@@ -1,0 +1,630 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "ucalc.hxx"
+
+#include "conditio.hxx"
+#include "colorscale.hxx"
+
+#include "clipparam.hxx"
+#include "globstr.hrc"
+#include "docfunc.hxx"
+#include "scitems.hxx"
+#include "attrib.hxx"
+#include "fillinfo.hxx"
+
+#include <o3tl/make_unique.hxx>
+
+void Test::testCopyPasteSkipEmptyConditionalFormatting()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScRange aDestRange(0,0,0,1,2,0);
+    ScRange aSrcRange(3,3,0,5,4,0);
+
+    ScMarkData aMark;
+    aMark.SetMarkArea(aDestRange);
+
+    m_pDoc->SetValue(0,0,0,1);
+    m_pDoc->SetValue(1,0,0,1);
+    m_pDoc->SetValue(0,1,0,1);
+    m_pDoc->SetValue(0,2,0,1);
+    m_pDoc->SetValue(1,2,0,1);
+
+    //create conditional formatting for A1:B3
+    ScConditionalFormatList* pCondFormatList = new ScConditionalFormatList();
+    m_pDoc->SetCondFormList(pCondFormatList, 0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    pFormat->SetRange(aDestRange);
+    sal_uLong nCondFormatKey = m_pDoc->AddCondFormat(pFormat, 0);
+
+    // Prepare a clipboard content interleaved with empty cells.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScClipParam aParam(aSrcRange, false);
+    aClipDoc.SetClipParam(aParam);
+    aClipDoc.SetValue(3,3,0,2);
+    aClipDoc.SetValue(4,3,0,2);
+    aClipDoc.SetValue(4,4,0,2);
+    aClipDoc.SetValue(3,5,0,2);
+    aClipDoc.SetValue(4,5,0,2);
+
+    ScConditionalFormat* pClipFormat = new ScConditionalFormat(2, &aClipDoc);
+    pClipFormat->SetRange(aSrcRange);
+    aClipDoc.AddCondFormat(pClipFormat, 0);
+
+    // Create undo document.
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc, &aMark);
+
+    // Paste clipboard content onto A1:A5 but skip empty cells.
+    bool bSkipEmpty = true;
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
+    CPPUNIT_ASSERT(m_pDoc->GetCondFormat(1,1,0));
+    // empty cell in copy area does not overwrite conditional formatting
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nCondFormatKey), m_pDoc->GetCondFormat(1,1,0)->GetKey());
+    for(SCCOL nCol = 0; nCol <= 1; ++nCol)
+    {
+        for(SCROW nRow = 0; nRow <= 2; ++nRow)
+        {
+            if(nRow == 1 && nCol == 1)
+                continue;
+
+            CPPUNIT_ASSERT(m_pDoc->GetCondFormat(nCol, nRow, 0));
+            CPPUNIT_ASSERT(nCondFormatKey != m_pDoc->GetCondFormat(nCol, nRow, 0)->GetKey());
+        }
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatINSDEL()
+{
+    // fdo#62206
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,0,3,0));
+    pFormat->SetRange(aRangeList);
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    m_pDoc->InsertCol(0,0,MAXROW,0,0,2);
+    const ScRangeList& rRange = pFormat->GetRange();
+    CPPUNIT_ASSERT(rRange == ScRange(2,0,0,2,3,0));
+
+    OUString aExpr = pEntry->GetExpression(ScAddress(2,0,0), 0);
+    CPPUNIT_ASSERT_EQUAL(aExpr, OUString("D2"));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatInsertCol()
+{
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    m_pDoc->InsertCol(0,0,MAXROW,0,4,2);
+    const ScRangeList& rRange = pFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,5,3,0)), rRange);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatInsertRow()
+{
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    m_pDoc->InsertRow(0,0,MAXCOL,0,4,2);
+    const ScRangeList& rRange = pFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,3,5,0)), rRange);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatInsertDeleteSheets()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Add a conditional format to B2:B4.
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    pFormat->SetRange(ScRange(1,1,0,1,3,0));
+
+    sal_uLong nKey = m_pDoc->AddCondFormat(pFormat, 0);
+
+    // Add condition in which if the value equals 2, set the "Result" style.
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(
+        SC_COND_EQUAL, "=2", "" , m_pDoc, ScAddress(0,0,0), ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    // Apply the format to the range.
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, nKey);
+
+    // Make sure this conditional format entry is really there.
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+    const ScConditionalFormat* pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT_MESSAGE("Wrong conditional format instance.", pCheck == pFormat);
+
+    // ... and its range is B2:B4.
+    ScRangeList aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    const ScRange* pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4.", *pRange == ScRange(1,1,0,1,3,0));
+
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+
+    // Insert a new sheet at the left.
+    bool bInserted = rFunc.InsertTable(0, "Inserted", true, true);
+    CPPUNIT_ASSERT(bInserted);
+
+    pList = m_pDoc->GetCondFormList(1);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    // Make sure the range also got shifted.
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the sheet insertion.", *pRange == ScRange(1,1,1,1,3,1));
+
+    // Delete the sheet to the left.
+    bool bDeleted = rFunc.DeleteTable(0, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    // Make sure the range got shifted back.
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the sheet removal.", *pRange == ScRange(1,1,0,1,3,0));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and re-check.
+    pUndoMgr->Undo();
+
+    pList = m_pDoc->GetCondFormList(1);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the undo of the sheet removal.", *pRange == ScRange(1,1,1,1,3,1));
+
+#if 0 // TODO : Undo of sheet insertion currently depends on the presence of
+      // view shell, and crashes when executed during cppunit run.
+
+    // Undo again and re-check.
+    pUndoMgr->Undo();
+
+    pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    // Make sure the range got shifted back.
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the undo of sheet insertion.", *pRange == ScRange(1,1,0,1,3,0));
+#else
+    m_pDoc->DeleteTab(1);
+#endif
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondCopyPaste()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    sal_uLong nIndex = m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
+
+    ScRange aTargetRange(4,4,0,7,7,0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(7,7,0);
+    CPPUNIT_ASSERT(pPastedFormat);
+
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(aTargetRange), pPastedFormat->GetRange());
+    CPPUNIT_ASSERT( nIndex != pPastedFormat->GetKey());
+    const SfxPoolItem* pItem = m_pDoc->GetAttr( 7, 7, 0, ATTR_CONDITIONAL );
+    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+    CPPUNIT_ASSERT(pCondFormatItem);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+    CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondCopyPasteSingleCell()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    sal_uLong nIndex = m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
+
+    ScRange aTargetRange(4,4,0,4,4,0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4,4,0);
+    CPPUNIT_ASSERT(pPastedFormat);
+
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(aTargetRange), pPastedFormat->GetRange());
+    CPPUNIT_ASSERT( nIndex != pPastedFormat->GetKey());
+    const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, 4, 0, ATTR_CONDITIONAL );
+    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+    CPPUNIT_ASSERT(pCondFormatItem);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+    CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondCopyPasteSingleCellToRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    sal_uLong nIndex = m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
+
+    ScRange aTargetRange(4,4,0,4,8,0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    std::set<sal_uLong> aCondFormatIndices;
+    for(SCROW nRow = 4; nRow <= 8; ++nRow)
+    {
+        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4, nRow, 0);
+        CPPUNIT_ASSERT(pPastedFormat);
+
+        CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(4, nRow, 0)), pPastedFormat->GetRange());
+        sal_uLong nPastedKey = pPastedFormat->GetKey();
+        CPPUNIT_ASSERT( nIndex != nPastedKey);
+        const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, nRow, 0, ATTR_CONDITIONAL );
+        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+        CPPUNIT_ASSERT(pCondFormatItem);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+        CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+        auto itr = aCondFormatIndices.find(nPastedKey);
+        CPPUNIT_ASSERT(itr == aCondFormatIndices.end());
+        aCondFormatIndices.insert(nPastedKey);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondCopyPasteSheetBetweenDoc()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aDoc;
+    aDoc.TransferTab(m_pDoc, 0, 0);
+
+    ScConditionalFormatList* pList = aDoc.GetCondFormList(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondCopyPasteSheet()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    m_pDoc->CopyTab(0, SC_TAB_APPEND);
+
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+
+    ScConditionalFormat& rFormat = **pList->begin();
+    const ScRangeList& rRange = rFormat.GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,1,3,3,1)), rRange);
+    sal_uInt32 nKey = rFormat.GetKey();
+    const SfxPoolItem* pItem = m_pDoc->GetAttr( 2, 2, 1, ATTR_CONDITIONAL );
+    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+    CPPUNIT_ASSERT(pCondFormatItem);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+    CPPUNIT_ASSERT( nKey == pCondFormatItem->GetCondFormatData().at(0) );
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testIconSet()
+{
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,0,0,0));
+    pFormat->SetRange(aRangeList);
+
+    ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
+    ScIconSetFormatData* pData = new ScIconSetFormatData;
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(0, COL_BLUE));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(1, COL_GREEN));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(2, COL_RED));
+    pEntry->SetIconSetData(pData);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    struct {
+        double nVal; sal_Int32 nIndex;
+    } aTests[] = {
+        { -1.0, 0 },
+        { 0.0, 0 },
+        { 1.0, 1 },
+        { 2.0, 2 },
+        { 3.0, 2 }
+    };
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    {
+        m_pDoc->SetValue(0,0,0,aTests[i].nVal);
+        ScIconSetInfo* pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
+        CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
+        delete pInfo;
+    }
+
+    delete pEntry;
+    m_pDoc->DeleteTab(0);
+}
+
+namespace {
+
+struct ScDataBarLengthData
+{
+    double nVal;
+    double nLength;
+};
+
+void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const ScRange& rRange,
+        double nMinVal, ScColorScaleEntryType eMinType,
+        double nMaxVal, ScColorScaleEntryType eMaxType,
+        double nZeroPos, databar::ScAxisPosition eAxisPos)
+{
+    std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(1, pDoc));
+    ScRangeList aRangeList(rRange);
+    pFormat->SetRange(aRangeList);
+
+    SCCOL nCol = rRange.aStart.Col();
+
+    ScDataBarFormat* pDatabar = new ScDataBarFormat(pDoc);
+    pFormat->AddEntry(pDatabar);
+
+    ScDataBarFormatData* pFormatData = new ScDataBarFormatData();
+    pFormatData->meAxisPosition = eAxisPos;
+
+    pFormatData->mpLowerLimit.reset(new ScColorScaleEntry());
+    pFormatData->mpLowerLimit->SetValue(nMinVal);
+    pFormatData->mpLowerLimit->SetType(eMinType);
+    pFormatData->mpUpperLimit.reset(new ScColorScaleEntry());
+    pFormatData->mpUpperLimit->SetValue(nMaxVal);
+    pFormatData->mpUpperLimit->SetType(eMaxType);
+    pDatabar->SetDataBarData(pFormatData);
+
+    for (size_t i = 0; pData[i].nLength != -200; ++i)
+    {
+        pDoc->SetValue(nCol, i, 0, pData[i].nVal);
+    }
+
+    for (size_t i = 0; pData[i].nLength != -200; ++i)
+    {
+        std::unique_ptr<ScDataBarInfo> xInfo(pDatabar->GetDataBarInfo(ScAddress(nCol, i, 0)));
+        CPPUNIT_ASSERT(xInfo.get());
+        ASSERT_DOUBLES_EQUAL(pData[i].nLength, xInfo->mnLength);
+        ASSERT_DOUBLES_EQUAL(nZeroPos, xInfo->mnZero);
+    }
+}
+
+}
+
+void Test::testDataBarLengthAutomaticAxis()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScDataBarLengthData aValues[] = {
+        { 2, 0 },
+        { 3, 0 },
+        { 4, 25.0 },
+        { 5, 50.0 },
+        { 6, 75.0 },
+        { 7, 100.0 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+
+    testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,7,0),
+            3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE, 0.0, databar::AUTOMATIC);
+
+    ScDataBarLengthData aValues2[] = {
+        { -6, -100 },
+        { -5, -100 },
+        { -4, -100 },
+        { -3, -75.0 },
+        { -2, -50.0 },
+        { -1, -25.0 },
+        { 0, 0.0 },
+        { 1, 12.5 },
+        { 2, 25.0 },
+        { 3, 37.5 },
+        { 4, 50.0 },
+        { 5, 62.5 },
+        { 6, 75.0 },
+        { 7, 87.5 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
+            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 1.0/3.0 * 100, databar::AUTOMATIC);
+
+    ScDataBarLengthData aValues3[] = {
+        { 2, 0.0 },
+        { 3, 25.0 },
+        { 4, 50.0 },
+        { 6, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues3, ScRange(2,0,0,2,3,0),
+            0, COLORSCALE_MIN, 0, COLORSCALE_MAX, 0, databar::AUTOMATIC);
+
+    ScDataBarLengthData aValues4[] = {
+        { 2, 40.0 },
+        { 3, 60.0 },
+        { 4, 80.0 },
+        { 5, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues4, ScRange(3,0,0,3,3,0),
+            0, COLORSCALE_AUTO, 0, COLORSCALE_AUTO, 0, databar::AUTOMATIC);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDataBarLengthMiddleAxis()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScDataBarLengthData aValues[] = {
+        { 1, 25.0 },
+        { 2, 25.0 },
+        { 3, 37.5 },
+        { 4, 50.0 },
+        { 5, 62.5 },
+        { 6, 75.0 },
+        { 7, 87.5 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+
+    testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,8,0),
+            2, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 50.0, databar::MIDDLE);
+
+    ScDataBarLengthData aValues2[] = {
+        { -6, -50 },
+        { -5, -50 },
+        { -4, -50 },
+        { -3, -37.5 },
+        { -2, -25.0 },
+        { -1, -12.5 },
+        { 0, 0.0 },
+        { 1, 12.5 },
+        { 2, 25.0 },
+        { 3, 37.5 },
+        { 4, 50.0 },
+        { 5, 62.5 },
+        { 6, 75.0 },
+        { 7, 87.5 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
+            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 50.0, databar::MIDDLE);
+
+    m_pDoc->DeleteTab(0);
+}
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
