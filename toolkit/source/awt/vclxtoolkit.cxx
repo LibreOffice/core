@@ -22,6 +22,13 @@
 #include <prewin.h>
 #include <postwin.h>
 #endif
+#if defined UNX && !defined MACOSX
+#include <prex.h>
+#include "GL/glxew.h"
+#include <postx.h>
+#undef None // Avoid clash with the one in <toolkit/awt/scrollabledialog.hxx>
+#undef Status // Sigh... used for instance as parameter name in css::awt::XImageConsumer
+#endif
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -113,6 +120,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -193,6 +201,9 @@ public:
 
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle()
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual sal_Int64 SAL_CALL getOpenGLBufferSwapCounter()
         throw (css::uno::RuntimeException, std::exception) override;
 
     // css::awt::XToolkit
@@ -1906,11 +1917,19 @@ void SAL_CALL VCLXToolkit::reschedule()
     Application::Reschedule(true);
 }
 
+// css::awt::XToolkitExperimental
+
 void SAL_CALL VCLXToolkit::processEventsToIdle()
     throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::ProcessEventsToIdle();
+}
+
+sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
+    throw (css::uno::RuntimeException, std::exception)
+{
+     return OpenGLContext::getBufferSwapCounter();
 }
 
 // css:awt:XToolkitRobot

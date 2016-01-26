@@ -186,6 +186,9 @@ public:
     /// reset the GL context so this context is not implicit in subsequent GL calls.
     void resetCurrent();
     void swapBuffers();
+
+    static sal_Int64 getBufferSwapCounter();
+
     void sync();
     void show();
 
@@ -248,6 +251,8 @@ private:
     typedef std::unordered_map< rtl::OString, std::shared_ptr<OpenGLProgram>, ProgramHash > ProgramCollection;
     ProgramCollection maPrograms;
     OpenGLProgram* mpCurrentProgram;
+
+    static sal_Int64 mnBufferSwapCounter;
 
 public:
     vcl::Region maClipRegion;

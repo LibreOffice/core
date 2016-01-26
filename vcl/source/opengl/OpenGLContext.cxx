@@ -50,6 +50,8 @@ static std::vector<GLXContext> g_vShareList;
 static std::vector<HGLRC> g_vShareList;
 #endif
 
+sal_Int64 OpenGLContext::mnBufferSwapCounter = 0;
+
 GLWindow::~GLWindow()
 {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
@@ -1535,6 +1537,8 @@ void OpenGLContext::swapBuffers()
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
 
+    mnBufferSwapCounter++;
+
     static bool bSleep = getenv("SAL_GL_SLEEP_ON_SWAP");
     if (bSleep)
     {
@@ -1542,6 +1546,11 @@ void OpenGLContext::swapBuffers()
         TimeValue aSleep( 0, 500*1000*1000 );
         osl::Thread::wait( aSleep );
     }
+}
+
+sal_Int64 OpenGLContext::getBufferSwapCounter()
+{
+    return mnBufferSwapCounter;
 }
 
 void OpenGLContext::sync()
