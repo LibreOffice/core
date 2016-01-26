@@ -203,7 +203,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     // some event listeners do really bad stuff
     // => prepare for the worst
-    ImplDelData aDogTag( this );
+    VclPtr<vcl::Window> xWindow( this );
 
     // Currently the client window should always get the focus
     // Should the border window at some point be focusable
@@ -312,8 +312,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
             }
         }
 
-        vcl::Window* pOldFocusWindow = pSVData->maWinData.mpFocusWin;
-        ImplDelData aOldFocusDel( pOldFocusWindow );
+        VclPtr<vcl::Window> pOldFocusWindow = pSVData->maWinData.mpFocusWin;
 
         pSVData->maWinData.mpFocusWin = this;
 
@@ -348,7 +347,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         }
 
         // call Get- and LoseFocus
-        if ( pOldFocusWindow && ! aOldFocusDel.IsDead() )
+        if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
         {
             if ( pOldFocusWindow->IsTracking() &&
                  (pSVData->maWinData.mnTrackFlags & StartTrackingFlags::FocusCancel) )
@@ -378,15 +377,15 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
                 // notify the new focus window so it can restore the inner focus
                 // eg, toolboxes can select their recent active item
                 if( pOldFocusWindow &&
-                    ! aOldFocusDel.IsDead() &&
+                    ! pOldFocusWindow->IsDisposed() &&
                     ( pOldFocusWindow->GetDialogControlFlags() & DialogControlFlags::FloatWinPopupModeEndCancel ) )
                     mpWindowImpl->mnGetFocusFlags |= GetFocusFlags::FloatWinPopupModeEndCancel;
                 NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
-                if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )
+                if ( !ImplCallPreNotify( aNEvt ) && !xWindow->IsDisposed() )
                     CompatGetFocus();
-                if( !aDogTag.IsDead() )
-                    ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDead()) ? pOldFocusWindow : nullptr );
-                if( !aDogTag.IsDead() )
+                if( !xWindow->IsDisposed() )
+                    ImplCallActivateListeners( (pOldFocusWindow && ! pOldFocusWindow->IsDisposed()) ? pOldFocusWindow : nullptr );
+                if( !xWindow->IsDisposed() )
                 {
                     mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
                     mpWindowImpl->mbInFocusHdl = false;

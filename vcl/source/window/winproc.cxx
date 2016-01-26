@@ -1084,11 +1084,10 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         pChild = pWindow->GetParent();
 
         // call handler
-        ImplDelData aChildDelData( pChild );
         KeyEvent    aKEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
         bool bPreNotify = ImplCallPreNotify( aNEvt );
-        if ( aChildDelData.IsDead() )
+        if ( pChild->IsDisposed() )
             return true;
 
         if ( !bPreNotify )
@@ -1104,9 +1103,9 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 pChild->KeyUp( aKEvt );
             }
 
-            if( !aChildDelData.IsDead() )
+            if( !pChild->IsDisposed() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
-            if ( aChildDelData.IsDead() )
+            if ( pChild->IsDisposed() )
                 return true;
         }
 
@@ -1296,7 +1295,6 @@ static bool ImplCallWheelCommand( const VclPtr<vcl::Window>& pWindow, const Poin
     Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
     CommandEvent        aCEvt( aCmdMousePos, CommandEventId::Wheel, true, pWheelData );
     NotifyEvent         aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
-    ImplDelData         aDelData( pWindow );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
     if ( pWindow->IsDisposed() )
         return false;
@@ -1351,13 +1349,12 @@ public:
 
 bool HandleGestureEventBase::Setup()
 {
-    ImplDelData aDogTag( m_pWindow );
 
     if (m_pSVData->maWinData.mpAutoScrollWin)
         m_pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
     if (m_pSVData->maHelpData.mpHelpWin)
         ImplDestroyHelpWindow( true );
-    if (aDogTag.IsDead())
+    if (m_pWindow->IsDisposed())
         return false;
     return true;
 }
