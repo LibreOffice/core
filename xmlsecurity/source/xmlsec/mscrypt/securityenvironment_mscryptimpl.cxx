@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
 #include <string.h>
 
 #ifdef _MSC_VER
@@ -94,7 +97,7 @@ void traceTrustStatus(DWORD err)
 {
     if (err == 0)
         SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[0].name);
-    for (int i = 1; i < SAL_N_ELEMENTS(arErrStrings); i++)
+    for (std::size_t i = 1; i < SAL_N_ELEMENTS(arErrStrings); i++)
     {
         if (arErrStrings[i].error & err)
             SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[i].name);
