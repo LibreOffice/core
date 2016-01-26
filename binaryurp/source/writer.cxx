@@ -35,6 +35,17 @@
 #include "currentcontext.hxx"
 #include "specialfunctionids.hxx"
 #include "writer.hxx"
+#include <rtl/ustrbuf.hxx>
+
+namespace {
+       OUString getAsString(const rtl::ByteSequence &tid)
+       {
+               OUStringBuffer aStr;
+               for (sal_Int32 i = 0; i < tid.getLength(); ++i)
+                       aStr.append((sal_Int32)tid[i], 16);
+               return aStr.makeStringAndClear();
+       }
+}
 
 namespace binaryurp {
 
@@ -105,6 +116,10 @@ void Writer::queueRequest(
     osl::MutexGuard g(mutex_);
     queue_.push_back(Item(tid, oid, type, member, inArguments, cc));
     items_.set();
+
+	SAL_DEBUG("writer::queueRequest tid " << getAsString(tid) <<
+              " type " << OUString(type.get()->pTypeName) <<
+              " member " << OUString(member.get()->pTypeName));
 }
 
 void Writer::queueReply(
@@ -119,6 +134,12 @@ void Writer::queueReply(
             tid, member, setter, exception, returnValue, outArguments,
             setCurrentContextMode));
     items_.set();
+
+	SAL_DEBUG("writer::queueReply tid " << getAsString(tid) <<
+              " member " << OUString(member.get()->pTypeName) <<
+              " exception? " << exception <<
+              " setter " << setter <<
+              " setCurrentContextMode " << setCurrentContextMode);
 }
 
 void Writer::unblock() {
@@ -193,6 +214,12 @@ void Writer::sendRequest(
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
     css::uno::UnoInterfaceReference const & currentContext)
 {
+	SAL_DEBUG("writer::sendRequest tid " << getAsString(tid) <<
+              " type " << OUString(type.get()->pTypeName)  <<
+              " member " << OUString(member.get()->pTypeName) <<
+              " cctx mode? " << currentContextMode <<
+              " cur ctx " << currentContext.get());
+
     OSL_ASSERT(tid.getLength() != 0 && !oid.isEmpty() && member.is());
     css::uno::TypeDescription t(type);
     sal_Int32 functionId = 0;
@@ -341,6 +368,11 @@ void Writer::sendReply(
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny > const & outArguments)
 {
+	SAL_DEBUG("writer::sendReply tid " << getAsString(tid) <<
+              " member " << OUString(member.get()->pTypeName) <<
+              " exception? " << exception <<
+              " setter " << setter);
+
     OSL_ASSERT(tid.getLength() != 0 && member.is() && member.get()->bComplete);
     std::vector< unsigned char > buf;
     bool newTid = tid != lastTid_;
