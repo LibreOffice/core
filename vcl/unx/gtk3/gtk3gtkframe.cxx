@@ -3119,7 +3119,7 @@ public:
          * gtk_drag_get_data
          */
         {
-            m_pLoop = g_main_loop_new(NULL, true);
+            m_pLoop = g_main_loop_new(nullptr, true);
             m_pFrame->SetFormatConversionRequest(this);
 
             gtk_drag_get_data(m_pWidget, m_pContext, it->second, m_nTime);
