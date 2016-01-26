@@ -206,7 +206,15 @@ namespace svgio
                     // prepare Target and ViewBox for evtl. AspectRatio mappings
                     const double fX(getX().isSet() ? getX().solve(*this, xcoordinate) : 0.0);
                     const double fY(getY().isSet() ? getY().solve(*this, ycoordinate) : 0.0);
-                    const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
+                    const double fWidthMinusHeight(fWidth - fHeight >= 0.0 ? (fWidth - fHeight) / 2.0 : 0.0);
+                    const double fHeightMinusWidth(fHeight - fWidth >= 0.0 ? (fHeight - fWidth) / 2.0 : 0.0);
+
+                    basegfx::B2DRange aTarget = basegfx::B2DRange(
+                        fX + fWidthMinusHeight,
+                        fY + fHeightMinusWidth,
+                        fX + fWidth - fWidthMinusHeight,
+                        fY + fHeight - fHeightMinusWidth);
+
                     basegfx::B2DRange aViewBox(aTarget);
 
                     if(!maMimeType.isEmpty() && !maData.isEmpty())
