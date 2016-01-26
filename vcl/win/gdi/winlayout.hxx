@@ -71,7 +71,7 @@ public:
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout(HDC, BYTE nCharSet, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
+                    SimpleWinLayout(HDC, const WinFontFace&, WinFontInstance&, bool bUseOpenGL);
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
@@ -110,7 +110,6 @@ private:
     mutable long    mnWidth;
 
     int             mnNotdefWidth;
-    BYTE            mnCharSet;
 };
 
 class UniscribeLayout : public WinLayout

@@ -497,7 +497,7 @@ bool WinFontInstance::AddChunkOfGlyphs(bool bRealGlyphIndices, int nGlyphIndex, 
     return true;
 }
 
-SimpleWinLayout::SimpleWinLayout(HDC hDC, BYTE nCharSet, const WinFontFace& rWinFontData,
+SimpleWinLayout::SimpleWinLayout(HDC hDC, const WinFontFace& rWinFontData,
         WinFontInstance& rWinFontEntry, bool bUseOpenGL)
 :   WinLayout(hDC, rWinFontData, rWinFontEntry, bUseOpenGL),
     mnGlyphCount( 0 ),
@@ -510,8 +510,7 @@ SimpleWinLayout::SimpleWinLayout(HDC hDC, BYTE nCharSet, const WinFontFace& rWin
     mpGlyphs2Chars( NULL ),
     mpGlyphRTLFlags( NULL ),
     mnWidth( 0 ),
-    mnNotdefWidth( -1 ),
-    mnCharSet( nCharSet )
+    mnNotdefWidth( -1 )
 {
 }
 
@@ -3782,7 +3781,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
                     rFontInstance.SetKernData( mnFontKernPairCount, mpFontKernPairs );
                 }
 
-                pWinLayout = new SimpleWinLayout(getHDC(), ANSI_CHARSET, rFontFace, rFontInstance, bUseOpenGL);
+                pWinLayout = new SimpleWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
             }
             else
             {
