@@ -3388,17 +3388,33 @@ bool adjustDoubleRefInName(
     ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
 {
     bool bRefChanged = false;
-    if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
+    if (rCxt.mrDoc.IsExpandRefs())
     {
-        // Check and see if we should expand the range at the top.
-        ScRange aSelectedRange = getSelectedRange(rCxt);
-        ScRange aAbs = rRef.toAbs(rPos);
-        if (aSelectedRange.Intersects(aAbs))
+        if (rCxt.mnRowDelta > 0 && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
         {
-            // Selection intersects the referenced range. Only expand the
-            // bottom position.
-            rRef.IncEndRowSticky(rCxt.mnRowDelta, rPos);
-            return true;
+            // Check and see if we should expand the range at the top.
+            ScRange aSelectedRange = getSelectedRange(rCxt);
+            ScRange aAbs = rRef.toAbs(rPos);
+            if (aSelectedRange.Intersects(aAbs))
+            {
+                // Selection intersects the referenced range. Only expand the
+                // bottom position.
+                rRef.IncEndRowSticky(rCxt.mnRowDelta, rPos);
+                return true;
+            }
+        }
+        if (rCxt.mnColDelta > 0 && !rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel())
+        {
+            // Check and see if we should expand the range at the left.
+            ScRange aSelectedRange = getSelectedRange(rCxt);
+            ScRange aAbs = rRef.toAbs(rPos);
+            if (aSelectedRange.Intersects(aAbs))
+            {
+                // Selection intersects the referenced range. Only expand the
+                // right position.
+                rRef.IncEndColSticky(rCxt.mnColDelta, rPos);
+                return true;
+            }
         }
     }
 
@@ -3540,6 +3556,66 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
                             aRes.mbReferenceModified = true;
                         }
+                        else if (rCxt.mnColDelta < 0)
+                        {
+                            // column(s) deleted.
+
+                            if (rRef.IsEntireRow())
+                                // Rows of entire rows are not affected.
+                                break;
+
+                            if (rRef.Ref1.IsColRel() || rRef.Ref2.IsColRel())
+                                // Don't modify relative references in names.
+                                break;
+
+                            if (aAbs.aStart.Row() < rCxt.maRange.aStart.Row() || rCxt.maRange.aEnd.Row() < aAbs.aEnd.Row())
+                                // row range of the reference is not entirely in the deleted row range.
+                                break;
+
+                            if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
+                                // wrong tables
+                                break;
+
+                            ScRange aDeleted = rCxt.maRange;
+                            aDeleted.aStart.IncCol(rCxt.mnColDelta);
+                            aDeleted.aEnd.SetCol(aDeleted.aStart.Col()-rCxt.mnColDelta-1);
+
+                            if (aAbs.aEnd.Col() < aDeleted.aStart.Col() || aDeleted.aEnd.Col() < aAbs.aStart.Col())
+                                // reference range doesn't intersect with the deleted range.
+                                break;
+
+                            if (aDeleted.aStart.Col() <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= aDeleted.aEnd.Col())
+                            {
+                                // This reference is entirely deleted.
+                                rRef.Ref1.SetColDeleted(true);
+                                rRef.Ref2.SetColDeleted(true);
+                                aRes.mbReferenceModified = true;
+                                break;
+                            }
+
+                            if (aAbs.aStart.Col() < aDeleted.aStart.Col())
+                            {
+                                if (!aAbs.IsEndColSticky())
+                                {
+                                    if (aDeleted.aEnd.Col() < aAbs.aEnd.Col())
+                                        // Deleted in the middle.  Make the reference shorter.
+                                        rRef.Ref2.IncCol(rCxt.mnColDelta);
+                                    else
+                                        // Deleted at tail end.  Cut off the right part.
+                                        rRef.Ref2.SetAbsCol(aDeleted.aStart.Col()-1);
+                                }
+                            }
+                            else
+                            {
+                                // Deleted at the left.  Cut the left off and shift left.
+                                rRef.Ref1.SetAbsCol(aDeleted.aEnd.Col()+1);
+                                rRef.Ref1.IncCol(rCxt.mnColDelta);
+                                if (!aAbs.IsEndColSticky())
+                                    rRef.Ref2.IncCol(rCxt.mnColDelta);
+                            }
+
+                            aRes.mbReferenceModified = true;
+                        }
                         else if (rCxt.maRange.Intersects(aAbs))
                         {
                             if (rCxt.mnColDelta && rCxt.maRange.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
@@ -3562,6 +3638,18 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                             {
                                 // Expand by the bottom edge.
                                 rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                                aRes.mbReferenceModified = true;
+                            }
+                        }
+                        else if (rCxt.mnColDelta > 0 && rCxt.mrDoc.IsExpandRefs())
+                        {
+                            // Check if we could expand range reference by the right
+                            // edge. For named expressions, we only expand absolute
+                            // references.
+                            if (!rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel() && aAbs.aEnd.Col()+1 == rCxt.maRange.aStart.Col())
+                            {
+                                // Expand by the right edge.
+                                rRef.Ref2.IncCol(rCxt.mnColDelta);
                                 aRes.mbReferenceModified = true;
                             }
                         }
