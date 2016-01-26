@@ -607,9 +607,9 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mhDefPal(0),
     mpStdClipRgnData(NULL),
     mpFontAttrCache(NULL),
+    mbFontKernInit(false),
     mpFontKernPairs(NULL),
     mnFontKernPairCount(0),
-    mbFontKernInit(false),
     mnPenWidth(GSL_PEN_WIDTH)
 {
     if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
