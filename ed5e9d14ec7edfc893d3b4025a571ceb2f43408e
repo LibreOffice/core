@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_14101c4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-26T22:08:30Z",
+      "side": 1,
+      "message": "Freeze rows and columns button is here http://opengrok.libreoffice.org/xref/core/sc/uiconfig/scalc/toolbar/standardbar.xml#80",
+      "parentUuid": "7aa08908_91cb7e1e",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_11d82eef",
         "filename": "framework/Library_fwk.mk",
         "patchSetId": 13
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_541aa46f",
+        "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-26T22:08:30Z",
+      "side": 1,
+      "message": "i\u0027ve added to menubar.xml too. But bug report says \"split/group button for the toolbar\".",
+      "parentUuid": "7aa08908_f1e762aa",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_d1ece691",
         "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
         "patchSetId": 13
@@ -64,6 +100,24 @@
       "writtenOn": "2016-01-26T18:52:16Z",
       "side": 1,
       "message": "I think you should at least handle enable/disable states for FreezePanesFirstColumn/FirstRow commands.",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_942a4c7d",
+        "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-26T22:08:30Z",
+      "side": 1,
+      "message": "Maxim, i don\u0027t know how can i handle this commands for which situations. Can you help me?",
+      "parentUuid": "7aa08908_d1ece691",
       "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_f41f5059",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Controller.xcu",
+        "patchSetId": 13
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-26T22:08:30Z",
+      "side": 1,
+      "message": "Maxim i\u0027ve did it with referance to Save As. Save As has an uno command like this. And it didn\u0027t use anywhere.\n\nhttp://opengrok.libreoffice.org/search?q\u003d%22.uno%3ASaveAsMenu%22\u0026project\u003dcore\n\nThis command used only this page 1079th line.\nI don\u0027t know another way :/",
+      "parentUuid": "7aa08908_91f25e6e",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_31028a3f",
         "filename": "sc/sdi/scalc.sdi",
         "patchSetId": 13
@@ -98,6 +170,24 @@
       "writtenOn": "2016-01-26T18:52:16Z",
       "side": 1,
       "message": "Any reason this is not allowed to be added to toolbars?",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d424d4b0",
+        "filename": "sc/sdi/scalc.sdi",
+        "patchSetId": 13
+      },
+      "lineNbr": 2908,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-26T22:08:30Z",
+      "side": 1,
+      "message": "There is no reason. I only copied FreezePanes defination. I\u0027ll change it.",
+      "parentUuid": "7aa08908_31028a3f",
       "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
