@@ -16,7 +16,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using namespace oox;
 using namespace oox::formulaimport;
 
 /*

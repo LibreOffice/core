@@ -24,7 +24,6 @@
 
 #include "smdetect.hxx"
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 

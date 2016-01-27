@@ -98,8 +98,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 
 #define SmDocShell
