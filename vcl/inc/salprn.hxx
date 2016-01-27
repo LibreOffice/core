@@ -24,6 +24,8 @@
 
 #include "salptype.hxx"
 
+#include <vector>
+
 class SalGraphics;
 class SalFrame;
 struct ImplJobSetup;
