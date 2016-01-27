@@ -419,7 +419,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
 };
 
 // import data
-bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent )
+bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent )
 {
     assert( !bInMerge && !pImpl->pMergeData && "merge already activated!" );
 
@@ -2856,7 +2856,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                         aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
                     }
 
-                    MergeNew( aMergeDesc );
+                    Merge( aMergeDesc );
                 }
             }
         }
