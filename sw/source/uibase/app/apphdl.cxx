@@ -635,7 +635,7 @@ SwMailMergeConfigItem* PerformMailMerge(SwView* pView)
     SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
     aMergeDesc.pMailMergeConfigItem = pConfigItem;
     aMergeDesc.bCreateSingleFile = true;
-    rSh.GetDBManager()->MergeNew(aMergeDesc);
+    rSh.GetDBManager()->Merge(aMergeDesc);
 
     pConfigItem->SetMergeDone();
 
@@ -773,7 +773,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
             SwWrtShell& rSh = pView->GetWrtShell();
             SwMergeDescriptor aMergeDesc(DBMGR_MERGE, rSh, aDescriptor);
-            rSh.GetDBManager()->MergeNew(aMergeDesc);
+            rSh.GetDBManager()->Merge(aMergeDesc);
 
             // update enabled / disabled status of the buttons in the toolbar
             SfxBindings& rBindings = rSh.GetView().GetViewFrame()->GetBindings();
