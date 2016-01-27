@@ -26,7 +26,7 @@ bool isBorder(vec2 point)
 
 void main()
 {
-    vec4 fragment = texture2D(slideTexture, texturePosition);
+    vec4 fragment = vec4(texture2D(slideTexture, texturePosition).rgb, 1.0);
     vec3 lightVector = vec3(0.0, 0.0, 1.0);
     float light = max(dot(lightVector, normal), 0.0);
     if (hexagonSize > 1.0) {
