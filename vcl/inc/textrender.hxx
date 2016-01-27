@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 
-#include <sal/types.h>
-#include <vcl/salgtype.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/metric.hxx>
 #include "salgdi.hxx"
-#include "salglyphid.hxx"
-#include "fontsubset.hxx"
+
 #include <config_cairo_canvas.h>
 
 class ImplLayoutArgs;

@@ -20,9 +20,6 @@
 #ifndef INCLUDED_VCL_INC_TEXTLINEINFO_HXX
 #define INCLUDED_VCL_INC_TEXTLINEINFO_HXX
 
-#include <vcl/dllapi.h>
-#include <sal/types.h>
-
 class ImplTextLineInfo
 {
 private:
