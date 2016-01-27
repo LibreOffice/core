@@ -1,15 +1,15 @@
-From 1770428d30a77e7c5e3344687369d83e04201f0b Mon Sep 17 00:00:00 2001
+From 7e46355a9a7a223077f4d83587fd842bbaf97e37 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Mon, 25 Jan 2016 09:50:03 +0100
-Subject: [PATCH] OOXML Relationship Transform skeleton
+Subject: [PATCH] OOXML Relationship Transform
 
 ---
  include/xmlsec/strings.h    |   3 +
  include/xmlsec/transforms.h |   4 +
  src/strings.c               |   3 +
- src/transforms.c            |  11 ++
- src/xpath.c                 | 279 ++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 300 insertions(+)
+ src/transforms.c            |  11 +
+ src/xpath.c                 | 480 ++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 501 insertions(+)
 
 diff --git a/include/xmlsec/strings.h b/include/xmlsec/strings.h
 index 07afb9d..9c72d1b 100644
@@ -77,7 +77,7 @@ index 2ed3fe8..9e5ad27 100644
      if(xmlSecTransformIdsRegister(xmlSecTransformXsltId) < 0) {
  	xmlSecError(XMLSEC_ERRORS_HERE,
 diff --git a/src/xpath.c b/src/xpath.c
-index 8b0b4f8..ddcd95d 100644
+index 8b0b4f8..e56920e 100644
 --- a/src/xpath.c
 +++ b/src/xpath.c
 @@ -17,6 +17,7 @@
@@ -88,7 +88,7 @@ index 8b0b4f8..ddcd95d 100644
  
  #include <xmlsec/xmlsec.h>
  #include <xmlsec/xmltree.h>
-@@ -1144,5 +1145,283 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
+@@ -1144,5 +1145,484 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
      return(0);
  }
  
@@ -96,7 +96,7 @@ index 8b0b4f8..ddcd95d 100644
 +typedef struct _xmlSecRelationshipCtx xmlSecRelationshipCtx, *xmlSecRelationshipCtxPtr;
 +struct _xmlSecRelationshipCtx
 +{
-+    xmlParserCtxtPtr parserCtx;
++    xmlSecPtrListPtr sourceIdList;
 +};
 +#define xmlSecRelationshipSize (sizeof(xmlSecTransform) + sizeof(xmlSecRelationshipCtx))
 +#define xmlSecRelationshipGetCtx(transform) ((xmlSecRelationshipCtxPtr)(((xmlSecByte*)(transform)) + sizeof(xmlSecTransform)))
@@ -105,6 +105,7 @@ index 8b0b4f8..ddcd95d 100644
 +static void xmlSecRelationshipFinalize (xmlSecTransformPtr transform);
 +static int xmlSecTransformRelationshipPopBin(xmlSecTransformPtr transform, xmlSecByte* data, xmlSecSize maxDataSize, xmlSecSize* dataSize, xmlSecTransformCtxPtr transformCtx);
 +static int xmlSecTransformRelationshipPushXml(xmlSecTransformPtr transform, xmlSecNodeSetPtr nodes, xmlSecTransformCtxPtr transformCtx);
++static int xmlSecRelationshipReadNode(xmlSecTransformPtr transform, xmlNodePtr node, xmlSecTransformCtxPtr transformCtx);
 +
 +static xmlSecTransformKlass xmlSecRelationshipKlass =
 +{
@@ -116,7 +117,7 @@ index 8b0b4f8..ddcd95d 100644
 +    xmlSecTransformUsageDSigTransform, /* xmlSecAlgorithmUsage usage; */
 +    xmlSecRelationshipInitialize, /* xmlSecTransformInitializeMethod initialize; */
 +    xmlSecRelationshipFinalize, /* xmlSecTransformFinalizeMethod finalize; */
-+    NULL, /* xmlSecTransformNodeReadMethod readNode; */
++    xmlSecRelationshipReadNode, /* xmlSecTransformNodeReadMethod readNode; */
 +    NULL, /* xmlSecTransformNodeWriteMethod writeNode; */
 +    NULL, /* xmlSecTransformSetKeyReqMethod setKeyReq; */
 +    NULL, /* xmlSecTransformSetKeyMethod setKey; */
@@ -139,6 +140,7 @@ index 8b0b4f8..ddcd95d 100644
 +static int xmlSecRelationshipInitialize(xmlSecTransformPtr transform)
 +{
 +    xmlSecRelationshipCtxPtr ctx;
++    int ret;
 +
 +    xmlSecAssert2(xmlSecTransformCheckId(transform, xmlSecTransformRelationshipId), -1);
 +    xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecRelationshipSize), -1);
@@ -148,6 +150,18 @@ index 8b0b4f8..ddcd95d 100644
 +
 +    /* initialize context */
 +    memset(ctx, 0, sizeof(xmlSecRelationshipCtx));
++
++    ctx->sourceIdList = xmlSecPtrListCreate(xmlSecStringListId);
++    if (!ctx->sourceIdList)
++    {
++        xmlSecError(XMLSEC_ERRORS_HERE,
++                    xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                    "xmlSecPtrListCreate",
++                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                    XMLSEC_ERRORS_NO_MESSAGE);
++        return -1;
++    }
++
 +    return 0;
 +}
 +
@@ -161,20 +175,207 @@ index 8b0b4f8..ddcd95d 100644
 +    ctx = xmlSecRelationshipGetCtx(transform);
 +    xmlSecAssert(ctx != NULL);
 +
-+    if (ctx->parserCtx != NULL)
-+	xmlFreeParserCtxt(ctx->parserCtx);
++    if (ctx->sourceIdList)
++	xmlSecPtrListDestroy(ctx->sourceIdList);
 +
 +    memset(ctx, 0, sizeof(xmlSecRelationshipCtx));
++}
++
++static int xmlSecRelationshipReadNode(xmlSecTransformPtr transform, xmlNodePtr node, xmlSecTransformCtxPtr transformCtx)
++{
++    xmlSecRelationshipCtxPtr ctx;
++    xmlNodePtr cur;
++    int ret;
++
++    xmlSecAssert2(xmlSecTransformCheckId(transform, xmlSecTransformRelationshipId), -1);
++    xmlSecAssert2(xmlSecTransformCheckSize(transform, xmlSecRelationshipSize), -1);
++    xmlSecAssert2(node != NULL, -1);
++    xmlSecAssert2(transformCtx != NULL, -1);
++    ctx = xmlSecRelationshipGetCtx(transform);
++    xmlSecAssert2(ctx != NULL, -1);
++
++    cur = node->children;
++    while (cur)
++    {
++        if (xmlSecCheckNodeName(cur, "RelationshipReference", "http://schemas.openxmlformats.org/package/2006/digital-signature"))
++        {
++            xmlChar* sourceId;
++            xmlChar* tmp;
++
++            sourceId = xmlGetProp(cur, "SourceId");
++            if (sourceId == NULL)
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            NULL,
++                            xmlSecErrorsSafeString("SourceId"),
++                            XMLSEC_ERRORS_R_INVALID_NODE_ATTRIBUTE,
++                            "node=%s",
++                            xmlSecErrorsSafeString(xmlSecNodeGetName(node)));
++                return -1;
++            }
++
++            tmp = xmlStrdup(sourceId);
++            if (!tmp)
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                            NULL,
++                            XMLSEC_ERRORS_R_STRDUP_FAILED,
++                            "len=%d", xmlStrlen(sourceId));
++                return -1;
++            }
++
++            ret = xmlSecPtrListAdd(ctx->sourceIdList, tmp);
++            if (ret < 0)
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                            "xmlSecPtrListAdd",
++                            XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                            XMLSEC_ERRORS_NO_MESSAGE);
++                xmlFree(tmp);
++                return -1;
++            }
++
++        }
++
++        cur = cur->next;
++    }
++
++    return 0;
++}
++
++int xmlSecTransformRelationshipProcessElementNode(xmlSecTransformPtr transform, xmlOutputBufferPtr buf, xmlNodePtr cur)
++{
++    xmlAttrPtr attr;
++    int foundTargetMode = 0;
++
++    xmlOutputBufferWriteString(buf, "<");
++    xmlOutputBufferWriteString(buf, (const char *)cur->name);
++
++    if (cur->nsDef)
++    {
++        xmlOutputBufferWriteString(buf, " xmlns=\"");
++        if (cur->nsDef->href)
++            xmlOutputBufferWriteString(buf, cur->nsDef->href);
++        xmlOutputBufferWriteString(buf, "\"");
++    }
++
++    for (attr = cur->properties; attr; attr = attr->next)
++    {
++        xmlOutputBufferWriteString(buf, " ");
++        xmlOutputBufferWriteString(buf, (const char *)attr->name);
++        if (strcmp(attr->name, "TargetMode") == 0)
++            foundTargetMode = 1;
++        xmlOutputBufferWriteString(buf, "=\"");
++        xmlOutputBufferWriteString(buf, (const char *)xmlGetProp(cur, attr->name));
++        xmlOutputBufferWriteString(buf, "\"");
++    }
+ 
++    if (strcmp(cur->name, "Relationship") == 0 && !foundTargetMode)
++        xmlOutputBufferWriteString(buf, " TargetMode=\"Internal\"");
+ 
++    xmlOutputBufferWriteString(buf, ">");
++
++    if (cur->children)
++    {
++        int ret = xmlSecTransformRelationshipProcessNodeList(transform, buf, cur->children);
++        if (ret < 0)
++            return -1;
++    }
++
++    xmlOutputBufferWriteString(buf, "</");
++    xmlOutputBufferWriteString(buf, (const char *)cur->name);
++    xmlOutputBufferWriteString(buf, ">");
++
++    return 0;
++}
++
++int xmlSecTransformRelationshipProcessNode(xmlSecTransformPtr transform, xmlOutputBufferPtr buf, xmlNodePtr cur)
++{
++    int ret;
++
++    switch (cur->type)
++    {
++    case XML_ELEMENT_NODE:
++        if (xmlSecCheckNodeName(cur, "Relationship", "http://schemas.openxmlformats.org/package/2006/relationships"))
++        {
++            xmlChar* id = xmlGetProp(cur, "Id");
++            if (id)
++            {
++                int i;
++                int found = 0;
++                xmlSecRelationshipCtxPtr ctx;
++
++                ctx = xmlSecRelationshipGetCtx(transform);
++                for (i = 0; i < xmlSecPtrListGetSize(ctx->sourceIdList); ++i)
++                {
++                    if (strcmp(xmlSecPtrListGetItem(ctx->sourceIdList, i), id) == 0)
++                    {
++                        found = 1;
++                        break;
++                    }
++                }
++
++                if (!found)
++                    return 0;
++            }
++        }
++
++        ret = xmlSecTransformRelationshipProcessElementNode(transform, buf, cur);
++        if (ret < 0)
++            return -1;
++        break;
++    }
++
++    return 0;
++}
++
++int xmlSecTransformRelationshipProcessNodeList(xmlSecTransformPtr transform, xmlOutputBufferPtr buf, xmlNodePtr cur)
++{
++    int ret;
++
++    for (ret = 0; cur; cur = cur->next)
++    {
++        ret = xmlSecTransformRelationshipProcessNode(transform, buf, cur);
++        if (ret < 0)
++            return -1;
++    }
++
++    return 0;
++}
++
++int xmlSecTransformRelationshipExecute(xmlSecTransformPtr transform, xmlOutputBufferPtr buf, xmlDocPtr doc)
++{
++    if (doc->children != NULL)
++    {
++        int ret = xmlSecTransformRelationshipProcessNodeList(transform, buf, doc->children);
++        if (ret < 0)
++        {
++            xmlSecError(XMLSEC_ERRORS_HERE,
++                        xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                        "xmlSecTransformRelationshipProcessNodeList",
++                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                        XMLSEC_ERRORS_NO_MESSAGE);
++            return -1;
++        }
++    }
++
++    return 0;
 +}
 +
 +static int xmlSecTransformRelationshipPushXml(xmlSecTransformPtr transform, xmlSecNodeSetPtr nodes, xmlSecTransformCtxPtr transformCtx)
 +{
 +    xmlOutputBufferPtr buf;
++    xmlSecRelationshipCtxPtr ctx;
 +    int ret;
 +
 +    xmlSecAssert2(nodes != NULL, -1);
 +    xmlSecAssert2(nodes->doc != NULL, -1);
 +    xmlSecAssert2(transformCtx != NULL, -1);
++
++    ctx = xmlSecRelationshipGetCtx(transform);
++    xmlSecAssert2(ctx != NULL, -1);
 +
 +    /* check/update current transform status */
 +    switch(transform->status)
@@ -221,8 +422,8 @@ index 8b0b4f8..ddcd95d 100644
 +	    return(-1);
 +	}
 +    }
- 
-+    ret = xmlC14NExecute(nodes->doc, (xmlC14NIsVisibleCallback)xmlSecNodeSetContains, nodes, XML_C14N_1_0, NULL, 0, buf);
++
++    ret = xmlSecTransformRelationshipExecute(transform, buf, nodes->doc);
 +    if (ret < 0)
 +    {
 +	xmlSecError(XMLSEC_ERRORS_HERE,
@@ -233,7 +434,7 @@ index 8b0b4f8..ddcd95d 100644
 +	xmlOutputBufferClose(buf);
 +	return(-1);
 +    }
- 
++
 +    ret = xmlOutputBufferClose(buf);
 +    if (ret < 0)
 +    {
