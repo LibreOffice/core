@@ -110,6 +110,6 @@ public:
     virtual bool cancelShutdown() = 0;
 };
 
-#endif
+#endif // INCLUDED_VCL_INC_SALSESSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
