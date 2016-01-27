@@ -20,23 +20,20 @@
 #ifndef INCLUDED_VCL_INC_SALLAYOUT_HXX
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
-#include <iostream>
 #include <list>
-#include <vector>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
-#include <sal/log.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/devicecoordinate.hxx>
 
+#include "salglyphid.hxx"
+
 #ifndef _TOOLS_LANG_HXX
 typedef unsigned short LanguageType;
 #endif
-
-#include "salglyphid.hxx"
 
 #define MAX_FALLBACK 16
 
