@@ -2560,14 +2560,12 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     {
         case GDK_SCROLL_SMOOTH:
         {
-            double delta_x, delta_y;
-            gdk_event_get_scroll_deltas(pEvent, &delta_x, &delta_y);
             //pick the bigger one I guess
-            aEvent.mbHorz = fabs(delta_x) > fabs(delta_y);
+            aEvent.mbHorz = fabs(pSEvent->delta_x) > fabs(pSEvent->delta_y);
             if (aEvent.mbHorz)
-                aEvent.mnDelta = -delta_x;
+                aEvent.mnDelta = -pSEvent->delta_x * 40;
             else
-                aEvent.mnDelta = -delta_y;
+                aEvent.mnDelta = -pSEvent->delta_y * 40;
             aEvent.mnScrollLines = 1;
             pThis->m_nLastScrollEventTime = pSEvent->time;
             break;
