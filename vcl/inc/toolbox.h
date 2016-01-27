@@ -23,6 +23,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>
 
+#include <vector>
+
 #define TB_DROPDOWNARROWWIDTH   11
 
 #define TB_MENUBUTTON_SIZE      12
