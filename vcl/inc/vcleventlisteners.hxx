@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
 #define INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
 
+#include <vector>
+
 class VCL_DLLPUBLIC VclEventListeners
 {
 public:
