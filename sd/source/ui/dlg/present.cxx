@@ -58,7 +58,6 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     get( aCbxManuel,            "manualslides"          );
     get( aCbxMousepointer,      "pointervisible"        );
     get( aCbxPen,               "pointeraspen"          );
-    get( aCbxNavigator,         "navigatorvisible"      );
     get( aCbxAnimationAllowed,  "animationsallowed"     );
     get( aCbxChangePage,        "changeslidesbyclick"   );
     get( aCbxAlwaysOnTop,       "alwaysontop"           );
@@ -118,7 +117,6 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     aCbxManuel->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_MANUEL ) ).GetValue() );
     aCbxMousepointer->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_MOUSE ) ).GetValue() );
     aCbxPen->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_PEN ) ).GetValue() );
-    aCbxNavigator->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_NAVIGATOR ) ).GetValue() );
     aCbxAnimationAllowed->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_ANIMATION_ALLOWED ) ).GetValue() );
     aCbxChangePage->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
     aCbxAlwaysOnTop->Check( static_cast<const SfxBoolItem&>( rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
@@ -170,7 +168,6 @@ void SdStartPresentationDlg::dispose()
     aCbxManuel.clear();
     aCbxMousepointer.clear();
     aCbxPen.clear();
-    aCbxNavigator.clear();
     aCbxAnimationAllowed.clear();
     aCbxChangePage.clear();
     aCbxAlwaysOnTop.clear();
@@ -301,7 +298,6 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MANUEL, aCbxManuel->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MOUSE, aCbxMousepointer->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_PEN, aCbxPen->IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_NAVIGATOR, aCbxNavigator->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ANIMATION_ALLOWED, aCbxAnimationAllowed->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CHANGE_PAGE, aCbxChangePage->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALWAYS_ON_TOP, aCbxAlwaysOnTop->IsChecked() ) );

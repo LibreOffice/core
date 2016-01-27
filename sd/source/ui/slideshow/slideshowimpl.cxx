@@ -54,7 +54,6 @@
 #include <svx/bmpmask.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#include "NavigatorChildWindow.hxx"
 #include "AnimationChildWindow.hxx"
 #include "notifydocumentevent.hxx"
 #include <slideshowimpl.hxx>
@@ -103,14 +102,7 @@ static sal_uInt16 const pAllowed[] =
     SID_OPENDOC                             , //     5501   ///< that internally jumps work
     SID_JUMPTOMARK                          , //     5598
     SID_OPENHYPERLINK                       , //     6676
-    SID_NAVIGATOR                           , //    10366
-    SID_PRESENTATION_END                    , //    27218
-    SID_NAVIGATOR_PAGENAME                  , //    27287
-    SID_NAVIGATOR_STATE                     , //    27288
-    SID_NAVIGATOR_INIT                      , //    27289
-    SID_NAVIGATOR_PEN                       , //    27291
-    SID_NAVIGATOR_PAGE                      , //    27292
-    SID_NAVIGATOR_OBJECT                      //    27293
+    SID_PRESENTATION_END                     //    27218
 };
 
 class AnimationSlideController
@@ -772,7 +764,6 @@ bool SlideshowImpl::startPreview(
         maPresSettings.mbAnimationAllowed = true;
         maPresSettings.mnPauseTimeout = 0;
         maPresSettings.mbShowPauseLogo = false;
-        maPresSettings.mbStartWithNavigator = false;
 
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
@@ -893,7 +884,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             maPresSettings.mbMouseAsPen = false;
             maPresSettings.mnPauseTimeout = 0;
             maPresSettings.mbShowPauseLogo = false;
-            maPresSettings.mbStartWithNavigator = false;
         }
 
         if( pStartPage )
@@ -946,9 +936,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // Hide the side panes for in-place presentations.
             if ( ! maPresSettings.mbFullScreen)
                 mpPaneHider.reset(new PaneHider(*mpViewShell,this));
-
-            if( getViewFrame() )
-                getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
 
             // these Slots are forbidden in other views for this document
             if( mpDocSh )
@@ -1377,12 +1364,6 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
         registerShapeEvents(mpSlideController->getCurrentSlideNumber());
         update();
 
-        SfxBindings* pBindings = getBindings();
-        if( pBindings )
-        {
-            pBindings->Invalidate( SID_NAVIGATOR_STATE );
-            pBindings->Invalidate( SID_NAVIGATOR_PAGENAME );
-        }
     }
     // send out page change event and notify to update all acc info for current page
     if (mpViewShell)
@@ -2450,8 +2431,6 @@ FncGetChildWindowId aShowChildren[] =
     &SfxInfoBarContainerChild::GetChildWindowId
 };
 
-#define NAVIGATOR_CHILD_MASK        0x80000000UL
-
 void SlideshowImpl::hideChildWindows()
 {
     mnChildMask = 0UL;
@@ -2462,9 +2441,6 @@ void SlideshowImpl::hideChildWindows()
 
         if( pViewFrame )
         {
-            if( pViewFrame->GetChildWindow( SID_NAVIGATOR ) != nullptr )
-                mnChildMask |= NAVIGATOR_CHILD_MASK;
-
             for( sal_uLong i = 0, nCount = sizeof( aShowChildren ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
             {
                 const sal_uInt16 nId = ( *aShowChildren[ i ] )();
@@ -2486,8 +2462,6 @@ void SlideshowImpl::showChildWindows()
         SfxViewFrame* pViewFrame = getViewFrame();
         if( pViewFrame )
         {
-            pViewFrame->SetChildWindow( SID_NAVIGATOR, ( mnChildMask & NAVIGATOR_CHILD_MASK ) != 0 );
-
             for( sal_uLong i = 0, nCount = sizeof( aShowChildren ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
             {
                 if( mnChildMask & ( 1 << i ) )
@@ -2644,58 +2618,6 @@ sal_Bool SAL_CALL SlideshowImpl::isActive() throw (RuntimeException, std::except
 {
     SolarMutexGuard aSolarGuard;
     return mbActive;
-}
-
-void SlideshowImpl::receiveRequest(SfxRequest& rReq)
-{
-    const SfxItemSet* pArgs      = rReq.GetArgs();
-
-    switch ( rReq.GetSlot() )
-    {
-        case SID_NAVIGATOR_PEN:
-            setUsePen(!mbUsePen);
-        break;
-
-        case SID_NAVIGATOR_PAGE:
-        {
-            PageJump    eJump = (PageJump)static_cast<const SfxAllEnumItem&>( pArgs->Get(SID_NAVIGATOR_PAGE)).GetValue();
-            switch( eJump )
-            {
-                case PAGE_FIRST:        gotoFirstSlide(); break;
-                case PAGE_LAST:         gotoLastSlide(); break;
-                case PAGE_NEXT:         gotoNextSlide(); break;
-                case PAGE_PREVIOUS:     gotoPreviousSlide(); break;
-                case PAGE_NONE:         break;
-            }
-        }
-        break;
-
-        case SID_NAVIGATOR_OBJECT:
-        {
-            const OUString aTarget( static_cast<const SfxStringItem&>(pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
-
-            // is the bookmark a Slide?
-            bool        bIsMasterPage;
-            sal_uInt16  nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
-            SdrObject*  pObj   = nullptr;
-
-            if( nPgNum == SDRPAGE_NOTFOUND )
-            {
-                // is the bookmark an object?
-                pObj = mpDoc->GetObj( aTarget );
-
-                if( pObj )
-                    nPgNum = pObj->GetPage()->GetPageNum();
-            }
-
-            if( nPgNum != SDRPAGE_NOTFOUND )
-            {
-                nPgNum = ( nPgNum - 1 ) >> 1;
-                displaySlideNumber( nPgNum );
-            }
-        }
-        break;
-    }
 }
 
 void SlideshowImpl::setAutoSaveState( bool bOn)
@@ -3330,11 +3252,6 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
             mnPauseTimeout = nPause;
             return;
         }
-    }
-    else if ( rProperty == "StartWithNavigator" )
-    {
-        if( rValue >>= mbStartWithNavigator )
-            return;
     }
     else if ( rProperty == "UsePen" )
     {
