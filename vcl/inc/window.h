@@ -25,6 +25,9 @@
 #include <vcl/idle.hxx>
 #include <vcl/rendersettings.hxx>
 
+#include <vector>
+#include <set>
+
 struct ImplDelData;
 
 namespace vcl {
