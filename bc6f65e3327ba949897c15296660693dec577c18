@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_f4e630e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-27T14:33:09Z",
+      "side": 1,
+      "message": "If you start your commit message with a bug id like:\n tdf#97362: Convert Java unit test ...\nit will get linked in a lot of tools and webinterfaces to https://bugs.documentfoundation.org/show_bug.cgi?id\u003d97362 and you get an automatic commit notification on the bug!\n\n(Nitpick, so its not blocking merging this.)",
+      "revId": "bc6f65e3327ba949897c15296660693dec577c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_94e1acd3",
+        "filename": "sw/PythonTest_sw_python.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-27T14:33:09Z",
+      "side": 1,
+      "message": "nitpick: Indenting makefiles is tricky: While we use space to indent, in makefiles we sometimes need tabs (because they are relevant for syntax).\n\nNo strong opinion on how to indent when the indent in makefiles, when it is not relevant for syntax (like here), but in general, it should be consistent: either tabs or spaces, not mixing them.\n\n(Nitpick, so its not blocking merging this. Can be fixed later.)",
+      "revId": "bc6f65e3327ba949897c15296660693dec577c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d4eb34af",
+        "filename": "sw/qa/python/check_named_property_values.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-27T14:33:09Z",
+      "side": 1,
+      "message": "gerrit highlights superficial whitespace here. We should avoid that.\n(Yes, possibly it was even me accidentally adding that when sending you the example.)\n\n(Nitpick, so its not blocking merging this. Can be fixed later.)",
+      "revId": "bc6f65e3327ba949897c15296660693dec577c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_34d1d8fc",
+        "filename": "sw/qa/python/check_named_property_values.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-27T14:33:09Z",
+      "side": 1,
+      "message": "Nitpick: Note that Python has the assertIn test, so you can write:\n self.assertIn(names[i], [\"prop1\", \"prop2\"], \"Got a wrong element name\")\nsee: https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertIn\nThe advantage is that this gives much more helpful error messages on failure.\n\n(Nitpick, so its not blocking merging this. Can be fixed later.)",
+      "revId": "bc6f65e3327ba949897c15296660693dec577c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_74db601c",
+        "filename": "sw/qa/python/check_named_property_values.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-27T14:33:09Z",
+      "side": 1,
+      "message": "Great! This is exactly how you tell the unittest that you expect the following to throw an exception!\n\nNitpick: \"self.assertRaises(Exception)\" is happy with _any_ exception, while the old test really expects a com.sun.star.container.ElementExistException here. A follow-up could make this:\n from com.sun.star.container import ElementExistException\n ...\n self.assertRaises(ElementExistException)\n\nto make sure this really throws a ElementExistException.\n\n(Nitpick, so its not blocking merging this. Can be fixed later.)",
+      "revId": "bc6f65e3327ba949897c15296660693dec577c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
