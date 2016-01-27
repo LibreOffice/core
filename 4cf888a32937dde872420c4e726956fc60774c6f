@@ -22,6 +22,30 @@
       "revId": "4cf888a32937dde872420c4e726956fc60774c6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_1423fc06",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3950,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-27T15:57:27Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that be \"defensive programming\"?",
+      "parentUuid": "7aa08908_d41054ab",
+      "range": {
+        "startLine": 3950,
+        "startChar": 8,
+        "endLine": 3950,
+        "endChar": 33
+      },
+      "revId": "4cf888a32937dde872420c4e726956fc60774c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
