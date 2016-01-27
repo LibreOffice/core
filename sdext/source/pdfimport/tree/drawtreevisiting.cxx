@@ -663,12 +663,11 @@ bool isSpaces(TextElement* pTextElem)
 
 bool notTransformed(const GraphicsContext& GC)
 {
-    return (
-        GC.Transformation.get(0,0) ==  100.00 &&
-        GC.Transformation.get(1,0) ==    0.00 &&
-        GC.Transformation.get(0,1) ==    0.00 &&
-        GC.Transformation.get(1,1) == -100.00
-       );
+    return
+        rtl::math::approxEqual(GC.Transformation.get(0,0), 100.00) &&
+        GC.Transformation.get(1,0) == 0.00 &&
+        GC.Transformation.get(0,1) == 0.00 &&
+        rtl::math::approxEqual(GC.Transformation.get(1,1), -100.00);
 }
 
 void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
