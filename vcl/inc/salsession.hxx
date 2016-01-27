@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALSESSION_HXX
 #define INCLUDED_VCL_INC_SALSESSION_HXX
 
-#include "vcl/dllapi.h"
+#include <vcl/dllapi.h>
 
 enum SalSessionEventType
 {
