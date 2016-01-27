@@ -30,7 +30,8 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <boost/functional/hash.hpp>
+
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -59,9 +60,9 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
         };
 
         typedef std::unordered_map<
-                    long                    ,
-                    TNumberedItem           ,
-                    ::boost::hash< long >     ,
+                    long,
+                    TNumberedItem,
+                    ::std::hash<long>,
                     ::std::equal_to< long > > TNumberedItemHash;
 
         typedef ::std::vector< long > TDeadItemList;
