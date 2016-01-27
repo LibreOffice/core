@@ -286,7 +286,7 @@ void Bridge::terminate(bool final) {
             }
             w = writer_;
             joinW = !isThread(writer_.get());
-            assert(!final || joinW);
+            assert(!final || joinW); // horror crash here ? ....
             if (joinW) {
                 writer_.clear();
             }
