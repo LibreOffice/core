@@ -104,7 +104,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 
 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
-    : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
+    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
     , m_pDialogWindow(pDialogWindow)
     , m_pDlgEditor(nullptr)
     , m_pDlgEdModel(nullptr)
@@ -550,13 +550,13 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 // XInterface
 
 
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogWindow, AccessibleExtendedComponentHelper_BASE, AccessibleDialogWindow_BASE )
+IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogWindow, OAccessibleExtendedComponentHelper, AccessibleDialogWindow_BASE )
 
 
 // XTypeProvider
 
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogWindow, AccessibleExtendedComponentHelper_BASE, AccessibleDialogWindow_BASE )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogWindow, OAccessibleExtendedComponentHelper, AccessibleDialogWindow_BASE )
 
 
 // XComponent
@@ -564,7 +564,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogWindow, AccessibleExtendedComp
 
 void AccessibleDialogWindow::disposing()
 {
-    AccessibleExtendedComponentHelper_BASE::disposing();
+    OAccessibleExtendedComponentHelper::disposing();
 
     if ( m_pDialogWindow )
     {

@@ -42,15 +42,12 @@ class DialogWindow;
 
 //  class AccessibleDialogControlShape
 
-
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
-
 typedef ::cppu::ImplHelper3<
         css::accessibility::XAccessible,
         css::lang::XServiceInfo,
         css::beans::XPropertyChangeListener > AccessibleDialogControlShape_BASE;
 
-class AccessibleDialogControlShape :    public AccessibleExtendedComponentHelper_BASE,
+class AccessibleDialogControlShape :    public comphelper::OAccessibleExtendedComponentHelper,
                                         public AccessibleDialogControlShape_BASE
 {
     friend class AccessibleDialogWindow;

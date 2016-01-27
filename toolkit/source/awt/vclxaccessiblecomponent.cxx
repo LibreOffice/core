@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
-    : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
+    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
 {
     m_xVCLXWindow = pVCLXWindow;
@@ -92,8 +92,8 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     // @see OAccessibleContextHelper::OAccessibleContextHelper( IMutex* )
 }
 
-IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
-IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
+IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
+IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
 
 OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
@@ -348,7 +348,7 @@ void VCLXAccessibleComponent::disposing()
 {
     DisconnectEvents();
 
-    AccessibleExtendedComponentHelper_BASE::disposing();
+    OAccessibleExtendedComponentHelper::disposing();
 
     m_xVCLXWindow.clear();
 }
@@ -557,7 +557,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
     if ( xAcc.is() )
     {   // we _do_ have a foreign-controlled parent -> use the base class' implementation,
         // which goes the UNO way
-        nIndex = AccessibleExtendedComponentHelper_BASE::getAccessibleIndexInParent( );
+        nIndex = OAccessibleExtendedComponentHelper::getAccessibleIndexInParent( );
     }
     else
     {

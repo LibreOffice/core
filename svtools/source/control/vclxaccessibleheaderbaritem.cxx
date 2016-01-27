@@ -47,7 +47,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent )
-    :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
+    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
     ,m_pHeadBar( pHeadBar )
     ,m_nIndexInParent(_nIndexInParent + 1)
 
@@ -93,13 +93,13 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds() throw (RuntimeExcept
 // XInterface
 
 
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleHeaderBarItem, AccessibleExtendedComponentHelper_BASE, VCLXAccessibleHeaderBarItem_BASE )
+IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleHeaderBarItem, OAccessibleExtendedComponentHelper, VCLXAccessibleHeaderBarItem_BASE )
 
 
 // XTypeProvider
 
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, AccessibleExtendedComponentHelper_BASE, VCLXAccessibleHeaderBarItem_BASE )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, OAccessibleExtendedComponentHelper, VCLXAccessibleHeaderBarItem_BASE )
 
 
 // XComponent
@@ -107,7 +107,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, AccessibleExtende
 
 void VCLXAccessibleHeaderBarItem::disposing()
 {
-    AccessibleExtendedComponentHelper_BASE::disposing();
+    OAccessibleExtendedComponentHelper::disposing();
 }
 
 // XServiceInfo

@@ -344,13 +344,13 @@ namespace accessibility
     // XInterface
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPageList, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPageList_BASE )
+    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPageList, OAccessibleExtendedComponentHelper, AccessibleTabBarPageList_BASE )
 
 
     // XTypeProvider
 
 
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPageList, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPageList_BASE )
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPageList, OAccessibleExtendedComponentHelper, AccessibleTabBarPageList_BASE )
 
 
     // XComponent

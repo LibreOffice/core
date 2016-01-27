@@ -49,16 +49,13 @@ class AccessibleStateSetHelper;
 
 //  class VCLXAccessibleComponent
 
-
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
-
 typedef ::cppu::ImplHelper1<
     css::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
 class VCLExternalSolarLock;
 
 class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
-        :public AccessibleExtendedComponentHelper_BASE
+        :public comphelper::OAccessibleExtendedComponentHelper
         ,public ::comphelper::OAccessibleImplementationAccess
         ,public VCLXAccessibleComponent_BASE
 {

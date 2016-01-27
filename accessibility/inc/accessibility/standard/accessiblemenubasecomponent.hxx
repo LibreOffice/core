@@ -41,14 +41,11 @@ class AccessibleStateSetHelper;
 
 //  class OAccessibleMenuBaseComponent
 
-
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
-
 typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > OAccessibleMenuBaseComponent_BASE;
 
-class OAccessibleMenuBaseComponent : public AccessibleExtendedComponentHelper_BASE,
+class OAccessibleMenuBaseComponent : public comphelper::OAccessibleExtendedComponentHelper,
                                      public OAccessibleMenuBaseComponent_BASE
 {
     friend class OAccessibleMenuItemComponent;

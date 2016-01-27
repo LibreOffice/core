@@ -51,7 +51,7 @@ using namespace ::comphelper;
 
 
 AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)
-    :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
+    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
     ,m_pDialogWindow( pDialogWindow )
     ,m_pDlgEdObj( pDlgEdObj )
 {
@@ -245,15 +245,15 @@ awt::Rectangle AccessibleDialogControlShape::implGetBounds() throw (RuntimeExcep
 }
 
 // XInterface
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogControlShape, AccessibleExtendedComponentHelper_BASE, AccessibleDialogControlShape_BASE )
+IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogControlShape, OAccessibleExtendedComponentHelper, AccessibleDialogControlShape_BASE )
 
 // XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogControlShape, AccessibleExtendedComponentHelper_BASE, AccessibleDialogControlShape_BASE )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogControlShape, OAccessibleExtendedComponentHelper, AccessibleDialogControlShape_BASE )
 
 // XComponent
 void AccessibleDialogControlShape::disposing()
 {
-    AccessibleExtendedComponentHelper_BASE::disposing();
+    OAccessibleExtendedComponentHelper::disposing();
 
     m_pDialogWindow = nullptr;
     m_pDlgEdObj = nullptr;

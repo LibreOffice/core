@@ -43,13 +43,11 @@ class AccessibleStateSetHelper;
 //    class VCLXAccessibleHeaderBarItem
 //    ----------------------------------------------------
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
-
 typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleHeaderBarItem_BASE;
 
-class VCLXAccessibleHeaderBarItem :    public AccessibleExtendedComponentHelper_BASE,
+class VCLXAccessibleHeaderBarItem :    public comphelper::OAccessibleExtendedComponentHelper,
                         public VCLXAccessibleHeaderBarItem_BASE
 {
 private:

@@ -47,15 +47,12 @@ class DlgEdObj;
 
 //  class AccessibleDialogWindow
 
-
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
-
 typedef ::cppu::ImplHelper3 <
     css::accessibility::XAccessible,
     css::accessibility::XAccessibleSelection,
     css::lang::XServiceInfo > AccessibleDialogWindow_BASE;
 
-class AccessibleDialogWindow :  public AccessibleExtendedComponentHelper_BASE,
+class AccessibleDialogWindow :  public comphelper::OAccessibleExtendedComponentHelper,
                                 public AccessibleDialogWindow_BASE,
                                 public SfxListener
 {

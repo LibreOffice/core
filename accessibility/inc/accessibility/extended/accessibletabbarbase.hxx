@@ -33,12 +33,7 @@ class VclWindowEvent;
 namespace accessibility
 {
 
-
-
-
-typedef ::comphelper::OAccessibleExtendedComponentHelper AccessibleExtendedComponentHelper_BASE;
-
-class AccessibleTabBarBase : public AccessibleExtendedComponentHelper_BASE
+class AccessibleTabBarBase : public comphelper::OAccessibleExtendedComponentHelper
 {
 public:
     explicit            AccessibleTabBarBase( TabBar* pTabBar );

@@ -45,7 +45,7 @@ using namespace ::comphelper;
 
 
 OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent( Menu* pMenu )
-    :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
+    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
     ,m_pMenu( pMenu )
     ,m_bEnabled( false )
     ,m_bFocused( false )
@@ -685,13 +685,13 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
 // XInterface
 
 
-IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleMenuBaseComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleMenuBaseComponent_BASE )
+IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleMenuBaseComponent, OAccessibleExtendedComponentHelper, OAccessibleMenuBaseComponent_BASE )
 
 
 // XTypeProvider
 
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuBaseComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleMenuBaseComponent_BASE )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuBaseComponent, OAccessibleExtendedComponentHelper, OAccessibleMenuBaseComponent_BASE )
 
 
 // XComponent
@@ -699,7 +699,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleMenuBaseComponent, AccessibleExtend
 
 void OAccessibleMenuBaseComponent::disposing()
 {
-    AccessibleExtendedComponentHelper_BASE::disposing();
+    OAccessibleExtendedComponentHelper::disposing();
 
     if ( m_pMenu )
     {

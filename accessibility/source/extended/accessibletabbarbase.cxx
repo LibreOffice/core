@@ -30,7 +30,7 @@ namespace accessibility
 
 
 AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
-    AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() ),
+    OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() ),
     m_pTabBar( nullptr )
 {
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
@@ -69,7 +69,7 @@ void AccessibleTabBarBase::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
 
 void AccessibleTabBarBase::disposing()
 {
-    AccessibleExtendedComponentHelper_BASE::disposing();
+    OAccessibleExtendedComponentHelper::disposing();
     ClearTabBarPointer();
 }
 

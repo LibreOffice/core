@@ -202,13 +202,13 @@ namespace accessibility
     // XInterface
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPage, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPage_BASE )
+    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabBarPage, OAccessibleExtendedComponentHelper, AccessibleTabBarPage_BASE )
 
 
     // XTypeProvider
 
 
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPage, AccessibleExtendedComponentHelper_BASE, AccessibleTabBarPage_BASE )
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabBarPage, OAccessibleExtendedComponentHelper, AccessibleTabBarPage_BASE )
 
 
     // XComponent
