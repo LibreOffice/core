@@ -20,7 +20,9 @@
 #ifndef INCLUDED_VCL_INC_SALLAYOUT_HXX
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
+#include <iostream>
 #include <list>
+#include <vector>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -31,9 +33,9 @@
 
 #include "salglyphid.hxx"
 
-typedef unsigned short LanguageType;
-
 #define MAX_FALLBACK 16
+
+typedef unsigned short LanguageType;
 
 class SalGraphics;
 class PhysicalFontFace;
