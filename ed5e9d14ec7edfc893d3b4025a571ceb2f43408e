@@ -284,6 +284,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_74aa401b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Controller.xcu",
+        "patchSetId": 13
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-01-27T17:07:18Z",
+      "side": 1,
+      "message": "PopupMenuToolbarController::statusChanged calls the \"enable\" method that enables/disables the button. Take a look at how this is implemented (svtools/source/uno/toolboxcontroller.cxx#773). This will give you an idea how to access the ToolBox. (And then you could enable/disable in PopupMenuToolbarController::statusChanged too, instead of calling the \"enable\" method.)",
+      "parentUuid": "7aa08908_54e2a4a0",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_31028a3f",
         "filename": "sc/sdi/scalc.sdi",
         "patchSetId": 13
