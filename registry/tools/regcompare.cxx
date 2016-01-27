@@ -25,6 +25,7 @@
 #include "options.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
 #include <stdio.h>
@@ -584,7 +585,7 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
             }
             break;
         case RT_TYPE_FLOAT:
-            if (constValue1.m_value.aFloat != constValue2.m_value.aFloat)
+            if (!rtl::math::approxEqual(constValue1.m_value.aFloat, constValue2.m_value.aFloat))
             {
                 if ( options.forceOutput() && !options.unoTypeCheck() )
                 {
@@ -596,7 +597,7 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
             }
             break;
         case RT_TYPE_DOUBLE:
-            if (constValue1.m_value.aDouble != constValue2.m_value.aDouble)
+            if (!rtl::math::approxEqual(constValue1.m_value.aDouble, constValue2.m_value.aDouble))
             {
                 if ( options.forceOutput() && !options.unoTypeCheck() )
                 {
