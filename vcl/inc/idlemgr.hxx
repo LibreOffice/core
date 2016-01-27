@@ -40,7 +40,7 @@ public:
     bool            InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPriority );
     void            RemoveIdleHdl( const Link<Application*,void>& rLink );
 
-                    // Timer* kann auch NULL sein
+                    // Timer* can be NULL
                     DECL_LINK_TYPED(TimeoutHdl, Timer *, void);
 };
 
