@@ -20,16 +20,6 @@
 #ifndef INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
 #define INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
 
-#include <tools/link.hxx>
-#include <vcl/dllapi.h>
-#include <vcl/impdel.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
-
-#include <com/sun/star/uno/Reference.hxx>
-
-#include <vector>
-
 class VCL_DLLPUBLIC VclEventListeners
 {
 public:
