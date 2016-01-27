@@ -20,8 +20,6 @@
 #include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
 #include "com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp"
-#include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
-#include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -386,60 +384,7 @@ void VclGtkClipboard::ClipboardGet(GtkClipboard* /*clipboard*/, GtkSelectionData
 {
     if (!m_aContents.is())
         return;
-
-    GdkAtom type(gdk_atom_intern(OUStringToOString(m_aConversionHelper.aInfoToFlavor[info].MimeType,
-                                                   RTL_TEXTENCODING_UTF8).getStr(),
-                                 false));
-
-    css::datatransfer::DataFlavor aFlavor(m_aConversionHelper.aInfoToFlavor[info]);
-    if (aFlavor.MimeType == "UTF8_STRING" || aFlavor.MimeType == "STRING")
-        aFlavor.MimeType = "text/plain;charset=utf-8";
-
-    Sequence<sal_Int8> aData;
-    Any aValue;
-
-    try
-    {
-        aValue = m_aContents->getTransferData(aFlavor);
-    }
-    catch(...)
-    {
-    }
-
-    if (aValue.getValueTypeClass() == TypeClass_STRING)
-    {
-        OUString aString;
-        aValue >>= aString;
-        aData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aString.getStr()), aString.getLength() * sizeof( sal_Unicode ) );
-    }
-    else if (aValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get())
-    {
-        aValue >>= aData;
-    }
-    else if (aFlavor.MimeType == "text/plain;charset=utf-8")
-    {
-        //didn't have utf-8, try utf-16 and convert
-        aFlavor.MimeType = "text/plain;charset=utf-16";
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
-        try
-        {
-            aValue = m_aContents->getTransferData(aFlavor);
-        }
-        catch(...)
-        {
-        }
-        OUString aString;
-        aValue >>= aString;
-        OString aUTF8String(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
-        gtk_selection_data_set(selection_data, type, 8,
-                               reinterpret_cast<const guchar *>(aUTF8String.getStr()),
-                               aUTF8String.getLength());
-        return;
-    }
-
-    gtk_selection_data_set(selection_data, type, 8,
-                           reinterpret_cast<const guchar *>(aData.getArray()),
-                           aData.getLength());
+    m_aConversionHelper.setSelectionData(m_aContents, selection_data, info);
 }
 
 void VclGtkClipboard::OwnerChanged(GtkClipboard* clipboard, GdkEvent* /*event*/)
@@ -476,6 +421,64 @@ GtkTargetEntry VclToGtkHelper::makeGtkTargetEntry(const css::datatransfer::DataF
         aInfoToFlavor.push_back(rFlavor);
     }
     return aEntry;
+}
+
+void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransferable> &rTrans,
+                                      GtkSelectionData *selection_data, guint info)
+{
+    GdkAtom type(gdk_atom_intern(OUStringToOString(aInfoToFlavor[info].MimeType,
+                                                   RTL_TEXTENCODING_UTF8).getStr(),
+                                 false));
+
+    css::datatransfer::DataFlavor aFlavor(aInfoToFlavor[info]);
+    if (aFlavor.MimeType == "UTF8_STRING" || aFlavor.MimeType == "STRING")
+        aFlavor.MimeType = "text/plain;charset=utf-8";
+
+    Sequence<sal_Int8> aData;
+    Any aValue;
+
+    try
+    {
+        aValue = rTrans->getTransferData(aFlavor);
+    }
+    catch (...)
+    {
+    }
+
+    if (aValue.getValueTypeClass() == TypeClass_STRING)
+    {
+        OUString aString;
+        aValue >>= aString;
+        aData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aString.getStr()), aString.getLength() * sizeof( sal_Unicode ) );
+    }
+    else if (aValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get())
+    {
+        aValue >>= aData;
+    }
+    else if (aFlavor.MimeType == "text/plain;charset=utf-8")
+    {
+        //didn't have utf-8, try utf-16 and convert
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        try
+        {
+            aValue = rTrans->getTransferData(aFlavor);
+        }
+        catch (...)
+        {
+        }
+        OUString aString;
+        aValue >>= aString;
+        OString aUTF8String(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
+        gtk_selection_data_set(selection_data, type, 8,
+                               reinterpret_cast<const guchar *>(aUTF8String.getStr()),
+                               aUTF8String.getLength());
+        return;
+    }
+
+    gtk_selection_data_set(selection_data, type, 8,
+                           reinterpret_cast<const guchar *>(aData.getArray()),
+                           aData.getLength());
 }
 
 namespace
@@ -604,6 +607,10 @@ void VclGtkClipboard::setContents(
                                         ClipboardGetFunc, ClipboardClearFunc, G_OBJECT(m_pOwner));
             gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
         }
+
+        for (auto &a : m_aGtkTargets)
+            g_free(a.target);
+
         m_aGtkTargets = aGtkTargets;
     }
 
@@ -808,6 +815,72 @@ void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions) throw(std::excep
 Reference< XInterface > GtkInstance::CreateDropTarget()
 {
     return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDropTarget()) );
+}
+
+GtkDragSource::~GtkDragSource()
+{
+    if (m_pFrame)
+        m_pFrame->deregisterDragSource(this);
+}
+
+void GtkDragSource::deinitialize()
+{
+    m_pFrame = nullptr;
+}
+
+sal_Bool GtkDragSource::isDragImageSupported() throw(std::exception)
+{
+    return true;
+}
+
+sal_Int32 GtkDragSource::getDefaultCursor( sal_Int8 ) throw(std::exception)
+{
+    return 0;
+}
+
+void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArguments) throw(Exception, std::exception)
+{
+    if (rArguments.getLength() < 2)
+    {
+        throw RuntimeException("DragSource::initialize: Cannot install window event handler",
+                               static_cast<OWeakObject*>(this));
+    }
+
+    sal_Size nFrame = 0;
+    rArguments.getConstArray()[1] >>= nFrame;
+
+    if (!nFrame)
+    {
+        throw RuntimeException("DragSource::initialize: missing SalFrame",
+                               static_cast<OWeakObject*>(this));
+    }
+
+    m_pFrame = reinterpret_cast<GtkSalFrame*>(nFrame);
+    m_pFrame->registerDragSource(this);
+}
+
+OUString SAL_CALL GtkDragSource::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.datatransfer.dnd.VclGtkDragSource");
+}
+
+sal_Bool SAL_CALL GtkDragSource::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL GtkDragSource::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDragSource" };
+    return aRet;
+}
+
+Reference< XInterface > GtkInstance::CreateDragSource()
+{
+    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDragSource()) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

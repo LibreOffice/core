@@ -24,6 +24,7 @@
 #include <unx/gensys.h>
 #include <headless/svpinst.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -56,6 +57,8 @@ struct VclToGtkHelper
 {
     std::vector<css::datatransfer::DataFlavor> aInfoToFlavor;
     std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+    void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
+                          GtkSelectionData *selection_data, guint info);
 private:
     GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
 };
@@ -123,6 +126,48 @@ public:
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
     void fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte);
 };
+
+class GtkDragSource : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+                                                           css::lang::XInitialization,
+                                                           css::lang::XServiceInfo>
+{
+    osl::Mutex m_aMutex;
+    GtkSalFrame* m_pFrame;
+    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
+    css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
+    VclToGtkHelper m_aConversionHelper;
+public:
+    GtkDragSource() : WeakComponentImplHelper( m_aMutex ) {}
+    virtual ~GtkDragSource();
+
+    // XDragSource
+    virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) override;
+    virtual sal_Int32   SAL_CALL getDefaultCursor(sal_Int8 dragAction) throw(std::exception) override;
+    virtual void        SAL_CALL startDrag(
+        const css::datatransfer::dnd::DragGestureEvent& trigger, sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
+        const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
+        const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener) throw(std::exception) override;
+
+    // XInitialization
+    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any >& rArguments)
+        throw (css::uno::Exception, std::exception) override;
+            void        deinitialize();
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    void dragFailed();
+    void dragDelete();
+    void dragEnd(GdkDragContext* context);
+    void dragDataGet(GtkSelectionData *data, guint info);
+};
+
 #endif
 
 class GtkSalTimer;
@@ -175,6 +220,7 @@ public:
 
 #if GTK_CHECK_VERSION(3,0,0)
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
 #endif
 

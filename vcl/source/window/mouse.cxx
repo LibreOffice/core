@@ -751,6 +751,7 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aDragSourceAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
 #endif

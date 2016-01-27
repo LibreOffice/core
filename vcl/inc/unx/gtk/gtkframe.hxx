@@ -40,6 +40,9 @@
 #include "tools/link.hxx"
 
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
 #include <list>
 #include <vector>
@@ -55,6 +58,7 @@ typedef ::Window GdkNativeWindow;
 #define gdk_set_sm_client_id(i) gdk_x11_set_sm_client_id(i)
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
 class GtkDropTarget;
+class GtkDragSource;
 class GtkDnDTransferable;
 #endif
 
@@ -209,6 +213,7 @@ class GtkSalFrame : public SalFrame
     long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
     GtkDropTarget*                  m_pDropTarget;
+    GtkDragSource*                  m_pDragSource;
     bool                            m_bInDrag;
     GtkDnDTransferable*             m_pFormatConversionRequest;
 #else
@@ -249,6 +254,13 @@ class GtkSalFrame : public SalFrame
     static void         signalDragDropReceived(GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                                                GtkSelectionData *data, guint ttype, guint time, gpointer frame);
     static void         signalDragLeave(GtkWidget *widget, GdkDragContext *context, guint time, gpointer frame);
+
+    static gboolean     signalDragFailed(GtkWidget *widget, GdkDragContext *context, GtkDragResult result, gpointer frame);
+    static void         signalDragDelete(GtkWidget *widget, GdkDragContext *context, gpointer frame);
+    static void         signalDragEnd(GtkWidget *widget, GdkDragContext *context, gpointer frame);
+    static void         signalDragDataGet(GtkWidget* widget, GdkDragContext* context, GtkSelectionData *data, guint info,
+                                          guint time, gpointer frame);
+
 #if GTK_CHECK_VERSION(3,14,0)
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
     static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
@@ -385,10 +397,25 @@ public:
         m_pDropTarget = nullptr;
     }
 
+    void registerDragSource(GtkDragSource* pDragSource)
+    {
+        assert(!m_pDragSource);
+        m_pDragSource = pDragSource;
+    }
+
+    void deregisterDragSource(GtkDragSource* pDragSource)
+    {
+        assert(m_pDragSource == pDragSource); (void)pDragSource;
+        m_pDragSource = nullptr;
+    }
+
     void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
     {
         m_pFormatConversionRequest = pRequest;
     }
+
+    void startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
+                   GdkDragAction sourceActions, GtkTargetList* pTargetList);
 
 #endif
     virtual ~GtkSalFrame();
