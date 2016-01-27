@@ -155,6 +155,7 @@ public:
     void testMoveCellAnchoredShapes();
     void testMatrixMultiplication();
     void testPreserveTextWhitespaceXLSX();
+    void testPreserveTextWhitespace2XLSX();
     void testTextDirection();
 
     void testRefStringXLSX();
@@ -211,6 +212,7 @@ public:
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testPreserveTextWhitespaceXLSX);
+    CPPUNIT_TEST(testPreserveTextWhitespace2XLSX);
     CPPUNIT_TEST(testSheetLocalRangeNameXLS);
     CPPUNIT_TEST(testSheetTextBoxHyperlink);
     CPPUNIT_TEST(testFontSize);
@@ -2779,6 +2781,20 @@ void ScExportTest::testPreserveTextWhitespaceXLSX()
     xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si/x:t", "space", "preserve");
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPreserveTextWhitespace2XLSX()
+{
+    ScDocShellRef xShell = loadDoc("preserve_space.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:sst/x:si[1]/x:t", "space", "preserve");
+    assertXPath(pDoc, "/x:sst/x:si[2]/x:r[1]/x:t", "space", "preserve");
+    assertXPath(pDoc, "/x:sst/x:si[2]/x:r[2]/x:t", "space", "preserve");
     xDocSh->DoClose();
 }
 
