@@ -29,6 +29,7 @@
 #include <opencl/openclwrapper.hxx>
 #include <opencl/platforminfo.hxx>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 
 #include "opencl_device.hxx"
 
@@ -175,7 +176,7 @@ double timerCurrent(timer* mytimer)
 /* Random number generator */
 double random(double min, double max)
 {
-    if (min == max)
+    if (rtl::math::approxEqual(min, max))
         return min;
     return comphelper::rng::uniform_real_distribution(min, max);
 }
