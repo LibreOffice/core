@@ -1036,6 +1036,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     //check if the doc is synchronized and contains at least one linked section
     const bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFormatCount() > 1;
     const bool bNeedsTempFiles = ( bMT_EMAIL || bMT_FILE );
+    const bool bIsMergeSilent = IsMergeSilent();
 
     bool bCheckSingleFile_ = rMergeDescriptor.bCreateSingleFile;
     if( bMT_EMAIL )
@@ -1160,7 +1161,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             vcl::Window *pSourceWindow = nullptr;
             VclPtr<CancelableDialog> pProgressDlg;
 
-            if( !IsMergeSilent() )
+            if( !bIsMergeSilent )
             {
                 // construct the process dialog
                 pSourceWindow = &pSourceShell->GetView().GetEditWin();
@@ -1215,7 +1216,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // it can be manually computed from the source documents (for which we do layouts, so the page
             // count is known, and there is a blank page between each of them in the target document).
             int targetDocPageCount = 0;
-            if( !IsMergeSilent() && bMT_SHELL &&
+            if( !bIsMergeSilent && bMT_SHELL &&
                     lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
                 static_cast<CreateMonitor*>( pProgressDlg.get() )->SetTotalCount( nDocCount );
 
@@ -1289,7 +1290,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         std::unique_ptr< INetURLObject > aTempFileURL;
                         if( bNeedsTempFiles )
                             aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
-                        if (!IsMergeSilent()) {
+                        if( !bIsMergeSilent ) {
                             if( bMT_SHELL )
                                 static_cast<CreateMonitor*>( pProgressDlg.get() )->SetCurrentPosition( nDocNo );
                             else {
@@ -1393,7 +1394,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                                 lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, false, aOptions );
 
-                                pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+                                pWorkView->StartPrint( aOptions, bIsMergeSilent, rMergeDescriptor.bPrintAsync );
                                 // some GetPrinter functions have a true default, so keep the false
                                 SfxPrinter* pDocPrt = pWorkView->GetPrinter( false );
                                 JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
@@ -1525,7 +1526,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     // print the target document
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                     lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, true, aOptions );
-                    pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+                    pTargetView->ExecPrint( aOptions, bIsMergeSilent, rMergeDescriptor.bPrintAsync );
                 }
 
                 if( IsMergeOk() && bMT_SHELL )
