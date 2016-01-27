@@ -219,7 +219,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     {
         svx::ODataAccessDescriptor aDescriptor(aArgs);
         SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
-        pDBManager->MergeNew(aMergeDesc);
+        pDBManager->Merge(aMergeDesc);
     }
     else if(aURL.Complete.equalsAscii(cURLInsertColumns))
     {

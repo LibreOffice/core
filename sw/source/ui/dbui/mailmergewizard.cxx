@@ -283,7 +283,7 @@ void SwMailMergeWizard::CreateTargetDocument()
     aMergeDesc.pMailMergeConfigItem = &m_rConfigItem;
     aMergeDesc.bCreateSingleFile = true;
 
-    GetSwView()->GetWrtShell().GetDBManager()->MergeNew( aMergeDesc, this );
+    GetSwView()->GetWrtShell().GetDBManager()->Merge( aMergeDesc, this );
     m_rConfigItem.SetMergeDone();
     if( m_rConfigItem.GetTargetView() )
         m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame().Appear();
