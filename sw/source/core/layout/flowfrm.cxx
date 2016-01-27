@@ -287,10 +287,11 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
             nRet = 1;
         pTmp = pTmp->GetFollow();
     } while ( !nRet && pTmp );
-    if ( pPage->GetSortedObjs() )
+    const SwSortedObjs *pObjs = pPage ? pPage->GetSortedObjs() : nullptr;
+    if (pObjs)
     {
         // #i28701# - new type <SwSortedObjs>
-        const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
+        const SwSortedObjs &rObjs = *pObjs;
         sal_uLong nIndex = ULONG_MAX;
         for ( size_t i = 0; nRet < 3 && i < rObjs.size(); ++i )
         {
