@@ -3958,6 +3958,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
+    if (cMatrixFlag == MM_FORMULA)
+    {
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
+        return false;
+    }
+
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
