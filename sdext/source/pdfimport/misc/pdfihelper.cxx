@@ -54,7 +54,7 @@ void pdfi::FillDashStyleProps(PropertyMap& props, const std::vector<double>& das
 
     for (size_t i = 0; i < pairCount; i++)
     {
-        if (dotLengths[dotStage] != dashArray[i * 2])
+        if (!rtl::math::approxEqual(dotLengths[dotStage], dashArray[i * 2]))
         {
             dotStage++;
             if (dotStage == 3)
