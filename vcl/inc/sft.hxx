@@ -49,6 +49,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
 
+#include <vector>
+
 namespace vcl
 {
 
