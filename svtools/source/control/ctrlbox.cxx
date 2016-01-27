@@ -372,7 +372,7 @@ static double lcl_getGuessedWidth( long nTested, double nRate, bool bChanging )
         nWidth = double( nTested ) / nRate;
     else
     {
-        if ( double( nTested ) == nRate )
+        if ( rtl::math::approxEqual(double( nTested ), nRate) )
             nWidth = nRate;
     }
 
