@@ -398,6 +398,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Arpitan (Switzerland)" ; LANGUAGE_USER_ARPITAN_SWITZERLAND ; > ;
         < "English (Botswana)" ; LANGUAGE_USER_ENGLISH_BOTSWANA ; > ;
         < "Interlingue Occidental" ; LANGUAGE_USER_INTERLINGUE ; > ;
+        < "Apatani" ; LANGUAGE_USER_APATANI ; > ;
     };
 };
 
