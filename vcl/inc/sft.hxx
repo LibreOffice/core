@@ -46,13 +46,8 @@
 #include <unistd.h>
 #endif
 
-#include <sal/types.h>
-
-#include "vcl/dllapi.h"
-
-#include <vector>
-
-#include "vcl/fontcapabilities.hxx"
+#include <vcl/dllapi.h>
+#include <vcl/fontcapabilities.hxx>
 
 namespace vcl
 {
