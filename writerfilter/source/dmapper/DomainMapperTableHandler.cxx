@@ -1188,10 +1188,11 @@ void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::X
 #endif
 
     //add a new 'row' of properties
-    m_aCellSeq = CellSequence_t(2);
-    if (!start.get())
-        return;
-    m_aCellSeq[0] = start->getStart();
+    m_aCellRange.clear();
+    uno::Reference<text::XTextRange> xStart;
+    if (start.get())
+        xStart = start->getStart();
+    m_aCellRange.push_back(xStart);
 }
 
 void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTextRange > & end)
@@ -1203,10 +1204,11 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
     TagLogger::getInstance().endElement();
 #endif
 
-    if (!end.get())
-        return;
-    m_aCellSeq[1] = end->getEnd();
-    m_aRowSeq[m_nCellIndex] = m_aCellSeq;
+    uno::Reference<text::XTextRange> xEnd;
+    if (end.get())
+        xEnd = end->getEnd();
+    m_aCellRange.push_back(xEnd);
+    m_aRowSeq[m_nCellIndex] = comphelper::containerToSequence(m_aCellRange);
     ++m_nCellIndex;
 }
 

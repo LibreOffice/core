@@ -62,7 +62,7 @@ class DomainMapperTableHandler
 {
     css::uno::Reference<css::text::XTextAppendAndConvert>  m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;
-    CellSequence_t m_aCellSeq;
+    std::vector< css::uno::Reference<css::text::XTextRange> > m_aCellRange;
     RowSequence_t    m_aRowSeq;
     TableSequence_t m_aTableSeq;
 
