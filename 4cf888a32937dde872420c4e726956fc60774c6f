@@ -70,6 +70,30 @@
       "revId": "4cf888a32937dde872420c4e726956fc60774c6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b4edc890",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3950,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-01-27T16:17:40Z",
+      "side": 1,
+      "message": "I wanted to fix only this specific issue.",
+      "parentUuid": "7aa08908_f4d0f0cb",
+      "range": {
+        "startLine": 3950,
+        "startChar": 8,
+        "endLine": 3950,
+        "endChar": 33
+      },
+      "revId": "4cf888a32937dde872420c4e726956fc60774c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
