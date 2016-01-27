@@ -289,7 +289,7 @@ public:
     inline void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
 
     /// Merging of data records into fields.
-    bool            MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = nullptr );
+    bool            Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = nullptr );
     void            MergeCancel();
 
     inline bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };

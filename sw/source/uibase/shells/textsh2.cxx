@@ -178,7 +178,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 aDescriptor[daCommandType]  <<= nCommandTypeArg;
 
                 SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
-                pDBManager->MergeNew(aMergeDesc);
+                pDBManager->Merge(aMergeDesc);
 
                 if ( bDisposeResultSet )
                     ::comphelper::disposeComponent(xCursor);

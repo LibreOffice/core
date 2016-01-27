@@ -547,7 +547,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw IllegalArgumentException("Property type mismatch or property not set: " + rName, static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
 
-    // need to translate the selection: the API here requires a sequence of bookmarks, but the MergeNew
+    // need to translate the selection: the API here requires a sequence of bookmarks, but the Merge
     // method we will call below requires a sequence of indices.
     if ( aCurSelection.getLength() )
     {
@@ -800,7 +800,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
 
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh));
-    bool bSucc = pMgr->MergeNew( aMergeDesc );
+    bool bSucc = pMgr->Merge( aMergeDesc );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh));
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
