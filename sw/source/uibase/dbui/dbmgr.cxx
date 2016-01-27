@@ -169,6 +169,13 @@ enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const sal_uInt16 nSkip = 0,
                               const SwDBNextRecord action = SwDBNextRecord::NEXT );
 
+enum class WorkingDocType { SOURCE, TARGET, COPY };
+static SfxObjectShell* lcl_CreateWorkingDocument(
+    const WorkingDocType aType, const SwDoc* pSourceDoc,
+    const vcl::Window *pSourceWindow,
+    SwDBManager** const pDBManager,
+    SwView** const pView, SwWrtShell** const pWrtShell, SwDoc** const pDoc );
+
 static bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<sdbc::XResultSet>& xResultSet )
 {
     uno::Reference<beans::XPropertySet> xPrSet(xResultSet, uno::UNO_QUERY);
@@ -418,6 +425,35 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
 {
     assert( !bInMerge && !pImpl->pMergeData && "merge already activated!" );
 
+    SfxObjectShellLock  xWorkObjSh;
+    SwWrtShell         *pWorkShell;
+    SwDoc              *pWorkDoc;
+    SwDBManager        *pWorkDocOrigDBManager;
+
+    switch( rMergeDesc.nMergeType )
+    {
+        case DBMGR_MERGE_PRINTER:
+        case DBMGR_MERGE_EMAIL:
+        case DBMGR_MERGE_FILE:
+        case DBMGR_MERGE_SHELL:
+        {
+            SwDocShell *pSourceDocSh = rMergeDesc.rSh.GetView().GetDocShell();
+            if( pSourceDocSh->IsModified() )
+            {
+                pWorkDocOrigDBManager = this;
+                xWorkObjSh = lcl_CreateWorkingDocument(
+                    WorkingDocType::SOURCE, rMergeDesc.rSh.GetDoc(), nullptr,
+                    &pWorkDocOrigDBManager, nullptr, &pWorkShell, &pWorkDoc );
+            }
+            // fall through
+        }
+
+        default:
+            if( !xWorkObjSh.Is() )
+                pWorkShell = &rMergeDesc.rSh;
+            break;
+    }
+
     SwDBData aData;
     aData.nCommandType = sdb::CommandType::TABLE;
     uno::Reference<sdbc::XResultSet>  xResSet;
@@ -479,7 +515,7 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
 
     lcl_InitNumberFormatter(*pImpl->pMergeData, xSource);
 
-    rMergeDesc.rSh.ChgDBData(aData);
+    pWorkShell->ChgDBData(aData);
     bInMerge = true;
 
     if (IsInitDBFields())
@@ -487,13 +523,13 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
         // with database fields without DB-Name, use DB-Name from Doc
         std::vector<OUString> aDBNames;
         aDBNames.push_back(OUString());
-        SwDBData aInsertData = rMergeDesc.rSh.GetDBData();
+        SwDBData aInsertData = pWorkShell->GetDBData();
         OUString sDBName = aInsertData.sDataSource;
         sDBName += OUString(DB_DELIM);
         sDBName += aInsertData.sCommand;
         sDBName += OUString(DB_DELIM);
         sDBName += OUString::number(aInsertData.nCommandType);
-        rMergeDesc.rSh.ChangeDBFields( aDBNames, sDBName);
+        pWorkShell->ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(false);
     }
 
@@ -501,10 +537,10 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
     switch(rMergeDesc.nMergeType)
     {
         case DBMGR_MERGE:
-            rMergeDesc.rSh.StartAllAction();
-            rMergeDesc.rSh.SwViewShell::UpdateFields( true );
-            rMergeDesc.rSh.SetModified();
-            rMergeDesc.rSh.EndAllAction();
+            pWorkShell->StartAllAction();
+            pWorkShell->SwViewShell::UpdateFields( true );
+            pWorkShell->SetModified();
+            pWorkShell->EndAllAction();
             break;
 
         case DBMGR_MERGE_PRINTER:
@@ -512,17 +548,23 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pP
         case DBMGR_MERGE_FILE:
         case DBMGR_MERGE_SHELL:
             // save files and send them as e-Mail if required
-            bRet = MergeMailFiles(&rMergeDesc.rSh, rMergeDesc, pParent);
+            bRet = MergeMailFiles(pWorkShell, rMergeDesc, pParent);
             break;
 
         default:
             // insert selected entries
             // (was: InsertRecord)
-            ImportFromConnection(&rMergeDesc.rSh);
+            ImportFromConnection(pWorkShell);
             break;
     }
 
     DELETEZ( pImpl->pMergeData );
+
+    if( xWorkObjSh.Is() )
+    {
+        pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
+        xWorkObjSh->DoClose();
+    }
 
     bInMerge = false;
 
@@ -906,8 +948,6 @@ static void lcl_PreparePrinterOptions(
     }
 }
 
-enum class WorkingDocType { SOURCE, TARGET, COPY };
-
 static SfxObjectShell* lcl_CreateWorkingDocument(
     // input
     const WorkingDocType aType, const SwDoc* pSourceDoc,
@@ -1105,21 +1145,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             }
         }
 
-        SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
+        SwDocShell  *pSourceDocSh = pSourceShell->GetView().GetDocShell();
 
-        uno::Reference<document::XDocumentProperties> xSourceDocProps;
-        {
-            uno::Reference<document::XDocumentPropertiesSupplier>
-                xDPS(pSourceDocSh->GetModel(), uno::UNO_QUERY);
-            xSourceDocProps.set(xDPS->getDocumentProperties());
-            assert( xSourceDocProps.is() && "DocumentProperties is null" );
-        }
-
-        // Try saving the source document
-        SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
-        if( !bMT_SHELL && pSourceDocSh->IsModified() )
-            pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SfxCallMode::SYNCHRON|SfxCallMode::RECORD);
-        if( bMT_SHELL || !pSourceDocSh->IsModified() )
         {
             // setup the output format
             std::shared_ptr<const SfxFilter> pStoreToFilter = SwIoSystem::GetFileFilter(
@@ -2823,15 +2850,8 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         {
             {
                 {
-                    SwWrtShell  *pWorkShell;
-                    SwDoc       *pWorkDoc;
-                    SwDBManager *pWorkDocOrigDBManager = this;
-                    SfxObjectShellLock xWorkDocSh = lcl_CreateWorkingDocument(
-                        WorkingDocType::SOURCE, rSh.GetDoc(), nullptr,
-                        &pWorkDocOrigDBManager, nullptr, &pWorkShell, &pWorkDoc );
-
                     // prepare mail merge descriptor
-                    SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), *pWorkShell, aDescriptor );
+                    SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
                     aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
                     aMergeDesc.sPath = pImpl->pMergeDialog->GetTargetURL();
@@ -2841,9 +2861,6 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                     }
 
                     MergeNew( aMergeDesc );
-
-                    pWorkDoc->SetDBManager( pWorkDocOrigDBManager );
-                    xWorkDocSh->DoClose();
                 }
             }
         }
