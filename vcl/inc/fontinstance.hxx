@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_FONTENTRY_HXX
-#define INCLUDED_VCL_INC_FONTENTRY_HXX
+#ifndef INCLUDED_VCL_INC_FONTINSTANCE_HXX
+#define INCLUDED_VCL_INC_FONTINSTANCE_HXX
 
 #include "fontselect.hxx"
 #include "impfontmetricdata.hxx"
@@ -61,6 +61,6 @@ private:
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 
-#endif // INCLUDED_VCL_INC_FONTENTRY_HXX
+#endif // INCLUDED_VCL_INC_FONTINSTANCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
