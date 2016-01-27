@@ -9740,6 +9740,7 @@ SlideTransition.prototype.createSlideTransition = function( aLeavingSlide, aEnte
 
 SlideTransition.prototype.parseElement = function()
 {
+    this.bIsValid = true;
     var aAnimElem = this.aElement;
 
     // type attribute
@@ -9751,6 +9752,7 @@ SlideTransition.prototype.parseElement = function()
     }
     else
     {
+        this.bIsValid = false;
         log( 'SlideTransition.parseElement: transition type not valid: ' + sTypeAttr );
     }
 
@@ -9762,11 +9764,17 @@ SlideTransition.prototype.parseElement = function()
     if( sSubTypeAttr && ( aTransitionSubtypeInMap[ sSubTypeAttr ] !== undefined ) )
     {
         this.eTransitionSubType = aTransitionSubtypeInMap[ sSubTypeAttr ];
-        this.bIsValid = true;
     }
     else
     {
+        this.bIsValid = false;
         log( 'SlideTransition.parseElement: transition subtype not valid: ' + sSubTypeAttr );
+    }
+
+    if( this.bIsValid && aTransitionInfoTable[this.eTransitionType][this.eTransitionSubType] === undefined )
+    {
+        this.bIsValid = false;
+        log( 'SlideTransition.parseElement: transition not valid: type: ' + sTypeAttr + ' subtype: ' + sSubTypeAttr );
     }
 
     // direction attribute
@@ -12271,6 +12279,7 @@ function SlideShow()
     this.bIsIdle = true;
     this.bIsEnabled = true;
     this.bNoSlideTransition = false;
+    this.bIsTransitionRunning = false;
 
     this.nCurrentEffect = 0;
     this.bIsNextEffectRunning = false;
@@ -12357,6 +12366,11 @@ SlideShow.prototype.isRunning = function()
     return !this.bIsIdle;
 };
 
+SlideShow.prototype.isTransitionPlaying = function()
+{
+    return this.bIsTransitionRunning;
+};
+
 SlideShow.prototype.isMainEffectPlaying = function()
 {
     return this.bIsNextEffectRunning;
@@ -12438,6 +12452,17 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
         theMetaDoc.getCurrentSlide().slideElement.setAttribute('clip-path', sRef);
     }
 
+    this.bIsTransitionRunning = false;
+    if( this.bIsRewinding )
+    {
+        theMetaDoc.aMetaSlideSet[nSlideIndex].hide();
+        var nIndex = nCurSlide !== undefined ? nCurSlide : -1;
+        this.displaySlide( nIndex, true );
+        this.skipAllEffects();
+        this.bIsRewinding = false;
+        return;
+    }
+
     theMetaDoc.setCurrentSlide(nSlideIndex);
 
     if( this.aSlideViewElement )
@@ -12486,6 +12511,12 @@ SlideShow.prototype.nextEffect = function()
     if( !this.isEnabled() )
         return false;
 
+    if( this.isTransitionPlaying() )
+    {
+        this.skipTransition();
+        return true;
+    }
+
     if( this.isAnyEffectPlaying() )
     {
         this.skipAllPlayingEffects();
@@ -12504,6 +12535,23 @@ SlideShow.prototype.nextEffect = function()
     ++this.nCurrentEffect;
     this.update();
     return true;
+};
+
+/** skipTransition
+ *  Skip the current playing slide transition.
+ */
+SlideShow.prototype.skipTransition  = function()
+{
+    if( this.bIsSkipping || this.bIsRewinding )
+        return;
+
+    this.bIsSkipping = true;
+
+    this.aActivityQueue.endAll();
+    this.aTimerEventQueue.forceEmpty();
+    this.aActivityQueue.endAll();
+    this.update();
+    this.bIsSkipping = false;
 };
 
 /** skipAllPlayingEffects
@@ -12576,6 +12624,12 @@ SlideShow.prototype.skipNextEffect = function()
  */
 SlideShow.prototype.skipPlayingOrNextEffect = function()
 {
+    if( this.isTransitionPlaying() )
+    {
+        this.skipTransition();
+        return true;
+    }
+
     if( this.isAnyEffectPlaying() )
         return this.skipAllPlayingEffects();
     else
@@ -12597,6 +12651,11 @@ SlideShow.prototype.skipAllEffects = function()
         return true;
 
     this.bIsSkippingAll = true;
+
+    if( this.isTransitionPlaying() )
+    {
+        this.skipTransition();
+    }
 
     if( this.isAnyEffectPlaying() )
     {
@@ -12621,6 +12680,20 @@ SlideShow.prototype.skipAllEffects = function()
     }
     this.bIsSkippingAll = false;
     return true;
+};
+
+/** rewindTransition
+ * Rewind the current playing slide transition.
+ */
+SlideShow.prototype.rewindTransition = function()
+{
+    if( this.bIsSkipping || this.bIsRewinding )
+    return;
+
+    this.bIsRewinding = true;
+    this.aActivityQueue.endAll();
+    this.update();
+    this.bIsRewinding = false;
 };
 
 /** rewindEffect
@@ -12732,6 +12805,11 @@ SlideShow.prototype.rewindEffect = function()
  */
 SlideShow.prototype.rewindToPreviousSlide = function()
 {
+    if( this.isTransitionPlaying() )
+    {
+        this.rewindTransition();
+        return;
+    }
     if( this.isAnyEffectPlaying() )
         return;
     var nNewSlide = nCurSlide - 1;
@@ -12770,6 +12848,11 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
     {
         aMetaDoc.getCurrentSlide().show();
         return;
+    }
+
+    if( this.isTransitionPlaying() )
+    {
+        this.skipTransition();
     }
 
     // handle current slide
@@ -12842,6 +12925,7 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 
                 if( aTransitionActivity )
                 {
+                    this.bIsTransitionRunning = true;
                     this.aActivityQueue.addActivity( aTransitionActivity );
                     this.update();
                 }
