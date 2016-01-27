@@ -24,7 +24,7 @@
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <initui.hxx>
-#include <../../uibase/envelp/labimp.hxx>
+#include "labimp.hxx"
 #include <labfmt.hxx>
 #include <labprt.hxx>
 #include <unotools.hxx>
