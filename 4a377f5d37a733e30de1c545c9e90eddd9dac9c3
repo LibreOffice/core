@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_34db98ef",
+        "filename": "sw/qa/python/check_named_property_values.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-27T16:09:00Z",
+      "side": 1,
+      "message": "the Java code checked for the specific type of exception thrown;  can that be done here too?",
+      "revId": "4a377f5d37a733e30de1c545c9e90eddd9dac9c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
