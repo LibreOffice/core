@@ -69,11 +69,11 @@ namespace slideshow
                         nDelta/(2.0-nMax-nMin) :
                         nDelta/(nMax + nMin);
 
-                    if( nRed == nMax )
+                    if( rtl::math::approxEqual(nRed, nMax) )
                         aRes.mnHue = (nGreen - nBlue)/nDelta;
-                    else if( nGreen == nMax )
+                    else if( rtl::math::approxEqual(nGreen, nMax) )
                         aRes.mnHue = 2.0 + (nBlue - nRed)/nDelta;
-                    else if( nBlue == nMax )
+                    else if( rtl::math::approxEqual(nBlue, nMax) )
                         aRes.mnHue = 4.0 + (nRed - nGreen)/nDelta;
 
                     aRes.mnHue *= 60.0;
