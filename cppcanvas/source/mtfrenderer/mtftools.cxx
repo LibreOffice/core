@@ -126,8 +126,8 @@ namespace cppcanvas
         {
             const bool bOffsetting( !rOffset.equalZero() );
             const bool bScaling( pScaling &&
-                                 pScaling->getX() != 1.0 &&
-                                 pScaling->getY() != 1.0 );
+                                 !rtl::math::approxEqual(pScaling->getX(), 1.0) &&
+                                 !rtl::math::approxEqual(pScaling->getY(), 1.0) );
             const bool bRotation( pRotation &&
                                   *pRotation != 0.0 );
 
