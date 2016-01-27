@@ -31,9 +31,7 @@
 
 #include "salglyphid.hxx"
 
-#ifndef _TOOLS_LANG_HXX
 typedef unsigned short LanguageType;
-#endif
 
 #define MAX_FALLBACK 16
 
