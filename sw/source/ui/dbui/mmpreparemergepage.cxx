@@ -139,7 +139,7 @@ void SwMailMergePrepareMergePage:: MoveHdl_Impl(Control* pCtrl)
 
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
-    rSh.GetDBManager()->MergeNew(aMergeDesc);
+    rSh.GetDBManager()->Merge(aMergeDesc);
 }
 
 IMPL_LINK_TYPED( SwMailMergePrepareMergePage, ExcludeHdl_Impl, Button*, pBox, void)
