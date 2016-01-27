@@ -52,7 +52,7 @@ static bool cpp_call(
     void * pUnoArgs[],
     uno_Any ** ppUnoExc ) throw ()
 {
-    const int MAXPARAMS = 20;
+    const int MAXPARAMS = 32;
 
     if ( nParams > MAXPARAMS )
     {
@@ -206,14 +206,20 @@ static bool cpp_call(
                           aCppParams[4].i, aCppParams[5].i, aCppParams[6].i, aCppParams[7].i,
                           aCppParams[8].i, aCppParams[9].i, aCppParams[10].i, aCppParams[11].i,
                           aCppParams[12].i, aCppParams[13].i, aCppParams[14].i, aCppParams[15].i,
-                          aCppParams[16].i, aCppParams[17].i, aCppParams[18].i, aCppParams[19].i );
+                          aCppParams[16].i, aCppParams[17].i, aCppParams[18].i, aCppParams[19].i,
+                          aCppParams[20].i, aCppParams[21].i, aCppParams[22].i, aCppParams[23].i,
+                          aCppParams[24].i, aCppParams[25].i, aCppParams[26].i, aCppParams[27].i,
+                          aCppParams[28].i, aCppParams[29].i, aCppParams[30].i, aCppParams[31].i );
         else
             uRetVal.i =
                 pIMethod (aCppParams[0].i, aCppParams[1].d, aCppParams[2].d, aCppParams[3].d,
                           aCppParams[4].i, aCppParams[5].i, aCppParams[6].i, aCppParams[7].i,
                           aCppParams[8].i, aCppParams[9].i, aCppParams[10].i, aCppParams[11].i,
                           aCppParams[12].i, aCppParams[13].i, aCppParams[14].i, aCppParams[15].i,
-                          aCppParams[16].i, aCppParams[17].i, aCppParams[18].i, aCppParams[19].i );
+                          aCppParams[16].i, aCppParams[17].i, aCppParams[18].i, aCppParams[19].i,
+                          aCppParams[20].i, aCppParams[21].i, aCppParams[22].i, aCppParams[23].i,
+                          aCppParams[24].i, aCppParams[25].i, aCppParams[26].i, aCppParams[27].i,
+                          aCppParams[28].i, aCppParams[29].i, aCppParams[30].i, aCppParams[31].i );
     }
     __except (CPPU_CURRENT_NAMESPACE::mscx_filterCppException(
                   GetExceptionInformation(),
