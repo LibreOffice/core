@@ -56,7 +56,6 @@
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
 
 
 
