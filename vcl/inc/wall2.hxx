@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_WALL2_HXX
 #define INCLUDED_VCL_INC_WALL2_HXX
 
-#include <vcl/wall.hxx>
-
 class ImplWallpaper
 {
     friend class Wallpaper;
