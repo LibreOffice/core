@@ -30,7 +30,7 @@ private:
     Gradient*       mpGradient;
     Rectangle*      mpRect;
     WallpaperStyle  meStyle;
-    sal_uLong           mnRefCount;
+    sal_uLong       mnRefCount;
     BitmapEx*       mpCache;
 
     friend SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
