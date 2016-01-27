@@ -3962,7 +3962,7 @@ void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
     GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
     aFakeEvent.button.device = gdk_device_manager_get_client_pointer(pDeviceManager);
 
-
+#if GTK_CHECK_VERSION(3,10,0)
     GdkDragContext *pContext = gtk_drag_begin_with_coordinates(getMouseEventWidget(),
                                                                pTargetList,
                                                                sourceActions,
@@ -3970,6 +3970,15 @@ void GtkSalFrame::startDrag(gint nButton, gint nDragOriginX, gint nDragOriginY,
                                                                &aFakeEvent,
                                                                nDragOriginX,
                                                                nDragOriginY);
+#else
+    GdkDragContext *pContext = gtk_drag_begin(getMouseEventWidget(),
+                                              pTargetList,
+                                              sourceActions,
+                                              nButton,
+                                              &aFakeEvent);
+    (void)nDragOriginX;
+    (void)nDragOriginY;
+#endif
 
     if (!pContext)
         m_pDragSource->dragFailed();
