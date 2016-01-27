@@ -187,7 +187,7 @@ namespace canvas
                    std::exception) override
         {
             tools::verifyBitmapSize(size,
-                                    BOOST_CURRENT_FUNCTION,
+                                    __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -199,7 +199,7 @@ namespace canvas
                                                                                                                                                                                                css::uno::RuntimeException) override
         {
             tools::verifyBitmapSize(size,
-                                    BOOST_CURRENT_FUNCTION,
+                                    __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -213,7 +213,7 @@ namespace canvas
                    std::exception) override
         {
             tools::verifyBitmapSize(size,
-                                    BOOST_CURRENT_FUNCTION,
+                                    __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -225,7 +225,7 @@ namespace canvas
                                                                                                                                                                                                     css::uno::RuntimeException) override
         {
             tools::verifyBitmapSize(size,
-                                    BOOST_CURRENT_FUNCTION,
+                                    __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );

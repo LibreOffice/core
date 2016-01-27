@@ -119,7 +119,7 @@ namespace canvas
                                                                                                                              css::uno::RuntimeException) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -156,7 +156,7 @@ namespace canvas
                                                                                                          css::uno::RuntimeException) override
         {
             tools::verifyArgs(aNewPos, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -168,7 +168,7 @@ namespace canvas
                                                                                                                     css::uno::RuntimeException) override
         {
             tools::verifyArgs(aTransformation,
-                              BOOST_CURRENT_FUNCTION,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );

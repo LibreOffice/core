@@ -118,7 +118,7 @@ namespace cairocanvas
                       ColorType                     eColorType )
     {
         ::canvas::tools::verifyInput( renderState,
-                                      BOOST_CURRENT_FUNCTION,
+                                      __func__,
                                       const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );

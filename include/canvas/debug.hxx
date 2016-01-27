@@ -33,7 +33,7 @@
 # if OSL_DEBUG_LEVEL > 2
 #  include <osl/diagnose.h>
 #  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
-                                            BOOST_CURRENT_FUNCTION, a, \
+                                            __func__, a, \
                                             find_unreachable_objects(true) )
 # else
 /** This macro shows how much memory is still used by shared_ptrs
@@ -44,7 +44,7 @@
     from deletion by circular references.
  */
 #  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
-                                            BOOST_CURRENT_FUNCTION, a, \
+                                            __func__, a, \
                                             find_unreachable_objects(false) )
 # endif
 

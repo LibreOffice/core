@@ -92,7 +92,7 @@ namespace canvas
                                                                                                                                                                                                                                            css::uno::RuntimeException) override
         {
             tools::verifyArgs(animation,
-                              BOOST_CURRENT_FUNCTION,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -106,7 +106,7 @@ namespace canvas
                                                                                                                                                                                                                                                                                  css::uno::RuntimeException) override
         {
             tools::verifyArgs(animationBitmaps,
-                              BOOST_CURRENT_FUNCTION,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
             tools::verifyRange( interpolationMode,
                                 css::rendering::InterpolationMode::NEAREST_NEIGHBOR,
@@ -121,7 +121,7 @@ namespace canvas
                                                                                                                                                                                               css::uno::RuntimeException) override
         {
             tools::verifySpriteSize(spriteSize,
-                                    BOOST_CURRENT_FUNCTION,
+                                    __func__,
                                     static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -133,7 +133,7 @@ namespace canvas
                                                                                                                                                                                                                         css::uno::RuntimeException) override
         {
             tools::verifyArgs(original,
-                              BOOST_CURRENT_FUNCTION,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
