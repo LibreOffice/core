@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_545f440e",
+        "filename": "accessibility/source/standard/vclxaccessiblefixedhyperlink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-27T00:46:59Z",
+      "side": 1,
+      "message": "note that even the \"uno::Sequence\u003cOUString\u003e\" is superficial duplication here in C++11.\n return { \"com.sun.star.awt.AccessibleFixedHyperlink\" };\nis enough by itself.",
+      "revId": "6ae86c5c4f7186ef7f754a5da4d245414e1dd299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
