@@ -2098,20 +2098,30 @@ static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent* pEvent )
     }
 
     // #105224# send commandevent to allow special treatment of Ctrl-LeftShift/Ctrl-RightShift etc.
+    // + auto-accelerator feature, tdf#92630
 
-    // find window - first look to see if the system window is available
-    vcl::Window* pChild = pWindow->ImplGetWindowImpl()->mpFirstChild;
+    vcl::Window *pChild = nullptr;
 
-    while ( pChild )
+    // Alt pressed or released => give SystemWindow a chance to handle auto-accelerator
+    if ( pEvent->mnCode == KEY_MOD2 || (pEvent->mnModKeyCode & MODKEY_MOD2) != 0 )
     {
-        if ( pChild->ImplGetWindowImpl()->mbSysWin )
-            break;
-        pChild = pChild->ImplGetWindowImpl()->mpNext;
+        // find window - first look to see if the system window is available
+        pChild = pWindow->ImplGetWindowImpl()->mpFirstChild;
+
+        while ( pChild )
+        {
+            if ( pChild->ImplGetWindowImpl()->mbSysWin )
+                break;
+            pChild = pChild->ImplGetWindowImpl()->mpNext;
+        }
     }
+
     //...if not, try to find a key input window...
-    if (!pChild) ImplGetKeyInputWindow( pWindow );
+    if (!pChild)
+        pChild = ImplGetKeyInputWindow( pWindow );
     //...otherwise fail safe...
-    if (!pChild) pChild = pWindow;
+    if (!pChild)
+        pChild = pWindow;
 
     CommandModKeyData data( pEvent->mnModKeyCode );
     ImplCallCommand( pChild, CommandEventId::ModKeyChange, &data );
