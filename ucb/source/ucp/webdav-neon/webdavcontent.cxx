@@ -1908,14 +1908,18 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
 
+        NeonUri sourceURI( xIdentifier->getContentIdentifier() );
+        NeonUri targetURI( xNewId->getContentIdentifier() );
+
         try
         {
-            NeonUri sourceURI( xIdentifier->getContentIdentifier() );
-            NeonUri targetURI( xNewId->getContentIdentifier() );
             targetURI.SetScheme( sourceURI.GetScheme() );
 
             xResAccess->MOVE(
                 sourceURI.GetPath(), targetURI.GetURI(), false, xEnv );
+            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
+
             // @@@ Should check for resources that could not be moved
             //     (due to source access or target overwrite) and send
             //     this information through the interaction handler.
@@ -1949,6 +1953,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         catch ( DAVException const & e )
         {
+            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
             // Do not set new title!
             aNewTitle.clear();
 
@@ -2578,11 +2584,12 @@ void Content::transfer(
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
     }
 
+    NeonUri sourceURI( rArgs.SourceURL );
+    NeonUri targetURI( xIdentifier->getContentIdentifier() );
+
     OUString aTargetURI;
     try
     {
-        NeonUri sourceURI( rArgs.SourceURL );
-        NeonUri targetURI( xIdentifier->getContentIdentifier() );
         aTargetURI = targetURI.GetPathBaseNameUnescaped();
 
         // Check source's and target's URL scheme
@@ -2703,6 +2710,8 @@ void Content::transfer(
                                 rArgs.NameClash
                                     == ucb::NameClash::OVERWRITE,
                                 Environment );
+            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
 
             if ( xSource.is() )
             {
@@ -2749,10 +2758,14 @@ void Content::transfer(
     }
     catch ( ucb::IllegalIdentifierException const & )
     {
+        aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+        aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
         // queryContent
     }
     catch ( DAVException const & e )
     {
+        aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+        aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
         // [RFC 2518] - WebDAV
         // 412 (Precondition Failed) - The server was unable to maintain
         // the liveness of the properties listed in the propertybehavior
