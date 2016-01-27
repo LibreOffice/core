@@ -20,10 +20,9 @@
 #ifndef INCLUDED_VCL_INC_SALOBJ_HXX
 #define INCLUDED_VCL_INC_SALOBJ_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/salgtype.hxx>
-#include <salwtype.hxx>
+
+#include "salwtype.hxx"
 
 struct SystemEnvData;
 
