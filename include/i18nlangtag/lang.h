@@ -716,6 +716,10 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_APATANI               0x0698
 
 
+/* XXX Add new user defined LCIDs ^^^ there.
+ * Note that we run out of IDs with sublanguage ID 0x01 after 0x07DF ... */
+
+
 /* Primary language ID range for on-the-fly assignment. */
 #define LANGUAGE_ON_THE_FLY_START           0x03E0
 #define LANGUAGE_ON_THE_FLY_END             0x03FE
