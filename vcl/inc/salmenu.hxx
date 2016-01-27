@@ -20,10 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALMENU_HXX
 #define INCLUDED_VCL_INC_SALMENU_HXX
 
-#include <tools/solar.h>
-#include "vcl/dllapi.h"
 #include <vcl/menu.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/image.hxx>
 
 struct SystemMenuData;
