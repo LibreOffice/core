@@ -20,117 +20,117 @@
 #ifndef INCLUDED_VCL_INC_SVIDS_HRC
 #define INCLUDED_VCL_INC_SVIDS_HRC
 
-#define SV_RESID_STDOFFSET                  0
-#define SV_RESID_MONOOFFSET                 1
+#define SV_RESID_STDOFFSET                              0
+#define SV_RESID_MONOOFFSET                             1
 
 // ATTENTION: These IDs must be spaced at least by 10, as, depending on style,
 // an offset will get added:
 
-#define SV_RESID_BITMAP_CHECK               1000
-#define SV_RESID_BITMAP_RADIO               1010
+#define SV_RESID_BITMAP_CHECK                        1000
+#define SV_RESID_BITMAP_RADIO                        1010
 
-#define SV_RESID_BITMAP_MSGBOX              1020
+#define SV_RESID_BITMAP_MSGBOX                       1020
 
-#define SV_RESID_BITMAP_PIN                 1030
+#define SV_RESID_BITMAP_PIN                          1030
 
-#define SV_RESID_BITMAP_SPLITHPIN           1040
-#define SV_RESID_BITMAP_SPLITVPIN           1041
-#define SV_RESID_BITMAP_SPLITHARW           1042
-#define SV_RESID_BITMAP_SPLITVARW           1043
+#define SV_RESID_BITMAP_SPLITHPIN                    1040
+#define SV_RESID_BITMAP_SPLITVPIN                    1041
+#define SV_RESID_BITMAP_SPLITHARW                    1042
+#define SV_RESID_BITMAP_SPLITVARW                    1043
 
-#define SV_RESID_BITMAP_SCROLLMSK           1050
-#define SV_RESID_BITMAP_SCROLLBMP           1051
-#define SV_RESID_BITMAP_CLOSEDOC            1052
-#define SV_RESID_BITMAP_INDEX               1053
-#define SV_RESID_BITMAP_REFRESH             1054
+#define SV_RESID_BITMAP_SCROLLMSK                    1050
+#define SV_RESID_BITMAP_SCROLLBMP                    1051
+#define SV_RESID_BITMAP_CLOSEDOC                     1052
+#define SV_RESID_BITMAP_INDEX                        1053
+#define SV_RESID_BITMAP_REFRESH                      1054
 
-#define SV_DISCLOSURE_PLUS                  1060
-#define SV_DISCLOSURE_MINUS                 1061
+#define SV_DISCLOSURE_PLUS                           1060
+#define SV_DISCLOSURE_MINUS                          1061
 
-#define RID_STR_PAPERNAMES                  1070
+#define RID_STR_PAPERNAMES                           1070
 
-#define SV_RESID_MENU_EDIT                  2000
-#define SV_MENU_EDIT_UNDO                   1
-#define SV_MENU_EDIT_CUT                    2
-#define SV_MENU_EDIT_COPY                   3
-#define SV_MENU_EDIT_PASTE                  4
-#define SV_MENU_EDIT_DELETE                 5
-#define SV_MENU_EDIT_SELECTALL              6
-#define SV_MENU_EDIT_INSERTSYMBOL           7
-#define SV_RESID_STRING_NOSELECTIONPOSSIBLE 2001
+#define SV_RESID_MENU_EDIT                           2000
+#define SV_MENU_EDIT_UNDO                               1
+#define SV_MENU_EDIT_CUT                                2
+#define SV_MENU_EDIT_COPY                               3
+#define SV_MENU_EDIT_PASTE                              4
+#define SV_MENU_EDIT_DELETE                             5
+#define SV_MENU_EDIT_SELECTALL                          6
+#define SV_MENU_EDIT_INSERTSYMBOL                       7
+#define SV_RESID_STRING_NOSELECTIONPOSSIBLE          2001
 
-#define SV_MENU_MAC_SERVICES                2002
-#define SV_MENU_MAC_HIDEAPP                 2003
-#define SV_MENU_MAC_HIDEALL                 2004
-#define SV_MENU_MAC_SHOWALL                 2005
-#define SV_MENU_MAC_QUITAPP                 2006
+#define SV_MENU_MAC_SERVICES                         2002
+#define SV_MENU_MAC_HIDEAPP                          2003
+#define SV_MENU_MAC_HIDEALL                          2004
+#define SV_MENU_MAC_SHOWALL                          2005
+#define SV_MENU_MAC_QUITAPP                          2006
 
-#define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT     1
-#define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE    2
+#define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT           1
+#define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE          2
 
-#define SV_PRINT_PRT_NUP_ORDER_LRTB               0
-#define SV_PRINT_PRT_NUP_ORDER_TBLR               1
-#define SV_PRINT_PRT_NUP_ORDER_TBRL               2
-#define SV_PRINT_PRT_NUP_ORDER_RLTB               3
+#define SV_PRINT_PRT_NUP_ORDER_LRTB                     0
+#define SV_PRINT_PRT_NUP_ORDER_TBLR                     1
+#define SV_PRINT_PRT_NUP_ORDER_TBRL                     2
+#define SV_PRINT_PRT_NUP_ORDER_RLTB                     3
 
-#define SV_PRINT_NATIVE_STRINGS           2050
+#define SV_PRINT_NATIVE_STRINGS                      2050
 
-#define SV_HELPTEXT_CLOSE                   10000
-#define SV_HELPTEXT_MINIMIZE                10001
-#define SV_HELPTEXT_MAXIMIZE                10002
-#define SV_HELPTEXT_RESTORE                 10003
-#define SV_HELPTEXT_ROLLDOWN                10004
-#define SV_HELPTEXT_ROLLUP                  10005
-#define SV_HELPTEXT_HELP                    10006
-#define SV_HELPTEXT_ALWAYSVISIBLE           10007
-#define SV_HELPTEXT_FADEIN                  10008
-#define SV_HELPTEXT_FADEOUT                 10009
-#define SV_HELPTEXT_SPLITFLOATING           10010
-#define SV_HELPTEXT_SPLITFIXED              10011
-#define SV_HELPTEXT_CLOSEDOCUMENT           10012
+#define SV_HELPTEXT_CLOSE                           10000
+#define SV_HELPTEXT_MINIMIZE                        10001
+#define SV_HELPTEXT_MAXIMIZE                        10002
+#define SV_HELPTEXT_RESTORE                         10003
+#define SV_HELPTEXT_ROLLDOWN                        10004
+#define SV_HELPTEXT_ROLLUP                          10005
+#define SV_HELPTEXT_HELP                            10006
+#define SV_HELPTEXT_ALWAYSVISIBLE                   10007
+#define SV_HELPTEXT_FADEIN                          10008
+#define SV_HELPTEXT_FADEOUT                         10009
+#define SV_HELPTEXT_SPLITFLOATING                   10010
+#define SV_HELPTEXT_SPLITFIXED                      10011
+#define SV_HELPTEXT_CLOSEDOCUMENT                   10012
 
-#define SV_BUTTONTEXT_OK                    10100
-#define SV_BUTTONTEXT_CANCEL                10101
-#define SV_BUTTONTEXT_YES                   10102
-#define SV_BUTTONTEXT_NO                    10103
-#define SV_BUTTONTEXT_RETRY                 10104
-#define SV_BUTTONTEXT_HELP                  10105
-#define SV_BUTTONTEXT_CLOSE                 10106
-#define SV_BUTTONTEXT_MORE                  10107
-#define SV_BUTTONTEXT_IGNORE                10108
-#define SV_BUTTONTEXT_ABORT                 10109
-#define SV_BUTTONTEXT_LESS                  10110
-#define SV_BUTTONTEXT_RESET                 10111
-#define SV_BUTTONTEXT_ADD                   10112
-#define SV_BUTTONTEXT_DELETE                10113
-#define SV_BUTTONTEXT_REMOVE                10114
-#define SV_BUTTONTEXT_NEW                   10115
-#define SV_BUTTONTEXT_EDIT                  10116
-#define SV_BUTTONTEXT_APPLY                 10117
-#define SV_BUTTONTEXT_SAVE                  10118
-#define SV_BUTTONTEXT_OK_NOMNEMONIC         10119
-#define SV_BUTTONTEXT_CANCEL_NOMNEMONIC     10120
-#define SV_BUTTONTEXT_UNDO                  10121
-#define SV_BUTTONTEXT_PASTE                 10122
-#define SV_BUTTONTEXT_NEXT                  10123
-#define SV_BUTTONTEXT_GO_UP                 10124
-#define SV_BUTTONTEXT_GO_DOWN               10125
-#define SV_BUTTONTEXT_CLEAR                 10126
-#define SV_BUTTONTEXT_OPEN                  10127
-#define SV_BUTTONTEXT_PLAY                  10128
-#define SV_BUTTONTEXT_FIND                  10129
-#define SV_BUTTONTEXT_STOP                  10130
-#define SV_BUTTONTEXT_CONNECT               10131
+#define SV_BUTTONTEXT_OK                            10100
+#define SV_BUTTONTEXT_CANCEL                        10101
+#define SV_BUTTONTEXT_YES                           10102
+#define SV_BUTTONTEXT_NO                            10103
+#define SV_BUTTONTEXT_RETRY                         10104
+#define SV_BUTTONTEXT_HELP                          10105
+#define SV_BUTTONTEXT_CLOSE                         10106
+#define SV_BUTTONTEXT_MORE                          10107
+#define SV_BUTTONTEXT_IGNORE                        10108
+#define SV_BUTTONTEXT_ABORT                         10109
+#define SV_BUTTONTEXT_LESS                          10110
+#define SV_BUTTONTEXT_RESET                         10111
+#define SV_BUTTONTEXT_ADD                           10112
+#define SV_BUTTONTEXT_DELETE                        10113
+#define SV_BUTTONTEXT_REMOVE                        10114
+#define SV_BUTTONTEXT_NEW                           10115
+#define SV_BUTTONTEXT_EDIT                          10116
+#define SV_BUTTONTEXT_APPLY                         10117
+#define SV_BUTTONTEXT_SAVE                          10118
+#define SV_BUTTONTEXT_OK_NOMNEMONIC                 10119
+#define SV_BUTTONTEXT_CANCEL_NOMNEMONIC             10120
+#define SV_BUTTONTEXT_UNDO                          10121
+#define SV_BUTTONTEXT_PASTE                         10122
+#define SV_BUTTONTEXT_NEXT                          10123
+#define SV_BUTTONTEXT_GO_UP                         10124
+#define SV_BUTTONTEXT_GO_DOWN                       10125
+#define SV_BUTTONTEXT_CLEAR                         10126
+#define SV_BUTTONTEXT_OPEN                          10127
+#define SV_BUTTONTEXT_PLAY                          10128
+#define SV_BUTTONTEXT_FIND                          10129
+#define SV_BUTTONTEXT_STOP                          10130
+#define SV_BUTTONTEXT_CONNECT                       10131
 
-#define SV_STDTEXT_FIRST                    SV_STDTEXT_SERVICENOTAVAILABLE
-#define SV_STDTEXT_SERVICENOTAVAILABLE      10210
+#define SV_STDTEXT_FIRST                            SV_STDTEXT_SERVICENOTAVAILABLE
+#define SV_STDTEXT_SERVICENOTAVAILABLE              10210
 
-#define SV_STDTEXT_DONTASKAGAIN             10212
-#define SV_STDTEXT_DONTWARNAGAIN            10213
-#define SV_STDTEXT_ABOUT                    10214
-#define SV_STDTEXT_PREFERENCES              10215
-#define SV_MAC_SCREENNNAME                  10216
-#define SV_STDTEXT_ALLFILETYPES             10217
+#define SV_STDTEXT_DONTASKAGAIN                     10212
+#define SV_STDTEXT_DONTWARNAGAIN                    10213
+#define SV_STDTEXT_ABOUT                            10214
+#define SV_STDTEXT_PREFERENCES                      10215
+#define SV_MAC_SCREENNNAME                          10216
+#define SV_STDTEXT_ALLFILETYPES                     10217
 
 #define STR_FPICKER_AUTO_EXTENSION                  10300
 #define STR_FPICKER_PASSWORD                        10301
@@ -152,47 +152,47 @@
 #define STR_FPICKER_SAVE                            10317
 #define STR_FPICKER_TYPE                            10318
 
-#define SV_ACCESSERROR_NO_FONTS             10510
+#define SV_ACCESSERROR_NO_FONTS                     10510
 
-#define SV_SHORTCUT_HELP                    10600
-#define SV_SHORTCUT_CONTEXTHELP             10601
-#define SV_SHORTCUT_ACTIVEHELP              10602
-#define SV_SHORTCUT_DOCKUNDOCK              10603
-#define SV_SHORTCUT_NEXTSUBWINDOW           10604
-#define SV_SHORTCUT_PREVSUBWINDOW           10605
-#define SV_SHORTCUT_TODOCUMENT              10606
-#define SV_SHORTCUT_MENUBAR                 10607
-#define SV_SHORTCUT_SPLITTER                10608
+#define SV_SHORTCUT_HELP                            10600
+#define SV_SHORTCUT_CONTEXTHELP                     10601
+#define SV_SHORTCUT_ACTIVEHELP                      10602
+#define SV_SHORTCUT_DOCKUNDOCK                      10603
+#define SV_SHORTCUT_NEXTSUBWINDOW                   10604
+#define SV_SHORTCUT_PREVSUBWINDOW                   10605
+#define SV_SHORTCUT_TODOCUMENT                      10606
+#define SV_SHORTCUT_MENUBAR                         10607
+#define SV_SHORTCUT_SPLITTER                        10608
 
-#define SV_PRINT_NOPAGES                    10609
-#define SV_PRINT_TOFILE_TXT                 10610
-#define SV_PRINT_DEFPRT_TXT                 10611
-#define SV_PRINT_PRINTPREVIEW_TXT           10612
-#define SV_PRINT_COLLATE_IMG                10613
-#define SV_PRINT_NOCOLLATE_IMG              10614
-#define SV_PRINT_QUERYFAXNUMBER_TXT         10615
-#define SV_PRINT_INVALID_TXT                10616
-#define SV_PRINT_CUSTOM_TXT                 10617
+#define SV_PRINT_NOPAGES                            10609
+#define SV_PRINT_TOFILE_TXT                         10610
+#define SV_PRINT_DEFPRT_TXT                         10611
+#define SV_PRINT_PRINTPREVIEW_TXT                   10612
+#define SV_PRINT_COLLATE_IMG                        10613
+#define SV_PRINT_NOCOLLATE_IMG                      10614
+#define SV_PRINT_QUERYFAXNUMBER_TXT                 10615
+#define SV_PRINT_INVALID_TXT                        10616
+#define SV_PRINT_CUSTOM_TXT                         10617
 
-#define SV_EDIT_WARNING_STR                 10650
+#define SV_EDIT_WARNING_STR                         10650
 
-#define SV_FUNIT_STRINGS                    10700
+#define SV_FUNIT_STRINGS                            10700
 
-#define SV_ICON_SIZE48_START                20000
-#define SV_ICON_SIZE32_START                21000
-#define SV_ICON_SIZE16_START                23000
+#define SV_ICON_SIZE48_START                        20000
+#define SV_ICON_SIZE32_START                        21000
+#define SV_ICON_SIZE16_START                        23000
 
-#define SV_ICON_ID_OFFICE                       1
-#define SV_ICON_ID_TEXT                         2
-#define SV_ICON_ID_TEXT_TEMPLATE                3
-#define SV_ICON_ID_SPREADSHEET                  4
-#define SV_ICON_ID_SPREADSHEET_TEMPLATE         5
-#define SV_ICON_ID_DRAWING                      6
-#define SV_ICON_ID_PRESENTATION                 8
-#define SV_ICON_ID_MASTER_DOCUMENT             10
-#define SV_ICON_ID_TEMPLATE                    11
-#define SV_ICON_ID_DATABASE                    12
-#define SV_ICON_ID_FORMULA                     13
+#define SV_ICON_ID_OFFICE                               1
+#define SV_ICON_ID_TEXT                                 2
+#define SV_ICON_ID_TEXT_TEMPLATE                        3
+#define SV_ICON_ID_SPREADSHEET                          4
+#define SV_ICON_ID_SPREADSHEET_TEMPLATE                 5
+#define SV_ICON_ID_DRAWING                              6
+#define SV_ICON_ID_PRESENTATION                         8
+#define SV_ICON_ID_MASTER_DOCUMENT                     10
+#define SV_ICON_ID_TEMPLATE                            11
+#define SV_ICON_ID_DATABASE                            12
+#define SV_ICON_ID_FORMULA                             13
 
 #endif // INCLUDED_VCL_INC_SVIDS_HRC
 
