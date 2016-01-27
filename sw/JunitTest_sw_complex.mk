@@ -29,7 +29,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/checkColor/CheckChangeColor \
     sw/qa/complex/indeterminateState/CheckIndeterminateState \
     sw/qa/complex/writer/CheckBookmarks \
-    sw/qa/complex/writer/CheckIndexedPropertyValues \
     sw/qa/complex/writer/CheckTable \
     sw/qa/complex/writer/LoadSaveTest \
     sw/qa/complex/writer/TestDocument \
@@ -49,7 +48,6 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.checkColor.CheckChangeColor \
     complex.writer.CheckBookmarks \
     complex.writer.CheckTable \
-    complex.writer.CheckIndexedPropertyValues \
     complex.writer.TextPortionEnumerationTest \
 ))
 
