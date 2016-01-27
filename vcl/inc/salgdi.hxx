@@ -28,6 +28,10 @@
 
 #include <config_cairo_canvas.h>
 
+#include <map>
+#include <set>
+#include <vector>
+
 class PhysicalFontCollection;
 class SalBitmap;
 class FontSelectPattern;
