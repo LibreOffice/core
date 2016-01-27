@@ -20,16 +20,17 @@
 #ifndef INCLUDED_VCL_OPENGLGDIIMPL_HXX
 #define INCLUDED_VCL_OPENGLGDIIMPL_HXX
 
+#include <vcl/dllapi.h>
+#include <vcl/opengl/OpenGLContext.hxx>
+
+#include "regionband.hxx"
 #include "salgeom.hxx"
 #include "salgdiimpl.hxx"
-#include <vcl/dllapi.h>
-
 #include "opengl/framebuffer.hxx"
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
-#include "regionband.hxx"
 
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <memory>
 
 class SalFrame;
 class SalVirtualDevice;
