@@ -484,8 +484,9 @@ void SdrEditView::ImpCheckToTopBtmPossible()
     { // special-casing for single selection
         SdrObject* pObj=GetMarkedObjectByIndex(0);
         SdrObjList* pOL=pObj->GetObjList();
-        size_t nMax=pOL->GetObjCount();
-        size_t nMin=0;
+        SAL_WARN_IF(!pOL, "svx", "Object somehow has no ObjList");
+        size_t nMax = pOL ? pOL->GetObjCount() : 0;
+        size_t nMin = 0;
         const size_t nObjNum=pObj->GetOrdNum();
         SdrObject* pRestrict=GetMaxToTopObj(pObj);
         if (pRestrict!=nullptr) {
