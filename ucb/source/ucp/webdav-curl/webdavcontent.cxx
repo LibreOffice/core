@@ -2441,7 +2441,10 @@ void Content::insert(
             xResAccess->setURL( aURL );
 
             if ( bCollection )
+            {
                 xResAccess->MKCOL( Environment );
+                aStaticDAVOptionsCache.removeDAVOptions( aTargetUrl );
+            }
             else
             {
                 xResAccess->PUT( xInputStream, Environment );
