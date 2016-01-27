@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_346d5833",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-27T16:05:13Z",
+      "side": 1,
+      "message": "It is unnecessary to modify the string, which always comes with a cost. It would only be necessary to detect trailing spaces and then check the last character.",
+      "revId": "cf80a08502fc4666f329e4f9735b11c41c2761ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d45e9475",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-27T16:05:13Z",
+      "side": 1,
+      "message": "Instead of multiple endsWith() calls I\u0027d prefer to obtain the last (before trailing spaces) character once and check the character.",
+      "revId": "cf80a08502fc4666f329e4f9735b11c41c2761ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_7477e002",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-01-27T16:05:13Z",
+      "side": 1,
+      "message": "This unnecessarily duplicates code. It would be better to do that once, and only use the state inside if(pTableView) and if(pTopView).",
+      "revId": "cf80a08502fc4666f329e4f9735b11c41c2761ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
