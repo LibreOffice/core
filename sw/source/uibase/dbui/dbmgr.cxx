@@ -1168,9 +1168,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 // construct the process dialog
                 pSourceWindow = &pSourceShell->GetView().GetEditWin();
-                if( ! pParent )
+                if( !pParent )
                     pParent = pSourceWindow;
-                if( bMT_SHELL )
+                if( !bMT_PRINTER )
                     pProgressDlg = VclPtr<CreateMonitor>::Create(
                         pParent, pParent != pSourceWindow );
                 else {
@@ -1227,7 +1227,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // it can be manually computed from the source documents (for which we do layouts, so the page
             // count is known, and there is a blank page between each of them in the target document).
             int targetDocPageCount = 0;
-            if( !bIsMergeSilent && bMT_SHELL &&
+            if( !bIsMergeSilent && !bMT_PRINTER &&
                     lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
                 static_cast<CreateMonitor*>( pProgressDlg.get() )->SetTotalCount( nDocCount );
 
@@ -1302,7 +1302,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         if( bNeedsTempFiles )
                             aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
                         if( !bIsMergeSilent ) {
-                            if( bMT_SHELL )
+                            if( !bMT_PRINTER )
                                 static_cast<CreateMonitor*>( pProgressDlg.get() )->SetCurrentPosition( nDocNo );
                             else {
                                 PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>( pProgressDlg.get() );
