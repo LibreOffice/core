@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_14093c32",
+        "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-27T21:10:55Z",
+      "side": 1,
+      "message": "VCLXAccessibleComponent is already a uno component, you can save yourself some work (and bugs) by using ImplInheritanceHelper here:\n\npublic ::cppu::ImplInheritanceHelper\u003cVCLXAccessibleComponent, css::accessibility::XAccessibleEditableText\u003e",
+      "range": {
+        "startLine": 128,
+        "startChar": 51,
+        "endLine": 128,
+        "endChar": 74
+      },
+      "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_7406c021",
+        "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-27T21:10:55Z",
+      "side": 1,
+      "message": "with this implementation every instance is leaked",
+      "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_5403c40f",
+        "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-27T21:10:55Z",
+      "side": 1,
+      "message": "this is incomplete since you don\u0027t call the base class queryInterface so the interfaces impelemented by the base class cannot be queried.\n\nImplInheritanceHelper would implement XInterface automatically.",
+      "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b7fe6a03",
+        "filename": "sw/source/uibase/docvw/SidebarTxtControlAcc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-01-27T21:10:55Z",
+      "side": 1,
+      "message": "if you access member variables you need a MutexGuard at the beginning of a UNO method implementation; apparently this class has a maMutex",
+      "revId": "f5ea0dc63ce6876533e32d895baba1b96bc4dc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
