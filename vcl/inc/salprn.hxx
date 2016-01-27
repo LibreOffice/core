@@ -20,15 +20,9 @@
 #ifndef INCLUDED_VCL_INC_SALPRN_HXX
 #define INCLUDED_VCL_INC_SALPRN_HXX
 
-#include <rtl/ustring.hxx>
-
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 
 #include "salptype.hxx"
-
-#include <vector>
 
 class SalGraphics;
 class SalFrame;
