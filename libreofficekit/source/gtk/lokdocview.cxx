@@ -65,6 +65,8 @@ struct LOKDocViewPrivateImpl
     glong m_nDocumentHeightTwips;
     /// View or edit mode.
     gboolean m_bEdit;
+    /// LOK Features
+    guint64 m_nLOKFeatures;
     /// Position and size of the visible cursor.
     GdkRectangle m_aVisibleCursor;
     /// Cursor overlay is visible or hidden (for blinking).
@@ -147,6 +149,7 @@ struct LOKDocViewPrivateImpl
         m_nDocumentWidthTwips(0),
         m_nDocumentHeightTwips(0),
         m_bEdit(FALSE),
+        m_nLOKFeatures(0),
         m_aVisibleCursor({0, 0, 0, 0}),
         m_bCursorOverlayVisible(false),
         m_bCursorVisible(true),
@@ -204,6 +207,7 @@ enum
     COMMAND_RESULT,
     FORMULA_CHANGED,
     TEXT_SELECTION,
+    PASSWORD_REQUIRED,
 
     LAST_SIGNAL
 };
@@ -224,6 +228,8 @@ enum
     PROP_DOC_HEIGHT,
     PROP_CAN_ZOOM_IN,
     PROP_CAN_ZOOM_OUT,
+    PROP_DOC_PASSWORD,
+    PROP_DOC_PASSWORD_TO_MODIFY,
 
     PROP_LAST
 };
@@ -323,6 +329,10 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_SET_PART";
     case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
         return "LOK_CALLBACK_SEARCH_RESULT_SELECTION";
+    case LOK_CALLBACK_DOCUMENT_PASSWORD:
+        return "LOK_CALLBACK_DOCUMENT_PASSWORD";
+    case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+        return "LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY";
     }
     return nullptr;
 }
@@ -831,6 +841,7 @@ globalCallback (gpointer pData)
 {
     CallbackData* pCallback = static_cast<CallbackData*>(pData);
     LOKDocViewPrivate& priv = getPrivate(pCallback->m_pDocView);
+    gboolean bModify = false;
 
     switch (pCallback->m_nType)
     {
@@ -852,12 +863,12 @@ globalCallback (gpointer pData)
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 1.0);
     }
     break;
-    case LOK_CALLBACK_DOCUMENT_PASSWORD:
     case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+        bModify = true;
+    case LOK_CALLBACK_DOCUMENT_PASSWORD:
     {
         char const*const pURL(pCallback->m_aPayload.c_str());
-        // TODO maybe allow more passwords
-        priv->m_pOffice->pClass->setDocumentPassword(priv->m_pOffice, pURL, "1");
+        g_signal_emit (pCallback->m_pDocView, doc_view_signals[PASSWORD_REQUIRED], 0, pURL, bModify);
     }
     break;
     default:
@@ -1960,6 +1971,8 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    gboolean bDocPasswordEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD;
+    gboolean bDocPasswordToModifyEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
 
     switch (propId)
     {
@@ -1986,6 +1999,20 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
         break;
     case PROP_DOC_HEIGHT:
         priv->m_nDocumentHeightTwips = g_value_get_long (value);
+        break;
+    case PROP_DOC_PASSWORD:
+        if (g_value_get_boolean (value) != bDocPasswordEnabled)
+        {
+            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD;
+            priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
+        }
+        break;
+    case PROP_DOC_PASSWORD_TO_MODIFY:
+        if ( g_value_get_boolean (value) != bDocPasswordToModifyEnabled)
+        {
+            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+            priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
+        }
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
@@ -2035,6 +2062,12 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
     case PROP_CAN_ZOOM_OUT:
         g_value_set_boolean (value, priv->m_bCanZoomOut);
         break;
+    case PROP_DOC_PASSWORD:
+        g_value_set_boolean (value, priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD);
+        break;
+    case PROP_DOC_PASSWORD_TO_MODIFY:
+        g_value_set_boolean (value, priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
     }
@@ -2083,8 +2116,6 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
                      priv->m_aLOPath);
         return FALSE;
     }
-
-//    priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, LOK_FEATURE_DOCUMENT_PASSWORD|LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY);
 
     return TRUE;
 }
@@ -2273,6 +2304,33 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                              static_cast<GParamFlags>(G_PARAM_READABLE
                                                       | G_PARAM_STATIC_STRINGS));
 
+    /**
+     * LOKDocView:doc-password:
+     *
+     * Set it to true if client supports providing password for viewing
+     * password protected documents
+     */
+    properties[PROP_DOC_PASSWORD] =
+        g_param_spec_boolean("doc-password",
+                             "Document password capability",
+                             "Whether client supports providing document passwords",
+                             FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE
+                                                      | G_PARAM_STATIC_STRINGS));
+
+    /**
+     * LOKDocView:doc-password-to-modify:
+     *
+     * Set it to true if client supports providing password for edit-protected documents
+     */
+    properties[PROP_DOC_PASSWORD_TO_MODIFY] =
+        g_param_spec_boolean("doc-password-to-modify",
+                             "Edit document password capability",
+                             "Whether the client supports providing passwords to edit documents",
+                             FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE
+                                                      | G_PARAM_STATIC_STRINGS));
+
     g_object_class_install_properties(pGObjectClass, PROP_LAST, properties);
 
     /**
@@ -2458,6 +2516,37 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      nullptr, nullptr,
                      g_cclosure_marshal_VOID__BOOLEAN,
                      G_TYPE_NONE, 1,
+                     G_TYPE_BOOLEAN);
+
+    /**
+     * LOKDocView::password-required:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pUrl: URL of the document for which password is required
+     * @bModify: whether password id required to modify the document
+     * This is true when password is required to edit the document,
+     * while it can still be viewed without password. In such cases, provide a NULL
+     * password for read-only access to the document.
+     * If false, password is required for opening the document, and document
+     * cannot be opened without providing a valid password.
+     *
+     * Password must be provided by calling lok_doc_view_set_document_password
+     * function with pUrl as provided by the callback.
+     *
+     * Upon entering a invalid password, another `password-required` signal is
+     * emitted.
+     * Upon entering a valid password, document starts to load.
+     * Upon entering a NULL password: if bModify is %TRUE, document starts to
+     * open in view-only mode, else loading of document is aborted.
+     */
+    doc_view_signals[PASSWORD_REQUIRED] =
+        g_signal_new("password-required",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 2,
+                     G_TYPE_STRING,
                      G_TYPE_BOOLEAN);
 }
 
@@ -2857,6 +2946,16 @@ lok_doc_view_paste (LOKDocView* pDocView,
     }
 
     return ret;
+}
+
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_set_document_password (LOKDocView* pDocView,
+                                    const gchar* pURL,
+                                    const gchar* pPassword)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    priv->m_pOffice->pClass->setDocumentPassword(priv->m_pOffice, pURL, pPassword);
 }
 
 SAL_DLLPUBLIC_EXPORT gfloat

@@ -486,10 +486,20 @@ static void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
     }
 }
 
+static void
+setLOKFeatures (GtkWidget* pDocView)
+{
+    g_object_set(G_OBJECT(pDocView),
+                 "doc-password", TRUE,
+                 "doc-password-to-modify", TRUE,
+                 nullptr);
+}
+
 /// Common initialization, regardless if it's just a new view or a full init.
 static TiledWindow& setupWidgetAndCreateWindow(GtkWidget* pDocView)
 {
     setupDocView(pDocView);
+    setLOKFeatures(pDocView);
     TiledWindow aWindow;
     aWindow.m_pDocView = pDocView;
     GtkWidget* pWindow = createWindow(aWindow);
@@ -859,6 +869,45 @@ static void formulaChanged(LOKDocView* pLOKDocView, char* pPayload, gpointer /*p
 {
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
     gtk_entry_set_text(GTK_ENTRY(rWindow.m_pFormulabarEntry), pPayload);
+}
+
+/// LOKDocView password is requried to open the document
+static void passwordRequired(LOKDocView* pLOKDocView, gchar* pUrl, gboolean bModify, gpointer /*pData*/)
+{
+    GtkWidget* pPasswordDialog = gtk_dialog_new_with_buttons ("Password required",
+                                                              GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pLOKDocView))),
+                                                              GTK_DIALOG_MODAL,
+                                                              "OK",
+                                                              GTK_RESPONSE_OK,
+                                                              nullptr);
+    g_object_set(G_OBJECT(pPasswordDialog), "resizable", FALSE, nullptr);
+    GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pPasswordDialog));
+    GtkWidget* pPasswordEntry = gtk_entry_new ();
+    gtk_entry_set_visibility (GTK_ENTRY(pPasswordEntry), FALSE);
+    gtk_entry_set_invisible_char (GTK_ENTRY(pPasswordEntry), '*');
+    gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pPasswordEntry, TRUE, TRUE, 2);
+    if (bModify)
+    {
+        GtkWidget* pSecondaryLabel = gtk_label_new ("Document requires password to edit");
+        gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pSecondaryLabel, TRUE, TRUE, 2);
+        gtk_dialog_add_button (GTK_DIALOG (pPasswordDialog), "Open as read-only", GTK_RESPONSE_ACCEPT);
+    }
+    gtk_widget_show_all(pPasswordDialog);
+
+    gint res = gtk_dialog_run (GTK_DIALOG(pPasswordDialog));
+    switch (res)
+    {
+    case GTK_RESPONSE_OK:
+        lok_doc_view_set_document_password (pLOKDocView, pUrl, gtk_entry_get_text(GTK_ENTRY(pPasswordEntry)));
+        break;
+    case GTK_RESPONSE_ACCEPT:
+        // User accepts to open this document as read-only
+    case GTK_RESPONSE_DELETE_EVENT:
+        lok_doc_view_set_document_password (pLOKDocView, pUrl, nullptr);
+        break;
+    }
+
+    gtk_widget_destroy(pPasswordDialog);
 }
 
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
@@ -1353,6 +1402,7 @@ static void setupDocView(GtkWidget* pDocView)
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), nullptr);
     g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
+    g_signal_connect(pDocView, "password-required", G_CALLBACK(passwordRequired), nullptr);
 }
 
 int main( int argc, char* argv[] )

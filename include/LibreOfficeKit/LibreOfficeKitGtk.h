@@ -286,6 +286,18 @@ gboolean                        lok_doc_view_paste                 (LOKDocView* 
                                                                     gsize nSize);
 
 /**
+ * lok_doc_view_set_document_password:
+ * @pDocView: The #LOKDocView instance
+ * @pUrl: the URL of the document to set password for, as sent with signal `password-required`
+ * @pPassword: (nullable): the password, NULL for no password
+ *
+ * Set the password for password protected documents
+ */
+void                            lok_doc_view_set_document_password (LOKDocView* pDocView,
+                                                                    const gchar* pURL,
+                                                                    const gchar* pPassword);
+
+/**
  * lok_doc_view_pixel_to_twip:
  * @pDocView: The #LOKDocView instance
  * @fInput: The value in pixels to convert to twips
