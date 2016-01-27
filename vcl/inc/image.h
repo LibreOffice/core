@@ -23,13 +23,14 @@
 #include <vcl/bitmapex.hxx>
 
 #include <unordered_map>
+#include <vector>
 
 struct ImageAryData
 {
     OUString maName;
     // Images identified by either name, or by id
-    sal_uInt16          mnId;
-    BitmapEx        maBitmapEx;
+    sal_uInt16              mnId;
+    BitmapEx                maBitmapEx;
 
     ImageAryData( const OUString &aName,
                   sal_uInt16 nId, const BitmapEx &aBitmap );
@@ -48,11 +49,11 @@ struct ImplImageList
     typedef std::unordered_map< OUString, ImageAryData *, OUStringHash >
         ImageAryDataNameHash;
 
-    ImageAryDataVec             maImages;
-    ImageAryDataNameHash        maNameHash;
+    ImageAryDataVec        maImages;
+    ImageAryDataNameHash   maNameHash;
     OUString               maPrefix;
-    Size                        maImageSize;
-    sal_uIntPtr                       mnRefCount;
+    Size                   maImageSize;
+    sal_uIntPtr            mnRefCount;
 
     ImplImageList();
     ImplImageList( const ImplImageList &aSrc );
