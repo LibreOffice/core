@@ -116,7 +116,6 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
         { OUString("IsShowLogo"),               ATTR_PRESENT_SHOW_PAUSELOGO,    cppu::UnoType<bool>::get(),                0, 0 },
         { OUString("IsTransitionOnClick"),      ATTR_PRESENT_CHANGE_PAGE,       cppu::UnoType<bool>::get(),                0, 0 },
         { OUString("Pause"),                    ATTR_PRESENT_PAUSE_TIMEOUT,     ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
-        { OUString("StartWithNavigator"),       ATTR_PRESENT_NAVIGATOR,         cppu::UnoType<bool>::get(),                0, 0 },
         { OUString("UsePen"),                   ATTR_PRESENT_PEN,               cppu::UnoType<bool>::get(),                0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -440,22 +439,6 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         }
         break;
     }
-    case ATTR_PRESENT_NAVIGATOR:
-    {
-        bool bVal = false;
-
-        if( aValue >>= bVal )
-        {
-            bIllegalArgument = false;
-
-            if( rPresSettings.mbStartWithNavigator != bVal)
-            {
-                bValuesChanged = true;
-                rPresSettings.mbStartWithNavigator = bVal;
-            }
-        }
-        break;
-    }
     case ATTR_PRESENT_PEN:
     {
         bool bVal = false;
@@ -578,8 +561,6 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
         return Any( rPresSettings.mbMouseVisible );
     case ATTR_PRESENT_ALWAYS_ON_TOP:
         return Any( rPresSettings.mbAlwaysOnTop );
-    case ATTR_PRESENT_NAVIGATOR:
-        return Any( rPresSettings.mbStartWithNavigator );
     case ATTR_PRESENT_PEN:
         return Any( rPresSettings.mbMouseAsPen );
     case ATTR_PRESENT_PAUSE_TIMEOUT:
@@ -1030,12 +1011,6 @@ void SlideShow::pause( bool bPause )
         else
             mxController->resume();
     }
-}
-
-void SlideShow::receiveRequest(SfxRequest& rReq)
-{
-    if( mxController.is() )
-        mxController->receiveRequest( rReq );
 }
 
 sal_Int32 SlideShow::getFirstPageNumber()
