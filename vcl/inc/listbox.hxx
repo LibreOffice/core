@@ -26,6 +26,9 @@
 
 #include <boost/signals2/signal.hpp>
 
+#include <vector>
+#include <memory>
+
 class ScrollBar;
 class ScrollBarBox;
 
