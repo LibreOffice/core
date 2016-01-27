@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "7aa08908_d4ecd491",
+        "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-27T16:26:41Z",
+      "side": 1,
+      "message": "Sorry i don\u0027t understand what you mean. This is the same with save button implemetation.",
+      "parentUuid": "7aa08908_9451ac11",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_d1ece691",
         "filename": "framework/source/uielement/freezepanesmenucontroller.cxx",
         "patchSetId": 13
@@ -242,6 +260,24 @@
       "writtenOn": "2016-01-27T00:14:28Z",
       "side": 1,
       "message": ".uno:FreezePane has \"checked\" state when the freeze is active (i.e. the button looks pressed), but PopupMenuToolbarController on which GenericPopupToolbarController is based doesn\u0027t handle boolean status updates, so this likely will create a regression. Can you fix that in PopupMenuToolbarController::statusChanged? You can take svtools/source/uno/generictoolboxcontroller.cxx#146 as an example.",
+      "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_54e2a4a0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Controller.xcu",
+        "patchSetId": 13
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-01-27T16:26:41Z",
+      "side": 1,
+      "message": "generictoolboxcontroller.cxx has a m_pToolbox object comes from ctor. It use this for checking unchecking. I couldn\u0027t a way to use this object in PopupMenuToolbarController::statusChanged. I think i can\u0027t fix it.",
+      "parentUuid": "7aa08908_3468b8ba",
       "revId": "ed5e9d14ec7edfc893d3b4025a571ceb2f43408e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
