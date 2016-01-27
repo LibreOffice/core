@@ -27,7 +27,7 @@
 #include "swtypes.hxx"
 #include "cmdid.h"
 #include "label.hxx"
-#include "../../uibase/envelp/labimp.hxx"
+#include "labimp.hxx"
 #include "labimg.hxx"
 #include "labfmt.hxx"
 #include "uitool.hxx"

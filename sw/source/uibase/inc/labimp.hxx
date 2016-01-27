@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_ENVELP_LABIMP_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_ENVELP_LABIMP_HXX
+#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
+#define INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/lstbox.hxx>
@@ -76,6 +76,6 @@
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
 
-#endif
+#endif // INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
