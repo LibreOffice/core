@@ -20,8 +20,9 @@
 #ifndef INCLUDED_VCL_INC_PRINT_H
 #define INCLUDED_VCL_INC_PRINT_H
 
-#include "rtl/ustring.hxx"
-#include "vcl/dllapi.h"
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
+
 #include <vector>
 #include <unordered_map>
 
@@ -41,10 +42,9 @@ struct ImplPrnQueueData
 class VCL_PLUGIN_PUBLIC ImplPrnQueueList
 {
 public:
-    std::unordered_map< OUString, sal_Int32, OUStringHash >
-                                        m_aNameToIndex;
+    std::unordered_map< OUString, sal_Int32, OUStringHash > m_aNameToIndex;
     std::vector< ImplPrnQueueData >     m_aQueueInfos;
-    std::vector< OUString >        m_aPrinterList;
+    std::vector< OUString >             m_aPrinterList;
 
     ImplPrnQueueList() {}
     ~ImplPrnQueueList();
