@@ -36,7 +36,6 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
     #include <cppuhelper/exc_hlp.hxx>
     #include <osl/diagnose.h>
     #include <osl/thread.h>
-    #include <boost/current_function.hpp>
 
     /** reports a caught UNO exception via OSL diagnostics
 
@@ -44,7 +43,7 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         handling is not correct ....
     */
     #define DBG_UNHANDLED_EXCEPTION()   \
-        DbgUnhandledException( ::cppu::getCaughtException(), BOOST_CURRENT_FUNCTION, SAL_DETAIL_WHERE);
+        DbgUnhandledException( ::cppu::getCaughtException(), __func__, SAL_DETAIL_WHERE);
 
 #else   // OSL_DEBUG_LEVEL
     #define DBG_UNHANDLED_EXCEPTION()
@@ -56,14 +55,14 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
 #define ENSURE_ARG_OR_THROW(c, m) if( !(c) ) { \
                                      OSL_ENSURE(c, m); \
                                      throw css::lang::IllegalArgumentException( \
-                                     OUStringLiteral(BOOST_CURRENT_FUNCTION) \
+                                     OUStringLiteral(__func__) \
                                      + ",\n" m, \
                                      css::uno::Reference< css::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
                                                throw css::lang::IllegalArgumentException( \
-                                               OUStringLiteral(BOOST_CURRENT_FUNCTION) \
+                                               OUStringLiteral(__func__) \
                                                + ",\n" m, \
                                                ifc, \
                                                arg ); }
@@ -75,14 +74,14 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
     if( !(c) ){ \
         OSL_ENSURE(c, m); \
         throw css::uno::RuntimeException( \
-        OUStringLiteral(BOOST_CURRENT_FUNCTION) + ",\n" m, \
+        OUStringLiteral(__func__) + ",\n" m, \
         css::uno::Reference< css::uno::XInterface >() ); }
 
 #define ENSURE_OR_THROW2(c, m, ifc) \
     if( !(c) ) { \
         OSL_ENSURE(c, m); \
         throw css::uno::RuntimeException( \
-        OUStringLiteral(BOOST_CURRENT_FUNCTION) + ",\n" m, \
+        OUStringLiteral(__func__) + ",\n" m, \
         ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and
