@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cairotextrender.hxx"
+#include "unx/cairotextrender.hxx"
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/settings.hxx>

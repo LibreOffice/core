@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX
 #define INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX
 
-#include "cairotextrender.hxx"
+#include "unx/cairotextrender.hxx"
 
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"

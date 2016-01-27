@@ -20,19 +20,16 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 
-#include "textrender.hxx"
 #include <vcl/region.hxx>
+
+#include "textrender.hxx"
+
 #include <deque>
 
 typedef struct FT_FaceRec_* FT_Face;
 
 class ServerFont;
 class GlyphCache;
-class ImplLayoutArgs;
-class ServerFontLayout;
-class PhysicalFontCollection;
-class PhysicalFontFace;
-class ImplFontMetricData;
 typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC CairoFontsCache
