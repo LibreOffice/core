@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 
-typedef struct _SalFrameGeometry {
+struct SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
     long                nX, nY;
     // dimensions of the drawable area in pixel
@@ -34,13 +34,18 @@ typedef struct _SalFrameGeometry {
                         nBottomDecoration;
     unsigned int        nDisplayScreenNumber;
 
-    _SalFrameGeometry() :
-    nX( 0 ), nY( 0 ), nWidth( 1 ), nHeight( 1 ),
-    nLeftDecoration( 0 ), nTopDecoration( 0 ),
-    nRightDecoration( 0 ), nBottomDecoration( 0 ),
-    nDisplayScreenNumber( 0 )
+    SalFrameGeometry() :
+        nX( 0 ),
+        nY( 0 ),
+        nWidth( 1 ),
+        nHeight( 1 ),
+        nLeftDecoration( 0 ),
+        nTopDecoration( 0 ),
+        nRightDecoration( 0 ),
+        nBottomDecoration( 0 ),
+        nDisplayScreenNumber( 0 )
     {}
-} SalFrameGeometry;
+};
 
 /// Interface used to share logic on sizing between
 /// SalVirtualDevices and SalFrames
