@@ -118,7 +118,7 @@ void Writer::queueRequest(
     items_.set();
 
 	SAL_DEBUG("writer::queueRequest tid " << getAsString(tid) <<
-              " type " << OUString(type.get()->pTypeName) <<
+//              " type " << OUString(type.get()->pTypeName) <<
               " member " << OUString(member.get()->pTypeName));
 }
 
@@ -215,10 +215,10 @@ void Writer::sendRequest(
     css::uno::UnoInterfaceReference const & currentContext)
 {
 	SAL_DEBUG("writer::sendRequest tid " << getAsString(tid) <<
-              " type " << OUString(type.get()->pTypeName)  <<
+//              " type " << OUString(type.get()->pTypeName)  <<
               " member " << OUString(member.get()->pTypeName) <<
-              " cctx mode? " << currentContextMode <<
-              " cur ctx " << currentContext.get());
+              " cctx mode? " << currentContextMode);
+//              " cur ctx " << currentContext.get()); - currentContext ref -> null
 
     OSL_ASSERT(tid.getLength() != 0 && !oid.isEmpty() && member.is());
     css::uno::TypeDescription t(type);
