@@ -21,8 +21,9 @@
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CAIRO_HXX
 
 #include <sal/config.h>
+
 #include <vcl/cairo.hxx>
-#include "vcl/dllapi.h"
+#include <vcl/dllapi.h>
 
 struct SystemEnvData;
 namespace vcl { class Window; }
