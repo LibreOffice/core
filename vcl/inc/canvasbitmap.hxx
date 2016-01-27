@@ -35,8 +35,8 @@ namespace unotools
 {
     class VCL_DLLPUBLIC VclCanvasBitmap :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
-                                      css::rendering::XBitmapPalette,
-                                      css::rendering::XIntegerBitmapColorSpace >
+                                     css::rendering::XBitmapPalette,
+                                     css::rendering::XIntegerBitmapColorSpace >
     {
     private:
         BitmapEx                                       m_aBmpEx;
@@ -112,7 +112,7 @@ namespace unotools
         explicit VclCanvasBitmap( const BitmapEx& rBitmap );
 
         /// Retrieve contained bitmap. Call me with locked Solar mutex!
-        BitmapEx getBitmapEx() const { return m_aBmpEx;}
+        BitmapEx getBitmapEx() const { return m_aBmpEx; }
    };
 }
 }
