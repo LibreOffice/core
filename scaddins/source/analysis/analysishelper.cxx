@@ -1123,15 +1123,15 @@ double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
     double      fPrice2 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield2, fRedemp, nFreq, nBase );
     double      fYieldN = ( fYield2 - fYield1 ) * 0.5;
 
-    for( sal_uInt32 nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ )
+    for( sal_uInt32 nIter = 0 ; nIter < 100 && !rtl::math::approxEqual(fPriceN, fPrice) ; nIter++ )
     {
         fPriceN = getPrice_( nNullDate, nSettle, nMat, fRate, fYieldN, fRedemp, nFreq, nBase );
 
-        if( fPrice == fPrice1 )
+        if( rtl::math::approxEqual(fPrice, fPrice1) )
             return fYield1;
-        else if( fPrice == fPrice2 )
+        else if( rtl::math::approxEqual(fPrice, fPrice2) )
             return fYield2;
-        else if( fPrice == fPriceN )
+        else if( rtl::math::approxEqual(fPrice, fPriceN) )
             return fYieldN;
         else if( fPrice < fPrice2 )
         {
