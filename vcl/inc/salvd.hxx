@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALVD_HXX
 #define INCLUDED_VCL_INC_SALVD_HXX
 
-#include <salgeom.hxx>
+#include "salgeom.hxx"
 
 class SalGraphics;
 
