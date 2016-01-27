@@ -20,13 +20,8 @@
 #ifndef INCLUDED_VCL_INC_TOOLBOX_H
 #define INCLUDED_VCL_INC_TOOLBOX_H
 
-#include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
-#include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>
-
-#include <vector>
 
 #define TB_DROPDOWNARROWWIDTH   11
 
