@@ -1,4 +1,4 @@
-From 0e343965d4c84480207a90d5a83dacfb826be386 Mon Sep 17 00:00:00 2001
+From 04101dc871b13cba28d520fd00caf2d96b2e4c72 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Mon, 25 Jan 2016 11:24:01 +0100
 Subject: [PATCH] NSS glue layer: add SHA-256 support
@@ -7,8 +7,8 @@ Subject: [PATCH] NSS glue layer: add SHA-256 support
  include/xmlsec/nss/crypto.h | 25 ++++++++++++++++++++
  src/nss/crypto.c            |  4 ++++
  src/nss/digests.c           | 57 +++++++++++++++++++++++++++++++++++++++++++++
- src/nss/signatures.c        | 44 ++++++++++++++++++++++++++++++++++
- 4 files changed, 130 insertions(+)
+ src/nss/signatures.c        | 51 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 137 insertions(+)
 
 diff --git a/include/xmlsec/nss/crypto.h b/include/xmlsec/nss/crypto.h
 index 42ba6ca..707f8d9 100644
@@ -157,10 +157,31 @@ index 5a1db91..0c4657c 100644
  
  
 diff --git a/src/nss/signatures.c b/src/nss/signatures.c
-index 3c9639c..c9afa4e 100644
+index 3c9639c..fb58403 100644
 --- a/src/nss/signatures.c
 +++ b/src/nss/signatures.c
-@@ -545,6 +545,50 @@ xmlSecNssTransformRsaSha1GetKlass(void) {
+@@ -87,6 +87,9 @@ xmlSecNssSignatureCheckId(xmlSecTransformPtr transform) {
+     if(xmlSecTransformCheckId(transform, xmlSecNssTransformRsaSha1Id)) {
+ 	return(1);
+     }
++    if(xmlSecTransformCheckId(transform, xmlSecNssTransformRsaSha256Id)) {
++	return(1);
++    }
+ #endif /* XMLSEC_NO_RSA */
+ 
+     return(0);
+@@ -123,6 +126,10 @@ xmlSecNssSignatureInitialize(xmlSecTransformPtr transform) {
+ 	ctx->keyId	= xmlSecNssKeyDataRsaId;
+ 	ctx->alg	= SEC_OID_PKCS1_SHA1_WITH_RSA_ENCRYPTION;
+     } else 
++    if(xmlSecTransformCheckId(transform, xmlSecNssTransformRsaSha256Id)) {
++	ctx->keyId	= xmlSecNssKeyDataRsaId;
++	ctx->alg	= SEC_OID_PKCS1_SHA256_WITH_RSA_ENCRYPTION;
++    } else
+ #endif /* XMLSEC_NO_RSA */
+         if(1) {
+ 	    xmlSecError(XMLSEC_ERRORS_HERE, 
+@@ -545,6 +552,50 @@ xmlSecNssTransformRsaSha1GetKlass(void) {
      return(&xmlSecNssRsaSha1Klass);
  }
  
