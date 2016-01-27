@@ -23,8 +23,9 @@
 #define SV_RESID_STDOFFSET                  0
 #define SV_RESID_MONOOFFSET                 1
 
-// Achtung: Diese Id's muessen min. 10 Werte auseinanderliegen, da
-// je nach Style noch ein Offset aufgerechnet wird
+// ATTENTION: These IDs must be spaced at least by 10, as, depending on style,
+// an offset will get added:
+
 #define SV_RESID_BITMAP_CHECK               1000
 #define SV_RESID_BITMAP_RADIO               1010
 
