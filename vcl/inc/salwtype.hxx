@@ -32,8 +32,6 @@ namespace vcl { class Window; }
 class FontSelectPattern;
 enum class InputContextFlags;
 
-// - SalEvent -
-
 #define SALEVENT_MOUSEMOVE              ((sal_uInt16)1)
 #define SALEVENT_MOUSELEAVE             ((sal_uInt16)2)
 #define SALEVENT_MOUSEBUTTONDOWN        ((sal_uInt16)3)
@@ -123,7 +121,6 @@ struct SalKeyModEvent
     sal_uInt16      mnModKeyCode;   // extended Modifier (MODKEY_LEFT,MODKEY_RIGHT,MODKEY_PRESS,MODKEY_RELEASE)
 };
 
-// PAINT
 struct SalPaintEvent
 {
     long            mnBoundX;           // BoundRect - X
@@ -139,10 +136,6 @@ struct SalPaintEvent
     {}
 };
 
-// USEREVENT
-// pEvent == pData
-
-// WHEELMOUSE
 #define SAL_WHEELMOUSE_EVENT_PAGESCROLL     ((sal_uLong)0xFFFFFFFF)
 struct SalWheelMouseEvent
 {
@@ -161,7 +154,6 @@ struct SalWheelMouseEvent
     {}
 };
 
-// EXTTEXTINPUT
 struct SalExtTextInputEvent
 {
     sal_uInt64          mnTime;         // Time in ms, when event is created
@@ -172,7 +164,6 @@ struct SalExtTextInputEvent
     bool                mbOnlyCursor;   // true: Only Cursor-Position has been changed
 };
 
-// EXTTEXTINPUTPOS
 struct SalExtTextInputPosEvent
 {
     long            mnX;            // Cursor-X-Position to upper left corner of frame
@@ -192,13 +183,11 @@ struct SalExtTextInputPosEvent
     }
 };
 
-// INPUTCONTEXTCHANGE
 struct SalInputContextChangeEvent
 {
     LanguageType    meLanguage;     // new language
 };
 
-// SURROUNDINGTEXTREQUEST
 struct SalSurroundingTextRequestEvent
 {
     OUString        maText;         // Text
@@ -206,14 +195,12 @@ struct SalSurroundingTextRequestEvent
     sal_uLong       mnEnd;          // The end index of selected range
 };
 
-// SURROUNDINGTEXTSELECTIONCHANGE
 struct SalSurroundingTextSelectionChangeEvent
 {
     sal_uLong       mnStart;        // The beginning index of selected range
     sal_uLong       mnEnd;          // The end index of selected range
 };
 
-// QUERYCHARPOSITION
 struct SalQueryCharPositionEvent
 {
     bool            mbValid;                // The data is valid or not.
@@ -225,23 +212,15 @@ struct SalQueryCharPositionEvent
     long            mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
 };
 
-// - SalFrame-Types -
-
 typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, sal_uInt16 nEvent, const void* pEvent );
-
-// - SalObject-Events -
 
 #define SALOBJ_EVENT_GETFOCUS           ((sal_uInt16)1)
 #define SALOBJ_EVENT_LOSEFOCUS          ((sal_uInt16)2)
 #define SALOBJ_EVENT_TOTOP              ((sal_uInt16)3)
 #define SALOBJ_EVENT_COUNT              ((sal_uInt16)4)
 
-// - SalObject-Types -
-
 typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
                                sal_uInt16 nEvent, const void* pEvent );
-
-// - SalFrameState -
 
 struct SalFrameState
 {
@@ -256,8 +235,6 @@ struct SalFrameState
     long            mnMaximizedHeight;
     sal_uLong       mnState;
 };
-
-// - SalInputContext -
 
 struct SalInputContext
 {
