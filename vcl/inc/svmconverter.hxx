@@ -20,10 +20,11 @@
 #ifndef INCLUDED_VCL_INC_SVMCONVERTER_HXX
 #define INCLUDED_VCL_INC_SVMCONVERTER_HXX
 
-#include <stack>
 #include <vcl/dllapi.h>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
+
+#include <stack>
 
 #define CONVERT_TO_SVM1                 0x00000001UL
 #define CONVERT_FROM_SVM1               0x00000002UL
