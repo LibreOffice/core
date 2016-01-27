@@ -1,4 +1,4 @@
-From 7e46355a9a7a223077f4d83587fd842bbaf97e37 Mon Sep 17 00:00:00 2001
+From 24c1395c547f8a2f0c78a8618c766ecd55909c66 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Mon, 25 Jan 2016 09:50:03 +0100
 Subject: [PATCH] OOXML Relationship Transform
@@ -8,8 +8,8 @@ Subject: [PATCH] OOXML Relationship Transform
  include/xmlsec/transforms.h |   4 +
  src/strings.c               |   3 +
  src/transforms.c            |  11 +
- src/xpath.c                 | 480 ++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 501 insertions(+)
+ src/xpath.c                 | 542 ++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 563 insertions(+)
 
 diff --git a/include/xmlsec/strings.h b/include/xmlsec/strings.h
 index 07afb9d..9c72d1b 100644
@@ -77,7 +77,7 @@ index 2ed3fe8..9e5ad27 100644
      if(xmlSecTransformIdsRegister(xmlSecTransformXsltId) < 0) {
  	xmlSecError(XMLSEC_ERRORS_HERE,
 diff --git a/src/xpath.c b/src/xpath.c
-index 8b0b4f8..e56920e 100644
+index 8b0b4f8..b9a03e5 100644
 --- a/src/xpath.c
 +++ b/src/xpath.c
 @@ -17,6 +17,7 @@
@@ -88,7 +88,7 @@ index 8b0b4f8..e56920e 100644
  
  #include <xmlsec/xmlsec.h>
  #include <xmlsec/xmltree.h>
-@@ -1144,5 +1145,484 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
+@@ -1144,5 +1145,546 @@ xmlSecTransformVisa3DHackExecute(xmlSecTransformPtr transform, int last,
      return(0);
  }
  
@@ -271,10 +271,10 @@ index 8b0b4f8..e56920e 100644
 +        xmlOutputBufferWriteString(buf, (const char *)xmlGetProp(cur, attr->name));
 +        xmlOutputBufferWriteString(buf, "\"");
 +    }
- 
++
 +    if (strcmp(cur->name, "Relationship") == 0 && !foundTargetMode)
 +        xmlOutputBufferWriteString(buf, " TargetMode=\"Internal\"");
- 
++
 +    xmlOutputBufferWriteString(buf, ">");
 +
 +    if (cur->children)
@@ -331,17 +331,79 @@ index 8b0b4f8..e56920e 100644
 +    return 0;
 +}
 +
++/* Sorts Relationship elements by Id value in lexicographical order. */
++static int xmlSecTransformRelationshipCompare(xmlNodePtr node1, xmlNodePtr node2)
++{
++    xmlChar* id1;
++    xmlChar* id2;
++
++    if (node1 == node2)
++        return 0;
++    if (!node1)
++        return -1;
++    if (!node2)
++        return 1;
++
++    id1 = xmlGetProp(node1, "Id");
++    id2 = xmlGetProp(node2, "Id");
++
++    if (!id1)
++        return -1;
++    if (!id2)
++        return 1;
++
++    return xmlStrcmp(id1, id2);
++}
++
 +int xmlSecTransformRelationshipProcessNodeList(xmlSecTransformPtr transform, xmlOutputBufferPtr buf, xmlNodePtr cur)
 +{
++    xmlListPtr list;
 +    int ret;
 +
-+    for (ret = 0; cur; cur = cur->next)
++    list = xmlListCreate(NULL, (xmlListDataCompare)xmlSecTransformRelationshipCompare);
++    if (!list)
++        return -1;
++
++    for (; cur; cur = cur->next)
 +    {
-+        ret = xmlSecTransformRelationshipProcessNode(transform, buf, cur);
-+        if (ret < 0)
-+            return -1;
++        if (strcmp(cur->name, "Relationship") == 0)
++            xmlListInsert(list, cur);
++        else
++        {
++            ret = xmlSecTransformRelationshipProcessNode(transform, buf, cur);
++            if (ret < 0)
++            {
++                xmlListDelete(list);
++                return -1;
++            }
++        }
 +    }
 +
++    if (!xmlListEmpty(list))
++    {
++        int size;
++        int i;
+ 
++        xmlListSort(list);
++        size = xmlListSize(list);
++        for (i = 0; i < size; ++i)
++        {
++            xmlLinkPtr link = xmlListFront(list);
++            xmlNodePtr node = (xmlNodePtr)xmlLinkGetData(link);
+ 
++            ret = xmlSecTransformRelationshipProcessNode(transform, buf, node);
++            if (ret < 0)
++            {
++                xmlListDelete(list);
++                return -1;
++            }
++
++            xmlListPopFront(list);
++        }
++
++    }
++
++    xmlListDelete(list);
 +    return 0;
 +}
 +
