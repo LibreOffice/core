@@ -20,23 +20,11 @@
 #ifndef INCLUDED_VCL_INC_SALGDI_HXX
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
-#include <tools/solar.h>
-#include <osl/thread.hxx>
-
-#include <vcl/dllapi.h>
-#include <vcl/salgtype.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/metric.hxx>
 
 #include "impfontmetricdata.hxx"
-
 #include "salgdiimpl.hxx"
-#include "salglyphid.hxx"
 #include "sallayout.hxx"
-
-#include <map>
-#include <set>
 
 #include <config_cairo_canvas.h>
 
