@@ -20,10 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALVD_HXX
 #define INCLUDED_VCL_INC_SALVD_HXX
 
-#include <vcl/dllapi.h>
 #include <salgeom.hxx>
-
-#include <memory>
 
 class SalGraphics;
 
