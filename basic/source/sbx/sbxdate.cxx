@@ -281,7 +281,7 @@ start:
             if( n <= -1.0 || n >= 1.0 )
             {
                 // Time only if != 00:00:00
-                if( floor( n ) == n )
+                if( rtl::math::approxEqual(floor( n ), n) )
                 {
                     switch( eDate )
                     {

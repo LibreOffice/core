@@ -1028,7 +1028,7 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
             case TypeClass_DOUBLE:
             {
                 double d = pVar->GetDouble();
-                if( d == floor( d ) )
+                if( rtl::math::approxEqual(d, floor( d )) )
                 {
                     if( d >= -128 && d <= 127 )
                         aType = ::cppu::UnoType<sal_Int8>::get();
