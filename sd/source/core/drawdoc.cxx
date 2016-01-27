@@ -126,8 +126,7 @@ PresentationSettings::PresentationSettings()
     mbFullScreen( true ),
     mbAnimationAllowed( true ),
     mnPauseTimeout( 10 ),
-    mbShowPauseLogo( false ),
-    mbStartWithNavigator(false)
+    mbShowPauseLogo( false )
 {
 }
 
@@ -144,8 +143,7 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
     mbFullScreen( r.mbFullScreen ),
     mbAnimationAllowed( r.mbAnimationAllowed ),
     mnPauseTimeout( r.mnPauseTimeout ),
-    mbShowPauseLogo( r.mbShowPauseLogo ),
-    mbStartWithNavigator( r.mbStartWithNavigator )
+    mbShowPauseLogo( r.mbShowPauseLogo )
 {
 }
 

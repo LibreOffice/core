@@ -35,7 +35,6 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
-#include "slideshow.hxx"
 #include "pgjump.hxx"
 #include "NavigatorChildWindow.hxx"
 #include "navigatr.hxx"
@@ -71,12 +70,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
         case SID_NAVIGATOR_PAGE:
         case SID_NAVIGATOR_OBJECT:
         {
-            rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-            if (xSlideshow.is() && xSlideshow->isRunning() )
-            {
-                xSlideshow->receiveRequest( rReq );
-            }
-            else if (nSId == SID_NAVIGATOR_PAGE)
+            if (nSId == SID_NAVIGATOR_PAGE)
             {
                 if ( mpDrawView->IsTextEdit() )
                     mpDrawView->SdrEndTextEdit();
@@ -166,36 +160,15 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     bool   bEndless = false;
     OUString aPageName;
 
-    rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    if( xSlideshow.is() && xSlideshow->isRunning() )
+    nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
+
+    if (mpActualPage != nullptr)
     {
-        // pen activated?
-        nState |= xSlideshow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
-
-        nCurrentPage = (sal_uInt16)xSlideshow->getCurrentPageNumber();
-        nFirstPage = (sal_uInt16)xSlideshow->getFirstPageNumber();
-        nLastPage = (sal_uInt16)xSlideshow->getLastPageNumber();
-        bEndless = xSlideshow->isEndless();
-
-        // Get the page for the current page number.
-        SdPage* pPage = nullptr;
-        if( nCurrentPage < GetDoc()->GetSdPageCount( PK_STANDARD ) )
-            pPage = GetDoc()->GetSdPage (nCurrentPage, PK_STANDARD);
-
-        if(pPage)
-            aPageName = pPage->GetName();
+        nCurrentPage = ( mpActualPage->GetPageNum() - 1 ) / 2;
+        aPageName = mpActualPage->GetName();
     }
-    else
-    {
-        nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
+    nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;
 
-        if (mpActualPage != nullptr)
-        {
-            nCurrentPage = ( mpActualPage->GetPageNum() - 1 ) / 2;
-            aPageName = mpActualPage->GetName();
-        }
-        nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;
-    }
 
     // first page / previous page
     if( nCurrentPage == nFirstPage )
