@@ -359,15 +359,20 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
 
-            if ( rSigInfo.SignatureIsValid )
+            // OOXML intentionally doesn't sign metadata.
+            if ( rSigInfo.SignatureIsValid && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
             {
                  rSigInfo.SignatureIsValid =
                       DocumentSignatureHelper::checkIfAllFilesAreSigned(
                       aElementsToBeVerified, rInfo, mode);
             }
             if (eMode == SignatureModeDocumentContent)
-                rSigInfo.PartialDocumentSignature =
-                    ! DocumentSignatureHelper::isOOo3_2_Signature(aSignInfos[n]);
+            {
+                if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+                    rSigInfo.PartialDocumentSignature = true;
+                else
+                    rSigInfo.PartialDocumentSignature = !DocumentSignatureHelper::isOOo3_2_Signature(aSignInfos[n]);
+            }
 
         }
     }
