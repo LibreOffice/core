@@ -858,6 +858,8 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
         }
+        // TODO PLACEHOLDER:
+        // remove target URL options from cache, since PROPPATCH may change them
 
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
@@ -1869,6 +1871,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Set property values at server.
             xResAccess->PROPPATCH( aProppatchValues, xEnv );
+            // TODO PLACEHOLDER:
+            // remove target URL options from cache, since PROPPATCH may change it
 
             std::vector< ProppatchValue >::const_iterator it
                 = aProppatchValues.begin();
@@ -2739,6 +2743,8 @@ void Content::transfer(
                                 rArgs.NameClash
                                     == ucb::NameClash::OVERWRITE,
                                 Environment );
+            aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
+            aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
 
 // DAV resources store all additional props on server!
 //              // Copy own and all children's Additional Core Properties.
