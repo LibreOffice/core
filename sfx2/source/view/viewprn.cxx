@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
+
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 
@@ -817,12 +819,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                 // execute PrinterSetupDialog
                 VclPtrInstance<PrinterSetupDialog> pPrintSetupDlg( GetWindow() );
-                SfxDialogExecutor_Impl* pExecutor = nullptr;
+                std::unique_ptr<SfxDialogExecutor_Impl> pExecutor;
 
                 if (pImp->m_bHasPrintOptions && HasPrintOptionsPage())
                 {
                     // additional controls for dialog
-                    pExecutor = new SfxDialogExecutor_Impl( this, pPrintSetupDlg );
+                    pExecutor.reset( new SfxDialogExecutor_Impl( this, pPrintSetupDlg ) );
                     if ( bPrintOnHelp )
                         pExecutor->DisableHelp();
                     pPrintSetupDlg->SetOptionsHdl( pExecutor->GetLink() );
@@ -844,7 +846,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
 
                 pPrintSetupDlg.disposeAndClear();
-                delete pExecutor;
 
                 // no recording of PrinterSetup except printer name (is printer dependent)
                 rReq.Ignore();
