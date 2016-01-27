@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 #define INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 
+#include <memory>
+
 class Control;
 
 namespace vcl
