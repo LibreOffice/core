@@ -21,27 +21,9 @@
 #define INCLUDED_VCL_INC_WINDOW_H
 
 #include <sal/config.h>
-
-#include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <list>
-#include <tools/wintypes.hxx>
 #include <tools/fract.hxx>
-#include <vcl/cursor.hxx>
-#include <vcl/inputctx.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/pointr.hxx>
-#include <vcl/salnativewidgets.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/vclevent.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/rendersettings.hxx>
-#include "vcleventlisteners.hxx"
-#include "impfontcache.hxx"
-
-#include <vector>
-#include <set>
 
 struct ImplDelData;
 
