@@ -20,36 +20,20 @@
 #ifndef INCLUDED_VCL_INC_SVDATA_HXX
 #define INCLUDED_VCL_INC_SVDATA_HXX
 
-#include "sal/types.h"
+#include <config_version.h>
 
-#include <osl/thread.hxx>
-#include <rtl/ref.hxx>
-#include <rtl/ustring.hxx>
-#include "tools/link.hxx"
-#include "tools/fldunit.hxx"
-#include "tools/color.hxx"
-#include "tools/debug.hxx"
-#include "tools/solar.h"
-#include "vcl/bitmapex.hxx"
-#include "vcl/idle.hxx"
-#include "vcl/dllapi.h"
-#include "vcl/keycod.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/vclevent.hxx"
+#include <tools/fldunit.hxx>
+#include <unotools/options.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
+
+#include <com/sun/star/lang/XComponent.hpp>
+
 #include "vcleventlisteners.hxx"
-
 #include "impfontcache.hxx"
-
-#include "unotools/options.hxx"
-
 #include "xconnection.hxx"
 
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-
 #include <unordered_map>
-
-#include <config_version.h>
 
 struct ImplTimerData;
 struct ImplIdleData;
