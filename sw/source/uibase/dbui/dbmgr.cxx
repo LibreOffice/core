@@ -964,6 +964,60 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     return xWorkObjectShell;
 }
 
+uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
+    const SwMergeDescriptor &rMergeDescriptor,
+    const OUString &sFileURL, const OUString &sMailRecipient,
+    const OUString &sMailBodyMimeType, const rtl_TextEncoding &sMailEncoding,
+    const OUString &sAttachmentMimeType )
+{
+    SwMailMessage* pMessage = new SwMailMessage;
+    uno::Reference< mail::XMailMessage > xMessage = pMessage;
+    if( rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo() )
+        pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
+    pMessage->addRecipient( sMailRecipient );
+    pMessage->SetSenderAddress( rMergeDescriptor.pMailMergeConfigItem->GetMailAddress() );
+
+    OUString sBody;
+    if( rMergeDescriptor.bSendAsAttachment )
+    {
+        sBody = rMergeDescriptor.sMailBody;
+        mail::MailAttachment aAttach;
+        aAttach.Data = new SwMailTransferable( sFileURL,
+            rMergeDescriptor.sAttachmentName, sAttachmentMimeType );
+        aAttach.ReadableName = rMergeDescriptor.sAttachmentName;
+        pMessage->addAttachment( aAttach );
+    }
+    else
+    {
+        //read in the temporary file and use it as mail body
+        SfxMedium aMedium( sFileURL, StreamMode::READ );
+        SvStream* pInStream = aMedium.GetInStream();
+        assert( pInStream && "no output file created?" );
+        if( pInStream )
+            return xMessage;
+
+        pInStream->SetStreamCharSet( sMailEncoding );
+        OString sLine;
+        while ( pInStream->ReadLine( sLine ) )
+        {
+            sBody += OStringToOUString( sLine, sMailEncoding );
+            sBody += "\n";
+        }
+    }
+    pMessage->setSubject( rMergeDescriptor.sSubject );
+    uno::Reference< datatransfer::XTransferable> xBody =
+                new SwMailTransferable( sBody, sMailBodyMimeType );
+    pMessage->setBody( xBody );
+
+    for( const OUString& sCcRecipient : rMergeDescriptor.aCopiesTo )
+        pMessage->addCcRecipient( sCcRecipient );
+    for( const OUString& sBccRecipient : rMergeDescriptor.aBlindCopiesTo )
+        pMessage->addBccRecipient( sBccRecipient );
+
+    xMessage = pMessage;
+    return xMessage;
+}
+
 /**
  * Please have a look at the README in the same directory, before you make
  * larger changes in this function!
@@ -1374,70 +1428,17 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             if( bMT_EMAIL && !IsMergeError() )
                             {
+                                // schedule file for later removal
+                                aFilesToRemove.push_back( sFileURL );
+
+                                uno::Reference< mail::XMailMessage > xMessage = lcl_CreateMailFromDoc(
+                                    rMergeDescriptor, sFileURL, sColumnData, sMailBodyMimeType,
+                                    sMailEncoding, pStoreToFilter->GetMimeType() );
+                                if( xMessage.is() )
                                 {
-                                    SwMailMessage* pMessage = new SwMailMessage;
-                                    uno::Reference< mail::XMailMessage > xMessage = pMessage;
-                                    if(rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo())
-                                        pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
-                                    pMessage->addRecipient( sColumnData );
-                                    pMessage->SetSenderAddress( rMergeDescriptor.pMailMergeConfigItem->GetMailAddress() );
-                                    OUString sBody;
-
-                                    if(rMergeDescriptor.bSendAsAttachment)
-                                    {
-                                        sBody = rMergeDescriptor.sMailBody;
-                                        mail::MailAttachment aAttach;
-                                        aAttach.Data = new SwMailTransferable(
-                                                sFileURL,
-                                                rMergeDescriptor.sAttachmentName,
-                                                pStoreToFilter->GetMimeType());
-                                        aAttach.ReadableName = rMergeDescriptor.sAttachmentName;
-                                        pMessage->addAttachment( aAttach );
-                                    }
-                                    else
-                                    {
-                                        {
-                                            //read in the temporary file and use it as mail body
-                                            SfxMedium aMedium( sFileURL, StreamMode::READ);
-                                            SvStream* pInStream = aMedium.GetInStream();
-                                            assert( pInStream && "no output file created?" );
-                                            if(pInStream)
-                                            {
-                                                pInStream->SetStreamCharSet( sMailEncoding );
-                                                OString sLine;
-                                                bool bDone = pInStream->ReadLine( sLine );
-                                                while ( bDone )
-                                                {
-                                                    sBody += OStringToOUString( sLine, sMailEncoding );
-                                                    sBody += "\n";
-                                                    bDone = pInStream->ReadLine( sLine );
-                                                }
-                                            }
-                                        }
-                                    }
-                                    pMessage->setSubject( rMergeDescriptor.sSubject );
-                                    uno::Reference< datatransfer::XTransferable> xBody =
-                                                new SwMailTransferable(
-                                                    sBody, sMailBodyMimeType);
-                                    pMessage->setBody( xBody );
-
-                                    if(rMergeDescriptor.aCopiesTo.getLength())
-                                    {
-                                        const OUString* pCopies = rMergeDescriptor.aCopiesTo.getConstArray();
-                                        for( sal_Int32 nToken = 0; nToken < rMergeDescriptor.aCopiesTo.getLength(); ++nToken)
-                                            pMessage->addCcRecipient( pCopies[nToken] );
-                                    }
-                                    if(rMergeDescriptor.aBlindCopiesTo.getLength())
-                                    {
-                                        const OUString* pCopies = rMergeDescriptor.aBlindCopiesTo.getConstArray();
-                                        for( sal_Int32 nToken = 0; nToken < rMergeDescriptor.aBlindCopiesTo.getLength(); ++nToken)
-                                            pMessage->addBccRecipient( pCopies[nToken] );
-                                    }
                                     xMailDispatcher->enqueueMailMessage( xMessage );
-                                    if(!xMailDispatcher->isStarted())
+                                    if( !xMailDispatcher->isStarted() )
                                         xMailDispatcher->start();
-                                    //schedule for removal
-                                    aFilesToRemove.push_back(sFileURL);
                                 }
                             }
                         }
