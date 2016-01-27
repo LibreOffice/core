@@ -187,10 +187,10 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
             return;
     }
 
-    //  if 0 != dynamic_cast< SfxPrinter *>( (mpPrinter ))
+    SfxPrinter* const pSfxPrinter = dynamic_cast<SfxPrinter*>(pNewPrinter);
+    if (pSfxPrinter)
     {
-        // Since we do not have RTTI we use a hard cast (...)
-        SetPrinter(static_cast<SfxPrinter*>(pNewPrinter));
+        SetPrinter(pSfxPrinter);
 
         // container owns printer
         mbOwnPrinter = false;
