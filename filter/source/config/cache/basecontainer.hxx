@@ -28,7 +28,6 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <salhelper/singletonref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -74,10 +73,6 @@ class BaseContainer : public BaseLock
         /** @short  the list of supported uno service names of our derived class, which we provide
                     at the interface XServiceInfo of our class ... */
         css::uno::Sequence< OUString > m_lServiceNames;
-
-        /** @short  reference(!) to a singleton filter cache implementation,
-                    which is used to work with the underlying configuration. */
-        ::salhelper::SingletonRef< FilterCache > m_rCache;
 
         /** @short  local filter cache, which is used to collect changes on the
                     filter configuration first and flush it later.

@@ -28,35 +28,19 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 
 #define LOAD_IMPLICIT
 
 namespace filter{
     namespace config{
 
-
-namespace
-{
-    typedef ::salhelper::SingletonRef< FilterCache > FilterCacheRefHold;
-    /** @short  hold at least one filter cache instance alive and
-                prevent the office from unloading this cache if no filter
-                is currently used.*/
-    struct thePerformanceOptimizer :
-        public rtl::Static<FilterCacheRefHold, thePerformanceOptimizer>
-    {
-    };
-}
-
 BaseContainer::BaseContainer()
     : BaseLock     (       )
-    , m_rCache     (       )
     , m_pFlushCache(nullptr   )
     , m_eType()
     , m_lListener  (m_aLock)
 {
-    m_rCache->load(FilterCache::E_CONTAINS_STANDARD);
-    thePerformanceOptimizer::get();
+    TheFilterCache::get().load(FilterCache::E_CONTAINS_STANDARD);
 }
 
 
@@ -114,7 +98,7 @@ void BaseContainer::impl_loadOnDemand()
             break;
     }
 
-    m_rCache->load(eRequiredState);
+    TheFilterCache::get().load(eRequiredState);
     // <- SAFE
 #endif
 }
@@ -127,7 +111,7 @@ void BaseContainer::impl_initFlushMode()
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (!m_pFlushCache)
-        m_pFlushCache = m_rCache->clone();
+        m_pFlushCache = TheFilterCache::get().clone();
     if (!m_pFlushCache)
         throw css::uno::RuntimeException( "Can not create write copy of internal used cache on demand.",
                 static_cast< OWeakObject* >(this));
@@ -143,7 +127,7 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     if (m_pFlushCache)
         return m_pFlushCache;
     else
-        return &(*m_rCache);
+        return &TheFilterCache::get();
     // <- SAFE
 }
 
@@ -492,7 +476,7 @@ void SAL_CALL BaseContainer::flush()
                 If the global cache gets this information via listener,
                 we should remove this method!
         */
-        m_rCache->takeOver(*m_pFlushCache);
+        TheFilterCache::get().takeOver(*m_pFlushCache);
     }
     catch(const css::uno::Exception& ex)
     {

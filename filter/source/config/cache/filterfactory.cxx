@@ -95,7 +95,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
             type name instead of a filter name. For a small migration time
             we must simulate this old feature :-( */
 
-        if (!m_rCache->hasItem(FilterCache::E_FILTER, sFilter) && m_rCache->hasItem(FilterCache::E_TYPE, sFilter))
+        auto & cache = TheFilterCache::get();
+
+        if (!cache.hasItem(FilterCache::E_FILTER, sFilter) && cache.hasItem(FilterCache::E_TYPE, sFilter))
         {
             OSL_FAIL("Who use this deprecated functionality?");
             _FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
@@ -112,7 +114,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
             // prevent outside code against NoSuchElementException!
             // But don't implement such defensive strategy for our new create handling :-)
-            if (!m_rCache->hasItem(FilterCache::E_FILTER, sRealFilter))
+            if (!cache.hasItem(FilterCache::E_FILTER, sRealFilter))
                 return css::uno::Reference< css::uno::XInterface>();
         }
 
@@ -121,7 +123,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     #endif // _FILTER_CONFIG_MIGRATION_Q_
 
     // search filter on cache
-    CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, sRealFilter);
+    CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sRealFilter);
     OUString sFilterService;
     aFilter[PROPNAME_FILTERSERVICE] >>= sFilterService;
 
@@ -169,7 +171,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     OUStringList lUNOFilters;
     try
     {
-        lUNOFilters = m_rCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
+        lUNOFilters = TheFilterCache::get().getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

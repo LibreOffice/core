@@ -79,7 +79,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
             type name instead of a handler name. For a small migration time
             we must simulate this old feature :-( */
 
-        if (!m_rCache->hasItem(FilterCache::E_CONTENTHANDLER, sHandler) && m_rCache->hasItem(FilterCache::E_TYPE, sHandler))
+        auto & cache = TheFilterCache::get();
+
+        if (!cache.hasItem(FilterCache::E_CONTENTHANDLER, sHandler) && cache.hasItem(FilterCache::E_TYPE, sHandler))
         {
             _FILTER_CONFIG_LOG_("ContentHandlerFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
@@ -97,7 +99,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
             // prevent outside code against NoSuchElementException!
             // But don't implement such defensive strategy for our new create handling :-)
-            if (!m_rCache->hasItem(FilterCache::E_CONTENTHANDLER, sRealHandler))
+            if (!cache.hasItem(FilterCache::E_CONTENTHANDLER, sRealHandler))
                 return css::uno::Reference< css::uno::XInterface>();
         }
 
@@ -106,7 +108,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     #endif // _FILTER_CONFIG_MIGRATION_Q_
 
     // search handler on cache
-    CacheItem aHandler = m_rCache->getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);
+    CacheItem aHandler = cache.getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);
 
     // create service instance
     xHandler = m_xContext->getServiceManager()->createInstanceWithContext(sRealHandler, m_xContext);

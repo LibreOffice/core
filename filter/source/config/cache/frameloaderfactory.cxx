@@ -76,7 +76,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
             type name instead of a loader name. For a small migration time
             we must simulate this old feature :-( */
 
-        if (!m_rCache->hasItem(FilterCache::E_FRAMELOADER, sLoader) && m_rCache->hasItem(FilterCache::E_TYPE, sLoader))
+        auto & cache = TheFilterCache::get();
+
+        if (!cache.hasItem(FilterCache::E_FRAMELOADER, sLoader) && cache.hasItem(FilterCache::E_TYPE, sLoader))
         {
             _FILTER_CONFIG_LOG_("FrameLoaderFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
@@ -94,7 +96,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
             // prevent outside code against NoSuchElementException!
             // But don't implement such defensive strategy for our new create handling :-)
-            if (!m_rCache->hasItem(FilterCache::E_FRAMELOADER, sRealLoader))
+            if (!cache.hasItem(FilterCache::E_FRAMELOADER, sRealLoader))
                 return css::uno::Reference< css::uno::XInterface>();
         }
 
@@ -103,7 +105,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     #endif // _FILTER_CONFIG_MIGRATION_Q_
 
     // search loader on cache
-    CacheItem aLoader = m_rCache->getItem(m_eType, sRealLoader);
+    CacheItem aLoader = cache.getItem(m_eType, sRealLoader);
 
     // create service instance
     css::uno::Reference< css::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sRealLoader, m_xContext);
