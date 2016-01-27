@@ -16,8 +16,8 @@
 
 class OutDevStateStack
 {
-    typedef std::deque<std::unique_ptr<OutDevState>> DataType;
-    DataType maData;
+    std::deque<std::unique_ptr<OutDevState>> maData;
+
 public:
     bool empty() const;
     size_t size() const;
