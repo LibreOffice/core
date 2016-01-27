@@ -52,8 +52,6 @@ namespace basegfx {
     class B2DPolyPolygon;
 }
 
-// - SalGraphics-Codes -
-
 #define SAL_SETFONT_USEDRAWTEXTARRAY        ((sal_uInt16)0x0004)
 #define SAL_SETFONT_BADFONT                 ((sal_uInt16)0x1000)
 
