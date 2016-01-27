@@ -44,12 +44,15 @@ class SwFieldRefPage : public SwFieldPage
     VclPtr<FixedText>      m_pNameFT;
     VclPtr<Edit>           m_pNameED;
     VclPtr<Edit>           m_pValueED;
+    VclPtr<ComboBox>       m_pSearchLB;
+    VclPtr<PushButton>     m_pSearchBtn;
     OUString    sBookmarkText;
     OUString    sFootnoteText;
     OUString    sEndnoteText;
     // #i83479#
     OUString    sHeadingText;
     OUString    sNumItemText;
+    std::vector<OUString>aSearchStrings;
 
     IDocumentOutlineNodes::tSortedOutlineNodeList maOutlineNodes;
     IDocumentListItems::tSortedNodeNumList maNumItems;
@@ -87,6 +90,7 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
     virtual void        FillUserData() override;
+    virtual void        Search();
 };
 
 #endif

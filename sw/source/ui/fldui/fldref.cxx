@@ -26,6 +26,8 @@
 #include <reffld.hxx>
 #include <wrtsh.hxx>
 
+#include <sfx2/app.hxx>
+#include <svl/srchitem.hxx>
 #include <fldui.hrc>
 #include <globals.hrc>
 #include <SwNodeNum.hxx>
@@ -58,6 +60,8 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet 
     get(m_pTypeLB, "type");
     get(m_pSelection, "selectframe");
     get(m_pSelectionLB, "select");
+    get(m_pSearchLB, "box7");
+    get(m_pSearchBtn, "search");
     m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() | WB_SORT);
     // #i83479#
     get(m_pSelectionToolTipLB, "selecttip");
@@ -122,6 +126,9 @@ void SwFieldRefPage::dispose()
     m_pNameED.clear();
     m_pValueED.clear();
     SwFieldPage::dispose();
+}
+void SwFieldRefPage::Search()
+{
 }
 
 // #i83479#
