@@ -21,11 +21,13 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 #include <lingutil.hxx>
 #include <hunspell.hxx>
@@ -141,6 +143,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 
         if (!aDics.empty())
         {
+            uno::Reference< lang::XMultiServiceFactory > xServiceFactory(comphelper::getProcessServiceFactory());
+            uno::Reference< ucb::XSimpleFileAccess > xAccess(xServiceFactory->createInstance("com.sun.star.ucb.SimpleFileAccess"), uno::UNO_QUERY);
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
             std::set< OUString, lt_rtl_OUString > aLocaleNamesSet;
@@ -148,10 +152,14 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
                 uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
+                uno::Sequence< OUString > aLocations( aDictIt->aLocations );
                 sal_Int32 nLen2 = aLocaleNames.getLength();
                 for (k = 0;  k < nLen2;  ++k)
                 {
-                    aLocaleNamesSet.insert( aLocaleNames[k] );
+                    if (xAccess.is() && xAccess->exists(aLocations[k]))
+                    {
+                        aLocaleNamesSet.insert( aLocaleNames[k] );
+                    }
                 }
             }
             // ... and add them to the resulting sequence
