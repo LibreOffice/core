@@ -11,24 +11,14 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,openssl))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL)))
 
-# break symlinks after extracting tarball
-# note: escape \; because LO patched make 3.82 cuts off the command otherwise
-ifeq ($(OS_FOR_BUILD),WNT)
-$(eval $(call gb_UnpackedTarball_set_pre_action,openssl,\
-	cd include/openssl && \
-	for header in `find . -type l` \; do \
-		cp --remove-destination `readlink $$$$header` $$$$header \; \
-	done && cd -))
-endif
-
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssllnx.patch \
 	external/openssl/opensslwnt.patch \
-	external/openssl/openssl-1.0.1g-msvc2012-winxp.patch.1 \
 	external/openssl/openssl-1.0.1h-win64.patch.1 \
 	external/openssl/opensslsol.patch \
 	external/openssl/opensslios.patch \
 	external/openssl/openssl-3650-masm.patch.1 \
+	external/openssl/openssl-fixbuild.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
