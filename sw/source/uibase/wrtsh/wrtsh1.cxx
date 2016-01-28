@@ -240,7 +240,7 @@ void SwWrtShell::Insert( const OUString &rStr )
 
 void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
                          const Graphic &rGrf, SwFlyFrmAttrMgr *pFrmMgr,
-                         bool bRule )
+                         bool bRule, sal_uInt16 nAnchorType )
 {
     ResetCursorStack();
     if ( !CanInsert() )
@@ -276,9 +276,9 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         // These must be removed explicitly for the optimal size.
         pFrmMgr->DelAttr(RES_FRM_SIZE);
 
-        if (comphelper::LibreOfficeKit::isActive())
-            // LOK: anchor inserted images as-char by default.
-            pFrmMgr->SetAnchor(FLY_AS_CHAR);
+        if (nAnchorType != 0)
+            // Something other than at-para was requested.
+            pFrmMgr->SetAnchor(static_cast<RndStdIds>(nAnchorType));
     }
     else
     {
