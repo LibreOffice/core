@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
-
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -69,11 +67,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
-
-    // XServiceInfo - static versions (used for component registration)
-    static OUString SAL_CALL getImplementationName_static();
-    static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-    static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
 private:
     IndexedPropertyValues maProperties;
@@ -217,11 +210,6 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    return getImplementationName_static();
-}
-
-OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static(  )
-{
     return OUString( "IndexedPropertyValuesContainer" );
 }
 
@@ -232,27 +220,17 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUStrin
 
 css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
-}
-
-
-css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
-{
     const OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-
-uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer::Create(
-                SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >&)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+IndexedPropertyValuesContainer_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject*>(new IndexedPropertyValuesContainer());
-}
-
-void createRegistryInfo_IndexedPropertyValuesContainer()
-{
-    static ::comphelper::module::OAutoRegistration< IndexedPropertyValuesContainer > aAutoRegistration;
+    return cppu::acquire(new IndexedPropertyValuesContainer());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

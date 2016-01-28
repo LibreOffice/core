@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 void createRegistryInfo_AnyCompareFactory();
-void createRegistryInfo_IndexedPropertyValuesContainer();
 void createRegistryInfo_Map();
 void createRegistryInfo_NamedPropertyValuesContainer();
 void createRegistryInfo_OInstanceLocker();
