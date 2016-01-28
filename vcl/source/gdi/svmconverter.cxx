@@ -249,7 +249,7 @@ void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
     rOStm.WriteInt16( rActualCharSet );
     rOStm.WriteInt16( rFont.GetFamilyType() );
     rOStm.WriteInt16( rFont.GetPitch() );
-    rOStm.WriteInt16( rFont.GetAlign() );
+    rOStm.WriteInt16( rFont.GetAlignment() );
     rOStm.WriteInt16( nWeight );
     rOStm.WriteInt16( rFont.GetUnderline() );
     rOStm.WriteInt16( rFont.GetStrikeout() );
@@ -828,7 +828,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     aFont.SetCharSet( (rtl_TextEncoding) nCharSet );
                     aFont.SetFamily( (FontFamily) nFamily );
                     aFont.SetPitch( (FontPitch) nPitch );
-                    aFont.SetAlign( (FontAlign) nAlign );
+                    aFont.SetAlignment( (FontAlign) nAlign );
                     aFont.SetWeight( ( nWeight == 1 ) ? WEIGHT_LIGHT : ( nWeight == 2 ) ? WEIGHT_NORMAL :
                                      ( nWeight == 3 ) ? WEIGHT_BOLD : WEIGHT_DONTKNOW );
                     aFont.SetUnderline( (FontUnderline) nUnderline );
@@ -844,7 +844,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         eActualCharSet = osl_getThreadTextEncoding();
 
                     rMtf.AddAction( new MetaFontAction( aFont ) );
-                    rMtf.AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
+                    rMtf.AddAction( new MetaTextAlignAction( aFont.GetAlignment() ) );
                     rMtf.AddAction( new MetaTextColorAction( aFont.GetColor() ) );
                     rMtf.AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
 
@@ -2063,7 +2063,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
-                aSaveFont.SetAlign( static_cast<const MetaTextAlignAction*>(pAction)->GetTextAlign() );
+                aSaveFont.SetAlignment( static_cast<const MetaTextAlignAction*>(pAction)->GetTextAlign() );
                 rSaveVDev.SetFont( aSaveFont );
                 ImplWriteFont( rOStm, rSaveVDev.GetFont(), rActualCharSet );
                 nCount++;

@@ -1427,11 +1427,11 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         aTmp.SetTransparent( false );
 
     if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
-        aTmp.SetAlign( ALIGN_BASELINE );
+        aTmp.SetAlignment( ALIGN_BASELINE );
     else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
-        aTmp.SetAlign( ALIGN_BOTTOM );
+        aTmp.SetAlignment( ALIGN_BOTTOM );
     else
-        aTmp.SetAlign( ALIGN_TOP );
+        aTmp.SetAlignment( ALIGN_TOP );
 
     if ( nGfxMode == GM_ADVANCED )
     {
@@ -1489,7 +1489,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
     {
         maLatestFont = aTmp;
         mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
-        mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlign() ) );
+        mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlignment() ) );
         mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
         mpGDIMetaFile->AddAction( new MetaTextFillColorAction( aTmp.GetFillColor(), !aTmp.IsTransparent() ) );
     }

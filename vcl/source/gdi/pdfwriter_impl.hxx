@@ -1149,7 +1149,7 @@ public:
 
     void setTextAlign( TextAlign eAlign )
     {
-        m_aGraphicsStack.front().m_aFont.SetAlign( eAlign );
+        m_aGraphicsStack.front().m_aFont.SetAlignment( eAlign );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
 

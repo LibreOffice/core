@@ -44,7 +44,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
     rStream.WriteUInt16( nTemp );
 
     nTemp = (sal_uInt16)rFont.GetPitch(); rStream.WriteUInt16( nTemp );
-    nTemp = (sal_uInt16)rFont.GetAlign(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetAlignment(); rStream.WriteUInt16( nTemp );
     nTemp = (sal_uInt16)rFont.GetWeight(); rStream.WriteUInt16( nTemp );
     nTemp = (sal_uInt16)rFont.GetUnderline(); rStream.WriteUInt16( nTemp );
     nTemp = (sal_uInt16)rFont.GetStrikeout(); rStream.WriteUInt16( nTemp );
@@ -73,7 +73,7 @@ vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     aFont.SetCharSet((rtl_TextEncoding)nTemp);
 
     rStream.ReadUInt16( nTemp ); aFont.SetPitch((FontPitch)nTemp);
-    rStream.ReadUInt16( nTemp ); aFont.SetAlign((FontAlign)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetAlignment((FontAlign)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetWeight((FontWeight)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetUnderline((FontUnderline)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetStrikeout((FontStrikeout)nTemp);
@@ -202,7 +202,7 @@ SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) c
 void SvxBulletItem::SetDefaultFont_Impl()
 {
     aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE );
-    aFont.SetAlign( ALIGN_BOTTOM);
+    aFont.SetAlignment( ALIGN_BOTTOM);
     aFont.SetTransparent( true );
 }
 

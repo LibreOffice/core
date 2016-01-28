@@ -1117,7 +1117,7 @@ void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working
 
     vcl::Font aFont( pPrinter->GetFont() );
     aFont.SetWeight( WEIGHT_BOLD );
-    aFont.SetAlign( ALIGN_BOTTOM );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     pPrinter->SetFont( aFont );
 
     long const nFontHeight = pPrinter->GetTextHeight();
@@ -1160,7 +1160,7 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
         MapMode aMap( MAP_100TH_MM );
         pPrinter->SetMapMode( aMap );
         vcl::Font aFont;
-        aFont.SetAlign( ALIGN_BOTTOM );
+        aFont.SetAlignment( ALIGN_BOTTOM );
         aFont.SetSize( Size( 0, 360 ));
         pPrinter->SetFont( aFont );
 

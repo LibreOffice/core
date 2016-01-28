@@ -806,9 +806,9 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextAlignAction( eAlign ) );
 
-    if ( maFont.GetAlign() != eAlign )
+    if ( maFont.GetAlignment() != eAlign )
     {
-        maFont.SetAlign( eAlign );
+        maFont.SetAlignment( eAlign );
         mbNewFont = true;
     }
 

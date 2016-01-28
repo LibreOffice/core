@@ -159,7 +159,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     vcl::Font aFont;
     const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTINFO ));
     aFont.SetHeight( pCustomShape->GetLogicRect().GetHeight() / rFWData.nMaxParagraphsPerTextArea );
-    aFont.SetAlign( ALIGN_TOP );
+    aFont.SetAlignment( ALIGN_TOP );
     aFont.SetFamilyName( rFontItem.GetFamilyName() );
     aFont.SetFamily( rFontItem.GetFamily() );
     aFont.SetStyleName( rFontItem.GetStyleName() );
@@ -246,7 +246,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pCustomShape->GetMergedItem( nFntItm ));
             vcl::Font aFont;
             aFont.SetHeight( rFWData.nSingleLineHeight );
-            aFont.SetAlign( ALIGN_TOP );
+            aFont.SetAlignment( ALIGN_TOP );
 
             aFont.SetFamilyName( rFontItem.GetFamilyName() );
             aFont.SetFamily( rFontItem.GetFamily() );

@@ -301,10 +301,10 @@ namespace
                             }
                             if(!(nPushFlags & PushFlags::TEXTALIGN      ))
                             {
-                                if(pLast->getFont().GetAlign() != pTip->getFont().GetAlign())
+                                if(pLast->getFont().GetAlignment() != pTip->getFont().GetAlignment())
                                 {
                                     vcl::Font aFont(pLast->getFont());
-                                    aFont.SetAlign(pTip->getFont().GetAlign());
+                                    aFont.SetAlignment(pTip->getFont().GetAlignment());
                                     pLast->setFont(aFont);
                                 }
                             }
@@ -1237,12 +1237,12 @@ namespace
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
 
         // take text align into account
-        if(ALIGN_BASELINE != rFont.GetAlign())
+        if(ALIGN_BASELINE != rFont.GetAlignment())
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
             aTextLayouterDevice.setFont(rFont);
 
-            if(ALIGN_TOP == rFont.GetAlign())
+            if(ALIGN_TOP == rFont.GetAlignment())
             {
                 rAlignmentOffset.setY(aTextLayouterDevice.getFontAscent());
             }
@@ -2659,10 +2659,10 @@ namespace
                     // TextAlign is applied to the current font (as in
                     // OutputDevice::SetTextAlign which would be used when
                     // playing the Metafile)
-                    if(rPropertyHolders.Current().getFont().GetAlign() != aNewTextAlign)
+                    if(rPropertyHolders.Current().getFont().GetAlignment() != aNewTextAlign)
                     {
                         vcl::Font aNewFont(rPropertyHolders.Current().getFont());
-                        aNewFont.SetAlign(aNewTextAlign);
+                        aNewFont.SetAlignment(aNewTextAlign);
                         rPropertyHolders.Current().setFont(aNewFont);
                     }
 

@@ -1454,9 +1454,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     {
                         aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                     }
-                    eSrcTextAlign = aSrcFont.GetAlign();
+                    eSrcTextAlign = aSrcFont.GetAlignment();
                     aSrcTextColor = aSrcFont.GetColor();
-                    aSrcFont.SetAlign( ALIGN_BASELINE );
+                    aSrcFont.SetAlignment( ALIGN_BASELINE );
                     aSrcFont.SetColor( COL_WHITE );
                 }
                 break;
@@ -1789,7 +1789,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     vcl::Font aFont;
     aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
     aFont.SetColor( Color( COL_WHITE ) );
-    aFont.SetAlign( ALIGN_BASELINE );
+    aFont.SetAlignment( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
     CreateSelectDeleteFont(aDstFont);
 
