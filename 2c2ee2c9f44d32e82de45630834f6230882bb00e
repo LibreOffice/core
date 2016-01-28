@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_774ec2c2",
+        "filename": "Makefile.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-28T13:54:14Z",
+      "side": 1,
+      "message": "config_build directory does not seem to exist on windows and ubuntu ?",
+      "revId": "2c2ee2c9f44d32e82de45630834f6230882bb00e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
