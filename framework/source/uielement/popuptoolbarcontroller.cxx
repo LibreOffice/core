@@ -406,6 +406,7 @@ void SaveToolbarController::functionSelected( const OUString& /*aCommand*/ )
 void SaveToolbarController::updateImage()
     throw ( css::uno::RuntimeException, std::exception )
 {
+    SolarMutexGuard aGuard;
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( !getToolboxId( nId, &pToolBox ) )
