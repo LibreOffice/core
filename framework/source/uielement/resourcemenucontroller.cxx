@@ -175,7 +175,11 @@ void ResourceMenuController::updatePopupMenu()
     }
 
     // Clear previous content.
-    m_xMenuBarManager.clear();
+    if ( m_xMenuBarManager.is() )
+    {
+        m_xMenuBarManager->dispose();
+        m_xMenuBarManager.clear();
+    }
     resetPopupMenu( m_xPopupMenu );
     m_nNewMenuId = 1;
 
@@ -240,7 +244,7 @@ void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*
         VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( m_xPopupMenu );
         css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
         m_xMenuBarManager.set( new framework::MenuBarManager(
-            m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), true, true, !m_bContextMenu && !m_bInToolbar ) );
+            m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), false, true, !m_bContextMenu && !m_bInToolbar ) );
     }
 }
 
@@ -278,8 +282,12 @@ void ResourceMenuController::disposing( const css::lang::EventObject& rEvent )
         m_xModuleConfigManager.clear();
     else
     {
+        if ( m_xMenuBarManager.is() )
+        {
+            m_xMenuBarManager->dispose();
+            m_xMenuBarManager.clear();
+        }
         svt::PopupMenuControllerBase::disposing( rEvent );
-        m_xMenuBarManager.clear();
     }
 }
 
@@ -295,8 +303,12 @@ void ResourceMenuController::disposing()
 
     m_xConfigManager.clear();
     m_xModuleConfigManager.clear();
-    m_xMenuBarManager.clear();
     m_xMenuContainer.clear();
+    if ( m_xMenuBarManager.is() )
+    {
+        m_xMenuBarManager->dispose();
+        m_xMenuBarManager.clear();
+    }
 
     svt::PopupMenuControllerBase::disposing();
 }
