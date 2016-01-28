@@ -1,32 +1,39 @@
---- misc/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2007-03-05 01:06:47.000000000 +0100
-+++ build/openssl-0.9.8v/crypto/x509v3/v3_pci.c	2010-03-26 12:04:20.961547300 +0100
+diff -ru openssl.orig/crypto/x509v3/v3_pci.c openssl/crypto/x509v3/v3_pci.c
+--- a/openssl.orig/crypto/x509v3/v3_pci.c	2016-03-01 14:35:05.000000000 +0100
++++ b/openssl/crypto/x509v3/v3_pci.c	2016-03-03 20:27:42.195914432 +0100
 @@ -3,7 +3,7 @@
   * Contributed to the OpenSSL Project 2004 by Richard Levitte
   * (richard@levitte.org)
   */
--/* Copyright (c) 2004 Kungliga Tekniska Högskolan
+-/* Copyright (c) 2004 Kungliga Tekniska HÃ¶gskolan
 +/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
   *
---- misc/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2004-12-28 01:21:33.000000000 +0100
-+++ build/openssl-0.9.8v/crypto/x509v3/v3_pcia.c	2010-03-26 12:04:20.961547300 +0100
+diff -ru openssl.orig/crypto/x509v3/v3_pcia.c openssl/crypto/x509v3/v3_pcia.c
+--- a/openssl.orig/crypto/x509v3/v3_pcia.c	2016-03-01 14:35:05.000000000 +0100
++++ b/openssl/crypto/x509v3/v3_pcia.c	2016-03-03 20:27:56.495913984 +0100
 @@ -3,7 +3,7 @@
   * Contributed to the OpenSSL Project 2004 by Richard Levitte
   * (richard@levitte.org)
   */
--/* Copyright (c) 2004 Kungliga Tekniska Högskolan
+-/* Copyright (c) 2004 Kungliga Tekniska HÃ¶gskolan
 +/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
   *
---- misc/openssl-0.9.8v/ms/do_ms.bat	2009-07-28 14:51:19.000000000 +0200
-+++ build/openssl-0.9.8v/ms/do_ms.bat	2010-03-26 12:19:19.399047300 +0100
+diff -ru openssl.orig/ms/do_ms.bat openssl/ms/do_ms.bat
+--- a/openssl.orig/ms/do_ms.bat	2015-01-15 15:43:14.000000000 +0100
++++ b/openssl/ms/do_ms.bat	2016-03-03 20:31:09.355907935 +0100
 @@ -1,11 +1,11 @@
  
 -perl util\mkfiles.pl >MINFO
 -perl util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
 -perl util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
+-if x%OSVERSION% == x goto skipce
+-perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
+-perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
+-:skipce
 +%1 util\mkfiles.pl >MINFO
 +if %2 == VC-WIN32 goto not64a
 +perl ms\uplink.pl win64a > ms\uptable.asm
@@ -34,17 +41,14 @@
 +:not64a
 +%1 util\mk1mf.pl no-asm %2 >ms\nt.mak
 +%1 util\mk1mf.pl dll no-asm %2 >ms\ntdll.mak
--if x%OSVERSION% == x goto skipce
--perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
--perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
--:skipce
  
 -perl util\mkdef.pl 32 libeay > ms\libeay32.def
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
 +%1 util\mkdef.pl 32 libeay > ms\libeay32.def
 +%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
---- misc/openssl-0.9.8v/util/mk1mf.pl	2009-09-20 14:46:42.000000000 +0200
-+++ build/openssl-0.9.8v/util/mk1mf.pl	2010-03-26 12:04:20.977172300 +0100
+diff -ru openssl.orig/util/mk1mf.pl openssl/util/mk1mf.pl
+--- a/openssl.orig/util/mk1mf.pl	2016-03-03 20:22:21.043924505 +0100
++++ b/openssl/util/mk1mf.pl	2016-03-03 20:34:45.015901171 +0100
 @@ -163,7 +163,7 @@
  $inc_def="outinc";
  $tmp_def="tmp";
@@ -54,8 +58,8 @@
  $mkdir="-mkdir" unless defined $mkdir;
  
  ($ssl,$crypto)=("ssl","crypto");
-@@ -343,6 +343,11 @@
- 	chop;
+@@ -347,6 +347,11 @@
+ 	s/\s*$//; # was chop, didn't work in mixture of perls for Windows...
  
  	($key,$val)=/^([^=]+)=(.*)/;
 +
@@ -66,7 +70,7 @@
  	if ($key eq "RELATIVE_DIRECTORY")
  		{
  		if ($lib ne "")
-@@ -469,7 +474,7 @@
+@@ -473,7 +478,7 @@
  # Set your compiler options
  PLATFORM=$platform
  CC=$bin_dir${cc}
@@ -75,16 +79,16 @@
  APP_CFLAG=$app_cflag
  LIB_CFLAG=$lib_cflag
  SHLIB_CFLAG=$shl_cflag
-@@ -484,7 +489,7 @@
+@@ -488,7 +493,7 @@
  
- LINK=$link
+ LINK_CMD=$link
  LFLAGS=$lflags
 -RSC=$rsc
 +RSC=$rsc \$(SOLARINC)
  
  # The output directory for everything interesting
  OUT_D=$out_dir
-@@ -665,7 +670,7 @@
+@@ -669,7 +674,7 @@
  printf OUT <<EOF;
  #ifdef $platform_cpp_symbol
    /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
@@ -93,8 +97,9 @@
    #define PLATFORM "$platform"
  EOF
  printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
---- misc/openssl-0.9.8v/util/pl/VC-32.pl	2010-02-04 02:10:24.000000000 +0100
-+++ build/openssl-0.9.8v/util/pl/VC-32.pl	2010-03-26 12:04:20.977172300 +0100
+diff -ru openssl.orig/util/pl/VC-32.pl openssl/util/pl/VC-32.pl
+--- a/openssl.orig/util/pl/VC-32.pl	2016-03-01 14:35:53.000000000 +0100
++++ b/openssl/util/pl/VC-32.pl	2016-03-03 21:15:14.083824986 +0100
 @@ -30,7 +30,7 @@
  my $ff = "";
  
@@ -104,6 +109,15 @@
  if ($FLAVOR =~ /WIN64/)
      {
      # Note that we currently don't have /WX on Win64! There is a lot of
+@@ -48,7 +48,7 @@
+     my $f = $shlib || $fips ?' /MD':' /MT';
+     $opt_cflags=$f.' /Ox';
+     $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
+-    $lflags="/nologo /subsystem:console /opt:ref";
++    $lflags="/nologo /subsystem:console,5.02 /opt:ref";
+ 
+     *::perlasm_compile_target = sub {
+ 	my ($target,$source,$bname)=@_;
 @@ -114,7 +114,7 @@
      }
  
@@ -132,9 +146,10 @@
      $ff = "/fixed";
 -    $opt_cflags=$f.' /Ox /O2 /Ob2';
 -    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
+-    $lflags="/nologo /subsystem:console /opt:ref";
++    $lflags="/nologo /subsystem:console,5.01 /opt:ref";
 +    $opt_cflags=$f.' -Ox -O2 -Ob2';
 +    $dbg_cflags=$f.'d -Od -DDEBUG -D_DEBUG';
-     $lflags="/nologo /subsystem:console /opt:ref";
      }
 -$lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
 +$lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
@@ -150,8 +165,9 @@
  
  # EXE linking stuff
  $link="link";
---- build/openssl-0.9.8v/ms/uplink.c
-+++ build/openssl-0.9.8v/ms/uplink.c
+diff -ru openssl.orig/ms/uplink.c openssl/ms/uplink.c
+--- a/openssl.orig/ms/uplink.c	2015-03-19 15:02:02.000000000 +0100
++++ b/openssl/ms/uplink.c	2016-03-03 20:39:19.403892565 +0100
 @@ -1,5 +1,6 @@
  #if (defined(_WIN64) || defined(_WIN32_WCE)) && !defined(UNICODE)
  # define UNICODE
