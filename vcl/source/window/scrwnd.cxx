@@ -373,9 +373,9 @@ IMPL_LINK_NOARG_TYPED(ImplWheelWindow, ImplScrollHdl, Timer *, void)
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
             const sal_uInt64 nTime = tools::Time::GetSystemTicks();
-            ImplDelData aDel( this );
+            VclPtr<ImplWheelWindow> xWin(this);
             pWindow->Command( aCEvt );
-            if( aDel.IsDead() )
+            if( xWin->IsDisposed() )
                 return;
             mnRepaintTime = std::max( tools::Time::GetSystemTicks() - nTime, (sal_uInt64)1 );
             ImplRecalcScrollValues();
