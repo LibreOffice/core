@@ -860,7 +860,7 @@ void NeonSession::PROPFIND( const OUString & inPath,
          for(std::vector< OUString >::const_iterator it = inPropNames.begin();
              it < inPropNames.end(); ++it)
          {
-            SAL_INFO( "ucb.ucp.webdav", "PROFIND - property requested: " << *it );
+            SAL_INFO( "ucb.ucp.webdav", "PROPFIND - property requested: " << *it );
          }
     } //debug
 #endif
@@ -1565,7 +1565,7 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
     }
     else
     {
-#if defined SAL_LOG_WARN
+#if defined SAL_LOG_INFO
     {
         char * p = ne_uri_unparse( &(pLock->uri) );
         SAL_INFO( "ucb.ucp.webdav", "UNLOCK (from store) - relative URL: <" << p << "> token: <" << pLock->token << "> failed!" );
@@ -1700,7 +1700,7 @@ void NeonSession::HandleError( int nError,
 
             sal_uInt16 code = makeStatusCode( aText );
 
-            SAL_WARN( "ucb.ucp.webdav", "Neon received http error: '" << aText << "'" );
+            SAL_WARN( "ucb.ucp.webdav", "Neon returned NE_ERROR, http response status code was: '" << aText << "'" );
             if ( code == SC_LOCKED )
             {
                 if ( m_aNeonLockStore.findByUri(
