@@ -302,7 +302,7 @@ void TableManager::resolveCurrentTable()
 
                 unsigned int nCells = pRowData->getCellCount();
 
-                mpTableDataHandler->startRow(nCells, pRowData->getProperties());
+                mpTableDataHandler->startRow(pRowData->getProperties());
 
                 for (unsigned int nCell = 0; nCell < nCells; ++nCell)
                 {

@@ -63,7 +63,7 @@ class DomainMapperTableHandler
     css::uno::Reference<css::text::XTextAppendAndConvert>  m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;
     std::vector< css::uno::Reference<css::text::XTextRange> > m_aCellRange;
-    RowSequence_t    m_aRowSeq;
+    std::vector<CellSequence_t> m_aRowRanges;
     TableSequence_t m_aTableSeq;
 
     css::uno::Reference< css::text::XTextRange >           m_xTableRange;
@@ -73,7 +73,6 @@ class DomainMapperTableHandler
     PropertyMapVector1      m_aRowProperties;
     TablePropertyMapPtr     m_aTableProperties;
 
-    sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
     /// Did we have a foot or endnote in this table?
@@ -103,10 +102,9 @@ public:
     /**
        Handle start of row.
 
-       @param nCols    number of columns in the table
        @param pProps   properties of the row
      */
-    void startRow(unsigned int nCells, TablePropertyMapPtr pProps);
+    void startRow(TablePropertyMapPtr pProps);
     /// Handle end of row.
     void endRow();
     /**

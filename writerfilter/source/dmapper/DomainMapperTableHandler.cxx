@@ -56,7 +56,6 @@ DomainMapperTableHandler::DomainMapperTableHandler(
             DomainMapper_Impl& rDMapper_Impl)
     : m_xText(xText),
         m_rDMapper_Impl( rDMapper_Impl ),
-        m_nCellIndex(0),
         m_nRowIndex(0),
         m_bHadFootOrEndnote(false)
 {
@@ -1137,28 +1136,24 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 #endif
 }
 
-void DomainMapperTableHandler::startRow(unsigned int nCells,
-                                        TablePropertyMapPtr pProps)
+void DomainMapperTableHandler::startRow(TablePropertyMapPtr pProps)
 {
     m_aRowProperties.push_back( pProps );
     m_aCellProperties.push_back( PropertyMapVector1() );
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("table.row");
-    TagLogger::getInstance().attribute("cells", nCells);
     if (pProps != nullptr)
         pProps->dumpXml();
 #endif
 
-    m_aRowSeq = RowSequence_t(nCells);
-    m_nCellIndex = 0;
+    m_aRowRanges.clear();
 }
 
 void DomainMapperTableHandler::endRow()
 {
-    m_aTableSeq[m_nRowIndex] = m_aRowSeq;
+    m_aTableSeq[m_nRowIndex] = comphelper::containerToSequence(m_aRowRanges);
     ++m_nRowIndex;
-    m_nCellIndex = 0;
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
 #endif
@@ -1208,8 +1203,7 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
     if (end.get())
         xEnd = end->getEnd();
     m_aCellRange.push_back(xEnd);
-    m_aRowSeq[m_nCellIndex] = comphelper::containerToSequence(m_aCellRange);
-    ++m_nCellIndex;
+    m_aRowRanges.push_back(comphelper::containerToSequence(m_aCellRange));
 }
 
 void DomainMapperTableHandler::setHadFootOrEndnote(bool bHadFootOrEndnote)
