@@ -1056,7 +1056,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetAlign( ALIGN_BOTTOM );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     long nTextWidth = rPageSize.Width();
     if( rPageSize.Width() < rPageSize.Height() )
     {

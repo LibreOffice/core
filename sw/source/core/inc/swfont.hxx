@@ -502,7 +502,7 @@ inline void SwFont::SetPitch( const FontPitch ePitch, const sal_uInt8 nWhich )
 inline void SwSubFont::SetAlign( const FontAlign eAlign )
 {
     m_pMagic = nullptr;
-    Font::SetAlign( eAlign );
+    Font::SetAlignment( eAlign );
 }
 
 inline void SwFont::SetAlign( const FontAlign eAlign )

@@ -987,7 +987,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
 
     FontMetric aFontMetric( mpVD->GetFontMetric() );
     vcl::Font aFnt( mpVD->GetFont() );
-    FontAlign eAlg( aFnt.GetAlign() );
+    FontAlign eAlg( aFnt.GetAlignment() );
 
     sal_Int32 nTextWidth = (sal_Int32)( mpVD->GetTextWidth( rStr ) * mfScaleX );
     sal_Int32 nTextHeight = (sal_Int32)( mpVD->GetTextHeight() * mfScaleY );

@@ -1171,7 +1171,7 @@ public:
     bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
 
     void                        SetTextAlign( TextAlign eAlign );
-    TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
+    TextAlign                   GetTextAlign() const { return maFont.GetAlignment(); }
 
     /** Width of the text.
 

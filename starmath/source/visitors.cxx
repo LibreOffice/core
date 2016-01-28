@@ -527,7 +527,7 @@ void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
 {
     //! since this chars might come from any font, that we may not have
     //! set to ALIGN_BASELINE yet, we do it now.
-    pNode->GetFont( ).SetAlign( ALIGN_BASELINE );
+    pNode->GetFont( ).SetAlignment( ALIGN_BASELINE );
 
     DrawTextNode( pNode );
 }

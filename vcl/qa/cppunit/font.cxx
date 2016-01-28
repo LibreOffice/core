@@ -26,6 +26,7 @@ public:
     void testWidthType();
     void testPitch();
     void testItalic();
+    void testAlignment();
     void testQuality();
     void testBuiltInFontFlag();
     void testEmbeddableFontFlag();
@@ -39,6 +40,7 @@ public:
     CPPUNIT_TEST(testWidthType);
     CPPUNIT_TEST(testPitch);
     CPPUNIT_TEST(testItalic);
+    CPPUNIT_TEST(testAlignment);
     CPPUNIT_TEST(testQuality);
     CPPUNIT_TEST(testBuiltInFontFlag);
     CPPUNIT_TEST(testEmbeddableFontFlag);
@@ -90,6 +92,18 @@ void VclFontTest::testItalic()
     aFont.SetItalic(FontItalic::ITALIC_NORMAL);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Italic should be EXPANDED", FontItalic::ITALIC_NORMAL, aFont.GetItalic());
 }
+
+
+void VclFontTest::testAlignment()
+{
+    vcl::Font aFont;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Text alignment should be ALIGN_TOP", TextAlign::ALIGN_TOP, aFont.GetAlignment());
+
+    aFont.SetAlignment(TextAlign::ALIGN_BASELINE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Text alignment should be ALIGN_BASELINE", TextAlign::ALIGN_BASELINE, aFont.GetAlignment());
+}
+
 
 void VclFontTest::testPitch()
 {

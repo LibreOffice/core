@@ -454,7 +454,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
 
     vcl::Font aOldFont( pVDev->GetFont() );
     vcl::Font aNewFont( aOldFont );
-    aNewFont.SetAlign( ALIGN_BASELINE );
+    aNewFont.SetAlignment( ALIGN_BASELINE );
     pVDev->SetFont( aNewFont );
     aOldFont.SetOrientation(0);
 

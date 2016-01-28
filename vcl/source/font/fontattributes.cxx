@@ -28,6 +28,7 @@ FontAttributes::FontAttributes()
     mePitch( PITCH_DONTKNOW ),
     meWidthType ( WIDTH_DONTKNOW ),
     meItalic ( ITALIC_NONE ),
+    meAlign ( ALIGN_TOP ),
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     mbSymbolFlag( false ),
     mnQuality( 0 ),
@@ -45,6 +46,7 @@ FontAttributes::FontAttributes( const FontAttributes& rFontAttributes ) :
     mePitch( rFontAttributes.mePitch ),
     meWidthType( rFontAttributes.meWidthType ),
     meItalic( rFontAttributes.meItalic ),
+    meAlign( rFontAttributes.meAlign ),
     meCharSet( rFontAttributes.meCharSet ),
     mbSymbolFlag( rFontAttributes.mbSymbolFlag ),
     maMapNames( rFontAttributes.maMapNames ),
@@ -54,7 +56,6 @@ FontAttributes::FontAttributes( const FontAttributes& rFontAttributes ) :
     mbSubsettable( rFontAttributes.mbSubsettable ),
     mbEmbeddable( rFontAttributes.mbEmbeddable )
 {}
-
 
 bool FontAttributes::CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const
 {

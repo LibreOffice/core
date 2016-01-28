@@ -532,7 +532,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
     aColor=Sgv2SvFarbe(Atr.L.LFarbe,Atr.L.LBFarbe,Atr.L.LIntens); aFont.SetColor(aColor);
     aColor=Sgv2SvFarbe(Atr.F.FFarbe,Atr.F.FBFarbe,Atr.F.FIntens); aFont.SetFillColor(aColor);
     aFont.SetTransparent(true);
-    aFont.SetAlign(ALIGN_BASELINE);
+    aFont.SetAlignment(ALIGN_BASELINE);
 
     nRotation/=10; nRotation=3600-nRotation; if (nRotation==3600) nRotation=0;
     aFont.SetOrientation(nRotation);

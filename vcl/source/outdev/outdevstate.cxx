@@ -532,7 +532,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         mpMetaFile->AddAction( new MetaFontAction( aFont ) );
         // the color and alignment actions don't belong here
         // TODO: get rid of them without breaking anything...
-        mpMetaFile->AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
+        mpMetaFile->AddAction( new MetaTextAlignAction( aFont.GetAlignment() ) );
         mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
     }
 

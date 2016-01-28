@@ -92,7 +92,7 @@ void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext& rRenderContext,long& n
 void initFont(vcl::Font& rFont)
 {
     rFont.SetTransparent(true);
-    rFont.SetAlign(ALIGN_BASELINE);
+    rFont.SetAlignment(ALIGN_BASELINE);
 }
 
 void setFontSize(vcl::Font& rFont)
@@ -118,7 +118,7 @@ void setFont(const SvxFont& rNewFont, SvxFont& rImplFont)
 {
     rImplFont = rNewFont;
     rImplFont.SetTransparent(true);
-    rImplFont.SetAlign(ALIGN_BASELINE);
+    rImplFont.SetAlignment(ALIGN_BASELINE);
 }
 
 } // end anonymous namespace

@@ -50,6 +50,7 @@ public:
     FontPitch           GetPitchNoAsk() const                           { return mePitch; }
     FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW) AskConfig(); return meWidthType; }
     FontWidth           GetWidthTypeNoAsk() const                       { return meWidthType; }
+    TextAlign           GetAlignment() const                            { return meAlign; }
     rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
 
     bool                IsSymbolFont() const                            { return mbSymbol; }
@@ -62,6 +63,7 @@ public:
     void                SetItalic( const FontItalic eItalic )           { meItalic = eItalic; }
     void                SetWeight( const FontWeight eWeight )           { meWeight = eWeight; }
     void                SetWidthType( const FontWidth eWidthType )      { meWidthType = eWidthType; }
+    void                SetAlignment( const TextAlign eAlignment )      { meAlign = eAlignment; }
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
 
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbol = bSymbolFlag; }
