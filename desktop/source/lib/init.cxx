@@ -32,6 +32,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -47,6 +48,7 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -1176,7 +1178,10 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
         return false;
     }
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(text::TextContentAnchorType_AS_CHARACTER))},
+    }));
     if (!comphelper::dispatchCommand(".uno:Paste", aPropertyValues))
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";

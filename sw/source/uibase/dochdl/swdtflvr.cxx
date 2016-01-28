@@ -1131,7 +1131,7 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
     return bIsPaste;
 }
 
-bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
+bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, sal_uInt16 nAnchorType)
 {
     sal_uInt16 nEventAction, nAction=0;
     SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
@@ -1172,7 +1172,7 @@ bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nFormat,
-                                        nDestination, false, false );
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType );
 }
 
 bool SwTransferable::PasteData( TransferableDataHelper& rData,
@@ -1180,7 +1180,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             SotExchangeDest nDestination, bool bIsPasteFormat,
                             bool bIsDefault,
                             const Point* pPt, sal_Int8 nDropAction,
-                            bool bPasteSelection )
+                            bool bPasteSelection, sal_uInt16 nAnchorType )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
     std::unique_ptr<SwTrnsfrActionAndUndo> pAction;
@@ -1513,7 +1513,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_GRAPH:
             bRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Insert, pPt,
-                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste);
+                                                nActionFlags, nDropAction, bNeedToSelectBeforePaste, nAnchorType );
             break;
 
         case EXCHG_OUT_ACTION_REPLACE_DRAWOBJ:
@@ -2256,7 +2256,7 @@ bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
 bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste)
+                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, sal_uInt16 nAnchorType )
 {
     bool bRet = false;
 
@@ -2364,7 +2364,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             case SwPasteSdr::Insert:
             {
                 SwTransferable::SetSelInShell( rSh, false, pPt );
-                rSh.Insert( sURL, aEmptyOUStr, aGraphic );
+                rSh.Insert( sURL, aEmptyOUStr, aGraphic, nullptr, false, nAnchorType );
                 break;
             }
 
