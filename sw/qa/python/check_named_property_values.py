@@ -24,6 +24,9 @@ from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.beans import PropertyValue
 from com.sun.star.container import XNameContainer
 from org.libreoffice.unotest import OfficeConnection
+from com.sun.star.container import ElementExistException
+from com.sun.star.lang import IllegalArgumentException
+from com.sun.star.container import NoSuchElementException
 
 
 class CheckNamedPropertyValues(unittest.TestCase):
@@ -40,8 +43,8 @@ class CheckNamedPropertyValues(unittest.TestCase):
         cls._uno.tearDown()
 
 
-    def test_checkNamedPropertyValues(self): 
-    
+    def test_checkNamedPropertyValues(self):
+
         xServiceManager = self.xContext.ServiceManager
         xCont = xServiceManager.createInstanceWithContext('com.sun.star.document.NamedPropertyValues', self.xContext)
 
@@ -52,7 +55,7 @@ class CheckNamedPropertyValues(unittest.TestCase):
         prop2 = uno.Any("[]com.sun.star.beans.PropertyValue", (p2,))
 
         t = xCont.getElementType()
-        self.assertFalse(xCont.hasElements()) #Initial container is not empty
+        self.assertFalse(xCont.hasElements(),  "Initial container is not empty")
 
         uno.invoke(xCont, "insertByName", ("prop1", prop1))
         ret = xCont["prop1"]
@@ -65,23 +68,23 @@ class CheckNamedPropertyValues(unittest.TestCase):
         self.assertEqual(p2.Value, ret[0].Value)
 
         xCont.removeByName("prop1")
-        self.assertFalse(xCont.hasElements()) #Could not remove PropertyValue.
+        self.assertFalse(xCont.hasElements(), "Could not remove PropertyValue.")
         uno.invoke(xCont, "insertByName", ("prop1", prop1))
         uno.invoke(xCont, "insertByName", ("prop2", prop2))
-        self.assertTrue(xCont.hasElements()) #Did not insert PropertyValue
+        self.assertTrue(xCont.hasElements(), "Did not insert PropertyValue")
         names = xCont.getElementNames()
-        self.assertEqual(2, len(names)) #Not all element names were returned
-        for i in range(len(names)):
-            self.assertTrue( names[i]=="prop1" or names[i]=="prop2") #Got a wrong element name
+        self.assertEqual(2, len(names), "Not all element names were returned")
 
-        with self.assertRaises(Exception):
+        for i in range(len(names)):
+            self.assertIn(names[i], ["prop1", "prop2"], "Got a wrong element name")
+
+        with self.assertRaises(ElementExistException):
             uno.invoke(xCont, "insertByName", ("prop2", prop1))
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(IllegalArgumentException):
             uno.invoke(xCont, "insertByName",("prop3", "Example String"))
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(NoSuchElementException):
             xCont.removeByName("prop3")
-
 
 
