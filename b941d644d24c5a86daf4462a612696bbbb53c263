@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_f782b2c7",
+        "filename": "qadevOOo/runner/helper/APIDescGetter.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-28T13:41:06Z",
+      "side": 1,
+      "message": "would make more sense to move this up and convert the previous block to read\n{\n    File dirs \u003d new File(descPath);\n    modules \u003d dirs.list();\n    if (modules \u003d\u003d null) {\n        throw new IllegalStateException(\"missing dirs\");\n    }\n}",
+      "revId": "b941d644d24c5a86daf4462a612696bbbb53c263",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
