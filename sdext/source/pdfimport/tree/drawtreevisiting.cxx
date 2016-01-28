@@ -215,9 +215,9 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if (rElem.MirrorVertical)
         {
             basegfx::B2DHomMatrix mat2;
-            mat2.translate(-0.5, -0.5);
-            mat2.scale(-1, -1);
-            mat2.translate(0.5, 0.5);
+            mat2.translate(0, -0.5);
+            mat2.scale(1, -1);
+            mat2.translate(0, 0.5);
             mat = mat * mat2;
         }
 
@@ -948,13 +948,6 @@ void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< Element* >::c
     aGCProps[ "fo:padding-left" ]                = "0cm";
     aGCProps[ "fo:padding-right" ]               = "0cm";
     aGCProps[ "fo:padding-bottom" ]              = "0cm";
-
-    // remark: vertical mirroring is done in current OOO by
-    // mirroring horzontally and rotating 180 degrees
-    // this is quaint, but unfortunately it seems
-    // mirror=vertical is defined but not implemented in current code
-    if( elem.MirrorVertical )
-        aGCProps[ "style:mirror" ] = "horizontal";
 
     StyleContainer::Style style1( "style:style", props1 );
     StyleContainer::Style subStyle1( "style:graphic-properties", aGCProps );
