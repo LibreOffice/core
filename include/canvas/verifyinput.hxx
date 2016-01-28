@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <algorithm>
+#include <boost/current_function.hpp>
 
 #include <canvas/canvastoolsdllapi.h>
 

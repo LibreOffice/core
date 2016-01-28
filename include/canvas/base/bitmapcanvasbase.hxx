@@ -112,7 +112,7 @@ namespace canvas
         {
             tools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
                               destRect, destViewState, destRenderState,
-                              __func__,
+                              BOOST_CURRENT_FUNCTION,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::BaseType::MutexType aGuard( BaseType::m_aMutex );

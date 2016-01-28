@@ -380,7 +380,7 @@ namespace oglcanvas
 
     void SpriteDeviceHelper::dumpScreenContent() const
     {
-        SAL_INFO("canvas.ogl", __func__);
+        SAL_INFO("canvas.ogl", BOOST_CURRENT_FUNCTION );
     }
 
     void SpriteDeviceHelper::show( const ::rtl::Reference< CanvasCustomSprite >& xSprite )

@@ -45,7 +45,7 @@ namespace canvas
                                                                               const css::geometry::IntegerRectangle2D& rect ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(rect,
-                              __func__,
+                              BOOST_CURRENT_FUNCTION,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(rect, Base::getSize() );
 
@@ -60,7 +60,7 @@ namespace canvas
                                        const css::geometry::IntegerRectangle2D&   rect ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(bitmapLayout, rect,
-                              __func__,
+                              BOOST_CURRENT_FUNCTION,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(rect, Base::getSize() );
 
@@ -74,7 +74,7 @@ namespace canvas
                                         const css::geometry::IntegerPoint2D&       pos ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(bitmapLayout, pos,
-                              __func__,
+                              BOOST_CURRENT_FUNCTION,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(pos, Base::getSize() );
 
@@ -87,7 +87,7 @@ namespace canvas
                                                                   const css::geometry::IntegerPoint2D& pos ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override
         {
             tools::verifyArgs(pos,
-                              __func__,
+                              BOOST_CURRENT_FUNCTION,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(pos, Base::getSize() );
 
