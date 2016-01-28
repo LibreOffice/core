@@ -108,8 +108,7 @@ SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)
 
 void SmDocShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterPopupMenu(SmResId(RID_VIEWMENU));
-    GetStaticInterface()->RegisterPopupMenu(SmResId(RID_COMMANDMENU));
+    GetStaticInterface()->RegisterPopupMenu("view");
 }
 
 SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SfxObjectShellFlags::STD_NORMAL, "smath" )

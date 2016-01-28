@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/smath,\
 	starmath/uiconfig/smath/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/smath,\
+	starmath/uiconfig/smath/popupmenu/view \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/smath,\
 	starmath/uiconfig/smath/statusbar/statusbar \
 ))

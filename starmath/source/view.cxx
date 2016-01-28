@@ -563,9 +563,6 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
             case CommandEventId::ContextMenu:
             {
                 GetParent()->ToTop();
-                SmResId aResId( RID_VIEWMENU );
-                std::unique_ptr<PopupMenu> xPopupMenu(new PopupMenu(aResId));
-                xPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
                     aPos = rCEvt.GetMousePosPixel();
@@ -573,7 +570,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 
                 // added for replaceability of context menus
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
-                        ->ExecutePopup( aResId, this, &aPos );
+                        ->ExecutePopup( this, &aPos );
 
                 bCallBase = false;
             }
@@ -602,14 +599,6 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
         ScrollableWindow::Command (rCEvt);
 }
 
-
-IMPL_LINK_TYPED( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu, bool )
-{
-    SmViewShell *pViewSh = GetView();
-    if (pViewSh)
-        pViewSh->GetViewFrame()->GetDispatcher()->Execute( pMenu->GetCurItemId() );
-    return false;
-}
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {

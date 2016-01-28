@@ -20,7 +20,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
-#include "smcommands.h"
 
 String RID_FONTREGULAR
 {
@@ -41,58 +40,6 @@ String RID_UNDOFORMATNAME
 String GID_MATH
 {
     Text = "StarMath" ;
-};
-Menu RID_VIEWMENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_ZOOM_50_PERCENT;
-            HelpId = CMD_SID_VIEW050 ;
-            Text [ en-US ] = "~View 50%" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_ZOOM_100_PERCENT ;
-            HelpId = CMD_SID_VIEW100 ;
-            Text [ en-US ] = "View ~100%" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_ZOOM_200_PERCENT ;
-            HelpId = CMD_SID_VIEW200 ;
-            Text [ en-US ] = "View ~200%" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_ZOOMIN ;
-            HelpId = CMD_SID_ZOOMIN ;
-            Text [ en-US ] = "~Zoom In" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_ZOOMOUT ;
-            HelpId = CMD_SID_ZOOMOUT ;
-            Text [ en-US ] = "Zoom ~Out" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_ZOOM_OPTIMAL ;
-            HelpId = CMD_SID_ADJUST ;
-            Text [ en-US ] = "~Display All" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = SID_DRAW ;
-            HelpId = CMD_SID_DRAW ;
-            Text [ en-US ] = "U~pdate" ;
-        };
-    };
 };
 
 String STR_BLACK

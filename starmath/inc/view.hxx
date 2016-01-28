@@ -91,7 +91,6 @@ protected:
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
     virtual void StateChanged( StateChangedType eChanged ) override;
-    DECL_LINK_TYPED(MenuSelectHdl, Menu*, bool);
 
 private:
     void RepaintViewShellDoc();

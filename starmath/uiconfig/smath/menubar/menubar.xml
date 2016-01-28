@@ -85,7 +85,7 @@
       <menu:menuitem menu:id=".uno:FullScreen"/>
       <menu:menuitem menu:id=".uno:ZoomIn"/>
       <menu:menuitem menu:id=".uno:ZoomOut"/>
-      <menu:menuitem menu:id=".uno:Adjust"/>
+      <menu:menuitem menu:id=".uno:ZoomOptimal"/>
       <menu:menu menu:id=".uno:ZoomMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Zoom50Percent"/>
