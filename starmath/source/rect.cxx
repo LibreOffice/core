@@ -371,17 +371,17 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
     if (ePos == RectPos::Top || ePos == RectPos::Bottom)
         // correct error in current horizontal position
         switch (eHor)
-        {   case RHA_LEFT :
+        {   case RectHorAlign::Left:
                 aPos.X() += rRect.GetItalicLeft() - GetItalicLeft();
                 break;
-            case RHA_CENTER :
+            case RectHorAlign::Center:
                 aPos.X() += rRect.GetItalicCenterX() - GetItalicCenterX();
                 break;
-            case RHA_RIGHT :
+            case RectHorAlign::Right:
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
-            default :
-                SAL_WARN("starmath", "unknown case");
+            default:
+                assert(false);
         }
 
     return aPos;
