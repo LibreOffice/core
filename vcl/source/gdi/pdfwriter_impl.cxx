@@ -8846,7 +8846,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     double fXScale = 1.0;
     double fSkew = 0.0;
     sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontInstance->maFontSelData.mnHeight;
-    TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
+    TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
 
     // transform font height back to current units
     // note: the layout calculates in outdevs device pixel !!
@@ -9873,7 +9873,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     }
 
     Point aPos( rPos );
-    TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
+    TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
     if( eAlign == ALIGN_TOP )
         aPos.Y() += HCONV( pFontInstance->mxFontMetric->GetAscent() );
     else if( eAlign == ALIGN_BOTTOM )
@@ -12066,7 +12066,7 @@ void PDFWriterImpl::pop()
     if( ! (aState.m_nFlags & PushFlags::OVERLINECOLOR ) )
         setOverlineColor( aState.m_aOverlineColor );
     if( ! (aState.m_nFlags & PushFlags::TEXTALIGN ) )
-        setTextAlign( aState.m_aFont.GetAlign() );
+        setTextAlign( aState.m_aFont.GetAlignment() );
     if( ! (aState.m_nFlags & PushFlags::TEXTFILLCOLOR) )
         setTextFillColor( aState.m_aFont.GetFillColor() );
     if( ! (aState.m_nFlags & PushFlags::REFPOINT) )

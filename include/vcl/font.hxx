@@ -64,8 +64,8 @@ public:
     FontPitch           GetPitch() const;
     FontWidth           GetWidthType();
     FontWidth           GetWidthType() const;
+    FontAlign           GetAlignment() const;
     rtl_TextEncoding    GetCharSet() const;
-    FontAlign           GetAlign() const;
 
     bool                IsSymbolFont() const;
 
@@ -77,8 +77,8 @@ public:
     void                SetItalic( FontItalic );
     void                SetWeight( FontWeight );
     void                SetWidthType( FontWidth );
+    void                SetAlignment( FontAlign );
     void                SetCharSet( rtl_TextEncoding );
-    void                SetAlign( FontAlign );
 
     void                SetSymbolFlag( bool );
 

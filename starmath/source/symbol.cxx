@@ -52,7 +52,7 @@ SmSym::SmSym() :
 {
     m_aExportName = m_aName;
     m_aFace.SetTransparent(true);
-    m_aFace.SetAlign(ALIGN_BASELINE);
+    m_aFace.SetAlignment(ALIGN_BASELINE);
 }
 
 
@@ -69,7 +69,7 @@ SmSym::SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
 
     m_aFace     = rFont;
     m_aFace.SetTransparent(true);
-    m_aFace.SetAlign(ALIGN_BASELINE);
+    m_aFace.SetAlignment(ALIGN_BASELINE);
 
     m_cChar         = cChar;
     m_aSetName      = rSet;

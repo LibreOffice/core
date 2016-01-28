@@ -587,7 +587,7 @@ void EMFWriter::ImplCheckTextAttr()
         // TextAlign
         sal_uInt32 nTextAlign;
 
-        switch( rFont.GetAlign() )
+        switch( rFont.GetAlignment() )
         {
             case ALIGN_TOP:    nTextAlign = TA_TOP; break;
             case ALIGN_BOTTOM: nTextAlign = TA_BOTTOM; break;

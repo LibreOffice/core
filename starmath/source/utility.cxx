@@ -235,7 +235,7 @@ void SmFace::Impl_Init()
 {
     SetSize( GetSize() );
     SetTransparent( true );
-    SetAlign( ALIGN_BASELINE );
+    SetAlignment( ALIGN_BASELINE );
     SetColor( COL_AUTO );
 }
 

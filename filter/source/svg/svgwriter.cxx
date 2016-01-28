@@ -1555,9 +1555,9 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     const FontMetric                        aMetric( mpVDev->GetFontMetric() );
     const vcl::Font&                        rFont = mpVDev->GetFont();
 
-    if( rFont.GetAlign() == ALIGN_TOP )
+    if( rFont.GetAlignment() == ALIGN_TOP )
         aBaseLinePos.Y() += aMetric.GetAscent();
-    else if( rFont.GetAlign() == ALIGN_BOTTOM )
+    else if( rFont.GetAlignment() == ALIGN_BOTTOM )
         aBaseLinePos.Y() -= aMetric.GetDescent();
 
     if( bApplyMapping )
@@ -2435,9 +2435,9 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     const FontMetric                        aMetric( mpVDev->GetFontMetric() );
     const vcl::Font&                        rFont = mpVDev->GetFont();
 
-    if( rFont.GetAlign() == ALIGN_TOP )
+    if( rFont.GetAlignment() == ALIGN_TOP )
         aBaseLinePos.Y() += aMetric.GetAscent();
-    else if( rFont.GetAlign() == ALIGN_BOTTOM )
+    else if( rFont.GetAlignment() == ALIGN_BOTTOM )
         aBaseLinePos.Y() -= aMetric.GetDescent();
 
     if( bApplyMapping )

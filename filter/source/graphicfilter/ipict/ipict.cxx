@@ -1874,7 +1874,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aActFont.SetCharSet( GetTextEncoding());
     aActFont.SetFamily(FAMILY_SWISS);
     aActFont.SetSize(Size(0,12));
-    aActFont.SetAlign(ALIGN_BASELINE);
+    aActFont.SetAlignment(ALIGN_BASELINE);
 
     aHRes = aVRes = Fraction( 1, 1 );
 

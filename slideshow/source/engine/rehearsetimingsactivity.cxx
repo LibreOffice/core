@@ -155,7 +155,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
 {
     maFont.SetHeight( maFont.GetHeight() * 2 );
     maFont.SetWidth( maFont.GetWidth() * 2 );
-    maFont.SetAlign( ALIGN_BASELINE );
+    maFont.SetAlignment( ALIGN_BASELINE );
     maFont.SetColor( COL_BLACK );
 
     // determine sprite size (in pixel):

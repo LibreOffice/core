@@ -191,8 +191,8 @@ void TextEngine::SetFont( const vcl::Font& rFont )
         aFillColor.SetTransparency( 0 );
         maFont.SetFillColor( aFillColor );
 
-        maFont.SetAlign( ALIGN_TOP );
-        mpRefDev->SetFont( maFont);
+        maFont.SetAlignment( ALIGN_TOP );
+        mpRefDev->SetFont( maFont );
         Size aTextSize;
         aTextSize.Width() = mpRefDev->GetTextWidth("    ");
         aTextSize.Height() = mpRefDev->GetTextHeight();

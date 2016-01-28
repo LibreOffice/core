@@ -128,12 +128,12 @@ void Font::SetTransparent( bool bTransparent )
     }
 }
 
-void Font::SetAlign( FontAlign eAlign )
+void Font::SetAlignment( FontAlign eAlign )
 {
     if( mpImplFont->meAlign != eAlign )
     {
         MakeUnique();
-        mpImplFont->meAlign = eAlign;
+        mpImplFont->SetAlignment(eAlign);
     }
 }
 
@@ -776,7 +776,7 @@ const Color& Font::GetColor() const { return mpImplFont->maColor; }
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
 bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
 
-FontAlign Font::GetAlign() const { return mpImplFont->meAlign; }
+FontAlign Font::GetAlignment() const { return mpImplFont->GetAlignment(); }
 
 const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName(); }
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }

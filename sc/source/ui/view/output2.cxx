@@ -323,7 +323,7 @@ void ScDrawStringsVars::SetPattern(
     else
         pPattern->GetFont( aFont, eColorMode, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript,
                             &aBackConfigColor, &aTextConfigColor );
-    aFont.SetAlign(ALIGN_BASELINE);
+    aFont.SetAlignment(ALIGN_BASELINE);
 
     // orientation
 
