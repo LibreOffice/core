@@ -25,6 +25,7 @@
 #include <vcl/unohelp.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <sal/types.h>
 
 #include "printdlg.hxx"
@@ -1824,13 +1825,13 @@ bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::bea
 
 void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const
 {
-    if( m_aUIProperties.getLength() > 0 )
+    if( !m_aUIProperties.empty() )
     {
         sal_Int32 nIndex = io_rProps.getLength();
         io_rProps.realloc( nIndex+1 );
         css::beans::PropertyValue aVal;
         aVal.Name = "ExtraPrintUIOptions";
-        aVal.Value = css::uno::makeAny( m_aUIProperties );
+        aVal.Value = css::uno::makeAny( comphelper::containerToSequence(m_aUIProperties) );
         io_rProps[ nIndex ] = aVal;
     }
 }
@@ -1847,7 +1848,7 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
         + (i_rTitle.isEmpty() ? 0 : 1)                                // Text
         + (i_rHelpIds.getLength() ? 1 : 0)                            // HelpId
         + (i_pVal ? 1 : 0)                                            // Property
-        + i_rControlOptions.maAddProps.getLength()                    // additional props
+        + i_rControlOptions.maAddProps.size()                         // additional props
         + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           // grouping
         + (i_rControlOptions.mbInternalOnly ? 1 : 0)                  // internal hint
         + (i_rControlOptions.mbEnabled ? 0 : 1)                       // enabled
@@ -1913,7 +1914,7 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
         aCtrl[nUsed++].Value <<= sal_False;
     }
 
-    sal_Int32 nAddProps = i_rControlOptions.maAddProps.getLength();
+    sal_Int32 nAddProps = i_rControlOptions.maAddProps.size();
     for( sal_Int32 i = 0; i < nAddProps; i++ )
         aCtrl[ nUsed++ ] = i_rControlOptions.maAddProps[i];
 
@@ -1981,8 +1982,8 @@ css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
-    sal_Int32 nUsed = aOpt.maAddProps.getLength();
-    aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
+    sal_Int32 nUsed = aOpt.maAddProps.size();
+    aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = "Choices";
     aOpt.maAddProps[nUsed].Value = css::uno::makeAny( i_rChoices );
     if( i_rDisabledChoices.getLength() )
@@ -2007,8 +2008,8 @@ css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
-    sal_Int32 nUsed = aOpt.maAddProps.getLength();
-    aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
+    sal_Int32 nUsed = aOpt.maAddProps.size();
+    aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = "Choices";
     aOpt.maAddProps[nUsed].Value = css::uno::makeAny( i_rChoices );
     if( i_rDisabledChoices.getLength() )
@@ -2036,8 +2037,8 @@ css::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     UIControlOptions aOpt( i_rControlOptions );
     if( i_nMaxValue >= i_nMinValue )
     {
-        sal_Int32 nUsed = aOpt.maAddProps.getLength();
-        aOpt.maAddProps.realloc( nUsed + 2 );
+        sal_Int32 nUsed = aOpt.maAddProps.size();
+        aOpt.maAddProps.resize( nUsed + 2 );
         aOpt.maAddProps[nUsed  ].Name  = "MinValue";
         aOpt.maAddProps[nUsed++].Value = css::uno::makeAny( i_nMinValue );
         aOpt.maAddProps[nUsed  ].Name  = "MaxValue";

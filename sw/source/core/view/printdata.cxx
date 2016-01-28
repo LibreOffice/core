@@ -163,7 +163,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // Its just the source code that gets printed ...
     if (bSwSrcView)
     {
-        m_aUIProperties.realloc( 0 );
+        m_aUIProperties.clear();
         return;
     }
 
@@ -175,7 +175,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // (5 options are not available for Writer-Web)
     const int nCTLOpts = bCTL ? 1 : 0;
     const int nNumProps = nCTLOpts + (bWeb ? 15 : 21);
-    m_aUIProperties.realloc( nNumProps );
+    m_aUIProperties.resize( nNumProps );
     int nIdx = 0;
 
     // load the writer PrinterOptions into the custom tab
