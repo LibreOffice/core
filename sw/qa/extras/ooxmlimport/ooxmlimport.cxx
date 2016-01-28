@@ -74,10 +74,12 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <swtypes.hxx>
+#include <drawdoc.hxx>
 #include <tools/datetimeutils.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <svx/svdpage.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
 #include <bordertest.hxx>
@@ -3062,6 +3064,19 @@ DECLARE_OOXMLIMPORT_TEST(testTdf95213, "tdf95213.docx")
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aName), uno::UNO_QUERY);
     // This was awt::FontWeight::BOLD.
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xStyle, "CharWeight"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf97371, "tdf97371.docx")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pShape = pPage->GetObj(0);
+    SdrObject* pTextBox = pPage->GetObj(1);
+    long nDiff = std::abs(pShape->GetSnapRect().Top() - pTextBox->GetSnapRect().Top());
+    // The top of the two shapes were 410 and 3951, now it should be 3950 and 3951.
+    CPPUNIT_ASSERT(nDiff < 10);
 }
 
 // base class to supply a helper method for testHFLinkToPrev

@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     sw \
     tl \
     vcl \
+    svxcore \
 	$(gb_UWINAPI) \
 ))
 

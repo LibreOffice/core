@@ -805,8 +805,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         // This needs to be AT_PARAGRAPH by default and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
-                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE)
+
+                        // Avoid setting AnchorType for TextBoxes till SwTextBoxHelper::syncProperty() doesn't handle transition.
+                        bool bTextBox = false;
+                        xShapeProps->getPropertyValue("TextBox") >>= bTextBox;
+                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE && !bTextBox)
                             eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
+
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
 
                         //only the position orientation is handled in applyPosition()
