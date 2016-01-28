@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -73,11 +70,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
-
-    // XServiceInfo - static versions (used for component registration)
-    static OUString SAL_CALL getImplementationName_static();
-    static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-    static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
 private:
     NamedPropertyValues maProperties;
@@ -178,11 +170,6 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    return getImplementationName_static();
-}
-
-OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName_static(  )
-{
     return OUString( "NamedPropertyValuesContainer" );
 }
 
@@ -193,25 +180,17 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString&
 
 css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
-}
-
-css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames_static(  )
-{
     const OUString aServiceName( "com.sun.star.document.NamedPropertyValues" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer::Create(
-                SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >&)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+NamedPropertyValuesContainer_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject*>(new NamedPropertyValuesContainer());
-}
-
-void createRegistryInfo_NamedPropertyValuesContainer()
-{
-    static ::comphelper::module::OAutoRegistration< NamedPropertyValuesContainer > aAutoRegistration;
+    return cppu::acquire(new NamedPropertyValuesContainer());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
