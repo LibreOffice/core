@@ -3345,6 +3345,7 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
     GroupId = GID_MODIFY;
 ]
 
+<<<<<<< HEAD
 SfxBoolItem Polygon SID_DRAW_POLYGON
 
 [
@@ -3363,6 +3364,8 @@ SfxBoolItem Polygon SID_DRAW_POLYGON
     GroupId = GID_DRAWING;
 ]
 
+=======
+>>>>>>> tdf#89646 Implement "uno:LineToolbox" command into writer.
 SfxVoidItem Presentation SID_PRESENTATION
 ()
 [
