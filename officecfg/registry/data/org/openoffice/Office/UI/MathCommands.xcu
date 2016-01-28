@@ -106,24 +106,6 @@
           <value xml:lang="en-US">Options</value>
         </prop>
       </node>
-      <node oor:name=".uno:View50" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">0.5</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:View100" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Zoom 100%</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:View200" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Zoom 200%</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ZoomIn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Z~oom In</value>
