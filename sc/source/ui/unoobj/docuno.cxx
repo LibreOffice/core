@@ -244,7 +244,7 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     sal_Int32 nNumProps= 9, nIdx = 0;
 
-    m_aUIProperties.realloc(nNumProps);
+    m_aUIProperties.resize(nNumProps);
 
     // load the writer PrinterOptions into the custom tab
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
@@ -326,7 +326,7 @@ void ScPrintUIOptions::SetDefaults()
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
     bool bSuppress = rPrintOpt.GetSkipEmpty();
 
-    for (sal_Int32 nUIPos=0; nUIPos<m_aUIProperties.getLength(); ++nUIPos)
+    for (size_t nUIPos=0; nUIPos<m_aUIProperties.size(); ++nUIPos)
     {
         uno::Sequence<beans::PropertyValue> aUIProp;
         if ( m_aUIProperties[nUIPos].Value >>= aUIProp )
