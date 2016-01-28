@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_b7a02aa7",
+        "filename": "svgio/source/svgreader/svgimagenode.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-01-28T08:35:23Z",
+      "side": 1,
+      "message": "Hi Xisco,\nI think this will only work for rectangular images:\nw \u003d fWidth - fWidthMinusHeight \u003d 0.5 (fWidth - fHeight)\nw \u003d fHeight - fHeightMinusWidth \u003d 0.5 (fHeight - fWidth)\nTo keep the aspect ratio you will have to deal with the aspect ratio of the image. Please try with a non-rectangular image.\nThere is already code to create a evtl needed mapping when !aTarget.equal(aViewBox), so probably setting aViewBox in line 283 relative to the image width/height may be enough. This has to do with SvgAspectRatio, maybe the default is not correct and there is a definition in SVG for it",
+      "range": {
+        "startLine": 209,
+        "startChar": 1,
+        "endLine": 216,
+        "endChar": 58
+      },
+      "revId": "e8b33608a9b44e13631904ba6ec2699803641605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
