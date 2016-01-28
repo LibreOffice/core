@@ -344,16 +344,9 @@ namespace {
             ProcessResource();
         }
 
-        Sequence< beans::PropertyValue > GetDialogControls() const
+        const std::vector< beans::PropertyValue >& GetDialogControls() const
         {
-            if (maProperties.empty())
-                return Sequence< beans::PropertyValue >();
-            else
-            {
-                return Sequence<beans::PropertyValue>(
-                        &maProperties.front(),
-                        maProperties.size());
-            }
+            return maProperties;
         }
 
         std::vector<sal_Int32> GetSlidesPerPage() const
@@ -1258,7 +1251,7 @@ public:
         css::uno::Sequence<css::beans::PropertyValue> aProperties (3);
 
         aProperties[0].Name = "ExtraPrintUIOptions";
-        aProperties[0].Value <<= m_aUIProperties;
+        aProperties[0].Value <<= comphelper::containerToSequence(m_aUIProperties);
 
         aProperties[1].Name = "PageSize";
         aProperties[1].Value <<= maPrintSize;

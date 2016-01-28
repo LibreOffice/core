@@ -596,17 +596,17 @@ public:
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
-    protected:
+protected:
     std::unordered_map< OUString, css::uno::Any, OUStringHash >
                          m_aPropertyMap;
-    css::uno::Sequence< css::beans::PropertyValue >
+    std::vector< css::beans::PropertyValue >
                          m_aUIProperties;
 
-    public:
+public:
 
                          /// Create without ui properties
                          PrinterOptionsHelper() {}
-                         PrinterOptionsHelper( const css::uno::Sequence< css::beans::PropertyValue >& i_rUIProperties )
+                         PrinterOptionsHelper( const std::vector< css::beans::PropertyValue >& i_rUIProperties )
                              : m_aUIProperties( i_rUIProperties )  {}
                          ~PrinterOptionsHelper() {}
 
@@ -618,7 +618,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     bool                 processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp,
                              std::set< OUString >* o_pChangeProp = nullptr );
 
-    /** Append  to a sequence of property values the ui property sequence passed at creation
+    /** Append to a sequence of property values the ui property sequence passed at creation
 
         as the "ExtraPrintUIOptions" property. if that sequence was empty, no "ExtraPrintUIOptions" property
         will be appended.
@@ -652,7 +652,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
         OUString         maGroupHint;
         bool             mbInternalOnly;
         bool             mbEnabled;
-        css::uno::Sequence< css::beans::PropertyValue >
+        std::vector< css::beans::PropertyValue >
                          maAddProps;
 
                          UIControlOptions( const OUString& i_rDependsOnName = OUString(),

@@ -75,7 +75,7 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create sequence of print UI options
     // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
-    m_aUIProperties.realloc( nNumProps );
+    m_aUIProperties.resize( nNumProps );
 
     // load the math PrinterOptions into the custom tab
     m_aUIProperties[nIdx].Name = "OptionsUIFile";
