@@ -75,6 +75,9 @@ defaultBootstrap_InitialComponentContext();
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
+CPPUHELPER_DLLPUBLIC void SAL_CALL
+preInitBootstrap();
+
 /**
  * An exception indicating a bootstrap error.
  *
