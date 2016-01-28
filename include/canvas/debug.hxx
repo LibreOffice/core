@@ -26,14 +26,14 @@
 #ifdef BOOST_SP_ENABLE_DEBUG_HOOKS
 
 # include <sal/config.h>
+# include <osl/diagnose.h>
 # include <memory>
 
 ::std::size_t find_unreachable_objects( bool );
 
 # if OSL_DEBUG_LEVEL > 2
-#  include <osl/diagnose.h>
 #  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
-                                            BOOST_CURRENT_FUNCTION, a, \
+                                            OSL_THIS_FUNC, a, \
                                             find_unreachable_objects(true) )
 # else
 /** This macro shows how much memory is still used by shared_ptrs
@@ -44,7 +44,7 @@
     from deletion by circular references.
  */
 #  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
-                                            BOOST_CURRENT_FUNCTION, a, \
+                                            OSL_THIS_FUNC, a, \
                                             find_unreachable_objects(false) )
 # endif
 

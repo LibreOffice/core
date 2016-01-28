@@ -139,7 +139,7 @@ namespace canvas
                    std::exception) override
         {
             tools::verifyArgs(aPoint, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -156,7 +156,7 @@ namespace canvas
                                                    std::exception) override
         {
             tools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -175,7 +175,7 @@ namespace canvas
                                                    std::exception) override
         {
             tools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -194,7 +194,7 @@ namespace canvas
                                        std::exception) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -214,7 +214,7 @@ namespace canvas
                                        std::exception) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -233,7 +233,7 @@ namespace canvas
                                                                                                                                                           css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -253,7 +253,7 @@ namespace canvas
                                                                                                                                                               css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -271,7 +271,7 @@ namespace canvas
                                                                                                                                                   css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -290,7 +290,7 @@ namespace canvas
                                        std::exception) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -310,7 +310,7 @@ namespace canvas
                                                std::exception) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -328,7 +328,7 @@ namespace canvas
                                           const css::uno::Reference< css::geometry::XMapping2D >&         xMapping ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -349,7 +349,7 @@ namespace canvas
                               // dummy, to keep argPos in sync
                               fontRequest,
                               fontMatrix,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -364,7 +364,7 @@ namespace canvas
                                                                                                                                              css::uno::RuntimeException) override
         {
             tools::verifyArgs(aFilter,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -384,7 +384,7 @@ namespace canvas
                        std::exception) override
         {
             tools::verifyArgs(xFont, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
             tools::verifyRange( textDirection,
                                 css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
@@ -407,7 +407,7 @@ namespace canvas
                                    std::exception) override
         {
             tools::verifyArgs(laidOutText, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -424,7 +424,7 @@ namespace canvas
                         const css::rendering::RenderState&                                 renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -440,7 +440,7 @@ namespace canvas
                                  const css::rendering::RenderState&                                    renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
-                              BOOST_CURRENT_FUNCTION,
+                              OSL_THIS_FUNC,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
