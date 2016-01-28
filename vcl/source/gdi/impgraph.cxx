@@ -290,8 +290,8 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                         if(maSvgData->getSvgDataArrayLength() == rImpGraphic.maSvgData->getSvgDataArrayLength())
                         {
                             if(0 == memcmp(
-                                maSvgData->getSvgDataArray().get(),
-                                rImpGraphic.maSvgData->getSvgDataArray().get(),
+                                maSvgData->getSvgDataArray().getConstArray(),
+                                rImpGraphic.maSvgData->getSvgDataArray().getConstArray(),
                                 maSvgData->getSvgDataArrayLength()))
                             {
                                 bRet = true;
@@ -1545,7 +1545,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                             {
                                 SvgDataArray aNewData(nSvgDataArrayLength);
 
-                                rIStm.Read(aNewData.begin(), nSvgDataArrayLength);
+                                rIStm.Read(aNewData.getArray(), nSvgDataArrayLength);
                                 OUString aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
 
                                 if (!rIStm.GetError())
@@ -1616,7 +1616,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                             rOStm.WriteUInt32( nSvgMagic );
                             rOStm.WriteUInt32( rImpGraphic.getSvgData()->getSvgDataArrayLength() );
-                            rOStm.Write(rImpGraphic.getSvgData()->getSvgDataArray().get(), rImpGraphic.getSvgData()->getSvgDataArrayLength());
+                            rOStm.Write(rImpGraphic.getSvgData()->getSvgDataArray().getConstArray(), rImpGraphic.getSvgData()->getSvgDataArrayLength());
                             rOStm.WriteUniOrByteString(rImpGraphic.getSvgData()->getPath(),
                                                        rOStm.GetStreamCharSet());
                         }
