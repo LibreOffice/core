@@ -60,8 +60,12 @@ enum class RectPos
     Bottom,
     Attribute
 };
-enum RectHorAlign
-{   RHA_LEFT, RHA_CENTER, RHA_RIGHT
+
+enum class RectHorAlign
+{
+    Left,
+    Center,
+    Right
 };
 enum RectVerAlign
 {   RVA_TOP, RVA_MID, RVA_BOTTOM, RVA_BASELINE, RVA_CENTERY,
