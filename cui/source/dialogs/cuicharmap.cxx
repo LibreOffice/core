@@ -275,7 +275,7 @@ void SvxShowText::SetFont( const vcl::Font& rFont )
     long nWinHeight = GetOutputSizePixel().Height();
     maFont = vcl::Font(rFont);
     maFont.SetWeight(WEIGHT_NORMAL);
-    maFont.SetAlign(ALIGN_TOP);
+    maFont.SetAlignment(ALIGN_TOP);
     maFont.SetSize(PixelToLogic(Size(0, nWinHeight / 2)));
     maFont.SetTransparent(true);
     Control::SetFont(maFont);

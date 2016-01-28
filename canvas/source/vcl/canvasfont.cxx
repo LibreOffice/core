@@ -47,7 +47,7 @@ namespace vclcanvas
         mpRefDevice( &rDevice ),
         mpOutDevProvider( rOutDevProvider )
     {
-        maFont->SetAlign( ALIGN_BASELINE );
+        maFont->SetAlignment( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
         maFont->SetVertical( rFontRequest.FontDescription.IsVertical==css::util::TriState_YES );
 

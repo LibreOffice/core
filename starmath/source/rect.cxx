@@ -615,7 +615,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 
     pGlyphDev->Push(PushFlags::FONT | PushFlags::MAPMODE);
     vcl::Font aFnt(rDev.GetFont());
-    aFnt.SetAlign(ALIGN_TOP);
+    aFnt.SetAlignment(ALIGN_TOP);
 
     // use scale factor when calling GetTextBoundRect to counter
     // negative effects from antialiasing which may otherwise result

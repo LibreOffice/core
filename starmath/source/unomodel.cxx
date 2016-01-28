@@ -460,7 +460,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
                     SmFace aSet( sFontName, rOld.GetSize() );
                     aSet.SetBorderWidth( rOld.GetBorderWidth() );
-                    aSet.SetAlign( ALIGN_BASELINE );
+                    aSet.SetAlignment( ALIGN_BASELINE );
                     aFormat.SetFont( (*ppEntries)->mnMemberId, aSet );
                 }
             }

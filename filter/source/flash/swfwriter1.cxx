@@ -567,7 +567,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         FlashFont&          rFlashFont = Impl_getFont( aFont );
 
         // always adjust text position to match baseline alignment
-        switch( aOldFont.GetAlign() )
+        switch( aOldFont.GetAlignment() )
         {
             case( ALIGN_TOP ):
                 aBaseLinePos.Y() += aMetric.GetAscent();

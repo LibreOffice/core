@@ -58,6 +58,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetPitch( rData.GetPitch() );
         aFontMetric.SetWeight( rData.GetWeight() );
         aFontMetric.SetItalic( rData.GetItalic() );
+        aFontMetric.SetAlignment( rData.GetAlignment() );
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetScalableFlag( rData.IsScalable() );
         aFontMetric.SetBuiltInFontFlag( rData.IsBuiltInFont() );
@@ -182,6 +183,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetPitch( xFontMetric->GetPitch() );
     aMetric.SetWeight( xFontMetric->GetWeight() );
     aMetric.SetItalic( xFontMetric->GetItalic() );
+    aMetric.SetAlignment( xFontMetric->GetAlignment() );
     aMetric.SetWidthType( xFontMetric->GetWidthType() );
     if ( pFontInstance->mnOwnOrientation )
         aMetric.SetOrientation( pFontInstance->mnOwnOrientation );
@@ -1124,7 +1126,7 @@ bool OutputDevice::ImplNewFont() const
     }
 
     // calculate text offset depending on TextAlignment
-    TextAlign eAlign = maFont.GetAlign();
+    TextAlign eAlign = maFont.GetAlignment();
     if ( eAlign == ALIGN_BASELINE )
     {
         mnTextOffX = 0;
