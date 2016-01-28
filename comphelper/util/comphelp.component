@@ -22,7 +22,8 @@
   <implementation name="AnyCompareFactory">
     <service name="com.sun.star.ucb.AnyCompareFactory"/>
   </implementation>
-  <implementation name="IndexedPropertyValuesContainer">
+  <implementation name="IndexedPropertyValuesContainer"
+      constructor="IndexedPropertyValuesContainer_get_implementation">
     <service name="com.sun.star.document.IndexedPropertyValues"/>
   </implementation>
   <implementation name="NamedPropertyValuesContainer">
