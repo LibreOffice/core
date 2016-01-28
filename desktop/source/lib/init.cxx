@@ -53,6 +53,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
@@ -1797,6 +1799,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 #endif
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
+
     if (!xContext.is())
     {
         gImpl->maLastExceptionMsg = "XComponentContext could not be created";
@@ -1835,6 +1838,9 @@ static void lo_startmain(void*)
 {
     osl_setThreadName("lo_startmain");
 
+    if (GetpApp())
+        Application::GetSolarMutex().tryToAcquire();
+
     soffice_main();
 }
 
@@ -1863,19 +1869,38 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfilePath)
 {
+    enum {
+        PRE_INIT,     // setup shared data in master process
+        SECOND_INIT,  // complete init. after fork
+        FULL_INIT     // do a standard complete init.
+    } eStage;
+
+    // Did we do a pre-initialize
+    static bool bPreInited = false;
+
+    // What stage are we at ?
+    if (pThis == NULL)
+        eStage = PRE_INIT;
+    else if (bPreInited)
+        eStage = SECOND_INIT;
+    else
+        eStage = FULL_INIT;
+
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
     if (bInitialized)
         return 1;
 
-    comphelper::LibreOfficeKit::setActive();
+    if (eStage != SECOND_INIT)
+        comphelper::LibreOfficeKit::setActive();
 
     static bool bViewCallback = getenv("LOK_VIEW_CALLBACK");
     comphelper::LibreOfficeKit::setViewCallback(bViewCallback);
 
-    comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
+    if (eStage != PRE_INIT)
+        comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
-    if (pUserProfilePath)
+    if (eStage != SECOND_INIT && pUserProfilePath)
         rtl::Bootstrap::set(OUString("UserInstallation"), OUString(pUserProfilePath, strlen(pUserProfilePath), RTL_TEXTENCODING_UTF8));
 
     OUString aAppPath;
@@ -1898,22 +1923,34 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     try
     {
-        SAL_INFO("lok", "Attempting to initalize UNO");
-        if (!initialize_uno(aAppURL))
+        if (eStage != SECOND_INIT)
         {
-            return false;
+            SAL_INFO("lok", "Attempting to initalize UNO");
+
+            if (!initialize_uno(aAppURL))
+                return false;
+
+            // Force headless -- this is only for bitmap rendering.
+            rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
+
+            // We specifically need to make sure we have the "headless"
+            // command arg set (various code specifically checks via
+            // CommandLineArgs):
+            desktop::Desktop::GetCommandLineArgs().setHeadless();
+
+            Application::EnableHeadlessMode(true);
+
+            if (eStage == PRE_INIT)
+            {
+                InitVCL();
+                // pre-load all component libraries.
+                cppu::preInitBootstrap();
+                // Release Solar Mutex, lo_startmain thread should acquire it.
+                Application::ReleaseSolarMutex();
+            }
+
+            force_c_locale();
         }
-        force_c_locale();
-
-        // Force headless -- this is only for bitmap rendering.
-        rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
-
-        // We specifically need to make sure we have the "headless"
-        // command arg set (various code specifically checks via
-        // CommandLineArgs):
-        desktop::Desktop::GetCommandLineArgs().setHeadless();
-
-        Application::EnableHeadlessMode(true);
 
         // This is horrible crack. I really would want to go back to simply just call
         // InitVCL() here. The OfficeIPCThread thing is just horrible.
@@ -1934,27 +1971,34 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         // the Thread from wherever (it's done again in Desktop::Main), and can
         // then use it to wait until we're definitely ready to continue.
 
-        SAL_INFO("lok", "Enabling OfficeIPCThread");
-        OfficeIPCThread::EnableOfficeIPCThread();
-        SAL_INFO("lok", "Starting soffice_main");
-        pLib->maThread = osl_createThread(lo_startmain, NULL);
-        SAL_INFO("lok", "Waiting for OfficeIPCThread");
-        OfficeIPCThread::WaitForReady();
-        SAL_INFO("lok", "OfficeIPCThread ready -- continuing");
-
-        // If the Thread has been disabled again that indicates that a
-        // restart is required (or in any case we don't have a useable
-        // process around).
-        if (!OfficeIPCThread::IsEnabled())
+        if (eStage != PRE_INIT)
         {
-            fprintf(stderr, "LOK init failed -- restart required\n");
-            return false;
+            SAL_INFO("lok", "Enabling OfficeIPCThread");
+            OfficeIPCThread::EnableOfficeIPCThread();
+            SAL_INFO("lok", "Starting soffice_main");
+            pLib->maThread = osl_createThread(lo_startmain, NULL);
+            SAL_INFO("lok", "Waiting for OfficeIPCThread");
+            OfficeIPCThread::WaitForReady();
+            SAL_INFO("lok", "OfficeIPCThread ready -- continuing");
+
+            // If the Thread has been disabled again that indicates that a
+            // restart is required (or in any case we don't have a useable
+            // process around).
+            if (!OfficeIPCThread::IsEnabled())
+            {
+                fprintf(stderr, "LOK init failed -- restart required\n");
+                return false;
+            }
         }
 
-        ErrorHandler::RegisterDisplay(aBasicErrorFunc);
+        if (eStage != SECOND_INIT)
+            ErrorHandler::RegisterDisplay(aBasicErrorFunc);
 
         SAL_INFO("lok", "LOK Initialized");
-        bInitialized = true;
+        if (eStage == PRE_INIT)
+            bPreInited = true;
+        else
+            bInitialized = true;
     }
     catch (css::uno::Exception& exception)
     {
@@ -1986,6 +2030,12 @@ SAL_JNI_EXPORT
 LibreOfficeKit *libreofficekit_hook(const char* install_path)
 {
     return libreofficekit_hook_2(install_path, NULL);
+}
+
+SAL_JNI_EXPORT
+int lok_preinit(const char* install_path, const char* user_profile_path)
+{
+    return lo_initialize(NULL, install_path, user_profile_path);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
