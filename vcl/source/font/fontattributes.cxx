@@ -37,6 +37,24 @@ FontAttributes::FontAttributes()
     mbEmbeddable ( false )
 {}
 
+FontAttributes::FontAttributes( const FontAttributes& rFontAttributes ) :
+    maFamilyName( rFontAttributes.maFamilyName ),
+    maStyleName( rFontAttributes.maStyleName ),
+    meWeight( rFontAttributes.meWeight ),
+    meFamily( rFontAttributes.meFamily ),
+    mePitch( rFontAttributes.mePitch ),
+    meWidthType( rFontAttributes.meWidthType ),
+    meItalic( rFontAttributes.meItalic ),
+    meCharSet( rFontAttributes.meCharSet ),
+    mbSymbolFlag( rFontAttributes.mbSymbolFlag ),
+    maMapNames( rFontAttributes.maMapNames ),
+    mnQuality( rFontAttributes.mnQuality ),
+    mbOrientation( rFontAttributes.mbOrientation ),
+    mbDevice( rFontAttributes.mbDevice ),
+    mbSubsettable( rFontAttributes.mbSubsettable ),
+    mbEmbeddable( rFontAttributes.mbEmbeddable )
+{}
+
 
 bool FontAttributes::CompareDeviceIndependentFontAttributes(const FontAttributes& rOther) const
 {

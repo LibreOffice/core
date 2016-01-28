@@ -28,6 +28,7 @@ class FontAttributes
 {
 public:
     explicit            FontAttributes();
+                        FontAttributes( const FontAttributes& );
 
     // device independent font functions
     const OUString&     GetFamilyName() const                       { return maFamilyName; }
