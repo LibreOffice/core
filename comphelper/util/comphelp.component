@@ -25,7 +25,8 @@
   <implementation name="IndexedPropertyValuesContainer">
     <service name="com.sun.star.document.IndexedPropertyValues"/>
   </implementation>
-  <implementation name="NamedPropertyValuesContainer">
+  <implementation name="NamedPropertyValuesContainer"
+      constructor="NamedPropertyValuesContainer_get_implementation">
     <service name="com.sun.star.document.NamedPropertyValues"/>
   </implementation>
   <implementation name="com.sun.star.comp.MemoryStream">

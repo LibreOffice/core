@@ -25,7 +25,6 @@
 void createRegistryInfo_AnyCompareFactory();
 void createRegistryInfo_IndexedPropertyValuesContainer();
 void createRegistryInfo_Map();
-void createRegistryInfo_NamedPropertyValuesContainer();
 void createRegistryInfo_OInstanceLocker();
 void createRegistryInfo_OPropertyBag();
 void createRegistryInfo_OSimpleLogRing();
