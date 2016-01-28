@@ -38,7 +38,11 @@ namespace comphelper { namespace module
                 createRegistryInfo_SequenceOutputStream();
                 createRegistryInfo_SequenceInputStream();
                 createRegistryInfo_UNOMemoryStream();
+<<<<<<< HEAD
                 createRegistryInfo_NamedPropertyValuesContainer();
+=======
+                createRegistryInfo_IndexedPropertyValuesContainer();
+>>>>>>> tdf#74608 comphelper: Constructor feature for NamedPropertyValuesContainer
                 createRegistryInfo_AnyCompareFactory();
                 createRegistryInfo_OInstanceLocker();
                 createRegistryInfo_Map();
