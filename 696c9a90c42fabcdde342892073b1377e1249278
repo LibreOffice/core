@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_d7ecd691",
+        "filename": "icon-themes/elementary/links.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-28T14:36:43Z",
+      "side": 1,
+      "message": "this doesn\u0027t look good :)",
+      "revId": "696c9a90c42fabcdde342892073b1377e1249278",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
