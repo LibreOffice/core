@@ -467,6 +467,17 @@ void DesktopLOKTest::testPasteWriterJPEG()
     // This was text::TextContentAnchorType_AT_PARAGRAPH.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
 
+    // Delete the pasted picture, and paste again with a custom anchor type.
+    uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY)->dispose();
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
+    }));
+    comphelper::dispatchCommand(".uno:Paste", aPropertyValues);
+    xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 

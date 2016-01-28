@@ -284,7 +284,13 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
                     SwView* pView = &rView;
-                    SwTransferable::Paste( rSh, aDataHelper );
+
+                    const SfxUInt16Item* pAnchorType = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
+                    if (pAnchorType)
+                        SwTransferable::Paste(rSh, aDataHelper, pAnchorType->GetValue());
+                    else
+                        SwTransferable::Paste(rSh, aDataHelper);
+
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify( &rSh );

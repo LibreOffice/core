@@ -4159,7 +4159,7 @@ SfxBoolItem PartWindow SID_PARTWIN
 
 
 SfxVoidItem Paste SID_PASTE
-()
+(SfxUInt16Item AnchorType FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,

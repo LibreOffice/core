@@ -105,7 +105,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     static bool _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste);
+                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, sal_uInt16 nAnchorType = 0 );
 
     static bool _PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh );
@@ -168,13 +168,13 @@ public:
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    static bool Paste( SwWrtShell&, TransferableDataHelper& );
+    static bool Paste( SwWrtShell&, TransferableDataHelper&, sal_uInt16 nAnchorType = 0 );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt16 nAction, SotClipboardFormatId nFormat,
                           SotExchangeDest nDestination, bool bIsPasteFormat,
                           bool bIsDefault,
                           const Point* pDDPos = nullptr, sal_Int8 nDropAction = 0,
-                          bool bPasteSelection = false );
+                          bool bPasteSelection = false, sal_uInt16 nAnchorType = 0 );
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
