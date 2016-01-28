@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_f79e3206",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/TypeDescription.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-28T15:17:33Z",
+      "side": 1,
+      "message": "Isn\u0027t it a bit arbitrary to add an empty line exactly here, nested in this 100+ line method that until now contains not a single empty line?",
+      "revId": "902b1b6f048e07e5c4a9a517f7169d7ed21b9fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_9799ae22",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/TypeDescription.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-01-28T15:17:33Z",
+      "side": 1,
+      "message": "Jan 25 12:03:49 \u003csberg\u003e ...at which point checking for typeArguments!\u003dnull but not also for typeArguments.length \u003e\u003d index looks odd, and checking for both doesn\u0027t look much better IMO, given none of this is direct \"user input\" to the TypeDescription ctor, so assumption is that this is a \"cannot happen\" situation and the JVM\u0027s exceptions upon null pointer and/or out of bounds are already perfectly adequate\nJan 25 12:09:18 \u003cjanIV\u003e sberg, but index comes from a different place (the info variable) not from typeArguments\nJan 25 12:12:32 \u003csberg\u003e janIV, both come from the underlying type info system",
+      "revId": "902b1b6f048e07e5c4a9a517f7169d7ed21b9fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
