@@ -22,6 +22,9 @@
 
 #include <sal/config.h>
 
+#include <memory>
+#include <vector>
+
 #include <classes/framecontainer.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
