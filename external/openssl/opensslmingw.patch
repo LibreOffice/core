@@ -1,5 +1,6 @@
---- misc/openssl-0.9.8v/Makefile.shared	2008-09-17 17:56:40.000000000 +0200
-+++ misc/build/openssl-0.9.8v/Makefile.shared	2009-03-30 11:52:53.684538000 +0200
+diff -ru openssl.orig/Makefile.shared openssl/Makefile.shared
+--- a/openssl.orig/Makefile.shared	2016-03-03 21:16:48.751822016 +0100
++++ b/openssl/Makefile.shared	2016-03-03 21:27:12.615802449 +0100
 @@ -278,7 +278,7 @@
  link_a.cygwin:
  	@ $(CALC_VERSIONS); \
@@ -13,7 +14,7 @@
  		SHLIB_SOVER=32; \
  		extras="$(LIBNAME).def"; \
  		$(PERL) util/mkdef.pl 32 $$SHLIB > $$extras; \
--		base=; [ $(LIBNAME) = "crypto" ] && base=-Wl,--image-base,0x63000000; \
+-		base=; [ $(LIBNAME) = "crypto" -a -n "$(FIPSCANLIB)" ] && base=-Wl,--image-base,0x63000000; \
 +                base=;  \
 +                 if test $(LIBNAME) = "crypto"; then \
 +                         SHLIB=libeay32; \
@@ -26,14 +27,15 @@
  	extras="$$extras rc.o"; \
  	ALLSYMSFLAGS='-Wl,--whole-archive'; \
  	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
--	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-s,-Bsymbolic -Wl,--out-implib,lib$(LIBNAME).dll.a $$extras"; \
+-	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--out-implib,lib$(LIBNAME).dll.a $$extras"; \
 +	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-s,-Bsymbolic -Wl,--export-all-symbols -Wl,--out-implib,lib$(LIBNAME).dll.a $$extras"; \
  	[ -f apps/$$dll_name ] && rm apps/$$dll_name; \
  	[ -f test/$$dll_name ] && rm test/$$dll_name; \
  	$(LINK_SO_A) || exit 1; \
---- misc/openssl-0.9.8v/e_os2.h	2005-12-19 03:57:07.000000000 +0900
-+++ misc/build/openssl-0.9.8v/e_os2.h	2009-04-04 23:07:15.324250000 +0900
-@@ -287,7 +287,7 @@
+diff -ru openssl.orig/e_os2.h openssl/e_os2.h
+--- a/openssl.orig/e_os2.h	2016-03-01 14:35:53.000000000 +0100
++++ b/openssl/e_os2.h	2016-03-03 21:27:33.179801804 +0100
+@@ -293,7 +293,7 @@
  # ifdef OPENSSL_EXPORT_VAR_AS_FUNCTION
  #  define OPENSSL_IMPLEMENT_GLOBAL(type,name,value)                      \
          type *_shadow_##name(void)                                      \
@@ -42,9 +44,10 @@
  #  define OPENSSL_DECLARE_GLOBAL(type,name) type *_shadow_##name(void)
  #  define OPENSSL_GLOBAL_REF(name) (*(_shadow_##name()))
  # else
---- misc/openssl-0.9.8v/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
-+++ misc/build/openssl-0.9.8v/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
-@@ -79,15 +79,41 @@
+diff -ru openssl.orig/ms/mingw32.bat openssl/ms/mingw32.bat
+--- a/openssl.orig/ms/mingw32.bat	2016-03-01 14:35:05.000000000 +0100
++++ b/openssl/ms/mingw32.bat	2016-03-03 21:27:56.487801073 +0100
+@@ -75,15 +75,41 @@
  rem copy ms\tlhelp32.h outinc
  
  echo Building the libraries
@@ -77,20 +80,21 @@
 +gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
 +if errorlevel 1 goto end
 +goto finished
-+
+ 
 +:shared_gxxlib
 +gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lws2_32 -lgdi32 %MINGW_SHARED_LIBSTDSPP%
 +if errorlevel 1 goto end
 +gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto %MINGW_SHARED_LIBSTDSPP%
 +if errorlevel 1 goto end
 +goto finished
- 
++ 
 +:finished
  echo Done compiling OpenSSL
  
  :end
---- misc/openssl-0.9.8v/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
-+++ misc/build/openssl-0.9.8v/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
+diff -ru openssl.orig/util/pl/Mingw32.pl openssl/util/pl/Mingw32.pl
+--- a/openssl.orig/util/pl/Mingw32.pl	2016-03-01 14:33:04.000000000 +0100
++++ b/openssl/util/pl/Mingw32.pl	2016-03-03 21:28:16.691800440 +0100
 @@ -6,11 +6,11 @@
  $o='/';
  $cp='cp';
@@ -107,12 +111,12 @@
  $mkdir='mkdir';
  
  # C compiler stuff
-@@ -87,7 +87,8 @@
+@@ -85,7 +85,8 @@
  	($Name=$name) =~ tr/a-z/A-Z/;
  
  	$ret.="$target: \$(${Name}OBJ)\n";
 -	$ret.="\tif exist $target \$(RM) $target\n";
-+    $ret.="\t\$(RM) $target\n";
++       $ret.="\t\$(RM) $target\n";
 +#	$ret.="\tif exist $target \$(RM) $target\n";
  	$ret.="\t\$(MKLIB) $target \$(${Name}OBJ)\n";
  	$ret.="\t\$(RANLIB) $target\n\n";
