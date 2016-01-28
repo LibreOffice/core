@@ -73,7 +73,7 @@ namespace oglcanvas
                                                                                                uno::RuntimeException, std::exception)
     {
         canvas::tools::verifyArgs(aNewPos, viewState, renderState,
-                                  BOOST_CURRENT_FUNCTION,
+                                  OSL_THIS_FUNC,
                                   static_cast< ::cppu::OWeakObject* >(this));
 
         ::osl::MutexGuard aGuard( m_aMutex );
