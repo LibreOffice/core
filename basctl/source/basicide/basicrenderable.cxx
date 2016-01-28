@@ -42,7 +42,7 @@ Renderable::Renderable (BaseWindow* pWin)
     if( aStrings.Count() < 3 ) // bad resource ?
         return;
 
-    m_aUIProperties.realloc( 3 );
+    m_aUIProperties.resize( 3 );
 
     // show Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
