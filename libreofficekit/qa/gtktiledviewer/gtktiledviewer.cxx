@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <pwd.h>
+#include <cmath>
 #include <string>
 #include <map>
 #include <iostream>
