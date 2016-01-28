@@ -2040,9 +2040,9 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 // do we have a native SVG RenderGraphic, whose data can be written directly?
                 const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
 
-                if(aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
+                if (aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
                 {
-                    rOStm.Write(aSvgDataPtr->getSvgDataArray().get(), aSvgDataPtr->getSvgDataArrayLength());
+                    rOStm.Write(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
 
                     if( rOStm.GetError() )
                     {
