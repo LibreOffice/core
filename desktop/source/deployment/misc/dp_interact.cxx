@@ -108,11 +108,9 @@ bool interactContinuation( Any const & request,
         if (xInteractionHandler.is()) {
             bool cont = false;
             bool abort = false;
-            Sequence< Reference<task::XInteractionContinuation> > conts( 2 );
-            conts[ 0 ] = new InteractionContinuationImpl(
-                continuation, &cont );
-            conts[ 1 ] = new InteractionContinuationImpl(
-                cppu::UnoType<task::XInteractionAbort>::get(), &abort );
+            std::vector< Reference<task::XInteractionContinuation> > conts {
+                new InteractionContinuationImpl(continuation, &cont ),
+                new InteractionContinuationImpl( cppu::UnoType<task::XInteractionAbort>::get(), &abort ) };
             xInteractionHandler->handle(
                 new ::comphelper::OInteractionRequest( request, conts ) );
             if (cont || abort) {

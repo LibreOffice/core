@@ -69,7 +69,7 @@ XInteractionRequestImpl::XInteractionRequestImpl()
     : p1( new XInteractionApproveImpl )
     , p2( new XInteractionDisapproveImpl )
 {
-    uno::Sequence<uno::Reference<task::XInteractionContinuation>> continuations{
+    std::vector<uno::Reference<task::XInteractionContinuation>> continuations{
         Reference<XInteractionContinuation>(p1),
         Reference<XInteractionContinuation>(p2) };
     Any aAny;

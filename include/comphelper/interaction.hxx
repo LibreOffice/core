@@ -29,6 +29,7 @@
 #include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <vector>
 
 
 namespace comphelper
@@ -38,8 +39,8 @@ namespace comphelper
 
     //= OInteraction
 
-    /** template for instantiating concret interaction handlers<p/>
-        the template argument must eb an interface derived from XInteractionContinuation
+    /** template for instantiating concrete interaction handlers<p/>
+        the template argument must be an interface derived from XInteractionContinuation
     */
     template <class INTERACTION>
     class OInteraction
@@ -119,13 +120,13 @@ namespace comphelper
     {
         css::uno::Any
                     m_aRequest;         /// the request we represent
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
+        std::vector< css::uno::Reference< css::task::XInteractionContinuation > >
                     m_aContinuations;   /// all registered continuations
 
     public:
         OInteractionRequest(const css::uno::Any& _rRequestDescription);
         OInteractionRequest(const css::uno::Any& rRequestDescription,
-            css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const& rContinuations);
+            std::vector<css::uno::Reference<css::task::XInteractionContinuation>> const& rContinuations);
 
         /// add a new continuation
         void addContinuation(const css::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);

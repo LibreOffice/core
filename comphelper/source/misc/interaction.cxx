@@ -45,7 +45,7 @@ namespace comphelper
     }
 
     OInteractionRequest::OInteractionRequest(const Any& rRequestDescription,
-            Sequence<Reference<XInteractionContinuation>> const& rContinuations)
+            std::vector<Reference<XInteractionContinuation>> const& rContinuations)
         : m_aRequest(rRequestDescription)
         , m_aContinuations(rContinuations)
     {
@@ -56,9 +56,7 @@ namespace comphelper
         OSL_ENSURE(_rxContinuation.is(), "OInteractionRequest::addContinuation: invalid argument!");
         if (_rxContinuation.is())
         {
-            sal_Int32 nOldLen = m_aContinuations.getLength();
-            m_aContinuations.realloc(nOldLen + 1);
-            m_aContinuations[nOldLen] = _rxContinuation;
+            m_aContinuations.push_back(_rxContinuation);
         }
     }
 
@@ -71,7 +69,7 @@ namespace comphelper
 
     Sequence< Reference< XInteractionContinuation > > SAL_CALL OInteractionRequest::getContinuations(  ) throw(RuntimeException, std::exception)
     {
-        return m_aContinuations;
+        return comphelper::containerToSequence(m_aContinuations);
     }
 
 
