@@ -351,7 +351,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
     pFrame->h = pImageElement->h = aScale.getY();
     pFrame->ZOrder = m_nNextZOrder++;
 
-    if (aScale.getY() > 0)
+    if (aScale.getY() < 0)
         pFrame->MirrorVertical = pImageElement->MirrorVertical = true;
 }
 
