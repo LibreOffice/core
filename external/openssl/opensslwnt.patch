@@ -4,7 +4,7 @@
   * Contributed to the OpenSSL Project 2004 by Richard Levitte
   * (richard@levitte.org)
   */
--/* Copyright (c) 2004 Kungliga Tekniska Högskolan
+-/* Copyright (c) 2004 Kungliga Tekniska HÃ¶gskolan
 +/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
@@ -15,7 +15,7 @@
   * Contributed to the OpenSSL Project 2004 by Richard Levitte
   * (richard@levitte.org)
   */
--/* Copyright (c) 2004 Kungliga Tekniska Högskolan
+-/* Copyright (c) 2004 Kungliga Tekniska HÃ¶gskolan
 +/* Copyright (c) 2004 Kungliga Tekniska Hoegskolan
   * (Royal Institute of Technology, Stockholm, Sweden).
   * All rights reserved.
@@ -55,7 +55,7 @@
  
  ($ssl,$crypto)=("ssl","crypto");
 @@ -343,6 +343,11 @@
- 	chop;
+ 	s/\s*$//; # was chop, didn't work in mixture of perls for Windows...
  
  	($key,$val)=/^([^=]+)=(.*)/;
 +
