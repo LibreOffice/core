@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_57aaa671",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-28T11:16:23Z",
+      "side": 0,
+      "message": "Still, 4 accessibility relations are deleted and only 2 are added",
+      "revId": "d597b347b827b29c7afb454657232127110d26ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_97ba4ebf",
+        "filename": "svx/source/sidebar/graphic/GraphicPropertyPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-28T11:16:23Z",
+      "side": 0,
+      "message": "You can as well remove those 3",
+      "revId": "d597b347b827b29c7afb454657232127110d26ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

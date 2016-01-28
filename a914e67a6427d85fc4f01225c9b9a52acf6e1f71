@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_17a01e90",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-28T11:16:23Z",
+      "side": 1,
+      "message": "Why is this block duplicated?",
+      "revId": "a914e67a6427d85fc4f01225c9b9a52acf6e1f71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_77ad2288",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-01-28T11:16:23Z",
+      "side": 1,
+      "message": "This one too",
+      "revId": "a914e67a6427d85fc4f01225c9b9a52acf6e1f71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
