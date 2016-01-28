@@ -69,6 +69,31 @@ SfxBoolItem AddField SID_FM_ADD_FIELD
     GroupId = GID_CONTROLS;
 ]
 
+SfxBoolItem Polygon SID_DRAW_POLYGON
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
 
 SfxVoidItem AddTable SID_FM_ADDTABLE
 ()
@@ -94,6 +119,31 @@ SfxVoidItem AddTable SID_FM_ADDTABLE
     GroupId = GID_TABLE;
 ]
 
+SfxVoidItem LineToolbox SID_DRAWTBX_LINES
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
 
 SfxVoidItem AlignCenter SID_OBJECT_ALIGN_CENTER
 ()

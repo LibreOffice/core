@@ -44,6 +44,36 @@ interface TextEditView : BaseTextEditView
 ]
 {
      // Slots, which are not needed in the WebDocShell
+    SID_DRAWTBX_LINES
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+    ]
+    SID_DRAW_FREELINE
+    [
+         ExecMethod = ExecDlgExt ;
+         StateMethod = GetState ;
+    ]
+    SID_DRAW_BEZIER_FILL
+    [
+         ExecMethod = ExecDlgExt ;
+         StateMethod = GetState ;
+    ]
+    SID_DRAW_XPOLYGON
+    [
+         ExecMethod = ExecDlgExt ;
+         StateMethod = GetState ;
+    ]
+    SID_DRAW_POLYGON
+    [
+         ExecMethod = ExecDlgExt ;
+         StateMethod = GetState ;
+    ]
+    SID_DRAW_XPOLYGON_NOFILL
+    [
+         ExecMethod = ExecDlgExt ;
+         StateMethod = GetState ;
+    ]
     FN_INSERT_OBJ_CTRL
     [
         StateMethod = GetState ;
