@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_026e1ac9",
+        "filename": "comphelper/source/container/IndexedPropertyValuesContainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2016-01-28T20:17:02Z",
+      "side": 1,
+      "message": "Please do not forget that \"constructor functions\" need \u0027css::uno::Sequence\u003ccss::uno::Any\u003e const \u0026\u0027 as second parameter.",
+      "revId": "24d59e48d0f583c5396c51f78032a0a2787ce038",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
