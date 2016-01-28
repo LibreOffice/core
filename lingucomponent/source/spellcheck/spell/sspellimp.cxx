@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 #include <lingutil.hxx>
 #include <hunspell.hxx>
@@ -160,6 +161,18 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         numdict = aDics.size();
         if (numdict)
         {
+            uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+            uno::Reference< ucb::XSimpleFileAccess > xAccess;
+            try
+            {
+                xAccess.set( xServiceFactory->createInstance(
+                        A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+            }
+            catch (uno::Exception & e)
+            {
+                DBG_ASSERT( 0, "failed to get input stream" );
+                (void) e;
+            }
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
             std::set< rtl::OUString, lt_rtl_OUString > aLocaleNamesSet;
@@ -167,10 +180,14 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
                 uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                uno::Sequence< rtl::OUString > aLocations( aDictIt->aLocations );
                 sal_Int32 nLen2 = aLocaleNames.getLength();
                 for (k = 0;  k < nLen2;  ++k)
                 {
-                    aLocaleNamesSet.insert( aLocaleNames[k] );
+                    if (xAccess.is() && xAccess->exists(aLocations[k]))
+                    {
+                        aLocaleNamesSet.insert( aLocaleNames[k] );
+                    }
                 }
             }
             // ... and add them to the resulting sequence
