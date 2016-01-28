@@ -292,8 +292,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    Insert(const OUString &);
     // graphic
     void    Insert( const OUString &rPath, const OUString &rFilter,
-                    const Graphic &, SwFlyFrmAttrMgr * = 0,
-                    bool bRule = false );
+                    const Graphic &, SwFlyFrmAttrMgr * = nullptr,
+                    bool bRule = false, sal_uInt16 nAnchorType = 0 );
 
     void    InsertByWord( const OUString & );
     void    InsertPageBreak(const OUString *pPageDesc = 0, const ::boost::optional<sal_uInt16>& rPgNum = boost::none);
