@@ -36,12 +36,9 @@
 #include <stdlib.h>
 #include <osl/module.hxx>
 
-#if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-#   define WIN32_LEAN_AND_MEAN
-// #    include <windows.h>
-#   include <tchar.h>
-#include <tools/postwin.h>
+#ifdef WNT // Windows
+#define WIN32_LEAN_AND_MEAN
+#include <tchar.h>
 #endif
 
 #include <iostream>

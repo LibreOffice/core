@@ -27,16 +27,13 @@
 //########################################
 // includes
 
-#if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-#   define UNICODE
-#   define _UNICODE
-#   define WIN32_LEAN_AND_MEAN
-// #    include <windows.h>
-#   include <tchar.h>
-#include <tools/postwin.h>
+#ifdef WNT // Windows
+#define UNICODE
+#define _UNICODE
+#define WIN32_LEAN_AND_MEAN
+#include <tchar.h>
 #else
-#   include <unistd.h>
+#include <unistd.h>
 #endif
 
 #include <stdio.h>

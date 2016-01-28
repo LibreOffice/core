@@ -31,10 +31,8 @@
 #include <osl_Mutex_Const.h>
 
 #ifdef WNT
-#include <tools/prewin.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <tools/postwin.h>
 #endif
 
 using namespace osl;

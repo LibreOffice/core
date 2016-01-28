@@ -46,12 +46,7 @@
 // #endif
 #include <osl/file.hxx>
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-// #define UNICODE
-// #define WIN32_LEAN_AND_MEAN
-// #include <windows.h>
 #include <tchar.h>
-#include <tools/postwin.h>
 #endif
 
 using namespace ::osl;

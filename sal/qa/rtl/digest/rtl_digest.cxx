@@ -39,7 +39,7 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
     // BACK: Str "ababab....0f" Hexcode String
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    if ( handle > 0 )
+    if ( handle != NULL )
     {
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
         sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));

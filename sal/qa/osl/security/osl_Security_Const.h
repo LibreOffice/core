@@ -28,11 +28,7 @@
 #define _OSL_SECURITY_CONST_H_
 
 #if ( defined WNT )                     // Windows
-//#define UNICODE
-#include <tools/prewin.h>
-// #include <windows.h>
 #include <io.h>
-#include <tools/postwin.h>
 #endif
 
 //------------------------------------------------------------------------

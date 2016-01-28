@@ -83,11 +83,8 @@ extern "C"
 #ifndef _OSL_SOCKET_CONST_H_
 
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-// #include <windows.h>
 #include <winsock.h>
 #include <string.h>
-#include <tools/postwin.h>
 #endif
 
 #endif

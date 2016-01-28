@@ -33,9 +33,7 @@
 
 #ifdef WNT
 #define WIN32_LEAN_AND_MEAN
-#include <tools/prewin.h>
 #include <windows.h>
-#include <tools/postwin.h>
 #endif
 
 #ifdef UNX
