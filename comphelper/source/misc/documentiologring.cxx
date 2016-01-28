@@ -78,7 +78,7 @@ void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::
     ::osl::MutexGuard aGuard( m_aMutex );
 
     m_aMessages[m_nPos] = aMessage;
-    if ( ++m_nPos >= m_aMessages.getLength() )
+    if ( ++m_nPos >= (sal_Int32)m_aMessages.size() )
     {
         m_nPos = 0;
         m_bFull = true;
@@ -93,12 +93,12 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno:
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nResLen = m_bFull ? m_aMessages.getLength() : m_nPos;
+    sal_Int32 nResLen = m_bFull ? m_aMessages.size() : m_nPos;
     sal_Int32 nStart = m_bFull ? m_nPos : 0;
     uno::Sequence< OUString > aResult( nResLen );
 
     for ( sal_Int32 nInd = 0; nInd < nResLen; nInd++ )
-        aResult[nInd] = m_aMessages[ ( nStart + nInd ) % m_aMessages.getLength() ];
+        aResult[nInd] = m_aMessages[ ( nStart + nInd ) % m_aMessages.size() ];
 
     // if used once then default initialized
     m_bInitialized = true;
@@ -121,7 +121,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
     {
         sal_Int32 nLen = 0;
         if ( aArguments.getLength() == 1 && ( aArguments[0] >>= nLen ) && nLen )
-            m_aMessages.realloc( nLen );
+            m_aMessages.resize( nLen );
         else
             throw lang::IllegalArgumentException(
                 "Nonnull size is expected as the first argument!",

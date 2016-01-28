@@ -26,6 +26,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vector>
 
 #define SIMPLELOGRING_SIZE 256
 
@@ -37,7 +38,7 @@ class OSimpleLogRing : public ::cppu::WeakImplHelper< css::logging::XSimpleLogRi
                                                       css::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    css::uno::Sequence< OUString > m_aMessages;
+    std::vector< OUString > m_aMessages;
 
     bool      m_bInitialized;
     bool      m_bFull;
