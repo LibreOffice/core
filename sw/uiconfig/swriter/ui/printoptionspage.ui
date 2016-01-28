@@ -34,7 +34,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="graphics">
-                        <property name="label" translatable="yes">_Pictures and objects</property>
+                        <property name="label" translatable="yes">_Images and objects</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
