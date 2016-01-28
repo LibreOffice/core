@@ -16,6 +16,24 @@
       "revId": "0a1aea826d905489561e682f1e4c6604bd8ceef1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_f75752c8",
+        "filename": "vcl/source/app/vclevent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-01-28T06:50:29Z",
+      "side": 1,
+      "message": "there is a dynamic_cast check two lines up",
+      "parentUuid": "7aa08908_d148668a",
+      "revId": "0a1aea826d905489561e682f1e4c6604bd8ceef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
