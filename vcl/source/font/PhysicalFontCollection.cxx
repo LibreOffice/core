@@ -23,6 +23,7 @@
 #endif
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include "outdev.h"
 #include "PhysicalFontCollection.hxx"

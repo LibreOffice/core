@@ -18,8 +18,8 @@
  */
 
 #include <sal/types.h>
-
 #include <tools/fontenum.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include "fontinstance.hxx"
 #include "fontattributes.hxx"

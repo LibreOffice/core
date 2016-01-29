@@ -43,7 +43,7 @@ public: // TODO: make data members private
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     long            mnLineHeight;
-    sal_uLong       mnRefCount;
+    sal_uInt32      mnRefCount;
     sal_uInt16      mnSetFontFlags;         // Flags returned by SalGraphics::SetFont()
     short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
     short           mnOrientation;          // text angle in 3600 system

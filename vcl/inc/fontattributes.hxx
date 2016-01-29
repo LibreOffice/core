@@ -20,9 +20,13 @@
 #ifndef INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 #define INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 
-#include <unotools/fontdefs.hxx>
-#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/vclenum.hxx>
+
+
+
+/* The following class is extraordinarily similar to ImplFont. */
 
 class FontAttributes
 {
