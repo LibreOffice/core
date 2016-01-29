@@ -1113,13 +1113,13 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     aItemSet.Put( SvxPostureItem( eItalic, RES_CHRATR_POSTURE ) );
             }
         }
-        if( xPropSetInfo->hasPropertyByName( "FontUnderline" ) )
+        if( xPropSetInfo->hasPropertyByName( "FontLineStyle" ) )
         {
-            aTmp = xPropSet->getPropertyValue( "FontUnderline" );
+            aTmp = xPropSet->getPropertyValue( "FontLineStyle" );
             if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() )
             {
-                FontUnderline eUnderline =
-                    (FontUnderline)*static_cast<sal_Int16 const *>(aTmp.getValue());
+                FontLineStyle eUnderline =
+                    (FontLineStyle)*static_cast<sal_Int16 const *>(aTmp.getValue());
                 if( eUnderline != UNDERLINE_DONTKNOW  &&
                     eUnderline != UNDERLINE_NONE )
                     aItemSet.Put( SvxUnderlineItem( eUnderline, RES_CHRATR_UNDERLINE ) );

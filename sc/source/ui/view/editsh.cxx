@@ -965,9 +965,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ULINE_VAL_DOUBLE:
         case SID_ULINE_VAL_DOTTED:
             {
-                FontUnderline eOld = static_cast<const SvxUnderlineItem&>( pEditView->
+                FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( pEditView->
                                     GetAttribs().Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-                FontUnderline eNew = eOld;
+                FontLineStyle eNew = eOld;
                 switch (nSlot)
                 {
                     case SID_ATTR_CHAR_UNDERLINE:
@@ -998,9 +998,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_OVERLINE:
             {
-                FontUnderline eOld = static_cast<const SvxOverlineItem&>( pEditView->
+                FontLineStyle eOld = static_cast<const SvxOverlineItem&>( pEditView->
                                     GetAttribs().Get(EE_CHAR_OVERLINE)).GetLineStyle();
-                FontUnderline eNew = ( eOld != UNDERLINE_NONE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
+                FontLineStyle eNew = ( eOld != UNDERLINE_NONE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
                 aSet.Put( SvxOverlineItem( eNew, EE_CHAR_OVERLINE ) );
                 rBindings.Invalidate( nSlot );
             }
@@ -1139,7 +1139,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     }
     else
     {
-        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                     aAttribs.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)

@@ -671,7 +671,7 @@ void ScExportTest::testRichTextExportODS()
             return false;
         }
 
-        static bool isOverline(const editeng::Section& rAttr, FontUnderline eStyle)
+        static bool isOverline(const editeng::Section& rAttr, FontLineStyle eStyle)
         {
             if (rAttr.maAttributes.empty())
                 return false;
@@ -688,7 +688,7 @@ void ScExportTest::testRichTextExportODS()
             return false;
         }
 
-        static bool isUnderline(const editeng::Section& rAttr, FontUnderline eStyle)
+        static bool isUnderline(const editeng::Section& rAttr, FontLineStyle eStyle)
         {
             if (rAttr.maAttributes.empty())
                 return false;

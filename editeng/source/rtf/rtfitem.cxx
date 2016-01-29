@@ -206,8 +206,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );
     bool bFirstToken = true;
     bool bContinue = true;
-    FontUnderline eUnderline;
-    FontUnderline eOverline;
+    FontLineStyle eUnderline;
+    FontLineStyle eOverline;
     FontEmphasisMark eEmphasis;
     bPardTokenRead = false;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;

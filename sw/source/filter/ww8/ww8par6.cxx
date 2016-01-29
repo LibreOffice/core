@@ -3260,7 +3260,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
 
 void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    FontUnderline eUnderline = UNDERLINE_NONE;
+    FontLineStyle eUnderline = UNDERLINE_NONE;
     bool bWordLine = false;
     if( pData )
     {
@@ -3271,22 +3271,22 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
         switch( *pData )
         {
             case 2: bWordLine = true;       // no break;
-            case 1: eUnderline = (FontUnderline)UNDERLINE_SINGLE;       break;
-            case 3: eUnderline = (FontUnderline)UNDERLINE_DOUBLE;       break;
-            case 4: eUnderline = (FontUnderline)UNDERLINE_DOTTED;       break;
-            case 7: eUnderline = (FontUnderline)UNDERLINE_DASH;         break;
-            case 9: eUnderline = (FontUnderline)UNDERLINE_DASHDOT;      break;
-            case 10:eUnderline = (FontUnderline)UNDERLINE_DASHDOTDOT;   break;
-            case 6: eUnderline = (FontUnderline)UNDERLINE_BOLD;         break;
-            case 11:eUnderline = (FontUnderline)UNDERLINE_WAVE;         break;
-            case 20:eUnderline = (FontUnderline)UNDERLINE_BOLDDOTTED;   break;
-            case 23:eUnderline = (FontUnderline)UNDERLINE_BOLDDASH;     break;
-            case 39:eUnderline = (FontUnderline)UNDERLINE_LONGDASH;     break;
-            case 55:eUnderline = (FontUnderline)UNDERLINE_BOLDLONGDASH; break;
-            case 25:eUnderline = (FontUnderline)UNDERLINE_BOLDDASHDOT;  break;
-            case 26:eUnderline = (FontUnderline)UNDERLINE_BOLDDASHDOTDOT;break;
-            case 27:eUnderline = (FontUnderline)UNDERLINE_BOLDWAVE;     break;
-            case 43:eUnderline = (FontUnderline)UNDERLINE_DOUBLEWAVE;   break;
+            case 1: eUnderline = (FontLineStyle)UNDERLINE_SINGLE;       break;
+            case 3: eUnderline = (FontLineStyle)UNDERLINE_DOUBLE;       break;
+            case 4: eUnderline = (FontLineStyle)UNDERLINE_DOTTED;       break;
+            case 7: eUnderline = (FontLineStyle)UNDERLINE_DASH;         break;
+            case 9: eUnderline = (FontLineStyle)UNDERLINE_DASHDOT;      break;
+            case 10:eUnderline = (FontLineStyle)UNDERLINE_DASHDOTDOT;   break;
+            case 6: eUnderline = (FontLineStyle)UNDERLINE_BOLD;         break;
+            case 11:eUnderline = (FontLineStyle)UNDERLINE_WAVE;         break;
+            case 20:eUnderline = (FontLineStyle)UNDERLINE_BOLDDOTTED;   break;
+            case 23:eUnderline = (FontLineStyle)UNDERLINE_BOLDDASH;     break;
+            case 39:eUnderline = (FontLineStyle)UNDERLINE_LONGDASH;     break;
+            case 55:eUnderline = (FontLineStyle)UNDERLINE_BOLDLONGDASH; break;
+            case 25:eUnderline = (FontLineStyle)UNDERLINE_BOLDDASHDOT;  break;
+            case 26:eUnderline = (FontLineStyle)UNDERLINE_BOLDDASHDOTDOT;break;
+            case 27:eUnderline = (FontLineStyle)UNDERLINE_BOLDWAVE;     break;
+            case 43:eUnderline = (FontLineStyle)UNDERLINE_DOUBLEWAVE;   break;
         }
     }
 

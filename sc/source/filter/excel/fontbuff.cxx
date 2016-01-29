@@ -64,7 +64,7 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
         rItemSet.Put( aAttr );
     }
 
-    FontUnderline eUnderline;
+    FontLineStyle eUnderline;
     switch( nIndex & 0x60 ) // Bit 5+6
     {
         case 0x60:

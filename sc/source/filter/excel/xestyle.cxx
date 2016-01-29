@@ -1024,7 +1024,7 @@ XclExpDxfFont::XclExpDxfFont(const XclExpRoot& rRoot,
 
 namespace {
 
-const char* getUnderlineOOXValue(FontUnderline eUnderline)
+const char* getUnderlineOOXValue(FontLineStyle eUnderline)
 {
     switch (eUnderline)
     {

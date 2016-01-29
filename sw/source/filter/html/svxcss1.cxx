@@ -1840,8 +1840,8 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
     bool bCrossedOut = false;
     bool bBlink = false;
     bool bBlinkOn = false;
-    FontUnderline eUnderline  = UNDERLINE_NONE;
-    FontUnderline eOverline   = UNDERLINE_NONE;
+    FontLineStyle eUnderline  = UNDERLINE_NONE;
+    FontLineStyle eOverline   = UNDERLINE_NONE;
     FontStrikeout eCrossedOut = STRIKEOUT_NONE;
 
     // der Wert kann zwei Werte enthalten! Und MS-IE auch Strings

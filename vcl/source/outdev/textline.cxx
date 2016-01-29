@@ -206,7 +206,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
 
 void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                                          long nDistX, long nDistY, long nWidth,
-                                         FontUnderline eTextLine,
+                                         FontLineStyle eTextLine,
                                          Color aColor,
                                          bool bIsAbove )
 {
@@ -274,7 +274,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
 
 void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                                              long nDistX, long nDistY, long nWidth,
-                                             FontUnderline eTextLine,
+                                             FontLineStyle eTextLine,
                                              Color aColor,
                                              bool bIsAbove )
 {
@@ -674,8 +674,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 void OutputDevice::ImplDrawTextLine( long nX, long nY,
                                      long nDistX, DeviceCoordinate nWidth,
                                      FontStrikeout eStrikeout,
-                                     FontUnderline eUnderline,
-                                     FontUnderline eOverline,
+                                     FontLineStyle eUnderline,
+                                     FontLineStyle eOverline,
                                      bool bUnderlineAbove )
 {
     if ( !nWidth )
@@ -739,7 +739,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 }
 
 void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStrikeout,
-                                      FontUnderline eUnderline, FontUnderline eOverline,
+                                      FontLineStyle eUnderline, FontLineStyle eOverline,
                                       bool bWordLine, bool bUnderlineAbove )
 {
     if( bWordLine )
@@ -933,8 +933,8 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
 
 void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontStrikeout eStrikeout,
-                                 FontUnderline eUnderline,
-                                 FontUnderline eOverline,
+                                 FontLineStyle eUnderline,
+                                 FontLineStyle eOverline,
                                  bool bUnderlineAbove )
 {
     assert(!is_double_buffered_window());

@@ -954,11 +954,11 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     }
 
     // Underline
-    FontUnderline eUnderline;
+    FontLineStyle eUnderline;
     if( GetWhich( rSet, SID_ATTR_CHAR_UNDERLINE, nWhich ) )
     {
         const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
-        eUnderline = ( FontUnderline ) rItem.GetValue();
+        eUnderline = ( FontLineStyle ) rItem.GetValue();
         SetTextLineColor( rItem.GetColor() );
     }
     else
@@ -969,11 +969,11 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     rCTLFont.SetUnderline( eUnderline );
 
     // Overline
-    FontUnderline eOverline;
+    FontLineStyle eOverline;
     if( GetWhich( rSet, SID_ATTR_CHAR_OVERLINE, nWhich ) )
     {
         const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
-        eOverline = ( FontUnderline ) rItem.GetValue();
+        eOverline = ( FontLineStyle ) rItem.GetValue();
         SetOverlineColor( rItem.GetColor() );
     }
     else
@@ -1189,12 +1189,12 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     }
 
     // Underline
-    FontUnderline eUnderline;
+    FontLineStyle eUnderline;
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_UNDERLINE );
     if( ISITEMSET )
     {
         const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
-        eUnderline = ( FontUnderline ) rItem.GetValue();
+        eUnderline = ( FontLineStyle ) rItem.GetValue();
         SetTextLineColor( rItem.GetColor() );
     }
     else
@@ -1205,12 +1205,12 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     rCTLFont.SetUnderline( eUnderline );
 
     // Overline
-    FontUnderline eOverline;
+    FontLineStyle eOverline;
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_OVERLINE );
     if( ISITEMSET )
     {
         const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
-        eOverline = ( FontUnderline ) rItem.GetValue();
+        eOverline = ( FontLineStyle ) rItem.GetValue();
         SetOverlineColor( rItem.GetColor() );
     }
     else

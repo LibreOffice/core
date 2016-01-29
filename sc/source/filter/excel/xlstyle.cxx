@@ -163,7 +163,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
 
 namespace Awt              = ::com::sun::star::awt;
 namespace AwtFontFamily    = Awt::FontFamily;
-namespace AwtFontUnderline = Awt::FontUnderline;
+namespace AwtFontLineStyle  = Awt::FontUnderline;
 namespace AwtFontStrikeout = Awt::FontStrikeout;
 
 XclFontData::XclFontData()
@@ -271,9 +271,9 @@ FontWeight XclFontData::GetScWeight() const
     return eScWeight;
 }
 
-FontUnderline XclFontData::GetScUnderline() const
+FontLineStyle XclFontData::GetScUnderline() const
 {
-    FontUnderline eScUnderl = UNDERLINE_NONE;
+    FontLineStyle eScUnderl = UNDERLINE_NONE;
     switch( mnUnderline )
     {
         case EXC_FONTUNDERL_SINGLE:
@@ -352,7 +352,7 @@ void XclFontData::SetScWeight( FontWeight eScWeight )
     }
 }
 
-void XclFontData::SetScUnderline( FontUnderline eScUnderl )
+void XclFontData::SetScUnderline( FontLineStyle eScUnderl )
 {
     switch( eScUnderl )
     {
@@ -422,13 +422,13 @@ float XclFontData::GetApiWeight() const
 
 sal_Int16 XclFontData::GetApiUnderline() const
 {
-    sal_Int16 nApiUnderl = AwtFontUnderline::NONE;
+    sal_Int16 nApiUnderl = AwtFontLineStyle::NONE;
     switch( mnUnderline )
     {
         case EXC_FONTUNDERL_SINGLE:
-        case EXC_FONTUNDERL_SINGLE_ACC: nApiUnderl = AwtFontUnderline::SINGLE;  break;
+        case EXC_FONTUNDERL_SINGLE_ACC: nApiUnderl = AwtFontLineStyle::SINGLE;  break;
         case EXC_FONTUNDERL_DOUBLE:
-        case EXC_FONTUNDERL_DOUBLE_ACC: nApiUnderl = AwtFontUnderline::DOUBLE;  break;
+        case EXC_FONTUNDERL_DOUBLE_ACC: nApiUnderl = AwtFontLineStyle::DOUBLE;  break;
     }
     return nApiUnderl;
 }
@@ -486,10 +486,10 @@ void XclFontData::SetApiUnderline( sal_Int16 nApiUnderl )
 {
     switch( nApiUnderl )
     {
-        case AwtFontUnderline::NONE:
-        case AwtFontUnderline::DONTKNOW:    mnUnderline = EXC_FONTUNDERL_NONE;      break;
-        case AwtFontUnderline::DOUBLE:
-        case AwtFontUnderline::DOUBLEWAVE:  mnUnderline = EXC_FONTUNDERL_DOUBLE;    break;
+        case AwtFontLineStyle::NONE:
+        case AwtFontLineStyle::DONTKNOW:    mnUnderline = EXC_FONTUNDERL_NONE;      break;
+        case AwtFontLineStyle::DOUBLE:
+        case AwtFontLineStyle::DOUBLEWAVE:  mnUnderline = EXC_FONTUNDERL_DOUBLE;    break;
         default:                            mnUnderline = EXC_FONTUNDERL_SINGLE;
     }
 }
@@ -568,7 +568,7 @@ const sal_Char *const *const sppcPropNamesChCmplxNoName = sppcPropNamesChCmplx +
 const sal_Char *const sppcPropNamesControl[] =
 {
     "FontName", "FontFamily", "FontCharset", "FontHeight", "FontSlant",
-    "FontWeight", "FontUnderline", "FontStrikeout", "TextColor", nullptr
+    "FontWeight", "FontLineStyle", "FontStrikeout", "TextColor", nullptr
 };
 
 /** Inserts all passed API font settings into the font data object. */

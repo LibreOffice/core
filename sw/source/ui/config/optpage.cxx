@@ -2147,8 +2147,8 @@ IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
             break;
 
         case SID_ATTR_CHAR_UNDERLINE:
-            rFont.SetUnderline( ( FontUnderline ) pAttr->nAttr );
-            rCJKFont.SetUnderline( ( FontUnderline ) pAttr->nAttr );
+            rFont.SetUnderline( ( FontLineStyle ) pAttr->nAttr );
+            rCJKFont.SetUnderline( ( FontLineStyle ) pAttr->nAttr );
             break;
 
         case SID_ATTR_CHAR_STRIKEOUT:

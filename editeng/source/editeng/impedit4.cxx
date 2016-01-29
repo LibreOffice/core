@@ -849,7 +849,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             // Must underlined if in WordLineMode, but the information is
             // missing here
-            FontUnderline e = static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle();
+            FontLineStyle e = static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle();
             switch ( e )
             {
                 case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULNONE );       break;
@@ -863,7 +863,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_OVERLINE:
         {
-            FontUnderline e = static_cast<const SvxOverlineItem&>(rItem).GetLineStyle();
+            FontLineStyle e = static_cast<const SvxOverlineItem&>(rItem).GetLineStyle();
             switch ( e )
             {
                 case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLNONE );       break;

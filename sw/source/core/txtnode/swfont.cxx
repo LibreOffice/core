@@ -1169,7 +1169,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
     if( COMPLETE_STRING == rInf.GetLen() )
         rInf.SetLen( nLn );
 
-    FontUnderline nOldUnder = UNDERLINE_NONE;
+    FontLineStyle nOldUnder = UNDERLINE_NONE;
     SwUnderlineFont* pUnderFnt = nullptr;
 
     if( rInf.GetUnderFnt() )
@@ -1296,7 +1296,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     if( !rInf.GetLen() || !rInf.GetText().getLength() )
         return;
 
-    FontUnderline nOldUnder = UNDERLINE_NONE;
+    FontLineStyle nOldUnder = UNDERLINE_NONE;
     SwUnderlineFont* pUnderFnt = nullptr;
 
     if( rInf.GetUnderFnt() )

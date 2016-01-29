@@ -50,7 +50,7 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl:
     rFont.SetKerning( rDesc.Kerning ? FontKerning::FontSpecific : FontKerning::NONE );
     rFont.SetWeight( VCLUnoHelper::ConvertFontWeight(rDesc.Weight) );
     rFont.SetItalic( (FontItalic)rDesc.Slant );
-    rFont.SetUnderline( (FontUnderline)rDesc.Underline );
+    rFont.SetUnderline( (FontLineStyle)rDesc.Underline );
     rFont.SetStrikeout( (FontStrikeout)rDesc.Strikeout );
     rFont.SetWordLineMode( rDesc.WordLineMode );
 }
@@ -102,7 +102,7 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
     }
 
     {
-        SvxUnderlineItem aUnderlineItem( (FontUnderline)0, EE_CHAR_UNDERLINE );
+        SvxUnderlineItem aUnderlineItem( (FontLineStyle)0, EE_CHAR_UNDERLINE );
         aTemp <<= (sal_Int16)rDesc.Underline;
         static_cast<SfxPoolItem*>(&aUnderlineItem)->PutValue( aTemp, MID_TL_STYLE );
         rSet.Put( aUnderlineItem );

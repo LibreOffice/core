@@ -25,7 +25,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextLine mapFontUnderlineToTextLine(FontUnderline eLineStyle)
+        TextLine mapFontLineStyleToTextLine(FontLineStyle eLineStyle)
         {
             switch(eLineStyle)
             {
@@ -46,12 +46,12 @@ namespace drawinglayer
                 case UNDERLINE_BOLDDASHDOT:     return TEXT_LINE_BOLDDASHDOT;
                 case UNDERLINE_BOLDDASHDOTDOT:  return TEXT_LINE_BOLDDASHDOTDOT;
                 case UNDERLINE_BOLDWAVE:        return TEXT_LINE_BOLDWAVE;
-                // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
+                // FontLineStyle_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
                 default:                        return TEXT_LINE_NONE;
             }
         }
 
-        FontUnderline mapTextLineToFontUnderline(TextLine eLineStyle)
+        FontLineStyle mapTextLineToFontLineStyle(TextLine eLineStyle)
         {
             switch(eLineStyle)
             {

@@ -1539,9 +1539,9 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
     sal_Int32 nPos = m_pUnderlineLB->GetSelectEntryPos();
-    FontUnderline eUnderline = (FontUnderline)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
+    FontLineStyle eUnderline = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
     nPos = m_pOverlineLB->GetSelectEntryPos();
-    FontUnderline eOverline = (FontUnderline)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos ));
+    FontLineStyle eOverline = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos ));
     nPos = m_pStrikeoutLB->GetSelectEntryPos();
     FontStrikeout eStrikeout = (FontStrikeout)reinterpret_cast<sal_uLong>(m_pStrikeoutLB->GetEntryData( nPos ));
     rFont.SetUnderline( eUnderline );
@@ -1837,7 +1837,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         else
         {
             const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>(rSet->Get( nWhich ));
-            FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
+            FontLineStyle eUnderline = (FontLineStyle)rItem.GetValue();
             rFont.SetUnderline( eUnderline );
             rCJKFont.SetUnderline( eUnderline );
             rCTLFont.SetUnderline( eUnderline );
@@ -1846,7 +1846,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             {
                 for ( sal_Int32 i = 0; i < m_pUnderlineLB->GetEntryCount(); ++i )
                 {
-                    if ( (FontUnderline)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData(i)) == eUnderline )
+                    if ( (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData(i)) == eUnderline )
                     {
                         m_pUnderlineLB->SelectEntryPos(i);
                         bEnable = true;
@@ -1894,7 +1894,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         else
         {
             const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>(rSet->Get( nWhich ));
-            FontUnderline eOverline = (FontUnderline)rItem.GetValue();
+            FontLineStyle eOverline = (FontLineStyle)rItem.GetValue();
             rFont.SetOverline( eOverline );
             rCJKFont.SetOverline( eOverline );
             rCTLFont.SetOverline( eOverline );
@@ -1903,7 +1903,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             {
                 for ( sal_Int32 i = 0; i < m_pOverlineLB->GetEntryCount(); ++i )
                 {
-                    if ( (FontUnderline)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData(i)) == eOverline )
+                    if ( (FontLineStyle)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData(i)) == eOverline )
                     {
                         m_pOverlineLB->SelectEntryPos(i);
                         bEnable = true;
@@ -2274,7 +2274,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_UNDERLINE );
     sal_Int32 nPos = m_pUnderlineLB->GetSelectEntryPos();
-    FontUnderline eUnder = (FontUnderline)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
+    FontLineStyle eUnder = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
 
     if ( pOld )
     {
@@ -2286,7 +2286,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxUnderlineItem& rItem = *static_cast<const SvxUnderlineItem*>(pOld);
-        if ( (FontUnderline)rItem.GetValue() == eUnder &&
+        if ( (FontLineStyle)rItem.GetValue() == eUnder &&
              ( UNDERLINE_NONE == eUnder || rItem.GetColor() == m_pUnderlineColorLB->GetSelectEntryColor() ) &&
              ! bAllowChg )
             bChanged = false;
@@ -2308,7 +2308,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_OVERLINE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_OVERLINE );
     nPos = m_pOverlineLB->GetSelectEntryPos();
-    FontUnderline eOver = (FontUnderline)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos ));
+    FontLineStyle eOver = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pOverlineLB->GetEntryData( nPos ));
 
     if ( pOld )
     {
@@ -2320,7 +2320,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxOverlineItem& rItem = *static_cast<const SvxOverlineItem*>(pOld);
-        if ( (FontUnderline)rItem.GetValue() == eOver &&
+        if ( (FontLineStyle)rItem.GetValue() == eOver &&
              ( UNDERLINE_NONE == eOver || rItem.GetColor() == m_pOverlineColorLB->GetSelectEntryColor() ) &&
              ! bAllowChg )
             bChanged = false;

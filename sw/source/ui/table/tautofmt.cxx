@@ -590,8 +590,8 @@ void AutoFormatPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font
     lcl_SetFontProperties( rCJKFont, rBoxFormat.GetCJKFont(), rBoxFormat.GetCJKWeight(), rBoxFormat.GetCJKPosture() );
     lcl_SetFontProperties( rCTLFont, rBoxFormat.GetCTLFont(), rBoxFormat.GetCTLWeight(), rBoxFormat.GetCTLPosture() );
 
-    SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFormat.GetUnderline().GetValue() );
-    SETONALLFONTS( SetOverline,     (FontUnderline)rBoxFormat.GetOverline().GetValue() );
+    SETONALLFONTS( SetUnderline,    (FontLineStyle)rBoxFormat.GetUnderline().GetValue() );
+    SETONALLFONTS( SetOverline,     (FontLineStyle)rBoxFormat.GetOverline().GetValue() );
     SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFormat.GetCrossedOut().GetValue() );
     SETONALLFONTS( SetOutline,      rBoxFormat.GetContour().GetValue() );
     SETONALLFONTS( SetShadow,       rBoxFormat.GetShadowed().GetValue() );

@@ -135,7 +135,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             break;
         case FN_UNDERLINE_DOUBLE:
         {
-            FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+            FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                             aSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
             switch( eState )
             {
@@ -659,7 +659,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 eState = aCoreSet.GetItemState(RES_CHRATR_UNDERLINE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+                    FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                             aCoreSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
                     rSet.Put(SfxBoolItem(nSlot, eUnderline == UNDERLINE_DOUBLE));
                 }

@@ -876,13 +876,13 @@ static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nEle
             FSEND );
 }
 
-static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveUnderline )
+static const char* lcl_GetUnderlineStyle( FontLineStyle eUnderline, bool& bHaveUnderline )
 {
     bHaveUnderline = true;
     switch( eUnderline )
     {
         // OOXTODO: doubleAccounting, singleAccounting
-        // OOXTODO: what should be done with the other FontUnderline values?
+        // OOXTODO: what should be done with the other FontLineStyle values?
         case UNDERLINE_SINGLE:  return "single";
         case UNDERLINE_DOUBLE:  return "double";
         case UNDERLINE_NONE:

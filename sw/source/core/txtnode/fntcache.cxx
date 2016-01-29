@@ -1772,8 +1772,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     rInf.GetOut().Push();
                     Color aPreviousColor = pTmpFont->GetColor();
 
-                    FontUnderline aPreviousUnderline = pTmpFont->GetUnderline();
-                    FontUnderline aPreviousOverline = pTmpFont->GetOverline();
+                    FontLineStyle aPreviousUnderline = pTmpFont->GetUnderline();
+                    FontLineStyle aPreviousOverline = pTmpFont->GetOverline();
                     FontStrikeout aPreviousStrikeout = pTmpFont->GetStrikeout();
 
                     pTmpFont->SetColor( Color(NON_PRINTING_CHARACTER_COLOR) );

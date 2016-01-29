@@ -795,17 +795,17 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 
         if( mrExport.IsUseNativeTextDecoration() )
         {
-            FontUnderline eCurFontUnderline         = maCurrentFont.GetUnderline();
+            FontLineStyle eCurFontLineStyle         = maCurrentFont.GetUnderline();
             FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
 
-            FontUnderline eParFontUnderline         = maParentFont.GetUnderline();
+            FontLineStyle eParFontLineStyle         = maParentFont.GetUnderline();
             FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
 
             OUString sTextDecoration;
             bool bIsDecorationChanged = false;
-            if( eCurFontUnderline != eParFontUnderline )
+            if( eCurFontLineStyle != eParFontLineStyle )
             {
-                if( eCurFontUnderline != UNDERLINE_NONE )
+                if( eCurFontLineStyle != UNDERLINE_NONE )
                     sTextDecoration = "underline";
                 bIsDecorationChanged = true;
             }

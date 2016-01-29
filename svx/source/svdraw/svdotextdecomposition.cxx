@@ -294,13 +294,13 @@ namespace
 
                 // prepare overline and underline data
                 const drawinglayer::primitive2d::TextLine eFontOverline(
-                    drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetOverline()));
-                const drawinglayer::primitive2d::TextLine eFontUnderline(
-                    drawinglayer::primitive2d::mapFontUnderlineToTextLine(rInfo.mrFont.GetUnderline()));
+                    drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetOverline()));
+                const drawinglayer::primitive2d::TextLine eFontLineStyle(
+                    drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetUnderline()));
 
                 // check UnderlineAbove
                 const bool bUnderlineAbove(
-                    drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
+                    drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && impIsUnderlineAbove(rInfo.mrFont));
 
                 // prepare strikeout data
                 const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
@@ -351,7 +351,7 @@ namespace
                     aBOverlineColor,
                     aBUnderlineColor,
                     eFontOverline,
-                    eFontUnderline,
+                    eFontLineStyle,
                     bUnderlineAbove,
                     eTextStrikeout,
                     bWordLineMode,

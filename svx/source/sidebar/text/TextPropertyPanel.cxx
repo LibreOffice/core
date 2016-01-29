@@ -272,7 +272,7 @@ void TextPropertyPanel::NotifyItemUpdate (
             if( eState >= SfxItemState::DEFAULT && dynamic_cast<const SvxUnderlineItem*>( pState) !=  nullptr )
             {
                 const SvxUnderlineItem* pItem = static_cast<const SvxUnderlineItem*>(pState);
-                meUnderline = (FontUnderline)pItem->GetValue();
+                meUnderline = (FontLineStyle)pItem->GetValue();
                 meUnderlineColor = pItem->GetColor();
             }
             else

@@ -554,9 +554,9 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     pView->GetAttributes(aViewAttr);
 
     //  Unterstreichung
-    FontUnderline eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
+    FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
                                         Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-    FontUnderline eNew = eOld;
+    FontLineStyle eNew = eOld;
     switch (nSlot)
     {
         case SID_ULINE_VAL_NONE:
@@ -1114,7 +1114,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                     aAttrSet.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)

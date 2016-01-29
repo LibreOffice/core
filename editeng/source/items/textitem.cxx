@@ -1250,7 +1250,7 @@ bool SvxFontWidthItem::GetPresentation
 
 // class SvxTextLineItem ------------------------------------------------
 
-SvxTextLineItem::SvxTextLineItem( const FontUnderline eSt, const sal_uInt16 nId )
+SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, (sal_uInt16)eSt ), mColor( COL_TRANSPARENT )
 {
 }
@@ -1266,7 +1266,7 @@ bool SvxTextLineItem::HasBoolValue() const
 
 bool SvxTextLineItem::GetBoolValue() const
 {
-    return  (FontUnderline)GetValue() != UNDERLINE_NONE;
+    return  (FontLineStyle)GetValue() != UNDERLINE_NONE;
 }
 
 
@@ -1306,7 +1306,7 @@ SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxTextLineItem(  (FontUnderline)nState, Which() );
+    return new SvxTextLineItem(  (FontLineStyle)nState, Which() );
 }
 
 
@@ -1404,7 +1404,7 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 
 // class SvxUnderlineItem ------------------------------------------------
 
-SvxUnderlineItem::SvxUnderlineItem( const FontUnderline eSt, const sal_uInt16 nId )
+SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
 {
 }
@@ -1424,7 +1424,7 @@ SfxPoolItem* SvxUnderlineItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxUnderlineItem(  (FontUnderline)nState, Which() );
+    return new SvxUnderlineItem(  (FontLineStyle)nState, Which() );
 }
 
 
@@ -1437,7 +1437,7 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 // class SvxOverlineItem ------------------------------------------------
 
-SvxOverlineItem::SvxOverlineItem( const FontUnderline eSt, const sal_uInt16 nId )
+SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
 {
 }
@@ -1457,7 +1457,7 @@ SfxPoolItem* SvxOverlineItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxOverlineItem(  (FontUnderline)nState, Which() );
+    return new SvxOverlineItem(  (FontLineStyle)nState, Which() );
 }
 
 

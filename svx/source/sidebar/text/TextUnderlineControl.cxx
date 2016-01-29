@@ -132,7 +132,7 @@ void TextUnderlineControl::initial()
     maVSUnderline->Show();
 }
 
-void TextUnderlineControl::Rearrange(FontUnderline eLine)
+void TextUnderlineControl::Rearrange(FontLineStyle eLine)
 {
     maVSUnderline->SetItemImage(1, maIMGSingle);
     maVSUnderline->SetItemImage(2, maIMGDouble );
@@ -214,9 +214,9 @@ IMPL_LINK_TYPED(TextUnderlineControl, VSSelectHdl, ValueSet*, pControl, void)
     if ( pControl == maVSUnderline.get() )
     {
         const sal_uInt16 iPos = maVSUnderline->GetSelectItemId();
-        const FontUnderline eUnderline = ( iPos == 0 )
+        const FontLineStyle eUnderline = ( iPos == 0 )
                                          ? UNDERLINE_NONE
-                                         : static_cast<FontUnderline>(reinterpret_cast<sal_uInt64>(maVSUnderline->GetItemData( iPos )));
+                                         : static_cast<FontLineStyle>(reinterpret_cast<sal_uInt64>(maVSUnderline->GetItemData( iPos )));
 
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
 

@@ -1410,7 +1410,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
             case SID_ATTR_CHAR_UNDERLINE:
                 {
-                    FontUnderline       eUnderline;
+                    FontLineStyle       eUnderline;
 
                     if( pSet )
                     {
@@ -1453,9 +1453,9 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ULINE_VAL_DOUBLE:
             case SID_ULINE_VAL_DOTTED:
                 {
-                    FontUnderline eOld = static_cast<const SvxUnderlineItem&>(
+                    FontLineStyle eOld = static_cast<const SvxUnderlineItem&>(
                                             pAttrs->GetItem(ATTR_FONT_UNDERLINE)).GetLineStyle();
-                    FontUnderline eNew = eOld;
+                    FontLineStyle eNew = eOld;
                     switch (nSlot)
                     {
                         case SID_ULINE_VAL_SINGLE:
@@ -2182,7 +2182,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     }
     else
     {
-        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                     rAttrSet.Get(ATTR_FONT_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)

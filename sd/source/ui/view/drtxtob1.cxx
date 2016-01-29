@@ -446,7 +446,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_UNDERLINE:
                     {
-                        FontUnderline eFU = static_cast<const SvxUnderlineItem&>( aEditAttr.
+                        FontLineStyle eFU = static_cast<const SvxUnderlineItem&>( aEditAttr.
                                         Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
                         aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ?
                                             UNDERLINE_NONE : UNDERLINE_SINGLE,
@@ -455,7 +455,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_OVERLINE:
                     {
-                        FontUnderline eFO = static_cast<const SvxOverlineItem&>( aEditAttr.
+                        FontLineStyle eFO = static_cast<const SvxOverlineItem&>( aEditAttr.
                                         Get( EE_CHAR_OVERLINE ) ).GetLineStyle();
                         aNewAttr.Put( SvxOverlineItem( eFO == UNDERLINE_SINGLE ?
                                             UNDERLINE_NONE : UNDERLINE_SINGLE,

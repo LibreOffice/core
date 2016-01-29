@@ -780,7 +780,7 @@ void AnnotationWindow::ExecuteSlot( sal_uInt16 nSID )
         break;
         case SID_ATTR_CHAR_UNDERLINE:
         {
-            FontUnderline eFU = static_cast<const SvxUnderlineItem&>( aEditAttr. Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+            FontLineStyle eFU = static_cast<const SvxUnderlineItem&>( aEditAttr. Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
             aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE ) );
         }
         break;
