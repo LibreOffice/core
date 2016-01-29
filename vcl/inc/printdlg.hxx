@@ -163,7 +163,6 @@ namespace vcl
         class OutputOptPage
         {
         public:
-            VclPtr<CheckBox>                    mpToFileBox;
             VclPtr<CheckBox>                    mpCollateSingleJobsBox;
             VclPtr<CheckBox>                    mpPapersizeFromSetup;
 
