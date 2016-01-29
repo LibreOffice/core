@@ -1103,6 +1103,25 @@ DECLARE_OOXMLEXPORT_TEST(testTDF93675, "no-numlevel-but-indented.odt")
     assertXPath(pXmlDoc, "//w:ind", "start", "1418");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // there should be no flipH and flipV attributes in this case
+    assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipH");
+    assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipV");
+    // check rotation angle
+    assertXPath(pXmlDoc, "//a:xfrm", "rot", "13500000");
+    // check the first few coordinates of the polygon
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "2351");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "3171");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "x", "1695");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "y", "3171");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "x", "1695");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "y", "1701");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
