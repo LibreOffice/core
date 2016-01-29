@@ -132,14 +132,14 @@ private:
     // Flags - device independent
     bool                mbSymbolFlag:1,
                         mbOutline:1,
-                        mbConfigLookup:1,   // there was a config lookup
+                        mbConfigLookup:1,   // config lookup should only be done once
                         mbShadow:1,
                         mbVertical:1,
                         mbTransparent:1;    // compatibility, now on output device
 
     // deprecated variables - device independent
-    Color               maColor;        // compatibility, now on output device
-    Color               maFillColor;    // compatibility, now on output device
+    Color               maColor;            // compatibility, now on output device
+    Color               maFillColor;        // compatibility, now on output device
 
     // Device dependent variables
     OUString            maMapNames;
