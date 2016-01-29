@@ -910,24 +910,6 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
     return pClassMenu;
 }
 
-RscTop * RscTypCont::InitClassSplitWindow( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassSplitWindow;
-
-    // initialize class
-    nId = pHS->getID( "SplitWindow" );
-    pClassSplitWindow = new RscClass( nId, RSC_SPLITWINDOW, pSuper );
-    pClassSplitWindow->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassSplitWindow );
-
-    INS_WINBIT(pClassSplitWindow,Sizeable)
-    INS_WINBIT(pClassSplitWindow,NoSplitDraw)
-
-    return pClassSplitWindow;
-}
-
 RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
 {
     Atom        nId;

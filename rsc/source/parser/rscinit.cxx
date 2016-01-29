@@ -393,9 +393,6 @@ void RscTypCont::Init()
                                  RSC_MENUITEM_MENU );
 }
 {
-    RscTop* pClassSplitWindow = InitClassSplitWindow( pClassWindow );
-    pRoot->Insert( pClassSplitWindow );
-
     // initialize class
     nId = pHS->getID( "SpinButton" );
     RscTop*  pClassSpinButton = new RscClass( nId, RSC_SPINBUTTON, pClassControl );

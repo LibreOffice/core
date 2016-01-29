@@ -69,7 +69,6 @@
 
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
 
-#define RSC_SPLITWINDOW         (RSC_NOTYPE + 0x60)
 #define RSC_SPINFIELD           (RSC_NOTYPE + 0x61)
 
 #define RSC_NUMERICFIELD        (RSC_NOTYPE + 0x63)
