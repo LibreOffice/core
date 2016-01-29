@@ -204,7 +204,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     }
 
     // If blanks are skipped, account for them in initial page range value
-    if (!rPrintData.IsPrintEmptyPages())
+    if (pSh && !rPrintData.IsPrintEmptyPages())
     {
         sal_uInt16 nMax = nCurrentPage;
         SwPageFrame *pPage = dynamic_cast<SwPageFrame*>(pSh->GetLayout()->Lower());
