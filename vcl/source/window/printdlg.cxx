@@ -484,7 +484,6 @@ PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
     , mnCollateUIMode( 0 )
 {
     pUIBuilder->get(mpPrinters, "printers");
-    mpPrinters->SetStyle(mpPrinters->GetStyle() | WB_SORT);
     pUIBuilder->get(mpStatusTxt, "status");
     pUIBuilder->get(mpLocationTxt, "location");
     pUIBuilder->get(mpCommentTxt, "comment");
@@ -535,7 +534,6 @@ void PrintDialog::JobTabPage::storeToSettings()
 
 PrintDialog::OutputOptPage::OutputOptPage( VclBuilder *pUIBuilder )
 {
-    pUIBuilder->get(mpToFileBox, "printtofile");
     pUIBuilder->get(mpCollateSingleJobsBox, "singleprintjob");
     pUIBuilder->get(mpPapersizeFromSetup, "papersizefromsetup");
 }
@@ -560,13 +558,16 @@ void PrintDialog::OutputOptPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( "PrintDialog",
-                     "ToFile",
-                     mpToFileBox->IsChecked() ? OUString("true")
-                                             : OUString("false") );
-    pItem->setValue( "PrintDialog",
                      "CollateSingleJobs",
                      mpCollateSingleJobsBox->IsChecked() ? OUString("true") :
                                                 OUString("false") );
+}
+
+namespace {
+   bool lcl_ListBoxCompare( const OUString& rStr1, const OUString& rStr2 )
+   {
+       return ListBox::NaturalSortCompare( rStr1, rStr2 ) < 0;
+   }
 }
 
 PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterController>& i_rController )
@@ -607,8 +608,10 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 
     Printer::updatePrinters();
 
+    maJobPage.mpPrinters->InsertEntry( maPrintToFileText );
     // fill printer listbox
-    const std::vector< OUString >& rQueues( Printer::GetPrinterQueues() );
+    std::vector< OUString > rQueues( Printer::GetPrinterQueues() );
+    std::sort( rQueues.begin(), rQueues.end(), lcl_ListBoxCompare );
     for( std::vector< OUString >::const_iterator it = rQueues.begin();
          it != rQueues.end(); ++it )
     {
@@ -676,7 +679,6 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     maJobPage.mpCollateBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maJobPage.mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maOptionsPage.mpToFileBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maOptionsPage.mpPapersizeFromSetup->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
@@ -756,19 +758,12 @@ void PrintDialog::readFromSettings()
             break;
         }
     }
-    mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
 
     // persistent window state
     OUString aWinState( pItem->getValue( "PrintDialog",
                                               "WindowState" ) );
     if( !aWinState.isEmpty() )
         SetWindowState( OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
-
-    if( maOptionsPage.mpToFileBox->IsChecked() )
-    {
-        maPController->resetPrinterOptions( true );
-        preparePreview( true, true );
-    }
 }
 
 void PrintDialog::storeToSettings()
@@ -779,8 +774,13 @@ void PrintDialog::storeToSettings()
     // store last selected printer
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( "PrintDialog",
+                     "ToFile",
+                      isPrintToFile() ? OUString("true")
+                                             : OUString("false") );
+    pItem->setValue( "PrintDialog",
                      "LastPrinter",
-                     maJobPage.mpPrinters->GetSelectEntry() );
+                      isPrintToFile() ? Printer::GetDefaultPrinterName()
+                                      : maJobPage.mpPrinters->GetSelectEntry() );
 
     pItem->setValue( "PrintDialog",
                      "LastPage",
@@ -794,7 +794,7 @@ void PrintDialog::storeToSettings()
 
 bool PrintDialog::isPrintToFile()
 {
-    return maOptionsPage.mpToFileBox->IsChecked();
+    return ( maJobPage.mpPrinters->GetSelectEntryPos() == 0 );
 }
 
 bool PrintDialog::isCollate()
@@ -1521,13 +1521,26 @@ IMPL_LINK_TYPED( PrintDialog, SelectHdl, ListBox&, rBox, void )
 {
     if(  &rBox == maJobPage.mpPrinters )
     {
-        OUString aNewPrinter( rBox.GetSelectEntry() );
-        // set new printer
-        maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
-        maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
-        // update text fields
-        updatePrinterText();
-        preparePreview();
+
+        if ( rBox.GetSelectEntryPos() != 0)
+        {
+            OUString aNewPrinter( rBox.GetSelectEntry() );
+            // set new printer
+            maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
+            maPController->resetPrinterOptions( false  );
+            // update text fields
+            mpOKButton->SetText( maPrintText );
+            updatePrinterText();
+            preparePreview();
+        }
+        else // print to file
+        {
+            // use the default printer or FIXME: the last used one?
+            maPController->setPrinter( VclPtrInstance<Printer>( Printer::GetDefaultPrinterName() ) );
+            mpOKButton->SetText( maPrintToFileText );
+            maPController->resetPrinterOptions( true );
+            preparePreview( true, true );
+        }
     }
     else if( &rBox == maNUpPage.mpNupOrientationBox || &rBox == maNUpPage.mpNupOrderBox )
     {
@@ -1574,12 +1587,6 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
     else if( pButton == mpBackwardBtn )
     {
         previewBackward();
-    }
-    else if( pButton == maOptionsPage.mpToFileBox )
-    {
-        mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
-        maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
-        preparePreview( true, true );
     }
     else if( pButton == maOptionsPage.mpPapersizeFromSetup )
     {
