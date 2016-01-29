@@ -856,7 +856,7 @@ ImplFont::ImplFont() :
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
     maCJKLanguageTag( LANGUAGE_DONTKNOW ),
-    mbSymbol( false ),
+    mbSymbolFlag( false ),
     mbOutline( false ),
     mbConfigLookup( false ),
     mbShadow( false ),
@@ -893,7 +893,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     meCharSet( rImplFont.meCharSet ),
     maLanguageTag( rImplFont.maLanguageTag ),
     maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
-    mbSymbol( rImplFont.mbSymbol ),
+    mbSymbolFlag( rImplFont.mbSymbolFlag ),
     mbOutline( rImplFont.mbOutline ),
     mbConfigLookup( rImplFont.mbConfigLookup ),
     mbShadow( rImplFont.mbShadow ),
@@ -948,6 +948,35 @@ bool ImplFont::operator==( const ImplFont& rOther ) const
     ||  (mbShadow       != rOther.mbShadow)
     ||  (mnKerning      != rOther.mnKerning)
     ||  (mbTransparent  != rOther.mbTransparent) )
+        return false;
+
+    return true;
+}
+
+bool ImplFont::CompareDeviceIndependentFontAttributes(const ImplFont& rOther) const
+{
+    if (maFamilyName != rOther.maFamilyName)
+        return false;
+
+    if (maStyleName != rOther.maStyleName)
+        return false;
+
+    if (meWeight != rOther.meWeight)
+        return false;
+
+    if (meItalic != rOther.meItalic)
+        return false;
+
+    if (meFamily != rOther.meFamily)
+        return false;
+
+    if (mePitch != rOther.mePitch)
+        return false;
+
+    if (meWidthType != rOther.meWidthType)
+        return false;
+
+    if (mbSymbolFlag != rOther.mbSymbolFlag)
         return false;
 
     return true;

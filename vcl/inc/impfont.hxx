@@ -48,7 +48,7 @@ public:
     TextAlign           GetAlignment() const                            { return meAlign; }
     rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
 
-    bool                IsSymbolFont() const                            { return mbSymbol; }
+    bool                IsSymbolFont() const                            { return mbSymbolFlag; }
 
     void                SetFamilyName( const OUString& sFamilyName )    { maFamilyName = sFamilyName; }
     void                SetStyleName( const OUString& sStyleName )      { maStyleName = sStyleName; }
@@ -61,7 +61,9 @@ public:
     void                SetAlignment( const TextAlign eAlignment )      { meAlign = eAlignment; }
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
 
-    void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbol = bSymbolFlag; }
+    void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbolFlag = bSymbolFlag; }
+
+    bool                CompareDeviceIndependentFontAttributes(const ImplFont& rOther) const;
 
     // straight properties, no getting them from AskConfig()
     FontFamily          GetFamilyTypeNoAsk() const                      { return meFamily; }
@@ -128,7 +130,7 @@ private:
     LanguageTag         maCJKLanguageTag;
 
     // Flags - device independent
-    bool                mbSymbol:1,
+    bool                mbSymbolFlag:1,
                         mbOutline:1,
                         mbConfigLookup:1,   // there was a config lookup
                         mbShadow:1,
