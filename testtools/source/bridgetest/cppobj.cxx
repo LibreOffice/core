@@ -54,6 +54,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace test::testtools::bridgetest;
 
+#ifdef _MSC_VER
+#pragma warning (disable : 4503) // irrelevant for test code
+#endif
 
 #define SERVICENAME     "com.sun.star.test.bridge.CppTestObject"
 #define IMPLNAME        "com.sun.star.comp.bridge.CppTestObject"
