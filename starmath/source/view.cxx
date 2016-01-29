@@ -569,8 +569,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 SAL_WARN_IF( !pViewShell, "starmath", "view shell missing" );
 
                 // added for replaceability of context menus
-                pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
-                        ->ExecutePopup( this, &aPos );
+                SfxDispatcher::ExecutePopup( this, &aPos );
 
                 bCallBase = false;
             }
