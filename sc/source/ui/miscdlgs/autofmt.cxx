@@ -145,8 +145,8 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font
 #define SETONALLFONTS( MethodName, Value ) \
 rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Value );
 
-        SETONALLFONTS( SetUnderline,    (FontUnderline)pUnderlineItem->GetValue() )
-        SETONALLFONTS( SetOverline,     (FontUnderline)pOverlineItem->GetValue() )
+        SETONALLFONTS( SetUnderline,    (FontLineStyle)pUnderlineItem->GetValue() )
+        SETONALLFONTS( SetOverline,     (FontLineStyle)pOverlineItem->GetValue() )
         SETONALLFONTS( SetStrikeout,    (FontStrikeout)pCrossedOutItem->GetValue() )
         SETONALLFONTS( SetOutline,      pContourItem->GetValue() )
         SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )

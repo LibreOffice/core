@@ -1378,8 +1378,8 @@ MetaTextLineAction::MetaTextLineAction() :
     MetaAction  ( MetaActionType::TEXTLINE ),
     mnWidth     ( 0 ),
     meStrikeout ( STRIKEOUT_NONE ),
-    meUnderline ( UNDERLINE_NONE ),
-    meOverline  ( UNDERLINE_NONE )
+    meUnderline ( LINESTYLE_NONE ),
+    meOverline  ( LINESTYLE_NONE )
 {}
 
 MetaTextLineAction::~MetaTextLineAction()
@@ -1387,8 +1387,8 @@ MetaTextLineAction::~MetaTextLineAction()
 
 MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
                                         FontStrikeout eStrikeout,
-                                        FontUnderline eUnderline,
-                                        FontUnderline eOverline ) :
+                                        FontLineStyle eUnderline,
+                                        FontLineStyle eOverline ) :
     MetaAction  ( MetaActionType::TEXTLINE ),
     maPos       ( rPos ),
     mnWidth     ( nWidth ),
@@ -1446,11 +1446,11 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     meStrikeout = (FontStrikeout)nTempStrikeout;
     sal_uInt32 nTempUnderline(0);
     rIStm.ReadUInt32( nTempUnderline );
-    meUnderline = (FontUnderline)nTempUnderline;
+    meUnderline = (FontLineStyle)nTempUnderline;
     if ( aCompat.GetVersion() >= 2 ) {
         sal_uInt32 nTempUnderline2(0);
         rIStm.ReadUInt32(nTempUnderline2);
-        meUnderline = (FontUnderline)nTempUnderline2;
+        meUnderline = (FontLineStyle)nTempUnderline2;
     }
 }
 

@@ -688,16 +688,16 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                     {
                         vcl::Font aFont = rRenderContext.GetFont();
                         if (nAttr & EXTTEXTINPUT_ATTR_UNDERLINE)
-                            aFont.SetUnderline(UNDERLINE_SINGLE);
+                            aFont.SetUnderline(LINESTYLE_SINGLE);
                         else if (nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE)
-                            aFont.SetUnderline( UNDERLINE_BOLD);
+                            aFont.SetUnderline( LINESTYLE_BOLD);
                         else if (nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE)
-                            aFont.SetUnderline( UNDERLINE_DOTTED);
+                            aFont.SetUnderline( LINESTYLE_DOTTED);
                         else if (nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE)
-                            aFont.SetUnderline( UNDERLINE_DASHDOT);
+                            aFont.SetUnderline( LINESTYLE_DASHDOT);
                         else if (nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE)
                         {
-                            aFont.SetUnderline(UNDERLINE_WAVE);
+                            aFont.SetUnderline(LINESTYLE_WAVE);
                             rRenderContext.SetTextLineColor(Color(COL_LIGHTGRAY));
                         }
                         rRenderContext.SetFont(aFont);

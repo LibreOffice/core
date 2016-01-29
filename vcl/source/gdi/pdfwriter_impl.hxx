@@ -1160,9 +1160,9 @@ public:
                           sal_Int32 nIndex, sal_Int32 nLen,
                           bool bTextLines = true  );
     void drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle, bool bTextLines = true  );
-    void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
-    void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
-    void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove );
+    void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
+    void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     void drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor );
     void drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout );
 

@@ -940,7 +940,7 @@ void FontStylePropertyBox::update()
     vcl::Font aFont( mpEdit->GetFont() );
     aFont.SetWeight( mfFontWeight == awt::FontWeight::BOLD ? WEIGHT_BOLD : WEIGHT_NORMAL );
     aFont.SetItalic( meFontSlant == awt::FontSlant_ITALIC ? ITALIC_NORMAL : ITALIC_NONE  );
-    aFont.SetUnderline( mnFontUnderline == awt::FontUnderline::NONE ? UNDERLINE_NONE : UNDERLINE_SINGLE );
+    aFont.SetUnderline( mnFontUnderline == awt::FontUnderline::NONE ? LINESTYLE_NONE : LINESTYLE_SINGLE );
     mpEdit->SetFont( aFont );
     mpEdit->Invalidate();
 }

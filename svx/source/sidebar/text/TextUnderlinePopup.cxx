@@ -35,7 +35,7 @@ TextUnderlinePopup::~TextUnderlinePopup()
 {
 }
 
-void TextUnderlinePopup::Rearrange (FontUnderline eLine)
+void TextUnderlinePopup::Rearrange (FontLineStyle eLine)
 {
     ProvideContainerAndControl();
 

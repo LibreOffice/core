@@ -665,13 +665,13 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     if( !aExpand.isEmpty() )
     {
         const SwFont *pTmpFnt = rInf.GetFont();
-        bool bPaintSpace = ( UNDERLINE_NONE != pTmpFnt->GetUnderline() ||
-                                 UNDERLINE_NONE != pTmpFnt->GetOverline()  ||
+        bool bPaintSpace = ( LINESTYLE_NONE != pTmpFnt->GetUnderline() ||
+                                 LINESTYLE_NONE != pTmpFnt->GetOverline()  ||
                                  STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
                                  !pTmpFnt->IsWordLineMode();
         if( bPaintSpace && pFnt )
-            bPaintSpace = ( UNDERLINE_NONE != pFnt->GetUnderline() ||
-                            UNDERLINE_NONE != pFnt->GetOverline()  ||
+            bPaintSpace = ( LINESTYLE_NONE != pFnt->GetUnderline() ||
+                            LINESTYLE_NONE != pFnt->GetOverline()  ||
                             STRIKEOUT_NONE != pFnt->GetStrikeout() ) &&
                             !pFnt->IsWordLineMode();
 

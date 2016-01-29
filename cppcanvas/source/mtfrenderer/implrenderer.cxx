@@ -1496,7 +1496,7 @@ namespace cppcanvas
                         rState.textReliefStyle          = (sal_Int8)rFont.GetRelief();
                         rState.textOverlineStyle        = (sal_Int8)rFont.GetOverline();
                         rState.textUnderlineStyle       = rParms.maFontUnderline.is_initialized() ?
-                            (*rParms.maFontUnderline ? (sal_Int8)UNDERLINE_SINGLE : (sal_Int8)UNDERLINE_NONE) :
+                            (*rParms.maFontUnderline ? (sal_Int8)LINESTYLE_SINGLE : (sal_Int8)LINESTYLE_NONE) :
                             (sal_Int8)rFont.GetUnderline();
                         rState.textStrikeoutStyle       = (sal_Int8)rFont.GetStrikeout();
                         rState.textEmphasisMarkStyle    = (sal_Int8)rFont.GetEmphasisMark();

@@ -113,7 +113,7 @@ namespace svt
 
     void HyperLabel::ActivateHyperMode(vcl::Font aFont, const Color aColor)
     {
-        aFont.SetUnderline(UNDERLINE_SINGLE);
+        aFont.SetUnderline(LINESTYLE_SINGLE);
         m_pImpl->m_bHyperMode = true;
         SetPointer( PointerStyle::RefHand );
         SetControlFont( aFont);
@@ -124,7 +124,7 @@ namespace svt
     void HyperLabel::DeactivateHyperMode(vcl::Font aFont, const Color aColor)
     {
         m_pImpl->m_bHyperMode = false;
-        aFont.SetUnderline(UNDERLINE_NONE);
+        aFont.SetUnderline(LINESTYLE_NONE);
         SetPointer( PointerStyle::Arrow );
         SetControlFont( aFont);
         SetTextColor( aColor);

@@ -1337,8 +1337,8 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         else                     aActFont.SetWeight(WEIGHT_NORMAL);
         if ( (nFace & 0x02)!=0 ) aActFont.SetItalic(ITALIC_NORMAL);
         else                     aActFont.SetItalic(ITALIC_NONE);
-        if ( (nFace & 0x04)!=0 ) aActFont.SetUnderline(UNDERLINE_SINGLE);
-        else                     aActFont.SetUnderline(UNDERLINE_NONE);
+        if ( (nFace & 0x04)!=0 ) aActFont.SetUnderline(LINESTYLE_SINGLE);
+        else                     aActFont.SetUnderline(LINESTYLE_NONE);
         if ( (nFace & 0x08)!=0 ) aActFont.SetOutline(true);
         else                     aActFont.SetOutline(false);
         if ( (nFace & 0x10)!=0 ) aActFont.SetShadow(true);

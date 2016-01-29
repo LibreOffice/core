@@ -405,13 +405,13 @@ bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 void SwExtend::ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr )
 {
     if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
-        rFnt.SetUnderline( UNDERLINE_SINGLE );
+        rFnt.SetUnderline( LINESTYLE_SINGLE );
     else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
-        rFnt.SetUnderline( UNDERLINE_BOLD );
+        rFnt.SetUnderline( LINESTYLE_BOLD );
     else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
-        rFnt.SetUnderline( UNDERLINE_DOTTED );
+        rFnt.SetUnderline( LINESTYLE_DOTTED );
     else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
-        rFnt.SetUnderline( UNDERLINE_DOTTED );
+        rFnt.SetUnderline( LINESTYLE_DOTTED );
 
     if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
         rFnt.SetColor( Color( COL_RED ) );

@@ -406,8 +406,8 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
         aFont.SetWeight( VCLUnoHelper::ConvertFontWeight( rDescr.Weight ) );
     if ( rDescr.Slant != css::awt::FontSlant_DONTKNOW )
         aFont.SetItalic( VCLUnoHelper::ConvertFontSlant( rDescr.Slant ) );
-    if ( (FontUnderline)rDescr.Underline != UNDERLINE_DONTKNOW )
-        aFont.SetUnderline( (FontUnderline)rDescr.Underline );
+    if ( (FontLineStyle)rDescr.Underline != LINESTYLE_DONTKNOW )
+        aFont.SetUnderline( (FontLineStyle)rDescr.Underline );
     if ( (FontStrikeout)rDescr.Strikeout != STRIKEOUT_DONTKNOW )
         aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
 

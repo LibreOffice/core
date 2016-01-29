@@ -63,8 +63,8 @@ namespace cppcanvas
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment
                 textReliefStyle(RELIEF_NONE),
-                textOverlineStyle(UNDERLINE_NONE),
-                textUnderlineStyle(UNDERLINE_NONE),
+                textOverlineStyle(LINESTYLE_NONE),
+                textUnderlineStyle(LINESTYLE_NONE),
                 textStrikeoutStyle(STRIKEOUT_NONE),
                 textReferencePoint(ALIGN_BASELINE),
 

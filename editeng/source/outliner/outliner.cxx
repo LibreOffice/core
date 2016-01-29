@@ -877,8 +877,8 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     else
     {
         aBulletFont = aStdFont;
-        aBulletFont.SetUnderline( UNDERLINE_NONE );
-        aBulletFont.SetOverline( UNDERLINE_NONE );
+        aBulletFont.SetUnderline( LINESTYLE_NONE );
+        aBulletFont.SetOverline( LINESTYLE_NONE );
         aBulletFont.SetStrikeout( STRIKEOUT_NONE );
         aBulletFont.SetEmphasisMark( EMPHASISMARK_NONE );
         aBulletFont.SetRelief( RELIEF_NONE );

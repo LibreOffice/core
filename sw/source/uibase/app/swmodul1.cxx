@@ -479,7 +479,7 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
         break;
 
     case SID_ATTR_CHAR_UNDERLINE:
-        rSet.Put( SvxUnderlineItem( (FontUnderline)rAttr.nAttr,
+        rSet.Put( SvxUnderlineItem( (FontLineStyle)rAttr.nAttr,
                                     RES_CHRATR_UNDERLINE));
         break;
 

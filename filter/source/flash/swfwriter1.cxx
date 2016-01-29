@@ -558,7 +558,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         vcl::Font aFont(aOldFont);
         short nOrientation = aFont.GetOrientation();
         aFont.SetOrientation( 0 );
-        aFont.SetUnderline(UNDERLINE_NONE);
+        aFont.SetUnderline(LINESTYLE_NONE);
         aFont.SetStrikeout(STRIKEOUT_NONE);
         mpVDev->SetFont( aFont );
 
@@ -677,7 +677,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         //  numbers, but the flash lines up very well with the original OOo document.  All of this should
         //  probably be converted to polygons as part of the meta file, though, as we don't handle any
         //  fancy lines (like dashes).
-        if( ( aOldFont.GetStrikeout() != STRIKEOUT_NONE ) || ( aOldFont.GetUnderline() != UNDERLINE_NONE ) )
+        if( ( aOldFont.GetStrikeout() != STRIKEOUT_NONE ) || ( aOldFont.GetUnderline() != LINESTYLE_NONE ) )
         {
             tools::Polygon aPoly( 4 );
             const long  nLineHeight = std::max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
@@ -698,7 +698,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 
             // AS: The factor of 1.5 on the nLineHeight is a magic number.  I'm not sure why it works,
             //  but it looks good to me.
-            if( aOldFont.GetUnderline() != UNDERLINE_NONE )
+            if( aOldFont.GetUnderline() != LINESTYLE_NONE )
             {
                 aPoly[ 0 ].X() = aBaseLinePos.X();
                 aPoly[ 0 ].Y() = static_cast<long>(aBaseLinePos.Y() + 1.5*nLineHeight);

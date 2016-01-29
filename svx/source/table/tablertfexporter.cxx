@@ -228,7 +228,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         bResetAttr = true;
         mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
     }
-    if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
+    if ( rUnderlineItem.GetLineStyle() != LINESTYLE_NONE )
     {   // underline
         bResetAttr = true;
         mrStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );

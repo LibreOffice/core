@@ -1410,7 +1410,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
             case SID_ATTR_CHAR_UNDERLINE:
                 {
-                    FontUnderline       eUnderline;
+                    FontLineStyle       eUnderline;
 
                     if( pSet )
                     {
@@ -1436,9 +1436,9 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                         SvxUnderlineItem aUnderline( static_cast<const SvxUnderlineItem&>(
                                                         pAttrs->GetItem(
                                                             ATTR_FONT_UNDERLINE ) ) );
-                        eUnderline = (UNDERLINE_NONE != aUnderline.GetLineStyle())
-                                    ? UNDERLINE_NONE
-                                    : UNDERLINE_SINGLE;
+                        eUnderline = (LINESTYLE_NONE != aUnderline.GetLineStyle())
+                                    ? LINESTYLE_NONE
+                                    : LINESTYLE_SINGLE;
                         aUnderline.SetLineStyle( eUnderline );
                         pTabViewShell->ApplyAttr( aUnderline );
                         pNewSet->Put( aUnderline,aUnderline.Which() );
@@ -1447,25 +1447,25 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 break;
 
             case SID_ULINE_VAL_NONE:
-                pTabViewShell->ApplyAttr( SvxUnderlineItem( UNDERLINE_NONE, ATTR_FONT_UNDERLINE ) );
+                pTabViewShell->ApplyAttr( SvxUnderlineItem( LINESTYLE_NONE, ATTR_FONT_UNDERLINE ) );
                 break;
             case SID_ULINE_VAL_SINGLE:      // Toggles
             case SID_ULINE_VAL_DOUBLE:
             case SID_ULINE_VAL_DOTTED:
                 {
-                    FontUnderline eOld = static_cast<const SvxUnderlineItem&>(
+                    FontLineStyle eOld = static_cast<const SvxUnderlineItem&>(
                                             pAttrs->GetItem(ATTR_FONT_UNDERLINE)).GetLineStyle();
-                    FontUnderline eNew = eOld;
+                    FontLineStyle eNew = eOld;
                     switch (nSlot)
                     {
                         case SID_ULINE_VAL_SINGLE:
-                            eNew = ( eOld == UNDERLINE_SINGLE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
+                            eNew = ( eOld == LINESTYLE_SINGLE ) ? LINESTYLE_NONE : LINESTYLE_SINGLE;
                             break;
                         case SID_ULINE_VAL_DOUBLE:
-                            eNew = ( eOld == UNDERLINE_DOUBLE ) ? UNDERLINE_NONE : UNDERLINE_DOUBLE;
+                            eNew = ( eOld == LINESTYLE_DOUBLE ) ? LINESTYLE_NONE : LINESTYLE_DOUBLE;
                             break;
                         case SID_ULINE_VAL_DOTTED:
-                            eNew = ( eOld == UNDERLINE_DOTTED ) ? UNDERLINE_NONE : UNDERLINE_DOTTED;
+                            eNew = ( eOld == LINESTYLE_DOTTED ) ? LINESTYLE_NONE : LINESTYLE_DOTTED;
                             break;
                     }
                     pTabViewShell->ApplyAttr( SvxUnderlineItem( eNew, ATTR_FONT_UNDERLINE ) );
@@ -2182,14 +2182,14 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     }
     else
     {
-        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                     rAttrSet.Get(ATTR_FONT_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
-            case UNDERLINE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
-            case UNDERLINE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
-            case UNDERLINE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
+            case LINESTYLE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
+            case LINESTYLE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
+            case LINESTYLE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
             default:
                 break;
         }

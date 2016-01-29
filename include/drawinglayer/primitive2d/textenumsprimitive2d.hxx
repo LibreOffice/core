@@ -58,8 +58,8 @@ namespace drawinglayer
         };
 
         /** helper to convert LineStyle */
-        TextLine DRAWINGLAYER_DLLPUBLIC mapFontUnderlineToTextLine(FontUnderline eLineStyle);
-        FontUnderline DRAWINGLAYER_DLLPUBLIC mapTextLineToFontUnderline(TextLine eLineStyle);
+        TextLine DRAWINGLAYER_DLLPUBLIC mapFontLineStyleToTextLine(FontLineStyle eLineStyle);
+        FontLineStyle DRAWINGLAYER_DLLPUBLIC mapTextLineToFontLineStyle(TextLine eLineStyle);
 
         /** FontStrikeout definition */
         enum TextStrikeout

@@ -1211,7 +1211,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             Color aCol( COL_BLUE );
             aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE ) );
+            aSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE ) );
             // i40133: patch submitted by rail: set language to 'none' to prevent spell checking:
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CJK_LANGUAGE ) );
@@ -1222,7 +1222,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             Color aCol( COL_RED );
             aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE ) );
+            aSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE ) );
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CJK_LANGUAGE ) );
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CTL_LANGUAGE ) );
@@ -1232,7 +1232,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             Color aCol( COL_CYAN );
             aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_DOTTED, RES_CHRATR_UNDERLINE ) );
+            aSet.Put( SvxUnderlineItem( LINESTYLE_DOTTED, RES_CHRATR_UNDERLINE ) );
             aSet.Put( SvxCaseMapItem( SVX_CASEMAP_KAPITAELCHEN, RES_CHRATR_CASEMAP ) );
         }
         break;
@@ -1242,7 +1242,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             long nH = static_cast<const SvxFontHeightItem*>(GetDfltAttr(
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
             SetAllScriptItem( aSet, SvxFontHeightItem( nH, 100, RES_CHRATR_FONTSIZE));
-            aSet.Put(SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ));
+            aSet.Put(SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE ));
             aSet.Put(SvxEmphasisMarkItem( EMPHASISMARK_NONE, RES_CHRATR_EMPHASIS_MARK) );
         }
         break;

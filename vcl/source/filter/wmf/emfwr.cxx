@@ -532,7 +532,7 @@ void EMFWriter::ImplCheckTextAttr()
 
         m_rStm.WriteInt32( nWeight );
         m_rStm.WriteUChar( ( ITALIC_NONE == rFont.GetItalic() ) ? 0 : 1 );
-        m_rStm.WriteUChar( ( UNDERLINE_NONE == rFont.GetUnderline() ) ? 0 : 1 );
+        m_rStm.WriteUChar( ( LINESTYLE_NONE == rFont.GetUnderline() ) ? 0 : 1 );
         m_rStm.WriteUChar( ( STRIKEOUT_NONE == rFont.GetStrikeout() ) ? 0 : 1 );
         m_rStm.WriteUChar( ( RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet() ) ? 2 : 0 );
         m_rStm.WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 );

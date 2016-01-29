@@ -1488,7 +1488,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
 
     if ( pSet->GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
     {
-        bTemp = static_cast<const SvxUnderlineItem&>(pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != UNDERLINE_NONE;
+        bTemp = static_cast<const SvxUnderlineItem&>(pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != LINESTYLE_NONE;
         aTemp = pState->SetUnderline( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);

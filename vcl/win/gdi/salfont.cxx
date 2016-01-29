@@ -890,9 +890,9 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         else
             rFont.SetItalic( ITALIC_NONE );
         if ( rLogFont.lfUnderline )
-            rFont.SetUnderline( UNDERLINE_SINGLE );
+            rFont.SetUnderline( LINESTYLE_SINGLE );
         else
-            rFont.SetUnderline( UNDERLINE_NONE );
+            rFont.SetUnderline( LINESTYLE_NONE );
         if ( rLogFont.lfStrikeOut )
             rFont.SetStrikeout( STRIKEOUT_SINGLE );
         else

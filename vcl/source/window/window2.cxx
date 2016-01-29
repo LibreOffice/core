@@ -1486,7 +1486,7 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
     else if (rKey == "underline")
     {
         vcl::Font aFont(GetControlFont());
-        aFont.SetUnderline(toBool(rValue) ? UNDERLINE_SINGLE : UNDERLINE_NONE);
+        aFont.SetUnderline(toBool(rValue) ? LINESTYLE_SINGLE : LINESTYLE_NONE);
         SetControlFont(aFont);
     }
     else if (rKey == "size")

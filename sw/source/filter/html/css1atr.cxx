@@ -2324,10 +2324,10 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
     {
         switch( pUItem->GetLineStyle() )
         {
-        case UNDERLINE_NONE:
+        case LINESTYLE_NONE:
             bNone = true;
             break;
-        case UNDERLINE_DONTKNOW:
+        case LINESTYLE_DONTKNOW:
             break;
         default:
             if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
@@ -2347,10 +2347,10 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
     {
         switch( pOItem->GetLineStyle() )
         {
-        case UNDERLINE_NONE:
+        case LINESTYLE_NONE:
             bNone = true;
             break;
-        case UNDERLINE_DONTKNOW:
+        case LINESTYLE_DONTKNOW:
             break;
         default:
             if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )

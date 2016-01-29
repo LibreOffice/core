@@ -807,7 +807,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
     }
     if ( pAttrSet->GetCharHidden().GetValue() )
-        SetUnderline( UNDERLINE_DOTTED );
+        SetUnderline( LINESTYLE_DOTTED );
     else
         SetUnderline( pAttrSet->GetUnderline().GetLineStyle() );
     SetUnderColor( pAttrSet->GetUnderline().GetColor() );
@@ -982,8 +982,8 @@ bool SwSubFont::ChgFnt( SwViewShell const *pSh, OutputDevice& rOut )
     pLastFont->SetDevFont( pSh, rOut );
 
     pLastFont->Lock();
-    return UNDERLINE_NONE != GetUnderline() ||
-           UNDERLINE_NONE != GetOverline()  ||
+    return LINESTYLE_NONE != GetUnderline() ||
+           LINESTYLE_NONE != GetOverline()  ||
            STRIKEOUT_NONE != GetStrikeout();
 }
 
@@ -1169,13 +1169,13 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
     if( COMPLETE_STRING == rInf.GetLen() )
         rInf.SetLen( nLn );
 
-    FontUnderline nOldUnder = UNDERLINE_NONE;
+    FontLineStyle nOldUnder = LINESTYLE_NONE;
     SwUnderlineFont* pUnderFnt = nullptr;
 
     if( rInf.GetUnderFnt() )
     {
         nOldUnder = GetUnderline();
-        SetUnderline( UNDERLINE_NONE );
+        SetUnderline( LINESTYLE_NONE );
         pUnderFnt = rInf.GetUnderFnt();
     }
 
@@ -1235,7 +1235,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
         }
     }
 
-    if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
+    if( pUnderFnt && nOldUnder != LINESTYLE_NONE )
     {
         Size aFontSize = _GetTextSize( rInf );
         const OUString oldStr = rInf.GetText();
@@ -1296,13 +1296,13 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     if( !rInf.GetLen() || !rInf.GetText().getLength() )
         return;
 
-    FontUnderline nOldUnder = UNDERLINE_NONE;
+    FontLineStyle nOldUnder = LINESTYLE_NONE;
     SwUnderlineFont* pUnderFnt = nullptr;
 
     if( rInf.GetUnderFnt() )
     {
         nOldUnder = GetUnderline();
-        SetUnderline( UNDERLINE_NONE );
+        SetUnderline( LINESTYLE_NONE );
         pUnderFnt = rInf.GetUnderFnt();
     }
 
@@ -1347,7 +1347,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
                             rInf.GetText() ), rInf.GetIdx(), rInf.GetLen() );
     }
 
-    if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
+    if( pUnderFnt && nOldUnder != LINESTYLE_NONE )
     {
         const OUString oldStr = rInf.GetText();
         OUString aStr("  ");

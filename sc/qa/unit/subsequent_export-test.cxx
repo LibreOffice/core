@@ -546,14 +546,14 @@ void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sa
         break;
         case EE_CHAR_OVERLINE:
         {
-            SvxOverlineItem aItem(UNDERLINE_DOUBLE, nType);
+            SvxOverlineItem aItem(LINESTYLE_DOUBLE, nType);
             aItemSet.Put(aItem);
             rEE.QuickSetAttribs(aItemSet, aSel);
         }
         break;
         case EE_CHAR_UNDERLINE:
         {
-            SvxUnderlineItem aItem(UNDERLINE_DOUBLE, nType);
+            SvxUnderlineItem aItem(LINESTYLE_DOUBLE, nType);
             aItemSet.Put(aItem);
             rEE.QuickSetAttribs(aItemSet, aSel);
         }
@@ -671,7 +671,7 @@ void ScExportTest::testRichTextExportODS()
             return false;
         }
 
-        static bool isOverline(const editeng::Section& rAttr, FontUnderline eStyle)
+        static bool isOverline(const editeng::Section& rAttr, FontLineStyle eStyle)
         {
             if (rAttr.maAttributes.empty())
                 return false;
@@ -688,7 +688,7 @@ void ScExportTest::testRichTextExportODS()
             return false;
         }
 
-        static bool isUnderline(const editeng::Section& rAttr, FontUnderline eStyle)
+        static bool isUnderline(const editeng::Section& rAttr, FontLineStyle eStyle)
         {
             if (rAttr.maAttributes.empty())
                 return false;
@@ -920,7 +920,7 @@ void ScExportTest::testRichTextExportODS()
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
                 return false;
 
-            if (pAttr->maAttributes.size() != 1 || !isOverline(*pAttr, UNDERLINE_DOUBLE))
+            if (pAttr->maAttributes.size() != 1 || !isOverline(*pAttr, LINESTYLE_DOUBLE))
                 return false;
 
             // Last section should have underline applied.
@@ -928,7 +928,7 @@ void ScExportTest::testRichTextExportODS()
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 9 || pAttr->mnEnd != 14)
                 return false;
 
-            if (pAttr->maAttributes.size() != 1 || !isUnderline(*pAttr, UNDERLINE_DOUBLE))
+            if (pAttr->maAttributes.size() != 1 || !isUnderline(*pAttr, LINESTYLE_DOUBLE))
                 return false;
 
             return true;

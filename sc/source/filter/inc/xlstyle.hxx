@@ -329,7 +329,7 @@ struct XclFontData
     /** Returns the Calc font weight. */
     FontWeight          GetScWeight() const;
     /** Returns the Calc font underline style. */
-    FontUnderline       GetScUnderline() const;
+    FontLineStyle       GetScUnderline() const;
     /** Returns the Calc escapement style. */
     SvxEscapement       GetScEscapement() const;
     /** Returns the Calc strike-out style. */
@@ -346,7 +346,7 @@ struct XclFontData
     /** Sets the Calc font weight. */
     void                SetScWeight( FontWeight eScWeight );
     /** Sets the Calc underline style. */
-    void                SetScUnderline( FontUnderline eScUnderl );
+    void                SetScUnderline( FontLineStyle eScUnderl );
     /** Sets the Calc escapement style. */
     void                SetScEscapement( short nScEscapem );
     /** Sets the Calc strike-out style. */

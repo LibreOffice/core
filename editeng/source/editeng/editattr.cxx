@@ -128,7 +128,7 @@ EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr,
 
 void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
-    rFont.SetUnderline( (FontUnderline)static_cast<const SvxUnderlineItem*>(GetItem())->GetValue() );
+    rFont.SetUnderline( (FontLineStyle)static_cast<const SvxUnderlineItem*>(GetItem())->GetValue() );
 
     if ( pOutDev )
         pOutDev->SetTextLineColor( static_cast<const SvxUnderlineItem*>(GetItem())->GetColor() );
@@ -146,7 +146,7 @@ EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, sa
 
 void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
-    rFont.SetOverline( (FontUnderline)static_cast<const SvxOverlineItem*>(GetItem())->GetValue() );
+    rFont.SetOverline( (FontLineStyle)static_cast<const SvxOverlineItem*>(GetItem())->GetValue() );
     if ( pOutDev )
         pOutDev->SetOverlineColor( static_cast<const SvxOverlineItem*>(GetItem())->GetColor() );
 }

@@ -745,13 +745,13 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     const SwFont* pOrigFont = rInf.GetFont();
     SwFont* pHoleFont = nullptr;
     SwFontSave* pFontSave = nullptr;
-    if( pOrigFont->GetUnderline() != UNDERLINE_NONE
-    ||  pOrigFont->GetOverline() != UNDERLINE_NONE
+    if( pOrigFont->GetUnderline() != LINESTYLE_NONE
+    ||  pOrigFont->GetOverline() != LINESTYLE_NONE
     ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )
     {
         pHoleFont = new SwFont( *pOrigFont );
-        pHoleFont->SetUnderline( UNDERLINE_NONE );
-        pHoleFont->SetOverline( UNDERLINE_NONE );
+        pHoleFont->SetUnderline( LINESTYLE_NONE );
+        pHoleFont->SetOverline( LINESTYLE_NONE );
         pHoleFont->SetStrikeout( STRIKEOUT_NONE );
         pFontSave = new SwFontSave( rInf, pHoleFont );
     }

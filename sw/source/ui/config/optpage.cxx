@@ -1544,8 +1544,8 @@ static CharAttr aRedlineAttr[] =
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_NOT_MAPPED },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },
     { SID_ATTR_CHAR_POSTURE,        ITALIC_NORMAL },
-    { SID_ATTR_CHAR_UNDERLINE,      UNDERLINE_SINGLE },
-    { SID_ATTR_CHAR_UNDERLINE,      UNDERLINE_DOUBLE },
+    { SID_ATTR_CHAR_UNDERLINE,      LINESTYLE_SINGLE },
+    { SID_ATTR_CHAR_UNDERLINE,      LINESTYLE_DOUBLE },
     { SID_ATTR_CHAR_STRIKEOUT,      STRIKEOUT_SINGLE },
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_VERSALIEN },
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_GEMEINE },
@@ -2101,8 +2101,8 @@ IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
     rCJKFont.SetWeight(WEIGHT_NORMAL);
     rFont.SetItalic(ITALIC_NONE);
     rCJKFont.SetItalic(ITALIC_NONE);
-    rFont.SetUnderline(UNDERLINE_NONE);
-    rCJKFont.SetUnderline(UNDERLINE_NONE);
+    rFont.SetUnderline(LINESTYLE_NONE);
+    rCJKFont.SetUnderline(LINESTYLE_NONE);
     rFont.SetStrikeout(STRIKEOUT_NONE);
     rCJKFont.SetStrikeout(STRIKEOUT_NONE);
     rFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
@@ -2147,8 +2147,8 @@ IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
             break;
 
         case SID_ATTR_CHAR_UNDERLINE:
-            rFont.SetUnderline( ( FontUnderline ) pAttr->nAttr );
-            rCJKFont.SetUnderline( ( FontUnderline ) pAttr->nAttr );
+            rFont.SetUnderline( ( FontLineStyle ) pAttr->nAttr );
+            rCJKFont.SetUnderline( ( FontLineStyle ) pAttr->nAttr );
             break;
 
         case SID_ATTR_CHAR_STRIKEOUT:

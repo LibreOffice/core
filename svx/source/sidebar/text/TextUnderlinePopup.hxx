@@ -36,7 +36,7 @@ public:
         const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator);
     virtual ~TextUnderlinePopup();
 
-    void Rearrange (FontUnderline eLine);
+    void Rearrange (FontLineStyle eLine);
 };
 
 } } // end of namespace svx::sidebar
