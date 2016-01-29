@@ -25,8 +25,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <boost/current_function.hpp>
-
 #include <tools/toolsdllapi.h>
 
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
@@ -36,7 +34,6 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
     #include <cppuhelper/exc_hlp.hxx>
     #include <osl/diagnose.h>
     #include <osl/thread.h>
-    #include <boost/current_function.hpp>
 
     /** reports a caught UNO exception via OSL diagnostics
 
