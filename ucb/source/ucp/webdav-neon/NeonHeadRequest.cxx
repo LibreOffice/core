@@ -81,8 +81,12 @@ void process_headers( ne_request * req,
 
             while ( it != end )
             {
-                if ( (*it) == aHeaderName )
+                // header names are case insensitive
+                if ( (*it).equalsIgnoreAsciiCase( aHeaderName ) )
+                {
+                    aHeaderName = (*it);
                     break;
+                }
 
                 ++it;
             }

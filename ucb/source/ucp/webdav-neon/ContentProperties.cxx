@@ -433,7 +433,7 @@ void ContentProperties::addProperty( const OUString & rName,
         (*m_xProps)[ OUString("Size") ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
-    else if ( rName == "Content-Length" )
+    else if ( rName.equalsIgnoreAsciiCase( "Content-Length" ) )
     {
         // Do NOT map Content-length entity header to DAV:getcontentlength!
         // Only DAV resources have this property.
@@ -451,7 +451,7 @@ void ContentProperties::addProperty( const OUString & rName,
         (*m_xProps)[ OUString("MediaType") ]
             = PropertyValue( rValue, true );
     }
-    else if ( rName == "Content-Type" )
+    else if ( rName.equalsIgnoreAsciiCase( "Content-Type" ) )
     {
         // Do NOT map Content-Type entity header to DAV:getcontenttype!
         // Only DAV resources have this property.
@@ -474,7 +474,7 @@ void ContentProperties::addProperty( const OUString & rName,
         (*m_xProps)[ OUString("DateModified") ]
             = PropertyValue( uno::makeAny( aDate ), true );
     }
-    else if ( rName == "Last-Modified" )
+    else if ( rName.equalsIgnoreAsciiCase( "Last-Modified" ) )
     {
         // Do not map Last-Modified entity header to DAV:getlastmodified!
         // Only DAV resources have this property.
