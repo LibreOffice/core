@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_e2482e8a",
+        "filename": "solenv/gbuild/Output.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-01-29T22:53:13Z",
+      "side": 1,
+      "message": "nitpick: also note that %k doesnt appear to be POSIX 1003.1\nhttp://www.unix.com/man-page/posix/1p/date/",
+      "revId": "da223f581fee7eff32eeeb76289a398d045de471",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
