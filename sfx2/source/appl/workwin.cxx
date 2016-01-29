@@ -1593,12 +1593,16 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         {
             if ( pChild->GetType() == nId )
             {
-                if ( pChild->GetWindow()->GetType() == RSC_DOCKINGWINDOW )
+                if (SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(pChild->GetWindow()))
+                {
                     // it's a DockingWindow
-                    pDockWin = static_cast<SfxDockingWindow*>( pChild->GetWindow() );
+                    pDockWin = pSfxDockingWindow;
+                }
                 else
+                {
                     // FloatingWindow or ModelessDialog
                     pWin = pChild->GetWindow();
+                }
                 break;
             }
         }

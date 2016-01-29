@@ -327,13 +327,10 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     pImp->pFact->aInfo = rInfo;
 }
 
-
 void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 {
-
     eChildAlignment = eAlign;
 }
-
 
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
@@ -348,14 +345,14 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
     }
-    else if ( pWindow->GetType() == RSC_DOCKINGWINDOW )
+    else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
     {
-        if (static_cast<DockingWindow*>(pWindow.get())->GetFloatingWindow() )
-            aInfo.aWinState = static_cast<DockingWindow*>(pWindow.get())->GetFloatingWindow()->GetWindowState();
-        else
+        if (pDockingWindow->GetFloatingWindow())
+            aInfo.aWinState = pDockingWindow->GetFloatingWindow()->GetWindowState();
+        else if (SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(pDockingWindow))
         {
             SfxChildWinInfo aTmpInfo;
-            static_cast<SfxDockingWindow*>(pWindow.get())->FillInfo( aTmpInfo );
+            pSfxDockingWindow->FillInfo( aTmpInfo );
             aInfo.aExtraString = aTmpInfo.aExtraString;
         }
     }
@@ -365,12 +362,10 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     return aInfo;
 }
 
-
 sal_uInt16 SfxChildWindow::GetPosition()
 {
     return pImp->pFact->nPos;
 }
-
 
 void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinInfo& rInfo)
 {
