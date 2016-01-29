@@ -759,25 +759,6 @@ void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
         ScAppOptions aNewOpts(rAppOpt);                                 // Let App know
         aNewOpts.SetLRUFuncList(aIdxList, n);
         SetAppOptions(aNewOpts);
-
-        RecentFunctionsChanged();
-    }
-}
-
-void ScModule::RecentFunctionsChanged()
-{
-    // update function list window
-    sal_uInt16 nFuncListID = ScFunctionChildWindow::GetChildWindowId();
-
-    //! notify all views
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm && pViewFrm->HasChildWindow(nFuncListID))
-    {
-        ScFunctionChildWindow* pWnd = static_cast<ScFunctionChildWindow*>(pViewFrm->GetChildWindow(nFuncListID));
-        if (!pWnd)
-            return;
-        ScFunctionDockWin* pFuncList = static_cast<ScFunctionDockWin*>(pWnd->GetWindow());
-        pFuncList->InitLRUList();
     }
 }
 

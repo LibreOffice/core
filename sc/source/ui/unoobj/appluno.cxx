@@ -507,8 +507,6 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
     ScAppOptions aNewOpts(pScMod->GetAppOptions());
     aNewOpts.SetLRUFuncList(pFuncs.get(), nCount);
     pScMod->SetAppOptions(aNewOpts);
-
-    ScModule::RecentFunctionsChanged();       // update function list child window
 }
 
 sal_Int32 SAL_CALL ScRecentFunctionsObj::getMaxRecentFunctions() throw(uno::RuntimeException, std::exception)

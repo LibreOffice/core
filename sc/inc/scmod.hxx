@@ -182,7 +182,6 @@ public:
     SC_DLLPUBLIC void   SetInputOptions ( const ScInputOptions& rOpt );
     void                SetPrintOptions ( const ScPrintOptions& rOpt );
     void                InsertEntryToLRUList(sal_uInt16 nFIndex);
-    static void         RecentFunctionsChanged();
 
     static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
                                           bool& rAutoSpell );
