@@ -294,7 +294,7 @@ void TableManager::resolveCurrentTable()
 
             unsigned int nRows = pTableData->getRowCount();
 
-            mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
+            mpTableDataHandler->startTable(pTableData->getDepth(), getTableProps());
 
             for (unsigned int nRow = 0; nRow < nRows; ++nRow)
             {

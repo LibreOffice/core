@@ -56,7 +56,6 @@ DomainMapperTableHandler::DomainMapperTableHandler(
             DomainMapper_Impl& rDMapper_Impl)
     : m_xText(xText),
         m_rDMapper_Impl( rDMapper_Impl ),
-        m_nRowIndex(0),
         m_bHadFootOrEndnote(false)
 {
 }
@@ -65,17 +64,14 @@ DomainMapperTableHandler::~DomainMapperTableHandler()
 {
 }
 
-void DomainMapperTableHandler::startTable(unsigned int nRows,
-                                          unsigned int /*nDepth*/,
+void DomainMapperTableHandler::startTable(unsigned int /*nDepth*/,
                                           TablePropertyMapPtr pProps)
 {
     m_aTableProperties = pProps;
-    m_aTableSeq = TableSequence_t(nRows);
-    m_nRowIndex = 0;
+    m_aTableRanges.clear();
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("tablehandler.table");
-    TagLogger::getInstance().attribute("rows", nRows);
 
     if (pProps.get() != nullptr)
         pProps->dumpXml();
@@ -815,7 +811,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     if (aCellDirectionVal->second.get<sal_Int32>() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_TextDirection_btLr))
                     {
                         // btLr, so map ParagraphAdjust_CENTER to VertOrientation::CENTER.
-                        uno::Reference<beans::XPropertySet> xPropertySet(m_aTableSeq[nRow][nCell][0], uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_aTableRanges[nRow][nCell][0], uno::UNO_QUERY);
                         if (xPropertySet->getPropertyValue("ParaAdjust").get<sal_Int16>() == style::ParagraphAdjust_CENTER)
                             (*aCellIterator)->Insert(PROP_VERT_ORIENT, uno::makeAny(text::VertOrientation::CENTER));
                     }
@@ -873,18 +869,18 @@ bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
 }
 
 /// Are all cells in this row empty?
-bool lcl_emptyRow(TableSequence_t& rTableSeq, sal_Int32 nRow)
+bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
 {
-    if (nRow >= rTableSeq.getLength())
+    if (nRow >= static_cast<sal_Int32>(rTableRanges.size()))
     {
-        SAL_WARN("writerfilter", "m_aCellProperties not in sync with m_aTableSeq?");
+        SAL_WARN("writerfilter", "m_aCellProperties not in sync with rTableRanges?");
         return false;
     }
 
-    RowSequence_t rRowSeq = rTableSeq[nRow];
+    RowSequence_t rRowSeq = rTableRanges[nRow];
     if (rRowSeq.getLength() == 0)
     {
-        SAL_WARN("writerfilter", "m_aCellProperties not in sync with m_aTableSeq?");
+        SAL_WARN("writerfilter", "m_aCellProperties not in sync with rTableRanges?");
         return false;
     }
 
@@ -929,7 +925,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
             // tblHeader is only our property, remove before the property map hits UNO
             (*aRowIter)->Erase(PROP_TBL_HEADER);
 
-            if (lcl_hideMarks(m_aCellProperties[nRow]) && lcl_emptyRow(m_aTableSeq, nRow))
+            if (lcl_hideMarks(m_aCellProperties[nRow]) && lcl_emptyRow(m_aTableRanges, nRow))
             {
                 // We have CellHideMark on all cells, and also all cells are empty:
                 // Set the row height to minimal as Word does.
@@ -997,17 +993,17 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     lcl_DumpPropertyValueSeq(aRowProperties);
 #endif
 
-    if (m_aTableSeq.getLength() > 0)
+    if (!m_aTableRanges.empty())
     {
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
 
         bool bFloating = !aFrameProperties.empty();
         // Additional checks: if we can do this.
-        if (bFloating && m_aTableSeq[0].getLength() > 0 && m_aTableSeq[0][0].getLength() > 0)
+        if (bFloating && m_aTableRanges[0].getLength() > 0 && m_aTableRanges[0][0].getLength() > 0)
         {
-            xStart = m_aTableSeq[0][0][0];
-            uno::Sequence< uno::Sequence< uno::Reference<text::XTextRange> > >& rLastRow = m_aTableSeq[m_aTableSeq.getLength() - 1];
+            xStart = m_aTableRanges[0][0][0];
+            uno::Sequence< uno::Sequence< uno::Reference<text::XTextRange> > >& rLastRow = m_aTableRanges[m_aTableRanges.size() - 1];
             uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
             xEnd = rLastCell[1];
         }
@@ -1016,7 +1012,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         {
             if (m_xText.is())
             {
-                xTable = m_xText->convertToTable(m_aTableSeq, aCellProperties, aRowProperties, aTableInfo.aTableProperties);
+                xTable = m_xText->convertToTable(comphelper::containerToSequence(m_aTableRanges), aCellProperties, aRowProperties, aTableInfo.aTableProperties);
 
                 if (xTable.is())
                 {
@@ -1152,8 +1148,7 @@ void DomainMapperTableHandler::startRow(TablePropertyMapPtr pProps)
 
 void DomainMapperTableHandler::endRow()
 {
-    m_aTableSeq[m_nRowIndex] = comphelper::containerToSequence(m_aRowRanges);
-    ++m_nRowIndex;
+    m_aTableRanges.push_back(comphelper::containerToSequence(m_aRowRanges));
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().endElement();
 #endif

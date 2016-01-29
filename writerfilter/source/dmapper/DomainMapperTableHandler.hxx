@@ -30,7 +30,6 @@ namespace dmapper {
 
 typedef css::uno::Sequence< css::uno::Reference< css::text::XTextRange > > CellSequence_t;
 typedef css::uno::Sequence<CellSequence_t> RowSequence_t;
-typedef css::uno::Sequence<RowSequence_t> TableSequence_t;
 
 typedef css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValues> >  CellPropertyValuesSeq_t;
 
@@ -64,7 +63,7 @@ class DomainMapperTableHandler
     DomainMapper_Impl&      m_rDMapper_Impl;
     std::vector< css::uno::Reference<css::text::XTextRange> > m_aCellRange;
     std::vector<CellSequence_t> m_aRowRanges;
-    TableSequence_t m_aTableSeq;
+    std::vector<RowSequence_t> m_aTableRanges;
 
     css::uno::Reference< css::text::XTextRange >           m_xTableRange;
 
@@ -72,8 +71,6 @@ class DomainMapperTableHandler
     PropertyMapVector2      m_aCellProperties;
     PropertyMapVector1      m_aRowProperties;
     TablePropertyMapPtr     m_aTableProperties;
-
-    sal_Int32 m_nRowIndex;
 
     /// Did we have a foot or endnote in this table?
     bool m_bHadFootOrEndnote;
@@ -92,11 +89,10 @@ public:
     /**
        Handle start of table.
 
-       @param nRows   number of rows in the table
        @param nDepth  depth of the table in surrounding table hierarchy
        @param pProps  properties of the table
      */
-    void startTable(unsigned int nRows, unsigned int nDepth, TablePropertyMapPtr pProps);
+    void startTable(unsigned int nDepth, TablePropertyMapPtr pProps);
     /// Handle end of table.
     void endTable(unsigned int nestedTableLevel);
     /**
