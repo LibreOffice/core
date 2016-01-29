@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_62743efd",
+        "filename": "external/boost/UnpackedTarball_boost.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-01-29T15:22:32Z",
+      "side": 0,
+      "message": "Why all these (and above) remove files weren\u0027t dropped?",
+      "revId": "6f12c93703b676b1b3839caaf2c21788e5d68477",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
