@@ -53,16 +53,12 @@ private:
     VclPtr<ListBox>     aDDFuncList;
     VclPtr<ListBox>            pAllFuncList;
 
-    SfxChildAlignment   eSfxNewAlignment;
-    SfxChildAlignment   eSfxOldAlignment;
     VclPtr<ImageButton> aInsertButton;
     VclPtr<FixedText>   aFiFuncDesc;
     sal_uLong           nMinWidth;
     sal_uLong           nMinHeight;
     Size                aOldSize;
     bool                bSizeFlag;
-    bool                bInit;
-    short               nDockMode;
     Point               aSplitterInitPos;
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16              nArgs;
@@ -74,11 +70,8 @@ private:
     void            DoEnter();
     void            SetDescription();
     void            SetLeftRightSize();
-    void            SetTopBottonSize();
     void            SetMyWidthLeRi(Size &aNewSize);
     void            SetMyHeightLeRi(Size &aNewSize);
-    void            SetMyWidthToBo(Size &aNewSize);
-    void            SetMyHeightToBo(Size &aNewSize);
     void            UseSplitterInitPos();
 
                     DECL_LINK_TYPED( SetSelectionHdl, ListBox&, void );
