@@ -3926,7 +3926,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxShadowedItem& >(rHt).GetValue();
             break;
         case RES_CHRATR_UNDERLINE:
-            bMustWrite = static_cast< const SvxUnderlineItem& >(rHt).GetLineStyle() != UNDERLINE_NONE;
+            bMustWrite = static_cast< const SvxUnderlineItem& >(rHt).GetLineStyle() != LINESTYLE_NONE;
             break;
         case RES_CHRATR_WEIGHT:
             bMustWrite = static_cast< const SvxWeightItem& >(rHt).GetWeight() != WEIGHT_NORMAL;
@@ -6335,23 +6335,23 @@ void DocxAttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
 
     switch ( rUnderline.GetLineStyle() )
     {
-        case UNDERLINE_SINGLE:         pUnderlineValue = "single";          break;
-        case UNDERLINE_BOLD:           pUnderlineValue = "thick";           break;
-        case UNDERLINE_DOUBLE:         pUnderlineValue = "double";          break;
-        case UNDERLINE_DOTTED:         pUnderlineValue = "dotted";          break;
-        case UNDERLINE_DASH:           pUnderlineValue = "dash";            break;
-        case UNDERLINE_DASHDOT:        pUnderlineValue = "dotDash";         break;
-        case UNDERLINE_DASHDOTDOT:     pUnderlineValue = "dotDotDash";      break;
-        case UNDERLINE_WAVE:           pUnderlineValue = "wave";            break;
-        case UNDERLINE_BOLDDOTTED:     pUnderlineValue = "dottedHeavy";     break;
-        case UNDERLINE_BOLDDASH:       pUnderlineValue = "dashedHeavy";     break;
-        case UNDERLINE_LONGDASH:       pUnderlineValue = "dashLongHeavy";   break;
-        case UNDERLINE_BOLDLONGDASH:   pUnderlineValue = "dashLongHeavy";   break;
-        case UNDERLINE_BOLDDASHDOT:    pUnderlineValue = "dashDotHeavy";    break;
-        case UNDERLINE_BOLDDASHDOTDOT: pUnderlineValue = "dashDotDotHeavy"; break;
-        case UNDERLINE_BOLDWAVE:       pUnderlineValue = "wavyHeavy";       break;
-        case UNDERLINE_DOUBLEWAVE:     pUnderlineValue = "wavyDouble";      break;
-        case UNDERLINE_NONE:           // fall through
+        case LINESTYLE_SINGLE:         pUnderlineValue = "single";          break;
+        case LINESTYLE_BOLD:           pUnderlineValue = "thick";           break;
+        case LINESTYLE_DOUBLE:         pUnderlineValue = "double";          break;
+        case LINESTYLE_DOTTED:         pUnderlineValue = "dotted";          break;
+        case LINESTYLE_DASH:           pUnderlineValue = "dash";            break;
+        case LINESTYLE_DASHDOT:        pUnderlineValue = "dotDash";         break;
+        case LINESTYLE_DASHDOTDOT:     pUnderlineValue = "dotDotDash";      break;
+        case LINESTYLE_WAVE:           pUnderlineValue = "wave";            break;
+        case LINESTYLE_BOLDDOTTED:     pUnderlineValue = "dottedHeavy";     break;
+        case LINESTYLE_BOLDDASH:       pUnderlineValue = "dashedHeavy";     break;
+        case LINESTYLE_LONGDASH:       pUnderlineValue = "dashLongHeavy";   break;
+        case LINESTYLE_BOLDLONGDASH:   pUnderlineValue = "dashLongHeavy";   break;
+        case LINESTYLE_BOLDDASHDOT:    pUnderlineValue = "dashDotHeavy";    break;
+        case LINESTYLE_BOLDDASHDOTDOT: pUnderlineValue = "dashDotDotHeavy"; break;
+        case LINESTYLE_BOLDWAVE:       pUnderlineValue = "wavyHeavy";       break;
+        case LINESTYLE_DOUBLEWAVE:     pUnderlineValue = "wavyDouble";      break;
+        case LINESTYLE_NONE:           // fall through
         default:                       pUnderlineValue = "none";            break;
     }
 

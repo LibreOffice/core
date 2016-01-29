@@ -107,9 +107,9 @@ SfxPoolItem* SvxPostureItem::CreateDefault() { return new SvxPostureItem(ITALIC_
 SfxPoolItem* SvxWeightItem::CreateDefault() {return new SvxWeightItem(WEIGHT_NORMAL, 0);}
 SfxPoolItem* SvxFontHeightItem::CreateDefault() {return new SvxFontHeightItem(240, 100, 0);}
 SfxPoolItem* SvxFontWidthItem::CreateDefault() {return new SvxFontWidthItem(0, 100, 0);}
-SfxPoolItem* SvxTextLineItem::CreateDefault() {return new SvxTextLineItem(UNDERLINE_NONE, 0);}
-SfxPoolItem* SvxUnderlineItem::CreateDefault() {return new SvxUnderlineItem(UNDERLINE_NONE, 0);}
-SfxPoolItem* SvxOverlineItem::CreateDefault() {return new SvxOverlineItem(UNDERLINE_NONE, 0);}
+SfxPoolItem* SvxTextLineItem::CreateDefault() {return new SvxTextLineItem(LINESTYLE_NONE, 0);}
+SfxPoolItem* SvxUnderlineItem::CreateDefault() {return new SvxUnderlineItem(LINESTYLE_NONE, 0);}
+SfxPoolItem* SvxOverlineItem::CreateDefault() {return new SvxOverlineItem(LINESTYLE_NONE, 0);}
 SfxPoolItem* SvxCrossedOutItem::CreateDefault() {return new SvxCrossedOutItem(STRIKEOUT_NONE, 0);}
 SfxPoolItem* SvxShadowedItem::CreateDefault() {return new SvxShadowedItem(false, 0);}
 SfxPoolItem* SvxAutoKernItem::CreateDefault() {return new SvxAutoKernItem(false, 0);}
@@ -1250,7 +1250,7 @@ bool SvxFontWidthItem::GetPresentation
 
 // class SvxTextLineItem ------------------------------------------------
 
-SvxTextLineItem::SvxTextLineItem( const FontUnderline eSt, const sal_uInt16 nId )
+SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, (sal_uInt16)eSt ), mColor( COL_TRANSPARENT )
 {
 }
@@ -1266,14 +1266,14 @@ bool SvxTextLineItem::HasBoolValue() const
 
 bool SvxTextLineItem::GetBoolValue() const
 {
-    return  (FontUnderline)GetValue() != UNDERLINE_NONE;
+    return  (FontLineStyle)GetValue() != LINESTYLE_NONE;
 }
 
 
 
 void SvxTextLineItem::SetBoolValue( bool bVal )
 {
-    SetValue( (sal_uInt16)(bVal ? UNDERLINE_SINGLE : UNDERLINE_NONE) );
+    SetValue( (sal_uInt16)(bVal ? LINESTYLE_SINGLE : LINESTYLE_NONE) );
 }
 
 
@@ -1289,7 +1289,7 @@ SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
 
 sal_uInt16 SvxTextLineItem::GetValueCount() const
 {
-    return UNDERLINE_DOTTED + 1;    // UNDERLINE_NONE also belongs here
+    return LINESTYLE_DOTTED + 1;    // LINESTYLE_NONE also belongs here
 }
 
 
@@ -1306,7 +1306,7 @@ SfxPoolItem* SvxTextLineItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxTextLineItem(  (FontUnderline)nState, Which() );
+    return new SvxTextLineItem(  (FontLineStyle)nState, Which() );
 }
 
 
@@ -1404,7 +1404,7 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 
 // class SvxUnderlineItem ------------------------------------------------
 
-SvxUnderlineItem::SvxUnderlineItem( const FontUnderline eSt, const sal_uInt16 nId )
+SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
 {
 }
@@ -1424,20 +1424,20 @@ SfxPoolItem* SvxUnderlineItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxUnderlineItem(  (FontUnderline)nState, Which() );
+    return new SvxUnderlineItem(  (FontLineStyle)nState, Which() );
 }
 
 
 
 OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos <= (sal_uInt16)UNDERLINE_BOLDWAVE, "enum overflow!" );
+    DBG_ASSERT( nPos <= (sal_uInt16)LINESTYLE_BOLDWAVE, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_UL_BEGIN + nPos);
 }
 
 // class SvxOverlineItem ------------------------------------------------
 
-SvxOverlineItem::SvxOverlineItem( const FontUnderline eSt, const sal_uInt16 nId )
+SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )
 {
 }
@@ -1457,14 +1457,14 @@ SfxPoolItem* SvxOverlineItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nState;
     rStrm.ReadUChar( nState );
-    return new SvxOverlineItem(  (FontUnderline)nState, Which() );
+    return new SvxOverlineItem(  (FontLineStyle)nState, Which() );
 }
 
 
 
 OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos <= (sal_uInt16)UNDERLINE_BOLDWAVE, "enum overflow!" );
+    DBG_ASSERT( nPos <= (sal_uInt16)LINESTYLE_BOLDWAVE, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_OL_BEGIN + nPos);
 }
 

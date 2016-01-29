@@ -1024,15 +1024,15 @@ XclExpDxfFont::XclExpDxfFont(const XclExpRoot& rRoot,
 
 namespace {
 
-const char* getUnderlineOOXValue(FontUnderline eUnderline)
+const char* getUnderlineOOXValue(FontLineStyle eUnderline)
 {
     switch (eUnderline)
     {
-        case UNDERLINE_NONE:
-        case UNDERLINE_DONTKNOW:
+        case LINESTYLE_NONE:
+        case LINESTYLE_DONTKNOW:
             return "none";
-        case UNDERLINE_DOUBLE:
-        case UNDERLINE_DOUBLEWAVE:
+        case LINESTYLE_DOUBLE:
+        case LINESTYLE_DOUBLEWAVE:
             return "double";
         default:
             return "single";

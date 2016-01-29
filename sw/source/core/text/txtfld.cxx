@@ -516,8 +516,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     // Overline style of paragraph font should not be considered
                     // Weight style of paragraph font should not be considered
                     // Posture style of paragraph font should not be considered
-                    pNumFnt->SetUnderline( UNDERLINE_NONE );
-                    pNumFnt->SetOverline( UNDERLINE_NONE );
+                    pNumFnt->SetUnderline( LINESTYLE_NONE );
+                    pNumFnt->SetOverline( LINESTYLE_NONE );
                     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
                     pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
                     pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );
@@ -577,9 +577,9 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     {
                         // i18463:
                         // Underline style of paragraph font should not be considered
-                        pNumFnt->SetUnderline( UNDERLINE_NONE );
+                        pNumFnt->SetUnderline( LINESTYLE_NONE );
                         // Overline style of paragraph font should not be considered
-                        pNumFnt->SetOverline( UNDERLINE_NONE );
+                        pNumFnt->SetOverline( LINESTYLE_NONE );
                     }
 
                     // Apply the explicit attributes from the character style

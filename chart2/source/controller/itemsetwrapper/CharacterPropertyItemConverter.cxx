@@ -141,7 +141,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
         case EE_CHAR_UNDERLINE:
         {
-            SvxUnderlineItem aItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
+            SvxUnderlineItem aItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE);
             bool bModified = false;
 
             uno::Any aValue( GetPropertySet()->getPropertyValue( "CharUnderline" ));
@@ -173,7 +173,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
         case EE_CHAR_OVERLINE:
         {
-            SvxOverlineItem aItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
+            SvxOverlineItem aItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
             bool bModified = false;
 
             uno::Any aValue( GetPropertySet()->getPropertyValue( "CharOverline" ) );

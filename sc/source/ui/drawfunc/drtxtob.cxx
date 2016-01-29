@@ -554,22 +554,22 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     pView->GetAttributes(aViewAttr);
 
     //  Unterstreichung
-    FontUnderline eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
+    FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
                                         Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-    FontUnderline eNew = eOld;
+    FontLineStyle eNew = eOld;
     switch (nSlot)
     {
         case SID_ULINE_VAL_NONE:
-            eNew = UNDERLINE_NONE;
+            eNew = LINESTYLE_NONE;
             break;
         case SID_ULINE_VAL_SINGLE:
-            eNew = ( eOld == UNDERLINE_SINGLE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
+            eNew = ( eOld == LINESTYLE_SINGLE ) ? LINESTYLE_NONE : LINESTYLE_SINGLE;
             break;
         case SID_ULINE_VAL_DOUBLE:
-            eNew = ( eOld == UNDERLINE_DOUBLE ) ? UNDERLINE_NONE : UNDERLINE_DOUBLE;
+            eNew = ( eOld == LINESTYLE_DOUBLE ) ? LINESTYLE_NONE : LINESTYLE_DOUBLE;
             break;
         case SID_ULINE_VAL_DOTTED:
-            eNew = ( eOld == UNDERLINE_DOTTED ) ? UNDERLINE_NONE : UNDERLINE_DOTTED;
+            eNew = ( eOld == LINESTYLE_DOTTED ) ? LINESTYLE_NONE : LINESTYLE_DOTTED;
             break;
         default:
             break;
@@ -1114,14 +1114,14 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                     aAttrSet.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
-            case UNDERLINE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
-            case UNDERLINE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
-            case UNDERLINE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
+            case LINESTYLE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
+            case LINESTYLE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
+            case LINESTYLE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
             default:
                 break;
         }

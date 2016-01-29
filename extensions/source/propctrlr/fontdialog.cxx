@@ -210,7 +210,7 @@ namespace pcr
             float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
             float   nFontWeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
             css::awt::FontSlant nFontSlant  = static_cast<css::awt::FontSlant>(aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant));
-            sal_Int16 nFontUnderline        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
+            sal_Int16 nFontLineStyle        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
             sal_Int16 nFontStrikeout        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
 
             sal_Int32 nTextLineColor        = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO);
@@ -229,7 +229,7 @@ namespace pcr
 
             FontWeight      eWeight=VCLUnoHelper::ConvertFontWeight(nFontWeight);
             FontItalic      eItalic=VCLUnoHelper::ConvertFontSlant(nFontSlant);
-            FontUnderline   eUnderline=(FontUnderline)nFontUnderline;
+            FontLineStyle    eUnderline=(FontLineStyle)nFontLineStyle;
             FontStrikeout   eStrikeout=(FontStrikeout)nFontStrikeout;
 
             SvxWeightItem       aWeightItem(eWeight,CFID_WEIGHT);
@@ -264,7 +264,7 @@ namespace pcr
             aPropExtractor.invalidateItem(PROPERTY_FONT_HEIGHT, CFID_HEIGHT, *_pSet);
             aPropExtractor.invalidateItem(PROPERTY_FONT_WEIGHT, CFID_WEIGHT, *_pSet, css::awt::FontWeight::DONTKNOW == nFontWeight);
             aPropExtractor.invalidateItem(PROPERTY_FONT_SLANT, CFID_POSTURE, *_pSet, css::awt::FontSlant_DONTKNOW == nFontSlant);
-            aPropExtractor.invalidateItem(PROPERTY_FONT_UNDERLINE, CFID_UNDERLINE, *_pSet, css::awt::FontUnderline::DONTKNOW == nFontUnderline);
+            aPropExtractor.invalidateItem(PROPERTY_FONT_UNDERLINE, CFID_UNDERLINE, *_pSet, css::awt::FontUnderline::DONTKNOW == nFontLineStyle);
             aPropExtractor.invalidateItem(PROPERTY_FONT_STRIKEOUT, CFID_STRIKEOUT, *_pSet, css::awt::FontStrikeout::DONTKNOW == nFontStrikeout);
             aPropExtractor.invalidateItem(PROPERTY_WORDLINEMODE, CFID_WORDLINEMODE, *_pSet);
             aPropExtractor.invalidateItem(PROPERTY_TEXTCOLOR, CFID_CHARCOLOR, *_pSet);

@@ -1036,16 +1036,16 @@ public:
 
     void                        DrawTextLine( const Point& rPos, long nWidth,
                                               FontStrikeout eStrikeout,
-                                              FontUnderline eUnderline,
-                                              FontUnderline eOverline,
+                                              FontLineStyle eUnderline,
+                                              FontLineStyle eOverline,
                                               bool bUnderlineAbove = false );
 
     void                        ImplDrawTextLine( long nBaseX, long nX, long nY, DeviceCoordinate nWidth,
-                                                  FontStrikeout eStrikeout, FontUnderline eUnderline,
-                                                  FontUnderline eOverline, bool bUnderlineAbove );
+                                                  FontStrikeout eStrikeout, FontLineStyle eUnderline,
+                                                  FontLineStyle eOverline, bool bUnderlineAbove );
 
-    void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline,
-                                                   FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove );
+    void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontLineStyle eUnderline,
+                                                   FontLineStyle eOverline, bool bWordLine, bool bUnderlineAbove );
 
     void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos );
 
@@ -1228,8 +1228,8 @@ private:
     SAL_DLLPRIVATE void         ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice* pOutDev,
                                                    bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
     SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
-    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
-    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );

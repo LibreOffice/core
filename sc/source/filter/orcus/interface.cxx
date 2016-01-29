@@ -739,7 +739,7 @@ ScOrcusStyles::font::font():
     mbBold(false),
     mbItalic(false),
     mnSize(10),
-    meUnderline(UNDERLINE_NONE)
+    meUnderline(LINESTYLE_NONE)
 {
 }
 
@@ -949,14 +949,14 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
     {
         case orcus::spreadsheet::underline_single:
         case orcus::spreadsheet::underline_single_accounting:
-            maCurrentFont.meUnderline = UNDERLINE_SINGLE;
+            maCurrentFont.meUnderline = LINESTYLE_SINGLE;
             break;
         case orcus::spreadsheet::underline_double:
         case orcus::spreadsheet::underline_double_accounting:
-            maCurrentFont.meUnderline = UNDERLINE_DOUBLE;
+            maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
             break;
         case orcus::spreadsheet::underline_none:
-            maCurrentFont.meUnderline = UNDERLINE_NONE;
+            maCurrentFont.meUnderline = LINESTYLE_NONE;
             break;
     }
 }

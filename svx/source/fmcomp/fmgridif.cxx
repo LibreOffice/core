@@ -114,7 +114,7 @@ vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
     aFont.SetWidthType( VCLUnoHelper::ConvertFontWidth( rDescr.CharacterWidth ) );
     aFont.SetWeight( VCLUnoHelper::ConvertFontWeight( rDescr.Weight ) );
     aFont.SetItalic( (FontItalic)rDescr.Slant );
-    aFont.SetUnderline( (::FontUnderline)rDescr.Underline );
+    aFont.SetUnderline( (::FontLineStyle)rDescr.Underline );
     aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );
     aFont.SetOrientation( (sal_Int16)rDescr.Orientation );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );

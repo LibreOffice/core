@@ -659,7 +659,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxWordLineModeItem(false,ITEMID_WORDLINEMODE),
         new SvxContourItem(false,ITEMID_CONTOUR),
         new SvxCrossedOutItem(STRIKEOUT_NONE,ITEMID_CROSSEDOUT),
-        new SvxUnderlineItem(UNDERLINE_NONE,ITEMID_UNDERLINE),
+        new SvxUnderlineItem(LINESTYLE_NONE,ITEMID_UNDERLINE),
 
         new SvxColorItem(ITEMID_COLOR),
         new SvxKerningItem(0,ITEMID_KERNING),

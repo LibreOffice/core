@@ -785,9 +785,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bTextDecorationType )
         {
-            if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() )
+            if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Underline );
-            if ( UNDERLINE_NONE    != rInf.GetFont()->GetOverline() )
+            if ( LINESTYLE_NONE    != rInf.GetFont()->GetOverline() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::Overline );
             if ( STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() )
                 mpPDFExtOutDevData->SetStructureAttribute( vcl::PDFWriter::TextDecorationType, vcl::PDFWriter::LineThrough );
@@ -1378,8 +1378,8 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     const sal_uInt8 nFont = rInf.GetFont()->GetActual();
                     const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
-                    if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() ||
-                         UNDERLINE_NONE    != rInf.GetFont()->GetOverline()  ||
+                    if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() ||
+                         LINESTYLE_NONE    != rInf.GetFont()->GetOverline()  ||
                          STRIKEOUT_NONE    != rInf.GetFont()->GetStrikeout() ||
                          EMPHASISMARK_NONE != rInf.GetFont()->GetEmphasisMark() ||
                          0                 != rInf.GetFont()->GetEscapement() ||

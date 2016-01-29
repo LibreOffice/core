@@ -64,15 +64,15 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
         rItemSet.Put( aAttr );
     }
 
-    FontUnderline eUnderline;
+    FontLineStyle eUnderline;
     switch( nIndex & 0x60 ) // Bit 5+6
     {
         case 0x60:
-        case 0x20:  eUnderline = UNDERLINE_SINGLE;      break;
-        case 0x40:  eUnderline = UNDERLINE_DOUBLE;      break;
-        default:    eUnderline = UNDERLINE_NONE;
+        case 0x20:  eUnderline = LINESTYLE_SINGLE;      break;
+        case 0x40:  eUnderline = LINESTYLE_DOUBLE;      break;
+        default:    eUnderline = LINESTYLE_NONE;
     }
-    if( eUnderline != UNDERLINE_NONE )
+    if( eUnderline != LINESTYLE_NONE )
     {
         SvxUnderlineItem aUndItem( eUnderline, ATTR_FONT_UNDERLINE );
         rItemSet.Put( aUndItem );

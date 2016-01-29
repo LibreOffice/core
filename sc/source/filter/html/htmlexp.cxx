@@ -1016,7 +1016,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     bool bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
     bool bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
-    bool bUnderline     = ( UNDERLINE_NONE  != rUnderlineItem.GetLineStyle() );
+    bool bUnderline     = ( LINESTYLE_NONE  != rUnderlineItem.GetLineStyle() );
     bool bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // default is AUTO now
     bool bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
     sal_uInt16 nSetFontSizeNumber = 0;

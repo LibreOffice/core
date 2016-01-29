@@ -771,7 +771,7 @@ struct FontAttribSetter
         }
         else if(rPropName == "CharUnderline")
         {
-            FontUnderline eUnderline = static_cast<FontUnderline>(rProp.second.get<sal_Int16>());
+            FontLineStyle eUnderline = static_cast<FontLineStyle>(rProp.second.get<sal_Int16>());
             mrFont.SetUnderline(eUnderline);
         }
         else if(rPropName == "CharWeight")

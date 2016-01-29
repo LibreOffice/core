@@ -482,7 +482,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
             case EE_CHAR_UNDERLINE:
             {
                 if (!pPoolItem)
-                    pPoolItem.reset(new SvxUnderlineItem(UNDERLINE_NONE, pEntry->mnItemID));
+                    pPoolItem.reset(new SvxUnderlineItem(LINESTYLE_NONE, pEntry->mnItemID));
 
                 pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }
@@ -490,7 +490,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
             case EE_CHAR_OVERLINE:
             {
                 if (!pPoolItem)
-                    pPoolItem.reset(new SvxOverlineItem(UNDERLINE_NONE, pEntry->mnItemID));
+                    pPoolItem.reset(new SvxOverlineItem(LINESTYLE_NONE, pEntry->mnItemID));
 
                 pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }

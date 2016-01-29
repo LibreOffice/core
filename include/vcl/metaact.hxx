@@ -546,8 +546,8 @@ private:
     Point               maPos;
     long                mnWidth;
     FontStrikeout       meStrikeout;
-    FontUnderline       meUnderline;
-    FontUnderline       meOverline;
+    FontLineStyle       meUnderline;
+    FontLineStyle       meOverline;
 
 public:
                         MetaTextLineAction();
@@ -561,16 +561,16 @@ public:
 
                         MetaTextLineAction( const Point& rPos, long nWidth,
                                             FontStrikeout eStrikeout,
-                                            FontUnderline eUnderline,
-                                            FontUnderline eOverline );
+                                            FontLineStyle eUnderline,
+                                            FontLineStyle eOverline );
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maPos; }
     long                GetWidth() const { return mnWidth; }
     FontStrikeout       GetStrikeout() const { return meStrikeout; }
-    FontUnderline       GetUnderline() const { return meUnderline; }
-    FontUnderline       GetOverline()  const { return meOverline; }
+    FontLineStyle       GetUnderline() const { return meUnderline; }
+    FontLineStyle       GetOverline()  const { return meOverline; }
 };
 
 class VCL_DLLPUBLIC MetaBmpAction : public MetaAction

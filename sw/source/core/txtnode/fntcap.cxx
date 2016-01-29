@@ -305,8 +305,8 @@ void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
 {
     // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
     // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
-    rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
-                       GetOverline()  != UNDERLINE_NONE ||
+    rInf.SetDrawSpace( GetUnderline() != LINESTYLE_NONE ||
+                       GetOverline()  != LINESTYLE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
     SwDoDrawCapital aDo( rInf );
     DoOnCapitals( aDo );
@@ -457,8 +457,8 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
     const sal_uInt16 nCapWidth = (sal_uInt16)( GetCapitalSize( rInf ).Width() );
     rInf.SetPos(aOldPos);
 
-    rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
-                       GetOverline()  != UNDERLINE_NONE ||
+    rInf.SetDrawSpace( GetUnderline() != LINESTYLE_NONE ||
+                       GetOverline()  != LINESTYLE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
     SwDoDrawStretchCapital aDo( rInf, nCapWidth );
     DoOnCapitals( aDo );
@@ -499,8 +499,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     SwSubFont aFont( *this );
     Point aStartPos( rDo.GetInf().GetPos() );
 
-    const bool bTextLines = aFont.GetUnderline() != UNDERLINE_NONE
-                         || aFont.GetOverline()  != UNDERLINE_NONE
+    const bool bTextLines = aFont.GetUnderline() != LINESTYLE_NONE
+                         || aFont.GetOverline()  != LINESTYLE_NONE
                          || aFont.GetStrikeout() != STRIKEOUT_NONE;
     const bool bWordWise = bTextLines && aFont.IsWordLineMode() &&
                            rDo.GetInf().GetDrawSpace();
@@ -519,8 +519,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             pSpaceFont = pLastFont;
 
         // Wir basteln uns einen Font fuer die Grossbuchstaben:
-        aFont.SetUnderline( UNDERLINE_NONE );
-        aFont.SetOverline( UNDERLINE_NONE );
+        aFont.SetUnderline( LINESTYLE_NONE );
+        aFont.SetOverline( LINESTYLE_NONE );
         aFont.SetStrikeout( STRIKEOUT_NONE );
         pMagic2 = nullptr;
         nIndex2 = 0;

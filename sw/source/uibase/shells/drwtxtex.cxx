@@ -178,16 +178,16 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
             else
             {
-                FontUnderline eFU = static_cast<const SvxUnderlineItem&>(aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-                aNewAttr.Put( SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE) );
+                FontLineStyle eFU = static_cast<const SvxUnderlineItem&>(aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+                aNewAttr.Put( SvxUnderlineItem(eFU == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE, EE_CHAR_UNDERLINE) );
             }
         }
         break;
 
         case SID_ATTR_CHAR_OVERLINE:
         {
-             FontUnderline eFO = static_cast<const SvxOverlineItem&>(aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
-            aNewAttr.Put(SvxOverlineItem(eFO == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_OVERLINE));
+            FontLineStyle eFO = static_cast<const SvxOverlineItem&>(aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
+            aNewAttr.Put(SvxOverlineItem(eFO == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE, EE_CHAR_OVERLINE));
         }
         break;
 

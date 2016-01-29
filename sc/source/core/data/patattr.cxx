@@ -258,8 +258,8 @@ void ScPatternAttr::GetFont(
     sal_uInt32 nFontHeight;
     FontWeight eWeight;
     FontItalic eItalic;
-    FontUnderline eUnder;
-    FontUnderline eOver;
+    FontLineStyle eUnder;
+    FontLineStyle eOver;
     bool bWordLine;
     FontStrikeout eStrike;
     bool bOutline;
@@ -294,11 +294,11 @@ void ScPatternAttr::GetFont(
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
-        eUnder = (FontUnderline)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
+        eUnder = (FontLineStyle)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
-        eOver = (FontUnderline)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+        eOver = (FontLineStyle)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
@@ -341,9 +341,9 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( nWeightId )).GetValue();
         eItalic = (FontItalic)static_cast<const SvxPostureItem&>(
                         rItemSet.Get( nPostureId )).GetValue();
-        eUnder = (FontUnderline)static_cast<const SvxUnderlineItem&>(
+        eUnder = (FontLineStyle)static_cast<const SvxUnderlineItem&>(
                         rItemSet.Get( ATTR_FONT_UNDERLINE )).GetValue();
-        eOver = (FontUnderline)static_cast<const SvxOverlineItem&>(
+        eOver = (FontLineStyle)static_cast<const SvxOverlineItem&>(
                         rItemSet.Get( ATTR_FONT_OVERLINE )).GetValue();
         bWordLine = static_cast<const SvxWordLineModeItem&>(
                         rItemSet.Get( ATTR_FONT_WORDLINE )).GetValue();
@@ -532,13 +532,13 @@ ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nS
     if ( rItemSet.GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
-        aReturn.eUnder = (FontUnderline)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
+        aReturn.eUnder = (FontLineStyle)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
-        aReturn.eOver = (FontUnderline)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+        aReturn.eOver = (FontLineStyle)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) == SfxItemState::SET )
@@ -602,8 +602,8 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     SvxFontItem     aCtlFontItem(EE_CHAR_FONTINFO_CTL);
     long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
-    SvxUnderlineItem aUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
-    SvxOverlineItem aOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE);
+    SvxUnderlineItem aUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE);
+    SvxOverlineItem aOverlineItem(LINESTYLE_NONE, EE_CHAR_OVERLINE);
     bool            bWordLine;
     FontStrikeout   eStrike;
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
@@ -867,9 +867,9 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 
     // SvxTextLineItem contains enum and color
     if (rEditSet.GetItemState(EE_CHAR_UNDERLINE,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxUnderlineItem(UNDERLINE_NONE,ATTR_FONT_UNDERLINE) = *static_cast<const SvxUnderlineItem*>(pItem) );
+        rDestSet.Put( SvxUnderlineItem(LINESTYLE_NONE,ATTR_FONT_UNDERLINE) = *static_cast<const SvxUnderlineItem*>(pItem) );
     if (rEditSet.GetItemState(EE_CHAR_OVERLINE,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxOverlineItem(UNDERLINE_NONE,ATTR_FONT_OVERLINE) = *static_cast<const SvxOverlineItem*>(pItem) );
+        rDestSet.Put( SvxOverlineItem(LINESTYLE_NONE,ATTR_FONT_OVERLINE) = *static_cast<const SvxOverlineItem*>(pItem) );
     if (rEditSet.GetItemState(EE_CHAR_WLM,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxWordLineModeItem( static_cast<const SvxWordLineModeItem*>(pItem)->GetValue(),
                         ATTR_FONT_WORDLINE) );

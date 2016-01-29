@@ -25,54 +25,54 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextLine mapFontUnderlineToTextLine(FontUnderline eLineStyle)
+        TextLine mapFontLineStyleToTextLine(FontLineStyle eLineStyle)
         {
             switch(eLineStyle)
             {
-                case UNDERLINE_SINGLE:          return TEXT_LINE_SINGLE;
-                case UNDERLINE_DOUBLE:          return TEXT_LINE_DOUBLE;
-                case UNDERLINE_DOTTED:          return TEXT_LINE_DOTTED;
-                case UNDERLINE_DASH:            return TEXT_LINE_DASH;
-                case UNDERLINE_LONGDASH:        return TEXT_LINE_LONGDASH;
-                case UNDERLINE_DASHDOT:         return TEXT_LINE_DASHDOT;
-                case UNDERLINE_DASHDOTDOT:      return TEXT_LINE_DASHDOTDOT;
-                case UNDERLINE_SMALLWAVE:       return TEXT_LINE_SMALLWAVE;
-                case UNDERLINE_WAVE:            return TEXT_LINE_WAVE;
-                case UNDERLINE_DOUBLEWAVE:      return TEXT_LINE_DOUBLEWAVE;
-                case UNDERLINE_BOLD:            return TEXT_LINE_BOLD;
-                case UNDERLINE_BOLDDOTTED:      return TEXT_LINE_BOLDDOTTED;
-                case UNDERLINE_BOLDDASH:        return TEXT_LINE_BOLDDASH;
-                case UNDERLINE_BOLDLONGDASH:    return TEXT_LINE_BOLDLONGDASH;
-                case UNDERLINE_BOLDDASHDOT:     return TEXT_LINE_BOLDDASHDOT;
-                case UNDERLINE_BOLDDASHDOTDOT:  return TEXT_LINE_BOLDDASHDOTDOT;
-                case UNDERLINE_BOLDWAVE:        return TEXT_LINE_BOLDWAVE;
-                // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
+                case LINESTYLE_SINGLE:          return TEXT_LINE_SINGLE;
+                case LINESTYLE_DOUBLE:          return TEXT_LINE_DOUBLE;
+                case LINESTYLE_DOTTED:          return TEXT_LINE_DOTTED;
+                case LINESTYLE_DASH:            return TEXT_LINE_DASH;
+                case LINESTYLE_LONGDASH:        return TEXT_LINE_LONGDASH;
+                case LINESTYLE_DASHDOT:         return TEXT_LINE_DASHDOT;
+                case LINESTYLE_DASHDOTDOT:      return TEXT_LINE_DASHDOTDOT;
+                case LINESTYLE_SMALLWAVE:       return TEXT_LINE_SMALLWAVE;
+                case LINESTYLE_WAVE:            return TEXT_LINE_WAVE;
+                case LINESTYLE_DOUBLEWAVE:      return TEXT_LINE_DOUBLEWAVE;
+                case LINESTYLE_BOLD:            return TEXT_LINE_BOLD;
+                case LINESTYLE_BOLDDOTTED:      return TEXT_LINE_BOLDDOTTED;
+                case LINESTYLE_BOLDDASH:        return TEXT_LINE_BOLDDASH;
+                case LINESTYLE_BOLDLONGDASH:    return TEXT_LINE_BOLDLONGDASH;
+                case LINESTYLE_BOLDDASHDOT:     return TEXT_LINE_BOLDDASHDOT;
+                case LINESTYLE_BOLDDASHDOTDOT:  return TEXT_LINE_BOLDDASHDOTDOT;
+                case LINESTYLE_BOLDWAVE:        return TEXT_LINE_BOLDWAVE;
+                // FontLineStyle_FORCE_EQUAL_SIZE, LINESTYLE_DONTKNOW, LINESTYLE_NONE
                 default:                        return TEXT_LINE_NONE;
             }
         }
 
-        FontUnderline mapTextLineToFontUnderline(TextLine eLineStyle)
+        FontLineStyle mapTextLineToFontLineStyle(TextLine eLineStyle)
         {
             switch(eLineStyle)
             {
-                default: /*TEXT_LINE_NONE*/   return UNDERLINE_NONE;
-                case TEXT_LINE_SINGLE:        return UNDERLINE_SINGLE;
-                case TEXT_LINE_DOUBLE:        return UNDERLINE_DOUBLE;
-                case TEXT_LINE_DOTTED:        return UNDERLINE_DOTTED;
-                case TEXT_LINE_DASH:          return UNDERLINE_DASH;
-                case TEXT_LINE_LONGDASH:      return UNDERLINE_LONGDASH;
-                case TEXT_LINE_DASHDOT:       return UNDERLINE_DASHDOT;
-                case TEXT_LINE_DASHDOTDOT:    return UNDERLINE_DASHDOTDOT;
-                case TEXT_LINE_SMALLWAVE:     return UNDERLINE_SMALLWAVE;
-                case TEXT_LINE_WAVE:          return UNDERLINE_WAVE;
-                case TEXT_LINE_DOUBLEWAVE:    return UNDERLINE_DOUBLEWAVE;
-                case TEXT_LINE_BOLD:          return UNDERLINE_BOLD;
-                case TEXT_LINE_BOLDDOTTED:    return UNDERLINE_BOLDDOTTED;
-                case TEXT_LINE_BOLDDASH:      return UNDERLINE_BOLDDASH;
-                case TEXT_LINE_BOLDLONGDASH:  return UNDERLINE_LONGDASH;
-                case TEXT_LINE_BOLDDASHDOT:   return UNDERLINE_BOLDDASHDOT;
-                case TEXT_LINE_BOLDDASHDOTDOT:return UNDERLINE_BOLDDASHDOT;
-                case TEXT_LINE_BOLDWAVE:      return UNDERLINE_BOLDWAVE;
+                default: /*TEXT_LINE_NONE*/   return LINESTYLE_NONE;
+                case TEXT_LINE_SINGLE:        return LINESTYLE_SINGLE;
+                case TEXT_LINE_DOUBLE:        return LINESTYLE_DOUBLE;
+                case TEXT_LINE_DOTTED:        return LINESTYLE_DOTTED;
+                case TEXT_LINE_DASH:          return LINESTYLE_DASH;
+                case TEXT_LINE_LONGDASH:      return LINESTYLE_LONGDASH;
+                case TEXT_LINE_DASHDOT:       return LINESTYLE_DASHDOT;
+                case TEXT_LINE_DASHDOTDOT:    return LINESTYLE_DASHDOTDOT;
+                case TEXT_LINE_SMALLWAVE:     return LINESTYLE_SMALLWAVE;
+                case TEXT_LINE_WAVE:          return LINESTYLE_WAVE;
+                case TEXT_LINE_DOUBLEWAVE:    return LINESTYLE_DOUBLEWAVE;
+                case TEXT_LINE_BOLD:          return LINESTYLE_BOLD;
+                case TEXT_LINE_BOLDDOTTED:    return LINESTYLE_BOLDDOTTED;
+                case TEXT_LINE_BOLDDASH:      return LINESTYLE_BOLDDASH;
+                case TEXT_LINE_BOLDLONGDASH:  return LINESTYLE_LONGDASH;
+                case TEXT_LINE_BOLDDASHDOT:   return LINESTYLE_BOLDDASHDOT;
+                case TEXT_LINE_BOLDDASHDOTDOT:return LINESTYLE_BOLDDASHDOT;
+                case TEXT_LINE_BOLDWAVE:      return LINESTYLE_BOLDWAVE;
             }
         }
 

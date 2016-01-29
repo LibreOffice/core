@@ -96,34 +96,34 @@ void TextUnderlineControl::initial()
     maVSUnderline->SetText( SVX_RESSTR(STR_WITHOUT) );
 
     maVSUnderline->InsertItem(1, maIMGSingle, SVX_RESSTR(STR_SINGLE));
-    maVSUnderline->SetItemData(1, reinterpret_cast<void*>(UNDERLINE_SINGLE));
+    maVSUnderline->SetItemData(1, reinterpret_cast<void*>(LINESTYLE_SINGLE));
 
     maVSUnderline->InsertItem(2, maIMGDouble, SVX_RESSTR(STR_DOUBLE));
-    maVSUnderline->SetItemData(2, reinterpret_cast<void*>(UNDERLINE_DOUBLE));
+    maVSUnderline->SetItemData(2, reinterpret_cast<void*>(LINESTYLE_DOUBLE));
 
     maVSUnderline->InsertItem(3, maIMGBold, SVX_RESSTR(STR_BOLD));
-    maVSUnderline->SetItemData(3, reinterpret_cast<void*>(UNDERLINE_BOLD));
+    maVSUnderline->SetItemData(3, reinterpret_cast<void*>(LINESTYLE_BOLD));
 
     maVSUnderline->InsertItem(4, maIMGDot, SVX_RESSTR(STR_DOT));
-    maVSUnderline->SetItemData(4, reinterpret_cast<void*>(UNDERLINE_DOTTED));
+    maVSUnderline->SetItemData(4, reinterpret_cast<void*>(LINESTYLE_DOTTED));
 
     maVSUnderline->InsertItem(5, maIMGDotBold, SVX_RESSTR(STR_DOT_BOLD));
-    maVSUnderline->SetItemData(5, reinterpret_cast<void*>(UNDERLINE_BOLDDOTTED));
+    maVSUnderline->SetItemData(5, reinterpret_cast<void*>(LINESTYLE_BOLDDOTTED));
 
     maVSUnderline->InsertItem(6, maIMGDash, SVX_RESSTR(STR_DASH));
-    maVSUnderline->SetItemData(6, reinterpret_cast<void*>(UNDERLINE_DASH));
+    maVSUnderline->SetItemData(6, reinterpret_cast<void*>(LINESTYLE_DASH));
 
     maVSUnderline->InsertItem(7, maIMGDashLong, SVX_RESSTR(STR_DASH_LONG));
-    maVSUnderline->SetItemData(7, reinterpret_cast<void*>(UNDERLINE_LONGDASH));
+    maVSUnderline->SetItemData(7, reinterpret_cast<void*>(LINESTYLE_LONGDASH));
 
     maVSUnderline->InsertItem(8, maIMGDashDot, SVX_RESSTR(STR_DASH_DOT));
-    maVSUnderline->SetItemData(8, reinterpret_cast<void*>(UNDERLINE_DASHDOT));
+    maVSUnderline->SetItemData(8, reinterpret_cast<void*>(LINESTYLE_DASHDOT));
 
     maVSUnderline->InsertItem(9, maIMGDashDotDot, SVX_RESSTR(STR_DASH_DOT_DOT));
-    maVSUnderline->SetItemData(9, reinterpret_cast<void*>(UNDERLINE_DASHDOTDOT));
+    maVSUnderline->SetItemData(9, reinterpret_cast<void*>(LINESTYLE_DASHDOTDOT));
 
     maVSUnderline->InsertItem(10, maIMGWave, SVX_RESSTR(STR_WAVE));
-    maVSUnderline->SetItemData(10, reinterpret_cast<void*>(UNDERLINE_WAVE));
+    maVSUnderline->SetItemData(10, reinterpret_cast<void*>(LINESTYLE_WAVE));
 
     maVSUnderline->SetColCount();
     maVSUnderline->SetSelectHdl(LINK( this, TextUnderlineControl, VSSelectHdl ));
@@ -132,7 +132,7 @@ void TextUnderlineControl::initial()
     maVSUnderline->Show();
 }
 
-void TextUnderlineControl::Rearrange(FontUnderline eLine)
+void TextUnderlineControl::Rearrange(FontLineStyle eLine)
 {
     maVSUnderline->SetItemImage(1, maIMGSingle);
     maVSUnderline->SetItemImage(2, maIMGDouble );
@@ -147,57 +147,57 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
 
     switch(eLine)
     {
-    case UNDERLINE_SINGLE:
+    case LINESTYLE_SINGLE:
         maVSUnderline->SetItemImage(1, maIMGSingleSel);
         maVSUnderline->SelectItem(1);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_DOUBLE:
+    case LINESTYLE_DOUBLE:
         maVSUnderline->SetItemImage(2, maIMGDoubleSel);
         maVSUnderline->SelectItem(2);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_BOLD:
+    case LINESTYLE_BOLD:
         maVSUnderline->SetItemImage(3, maIMGBoldSel);
         maVSUnderline->SelectItem(3);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_DOTTED:
+    case LINESTYLE_DOTTED:
         maVSUnderline->SetItemImage(4, maIMGDotSel);
         maVSUnderline->SelectItem(4);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_BOLDDOTTED:
+    case LINESTYLE_BOLDDOTTED:
         maVSUnderline->SetItemImage(5, maIMGDotBoldSel);
         maVSUnderline->SelectItem(5);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_DASH:
+    case LINESTYLE_DASH:
         maVSUnderline->SetItemImage(6, maIMGDashSel);
         maVSUnderline->SelectItem(6);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_LONGDASH:
+    case LINESTYLE_LONGDASH:
         maVSUnderline->SetItemImage(7, maIMGDashLongSel);
         maVSUnderline->SelectItem(7);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_DASHDOT:
+    case LINESTYLE_DASHDOT:
         maVSUnderline->SetItemImage(8, maIMGDashDotSel);
         maVSUnderline->SelectItem(8);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_DASHDOTDOT:
+    case LINESTYLE_DASHDOTDOT:
         maVSUnderline->SetItemImage(9, maIMGDashDotDotSel);
         maVSUnderline->SelectItem(9);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_WAVE:
+    case LINESTYLE_WAVE:
         maVSUnderline->SetItemImage(10, maIMGWaveSel);
         maVSUnderline->SelectItem(10);
         maVSUnderline->GrabFocus();
         break;
-    case UNDERLINE_NONE:
+    case LINESTYLE_NONE:
         maVSUnderline->SelectItem(0);
         maVSUnderline->GrabFocus();
         break;
@@ -214,9 +214,9 @@ IMPL_LINK_TYPED(TextUnderlineControl, VSSelectHdl, ValueSet*, pControl, void)
     if ( pControl == maVSUnderline.get() )
     {
         const sal_uInt16 iPos = maVSUnderline->GetSelectItemId();
-        const FontUnderline eUnderline = ( iPos == 0 )
-                                         ? UNDERLINE_NONE
-                                         : static_cast<FontUnderline>(reinterpret_cast<sal_uInt64>(maVSUnderline->GetItemData( iPos )));
+        const FontLineStyle eUnderline = ( iPos == 0 )
+                                         ? LINESTYLE_NONE
+                                         : static_cast<FontLineStyle>(reinterpret_cast<sal_uInt64>(maVSUnderline->GetItemData( iPos )));
 
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
 

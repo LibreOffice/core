@@ -960,8 +960,8 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo &rInf 
     // Weight style of paragraph font should not be considered
     // Posture style of paragraph font should not be considered
     // See also #i18463# and SwTextFormatter::NewNumberPortion()
-    pNumFnt->SetUnderline( UNDERLINE_NONE );
-    pNumFnt->SetOverline( UNDERLINE_NONE );
+    pNumFnt->SetUnderline( LINESTYLE_NONE );
+    pNumFnt->SetOverline( LINESTYLE_NONE );
     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
     pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
     pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );

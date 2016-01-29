@@ -133,22 +133,22 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             rSh.QuickUpdateStyle();
             rReq.Done();
             break;
-        case FN_UNDERLINE_DOUBLE:
+        case FN_LINESTYLE_DOUBLE:
         {
-            FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+            FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                             aSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
             switch( eState )
             {
                 case STATE_TOGGLE:
-                    eUnderline = eUnderline == UNDERLINE_DOUBLE ?
-                        UNDERLINE_NONE :
-                            UNDERLINE_DOUBLE;
+                    eUnderline = eUnderline == LINESTYLE_DOUBLE ?
+                        LINESTYLE_NONE :
+                            LINESTYLE_DOUBLE;
                 break;
                 case STATE_ON:
-                    eUnderline = UNDERLINE_DOUBLE;
+                    eUnderline = LINESTYLE_DOUBLE;
                 break;
                 case STATE_OFF:
-                    eUnderline = UNDERLINE_NONE;
+                    eUnderline = LINESTYLE_NONE;
                 break;
             }
             SvxUnderlineItem aUnderline(eUnderline, RES_CHRATR_UNDERLINE );
@@ -654,14 +654,14 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 nSlot = 0;
             }
             break;
-            case FN_UNDERLINE_DOUBLE:
+            case FN_LINESTYLE_DOUBLE:
             {
                 eState = aCoreSet.GetItemState(RES_CHRATR_UNDERLINE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
+                    FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
                             aCoreSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
-                    rSet.Put(SfxBoolItem(nSlot, eUnderline == UNDERLINE_DOUBLE));
+                    rSet.Put(SfxBoolItem(nSlot, eUnderline == LINESTYLE_DOUBLE));
                 }
                 else
                     rSet.InvalidateItem(nSlot);

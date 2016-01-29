@@ -1840,8 +1840,8 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
     bool bCrossedOut = false;
     bool bBlink = false;
     bool bBlinkOn = false;
-    FontUnderline eUnderline  = UNDERLINE_NONE;
-    FontUnderline eOverline   = UNDERLINE_NONE;
+    FontLineStyle eUnderline  = LINESTYLE_NONE;
+    FontLineStyle eOverline   = LINESTYLE_NONE;
     FontStrikeout eCrossedOut = STRIKEOUT_NONE;
 
     // der Wert kann zwei Werte enthalten! Und MS-IE auch Strings
@@ -1857,10 +1857,10 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             if( aValue == "none" )
             {
                 bUnderline = true;
-                eUnderline = UNDERLINE_NONE;
+                eUnderline = LINESTYLE_NONE;
 
                 bOverline = true;
-                eOverline = UNDERLINE_NONE;
+                eOverline = LINESTYLE_NONE;
 
                 bCrossedOut = true;
                 eCrossedOut = STRIKEOUT_NONE;
@@ -1876,7 +1876,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             if( aValue == "underline" )
             {
                 bUnderline = true;
-                eUnderline = UNDERLINE_SINGLE;
+                eUnderline = LINESTYLE_SINGLE;
 
                 bKnown = true;
             }
@@ -1886,7 +1886,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             if( aValue == "overline" )
             {
                 bOverline = true;
-                eOverline = UNDERLINE_SINGLE;
+                eOverline = LINESTYLE_SINGLE;
 
                 bKnown = true;
             }
@@ -1916,7 +1916,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
         if( !bKnown )
         {
             bUnderline = true;
-            eUnderline = UNDERLINE_SINGLE;
+            eUnderline = LINESTYLE_SINGLE;
         }
 
         pExpr = pExpr->GetNext();

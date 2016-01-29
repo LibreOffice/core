@@ -9066,12 +9066,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     // draw eventual textlines
     FontStrikeout eStrikeout = m_aCurrentPDFState.m_aFont.GetStrikeout();
-    FontUnderline eUnderline = m_aCurrentPDFState.m_aFont.GetUnderline();
-    FontUnderline eOverline  = m_aCurrentPDFState.m_aFont.GetOverline();
+    FontLineStyle eUnderline = m_aCurrentPDFState.m_aFont.GetUnderline();
+    FontLineStyle eOverline  = m_aCurrentPDFState.m_aFont.GetOverline();
     if( bTextLines &&
         (
-         ( eUnderline != UNDERLINE_NONE && eUnderline != UNDERLINE_DONTKNOW ) ||
-         ( eOverline  != UNDERLINE_NONE && eOverline  != UNDERLINE_DONTKNOW ) ||
+         ( eUnderline != LINESTYLE_NONE && eUnderline != LINESTYLE_DONTKNOW ) ||
+         ( eOverline  != LINESTYLE_NONE && eOverline  != LINESTYLE_DONTKNOW ) ||
          ( eStrikeout != STRIKEOUT_NONE && eStrikeout != STRIKEOUT_DONTKNOW )
          )
         )
@@ -9484,7 +9484,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
 
 #define HCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicHeight( x )
 
-void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove )
+void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
     LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance;
@@ -9508,20 +9508,20 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnd
         nLineHeight = HCONV( pFontInstance->mxFontMetric->GetWavelineUnderlineSize() );
         nLinePos = HCONV( pFontInstance->mxFontMetric->GetWavelineUnderlineOffset() );
     }
-    if ( (eTextLine == UNDERLINE_SMALLWAVE) && (nLineHeight > 3) )
+    if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
     long nLineWidth = getReferenceDevice()->mnDPIX/450;
     if ( ! nLineWidth )
         nLineWidth = 1;
 
-    if ( eTextLine == UNDERLINE_BOLDWAVE )
+    if ( eTextLine == LINESTYLE_BOLDWAVE )
         nLineWidth = 3*nLineWidth;
 
     m_aPages.back().appendMappedLength( (sal_Int32)nLineWidth, aLine );
     aLine.append( " w " );
 
-    if ( eTextLine == UNDERLINE_DOUBLEWAVE )
+    if ( eTextLine == LINESTYLE_DOUBLEWAVE )
     {
         long nOrgLineHeight = nLineHeight;
         nLineHeight /= 3;
@@ -9548,13 +9548,13 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnd
     }
     else
     {
-        if ( eTextLine != UNDERLINE_BOLDWAVE )
+        if ( eTextLine != LINESTYLE_BOLDWAVE )
             nLinePos -= nLineWidth/2;
         m_aPages.back().appendWaveLine( nWidth, -nLinePos, nLineHeight, aLine );
     }
 }
 
-void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove )
+void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
     LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance;
@@ -9562,17 +9562,17 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
 
-    if ( eTextLine > UNDERLINE_BOLDWAVE )
-        eTextLine = UNDERLINE_SINGLE;
+    if ( eTextLine > LINESTYLE_BOLDWAVE )
+        eTextLine = LINESTYLE_SINGLE;
 
     switch ( eTextLine )
     {
-        case UNDERLINE_SINGLE:
-        case UNDERLINE_DOTTED:
-        case UNDERLINE_DASH:
-        case UNDERLINE_LONGDASH:
-        case UNDERLINE_DASHDOT:
-        case UNDERLINE_DASHDOTDOT:
+        case LINESTYLE_SINGLE:
+        case LINESTYLE_DOTTED:
+        case LINESTYLE_DASH:
+        case LINESTYLE_LONGDASH:
+        case LINESTYLE_DASHDOT:
+        case LINESTYLE_DASHDOTDOT:
             if ( bIsAbove )
             {
                 if ( !pFontInstance->mxFontMetric->GetAboveUnderlineSize() )
@@ -9588,12 +9588,12 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                 nLinePos    = HCONV( pFontInstance->mxFontMetric->GetUnderlineOffset() );
             }
             break;
-        case UNDERLINE_BOLD:
-        case UNDERLINE_BOLDDOTTED:
-        case UNDERLINE_BOLDDASH:
-        case UNDERLINE_BOLDLONGDASH:
-        case UNDERLINE_BOLDDASHDOT:
-        case UNDERLINE_BOLDDASHDOTDOT:
+        case LINESTYLE_BOLD:
+        case LINESTYLE_BOLDDOTTED:
+        case LINESTYLE_BOLDDASH:
+        case LINESTYLE_BOLDLONGDASH:
+        case LINESTYLE_BOLDDASHDOT:
+        case LINESTYLE_BOLDDASHDOTDOT:
             if ( bIsAbove )
             {
                 if ( !pFontInstance->mxFontMetric->GetAboveBoldUnderlineSize() )
@@ -9610,7 +9610,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                 nLinePos += nLineHeight/2;
             }
             break;
-        case UNDERLINE_DOUBLE:
+        case LINESTYLE_DOUBLE:
             if ( bIsAbove )
             {
                 if ( !pFontInstance->mxFontMetric->GetAboveDoubleUnderlineSize() )
@@ -9641,20 +9641,20 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
 
         switch ( eTextLine )
         {
-            case UNDERLINE_DOTTED:
-            case UNDERLINE_BOLDDOTTED:
+            case LINESTYLE_DOTTED:
+            case LINESTYLE_BOLDDOTTED:
                 aLine.append( "[ " );
                 m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
                 aLine.append( " ] 0 d\n" );
                 break;
-            case UNDERLINE_DASH:
-            case UNDERLINE_LONGDASH:
-            case UNDERLINE_BOLDDASH:
-            case UNDERLINE_BOLDLONGDASH:
+            case LINESTYLE_DASH:
+            case LINESTYLE_LONGDASH:
+            case LINESTYLE_BOLDDASH:
+            case LINESTYLE_BOLDLONGDASH:
                 {
                     sal_Int32 nDashLength = 4*nLineHeight;
                     sal_Int32 nVoidLength = 2*nLineHeight;
-                    if ( ( eTextLine == UNDERLINE_LONGDASH ) || ( eTextLine == UNDERLINE_BOLDLONGDASH ) )
+                    if ( ( eTextLine == LINESTYLE_LONGDASH ) || ( eTextLine == LINESTYLE_BOLDLONGDASH ) )
                         nDashLength = 8*nLineHeight;
 
                     aLine.append( "[ " );
@@ -9664,8 +9664,8 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                     aLine.append( " ] 0 d\n" );
                 }
                 break;
-            case UNDERLINE_DASHDOT:
-            case UNDERLINE_BOLDDASHDOT:
+            case LINESTYLE_DASHDOT:
+            case LINESTYLE_BOLDDASHDOT:
                 {
                     sal_Int32 nDashLength = 4*nLineHeight;
                     sal_Int32 nVoidLength = 2*nLineHeight;
@@ -9680,8 +9680,8 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                     aLine.append( " ] 0 d\n" );
                 }
                 break;
-            case UNDERLINE_DASHDOTDOT:
-            case UNDERLINE_BOLDDASHDOTDOT:
+            case LINESTYLE_DASHDOTDOT:
+            case LINESTYLE_BOLDDASHDOTDOT:
                 {
                     sal_Int32 nDashLength = 4*nLineHeight;
                     sal_Int32 nVoidLength = 2*nLineHeight;
@@ -9711,7 +9711,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
         aLine.append( ' ' );
         m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine );
         aLine.append( " l S\n" );
-        if ( eTextLine == UNDERLINE_DOUBLE )
+        if ( eTextLine == LINESTYLE_DOUBLE )
         {
             aLine.append( "0 " );
             m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine );
@@ -9846,12 +9846,12 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     }
 }
 
-void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove )
+void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove )
 {
     if ( !nWidth ||
          ( ((eStrikeout == STRIKEOUT_NONE)||(eStrikeout == STRIKEOUT_DONTKNOW)) &&
-           ((eUnderline == UNDERLINE_NONE)||(eUnderline == UNDERLINE_DONTKNOW)) &&
-           ((eOverline  == UNDERLINE_NONE)||(eOverline  == UNDERLINE_DONTKNOW)) ) )
+           ((eUnderline == LINESTYLE_NONE)||(eUnderline == LINESTYLE_DONTKNOW)) &&
+           ((eOverline  == LINESTYLE_NONE)||(eOverline  == LINESTYLE_DONTKNOW)) ) )
         return;
 
     MARK( "drawTextLine" );
@@ -9894,19 +9894,19 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     if ( aUnderlineColor.GetTransparency() != 0 )
         aUnderlineColor = aStrikeoutColor;
 
-    if ( (eUnderline == UNDERLINE_SMALLWAVE) ||
-         (eUnderline == UNDERLINE_WAVE) ||
-         (eUnderline == UNDERLINE_DOUBLEWAVE) ||
-         (eUnderline == UNDERLINE_BOLDWAVE) )
+    if ( (eUnderline == LINESTYLE_SMALLWAVE) ||
+         (eUnderline == LINESTYLE_WAVE) ||
+         (eUnderline == LINESTYLE_DOUBLEWAVE) ||
+         (eUnderline == LINESTYLE_BOLDWAVE) )
     {
         drawWaveTextLine( aLine, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
         bUnderlineDone = true;
     }
 
-    if ( (eOverline == UNDERLINE_SMALLWAVE) ||
-         (eOverline == UNDERLINE_WAVE) ||
-         (eOverline == UNDERLINE_DOUBLEWAVE) ||
-         (eOverline == UNDERLINE_BOLDWAVE) )
+    if ( (eOverline == LINESTYLE_SMALLWAVE) ||
+         (eOverline == LINESTYLE_WAVE) ||
+         (eOverline == LINESTYLE_DOUBLEWAVE) ||
+         (eOverline == LINESTYLE_BOLDWAVE) )
     {
         drawWaveTextLine( aLine, nWidth, eOverline, aOverlineColor, true );
         bOverlineDone = true;

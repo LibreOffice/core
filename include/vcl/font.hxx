@@ -144,10 +144,10 @@ public:
     bool                IsShadow() const;
     void                SetRelief( FontRelief );
     FontRelief          GetRelief() const;
-    void                SetUnderline( FontUnderline );
-    FontUnderline       GetUnderline() const;
-    void                SetOverline( FontUnderline );
-    FontUnderline       GetOverline() const;
+    void                SetUnderline( FontLineStyle );
+    FontLineStyle       GetUnderline() const;
+    void                SetOverline( FontLineStyle );
+    FontLineStyle       GetOverline() const;
     void                SetStrikeout( FontStrikeout );
     FontStrikeout       GetStrikeout() const;
     void                SetEmphasisMark( FontEmphasisMark );

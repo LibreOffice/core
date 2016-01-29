@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxTextLineItem( const FontUnderline eSt,
+    SvxTextLineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -71,9 +71,9 @@ public:
         }
 
     // enum cast
-    FontUnderline           GetLineStyle() const
-                                { return (FontUnderline)GetValue(); }
-    void                    SetLineStyle( FontUnderline eNew )
+    FontLineStyle           GetLineStyle() const
+                                { return (FontLineStyle)GetValue(); }
+    void                    SetLineStyle( FontLineStyle eNew )
                                 { SetValue((sal_uInt16) eNew); }
 
     const Color&            GetColor() const                { return mColor; }
@@ -89,7 +89,7 @@ class EDITENG_DLLPUBLIC SvxUnderlineItem : public SvxTextLineItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxUnderlineItem( const FontUnderline eSt,
+    SvxUnderlineItem( const FontLineStyle eSt,
                       const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -106,7 +106,7 @@ class EDITENG_DLLPUBLIC SvxOverlineItem : public SvxTextLineItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxOverlineItem( const FontUnderline eSt,
+    SvxOverlineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

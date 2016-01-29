@@ -849,13 +849,13 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             // Must underlined if in WordLineMode, but the information is
             // missing here
-            FontUnderline e = static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle();
+            FontLineStyle e = static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle();
             switch ( e )
             {
-                case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULNONE );       break;
-                case UNDERLINE_SINGLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );       break;
-                case UNDERLINE_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULDB );     break;
-                case UNDERLINE_DOTTED:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULD );      break;
+                case LINESTYLE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULNONE );       break;
+                case LINESTYLE_SINGLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );       break;
+                case LINESTYLE_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULDB );     break;
+                case LINESTYLE_DOTTED:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULD );      break;
                 default:
                     break;
             }
@@ -863,13 +863,13 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_OVERLINE:
         {
-            FontUnderline e = static_cast<const SvxOverlineItem&>(rItem).GetLineStyle();
+            FontLineStyle e = static_cast<const SvxOverlineItem&>(rItem).GetLineStyle();
             switch ( e )
             {
-                case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLNONE );       break;
-                case UNDERLINE_SINGLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OL );       break;
-                case UNDERLINE_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLDB );     break;
-                case UNDERLINE_DOTTED:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLD );      break;
+                case LINESTYLE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLNONE );       break;
+                case LINESTYLE_SINGLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OL );       break;
+                case LINESTYLE_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLDB );     break;
+                case LINESTYLE_DOTTED:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLD );      break;
                 default:
                     break;
             }

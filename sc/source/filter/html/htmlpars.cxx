@@ -1692,7 +1692,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         case HTML_UNDERLINE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
-                pActEntry->aItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE,
+                pActEntry->aItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE,
                     ATTR_FONT_UNDERLINE ) );
         }
         break;
@@ -2971,7 +2971,7 @@ void ScHTMLQueryParser::ProcessToken( const ImportInfo& rInfo )
         break;
 
         case HTML_UNDERLINE_ON:     // <u>
-            mpCurrTable->PutItem( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
+            mpCurrTable->PutItem( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
         break;
     }
 }

@@ -296,7 +296,7 @@
 #define FN_AUTOFORMAT_AUTO      (FN_FORMAT + 2 ) /* apply autoformat during user input */
 #define FN_GROW_FONT_SIZE       (FN_FORMAT + 3 ) /* size */
 #define FN_SHRINK_FONT_SIZE     (FN_FORMAT + 4 ) /* size */
-#define FN_UNDERLINE_DOUBLE     (FN_FORMAT + 5 ) /* double underline */
+#define FN_LINESTYLE_DOUBLE     (FN_FORMAT + 5 ) /* double underline */
 #define FN_AUTOFORMAT_REDLINE_APPLY (FN_FORMAT + 6 ) /* apply autoformat with Redlining */
 #define FN_SET_SUPER_SCRIPT     (FN_FORMAT + 11) /* superscript */
 #define FN_SET_SUB_SCRIPT       (FN_FORMAT + 12) /* subscript */

@@ -766,9 +766,9 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 aNewData.mnUnderline = EXC_FONTUNDERL_NONE;
                 switch( aFont.GetUnderline() )
                 {
-                    case UNDERLINE_NONE:    aNewData.mnUnderline = EXC_FONTUNDERL_NONE;    break;
-                    case UNDERLINE_SINGLE:  aNewData.mnUnderline = EXC_FONTUNDERL_SINGLE;  break;
-                    case UNDERLINE_DOUBLE:  aNewData.mnUnderline = EXC_FONTUNDERL_DOUBLE;  break;
+                    case LINESTYLE_NONE:    aNewData.mnUnderline = EXC_FONTUNDERL_NONE;    break;
+                    case LINESTYLE_SINGLE:  aNewData.mnUnderline = EXC_FONTUNDERL_SINGLE;  break;
+                    case LINESTYLE_DOUBLE:  aNewData.mnUnderline = EXC_FONTUNDERL_DOUBLE;  break;
                     default:                aNewData.mnUnderline = EXC_FONTUNDERL_SINGLE;
                 }
                 if( aFontData.mnUnderline != aNewData.mnUnderline )

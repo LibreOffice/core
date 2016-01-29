@@ -120,8 +120,8 @@ SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell const *
 {
     nZoom = pSh ? pSh->GetViewOptions()->GetZoom() : USHRT_MAX;
     bSymbol = RTL_TEXTENCODING_SYMBOL == aFont.GetCharSet();
-    bPaintBlank = ( UNDERLINE_NONE != aFont.GetUnderline()
-                 || UNDERLINE_NONE != aFont.GetOverline()
+    bPaintBlank = ( LINESTYLE_NONE != aFont.GetUnderline()
+                 || LINESTYLE_NONE != aFont.GetOverline()
                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
                  && !aFont.IsWordLineMode();
     aFont.SetLanguage(rFont.GetLanguage());
@@ -869,7 +869,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     if ( ! pTmpFont )
         pTmpFont = pPrtFont;
 
-    // HACK: UNDERLINE_WAVE must not be abused any more, hence the grey wave
+    // HACK: LINESTYLE_WAVE must not be abused any more, hence the grey wave
     // line of the ExtendedAttributeSets will appear in the font color first
 
     const bool bSwitchH2V = rInf.GetFrame() && rInf.GetFrame()->IsVertical();
@@ -1772,13 +1772,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     rInf.GetOut().Push();
                     Color aPreviousColor = pTmpFont->GetColor();
 
-                    FontUnderline aPreviousUnderline = pTmpFont->GetUnderline();
-                    FontUnderline aPreviousOverline = pTmpFont->GetOverline();
+                    FontLineStyle aPreviousUnderline = pTmpFont->GetUnderline();
+                    FontLineStyle aPreviousOverline = pTmpFont->GetOverline();
                     FontStrikeout aPreviousStrikeout = pTmpFont->GetStrikeout();
 
                     pTmpFont->SetColor( Color(NON_PRINTING_CHARACTER_COLOR) );
-                    pTmpFont->SetUnderline(UNDERLINE_NONE);
-                    pTmpFont->SetOverline(UNDERLINE_NONE);
+                    pTmpFont->SetUnderline(LINESTYLE_NONE);
+                    pTmpFont->SetOverline(LINESTYLE_NONE);
                     pTmpFont->SetStrikeout(STRIKEOUT_NONE);
                     rInf.GetOut().SetFont( *pTmpFont );
                     long nShift = rInf.GetOut( ).GetFontMetric( ).GetBulletOffset( );

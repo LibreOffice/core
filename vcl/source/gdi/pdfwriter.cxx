@@ -71,8 +71,8 @@ void PDFWriter::DrawTextLine(
                              const Point& rPos,
                              long nWidth,
                              FontStrikeout eStrikeout,
-                             FontUnderline eUnderline,
-                             FontUnderline eOverline,
+                             FontLineStyle eUnderline,
+                             FontLineStyle eOverline,
                              bool bUnderlineAbove )
 {
     xImplementation->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );

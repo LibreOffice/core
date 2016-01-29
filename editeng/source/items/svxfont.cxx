@@ -693,9 +693,9 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     Size aPartSize;
 
     // Set the desired font
-    FontUnderline eUnder = pFont->GetUnderline();
+    FontLineStyle eUnder = pFont->GetUnderline();
     FontStrikeout eStrike = pFont->GetStrikeout();
-    pFont->SetUnderline( UNDERLINE_NONE );
+    pFont->SetUnderline( LINESTYLE_NONE );
     pFont->SetStrikeout( STRIKEOUT_NONE );
     if ( !bUpper )
     {

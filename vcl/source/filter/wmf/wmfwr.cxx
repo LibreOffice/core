@@ -331,7 +331,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
     pWMF->WriteUInt16( nWeight );
 
     if (rFont.GetItalic()==ITALIC_NONE)       pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
-    if (rFont.GetUnderline()==UNDERLINE_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
+    if (rFont.GetUnderline()==LINESTYLE_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
     if (rFont.GetStrikeout()==STRIKEOUT_NONE) pWMF->WriteUChar( 0 ); else  pWMF->WriteUChar( 1 );
 
     rtl_TextEncoding  eFontNameEncoding = rFont.GetCharSet();

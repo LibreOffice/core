@@ -221,7 +221,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         aFont.SetItalic( ITALIC_NORMAL );
 
     if( rFont.lfUnderline )
-        aFont.SetUnderline( UNDERLINE_SINGLE );
+        aFont.SetUnderline( LINESTYLE_SINGLE );
 
     if( rFont.lfStrikeOut )
         aFont.SetStrikeout( STRIKEOUT_SINGLE );

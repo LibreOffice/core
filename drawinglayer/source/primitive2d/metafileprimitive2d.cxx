@@ -1299,8 +1299,8 @@ namespace
             const bool bWordLineMode(rFont.IsWordLineMode());
 
             const bool bDecoratedIsNeeded(
-                   UNDERLINE_NONE != rFont.GetOverline()
-                || UNDERLINE_NONE != rFont.GetUnderline()
+                   LINESTYLE_NONE != rFont.GetOverline()
+                || LINESTYLE_NONE != rFont.GetUnderline()
                 || STRIKEOUT_NONE != rFont.GetStrikeout()
                 || EMPHASISMARK_NONE != (rFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
                 || RELIEF_NONE != rFont.GetRelief()
@@ -1310,12 +1310,12 @@ namespace
             if(bDecoratedIsNeeded)
             {
                 // prepare overline, underline and strikeout data
-                const drawinglayer::primitive2d::TextLine eFontOverline(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rFont.GetOverline()));
-                const drawinglayer::primitive2d::TextLine eFontUnderline(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rFont.GetUnderline()));
+                const drawinglayer::primitive2d::TextLine eFontOverline(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rFont.GetOverline()));
+                const drawinglayer::primitive2d::TextLine eFontLineStyle(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rFont.GetUnderline()));
                 const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rFont.GetStrikeout()));
 
                 // check UndelineAbove
-                const bool bUnderlineAbove(drawinglayer::primitive2d::TEXT_LINE_NONE != eFontUnderline && isUnderlineAbove(rFont));
+                const bool bUnderlineAbove(drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && isUnderlineAbove(rFont));
 
                 // prepare emphasis mark data
                 drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_EMPHASISMARK_NONE);
@@ -1362,7 +1362,7 @@ namespace
                     rProperty.getOverlineColorActive() ? rProperty.getOverlineColor() : aFontColor,
                     rProperty.getTextLineColorActive() ? rProperty.getTextLineColor() : aFontColor,
                     eFontOverline,
-                    eFontUnderline,
+                    eFontLineStyle,
                     bUnderlineAbove,
                     eTextStrikeout,
                     bWordLineMode,
@@ -1472,8 +1472,8 @@ namespace
 
         if(fLineWidth > 0.0)
         {
-            const drawinglayer::primitive2d::TextLine aOverlineMode(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rAction.GetOverline()));
-            const drawinglayer::primitive2d::TextLine aUnderlineMode(drawinglayer::primitive2d::mapFontUnderlineToTextLine(rAction.GetUnderline()));
+            const drawinglayer::primitive2d::TextLine aOverlineMode(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rAction.GetOverline()));
+            const drawinglayer::primitive2d::TextLine aUnderlineMode(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rAction.GetUnderline()));
             const drawinglayer::primitive2d::TextStrikeout aTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rAction.GetStrikeout()));
 
             const bool bOverlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aOverlineMode);

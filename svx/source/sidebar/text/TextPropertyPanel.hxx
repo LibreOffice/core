@@ -94,7 +94,7 @@ private:
     ::sfx2::sidebar::ControllerItem maUnderlineControl;
     ::sfx2::sidebar::ControllerItem maSpacingControl;
 
-    FontUnderline               meUnderline;
+    FontLineStyle               meUnderline;
     Color                       meUnderlineColor;
     bool                        mbKernAvailable;
     bool                        mbKernLBAvailable;

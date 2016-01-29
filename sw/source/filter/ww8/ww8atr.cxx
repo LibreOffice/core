@@ -1208,60 +1208,60 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     sal_uInt8 b = 0;
     switch ( rUnderline.GetLineStyle() )
     {
-        case UNDERLINE_SINGLE:
+        case LINESTYLE_SINGLE:
             b = ( bWord ) ? 2 : 1;
             break;
-        case UNDERLINE_BOLD:
+        case LINESTYLE_BOLD:
             b = 6;
             break;
-        case UNDERLINE_DOUBLE:
+        case LINESTYLE_DOUBLE:
             b = 3;
             break;
-        case UNDERLINE_DOTTED:
+        case LINESTYLE_DOTTED:
             b = 4;
             break;
-        case UNDERLINE_DASH:
+        case LINESTYLE_DASH:
             b = 7;
             break;
-        case UNDERLINE_DASHDOT:
+        case LINESTYLE_DASHDOT:
             b = 9;
             break;
-        case UNDERLINE_DASHDOTDOT:
+        case LINESTYLE_DASHDOTDOT:
             b = 10;
             break;
-        case UNDERLINE_WAVE:
+        case LINESTYLE_WAVE:
             b = 11;
             break;
         // new in WW2000
-        case UNDERLINE_BOLDDOTTED:
+        case LINESTYLE_BOLDDOTTED:
             b = 20;
             break;
-        case UNDERLINE_BOLDDASH:
+        case LINESTYLE_BOLDDASH:
             b = 23;
             break;
-        case UNDERLINE_LONGDASH:
+        case LINESTYLE_LONGDASH:
             b = 39;
             break;
-        case UNDERLINE_BOLDLONGDASH:
+        case LINESTYLE_BOLDLONGDASH:
             b = 55;
             break;
-        case UNDERLINE_BOLDDASHDOT:
+        case LINESTYLE_BOLDDASHDOT:
             b = 25;
             break;
-        case UNDERLINE_BOLDDASHDOTDOT:
+        case LINESTYLE_BOLDDASHDOTDOT:
             b = 26;
             break;
-        case UNDERLINE_BOLDWAVE:
+        case LINESTYLE_BOLDWAVE:
             b = 27;
             break;
-        case UNDERLINE_DOUBLEWAVE:
+        case LINESTYLE_DOUBLEWAVE:
             b = 43;
             break;
-        case UNDERLINE_NONE:
+        case LINESTYLE_NONE:
             b = 0;
             break;
         default:
-            OSL_ENSURE( rUnderline.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type" );
+            OSL_ENSURE( rUnderline.GetLineStyle() == LINESTYLE_NONE, "Unhandled underline type" );
             break;
     }
 

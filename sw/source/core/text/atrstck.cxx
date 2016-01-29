@@ -795,7 +795,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if( mpShell && mpShell->GetWin())
             {
                 if ( static_cast<const SvxCharHiddenItem&>(rItem).GetValue() )
-                    rFnt.SetUnderline( UNDERLINE_DOTTED );
+                    rFnt.SetUnderline( LINESTYLE_DOTTED );
                 else
                     ActivateTop( rFnt, RES_CHRATR_UNDERLINE );
             }

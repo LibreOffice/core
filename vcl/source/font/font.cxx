@@ -322,7 +322,7 @@ void Font::SetShadow( bool bShadow )
     }
 }
 
-void Font::SetUnderline( FontUnderline eUnderline )
+void Font::SetUnderline( FontLineStyle eUnderline )
 {
     if( mpImplFont->meUnderline != eUnderline )
     {
@@ -331,7 +331,7 @@ void Font::SetUnderline( FontUnderline eUnderline )
     }
 }
 
-void Font::SetOverline( FontUnderline eOverline )
+void Font::SetOverline( FontLineStyle eOverline )
 {
     if( mpImplFont->meOverline != eOverline )
     {
@@ -430,12 +430,12 @@ void Font::Merge( const vcl::Font& rFont )
 
     if ( rFont.GetSize().Height() )
         SetSize( rFont.GetSize() );
-    if ( rFont.GetUnderline() != UNDERLINE_DONTKNOW )
+    if ( rFont.GetUnderline() != LINESTYLE_DONTKNOW )
     {
         SetUnderline( rFont.GetUnderline() );
         SetWordLineMode( rFont.IsWordLineMode() );
     }
-    if ( rFont.GetOverline() != UNDERLINE_DONTKNOW )
+    if ( rFont.GetOverline() != LINESTYLE_DONTKNOW )
     {
         SetOverline( rFont.GetOverline() );
         SetWordLineMode( rFont.IsWordLineMode() );
@@ -483,7 +483,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetFamilyType( (FontFamily) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetPitch( (FontPitch) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetWeight( (FontWeight) nTmp16 );
-    rIStm.ReadUInt16( nTmp16 ); rImplFont.meUnderline = (FontUnderline) nTmp16;
+    rIStm.ReadUInt16( nTmp16 ); rImplFont.meUnderline = (FontLineStyle) nTmp16;
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meStrikeout = (FontStrikeout) nTmp16;
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetItalic( (FontItalic) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.maLanguageTag.reset( (LanguageType) nTmp16);
@@ -506,7 +506,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 
     if( aCompat.GetVersion() >= 3 )
     {
-        rIStm.ReadUInt16( nTmp16 ); rImplFont.meOverline = (FontUnderline) nTmp16;
+        rIStm.ReadUInt16( nTmp16 ); rImplFont.meOverline = (FontLineStyle) nTmp16;
     }
 
     // Relief
@@ -829,8 +829,8 @@ void Font::SetOrientationFlag( bool bCanRotate ) { mpImplFont->SetOrientationFla
 bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 bool Font::IsShadow() const { return mpImplFont->mbShadow; }
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
-FontUnderline Font::GetUnderline() const { return mpImplFont->meUnderline; }
-FontUnderline Font::GetOverline()  const { return mpImplFont->meOverline; }
+FontLineStyle Font::GetUnderline() const { return mpImplFont->meUnderline; }
+FontLineStyle Font::GetOverline()  const { return mpImplFont->meOverline; }
 FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
@@ -846,8 +846,8 @@ ImplFont::ImplFont() :
     meWidthType( WIDTH_DONTKNOW ),
     meItalic( ITALIC_NONE ),
     meAlign( ALIGN_TOP ),
-    meUnderline( UNDERLINE_NONE ),
-    meOverline( UNDERLINE_NONE ),
+    meUnderline( LINESTYLE_NONE ),
+    meOverline( LINESTYLE_NONE ),
     meStrikeout( STRIKEOUT_NONE ),
     meRelief( RELIEF_NONE ),
     meEmphasisMark( EMPHASISMARK_NONE ),

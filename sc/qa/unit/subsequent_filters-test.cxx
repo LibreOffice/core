@@ -2243,7 +2243,7 @@ void ScFiltersTest::testRichTextContentODS()
         if (it->pAttr->Which() == EE_CHAR_UNDERLINE)
         {
             const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>(*it->pAttr);
-            bHasUnderline = (rItem.GetLineStyle() == UNDERLINE_SINGLE);
+            bHasUnderline = (rItem.GetLineStyle() == LINESTYLE_SINGLE);
             if (bHasUnderline)
                 break;
         }
