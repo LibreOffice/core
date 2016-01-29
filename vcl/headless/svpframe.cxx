@@ -292,10 +292,16 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
+
+        // Creating backing surfaces for invisible windows costs a big chunk of RAM.
+        if (Application::IsHeadlessModeEnabled())
+             aFrameSize = B2IVector( 1, 1 );
+
         sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(m_nScanlineFormat, aFrameSize.getX());
         m_aFrame = createBitmapDevice( aFrameSize, m_bTopDown, m_nScanlineFormat, nStride );
         if (m_bDamageTracking)
             m_aFrame->setDamageTracker(
+
                 basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
