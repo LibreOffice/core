@@ -1189,7 +1189,7 @@ void PivotTable::finalizeImport()
                 aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
 
                 // finalize all fields, this finds field names and creates grouping fields
-                maFields.forEachMem( &PivotTableField::finalizeImport, ::boost::cref( mxDPDescriptor ) );
+                maFields.forEachMem(&PivotTableField::finalizeImport, ::std::cref(mxDPDescriptor));
 
                 // all row fields
                 for( IndexVector::iterator aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
@@ -1252,7 +1252,7 @@ void PivotTable::finalizeImport()
 void PivotTable::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
     // process all fields, there is no chaining information in the cache fields
-    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, ::boost::cref( rxBaseDPField ), nBaseFieldIdx );
+    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, ::std::cref(rxBaseDPField), nBaseFieldIdx );
 }
 
 void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,

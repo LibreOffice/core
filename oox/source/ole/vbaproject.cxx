@@ -455,14 +455,14 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
         if( xBasicLib.is() )
         {
             // #TODO cater for mxOleOverridesSink, like I used to before
-            // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
+            // call Basic source code import for each module, std::[c]ref enforces pass-by-ref
             maModules.forEachMem( &VbaModule::createAndImportModule,
-                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
-                ::boost::cref( xDocObjectNA ) );
+                ::std::ref( *xVbaStrg ), ::std::cref( xBasicLib ),
+                ::std::cref( xDocObjectNA ) );
 
             // create empty dummy modules
             aDummyModules.forEachMem( &VbaModule::createEmptyModule,
-                ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+                ::std::cref( xBasicLib ), ::std::cref( xDocObjectNA ) );
         }
     }
     catch(const Exception& )
@@ -516,7 +516,7 @@ void VbaProject::attachMacros()
         aArgs[ 1 ] <<= maPrjName;
         Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
             "com.sun.star.script.vba.VBAMacroResolver", aArgs, mxContext ), UNO_QUERY_THROW );
-        maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::boost::cref( xResolver ) );
+        maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::std::cref( xResolver ) );
     }
     catch(const Exception& )
     {

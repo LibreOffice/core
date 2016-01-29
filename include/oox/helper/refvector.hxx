@@ -21,7 +21,8 @@
 #define INCLUDED_OOX_HELPER_REFVECTOR_HXX
 
 #include <sal/types.h>
-#include <boost/bind.hpp>
+
+#include <functional>
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -67,7 +68,7 @@ public:
     template< typename FuncType >
     void                forEachMem( FuncType pFunc ) const
                         {
-                            forEach( ::boost::bind( pFunc, _1 ) );
+                            forEach( ::std::bind( pFunc, std::placeholders::_1 ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -75,7 +76,7 @@ public:
     template< typename FuncType, typename ParamType >
     void                forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
-                            forEach( ::boost::bind( pFunc, _1, aParam ) );
+                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -83,7 +84,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
-                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
+                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2 ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -91,7 +92,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
     void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
-                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
+                            forEach( ::std::bind( pFunc, std::placeholders::_1, aParam1, aParam2, aParam3 ) );
                         }
 
     /** Calls the passed functor for every contained object. Passes the index as
@@ -107,7 +108,7 @@ public:
     template< typename FuncType, typename ParamType1, typename ParamType2 >
     void                forEachMemWithIndex( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
-                            forEachWithIndex( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
+                            forEachWithIndex( ::std::bind( pFunc, std::placeholders::_2, std::placeholders::_1, aParam1, aParam2 ) );
                         }
 
     /** Searches for an element by using the passed functor that takes a
