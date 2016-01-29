@@ -20,6 +20,7 @@
 #include <rtl/instance.hxx>
 
 #include "internal/rtllifecycle.h"
+#include "alloc_global.hxx"
 
 namespace
 {
@@ -72,9 +73,11 @@ namespace
         rtlArenaSingleton()
         {
             rtl_arena_init();
+            rtl_string_alloc_init();
         }
         ~rtlArenaSingleton()
         {
+            rtl_string_alloc_fini();
             rtl_arena_fini();
         }
     };

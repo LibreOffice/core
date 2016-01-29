@@ -31,6 +31,8 @@
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
 
+#include "alloc_global.hxx"
+
 /*
 inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
                               const IMPL_RTL_STRCODE* pSrc,
@@ -1148,7 +1150,7 @@ static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
         = (sal::static_int_cast< sal_uInt32 >(nLen)
            <= ((SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
                / sizeof (IMPL_RTL_STRCODE)))
-        ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_allocateMemory(
+        ? static_cast<IMPL_RTL_STRINGDATA *>(rtl_StringAllocateMemory(
             sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE)))
         : NULL;
     if (pData != NULL) {
@@ -1229,7 +1231,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
     if ( !osl_atomic_decrement( &(pThis->refCount) ) )
     {
         RTL_LOG_STRING_DELETE( pThis );
-        rtl_freeMemory( pThis );
+        rtl_StringFreeMemory( pThis );
     }
 }
 

@@ -28,6 +28,7 @@
 
 #include "internal/rtllifecycle.h"
 #include <internal/oslmemory.h>
+#include "alloc_global.hxx"
 
 AllocMode alloc_mode = AMode_UNSET;
 
@@ -390,5 +391,49 @@ void SAL_CALL rtl_freeAlignedMemory (void* Ptr) SAL_THROW_EXTERN_C()
 }
 
 /* ================================================================= */
+
+namespace {
+
+static rtl_memory_lock_type pLock;
+static sal_uInt64 nBytesAllocated = 0;
+
+void *SAL_CALL string_allocate(sal_Size n)
+{
+    RTL_MEMORY_LOCK_ACQUIRE(&pLock);
+    nBytesAllocated += n;
+    RTL_MEMORY_LOCK_RELEASE(&pLock);
+    sal_Size *p = static_cast<sal_Size *>(rtl_allocateMemory(n + sizeof(sal_Size)));
+    *p = n;
+    return p + 1;
+}
+
+void SAL_CALL string_free(void * p)
+{
+    sal_Size *prefix = static_cast<sal_Size *>(p);
+    prefix--;
+    sal_Size n = *prefix;
+    RTL_MEMORY_LOCK_ACQUIRE(&pLock);
+    nBytesAllocated -= n;
+    static int nPrint = 0;
+    if (nPrint++ % 100 == 0)
+        fprintf(stderr,"Total strings allocated %ld\n", (long)nBytesAllocated);
+    RTL_MEMORY_LOCK_RELEASE(&pLock);
+
+    rtl_freeMemory(prefix);
+}
+
+}
+
+void SAL_CALL rtl_string_alloc_init()
+{
+    RTL_MEMORY_LOCK_INIT(&pLock);
+}
+
+void SAL_CALL rtl_string_alloc_fini()
+{
+}
+
+rtl_AllocateMemory *rtl_StringAllocateMemory = string_allocate;
+rtl_FreeMemory     *rtl_StringFreeMemory = string_free;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
