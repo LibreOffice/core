@@ -1525,10 +1525,12 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         // Hide whitespace may require not to insert a new page.
         SwPageFrame* pPageFrame = FindPageFrame();
-        long nOldBottomDist = nBottomDist;
-        pPageFrame->HandleWhitespaceHiddenDiff(nBottomDist);
-        if (nOldBottomDist != nBottomDist)
+        const bool bHeightValid = pPageFrame->CheckPageHeightValidForHideWhitespace(nBottomDist);
+        if (!bHeightValid)
+        {
             pPageFrame->InvalidateSize();
+            nBottomDist = 0;
+        }
 
         if( nBottomDist >= 0 )
         {
