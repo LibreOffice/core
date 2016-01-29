@@ -32,10 +32,11 @@
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-class ScFunctionDockWin : public SfxDockingWindow, public SfxListener
+class ScFunctionWin : public vcl::Window, public SfxListener
 {
 
 private:
+    SfxBindings&        rBindings;
     Idle                aIdle;
     VclPtr<ScPrivatSplit> aPrivatSplit;
     VclPtr<ListBox>     aCatBox;
@@ -72,31 +73,22 @@ private:
 
 protected:
 
-    virtual bool    Close() override;
     virtual void    Resize() override;
-    virtual void    Resizing( Size& rSize ) override;
     void            SetSize();
-    virtual void    ToggleFloatingMode() override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
 
-    virtual SfxChildAlignment CheckAlignment(SfxChildAlignment,
-                                SfxChildAlignment eAlign) override;
-
 public:
-                    ScFunctionDockWin(  SfxBindings* pBindings,
+                    ScFunctionWin(  SfxBindings* pBindings,
                                         vcl::Window* pParent,
                                         const ResId& rResId );
 
-                    virtual ~ScFunctionDockWin();
+                    virtual ~ScFunctionWin();
     virtual void    dispose() override;
 
-    using SfxDockingWindow::Notify;
+    using ::vcl::Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void            InitLRUList();
-
-    void            Initialize (SfxChildWinInfo* pInfo);
-    virtual void    FillInfo(SfxChildWinInfo&) const override;
 };
 
 #endif

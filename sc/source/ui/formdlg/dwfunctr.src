@@ -20,17 +20,9 @@
 #include "sc.hrc"
 #include "dwfunctr.hrc"
 
-DockingWindow FID_FUNCTION_BOX
+Window FID_FUNCTION_BOX
 {
-    Border = TRUE ;
-    Hide = TRUE ;
     SVLook = TRUE ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
     Size = MAP_APPFONT ( 130 , 160 ) ;
     HelpId = HID_FUNCTION_BOX ;
     ListBox CB_CAT
