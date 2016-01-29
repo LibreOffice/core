@@ -53,10 +53,8 @@
 #*
 #************************************************************************/
 
-ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
-                SfxChildWindow *pCW, vcl::Window* pParent, const ResId& rResId ) :
-
-    SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
+ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP, vcl::Window* pParent, const ResId& rResId ) :
+    SfxDockingWindow( pBindingsP, nullptr, pParent, rResId ),
     aPrivatSplit    ( VclPtr<ScPrivatSplit>::Create( this, ResId( FT_SPLIT, *rResId.GetResMgr() ) ) ),
     aCatBox         ( VclPtr<ListBox>::Create( this, ResId( CB_CAT, *rResId.GetResMgr() ) ) ),
     aFuncList       ( VclPtr<ListBox>::Create( this, ResId( LB_FUNC, *rResId.GetResMgr() ) ) ),

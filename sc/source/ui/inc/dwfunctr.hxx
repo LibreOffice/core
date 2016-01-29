@@ -84,7 +84,6 @@ protected:
 
 public:
                     ScFunctionDockWin(  SfxBindings* pBindings,
-                                        SfxChildWindow *pCW,
                                         vcl::Window* pParent,
                                         const ResId& rResId );
 
