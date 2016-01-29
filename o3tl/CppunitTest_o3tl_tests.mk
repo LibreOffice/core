@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_libraries,o3tl_tests,\
 $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\
 	o3tl/qa/cow_wrapper_clients \
 	o3tl/qa/test-cow_wrapper \
-	o3tl/qa/test-range \
 	o3tl/qa/test-vector_pool \
 	o3tl/qa/test-sorted_vector \
 	o3tl/qa/test-typed_flags \
