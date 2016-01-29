@@ -77,21 +77,7 @@ public:
     void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
     void                DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
     void                SetMapNames( OUString const & aMapNames )   { maMapNames = aMapNames; }
-    void                AddMapName( OUString const & aMapName )
-                        {
-                            if( maMapNames.getLength() > 0 )
-                            {
-                                maMapNames += ";";
-                            }
-
-                            if (aMapName.getLength() == 0)
-                            {
-                                SAL_WARN("vcl.fonts", "New map name is empty");
-                                return;
-                            }
-
-                            maMapNames += aMapName;
-                        }
+    void                AddMapName( OUString const& );
 
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
     void                SetEmbeddableFlag ( bool bEmbeddable )      { mbEmbeddable = bEmbeddable; }
@@ -140,11 +126,27 @@ inline void FontAttributes::SetSymbolFlag( const bool bSymbolFlag )
     }
 }
 
-
 inline void FontAttributes::SetCharSet( const rtl_TextEncoding aEncoding )
 {
     meCharSet = aEncoding;
     mbSymbolFlag = meCharSet == RTL_TEXTENCODING_SYMBOL;
+}
+
+
+inline void FontAttributes::AddMapName( OUString const & aMapName )
+{
+    if( maMapNames.getLength() > 0 )
+    {
+        maMapNames += ";";
+    }
+
+    if (aMapName.getLength() == 0)
+    {
+        SAL_WARN("vcl.fonts", "New map name is empty");
+        return;
+    }
+
+    maMapNames += aMapName;
 }
 
 #endif // INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
