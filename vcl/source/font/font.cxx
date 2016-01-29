@@ -263,18 +263,18 @@ void Font::SetVertical( bool bVertical )
     }
 }
 
-void Font::SetKerning( FontKerning nKerning )
+void Font::SetKerning( FontKerning eKerning )
 {
-    if( mpImplFont->mnKerning != nKerning )
+    if( mpImplFont->meKerning != eKerning )
     {
         MakeUnique();
-        mpImplFont->mnKerning = nKerning;
+        mpImplFont->meKerning = eKerning;
     }
 }
 
 bool Font::IsKerning() const
 {
-    return bool(mpImplFont->mnKerning & FontKerning::FontSpecific);
+    return bool(mpImplFont->meKerning & FontKerning::FontSpecific);
 }
 
 void Font::SetWeight( FontWeight eWeight )
@@ -494,7 +494,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     rIStm.ReadCharAsBool( bTmp ); rImplFont.mbWordLine = bTmp;
     rIStm.ReadCharAsBool( bTmp ); rImplFont.mbOutline = bTmp;
     rIStm.ReadCharAsBool( bTmp ); rImplFont.mbShadow = bTmp;
-    rIStm.ReadUChar( nTmp8 ); rImplFont.mnKerning = static_cast<FontKerning>(nTmp8);
+    rIStm.ReadUChar( nTmp8 ); rImplFont.meKerning = static_cast<FontKerning>(nTmp8);
 
     if( aCompat.GetVersion() >= 2 )
     {
@@ -537,7 +537,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteBool( rImplFont.mbWordLine );
     rOStm.WriteBool( rImplFont.mbOutline );
     rOStm.WriteBool( rImplFont.mbShadow );
-    rOStm.WriteUChar( static_cast<sal_uInt8>(rImplFont.mnKerning) );
+    rOStm.WriteUChar( static_cast<sal_uInt8>(rImplFont.meKerning) );
 
     // new in version 2
     rOStm.WriteUChar( rImplFont.meRelief );
@@ -795,7 +795,7 @@ LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->maCJKLangu
 
 short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
 bool Font::IsVertical() const { return mpImplFont->mbVertical; }
-FontKerning Font::GetKerning() const { return mpImplFont->mnKerning; }
+FontKerning Font::GetKerning() const { return mpImplFont->meKerning; }
 
 FontPitch Font::GetPitch() { return mpImplFont->GetPitch(); }
 FontWeight Font::GetWeight() { return mpImplFont->GetWeight(); }
@@ -852,7 +852,7 @@ ImplFont::ImplFont() :
     meRelief( RELIEF_NONE ),
     meEmphasisMark( EMPHASISMARK_NONE ),
     mnOrientation( 0 ),
-    mnKerning( FontKerning::NONE ),
+    meKerning( FontKerning::NONE ),
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
     maCJKLanguageTag( LANGUAGE_DONTKNOW ),
@@ -888,7 +888,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     meRelief( rImplFont.meRelief ),
     meEmphasisMark( rImplFont.meEmphasisMark ),
     mnOrientation( rImplFont.mnOrientation ),
-    mnKerning( rImplFont.mnKerning ),
+    meKerning( rImplFont.meKerning ),
     maSize( rImplFont.maSize ),
     meCharSet( rImplFont.meCharSet ),
     maLanguageTag( rImplFont.maLanguageTag ),
@@ -946,7 +946,7 @@ bool ImplFont::operator==( const ImplFont& rOther ) const
     ||  (mbWordLine     != rOther.mbWordLine)
     ||  (mbOutline      != rOther.mbOutline)
     ||  (mbShadow       != rOther.mbShadow)
-    ||  (mnKerning      != rOther.mnKerning)
+    ||  (meKerning      != rOther.meKerning)
     ||  (mbTransparent  != rOther.mbTransparent) )
         return false;
 

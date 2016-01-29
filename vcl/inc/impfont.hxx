@@ -122,7 +122,7 @@ private:
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;
     short               mnOrientation;
-    FontKerning         mnKerning;
+    FontKerning         meKerning;
     Size                maSize;
     rtl_TextEncoding    meCharSet;
 
