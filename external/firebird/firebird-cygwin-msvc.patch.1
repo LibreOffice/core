@@ -302,10 +302,10 @@ diff -ur firebird.org/builds/posix/prefix.mingw firebird/builds/posix/prefix.min
  # 
  
  # -Wno-unused-variable is used due to unused gpre generated variables
--PROD_FLAGS=-O2  -march=i586 -DMINGW -mno-cygwin -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
--DEV_FLAGS=-ggdb -march=i586 -DMINGW -mno-cygwin -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
-+PROD_FLAGS=-O2  -march=i586 -DMINGW -mno-cygwin -Wall -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
-+DEV_FLAGS=-ggdb -march=i586 -DMINGW -mno-cygwin -Wall -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
+-PROD_FLAGS=-O2  -march=i586 -DMINGW -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
+-DEV_FLAGS=-ggdb -march=i586 -DMINGW -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
++PROD_FLAGS=-O2  -march=i586 -DMINGW -Wall -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
++DEV_FLAGS=-ggdb -march=i586 -DMINGW -Wall -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads
  
  PLATFORM_PATH=os/win32
  
@@ -338,15 +338,6 @@ diff -ur firebird.org/builds/posix/prefix.mingw firebird/builds/posix/prefix.min
 diff -ur firebird.org/configure firebird/configure
 --- firebird.org/configure	2015-07-30 18:57:33.826760500 +0200
 +++ firebird/configure	2015-07-30 19:29:23.873496600 +0200
-@@ -2878,7 +2878,7 @@
-     SHRLIB_EXT=so
-     ;;
- 
--  *-*-mingw*)
-+  *-*-mingw* | *-*-cygwin*)
-     MAKEFILE_PREFIX=mingw
-     PLATFORM=win32
- 
 @@ -9016,6 +9016,9 @@
  mingw*)
    opt_cr=`echo 'x\{0,1\}' | tr x '\015'` # option cr in regexp
@@ -476,20 +467,6 @@ diff -ur firebird.org/src/jrd/isc.cpp firebird/src/jrd/isc.cpp
  #include <windows.h>
  #include <aclapi.h>
  #include <lmcons.h>
-diff -ur firebird.org/src/jrd/os/win32/mod_loader.cpp firebird/src/jrd/os/win32/mod_loader.cpp
---- firebird.org/src/jrd/os/win32/mod_loader.cpp	2015-07-30 18:57:24.014278400 +0200
-+++ firebird/src/jrd/os/win32/mod_loader.cpp	2015-07-30 19:29:44.029786700 +0200
-@@ -95,6 +95,10 @@
-                     "msvcr90.dll",
- #elif _MSC_VER == 1600
-                     "msvcr100.dll",
-+#elif _MSC_VER == 1700
-+                    "msvcr110.dll",
-+#elif _MSC_VER == 1800
-+                     "mscvr120.dll",
- #else
-                     #error Specify CRT DLL name here !
- #endif
 diff -ur firebird.org/src/misc/makeHeader.cpp firebird/src/misc/makeHeader.cpp
 --- firebird.org/src/misc/makeHeader.cpp	2015-07-30 18:57:26.498503700 +0200
 +++ firebird/src/misc/makeHeader.cpp	2015-07-30 19:29:24.279812900 +0200
