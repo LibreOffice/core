@@ -446,6 +446,21 @@ void RtfExport::WriteInfo()
 
     if (xDocProps.is())
     {
+        // Handle user-defined properties.
+        uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = xDocProps->getUserDefinedProperties();
+        if (xUserDefinedProperties.is())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xUserDefinedProperties, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+            // Do we have explicit markup in RTF for this property name?
+            if (xPropertySetInfo->hasPropertyByName("Company"))
+            {
+                OUString aValue;
+                xPropertySet->getPropertyValue("Company") >>= aValue;
+                OutUnicode(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_COMPANY, aValue);
+            }
+        }
+
         OutUnicode(OOO_STRING_SVTOOLS_RTF_TITLE, xDocProps->getTitle(), true);
         OutUnicode(OOO_STRING_SVTOOLS_RTF_SUBJECT, xDocProps->getSubject());
 
