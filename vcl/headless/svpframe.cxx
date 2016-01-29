@@ -262,9 +262,14 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+
+        // Creating backing surfaces for invisible windows costs a big chunk of RAM.
+        if (Application::IsHeadlessModeEnabled())
+             aFrameSize = B2IVector( 1, 1 );
+
         m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                            aFrameSize.getX(),
-                            aFrameSize.getY());
+                                                aFrameSize.getX(),
+                                                aFrameSize.getY());
 
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
