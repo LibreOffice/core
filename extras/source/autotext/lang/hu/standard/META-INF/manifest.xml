@@ -2,9 +2,6 @@
 <!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
 <manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
  <manifest:file-entry manifest:full-path="/" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="2014/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2014/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2014/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="FN/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Object_1/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Object_1/content.xml" manifest:media-type="text/xml"/>
@@ -74,20 +71,11 @@
  <manifest:file-entry manifest:full-path="TU/settings.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TU/content.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TU/styles.xml" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="2010/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2010/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2010/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="2011/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2011/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2011/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="B/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="B/B.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="PL/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="PL/PL.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2012/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2012/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2012/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="2013/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2013/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="2013/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+ <manifest:file-entry manifest:full-path="2016/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="2016/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="2016/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
 </manifest:manifest>
