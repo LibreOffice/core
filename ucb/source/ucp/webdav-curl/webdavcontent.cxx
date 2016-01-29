@@ -1379,6 +1379,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         if ( bNetworkAccessAllowed )
         {
+            if( eType != DAV )
+                m_bDidGetOrHead = false;
+
             // All properties obtained already?
             std::vector< OUString > aMissingProps;
             if ( !( xProps
