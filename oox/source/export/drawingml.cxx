@@ -1530,6 +1530,21 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
                                                     break;
                     }
                 }
+                else if(aFieldKind == "ExtFile")
+                {
+                    sal_Int32 nNumFmt = -1;
+                    rXPropSet->getPropertyValue(UNO_TC_PROP_FILE_FORMAT) >>= nNumFmt;
+                    switch(nNumFmt)
+                    {
+                        case 0: aFieldValue = "file"; // Path/File name
+                                break;
+                        case 1: aFieldValue = "file1"; // Path
+                                break;
+                        case 2: aFieldValue = "file2"; // File name without extension
+                                break;
+                        case 3: aFieldValue = "file3"; // File name with extension
+                    }
+                }
             }
         }
     }

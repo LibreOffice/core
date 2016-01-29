@@ -140,6 +140,30 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
         aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
     }
+    else if ( sType.startsWith("file") )
+    {
+        OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
+        OString p( s.pData->buffer + 4 );
+        int idx = p.toInt32();
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.FileName" );
+        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+        Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
+
+        switch( idx )
+        {
+            case 1: // Path
+                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(1));
+                break;
+            case 2: // File name without extension
+                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(2));
+                break;
+            case 3: // File name with extension
+                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(3));
+                break;
+            default: // Path/File name
+                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(0));
+        }
+    }
 }
 
 } // namespace

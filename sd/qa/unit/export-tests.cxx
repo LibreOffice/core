@@ -139,6 +139,7 @@ public:
     void testExportTransitionsPPTX();
     void testDatetimeFieldNumberFormat();
     void testDatetimeFieldNumberFormatPPTX();
+    void testExtFileField();
 
     void testFdo90607();
     void testTdf91378();
@@ -192,6 +193,7 @@ public:
     CPPUNIT_TEST(testTdf92527);
     CPPUNIT_TEST(testDatetimeFieldNumberFormat);
     CPPUNIT_TEST(testDatetimeFieldNumberFormatPPTX);
+    CPPUNIT_TEST(testExtFileField);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1584,6 +1586,50 @@ void SdExportTest::testDatetimeFieldNumberFormatPPTX()
         uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
 
         matchNumberFormat( i, xRun );
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testExtFileField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/extfile_field.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    for(sal_uInt16 i = 0; i <= 3; ++i)
+    {
+        // get TextShape i + 1 from the first page
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( i, 0, xDocShRef ) );
+
+        // Get first paragraph
+        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+
+        // first chunk of text
+        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
+        uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+        uno::Reference<text::XTextField> xField;
+        xPropSet->getPropertyValue("TextField") >>= xField;
+        CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+        xPropSet.set(xField, uno::UNO_QUERY);
+        sal_Int32 nNumFmt;
+        xPropSet->getPropertyValue("FileFormat") >>= nNumFmt;
+        switch( i )
+        {
+            case 0:     // Path/File name
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("File formats don't match", sal_Int32(0), nNumFmt);
+                        break;
+            case 1:     // Path
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("File formats don't match", sal_Int32(1), nNumFmt);
+                        break;
+            case 2:     // File name without extension
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("File formats don't match", sal_Int32(2), nNumFmt);
+                        break;
+            case 3:     // File name with extension
+                        CPPUNIT_ASSERT_EQUAL_MESSAGE("File formats don't match", sal_Int32(3), nNumFmt);
+        }
     }
 
     xDocShRef->DoClose();
