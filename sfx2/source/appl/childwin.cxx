@@ -660,34 +660,12 @@ void SfxChildWindow::SetVisible_Impl( bool bVis )
 
 void SfxChildWindow::Hide()
 {
-    switch ( pWindow->GetType() )
-    {
-        case RSC_DOCKINGWINDOW :
-            static_cast<DockingWindow*>(pWindow.get())->Hide();
-            break;
-        case RSC_TOOLBOX :
-            static_cast<ToolBox*>(pWindow.get())->Hide();
-            break;
-        default:
-            pWindow->Hide();
-            break;
-    }
+    pWindow->Hide();
 }
 
 void SfxChildWindow::Show( ShowFlags nFlags )
 {
-    switch ( pWindow->GetType() )
-    {
-        case RSC_DOCKINGWINDOW :
-            static_cast<DockingWindow*>(pWindow.get())->Show( true, nFlags );
-            break;
-        case RSC_TOOLBOX :
-            static_cast<ToolBox*>(pWindow.get())->Show( true, nFlags );
-            break;
-        default:
-            pWindow->Show( true, nFlags );
-            break;
-    }
+    pWindow->Show(true, nFlags);
 }
 
 vcl::Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const

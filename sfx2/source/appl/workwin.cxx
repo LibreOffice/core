@@ -1003,32 +1003,12 @@ void SfxWorkWindow::ShowChildren_Impl()
             if ( SfxChildVisibility::VISIBLE == (pCli->nVisible & SfxChildVisibility::VISIBLE) && bVisible )
             {
                 ShowFlags nFlags = pCli->bSetFocus ? ShowFlags::NONE : ShowFlags::NoFocusChange | ShowFlags::NoActivate;
-                switch ( pCli->pWin->GetType() )
-                {
-                    case RSC_DOCKINGWINDOW :
-                        static_cast<DockingWindow*>(pCli->pWin.get())->Show( true, nFlags );
-                        break;
-                    case RSC_SPLITWINDOW :
-                        static_cast<SplitWindow*>(pCli->pWin.get())->Show( true, nFlags );
-                        break;
-                    default:
-                        pCli->pWin->Show( true, nFlags );
-                        break;
-                }
-
+                pCli->pWin->Show(true, nFlags);
                 pCli->bSetFocus = false;
             }
             else
             {
-                switch ( pCli->pWin->GetType() )
-                {
-                    case RSC_DOCKINGWINDOW :
-                        static_cast<DockingWindow*>(pCli->pWin.get())->Hide();
-                        break;
-                    default:
-                        pCli->pWin->Hide();
-                        break;
-                }
+                pCli->pWin->Hide();
             }
         }
     }
@@ -1042,17 +1022,7 @@ void SfxWorkWindow::HideChildren_Impl()
     {
         SfxChild_Impl *pChild = aChildren[nPos-1];
         if (pChild && pChild->pWin)
-        {
-            switch ( pChild->pWin->GetType() )
-            {
-                case RSC_DOCKINGWINDOW :
-                    static_cast<DockingWindow*>(pChild->pWin.get())->Hide();
-                    break;
-                default:
-                    pChild->pWin->Hide();
-                    break;
-            }
-        }
+            pChild->pWin->Hide();
     }
 }
 
