@@ -8571,14 +8571,6 @@ dnl ===================================================================
 dnl Check for Firebird stuff
 dnl ===================================================================
 ENABLE_FIREBIRD_SDBC=""
-if test -z "$enable_firebird_sdbc" ; then
-    if test "$_os" = "Darwin" -a ${MACOSX_SDK_VERSION:-0} -ge 101100 ; then
-        AC_MSG_NOTICE([firebird does not build on 10.11.. default to --disable-firebird-sdbc ])
-        enable_firebird_sdbc="no"
-    else
-        enable_firebird_sdbc="yes"
-    fi
-fi
 if test "$enable_firebird_sdbc" = "yes" ; then
     SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
 
