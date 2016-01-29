@@ -38,7 +38,11 @@ public:
         this function probably returns before the requested panel is visible.
     */
     static void ShowPanel (
-        const ::rtl::OUString& rsPanelId,
+        const OUString& rsPanelId,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    static bool IsPanelVisible(
+        const OUString& rsPanelId,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 

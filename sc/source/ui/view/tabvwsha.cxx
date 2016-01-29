@@ -28,6 +28,7 @@
 #include <svl/int64item.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -311,6 +312,14 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     }
                 }
                 break;
+
+            case FID_FUNCTION_BOX:
+            {
+                const bool bBoxOpen = ::sfx2::sidebar::Sidebar::IsPanelVisible("ScFunctionsPanel",
+                                                    pThisFrame->GetFrame().GetFrameInterface());
+                rSet.Put(SfxBoolItem(nWhich, bBoxOpen));
+                break;
+            }
 
             case FID_TOGGLESYNTAX:
                 rSet.Put(SfxBoolItem(nWhich, GetViewData().IsSyntaxMode()));

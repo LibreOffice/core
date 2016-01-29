@@ -26,23 +26,40 @@ using namespace css;
 namespace sfx2 { namespace sidebar {
 
 void Sidebar::ShowPanel (
-    const ::rtl::OUString& rsPanelId,
+    const OUString& rsPanelId,
     const css::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+    if (!pController)
+        return;
 
     const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
 
-    if (pController!=nullptr && pPanelDescriptor != nullptr)
-    {
-        // This should be a lot more sophisticated:
-        // - Make the deck switching asynchronous
-        // - Make sure to use a context that really shows the panel
+    if (!pPanelDescriptor)
+        return;
 
-        // All that is not necessary for the current use cases so lets
-        // keep it simple for the time being.
-        pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
-    }
+    // This should be a lot more sophisticated:
+    // - Make the deck switching asynchronous
+    // - Make sure to use a context that really shows the panel
+
+    // All that is not necessary for the current use cases so lets
+    // keep it simple for the time being.
+    pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
+}
+
+bool Sidebar::IsPanelVisible(
+    const OUString& rsPanelId,
+    const css::uno::Reference<frame::XFrame>& rxFrame)
+{
+    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+    if (!pController)
+        return false;
+
+    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+    if (!pPanelDescriptor)
+        return false;
+
+    return pController->IsDeckVisible(pPanelDescriptor->msDeckId);
 }
 
 } } // end of namespace sfx2::sidebar
