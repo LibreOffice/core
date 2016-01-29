@@ -1581,16 +1581,8 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	hu/crdbus54/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	hu/crdbus54/MOD2/settings.xml \
 	hu/crdbus54/MOD2/styles.xml \
-	hu/standard/2010/content.xml \
-	hu/standard/2010/styles.xml \
-	hu/standard/2011/content.xml \
-	hu/standard/2011/styles.xml \
-	hu/standard/2012/content.xml \
-	hu/standard/2012/styles.xml \
-	hu/standard/2013/content.xml \
-	hu/standard/2013/styles.xml \
-	hu/standard/2014/content.xml \
-	hu/standard/2014/styles.xml \
+	hu/standard/2016/content.xml \
+	hu/standard/2016/styles.xml \
 	hu/standard/AL/AL.xml \
 	hu/standard/AL/atevent.xml \
 	hu/standard/B/atevent.xml \
