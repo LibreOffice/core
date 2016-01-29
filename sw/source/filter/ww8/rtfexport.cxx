@@ -177,7 +177,7 @@ void RtfExport::WriteChar(sal_Unicode)
     /* WriteChar() has nothing to do for rtf. */
 }
 
-static bool IsExportNumRule(const SwNumRule& rRule, sal_uInt8* pEnd = nullptr)
+static bool IsExportNumRule(const SwNumRule& rRule)
 {
     sal_uInt8 nEnd = MAXLEVEL;
     while (nEnd-- && !rRule.GetNumFormat(nEnd))
@@ -195,8 +195,6 @@ static bool IsExportNumRule(const SwNumRule& rRule, sal_uInt8* pEnd = nullptr)
             break;
     }
 
-    if (pEnd)
-        *pEnd = nEnd;
     return nLvl != nEnd;
 }
 
