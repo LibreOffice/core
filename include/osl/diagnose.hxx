@@ -26,8 +26,8 @@
 #include <cstddef>
 #include <functional>
 #include <typeinfo>
+#include <unordered_set>
 
-#include <boost/unordered_set.hpp>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
@@ -93,7 +93,7 @@ struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
     }
 };
 
-typedef ::boost::unordered_set<void const*, VoidPtrHash, ::std::equal_to<void const*> > VoidPointerSet;
+typedef ::std::unordered_set<void const*, VoidPtrHash, ::std::equal_to<void const*> > VoidPointerSet;
 
 struct ObjectRegistryData {
     ObjectRegistryData( ::std::type_info const& rTypeInfo )
