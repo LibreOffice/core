@@ -1349,6 +1349,10 @@ SalGraphics* Window::ImplGetFrameGraphics() const
 
 void Window::ImplSetReallyVisible()
 {
+    // For now, no window is really visible in headless mode.
+    if( Application::IsHeadlessModeEnabled() )
+        return;
+
     // #i43594# it is possible that INITSHOW was never send, because the visibility state changed between
     // ImplCallInitShow() and ImplSetReallyVisible() when called from Show()
     // mbReallyShown is a useful indicator
