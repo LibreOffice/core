@@ -39,17 +39,12 @@ public:
     // device independent font functions
     const OUString&     GetFamilyName() const                           { return maFamilyName; }
     FontFamily          GetFamilyType()                                 { if(meFamily==FAMILY_DONTKNOW)  AskConfig(); return meFamily; }
-    FontFamily          GetFamilyTypeNoAsk() const                      { return meFamily; }
     const OUString&     GetStyleName() const                            { return maStyleName; }
 
     FontWeight          GetWeight()                                     { if(meWeight==WEIGHT_DONTKNOW)  AskConfig(); return meWeight; }
-    FontWeight          GetWeightNoAsk() const                          { return meWeight; }
     FontItalic          GetItalic()                                     { if(meItalic==ITALIC_DONTKNOW)  AskConfig(); return meItalic; }
-    FontItalic          GetItalicNoAsk() const                          { return meItalic; }
     FontPitch           GetPitch()                                      { if(mePitch==PITCH_DONTKNOW)    AskConfig(); return mePitch; }
-    FontPitch           GetPitchNoAsk() const                           { return mePitch; }
     FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW) AskConfig(); return meWidthType; }
-    FontWidth           GetWidthTypeNoAsk() const                       { return meWidthType; }
     TextAlign           GetAlignment() const                            { return meAlign; }
     rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
 
@@ -67,6 +62,13 @@ public:
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
 
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbol = bSymbolFlag; }
+
+    // straight properties, no getting them from AskConfig()
+    FontFamily          GetFamilyTypeNoAsk() const                      { return meFamily; }
+    FontWeight          GetWeightNoAsk() const                          { return meWeight; }
+    FontItalic          GetItalicNoAsk() const                          { return meItalic; }
+    FontPitch           GetPitchNoAsk() const                           { return mePitch; }
+    FontWidth           GetWidthTypeNoAsk() const                       { return meWidthType; }
 
     // device dependent functions
     int                 GetQuality() const                              { return mnQuality; }
