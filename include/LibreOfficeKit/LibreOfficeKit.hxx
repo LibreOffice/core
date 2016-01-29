@@ -428,6 +428,7 @@ public:
      *
      * @param pUrl the URL of the document to load
      * @param pFilterOptions options for the import filter, e.g. SkipImages.
+     * @since pFilterOptions argument added in LibreOffice 5.0
      */
     inline Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
@@ -450,7 +451,11 @@ public:
         return mpThis->pClass->getError(mpThis);
     }
 
-    /// Frees the memory pointed to by pFree.
+    /**
+     * Frees the memory pointed to by pFree.
+     *
+     * @since LibreOffice 5.2
+     */
     inline void freeError(char* pFree)
     {
         mpThis->pClass->freeError(pFree);
