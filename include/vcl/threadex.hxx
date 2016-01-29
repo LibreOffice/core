@@ -159,7 +159,7 @@ private:
     (e.g. for out parameters) to foreign threads, use inout_by_ref()
     for this purpose.  For in parameters, this may not affect you, because
     the functor object is copy constructed into free store.  This way
-    you must not use \verbatim boost::cref()/boost::ref() \endverbatim or similar
+    you must not use \verbatim std::cref()/std::ref() \endverbatim or similar
     for objects on your thread's stack.
     Use inout_by_ref() or inout_by_ptr() for this purpose, e.g.
 
@@ -168,15 +168,15 @@ private:
 
         long n = 3;
         // calling foo( long & r ):
-        syncExecute( boost::bind( &foo, inout_by_ref(n) ) );
+        syncExecute( std::bind( &foo, inout_by_ref(n) ) );
         // calling foo( long * p ):
-        syncExecute( boost::bind( &foo, inout_by_ptr(&n) ) );
+        syncExecute( std::bind( &foo, inout_by_ptr(&n) ) );
 
         char const* pc = "default";
         // calling foo( char const** ppc ):
-        syncExecute( boost::bind( &foo, inout_by_ptr(&pc) ) );
+        syncExecute( std::bind( &foo, inout_by_ptr(&pc) ) );
         // calling foo( char const*& rpc ):
-        syncExecute( boost::bind( &foo, inout_by_ref(pc) ) );
+        syncExecute( std::bind( &foo, inout_by_ref(pc) ) );
     \endcode
 
     @tpl ResultT result type, defaults to FuncT::result_type to seamlessly
