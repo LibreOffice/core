@@ -121,7 +121,6 @@ private:
     FontStrikeout       meStrikeout;
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;
-    short               mnOrientation;
     FontKerning         meKerning;
     Size                maSize;
     rtl_TextEncoding    meCharSet;
@@ -148,6 +147,9 @@ private:
                         mbSubsettable:1,
                         mbRotatable:1,      // is "rotatable" even a word?!? I'll keep it for consistency for now
                         mbDevice:1;
+
+    // TODO: metric data, should be migrated to ImplFontMetric
+    short               mnOrientation;
 
     int                 mnQuality;
 

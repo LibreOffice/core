@@ -851,7 +851,6 @@ ImplFont::ImplFont() :
     meStrikeout( STRIKEOUT_NONE ),
     meRelief( RELIEF_NONE ),
     meEmphasisMark( EMPHASISMARK_NONE ),
-    mnOrientation( 0 ),
     meKerning( FontKerning::NONE ),
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
@@ -869,6 +868,7 @@ ImplFont::ImplFont() :
     mbSubsettable( false ),
     mbRotatable( false ),
     mbDevice( false ),
+    mnOrientation( 0 ),
     mnQuality( 0 )
 {}
 
@@ -887,7 +887,6 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     meStrikeout( rImplFont.meStrikeout ),
     meRelief( rImplFont.meRelief ),
     meEmphasisMark( rImplFont.meEmphasisMark ),
-    mnOrientation( rImplFont.mnOrientation ),
     meKerning( rImplFont.meKerning ),
     maSize( rImplFont.maSize ),
     meCharSet( rImplFont.meCharSet ),
@@ -907,6 +906,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbSubsettable( rImplFont.mbSubsettable ),
     mbRotatable( rImplFont.mbRotatable ),
     mbDevice( rImplFont.mbDevice ),
+    mnOrientation( rImplFont.mnOrientation ),
     mnQuality( rImplFont.mnQuality )
 {}
 
