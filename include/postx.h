@@ -24,16 +24,6 @@
 }
 #endif
 
-#undef Min
-#undef Max
-#undef Success
-
-#undef Printer
-#undef Orientation
-
-#undef GetToken
-#undef ReleaseToken
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
