@@ -29,14 +29,6 @@ boost_patches += boost.multi_array.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.preprocessor.Wundef.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9892
 boost_patches += boost.property_tree.Wshadow.warnings.patch.1
-# https://svn.boost.org/trac/boost/ticket/9894
-boost_patches += boost.ptr_container.Wshadow.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9895
-boost_patches += boost.ptr_container.Wignored-qualifiers.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9896
-boost_patches += boost.ptr_container.Wextra.warnings.patch
-# https://svn.boost.org/trac/boost/ticket/9897
-boost_patches += boost.ptr_container.Wunused-parameter.warnings.patch
 # fixed upstream
 boost_patches += boost.random.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9900
@@ -52,7 +44,6 @@ boost_patches += boost.utility.Wundef.warnings.patch
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 ifeq (GCC,$(COM))
 boost_patches += boost_1_44_0-unused-parameters.patch
-boost_patches += boost.signals2.unused.parameters.patch
 endif
 
 # Clang warnings:
@@ -61,9 +52,7 @@ boost_patches += boost_1_44_0-clang-warnings.patch
 boost_patches += boost.auto_link.patch
 boost_patches += boost.std.move.patch
 boost_patches += boost.wunused.patch
-boost_patches += boost.wdeprecated-auto_ptr.patch.0
 boost_patches += boost.signal2.Wshadow.warnings.patch
-boost_patches += boost.boost_static_assert_unused_attribute.patch.0
 
 boost_patches += ubsan.patch.0
 boost_patches += rtti.patch.0
@@ -85,8 +74,14 @@ boost_patches += boost_1_59_0.multi_array.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11501
 boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
 
-boost_patches += clang-cl.patch.0
+# TODO(davido): port the patch if needed to 1.60
+#boost_patches += clang-cl.patch.0
 boost_patches += gcc6-warnings.patch.0
+
+# This patch was already applied upstream
+# https://github.com/boostorg/math/commit/74ff2db959c5fa75bec770c41ed2951a740fe936
+boost_patches += boost_1_60_0.quadmath.patch
+boost_patches += boost_1_60_0.undef.warning.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
