@@ -983,6 +983,12 @@ DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getProperty<OUString>(xUserDefinedProperties, "Company"));
 }
 
+DECLARE_RTFEXPORT_TEST(testRedline, "redline.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Rebecca Lopez"), getProperty<OUString>(getRun(getParagraph(1), 2), "RedlineAuthor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Dorothy Jones"), getProperty<OUString>(getRun(getParagraph(2), 2), "RedlineAuthor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
