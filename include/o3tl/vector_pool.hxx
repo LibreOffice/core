@@ -20,7 +20,6 @@
 #ifndef INCLUDED_O3TL_VECTOR_POOL_HXX
 #define INCLUDED_O3TL_VECTOR_POOL_HXX
 
-#include <sal/types.h>
 #include <vector>
 
 namespace o3tl

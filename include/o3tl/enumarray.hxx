@@ -20,7 +20,6 @@
 #ifndef INCLUDED_O3TL_ENUMARRAY_HXX
 #define INCLUDED_O3TL_ENUMARRAY_HXX
 
-#include <sal/config.h>
 #include <iterator>
 #include <type_traits>
 

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_O3TL_ENUMRANGE_HXX
 #define INCLUDED_O3TL_ENUMRANGE_HXX
 
-#include <sal/config.h>
-
 namespace o3tl {
 
 ///
