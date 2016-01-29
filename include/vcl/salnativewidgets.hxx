@@ -25,8 +25,6 @@
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <boost/functional/hash.hpp>
-
 /* Control Types:
  *
  *   Specify the overall, whole control
@@ -301,21 +299,6 @@ public:
         return true;
     }
 };
-
-struct ControlCacheHashFunction
-{
-    std::size_t operator()(ControlCacheKey const& aCache) const
-    {
-        std::size_t seed = 0;
-        boost::hash_combine(seed, aCache.mnType);
-        boost::hash_combine(seed, aCache.mnPart);
-        boost::hash_combine(seed, aCache.mnState);
-        boost::hash_combine(seed, aCache.maSize.Width());
-        boost::hash_combine(seed, aCache.maSize.Height());
-        return seed;
-    }
-};
-
 
 /* ButtonValue:
  *
