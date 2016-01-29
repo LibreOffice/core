@@ -919,6 +919,16 @@ DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")
+{
+    // The problem that a user defined property named "Company" was lost on export.
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = xDocumentProperties->getUserDefinedProperties();
+    // This resulted in a beans::UnknownPropertyException.
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getProperty<OUString>(xUserDefinedProperties, "Company"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
