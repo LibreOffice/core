@@ -244,9 +244,6 @@ void ScDLL::Init()
     ScZTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScChiSquareTestDialogWrapper        ::RegisterChildWindow(false, pMod);
 
-    // First docking Window for Calc
-    ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
-
     // Redlining Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScSimpleRefDlgWrapper       ::RegisterChildWindow(false, pMod, SfxChildWindowFlags::ALWAYSAVAILABLE|SfxChildWindowFlags::NEVERHIDE );

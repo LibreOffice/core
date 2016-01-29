@@ -76,7 +76,6 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScColRowNameRangesDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScFormulaDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
-    GetStaticInterface()->RegisterChildWindow(ScFunctionChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScFormulaDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScHighlightChgDlgWrapper::GetChildWindowId());

@@ -39,39 +39,6 @@
 #include "dwfunctr.hrc"
 #include "dwfunctr.hxx"
 
-SFX_IMPL_DOCKINGWINDOW_WITHID( ScFunctionChildWindow, FID_FUNCTION_BOX )
-
-/*************************************************************************
-#*  Member:     ScFunctionChildWindow
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionChildWindow
-#*
-#*  Funktion:   Konstruktor der Klasse ScFunctionChildWindow
-#*              Ableitung vom SfxChildWindow als "Behaelter" fuer
-#*              Funktions- Fenster in Clac
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-ScFunctionChildWindow::ScFunctionChildWindow( vcl::Window* pParentP,
-                                    sal_uInt16 nId,
-                                    SfxBindings* pBindings,
-                                    SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParentP, nId )
-{
-    VclPtr<ScFunctionDockWin> pWin = VclPtr<ScFunctionDockWin>::Create( pBindings, this,
-                                        pParentP, ScResId( FID_FUNCTION_BOX ) );
-    SetWindow(pWin);
-
-    SetAlignment(SfxChildAlignment::RIGHT);
-
-    pWin->Initialize( pInfo );
-}
-
 /*************************************************************************
 #*  Member:     ScFunctionDockWin
 #*------------------------------------------------------------------------

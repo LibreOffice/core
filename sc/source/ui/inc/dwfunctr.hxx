@@ -32,16 +32,6 @@
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-/** Derivation of SfxChildWindow as "containers" for Controller */
-class ScFunctionChildWindow : public SfxChildWindow
-{
- public:
-    ScFunctionChildWindow( vcl::Window*, sal_uInt16, SfxBindings*,
-                            SfxChildWinInfo* );
-
-    SFX_DECL_CHILDWINDOW_WITHID(ScFunctionChildWindow);
-};
-
 class ScFunctionDockWin : public SfxDockingWindow, public SfxListener
 {
 
