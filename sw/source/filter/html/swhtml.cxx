@@ -1771,7 +1771,7 @@ void SwHTMLParser::NextToken( int nToken )
     case HTML_UNDERLINE_ON:
         {
             NewStdAttr( HTML_UNDERLINE_ON, &m_aAttrTab.pUnderline,
-                        SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE) );
+                        SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE) );
         }
         break;
 

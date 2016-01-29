@@ -334,7 +334,7 @@ namespace pcr
         StyleSettings aStyleSettings( aAllSettings.GetStyleSettings() );
 
         vcl::Font aFieldFont( aStyleSettings.GetFieldFont() );
-        aFieldFont.SetUnderline( UNDERLINE_SINGLE );
+        aFieldFont.SetUnderline( LINESTYLE_SINGLE );
         aFieldFont.SetColor( aLinkColor.nColor );
         aStyleSettings.SetFieldFont( aFieldFont );
 

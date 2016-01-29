@@ -1417,13 +1417,13 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
     {
         sal_uInt16 nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
         if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
-            rFont.SetUnderline( UNDERLINE_SINGLE );
+            rFont.SetUnderline( LINESTYLE_SINGLE );
         else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
-            rFont.SetUnderline( UNDERLINE_BOLD );
+            rFont.SetUnderline( LINESTYLE_BOLD );
         else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
-            rFont.SetUnderline( UNDERLINE_DOTTED );
+            rFont.SetUnderline( LINESTYLE_DOTTED );
         else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
-            rFont.SetUnderline( UNDERLINE_DOTTED );
+            rFont.SetUnderline( LINESTYLE_DOTTED );
         if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
             rFont.SetColor( Color( COL_RED ) );
         else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
@@ -1437,7 +1437,7 @@ void TextEngine::SeekCursor( sal_uInt32 nPara, sal_Int32 nPos, vcl::Font& rFont,
         }
         else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
         {
-            rFont.SetUnderline( UNDERLINE_WAVE );
+            rFont.SetUnderline( LINESTYLE_WAVE );
 //          if( pOut )
 //              pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
         }

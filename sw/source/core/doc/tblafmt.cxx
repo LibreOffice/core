@@ -277,8 +277,8 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     m_aCTLWeight( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ),
     m_aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
 
-    m_aUnderline( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ),
-    m_aOverline( UNDERLINE_NONE, RES_CHRATR_OVERLINE ),
+    m_aUnderline( LINESTYLE_NONE, RES_CHRATR_UNDERLINE ),
+    m_aOverline( LINESTYLE_NONE, RES_CHRATR_OVERLINE ),
     m_aCrossedOut( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ),
     m_aContour( false, RES_CHRATR_CONTOUR ),
     m_aShadowed( false, RES_CHRATR_SHADOWED ),

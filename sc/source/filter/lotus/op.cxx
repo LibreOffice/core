@@ -541,7 +541,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
         if ( bIsItalics )
             rItemSet.Put( SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
         if ( bIsUnderLine )
-            rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
+            rItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
         r.SeekRel(3);
 

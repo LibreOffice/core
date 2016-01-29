@@ -25,8 +25,8 @@ struct SC_DLLPUBLIC ScDxfFont
     boost::optional<sal_uInt32> nFontHeight;
     boost::optional<FontWeight> eWeight;
     boost::optional<FontItalic> eItalic;
-    boost::optional<FontUnderline> eUnder;
-    boost::optional<FontUnderline> eOver;
+    boost::optional<FontLineStyle> eUnder;
+    boost::optional<FontLineStyle> eOver;
     boost::optional<bool> bWordLine;
     boost::optional<FontStrikeout> eStrike;
     boost::optional<bool> bOutline;

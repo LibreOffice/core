@@ -16,7 +16,7 @@ public:
     : FixedHyperlink( pParent, nWinStyle )
     {
         vcl::Font aFont = GetControlFont( );
-        aFont.SetUnderline( UNDERLINE_NONE );
+        aFont.SetUnderline( LINESTYLE_NONE );
         SetControlFont( aFont );
     }
 
@@ -27,13 +27,13 @@ protected:
         if ( !rMEvt.IsLeaveWindow() && IsEnabled() )
         {
             vcl::Font aFont = GetControlFont( );
-            aFont.SetUnderline( UNDERLINE_SINGLE );
+            aFont.SetUnderline( LINESTYLE_SINGLE );
             SetControlFont( aFont );
         }
         else
         {
             vcl::Font aFont = GetControlFont( );
-            aFont.SetUnderline( UNDERLINE_NONE );
+            aFont.SetUnderline( LINESTYLE_NONE );
             SetControlFont( aFont );
         }
 

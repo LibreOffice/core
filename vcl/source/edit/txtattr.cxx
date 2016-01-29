@@ -102,7 +102,7 @@ TextAttribHyperLink::~TextAttribHyperLink()
 void TextAttribHyperLink::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetColor( maColor );
-    rFont.SetUnderline( UNDERLINE_SINGLE );
+    rFont.SetUnderline( LINESTYLE_SINGLE );
 }
 
 TextAttrib* TextAttribHyperLink::Clone() const

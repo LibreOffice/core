@@ -5612,7 +5612,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
         rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
     }
     if ( GetAttrib( PPT_CharAttr_Underline, nVal, nDestinationInstance ) )
-        rSet.Put( SvxUnderlineItem( nVal != 0 ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+        rSet.Put( SvxUnderlineItem( nVal != 0 ? LINESTYLE_SINGLE : LINESTYLE_NONE, EE_CHAR_UNDERLINE ) );
 
     if ( GetAttrib( PPT_CharAttr_Shadow, nVal, nDestinationInstance ) )
         rSet.Put( SvxShadowedItem( nVal != 0, EE_CHAR_SHADOW ) );

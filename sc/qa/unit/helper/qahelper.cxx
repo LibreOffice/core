@@ -213,7 +213,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
         pPattern = pDoc->GetPattern(1,3,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", UNDERLINE_DOTTED, aFont.GetUnderline());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", LINESTYLE_DOTTED, aFont.GetUnderline());
         //check row height import
         //disable for now until we figure out cause of win tinderboxes test failures
         //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(256), pDoc->GetRowHeight(0,1) ); //0.178in

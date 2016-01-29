@@ -2364,55 +2364,55 @@ void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
         bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
     switch (rUnderline.GetLineStyle())
     {
-    case UNDERLINE_SINGLE:
+    case LINESTYLE_SINGLE:
         pStr = bWord ? OOO_STRING_SVTOOLS_RTF_ULW : OOO_STRING_SVTOOLS_RTF_UL;
         break;
-    case UNDERLINE_DOUBLE:
+    case LINESTYLE_DOUBLE:
         pStr = OOO_STRING_SVTOOLS_RTF_ULDB;
         break;
-    case UNDERLINE_NONE:
+    case LINESTYLE_NONE:
         pStr = OOO_STRING_SVTOOLS_RTF_ULNONE;
         break;
-    case UNDERLINE_DOTTED:
+    case LINESTYLE_DOTTED:
         pStr = OOO_STRING_SVTOOLS_RTF_ULD;
         break;
-    case UNDERLINE_DASH:
+    case LINESTYLE_DASH:
         pStr = OOO_STRING_SVTOOLS_RTF_ULDASH;
         break;
-    case UNDERLINE_DASHDOT:
+    case LINESTYLE_DASHDOT:
         pStr = OOO_STRING_SVTOOLS_RTF_ULDASHD;
         break;
-    case UNDERLINE_DASHDOTDOT:
+    case LINESTYLE_DASHDOTDOT:
         pStr = OOO_STRING_SVTOOLS_RTF_ULDASHDD;
         break;
-    case UNDERLINE_BOLD:
+    case LINESTYLE_BOLD:
         pStr = OOO_STRING_SVTOOLS_RTF_ULTH;
         break;
-    case UNDERLINE_WAVE:
+    case LINESTYLE_WAVE:
         pStr = OOO_STRING_SVTOOLS_RTF_ULWAVE;
         break;
-    case UNDERLINE_BOLDDOTTED:
+    case LINESTYLE_BOLDDOTTED:
         pStr = OOO_STRING_SVTOOLS_RTF_ULTHD;
         break;
-    case UNDERLINE_BOLDDASH:
+    case LINESTYLE_BOLDDASH:
         pStr = OOO_STRING_SVTOOLS_RTF_ULTHDASH;
         break;
-    case UNDERLINE_LONGDASH:
+    case LINESTYLE_LONGDASH:
         pStr = OOO_STRING_SVTOOLS_RTF_ULLDASH;
         break;
-    case UNDERLINE_BOLDLONGDASH:
+    case LINESTYLE_BOLDLONGDASH:
         pStr = OOO_STRING_SVTOOLS_RTF_ULTHLDASH;
         break;
-    case UNDERLINE_BOLDDASHDOT:
+    case LINESTYLE_BOLDDASHDOT:
         pStr = OOO_STRING_SVTOOLS_RTF_ULTHDASHD;
         break;
-    case UNDERLINE_BOLDDASHDOTDOT:
+    case LINESTYLE_BOLDDASHDOTDOT:
         pStr = OOO_STRING_SVTOOLS_RTF_ULTHDASHDD;
         break;
-    case UNDERLINE_BOLDWAVE:
+    case LINESTYLE_BOLDWAVE:
         pStr = OOO_STRING_SVTOOLS_RTF_ULHWAVE;
         break;
-    case UNDERLINE_DOUBLEWAVE:
+    case LINESTYLE_DOUBLEWAVE:
         pStr = OOO_STRING_SVTOOLS_RTF_ULULDBWAVE;
         break;
     default:

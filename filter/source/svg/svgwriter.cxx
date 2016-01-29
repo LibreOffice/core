@@ -333,9 +333,9 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
 
         if( mrExport.IsUseNativeTextDecoration() )
         {
-            if( rFont.GetUnderline() != UNDERLINE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
+            if( rFont.GetUnderline() != LINESTYLE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
             {
-                if( rFont.GetUnderline() != UNDERLINE_NONE )
+                if( rFont.GetUnderline() != LINESTYLE_NONE )
                     aTextDecoration = "underline ";
 
                 if( rFont.GetStrikeout() != STRIKEOUT_NONE )
@@ -795,17 +795,17 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 
         if( mrExport.IsUseNativeTextDecoration() )
         {
-            FontUnderline eCurFontUnderline         = maCurrentFont.GetUnderline();
+            FontLineStyle eCurFontLineStyle         = maCurrentFont.GetUnderline();
             FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
 
-            FontUnderline eParFontUnderline         = maParentFont.GetUnderline();
+            FontLineStyle eParFontLineStyle         = maParentFont.GetUnderline();
             FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
 
             OUString sTextDecoration;
             bool bIsDecorationChanged = false;
-            if( eCurFontUnderline != eParFontUnderline )
+            if( eCurFontLineStyle != eParFontLineStyle )
             {
-                if( eCurFontUnderline != UNDERLINE_NONE )
+                if( eCurFontLineStyle != LINESTYLE_NONE )
                     sTextDecoration = "underline";
                 bIsDecorationChanged = true;
             }
@@ -2576,7 +2576,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     if( !mrExport.IsUseNativeTextDecoration() )
     {
-        if( rFont.GetStrikeout() != STRIKEOUT_NONE || rFont.GetUnderline() != UNDERLINE_NONE )
+        if( rFont.GetStrikeout() != STRIKEOUT_NONE || rFont.GetUnderline() != LINESTYLE_NONE )
         {
             tools::Polygon aPoly( 4 );
             const long  nLineHeight = std::max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );

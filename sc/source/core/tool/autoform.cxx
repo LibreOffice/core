@@ -180,8 +180,8 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
     rStream.WriteUInt16( SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxUnderlineItem(LINESTYLE_NONE, ATTR_FONT_UNDERLINE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxOverlineItem(LINESTYLE_NONE, ATTR_FONT_OVERLINE).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(fileVersion) );
@@ -221,8 +221,8 @@ ScAutoFormatDataField::ScAutoFormatDataField() :
     aCTLWeight( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT ),
     aCTLPosture( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ),
 
-    aUnderline( UNDERLINE_NONE,ATTR_FONT_UNDERLINE ),
-    aOverline( UNDERLINE_NONE,ATTR_FONT_OVERLINE ),
+    aUnderline( LINESTYLE_NONE,ATTR_FONT_UNDERLINE ),
+    aOverline( LINESTYLE_NONE,ATTR_FONT_OVERLINE ),
     aCrossedOut( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ),
     aContour( false, ATTR_FONT_CONTOUR ),
     aShadowed( false, ATTR_FONT_SHADOWED ),

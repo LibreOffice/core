@@ -538,7 +538,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
         // if we are underlined, we store the beginning of this underlined
         // segment for repaint optimization
-        if ( UNDERLINE_NONE != pFnt->GetUnderline() && ! nUnderLineStart )
+        if ( LINESTYLE_NONE != pFnt->GetUnderline() && ! nUnderLineStart )
             nUnderLineStart = GetLeftMargin() + rInf.X();
 
         if ( pPor->IsFlyPortion() )
@@ -557,12 +557,12 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                      // reformat is at end of an underlined portion and next portion
                      // is not underlined
                   ( ( rInf.GetReformatStart() == rInf.GetIdx() &&
-                      UNDERLINE_NONE == pFnt->GetUnderline()
+                      LINESTYLE_NONE == pFnt->GetUnderline()
                     ) ||
                      // reformat is inside portion and portion is underlined
                     ( rInf.GetReformatStart() >= rInf.GetIdx() &&
                       rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() &&
-                      UNDERLINE_NONE != pFnt->GetUnderline() ) ) )
+                      LINESTYLE_NONE != pFnt->GetUnderline() ) ) )
             rInf.SetPaintOfst( nUnderLineStart );
         else if (  ! rInf.GetPaintOfst() &&
                    // 2. Right Tab

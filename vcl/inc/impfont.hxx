@@ -116,8 +116,8 @@ private:
     FontWidth           meWidthType;
     FontItalic          meItalic;
     TextAlign           meAlign;
-    FontUnderline       meUnderline;
-    FontUnderline       meOverline;
+    FontLineStyle        meUnderline;
+    FontLineStyle        meOverline;
     FontStrikeout       meStrikeout;
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;

@@ -107,7 +107,7 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
 
     //init state
     mpHeightItem = nullptr;
-    meUnderline = UNDERLINE_NONE;
+    meUnderline = LINESTYLE_NONE;
     meUnderlineColor = COL_AUTO;
     mbKernAvailable = true;
     mbKernLBAvailable = true;
@@ -272,11 +272,11 @@ void TextPropertyPanel::NotifyItemUpdate (
             if( eState >= SfxItemState::DEFAULT && dynamic_cast<const SvxUnderlineItem*>( pState) !=  nullptr )
             {
                 const SvxUnderlineItem* pItem = static_cast<const SvxUnderlineItem*>(pState);
-                meUnderline = (FontUnderline)pItem->GetValue();
+                meUnderline = (FontLineStyle)pItem->GetValue();
                 meUnderlineColor = pItem->GetColor();
             }
             else
-                meUnderline = UNDERLINE_NONE;
+                meUnderline = LINESTYLE_NONE;
         }
         break;
     case SID_ATTR_CHAR_KERNING:

@@ -209,7 +209,7 @@ void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetColor(aTextColor);
     aFont.SetWeight(WEIGHT_BOLD);
-    aFont.SetUnderline(UNDERLINE_SINGLE);
+    aFont.SetUnderline(LINESTYLE_SINGLE);
     rRenderContext.SetFont(aFont);
     rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
     m_pImpl->InCompleteHyperLabel = nullptr;
@@ -589,7 +589,7 @@ void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
     // draw it
     rRenderContext.DrawText(Rectangle(aTextPos, aOutputSize), GetText(),
                             DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
-    rRenderContext.DrawTextLine(aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE);
+    rRenderContext.DrawTextLine(aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, LINESTYLE_SINGLE, LINESTYLE_NONE);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetLineColor(rStyleSettings.GetFieldTextColor());
     rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());

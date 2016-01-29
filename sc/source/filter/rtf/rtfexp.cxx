@@ -224,7 +224,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         bResetAttr = true;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
     }
-    if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
+    if ( rUnderlineItem.GetLineStyle() != LINESTYLE_NONE )
     {   // underline
         bResetAttr = true;
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );

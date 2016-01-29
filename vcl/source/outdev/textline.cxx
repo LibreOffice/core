@@ -32,7 +32,7 @@
 #include "impfont.hxx"
 #include "outdata.hxx"
 
-#define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
+#define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
 bool OutputDevice::ImplIsUnderlineAbove( const vcl::Font& rFont )
@@ -206,7 +206,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
 
 void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                                          long nDistX, long nDistY, long nWidth,
-                                         FontUnderline eTextLine,
+                                         FontLineStyle eTextLine,
                                          Color aColor,
                                          bool bIsAbove )
 {
@@ -224,20 +224,20 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
         nLineHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
         nLinePos = pFontInstance->mxFontMetric->GetWavelineUnderlineOffset();
     }
-    if ( (eTextLine == UNDERLINE_SMALLWAVE) && (nLineHeight > 3) )
+    if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
     long nLineWidth = (mnDPIX / 300);
     if ( !nLineWidth )
         nLineWidth = 1;
 
-    if ( eTextLine == UNDERLINE_BOLDWAVE )
+    if ( eTextLine == LINESTYLE_BOLDWAVE )
         nLineWidth *= 2;
 
     nLinePos += nDistY - (nLineHeight / 2);
 
     long nLineWidthHeight = ((nLineWidth * mnDPIX) + (mnDPIY / 2)) / mnDPIY;
-    if ( eTextLine == UNDERLINE_DOUBLEWAVE )
+    if ( eTextLine == LINESTYLE_DOUBLEWAVE )
     {
         long nOrgLineHeight = nLineHeight;
         nLineHeight /= 3;
@@ -274,7 +274,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
 
 void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                                              long nDistX, long nDistY, long nWidth,
-                                             FontUnderline eTextLine,
+                                             FontLineStyle eTextLine,
                                              Color aColor,
                                              bool bIsAbove )
 {
@@ -286,16 +286,16 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     const long nY = nDistY;
 
     if ( eTextLine > UNDERLINE_LAST )
-        eTextLine = UNDERLINE_SINGLE;
+        eTextLine = LINESTYLE_SINGLE;
 
     switch ( eTextLine )
     {
-    case UNDERLINE_SINGLE:
-    case UNDERLINE_DOTTED:
-    case UNDERLINE_DASH:
-    case UNDERLINE_LONGDASH:
-    case UNDERLINE_DASHDOT:
-    case UNDERLINE_DASHDOTDOT:
+    case LINESTYLE_SINGLE:
+    case LINESTYLE_DOTTED:
+    case LINESTYLE_DASH:
+    case LINESTYLE_LONGDASH:
+    case LINESTYLE_DASHDOT:
+    case LINESTYLE_DASHDOTDOT:
         if ( bIsAbove )
         {
             nLineHeight = pFontInstance->mxFontMetric->GetAboveUnderlineSize();
@@ -307,12 +307,12 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
             nLinePos    = nY + pFontInstance->mxFontMetric->GetUnderlineOffset();
         }
         break;
-    case UNDERLINE_BOLD:
-    case UNDERLINE_BOLDDOTTED:
-    case UNDERLINE_BOLDDASH:
-    case UNDERLINE_BOLDLONGDASH:
-    case UNDERLINE_BOLDDASHDOT:
-    case UNDERLINE_BOLDDASHDOTDOT:
+    case LINESTYLE_BOLD:
+    case LINESTYLE_BOLDDOTTED:
+    case LINESTYLE_BOLDDASH:
+    case LINESTYLE_BOLDLONGDASH:
+    case LINESTYLE_BOLDDASHDOT:
+    case LINESTYLE_BOLDDASHDOTDOT:
         if ( bIsAbove )
         {
             nLineHeight = pFontInstance->mxFontMetric->GetAboveBoldUnderlineSize();
@@ -324,7 +324,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
             nLinePos    = nY + pFontInstance->mxFontMetric->GetBoldUnderlineOffset();
         }
         break;
-    case UNDERLINE_DOUBLE:
+    case LINESTYLE_DOUBLE:
         if ( bIsAbove )
         {
             nLineHeight = pFontInstance->mxFontMetric->GetAboveDoubleUnderlineSize();
@@ -356,16 +356,16 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
 
         switch ( eTextLine )
         {
-        case UNDERLINE_SINGLE:
-        case UNDERLINE_BOLD:
+        case LINESTYLE_SINGLE:
+        case LINESTYLE_BOLD:
             ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos, nWidth, nLineHeight );
             break;
-        case UNDERLINE_DOUBLE:
+        case LINESTYLE_DOUBLE:
             ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos,  nWidth, nLineHeight );
             ImplDrawTextRect( nBaseX, nBaseY, nLeft, nLinePos2, nWidth, nLineHeight );
             break;
-        case UNDERLINE_DOTTED:
-        case UNDERLINE_BOLDDOTTED:
+        case LINESTYLE_DOTTED:
+        case LINESTYLE_BOLDDOTTED:
             {
                 long nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
@@ -383,10 +383,10 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                 }
             }
             break;
-        case UNDERLINE_DASH:
-        case UNDERLINE_LONGDASH:
-        case UNDERLINE_BOLDDASH:
-        case UNDERLINE_BOLDLONGDASH:
+        case LINESTYLE_DASH:
+        case LINESTYLE_LONGDASH:
+        case LINESTYLE_BOLDDASH:
+        case LINESTYLE_BOLDLONGDASH:
             {
                 long nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
@@ -396,8 +396,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                 long nMinSpaceWidth;
                 long nSpaceWidth;
                 long nDashWidth;
-                if ( (eTextLine == UNDERLINE_LONGDASH) ||
-                     (eTextLine == UNDERLINE_BOLDLONGDASH) )
+                if ( (eTextLine == LINESTYLE_LONGDASH) ||
+                     (eTextLine == LINESTYLE_BOLDLONGDASH) )
                 {
                     nMinDashWidth = nDotWidth*6;
                     nMinSpaceWidth = nDotWidth*2;
@@ -431,8 +431,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                 }
             }
             break;
-        case UNDERLINE_DASHDOT:
-        case UNDERLINE_BOLDDASHDOT:
+        case LINESTYLE_DASHDOT:
+        case LINESTYLE_BOLDDASHDOT:
             {
                 long nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
@@ -466,8 +466,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                 }
             }
             break;
-        case UNDERLINE_DASHDOTDOT:
-        case UNDERLINE_BOLDDASHDOTDOT:
+        case LINESTYLE_DASHDOTDOT:
+        case LINESTYLE_BOLDDASHDOTDOT:
             {
                 long nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
@@ -674,8 +674,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 void OutputDevice::ImplDrawTextLine( long nX, long nY,
                                      long nDistX, DeviceCoordinate nWidth,
                                      FontStrikeout eStrikeout,
-                                     FontUnderline eUnderline,
-                                     FontUnderline eOverline,
+                                     FontLineStyle eUnderline,
+                                     FontLineStyle eOverline,
                                      bool bUnderlineAbove )
 {
     if ( !nWidth )
@@ -704,18 +704,18 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     if ( !IsOverlineColor() )
         aOverlineColor = GetTextColor();
 
-    if ( (eUnderline == UNDERLINE_SMALLWAVE) ||
-         (eUnderline == UNDERLINE_WAVE) ||
-         (eUnderline == UNDERLINE_DOUBLEWAVE) ||
-         (eUnderline == UNDERLINE_BOLDWAVE) )
+    if ( (eUnderline == LINESTYLE_SMALLWAVE) ||
+         (eUnderline == LINESTYLE_WAVE) ||
+         (eUnderline == LINESTYLE_DOUBLEWAVE) ||
+         (eUnderline == LINESTYLE_BOLDWAVE) )
     {
         ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
         bUnderlineDone = true;
     }
-    if ( (eOverline == UNDERLINE_SMALLWAVE) ||
-         (eOverline == UNDERLINE_WAVE) ||
-         (eOverline == UNDERLINE_DOUBLEWAVE) ||
-         (eOverline == UNDERLINE_BOLDWAVE) )
+    if ( (eOverline == LINESTYLE_SMALLWAVE) ||
+         (eOverline == LINESTYLE_WAVE) ||
+         (eOverline == LINESTYLE_DOUBLEWAVE) ||
+         (eOverline == LINESTYLE_BOLDWAVE) )
     {
         ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, true );
         bOverlineDone = true;
@@ -739,7 +739,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 }
 
 void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStrikeout,
-                                      FontUnderline eUnderline, FontUnderline eOverline,
+                                      FontLineStyle eUnderline, FontLineStyle eOverline,
                                       bool bWordLine, bool bUnderlineAbove )
 {
     if( bWordLine )
@@ -814,7 +814,7 @@ void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
     }
 
-    ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, false );
+    ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, LINESTYLE_SINGLE, LINESTYLE_NONE, false );
 }
 
 void OutputDevice::SetTextLineColor()
@@ -933,8 +933,8 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
 
 void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontStrikeout eStrikeout,
-                                 FontUnderline eUnderline,
-                                 FontUnderline eOverline,
+                                 FontLineStyle eUnderline,
+                                 FontLineStyle eOverline,
                                  bool bUnderlineAbove )
 {
     assert(!is_double_buffered_window());
@@ -942,8 +942,8 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineAction( rPos, nWidth, eStrikeout, eUnderline, eOverline ) );
 
-    if ( ((eUnderline == UNDERLINE_NONE) || (eUnderline == UNDERLINE_DONTKNOW)) &&
-         ((eOverline  == UNDERLINE_NONE) || (eOverline  == UNDERLINE_DONTKNOW)) &&
+    if ( ((eUnderline == LINESTYLE_NONE) || (eUnderline == LINESTYLE_DONTKNOW)) &&
+         ((eOverline  == LINESTYLE_NONE) || (eOverline  == LINESTYLE_DONTKNOW)) &&
          ((eStrikeout == STRIKEOUT_NONE) || (eStrikeout == STRIKEOUT_DONTKNOW)) )
     {
         return;

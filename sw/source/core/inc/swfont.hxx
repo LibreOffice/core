@@ -87,8 +87,8 @@ class SwSubFont : public SvxFont
     inline void SetCharSet( const rtl_TextEncoding eCharSet );
     inline void SetPitch( const FontPitch ePitch );
     inline void SetAlign( const FontAlign eAlign );
-    inline void SetUnderline( const FontUnderline eUnderline );
-    inline void SetOverline( const FontUnderline eOverline );
+    inline void SetUnderline( const FontLineStyle eUnderline );
+    inline void SetOverline( const FontLineStyle eOverline );
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
     inline void SetOutline( const bool bOutline );
@@ -209,9 +209,9 @@ public:
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
     inline void SetAlign( const FontAlign eAlign );
-    inline void SetUnderline( const FontUnderline eUnderline );
+    inline void SetUnderline( const FontLineStyle eUnderline );
     inline void SetUnderColor( const Color &rColor ) { m_aUnderColor = rColor; }
-    inline void SetOverline( const FontUnderline eOverline );
+    inline void SetOverline( const FontLineStyle eOverline );
     inline void SetOverColor( const Color &rColor ) { m_aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const bool bOutline );
@@ -268,9 +268,9 @@ public:
 
     bool IsSymbol( SwViewShell *pSh )
         { return m_aSub[m_nActual].IsSymbol( pSh ); }
-    FontUnderline GetUnderline() const { return m_aSub[m_nActual].GetUnderline(); }
+    FontLineStyle GetUnderline() const { return m_aSub[m_nActual].GetUnderline(); }
     const Color& GetUnderColor() const { return m_aUnderColor; }
-    FontUnderline GetOverline() const { return m_aSub[m_nActual].GetOverline(); }
+    FontLineStyle GetOverline() const { return m_aSub[m_nActual].GetOverline(); }
     const Color& GetOverColor() const { return m_aOverColor; }
     FontStrikeout GetStrikeout() const { return m_aSub[m_nActual].GetStrikeout(); }
     const Color& GetColor() const { return m_aSub[m_nActual].GetColor(); }
@@ -527,13 +527,13 @@ inline void SwFont::SetWeight( const FontWeight eWeight, const sal_uInt8 nWhich 
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetUnderline( const FontUnderline eUnderline )
+inline void SwSubFont::SetUnderline( const FontLineStyle eUnderline )
 {
     m_pMagic = nullptr;
     Font::SetUnderline( eUnderline );
 }
 
-inline void SwFont::SetUnderline( const FontUnderline eUnderline )
+inline void SwFont::SetUnderline( const FontLineStyle eUnderline )
 {
     m_bFontChg = true;
     m_aSub[0].SetUnderline( eUnderline );
@@ -542,13 +542,13 @@ inline void SwFont::SetUnderline( const FontUnderline eUnderline )
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetOverline( const FontUnderline eOverline )
+inline void SwSubFont::SetOverline( const FontLineStyle eOverline )
 {
     m_pMagic = nullptr;
     Font::SetOverline( eOverline );
 }
 
-inline void SwFont::SetOverline( const FontUnderline eOverline )
+inline void SwFont::SetOverline( const FontLineStyle eOverline )
 {
     m_bFontChg = true;
     m_aSub[0].SetOverline( eOverline );

@@ -2784,13 +2784,13 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     {
         sal_uInt16 nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
         if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
-            rFont.SetUnderline( UNDERLINE_SINGLE );
+            rFont.SetUnderline( LINESTYLE_SINGLE );
         else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
-            rFont.SetUnderline( UNDERLINE_BOLD );
+            rFont.SetUnderline( LINESTYLE_BOLD );
         else if ( nAttr & EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE )
-            rFont.SetUnderline( UNDERLINE_DOTTED );
+            rFont.SetUnderline( LINESTYLE_DOTTED );
         else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
-            rFont.SetUnderline( UNDERLINE_DOTTED );
+            rFont.SetUnderline( LINESTYLE_DOTTED );
         else if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
             rFont.SetColor( Color( COL_RED ) );
         else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
@@ -2804,7 +2804,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         }
         else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
         {
-            rFont.SetUnderline( UNDERLINE_WAVE );
+            rFont.SetUnderline( LINESTYLE_WAVE );
             if( pOut )
                 pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
         }
@@ -3394,7 +3394,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     if ( nOrientation || ( !IsVertical() && ( ( aTmpPos.X() + nTxtWidth ) >= nFirstVisXPos ) )
                                             || ( IsVertical() && ( ( aTmpPos.Y() + nTxtWidth ) >= nFirstVisYPos ) ) )
                                     {
-                                        if ( nEsc && ( ( aTmpFont.GetUnderline() != UNDERLINE_NONE ) ) )
+                                        if ( nEsc && ( ( aTmpFont.GetUnderline() != LINESTYLE_NONE ) ) )
                                         {
                                             // Paint the high/low without underline,
                                             // Display the Underline on the
@@ -3409,13 +3409,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 if ( pPrev->GetStart() )
                                                 {
                                                     SeekCursor( pPortion->GetNode(), pPrev->GetStart(), aDummy );
-                                                    if ( aDummy.GetUnderline() != UNDERLINE_NONE )
+                                                    if ( aDummy.GetUnderline() != LINESTYLE_NONE )
                                                         bSpecialUnderline = true;
                                                 }
                                                 if ( !bSpecialUnderline && ( pPrev->GetEnd() < pPortion->GetNode()->Len() ) )
                                                 {
                                                     SeekCursor( pPortion->GetNode(), pPrev->GetEnd()+1, aDummy );
-                                                    if ( aDummy.GetUnderline() != UNDERLINE_NONE )
+                                                    if ( aDummy.GetUnderline() != LINESTYLE_NONE )
                                                         bSpecialUnderline = true;
                                                 }
                                             }
@@ -3433,7 +3433,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                     aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
                                                 pOutDev->DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
 
-                                                aTmpFont.SetUnderline( UNDERLINE_NONE );
+                                                aTmpFont.SetUnderline( LINESTYLE_NONE );
                                                 if ( !nOrientation )
                                                     aTmpFont.SetEscapement( nEsc );
                                                 aTmpFont.SetPropr( nProp );

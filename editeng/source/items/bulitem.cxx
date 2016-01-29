@@ -75,7 +75,7 @@ vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     rStream.ReadUInt16( nTemp ); aFont.SetPitch((FontPitch)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetAlignment((FontAlign)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetWeight((FontWeight)nTemp);
-    rStream.ReadUInt16( nTemp ); aFont.SetUnderline((FontUnderline)nTemp);
+    rStream.ReadUInt16( nTemp ); aFont.SetUnderline((FontLineStyle)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetStrikeout((FontStrikeout)nTemp);
     rStream.ReadUInt16( nTemp ); aFont.SetItalic((FontItalic)nTemp);
 

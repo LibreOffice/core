@@ -1271,10 +1271,10 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     case RES_CHRATR_UNDERLINE:
         switch( static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle() )
         {
-        case UNDERLINE_SINGLE:
+        case LINESTYLE_SINGLE:
             eState = HTML_ON_VALUE;
             break;
-        case UNDERLINE_NONE:
+        case LINESTYLE_NONE:
             eState = HTML_OFF_VALUE;
             break;
         default:
@@ -2878,8 +2878,8 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.m_bOutOpts )
         return rWrt;
 
-    const FontUnderline eUnder = static_cast<const SvxUnderlineItem&>(rHt).GetLineStyle();
-    if( UNDERLINE_NONE != eUnder )
+    const FontLineStyle eUnder = static_cast<const SvxUnderlineItem&>(rHt).GetLineStyle();
+    if( LINESTYLE_NONE != eUnder )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_underline, rHTMLWrt.m_bTagOn );
     }

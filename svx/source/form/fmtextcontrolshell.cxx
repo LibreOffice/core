@@ -861,11 +861,11 @@ namespace svx
                     DBG_ASSERT( pTextLine, "FmTextControlShell::ExecuteTextAttribute: ooops - no underline/overline item!" );
                     if ( pTextLine )
                     {
-                        FontUnderline eTL = pTextLine->GetLineStyle();
+                        FontLineStyle eTL = pTextLine->GetLineStyle();
                         if ( SID_ATTR_CHAR_UNDERLINE == nSlot ) {
-                            aToggled.Put( SvxUnderlineItem( eTL == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                            aToggled.Put( SvxUnderlineItem( eTL == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE, nWhich ) );
                         } else {
-                            aToggled.Put( SvxOverlineItem( eTL == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, nWhich ) );
+                            aToggled.Put( SvxOverlineItem( eTL == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE, nWhich ) );
                         }
                     }
                 }

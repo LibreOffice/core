@@ -109,7 +109,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     }
 
     Color aCol( COL_RED );
-    FontUnderline eUnderline = UNDERLINE_NONE;
+    FontLineStyle eUnderline = LINESTYLE_NONE;
     const SwFormatURL &rURL = pFrame->FindFlyFrame()->GetFormat()->GetURL();
     if( !rURL.GetURL().isEmpty() || rURL.GetMap() )
     {

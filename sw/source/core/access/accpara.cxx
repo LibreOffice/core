@@ -2279,7 +2279,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                     sal_Int32 nLen = 1;
                     if( pWrongList->InWrongWord(nBegin,nLen) && !pTextNode->IsSymbol(nBegin) )
                     {
-                        rValue.Value <<= (sal_uInt16)UNDERLINE_WAVE;
+                        rValue.Value <<= (sal_uInt16)LINESTYLE_WAVE;
                     }
                 }
             }

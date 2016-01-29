@@ -407,7 +407,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 }
             }
 
-            OStringBuffer aStr("Nicht gefunden : ");
+            OStringBuffer aStr("Not found : ");
             aStr.append(pTok->GetString());
             OSL_FAIL(aStr.getStr());
         }

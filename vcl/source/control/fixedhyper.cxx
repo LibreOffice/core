@@ -33,7 +33,7 @@ void FixedHyperlink::Initialize()
     // changes the font
     vcl::Font aFont = GetControlFont( );
     // to underline
-    aFont.SetUnderline( UNDERLINE_SINGLE );
+    aFont.SetUnderline( LINESTYLE_SINGLE );
     SetControlFont( aFont );
     // changes the color to light blue
     SetControlForeground( Color( COL_LIGHTBLUE ) );

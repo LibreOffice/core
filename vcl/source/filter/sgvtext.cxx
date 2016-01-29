@@ -539,8 +539,8 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
 
     if ((Atr.Schnitt & TextBoldBit) !=0) aFont.SetWeight(WEIGHT_BOLD);
     if ((Atr.Schnitt & TextRSlnBit) !=0) aFont.SetItalic(ITALIC_NORMAL);
-    if ((Atr.Schnitt & TextUndlBit) !=0) aFont.SetUnderline(UNDERLINE_SINGLE);
-    if ((Atr.Schnitt & TextDbUnBit) !=0) aFont.SetUnderline(UNDERLINE_DOUBLE);
+    if ((Atr.Schnitt & TextUndlBit) !=0) aFont.SetUnderline(LINESTYLE_SINGLE);
+    if ((Atr.Schnitt & TextDbUnBit) !=0) aFont.SetUnderline(LINESTYLE_DOUBLE);
     if ((Atr.Schnitt & TextStrkBit) !=0) aFont.SetStrikeout(STRIKEOUT_SINGLE);
     if ((Atr.Schnitt & TextDbStBit) !=0) aFont.SetStrikeout(STRIKEOUT_DOUBLE);
     if ((Atr.Schnitt & TextSh2DBit) !=0) aFont.SetShadow(true);

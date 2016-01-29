@@ -729,7 +729,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             if (pHeadFootLine->LogFont.lfItalic != 0)
                 aEditAttribs.Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC), EE_CHAR_ITALIC);
             if (pHeadFootLine->LogFont.lfUnderline != 0)
-                aEditAttribs.Put(SvxUnderlineItem(UNDERLINE_SINGLE, EE_CHAR_UNDERLINE), EE_CHAR_UNDERLINE);
+                aEditAttribs.Put(SvxUnderlineItem(LINESTYLE_SINGLE, EE_CHAR_UNDERLINE), EE_CHAR_UNDERLINE);
             if (pHeadFootLine->LogFont.lfStrikeOut != 0)
                 aEditAttribs.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT), EE_CHAR_STRIKEOUT);
             OUString aText( pHeadFootLine->Title, strlen(pHeadFootLine->Title), DEFCHARSET );
@@ -1147,7 +1147,7 @@ void Sc10Import::LoadPatternCollection()
                 if( pPattern->LogFont.lfItalic != 0 )
                     rItemSet.Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
                 if( pPattern->LogFont.lfUnderline != 0 )
-                    rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
+                    rItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
                 if( pPattern->LogFont.lfStrikeOut != 0 )
                     rItemSet.Put( SvxCrossedOutItem( STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT ) );
             }
@@ -1776,7 +1776,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             if ((nValue1 & atItalic) == atItalic)
                 aScPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
             if ((nValue1 & atUnderline) == atUnderline)
-                aScPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE));
+                aScPattern.GetItemSet().Put(SvxUnderlineItem(LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE));
             if ((nValue1 & atStrikeOut) == atStrikeOut)
                 aScPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);

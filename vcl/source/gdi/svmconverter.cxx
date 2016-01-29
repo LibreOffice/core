@@ -831,7 +831,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     aFont.SetAlignment( (FontAlign) nAlign );
                     aFont.SetWeight( ( nWeight == 1 ) ? WEIGHT_LIGHT : ( nWeight == 2 ) ? WEIGHT_NORMAL :
                                      ( nWeight == 3 ) ? WEIGHT_BOLD : WEIGHT_DONTKNOW );
-                    aFont.SetUnderline( (FontUnderline) nUnderline );
+                    aFont.SetUnderline( (FontLineStyle) nUnderline );
                     aFont.SetStrikeout( (FontStrikeout) nStrikeout );
                     aFont.SetItalic( bItalic ? ITALIC_NORMAL : ITALIC_NONE );
                     aFont.SetOutline( bOutline );
@@ -1294,8 +1294,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
                                                             (FontStrikeout) nStrikeout,
-                                                            (FontUnderline) nUnderline,
-                                                            UNDERLINE_NONE ) );
+                                                            (FontLineStyle) nUnderline,
+                                                            LINESTYLE_NONE ) );
 
                     i += nFollowingActionCount;
                 }
@@ -2393,7 +2393,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const Point&                rStartPt = pA->GetStartPoint();
                 const sal_Int32             nWidth = (sal_Int32) pA->GetWidth();
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
-                const FontUnderline         eUnderline = pA->GetUnderline();
+                const FontLineStyle         eUnderline = pA->GetUnderline();
                 sal_uLong                   nOldPos, nNewPos;
 
                 // write RefPoint comment
