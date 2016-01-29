@@ -142,7 +142,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="open_remote">
-                    <property name="label" translatable="yes">Remote _Files</property>
+                    <property name="label" translatable="yes">Remote File_s</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
