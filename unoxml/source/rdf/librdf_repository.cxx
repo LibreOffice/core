@@ -30,7 +30,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/bind.hpp>
 #include <boost/optional.hpp>
 
 #include <libxslt/security.h>
@@ -1253,8 +1252,8 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
     ::std::vector< uno::Reference<rdf::XURI> > ret;
     std::transform(m_NamedGraphs.begin(), m_NamedGraphs.end(),
         std::back_inserter(ret),
-        boost::bind(&rdf::XNamedGraph::getName,
-            boost::bind(&NamedGraphMap_t::value_type::second, _1)));
+        [](std::pair<OUString, ::rtl::Reference<librdf_NamedGraph>> const& it)
+            { return it.second->getName(); });
     return comphelper::containerToSequence(ret);
 }
 
@@ -1585,7 +1584,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         predicates;
     ::std::transform(i_rPredicates.begin(), i_rPredicates.end(),
         ::std::back_inserter(predicates),
-        ::boost::bind(&librdf_TypeConverter::extractResource_NoLock, _1));
+        [](uno::Reference<rdf::XURI> const& xURI)
+            { return librdf_TypeConverter::extractResource_NoLock(xURI); });
 
     removeStatementRDFa(i_xObject); // not atomic with insertion?
 
