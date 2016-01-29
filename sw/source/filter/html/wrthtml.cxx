@@ -331,7 +331,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     OString aStartTags;
 
-    // Tabellen und Bereiche am Doc.-Anfang beachten
+    // respect table and section at document beginning
     {
         SwTableNode * pTNd = pCurPam->GetNode().FindTableNode();
         if( pTNd && bWriteAll )

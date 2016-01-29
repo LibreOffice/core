@@ -141,9 +141,13 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                             if( pTextNd->GetActualListLevel() + 1 <
                                 rInfo.GetDepth() )
                             {
-                                // node is numbered, but level is lower
+                                if (rPrevInfo.GetDepth() == 0)
+                                    // previous node had no numbering => write start value
+                                    bStartValue = true;
+                                else
+                                    // node is numbered, but level is lower
+                                    bStartValue = false;
                                 // => check completed
-                                bStartValue = false;
                                 break;
                             }
                             nPos++;
@@ -249,7 +253,6 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sal_uInt16 nStartVal = rNumFormat.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
             {
-                // #i51089 - TUNING#
                 if ( rWrt.pCurPam->GetNode().GetTextNode()->GetNum() )
                 {
                     nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()
