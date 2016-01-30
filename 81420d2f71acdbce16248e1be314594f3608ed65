@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a9d85d2_adfe1d03",
+        "filename": "external/boost/UnpackedTarball_boost.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-01-30T11:43:21Z",
+      "side": 1,
+      "message": "Talked with Stephan in person on FOSDEM. He agreed to push it as is and backport this experimental feature later.",
+      "revId": "81420d2f71acdbce16248e1be314594f3608ed65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
