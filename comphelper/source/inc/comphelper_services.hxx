@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-void createRegistryInfo_AnyCompareFactory();
 void createRegistryInfo_Map();
 void createRegistryInfo_OInstanceLocker();
 void createRegistryInfo_OPropertyBag();
