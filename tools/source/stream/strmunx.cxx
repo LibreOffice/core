@@ -308,11 +308,7 @@ SvFileStream::~SvFileStream()
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    OStringBuffer aTraceStr("SvFileStream::GetData(): ");
-    aTraceStr.append(static_cast<sal_Int64>(nSize));
-    aTraceStr.append(" Bytes from ");
-    aTraceStr.append(OUStringToOString(aFilename,
-        osl_getThreadTextEncoding()));
+    OString aTraceStr("SvFileStream::GetData(): " + OString::number(static_cast<sal_Int64>(nSize)) + " Bytes from " + OUStringToOString(aFilename, osl_getThreadTextEncoding()));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -332,11 +328,7 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    OStringBuffer aTraceStr("SvFileStream::PutData(): ");
-    aTraceStr.append(static_cast<sal_Int64>(nSize));
-    aTraceStr.append(" Bytes to ");
-    aTraceStr.append(OUStringToOString(aFilename,
-        osl_getThreadTextEncoding()));
+    OString aTraceStr("SvFileStream::PutData(): " + OString::number(static_cast<sal_Int64>(nSize)) + " Bytes to " + OUStringToOString(aFilename, osl_getThreadTextEncoding()));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -470,8 +462,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
 
 #ifdef DBG_UTIL
     OString aLocalFilename(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-    OStringBuffer aTraceStr("SvFileStream::Open(): ");
-    aTraceStr.append(aLocalFilename);
+    OString aTraceStr("SvFileStream::Open(): " + aLocalFilename);
     OSL_TRACE( "%s", aTraceStr.getStr() );
 #endif
 
@@ -568,9 +559,7 @@ void SvFileStream::Close()
     if ( IsOpen() )
     {
 #ifdef DBG_UTIL
-        OStringBuffer aTraceStr("SvFileStream::Close(): ");
-        aTraceStr.append(OUStringToOString(aFilename,
-            osl_getThreadTextEncoding()));
+        OString aTraceStr("SvFileStream::Close(): " + OUStringToOString(aFilename, osl_getThreadTextEncoding()));
         OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
