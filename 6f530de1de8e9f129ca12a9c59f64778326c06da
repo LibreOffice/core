@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a9d85d2_ad4c5d77",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-30T12:38:34Z",
+      "side": 1,
+      "message": ": should be ;",
+      "revId": "6f530de1de8e9f129ca12a9c59f64778326c06da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a9d85d2_ed566505",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-30T12:38:34Z",
+      "side": 1,
+      "message": "this was correct.",
+      "revId": "6f530de1de8e9f129ca12a9c59f64778326c06da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
