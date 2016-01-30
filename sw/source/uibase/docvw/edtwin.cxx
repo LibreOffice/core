@@ -29,6 +29,7 @@
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include <vcl/help.hxx>
 #include <vcl/graphic.hxx>
@@ -6058,6 +6059,29 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
             aNames = (*pCalendar)->getDays();
     }
 
+    // Add matching current date in ISO 8601 format, for example 2016-01-30
+    OUString rStrToday;
+
+    if (rWord[0] == '2')
+    {
+        OUStringBuffer rStr("");
+        rStr.append(sal::static_int_cast< sal_Int32 >((*pCalendar)->getValue(i18n::CalendarFieldIndex::YEAR))).append("-");
+        sal_Int32 nMonth = sal::static_int_cast< sal_Int32 >((*pCalendar)->getValue(i18n::CalendarFieldIndex::MONTH)+1);
+        sal_Int32 nDay = sal::static_int_cast< sal_Int32 > ((*pCalendar)->getValue(i18n::CalendarFieldIndex::DAY_OF_MONTH));
+        if (nMonth < 10)
+            rStr.append("0");
+        rStr.append(nMonth).append("-");
+        if (nDay < 10)
+            rStr.append("0");
+        rStrToday = rStr.append(nDay).toString();
+
+        // do not suggest for single years, for example for "2016",
+        // only for "201" or "2016-..." (to avoid unintentional text
+        // insertion at line ending, for example typing "30 January 2016")
+        if (rWord.getLength() != 4 && rStrToday.startsWith(rWord))
+            m_aHelpStrings.push_back(rStrToday);
+    }
+
     // Add matching words from AutoCompleteWord list
     const SwAutoCompleteWord& rACList = SwEditShell::GetAutoCompleteWords();
     std::vector<OUString> strings;
@@ -6067,6 +6091,13 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
         for (size_t i= 0; i<strings.size(); i++)
         {
             OUString aCompletedString = strings[i];
+
+            // when we have a matching current date, avoid to suggest
+            // other words with the same matching starting characters,
+            // for example 2016-01-3 instead of 2016-01-30
+            if (!rStrToday.isEmpty() && aCompletedString.startsWith(rWord))
+                continue;
+
             //fdo#61251 if it's an exact match, ensure unchanged replacement
             //exists as a candidate
             if (aCompletedString.startsWith(rWord))
