@@ -368,6 +368,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_LINEST { Text = "LINEST" ; };
     String SC_OPCODE_LOGEST { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
+    String SC_OPCODE_FORECAST_ETS_ADD { Text = "FORECAST.ETS" ; };
+    String SC_OPCODE_FORECAST_ETS_SEA { Text = "FORECAST.ETS.SEASONALITY" ; };
+    String SC_OPCODE_FORECAST_ETS_MUL { Text = "FORECAST.ETS.MULT" ; };
+    String SC_OPCODE_FORECAST_ETS_PIA { Text = "FORECAST.ETS.CONFINT" ; };
+    String SC_OPCODE_FORECAST_ETS_PIM { Text = "FORECAST.ETS.PI.MULT" ; };
+    String SC_OPCODE_FORECAST_ETS_STA { Text = "FORECAST.ETS.STAT" ; };
+    String SC_OPCODE_FORECAST_ETS_STM { Text = "FORECAST.ETS.STAT.MULT" ; };
+    String SC_OPCODE_FORECAST_LIN { Text = "FORECAST.LINEAR" ; };
     String SC_OPCODE_CHI_INV { Text = "LEGACY.CHIINV" ; };
     String SC_OPCODE_CHI_INV_MS { Text = "COM.MICROSOFT.CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
@@ -794,6 +802,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_LINEST { Text = "LINEST" ; };
     String SC_OPCODE_LOGEST { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
+    String SC_OPCODE_FORECAST_ETS_ADD { Text = "_xlfn.FORECAST.ETS" ; };
+    String SC_OPCODE_FORECAST_ETS_SEA { Text = "_xlfn.FORECAST.ETS.SEASONALITY" ; };
+    String SC_OPCODE_FORECAST_ETS_MUL { Text = "_xlfn.ORG.LIBREOFFICE.FORECAST.ETS.MULT" ; };
+    String SC_OPCODE_FORECAST_ETS_PIA { Text = "_xlfn.FORECAST.ETS.CONFINT" ; };
+    String SC_OPCODE_FORECAST_ETS_PIM { Text = "_xlfn.ORG.LIBREOFFICE.FORECAST.ETS.PI.MULT" ; };
+    String SC_OPCODE_FORECAST_ETS_STA { Text = "_xlfn.FORECAST.ETS.STAT" ; };
+    String SC_OPCODE_FORECAST_ETS_STM { Text = "_xlfn.ORG.LIBREOFFICE.FORECAST.ETS.STAT.MULT" ; };
+    String SC_OPCODE_FORECAST_LIN { Text = "_xlfn.FORECAST.LINEAR" ; };
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
     String SC_OPCODE_CHI_INV_MS { Text = "_xlfn.CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
@@ -1220,6 +1236,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_LINEST { Text = "LINEST" ; };
     String SC_OPCODE_LOGEST { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
+    String SC_OPCODE_FORECAST_ETS_ADD { Text = "FORECAST.ETS.ADD" ; };
+    String SC_OPCODE_FORECAST_ETS_SEA { Text = "FORECAST.ETS.SEASONALITY" ; };
+    String SC_OPCODE_FORECAST_ETS_MUL { Text = "FORECAST.ETS.MULT" ; };
+    String SC_OPCODE_FORECAST_ETS_PIA { Text = "FORECAST.ETS.PI.ADD" ; };
+    String SC_OPCODE_FORECAST_ETS_PIM { Text = "FORECAST.ETS.PI.MULT" ; };
+    String SC_OPCODE_FORECAST_ETS_STA { Text = "FORECAST.ETS.STAT.ADD" ; };
+    String SC_OPCODE_FORECAST_ETS_STM { Text = "FORECAST.ETS.STAT.MULT" ; };
+    String SC_OPCODE_FORECAST_LIN { Text = "FORECAST.LINEAR" ; };
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
     String SC_OPCODE_CHI_INV_MS { Text = "CHISQ.INV.RT" ; };
     String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
@@ -2620,6 +2644,38 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_FORECAST
     {
         Text [ en-US ] = "FORECAST" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_ADD
+    {
+        Text [ en-US ] = "FORECAST.ETS.ADD" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_SEA
+    {
+        Text [ en-US ] = "FORECAST.ETS.SEASONALITY" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_MUL
+    {
+        Text [ en-US ] = "FORECAST.ETS.MULT" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_PIA
+    {
+        Text [ en-US ] = "FORECAST.ETS.PI.ADD" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_PIM
+    {
+        Text [ en-US ] = "FORECAST.ETS.PI.MULT" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_STA
+    {
+        Text [ en-US ] = "FORECAST.ETS.STAT.ADD" ;
+    };
+    String SC_OPCODE_FORECAST_ETS_STM
+    {
+        Text [ en-US ] = "FORECAST.ETS.STAT.MULT" ;
+    };
+    String SC_OPCODE_FORECAST_LIN
+    {
+        Text [ en-US ] = "FORECAST.LINEAR" ;
     };
     String SC_OPCODE_CHI_INV
     {

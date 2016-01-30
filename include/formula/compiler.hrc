@@ -487,7 +487,15 @@
 #define SC_OPCODE_FLOOR_PRECISE     476
 #define SC_OPCODE_RAWSUBTRACT       477
 #define SC_OPCODE_WEEKNUM_OOO       478
-#define SC_OPCODE_STOP_2_PAR        479     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_FORECAST_ETS_ADD  479
+#define SC_OPCODE_FORECAST_ETS_SEA  480
+#define SC_OPCODE_FORECAST_ETS_MUL  481
+#define SC_OPCODE_FORECAST_ETS_PIA  482
+#define SC_OPCODE_FORECAST_ETS_PIM  483
+#define SC_OPCODE_FORECAST_ETS_STA  484
+#define SC_OPCODE_FORECAST_ETS_STM  485
+#define SC_OPCODE_FORECAST_LIN      486
+#define SC_OPCODE_STOP_2_PAR        487     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
