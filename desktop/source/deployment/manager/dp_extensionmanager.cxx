@@ -52,6 +52,9 @@
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
 #include <boost/bind.hpp>
+#include <vcl/layout.hxx>
+#include "../../app/desktop.hrc"
+#include "../../app/desktopresid.hxx"
 
 #include <list>
 #include <algorithm>
@@ -602,6 +605,10 @@ bool ExtensionManager::doChecksForAddExtension(
             xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0;
 
         return bCanInstall;
+        if(bCanInstall == true){
+            ScopedVclPtrInstance<MessageDialog> aWarnBox(nullptr, desktop::DesktopResId(STR_LO_MUST_BE_RESTARTED), VCL_MESSAGE_INFO);
+            aWarnBox->Execute();
+         }
     }
     catch ( const css::deployment::DeploymentException& ) {
         throw;
@@ -624,6 +631,7 @@ bool ExtensionManager::doChecksForAddExtension(
             "Extension Manager: unexpected exception in doChecksForAddExtension",
             static_cast<OWeakObject*>(this));
     }
+    return 0;
 }
 
 // Only add to shared and user repository
