@@ -1062,7 +1062,7 @@ namespace svgio
                 return;
             }
 
-            const double fOpacity(getOpacity().getNumber());
+            const double fOpacity(getOpacity().solve(mrOwner));
 
             if(basegfx::fTools::equalZero(fOpacity))
             {
@@ -1119,7 +1119,7 @@ namespace svgio
         {
             if(rSource.hasElements())
             {
-                const double fOpacity(getOpacity().getNumber());
+                const double fOpacity(getOpacity().solve(mrOwner));
 
                 if(basegfx::fTools::equalZero(fOpacity))
                 {
@@ -1215,7 +1215,7 @@ namespace svgio
             maTextDecoration(TextDecoration_notset),
             maTextAnchor(TextAnchor_notset),
             maColor(),
-            maOpacity(1.0),
+            maOpacity(),
             maVisibility(Visibility_visible),
             maTitle(),
             maDesc(),
@@ -2116,6 +2116,28 @@ namespace svgio
             if(pSvgStyleAttributes)
             {
                 return pSvgStyleAttributes->getFillOpacity();
+            }
+
+            // default is 1
+            return SvgNumber(1.0);
+        }
+
+        SvgNumber SvgStyleAttributes::getOpacity() const
+        {
+            if(mbIsClipPathContent)
+            {
+                return SvgNumber(1.0);
+            }
+            else if(maOpacity.isSet())
+            {
+                return maOpacity;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if(pSvgStyleAttributes)
+            {
+                return pSvgStyleAttributes->getOpacity();
             }
 
             // default is 1
