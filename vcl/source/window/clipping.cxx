@@ -850,7 +850,6 @@ void Window::ImplDeleteOverlapBackground()
 {
     if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
     {
-        mpWindowImpl->mpFrameData->mnAllSaveBackSize -= mpWindowImpl->mpOverlapData->mnSaveBackSize;
         mpWindowImpl->mpOverlapData->mpSaveBackDev.disposeAndClear();
         if ( mpWindowImpl->mpOverlapData->mpSaveBackRgn )
         {

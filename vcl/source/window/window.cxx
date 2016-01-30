@@ -1033,7 +1033,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mpFirstBackWin     = nullptr;
         mpWindowImpl->mpFrameData->mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
         mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
-        mpWindowImpl->mpFrameData->mnAllSaveBackSize  = 0;
         mpWindowImpl->mpFrameData->mnFocusId          = nullptr;
         mpWindowImpl->mpFrameData->mnMouseMoveId      = nullptr;
         mpWindowImpl->mpFrameData->mnLastMouseX       = -1;
