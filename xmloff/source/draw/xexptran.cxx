@@ -145,7 +145,7 @@ void Imp_PutDoubleChar(OUString& rStr, double fValue)
 {
     OUStringBuffer sStringBuffer;
     ::sax::Converter::convertDouble(sStringBuffer, fValue);
-    rStr += OUString(sStringBuffer.makeStringAndClear());
+    rStr += sStringBuffer.makeStringAndClear();
 }
 
 void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double fValue,
@@ -160,7 +160,7 @@ void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double f
         ::sax::Converter::convertDouble(sStringBuffer, fValue);
     }
 
-    rStr += OUString(sStringBuffer.makeStringAndClear());
+    rStr += sStringBuffer.makeStringAndClear();
 }
 
 // base class of all 2D transform objects

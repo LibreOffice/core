@@ -2122,7 +2122,7 @@ void ScTabViewObj::RangeSelDone( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    aEvent.RangeDescriptor = OUString( rText );
+    aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
@@ -2135,7 +2135,7 @@ void ScTabViewObj::RangeSelAborted( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    aEvent.RangeDescriptor = OUString( rText );
+    aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
@@ -2148,7 +2148,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    aEvent.RangeDescriptor = OUString( rText );
+    aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
     XRangeSelectionChangeListenerVector const listener(aRangeChgListeners);

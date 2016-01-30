@@ -652,9 +652,9 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if( pE )
     {
-        if( pE->m_aTerm != OUString( m_pED_Term->GetText() ) )
+        if( pE->m_aTerm != m_pED_Term->GetText() )
             return false;
-        if( pE->m_aMapping != OUString( m_pED_Mapping->GetText() ) )
+        if( pE->m_aMapping != m_pED_Mapping->GetText() )
             return false;
         if( pE->m_nConversionPropertyType != m_pLB_Property->GetSelectEntryPos()+1 )
             return false;

@@ -884,7 +884,7 @@ Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
     Sequence< OUString > aParamList( nCount );
     OUString* pArray = aParamList.getArray();
      for ( sal_Int32 i = 0; i < nCount; ++i )
-         pArray[i] = OUString( m_pAssignedList->GetEntry(i) );
+         pArray[i] = m_pAssignedList->GetEntry(i);
     return aParamList;
 }
 

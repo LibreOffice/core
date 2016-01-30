@@ -1027,9 +1027,9 @@ void XMLTextParagraphExport::exportListChange(
                 eLName = ( rNextInfo.IsNumbered() || nListLevelsToBeOpened > 1 )
                          ? XML_LIST_ITEM
                          : XML_LIST_HEADER;
-                aElem = OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                aElem = GetExport().GetNamespaceMap().GetQNameByKey(
                                             XML_NAMESPACE_TEXT,
-                                            GetXMLToken(eLName) ) );
+                                            GetXMLToken(eLName) );
                 GetExport().IgnorableWhitespace();
                 GetExport().StartElement(aElem, false);
                 pListElements->push_back(aElem);

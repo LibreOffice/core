@@ -1347,7 +1347,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 else
                                     nPageNo += ((long)nRowPos)*nColBreaks+nColPos;
 
-                                OUString aThisPageStr = OUString(aPageStr).replaceFirst("%1", OUString::number(nPageNo));
+                                OUString aThisPageStr = aPageStr.replaceFirst("%1", OUString::number(nPageNo));
 
                                 if ( pEditEng )
                                 {

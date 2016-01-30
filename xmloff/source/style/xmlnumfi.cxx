@@ -2164,7 +2164,7 @@ void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
     for ( sal_uInt16 i=0; i<XML_NUMF_COLORCOUNT; i++ )
         if (nColor == aNumFmtStdColors[i])
         {
-            aColName = OUString( pFormatter->GetKeyword( nFormatLang, sal::static_int_cast< sal_uInt16 >(NF_KEY_FIRSTCOLOR + i) ) );
+            aColName = pFormatter->GetKeyword( nFormatLang, sal::static_int_cast< sal_uInt16 >(NF_KEY_FIRSTCOLOR + i) );
             break;
         }
 

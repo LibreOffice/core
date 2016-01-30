@@ -102,8 +102,7 @@ OUString lcl_GetSelectedRole( const SvTabListBox & rRoleListBox, bool bUITransla
     OUString aResult;
     SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
     if( pEntry )
-        aResult = OUString( SvTabListBox::GetEntryText( pEntry,
-                                                       bUITranslated ? 1 : 0 ));
+        aResult = SvTabListBox::GetEntryText( pEntry, bUITranslated ? 1 : 0 );
     return aResult;
 }
 
@@ -112,7 +111,7 @@ OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
     OUString aResult;
     SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
     if( pEntry )
-        aResult = OUString( SvTabListBox::GetEntryText( pEntry, 2 ));
+        aResult = SvTabListBox::GetEntryText( pEntry, 2 );
     return aResult;
 }
 
@@ -219,7 +218,7 @@ DataSourceTabPage::DataSourceTabPage(
 
     m_pFT_CAPTION->Show(!bHideDescription);
 
-    m_aFixedTextRange = OUString( m_pFT_RANGE->GetText() );
+    m_aFixedTextRange = m_pFT_RANGE->GetText();
     this->SetText( SCH_RESSTR( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
@@ -425,9 +424,9 @@ void DataSourceTabPage::fillSeriesListBox()
                 const OUString aReplacementStr( "%NUMBER" );
                 sal_Int32 nIndex = aResString.indexOf( aReplacementStr );
                 if( nIndex != -1 )
-                    aLabel = OUString( aResString.replaceAt(
+                    aLabel = aResString.replaceAt(
                                          nIndex, aReplacementStr.getLength(),
-                                         OUString::number(nUnnamedSeriesIndex)));
+                                         OUString::number(nUnnamedSeriesIndex));
             }
             if( aLabel.isEmpty() )
                 aLabel = ::chart::SchResId( STR_DATA_UNNAMED_SERIES ).toString();

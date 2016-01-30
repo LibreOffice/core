@@ -224,7 +224,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
     {
         case USCRIPT_GREEK:
         {
-            const sal_Unicode aGrek[] = {
+            static const sal_Unicode aGrek[] = {
                 0x0391, 0x03BB, 0x03C6, 0x03AC, 0x03B2, 0x03B7, 0x03C4, 0x03BF
             };
             sSampleText = OUString(aGrek, SAL_N_ELEMENTS(aGrek));
@@ -232,7 +232,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_HEBREW:
         {
-            const sal_Unicode aHebr[] = {
+            static const sal_Unicode aHebr[] = {
                 0x05D0, 0x05B8, 0x05DC, 0x05B6, 0x05E3, 0x05BE, 0x05D1, 0x05B5,
                 0x05BC, 0x05D9, 0x05EA, 0x0020, 0x05E2, 0x05B4, 0x05D1, 0x05B0,
                 0x05E8, 0x05B4, 0x05D9
@@ -242,7 +242,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_ARABIC:
         {
-            const sal_Unicode aArab[] = {
+            static const sal_Unicode aArab[] = {
                 0x0623, 0x0628, 0x062C, 0x062F, 0x064A, 0x0629, 0x0020, 0x0639,
                 0x0631, 0x0628, 0x064A, 0x0629
             };
@@ -251,7 +251,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_ARMENIAN:
         {
-            const sal_Unicode aArmenian[] = {
+            static const sal_Unicode aArmenian[] = {
                 0x0561, 0x0575, 0x0562, 0x0578, 0x0582, 0x0562, 0x0565,
                 0x0576
             };
@@ -260,7 +260,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_DEVANAGARI:
         {
-            const sal_Unicode aDeva[] = {
+            static const sal_Unicode aDeva[] = {
                 0x0926, 0x0947, 0x0935, 0x0928, 0x093E, 0x0917, 0x0930, 0x0940
             };
             sSampleText = OUString(aDeva, SAL_N_ELEMENTS(aDeva));
@@ -268,7 +268,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_BENGALI:
         {
-            const sal_Unicode aBeng[] = {
+            static const sal_Unicode aBeng[] = {
                 0x09AC, 0x09BE, 0x0982, 0x09B2, 0x09BE, 0x0020, 0x09B2, 0x09BF,
                 0x09AA, 0x09BF
             };
@@ -277,7 +277,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_GURMUKHI:
         {
-            const sal_Unicode aGuru[] = {
+            static const sal_Unicode aGuru[] = {
                 0x0A17, 0x0A41, 0x0A30, 0x0A2E, 0x0A41, 0x0A16, 0x0A40
             };
             sSampleText = OUString(aGuru, SAL_N_ELEMENTS(aGuru));
@@ -285,7 +285,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_GUJARATI:
         {
-            const sal_Unicode aGujr[] = {
+            static const sal_Unicode aGujr[] = {
                 0x0A97, 0x0AC1, 0x0A9C, 0x0AB0, 0x0ABE, 0x0AA4, 0x0aC0, 0x0020,
                 0x0AB2, 0x0ABF, 0x0AAA, 0x0ABF
             };
@@ -294,7 +294,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_ORIYA:
         {
-            const sal_Unicode aOrya[] = {
+            static const sal_Unicode aOrya[] = {
                 0x0B09, 0x0B24, 0x0B4D, 0x0B15, 0x0B33, 0x0020, 0x0B32, 0x0B3F,
                 0x0B2A, 0x0B3F
             };
@@ -303,7 +303,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TAMIL:
         {
-            const sal_Unicode aTaml[] = {
+            static const sal_Unicode aTaml[] = {
                 0x0B85, 0x0BB0, 0x0BBF, 0x0B9A, 0x0BCD, 0x0B9A, 0x0BC1, 0x0BB5,
                 0x0B9F, 0x0BBF
             };
@@ -312,7 +312,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TELUGU:
         {
-            const sal_Unicode aTelu[] = {
+            static const sal_Unicode aTelu[] = {
                 0x0C24, 0x0C46, 0x0C32, 0x0C41, 0x0C17, 0x0C41
             };
             sSampleText = OUString(aTelu, SAL_N_ELEMENTS(aTelu));
@@ -320,7 +320,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_KANNADA:
         {
-            const sal_Unicode aKnda[] = {
+            static const sal_Unicode aKnda[] = {
                 0x0C95, 0x0CA8, 0x0CCD, 0x0CA8, 0x0CA1, 0x0020, 0x0CB2, 0x0CBF,
                 0x0CAA, 0x0CBF
             };
@@ -329,7 +329,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_MALAYALAM:
         {
-            const sal_Unicode aMlym[] = {
+            static const sal_Unicode aMlym[] = {
                 0x0D2E, 0x0D32, 0x0D2F, 0x0D3E, 0x0D33, 0x0D32, 0x0D3F, 0x0D2A,
                 0x0D3F
             };
@@ -338,7 +338,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_THAI:
         {
-            const sal_Unicode aThai[] = {
+            static const sal_Unicode aThai[] = {
                 0x0E2D, 0x0E31, 0x0E01, 0x0E29, 0x0E23, 0x0E44, 0x0E17, 0x0E22
             };
             sSampleText = OUString(aThai, SAL_N_ELEMENTS(aThai));
@@ -346,7 +346,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_LAO:
         {
-            const sal_Unicode aLao[] = {
+            static const sal_Unicode aLao[] = {
                 0x0EAD, 0x0EB1, 0x0E81, 0x0EAA, 0x0EAD, 0x0E99, 0x0EA5, 0x0EB2,
                 0x0EA7
             };
@@ -355,7 +355,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_GEORGIAN:
         {
-            const sal_Unicode aGeorgian[] = {
+            static const sal_Unicode aGeorgian[] = {
                 0x10D3, 0x10D0, 0x10DB, 0x10EC, 0x10D4, 0x10E0, 0x10DA, 0x10DD,
                 0x10D1, 0x10D0
             };
@@ -365,7 +365,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_HANGUL:
         case USCRIPT_KOREAN:
         {
-            const sal_Unicode aHang[] = {
+            static const sal_Unicode aHang[] = {
                 0xD55C, 0xAE00
             };
             sSampleText = OUString(aHang, SAL_N_ELEMENTS(aHang));
@@ -373,7 +373,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TIBETAN:
         {
-            const sal_Unicode aTibt[] = {
+            static const sal_Unicode aTibt[] = {
                 0x0F51, 0x0F56, 0x0F74, 0x0F0B, 0x0F45, 0x0F53, 0x0F0B
             };
             sSampleText = OUString(aTibt, SAL_N_ELEMENTS(aTibt));
@@ -381,7 +381,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_SYRIAC:
         {
-            const sal_Unicode aSyri[] = {
+            static const sal_Unicode aSyri[] = {
                 0x0723, 0x071B, 0x072A, 0x0722, 0x0713, 0x0720, 0x0710
             };
             sSampleText = OUString(aSyri, SAL_N_ELEMENTS(aSyri));
@@ -389,7 +389,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_THAANA:
         {
-            const sal_Unicode aThaa[] = {
+            static const sal_Unicode aThaa[] = {
                 0x078C, 0x07A7, 0x0782, 0x07A6
             };
             sSampleText = OUString(aThaa, SAL_N_ELEMENTS(aThaa));
@@ -397,7 +397,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_SINHALA:
         {
-            const sal_Unicode aSinh[] = {
+            static const sal_Unicode aSinh[] = {
                 0x0DC1, 0x0DD4, 0x0DAF, 0x0DCA, 0x0DB0, 0x0020, 0x0DC3, 0x0DD2,
                 0x0D82, 0x0DC4, 0x0DBD
             };
@@ -406,7 +406,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_MYANMAR:
         {
-            const sal_Unicode aMymr[] = {
+            static const sal_Unicode aMymr[] = {
                 0x1019, 0x103C, 0x1014, 0x103A, 0x1019, 0x102C, 0x1021, 0x1000,
                 0x1039, 0x1001, 0x101B, 0x102C
             };
@@ -415,7 +415,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_ETHIOPIC:
         {
-            const sal_Unicode aEthi[] = {
+            static const sal_Unicode aEthi[] = {
                 0x130D, 0x12D5, 0x12DD
             };
             sSampleText = OUString(aEthi, SAL_N_ELEMENTS(aEthi));
@@ -423,7 +423,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_CHEROKEE:
         {
-            const sal_Unicode aCher[] = {
+            static const sal_Unicode aCher[] = {
                 0x13D7, 0x13AA, 0x13EA, 0x13B6, 0x13D9, 0x13D7
             };
             sSampleText = OUString(aCher, SAL_N_ELEMENTS(aCher));
@@ -431,7 +431,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_KHMER:
         {
-            const sal_Unicode aKhmr[] = {
+            static const sal_Unicode aKhmr[] = {
                 0x17A2, 0x1780, 0x17D2, 0x1781, 0x179A, 0x1780, 0x17D2, 0x179A,
                 0x1798, 0x1781, 0x17C1, 0x1798, 0x179A, 0x1797, 0x17B6, 0x179F,
                 0x17B6
@@ -441,7 +441,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_MONGOLIAN:
         {
-            const sal_Unicode aMongolian[] = {
+            static const sal_Unicode aMongolian[] = {
                 0x182A, 0x1822, 0x1834, 0x1822, 0x182D, 0x180C
             };
             sSampleText = OUString(aMongolian, SAL_N_ELEMENTS(aMongolian));
@@ -449,7 +449,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TAGALOG:
         {
-            const sal_Unicode aTagalog[] = {
+            static const sal_Unicode aTagalog[] = {
                 0x170A, 0x170A, 0x170C, 0x1712
             };
             sSampleText = OUString(aTagalog, SAL_N_ELEMENTS(aTagalog));
@@ -457,7 +457,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_NEW_TAI_LUE:
         {
-            const sal_Unicode aTalu[] = {
+            static const sal_Unicode aTalu[] = {
                 0x1991, 0x19BA, 0x199F, 0x19B9, 0x19C9
             };
             sSampleText = OUString(aTalu, SAL_N_ELEMENTS(aTalu));
@@ -465,7 +465,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TRADITIONAL_HAN:
         {
-            const sal_Unicode aHant[] = {
+            static const sal_Unicode aHant[] = {
                 0x7E41
             };
             sSampleText = OUString(aHant, SAL_N_ELEMENTS(aHant));
@@ -473,7 +473,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_SIMPLIFIED_HAN:
         {
-            const sal_Unicode aHans[] = {
+            static const sal_Unicode aHans[] = {
                 0x7B80
             };
             sSampleText = OUString(aHans, SAL_N_ELEMENTS(aHans));
@@ -481,7 +481,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_HAN:
         {
-            const sal_Unicode aSimplifiedAndTraditionalChinese[] = {
+            static const sal_Unicode aSimplifiedAndTraditionalChinese[] = {
                 0x7B80, 0x7E41
             };
             sSampleText = OUString(aSimplifiedAndTraditionalChinese,
@@ -490,7 +490,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_JAPANESE:
         {
-            const sal_Unicode aJpan[] = {
+            static const sal_Unicode aJpan[] = {
                 0x65E5, 0x672C, 0x8A9E
             };
             sSampleText = OUString(aJpan, SAL_N_ELEMENTS(aJpan));
@@ -498,7 +498,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_YI:
         {
-            const sal_Unicode aYiii[] = {
+            static const sal_Unicode aYiii[] = {
                 0xA188,  0xA320, 0xA071, 0xA0B7
             };
             sSampleText = OUString(aYiii, SAL_N_ELEMENTS(aYiii));
@@ -506,7 +506,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_PHAGS_PA:
         {
-            const sal_Unicode aPhag[] = {
+            static const sal_Unicode aPhag[] = {
                 0xA84F, 0xA861, 0xA843, 0x0020, 0xA863, 0xA861, 0xA859, 0x0020,
                 0xA850, 0xA85C, 0xA85E
             };
@@ -515,7 +515,7 @@ OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TAI_LE:
         {
-            const sal_Unicode aTale[] = {
+            static const sal_Unicode aTale[] = {
                 0x1956, 0x196D, 0x1970, 0x1956, 0x196C, 0x1973, 0x1951, 0x1968,
                 0x1952, 0x1970
             };
@@ -541,7 +541,7 @@ OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_HAN:
         {
             //Three Character Classic
-            const sal_Unicode aZh[] = {
+            static const sal_Unicode aZh[] = {
                 0x4EBA, 0x4E4B, 0x521D, 0x0020, 0x6027, 0x672C, 0x5584
             };
             sSampleText = OUString(aZh, SAL_N_ELEMENTS(aZh));
@@ -550,7 +550,7 @@ OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_JAPANESE:
         {
             //'Beautiful Japanese'
-            const sal_Unicode aJa[] = {
+            static const sal_Unicode aJa[] = {
                 0x7F8E, 0x3057, 0x3044, 0x65E5, 0x672C, 0x8A9E
             };
             sSampleText = OUString(aJa, SAL_N_ELEMENTS(aJa));
@@ -560,7 +560,7 @@ OUString makeRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_HANGUL:
         {
             //The essential condition for...
-            const sal_Unicode aKo[] = {
+            static const sal_Unicode aKo[] = {
                 0xD0A4, 0xC2A4, 0xC758, 0x0020, 0xACE0, 0xC720, 0xC870,
                 0xAC74, 0xC740
             };
@@ -583,7 +583,7 @@ OUString makeShortMinimalTextForScript(UScriptCode eScript)
     {
         case USCRIPT_GREEK:
         {
-            const sal_Unicode aGrek[] = {
+            static const sal_Unicode aGrek[] = {
                 0x0391, 0x0392
             };
             sSampleText = OUString(aGrek, SAL_N_ELEMENTS(aGrek));
@@ -591,7 +591,7 @@ OUString makeShortMinimalTextForScript(UScriptCode eScript)
         }
         case USCRIPT_HEBREW:
         {
-            const sal_Unicode aHebr[] = {
+            static const sal_Unicode aHebr[] = {
                 0x05D0, 0x05D1
             };
             sSampleText = OUString(aHebr, SAL_N_ELEMENTS(aHebr));
@@ -642,7 +642,7 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
             break;
         case LANGUAGE_ASSAMESE & LANGUAGE_MASK_PRIMARY:
         {
-            const sal_Unicode aAs[] = {
+            static const sal_Unicode aAs[] = {
                 0x0985, 0x09B8, 0x09AE, 0x09C0, 0x09AF, 0x09BC, 0x09BE,
                 0x0020, 0x0986, 0x0996, 0x09F0
             };
@@ -726,7 +726,7 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
             break;
         case LANGUAGE_GAELIC_IRELAND & LANGUAGE_MASK_PRIMARY:
         {
-            const sal_Unicode aGa[] = {
+            static const sal_Unicode aGa[] = {
                 'T', 0x00E9, 'a', 'c', 's', ' ', 'S', 'a', 'm', 'p', 'l', 'a', 'c', 'h'
             };
             sRet = OUString(aGa, SAL_N_ELEMENTS(aGa));
@@ -1233,22 +1233,22 @@ namespace
 
             bool bKore = false, bJpan = false, bHant = false, bHans = false;
 
-            const sal_Unicode aKorean[] = { 0x3131 };
+            static const sal_Unicode aKorean[] = { 0x3131 };
             OUString sKorean(aKorean, SAL_N_ELEMENTS(aKorean));
             if (-1 == rDevice.HasGlyphs(rFont, sKorean))
                 bKore = true;
 
-            const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
+            static const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
             OUString sJapanese(aJapanese, SAL_N_ELEMENTS(aJapanese));
             if (-1 == rDevice.HasGlyphs(rFont, sJapanese))
                 bJpan = true;
 
-            const sal_Unicode aTraditionalChinese[] = { 0x570B };
+            static const sal_Unicode aTraditionalChinese[] = { 0x570B };
             OUString sTraditionalChinese(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
             if (-1 == rDevice.HasGlyphs(rFont, sTraditionalChinese))
                 bHant = true;
 
-            const sal_Unicode aSimplifiedChinese[] = { 0x56FD };
+            static const sal_Unicode aSimplifiedChinese[] = { 0x56FD };
             OUString sSimplifiedChinese(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
             if (-1 == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
                 bHans = true;

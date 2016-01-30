@@ -147,7 +147,7 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
             {
                 // Enum command, such as the current custom shape,
                 // toggle checked state.
-                if ( m_aLastCommand == OUString( m_aCommandURL + "." + aStrValue ) )
+                if ( m_aLastCommand == ( m_aCommandURL + "." + aStrValue ) )
                 {
                     eTri = TRISTATE_TRUE;
                     nItemBits |= ToolBoxItemBits::CHECKABLE;

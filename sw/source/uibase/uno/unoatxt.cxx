@@ -368,7 +368,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         bool bNoAttr = !pxCursor && !pxRange;
         if(bNoAttr)
         {
-            sOnlyText = OUString(xTextRange->getString());
+            sOnlyText = xTextRange->getString();
             pOnlyText = &sOnlyText;
         }
 

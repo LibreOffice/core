@@ -153,7 +153,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                 theQueryData.nRow2,
                                                 nSrcTab ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        OUString theDbName = OUString(STR_DB_LOCAL_NONAME);
+        OUString theDbName = STR_DB_LOCAL_NONAME;
 
          // Check if the passed range is a database range
 

@@ -194,7 +194,7 @@ throw( uno::RuntimeException, std::exception )
             mxFrame->setCreator( xFramesSupplier );
 
         util::URL aTargetURL;
-        aTargetURL.Complete = OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+        aTargetURL.Complete = maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE );
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
         xTrans->parseStrict( aTargetURL );
 

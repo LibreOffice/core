@@ -840,7 +840,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     {
         const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
 
-        OUString sListKey = OUString(  ODF_FORMDROPDOWN_LISTENTRY  );
+        OUString sListKey = ODF_FORMDROPDOWN_LISTENTRY;
         IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find( sListKey );
         if(pListEntries != pParameters->end())
         {
@@ -855,7 +855,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         }
 
         // Select the current one
-        OUString sResultKey = OUString( ODF_FORMDROPDOWN_RESULT  );
+        OUString sResultKey = ODF_FORMDROPDOWN_RESULT;
         IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find( sResultKey );
         if ( pResult != pParameters->end() )
         {
@@ -893,7 +893,7 @@ IMPL_LINK_TYPED( SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void )
         sal_Int32 selection = rBox.GetSelectEntryPos();
         if ( selection >= 0 )
         {
-            OUString sKey = OUString(  ODF_FORMDROPDOWN_RESULT  );
+            OUString sKey = ODF_FORMDROPDOWN_RESULT;
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
             SwView& rView = static_cast<SwEditWin*>( GetParent() )->GetView();

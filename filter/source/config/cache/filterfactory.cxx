@@ -285,11 +285,11 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
     pIt = lTokens.find(QUERY_PARAM_IFLAGS);
     if (pIt != lTokens.end())
-        nIFlags = OUString(pIt->second).toInt32();
+        nIFlags = pIt->second.toInt32();
 
     pIt = lTokens.find(QUERY_PARAM_EFLAGS);
     if (pIt != lTokens.end())
-        nEFlags = OUString(pIt->second).toInt32();
+        nEFlags = pIt->second.toInt32();
 
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -419,10 +419,10 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
         sModule = pIt1->second;
     pIt1 = lTokens.find(QUERY_PARAM_IFLAGS);
     if (pIt1 != lTokens.end())
-        nIFlags = OUString(pIt1->second).toInt32();
+        nIFlags = pIt1->second.toInt32();
     pIt1 = lTokens.find(QUERY_PARAM_EFLAGS);
     if (pIt1 != lTokens.end())
-        nEFlags = OUString(pIt1->second).toInt32();
+        nEFlags = pIt1->second.toInt32();
 
     // simple search for filters of one specific module.
     OUStringList lFilterList;

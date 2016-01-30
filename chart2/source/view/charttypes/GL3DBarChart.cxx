@@ -1153,7 +1153,7 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    OUString aFPS = OUString("Render FPS: ");
+    OUString aFPS = "Render FPS: ";
     addScreenTextShape(aFPS, glm::vec2(-0.77f, 0.99f), 0.07f, false, glm::vec4(0.0f, 1.0f, 1.0f, 0.0f));
     addScreenTextShape(maFPS, glm::vec2(-0.77f, 0.99f), 0.07f, true,
                        glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -1201,7 +1201,7 @@ void GL3DBarChart::updateDataUpdateFPS()
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    OUString aDataUpdateFPS = OUString("Data Update Rate: ");
+    OUString aDataUpdateFPS = "Data Update Rate: ";
     addScreenTextShape(aDataUpdateFPS, glm::vec2(-0.77, 0.92f), 0.07f, false, glm::vec4(0.0f, 1.0f, 1.0f, 0.0f));
     addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.77f, 0.92f), 0.07f, true, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 }

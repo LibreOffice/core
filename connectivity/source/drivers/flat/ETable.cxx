@@ -423,7 +423,7 @@ void OFlatTable::construct()
     INetURLObject aURL;
     aURL.SetURL(getEntry());
 
-    if(aURL.getExtension() != OUString(m_pConnection->getExtension()))
+    if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
 
     OUString aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);

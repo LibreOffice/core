@@ -137,7 +137,7 @@ OUString PlaceEditDialog::GetServerUrl()
     if (m_xCurrentDetails.get())
     {
         INetURLObject aUrl = m_xCurrentDetails->getUrl();
-        OUString sUsername = OUString( m_pEDUsername->GetText( ) ).trim( );
+        OUString sUsername = m_pEDUsername->GetText( ).trim( );
         if ( !sUsername.isEmpty( ) )
             aUrl.SetUser( sUsername );
         if ( !aUrl.HasError( ) )
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )
     UpdateLabel( );
 
     OUString sUrl = GetServerUrl( );
-    OUString sName = OUString( m_pEDServerName->GetText() ).trim( );
+    OUString sName = m_pEDServerName->GetText().trim( );
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
 }
 

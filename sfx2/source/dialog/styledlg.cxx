@@ -59,7 +59,7 @@ SfxStyleDialog::SfxStyleDialog
         SetCurPageId(m_nOrganizerId);
     else
     {
-        OUString sTxt = OUString(GetText()) + ": " + rStyle.GetName();
+        OUString sTxt = GetText() + ": " + rStyle.GetName();
         SetText( sTxt );
     }
     delete pExampleSet; // in SfxTabDialog::Ctor() already created

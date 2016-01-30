@@ -228,7 +228,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             {
 
                 sal_Int32 columnId = _nPosition % ColCount() +1;
-                aRetText = OUString( GetColumnDescription( sal_Int16( columnId ) ) );
+                aRetText = GetColumnDescription( sal_Int16( columnId ) );
                 sal_Int32 rowId = _nPosition / GetRowCount() + 1;
                 aRetText += OUString::number(rowId);
             }
@@ -256,7 +256,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            aRetText = OUString( GetColumnDescription( sal_Int16( _nPosition ) ) );
+            aRetText = GetColumnDescription( sal_Int16( _nPosition ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
             aRetText += OUString::number(sal_Int32(GetCurRow()));

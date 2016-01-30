@@ -424,7 +424,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 
     sal_Int32 nCurrentContext = m_plbForm->GetSelectEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
-        m_arrContextFields[nCurrentContext] = OUString(m_plbField->GetSelectEntry());
+        m_arrContextFields[nCurrentContext] = m_plbField->GetSelectEntry();
 }
 
 IMPL_LINK_TYPED(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)

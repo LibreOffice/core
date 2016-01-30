@@ -136,9 +136,9 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     }
 
     Sequence< OUString > lResult( nLen );
-    lResult[0] = OUString( sNode + "Hide" );
+    lResult[0] = sNode + "Hide";
     if ( _eType != NT_Option )
-        lResult[1] = OUString( sNode + sSet );
+        lResult[1] = sNode + sSet;
 
     Sequence< Any > aValues;
     aValues = GetProperties( lResult );

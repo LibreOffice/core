@@ -1573,7 +1573,7 @@ namespace
         OUString sMacro;
         if(nLast >= 0)
         {
-            sMacro = OUString(sParse.getStr() + nLast, sParse.getLength() - nLast );
+            sMacro = sParse.copy(nLast);
         }
         else
         {
@@ -2010,7 +2010,7 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
         if ( nullptr != dynamic_cast<const SbxObject*>( pVar) && ( static_cast<SbxObject*>(pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
-            pRetSeq[ nDialogCounter ] = OUString( pVar->GetName() );
+            pRetSeq[ nDialogCounter ] = pVar->GetName();
             nDialogCounter++;
         }
     }
@@ -2174,7 +2174,7 @@ uno::Sequence< OUString > LibraryContainer_Impl::getElementNames()
     OUString* pRetSeq = aRetSeq.getArray();
     for( sal_uInt16 i = 0 ; i < nLibs ; i++ )
     {
-        pRetSeq[i] = OUString( mpMgr->GetLibName( i ) );
+        pRetSeq[i] = mpMgr->GetLibName( i );
     }
     return aRetSeq;
 }

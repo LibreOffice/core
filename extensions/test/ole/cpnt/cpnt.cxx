@@ -1486,7 +1486,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         if( any.getValueTypeClass() == TypeClass_STRUCT)
         {
             SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-            pStruct->message= OUString("This struct was created in OleTest");
+            pStruct->message= "This struct was created in OleTest";
 
             SimpleStruct aStruct;
             any >>= aStruct;
@@ -1634,7 +1634,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             if( any.getValueTypeClass() == TypeClass_STRUCT)
             {
                 SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                pStruct->message= OUString("This struct was created in OleTest");
+                pStruct->message= "This struct was created in OleTest";
                 any >>= aStruct;
             }
         }
@@ -1790,7 +1790,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
                 if( any.getValueTypeClass() == TypeClass_STRUCT)
                 {
                     SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                    pStruct->message= OUString("This struct was created in OleTest");
+                    pStruct->message = "This struct was created in OleTest";
                     any >>= aStruct;
                 }
             }

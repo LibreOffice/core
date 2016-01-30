@@ -884,9 +884,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 sal_uInt32 nNumIndex = 0;
                                 double nVal;
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
-                                    aExpr1 = OUString( ::rtl::math::doubleToUString( nVal,
+                                    aExpr1 = ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], true));
+                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
                                 else
                                     aExpr1 = aTemp1;
                             }
@@ -901,9 +901,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 sal_uInt32 nNumIndex = 0;
                                 double nVal;
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
-                                    aExpr2 = OUString( ::rtl::math::doubleToUString( nVal,
+                                    aExpr2 = ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], true));
+                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
                                 else
                                     aExpr2 = aTemp2;
                                 if ( eMode == SC_VALID_TIME ) {

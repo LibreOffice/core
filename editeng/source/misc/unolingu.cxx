@@ -790,7 +790,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
                && pWord[ nIdx-- ] == pAltWord[ nAltIdx-- ])
             ++nR;
 
-        aRes.aReplacement       = OUString( aAltWord.copy( nL, nAltLen - nL - nR ) );
+        aRes.aReplacement       = aAltWord.copy( nL, nAltLen - nL - nR );
         aRes.nChangedPos        = (sal_Int16) nL;
         aRes.nChangedLength     = nLen - nL - nR;
         aRes.bIsAltSpelling     = true;
