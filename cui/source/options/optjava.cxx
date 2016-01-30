@@ -808,14 +808,17 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
     m_pAssignedList->SetDropDownLineCount(6);
     m_pAssignedList->set_width_request(m_pAssignedList->approximate_char_width() * 54);
     get( m_pRemoveBtn, "removebtn");
+    get( m_pEditBtn, "editbtn");
 
     m_pParameterEdit->SetModifyHdl( LINK( this, SvxJavaParameterDlg, ModifyHdl_Impl ) );
     m_pAssignBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
     m_pRemoveBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
+    m_pEditBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, EditHdl_Impl ) );
     m_pAssignedList->SetSelectHdl( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
     m_pAssignedList->SetDoubleClickHdl( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
 
     ModifyHdl_Impl( *m_pParameterEdit );
+    EnableEditButton();
     EnableRemoveButton();
 }
 
@@ -830,6 +833,7 @@ void SvxJavaParameterDlg::dispose()
     m_pAssignBtn.clear();
     m_pAssignedList.clear();
     m_pRemoveBtn.clear();
+    m_pEditBtn.clear();
     ModalDialog::dispose();
 }
 
@@ -853,14 +857,30 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
         m_pAssignedList->SelectEntryPos( nPos );
         m_pParameterEdit->SetText( OUString() );
         ModifyHdl_Impl( *m_pParameterEdit );
+        EnableEditButton();
         EnableRemoveButton();
     }
 }
 
+IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, EditHdl_Impl, Button*, void)
+{
+    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
+
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        OUString eVal = m_pAssignedList->GetSelectEntry();
+        m_pAssignedList->RemoveEntry( nPos );
+        m_pParameterEdit->SetText( eVal );
+    }
+    DisableRemoveButton();
+    DisableEditButton();
+    EnableAssignButton();
+}
 
 
 IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
 {
+    EnableEditButton();
     EnableRemoveButton();
 }
 
@@ -891,7 +911,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
     }
     EnableRemoveButton();
 }
-
 
 
 short SvxJavaParameterDlg::Execute()
