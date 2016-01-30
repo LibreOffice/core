@@ -663,7 +663,7 @@ void UsageInfo::save()
 
     if( file.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) == osl::File::E_None )
     {
-        OString aUsageInfoMsg = "Document Type,Command,Count";
+        OString aUsageInfoMsg = "Document Type;Command;Count";
 
         for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
             aUsageInfoMsg += "\n" + it->first.toUtf8() + ";" + OString::number(it->second);
