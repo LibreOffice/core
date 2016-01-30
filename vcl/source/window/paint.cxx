@@ -1061,8 +1061,6 @@ void Window::SetWindowRegionPixel()
             if ( IsReallyVisible() )
             {
                 // restore background storage
-                if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
-                    ImplDeleteOverlapBackground();
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
                     ImplInvalidateAllOverlapBackgrounds();
                 Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
@@ -1148,8 +1146,6 @@ void Window::SetWindowRegionPixel( const vcl::Region& rRegion )
         if ( IsReallyVisible() )
         {
             // restore background storage
-            if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
-                ImplDeleteOverlapBackground();
             if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
                 ImplInvalidateAllOverlapBackgrounds();
             Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );

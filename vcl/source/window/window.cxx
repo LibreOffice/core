@@ -934,7 +934,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     if ( mpWindowImpl->mbOverlapWin )
     {
         mpWindowImpl->mpOverlapData                   = new ImplOverlapData;
-        mpWindowImpl->mpOverlapData->mpSaveBackDev    = nullptr;
         mpWindowImpl->mpOverlapData->mpSaveBackRgn    = nullptr;
         mpWindowImpl->mpOverlapData->mpNextBackWin    = nullptr;
     }
@@ -1754,8 +1753,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( bNewPos || bNewSize )
             {
                 // reset background storage
-                if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
-                    ImplDeleteOverlapBackground();
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
                     ImplInvalidateAllOverlapBackgrounds();
                 // set Clip-Flag
