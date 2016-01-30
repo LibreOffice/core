@@ -895,6 +895,23 @@ static const FunctionData saFuncTable2013[] =
     { "ERROR.TYPE",             "ERROR.TYPE",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
+/** Functions new in Excel 2016.
+
+    See https://support.office.com/en-us/article/Forecasting-functions-897a2fe9-6595-4680-a0b0-93e0308d5f6e?ui=en-US&rs=en-US&ad=US#_forecast.ets
+
+    @See sc/source/filter/excel/xlformula.cxx saFuncTable_2016
+ */
+/* FIXME: BIFF12 function identifiers available? Where to obtain? */
+static const FunctionData saFuncTable2016[] =
+{
+    { "FORECAST.ETS",             "FORECAST.ETS",             NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FORECAST.ETS.CONFINT",     "FORECAST.ETS.CONFINT",     NOID,   NOID,   4,  7,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FORECAST.ETS.SEASONALITY", "FORECAST.ETS.SEASONALITY", NOID,   NOID,   2,  4,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FORECAST.ETS.STAT",        "FORECAST.ETS.STAT",        NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FORECAST.LINEAR",          "FORECAST.LINEAR",          NOID,   NOID,   3,  3,  V, { VR, VA }, FUNCFLAG_MACROCALL_NEW }
+};
+
+
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
 static const FunctionData saFuncTableOdf[] =
 {
@@ -926,7 +943,10 @@ static const FunctionData saFuncTableOOoLO[] =
     // Other functions.
     { "ORG.OPENOFFICE.CONVERT",     "ORG.OPENOFFICE.CONVERT",   NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "ORG.LIBREOFFICE.COLOR",      "ORG.LIBREOFFICE.COLOR",    NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "ORG.LIBREOFFICE.RAWSUBTRACT","ORG.LIBREOFFICE.RAWSUBTRACT",NOID, NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW }
+    { "ORG.LIBREOFFICE.RAWSUBTRACT","ORG.LIBREOFFICE.RAWSUBTRACT",NOID, NOID,   1, MX,  V, { RX }, FUNCFLAG_MACROCALL_NEW },
+    { "ORG.LIBREOFFICE.FORECAST.ETS.MULT",      "FORECAST.ETS.MULT",      NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "ORG.LIBREOFFICE.FORECAST.ETS.PI.MULT",   "FORECAST.ETS.PI.MULT",   NOID,   NOID,   4,  7,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW },
+    { "ORG.LIBREOFFICE.FORECAST.ETS.STAT.MULT", "FORECAST.ETS.STAT.MULT", NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 const sal_Unicode API_TOKEN_OPEN            = '(';
@@ -1045,6 +1065,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTable2010, STATIC_ARRAY_END( saFuncTable2010 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTable2016, STATIC_ARRAY_END( saFuncTable2016 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOOoLO, STATIC_ARRAY_END( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
 }
