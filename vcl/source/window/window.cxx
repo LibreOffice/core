@@ -938,7 +938,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpOverlapData->mpSaveBackRgn    = nullptr;
         mpWindowImpl->mpOverlapData->mpNextBackWin    = nullptr;
         mpWindowImpl->mpOverlapData->mnSaveBackSize   = 0;
-        mpWindowImpl->mpOverlapData->mbSaveBack       = false;
     }
 
     if( pParent && ! mpWindowImpl->mbFrame )
@@ -2455,9 +2454,6 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 ImplFocusToTop( ToTopFlags::NONE, false );
             }
 
-            // save background
-            if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mbSaveBack )
-                ImplSaveOverlapBackground();
             // adjust mpWindowImpl->mbReallyVisible
             bRealVisibilityChanged = !mpWindowImpl->mbReallyVisible;
             ImplSetReallyVisible();

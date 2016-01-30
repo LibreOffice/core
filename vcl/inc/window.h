@@ -108,7 +108,6 @@ struct ImplOverlapData
     vcl::Region*        mpSaveBackRgn;          //< saved region, which must be invalidated
     VclPtr<vcl::Window> mpNextBackWin;          //< next window with saved background
     sal_uIntPtr         mnSaveBackSize;         //< bitmap size of saved background
-    bool                mbSaveBack;             //< true: save background
 };
 
 struct ImplFrameData
