@@ -1,0 +1,78 @@
+From ccae2d400eb5c8899b85940390f301e03e768832 Mon Sep 17 00:00:00 2001
+From: David Ostrovsky <david@ostrovsky.org>
+Date: Sun, 5 Jul 2015 10:58:55 +0200
+Subject: [PATCH] Liblangtag: Fix compilation on VS 2015
+
+Change-Id: Ied20186f4863b49dba5d0c7ed98b3a297f3f2239
+---
+ external/liblangtag/ExternalProject_langtag.mk |  2 +-
+ external/liblangtag/UnpackedTarball_langtag.mk |  1 +
+ external/liblangtag/liblangtag-vc15.patch      | 31 ++++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 1 deletion(-)
+ create mode 100644 external/liblangtag/liblangtag-vc15.patch
+
+diff --git a/external/liblangtag/ExternalProject_langtag.mk b/external/liblangtag/ExternalProject_langtag.mk
+index c6b195d..a3d2b20 100644
+--- a/external/liblangtag/ExternalProject_langtag.mk
++++ b/external/liblangtag/ExternalProject_langtag.mk
+@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
+ # Results in "cl : Command line error D8003 : missing source filename"
+ $(call gb_ExternalProject_get_state_target,langtag,build):
+ 	$(call gb_ExternalProject_run,build,\
+-		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
++		MAKE=$(MAKE) autoconf && ./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
+ 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
+ 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
+ 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
+diff --git a/external/liblangtag/UnpackedTarball_langtag.mk b/external/liblangtag/UnpackedTarball_langtag.mk
+index 2951368..8928020 100644
+--- a/external/liblangtag/UnpackedTarball_langtag.mk
++++ b/external/liblangtag/UnpackedTarball_langtag.mk
+@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
+ 	external/liblangtag/liblangtag-0.5.1-unistd.patch \
+ 	external/liblangtag/liblangtag-0.5.1-include-last-record-in-language-subtag-registry.patch \
+ 	external/liblangtag/liblangtag-leak.patch.0 \
++	external/liblangtag/liblangtag-vc15.patch \
+ ))
+ 
+ ifeq ($(OS),WNT)
+diff --git a/external/liblangtag/liblangtag-vc15.patch b/external/liblangtag/liblangtag-vc15.patch
+new file mode 100644
+index 0000000..1778977
+--- /dev/null
++++ b/external/liblangtag/liblangtag-vc15.patch
+@@ -0,0 +1,31 @@
++diff -ur langtag.org/configure.ac langtag/configure.ac
++--- UnpackedTarball/langtag.org/configure.ac	2015-07-05 10:51:30.470991734 +0200
+++++ UnpackedTarball/langtag/configure.ac	2015-07-05 10:51:56.439991442 +0200
++@@ -209,10 +209,12 @@
++ AC_CHECK_FUNCS([backtrace getegid geteuid getgid getuid __secure_getenv secure_getenv strndup vasprintf vsnprintf])
++ AC_CHECK_VA_COPY
++ 
++-if test "x$ac_cv_func_vsnprintf" = xyes; then
++-	AC_CACHE_CHECK([Whether vsnprintf is C99-compliant], [lt_cv_c99_vsnprintf],
++-		[AC_RUN_IFELSE([AC_LANG_SOURCE([[
+++AC_CACHE_CHECK([Whether vsnprintf is C99-compliant], [lt_cv_c99_vsnprintf],
+++	[AC_RUN_IFELSE([AC_LANG_SOURCE([[
+++#include <sys/types.h>
+++#include <stdio.h>
++ #include <stdarg.h>
+++#include <stdlib.h>
++ int
++ foo(char *format, ...)
++ {
++@@ -236,9 +238,8 @@
++ 	return foo("foo: %s", "bar");
++ }]])],
++ 		[lt_cv_c99_vsnprintf=yes],[lt_cv_c99_vsnprintf=no],[lt_cv_c99_vsnprintf=no])])
++-	if test "x$lt_cv_c99_vsnprintf" = xyes; then
++-		AC_DEFINE(LT_HAVE_C99_VSNPRINTF, 1, [Have C99-compliant vsnprintf])
++-	fi
+++if test "x$lt_cv_c99_vsnprintf" = xyes; then
+++	AC_DEFINE(LT_HAVE_C99_VSNPRINTF, 1, [Have C99-compliant vsnprintf])
++ fi
++ 
++ dnl ======================================================================
+-- 
+2.1.4
+
