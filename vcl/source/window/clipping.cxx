@@ -25,9 +25,6 @@
 #include <salobj.hxx>
 #include <window.h>
 
-#define IMPL_MAXSAVEBACKSIZE    (640*480)
-#define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
-
 namespace vcl {
 
 void Window::InitClipRegion()
@@ -808,46 +805,6 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
     }
     else
         rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
-}
-
-void Window::ImplSaveOverlapBackground()
-{
-    DBG_ASSERT( !mpWindowImpl->mpOverlapData->mpSaveBackDev, "Window::ImplSaveOverlapBackground() - Background already saved" );
-
-    if ( !mpWindowImpl->mbFrame )
-    {
-        sal_uLong nSaveBackSize = mnOutWidth*mnOutHeight;
-        if ( nSaveBackSize <= IMPL_MAXSAVEBACKSIZE )
-        {
-            if ( nSaveBackSize+mpWindowImpl->mpFrameData->mnAllSaveBackSize <= IMPL_MAXALLSAVEBACKSIZE )
-            {
-                Size aOutSize( mnOutWidth, mnOutHeight );
-                mpWindowImpl->mpOverlapData->mpSaveBackDev = VclPtr<VirtualDevice>::Create( *mpWindowImpl->mpFrameWindow );
-                if ( mpWindowImpl->mpOverlapData->mpSaveBackDev->SetOutputSizePixel( aOutSize ) )
-                {
-                    mpWindowImpl->mpFrameWindow->ImplUpdateAll();
-
-                    if ( mpWindowImpl->mbInitWinClipRegion )
-                        ImplInitWinClipRegion();
-
-                    mpWindowImpl->mpOverlapData->mnSaveBackSize = nSaveBackSize;
-                    mpWindowImpl->mpFrameData->mnAllSaveBackSize += nSaveBackSize;
-                    Point aDevPt;
-
-                    Window* pWin = mpWindowImpl->mpFrameWindow;
-                    pWin->getFrameDev( Point( mnOutOffX, mnOutOffY ),
-                                           aDevPt, aOutSize,
-                                           *(mpWindowImpl->mpOverlapData->mpSaveBackDev) );
-                    mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpFrameData->mpFirstBackWin;
-                    mpWindowImpl->mpFrameData->mpFirstBackWin = this;
-                }
-                else
-                {
-                    mpWindowImpl->mpOverlapData->mpSaveBackDev.disposeAndClear();
-                }
-            }
-        }
-    }
 }
 
 bool Window::ImplRestoreOverlapBackground( vcl::Region& rInvRegion )

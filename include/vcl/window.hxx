@@ -629,7 +629,6 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, ScrollFlags nFlags );
 
-    SAL_DLLPRIVATE void                 ImplSaveOverlapBackground();
     SAL_DLLPRIVATE bool                 ImplRestoreOverlapBackground( vcl::Region& rInvRegion );
     SAL_DLLPRIVATE void                 ImplInvalidateAllOverlapBackgrounds();
 
