@@ -646,10 +646,10 @@ IMPL_LINK_TYPED( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
 
         m_pStbStatus->SetItemText( 1, rInfo.aMarkURL );
 
-        if ( m_pURLBox->GetText() != OUString(rInfo.aMarkURL) )
+        if ( m_pURLBox->GetText() != rInfo.aMarkURL )
             m_pURLBox->SetText( rInfo.aMarkURL );
 
-        if ( m_pEdtText->GetText() != OUString(rInfo.aMarkAltText) )
+        if ( m_pEdtText->GetText() != rInfo.aMarkAltText )
             m_pEdtText->SetText( rInfo.aMarkAltText );
 
         if ( rInfo.aMarkTarget.isEmpty() )

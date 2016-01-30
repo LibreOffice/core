@@ -1483,21 +1483,21 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         {
                             const SwGetRefField* pRefField = dynamic_cast<const SwGetRefField*>(pField);
                             if ( pRefField && pRefField->IsRefToHeadingCrossRefBookmark() )
-                                sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Headings"));
+                                sEntry = "Headings";
                             else if ( pRefField && pRefField->IsRefToNumItemCrossRefBookmark() )
-                                sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Numbered Paragraphs"));
+                                sEntry = "Numbered Paragraphs";
                             else
-                                sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmarks"));
+                                sEntry = "Bookmarks";
                         }
                         break;
                     case REF_FOOTNOTE:
-                        sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Footnotes"));
+                        sEntry = "Footnotes";
                         break;
                     case REF_ENDNOTE:
-                        sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Endnotes"));
+                        sEntry = "Endnotes";
                         break;
                     case REF_SETREFATTR:
-                        sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Insert Reference"));
+                        sEntry = "Insert Reference";
                         break;
                     case REF_SEQUENCEFLD:
                         sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName();

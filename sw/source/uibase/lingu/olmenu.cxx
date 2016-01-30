@@ -197,7 +197,7 @@ void SwSpellPopup::fillLangPopupMenu(
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         OUString aEntryText( *it );
-        if (aEntryText != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) )&&
+        if (aEntryText != SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) &&
             aEntryText != "*" && // multiple languages in current selection
             !aEntryText.isEmpty()) // 'no language found' from language guessing
         {

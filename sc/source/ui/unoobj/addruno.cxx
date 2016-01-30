@@ -200,7 +200,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             if ( bIsRange )
             {
                 //  range: also strip a "." after the last colon
-                sal_Int32 nColon = OUString(aUIString).lastIndexOf( (sal_Unicode) ':' );
+                sal_Int32 nColon = aUIString.lastIndexOf( (sal_Unicode) ':' );
                 if ( nColon >= 0 && nColon < aUIString.getLength() - 1 &&
                      aUIString[nColon+1] == '.' )
                     aUIString = aUIString.replaceAt( nColon+1, 1, "" );

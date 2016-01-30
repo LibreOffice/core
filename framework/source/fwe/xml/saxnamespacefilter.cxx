@@ -99,7 +99,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     }
     catch ( SAXException& e )
     {
-        e.Message = OUString( getErrorLineString() + e.Message );
+        e.Message = getErrorLineString() + e.Message;
         throw;
     }
 
@@ -111,7 +111,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     }
     catch ( SAXException& e )
     {
-        e.Message = OUString( getErrorLineString() + e.Message );
+        e.Message = getErrorLineString() + e.Message;
         throw;
     }
 
@@ -130,7 +130,7 @@ void SAL_CALL SaxNamespaceFilter::endElement(const OUString& aName)
     }
     catch ( SAXException& e )
     {
-        e.Message = OUString( getErrorLineString() + e.Message );
+        e.Message = getErrorLineString() + e.Message;
         throw;
     }
 

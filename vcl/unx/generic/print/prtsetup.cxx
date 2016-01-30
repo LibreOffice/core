@@ -495,7 +495,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
             if (pValue->m_bCustomOption)
                 aEntry = VclResId(SV_PRINT_CUSTOM_TXT);
             else
-                aEntry = OUString(m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption));
+                aEntry = m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption);
             sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
             m_pPPDValueBox->SetEntryData( nPos, const_cast<PPDValue *>(pValue) );
         }
