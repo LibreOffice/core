@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
-
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -74,11 +72,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception) override;
-
-    // XServiceInfo - static versions (used for component registration)
-    static OUString SAL_CALL getImplementationName_static();
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-    static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
 };
 
 sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw(css::uno::RuntimeException, std::exception)
@@ -121,11 +114,6 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeException, std::exception )
 {
-    return getImplementationName_static();
-}
-
-OUString SAL_CALL AnyCompareFactory::getImplementationName_static(  )
-{
     return OUString( "AnyCompareFactory" );
 }
 
@@ -136,25 +124,17 @@ sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
-}
-
-Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames_static(  )
-{
     const OUString aServiceName( "com.sun.star.ucb.AnyCompareFactory" );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL AnyCompareFactory::Create(
-                const Reference< XComponentContext >& rxContext )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+AnyCompareFactory_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject*>(new AnyCompareFactory( rxContext ));
-}
-
-void createRegistryInfo_AnyCompareFactory()
-{
-    static ::comphelper::module::OAutoRegistration< AnyCompareFactory > aAutoRegistration;
+    return cppu::acquire(new AnyCompareFactory(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
