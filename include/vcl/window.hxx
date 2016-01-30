@@ -738,8 +738,6 @@ private:
     SAL_DLLPRIVATE long                 ImplLogicUnitToPixelX( long nX, MapUnit eUnit );
     SAL_DLLPRIVATE long                 ImplLogicUnitToPixelY( long nY, MapUnit eUnit );
 
-    SAL_DLLPRIVATE bool                 ImplIsWindowInFront( const vcl::Window* pTestWindow ) const;
-
     SAL_DLLPRIVATE static void          ImplNewInputContext();
 
     SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
