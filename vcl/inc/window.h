@@ -109,7 +109,6 @@ struct ImplOverlapData
     VclPtr<vcl::Window> mpNextBackWin;          //< next window with saved background
     sal_uIntPtr         mnSaveBackSize;         //< bitmap size of saved background
     bool                mbSaveBack;             //< true: save background
-    sal_uInt8           mnTopLevel;             //< Level for Overlap-Window
 };
 
 struct ImplFrameData

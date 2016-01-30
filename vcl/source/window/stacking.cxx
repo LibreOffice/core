@@ -287,16 +287,6 @@ void Window::ImplToTop( ToTopFlags nFlags )
                 }
             }
 
-            // check TopLevel
-            sal_uInt8 nTopLevel = mpWindowImpl->mpOverlapData->mnTopLevel;
-            while ( pNextWin )
-            {
-                if ( (bOnTop != pNextWin->IsAlwaysOnTopEnabled()) ||
-                     (nTopLevel <= pNextWin->mpWindowImpl->mpOverlapData->mnTopLevel) )
-                    break;
-                pNextWin = pNextWin->mpWindowImpl->mpNext;
-            }
-
             // add the window to the list again
             mpWindowImpl->mpNext = pNextWin;
             if ( pNextWin )
