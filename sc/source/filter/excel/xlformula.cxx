@@ -566,6 +566,21 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocErrorType_ODF, 1,  1,  0,  "ERROR.TYPE" )
 };
 
+/** Functions new in Excel 2016.
+
+    See https://support.office.com/en-us/article/Forecasting-functions-897a2fe9-6595-4680-a0b0-93e0308d5f6e?ui=en-US&rs=en-US&ad=US#_forecast.ets
+
+    @See sc/source/filter/oox/formulabase.cxx saFuncTable2016 for V,VR,RO,...
+ */
+static const XclFunctionInfo saFuncTable_2016[] =
+{
+    EXC_FUNCENTRY_V_VR(  ocForecast_ETS_ADD,    3,  6,  0,  "FORECAST.ETS" ),
+    EXC_FUNCENTRY_V_VR(  ocForecast_ETS_PIA,    3,  7,  0,  "FORECAST.ETS.CONFINT" ),
+    EXC_FUNCENTRY_V_VR(  ocForecast_ETS_SEA,    2,  4,  0,  "FORECAST.ETS.SEASONALITY" ),
+    EXC_FUNCENTRY_V_VR(  ocForecast_ETS_STA,    3,  6,  0,  "FORECAST.ETS.STAT" ),
+    EXC_FUNCENTRY_V_VR(  ocForecast_LIN,        3,  3,  0,  "FORECAST.LINEAR" )
+};
+
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }
@@ -589,7 +604,10 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
     EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" ),
     EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" ),
     EXC_FUNCENTRY_OOO( ocRawSubtract,   2, MX,  0,  "ORG.LIBREOFFICE.RAWSUBTRACT" ),
-    EXC_FUNCENTRY_OOO( ocWeeknumOOo,    2,  2,  0,  "ORG.LIBREOFFICE.WEEKNUM_OOO" )
+    EXC_FUNCENTRY_OOO( ocWeeknumOOo,    2,  2,  0,  "ORG.LIBREOFFICE.WEEKNUM_OOO" ),
+    EXC_FUNCENTRY_OOO( ocForecast_ETS_MUL, 3,  6,  0,  "ORG.LIBREOFFICE.FORECAST.ETS.MULT" ),
+    EXC_FUNCENTRY_OOO( ocForecast_ETS_PIM, 3,  7,  0,  "ORG.LIBREOFFICE.FORECAST.ETS.PI.MULT" ),
+    EXC_FUNCENTRY_OOO( ocForecast_ETS_STM, 3,  6,  0,  "ORG.LIBREOFFICE.FORECAST.ETS.STAT.MULT" )
 };
 
 #undef EXC_FUNCENTRY_OOO
@@ -616,6 +634,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     (this->*pFillFunc)( saFuncTable_Oox, STATIC_ARRAY_END( saFuncTable_Oox ) );
     (this->*pFillFunc)( saFuncTable_2010, STATIC_ARRAY_END( saFuncTable_2010 ) );
     (this->*pFillFunc)( saFuncTable_2013, STATIC_ARRAY_END( saFuncTable_2013 ) );
+    (this->*pFillFunc)( saFuncTable_2016, STATIC_ARRAY_END( saFuncTable_2016 ) );
     (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
     (this->*pFillFunc)( saFuncTable_OOoLO, STATIC_ARRAY_END( saFuncTable_OOoLO ) );
 }
