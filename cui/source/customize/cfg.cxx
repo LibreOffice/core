@@ -303,7 +303,7 @@ OUString
 generateCustomURL(
     SvxEntries* entries )
 {
-    OUString url = OUString(ITEM_TOOLBAR_URL );
+    OUString url = ITEM_TOOLBAR_URL;
     url += CUSTOM_TOOLBAR_STR;
 
     // use a random number to minimize possible clash with existing custom toolbars

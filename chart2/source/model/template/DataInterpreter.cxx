@@ -447,7 +447,7 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
 
             aSourceRepr = "<none>";
             if( aSequences[k]->getLabel().is())
-                aSourceRepr = OUString( aSequences[k]->getLabel()->getSourceRangeRepresentation());
+                aSourceRepr = aSequences[k]->getLabel()->getSourceRangeRepresentation();
             xProp.set( aSequences[k]->getLabel(), uno::UNO_QUERY );
             if( xProp.is() &&
                 ( xProp->getPropertyValue( "Role") >>= aId ))

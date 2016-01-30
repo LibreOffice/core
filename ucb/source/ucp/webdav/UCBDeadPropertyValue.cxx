@@ -28,31 +28,31 @@ using namespace ::com::sun::star;
 
 // static
 const OUString UCBDeadPropertyValue::aTypeString
-    = OUString( "string" );
+    = "string";
 const OUString UCBDeadPropertyValue::aTypeLong
-    = OUString( "long" );
+    = "long";
 const OUString UCBDeadPropertyValue::aTypeShort
-    = OUString( "short" );
+    = "short";
 const OUString UCBDeadPropertyValue::aTypeBoolean
-    = OUString( "boolean" );
+    = "boolean";
 const OUString UCBDeadPropertyValue::aTypeChar
-    = OUString( "char" );
+    = "char";
 const OUString UCBDeadPropertyValue::aTypeByte
-    = OUString( "byte" );
+    = "byte";
 const OUString UCBDeadPropertyValue::aTypeHyper
-    = OUString( "hyper" );
+    = "hyper";
 const OUString UCBDeadPropertyValue::aTypeFloat
-    = OUString( "float" );
+    = "float);
 const OUString UCBDeadPropertyValue::aTypeDouble
-    = OUString( "double" );
+    = "double";
 
 // static
 const OUString UCBDeadPropertyValue::aXMLPre
-    = OUString( "<ucbprop><type>" );
+    = "<ucbprop><type>";
 const OUString UCBDeadPropertyValue::aXMLMid
-    = OUString( "</type><value>" );
+    = "</type><value>";
 const OUString UCBDeadPropertyValue::aXMLEnd
-    = OUString( "</value></ucbprop>" );
+    = "</value></ucbprop>";
 
 /*
 
