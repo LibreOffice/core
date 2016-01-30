@@ -144,8 +144,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
 
     // get the global service-manager
 
-    OUString rdbName = OUString(  RDB_SYSPATH  );
-    Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
+    Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( RDB_SYSPATH ) );
 
     // Print a message if an error occurred.
     if ( !g_xFactory.is( ) )

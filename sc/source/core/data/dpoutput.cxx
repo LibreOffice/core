@@ -1407,7 +1407,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
                 break;
 
             DataPilotTableHeaderData aHeaderData;
-            aHeaderData.MemberName = OUString(pArray[nItem].Name);
+            aHeaderData.MemberName = pArray[nItem].Name;
             aHeaderData.Flags = pArray[nItem].Flags;
             aHeaderData.Dimension = static_cast<sal_Int32>(pColFields[nField].nDim);
             aHeaderData.Hierarchy = static_cast<sal_Int32>(pColFields[nField].nHier);
@@ -1436,7 +1436,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
                 break;
 
             DataPilotTableHeaderData aHeaderData;
-            aHeaderData.MemberName = OUString(pArray[nItem].Name);
+            aHeaderData.MemberName = pArray[nItem].Name;
             aHeaderData.Flags = pArray[nItem].Flags;
             aHeaderData.Dimension = static_cast<sal_Int32>(pRowFields[nField].nDim);
             aHeaderData.Hierarchy = static_cast<sal_Int32>(pRowFields[nField].nHier);

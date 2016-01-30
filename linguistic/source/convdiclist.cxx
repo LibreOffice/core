@@ -69,7 +69,7 @@ OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectory
 {
     // build URL to use for new (persistent) dictionaries
 
-    OUString aFullDicName = OUString(rDicName) + CONV_DIC_DOT_EXT;
+    OUString aFullDicName = rDicName + CONV_DIC_DOT_EXT;
 
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INetProtocol::File );

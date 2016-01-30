@@ -366,7 +366,7 @@ void SvxThesaurusDialog::LookUp_Impl()
 {
     OUString aText( m_pWordCB->GetText() );
 
-    aLookUpText = OUString( aText );
+    aLookUpText = aText;
     if (!aLookUpText.isEmpty() &&
             (aLookUpHistory.empty() || aLookUpText != aLookUpHistory.top()))
         aLookUpHistory.push( aLookUpText );
@@ -476,7 +476,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl ));
 
     xThesaurus = xThes;
-    aLookUpText = OUString( rWord );
+    aLookUpText = rWord;
     nLookUpLanguage = nLanguage;
     if (!rWord.isEmpty())
         aLookUpHistory.push( rWord );

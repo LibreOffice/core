@@ -329,7 +329,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     {
         SearchResult sres2;
 
-        in_str = OUString(searchStr);
+        in_str = searchStr;
         css::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate( searchStr, 0, in_str.getLength(), offset );
@@ -436,7 +436,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     {
         SearchResult sres2;
 
-        in_str = OUString(searchStr);
+        in_str = searchStr;
         css::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate(searchStr, 0, in_str.getLength(), offset);

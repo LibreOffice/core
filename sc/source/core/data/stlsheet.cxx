@@ -314,7 +314,7 @@ const OUString& ScStyleSheet::GetFollow() const
 
 bool ScStyleSheet::SetName(const OUString& rNew, bool bReindexNow)
 {
-    OUString aFileStdName = OUString(STRING_STANDARD);
+    OUString aFileStdName = STRING_STANDARD;
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return false;
     else
