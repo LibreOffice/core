@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="comphelp" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="AnyCompareFactory">
+  <implementation name="AnyCompareFactory"
+      constructor="AnyCompareFactory_get_implementation">
     <service name="com.sun.star.ucb.AnyCompareFactory"/>
   </implementation>
   <implementation name="IndexedPropertyValuesContainer"
