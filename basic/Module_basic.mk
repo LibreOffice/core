@@ -16,11 +16,8 @@ $(eval $(call gb_Module_add_l10n_targets,basic,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,basic,\
-     CppunitTest_basic_scanner \
-     CppunitTest_basic_enable \
-     CppunitTest_basic_nested_struct \
-     CppunitTest_basic_coverage \
-     CppunitTest_basic_vba \
+	CppunitTest_basic_scanner \
+	CppunitTest_basic_macros \
 ))
 
 endif
