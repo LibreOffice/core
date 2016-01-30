@@ -801,10 +801,6 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
 }
 
-void Window::ImplInvalidateAllOverlapBackgrounds()
-{
-}
-
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
