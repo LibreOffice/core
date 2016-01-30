@@ -705,6 +705,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_aContentToolBox->InsertSeparator(4);
     m_aContentToolBox->SetHelpId(FN_PAGENUMBER, HID_NAVI_TBX16);
     m_aContentToolBox->ShowItem( FN_PAGENUMBER );
+    if(!IsGlobalDoc()){
+        m_aContentToolBox->HideItem( FN_GLOBAL_SWITCH );
+    }
 
     for( sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++  )
     {
