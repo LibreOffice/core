@@ -45,7 +45,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
     bIgnoreFirstMove    = true;
     bKeyInput           = false;
 
-    EnableSaveBackground();
     ApplySettings(*this);
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );

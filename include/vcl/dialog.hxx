@@ -41,7 +41,6 @@ private:
     DialogImpl*     mpDialogImpl;
     long            mnMousePositioned;
     bool            mbInExecute;
-    bool            mbOldSaveBack;
     bool            mbInClose;
     bool            mbModalMode;
     InitFlag        mnInitFlag; // used for deferred init

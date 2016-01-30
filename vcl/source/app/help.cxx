@@ -237,9 +237,6 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     ImplSetMouseTransparent( true );
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;
-//  on windows this will raise the application window, because help windows are system windows now
-//  EnableAlwaysOnTop();
-    EnableSaveBackground();
 
     if( mnStyle & QuickHelpFlags::BiDiRtl )
     {

@@ -2944,8 +2944,6 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :
 
     mnPopupModeStartSaveSelection = LISTBOX_ENTRY_NOTFOUND;
 
-    EnableSaveBackground();
-
     vcl::Window * pBorderWindow = ImplGetBorderWindow();
     if( pBorderWindow )
     {

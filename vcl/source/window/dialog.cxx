@@ -357,7 +357,6 @@ void Dialog::ImplInitDialogData()
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
     mbInExecute             = false;
-    mbOldSaveBack           = false;
     mbInClose               = false;
     mbModalMode             = false;
     mpContentArea.clear();
@@ -855,8 +854,6 @@ bool Dialog::ImplStartExecuteModal()
     }
     mbInExecute = true;
     SetModalInputMode( true );
-    mbOldSaveBack = IsSaveBackgroundEnabled();
-    EnableSaveBackground();
 
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
@@ -962,7 +959,6 @@ void Dialog::EndDialog( long nResult )
         mpPrevExecuteDlg = nullptr;
 
         Hide();
-        EnableSaveBackground( mbOldSaveBack );
         if ( GetParent() )
         {
             NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );

@@ -106,7 +106,6 @@ private:
     bool            mbPopupModeCanceled;
     bool            mbPopupModeTearOff;
     bool            mbMouseDown;
-    bool            mbOldSaveBackMode;
     bool            mbGrabFocus;    // act as key input window, although focus is not set
     bool            mbInCleanUp;
     Link<FloatingWindow*,void> maPopupModeEndHdl;

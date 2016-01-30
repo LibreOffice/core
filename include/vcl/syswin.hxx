@@ -210,9 +210,6 @@ public:
     // separately from the window title
     void            SetRepresentedURL( const OUString& );
 
-    void            EnableSaveBackground( bool bSave = true );
-    bool            IsSaveBackgroundEnabled() const;
-
     void            ShowTitleButton( TitleButton nButton, bool bVisible = true );
     bool            IsTitleButtonVisible( TitleButton nButton ) const;
 

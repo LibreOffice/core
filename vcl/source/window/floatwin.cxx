@@ -170,7 +170,6 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const O
     , mbPopupModeCanceled(false)
     , mbPopupModeTearOff(false)
     , mbMouseDown(false)
-    , mbOldSaveBackMode(false)
     , mbGrabFocus(false)
     , mbInCleanUp(false)
 {
@@ -696,9 +695,6 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     mbPopupModeTearOff      = false;
     mbMouseDown             = false;
 
-    mbOldSaveBackMode       = IsSaveBackgroundEnabled();
-    EnableSaveBackground();
-
     // add FloatingWindow to list of windows that are in popup mode
     ImplSVData* pSVData = ImplGetSVData();
     mpNextFloat = pSVData->maWinData.mpFirstFloat;
@@ -795,7 +791,6 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, VclPtr<vcl:
         if ( xFocusId != nullptr )
             Window::EndSaveFocus( xFocusId, false );
     }
-    EnableSaveBackground( mbOldSaveBackMode );
 
     mbPopupModeCanceled = bool(nFlags & FloatWinPopupEndFlags::Cancel);
 
