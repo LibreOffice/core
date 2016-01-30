@@ -58,7 +58,6 @@
 #include <vector>
 #include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
-#include <boost/current_function.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/log1p.hpp>

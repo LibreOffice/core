@@ -18,7 +18,6 @@
  */
 
 
-#include <boost/current_function.hpp>
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
