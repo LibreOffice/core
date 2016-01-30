@@ -105,7 +105,6 @@ struct ImplWinData
 struct ImplOverlapData
 {
     vcl::Region*        mpSaveBackRgn;          //< saved region, which must be invalidated
-    VclPtr<vcl::Window> mpNextBackWin;          //< next window with saved background
 };
 
 struct ImplFrameData

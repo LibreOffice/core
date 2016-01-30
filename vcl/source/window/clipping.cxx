@@ -810,12 +810,8 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
     vcl::Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
-    while ( pWindow )
+    if (pWindow)
     {
-        // remember next window here already, as this window could
-        // be removed within the next if clause from the list
-        vcl::Window* pNext = pWindow->mpWindowImpl->mpOverlapData->mpNextBackWin;
-
         if ( ImplIsWindowInFront( pWindow ) )
         {
             Rectangle aRect1( Point( mnOutOffX, mnOutOffY ),
@@ -831,8 +827,6 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
             }
 
         }
-
-        pWindow = pNext;
     }
 }
 

@@ -935,7 +935,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     {
         mpWindowImpl->mpOverlapData                   = new ImplOverlapData;
         mpWindowImpl->mpOverlapData->mpSaveBackRgn    = nullptr;
-        mpWindowImpl->mpOverlapData->mpNextBackWin    = nullptr;
     }
 
     if( pParent && ! mpWindowImpl->mbFrame )
