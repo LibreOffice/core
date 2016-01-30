@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -11,12 +12,11 @@ $(eval $(call gb_CppunitTest_CppunitTest,basic_scanner))
 $(eval $(call gb_CppunitTest_use_ure,basic_scanner))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basic_scanner, \
-    basic/qa/cppunit/test_scanner \
+	basic/qa/cppunit/test_scanner \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,basic_scanner,sb))
 
-# add a list of all needed libraries here
 $(eval $(call gb_CppunitTest_use_libraries,basic_scanner, \
     comphelper \
     cppu \
@@ -45,3 +45,5 @@ $(eval $(call gb_CppunitTest_set_include,basic_scanner,\
 -I$(SRCDIR)/basic/inc \
 $$(INCLUDE) \
 ))
+
+# vim: set noet sw=4 ts=4:
