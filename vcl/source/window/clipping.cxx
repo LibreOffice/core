@@ -33,9 +33,6 @@ void Window::InitClipRegion()
 
     vcl::Region  aRegion;
 
-    // Put back backed up background
-    if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
     if ( mpWindowImpl->mbInPaint )
         aRegion = *(mpWindowImpl->mpPaintRegion);
     else
@@ -320,9 +317,6 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
                     pWinChildClipRegion->Intersect( *pOldRegion );
                     bUpdate = aNewRegion == *pWinChildClipRegion;
                 }
-
-                if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                    ImplInvalidateAllOverlapBackgrounds();
 
                 vcl::Region      aRegion = *pWinChildClipRegion;
                 Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
@@ -809,25 +803,6 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
 
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
-    vcl::Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
-    if (pWindow)
-    {
-        if ( ImplIsWindowInFront( pWindow ) )
-        {
-            Rectangle aRect1( Point( mnOutOffX, mnOutOffY ),
-                              Size( mnOutWidth, mnOutHeight ) );
-            Rectangle aRect2( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
-                              Size( pWindow->mnOutWidth, pWindow->mnOutHeight ) );
-            aRect1.Intersection( aRect2 );
-            if ( !aRect1.IsEmpty() )
-            {
-                if ( !pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn )
-                    pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn = new vcl::Region( aRect2 );
-                pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn->Exclude( aRect1 );
-            }
-
-        }
-    }
 }
 
 } /* namespace vcl */

@@ -764,10 +764,6 @@ void Window::ImplInvalidateParentFrameRegion( vcl::Region& rRegion )
 
 void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
-    // reset background storage
-    if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
-
     // check what has to be redrawn
     bool bInvalidateAll = !pRegion;
 
@@ -1060,9 +1056,6 @@ void Window::SetWindowRegionPixel()
 
             if ( IsReallyVisible() )
             {
-                // restore background storage
-                if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                    ImplInvalidateAllOverlapBackgrounds();
                 Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 vcl::Region      aRegion( aRect );
                 ImplInvalidateParentFrameRegion( aRegion );
@@ -1145,9 +1138,6 @@ void Window::SetWindowRegionPixel( const vcl::Region& rRegion )
 
         if ( IsReallyVisible() )
         {
-            // restore background storage
-            if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                ImplInvalidateAllOverlapBackgrounds();
             Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
             vcl::Region      aRegion( aRect );
             ImplInvalidateParentFrameRegion( aRegion );
@@ -1545,10 +1535,6 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( !nHorzScroll && !nVertScroll )
         return;
-
-    // restore background storage
-    if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
 
     if ( mpWindowImpl->mpCursor )
         mpWindowImpl->mpCursor->ImplSuspend();

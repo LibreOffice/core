@@ -1027,7 +1027,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mpFocusWin         = nullptr;
         mpWindowImpl->mpFrameData->mpMouseMoveWin     = nullptr;
         mpWindowImpl->mpFrameData->mpMouseDownWin     = nullptr;
-        mpWindowImpl->mpFrameData->mpFirstBackWin     = nullptr;
         mpWindowImpl->mpFrameData->mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
         mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
         mpWindowImpl->mpFrameData->mnFocusId          = nullptr;
@@ -1572,9 +1571,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
     if ( IsReallyVisible() )
     {
-        if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-            ImplInvalidateAllOverlapBackgrounds();
-
         Rectangle aOldWinRect( Point( nOldOutOffX, nOldOutOffY ),
                                Size( nOldOutWidth, nOldOutHeight ) );
         pOldRegion = new vcl::Region( aOldWinRect );
@@ -1751,9 +1747,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             if ( bNewPos || bNewSize )
             {
-                // reset background storage
-                if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                    ImplInvalidateAllOverlapBackgrounds();
                 // set Clip-Flag
                 bUpdateSysObjClip = !ImplSetClipFlag( true );
             }
@@ -2507,9 +2500,6 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
     if( aDogTag.IsDead() )
         return;
-    // invalidate all saved backgrounds
-    if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
 
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
     // However, the access bridge only uses this event if the data member is not NULL (it's kind of a hack that
