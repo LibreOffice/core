@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "desktop.hrc"
+#include "../../inc/desktop.hrc"
 
 String STR_RECOVER_QUERY
 {
