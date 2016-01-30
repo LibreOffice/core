@@ -58,6 +58,9 @@
 
 #include <boost/bind.hpp>
 
+#define MIN_WIDTH   80
+#define MIN_HEIGHT  20
+
 
 namespace rptxml
 {
@@ -82,7 +85,8 @@ namespace rptxml
 
     Sequence< OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -98,7 +102,8 @@ namespace rptxml
 
     Sequence< OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -116,7 +121,8 @@ namespace rptxml
 
     Sequence< OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -133,7 +139,8 @@ namespace rptxml
 
     Sequence< OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -150,7 +157,8 @@ namespace rptxml
 
     Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = "com.sun.star.document.ExportFilter";
         return aSupported;
     }
 
@@ -169,8 +177,8 @@ namespace rptxml
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                const ::std::vector< XMLPropertyState >* /*pProperties*/ = nullptr,
-                sal_uInt32 /*nIdx*/ = 0 ) const override
+                const ::std::vector< XMLPropertyState >* /*pProperties*/ = 0,
+                sal_uInt32 /*nIdx*/ = 0 ) const SAL_OVERRIDE
         {
             // nothing to do here
         }
@@ -311,7 +319,8 @@ OUString ORptExport::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
 
 uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices { "com.sun.star.document.ExportFilter" };
+    uno::Sequence< OUString > aServices(1);
+    aServices.getArray()[0] = "com.sun.star.document.ExportFilter";
 
     return aServices;
 }
@@ -506,7 +515,7 @@ void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_I
 
 void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 {
-    OSL_ENSURE(_xProp != nullptr,"Section is NULL -> GPF");
+    OSL_ENSURE(_xProp != NULL,"Section is NULL -> GPF");
     exportAutoStyle(_xProp);
 
     Reference<XReportDefinition> xReport = _xProp->getReportDefinition();
@@ -966,7 +975,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 nEmptyCellColSpan = 0;
             }
         }
-        else
+        //elseTGrid::iterator
         { // empty rows
             nEmptyCellColSpan = aRowIter->second.size();
             if ( nEmptyCellColSpan )
@@ -988,6 +997,101 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             }
         }
     }
+    try{
+
+    //set height
+    ::std::vector<sal_Int32>::iterator aIter = m_aHeight.begin();
+    ::std::vector<sal_Int32>::iterator aEnd = m_aHeight.end();
+    sal_Int32 nHeight = 0;
+    for (; aIter != aEnd; ++aIter)
+        nHeight += *aIter;
+    m_xSection->setHeight( nHeight );
+    //set position, widths, and heights
+    sal_Int32 nLeftMargin = rptui::getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
+    sal_Int32 nPosY = 0;
+    //std::vector<std::vector<rptxml::ORptExport::TCell> >::iterator aRowIter = m_aGrid.begin();
+    //std::vector<std::vector<rptxml::ORptExport::TCell> >::iterator aRowEnd = m_aGrid.end();
+    for (sal_Int32 i = 0; aRowIter != aRowEnd; ++aRowIter,++i)
+    {
+         sal_Int32 nPosX = nLeftMargin;
+         ::std::vector< TCell >::iterator aColIter = aRowIter->second.begin();
+         ::std::vector< TCell >::iterator aColEnd = aRowIter->second.end();
+         //::std::vector<TCell>::iterator aColIter = (*aRowIter).begin();
+         //::std::vector<TCell>::iterator aColEnd = (*aRowIter).end();
+         for (sal_Int32 j = 0; aColIter != aColEnd; ++aColIter,++j)
+         {
+             TCell& rCell = *aColIter;
+             if ( !rCell.xElements.empty())
+             {
+                 ::std::vector< uno::Reference< report::XReportComponent> >::iterator aCellIter = rCell.xElements.begin();
+                 const ::std::vector< uno::Reference< report::XReportComponent> >::iterator aCellEnd = rCell.xElements.end();
+                 for (;aCellIter != aCellEnd ; ++aCellIter)
+                 {
+                      uno::Reference<report::XShape> xShape(*aCellIter,uno::UNO_QUERY);
+                      if ( xShape.is() )
+                      {
+                          xShape->setPositionX(xShape->getPositionX() + nLeftMargin);
+                      }
+                      else
+                      {
+                          sal_Int32 nWidth = rCell.nWidth;
+                          sal_Int32 nColSpan = rCell.nColSpan;
+                          if ( nColSpan > 1 )
+                          {
+                              ::std::vector<TCell>::iterator aWidthIter = aColIter + 1;
+                              while ( nColSpan > 1 )
+                              {
+                                   nWidth += (aWidthIter++)->nWidth;
+                                   --nColSpan;
+                              }
+                          }
+                          nHeight = rCell.nHeight;
+                          sal_Int32 nRowSpan = rCell.nRowSpan;
+                          if ( nRowSpan > 1 )
+                          {
+                              //::std::vector< ::std::vector<TCell> >::iterator aHeightIter = aRowIter + 1;
+                              while( nRowSpan > 1)
+                              {
+                                   //nHeight += (*aHeightIter)[j].nHeight;
+                                   ++aHeightIter;
+                                   --nRowSpan;
+                              }
+                          }
+                          Reference<XFixedLine> xFixedLine(*aCellIter,uno::UNO_QUERY);
+                          if ( xFixedLine.is() )
+                          {
+                              if ( xFixedLine->getOrientation() == 1 ) // vertical
+                              {
+                                  OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
+                                  nWidth += m_aWidth[j+1];
+                                  if ( nWidth < MIN_WIDTH )
+                                      nWidth = MIN_WIDTH;
+                              }
+                              else if ( nHeight < MIN_HEIGHT )
+                                      nHeight = MIN_HEIGHT;
+                          }
+                          try
+                          {
+                              (*aCellIter)->setSize(awt::Size(nWidth,nHeight));
+                              (*aCellIter)->setPosition(awt::Point(nPosX,nPosY));
+                          }
+                          catch(beans::PropertyVetoException)
+                          {
+                               OSL_FAIL("Could not set the correct position or size!");
+                          }
+                      }
+                  }
+              }
+              nPosX += m_aWidth[j];
+          }
+          nPosY += m_aHeight[i];
+            }
+        }
+
+        catch(Exception&)
+        {
+             OSL_FAIL("OXMLTable::EndElement -> exception catched");
+        }
 }
 
 OUString ORptExport::convertFormula(const OUString& _sFormula)
@@ -1024,8 +1128,9 @@ void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,
     }
 }
 
-void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle)
+bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle)
 {
+    bool bGroupExported = false;
     if ( _xReportDefinition.is() )
     {
         Reference< XGroups > xGroups = _xReportDefinition->getGroups();
@@ -1034,6 +1139,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
             sal_Int32 nCount = xGroups->getCount();
             if ( _nPos >= 0 && _nPos < nCount )
             {
+                bGroupExported = true;
                 Reference<XGroup> xGroup(xGroups->getByIndex(_nPos),uno::UNO_QUERY);
                 OSL_ENSURE(xGroup.is(),"No Group prepare for GPF");
                 if ( _bExportAutoStyle )
@@ -1114,6 +1220,7 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
             }
         }
     }
+    return bGroupExported;
 }
 
 void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField)
@@ -1427,12 +1534,12 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                         static const char s_sCurrent[] = "current";
                         AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, false, false);
-                        Characters("1");
+                        Characters(OUString("1"));
                     }
                     else if ( sToken == s_sPageCount )
                     {
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, false, false);
-                        Characters("1");
+                        Characters(OUString("1"));
                     }
                     else
                     {

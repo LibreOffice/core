@@ -46,15 +46,15 @@
 namespace rptxml
 {
 using namespace ::xmloff::token;
-using namespace css::uno;
-using namespace css::container;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::document;
-using namespace css::text;
-using namespace css::report;
-using namespace css::io;
-using namespace css::xml::sax;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::report;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::xml::sax;
 
 // - ORptExport -
 
@@ -69,6 +69,7 @@ public:
         sal_Int32 nHeight;
         sal_Int32 nColSpan;
         sal_Int32 nRowSpan;
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> > xElements;
         Reference<XReportComponent> xElement;
         bool      bSet;
         TCell(  sal_Int32 _nWidth,
@@ -93,6 +94,13 @@ public:
         {}
     };
     typedef ::std::pair< OUString ,OUString> TStringPair;
+    typedef struct
+    {
+        OUString sText;
+        OUString sField;
+        OUString sDecimal;
+        OUString sThousand;
+    } TDelimiter;
     typedef ::std::vector< OUString>                         TStringVec;
     typedef ::std::map< Reference<XPropertySet> ,OUString >  TPropertyStyleMap;
     typedef ::std::map< Reference<XPropertySet> ,  TStringVec>      TGridStyleMap;
@@ -101,6 +109,12 @@ public:
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
     typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >    m_xSection;
+    ::std::vector<sal_Int32>                        m_aHeight;
+    ::std::unique_ptr< TStringPair >                m_aAutoIncrement;
+    ::std::unique_ptr< TDelimiter >                 m_aDelimiter;
+    ::std::vector< Any >                            m_aDataSourceSettings;
+    ::std::vector< ::std::vector<TCell> >           m_aGrid;
     TSectionsGrid                                   m_aSectionsGrid;
 
     TPropertyStyleMap                               m_aAutoStyleNames;
@@ -108,9 +122,13 @@ private:
     TGridStyleMap                                   m_aRowStyleNames;
     TGroupFunctionMap                               m_aGroupFunctionMap;
 
+    OUString                                 m_sCharSet;
     OUString                                 m_sTableStyle;
     OUString                                 m_sCellStyle;
     OUString                                 m_sColumnStyle;
+    Any                                             m_aPreviewMode;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xExportHelper;
+    rtl::Reference < SvXMLExportPropertyMapper>       m_xSectionPropMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xTableStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xCellStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper>       m_xColumnStylesExportPropertySetMapper;
@@ -118,6 +136,8 @@ private:
     rtl::Reference < SvXMLExportPropertyMapper >      m_xParaPropMapper;
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
 
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xControlStylePropertyMapper;
+    mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XReportDefinition>                    m_xReportDefinition;
     bool                                        m_bAllreadyFilled;
@@ -128,7 +148,7 @@ private:
     void                    exportFunction(const Reference< XFunction>& _xFunction);
     void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
-    void                    exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
+    bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName);
     void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);
@@ -151,34 +171,35 @@ private:
 
 private:
                                     ORptExport();
-    virtual void                    SetBodyAttributes() override;
+    virtual void                    SetBodyAttributes() SAL_OVERRIDE;
 protected:
 
-    virtual void                    _ExportStyles( bool bUsed ) override;
-    virtual void                    _ExportAutoStyles() override;
-    virtual void                    _ExportContent() override;
-    virtual void                    _ExportMasterStyles() override;
-    virtual void                    _ExportFontDecls() override;
-    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
-    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() override;
-    virtual XMLShapeExport*         CreateShapeExport() override;
+    virtual void                    _ExportStyles( bool bUsed ) SAL_OVERRIDE;
+    virtual void                    _ExportAutoStyles() SAL_OVERRIDE;
+    virtual void                    _ExportContent() SAL_OVERRIDE;
+    virtual void                    _ExportMasterStyles() SAL_OVERRIDE;
+    virtual void                    _ExportFontDecls() SAL_OVERRIDE;
+    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
+    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() SAL_OVERRIDE;
+    virtual XMLShapeExport*         CreateShapeExport() SAL_OVERRIDE;
 
     virtual                 ~ORptExport(){};
 public:
 
     ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
-    static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
-    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
+    rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper; }
+    ::std::vector<sal_Int32> m_aWidth;
 };
 
 /** Exports only settings
@@ -188,10 +209,10 @@ public:
 class ORptExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 
 /** Exports only content
@@ -201,10 +222,10 @@ public:
 class ORptContentExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 
 /** Exports only styles
@@ -214,10 +235,10 @@ public:
 class ORptStylesExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 
 /** Exports only meta data
@@ -227,10 +248,10 @@ public:
 class ORptMetaExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 /** Exports all
  * \ingroup reportdesign_source_filter_xml
@@ -239,10 +260,10 @@ public:
 class ODBFullExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 
 } // rptxml
