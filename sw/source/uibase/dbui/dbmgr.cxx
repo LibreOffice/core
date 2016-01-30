@@ -989,7 +989,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             const OUString* pStoreToFilterOptions = nullptr;
 
             CreateStoreToFilter(pStoreToFilter, pStoreToFilterOptions, pSourceDocSh, bEMail, rMergeDescriptor);
-            const bool bIsPDFeport = pStoreToFilter && pStoreToFilter->GetFilterName() == "writer_pdf_Export";
+            const bool bIsPDFexport = pStoreToFilter && pStoreToFilter->GetFilterName() == "writer_pdf_Export";
 
             bCancel = false;
 
@@ -1083,7 +1083,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         // Create a copy of the source document and work with that one instead of the source.
                         // If we're not in the single file mode (which requires modifying the document for the merging),
                         // it is enough to do this just once.
-                        if( 1 == nDocNo || bCreateSingleFile || bIsPDFeport )
+                        if( 1 == nDocNo || bCreateSingleFile || bIsPDFexport )
                             CreateWorkDoc(xWorkDocSh, pWorkView, pWorkDoc, pOldDBManager, pSourceDocSh, nMaxDumpDocs, nDocNo);
 
                         SwWrtShell &rWorkShell = pWorkView->GetWrtShell();
@@ -1144,7 +1144,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             //convert fields to text if we are exporting to PDF
                             //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
-                            if( bIsPDFeport )
+                            if( bIsPDFexport )
                                 rWorkShell.ConvertFieldsToText();
                             xWorkDocSh->DoSaveAs(*pDstMed);
                             xWorkDocSh->DoSaveCompleted(pDstMed);
@@ -1233,7 +1233,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 }
                             }
                         }
-                        if( bCreateSingleFile || bIsPDFeport )
+                        if( bCreateSingleFile || bIsPDFexport )
                         {
                             CloseWorkDoc(pWorkDoc, xWorkDocSh, pOldDBManager);
                         }
@@ -1253,7 +1253,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
             FinishMailMergeFile(xWorkDocSh, pWorkView, pTargetDoc, pTargetShell, bCreateSingleFile, rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER,
-                                pWorkDoc, pOldDBManager, bIsPDFeport);
+                                pWorkDoc, pOldDBManager, bIsPDFexport);
 
             pProgressDlg.disposeAndClear();
 
@@ -1570,7 +1570,7 @@ void SwDBManager::FreezeLayouts(SwWrtShell *pTargetShell, bool freeze)
 
 void SwDBManager::FinishMailMergeFile(SfxObjectShellLock &xWorkDocSh, SwView *pWorkView, SwDoc *pTargetDoc,
                                        SwWrtShell *pTargetShell, bool bCreateSingleFile, bool bPrinter,
-                                       SwDoc *pWorkDoc, SwDBManager *pOldDBManager, const bool bIsPDFeport)
+                                       SwDoc *pWorkDoc, SwDBManager *pOldDBManager, const bool bIsPDFexport)
 {
     if ( xWorkDocSh.Is() && pWorkView->GetWrtShell().IsExpFieldsLocked() )
     {
@@ -1588,7 +1588,7 @@ void SwDBManager::FinishMailMergeFile(SfxObjectShellLock &xWorkDocSh, SwView *pW
 #endif
         }
 
-        if( !bIsPDFeport )
+        if( !bIsPDFexport )
             CloseWorkDoc(pWorkDoc, xWorkDocSh, pOldDBManager);
     }
 

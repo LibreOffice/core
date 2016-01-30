@@ -286,7 +286,7 @@ friend class SwConnectionDisposedListener_Impl;
 
     SAL_DLLPRIVATE void FinishMailMergeFile(SfxObjectShellLock &xWorkDocSh, SwView *pWorkView, SwDoc *pTargetDoc,
                                              SwWrtShell *pTargetShell, bool bCreateSingleFile, bool bPrinter,
-                                             SwDoc *pWorkDoc, SwDBManager *pOldDBManager, const bool bIsPDFeport);
+                                             SwDoc *pWorkDoc, SwDBManager *pOldDBManager, const bool bIsPDFexport);
 
     SAL_DLLPRIVATE bool SavePrintDoc(SfxObjectShellRef xTargetDocShell, SwView *pTargetView,
                                      const SwMergeDescriptor &rMergeDescriptor,
