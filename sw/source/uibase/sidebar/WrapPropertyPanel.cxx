@@ -201,6 +201,10 @@ void WrapPropertyPanel::Initialize()
 
 void WrapPropertyPanel::UpdateSpacingLB()
 {
+    // tdf#97407
+    // Remove custom entry if present
+    mpSpacingLB->RemoveEntry(aCustomEntry);
+
     if( (nLeft == nRight) && (nTop == nBottom) && (nLeft == nTop) )
     {
         for(sal_Int32 i = 0; i < mpSpacingLB->GetEntryCount(); i++)
@@ -208,7 +212,6 @@ void WrapPropertyPanel::UpdateSpacingLB()
             if(reinterpret_cast<sal_uLong>(mpSpacingLB->GetEntryData(i)) == nLeft )
             {
                 mpSpacingLB->SelectEntryPos(i);
-                mpSpacingLB->RemoveEntry(aCustomEntry);
                 return;
             }
         }
