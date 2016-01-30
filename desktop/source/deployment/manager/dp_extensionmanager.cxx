@@ -52,6 +52,8 @@
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
 #include <boost/bind.hpp>
+#include <svtools/restartdialog.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <list>
 #include <algorithm>
@@ -602,6 +604,9 @@ bool ExtensionManager::doChecksForAddExtension(
             xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0;
 
         return bCanInstall;
+        if(bCanInstall == true){
+            svtools::executeRestartDialog(comphelper::getProcessComponentContext(),nullptr,svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL);
+        }
     }
     catch ( const css::deployment::DeploymentException& ) {
         throw;
