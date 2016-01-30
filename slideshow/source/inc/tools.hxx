@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <comphelper/random.hxx>
+#include <osl/diagnose.h>
 #include <vector>
 
 #include <cppcanvas/color.hxx>
@@ -37,7 +38,6 @@
 #include "hslcolor.hxx"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/current_function.hpp>
 
 #include <functional>
 #include <cstdlib>
@@ -323,7 +323,7 @@ namespace slideshow
                     OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s\n",
                                OUStringToOString( propName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr(),
-                               BOOST_CURRENT_FUNCTION,
+                               OSL_THIS_FUNC,
                                OUStringToOString( a.getValueTypeRef()->pTypeName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
@@ -356,7 +356,7 @@ namespace slideshow
                     OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s to interface\n",
                                OUStringToOString( propName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr(),
-                               BOOST_CURRENT_FUNCTION,
+                               OSL_THIS_FUNC,
                                OUStringToOString( a.getValueTypeRef()->pTypeName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif

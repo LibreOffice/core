@@ -31,7 +31,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
