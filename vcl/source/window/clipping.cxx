@@ -807,11 +807,6 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
 }
 
-bool Window::ImplRestoreOverlapBackground( vcl::Region& rInvRegion )
-{
-    return false;
-}
-
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
     vcl::Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;

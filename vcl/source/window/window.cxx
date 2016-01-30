@@ -2344,21 +2344,10 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
         if ( mpWindowImpl->mbReallyVisible )
         {
-            vcl::Region  aInvRegion;
-            bool    bSaveBack = false;
+            if ( mpWindowImpl->mbInitWinClipRegion )
+                ImplInitWinClipRegion();
 
-            if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )
-            {
-                if ( ImplRestoreOverlapBackground( aInvRegion ) )
-                    bSaveBack = true;
-            }
-
-            if ( !bSaveBack )
-            {
-                if ( mpWindowImpl->mbInitWinClipRegion )
-                    ImplInitWinClipRegion();
-                aInvRegion = mpWindowImpl->maWinClipRegion;
-            }
+            vcl::Region aInvRegion = mpWindowImpl->maWinClipRegion;
 
             if( aDogTag.IsDead() )
                 return;
