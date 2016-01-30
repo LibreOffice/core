@@ -29,7 +29,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "../dom/node.hxx"
+#include "node.hxx"
 
 namespace DOM {namespace events
 {

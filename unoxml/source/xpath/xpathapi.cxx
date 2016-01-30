@@ -32,7 +32,7 @@
 #include <nodelist.hxx>
 #include <xpathobject.hxx>
 
-#include "../dom/node.hxx"
+#include "node.hxx"
 #include "../dom/document.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
