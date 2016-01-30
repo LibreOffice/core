@@ -90,9 +90,9 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
 
     if(pPath && pPts)
     {
-        const sal_uInt32 nMarkedPntAnz(pPts->size());
+        const sal_uInt32 nMarkedPointCount(pPts->size());
 
-        if(nMarkedPntAnz)
+        if(nMarkedPointCount)
         {
             bool bClosed(pPath->IsClosed());
             bSetMarkedPointsSmoothPossible = true;

@@ -200,7 +200,7 @@ String STR_ObjNameSingulPOLY
 {
     Text [ en-US ] = "Polygon" ;
 };
-String STR_ObjNameSingulPOLY_PntAnz
+String STR_ObjNameSingulPOLY_PointCount
 {
     Text [ en-US ] = "Polygon %2 corners" ;
 };
@@ -212,7 +212,7 @@ String STR_ObjNameSingulPLIN
 {
     Text [ en-US ] = "Polyline" ;
 };
-String STR_ObjNameSingulPLIN_PntAnz
+String STR_ObjNameSingulPLIN_PointCount
 {
     Text [ en-US ] = "Polyline with %2 corners" ;
 };

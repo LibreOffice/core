@@ -1945,11 +1945,11 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
             if(bClosed)
             {
-                nId = STR_ObjNameSingulPOLY_PntAnz;
+                nId = STR_ObjNameSingulPOLY_PointCount;
             }
             else
             {
-                nId = STR_ObjNameSingulPLIN_PntAnz;
+                nId = STR_ObjNameSingulPLIN_PointCount;
             }
 
             OUString sTemp(ImpGetResStr(nId));
