@@ -18,7 +18,6 @@
  */
 
 
-#include <boost/current_function.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>

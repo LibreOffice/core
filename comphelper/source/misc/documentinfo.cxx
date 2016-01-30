@@ -32,9 +32,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-#include <boost/current_function.hpp>
-
-
 namespace comphelper {
 
 
@@ -162,7 +159,7 @@ namespace comphelper {
             caught >>= exception;
             sMessage += OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() );
             sMessage += "\nin function:\n";
-            sMessage += BOOST_CURRENT_FUNCTION;
+            sMessage += OSL_THIS_FUNC;
             sMessage += "\n";
             OSL_FAIL( sMessage.getStr() );
         }

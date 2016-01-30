@@ -18,7 +18,6 @@
  */
 
 
-#include <boost/current_function.hpp>
 #include <canvas/canvastools.hxx>
 
 #include <comphelper/anytostring.hxx>

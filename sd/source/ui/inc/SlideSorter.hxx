@@ -26,7 +26,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/current_function.hpp>
 #include <vcl/scrbar.hxx>
 #include "sddllapi.h"
 #include <memory>
