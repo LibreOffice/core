@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_DESKTOPRESID_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_DESKTOPRESID_HXX
+#ifndef INCLUDED_DESKTOP_INC_DESKTOPRESID_HXX
+#define INCLUDED_DESKTOP_INC_DESKTOPRESID_HXX
 
 #include <tools/resid.hxx>
 
@@ -33,6 +33,6 @@ class DesktopResId : public ResId
 
 }
 
-#endif // INCLUDED_DESKTOP_SOURCE_APP_DESKTOPRESID_HXX
+#endif // INCLUDED_DESKTOP_INC_DESKTOPRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

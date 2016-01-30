@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_HRC_
-#define _DESKTOP_HRC_
+#ifndef INCLUDED_DESKTOP_HRC
+#define INCLUDED_DESKTOP_HRC
 
 #include <svl/solar.hrc>
 
@@ -66,6 +66,6 @@
 #define RID_APPTITLE                        (RID_DESKTOP_STRING_START+208)
 
 
-#endif // _DESKTOP_HRC_
+#endif // INCLUDED_DESKTOP_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
