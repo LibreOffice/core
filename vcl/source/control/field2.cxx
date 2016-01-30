@@ -69,7 +69,7 @@ uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
 static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 {
     if ( rStr.getLength() == 1 )
-        *pBuf++ = rStr[0];
+        *++pBuf = rStr[0];
     else if ( rStr.isEmpty() )
         ;
     else
@@ -88,10 +88,10 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
     do
     {
         *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
-        pTempBuf++;
+       ++pTempBuf;
         nNumber /= 10;
         if ( nMinLen )
-            nMinLen--;
+            --nMinLen;
     }
     while ( nNumber );
 
@@ -99,16 +99,16 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
     while ( nMinLen > 0 )
     {
         *pBuf = '0';
-        pBuf++;
-        nMinLen--;
+        ++pBuf;
+        --nMinLen;
     }
 
     // copy temp buffer to real buffer
     do
     {
-        pTempBuf--;
+        --pTempBuf;
         *pBuf = *pTempBuf;
-        pBuf++;
+        ++pBuf;
     }
     while ( pTempBuf != aTempBuf );
 
@@ -128,7 +128,7 @@ static sal_uInt16 ImplGetNum( const sal_Unicode*& rpBuf, bool& rbError )
     {
         nNumber *= 10;
         nNumber += *rpBuf - '0';
-        rpBuf++;
+        ++rpBuf;
     }
 
     return nNumber;
@@ -252,7 +252,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
             // if it is a literal copy otherwise ignore because it might be the next valid
             // character of the string
             if ( ImplCommaPointCharEqual( cChar, cLiteral ) )
-                nStrIndex++;
+                ++nStrIndex;
             else
             {
                 // Otherwise we check if it is a invalid character. This is the case if it does not
@@ -263,11 +263,11 @@ static OUString ImplPatternReformat( const OUString& rStr,
                     if ( rEditMask[n] != EDITMASK_LITERAL )
                     {
                         if ( !ImplIsPatternChar( cChar, rEditMask[n] ) )
-                            nStrIndex++;
+                            ++nStrIndex;
                         break;
                     }
 
-                    n++;
+                    ++n;
                 }
             }
         }
@@ -279,7 +279,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
             {
                 // use this character
                 aOutStr[i] = cTempChar;
-                nStrIndex++;
+                ++nStrIndex;
             }
             else
             {
@@ -303,17 +303,17 @@ static OUString ImplPatternReformat( const OUString& rStr,
                                 break;
                             }
 
-                            n++;
+                            ++n;
                         }
                     }
 
-                    nStrIndex++;
+                    ++nStrIndex;
                     continue;
                 }
             }
         }
 
-        i++;
+        ++i;
     }
 
     return aOutStr.makeStringAndClear();
@@ -335,7 +335,7 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
             if ( (rEditMask[nMaxPos-1] != EDITMASK_LITERAL) &&
                  (rStr[nMaxPos-1] != ' ') )
                 break;
-            nMaxPos--;
+            --nMaxPos;
         }
 
         // if we are in front of a literal, continue search until first character after the literal
@@ -347,7 +347,7 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
                 nMaxPos = nTempPos;
                 break;
             }
-            nTempPos++;
+            ++nTempPos;
         }
     }
 
@@ -377,11 +377,11 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
                  (aText[i] != ' ') )
                 break;
 
-            i++;
+            ++i;
         }
         // keep all literal characters
         while ( i && (rEditMask[i] == EDITMASK_LITERAL) )
-            i--;
+            --i;
         aText = aText.copy( i );
     }
 
@@ -421,7 +421,7 @@ static sal_Int32 ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorP
             nNewPos = nTempPos-1;
             break;
         }
-        nTempPos--;
+        --nTempPos;
     }
     return nNewPos;
 }
@@ -496,7 +496,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             nNewPos = 0;
             while ( (nNewPos < rEditMask.getLength()) &&
                     (rEditMask[nNewPos] == EDITMASK_LITERAL) )
-                nNewPos++;
+                ++nNewPos;
 
             // Home should not move to the right
             if ( nCursorPos < nNewPos )
@@ -513,7 +513,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             nNewPos = rEditMask.getLength();
             while ( nNewPos &&
                     (rEditMask[nNewPos-1] == EDITMASK_LITERAL) )
-                nNewPos--;
+                --nNewPos;
             // Use the start of selection as minimum; even a small position is allowed in case that
             // all was selected by the focus
             Selection aSel( aOldSel );
@@ -630,7 +630,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                         if ( (rEditMask[nTempPos+1] != EDITMASK_LITERAL ) &&
                              ImplCommaPointCharEqual( cChar, rLiteralMask[nTempPos] ) )
                         {
-                            nTempPos++;
+                            ++nTempPos;
                             ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nNewPos, nTempPos );
                             if ( nTempPos > nNewPos )
                             {
@@ -640,7 +640,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                         }
                         break;
                     }
-                    nTempPos++;
+                    ++nTempPos;
                 }
             }
 
@@ -663,7 +663,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                      ((n > rEditMask.getLength()) || (rEditMask[n-1] != EDITMASK_LITERAL)) )
                     break;
 
-                n--;
+                --n;
             }
             aStr.truncate( n );
 
@@ -762,7 +762,7 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
                 break;
             }
         }
-        i++;
+        ++i;
     }
 }
 
@@ -1349,7 +1349,7 @@ void DateField::ImplDateSpinArea( bool bUp )
                         break;
                     }
                     else
-                        nPos++;
+                        ++nPos;
                 }
             }
 
@@ -1712,7 +1712,7 @@ void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
     {
         sal_uInt16 nCentury = nTwoDigitYearStart / 100;
         if ( nDateYear < (nTwoDigitYearStart % 100) )
-            nCentury++;
+            ++nCentury;
         rDate.SetYear( nDateYear + (nCentury*100) );
     }
 }
@@ -2253,7 +2253,7 @@ void TimeField::ImplTimeSpinArea( bool bUp )
                     break;
                 }
                 else
-                    nPos++;
+                    ++nPos;
             }
         }
         else
