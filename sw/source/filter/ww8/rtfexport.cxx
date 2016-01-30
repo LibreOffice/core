@@ -25,7 +25,6 @@
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
-#include <ndtxt.hxx>
 #include <fmtpdsc.hxx>
 #include <ftninfo.hxx>
 #include <fmthdft.hxx>

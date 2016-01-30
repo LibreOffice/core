@@ -66,7 +66,6 @@
 #include <fmtanchr.hxx>
 #include <htmltbl.hxx>
 #include <ndgrf.hxx>
-#include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <swmodule.hxx>
 #include <txtftn.hxx>
@@ -79,7 +78,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include "writerhelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace sw::util;
