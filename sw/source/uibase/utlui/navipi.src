@@ -82,7 +82,7 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_GLOBAL_SWITCH ;
                 HelpID = HID_NAVI_TBX17 ;
-                Text [ en-US ] = "Toggle" ;
+                Text [ en-US ] = "Toggle Master View" ;
             };
             ToolBoxItem
             {
@@ -215,7 +215,7 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_GLOBAL_SWITCH ;
                 HelpID = HID_NAVI_TBX17 ;
-                Text [ en-US ] = "Toggle" ;
+                Text [ en-US ] = "Toggle Master View" ;
             };
             ToolBoxItem
             {
