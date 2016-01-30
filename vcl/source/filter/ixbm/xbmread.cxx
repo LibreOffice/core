@@ -336,7 +336,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     return eReadState;
 }
 
-VCL_DLLPUBLIC bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
+bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {
     XBMReader*  pXBMReader = static_cast<XBMReader*>( rGraphic.GetContext() );
     ReadState   eReadState;
