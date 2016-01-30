@@ -127,16 +127,38 @@ private:
     VclPtr<ListBox>                m_pAssignedList;
     VclPtr<PushButton>             m_pRemoveBtn;
 
+    VclPtr<PushButton>             m_pEditBtn;
+
     DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(DblClickHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(RemoveHdl_Impl, Button*, void);
 
+    DECL_LINK_TYPED(EditHdl_Impl, Button*, void);
+
     inline void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
                                     m_pAssignedList->GetSelectEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
+
+
+    inline void             EnableEditButton()
+                                { m_pEditBtn->Enable(
+                                    m_pAssignedList->GetSelectEntryPos()
+                                    != LISTBOX_ENTRY_NOTFOUND ); }
+
+    inline void             EnableAssignButton()
+                                { m_pAssignBtn->Enable(
+                                    true ); }
+
+    inline void             DisableRemoveButton()
+                                { m_pRemoveBtn->Disable(
+                                    true ); }
+
+    inline void             DisableEditButton()
+                                { m_pEditBtn->Disable(
+                                    true ); }
 
 
 public:
@@ -171,6 +193,7 @@ private:
     inline void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
                                     m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
+
 
 public:
     explicit SvxJavaClassPathDlg( vcl::Window* pParent );

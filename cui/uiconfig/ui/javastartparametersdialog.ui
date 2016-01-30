@@ -191,6 +191,20 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="editbtn">
+                    <property name="label" translatable="yes">_Edit</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="valign">start</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
                   <placeholder/>
                 </child>
                 <child>
