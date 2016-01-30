@@ -425,7 +425,7 @@ namespace svgio
             const basegfx::BColor* getCurrentColor() const;
 
             /// Opacity content
-            SvgNumber getOpacity() const { return maOpacity; }
+            SvgNumber getOpacity() const;
             void setOpacity(const SvgNumber& rOpacity = SvgNumber()) { maOpacity = rOpacity; }
 
             /// Visibility
