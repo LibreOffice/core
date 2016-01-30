@@ -40,7 +40,6 @@
 #include <unordered_map>
 #include <vector>
 #include <boost/checked_delete.hpp>
-#include <boost/current_function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>

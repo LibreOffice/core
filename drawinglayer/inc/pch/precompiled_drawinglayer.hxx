@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-#include <boost/current_function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>

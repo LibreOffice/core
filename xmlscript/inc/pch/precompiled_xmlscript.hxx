@@ -20,7 +20,6 @@
  ./bin/update_pch_bisect ./xmlscript/inc/pch/precompiled_xmlscript.hxx "/opt/lo/bin/make xmlscript.build" --find-conflicts
 */
 
-#include <boost/current_function.hpp>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/unload.h>

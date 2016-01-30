@@ -46,8 +46,6 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <boost/current_function.hpp>
-
 using namespace ::com::sun::star;
 
 namespace comphelper {
@@ -277,7 +275,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     else
     {
         // the mediatype is not known
-        OUString aMsg(BOOST_CURRENT_FUNCTION);
+        OUString aMsg(OSL_THIS_FUNC);
         aMsg += ":";
         aMsg += OUString::number(__LINE__);
         aMsg += ": unknown media type '";

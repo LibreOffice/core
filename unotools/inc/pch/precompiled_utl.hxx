@@ -34,7 +34,6 @@
 #include <string.h>
 #include <unordered_map>
 #include <vector>
-#include <boost/current_function.hpp>
 #include <boost/optional.hpp>
 #include <osl/detail/file.h>
 #include <osl/diagnose.h>

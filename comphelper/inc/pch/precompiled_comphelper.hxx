@@ -38,7 +38,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/current_function.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>

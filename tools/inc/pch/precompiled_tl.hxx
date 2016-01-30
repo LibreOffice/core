@@ -34,7 +34,6 @@
 #include <string.h>
 #include <vector>
 #include <boost/checked_delete.hpp>
-#include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/rational.hpp>

@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-#include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
