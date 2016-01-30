@@ -10,7 +10,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 
 #include <shellimpl.hxx>

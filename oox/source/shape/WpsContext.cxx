@@ -14,7 +14,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <svx/svdtrans.hxx>
 
 #include <boost/optional.hpp>
