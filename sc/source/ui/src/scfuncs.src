@@ -10061,6 +10061,494 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The X data array." ;
         };
     };
+     // -=*# Resource for function FORECAST.ETS #*=-
+    Resource SC_OPCODE_FORECAST_ETS_ADD
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates future value(s) using additive Exponential Smoothing algorithm." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_ADD;
+            6;  0;  0;  0;  1;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "date" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The date (array) for which you want to predict a value." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Number of Samples in Period (default 1); length of the seasonal pattern." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "Aggegration (default 0 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.ETS.MULT #*=-
+    Resource SC_OPCODE_FORECAST_ETS_MUL
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates future value(s) using multiplicative Exponential Smoothing algorithm." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_MUL;
+            6;  0;  0;  0;  1;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "date" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The date (array) for which you want to predict a value." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Number of Samples in Period (default 1); length of the seasonal pattern." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "Aggegration (default 0 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.ETS.CONFINT #*=-
+    Resource SC_OPCODE_FORECAST_ETS_PIA
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns a prediction interval at the specified target value(s) for additive Exponential Smoothing method" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_PIA;
+            7;  0;  0;  0;  1;  1;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "date" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The date (array) for which you want to predict a value." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Confidence level (default 0.95); value 0 to 1 (exclusive) for 0 to 100% calculated prediction interval." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Number of Samples in Period (default 1); length of the seasonal pattern." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 14 // Name of Parameter 7
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 15 // Description of Parameter 7
+        {
+            Text [ en-US ] = "Aggegration (default 1 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.ETS.PI.MULT #*=-
+    Resource SC_OPCODE_FORECAST_ETS_PIM
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns a prediction interval at the specified target value(s) for multiplicative Exponential Smoothing method" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_PIM;
+            7;  0;  0;  0;  1;  1;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "date" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The date (array) for which you want to predict a value." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Confidence level (default 0.95); value 0 to 1 (exclusive) for 0 to 100% calculated prediction interval." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Number of Samples in Period (default 1); length of the seasonal pattern." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 14 // Name of Parameter 7
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 15 // Description of Parameter 7
+        {
+            Text [ en-US ] = "Aggegration (default 1 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.ETS.SEASONALITY #*=-
+    Resource SC_OPCODE_FORECAST_ETS_SEA
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the number of samples in period (season) using additive Exponential Triple Smoothing algorithm." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_SEA;
+            4;  0;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Aggegration (default 1 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.ETS.STAT #*=-
+    Resource SC_OPCODE_FORECAST_ETS_STA
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns statistical value(s) using additive Exponential Smoothing algorithm." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_STA;
+            6;  0;  0;  0;  1;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Value (1-9) or array of values, indicating which statistic will be returned for the calculated forecast" ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Number of Samples in Period (default 1); length of the seasonal pattern." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "Aggegration (default 1 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.ETS.STAT.MULT #*=-
+    Resource SC_OPCODE_FORECAST_ETS_STM
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns statistical value(s) using multiplicative Exponential Smoothing algorithm." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_ETS_STM;
+            6;  0;  0;  0;  1;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The data array from which you want to forecast." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The date or numeric array; a consistent step between values is needed." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Value (1-9) or array of values, indicating which statistic will be returned for the calculated forecast" ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Number Of Samples in Period (default 1); length of the seasonal pattern." ;
+        };
+        String 10 // Name of Parameter 5
+        {
+            Text [ en-US ] = "boolean" ;
+        };
+        String 11 // Description of Parameter 5
+        {
+            Text [ en-US ] = "Data completion (default 1); 0 treats missing points as zero, 1 interpolates." ;
+        };
+        String 12 // Name of Parameter 6
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 13 // Description of Parameter 6
+        {
+            Text [ en-US ] = "Aggegration (default 1 = AVERAGE); method to be used to aggegrate identical (time) values." ;
+        };
+    };
+     // -=*# Resource for function FORECAST.LINEAR #*=-
+    Resource SC_OPCODE_FORECAST_LIN
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns a value along a linear regression" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            HID_FUNC_FORECAST_LIN;
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The X value for which the Y value on the regression linear is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_Y" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The Y data array." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "data_X" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The X data array." ;
+        };
+    };
      // -=*# Resource for function ADDRESS #*=-
     Resource SC_OPCODE_ADDRESS
     {
