@@ -102,11 +102,6 @@ struct ImplWinData
                         maTopWindowChildren;
 };
 
-struct ImplOverlapData
-{
-    vcl::Region*        mpSaveBackRgn;          //< saved region, which must be invalidated
-};
-
 struct ImplFrameData
 {
     Idle                maPaintIdle;            //< paint idle handler
@@ -188,7 +183,6 @@ public:
     ~WindowImpl();
 
     ImplWinData*        mpWinData;
-    ImplOverlapData*    mpOverlapData;
     ImplFrameData*      mpFrameData;
     SalFrame*           mpFrame;
     SalObject*          mpSysObj;

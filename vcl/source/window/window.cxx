@@ -550,9 +550,6 @@ void Window::dispose()
         delete mpWindowImpl->mpWinData;
     }
 
-    // cleanup overlap related window data
-    delete mpWindowImpl->mpOverlapData;
-
     // remove BorderWindow or Frame window data
     mpWindowImpl->mpBorderWindow.disposeAndClear();
     if ( mpWindowImpl->mbFrame )
@@ -612,7 +609,6 @@ WindowImpl::WindowImpl( WindowType nType )
     maWinRegion                         = vcl::Region(true);
     maWinClipRegion                     = vcl::Region(true);
     mpWinData                           = nullptr;                      // Extra Window Data, that we don't need for all windows
-    mpOverlapData                       = nullptr;                      // Overlap Data
     mpFrameData                         = nullptr;                      // Frame Data
     mpFrame                             = nullptr;                      // Pointer to frame window
     mpSysObj                            = nullptr;
@@ -929,13 +925,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     // insert window in list
     ImplInsertWindow( pParent );
     mpWindowImpl->mnStyle = nStyle;
-
-    // Overlap-Window-Data
-    if ( mpWindowImpl->mbOverlapWin )
-    {
-        mpWindowImpl->mpOverlapData                   = new ImplOverlapData;
-        mpWindowImpl->mpOverlapData->mpSaveBackRgn    = nullptr;
-    }
 
     if( pParent && ! mpWindowImpl->mbFrame )
         mbEnableRTL = AllSettings::GetLayoutRTL();
