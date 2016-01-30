@@ -1960,7 +1960,7 @@ void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
 SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    if( nTreeFlags & SvTreeFlags::CHKBTN )
+    if( pEntry && ( nTreeFlags & SvTreeFlags::CHKBTN ) )
     {
         SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
         if(!pItem)
