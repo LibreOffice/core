@@ -812,10 +812,6 @@ bool Window::ImplRestoreOverlapBackground( vcl::Region& rInvRegion )
     return false;
 }
 
-void Window::ImplDeleteOverlapBackground()
-{
-}
-
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
     vcl::Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
@@ -837,8 +833,6 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
                 if ( !pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn )
                     pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn = new vcl::Region( aRect2 );
                 pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn->Exclude( aRect1 );
-                if ( pWindow->mpWindowImpl->mpOverlapData->mpSaveBackRgn->IsEmpty() )
-                    pWindow->ImplDeleteOverlapBackground();
             }
 
         }

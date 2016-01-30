@@ -1574,18 +1574,6 @@ static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& r
 
 static void ImplHandlePaint( vcl::Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
-    // give up background save when system paints arrive
-    vcl::Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
-    while ( pSaveBackWin )
-    {
-        vcl::Window* pNext = pSaveBackWin->ImplGetWindowImpl()->mpOverlapData->mpNextBackWin;
-        Rectangle aRect( Point( pSaveBackWin->GetOutOffXPixel(), pSaveBackWin->GetOutOffYPixel() ),
-                         Size( pSaveBackWin->GetOutputWidthPixel(), pSaveBackWin->GetOutputHeightPixel() ) );
-        if ( aRect.IsOver( rBoundRect ) )
-            pSaveBackWin->ImplDeleteOverlapBackground();
-        pSaveBackWin = pNext;
-    }
-
     // system paint events must be checked for re-mirroring
     pWindow->ImplGetWindowImpl()->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
 

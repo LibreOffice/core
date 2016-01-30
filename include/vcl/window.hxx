@@ -585,8 +585,6 @@ public:
 
     SAL_DLLPRIVATE void                 ImplUpdateAll( bool bOverlapWindows = true );
 
-    SAL_DLLPRIVATE void                 ImplDeleteOverlapBackground();
-
     SAL_DLLPRIVATE void                 ImplControlFocus( GetFocusFlags nFlags = GetFocusFlags::NONE );
 
     SAL_DLLPRIVATE void                 ImplMirrorFramePos( Point &pt ) const;
