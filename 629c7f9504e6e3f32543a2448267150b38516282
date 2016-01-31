@@ -34,6 +34,24 @@
       "revId": "629c7f9504e6e3f32543a2448267150b38516282",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6c90bb96",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-01-31T17:21:54Z",
+      "side": 1,
+      "message": "I am not sure I understand your question\n1. Yes you should use ´;´ between values, both in title line and following lines\n2. Your title line contains 3 titles, but in the for loop you only collect 2 values pr line.",
+      "parentUuid": "5a9d85d2_0de4910b",
+      "revId": "629c7f9504e6e3f32543a2448267150b38516282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
