@@ -567,7 +567,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
             m_pFileView->EndInplaceEditing( false );
 
-            DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFileDialog::executeAsync: previous async action not yet finished!" );
+            SAL_WARN_IF( m_pCurrentAsyncAction.is(), "fpicker.office", "SvtFileDialog::executeAsync: previous async action not yet finished!" );
 
             m_pCurrentAsyncAction = new AsyncPickerAction( this, m_pFileView, AsyncPickerAction::Action::eOpenURL );
 
@@ -1257,7 +1257,7 @@ OUString RemoteFilesDialog::getCurFilter( ) const
 
 void RemoteFilesDialog::SetCurFilter( const OUString& rFilter )
 {
-    DBG_ASSERT( !IsInExecute(), "SvtFileDialog::SetCurFilter: currently executing!" );
+    SAL_WARN_IF( IsInExecute(), "fpicker.office", "SvtFileDialog::SetCurFilter: currently executing!" );
 
     // look for corresponding filter
     sal_uInt16 nPos = m_aFilters.size();
