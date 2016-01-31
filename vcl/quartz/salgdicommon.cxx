@@ -1624,28 +1624,18 @@ void AquaSalGraphics::initResolution( NSWindow* )
         mnRealDPIX = mnRealDPIY = 96;
         if( pScreen )
         {
-            NSDictionary* pDev = [pScreen deviceDescription];
-            if( pDev )
-            {
-                NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
-                if( pVal )
-                {
-                    // FIXME: casting a long to CGDirectDisplayID is evil, but
-                    // Apple suggest to do it this way
-                    const CGDirectDisplayID nDisplayID = (CGDirectDisplayID)[pVal longValue];
-                    const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
-                    mnRealDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
-                    mnRealDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
-                }
-                else
-                {
-                    OSL_FAIL( "no resolution found in device description" );
-                }
-            }
-            else
-            {
-                OSL_FAIL( "no device description" );
-            }
+            NSRect framePixels = [pScreen convertRectToBacking:[pScreen frame]];
+            SAL_INFO("vcl.quartz", "\nPixel Width: " << framePixels.size.width << "\n" << "Pixel Height: " << framePixels.size.height);
+
+            NSDictionary *description = [pScreen deviceDescription];
+            NSSize displayPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
+            CGSize displayPhysicalSize = CGDisplayScreenSize( [[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
+
+            SAL_INFO("vcl.quartz", "\nPixel Width: " << displayPixelSize.width << "\n" << "Pixel Height: " << displayPixelSize.height);
+            SAL_INFO("vcl.quartz", "\nPhysical Width: " << displayPhysicalSize.width << "\n" << "Physical Height: " << displayPhysicalSize.height);
+
+            mnRealDPIX = (framePixels.size.width  / displayPhysicalSize.width) * 25.4f;
+            mnRealDPIY = (framePixels.size.height / displayPhysicalSize.height) * 25.4f;
         }
         else
         {
@@ -1660,18 +1650,15 @@ void AquaSalGraphics::initResolution( NSWindow* )
         {
             mnRealDPIX = mnRealDPIY = nMinDPI;
         }
-        // Note that on a Retina display, the "mnRealDPIX" as
-        // calculated above is not the true resolution of the display,
-        // but the "logical" one, or whatever the correct terminology
-        // is. (For instance on a 5K 27in iMac, it's 108.)  So at
-        // least currently, it won't be over 200. I don't know whether
-        // this test is a "sanity check", or whether there is some
-        // real reason to limit this to 200.
-        static const int nMaxDPI = 200;
+        static const int nMaxDPI = 216;
         if( (mnRealDPIX > nMaxDPI) || (mnRealDPIY > nMaxDPI) )
         {
+            SAL_WARN("vcl.quartz", "DPI is greater than " << nMaxDPI << "!\n" <<
+                                "Actual X DPI: " << mnRealDPIX << "\n" <<
+                                "Actual Y DPI: " << mnRealDPIY);
             mnRealDPIX = mnRealDPIY = nMaxDPI;
         }
+
         // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
         mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
 
