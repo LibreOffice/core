@@ -701,11 +701,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
 
     /* If the length of strUTF8 and strURL differs it indicates that the URL was not correct encoded */
 
-    SAL_WARN_IF(
-        strUTF8->length != strURL->length &&
-        0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
-        , "sal.osl"
-        ,"osl_getSystemPathFromFileURL: \"" << rtl::OUString(strURL) << "\" is not encoded !!!");
+    OSL_ASSERT(strUTF8->length == strURL->length && 0 != rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 ));
 
     bValidEncoded = _osl_decodeURL( strUTF8, &strDecodedURL );
 

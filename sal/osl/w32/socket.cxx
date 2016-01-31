@@ -1400,10 +1400,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
 
         if (error > 0)  /* connected */
         {
-            SAL_WARN_IF(
-                !FD_ISSET(pSocket->m_Socket, &fds),
-                "sal.osl",
-                "osl_connectSocketTo(): select returned but socket not set\n");
+            OSL_ASSERT(FD_ISSET(pSocket->m_Socket, &fds));
 
             Result= osl_Socket_Ok;
 
