@@ -8,9 +8,8 @@
  */
 
 #include <limits>
+#include <tuple>
 #include <vector>
-
-#include <boost/tuple/tuple.hpp>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -72,7 +71,7 @@ void WriterfilterMiscTest::testTwipConversions()
 void WriterfilterMiscTest::testFieldParameters()
 {
     using writerfilter::dmapper::lcl_SplitFieldCommand;
-    boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> > result;
+    std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > result;
 
     result = lcl_SplitFieldCommand("PAGEREF last_page");
     CPPUNIT_ASSERT_EQUAL(OUString("PAGEREF"), boost::get<0>(result));

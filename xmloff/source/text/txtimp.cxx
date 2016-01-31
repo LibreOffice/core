@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <vector>
-
 #include <memory>
+#include <tuple>
+#include <vector>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -524,18 +523,18 @@ struct XMLTextImportHelper::Impl
        - data structure contains more than one candidate for each list level
          of the outline style (#i69629#)
     */
-    ::std::unique_ptr< ::std::vector< OUString > []>
+    std::unique_ptr< std::vector< OUString > []>
         m_xOutlineStylesCandidates;
 
     // start range, xml:id, RDFa stuff
-    typedef ::boost::tuple<
+    typedef std::tuple<
         uno::Reference<text::XTextRange>, OUString,
         std::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
             BookmarkMapEntry_t;
     /// start ranges for open bookmarks
-    ::std::map< OUString, BookmarkMapEntry_t > m_BookmarkStartRanges;
+    std::map< OUString, BookmarkMapEntry_t > m_BookmarkStartRanges;
 
-    typedef ::std::vector< OUString > BookmarkVector_t;
+    typedef std::vector< OUString > BookmarkVector_t;
     BookmarkVector_t m_BookmarkVector;
 
     /// name of the last 'open' redline that started between paragraphs
@@ -2492,7 +2491,7 @@ void XMLTextImportHelper::InsertBookmarkStartRange(
     std::shared_ptr< ::xmloff::ParsedRDFaAttributes > & i_rpRDFaAttributes)
 {
     m_xImpl->m_BookmarkStartRanges[sName] =
-        ::boost::make_tuple(rRange, i_rXmlId, i_rpRDFaAttributes);
+        std::make_tuple(rRange, i_rXmlId, i_rpRDFaAttributes);
     m_xImpl->m_BookmarkVector.push_back(sName);
 }
 
@@ -2506,9 +2505,9 @@ bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     {
         Impl::BookmarkMapEntry_t & rEntry =
             (*m_xImpl->m_BookmarkStartRanges.find(sName)).second;
-        o_rRange.set(rEntry.get<0>());
-        o_rXmlId = rEntry.get<1>();
-        o_rpRDFaAttributes = rEntry.get<2>();
+        o_rRange.set(std::get<0>(rEntry));
+        o_rXmlId = std::get<1>(rEntry);
+        o_rpRDFaAttributes = std::get<2>(rEntry);
         m_xImpl->m_BookmarkStartRanges.erase(sName);
         Impl::BookmarkVector_t::iterator it(m_xImpl->m_BookmarkVector.begin());
         while (it != m_xImpl->m_BookmarkVector.end() && it->compareTo(sName)!=0)

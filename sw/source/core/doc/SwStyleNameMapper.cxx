@@ -18,7 +18,7 @@
  */
 
 #include <numeric>
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 #include <SwStyleNameMapper.hxx>
 #include <tools/resmgr.hxx>
@@ -392,11 +392,11 @@ static void lcl_CheckSuffixAndDelete(OUString & rString)
     }
 }
 
-typedef boost::tuple<sal_uInt16, sal_uInt16, const ::std::vector<OUString>& (*)() > NameArrayIndexTuple_t;
+typedef std::tuple<sal_uInt16, sal_uInt16, const std::vector<OUString>& (*)() > NameArrayIndexTuple_t;
 
 static sal_uInt16 lcl_AccumulateIndexCount( sal_uInt16 nSum, const NameArrayIndexTuple_t& tuple ){
     // Return running sum + (index end) - (index start)
-    return nSum + boost::get<1>( tuple ) - boost::get<0>( tuple );
+    return nSum + std::get<1>( tuple ) - std::get<0>( tuple );
 }
 }
 
@@ -436,37 +436,37 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
         {
             pHashPointer = bProgName ? &m_pParaProgMap : &m_pParaUIMap;
-            vIndexes.push_back( boost::make_tuple(RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END, bProgName ? &GetTextProgNameArray : &GetTextUINameArray) );
-            vIndexes.push_back( boost::make_tuple(RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END, bProgName ? &GetListsProgNameArray : &GetListsUINameArray) );
-            vIndexes.push_back( boost::make_tuple(RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END, bProgName ? &GetExtraProgNameArray : &GetExtraUINameArray) );
-            vIndexes.push_back( boost::make_tuple(RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END, bProgName ? &GetRegisterProgNameArray : &GetRegisterUINameArray) );
-            vIndexes.push_back( boost::make_tuple(RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END, bProgName ? &GetDocProgNameArray : &GetDocUINameArray) );
-            vIndexes.push_back( boost::make_tuple(RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END, bProgName ? &GetHTMLProgNameArray : &GetHTMLUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END, bProgName ? &GetTextProgNameArray : &GetTextUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END, bProgName ? &GetListsProgNameArray : &GetListsUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END, bProgName ? &GetExtraProgNameArray : &GetExtraUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END, bProgName ? &GetRegisterProgNameArray : &GetRegisterUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END, bProgName ? &GetDocProgNameArray : &GetDocUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END, bProgName ? &GetHTMLProgNameArray : &GetHTMLUINameArray) );
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_CHRFMT:
         {
             pHashPointer = bProgName ? &m_pCharProgMap : &m_pCharUIMap;
-            vIndexes.push_back( boost::make_tuple(RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END, bProgName ? &GetChrFormatProgNameArray : &GetChrFormatUINameArray) );
-            vIndexes.push_back( boost::make_tuple(RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END, bProgName ? &GetHTMLChrFormatProgNameArray : &GetHTMLChrFormatUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END, bProgName ? &GetChrFormatProgNameArray : &GetChrFormatUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END, bProgName ? &GetHTMLChrFormatProgNameArray : &GetHTMLChrFormatUINameArray) );
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_FRMFMT:
         {
             pHashPointer = bProgName ? &m_pFrameProgMap : &m_pFrameUIMap;
-            vIndexes.push_back( boost::make_tuple(RES_POOLFRM_BEGIN, RES_POOLFRM_END, bProgName ? &GetFrameFormatProgNameArray : &GetFrameFormatUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLFRM_BEGIN, RES_POOLFRM_END, bProgName ? &GetFrameFormatProgNameArray : &GetFrameFormatUINameArray) );
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC:
         {
             pHashPointer = bProgName ? &m_pPageProgMap : &m_pPageUIMap;
-            vIndexes.push_back( boost::make_tuple(RES_POOLPAGE_BEGIN, RES_POOLPAGE_END, bProgName ? &GetPageDescProgNameArray : &GetPageDescUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLPAGE_BEGIN, RES_POOLPAGE_END, bProgName ? &GetPageDescProgNameArray : &GetPageDescUINameArray) );
         }
         break;
         case nsSwGetPoolIdFromName::GET_POOLID_NUMRULE:
         {
             pHashPointer = bProgName ? &m_pNumRuleProgMap : &m_pNumRuleUIMap;
-            vIndexes.push_back( boost::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray) );
+            vIndexes.push_back( std::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray) );
         }
         break;
     }
@@ -482,12 +482,12 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         for ( ::std::vector<NameArrayIndexTuple_t>::iterator entry = vIndexes.begin(); entry != vIndexes.end(); ++entry )
         {
             // Get a pointer to the function which will populate pStrings
-            const ::std::vector<OUString>& (*pStringsFetchFunc)() = boost::get<2>( *entry );
+            const ::std::vector<OUString>& (*pStringsFetchFunc)() = std::get<2>( *entry );
             if ( pStringsFetchFunc )
             {
                 const ::std::vector<OUString>& pStrings = pStringsFetchFunc();
                 sal_uInt16 nIndex, nId;
-                for ( nIndex = 0, nId = boost::get<0>( *entry ) ; nId < boost::get<1>( *entry ) ; nId++, nIndex++ )
+                for ( nIndex = 0, nId = std::get<0>( *entry ) ; nId < std::get<1>( *entry ) ; nId++, nIndex++ )
                     (*pHash)[pStrings[nIndex]] = nId;
             }
         }
