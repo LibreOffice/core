@@ -178,7 +178,7 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
         }
     }
 
-    return !rSalBmp.mpDIB || (rSalBmp.mpDIB && mpDIB != nullptr);
+    return !rSalBmp.mpDIB || (mpDIB != nullptr);
 }
 
 bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
