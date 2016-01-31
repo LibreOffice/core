@@ -149,16 +149,13 @@ private:
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
     inline void             EnableAssignButton()
-                                { m_pAssignBtn->Enable(
-                                    true ); }
+                                { m_pAssignBtn->Enable(); }
 
     inline void             DisableRemoveButton()
-                                { m_pRemoveBtn->Disable(
-                                    true ); }
+                                { m_pRemoveBtn->Disable(); }
 
     inline void             DisableEditButton()
-                                { m_pEditBtn->Disable(
-                                    true ); }
+                                { m_pEditBtn->Disable(); }
 
 
 public:
