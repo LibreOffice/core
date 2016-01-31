@@ -387,7 +387,7 @@ void GenPspGraphics::SetROPFillColor( SalROPColor )
     DBG_ASSERT( false, "Error: PrinterGfx::SetROPFillColor() not implemented" );
 }
 
-void GenPspGraphics::SetXORMode( bool bSet, bool )
+void GenPspGraphics::SetXORMode( bool bSet )
 {
     (void)bSet;
     DBG_ASSERT( !bSet, "Error: PrinterGfx::SetXORMode() not implemented" );
