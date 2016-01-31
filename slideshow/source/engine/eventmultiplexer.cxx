@@ -1016,17 +1016,17 @@ void EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 void EventMultiplexer::notifyUserPaintDisabled()
 {
     mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::mem_fn(&UserPaintEventHandler::disable));
+        std::mem_fn(&UserPaintEventHandler::disable));
 }
 
 void EventMultiplexer::notifySwitchPenMode(){
     mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::mem_fn(&UserPaintEventHandler::switchPenMode));
+        std::mem_fn(&UserPaintEventHandler::switchPenMode));
 }
 
 void EventMultiplexer::notifySwitchEraserMode(){
     mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::mem_fn(&UserPaintEventHandler::switchEraserMode));
+        std::mem_fn(&UserPaintEventHandler::switchEraserMode));
 }
 
 //adding erasing all ink features with UserPaintOverlay
@@ -1053,13 +1053,13 @@ bool EventMultiplexer::notifyNextEffect()
 void EventMultiplexer::notifySlideStartEvent()
 {
     mpImpl->maSlideStartHandlers.applyAll(
-        boost::mem_fn(&EventHandler::handleEvent) );
+        std::mem_fn(&EventHandler::handleEvent) );
 }
 
 bool EventMultiplexer::notifySlideEndEvent()
 {
     return mpImpl->maSlideEndHandlers.applyAll(
-        boost::mem_fn(&EventHandler::handleEvent) );
+        std::mem_fn(&EventHandler::handleEvent) );
 }
 
 bool EventMultiplexer::notifyAnimationStart(
@@ -1079,7 +1079,7 @@ bool EventMultiplexer::notifyAnimationEnd(
 bool EventMultiplexer::notifySlideAnimationsEnd()
 {
     return mpImpl->maSlideAnimationsEndHandlers.applyAll(
-        boost::mem_fn(&EventHandler::handleEvent));
+        std::mem_fn(&EventHandler::handleEvent));
 }
 
 bool EventMultiplexer::notifyAudioStopped(
@@ -1168,7 +1168,7 @@ void EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSl
 void EventMultiplexer::notifyViewsChanged()
 {
     mpImpl->maViewHandlers.applyAll(
-        boost::mem_fn( &ViewEventHandler::viewsChanged ));
+        std::mem_fn( &ViewEventHandler::viewsChanged ));
 }
 
 void EventMultiplexer::notifyViewClobbered(

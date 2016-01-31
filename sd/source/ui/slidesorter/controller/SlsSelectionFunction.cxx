@@ -62,8 +62,8 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
-#include <boost/bind.hpp>
 #include <boost/optional.hpp>
+#include <functional>
 
 namespace {
 static const sal_uInt32 SINGLE_CLICK             (0x00000001);
@@ -1386,7 +1386,7 @@ void MultiSelectionModeHandler::UpdatePosition (
 
     bool bDoAutoScroll = bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(
         rMousePosition,
-        ::boost::bind(
+        std::bind(
             &MultiSelectionModeHandler::UpdatePosition,
             this,
             rMousePosition,

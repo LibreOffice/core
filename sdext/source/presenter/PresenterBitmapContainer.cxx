@@ -26,11 +26,12 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <osl/diagnose.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
+using namespace std::placeholders;
 
 namespace sdext { namespace presenter {
 
@@ -129,7 +130,7 @@ void PresenterBitmapContainer::LoadBitmaps (
         {
             PresenterConfigurationAccess::ForAll(
                 rxBitmapList,
-                ::boost::bind(&PresenterBitmapContainer::ProcessBitmap, this, _1, _2));
+                std::bind(&PresenterBitmapContainer::ProcessBitmap, this, _1, _2));
         }
     }
     catch (Exception&)

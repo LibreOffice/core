@@ -22,10 +22,11 @@
 #include "PresenterPaneContainer.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace std::placeholders;
 
 namespace sdext { namespace presenter {
 
@@ -45,7 +46,7 @@ PresenterPaintManager::PresenterPaintManager (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         const bool bSynchronous)
 {
-    return ::boost::bind(
+    return std::bind(
         static_cast<void (PresenterPaintManager::*)(
             const css::uno::Reference<css::awt::XWindow>&,
             const css::awt::Rectangle&,

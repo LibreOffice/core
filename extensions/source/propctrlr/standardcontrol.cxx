@@ -466,7 +466,7 @@ namespace pcr
         m_aActionListeners.forEach< XActionListener >(
             boost::bind(
                 &XActionListener::actionPerformed,
-                _1, boost::cref(aEvent) ) );
+                _1, std::cref(aEvent) ) );
     }
 
 

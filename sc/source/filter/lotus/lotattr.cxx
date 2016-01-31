@@ -19,8 +19,6 @@
 
 #include "lotattr.hxx"
 
-#include <boost/bind.hpp>
-
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>

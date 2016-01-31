@@ -34,13 +34,13 @@
 #include "DrawController.hxx"
 #include "DrawDocShell.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
-
+using namespace std::placeholders;
 using ::sd::framework::FrameworkHelper;
 
 namespace {
@@ -221,7 +221,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
         ::std::find_if (
             mpPaneContainer->begin(),
             mpPaneContainer->end(),
-            ::boost::bind(&PaneDescriptor::CompareURL, _1, rxPaneId->getResourceURL())));
+            std::bind(&PaneDescriptor::CompareURL, _1, rxPaneId->getResourceURL())));
 
     if (iDescriptor != mpPaneContainer->end())
     {
@@ -284,7 +284,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         ::std::find_if(
             mpPaneContainer->begin(),
             mpPaneContainer->end(),
-            ::boost::bind(&PaneDescriptor::ComparePane, _1, rxPane)));
+            std::bind(&PaneDescriptor::ComparePane, _1, rxPane)));
 
     if (iDescriptor != mpPaneContainer->end())
     {
@@ -351,7 +351,7 @@ void SAL_CALL BasicPaneFactory::disposing (
             ::std::find_if (
                 mpPaneContainer->begin(),
                 mpPaneContainer->end(),
-                ::boost::bind(&PaneDescriptor::ComparePane, _1, xPane)));
+                std::bind(&PaneDescriptor::ComparePane, _1, xPane)));
         if (iDescriptor != mpPaneContainer->end())
         {
             iDescriptor->mxPane = nullptr;

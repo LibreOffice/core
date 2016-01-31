@@ -43,7 +43,6 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 using namespace css;

@@ -20,8 +20,8 @@
 #include "sal/config.h"
 
 #include <map>
+#include <functional>
 #include <utility>
-#include <boost/bind.hpp>
 
 #include <string.h>
 #include "RowSet.hxx"
@@ -94,6 +94,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
+using namespace std::placeholders;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* context,
@@ -1864,7 +1865,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             m_xActiveConnection->getMetaData(),
                                                                             aDescription,
                                                                             OUString(),
-                                                                            boost::bind(&ORowSet::getInsertValue, this, _1));
+                                                                            std::bind(&ORowSet::getInsertValue, this, _1));
                         aColumnMap.insert(std::make_pair(sName,0));
                         aColumns->get().push_back(pColumn);
                         pColumn->setName(sName);
@@ -1966,7 +1967,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                         m_xActiveConnection->getMetaData(),
                                                                         aDescription,
                                                                         sParseLabel,
-                                                                        boost::bind(&ORowSet::getInsertValue, this, _1));
+                                                                        std::bind(&ORowSet::getInsertValue, this, _1));
                     aColumns->get().push_back(pColumn);
 
                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i) != rKeyColumns.end()));
@@ -2795,7 +2796,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
                                                                 rParent.m_xActiveConnection->getMetaData(),
                                                                 aDescription,
                                                                 sParseLabel,
-                                                                boost::bind(&ORowSetClone::getValue, this, _1));
+                                                                std::bind(&ORowSetClone::getValue, this, _1));
             aColumns->get().push_back(pColumn);
             pColumn->setName(*pIter);
             aNames.push_back(*pIter);

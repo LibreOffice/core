@@ -2606,7 +2606,7 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
         }
         lang::EventObject aEvent(*this);
         m_aSelectionListeners.forEach<view::XSelectionChangeListener>(
-            ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
+            ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,std::cref(aEvent)));
 
     }
 }
@@ -3988,7 +3988,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         const OUString sKeyModifier("KeyModifier");
         const beans::PropertyValue* pIter = _aArgs.getConstArray();
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
-        const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
+        const beans::PropertyValue* pKeyModifier = std::find_if(pIter,pEnd,std::bind2nd(PropertyValueCompare(),std::cref(sKeyModifier)));
         sal_Int16 nKeyModifier = 0;
         if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
         {

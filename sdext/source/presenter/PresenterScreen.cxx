@@ -36,18 +36,20 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <vcl/svapp.hxx>
 
+#include <functional>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 
 namespace sdext { namespace presenter {
 
@@ -589,7 +591,7 @@ void PresenterScreen::RequestShutdownPresenterScreen()
         rtl::Reference<PresenterScreen> pSelf (this);
         PresenterFrameworkObserver::RunOnUpdateEnd(
             xCC,
-            ::boost::bind(&PresenterScreen::ShutdownPresenterScreen, pSelf));
+            std::bind(&PresenterScreen::ShutdownPresenterScreen, pSelf));
         xCC->update();
     }
 }
@@ -711,7 +713,7 @@ void PresenterScreen::ProcessLayout (
         PresenterConfigurationAccess::ForAll(
             xList,
             aProperties,
-            ::boost::bind(&PresenterScreen::ProcessComponent, this,
+            std::bind(&PresenterScreen::ProcessComponent, this,
                 _1,
                 _2,
                 rxContext,
@@ -740,7 +742,7 @@ void PresenterScreen::ProcessViewDescriptions (
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,
             aProperties,
-            ::boost::bind(&PresenterScreen::ProcessViewDescription, this, _1, _2));
+            std::bind(&PresenterScreen::ProcessViewDescription, this, _1, _2));
     }
     catch (const RuntimeException&)
     {

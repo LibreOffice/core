@@ -3408,7 +3408,7 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::beginEvent, _1,  boost::cref(xNode) ));
+        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::beginEvent, _1,  std::cref(xNode) ));
 }
 
 void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
@@ -3416,7 +3416,7 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::endEvent, _1, boost::cref(xNode) ));
+        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::endEvent, _1, std::cref(xNode) ));
 }
 
 void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException, std::exception)
@@ -3424,7 +3424,7 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  boost::cref(xNode), boost::cref(nRepeat) ));
+        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  std::cref(xNode), std::cref(nRepeat) ));
 }
 
 // css::presentation::XSlideShowListener:
@@ -3492,7 +3492,7 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if( maListeners.getLength() >= 0 )
-            maListeners.forEach<XSlideShowListener>( boost::bind( &XSlideShowListener::hyperLinkClicked, _1, boost::cref(aHyperLink) ));
+            maListeners.forEach<XSlideShowListener>( boost::bind( &XSlideShowListener::hyperLinkClicked, _1, std::cref(aHyperLink) ));
     }
 
     {

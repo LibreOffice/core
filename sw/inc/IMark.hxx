@@ -128,8 +128,6 @@ namespace sw { namespace mark
             ICheckboxFieldmark &operator =(ICheckboxFieldmark const&) = delete;
     };
 
-    // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this
-    // Neither will MSVC 2008 with _DEBUG
     struct CompareIMarkStartsAfter
     {
         bool operator()(SwPosition const& rPos,

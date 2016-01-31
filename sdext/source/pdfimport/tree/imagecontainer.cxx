@@ -32,9 +32,10 @@
 
 #include <comphelper/stl_types.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace com::sun::star;
+using namespace std::placeholders;
 
 namespace pdfi
 {
@@ -127,7 +128,7 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
     const sal_Int32             nLen(rEntry.getLength());
     const beans::PropertyValue* pValue(
         std::find_if(pAry,pAry+nLen,
-                     boost::bind(comphelper::TPropertyValueEqualFunctor(),
+                     std::bind(comphelper::TPropertyValueEqualFunctor(),
                                  _1,
                                  OUString("InputSequence"))));
     OSL_ENSURE( pValue != pAry+nLen,

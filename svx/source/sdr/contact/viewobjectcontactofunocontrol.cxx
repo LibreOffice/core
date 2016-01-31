@@ -56,7 +56,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 
 /*
@@ -1036,7 +1036,7 @@ namespace sdr { namespace contact {
         }
 
         m_bCreatingControl = true;
-        ::comphelper::ScopeGuard aGuard( ::boost::bind( lcl_resetFlag, ::boost::ref( m_bCreatingControl ) ) );
+        ::comphelper::ScopeGuard aGuard( std::bind( lcl_resetFlag, std::ref( m_bCreatingControl ) ) );
 
         if ( m_aControl.is() )
         {

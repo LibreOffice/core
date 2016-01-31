@@ -21,7 +21,7 @@
 
 #include "tools/ConfigurationAccess.hxx"
 #include <comphelper/processfactory.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <unordered_map>
 
 #include <tools/diagnose_ex.h>
@@ -31,6 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 using ::sd::tools::ConfigurationAccess;
 
 namespace sd { namespace framework {
@@ -105,7 +106,7 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
         ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
-            ::boost::bind(&ModuleController::ProcessFactory, this, _2));
+            std::bind(&ModuleController::ProcessFactory, this, _2));
     }
     catch (Exception&)
     {
@@ -157,7 +158,7 @@ void ModuleController::InstantiateStartupServices()
         tools::ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
-            ::boost::bind(&ModuleController::ProcessStartupService, this, _2));
+            std::bind(&ModuleController::ProcessStartupService, this, _2));
     }
     catch (Exception&)
     {

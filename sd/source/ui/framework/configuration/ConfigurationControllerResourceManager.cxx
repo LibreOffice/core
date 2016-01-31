@@ -24,11 +24,12 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/diagnose_ex.h>
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 
 namespace sd { namespace framework {
 
@@ -70,7 +71,7 @@ void ConfigurationControllerResourceManager::ActivateResources (
     ::std::for_each(
         rResources.begin(),
         rResources.end(),
-        ::boost::bind(&ConfigurationControllerResourceManager::ActivateResource,
+        std::bind(&ConfigurationControllerResourceManager::ActivateResource,
             this, _1, rxConfiguration));
 }
 
@@ -85,7 +86,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
     ::std::for_each(
         rResources.rbegin(),
         rResources.rend(),
-        ::boost::bind(&ConfigurationControllerResourceManager::DeactivateResource,
+        std::bind(&ConfigurationControllerResourceManager::DeactivateResource,
             this, _1, rxConfiguration));
 }
 

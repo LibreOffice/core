@@ -49,7 +49,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>

@@ -44,13 +44,12 @@
 
 #include <osl/time.h>
 
-#include <boost/bind.hpp>
-
 #include <functional>
 
 #include <stdio.h>
 
 using namespace ::com::sun::star;
+using namespace std::placeholders;
 
 namespace
 {
@@ -152,7 +151,7 @@ void setupMethodStubs( functor_vector_type& res )
 #ifdef FIXME_NEEDS_LOVE
     add(res,
         "DrawTextArray",
-        boost::bind(
+        std::bind(
             &OutputDevice::DrawTextArray,
             _1,
             aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.getLength() ));
@@ -250,7 +249,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawOutDev(foreign source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&, const Size&,
                                      const Point&, const Size&,
                                      const OutputDevice& ))(
@@ -258,7 +257,7 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect2.TopLeft(), aRect2.GetSize(),
             aRect.TopLeft(),  aRect.GetSize(),
-            boost::cref(aVDevBW) ));
+            std::cref(aVDevBW) ));
 
     /* void DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPt,  const Size& rSrcSize,
@@ -266,7 +265,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawOutDev(foreign source, scaled)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&, const Size&,
                                      const Point&, const Size&,
                                      const OutputDevice& ))(
@@ -274,7 +273,7 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect2.TopLeft(), aRect2.GetSize(),
             aRect.TopLeft(),  aRect.GetSize(),
-            boost::cref(aVDev) ));
+            std::cref(aVDev) ));
 #endif
 
     /* void CopyArea( const Point& rDestPt,
@@ -283,7 +282,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "CopyArea",
-        boost::bind(
+        std::bind(
             &OutputDevice::CopyArea,
             _1,
             aPt1, aPt3, aRect2.GetSize(), false ));
@@ -294,7 +293,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Bitmap& ))(
                 &OutputDevice::DrawBitmap),
@@ -306,7 +305,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Bitmap& ))(
                 &OutputDevice::DrawBitmap),
@@ -318,7 +317,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(scaled,alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Bitmap& ))(
@@ -331,7 +330,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(scaled)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Bitmap& ))(
@@ -346,7 +345,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(scaled subset,alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -363,7 +362,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmap(scaled subset)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -378,7 +377,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -390,7 +389,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -402,7 +401,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(alpha)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -414,7 +413,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(alpha, alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -426,7 +425,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled,alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const BitmapEx& ))(
@@ -439,7 +438,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const BitmapEx& ))(
@@ -452,7 +451,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled alpha)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const BitmapEx& ))(
@@ -465,7 +464,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled alpha, alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const BitmapEx& ))(
@@ -479,7 +478,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset,alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -495,7 +494,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -511,7 +510,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset, alpha)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -527,7 +526,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawBitmapEx(scaled subset, alpha alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -542,7 +541,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Bitmap&,
                                      const Color& ))(
@@ -555,7 +554,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Bitmap&,
                                      const Color& ))(
@@ -568,7 +567,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(scaled,alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Bitmap&,
@@ -582,7 +581,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(scaled)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Bitmap&,
@@ -597,7 +596,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(scaled subset,alien source)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -614,7 +613,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawMask(scaled subset)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Point&,
@@ -630,7 +629,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawImage",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Image&,
                                      sal_uInt16 nStyle ))(
@@ -643,7 +642,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawImage(scaled)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Image&,
@@ -657,7 +656,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawGradient( const Rectangle& rRect, const Gradient& rGradient ); */
     add(res,
         "DrawGradient",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const Rectangle&, const Gradient& ))(
                 &OutputDevice::DrawGradient),
             _1,
@@ -666,7 +665,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient ); */
     add(res,
         "DrawGradient(polygon)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const tools::PolyPolygon&, const Gradient& ))(
                 &OutputDevice::DrawGradient),
             _1,
@@ -675,7 +674,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ); */
     add(res,
         "DrawHatch",
-        boost::bind(
+        std::bind(
             &OutputDevice::DrawHatch,
             _1,
             aPoly3,aHatch ));
@@ -683,7 +682,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper ); */
     add(res,
         "DrawWallpaper",
-        boost::bind(
+        std::bind(
             &OutputDevice::DrawWallpaper,
             _1,
             aRect2,aWallpaper ));
@@ -692,7 +691,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle ); */
     add(res,
         "DrawWaveLine",
-        boost::bind(
+        std::bind(
             &OutputDevice::DrawWaveLine,
             _1,
             aPt1,aPt2,(sal_uInt16)WAVE_NORMAL ));
@@ -701,7 +700,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
     add(res,
         "DrawGrid",
-        boost::bind(
+        std::bind(
             &OutputDevice::DrawGrid,
             _1,
             aRect,Size(10,20),DrawGridFlags::HorzLines|DrawGridFlags::VertLines ));
@@ -711,7 +710,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawTransparent",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const tools::PolyPolygon&, sal_uInt16 ))(
                 &OutputDevice::DrawTransparent),
             _1,
@@ -723,7 +722,7 @@ void setupMethodStubs( functor_vector_type& res )
     */
     add(res,
         "DrawTransparent(metafile)",
-        boost::bind(
+        std::bind(
             (void (OutputDevice::*)( const GDIMetaFile&,
                                      const Point&,
                                      const Size&,
@@ -735,7 +734,7 @@ void setupMethodStubs( functor_vector_type& res )
     /* void Erase(); */
     add(res,
         "Erase",
-        boost::bind(
+        std::bind(
             &OutputDevice::Erase,
             _1 ));
 

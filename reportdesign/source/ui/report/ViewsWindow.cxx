@@ -395,7 +395,7 @@ void OViewsWindow::Copy()
     uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         [&aAllreadyCopiedObjects] (const TSectionsMap::value_type& sectionPtr) {
-            sectionPtr->getReportSection().Copy(boost::ref(aAllreadyCopiedObjects));
+            sectionPtr->getReportSection().Copy(std::ref(aAllreadyCopiedObjects));
         });
 
     OReportExchange* pCopy = new OReportExchange(aAllreadyCopiedObjects);

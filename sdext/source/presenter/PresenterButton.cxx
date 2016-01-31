@@ -29,10 +29,11 @@
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace std::placeholders;
 
 namespace sdext { namespace presenter {
 
@@ -496,7 +497,7 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
             Reference<container::XNameAccess>(
                 aConfiguration.GetConfigurationNode("PresenterScreenSettings/Buttons"),
                 UNO_QUERY),
-            ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
+            std::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
                 rsConfgurationName,
                 OUString("Name"),
                 _2)),

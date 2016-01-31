@@ -40,10 +40,11 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace css;
 using namespace css::uno;
+using namespace std::placeholders;
 
 const char UNO_SIDEBARGRADIENT[] = ".uno:sidebargradient";
 
@@ -82,7 +83,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maImgRadial(SVX_RES(IMG_RADIAL)),
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
-      maTrGrPopup(this, ::boost::bind(&AreaPropertyPanelBase::CreateTransparencyGradientControl, this, _1)),
+      maTrGrPopup(this, std::bind(&AreaPropertyPanelBase::CreateTransparencyGradientControl, this, _1)),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
       mxFrame(rxFrame),
