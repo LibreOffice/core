@@ -392,14 +392,14 @@ void Calendar::ImplFormat()
         maDayOfWeekText.clear();
         long nStartOffX = 0;
         sal_Int16 nDay = maCalendarWrapper.getFirstDayOfWeek();
-        for ( sal_Int16 nDayOfWeek = 0; nDayOfWeek < 7; nDayOfWeek++ )
+        for ( sal_Int16 nDayOfWeek = 0; nDayOfWeek < 7; ++nDayOfWeek )
         {
             // Use narrow name.
             OUString aDayOfWeek( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::DAY, nDay, 2));
             long nOffX = (mnDayWidth-GetTextWidth( aDayOfWeek ))/2;
             if ( mnWinStyle & WB_BOLDTEXT )
-                nOffX++;
+                ++nOffX;
             if ( !nDayOfWeek )
                 nStartOffX = nOffX;
             else
@@ -407,7 +407,7 @@ void Calendar::ImplFormat()
             nOffX += nDayOfWeek * mnDayWidth;
             mnDayOfWeekAry[nDayOfWeek] = nOffX;
             maDayOfWeekText += aDayOfWeek;
-            nDay++;
+            ++nDay;
             nDay %= 7;
         }
 
@@ -427,7 +427,7 @@ void Calendar::ImplFormat()
     mnDayCount = nWeekDay;
     sal_uInt16 nDaysInMonth;
     sal_uInt16 nMonthCount = (sal_uInt16)(mnMonthPerLine*mnLines);
-    for ( sal_uInt16 i = 0; i < nMonthCount; i++ )
+    for ( sal_uInt16 i = 0; i < nMonthCount; ++i )
     {
         nDaysInMonth = aTempDate.GetDaysInMonth();
         mnDayCount += nDaysInMonth;
@@ -495,14 +495,14 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 
     rDate = GetFirstMonth();
     nY = 0;
-    for ( long i = 0; i < mnLines; i++ )
+    for ( long i = 0; i < mnLines; ++i )
     {
         if ( rPos.Y() < nY )
             return 0;
 
         long nX = 0;
         long nYMonth = nY+mnMonthHeight;
-        for ( long j = 0; j < mnMonthPerLine; j++ )
+        for ( long j = 0; j < mnMonthPerLine; ++j )
         {
             if ( (rPos.X() < nX) && (rPos.Y() < nYMonth) )
                 return 0;
@@ -559,7 +559,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                             nDayY += mnDayHeight;
                         }
                         else
-                            nDayIndex++;
+                            ++nDayIndex;
                     }
                     if ( (i == mnLines-1) && (j == mnMonthPerLine-1) )
                     {
@@ -568,7 +568,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                         sal_uInt16 nDayCount = 42-nDaysInMonth-nWeekDay;
                         Date aTempDate = rDate;
                         aTempDate += nDaysInMonth;
-                        for ( nDay = 1; nDay <= nDayCount; nDay++ )
+                        for ( nDay = 1; nDay <= nDayCount; ++nDay )
                         {
                             if ( rPos.Y() < nDayY )
                             {
@@ -589,7 +589,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                                 nDayY += mnDayHeight;
                             }
                             else
-                                nDayIndex++;
+                                ++nDayIndex;
                         }
                     }
                 }
@@ -620,7 +620,7 @@ static void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangl
     else
         n = nHeight;
     if (!(n & 0x01))
-        n--;
+        --n;
     nLines = n/2;
 
     Rectangle aRect(Point( rRect.Left() + (nWidth / 2) - (nLines / 2),
@@ -633,20 +633,20 @@ static void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangl
     }
 
     rRenderContext.DrawRect(aRect);
-    for (i = 0; i < nLines; i++)
+    for (i = 0; i < nLines; ++i)
     {
         if (bPrev)
         {
-            aRect.Left()++;
-            aRect.Right()++;
+            ++aRect.Left();
+            ++aRect.Right();
         }
         else
         {
-            aRect.Left()--;
-            aRect.Right()--;
+            --aRect.Left();
+            --aRect.Right();
         }
-        aRect.Top()--;
-        aRect.Bottom()++;
+        --aRect.Top();
+        ++aRect.Bottom();
         rRenderContext.DrawRect(aRect);
     }
 }
@@ -796,7 +796,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
     HideFocus();
 
     nY = 0;
-    for (i = 0; i < mnLines; i++)
+    for (i = 0; i < mnLines; ++i)
     {
         // display title bar
         rRenderContext.SetLineColor();
@@ -834,20 +834,20 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
         }
         Point aSepPos1(0, aTitleRect.Top() + TITLE_BORDERY);
         Point aSepPos2(0, aTitleRect.Bottom() - TITLE_BORDERY);
-        for (j = 0; j < mnMonthPerLine-1; j++)
+        for (j = 0; j < mnMonthPerLine-1; ++j)
         {
             aSepPos1.X() += mnMonthWidth-1;
             aSepPos2.X() = aSepPos1.X();
             rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
             rRenderContext.DrawLine(aSepPos1, aSepPos2);
-            aSepPos1.X()++;
+            ++aSepPos1.X();
             aSepPos2.X() = aSepPos1.X();
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
             rRenderContext.DrawLine(aSepPos1, aSepPos2);
         }
 
         long nX = 0;
-        for (j = 0; j < mnMonthPerLine; j++)
+        for (j = 0; j < mnMonthPerLine; ++j)
         {
             nMonth  = aDate.GetMonth();
             nYear   = aDate.GetYear();
@@ -966,7 +966,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
                                  (DayOfWeek)((nDay + (sal_uInt16)eStartDay) % 7), false, true, nToday);
                 }
             }
-            for (nDay = 1; nDay <= nDaysInMonth; nDay++)
+            for (nDay = 1; nDay <= nDaysInMonth; ++nDay)
             {
                 nDeltaX = nDayX + (nDayIndex * mnDayWidth);
                 ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay, nMonth, nYear,
@@ -978,7 +978,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
                     nDayY += mnDayHeight;
                 }
                 else
-                    nDayIndex++;
+                    ++nDayIndex;
             }
             if ((i == mnLines - 1) && (j == mnMonthPerLine - 1))
             {
@@ -1000,7 +1000,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
                         nDayY += mnDayHeight;
                     }
                     else
-                        nDayIndex++;
+                        ++nDayIndex;
                 }
             }
 
@@ -1224,10 +1224,10 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
         nMonthOff -= aOldFirstDate.GetMonth()-rDate.GetMonth();
 
     // construct menu (include years with different months)
-    for ( i = 0; i < MENU_YEAR_COUNT; i++ )
+    for ( i = 0; i < MENU_YEAR_COUNT; ++i )
     {
         pYearPopupMenus[i] = new PopupMenu;
-        for ( j = 1; j <= 12; j++ )
+        for ( j = 1; j <= 12; ++j )
             pYearPopupMenus[i]->InsertItem( nYearIdCount+j,
                     maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, j-1, 1));
@@ -1242,7 +1242,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
 
     // destroy menu
     aPopupMenu.SetPopupMenu( 2, nullptr );
-    for ( i = 0; i < MENU_YEAR_COUNT; i++ )
+    for ( i = 0; i < MENU_YEAR_COUNT; ++i )
     {
         aPopupMenu.SetPopupMenu( 10+i, nullptr );
         delete pYearPopupMenus[i];
@@ -1656,7 +1656,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
                 while ( nNotchDelta < 0 )
                 {
                     ImplScroll( true );
-                    nNotchDelta++;
+                    ++nNotchDelta;
                 }
             }
             else
@@ -1664,7 +1664,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
                 while ( nNotchDelta > 0 )
                 {
                     ImplScroll( false );
-                    nNotchDelta--;
+                    --nNotchDelta;
                 }
             }
 
@@ -1830,7 +1830,7 @@ Date Calendar::GetLastMonth() const
 {
     Date aDate = GetFirstMonth();
     sal_uInt16 nMonthCount = GetMonthCount();
-    for ( sal_uInt16 i = 0; i < nMonthCount; i++ )
+    for ( sal_uInt16 i = 0; i < nMonthCount; ++i )
         aDate += aDate.GetDaysInMonth();
     --aDate;
     return aDate;
@@ -1890,7 +1890,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
             nDayIndex = 0;
-            for ( sal_uLong i = 0; i <= nDaysOff; i++ )
+            for ( sal_uLong i = 0; i <= nDaysOff; ++i )
             {
                 if ( aLastDate == rDate )
                 {
@@ -1905,17 +1905,17 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
                     aRect.Bottom() += mnDayHeight;
                 }
                 else
-                    nDayIndex++;
+                    ++nDayIndex;
                 ++aLastDate;
             }
         }
     }
 
     nY = 0;
-    for ( long i = 0; i < mnLines; i++ )
+    for ( long i = 0; i < mnLines; ++i )
     {
         nX = 0;
-        for ( long j = 0; j < mnMonthPerLine; j++ )
+        for ( long j = 0; j < mnMonthPerLine; ++j )
         {
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
 
@@ -1927,7 +1927,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
                 long nDayY = nY+mnDaysOffY;
                 nDayIndex = (sal_uInt16)aDate.GetDayOfWeek();
                 nDayIndex = (nDayIndex+(7-(sal_uInt16)ImplGetWeekStart())) % 7;
-                for ( sal_uInt16 nDay = 1; nDay <= nDaysInMonth; nDay++ )
+                for ( sal_uInt16 nDay = 1; nDay <= nDaysInMonth; ++nDay )
                 {
                     if ( nDay == rDate.GetDay() )
                     {
@@ -1943,7 +1943,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
                         nDayY += mnDayHeight;
                     }
                     else
-                        nDayIndex++;
+                        ++nDayIndex;
                 }
             }
 
