@@ -57,14 +57,14 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_LONG_LRSPACE:
         {
             const SvxLongLRSpaceItem *pItem = dynamic_cast<const SvxLongLRSpaceItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxLRSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
         {
             const SvxLongULSpaceItem *pItem = dynamic_cast<const SvxLongULSpaceItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxULSpaceItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxULSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
@@ -72,7 +72,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_TABSTOP:
         {
             const SvxTabStopItem *pItem = dynamic_cast<const SvxTabStopItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxTabStopItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxTabStopItem expected");
             rRuler.Update(pItem);
             break;
         }
@@ -80,7 +80,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_ATTR_PARA_LRSPACE:
         {
             const SvxLRSpaceItem *pItem = dynamic_cast<const SvxLRSpaceItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxLRSpaceItem expected");
             rRuler.UpdatePara(pItem);
             break;
         }
@@ -90,7 +90,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_RULER_ROWS_VERTICAL:
         {
             const SvxColumnItem *pItem = dynamic_cast<const SvxColumnItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxColumnItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxColumnItem expected");
 #ifdef DBG_UTIL
             if(pItem)
             {
@@ -109,35 +109,35 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         case SID_RULER_PAGE_POS:
         {   // Position page, page width
             const SvxPagePosSizeItem *pItem = dynamic_cast<const SvxPagePosSizeItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxPagePosSizeItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxPagePosSizeItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_OBJECT:
         {   // Object selection
             const SvxObjectItem *pItem = dynamic_cast<const SvxObjectItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxObjectItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxObjectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_PROTECT:
         {
             const SvxProtectItem *pItem = dynamic_cast<const SvxProtectItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxProtectItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxProtectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_BORDER_DISTANCE:
         {
             const SvxLRSpaceItem *pItem = dynamic_cast<const SvxLRSpaceItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SvxLRSpaceItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxLRSpaceItem expected");
             rRuler.UpdateParaBorder(pItem);
         }
         break;
         case SID_RULER_TEXT_RIGHT_TO_LEFT :
         {
             const SfxBoolItem *pItem = dynamic_cast<const SfxBoolItem*>( pState );
-            DBG_ASSERT(pState == nullptr || pItem != nullptr, "SfxBoolItem expected");
+            SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SfxBoolItem expected");
             rRuler.UpdateTextRTL(pItem);
         }
         break;
