@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a9d85d2_6d4ef5c2",
+        "filename": "vcl/quartz/salgdicommon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-01-31T04:45:32Z",
+      "side": 1,
+      "message": "Obviously this comment is invalidated by my patch - I\u0027ll need to change this!",
+      "revId": "c177769aa47440419dd7780881ae017115db48bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
