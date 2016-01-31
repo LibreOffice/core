@@ -1534,7 +1534,7 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
     mbStockBrush = bStockBrush;
 }
 
-void WinSalGraphicsImpl::SetXORMode( bool bSet, bool )
+void WinSalGraphicsImpl::SetXORMode( bool bSet)
 {
     mbXORMode = bSet;
     ::SetROP2( mrParent.getHDC(), bSet ? R2_XORPEN : R2_COPYPEN );
