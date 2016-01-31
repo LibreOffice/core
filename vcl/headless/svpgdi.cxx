@@ -798,9 +798,14 @@ bool SvpSalGraphics::drawPolyLine(
             aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
         }
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         cairo_region_t* pRegion = cairo_region_create_rectangles(aExtents.data(), aExtents.size());
         cairo_region_get_extents(pRegion, &extents);
         cairo_region_destroy(pRegion);
+#else
+        if (!aExtents.empty())
+            extents = aExtents[0];
+#endif
     }
 
     releaseCairoContext(cr, false, extents);
