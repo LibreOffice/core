@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -205,7 +205,7 @@ namespace vclcanvas
             {
                 std::ptrdiff_t nIndex;
                 double fAlpha;
-                boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
+                std::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
 
                 rOutDev.SetFillColor(
                     Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
@@ -371,7 +371,7 @@ namespace vclcanvas
 
                     std::ptrdiff_t nIndex;
                     double fAlpha;
-                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+                    std::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     // lerp color
                     rOutDev.SetFillColor(
@@ -429,7 +429,7 @@ namespace vclcanvas
 
                     std::ptrdiff_t nIndex;
                     double fAlpha;
-                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+                    std::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     // lerp color
                     rOutDev.SetFillColor(

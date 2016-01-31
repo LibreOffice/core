@@ -513,7 +513,7 @@ void RTFDocumentImpl::checkNeedPap()
         {
             auto pValue = std::make_shared<RTFValue>(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
             m_aStates.top().pCurrentBuffer->push_back(
-                Buf_t(BUFFER_PROPS, pValue));
+                Buf_t(BUFFER_PROPS, pValue, nullptr));
         }
     }
 }
@@ -528,7 +528,7 @@ void RTFDocumentImpl::runProps()
     else
     {
         auto pValue = std::make_shared<RTFValue>(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
-        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue));
+        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue, nullptr));
     }
 
     // Delete the sprm, so the trackchange range will be started only once.
@@ -1011,7 +1011,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     else
     {
         auto pValue = std::make_shared<RTFValue>(aAttributes, aSprms);
-        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue));
+        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue, nullptr));
     }
 }
 
@@ -1149,10 +1149,10 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     }
     else
     {
-        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN));
+        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, nullptr, nullptr));
         auto pValue = std::make_shared<RTFValue>(*sValue);
-        pCurrentBuffer->push_back(Buf_t(BUFFER_TEXT, pValue));
-        pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN));
+        pCurrentBuffer->push_back(Buf_t(BUFFER_TEXT, pValue, nullptr));
+        pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN, nullptr, nullptr));
     }
 }
 
@@ -1307,7 +1307,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get() &&
             m_nTopLevelCells == 0)
     {
-        m_aTableBufferStack.back().push_back(Buf_t(BUFFER_UTEXT, std::make_shared<RTFValue>(rString)));
+        m_aTableBufferStack.back().push_back(Buf_t(BUFFER_UTEXT, std::make_shared<RTFValue>(rString), nullptr));
         return;
     }
 
@@ -1328,7 +1328,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, pValue));
+        pCurrentBuffer->push_back(Buf_t(BUFFER_STARTRUN, pValue, nullptr));
     }
 
     if (m_aStates.top().eDestination == Destination::NORMAL
@@ -1341,7 +1341,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else
     {
         auto pValue = std::make_shared<RTFValue>(rString);
-        pCurrentBuffer->push_back(Buf_t(BUFFER_UTEXT, pValue));
+        pCurrentBuffer->push_back(Buf_t(BUFFER_UTEXT, pValue, nullptr));
     }
 
     m_bNeedCr = true;
@@ -1351,7 +1351,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN, pValue));
+        pCurrentBuffer->push_back(Buf_t(BUFFER_ENDRUN, pValue, nullptr));
     }
 }
 
@@ -1424,7 +1424,7 @@ void RTFDocumentImpl::replayRowBuffer(
     }
     for (size_t i = 0; i < rBuffer.size(); ++i)
     {
-        SAL_WARN_IF(BUFFER_CELLEND == boost::get<0>(rBuffer[i]),
+        SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(rBuffer[i]),
                     "writerfilter.rtf", "dropping table cell!");
     }
     assert(0 == rCellsSrpms.size());
@@ -1438,17 +1438,17 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
     {
         Buf_t aTuple(rBuffer.front());
         rBuffer.pop_front();
-        if (boost::get<0>(aTuple) == BUFFER_PROPS)
+        if (std::get<0>(aTuple) == BUFFER_PROPS)
         {
             // Construct properties via getProperties() and not directly, to take care of deduplication.
             writerfilter::Reference<Properties>::Pointer_t const pProp(
-                getProperties(boost::get<1>(aTuple)->getAttributes(), boost::get<1>(aTuple)->getSprms())
+                getProperties(std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms())
             );
             Mapper().props(pProp);
         }
-        else if (boost::get<0>(aTuple) == BUFFER_NESTROW)
+        else if (std::get<0>(aTuple) == BUFFER_NESTROW)
         {
-            TableRowBuffer& rRowBuffer(*boost::get<2>(aTuple));
+            TableRowBuffer& rRowBuffer(*std::get<2>(aTuple));
 
             replayRowBuffer(rRowBuffer.buffer, rRowBuffer.cellsSprms,
                             rRowBuffer.cellsAttributes, rRowBuffer.nCells);
@@ -1456,7 +1456,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
             sendProperties(rRowBuffer.pParaProperties,
                            rRowBuffer.pFrameProperties, rRowBuffer.pRowProperties);
         }
-        else if (boost::get<0>(aTuple) == BUFFER_CELLEND)
+        else if (std::get<0>(aTuple) == BUFFER_CELLEND)
         {
             assert(pSprms && pAttributes);
             auto pValue = std::make_shared<RTFValue>(1);
@@ -1467,29 +1467,29 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
             tableBreak();
             break;
         }
-        else if (boost::get<0>(aTuple) == BUFFER_STARTRUN)
+        else if (std::get<0>(aTuple) == BUFFER_STARTRUN)
             Mapper().startCharacterGroup();
-        else if (boost::get<0>(aTuple) == BUFFER_TEXT)
+        else if (std::get<0>(aTuple) == BUFFER_TEXT)
         {
-            sal_uInt8 const nValue = boost::get<1>(aTuple)->getInt();
+            sal_uInt8 const nValue = std::get<1>(aTuple)->getInt();
             Mapper().text(&nValue, 1);
         }
-        else if (boost::get<0>(aTuple) == BUFFER_UTEXT)
+        else if (std::get<0>(aTuple) == BUFFER_UTEXT)
         {
-            OUString const aString(boost::get<1>(aTuple)->getString());
+            OUString const aString(std::get<1>(aTuple)->getString());
             Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()), aString.getLength());
         }
-        else if (boost::get<0>(aTuple) == BUFFER_ENDRUN)
+        else if (std::get<0>(aTuple) == BUFFER_ENDRUN)
             Mapper().endCharacterGroup();
-        else if (boost::get<0>(aTuple) == BUFFER_PAR)
+        else if (std::get<0>(aTuple) == BUFFER_PAR)
             parBreak();
-        else if (boost::get<0>(aTuple) == BUFFER_STARTSHAPE)
-            m_pSdrImport->resolve(boost::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
-        else if (boost::get<0>(aTuple) == BUFFER_ENDSHAPE)
+        else if (std::get<0>(aTuple) == BUFFER_STARTSHAPE)
+            m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
+        else if (std::get<0>(aTuple) == BUFFER_ENDSHAPE)
             m_pSdrImport->close();
-        else if (boost::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
+        else if (std::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
         {
-            RTFSprms& rAttributes = boost::get<1>(aTuple)->getAttributes();
+            RTFSprms& rAttributes = std::get<1>(aTuple)->getAttributes();
             sal_Size nPos = rAttributes.find(0)->getInt();
             Id nId = rAttributes.find(1)->getInt();
             OUString aCustomMark = rAttributes.find(2)->getString();
@@ -1708,9 +1708,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 {
                     Buf_t aTuple = m_aSuperBuffer.front();
                     m_aSuperBuffer.pop_front();
-                    if (boost::get<0>(aTuple) == BUFFER_UTEXT)
+                    if (std::get<0>(aTuple) == BUFFER_UTEXT)
                     {
-                        aCustomMark = boost::get<1>(aTuple)->getString();
+                        aCustomMark = std::get<1>(aTuple)->getString();
                         bCustomMark = true;
                     }
                 }
@@ -1725,7 +1725,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     aAttributes.set(Id(0), std::make_shared<RTFValue>(m_nGroupStartPos - 1));
                     aAttributes.set(Id(1), std::make_shared<RTFValue>(nId));
                     aAttributes.set(Id(2), std::make_shared<RTFValue>(aCustomMark));
-                    m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_RESOLVESUBSTREAM, std::make_shared<RTFValue>(aAttributes)));
+                    m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_RESOLVESUBSTREAM, std::make_shared<RTFValue>(aAttributes), nullptr));
                 }
                 if (bCustomMark)
                 {
@@ -1811,7 +1811,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     else
                     {
                         auto pValue = std::make_shared<RTFValue>(m_aStates.top().aShape);
-                        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_STARTSHAPE, pValue));
+                        m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_STARTSHAPE, pValue, nullptr));
                     }
                 }
             }
@@ -2157,7 +2157,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             RTFValue::Pointer_t pValue;
             m_aStates.top().pCurrentBuffer->push_back(
-                Buf_t(BUFFER_PAR, pValue));
+                Buf_t(BUFFER_PAR, pValue, nullptr));
         }
         // but don't emit properties yet, since they may change till the first text token arrives
         m_bNeedPap = true;
@@ -2213,13 +2213,13 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             // There were no runs in the cell, so we need to send paragraph and character properties here.
             auto pPValue = std::make_shared<RTFValue>(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms);
-            m_aTableBufferStack.back().push_back(Buf_t(BUFFER_PROPS, pPValue));
+            m_aTableBufferStack.back().push_back(Buf_t(BUFFER_PROPS, pPValue, nullptr));
             auto pCValue = std::make_shared<RTFValue>(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
-            m_aTableBufferStack.back().push_back(Buf_t(BUFFER_PROPS, pCValue));
+            m_aTableBufferStack.back().push_back(Buf_t(BUFFER_PROPS, pCValue, nullptr));
         }
 
         RTFValue::Pointer_t pValue;
-        m_aTableBufferStack.back().push_back(Buf_t(BUFFER_CELLEND, pValue));
+        m_aTableBufferStack.back().push_back(Buf_t(BUFFER_CELLEND, pValue, nullptr));
         m_bNeedPap = true;
     }
     break;
@@ -5142,7 +5142,7 @@ RTFError RTFDocumentImpl::popState()
         else
         {
             auto pFFValue = std::make_shared<RTFValue>(aFFAttributes, aFFSprms);
-            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pFFValue));
+            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pFFValue, nullptr));
         }
         m_aFormfieldAttributes.clear();
         m_aFormfieldSprms.clear();
@@ -5827,7 +5827,7 @@ RTFError RTFDocumentImpl::popState()
         if (!m_aStates.top().pCurrentBuffer)
             Mapper().props(std::make_shared<RTFReferenceProperties>(RTFSprms(), aTCSprms));
         else
-            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, std::make_shared<RTFValue>(RTFSprms(), aTCSprms)));
+            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, std::make_shared<RTFValue>(RTFSprms(), aTCSprms), nullptr));
     }
 
     // This is the end of the doc, see if we need to close the last section.
@@ -6068,7 +6068,7 @@ RTFError RTFDocumentImpl::popState()
                     m_pSdrImport->close();
                 else
                     m_aStates.top().pCurrentBuffer->push_back(
-                        Buf_t(BUFFER_ENDSHAPE));
+                        Buf_t(BUFFER_ENDSHAPE, nullptr, nullptr));
             }
 
             // It's allowed to declare these inside the shape text, and they

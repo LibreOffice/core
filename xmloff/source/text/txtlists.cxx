@@ -76,7 +76,7 @@ XMLTextListsHelper::~XMLTextListsHelper()
 void XMLTextListsHelper::PushListContext(
     XMLTextListBlockContext *i_pListBlock)
 {
-    mListStack.push(::boost::make_tuple(i_pListBlock,
+    mListStack.push(std::make_tuple(i_pListBlock,
         static_cast<XMLTextListItemContext*>(nullptr),
         static_cast<XMLNumberedParaContext*>(nullptr)));
 }
@@ -84,7 +84,7 @@ void XMLTextListsHelper::PushListContext(
 void XMLTextListsHelper::PushListContext(
     XMLNumberedParaContext *i_pNumberedParagraph)
 {
-    mListStack.push(::boost::make_tuple(
+    mListStack.push(std::make_tuple(
         static_cast<XMLTextListBlockContext*>(nullptr),
         static_cast<XMLTextListItemContext*>(nullptr), i_pNumberedParagraph));
 }
@@ -103,11 +103,11 @@ void XMLTextListsHelper::ListContextTop(
 {
     if ( !mListStack.empty() ) {
         o_pListBlockContext =
-            static_cast<XMLTextListBlockContext*>(&mListStack.top().get<0>());
+            static_cast<XMLTextListBlockContext*>(&std::get<0>(mListStack.top()));
         o_pListItemContext  =
-            static_cast<XMLTextListItemContext *>(&mListStack.top().get<1>());
+            static_cast<XMLTextListItemContext *>(&std::get<1>(mListStack.top()));
         o_pNumberedParagraphContext =
-            static_cast<XMLNumberedParaContext *>(&mListStack.top().get<2>());
+            static_cast<XMLNumberedParaContext *>(&std::get<2>(mListStack.top()));
     }
 }
 
@@ -116,13 +116,13 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
     // may be cleared by ListBlockContext for upper list...
     if (i_pListItem) {
         assert(mListStack.size());
-        assert(mListStack.top().get<0>() &&
+        assert(std::get<0>(mListStack.top()) &&
             "internal error: SetListItem: mListStack has no ListBlock");
-        assert(!mListStack.top().get<1>() &&
+        assert(!std::get<1>(mListStack.top()) &&
             "error: SetListItem: list item already exists");
     }
     if ( !mListStack.empty() ) {
-        mListStack.top().get<1>() = i_pListItem;
+        std::get<1>(mListStack.top()) = i_pListItem;
     }
 }
 

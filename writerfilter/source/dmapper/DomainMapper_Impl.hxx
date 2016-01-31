@@ -27,12 +27,12 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <vector>
-#include <stack>
 #include <queue>
-#include <boost/optional.hpp>
-#include <boost/tuple/tuple.hpp>
+#include <stack>
+#include <tuple>
 #include <unordered_map>
+#include <vector>
+#include <boost/optional.hpp>
 
 #include <ooxml/resourceids.hxx>
 
@@ -871,7 +871,7 @@ private:
 };
 
 // export just for test
-SAL_DLLPUBLIC_EXPORT boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
+SAL_DLLPUBLIC_EXPORT std::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
     lcl_SplitFieldCommand(const OUString& rCommand);
 
 } //namespace dmapper

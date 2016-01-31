@@ -46,6 +46,7 @@
 #include <string>
 #include <swdllapi.h>
 #include <swerror.h>
+#include <tuple>
 #include <typeinfo>
 #include <unomid.h>
 #include <unordered_map>
@@ -56,7 +57,6 @@
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/endian.h>
