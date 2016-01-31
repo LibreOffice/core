@@ -16,17 +16,18 @@
 #include <osl/diagnose.h>
 
 #include <limits.h>
-#include <boost/bind.hpp>
 #include <boost/spirit/include/classic.hpp>
 #include <boost/spirit/include/classic_while.hpp>
-#include <numeric>
 #include <algorithm>
+#include <functional>
+#include <numeric>
 
 #include "units.hxx"
 #include "tokenmap.hxx"
 #include "sal/log.hxx"
 
 using namespace ::com::sun::star;
+using namespace std::placeholders;
 
 namespace svgi
 {
@@ -134,32 +135,32 @@ namespace
                 colorExpression =
                     (
                         // the #rrggbb form
-                        ('#' >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                                   boost::ref(self.m_rColor.r),_1,_2)]
-                             >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                                   boost::ref(self.m_rColor.g),_1,_2)]
-                             >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                                   boost::ref(self.m_rColor.b),_1,_2)])
+                        ('#' >> (xdigit_p >> xdigit_p)[std::bind(&setEightBitColor,
+                                                                   std::ref(self.m_rColor.r),_1,_2)]
+                             >> (xdigit_p >> xdigit_p)[std::bind(&setEightBitColor,
+                                                                   std::ref(self.m_rColor.g),_1,_2)]
+                             >> (xdigit_p >> xdigit_p)[std::bind(&setEightBitColor,
+                                                                   std::ref(self.m_rColor.b),_1,_2)])
                         |
                         // the #rgb form
-                        ('#' >> xdigit_p[boost::bind(&setFourBitColor,
-                                                     boost::ref(self.m_rColor.r),_1)]
-                             >> xdigit_p[boost::bind(&setFourBitColor,
-                                                     boost::ref(self.m_rColor.g),_1)]
-                             >> xdigit_p[boost::bind(&setFourBitColor,
-                                                     boost::ref(self.m_rColor.b),_1)])
+                        ('#' >> xdigit_p[std::bind(&setFourBitColor,
+                                                     std::ref(self.m_rColor.r),_1)]
+                             >> xdigit_p[std::bind(&setFourBitColor,
+                                                     std::ref(self.m_rColor.g),_1)]
+                             >> xdigit_p[std::bind(&setFourBitColor,
+                                                     std::ref(self.m_rColor.b),_1)])
                         |
                         // rgb() form
                         (str_p("rgb")
                             >> '(' >>
                             (
                                 // rgb(int,int,int)
-                                (byte_p[boost::bind(&setIntColor,
-                                                    boost::ref(self.m_rColor.r),_1)] >> ',' >>
-                                 byte_p[boost::bind(&setIntColor,
-                                                    boost::ref(self.m_rColor.g),_1)] >> ',' >>
-                                 byte_p[boost::bind(&setIntColor,
-                                                    boost::ref(self.m_rColor.b),_1)])
+                                (byte_p[std::bind(&setIntColor,
+                                                    std::ref(self.m_rColor.r),_1)] >> ',' >>
+                                 byte_p[std::bind(&setIntColor,
+                                                    std::ref(self.m_rColor.g),_1)] >> ',' >>
+                                 byte_p[std::bind(&setIntColor,
+                                                    std::ref(self.m_rColor.b),_1)])
                              |
                                 // rgb(double,double,double)
                                 (real_p[assign_a(self.m_rColor.r)] >> ',' >>
@@ -167,12 +168,12 @@ namespace
                                  real_p[assign_a(self.m_rColor.b)])
                              |
                                 // rgb(percent,percent,percent)
-                                (real_p[boost::bind(&setPercentColor,
-                                                    boost::ref(self.m_rColor.r),_1)] >> "%," >>
-                                 real_p[boost::bind(&setPercentColor,
-                                                    boost::ref(self.m_rColor.g),_1)] >> "%," >>
-                                 real_p[boost::bind(&setPercentColor,
-                                                    boost::ref(self.m_rColor.b),_1)] >> "%")
+                                (real_p[std::bind(&setPercentColor,
+                                                    std::ref(self.m_rColor.r),_1)] >> "%," >>
+                                 real_p[std::bind(&setPercentColor,
+                                                    std::ref(self.m_rColor.g),_1)] >> "%," >>
+                                 real_p[std::bind(&setPercentColor,
+                                                    std::ref(self.m_rColor.b),_1)] >> "%")
                              )
                          >> ')')
                      );
@@ -425,18 +426,18 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                  // translate(x,[y])
                  (str_p("translate")
                   >> '('
-                  >> real_p[boost::bind(&assign_twice,
-                                        boost::ref(aCurrTransform.m02),
-                                        boost::ref(aCurrTransform.m12),_1)]
+                  >> real_p[std::bind(&assign_twice,
+                                        std::ref(aCurrTransform.m02),
+                                        std::ref(aCurrTransform.m12),_1)]
                   >> !((',' | eps_p) >> real_p[assign_a(aCurrTransform.m12)])
                   >> ')')[push_back_a(aTransforms,aCurrTransform)]
                |
                  // scale(x,[y])
                  (str_p("scale")
                   >> '('
-                  >> real_p[boost::bind(&assign_twice,
-                                        boost::ref(aCurrTransform.m00),
-                                        boost::ref(aCurrTransform.m11),_1)]
+                  >> real_p[std::bind(&assign_twice,
+                                        std::ref(aCurrTransform.m00),
+                                        std::ref(aCurrTransform.m11),_1)]
                   >> !((',' | eps_p) >> real_p[assign_a(aCurrTransform.m11)])
                   >> ')')[push_back_a(aTransforms,aCurrTransform)]
                |
@@ -446,26 +447,26 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                   >> real_p[assign_a(fRotationAngle)]
                   >> !((',' | eps_p) >> real_p[assign_a(aCurrTransform.m02)]
                        >> (',' | eps_p) >>  real_p[assign_a(aCurrTransform.m12)])
-                  >> ')')[boost::bind(&calcRotation,
-                                      boost::ref(aTransforms),
-                                      boost::ref(aCurrTransform),
-                                      boost::cref(fRotationAngle))]
+                  >> ')')[std::bind(&calcRotation,
+                                      std::ref(aTransforms),
+                                      std::ref(aCurrTransform),
+                                      std::cref(fRotationAngle))]
                |
                  // skewX(phi)
                  (str_p("skewX")
                   >> '('
                   >> real_p[assign_a(fSkewAngle)]
-                  >> ')')[boost::bind(&calcSkewX,
-                                      boost::ref(aTransforms),
-                                      boost::cref(fSkewAngle))]
+                  >> ')')[std::bind(&calcSkewX,
+                                      std::ref(aTransforms),
+                                      std::cref(fSkewAngle))]
                |
                  // skewY(phi)
                  (str_p("skewY")
                   >> '('
                   >> real_p[assign_a(fSkewAngle)]
-                  >> ')')[boost::bind(&calcSkewY,
-                                      boost::ref(aTransforms),
-                                      boost::cref(fSkewAngle))]
+                  >> ')')[std::bind(&calcSkewY,
+                                      std::ref(aTransforms),
+                                      std::cref(fSkewAngle))]
                  // reset current transform after every push
                )[assign_a(aCurrTransform,aIdentityTransform)],
                  // list delimiter is either ',' or space

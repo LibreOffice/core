@@ -42,12 +42,13 @@
 #include <vcl/graphicfilter.hxx>
 #include <tools/zcodec.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <map>
 
 #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
 
 using namespace ::com::sun::star;
+using namespace std::placeholders;
 
 namespace svgi
 {
@@ -1685,10 +1686,10 @@ struct ShapeWritingVisitor
             {
                 // collect text from all TEXT_NODE children into sText
                 OUStringBuffer sText;
-                visitChildren(boost::bind(
+                visitChildren(std::bind(
                                   (OUStringBuffer& (OUStringBuffer::*)(const OUString& str))&OUStringBuffer::append,
-                                  boost::ref(sText),
-                                  boost::bind(&xml::dom::XNode::getNodeValue,
+                                  std::ref(sText),
+                                  std::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
                               xElem,
                               xml::dom::NodeType_TEXT_NODE);
@@ -1844,8 +1845,8 @@ struct ShapeWritingVisitor
         // apply transformation to polygon, to keep draw
         // import in 100th mm
         std::for_each(aPolys.begin(),aPolys.end(),
-                      boost::bind(&basegfx::B2DPolyPolygon::transform,
-                                  _1,boost::cref(aState.maCTM)));
+                      std::bind(&basegfx::B2DPolyPolygon::transform,
+                                  _1,std::cref(aState.maCTM)));
 
         for( size_t i=0; i<aPolys.size(); ++i )
         {
