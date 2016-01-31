@@ -38,8 +38,6 @@ public:
 
     // mainloop pieces
     virtual bool AnyInput( VclInputFlags nType );
-
-    void      damaged(AndroidSalFrame *frame);
 };
 
 #endif // INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX

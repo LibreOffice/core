@@ -37,63 +37,51 @@
 #include <cairo.h>
 
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
-
 #   define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
-
-    struct _cairo_rectangle_int
-    {
-        int x, y;
-        int width, height;
-    };
-
 #endif
 
 namespace
 {
-    cairo_rectangle_int_t getFillDamage(cairo_t* cr)
+    basegfx::B2DRange getClipBox(cairo_t* cr)
     {
-        cairo_rectangle_int_t extents;
         double x1, y1, x2, y2;
 
         cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+        return basegfx::B2DRange(x1, y1, x2, y2);
+    }
+
+    basegfx::B2DRange getFillDamage(cairo_t* cr)
+    {
+        double x1, y1, x2, y2;
 
         cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
-        cairo_region_intersect_rectangle(region, &extents);
 
-        cairo_region_get_extents(region, &extents);
-        cairo_region_destroy(region);
-#endif
-
-        return extents;
+        return basegfx::B2DRange(x1, y1, x2, y2);
     }
 
-    cairo_rectangle_int_t getStrokeDamage(cairo_t* cr)
+    basegfx::B2DRange getClippedFillDamage(cairo_t* cr)
     {
-        cairo_rectangle_int_t extents;
+        basegfx::B2DRange aDamageRect(getFillDamage(cr));
+        aDamageRect.intersect(getClipBox(cr));
+        return aDamageRect;
+    }
+
+    basegfx::B2DRange getStrokeDamage(cairo_t* cr)
+    {
         double x1, y1, x2, y2;
 
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
-
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-        cairo_region_t *region = cairo_region_create_rectangle(&extents);
-
         cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
-        extents.x = x1, extents.y = y1, extents.width = x2-x1, extents.height = y2-y1;
-        cairo_region_intersect_rectangle(region, &extents);
 
-        cairo_region_get_extents(region, &extents);
-        cairo_region_destroy(region);
-#endif
-
-        return extents;
+        return basegfx::B2DRange(x1, y1, x2, y2);
     }
 
+    basegfx::B2DRange getClippedStrokeDamage(cairo_t* cr)
+    {
+        basegfx::B2DRange aDamageRect(getStrokeDamage(cr));
+        aDamageRect.intersect(getClipBox(cr));
+        return aDamageRect;
+    }
 }
 
 #ifndef IOS
@@ -243,7 +231,7 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
-    cairo_rectangle_int_t extents = getFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
 
     cairo_clip(cr);
 
@@ -309,7 +297,7 @@ bool SvpSalGraphics::drawTransformedBitmap(
     cairo_transform(cr, &matrix);
 
     cairo_rectangle(cr, 0, 0, aSize.Width(), aSize.Height());
-    cairo_rectangle_int_t extents = getFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
     cairo_clip(cr);
 
     cairo_set_source_surface(cr, source, 0, 0);
@@ -349,7 +337,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
 
-    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basegfx::B2DRange extents;
 
     cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
@@ -361,7 +349,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
                                   fTransparency);
 
         if (m_aLineColor == SALCOLOR_NONE)
-            extents = getFillDamage(cr);
+            extents = getClippedFillDamage(cr);
 
         cairo_fill_preserve(cr);
     }
@@ -373,7 +361,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
                                   SALCOLOR_BLUE(m_aLineColor)/255.0,
                                   fTransparency);
 
-        extents = getStrokeDamage(cr);
+        extents = getClippedStrokeDamage(cr);
 
         cairo_stroke_preserve(cr);
     }
@@ -681,7 +669,7 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
     applyColor(cr, m_aLineColor);
 
-    cairo_rectangle_int_t extents = getStrokeDamage(cr);
+    basegfx::B2DRange extents = getClippedStrokeDamage(cr);
 
     cairo_stroke(cr);
 
@@ -765,12 +753,12 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_miter_limit(cr, 15.0);
 
 
-    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basegfx::B2DRange extents;
 
     if (!bNoJoin)
     {
         AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
-        extents = getStrokeDamage(cr);
+        extents = getClippedStrokeDamage(cr);
         cairo_stroke(cr);
     }
     else
@@ -781,8 +769,6 @@ bool SvpSalGraphics::drawPolyLine(
         aEdge.append(rPolyLine.getB2DPoint(0));
         aEdge.append(basegfx::B2DPoint(0.0, 0.0));
 
-        std::vector<cairo_rectangle_int_t> aExtents;
-        aExtents.reserve(nEdgeCount);
         for (sal_uInt32 i = 0; i < nEdgeCount; ++i)
         {
             const sal_uInt32 nNextIndex((i + 1) % nPointCount);
@@ -791,21 +777,16 @@ bool SvpSalGraphics::drawPolyLine(
             aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
 
             AddPolygonToPath(cr, aEdge, false, !getAntiAliasB2DDraw(), true);
-            aExtents.push_back(getStrokeDamage(cr));
+
+            extents.expand(getStrokeDamage(cr));
+
             cairo_stroke(cr);
 
             // prepare next step
             aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
         }
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-        cairo_region_t* pRegion = cairo_region_create_rectangles(aExtents.data(), aExtents.size());
-        cairo_region_get_extents(pRegion, &extents);
-        cairo_region_destroy(pRegion);
-#else
-        if (!aExtents.empty())
-            extents = aExtents[0];
-#endif
+        extents.intersect(getClipBox(cr));
     }
 
     releaseCairoContext(cr, false, extents);
@@ -852,7 +833,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
 
     setupPolyPolygon(cr, rPolyPoly);
 
-    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basegfx::B2DRange extents;
 
     if (m_aFillColor != SALCOLOR_NONE)
     {
@@ -862,7 +843,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
                                   1.0-fTransparency);
 
         if (m_aLineColor == SALCOLOR_NONE)
-            extents = getFillDamage(cr);
+            extents = getClippedFillDamage(cr);
 
         cairo_fill_preserve(cr);
     }
@@ -874,7 +855,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
                                   SALCOLOR_BLUE(m_aLineColor)/255.0,
                                   1.0-fTransparency);
 
-        extents = getStrokeDamage(cr);
+        extents = getClippedStrokeDamage(cr);
 
         cairo_stroke_preserve(cr);
     }
@@ -907,20 +888,20 @@ void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
 
     setupPolyPolygon(cr, rPolyPoly);
 
-    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basegfx::B2DRange extents;
 
     if (m_aFillColor != SALCOLOR_NONE)
     {
         applyColor(cr, m_aFillColor);
         if (m_aLineColor == SALCOLOR_NONE)
-            extents = getFillDamage(cr);
+            extents = getClippedFillDamage(cr);
         cairo_fill_preserve(cr);
     }
 
     if (m_aLineColor != SALCOLOR_NONE)
     {
         applyColor(cr, m_aLineColor);
-        extents = getStrokeDamage(cr);
+        extents = getClippedStrokeDamage(cr);
         cairo_stroke_preserve(cr);
     }
 
@@ -939,12 +920,12 @@ void SvpSalGraphics::copyArea( long nDestX,
     copyBits(aTR, this);
 }
 
-static cairo_rectangle_int_t renderSource(cairo_t* cr, const SalTwoRect& rTR,
+static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
                                           cairo_surface_t* source)
 {
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
-    cairo_rectangle_int_t extents = getFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
 
     cairo_clip(cr);
 
@@ -962,7 +943,7 @@ void SvpSalGraphics::copySource( const SalTwoRect& rTR,
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    cairo_rectangle_int_t extents = renderSource(cr, rTR, source);
+    basegfx::B2DRange extents = renderSource(cr, rTR, source);
 
     releaseCairoContext(cr, false, extents);
 }
@@ -1089,7 +1070,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 
     cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
 
-    cairo_rectangle_int_t extents = getFillDamage(cr);
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
 
     cairo_clip(cr);
 
@@ -1156,7 +1137,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+    basegfx::B2DRange extents;
 
     AddPolygonToPath(cr, rPoly, true, !getAntiAliasB2DDraw(), false);
 
@@ -1177,13 +1158,13 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         const double dashLengths[2] = { 4.0, 4.0 };
         cairo_set_dash(cr, dashLengths, 2, 0);
 
-        extents = getStrokeDamage(cr);
+        extents = getClippedStrokeDamage(cr);
 
         cairo_stroke(cr);
     }
     else
     {
-        extents = getFillDamage(cr);
+        extents = getClippedFillDamage(cr);
 
         cairo_clip(cr);
 
@@ -1297,10 +1278,10 @@ cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
     return &aDamageKey;
 }
 
-void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const
+void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
 {
-    sal_Int32 nExtentsLeft(extents.x), nExtentsTop(extents.y);
-    sal_Int32 nExtentsRight(extents.x + extents.width), nExtentsBottom(extents.y + extents.height);
+    sal_Int32 nExtentsLeft(rExtents.getMinX()), nExtentsTop(rExtents.getMinY());
+    sal_Int32 nExtentsRight(rExtents.getMaxX()), nExtentsBottom(rExtents.getMaxY());
     sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
     sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
     nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
