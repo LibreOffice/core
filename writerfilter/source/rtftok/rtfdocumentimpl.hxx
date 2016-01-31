@@ -12,9 +12,9 @@
 
 #include <stack>
 #include <queue>
+#include <tuple>
 #include <vector>
 #include <boost/optional.hpp>
-#include <boost/tuple/tuple.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -86,8 +86,8 @@ enum class RTFFieldStatus
 struct TableRowBuffer;
 
 /// A buffer storing dmapper calls.
-typedef ::boost::tuple<RTFBufferTypes, RTFValue::Pointer_t,
-        ::std::shared_ptr<TableRowBuffer> > Buf_t;
+typedef std::tuple<RTFBufferTypes, RTFValue::Pointer_t,
+        std::shared_ptr<TableRowBuffer> > Buf_t;
 typedef std::deque< Buf_t > RTFBuffer_t;
 
 /// holds one nested table row

@@ -28,11 +28,11 @@
 #include <memory>
 #include <ostream>
 #include <stdlib.h>
+#include <tuple>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/logic/tribool.hpp>
 #include <boost/optional.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>

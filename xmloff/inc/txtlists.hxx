@@ -22,10 +22,10 @@
 
 #include <rtl/ustring.hxx>
 #include <map>
-#include <vector>
 #include <stack>
+#include <tuple>
+#include <vector>
 #include <boost/noncopyable.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <xmloff/xmlictxt.hxx>
 
@@ -126,9 +126,9 @@ class XMLTextListsHelper : private boost::noncopyable
             XMLTextListBlockContext, XMLTextListItemContext,
             XMLNumberedParaContext
          */
-        typedef ::boost::tuple<SvXMLImportContextRef,
+        typedef std::tuple<SvXMLImportContextRef,
             SvXMLImportContextRef, SvXMLImportContextRef> ListStackFrame_t;
-        ::std::stack< ListStackFrame_t > mListStack;
+        std::stack< ListStackFrame_t > mListStack;
 
         // container type for processed lists:
         // map with <ListId> as key and pair( <ListStyleName, ContinueListId> )

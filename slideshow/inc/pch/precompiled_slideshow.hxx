@@ -50,6 +50,7 @@
 #include <string.h>
 #include <string>
 #include <type_traits>
+#include <tuple>
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -61,7 +62,6 @@
 #include <boost/optional.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <boost/weak_ptr.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
