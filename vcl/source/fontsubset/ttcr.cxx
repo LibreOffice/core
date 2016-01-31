@@ -1015,7 +1015,6 @@ TrueTypeTable *TrueTypeTableNew_cmap()
     cmap->n = 0;
     cmap->m = CMAP_SUBTABLE_INIT;
     cmap->s = static_cast<CmapSubTable *>(scalloc(CMAP_SUBTABLE_INIT, sizeof(CmapSubTable)));
-    memset(cmap->s, 0, sizeof(CmapSubTable) * CMAP_SUBTABLE_INIT);
 
     table->data = cmap;
 
@@ -1145,7 +1144,6 @@ void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
     if (!found) {
         if (t->n == t->m) {
             CmapSubTable* tmp = static_cast<CmapSubTable*>(scalloc(t->m + CMAP_SUBTABLE_INCR, sizeof(CmapSubTable)));
-            memset(tmp, 0, t->m + CMAP_SUBTABLE_INCR * sizeof(CmapSubTable));
             memcpy(tmp, s, sizeof(CmapSubTable) * t->m);
             t->m += CMAP_SUBTABLE_INCR;
             free(s);
