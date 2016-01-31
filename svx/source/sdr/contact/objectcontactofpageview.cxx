@@ -190,7 +190,7 @@ namespace sdr
                     // #i98402# if it's a PDF export, set the ClipRegion as ViewRange. This is
                     // mainly because SW does not use DrawingLayer Page-Oriented and if not doing this,
                     // all existing objects will be collected as primitives and processed.
-                    // OD 2009-03-05 #i99876# perform the same also for SW on printing.
+                    // perform the same also for SW on printing.
                     // fdo#78149 same thing also needed for plain MetaFile
                     //           export, so why not do it always
                     const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
