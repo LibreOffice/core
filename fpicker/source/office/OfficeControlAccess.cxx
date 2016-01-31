@@ -177,7 +177,7 @@ namespace svt
         :m_pFilePickerController( _pController )
         ,m_pFileView( _pFileView )
     {
-        DBG_ASSERT( m_pFilePickerController, "OControlAccess::OControlAccess: invalid control locator!" );
+        SAL_WARN_IF( !(m_pFilePickerController), "fpicker.office", "OControlAccess::OControlAccess: invalid control locator!" );
     }
 
 
@@ -350,7 +350,7 @@ namespace svt
     void OControlAccess::setValue( sal_Int16 _nControlId, sal_Int16 _nControlAction, const Any& _rValue )
     {
         Control* pControl = m_pFilePickerController->getControl( _nControlId );
-        DBG_ASSERT( pControl, "OControlAccess::SetValue: don't have this control in the current mode!" );
+        SAL_WARN_IF( !(pControl), "fpicker.office", "OControlAccess::SetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
             sal_Int16 nPropertyId = -1;
@@ -385,7 +385,7 @@ namespace svt
                         }
                         else
                         {
-                            DBG_ASSERT( WINDOW_LISTBOX == pControl->GetType(), "OControlAccess::SetValue: implGetControl returned nonsense!" );
+                            SAL_WARN_IF( WINDOW_LISTBOX != pControl->GetType(), "fpicker.office", "OControlAccess::SetValue: implGetControl returned nonsense!" );
                             implDoListboxAction( static_cast< ListBox* >( pControl ), _nControlAction, _rValue );
                         }
                         break;
@@ -403,7 +403,7 @@ namespace svt
         Any aRet;
 
         Control* pControl = m_pFilePickerController->getControl( _nControlId );
-        DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
+        SAL_WARN_IF( !(pControl), "fpicker.office", "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
             sal_Int16 nPropertyId = -1;
@@ -469,7 +469,7 @@ namespace svt
     void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
         Control* pControl = m_pFilePickerController->getControl( nId, true );
-        DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
+        SAL_WARN_IF( !(pControl), "fpicker.office", "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
             pControl->SetText( rLabel );
     }
@@ -480,7 +480,7 @@ namespace svt
         OUString sLabel;
 
         Control* pControl = m_pFilePickerController->getControl( nId, true );
-        DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
+        SAL_WARN_IF( !(pControl), "fpicker.office","OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
             sLabel = pControl->GetText();
 
@@ -542,12 +542,12 @@ namespace svt
     {
         if ( !_pControl )
             _pControl = m_pFilePickerController->getControl( _nControlId );
-        DBG_ASSERT( _pControl, "OControlAccess::implSetControlProperty: invalid argument, this will crash!" );
+        SAL_WARN_IF( !(_pControl), "fpicker.office","OControlAccess::implSetControlProperty: invalid argument, this will crash!" );
         if ( !_pControl )
             return;
 
-        DBG_ASSERT( _pControl == m_pFilePickerController->getControl( _nControlId ),
-            "OControlAccess::implSetControlProperty: inconsistent parameters!" );
+        SAL_WARN_IF( _pControl != m_pFilePickerController->getControl( _nControlId ),
+            "fpicker.office", "OControlAccess::implSetControlProperty: inconsistent parameters!" );
 
         switch ( _nProperty )
         {
@@ -609,8 +609,8 @@ namespace svt
 
             case PROPERTY_FLAG_LISTITEMS:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_LISTBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 Sequence< OUString > aItems;
                 if ( _rValue >>= aItems )
@@ -639,8 +639,8 @@ namespace svt
 
             case PROPERTY_FLAG_SELECTEDITEM:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_LISTBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 OUString sSelected;
                 if ( _rValue >>= sSelected )
@@ -656,8 +656,8 @@ namespace svt
 
             case PROPERTY_FLAG_SELECTEDITEMINDEX:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_LISTBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
@@ -673,8 +673,8 @@ namespace svt
 
             case PROPERTY_FLAG_CHECKED:
             {
-                DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
-                    "OControlAccess::implSetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_CHECKBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 bool bChecked = false;
                 if ( _rValue >>= bChecked )
@@ -696,7 +696,7 @@ namespace svt
 
     Any OControlAccess::implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const
     {
-        DBG_ASSERT( _pControl, "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );
+        SAL_WARN_IF( !(_pControl), "fpicker.office", "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );
 
         Any aReturn;
         switch ( _nProperty )
@@ -719,8 +719,8 @@ namespace svt
 
             case PROPERTY_FLAG_LISTITEMS:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_LISTBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 Sequence< OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
                 OUString* pItems = aItems.getArray();
@@ -733,8 +733,8 @@ namespace svt
 
             case PROPERTY_FLAG_SELECTEDITEM:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_LISTBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 OUString sSelected;
@@ -746,8 +746,8 @@ namespace svt
 
             case PROPERTY_FLAG_SELECTEDITEMINDEX:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_LISTBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
@@ -758,8 +758,8 @@ namespace svt
             break;
 
             case PROPERTY_FLAG_CHECKED:
-                DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
-                    "OControlAccess::implGetControlProperty: invalid control/property combination!" );
+                SAL_WARN_IF( WINDOW_CHECKBOX != _pControl->GetType(),
+                    "fpicker.office", "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 aReturn <<= static_cast< CheckBox* >( _pControl )->IsChecked( );
                 break;
