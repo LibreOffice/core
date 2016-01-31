@@ -11,10 +11,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,ucb_webdav_local))
 
-$(eval $(call gb_CppunitTest_use_api,ucb_webdav_local, \
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_api,ucb_webdav_local,))
 
 $(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_local, \
 	comphelper \
