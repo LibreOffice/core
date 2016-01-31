@@ -32,7 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <nativewidgets.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/vclstatuslistener.hxx>
