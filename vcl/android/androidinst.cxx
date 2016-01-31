@@ -37,26 +37,6 @@ public:
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-void AndroidSalInstance::damaged(AndroidSalFrame* /* frame */)
-{
-    static bool beenHere = false;
-    static jmethodID nCallbackDamaged = 0;
-
-    // Check if we are running in an app that has registered for damage callbacks
-    // static public void callbackDamaged();
-    // Call the Java layer to post an invalidate if necessary
-
-    if (appClass != 0 && !beenHere) {
-        nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(appClass, "callbackDamaged", "()V");
-        if (nCallbackDamaged == 0)
-            LOGE("Could not find the callbackDamaged method");
-        beenHere = true;
-    }
-
-    if (appClass != 0 && nCallbackDamaged != 0)
-        m_pJNIEnv->CallStaticVoidMethod(appClass, nCallbackDamaged);
-}
-
 void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 {
     rRect = Rectangle( Point( 0, 0 ),
@@ -129,16 +109,6 @@ public:
     virtual void GetWorkArea( Rectangle& rRect )
     {
         AndroidSalInstance::getInstance()->GetWorkArea( rRect );
-    }
-
-    virtual void damaged( const basegfx::B2IBox& rDamageRect)
-    {
-        if (rDamageRect.getWidth() <= 0 ||
-            rDamageRect.getHeight() <= 0)
-        {
-            return;
-        }
-        AndroidSalInstance::getInstance()->damaged( this );
     }
 
     virtual void UpdateSettings( AllSettings &rSettings )

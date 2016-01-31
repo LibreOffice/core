@@ -48,7 +48,6 @@ class GlyphCache;
 class ServerFont;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
-typedef struct _cairo_rectangle_int cairo_rectangle_int_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
 enum PaintMode { OVERPAINT, XOR, INVERT };
@@ -218,7 +217,7 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 
     cairo_t*                getCairoContext(bool bXorModeAllowed) const;
-    void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const cairo_rectangle_int_t& extents) const;
+    void                    releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const;
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void                    clipRegion(cairo_t* cr);
 };
