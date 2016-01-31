@@ -2355,6 +2355,9 @@ namespace svgio
 
             if(maFontSizeNumber.isSet())
             {
+                if(!maFontSizeNumber.isPositive())
+                    return aDefaultSize;
+
                 // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
                 // spec 10.10 Font selection properties \91font-size\92, lastline (click 'normative
                 // definition of the property')
