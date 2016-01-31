@@ -25,7 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 
 namespace sd {
 
@@ -58,7 +58,7 @@ NavigatorChildWindow::NavigatorChildWindow (
         pBindings);
 
     pNavWin->SetUpdateRequestFunctor(
-        ::boost::bind(RequestNavigatorUpdate, pBindings));
+        std::bind(RequestNavigatorUpdate, pBindings));
 
     SetWindow( pNavWin );
 }

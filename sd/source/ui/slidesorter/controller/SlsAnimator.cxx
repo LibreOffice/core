@@ -20,7 +20,9 @@
 #include "controller/SlsAnimator.hxx"
 #include "view/SlideSorterView.hxx"
 #include "View.hxx"
-#include <boost/bind.hpp>
+#include <functional>
+
+using namespace std::placeholders;
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -132,10 +134,10 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
     const AnimationList::iterator iAnimation (::std::find_if(
         maAnimations.begin(),
         maAnimations.end(),
-        ::boost::bind(
+        std::bind(
             ::std::equal_to<Animator::AnimationId>(),
             nId,
-            ::boost::bind(&Animation::mnAnimationId, _1))));
+            std::bind(&Animation::mnAnimationId, _1))));
     if (iAnimation != maAnimations.end())
     {
         OSL_ASSERT((*iAnimation)->mnAnimationId == nId);
@@ -159,7 +161,7 @@ void Animator::RemoveAllAnimations()
     ::std::for_each(
         maAnimations.begin(),
         maAnimations.end(),
-        ::boost::bind(
+        std::bind(
             &Animation::Expire,
             _1));
     maAnimations.clear();

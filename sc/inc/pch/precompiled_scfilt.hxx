@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <deque>
 #include <exception>
+#include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -48,7 +49,6 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>

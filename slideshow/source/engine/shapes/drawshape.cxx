@@ -46,7 +46,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <boost/mem_fn.hpp>
 #include <cmath>
 #include <algorithm>
 #include <functional>
@@ -324,7 +323,7 @@ namespace slideshow
 
                         ::basegfx::B2DRange aTotalBounds;
 
-                        // cannot use ::boost::bind, ::basegfx::B2DRange::expand()
+                        // cannot use std::bind, ::basegfx::B2DRange::expand()
                         // is overloaded.
                         for( const auto& rDocTreeNode : rSubsets )
                             aTotalBounds.expand( pRenderer->getSubsetArea(
@@ -571,7 +570,7 @@ namespace slideshow
                     pShape->maAnimationFrames.begin(),
                     pShape->maAnimationFrames.end(),
                     std::back_insert_iterator< std::vector<double> >( aTimeout ),
-                    boost::mem_fn(&MtfAnimationFrame::getDuration) );
+                    std::mem_fn(&MtfAnimationFrame::getDuration) );
 
                 WakeupEventSharedPtr pWakeupEvent(
                     new WakeupEvent( rContext.mrEventQueue.getTimer(),

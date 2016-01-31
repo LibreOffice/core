@@ -31,13 +31,14 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <boost/bind.hpp>
 #include <algorithm>
+#include <functional>
 #include <memory>
 #include <math.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace std::placeholders;
 
 const static double gnScrollBarGap (10);
 
@@ -826,7 +827,7 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
 
         // Schedule repeated executions.
         mnMousePressRepeaterTaskId = PresenterTimer::ScheduleRepeatedTask (
-            ::boost::bind(&PresenterScrollBar::MousePressRepeater::Callback, shared_from_this(), _1),
+            std::bind(&PresenterScrollBar::MousePressRepeater::Callback, shared_from_this(), _1),
             500000000,
             250000000);
     }

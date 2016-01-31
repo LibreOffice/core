@@ -32,13 +32,14 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
+#include <functional>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 using ::std::vector;
 
 namespace sdext { namespace presenter {
@@ -365,7 +366,7 @@ void PresenterHelpView::ReadHelpStrings()
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xStrings,
-        ::boost::bind(&PresenterHelpView::ProcessString, this, _2));
+        std::bind(&PresenterHelpView::ProcessString, this, _2));
 }
 
 void PresenterHelpView::ProcessString (

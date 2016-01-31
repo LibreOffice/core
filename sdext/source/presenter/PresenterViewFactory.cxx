@@ -35,11 +35,12 @@
 #include <com/sun/star/drawing/XSlideSorterBase.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 
 namespace sdext { namespace presenter {
 
@@ -491,7 +492,7 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
         if (pDescriptor.get() != nullptr)
-            pDescriptor->maActivator = ::boost::bind(
+            pDescriptor->maActivator = std::bind(
                 &PresenterSlideSorter::SetActiveState, _1);
         xView = pView.get();
     }

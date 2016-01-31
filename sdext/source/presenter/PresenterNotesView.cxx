@@ -40,11 +40,12 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 
 static const sal_Int32 gnSpaceBelowSeparator (10);
 static const sal_Int32 gnSpaceAboveSeparator (10);
@@ -118,7 +119,7 @@ PresenterNotesView::PresenterNotesView (
             rxComponentContext,
             mxParentWindow,
             mpPresenterController->GetPaintManager(),
-            ::boost::bind(&PresenterNotesView::SetTop, this, _1));
+            std::bind(&PresenterNotesView::SetTop, this, _1));
         mpScrollBar->SetBackground(
             mpPresenterController->GetViewBackground(mxViewId->getResourceURL()));
 

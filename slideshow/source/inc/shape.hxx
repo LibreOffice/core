@@ -217,7 +217,7 @@ namespace slideshow
              */
             struct lessThanShape
             {
-                // make functor adaptable (to boost::bind)
+                // make functor adaptable (to std::bind)
                 typedef bool result_type;
 
                 // since the ZOrder property on the XShape has somewhat

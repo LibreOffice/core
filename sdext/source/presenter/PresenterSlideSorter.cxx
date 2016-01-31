@@ -43,13 +43,14 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
+#include <functional>
 #include <math.h>
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+using namespace std::placeholders;
 
 namespace {
     const static sal_Int32 gnVerticalGap (10);
@@ -304,7 +305,7 @@ PresenterSlideSorter::PresenterSlideSorter (
                 rxContext,
                 mxWindow,
                 mpPresenterController->GetPaintManager(),
-                ::boost::bind(&PresenterSlideSorter::SetVerticalOffset,this,_1)));
+                std::bind(&PresenterSlideSorter::SetVerticalOffset,this,_1)));
 
         mpCloseButton = PresenterButton::Create(
             rxContext,
@@ -1054,7 +1055,7 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
         PresenterGeometryHelper::ConvertRectangle(mpLayout->maBoundingBox)))
     {
         mpLayout->ForAllVisibleSlides(
-            ::boost::bind(&PresenterSlideSorter::PaintPreview, this, mxCanvas, rUpdateBox, _1));
+            std::bind(&PresenterSlideSorter::PaintPreview, this, mxCanvas, rUpdateBox, _1));
     }
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);

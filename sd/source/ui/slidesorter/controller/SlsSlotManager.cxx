@@ -87,13 +87,14 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
+using namespace std::placeholders;
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -1140,9 +1141,9 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     ::std::for_each (
         aPagesToSelect.begin(),
         aPagesToSelect.end(),
-        ::boost::bind(
+        std::bind(
             static_cast<void (PageSelector::*)(const SdPage*)>(&PageSelector::SelectPage),
-            ::boost::ref(rSelector),
+            std::ref(rSelector),
             _1));
 }
 

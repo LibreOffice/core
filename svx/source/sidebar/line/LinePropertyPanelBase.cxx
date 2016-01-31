@@ -49,10 +49,11 @@
 #include "svx/sidebar/PopupContainer.hxx"
 #include "svx/sidebar/PopupControl.hxx"
 #include "LineWidthControl.hxx"
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace css;
 using namespace css::uno;
+using namespace std::placeholders;
 using sfx2::sidebar::Theme;
 
 const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
@@ -175,7 +176,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mnWidthCoreValue(0),
     mpStartItem(),
     mpEndItem(),
-    maLineWidthPopup(this, ::boost::bind(&LinePropertyPanelBase::CreateLineWidthPopupControl, this, _1)),
+    maLineWidthPopup(this, std::bind(&LinePropertyPanelBase::CreateLineWidthPopupControl, this, _1)),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
     mbWidthValuable(true),

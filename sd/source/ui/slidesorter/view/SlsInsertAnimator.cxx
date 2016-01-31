@@ -25,9 +25,11 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 
+#include <functional>
 #include <memory>
 #include <set>
-#include <boost/bind.hpp>
+
+using namespace std::placeholders;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -258,9 +260,9 @@ InsertAnimator::Implementation::RunContainer::const_iterator
     return std::find_if(
         maRuns.begin(),
         maRuns.end(),
-        ::boost::bind(
-            ::std::equal_to<sal_Int32>(),
-            ::boost::bind(&PageObjectRun::mnRunIndex, _1),
+        std::bind(
+            std::equal_to<sal_Int32>(),
+            std::bind(&PageObjectRun::mnRunIndex, _1),
             nRunIndex));
 }
 

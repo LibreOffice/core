@@ -26,8 +26,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include <boost/bind.hpp>
 #include <algorithm>
+#include <functional>
 
 namespace {
 
@@ -338,7 +338,10 @@ bool ScUserList::operator!=( const ScUserList& r ) const
 
 bool ScUserList::HasEntry( const OUString& rStr ) const
 {
-    return ::std::any_of(maData.begin(), maData.end(), ::boost::bind(&ScUserListData::GetString, _1) == rStr);
+    return std::any_of(maData.begin(), maData.end(), [&rStr](const auto& rEntry)
+    {
+        return rEntry->GetString() == rStr;
+    });
 }
 
 ScUserList::iterator ScUserList::begin()

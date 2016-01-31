@@ -1516,7 +1516,7 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
         // allow listeners to veto
         lang::EventObject aEvent( *this );
         m_aCloseListener.forEach< XCloseListener >(
-            boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
+            boost::bind( &XCloseListener::queryClosing, _1, std::cref( aEvent ), std::cref( _bDeliverOwnership ) ) );
 
         // notify that we're going to unload
         m_aEventNotifier.notifyDocumentEvent( "OnPrepareUnload" );
@@ -1781,7 +1781,7 @@ void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference<
     Reference< XInterface > xMe( *this );
 
     m_aStorageListeners.forEach< XStorageChangeListener >(
-        boost::bind( &XStorageChangeListener::notifyStorageChange, _1, boost::cref( xMe ), boost::cref( _rxNewRootStorage ) ) );
+        boost::bind( &XStorageChangeListener::notifyStorageChange, _1, std::cref( xMe ), std::cref( _rxNewRootStorage ) ) );
 }
 
 void ODatabaseDocument::disposing()

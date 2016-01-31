@@ -56,7 +56,6 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>

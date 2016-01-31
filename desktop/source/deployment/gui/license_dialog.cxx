@@ -35,7 +35,7 @@
 #include <vcl/threadex.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include "dp_gui_shared.hxx"
 #include "license_dialog.hxx"
 #include "dp_gui.hrc"
@@ -311,7 +311,7 @@ void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException, std::e
 sal_Int16 LicenseDialog::execute() throw (RuntimeException, std::exception)
 {
     return vcl::solarthread::syncExecute(
-        boost::bind( &LicenseDialog::solar_execute, this));
+        std::bind( &LicenseDialog::solar_execute, this));
 }
 
 sal_Int16 LicenseDialog::solar_execute()

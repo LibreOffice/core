@@ -40,7 +40,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>

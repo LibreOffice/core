@@ -31,7 +31,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>

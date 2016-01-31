@@ -43,8 +43,6 @@
 #include <svx/xtable.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <boost/ref.hpp>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 
@@ -379,7 +377,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
                 const beans::PropertyValue* pIter = rArgs.getConstArray();
                 const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
                 const beans::PropertyValue* pKeyModifier = ::std::find_if(
-                    pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
+                    pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), std::cref( sKeyModifier ) ) );
                 sal_Int16 nKeyModifier = 0;
                 if ( pKeyModifier != pEnd && pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
                 {

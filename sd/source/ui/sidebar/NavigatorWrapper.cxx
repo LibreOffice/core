@@ -23,7 +23,7 @@
 
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 namespace sd { namespace sidebar {
 
@@ -38,7 +38,7 @@ NavigatorWrapper::NavigatorWrapper (
         SdResId(FLT_NAVIGATOR),
         pBindings))
 {
-    maNavigator->SetUpdateRequestFunctor(::boost::bind(&NavigatorWrapper::UpdateNavigator, this));
+    maNavigator->SetUpdateRequestFunctor(std::bind(&NavigatorWrapper::UpdateNavigator, this));
     maNavigator->SetPosSizePixel(
         Point(0,0),
         GetSizePixel());

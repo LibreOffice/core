@@ -25,9 +25,10 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace com::sun::star;
+using namespace std::placeholders;
 
 namespace pdfi
 {
@@ -89,9 +90,9 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     std::sort(aAttributes.begin(), aAttributes.end());
     std::for_each(aAttributes.begin(),
                   aAttributes.end(),
-                  boost::bind( (OUStringBuffer& (OUStringBuffer::*)(const OUString&))
+                  std::bind( (OUStringBuffer& (OUStringBuffer::*)(const OUString&))
                                (&OUStringBuffer::append),
-                               boost::ref(aElement),
+                               std::ref(aElement),
                                _1 ));
     aElement.append(">");
 

@@ -25,10 +25,11 @@
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <functional>
+
+using namespace std::placeholders;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -263,9 +264,9 @@ void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
     ::std::for_each(
         mpLayers->begin(),
         mpLayers->end(),
-        ::boost::bind(&Layer::Validate, _1, mpTargetWindow->GetMapMode()));
+        std::bind(&Layer::Validate, _1, mpTargetWindow->GetMapMode()));
 
-    ForAllRectangles(rRepaintRegion, ::boost::bind(&LayeredDevice::RepaintRectangle, this, _1));
+    ForAllRectangles(rRepaintRegion, std::bind(&LayeredDevice::RepaintRectangle, this, _1));
 }
 
 void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
@@ -286,7 +287,7 @@ void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
         ::std::for_each(
             mpLayers->begin(),
             mpLayers->end(),
-            ::boost::bind(&Layer::Repaint, _1, ::boost::ref(*mpBackBuffer), rRepaintRectangle));
+            std::bind(&Layer::Repaint, _1, std::ref(*mpBackBuffer), rRepaintRectangle));
 
         DeviceCopy(*mpTargetWindow, *mpBackBuffer, rRepaintRectangle);
     }
@@ -296,12 +297,12 @@ void LayeredDevice::Resize()
 {
     const Size aSize (mpTargetWindow->GetSizePixel());
     mpBackBuffer->SetOutputSizePixel(aSize);
-    ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Resize, _1, aSize));
+    ::std::for_each(mpLayers->begin(), mpLayers->end(), std::bind(&Layer::Resize, _1, aSize));
 }
 
 void LayeredDevice::Dispose()
 {
-    ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Dispose, _1));
+    ::std::for_each(mpLayers->begin(), mpLayers->end(), std::bind(&Layer::Dispose, _1));
     mpLayers->clear();
 }
 
@@ -414,7 +415,7 @@ void Layer::Validate (const MapMode& rMapMode)
         mpLayerDevice->SetMapMode(rMapMode);
         ForAllRectangles(
             aRegion,
-            ::boost::bind(&Layer::ValidateRectangle, this, _1));
+            std::bind(&Layer::ValidateRectangle, this, _1));
     }
 }
 
@@ -450,9 +451,9 @@ void Layer::Repaint (
         ::std::for_each(
             maPainters.begin(),
             maPainters.end(),
-            ::boost::bind(&ILayerPainter::Paint,
+            std::bind(&ILayerPainter::Paint,
                 _1,
-                ::boost::ref(rTargetDevice),
+                std::ref(rTargetDevice),
                 rRepaintRectangle));
     }
 }

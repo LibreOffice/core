@@ -43,7 +43,7 @@
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace ::com::sun::star;
 
@@ -1216,6 +1216,8 @@ void ToolbarLayoutManager::implts_createCustomToolBars()
 
 void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
 {
+    using namespace std::placeholders;
+
     SolarMutexClearableGuard aReadLock;
 
     if ( !m_xPersistentWindowState.is() || !m_xFrame.is() || !m_bComponentAttached )
@@ -1282,7 +1284,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
 
     if ( !aMakeVisibleToolbars.empty() )
         ::std::for_each( aMakeVisibleToolbars.begin(), aMakeVisibleToolbars.end(),
-                ::boost::bind( &ToolbarLayoutManager::requestToolbar, this, _1));
+                std::bind( &ToolbarLayoutManager::requestToolbar, this, _1));
 }
 
 void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno::Sequence< beans::PropertyValue > >& aTbxSeqSeq )
