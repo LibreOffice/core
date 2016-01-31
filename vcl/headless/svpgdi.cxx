@@ -549,7 +549,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPoly.setClosed(false);
 
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Middle,
+    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
                  css::drawing::LineCap_BUTT);
 }
 
@@ -709,14 +709,8 @@ bool SvpSalGraphics::drawPolyLine(
         return false;
     }
 
-    // #i101491# Cairo does not support B2DLineJoin::NONE; return false to use
-    // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if (basegfx::B2DLineJoin::NONE == eLineJoin && rLineWidths.getX() > 1.3)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLine case");
-        return false;
-    }
+    bool bNoJoin = (basegfx::B2DLineJoin::NONE == eLineJoin && rLineWidths.getX() > 1.3);
 
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
@@ -725,20 +719,16 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
     switch (eLineJoin)
     {
-        case basegfx::B2DLineJoin::NONE:
-            eCairoLineJoin = /*TODO?*/CAIRO_LINE_JOIN_MITER;
-            break;
-        case basegfx::B2DLineJoin::Middle:
-            eCairoLineJoin = /*TODO?*/CAIRO_LINE_JOIN_MITER;
-            break;
         case basegfx::B2DLineJoin::Bevel:
             eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
             break;
-        case basegfx::B2DLineJoin::Miter:
-            eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
-            break;
         case basegfx::B2DLineJoin::Round:
             eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
+            break;
+        case basegfx::B2DLineJoin::NONE:
+        case basegfx::B2DLineJoin::Middle:
+        case basegfx::B2DLineJoin::Miter:
+            eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
             break;
     }
 
@@ -764,8 +754,6 @@ bool SvpSalGraphics::drawPolyLine(
         }
     }
 
-    AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
-
     cairo_set_source_rgba(cr, SALCOLOR_RED(m_aLineColor)/255.0,
                               SALCOLOR_GREEN(m_aLineColor)/255.0,
                               SALCOLOR_BLUE(m_aLineColor)/255.0,
@@ -774,10 +762,46 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
     cairo_set_line_width(cr, rLineWidths.getX());
+    cairo_set_miter_limit(cr, 15.0);
 
-    cairo_rectangle_int_t extents = getStrokeDamage(cr);
 
-    cairo_stroke(cr);
+    cairo_rectangle_int_t extents = {0, 0, 0, 0};
+
+    if (!bNoJoin)
+    {
+        AddPolygonToPath(cr, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
+        extents = getStrokeDamage(cr);
+        cairo_stroke(cr);
+    }
+    else
+    {
+        // emulate rendering::PathJoinType::NONE by painting single edges
+        const sal_uInt32 nEdgeCount(rPolyLine.isClosed() ? nPointCount : nPointCount - 1);
+        basegfx::B2DPolygon aEdge;
+        aEdge.append(rPolyLine.getB2DPoint(0));
+        aEdge.append(basegfx::B2DPoint(0.0, 0.0));
+
+        std::vector<cairo_rectangle_int_t> aExtents;
+        aExtents.reserve(nEdgeCount);
+        for (sal_uInt32 i = 0; i < nEdgeCount; ++i)
+        {
+            const sal_uInt32 nNextIndex((i + 1) % nPointCount);
+            aEdge.setB2DPoint(1, rPolyLine.getB2DPoint(nNextIndex));
+            aEdge.setNextControlPoint(0, rPolyLine.getNextControlPoint(i % nPointCount));
+            aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
+
+            AddPolygonToPath(cr, aEdge, false, !getAntiAliasB2DDraw(), true);
+            aExtents.push_back(getStrokeDamage(cr));
+            cairo_stroke(cr);
+
+            // prepare next step
+            aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+        }
+
+        cairo_region_t* pRegion = cairo_region_create_rectangles(aExtents.data(), aExtents.size());
+        cairo_region_get_extents(pRegion, &extents);
+        cairo_region_destroy(pRegion);
+    }
 
     releaseCairoContext(cr, false, extents);
 
