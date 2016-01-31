@@ -441,9 +441,9 @@ void SvpSalGraphics::SetFillColor( SalColor nSalColor )
     m_aFillColor = nSalColor;
 }
 
-void SvpSalGraphics::SetXORMode(bool bSet, bool bInvert)
+void SvpSalGraphics::SetXORMode(bool bSet )
 {
-    m_ePaintMode = bInvert ? INVERT : (bSet ? XOR : OVERPAINT);
+    m_ePaintMode = bSet ? XOR : OVERPAINT;
 }
 
 void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
