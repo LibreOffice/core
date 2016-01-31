@@ -1966,7 +1966,7 @@ void AquaSalGraphics::SetROPLineColor( SalROPColor nROPColor )
     }
 }
 
-void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
+void AquaSalGraphics::SetXORMode( bool bSet )
 {
     // return early if XOR mode remains unchanged
     if( mbPrinter )
@@ -1979,7 +1979,7 @@ void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
         mnXorMode = 0;
         return;
     }
-    else if( bSet && bInvertOnly && mnXorMode == 0)
+    else if( bSet && mnXorMode == 0)
     {
         CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
         mnXorMode = 2;
