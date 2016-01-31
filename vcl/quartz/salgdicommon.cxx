@@ -1667,7 +1667,7 @@ void AquaSalGraphics::initResolution( NSWindow* )
         // least currently, it won't be over 200. I don't know whether
         // this test is a "sanity check", or whether there is some
         // real reason to limit this to 200.
-        static const int nMaxDPI = 200;
+        static const int nMaxDPI = 300;
         if( (mnRealDPIX > nMaxDPI) || (mnRealDPIY > nMaxDPI) )
         {
             mnRealDPIX = mnRealDPIY = nMaxDPI;
