@@ -1426,7 +1426,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                 break;
             case ocClose:
                 pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );
-                DBG_ASSERT( nFn > 0, "FormulaTokenArray::RewriteMissing: underflow");
+                SAL_WARN_IF(nFn <= 0, "formula.core", "FormulaTokenArray::RewriteMissing: underflow");
                 if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
                     --nOcas;                    // leaving ADDRESS()
                 if (nFn > 0)
