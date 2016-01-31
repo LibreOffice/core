@@ -116,7 +116,7 @@ public:
     virtual void            SetFillColor() override;
     virtual void            SetFillColor( SalColor nSalColor ) override;
 
-    virtual void            SetXORMode( bool bSet, bool ) override;
+    virtual void            SetXORMode( bool bSet ) override;
 
     virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
