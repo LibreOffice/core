@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "vcl/salnativewidgets.hxx"
+#include "nativewidgets.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"

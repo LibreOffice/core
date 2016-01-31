@@ -24,7 +24,7 @@
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <nativewidgets.hxx>
 #include <vcl/settings.hxx>
 
 #include <textlayout.hxx>

@@ -24,7 +24,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <../vcl/inc/nativewidgets.hxx>
 
 // forward
 namespace vcl { struct ImplControlData; struct ControlLayoutData; }

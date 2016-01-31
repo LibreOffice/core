@@ -32,7 +32,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <../vcl/inc/nativewidgets.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>

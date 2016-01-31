@@ -26,7 +26,7 @@
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <../vcl/inc/nativewidgets.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/vclptr.hxx>
 #include <vector>

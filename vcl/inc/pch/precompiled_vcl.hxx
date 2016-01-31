@@ -172,7 +172,7 @@
 #include <vcl/region.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/salgtype.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <nativewidgets.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

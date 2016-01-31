@@ -23,7 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include <vcl/salnativewidgets.hxx>
+#include <nativewidgets.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 
 #include <salgdi.hxx>

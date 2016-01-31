@@ -36,7 +36,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/salnativewidgets.hxx>
+#include <../vcl/inc/nativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
 

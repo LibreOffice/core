@@ -25,6 +25,7 @@
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
+#include "nativewidgets.hxx"
 
 #include <config_cairo_canvas.h>
 
