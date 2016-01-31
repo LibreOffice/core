@@ -36,6 +36,7 @@
 #include <ostream>
 #include <set>
 #include <sstream>
+#include <tuple>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -44,7 +45,6 @@
 #include <vector>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>

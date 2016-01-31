@@ -25,10 +25,7 @@
 #include <basegfx/tools/keystoplerp.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <boost/tuple/tuple.hpp>
-
 using namespace ::basegfx;
-using namespace ::boost::tuples;
 
 namespace basegfxtools
 {
@@ -62,25 +59,25 @@ public:
         double fAlpha;
         std::ptrdiff_t nIndex;
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(-1.0);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(-1.0);
         CPPUNIT_ASSERT_MESSAGE("-1.0", nIndex==0 && fAlpha==0.0);
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(0.1);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.1);
         CPPUNIT_ASSERT_MESSAGE("0.1", nIndex==0 && fAlpha==0.0);
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(0.3);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.3);
         CPPUNIT_ASSERT_MESSAGE("0.3", nIndex==0 && fTools::equal(fAlpha,0.5));
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(0.5);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.5);
         CPPUNIT_ASSERT_MESSAGE("0.5", nIndex==0 && fTools::equal(fAlpha,1.0));
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(0.51);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.51);
         CPPUNIT_ASSERT_MESSAGE("0.51", nIndex==1 && fTools::equal(fAlpha,0.025));
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(0.9);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(0.9);
         CPPUNIT_ASSERT_MESSAGE("0.51", nIndex==1 && fTools::equal(fAlpha,1.0));
 
-        tie(nIndex,fAlpha) = maKeyStops.lerp(1.0);
+        std::tie(nIndex,fAlpha) = maKeyStops.lerp(1.0);
         CPPUNIT_ASSERT_MESSAGE("0.51", nIndex==1 && fAlpha==1.0);
     }
 

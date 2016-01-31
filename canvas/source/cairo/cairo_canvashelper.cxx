@@ -20,8 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
-
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -868,7 +867,7 @@ namespace cairocanvas
 
                                     std::ptrdiff_t nIndex;
                                     double fAlpha;
-                                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+                                    std::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                                     setColor(pCairo, lerp(pColors[nIndex], pColors[nIndex+1], fAlpha));
                                     cairo_rectangle( pCairo, -1+fT, -1+fT, 2-2*fT, 2-2*fT );

@@ -74,7 +74,7 @@
 #include <oox/token/tokens.hxx>
 
 #include <map>
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -2288,7 +2288,7 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
     return token.makeStringAndClear();
 }
 
-boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
+std::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
 lcl_SplitFieldCommand(const OUString& rCommand)
 {
     OUString sType;
@@ -2330,9 +2330,8 @@ lcl_SplitFieldCommand(const OUString& rCommand)
         }
     } while (nStartIndex < rCommand.getLength());
 
-    return boost::make_tuple(sType, arguments, switches);
+    return std::make_tuple(sType, arguments, switches);
 }
-
 
 OUString lcl_ExctractAskVariableAndHint( const OUString& rCommand, OUString& rHint )
 {
@@ -3555,13 +3554,13 @@ void DomainMapper_Impl::CloseFieldCommand()
         {
             uno::Reference< uno::XInterface > xFieldInterface;
 
-            boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
+            std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > const
                 field(lcl_SplitFieldCommand(pContext->GetCommand()));
-            OUString const sFirstParam(boost::get<1>(field).empty()
-                    ? OUString() : boost::get<1>(field).front());
+            OUString const sFirstParam(std::get<1>(field).empty()
+                    ? OUString() : std::get<1>(field).front());
 
             FieldConversionMap_t::iterator const aIt =
-                aFieldConversionMap.find(boost::get<0>(field));
+                aFieldConversionMap.find(std::get<0>(field));
             if(aIt != aFieldConversionMap.end())
             {
                 bool bCreateEnhancedField = false;
@@ -3614,7 +3613,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
                         FieldConversionMap_t::iterator aEnhancedIt =
-                            aEnhancedFieldConversionMap.find(boost::get<0>(field));
+                            aEnhancedFieldConversionMap.find(std::get<0>(field));
                         if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
                             sServiceName += OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
                     }
