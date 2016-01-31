@@ -512,7 +512,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
 
 void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode eOp, const CharClass* pCharClass )
 {
-    DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
+    SAL_WARN_IF( !(0 < eOp && sal_uInt16(eOp) < mnSymbols), "formula.core", "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
     {
         SAL_WARN_IF( !(mpTable[eOp].isEmpty() || (mpTable[eOp] == rStr) ||
