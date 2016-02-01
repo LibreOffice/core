@@ -24,8 +24,6 @@
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
 
-static jclass appClass = 0;
-
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
