@@ -88,6 +88,7 @@ using ::std::max;
 #endif
 
 #include <time.h>
+#include "../../../include/vcl/vclptr.hxx"
 
 #if defined ( __MINGW32__ )
 #include <sehandler.hxx>
@@ -1136,13 +1137,12 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
         // #i4715, save position
         RECT aRectPreMatrox, aRectPostMatrox;
         GetWindowRect( hWnd, &aRectPreMatrox );
-
-        vcl::DeletionListener aDogTag( pFrame );
+        VclPtr<vcl::DeletionListener> xWindow = const_cast<WinSalFrame*> pFrame;
         if( bNoActivate )
             ShowWindow( hWnd, SW_SHOWNOACTIVATE );
         else
             ShowWindow( hWnd, pFrame->mnShowState );
-        if( aDogTag.isDeleted() )
+        if( xWindow->isDeleted())
             return;
 
         if ( aSalShlData.mbWXP && pFrame->mbFloatWin && !(pFrame->mnStyle & SalFrameStyleFlags::NOSHADOW))

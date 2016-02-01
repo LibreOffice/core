@@ -1974,10 +1974,10 @@ void Window::GetFocus()
 {
     if ( HasFocus() && mpWindowImpl->mpLastFocusWindow && !(mpWindowImpl->mnDlgCtrlFlags & DialogControlFlags::WantFocus) )
     {
-        ImplDelData aDogtag( this );
+        VclPtr<vcl::Window> xWindow = this;
         mpWindowImpl->mpLastFocusWindow->GrabFocus();
-        if( aDogtag.IsDead() )
-            return;
+        if( xWindow->IsDisposed())
+            return ;
     }
 
     NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
@@ -2321,7 +2321,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     if ( IsDisposed() || mpWindowImpl->mbVisible == bVisible )
         return;
 
-    ImplDelData aDogTag( this );
+    VclPtr<vcl::Window> xWindow = this;
 
     bool bRealVisibilityChanged = false;
     mpWindowImpl->mbVisible = bVisible;
@@ -2329,7 +2329,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     if ( !bVisible )
     {
         ImplHideAllOverlaps();
-        if( aDogTag.IsDead() )
+        if( xWindow->IsDisposed())
             return;
 
         if ( mpWindowImpl->mpBorderWindow )
@@ -2366,7 +2366,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 aInvRegion = mpWindowImpl->maWinClipRegion;
             }
 
-            if( aDogTag.IsDead() )
+            if( xWindow->IsDisposed())
                 return;
 
             bRealVisibilityChanged = mpWindowImpl->mbReallyVisible;
@@ -2502,7 +2502,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 bool bNoActivate(nFlags & (ShowFlags::NoActivate|ShowFlags::NoFocusChange));
                 mpWindowImpl->mpFrame->Show( true, bNoActivate );
             }
-            if( aDogTag.IsDead() )
+            if( xWindow->IsDisposed() )
                 return;
 
             // Query the correct size of the window, if we are waiting for
@@ -2520,13 +2520,13 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 mpWindowImpl->mpFrameData->mpBuffer->SetOutputSizePixel(GetOutputSizePixel());
         }
 
-        if( aDogTag.IsDead() )
+        if( xWindow->IsDisposed())
             return;
 
         ImplShowAllOverlaps();
     }
 
-    if( aDogTag.IsDead() )
+    if( xWindow->IsDisposed())
         return;
     // invalidate all saved backgrounds
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
@@ -2539,7 +2539,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
         CallEventListeners( mpWindowImpl->mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE );
-    if( aDogTag.IsDead() )
+    if( xWindow->IsDisposed())
         return;
 
 }
@@ -2555,10 +2555,10 @@ Size Window::GetSizePixel() const
     // #i43257# trigger pending resize handler to assure correct window sizes
     if( mpWindowImpl->mpFrameData->maResizeIdle.IsActive() )
     {
-        ImplDelData aDogtag( const_cast<Window*>(this) );
+        VclPtr<vcl::Window> xWindow = const_cast<Window*>(this);
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
         mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( nullptr );
-        if( aDogtag.IsDead() )
+        if( xWindow->IsDisposed())
             return Size(0,0);
     }
 
@@ -3342,9 +3342,9 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
     // no deactivation if the newly activated window is my child
     if ( !pNew || !ImplIsChild( pNew ) )
     {
-        ImplDelData aDogtag( this );
+        VclPtr<vcl::Window> xWindow = this;
         CallEventListeners( VCLEVENT_WINDOW_DEACTIVATE );
-        if( aDogtag.IsDead() )
+        if( xWindow->IsDisposed())
             return;
 
         // #100759#, avoid walking the wrong frame's hierarchy
@@ -3359,9 +3359,9 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
     // no activation if the old active window is my child
     if ( !pOld || !ImplIsChild( pOld ) )
     {
-        ImplDelData aDogtag( this );
+        VclPtr<vcl::Window> xWindow = this;
         CallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
-        if( aDogtag.IsDead() )
+        if( xWindow->IsDisposed())
             return;
 
         if ( ImplGetParent() )
