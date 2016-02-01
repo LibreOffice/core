@@ -20,8 +20,6 @@
 
 #include <canvas/canvastools.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 #include "appletshape.hxx"
 #include "externalshapebase.hxx"
 #include "vieweventhandler.hxx"
@@ -268,7 +266,7 @@ namespace slideshow
             // No way of doing this, or?
         }
 
-        boost::shared_ptr<Shape> createAppletShape(
+        std::shared_ptr<Shape> createAppletShape(
             const uno::Reference< drawing::XShape >& xShape,
             double                                   nPrio,
             const OUString&                   rServiceName,
@@ -276,7 +274,7 @@ namespace slideshow
             sal_Size                                 nNumPropEntries,
             const SlideShowContext&                  rContext )
         {
-            boost::shared_ptr< AppletShape > pAppletShape(
+            std::shared_ptr< AppletShape > pAppletShape(
                 new AppletShape(xShape,
                                 nPrio,
                                 rServiceName,

@@ -26,12 +26,10 @@
 #include "view.hxx"
 #include "animatableshape.hxx"
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 #include <vector>
+#include <memory>
 
 
 namespace slideshow
@@ -60,18 +58,18 @@ namespace slideshow
             be called from the LayerManager. Normally, it shouldn't be
             possible to get hold of an instance of this class at all.
          */
-        class Layer : public boost::enable_shared_from_this<Layer>,
+        class Layer : public std::enable_shared_from_this<Layer>,
                       private boost::noncopyable
         {
         public:
-            typedef boost::shared_ptr<LayerEndUpdate> EndUpdater;
+            typedef std::shared_ptr<LayerEndUpdate> EndUpdater;
 
             /** Create background layer
 
                 This method will create a layer without a ViewLayer,
                 i.e. one that displays directly on the background.
              */
-            static ::boost::shared_ptr< Layer > createBackgroundLayer();
+            static ::std::shared_ptr< Layer > createBackgroundLayer();
 
             /** Create non-background layer
 
@@ -79,7 +77,7 @@ namespace slideshow
                 background, to contain shapes that should appear in
                 front of animated objects.
              */
-            static ::boost::shared_ptr< Layer > createLayer();
+            static ::std::shared_ptr< Layer > createLayer();
 
 
             /** Predicate, whether this layer is the special
@@ -255,8 +253,8 @@ namespace slideshow
             bool                       mbClipSet; // true, if beginUpdate set a clip
         };
 
-        typedef ::boost::shared_ptr< Layer >    LayerSharedPtr;
-        typedef ::boost::weak_ptr< Layer >      LayerWeakPtr;
+        typedef ::std::shared_ptr< Layer >    LayerSharedPtr;
+        typedef ::std::weak_ptr< Layer >      LayerWeakPtr;
         typedef ::std::vector< LayerSharedPtr > LayerVector;
 
     }

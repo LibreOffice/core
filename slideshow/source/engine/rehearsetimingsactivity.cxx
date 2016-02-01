@@ -103,7 +103,7 @@ public:
 private:
     ::canvas::tools::ElapsedTime    maTimer;
     double                          mnNextTime;
-    boost::weak_ptr<Activity>       mpActivity;
+    std::weak_ptr<Activity>       mpActivity;
     ActivitiesQueue&                mrActivityQueue;
 };
 
@@ -188,10 +188,10 @@ RehearseTimingsActivity::~RehearseTimingsActivity()
     }
 }
 
-boost::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
+std::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
     const SlideShowContext& rContext )
 {
-    boost::shared_ptr<RehearseTimingsActivity> pActivity(
+    std::shared_ptr<RehearseTimingsActivity> pActivity(
         new RehearseTimingsActivity( rContext ));
 
     pActivity->mpMouseHandler.reset(
@@ -217,7 +217,7 @@ void RehearseTimingsActivity::start()
     for_each_sprite( []( const ::cppcanvas::CustomSpriteSharedPtr& pSprite )
                      { return pSprite->show(); } );
 
-    mrActivitiesQueue.addActivity( shared_from_this() );
+    mrActivitiesQueue.addActivity( std::shared_ptr<Activity>((Activity*)this) );
 
     mpMouseHandler->reset();
     mrEventMultiplexer.addClickHandler(

@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_VIEWEVENTHANDLER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWEVENTHANDLER_HXX
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 #include "unoview.hxx"
 
@@ -39,7 +38,7 @@ namespace slideshow
             EventMultiplexer object, and are called from there to
             handle view events.
          */
-        class ViewEventHandler
+        class ViewEventHandler : public virtual std::enable_shared_from_this<ViewEventHandler>
         {
         public:
             virtual ~ViewEventHandler() {}
@@ -82,8 +81,8 @@ namespace slideshow
             virtual void viewsChanged() = 0;
         };
 
-        typedef ::boost::shared_ptr< ViewEventHandler > ViewEventHandlerSharedPtr;
-        typedef ::boost::weak_ptr< ViewEventHandler >   ViewEventHandlerWeakPtr;
+        typedef ::std::shared_ptr< ViewEventHandler > ViewEventHandlerSharedPtr;
+        typedef ::std::weak_ptr< ViewEventHandler >   ViewEventHandlerWeakPtr;
 
     }
 }

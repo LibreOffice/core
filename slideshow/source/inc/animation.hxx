@@ -43,7 +43,7 @@ namespace slideshow
             @see ColorAnimation
             @see PairAnimation
          */
-        class Animation
+        class Animation : public virtual std::enable_shared_from_this<Animation>
         {
         public:
             virtual ~Animation() {}
@@ -81,7 +81,7 @@ namespace slideshow
             virtual void end() = 0;
         };
 
-        typedef ::boost::shared_ptr< Animation > AnimationSharedPtr;
+        typedef ::std::shared_ptr< Animation > AnimationSharedPtr;
 
     }
 }

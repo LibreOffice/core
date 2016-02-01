@@ -451,12 +451,12 @@ private:
     UserEventQueue                          maUserEventQueue;
     SubsettableShapeManagerSharedPtr        mpDummyPtr;
 
-    boost::shared_ptr<SeparateListenerImpl> mpListener;
+    std::shared_ptr<SeparateListenerImpl> mpListener;
 
-    boost::shared_ptr<RehearseTimingsActivity> mpRehearseTimingsActivity;
-    boost::shared_ptr<WaitSymbol>           mpWaitSymbol;
+    std::shared_ptr<RehearseTimingsActivity> mpRehearseTimingsActivity;
+    std::shared_ptr<WaitSymbol>           mpWaitSymbol;
 
-    boost::shared_ptr<PointerSymbol>        mpPointerSymbol;
+    std::shared_ptr<PointerSymbol>        mpPointerSymbol;
 
     /// the current slide transition sound object:
     SoundPlayerSharedPtr                    mpCurrentSlideTransitionSound;
@@ -1855,7 +1855,7 @@ void SlideShowImpl::addShapeEventListener(
         aIter = maShapeEventListeners.insert(
             ShapeEventListenerMap::value_type(
                 xShape,
-                boost::shared_ptr<comphelper::OInterfaceContainerHelper2>(
+                std::shared_ptr<comphelper::OInterfaceContainerHelper2>(
                     new comphelper::OInterfaceContainerHelper2(m_aMutex)))).first;
     }
 

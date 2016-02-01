@@ -432,7 +432,7 @@ AnimationBaseNode::fillCommonParameters() const
     double nAcceleration = 0.0;
     double nDeceleration = 0.0;
     BaseNodeSharedPtr const pSelf( getSelf() );
-    for ( boost::shared_ptr<BaseNode> pNode( pSelf );
+    for ( std::shared_ptr<BaseNode> pNode( pSelf );
           pNode; pNode = pNode->getParentNode() )
     {
         uno::Reference<animations::XAnimationNode> const xAnimationNode(

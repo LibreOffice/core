@@ -30,8 +30,6 @@
 #include "hyperlinkarea.hxx"
 
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <set>
 #include <vector>
 
@@ -45,7 +43,7 @@ namespace slideshow
         struct SlideShowContext;
         class  DrawShapeSubsetting;
         class  DrawShape;
-        typedef ::boost::shared_ptr< DrawShape > DrawShapeSharedPtr;
+        typedef ::std::shared_ptr< DrawShape > DrawShapeSharedPtr;
 
         /** This class is the representation of a draw document's
             XShape, and implements the Shape, AnimatableShape, and
@@ -308,7 +306,7 @@ namespace slideshow
             ShapeAttributeLayerSharedPtr                                            mpAttributeLayer; // only created lazily
 
             // held here, to signal our destruction
-            boost::weak_ptr<Activity>                                               mpIntrinsicAnimationActivity;
+            std::weak_ptr<Activity>                                               mpIntrinsicAnimationActivity;
 
             // The attribute states, to detect attribute changes,
             // without buffering and querying each single attribute
