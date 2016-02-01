@@ -201,7 +201,7 @@ namespace svt
         if ( !m_pDlg )
         {
             m_pDlg.reset( implCreateDialog( VCLUnoHelper::GetWindow( m_xDialogParent ) ) );
-            DBG_ASSERT( m_pDlg, "OCommonPicker::createPicker: invalid dialog returned!" );
+            SAL_WARN_IF( !m_pDlg, "fpicker.office", "OCommonPicker::createPicker: invalid dialog returned!" );
 
             if ( m_pDlg )
             {
