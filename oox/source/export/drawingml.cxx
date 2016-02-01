@@ -1491,6 +1491,10 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
                 {
                     aFieldValue = "slidenum";
                 }
+                else if( aFieldKind == "Pages" )
+                {
+                    aFieldValue = "pagecount";
+                }
                 else if( aFieldKind == "URL" )
                 {
                     bIsURLField = true;

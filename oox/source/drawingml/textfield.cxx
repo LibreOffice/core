@@ -140,6 +140,11 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
         aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
     }
+    else if ( sType == "pagecount")
+    {
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageCount" );
+        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+    }
     else if ( sType.startsWith("file") )
     {
         OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
