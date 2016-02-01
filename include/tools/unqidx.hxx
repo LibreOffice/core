@@ -38,8 +38,6 @@ public:
         : maMap(),
           nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex), nCount(0) {}
 
-    size_t size() const { return maMap.size(); }
-
     sal_uIntPtr   Insert( void* p );
     // insert value with key, replacing existing entry if necessary
     void*         Remove( sal_uIntPtr aIndex );

@@ -49,7 +49,7 @@ void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 {
     // Check for valid index
     if ( (nIndex >= nStartIndex) &&
-         (nIndex < (size() + nStartIndex)) )
+         (nIndex < (maMap.size() + nStartIndex)) )
     {
         // insert index as empty entry, and reduce indexcount,
         // if this entry was used
@@ -69,7 +69,7 @@ void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
 {
     // check for valid index
     if ( (nIndex >= nStartIndex) &&
-         (nIndex < (size() + nStartIndex)) )
+         (nIndex < (maMap.size() + nStartIndex)) )
     {
         std::map<sal_uInt32, void*>::const_iterator it = maMap.find( nIndex - nStartIndex );
         if( it != maMap.end() )
