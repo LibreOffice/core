@@ -24,7 +24,7 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)

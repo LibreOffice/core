@@ -19,7 +19,7 @@
 
 #include <osl/diagnose.h>
 #include "Fetc.hxx"
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 
 CFormatEtc::CFormatEtc(  )
 {

@@ -21,7 +21,7 @@
 #include <rtl/string.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 #include "../misc/WinClip.hxx"
 #include "MimeAttrib.hxx"
 #include "DTransHelper.hxx"
