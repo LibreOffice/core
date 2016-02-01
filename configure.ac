@@ -1261,11 +1261,6 @@ AC_ARG_ENABLE(randr,
         [Disable RandR support in the vcl project.]),
 ,enable_randr=yes)
 
-AC_ARG_ENABLE(randr-link,
-    AS_HELP_STRING([--disable-randr-link],
-        [Disable linking with libXrandr, instead dynamically open it at runtime.]),
-,enable_randr_link=yes)
-
 AC_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the new gstreamer 1.0 avmedia backend.]),
@@ -9224,32 +9219,24 @@ dnl Check for XRandr
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable RandR support])
 if test "$USING_X11" = TRUE -a "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \); then
-    if test -z "$enable_randr_link" -o "$enable_randr_link" = "no"; then
-        XRANDR_DLOPEN="TRUE"
+    AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES(XRANDR, xrandr >= 1.2, ENABLE_RANDR="TRUE", ENABLE_RANDR="")
+    if test "$ENABLE_RANDR" != "TRUE"; then
+        AC_CHECK_HEADER(X11/extensions/Xrandr.h, [],
+                    [AC_MSG_ERROR([X11/extensions/Xrandr.h could not be found. X11 dev missing?])], [])
+        XRANDR_CFLAGS=" "
+        AC_CHECK_LIB([Xrandr], [XRRQueryExtension], [:],
+          [ AC_MSG_ERROR(libXrandr not found or functional) ], [])
+        XRANDR_LIBS="-lXrandr "
         ENABLE_RANDR="TRUE"
-        AC_MSG_RESULT([configured to dlopen libXrandr at runtime])
-    else
-        AC_MSG_RESULT([yes])
-        XRANDR_DLOPEN="FALSE"
-        PKG_CHECK_MODULES(XRANDR, xrandr >= 1.2, ENABLE_RANDR="TRUE", ENABLE_RANDR="")
-        if test "$ENABLE_RANDR" != "TRUE"; then
-            AC_CHECK_HEADER(X11/extensions/Xrandr.h, [],
-                        [AC_MSG_ERROR([X11/extensions/Xrandr.h could not be found. X11 dev missing?])], [])
-            XRANDR_CFLAGS=" "
-            AC_CHECK_LIB([Xrandr], [XRRQueryExtension], [:],
-              [ AC_MSG_ERROR(libXrandr not found or functional) ], [])
-            XRANDR_LIBS="-lXrandr "
-            ENABLE_RANDR="TRUE"
-        fi
-        XRANDR_CFLAGS=$(printf '%s' "$XRANDR_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${XRANDR_LIBS}"
-        XRANDR_LIBS="${filteredlibs}"
     fi
+    XRANDR_CFLAGS=$(printf '%s' "$XRANDR_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${XRANDR_LIBS}"
+    XRANDR_LIBS="${filteredlibs}"
 else
     ENABLE_RANDR=""
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(XRANDR_DLOPEN)
 AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 AC_SUBST(ENABLE_RANDR)

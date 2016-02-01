@@ -3230,8 +3230,6 @@ endif # ENABLE_EOT
 
 ifeq ($(USING_X11), TRUE)
 
-ifeq ($(XRANDR_DLOPEN),FALSE)
-
 define gb_LinkTarget__use_Xrandr
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -3242,16 +3240,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(XRANDR_LIBS) \
 )
 endef
-
-else # XRANDR_DLOPEN
-
-define gb_LinkTarget__use_Xrandr
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DXRANDR_DLOPEN \
-)
-endef
-
-endif # XRANDR_DLOPEN
 
 define gb_LinkTarget__use_Xrender
 $(call gb_LinkTarget_set_include,$(1),\
