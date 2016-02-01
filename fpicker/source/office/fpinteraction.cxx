@@ -38,7 +38,7 @@ namespace svt
         ,m_bUsed( false )
         ,m_eInterceptions( OFilePickerInteractionHandler::E_NOINTERCEPTION )
     {
-        DBG_ASSERT( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
+        SAL_WARN_IF( !m_xMaster.is(), "fpicker.office", "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
 

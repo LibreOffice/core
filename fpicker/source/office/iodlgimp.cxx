@@ -190,7 +190,7 @@ void SvtUpButton_Impl::Select()
     if ( nId )
     {
         --nId;
-        DBG_ASSERT( nId <= _aURLs.size(), "SvtUpButton_Impl:falscher Index" );
+        assert( nId <= _aURLs.size() &&  "SvtUpButton_Impl:falscher Index" );
 
         GetDialogParent()->OpenURL_Impl(_aURLs[nId]);
     }
