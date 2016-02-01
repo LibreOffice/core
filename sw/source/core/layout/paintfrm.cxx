@@ -560,7 +560,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
         {
             if (rtl::math::approxEqual(rThis.getStart().getX(), rOther.getStart().getX()))
             {
-                assert(rThis.getEnd().getX() == rOther.getEnd().getX());
+                assert(rtl::math::approxEqual(rThis.getEnd().getX(), rOther.getEnd().getX()));
                 nRet = lcl_TryMergeLines(
                     make_pair(rThis.getStart().getY(), rThis.getEnd().getY()),
                     make_pair(rOther.getStart().getY(),rOther.getEnd().getY()),
@@ -571,7 +571,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
         {
             if (rtl::math::approxEqual(rThis.getStart().getY(), rOther.getStart().getY()))
             {
-                assert(rThis.getEnd().getY() == rOther.getEnd().getY());
+                assert(rtl::math::approxEqual(rThis.getEnd().getY(), rOther.getEnd().getY()));
                 nRet = lcl_TryMergeLines(
                     make_pair(rThis.getStart().getX(), rThis.getEnd().getX()),
                     make_pair(rOther.getStart().getX(),rOther.getEnd().getX()),
