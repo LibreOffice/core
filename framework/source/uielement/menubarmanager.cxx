@@ -226,7 +226,7 @@ MenuBarManager::~MenuBarManager()
     m_xDeferedItemContainer.clear();
     m_aAsyncSettingsTimer.Stop();
 
-    DBG_ASSERT( OWeakObject::m_refCount == 0, "Who wants to delete an object with refcount > 0!" );
+    SAL_WARN_IF( OWeakObject::m_refCount != 0, "framework.uielement", "Who wants to delete an object with refcount > 0!" );
 }
 
 void MenuBarManager::Destroy()
