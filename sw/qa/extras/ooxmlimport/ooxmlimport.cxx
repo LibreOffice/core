@@ -3001,6 +3001,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf60351, "tdf60351.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),   aPolygon[5].Y);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf97417, "section_break_numbering.docx")
+{
+    // paragraph with numbering and section break was removed by writerfilter
+    // but its numbering was copied to all following paragraphs
+    CPPUNIT_ASSERT_MESSAGE("first paragraph missing numbering",
+        getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules").is());
+    uno::Reference<beans::XPropertySet> const xProps(getParagraph(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("second paragraph erroneous numbering",
+        !xProps->getPropertyValue("NumberingRules").hasValue());
+
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf95970, "tdf95970.docx")
 {
     // First shape: the rotation should be -12.94 deg, it should be mirrored.
