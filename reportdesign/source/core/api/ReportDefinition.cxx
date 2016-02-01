@@ -125,7 +125,6 @@
 #include <vcl/virdev.hxx>
 
 #include <boost/bind.hpp>
-#include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
 
 //  page styles

@@ -140,7 +140,6 @@
 #include "PageNumber.hxx"
 #include "UndoEnv.hxx"
 
-#include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
