@@ -56,7 +56,7 @@ namespace vclcanvas
         if( maArguments.getLength() == 0 )
             return;
 
-        OSL_TRACE( "SpriteCanvas created" );
+        SAL_INFO("canvas.vcl", "SpriteCanvas created" );
 
         // add our own property to GraphicDevice
         maPropHelper.addProperties(
@@ -105,7 +105,7 @@ namespace vclcanvas
 
     SpriteCanvas::~SpriteCanvas()
     {
-        OSL_TRACE( "SpriteCanvas destroyed" );
+        SAL_INFO("canvas.vcl", "SpriteCanvas destroyed" );
     }
 
 
