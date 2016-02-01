@@ -50,7 +50,10 @@ Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 
     if( pScreen )
     {
-        NSRect aFrame = [pScreen frame];
+        NSRect aFrame = [pScreen convertRectToBacking:[pScreen frame]];
+
+        SAL_INFO("vcl.quartz", "\nPixel Width: " << aFrame.size.width << "\n" << "Pixel Height: " << aFrame.size.height);
+
         aRet = Rectangle( Point( static_cast<long int>(aFrame.origin.x), static_cast<long int>(aFrame.origin.y) ),
                           Size( static_cast<long int>(aFrame.size.width), static_cast<long int>(aFrame.size.height) ) );
     }
