@@ -877,11 +877,9 @@ JNI_info::JNI_info(
 
 void JNI_info::destruct( JNIEnv * jni_env )
 {
-    t_str2type::const_iterator iPos( m_type_map.begin() );
-    t_str2type::const_iterator const iEnd( m_type_map.begin() );
-    for ( ; iPos != iEnd; ++iPos )
+    for (auto & i: m_type_map)
     {
-        iPos->second.m_info->destroy( jni_env );
+        i.second.m_info->destroy( jni_env );
     }
     if (nullptr != m_XInterface_type_info)
     {
