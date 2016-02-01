@@ -177,8 +177,7 @@ private:
     OUString impl_g_getLocation();
 
     bool
-        impl_isControllerConnected( const com::sun::star::uno::Reference<
-                            com::sun::star::frame::XController >& xController );
+        impl_isControllerConnected( const com::sun::star::uno::Reference< com::sun::star::frame::XController >& xController );
 
     com::sun::star::uno::Reference< com::sun::star::frame::XController >
         impl_getCurrentController()
@@ -195,22 +194,15 @@ private:
                             throw(::com::sun::star::uno::RuntimeException);
 
     void impl_store(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::embed::XStorage > & xStorage );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > & xStorage );
     void impl_load(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::embed::XStorage >& xStorage );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     void impl_loadGraphics(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::embed::XStorage >& xStorage );
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XFilter >
-        impl_createFilter( const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter >
+        impl_createFilter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate > impl_createDefaultChartTypeTemplate();
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > impl_createDefaultData();
@@ -222,8 +214,7 @@ private:
 
 public:
     //no default constructor
-    ChartModel(::com::sun::star::uno::Reference<
-               ::com::sun::star::uno::XComponentContext > const & xContext);
+    ChartModel(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel();
 
@@ -247,8 +238,7 @@ public:
 
     virtual sal_Bool SAL_CALL
         attachResource( const OUString& rURL
-                            , const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
+                            , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
@@ -258,13 +248,11 @@ public:
         getArgs()           throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        connectController( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XController >& xController )
+        connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        disconnectController( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XController >& xController )
+        disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
@@ -282,8 +270,7 @@ public:
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        setCurrentController( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XController >& xController )
+        setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
                             throw (::com::sun::star::container::NoSuchElementException
                             , ::com::sun::star::uno::RuntimeException, std::exception) override;
 
@@ -296,13 +283,11 @@ public:
         dispose()           throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        addEventListener( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::lang::XEventListener > & xListener )
+        addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        removeEventListener( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::lang::XEventListener > & xListener )
+        removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ::com::sun::star::util::XCloseable
@@ -313,13 +298,11 @@ public:
 
     // ::com::sun::star::util::XCloseBroadcaster (base of XCloseable)
     virtual void SAL_CALL
-        addCloseListener( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XCloseListener > & xListener )
+        addCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        removeCloseListener( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XCloseListener > & xListener )
+        removeCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ::com::sun::star::frame::XStorable2 (extension of XStorable)
@@ -345,15 +328,13 @@ public:
 
     virtual void SAL_CALL
         storeAsURL( const OUString& rURL
-                            , const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
+                            , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
                             throw (::com::sun::star::io::IOException
                             , ::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
         storeToURL( const OUString& rURL
-                            , const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
+                            , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
                             throw (::com::sun::star::io::IOException
                             , ::com::sun::star::uno::RuntimeException, std::exception) override;
 
@@ -368,13 +349,11 @@ public:
 
     // ::com::sun::star::util::XModifyBroadcaster (base of XModifiable)
     virtual void SAL_CALL
-        addModifyListener( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XModifyListener >& xListener )
+        addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-        removeModifyListener( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XModifyListener >& xListener )
+        removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener )
                             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XModifyListener ____
@@ -412,8 +391,7 @@ public:
         getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ::com::sun::star::chart2::XChartDocument
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDiagram > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
         getFirstDiagram()       throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setFirstDiagram(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
@@ -428,8 +406,7 @@ public:
         getDataProvider()
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
-        setChartTypeManager( const ::com::sun::star::uno::Reference<
-                             ::com::sun::star::chart2::XChartTypeManager >& xNewManager )
+        setChartTypeManager( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >& xNewManager )
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager > SAL_CALL
         getChartTypeManager()
@@ -444,8 +421,7 @@ public:
 
     // ____ XDataReceiver (public API) ____
     virtual void SAL_CALL
-        attachDataProvider( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::chart2::data::XDataProvider >& xProvider )
+        attachDataProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& xProvider )
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setArguments(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
@@ -455,18 +431,15 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL getUsedData()
         throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL attachNumberFormatsSupplier( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier )
+    virtual void SAL_CALL attachNumberFormatsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier )
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > SAL_CALL getRangeHighlighter()
         throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XTitled ____
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
         throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::chart2::XTitle >& Title )
+    virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XInterface (for old API wrapper) ____
@@ -479,8 +452,7 @@ public:
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::Exception,
                ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence<
-                                ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
+    virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
         throw (::com::sun::star::frame::DoubleInitializationException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::Exception,
@@ -565,11 +537,9 @@ public:
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XNumberFormatsSupplier ____
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings()
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats()
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats()
             throw (::com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ____ XChild ____
