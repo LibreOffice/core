@@ -76,6 +76,75 @@ interface TextEditView : BaseTextEditView
     ]
     SID_INSERT_DRAW // status()
     [
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_LINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_RECT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_ELLIPSE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_POLYGON_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_BEZIER_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_FREELINE_NOFILL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_ARC
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_PIE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CIRCLECUT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_TEXT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_TEXT_VERTICAL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_TEXT_MARQUEE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CAPTION
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CAPTION_VERTICAL
+    [
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
     ]

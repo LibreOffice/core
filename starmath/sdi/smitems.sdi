@@ -485,27 +485,7 @@ item SvxChooseControlEnum SvxChooseControlEnumItem;
 
 
 
-enum SvxDrawToolEnum
-{
-    SVX_SNAP_DRAW_SELECT,
-
-    SVX_SNAP_DRAW_LINE,
-    SVX_SNAP_DRAW_RECT,
-    SVX_SNAP_DRAW_ELLIPSE,
-    SVX_SNAP_DRAW_POLYGON,
-    SVX_SNAP_DRAW_ARC,
-    SVX_SNAP_DRAW_PIE,
-    SVX_SNAP_DRAW_CIRCLECUT,
-    SVX_SNAP_DRAW_TEXT,
-    SVX_SNAP_DRAW_CAPTION,
-    SVX_SNAP_DRAW_NOTHING
-}
-item SvxDrawToolEnum SvxDrawToolEnumItem;
-
-
-
 item SvxChooseControlEnum SvxChooseControlItem;
-item SvxDrawToolEnum SvxDrawToolItem;
 item FontUnderline SvxUnderlineItem;
 item FontWeight SvxWeightItem;
 item BYTE SvxWidowsItem;

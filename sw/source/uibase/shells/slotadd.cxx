@@ -122,7 +122,6 @@
 #include <svx/drawitem.hxx>
 #include <avmedia/mediaitem.hxx>
 
-#define SvxDrawToolItem  SfxAllEnumItem
 #define SvxDrawAlignItem SfxAllEnumItem
 #define avmedia_MediaItem ::avmedia::MediaItem
 

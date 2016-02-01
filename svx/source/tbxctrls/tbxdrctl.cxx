@@ -33,7 +33,7 @@
 #include "svx/tbxcolor.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
+SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxBoolItem);
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

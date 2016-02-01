@@ -472,19 +472,29 @@ void SwView::GetDrawState(SfxItemSet &rSet)
                                             nWhich = aIter.NextWhich() )
         switch(nWhich)
         {
-        case SID_INSERT_DRAW:
+        case SID_DRAW_LINE:
+        case SID_DRAW_RECT:
+        case SID_DRAW_ELLIPSE:
+        case SID_DRAW_POLYGON_NOFILL:
+        case SID_DRAW_BEZIER_NOFILL:
+        case SID_DRAW_FREELINE_NOFILL:
+        case SID_DRAW_ARC:
+        case SID_DRAW_PIE:
+        case SID_DRAW_CIRCLECUT:
+        case SID_DRAW_TEXT:
+        case SID_DRAW_CAPTION:
             if ( bWeb )
                 rSet.DisableItem( nWhich );
             else
-            {
-                SfxAllEnumItem aEnum(SID_INSERT_DRAW, m_nDrawSfxId);
-                if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
-                {
-                    aEnum.DisableValue( SID_DRAW_CAPTION_VERTICAL );
-                    aEnum.DisableValue( SID_DRAW_TEXT_VERTICAL );
-                }
-                rSet.Put(aEnum);
-            }
+                rSet.Put( SfxBoolItem( nWhich, m_nDrawSfxId == nWhich ) );
+            break;
+
+        case SID_DRAW_TEXT_VERTICAL:
+        case SID_DRAW_CAPTION_VERTICAL:
+            if ( bWeb || !SvtLanguageOptions().IsVerticalTextEnabled() )
+                rSet.DisableItem( nWhich );
+            else
+                rSet.Put( SfxBoolItem( nWhich, m_nDrawSfxId == nWhich ) );
             break;
 
         case SID_SHOW_HIDDEN:
@@ -503,6 +513,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
                                           m_nFormSfxId == nWhich));
             break;
 
+        case SID_INSERT_DRAW:
         case SID_FONTWORK_GALLERY_FLOATER :
         {
             if ( bWeb )

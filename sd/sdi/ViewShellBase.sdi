@@ -138,11 +138,7 @@ interface ViewShellBaseView
         StateMethod = GetState ;
     ]
     SID_INSERT_DRAW
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        PseudoSlots = FALSE;
-    ]
+    []
 }
 
 shell ViewShellBase
