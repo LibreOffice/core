@@ -146,7 +146,7 @@ size_t X11CairoTextRender::GetHeight() const
         return 1;
 }
 
-void X11CairoTextRender::drawSurface(cairo_t* /*cr*/)
+void X11CairoTextRender::releaseCairoContext(cairo_t* /*cr*/)
 {
 }
 

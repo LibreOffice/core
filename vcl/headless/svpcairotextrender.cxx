@@ -36,7 +36,7 @@ void SvpCairoTextRender::clipRegion(cairo_t* cr)
     mrParent.clipRegion(cr);
 }
 
-void SvpCairoTextRender::drawSurface(cairo_t*)
+void SvpCairoTextRender::releaseCairoContext(cairo_t*)
 {
 }
 

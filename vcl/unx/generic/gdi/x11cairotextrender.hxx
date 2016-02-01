@@ -43,7 +43,7 @@ public:
     virtual cairo_t* getCairoContext() override;
     virtual void getSurfaceOffset(double& nDX, double& nDY) override;
     virtual void clipRegion(cairo_t* cr) override;
-    virtual void drawSurface(cairo_t* cr) override;
+    virtual void releaseCairoContext(cairo_t* cr) override;
 };
 
 #endif
