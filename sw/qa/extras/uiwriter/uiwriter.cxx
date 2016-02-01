@@ -168,6 +168,7 @@ public:
     void testTextTableCellNames();
     void testShapeAnchorUndo();
     void testDde();
+    void testDocModState();
     void testTdf94804();
     void testTdf34957();
     void testTdf89954();
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST(testDde);
+    CPPUNIT_TEST(testDocModState);
     CPPUNIT_TEST(testTdf94804);
     CPPUNIT_TEST(testTdf34957);
     CPPUNIT_TEST(testTdf89954);
@@ -2737,6 +2739,69 @@ void SwUiWriterTest::testDde()
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
+}
+
+//IdleTask class to add a low priority Idle task
+class IdleTask
+{
+    public:
+    bool GetFlag();
+    IdleTask();
+    DECL_LINK_TYPED( FlipFlag, Idle *, void );
+    ~IdleTask() {}
+    private:
+    bool flag;
+    Idle maIdle;
+};
+
+//constructor of IdleTask Class
+IdleTask::IdleTask() : flag( false )
+{
+    //setting the Priority of Idle task to LOW, LOWEST
+    maIdle.SetPriority( SchedulerPriority::LOWEST );
+    //set idle for callback
+    maIdle.SetIdleHdl( LINK( this, IdleTask, FlipFlag) );
+    //starting the idle
+    maIdle.Start();
+}
+
+//GetFlag() of IdleTask Class
+bool IdleTask::GetFlag()
+{
+    //returning the status of current flag
+    return this->flag;
+}
+
+//Callback function of IdleTask Class
+IMPL_LINK_TYPED(IdleTask, FlipFlag, Idle*, , void)
+{
+    //setting the flag to make sure that low priority idle task has been dispatched
+    this->flag = true;
+}
+
+void SwUiWriterTest::testDocModState()
+{
+    //creating a new writer document via the XDesktop(to have more shells etc.)
+    SwDoc* pDoc = createDoc();
+    //creating instance of IdleTask Class
+    IdleTask idleTask;
+    //checking the state of the document via IDocumentState
+    IDocumentState& rState(pDoc->getIDocumentState());
+    //the state should not be modified
+    CPPUNIT_ASSERT(!(rState.IsModified()));
+    //checking the state of the document via SfxObjectShell
+    SwDocShell* pShell(pDoc->GetDocShell());
+    CPPUNIT_ASSERT(!(pShell->IsModified()));
+    //looping around yield until low priority idle task is dispatched and flag is flipped
+    while(!idleTask.GetFlag())
+    {
+        //dispatching all the events via VCL main-loop
+        Application::Yield();
+    }
+    //again checking for the state via IDocumentState
+    CPPUNIT_ASSERT(!(rState.IsModified()));
+    //again checking for the state via SfxObjectShell
+    CPPUNIT_ASSERT(!(pShell->IsModified()));
 }
 
 void SwUiWriterTest::testTdf94804()
