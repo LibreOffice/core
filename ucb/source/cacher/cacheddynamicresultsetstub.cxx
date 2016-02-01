@@ -47,8 +47,7 @@ CachedDynamicResultSetStub::~CachedDynamicResultSetStub()
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSetStub
-    ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
+void SAL_CALL CachedDynamicResultSetStub::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
     OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
@@ -61,8 +60,7 @@ void SAL_CALL CachedDynamicResultSetStub
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSetStub
-    ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
+void SAL_CALL CachedDynamicResultSetStub::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );
     OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
@@ -88,8 +86,7 @@ void SAL_CALL CachedDynamicResultSetStub::release()
     OWeakObject::release();
 }
 
-Any SAL_CALL CachedDynamicResultSetStub
-    ::queryInterface( const Type&  rType )
+Any SAL_CALL CachedDynamicResultSetStub::queryInterface( const Type&  rType )
     throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
@@ -204,8 +201,7 @@ Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetStubFactory
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSetStubFactory
-    ::connectToCache(
+void SAL_CALL CachedDynamicResultSetStubFactory::connectToCache(
               const Reference< XDynamicResultSet > & Source
             , const Reference< XDynamicResultSet > & TargetCache
             , const Sequence< NumberedSortingInfo > & SortingInfo
