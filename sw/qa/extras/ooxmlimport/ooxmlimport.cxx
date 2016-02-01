@@ -799,9 +799,9 @@ DECLARE_OOXMLIMPORT_TEST(testN778836, "n778836.docx")
      * The problem was that the paragraph inherited margins from the numbering
      * and parent paragraph styles and the result was incorrect.
      */
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(0), "ParaRightMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3810), getProperty<sal_Int32>(getParagraph(0), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(0), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3810), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN778140, "n778140.docx")
@@ -810,8 +810,8 @@ DECLARE_OOXMLIMPORT_TEST(testN778140, "n778140.docx")
      * The problem was that the paragraph top/bottom margins were incorrect due
      * to unhandled w:doNotUseHTMLParagraphAutoSpacing.
      */
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN778828, "n778828.docx")

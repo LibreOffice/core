@@ -876,8 +876,8 @@ DECLARE_RTFEXPORT_TEST(testNumOverrideStart, "num-override-start.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
 {
     // These were 176 (100 twips), as \sbauto and \sbbefore were ignored.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf88583, "tdf88583.odt")

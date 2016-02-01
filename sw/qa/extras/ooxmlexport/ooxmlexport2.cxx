@@ -1091,14 +1091,14 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo44689_start_page_0, "fdo44689_start_page_0.docx")
 {
     // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo44689_start_page_7, "fdo44689_start_page_7.docx")
 {
     // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
 }
 

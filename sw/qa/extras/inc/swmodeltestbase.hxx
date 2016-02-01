@@ -464,6 +464,7 @@ protected:
 
     uno::Reference<text::XTextContent> getParagraphOrTable(int number, uno::Reference<text::XText> xText = uno::Reference<text::XText>()) const
     {
+        assert(number != 0); // this thing is 1-based
         uno::Reference<container::XEnumerationAccess> paraEnumAccess;
         if (xText.is())
             paraEnumAccess.set(xText, uno::UNO_QUERY);

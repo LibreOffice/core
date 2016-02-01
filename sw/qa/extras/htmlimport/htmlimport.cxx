@@ -116,7 +116,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
     if(nParagraphs)
     {
         // get the paragraph
-        uno::Reference< text::XTextRange > xPara = getParagraph( 0 );
+        uno::Reference<text::XTextRange> xPara = getParagraph(1);
         uno::Reference< beans::XPropertySet > xParagraphProperties( xPara, uno::UNO_QUERY);
 
         // check for Bitmap FillStyle, name empty, repeat

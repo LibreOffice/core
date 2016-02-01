@@ -282,7 +282,7 @@ DECLARE_ODFIMPORT_TEST(testPageStyleLayoutRight, "hello.odt")
 
 DECLARE_ODFIMPORT_TEST(testFdo61952, "hello.odt")
 {
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Left Page")));
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Right Page")));
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Left Page")));
@@ -291,7 +291,7 @@ DECLARE_ODFIMPORT_TEST(testFdo61952, "hello.odt")
 
 DECLARE_ODFIMPORT_TEST(testFdo60842, "fdo60842.odt")
 {
-    uno::Reference<text::XTextContent> const xTable(getParagraphOrTable(0));
+    uno::Reference<text::XTextContent> const xTable(getParagraphOrTable(1));
     getCell(xTable, "A1", "");
     getCell(xTable, "B1", "18/02/2012");
     getCell(xTable, "C1", "USD"); // this is the cell with office:string-value
