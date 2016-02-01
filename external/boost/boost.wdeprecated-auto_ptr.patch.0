@@ -1,0 +1,46 @@
+--- boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp.orig2	2015-12-15 18:24:31.318854561 +0100
++++ boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp	2015-12-15 18:26:19.804853629 +0100
+@@ -11,6 +11,11 @@
+ #if !defined BOOST_SPIRIT_GRAMMAR_IPP
+ #define BOOST_SPIRIT_GRAMMAR_IPP
+ 
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
++
+ #if !defined(BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE)
+ #include <boost/spirit/home/classic/core/non_terminal/impl/object_with_id.ipp>
+ #include <algorithm>
+@@ -368,4 +373,8 @@
+ 
+ }} // namespace boost::spirit
+ 
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
++# pragma GCC diagnostic pop
++#endif
++
+ #endif
+--- boost/spirit/home/classic/symbols/impl/tst.ipp.orig	2015-12-15 19:08:48.978831726 +0100
++++ boost/spirit/home/classic/symbols/impl/tst.ipp	2015-12-15 19:09:35.064831330 +0100
+@@ -9,6 +9,11 @@
+ #ifndef BOOST_SPIRIT_TST_IPP
+ #define BOOST_SPIRIT_TST_IPP
+ 
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
++
+ ///////////////////////////////////////////////////////////////////////////////
+ #include <memory> // for std::auto_ptr
+ #include <boost/spirit/home/classic/core/assert.hpp>
+@@ -278,4 +283,8 @@
+ 
+ }} // namespace boost::spirit
+ 
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406) || defined(__clang__)
++# pragma GCC diagnostic pop
++#endif
++
+ #endif

@@ -82,6 +82,7 @@ boost_patches += gcc6-warnings.patch.0
 # https://github.com/boostorg/math/commit/74ff2db959c5fa75bec770c41ed2951a740fe936
 boost_patches += boost_1_60_0.quadmath.patch
 boost_patches += boost_1_60_0.undef.warning.patch
+boost_patches += boost.wdeprecated-auto_ptr.patch.0
 boost_patches += boost_1_60_0.android.undef.warning.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
