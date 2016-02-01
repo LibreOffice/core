@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_cf456118",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-01T20:30:14Z",
+      "side": 1,
+      "message": "maybe that name could be improved?",
+      "revId": "fea6201c75b970bb17aeb484a120282c8d3c5300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_ef401d0a",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2773,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-01T20:30:14Z",
+      "side": 1,
+      "message": "this doesn\u0027t really require a separate function, you can just start the maIdle from the constructor",
+      "revId": "fea6201c75b970bb17aeb484a120282c8d3c5300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_4fbb310f",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2776,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-01T20:30:14Z",
+      "side": 1,
+      "message": "if you set the flag already before even starting the idle then i understand why the while loop below is disabled...",
+      "revId": "fea6201c75b970bb17aeb484a120282c8d3c5300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_0f48092d",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2783,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-01T20:30:14Z",
+      "side": 1,
+      "message": "this starts the idle again, which we actually don\u0027t need to do for this test, it\u0027s enough if it is run once.\n\non the other hand, you should set the flag variable here.",
+      "revId": "fea6201c75b970bb17aeb484a120282c8d3c5300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
