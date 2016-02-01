@@ -28,8 +28,8 @@
 
 #include "viewlayer.hxx"
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -44,7 +44,7 @@ namespace slideshow
         // forward declaration necessary, because methods use ShapeSharedPtr
         class Shape;
 
-        typedef ::boost::shared_ptr< Shape > ShapeSharedPtr;
+        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** Represents a slide's shape object.
 
@@ -249,7 +249,7 @@ namespace slideshow
             };
         };
 
-        typedef ::boost::shared_ptr< Shape > ShapeSharedPtr;
+        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** A set which contains all shapes in an ordered fashion.
          */

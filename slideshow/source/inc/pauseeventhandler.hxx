@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_PAUSEEVENTHANDLER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_PAUSEEVENTHANDLER_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 /* Definition of PauseHandler interface */
@@ -56,7 +56,7 @@ namespace slideshow
             ~PauseEventHandler() {}
         };
 
-        typedef ::boost::shared_ptr< PauseEventHandler > PauseEventHandlerSharedPtr;
+        typedef ::std::shared_ptr< PauseEventHandler > PauseEventHandlerSharedPtr;
     }
 }
 

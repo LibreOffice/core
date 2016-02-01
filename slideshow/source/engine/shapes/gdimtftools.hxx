@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <boost/shared_ptr.hpp>
 
 #include "tools.hxx"
 

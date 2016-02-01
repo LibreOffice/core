@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ATTRIBUTABLESHAPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_ATTRIBUTABLESHAPE_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "animatableshape.hxx"
 #include "shapeattributelayer.hxx"
@@ -33,7 +33,7 @@ namespace slideshow
         // forward declaration necessary, because methods use AttributableShapeSharedPtr
         class AttributableShape;
 
-        typedef ::boost::shared_ptr< AttributableShape > AttributableShapeSharedPtr;
+        typedef ::std::shared_ptr< AttributableShape > AttributableShapeSharedPtr;
 
         /** Represents an animatable shape, that can have its
             attributes changed.

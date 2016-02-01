@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATABLESHAPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATABLESHAPE_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "shape.hxx"
 
@@ -72,7 +72,7 @@ namespace slideshow
 
         };
 
-        typedef ::boost::shared_ptr< AnimatableShape > AnimatableShapeSharedPtr;
+        typedef ::std::shared_ptr< AnimatableShape > AnimatableShapeSharedPtr;
 
     }
 }

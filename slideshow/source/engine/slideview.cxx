@@ -52,8 +52,8 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/weak_ptr.hpp>
 
+#include <memory>
 #include <vector>
 #include <iterator>
 #include <algorithm>

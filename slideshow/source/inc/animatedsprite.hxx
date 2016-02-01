@@ -30,7 +30,7 @@
 #include "viewlayer.hxx"
 
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 
@@ -154,7 +154,7 @@ namespace slideshow
             bool                                                        mbSpriteVisible;
         };
 
-        typedef ::boost::shared_ptr< AnimatedSprite > AnimatedSpriteSharedPtr;
+        typedef ::std::shared_ptr< AnimatedSprite > AnimatedSpriteSharedPtr;
 
     }
 }

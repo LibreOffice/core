@@ -23,7 +23,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/awt/Point.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <vcl/vclptr.hxx>
 
@@ -155,7 +155,7 @@ namespace slideshow
             bool                                              mbIsSoundEnabled;
         };
 
-        typedef ::boost::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;
+        typedef ::std::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;
 
     }
 }

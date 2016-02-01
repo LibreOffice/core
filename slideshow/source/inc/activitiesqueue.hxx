@@ -27,7 +27,7 @@
 
 #include <canvas/elapsedtime.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 

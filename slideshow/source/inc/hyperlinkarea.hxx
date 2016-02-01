@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_HYPERLINKAREA_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <utility>
 
@@ -74,8 +74,8 @@ namespace slideshow
                 // make functor adaptable (to boost::bind)
                 typedef bool result_type;
 
-                bool operator()(const boost::shared_ptr< HyperlinkArea >& rLHS,
-                                const boost::shared_ptr< HyperlinkArea >& rRHS) const
+                bool operator()(const std::shared_ptr< HyperlinkArea >& rLHS,
+                                const std::shared_ptr< HyperlinkArea >& rRHS) const
                 {
                     const double nPrioL( rLHS->getHyperlinkPriority() );
                     const double nPrioR( rRHS->getHyperlinkPriority() );
@@ -89,7 +89,7 @@ namespace slideshow
             ~HyperlinkArea() {}
        };
 
-        typedef boost::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;
+        typedef std::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;
     }
 }
 

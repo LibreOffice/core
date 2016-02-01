@@ -21,7 +21,6 @@
 #include "eventmultiplexer.hxx"
 #include "unoview.hxx"
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <vector>
 
@@ -31,7 +30,7 @@ namespace slideshow {
 namespace internal {
 
 class EventMultiplexer;
-typedef boost::shared_ptr<class PointerSymbol> PointerSymbolSharedPtr;
+typedef std::shared_ptr<class PointerSymbol> PointerSymbolSharedPtr;
 
 /// On-screen 'laser pointer' from the Impress remote control
 class PointerSymbol : public ViewEventHandler,

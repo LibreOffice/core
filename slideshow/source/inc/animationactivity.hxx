@@ -59,7 +59,7 @@ namespace slideshow
                                      const ShapeAttributeLayerSharedPtr&    rAttrLayer ) = 0;
         };
 
-        typedef ::boost::shared_ptr< AnimationActivity > AnimationActivitySharedPtr;
+        typedef ::std::shared_ptr< AnimationActivity > AnimationActivitySharedPtr;
 
     }
 }

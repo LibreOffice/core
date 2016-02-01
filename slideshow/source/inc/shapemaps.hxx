@@ -23,7 +23,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <map>
 
 namespace com { namespace sun { namespace star { namespace drawing
@@ -39,7 +39,7 @@ namespace slideshow
     {
         /// Maps XShape to shape listener
         typedef ::std::map< css::uno::Reference< css::drawing::XShape>,
-                            boost::shared_ptr< ::comphelper::OInterfaceContainerHelper2 >
+                            std::shared_ptr< ::comphelper::OInterfaceContainerHelper2 >
                             >                  ShapeEventListenerMap;
 
         /// Maps XShape to mouse cursor

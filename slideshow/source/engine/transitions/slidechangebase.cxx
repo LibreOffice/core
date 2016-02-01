@@ -176,7 +176,7 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
         return;
 
     // register ourselves for view change events
-    mrEventMultiplexer.addViewHandler( shared_from_this() );
+    mrEventMultiplexer.addViewHandler( std::shared_ptr<ViewEventHandler>((ViewEventHandler*)this) );
 
     // init views and create slide bitmaps
     for( const auto& pView : mrViewContainer )
@@ -251,7 +251,7 @@ void SlideChangeBase::end()
     mbSpritesVisible = false;
 
     // remove also from event multiplexer, we're dead anyway
-    mrEventMultiplexer.removeViewHandler( shared_from_this() );
+    mrEventMultiplexer.removeViewHandler( std::shared_ptr<ViewEventHandler>((ViewEventHandler*)this) );
 }
 
 bool SlideChangeBase::operator()( double nValue )

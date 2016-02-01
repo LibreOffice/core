@@ -22,7 +22,7 @@
 
 #include "viewlayer.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_MOUSEEVENTHANDLER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_MOUSEEVENTHANDLER_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace awt
 {
@@ -107,7 +107,7 @@ namespace slideshow
             virtual bool handleMouseMoved( const css::awt::MouseEvent& e ) = 0;
         };
 
-        typedef ::boost::shared_ptr< MouseEventHandler > MouseEventHandlerSharedPtr;
+        typedef ::std::shared_ptr< MouseEventHandler > MouseEventHandlerSharedPtr;
 
     }
 }

@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX
 
 #include <sal/config.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 
 namespace basegfx

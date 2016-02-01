@@ -26,7 +26,7 @@
 #include "slidebitmap.hxx"
 #include "shapemaps.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com {  namespace sun { namespace star {
     namespace drawing {
@@ -149,7 +149,7 @@ namespace slideshow
             ~Slide() {}
         };
 
-        typedef ::boost::shared_ptr< Slide > SlideSharedPtr;
+        typedef ::std::shared_ptr< Slide > SlideSharedPtr;
 
         class EventQueue;
         class CursorManager;
