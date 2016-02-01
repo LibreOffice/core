@@ -93,11 +93,10 @@ using namespace css;
 using namespace css::accessibility;
 using namespace css::uno;
 
-SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell)
-    : ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0)
-    , pAccessible(nullptr)
-    , pViewShell(pShell)
-    , nZoom(100)
+SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell) :
+    ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0),
+    pViewShell(pShell),
+    nZoom(100)
 {
     // docking windows are usually hidden (often already done in the
     // resource) and will be shown by the sfx framework.
@@ -122,8 +121,8 @@ SmGraphicWindow::~SmGraphicWindow()
 
 void SmGraphicWindow::dispose()
 {
-    if (pAccessible)
-        pAccessible->ClearWin();    // make Accessible defunctional
+    if (mxAccessible.is())
+        mxAccessible->ClearWin();    // make Accessible defunctional
     // Note: memory for pAccessible will be freed when the reference
     // xAccessible is released.
     CaretBlinkStop();
@@ -244,12 +243,12 @@ void SmGraphicWindow::GetFocus()
 void SmGraphicWindow::LoseFocus()
 {
     ScrollableWindow::LoseFocus();
-    if (xAccessible.is())
+    if (mxAccessible.is())
     {
         uno::Any aOldValue, aNewValue;
         aOldValue <<= AccessibleStateType::FOCUSED;
         // aNewValue remains empty
-        pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
+        mxAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
     if (!IsInlineEditEnabled())
@@ -635,12 +634,11 @@ void SmGraphicWindow::ZoomToFitInWindow()
 
 uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
 {
-    if (!pAccessible)
+    if (!mxAccessible.is())
     {
-        pAccessible = new SmGraphicAccessible( this );
-        xAccessible = pAccessible;
+        mxAccessible.set(new SmGraphicAccessible( this ));
     }
-    return xAccessible;
+    return uno::Reference< XAccessible >(mxAccessible.get());
 }
 
 /**************************************************************************/
