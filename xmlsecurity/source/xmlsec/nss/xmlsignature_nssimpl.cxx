@@ -244,9 +244,21 @@ SAL_CALL XMLSignature_NssImpl::validate(
         //Verify signature
         int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
 
+        // Also verify manifest: this is empty for ODF, but contains everything (except signature metadata) for OOXML.
+        xmlSecSize nReferenceCount = xmlSecPtrListGetSize(&pDsigCtx->manifestReferences);
+        // Require that all manifest references are also good.
+        xmlSecSize nReferenceGood = 0;
+        for (xmlSecSize nReference = 0; nReference < nReferenceCount; ++nReference)
+        {
+            xmlSecDSigReferenceCtxPtr pReference = static_cast<xmlSecDSigReferenceCtxPtr>(xmlSecPtrListGetItem(&pDsigCtx->manifestReferences, nReference));
+            if (pReference)
+            {
+                if (pReference->status == xmlSecDSigStatusSucceeded)
+                    ++nReferenceGood;
+            }
+        }
 
-        if (rs == 0 &&
-            pDsigCtx->status == xmlSecDSigStatusSucceeded)
+        if (rs == 0 && pDsigCtx->status == xmlSecDSigStatusSucceeded && nReferenceCount == nReferenceGood)
         {
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
             xmlSecDSigCtxDestroy( pDsigCtx ) ;
