@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 
 #include "DOTransferable.hxx"
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 #include "../misc/WinClip.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
