@@ -53,10 +53,9 @@
 #include "intrinsicanimationactivity.hxx"
 #include "intrinsicanimationeventhandler.hxx"
 
-#include <boost/weak_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
 #include <vector>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -131,7 +130,6 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
 }
 
 class ActivityImpl : public Activity,
-                     public boost::enable_shared_from_this<ActivityImpl>,
                      private boost::noncopyable
 {
 public:
@@ -139,8 +137,8 @@ public:
 
     ActivityImpl(
         SlideShowContext const& rContext,
-        boost::shared_ptr<WakeupEvent> const& pWakeupEvent,
-        boost::shared_ptr<DrawShape> const& pDrawShape );
+        std::shared_ptr<WakeupEvent> const& pWakeupEvent,
+        std::shared_ptr<DrawShape> const& pDrawShape );
 
     bool enableAnimations();
 
@@ -194,8 +192,8 @@ private:
 
 
     SlideShowContext                            maContext;
-    boost::shared_ptr<WakeupEvent>              mpWakeupEvent;
-    boost::weak_ptr<DrawShape>                  mpParentDrawShape;
+    std::shared_ptr<WakeupEvent>              mpWakeupEvent;
+    std::weak_ptr<DrawShape>                  mpParentDrawShape;
     DrawShapeSharedPtr                          mpDrawShape;
     ShapeAttributeLayerHolder                   maShapeAttrLayer;
     GDIMetaFileSharedPtr                        mpMetaFile;
@@ -736,8 +734,8 @@ bool ActivityImpl::perform()
 
 ActivityImpl::ActivityImpl(
     SlideShowContext const& rContext,
-    boost::shared_ptr<WakeupEvent> const& pWakeupEvent,
-    boost::shared_ptr<DrawShape> const& pParentDrawShape )
+    std::shared_ptr<WakeupEvent> const& pWakeupEvent,
+    std::shared_ptr<DrawShape> const& pParentDrawShape )
     : maContext(rContext),
       mpWakeupEvent(pWakeupEvent),
       mpParentDrawShape(pParentDrawShape),
@@ -770,7 +768,7 @@ ActivityImpl::ActivityImpl(
     // TODO(Q3): Doing this manually, instead of using
     // ShapeSubset. This is because of lifetime issues (ShapeSubset
     // generates circular references to parent shape)
-    mpDrawShape = boost::dynamic_pointer_cast<DrawShape>(
+    mpDrawShape = std::dynamic_pointer_cast<DrawShape>(
         maContext.mpSubsettableShapeManager->getSubsetShape(
             pParentDrawShape,
             scrollTextNode ));
@@ -861,8 +859,7 @@ ActivityImpl::ActivityImpl(
 bool ActivityImpl::enableAnimations()
 {
     mbIsActive = true;
-    return maContext.mrActivitiesQueue.addActivity(
-        shared_from_this() );
+    return maContext.mrActivitiesQueue.addActivity( ActivitySharedPtr(this) );
 }
 
 ActivityImpl::~ActivityImpl()
@@ -936,15 +933,15 @@ void ActivityImpl::end()
 namespace slideshow {
 namespace internal {
 
-boost::shared_ptr<Activity> createDrawingLayerAnimActivity(
+std::shared_ptr<Activity> createDrawingLayerAnimActivity(
     SlideShowContext const& rContext,
-    boost::shared_ptr<DrawShape> const& pDrawShape )
+    std::shared_ptr<DrawShape> const& pDrawShape )
 {
-    boost::shared_ptr<Activity> pActivity;
+    std::shared_ptr<Activity> pActivity;
 
     try
     {
-        boost::shared_ptr<WakeupEvent> const pWakeupEvent(
+        std::shared_ptr<WakeupEvent> const pWakeupEvent(
             new WakeupEvent( rContext.mrEventQueue.getTimer(),
                              rContext.mrActivitiesQueue ) );
         pActivity.reset( new ActivityImpl( rContext, pWakeupEvent, pDrawShape ) );

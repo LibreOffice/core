@@ -26,7 +26,7 @@
 #include "rgbcolor.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 /* Definition of UserPaintOverlay class */
@@ -39,7 +39,7 @@ namespace slideshow
         struct SlideShowContext;
 
         class PaintOverlayHandler;
-        typedef ::boost::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
+        typedef ::std::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
         typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         /** Slide overlay, which can be painted into by the user.
 
@@ -74,7 +74,7 @@ namespace slideshow
                               const PolyPolygonVector& rPolygons,
                               bool                    bActive );
 
-            ::boost::shared_ptr<PaintOverlayHandler>    mpHandler;
+            ::std::shared_ptr<PaintOverlayHandler>    mpHandler;
             EventMultiplexer&                           mrMultiplexer;
         };
     }

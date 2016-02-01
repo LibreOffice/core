@@ -32,13 +32,13 @@
 
 using namespace ::com::sun::star;
 
-namespace boost
+namespace std
 {
     // add operator!= for weak_ptr
     inline bool operator!=( slideshow::internal::LayerWeakPtr const& rLHS,
                             slideshow::internal::LayerWeakPtr const& rRHS )
     {
-        return (rLHS<rRHS) || (rRHS<rLHS);
+        return rLHS.lock().get() != rRHS.lock().get();
     }
 }
 

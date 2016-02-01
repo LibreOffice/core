@@ -260,7 +260,7 @@ namespace slideshow
             mbNodeTreeInitialized = false;
         }
 
-        void DrawShapeSubsetting::reset( const ::boost::shared_ptr< GDIMetaFile >& rMtf )
+        void DrawShapeSubsetting::reset( const ::std::shared_ptr< GDIMetaFile >& rMtf )
         {
             reset();
             mpMtf = rMtf;

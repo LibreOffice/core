@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_DISPOSABLE_HXX
 
 #include <sal/types.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 /* Definition of Disposable interface */
@@ -30,6 +30,14 @@ namespace slideshow
 {
     namespace internal
     {
+        /**
+         * Base class for being a shared pointer, since quite a few of the downstream classes
+         * want to be stored using std::shared_ptr.
+         */
+        class SharedPtrAble : public std::enable_shared_from_this<SharedPtrAble>
+        {
+        };
+
         /** Disposable interface
 
             With ref-counted objects, deleting object networks

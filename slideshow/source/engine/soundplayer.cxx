@@ -44,12 +44,12 @@ namespace slideshow
     {
         // TODO(Q3): Move the whole SoundPlayer class to avmedia.
 
-        boost::shared_ptr<SoundPlayer> SoundPlayer::create(
+        std::shared_ptr<SoundPlayer> SoundPlayer::create(
             EventMultiplexer & rEventMultiplexer,
             const OUString& rSoundURL,
             const uno::Reference< uno::XComponentContext>&  rComponentContext )
         {
-            boost::shared_ptr<SoundPlayer> pPlayer(
+            std::shared_ptr<SoundPlayer> pPlayer(
                 new SoundPlayer( rEventMultiplexer,
                                  rSoundURL,
                                  rComponentContext ) );

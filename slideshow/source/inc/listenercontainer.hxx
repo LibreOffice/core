@@ -126,7 +126,7 @@ template< typename ListenerT > struct ListenerOperations
 };
 
 template< typename ListenerTargetT >
-struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
+struct ListenerOperations< std::weak_ptr<ListenerTargetT> >
 {
     template< typename ContainerT,
               typename FuncT >
@@ -135,7 +135,7 @@ struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
     {
         for( const auto& rCurr : rContainer )
         {
-            boost::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
+            std::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
 
             if( pListener && func(pListener) )
                 return true;
@@ -152,11 +152,11 @@ struct ListenerOperations< boost::weak_ptr<ListenerTargetT> >
         bool bRet(false);
         for( const auto& rCurr : rContainer )
         {
-            boost::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
+            std::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
 
             if( pListener.get() &&
                 FunctionApply< typename ::std::result_of< FuncT( const typename ContainerT::value_type& ) >::type,
-                               boost::shared_ptr<ListenerTargetT> >::apply(func,pListener) )
+                               std::shared_ptr<ListenerTargetT> >::apply(func,pListener) )
             {
                 bRet = true;
             }

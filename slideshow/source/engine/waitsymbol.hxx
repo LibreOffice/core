@@ -28,7 +28,7 @@
 #include "eventmultiplexer.hxx"
 #include "unoview.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <vector>
 
@@ -36,7 +36,7 @@ namespace slideshow {
 namespace internal {
 
 class EventMultiplexer;
-typedef boost::shared_ptr<class WaitSymbol> WaitSymbolSharedPtr;
+typedef std::shared_ptr<class WaitSymbol> WaitSymbolSharedPtr;
 
 /// On-screen 'hour glass' for when slideshow is unresponsive
 class WaitSymbol : public ViewEventHandler,
