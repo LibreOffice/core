@@ -58,7 +58,6 @@
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
-#include <boost/ref.hpp>
 #include <boost/shared_array.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
