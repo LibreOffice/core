@@ -67,9 +67,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/layout.hxx>
 
-#include <boost/mem_fn.hpp>
-#include <boost/bind.hpp>
-
 #include <algorithm>
 #include <functional>
 
@@ -193,14 +190,14 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = true;
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = isEditable() && ::std::any_of(m_vRowList.begin(),m_vRowList.end(),::boost::mem_fn(&OTableRow::isValid));
+            aReturn.bEnabled = isEditable() && ::std::any_of(m_vRowList.begin(),m_vRowList.end(),::std::mem_fn(&OTableRow::isValid));
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = isConnected() && isEditable();
             if ( aReturn.bEnabled )
             {
                 aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                                                 ::boost::mem_fn(&OTableRow::isValid));
+                                                 ::std::mem_fn(&OTableRow::isValid));
             }
             break;
 
@@ -223,7 +220,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                                                 ::boost::mem_fn(&OTableRow::isValid));
+                                                 ::std::mem_fn(&OTableRow::isValid));
             }
             break;
         default:
@@ -552,7 +549,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
     if ( isModified() )
     {
         if ( ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                           ::boost::mem_fn(&OTableRow::isValid)) )
+                           ::std::mem_fn(&OTableRow::isValid)) )
         {
             ScopedVclPtrInstance<MessageDialog> aQry(getView(), "TableDesignSaveModifiedDialog",
                                                      "dbaccess/ui/tabledesignsavemodifieddialog.ui");
