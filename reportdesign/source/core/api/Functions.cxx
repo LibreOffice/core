@@ -22,7 +22,6 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <comphelper/property.hxx>
-#include <boost/mem_fn.hpp>
 #include <algorithm>
 
 namespace reportdesign
@@ -53,7 +52,8 @@ void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException, std::exception)
 
 void SAL_CALL OFunctions::disposing()
 {
-    ::std::for_each(m_aFunctions.begin(),m_aFunctions.end(),::boost::mem_fn(&css::report::XFunction::dispose));
+    for (auto& rFunction : m_aFunctions)
+        rFunction->dispose();
     m_aFunctions.clear();
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );

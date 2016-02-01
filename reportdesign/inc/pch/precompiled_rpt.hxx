@@ -56,7 +56,6 @@
 #include <boost/bind.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_array.hpp>
