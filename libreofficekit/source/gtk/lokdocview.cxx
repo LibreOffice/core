@@ -2676,7 +2676,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     fZoom = fZoom < MIN_ZOOM ? MIN_ZOOM : fZoom;
     fZoom = fZoom > MAX_ZOOM ? MAX_ZOOM : fZoom;
 
-    if (fZoom == priv->m_fZoom)
+    if (rtl::math::approxEqual(fZoom, priv->m_fZoom))
         return;
 
     priv->m_fZoom = fZoom;
