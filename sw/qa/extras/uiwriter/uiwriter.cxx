@@ -168,6 +168,7 @@ public:
     void testTextTableCellNames();
     void testShapeAnchorUndo();
     void testDde();
+    void testDocModState();
     void testTdf94804();
     void testTdf34957();
     void testTdf89954();
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST(testDde);
+    CPPUNIT_TEST(testDocModState);
     CPPUNIT_TEST(testTdf94804);
     CPPUNIT_TEST(testTdf34957);
     CPPUNIT_TEST(testTdf89954);
@@ -2737,6 +2739,77 @@ void SwUiWriterTest::testDde()
     const uno::Reference< text::XTextRange > xField = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
+}
+
+class Demo
+{
+    public:
+    void StartFunc();
+    bool GetFlag();
+    Demo( SwDoc& i_rSwdoc );
+    DECL_LINK_TYPED(FlipFlag, Idle *, void );
+    ~Demo() {}
+    private:
+    SwDoc& m_rDoc;
+    bool flag;
+    sal_Int32 mIdleCount;
+    Idle  maIdle;
+};
+
+//constructor of Demo Class
+Demo::Demo( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
+                                                                flag( false ),
+                                                                mIdleCount( 0 )
+{
+    maIdle.SetPriority( SchedulerPriority::LOWEST );
+    maIdle.SetIdleHdl( LINK( this, Demo, FlipFlag) );
+}
+
+bool Demo::GetFlag()
+{
+    return this->flag;
+}
+
+void Demo::StartFunc()
+{
+    std::cout<<"\n\n\nInside Demo StartFunc\n\n\n\n";
+    flag = true;
+    //if( !mIdleCount )
+        maIdle.Start();
+}
+
+IMPL_LINK_TYPED(Demo, FlipFlag, Idle*, pIdle, void )
+{
+    pIdle->Start();
+    std::cout<<"\n\n\nInside Callback\n\n\n\n";
+}
+
+void SwUiWriterTest::testDocModState()
+{
+    //creating a new writer document via the XDesktop(to have more shells etc.)
+    SwDoc* pDoc = createDoc();
+    //creating instance of Demo Class
+    Demo obj1(*pDoc);
+    obj1.StartFunc();
+    //checking the state of the document via IDocumentState
+    IDocumentState& rState(pDoc->getIDocumentState());
+    //the state should not be modified
+    CPPUNIT_ASSERT(!(rState.IsModified()));
+    //checking the state of the document via SfxObjectShell
+    SwDocShell* pShell(pDoc->GetDocShell());
+    CPPUNIT_ASSERT(!(pShell->IsModified()));
+    //dispatching all the events via VCL main-loop
+    /*
+    while(!obj1.getflag())
+    { */
+        Application::Yield();
+        /*
+    }
+    */
+    //again checking for the state via IDocumentState
+    CPPUNIT_ASSERT(!(rState.IsModified()));
+    //again checking for the state via SfxObjectShell
+    CPPUNIT_ASSERT(!(pShell->IsModified()));
 }
 
 void SwUiWriterTest::testTdf94804()
