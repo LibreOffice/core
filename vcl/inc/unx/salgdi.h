@@ -283,6 +283,10 @@ public:
      */
     void                            YieldGraphicsExpose();
 
+    cairo_t* getCairoContext();
+    void releaseCairoContext(cairo_t* cr);
+
+
     // do XCopyArea or XGet/PutImage depending on screen numbers
     // signature is like XCopyArea with screen numbers added
     static void                     CopyScreenArea(

@@ -25,10 +25,6 @@
 #include "gcach_xpeer.hxx"
 
 #include <cairo.h>
-#include <cairo-ft.h>
-
-#include <cairo-xlib.h>
-#include <cairo-xlib-xrender.h>
 
 struct BOX
 {
@@ -58,30 +54,7 @@ GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
 
 cairo_t* X11CairoTextRender::getCairoContext()
 {
-    // find a XRenderPictFormat compatible with the Drawable
-    XRenderPictFormat* pVisualFormat = mrParent.GetXRenderFormat();
-
-    Display* pDisplay = mrParent.GetXDisplay();
-
-    cairo_surface_t* surface = nullptr;
-    if (pVisualFormat)
-    {
-        surface = cairo_xlib_surface_create_with_xrender_format (
-                        pDisplay, mrParent.hDrawable_,
-                        ScreenOfDisplay(pDisplay, mrParent.m_nXScreen.getXScreen()),
-                        pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
-    }
-    else
-    {
-        surface = cairo_xlib_surface_create(pDisplay, mrParent.hDrawable_,
-            mrParent.GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
-    }
-
-    if (!surface)
-        return nullptr;
-
-    cairo_t *cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
+    cairo_t *cr = mrParent.getCairoContext();
 
     //rhbz#1283420 bodge to draw and undraw something which has the side effect
     //of making the mysterious xrender related problem go away
@@ -148,7 +121,7 @@ size_t X11CairoTextRender::GetHeight() const
 
 void X11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
-    cairo_destroy(cr);
+    mrParent.releaseCairoContext(cr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

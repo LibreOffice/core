@@ -64,6 +64,7 @@
 #include "xrender_peer.hxx"
 #include "cairo_cairo.hxx"
 #include "cairo_xlib_cairo.hxx"
+#include <cairo-xlib.h>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -562,6 +563,22 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pFrame);
     else
         return static_cast< SalGeometryProvider * >(m_pVDev);
+}
+
+cairo_t* X11SalGraphics::getCairoContext()
+{
+    cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
+            GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
+
+    cairo_t *cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
+
+    return cr;
+}
+
+void X11SalGraphics::releaseCairoContext(cairo_t* cr)
+{
+   cairo_destroy(cr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
