@@ -165,8 +165,8 @@ public:
     sal_Int32       GetAccessibleIndex() const { return mnAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
 
-    sal_uInt16  GetRow() const    { return (sal_uInt16)maNodeToken.nRow; }
-    sal_uInt16  GetColumn() const { return (sal_uInt16)maNodeToken.nCol; }
+    sal_uInt16  GetRow() const    { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
+    sal_uInt16  GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
 
     SmScaleMode     GetScaleMode() const { return meScaleMode; }
     void            SetScaleMode(SmScaleMode eMode) { meScaleMode = eMode; }
@@ -559,7 +559,7 @@ protected:
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
         sal_Unicode cChar = GetToken().cMathChar;
-        if ((sal_Unicode) '\0' != cChar)
+        if (sal_Unicode('\0') != cChar)
             SetText(OUString(cChar));
     }
 
