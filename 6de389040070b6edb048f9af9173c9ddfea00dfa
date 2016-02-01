@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_acd2a332",
+        "filename": "svtools/source/control/calendar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-01T05:12:59Z",
+      "side": 1,
+      "message": "Are you absolutely sure this actually means the same?",
+      "range": {
+        "startLine": 640,
+        "startChar": 14,
+        "endLine": 640,
+        "endChar": 19
+      },
+      "revId": "6de389040070b6edb048f9af9173c9ddfea00dfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
