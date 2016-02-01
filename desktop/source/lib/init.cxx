@@ -198,6 +198,7 @@ static const std::map <PointerStyle, OString> aPointerMap {
     { PointerStyle::Text, "text" },
     { PointerStyle::Help, "help" },
     { PointerStyle::Cross, "crosshair" },
+    { PointerStyle::Fill, "fill" },
     { PointerStyle::Move, "move" },
     { PointerStyle::NSize, "n-resize" },
     { PointerStyle::SSize, "s-resize" },
@@ -1123,7 +1124,6 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
 
     Pointer aPointer = pDoc->getPointer();
-
     // We don't map all possible pointers hence we need a default
     OString aPointerString = "default";
     auto aIt = aPointerMap.find(aPointer.GetStyle());
