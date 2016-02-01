@@ -67,7 +67,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/unordered_set.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>

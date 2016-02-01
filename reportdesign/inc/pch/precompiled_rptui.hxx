@@ -62,7 +62,6 @@
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/unordered_set.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
