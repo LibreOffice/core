@@ -169,6 +169,11 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
                 xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(0));
         }
     }
+    else if( sType == "author" )
+    {
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.Author" );
+        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+    }
 }
 
 } // namespace

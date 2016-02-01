@@ -1549,6 +1549,10 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
                         case 3: aFieldValue = "file3"; // File name with extension
                     }
                 }
+                else if(aFieldKind == "Author")
+                {
+                    aFieldValue = "author";
+                }
             }
         }
     }
