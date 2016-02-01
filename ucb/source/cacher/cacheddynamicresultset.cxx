@@ -46,8 +46,7 @@ CachedDynamicResultSet::~CachedDynamicResultSet()
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSet
-    ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
+void SAL_CALL CachedDynamicResultSet::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
     OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
@@ -60,8 +59,7 @@ void SAL_CALL CachedDynamicResultSet
 }
 
 //virtual
-void SAL_CALL CachedDynamicResultSet
-    ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
+void SAL_CALL CachedDynamicResultSet::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );
     OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
@@ -87,8 +85,7 @@ void SAL_CALL CachedDynamicResultSet::release()
     OWeakObject::release();
 }
 
-Any SAL_CALL CachedDynamicResultSet
-    ::queryInterface( const Type&  rType )
+Any SAL_CALL CachedDynamicResultSet::queryInterface( const Type&  rType )
     throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
@@ -127,8 +124,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
 // own methods. ( inherited )
 
 //virtual
-void SAL_CALL CachedDynamicResultSet
-    ::impl_disposing( const EventObject& Source )
+void SAL_CALL CachedDynamicResultSet::impl_disposing( const EventObject& Source )
     throw( RuntimeException )
 {
     DynamicResultSetWrapper::impl_disposing( Source );
@@ -203,11 +199,8 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedDynamicResultSetFactory );
 
 
 //virtual
-Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory
-    ::createCachedDynamicResultSet(
-          const Reference< XDynamicResultSet > & SourceStub
-        , const Reference< XContentIdentifierMapping > & ContentIdentifierMapping )
-        throw( RuntimeException, std::exception )
+Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory::createCachedDynamicResultSet(const Reference< XDynamicResultSet > & SourceStub, const Reference< XContentIdentifierMapping > & ContentIdentifierMapping )
+    throw( RuntimeException, std::exception )
 {
     Reference< XDynamicResultSet > xRet;
     xRet = new CachedDynamicResultSet( SourceStub, ContentIdentifierMapping, m_xContext );
