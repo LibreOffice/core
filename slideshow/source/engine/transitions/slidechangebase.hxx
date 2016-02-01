@@ -29,7 +29,7 @@
 #include "screenupdater.hxx"
 #include "soundplayer.hxx"
 
-#include <boost/enable_shared_from_this.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
@@ -50,7 +50,6 @@ namespace internal {
 */
 class SlideChangeBase : public ViewEventHandler,
                         public NumberAnimation,
-                        public boost::enable_shared_from_this<SlideChangeBase>,
                         private ::boost::noncopyable
 {
 public:

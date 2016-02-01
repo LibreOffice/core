@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_EXPRESSIONNODE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_EXPRESSIONNODE_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 /* Definition of ExpressionNode interface */
 
@@ -53,7 +53,7 @@ namespace slideshow
 
         };
 
-        typedef ::boost::shared_ptr< AnimationFunction > AnimationFunctionSharedPtr;
+        typedef ::std::shared_ptr< AnimationFunction > AnimationFunctionSharedPtr;
 
         /** Refinement of AnimationFunction
 
@@ -77,7 +77,7 @@ namespace slideshow
             virtual bool isConstant() const = 0;
         };
 
-        typedef ::boost::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
+        typedef ::std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
     }
 }
 

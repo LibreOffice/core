@@ -22,7 +22,7 @@
 #include "disposable.hxx"
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace slideshow {
 namespace internal {
@@ -123,14 +123,14 @@ public:
         @param rNotifee AnimationNode to notify
     */
     virtual bool registerDeactivatingListener(
-        const ::boost::shared_ptr< AnimationNode >& rNotifee ) = 0;
+        const ::std::shared_ptr< AnimationNode >& rNotifee ) = 0;
 
     /** Called to notify another AnimationNode's deactivation
 
         @param rNotifier The instance who calls this method.
     */
     virtual void notifyDeactivating(
-        const ::boost::shared_ptr< AnimationNode >& rNotifier ) = 0;
+        const ::std::shared_ptr< AnimationNode >& rNotifier ) = 0;
 
     /** Query node whether it has an animation pending.
 
@@ -141,7 +141,7 @@ public:
     virtual bool hasPendingAnimation() const = 0;
 };
 
-typedef ::boost::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
+typedef ::std::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
 
 } // namespace internal
 } // namespace presentation

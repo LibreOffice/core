@@ -28,8 +28,7 @@
 #include "intrinsicanimationeventhandler.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 namespace slideshow
 {
@@ -43,7 +42,6 @@ namespace slideshow
             animations, or GIF animations.
          */
         class IntrinsicAnimationActivity : public Activity,
-                                           public boost::enable_shared_from_this<IntrinsicAnimationActivity>,
                                            private boost::noncopyable
         {
         public:
@@ -83,7 +81,7 @@ namespace slideshow
 
         private:
             SlideShowContext                        maContext;
-            boost::weak_ptr<DrawShape>              mpDrawShape;
+            std::weak_ptr<DrawShape>              mpDrawShape;
             WakeupEventSharedPtr                    mpWakeupEvent;
             IntrinsicAnimationEventHandlerSharedPtr mpListener;
             ::std::vector<double>                   maTimeouts;
@@ -250,8 +248,7 @@ namespace slideshow
         bool IntrinsicAnimationActivity::enableAnimations()
         {
             mbIsActive = true;
-            return maContext.mrActivitiesQueue.addActivity(
-                shared_from_this() );
+            return maContext.mrActivitiesQueue.addActivity( ActivitySharedPtr(this) );
         }
 
 
