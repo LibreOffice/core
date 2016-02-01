@@ -99,7 +99,9 @@ void process_headers( ne_request * req,
         {
             // Create & set the PropertyValue
             DAVPropertyValue thePropertyValue;
-            thePropertyValue.Name = aHeaderName;
+            // header names are case insensitive, so are the
+            // corresponding property names
+            thePropertyValue.Name = aHeaderName.toAsciiLowerCase();
             thePropertyValue.IsCaseSensitive = false;
             thePropertyValue.Value <<= aHeaderValue;
 
