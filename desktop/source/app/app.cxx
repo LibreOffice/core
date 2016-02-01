@@ -1426,7 +1426,7 @@ int Desktop::Main()
 
         /* ensure existence of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively
-           and else can deadlock while creating this window from another tread while
+           and else can deadlock while creating this window from another thread while
            the main thread is not yet in the event loop.
         */
         Application::GetDefaultDevice();
