@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "RemoteFilesDialog.hxx"
+#include <comphelper/stillreadwriteinteraction.hxx>
 
 class FileViewContainer : public vcl::Window
 {
@@ -1416,10 +1417,29 @@ bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
     {
         Reference< XInteractionHandler > xInteractionHandler(
                         InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
-        Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-        ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
+        //check if WebDAV or not
+        if ( !INetURLObject( rURL ).isAnyKnownWebDAVScheme() )
+        {
+                // no webdav, use the interaction handler as is
+                Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+                ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
-        return aContent.isDocument();
+                return aContent.isDocument();
+        }
+        else
+        {
+            // It's a webdav URL, so use the same open sequence as in normal open process.
+            // Let's use a comphelper::StillReadWriteInteraction to trap errors here without showing the user.
+            // This sequence will result in an exception if the target URL resource is not present
+            comphelper::StillReadWriteInteraction* pInteraction = new comphelper::StillReadWriteInteraction(xInteractionHandler,xInteractionHandler);
+            css::uno::Reference< css::task::XInteractionHandler > xInteraction(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
+
+            Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteraction, Reference< XProgressHandler >() );
+            ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
+
+            aContent.openStream();
+            return aContent.isDocument();
+        }
     }
     catch( const Exception& )
     {
