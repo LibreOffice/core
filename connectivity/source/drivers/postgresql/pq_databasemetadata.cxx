@@ -1406,7 +1406,7 @@ typedef std::unordered_map
 <
     sal_Int32,
     DatabaseTypeDescription,
-    ::boost::hash< sal_Int32 >,
+    ::std::hash< sal_Int32 >,
     ::std::equal_to< sal_Int32 >
 > Oid2DatabaseTypeDescriptionMap;
 

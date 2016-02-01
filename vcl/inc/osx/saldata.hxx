@@ -33,8 +33,7 @@
 #include "svdata.hxx"
 #include "salwtype.hxx"
 
-#include <boost/functional/hash.hpp>
-
+#include <functional>
 #include <list>
 #include <map>
 #include <unordered_set>
@@ -56,10 +55,10 @@ class SystemFontList;
 #define SAL_CLIPRECT_COUNT 16
 
 class AquaSalFrame;
-struct FrameHash : public boost::hash<sal_IntPtr>
+struct FrameHash : public std::hash<sal_IntPtr>
 {
     size_t operator()(const AquaSalFrame* frame) const
-    { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
+    { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
 #define INVALID_CURSOR_PTR reinterpret_cast<NSCursor*>(0xdeadbeef)

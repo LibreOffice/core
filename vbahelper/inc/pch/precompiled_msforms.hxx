@@ -53,7 +53,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>

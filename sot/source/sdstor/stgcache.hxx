@@ -26,9 +26,9 @@
 #include <tools/stream.hxx>
 #include <stgelem.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/functional/hash.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <unordered_map>
+#include <functional>
 
 class UCBStorageStream;
 class StgPage;
@@ -40,7 +40,7 @@ class StgCache
     typedef std::unordered_map
     <
         sal_Int32, rtl::Reference< StgPage >,
-        boost::hash< sal_Int32 >, std::equal_to< sal_Int32 >
+        std::hash< sal_Int32 >, std::equal_to< sal_Int32 >
     > IndexToStgPage;
 
     typedef std::vector< rtl::Reference< StgPage > > LRUList;

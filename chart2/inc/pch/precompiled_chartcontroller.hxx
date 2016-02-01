@@ -55,7 +55,6 @@
 #include <utility>
 #include <vector>
 #include <boost/checked_delete.hpp>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_array.hpp>
