@@ -3333,7 +3333,7 @@ SfxBoolItem DrawSelect SID_DRAW_SELECT
 ]
 
 
-SvxDrawToolItem InsertDraw SID_INSERT_DRAW
+SfxBoolItem InsertDraw SID_INSERT_DRAW
 
 [
     /* flags: */
@@ -3357,8 +3357,6 @@ SvxDrawToolItem InsertDraw SID_INSERT_DRAW
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
-    PseudoSlots = TRUE;
-    PseudoPrefix = SID_DRAW;
 ]
 
 

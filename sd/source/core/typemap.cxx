@@ -104,7 +104,6 @@
 #include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
-#define SvxDrawToolItem             SfxAllEnumItem
 #include "sdslots.hxx"
 
 

@@ -94,43 +94,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         return;
     }
 
-    // evaluate pseudo slots in draw toolbox
-    //! is this still really needed ?????
-
-    if (nNewId == SID_INSERT_DRAW && pArgs)
-    {
-        const SfxPoolItem* pItem;
-        const SfxAllEnumItem* pEnumItem = nullptr;
-        if ( pArgs->GetItemState( SID_INSERT_DRAW, true, &pItem ) == SfxItemState::SET &&
-             ( pEnumItem = dynamic_cast<const SfxAllEnumItem*>( pItem ) ) )
-        {
-            SvxDrawToolEnum eSel = (SvxDrawToolEnum)pEnumItem->GetValue();
-            switch (eSel)
-            {
-                case SVX_SNAP_DRAW_SELECT:          nNewId = SID_OBJECT_SELECT;         break;
-                case SVX_SNAP_DRAW_LINE:            nNewId = SID_DRAW_LINE;             break;
-                case SVX_SNAP_DRAW_RECT:            nNewId = SID_DRAW_RECT;             break;
-                case SVX_SNAP_DRAW_ELLIPSE:         nNewId = SID_DRAW_ELLIPSE;          break;
-                case SVX_SNAP_DRAW_POLYGON_NOFILL:  nNewId = SID_DRAW_POLYGON_NOFILL;   break;
-                case SVX_SNAP_DRAW_BEZIER_NOFILL:   nNewId = SID_DRAW_BEZIER_NOFILL;    break;
-                case SVX_SNAP_DRAW_FREELINE_NOFILL: nNewId = SID_DRAW_FREELINE_NOFILL;  break;
-                case SVX_SNAP_DRAW_ARC:             nNewId = SID_DRAW_ARC;              break;
-                case SVX_SNAP_DRAW_PIE:             nNewId = SID_DRAW_PIE;              break;
-                case SVX_SNAP_DRAW_CIRCLECUT:       nNewId = SID_DRAW_CIRCLECUT;        break;
-                case SVX_SNAP_DRAW_TEXT:            nNewId = SID_DRAW_TEXT;             break;
-                case SVX_SNAP_DRAW_TEXT_VERTICAL:   nNewId = SID_DRAW_TEXT_VERTICAL;    break;
-                case SVX_SNAP_DRAW_TEXT_MARQUEE:    nNewId = SID_DRAW_TEXT_MARQUEE;     break;
-                case SVX_SNAP_DRAW_CAPTION:         nNewId = SID_DRAW_CAPTION;          break;
-                case SVX_SNAP_DRAW_CAPTION_VERTICAL: nNewId = SID_DRAW_CAPTION_VERTICAL; break;
-            }
-        }
-        else                    // sal_uInt16 item from controller
-        {
-            rReq.Done();
-            return;
-        }
-    }
-
     if ( nNewId == SID_DRAW_SELECT )
         nNewId = SID_OBJECT_SELECT;
 
@@ -244,9 +207,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         pTabView->SetDrawFuncPtr(nullptr);
     }
 
-    SfxRequest aNewReq(rReq);
-    aNewReq.SetSlot(nDrawSfxId);
-
     assert(nNewId != SID_DRAW_CHART); //#i71254# handled already above
 
     switch (nNewId)
@@ -254,18 +214,18 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_OBJECT_SELECT:
             // Nicht immer zurueckschalten
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
-            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, rReq));
             break;
 
         case SID_DRAW_LINE:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, rReq));
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, rReq));
             pView->SetFrameDragSingles( false );
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
@@ -274,25 +234,25 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_POLYGON_NOFILL:
         case SID_DRAW_BEZIER_NOFILL:
         case SID_DRAW_FREELINE_NOFILL:
-            pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, pDoc, rReq));
             break;
 
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pTabView->SetDrawFuncPtr(new FuConstArc(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstArc(this, pWin, pView, pDoc, rReq));
             break;
 
         case SID_DRAW_TEXT:
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
-            pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, rReq));
             break;
 
         case SID_FM_CREATE_CONTROL:
             SetDrawFormShell(true);
-            pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, rReq));
             nFormSfxId = nNewFormId;
             break;
 
@@ -304,7 +264,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, aNewReq ));
+            pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, rReq ));
             if ( nNewId != SID_DRAW_CS_ID )
             {
                 const SfxStringItem* pEnumCommand = rReq.GetArg<SfxStringItem>(nNewId);
@@ -329,8 +289,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     rReq.Done();
 
-    rBindings.Invalidate( SID_INSERT_DRAW );
-    rBindings.Update( SID_INSERT_DRAW );
+    Invalidate();
 
     // Create default drawing objects via keyboard
     // with qualifier construct directly
@@ -389,45 +348,35 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
-            case SID_INSERT_DRAW:
-                {
-                    //  SID_OBJECT_SELECT only if "harder" selection mode
-                    sal_uInt16 nPutId = nDrawSfxId;
-                    if ( nPutId == SID_OBJECT_SELECT && !IsDrawSelMode() )
-                        nPutId = USHRT_MAX;
-                    // only the images that are also in the controller
-                    if ( nPutId != SID_OBJECT_SELECT &&
-                         nPutId != SID_DRAW_LINE &&
-                         nPutId != SID_DRAW_RECT &&
-                         nPutId != SID_DRAW_ELLIPSE &&
-                         nPutId != SID_DRAW_POLYGON_NOFILL &&
-                         nPutId != SID_DRAW_BEZIER_NOFILL &&
-                         nPutId != SID_DRAW_FREELINE_NOFILL &&
-                         nPutId != SID_DRAW_ARC &&
-                         nPutId != SID_DRAW_PIE &&
-                         nPutId != SID_DRAW_CIRCLECUT &&
-                         nPutId != SID_DRAW_TEXT &&
-                         nPutId != SID_DRAW_TEXT_VERTICAL &&
-                         nPutId != SID_DRAW_TEXT_MARQUEE &&
-                         nPutId != SID_DRAW_CAPTION &&
-                         nPutId != SID_DRAW_CAPTION_VERTICAL )
-                        nPutId = USHRT_MAX;
-                    SfxAllEnumItem aItem( nWhich, nPutId );
-                    if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
-                    {
-                        aItem.DisableValue( SID_DRAW_TEXT_VERTICAL );
-                        aItem.DisableValue( SID_DRAW_CAPTION_VERTICAL );
-                    }
-                    rSet.Put( aItem );
-                }
-                break;
-
             case SID_DRAW_CHART:
                 {
                     bool bOle = GetViewFrame()->GetFrame().IsInPlace();
                     if ( bOle || !SvtModuleOptions().IsChart() )
                         rSet.DisableItem( nWhich );
                 }
+                break;
+
+            case SID_DRAW_LINE:
+            case SID_DRAW_RECT:
+            case SID_DRAW_ELLIPSE:
+            case SID_DRAW_POLYGON_NOFILL:
+            case SID_DRAW_BEZIER_NOFILL:
+            case SID_DRAW_FREELINE_NOFILL:
+            case SID_DRAW_ARC:
+            case SID_DRAW_PIE:
+            case SID_DRAW_CIRCLECUT:
+            case SID_DRAW_TEXT:
+            case SID_DRAW_TEXT_MARQUEE:
+            case SID_DRAW_CAPTION:
+                rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );
+                break;
+
+            case SID_DRAW_TEXT_VERTICAL:
+            case SID_DRAW_CAPTION_VERTICAL:
+                if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
+                    rSet.DisableItem( nWhich );
+                else
+                    rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );
                 break;
 
             case SID_OBJECT_SELECT:     // important for the old control-controller

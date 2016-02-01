@@ -99,7 +99,6 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdmetitm.hxx>
 
-#define SvxDrawToolItem             SfxAllEnumItem
 #define SvxDrawAlignItem            SfxAllEnumItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 

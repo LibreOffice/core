@@ -91,7 +91,7 @@ SfxBoolItem TrackChanges FN_REDLINE_ON
     GroupId = GID_EDIT;
 ]
 
-SfxAllEnumItem TrackChangesBar SID_TRACK_CHANGES_BAR
+SfxBoolItem TrackChangesBar SID_TRACK_CHANGES_BAR
 
 [
     /* flags: */

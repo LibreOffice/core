@@ -77,37 +77,13 @@ void SwView::ExecDraw(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
-    const SfxAllEnumItem* pEItem = nullptr;
     const SfxStringItem* pStringItem = nullptr;
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
     bool bDeselect = false;
 
     sal_uInt16 nSlotId = rReq.GetSlot();
     if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
-    {
-        pEItem = dynamic_cast< const SfxAllEnumItem*>(pItem);
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
-    }
-
-    if (SID_INSERT_DRAW == nSlotId && pEItem)
-        switch ( pEItem->GetValue() )
-        {
-            case SVX_SNAP_DRAW_SELECT:              nSlotId = SID_OBJECT_SELECT;            break;
-            case SVX_SNAP_DRAW_LINE:                nSlotId = SID_DRAW_LINE;                break;
-            case SVX_SNAP_DRAW_RECT:                nSlotId = SID_DRAW_RECT;                break;
-            case SVX_SNAP_DRAW_ELLIPSE:             nSlotId = SID_DRAW_ELLIPSE;             break;
-            case SVX_SNAP_DRAW_POLYGON_NOFILL:      nSlotId = SID_DRAW_POLYGON_NOFILL;      break;
-            case SVX_SNAP_DRAW_BEZIER_NOFILL:       nSlotId = SID_DRAW_BEZIER_NOFILL;       break;
-            case SVX_SNAP_DRAW_FREELINE_NOFILL:     nSlotId = SID_DRAW_FREELINE_NOFILL;     break;
-            case SVX_SNAP_DRAW_ARC:                 nSlotId = SID_DRAW_ARC;                 break;
-            case SVX_SNAP_DRAW_PIE:                 nSlotId = SID_DRAW_PIE;                 break;
-            case SVX_SNAP_DRAW_CIRCLECUT:           nSlotId = SID_DRAW_CIRCLECUT;           break;
-            case SVX_SNAP_DRAW_TEXT:                nSlotId = SID_DRAW_TEXT;                break;
-            case SVX_SNAP_DRAW_TEXT_VERTICAL:       nSlotId = SID_DRAW_TEXT_VERTICAL;       break;
-            case SVX_SNAP_DRAW_TEXT_MARQUEE:        nSlotId = SID_DRAW_TEXT_MARQUEE;        break;
-            case SVX_SNAP_DRAW_CAPTION:             nSlotId = SID_DRAW_CAPTION;             break;
-            case SVX_SNAP_DRAW_CAPTION_VERTICAL:    nSlotId = SID_DRAW_CAPTION_VERTICAL;    break;
-        }
 
     if (nSlotId == SID_OBJECT_SELECT && m_nFormSfxId == nSlotId)
     {
@@ -212,6 +188,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if( pWin )
             pWin->LeaveWait();
     }
+    else if ( m_nFormSfxId != USHRT_MAX )
+        GetViewFrame()->GetDispatcher()->Execute( SID_FM_LEAVE_CREATE );
 
     if( nSlotId == SID_DRAW_CS_ID )
     {
@@ -243,8 +221,6 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrameMode())
             m_pWrtShell->EnterSelFrameMode();
         LeaveDrawCreate();
-
-        GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
 
         AttrChangedNotify(m_pWrtShell);
         return;
@@ -332,14 +308,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             break;
     }
 
-    static sal_uInt16 const aInval[] =
-    {
-        // Slot IDs must be sorted when calling Invalidate!
-        SID_ATTRIBUTES_AREA,
-        SID_INSERT_DRAW,
-        0
-    };
-    GetViewFrame()->GetBindings().Invalidate(aInval);
+    GetViewFrame()->GetBindings().Invalidate(SID_ATTRIBUTES_AREA);
 
     bool bEndTextEdit = true;
     if (pFuncPtr)
