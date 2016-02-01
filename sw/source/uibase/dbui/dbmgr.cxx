@@ -860,7 +860,10 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     SfxMedium* pDstMed = new SfxMedium(
         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
         STREAM_STD_READWRITE );
-    if( !xTargetDocShell->DoSaveAs( *pDstMed ) )
+    bool bAnyError = !xTargetDocShell->DoSaveAs( *pDstMed );
+    // xObjectShell->DoSaveCompleted crashes the mail merge unit tests, so skip it
+    bAnyError |= (0 != xTargetDocShell->GetError());
+    if( bAnyError )
         SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile.GetURL() );
     else
         SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile.GetURL() );
@@ -900,12 +903,10 @@ static bool lcl_SaveDoc(
         rWorkShell.ConvertFieldsToText();
 
     bool bAnyError = !xObjectShell->DoSaveAs(*pDstMed);
-
     // Actually this should be a bool... so in case of email and individual
     // files, where this is set, we skip the the recently used handling
-    if( !decodedURL )
-        xObjectShell->DoSaveCompleted( pDstMed );
-    bAnyError = bAnyError || xObjectShell->GetError();
+    bAnyError |= !xObjectShell->DoSaveCompleted( pDstMed, !decodedURL );
+    bAnyError |= (0 != xObjectShell->GetError());
     if( bAnyError )
     {
         // error message ??

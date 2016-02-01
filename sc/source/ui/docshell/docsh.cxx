@@ -2449,9 +2449,9 @@ bool ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
     return SfxObjectShell::SaveCompleted( xStor );
 }
 
-bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
+bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent )
 {
-    bool bRet = SfxObjectShell::DoSaveCompleted( pNewStor );
+    bool bRet = SfxObjectShell::DoSaveCompleted( pNewStor, bRegisterRecent );
 
     //  SC_HINT_DOC_SAVED for change ReadOnly -> Read/Write
     Broadcast( SfxSimpleHint( SC_HINT_DOC_SAVED ) );
