@@ -51,7 +51,6 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional/optional.hpp>
 #include <osl/diagnose.h>

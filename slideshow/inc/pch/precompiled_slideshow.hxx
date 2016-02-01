@@ -55,7 +55,6 @@
 #include <utility>
 #include <vector>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>

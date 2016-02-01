@@ -42,7 +42,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/logic/tribool.hpp>
 #include <boost/noncopyable.hpp>

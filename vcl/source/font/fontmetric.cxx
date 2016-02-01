@@ -29,8 +29,6 @@
 #include <set>
 #include <cstdio>
 
-#include <boost/functional/hash.hpp>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;

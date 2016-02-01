@@ -55,7 +55,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_array.hpp>

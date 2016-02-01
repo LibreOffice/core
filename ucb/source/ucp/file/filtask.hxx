@@ -28,9 +28,9 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <boost/functional/hash.hpp>
 #include "filerror.hxx"
 #include <unordered_map>
+#include <functional>
 
 namespace fileaccess
 {
@@ -130,7 +130,7 @@ namespace fileaccess
         };  // end class TaskHandling
 
 
-        typedef std::unordered_map< sal_Int32,TaskHandling,boost::hash< sal_Int32 > > TaskMap;
+        typedef std::unordered_map< sal_Int32,TaskHandling,std::hash< sal_Int32 > > TaskMap;
     private:
 
         osl::Mutex                                                         m_aMutex;

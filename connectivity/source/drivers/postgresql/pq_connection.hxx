@@ -56,7 +56,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/functional/hash.hpp>
+#include <functional>
 
 #include <libpq-fe.h>
 #include <unordered_map>
@@ -160,7 +160,7 @@ typedef std::unordered_map
 <
     sal_Int32,
     OUString,
-    ::boost::hash< sal_Int32 >,
+    ::std::hash< sal_Int32 >,
     ::std::equal_to< sal_Int32 >
 > Int2StringMap;
 
