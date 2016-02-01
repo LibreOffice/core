@@ -90,8 +90,7 @@ Any SAL_CALL CachedContentResultSetStub
 
 
 //virtual
-void SAL_CALL CachedContentResultSetStub
-    ::impl_propertyChange( const PropertyChangeEvent& rEvt )
+void SAL_CALL CachedContentResultSetStub::impl_propertyChange( const PropertyChangeEvent& rEvt )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -111,10 +110,8 @@ void SAL_CALL CachedContentResultSetStub
 
 
 //virtual
-void SAL_CALL CachedContentResultSetStub
-    ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
-    throw( PropertyVetoException,
-           RuntimeException )
+void SAL_CALL CachedContentResultSetStub::impl_vetoableChange( const PropertyChangeEvent& rEvt )
+    throw( PropertyVetoException, RuntimeException )
 {
     impl_EnsureNotDisposed();
 
@@ -137,8 +134,7 @@ void SAL_CALL CachedContentResultSetStub
 
 XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
 //list all interfaces exclusive baseclasses
-Sequence< Type > SAL_CALL CachedContentResultSetStub
-    ::getTypes()
+Sequence< Type > SAL_CALL CachedContentResultSetStub::getTypes()
     throw( RuntimeException, std::exception )
 {
     static Sequence< Type >* pTypes = nullptr;
@@ -291,17 +287,14 @@ else \
     m_xResultSetOrigin->beforeFirst(); \
 return aRet;
 
-FetchResult SAL_CALL CachedContentResultSetStub
-    ::fetch( sal_Int32 nRowStartPosition
-    , sal_Int32 nRowCount, sal_Bool bDirection )
+FetchResult SAL_CALL CachedContentResultSetStub::fetch( sal_Int32 nRowStartPosition, sal_Int32 nRowCount, sal_Bool bDirection )
     throw( RuntimeException, std::exception )
 {
     impl_init_xRowOrigin();
     FETCH_XXX( impl_getCurrentRowContent, m_xRowOrigin );
 }
 
-sal_Int32 SAL_CALL CachedContentResultSetStub
-    ::impl_getColumnCount()
+sal_Int32 SAL_CALL CachedContentResultSetStub::impl_getColumnCount()
 {
     sal_Int32 nCount;
     bool bCached;
@@ -330,8 +323,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
     return m_nColumnCount;
 }
 
-void SAL_CALL CachedContentResultSetStub
-    ::impl_getCurrentRowContent( Any& rRowContent
+void SAL_CALL CachedContentResultSetStub::impl_getCurrentRowContent( Any& rRowContent
         , Reference< XRow > xRow )
         throw ( SQLException, RuntimeException )
 {
@@ -346,8 +338,7 @@ void SAL_CALL CachedContentResultSetStub
     rRowContent <<= aContent;
 }
 
-void SAL_CALL CachedContentResultSetStub
-    ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
+void SAL_CALL CachedContentResultSetStub::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
         throw ( RuntimeException )
 {
     //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResultSets
@@ -435,55 +426,43 @@ void SAL_CALL CachedContentResultSetStub
 // XFetchProviderForContentAccess methods.
 
 
-void SAL_CALL CachedContentResultSetStub
-    ::impl_getCurrentContentIdentifierString( Any& rAny
-        , Reference< XContentAccess > xContentAccess )
-        throw ( RuntimeException )
+void SAL_CALL CachedContentResultSetStub::impl_getCurrentContentIdentifierString( Any& rAny, Reference< XContentAccess > xContentAccess )
+    throw ( RuntimeException )
 {
-     rAny <<= xContentAccess->queryContentIdentifierString();
+    rAny <<= xContentAccess->queryContentIdentifierString();
 }
 
-void SAL_CALL CachedContentResultSetStub
-    ::impl_getCurrentContentIdentifier( Any& rAny
-        , Reference< XContentAccess > xContentAccess )
-        throw ( RuntimeException )
+void SAL_CALL CachedContentResultSetStub::impl_getCurrentContentIdentifier( Any& rAny, Reference< XContentAccess > xContentAccess )
+    throw ( RuntimeException )
 {
-     rAny <<= xContentAccess->queryContentIdentifier();
+    rAny <<= xContentAccess->queryContentIdentifier();
 }
 
-void SAL_CALL CachedContentResultSetStub
-    ::impl_getCurrentContent( Any& rAny
-        , Reference< XContentAccess > xContentAccess )
-        throw ( RuntimeException )
+void SAL_CALL CachedContentResultSetStub::impl_getCurrentContent( Any& rAny, Reference< XContentAccess > xContentAccess )
+    throw ( RuntimeException )
 {
-     rAny <<= xContentAccess->queryContent();
+    rAny <<= xContentAccess->queryContent();
 }
 
 //virtual
-FetchResult SAL_CALL CachedContentResultSetStub
-    ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( css::uno::RuntimeException, std::exception )
+FetchResult SAL_CALL CachedContentResultSetStub::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition, sal_Int32 nRowCount, sal_Bool bDirection )
+    throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
 }
 
 //virtual
-FetchResult SAL_CALL CachedContentResultSetStub
-    ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( css::uno::RuntimeException, std::exception )
+FetchResult SAL_CALL CachedContentResultSetStub::fetchContentIdentifiers( sal_Int32 nRowStartPosition, sal_Int32 nRowCount, sal_Bool bDirection )
+    throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
 }
 
 //virtual
-FetchResult SAL_CALL CachedContentResultSetStub
-    ::fetchContents( sal_Int32 nRowStartPosition
-        , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( css::uno::RuntimeException, std::exception )
+FetchResult SAL_CALL CachedContentResultSetStub::fetchContents( sal_Int32 nRowStartPosition, sal_Int32 nRowCount, sal_Bool bDirection )
+    throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
@@ -556,11 +535,9 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetStubFactory );
 // CachedContentResultSetStubFactory XCachedContentResultSetStubFactory methods.
 
 
-    //virtual
-Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
-    ::createCachedContentResultSetStub(
-            const Reference< XResultSet > & xSource )
-            throw( RuntimeException, std::exception )
+//virtual
+Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory::createCachedContentResultSetStub(const Reference< XResultSet > & xSource )
+    throw( RuntimeException, std::exception )
 {
     if( xSource.is() )
     {
