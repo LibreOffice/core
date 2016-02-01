@@ -138,7 +138,7 @@ RandRWrapper::RandRWrapper( Display* pDisplay ) :
         // obviously they expected libXext to be linked in global symbolspace (that is
         // linked by the application), which is not the case with us (because we want
         // to be able to run in headless mode even without an installed X11 library)
-        m_pRandRLib = osl_loadModule( "libXrandr.so.2", SAL_LOADMODULE_DEFAULT | SAL_LOADMODULE_NOW );
+        m_pRandRLib = osl_loadModuleAscii("libXrandr.so.2", SAL_LOADMODULE_DEFAULT | SAL_LOADMODULE_NOW);
         initFromModule();
     }
     if( m_bValid )
