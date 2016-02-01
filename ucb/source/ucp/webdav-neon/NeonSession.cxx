@@ -1826,8 +1826,10 @@ void runResponseHeaderHandler( void * userdata,
         {
             // Create & set the PropertyValue
             DAVPropertyValue thePropertyValue;
+            // header names are case insensitive, so are the
+            // corresponding property names.
+            thePropertyValue.Name = aHeaderName.toAsciiLowerCase();
             thePropertyValue.IsCaseSensitive = false;
-            thePropertyValue.Name = aHeaderName;
 
             if ( nPos < aHeader.getLength() )
                 thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
