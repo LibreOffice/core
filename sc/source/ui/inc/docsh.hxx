@@ -203,7 +203,7 @@ public:
     virtual void    LoadStyles( SfxObjectShell &rSource ) override;
 
     virtual bool    SaveCompleted( const css::uno::Reference< css::embed::XStorage >& ) override;      // SfxInPlaceObject
-    virtual bool    DoSaveCompleted( SfxMedium * pNewStor) override;     // SfxObjectShell
+    virtual bool    DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent ) override;     // SfxObjectShell
     virtual bool    QuerySlotExecutable( sal_uInt16 nSlotId ) override;
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,

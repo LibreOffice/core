@@ -1942,7 +1942,7 @@ bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 }
 
 
-bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
+bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
 {
     bool bOk = true;
     bool bMedChanged = pNewMed && pNewMed!=pMedium;
@@ -2092,7 +2092,8 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     pMedium->ClearBackup_Impl();
     pMedium->LockOrigFileOnDemand( true, false );
 
-    AddToRecentlyUsedList();
+    if (bRegisterRecent)
+        AddToRecentlyUsedList();
 
     return bOk;
 }
