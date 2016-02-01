@@ -16,8 +16,14 @@
 #include "compat.hxx"
 
 /**
-Dump a list of calls to methods, and a list of method definitions.
-Then we will post-process the 2 lists and find the set of unused methods.
+This plugin performs 3 different analyses:
+
+(1) Find unused methods
+(2) Find methods whose return types are never evaluated
+(3) Find methods which are public, but are never called from outside the class i.e. they can be private
+
+It does so, by dumping various call/definition/use info to a log file.
+Then we will post-process the various lists and find the set of unused methods.
 
 Be warned that it produces around 5G of log file.
 
@@ -41,6 +47,7 @@ namespace {
 
 struct MyFuncInfo
 {
+    std::string access;
     std::string returnType;
     std::string nameAndParams;
     std::string sourceLocation;
@@ -58,15 +65,16 @@ struct MyFuncInfo
 
 
 // try to limit the voluminous output a little
+
+// for the "unused method" analysis
 static std::set<MyFuncInfo> callSet;
-static std::set<MyFuncInfo> usedReturnSet;
 static std::set<MyFuncInfo> definitionSet;
+// for the "unused return type" analysis
+static std::set<MyFuncInfo> usedReturnSet;
+// for the "unnecessary public" analysis
+static std::set<MyFuncInfo> publicDefinitionSet;
+static std::set<MyFuncInfo> calledFromOutsideSet;
 
-
-static bool startswith(const std::string& s, const std::string& prefix)
-{
-    return s.rfind(prefix,0) == 0;
-}
 
 class UnusedMethods:
     public RecursiveASTVisitor<UnusedMethods>, public loplugin::Plugin
@@ -80,17 +88,19 @@ public:
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
+
         std::string output;
+        for (const MyFuncInfo & s : definitionSet)
+            output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
+        // for the "unused method" analysis
         for (const MyFuncInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
+        // for the "unused return type" analysis
         for (const MyFuncInfo & s : usedReturnSet)
             output += "usedReturn:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
-        for (const MyFuncInfo & s : definitionSet)
-        {
-            //treat all UNO interfaces as having been called, since they are part of our external ABI
-            if (!startswith(s.nameAndParams, "com::sun::star::"))
-                output += "definition:\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
-        }
+        // for the "unnecessary public" analysis
+        for (const MyFuncInfo & s : calledFromOutsideSet)
+            output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         ofstream myfile;
         myfile.open( SRCDIR "/unusedmethods.log", ios::app | ios::out);
         myfile << output;
@@ -121,6 +131,13 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
 #endif
 
     MyFuncInfo aInfo;
+    switch (functionDecl->getAccess())
+    {
+    case AS_public: aInfo.access = "public"; break;
+    case AS_private: aInfo.access = "private"; break;
+    case AS_protected: aInfo.access = "protected"; break;
+    default: aInfo.access = "unknown"; break;
+    }
     aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
 
     if (isa<CXXMethodDecl>(functionDecl)) {
@@ -201,6 +218,33 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::
 // prevent recursive templates from blowing up the stack
 static std::set<std::string> traversedFunctionSet;
 
+const Decl* get_DeclContext_from_Stmt(ASTContext& context, const Stmt& stmt)
+{
+  auto it = context.getParents(stmt).begin();
+
+  if (it == context.getParents(stmt).end())
+      return nullptr;
+
+  const Decl *aDecl = it->get<Decl>();
+  if (aDecl)
+      return aDecl;
+
+  const Stmt *aStmt = it->get<Stmt>();
+  if (aStmt)
+      return get_DeclContext_from_Stmt(context, *aStmt);
+
+  return nullptr;
+}
+
+static const FunctionDecl* get_top_FunctionDecl_from_Stmt(ASTContext& context, const Stmt& stmt)
+{
+  const Decl *decl = get_DeclContext_from_Stmt(context, stmt);
+  if (decl)
+      return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
+
+  return nullptr;
+}
+
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
     // Note that I don't ignore ANYTHING here, because I want to get calls to my code that result
@@ -232,10 +276,22 @@ gotfunc:
 
     logCallToRootMethods(calleeFunctionDecl, callSet);
 
+    const Stmt* parent = parentStmt(expr);
+
+    // Now do the checks necessary for the "unnecessary public" analysis
+    CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
+    if (calleeMethodDecl && calleeMethodDecl->getAccess() == AS_public)
+    {
+        const FunctionDecl* parentFunctionDecl = get_top_FunctionDecl_from_Stmt(compiler.getASTContext(), *expr);
+        if (parentFunctionDecl && parentFunctionDecl != calleeFunctionDecl) {
+            calledFromOutsideSet.insert(niceName(parentFunctionDecl));
+        }
+    }
+
+    // Now do the checks necessary for the "unused return value" analysis
     if (calleeFunctionDecl->getReturnType()->isVoidType()) {
         return true;
     }
-    const Stmt* parent = parentStmt(expr);
     if (!parent) {
         // we will get null parent if it's under a CXXConstructExpr node
         logCallToRootMethods(calleeFunctionDecl, usedReturnSet);
@@ -283,7 +339,13 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     }
 
     if( functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl ))
-        definitionSet.insert(niceName(functionDecl));
+    {
+        MyFuncInfo funcInfo = niceName(functionDecl);
+        definitionSet.insert(funcInfo);
+        if (functionDecl->getAccess() == AS_public) {
+            publicDefinitionSet.insert(funcInfo);
+        }
+    }
     return true;
 }
 
