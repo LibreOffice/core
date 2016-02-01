@@ -1859,18 +1859,18 @@ void SdrEditView::UnGroupMarked()
             // FIRST move contained objects to parent of group, so that
             // the contained objects are NOT migrated to the UNDO-ItemPool
             // when AddUndo(new SdrUndoDelObj(*pGrp)) is called.
-            const size_t nAnz=pSrcLst->GetObjCount();
+            const size_t nObjCount=pSrcLst->GetObjCount();
 
             if( bUndo )
             {
-                for (size_t no=nAnz; no>0;)
+                for (size_t no=nObjCount; no>0;)
                 {
                     no--;
                     SdrObject* pObj=pSrcLst->GetObj(no);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pObj));
                 }
             }
-            for (size_t no=0; no<nAnz; ++no)
+            for (size_t no=0; no<nObjCount; ++no)
             {
                 SdrObject* pObj=pSrcLst->RemoveObject(0);
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
