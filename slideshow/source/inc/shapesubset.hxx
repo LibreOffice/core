@@ -24,14 +24,14 @@
 #include "subsettableshapemanager.hxx"
 #include "doctreenode.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace slideshow
 {
     namespace internal
     {
         class ShapeSubset;
-        typedef ::boost::shared_ptr< ShapeSubset > ShapeSubsetSharedPtr;
+        typedef ::std::shared_ptr< ShapeSubset > ShapeSubsetSharedPtr;
 
         /* Definition of ShapeSubset class */
 

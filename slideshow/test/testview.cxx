@@ -160,7 +160,7 @@ public:
         return maBounds;
     }
 
-    virtual std::vector<boost::shared_ptr<TestView> > getViewLayers() const
+    virtual std::vector<std::shared_ptr<TestView> > getViewLayers() const
     {
         return maViewLayers;
     }

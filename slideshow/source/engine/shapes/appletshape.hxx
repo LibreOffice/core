@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_APPLETSHAPE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace drawing
 {
@@ -35,7 +35,7 @@ namespace slideshow
         struct SlideShowContext;
         class Shape;
 
-        boost::shared_ptr<Shape> createAppletShape(
+        std::shared_ptr<Shape> createAppletShape(
             const css::uno::Reference< css::drawing::XShape >& xShape,
             double                                  nPrio,
             const OUString&                         rServiceName,
