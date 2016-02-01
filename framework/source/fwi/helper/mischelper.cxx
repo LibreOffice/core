@@ -53,7 +53,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         }
         catch (const uno::Exception &)
         {
-            DBG_ASSERT( false, "failed to get language guessing component" );
+            SAL_WARN( "framework.fwi", "failed to get language guessing component" );
         }
     }
     return m_xLanguageGuesser;

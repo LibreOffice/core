@@ -34,8 +34,8 @@ namespace svt
         ,m_pDialog  ( _pDialog )
         ,m_bRunning ( false    )
     {
-        DBG_ASSERT( m_pDialog, "AsyncPickerAction::AsyncPickerAction: invalid dialog!" );
-        DBG_ASSERT( m_pView, "AsyncPickerAction::AsyncPickerAction: invalid view!" );
+        assert( m_pDialog && "AsyncPickerAction::AsyncPickerAction: invalid dialog!" );
+        assert( m_pView && "AsyncPickerAction::AsyncPickerAction: invalid view!" );
     }
 
 
