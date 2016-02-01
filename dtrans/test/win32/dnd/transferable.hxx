@@ -44,7 +44,7 @@
 
 #include <process.h>
 
-#include "../../source/win32/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 
 // my defines
 
