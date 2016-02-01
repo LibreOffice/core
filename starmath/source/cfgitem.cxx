@@ -1220,9 +1220,9 @@ void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
     const SfxItemPool *pPool = rSet.GetPool();
 
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTSIZE),
-                           (sal_uInt16) GetPrintSize()));
+                           sal::static_int_cast<sal_uInt16>(GetPrintSize())));
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
-                           (sal_uInt16) GetPrintZoomFactor()));
+                           GetPrintZoomFactor()));
 
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));

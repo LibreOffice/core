@@ -26,7 +26,7 @@
 #include <types.hxx>
 
 
-#define SM_FMT_VERSION_51   ((sal_uInt8) 0x01)
+#define SM_FMT_VERSION_51   (sal_uInt8(0x01))
 #define SM_FMT_VERSION_NOW  SM_FMT_VERSION_51
 
 #define FNTNAME_TIMES   "Times New Roman"
