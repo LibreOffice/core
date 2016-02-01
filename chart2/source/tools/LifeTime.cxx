@@ -163,8 +163,7 @@ bool LifeTimeManager::dispose()
 
 CloseableLifeTimeManager::CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
         , ::com::sun::star::lang::XComponent* pComponent
-        , bool bLongLastingCallsCancelable )
-        : LifeTimeManager( pComponent, bLongLastingCallsCancelable )
+        , bool bLongLastingCallsCancelable ) : LifeTimeManager( pComponent, bLongLastingCallsCancelable )
         , m_pCloseable(pCloseable)
 {
     impl_init();
