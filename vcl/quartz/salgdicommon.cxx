@@ -973,13 +973,6 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
         return true;
     }
 
-    // reject requests that cannot be handled yet
-    if( rLineWidths.getX() != rLineWidths.getY() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
-        return false;
-    }
-
 #ifdef IOS
     if( !CheckContext() )
     {

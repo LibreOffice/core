@@ -690,13 +690,6 @@ bool SvpSalGraphics::drawPolyLine(
         return true;
     }
 
-    // reject requests that cannot be handled yet
-    if (rLineWidths.getX() != rLineWidths.getY())
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawPolyLine case");
-        return false;
-    }
-
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
     bool bNoJoin = (basegfx::B2DLineJoin::NONE == eLineJoin && rLineWidths.getX() > 1.3);
 
