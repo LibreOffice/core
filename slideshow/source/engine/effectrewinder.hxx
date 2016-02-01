@@ -90,7 +90,7 @@ public:
             is called then the other functor is not called.
     */
     bool rewind (
-        const ::boost::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
+        const ::std::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
         const ::std::function<void ()>& rSlideRewindFunctor,
         const ::std::function<void ()>& rPreviousSlideFunctor);
 
@@ -119,7 +119,7 @@ private:
     EventSharedPtr mpAsynchronousRewindEvent;
 
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
-    ::boost::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
+    ::std::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
     bool mbNonUserTriggeredMainSequenceEffectSeen;
 

@@ -76,7 +76,7 @@ namespace slideshow
                 bool                        mbParseAnimationFunction;
             };
 
-            typedef ::boost::shared_ptr< ParserContext > ParserContextSharedPtr;
+            typedef ::std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 
             template< typename Generator > class ShapeBoundsFunctor

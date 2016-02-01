@@ -494,7 +494,7 @@ private:
 
 template< typename Handler, typename Functor >
 void UserEventQueue::registerEvent(
-    boost::shared_ptr< Handler >& rHandler,
+    std::shared_ptr< Handler >& rHandler,
     const EventSharedPtr&         rEvent,
     const Functor&                rRegistrationFunctor )
 {
@@ -513,7 +513,7 @@ void UserEventQueue::registerEvent(
 
 template< typename Handler, typename Arg, typename Functor >
 void UserEventQueue::registerEvent(
-    boost::shared_ptr< Handler >& rHandler,
+    std::shared_ptr< Handler >& rHandler,
     const EventSharedPtr&         rEvent,
     const Arg&                    rArg,
     const Functor&                rRegistrationFunctor )
@@ -692,7 +692,7 @@ public:
           mnPrio(nPrio),
           mbAdvanceOnClick( bAdvanceOnClick ) {}
 
-    void operator()( const boost::shared_ptr<ClickEventHandler>& rHandler )const
+    void operator()( const std::shared_ptr<ClickEventHandler>& rHandler )const
     {
         // register the handler on _two_ sources: we want the
         // nextEffect events, e.g. space bar, to trigger clicks, as well!
@@ -796,8 +796,8 @@ void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
 
 void UserEventQueue::callSkipEffectEventHandler()
 {
-    ::boost::shared_ptr<SkipEffectEventHandler> pHandler (
-        ::boost::dynamic_pointer_cast<SkipEffectEventHandler>(mpSkipEffectEventHandler));
+    ::std::shared_ptr<SkipEffectEventHandler> pHandler (
+        ::std::dynamic_pointer_cast<SkipEffectEventHandler>(mpSkipEffectEventHandler));
     if (pHandler)
         pHandler->skipEffect();
 }

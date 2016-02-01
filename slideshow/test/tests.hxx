@@ -22,7 +22,7 @@
 
 #include "animatableshape.hxx"
 #include "unoview.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace basegfx{ class B1DRange; class B2DRange; class B2DVector; }
 
@@ -37,10 +37,10 @@ public:
     virtual bool wasClipSet() const = 0;
     virtual basegfx::B2DRange getBounds() const = 0;
 
-    virtual std::vector<boost::shared_ptr<TestView> > getViewLayers() const = 0;
+    virtual std::vector<std::shared_ptr<TestView> > getViewLayers() const = 0;
 };
 
-typedef boost::shared_ptr<TestView> TestViewSharedPtr;
+typedef std::shared_ptr<TestView> TestViewSharedPtr;
 TestViewSharedPtr createTestView();
 
 
@@ -54,7 +54,7 @@ public:
     virtual sal_Int32 getAnimationCount() const = 0;
 };
 
-typedef boost::shared_ptr<TestShape> TestShapeSharedPtr;
+typedef std::shared_ptr<TestShape> TestShapeSharedPtr;
 TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
                                    double                   nPrio);
 

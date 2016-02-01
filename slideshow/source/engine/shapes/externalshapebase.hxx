@@ -119,7 +119,7 @@ namespace slideshow
             /// The associated XShape
             css::uno::Reference< css::drawing::XShape >                             mxShape;
 
-            boost::shared_ptr<ExternalShapeBaseListener>                            mpListener;
+            std::shared_ptr<ExternalShapeBaseListener>                            mpListener;
 
             SubsettableShapeManagerSharedPtr                                        mpShapeManager;
             EventMultiplexer&                                                       mrEventMultiplexer;

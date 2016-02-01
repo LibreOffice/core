@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 #include "gdimtftools.hxx"
@@ -87,7 +87,7 @@ namespace slideshow
             const ::basegfx::B2DRectangle                       maBounds;
         };
 
-        typedef ::boost::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
+        typedef ::std::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
 
     }
 }

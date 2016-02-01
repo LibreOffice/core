@@ -22,8 +22,8 @@
 
 #include <osl/diagnose.h>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/mem_fn.hpp>
+#include <memory>
 #include <vector>
 #include <algorithm>
 
@@ -212,9 +212,9 @@ namespace internal
         }
     }
 
-    ::boost::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock (const bool bStartLocked)
+    ::std::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock (const bool bStartLocked)
     {
-        return ::boost::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this, bStartLocked));
+        return ::std::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this, bStartLocked));
     }
 
 

@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGON_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 /* Definition of ParametricPolyPolygon interface */
@@ -82,7 +82,7 @@ namespace slideshow
             virtual ::basegfx::B2DPolyPolygon operator()( double t ) = 0;
         };
 
-        typedef ::boost::shared_ptr< ParametricPolyPolygon > ParametricPolyPolygonSharedPtr;
+        typedef ::std::shared_ptr< ParametricPolyPolygon > ParametricPolyPolygonSharedPtr;
 
     }
 }

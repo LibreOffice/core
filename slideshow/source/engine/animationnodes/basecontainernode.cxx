@@ -177,7 +177,7 @@ void BaseContainerNode::showState() const
     for( std::size_t i=0; i<maChildren.size(); ++i )
     {
         BaseNodeSharedPtr pNode =
-            boost::dynamic_pointer_cast<BaseNode>(maChildren[i]);
+            std::dynamic_pointer_cast<BaseNode>(maChildren[i]);
         SAL_INFO("slideshow.verbose",
                  "Node connection: n" <<
                  debugGetNodeName(this) <<

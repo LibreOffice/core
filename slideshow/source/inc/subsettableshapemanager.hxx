@@ -22,7 +22,7 @@
 
 #include "shapemanager.hxx"
 #include "intrinsicanimationeventhandler.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 /* Definition of SubsettableShapeManager interface */
 
@@ -62,8 +62,8 @@ namespace slideshow
                 @param rSubsetShape
                 The subset to display in the generated shape.
              */
-            virtual boost::shared_ptr<AttributableShape> getSubsetShape(
-                const boost::shared_ptr<AttributableShape>& rOrigShape,
+            virtual std::shared_ptr<AttributableShape> getSubsetShape(
+                const std::shared_ptr<AttributableShape>& rOrigShape,
                 const DocTreeNode&                          rTreeNode ) = 0;
 
             /** Revoke a previously queried subset shape.
@@ -80,8 +80,8 @@ namespace slideshow
                 The subset created from rOrigShape
              */
             virtual void revokeSubset(
-                const boost::shared_ptr<AttributableShape>& rOrigShape,
-                const boost::shared_ptr<AttributableShape>& rSubsetShape ) = 0;
+                const std::shared_ptr<AttributableShape>& rOrigShape,
+                const std::shared_ptr<AttributableShape>& rSubsetShape ) = 0;
 
             // Evil hackish way of getting intrinsic animation slide-wise
 
@@ -103,7 +103,7 @@ namespace slideshow
             virtual void notifyIntrinsicAnimationsDisabled() = 0;
         };
 
-        typedef ::boost::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
+        typedef ::std::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
     }
 }
 

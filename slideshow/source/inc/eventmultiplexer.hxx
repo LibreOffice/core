@@ -28,8 +28,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <memory>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include "unoview.hxx"
@@ -73,7 +71,7 @@ public:
     virtual void viewClobbered( const UnoViewSharedPtr& rView ) = 0;
 };
 
-typedef ::boost::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
+typedef ::std::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
 
 /** Interface for handling hyperlink clicks.
 
@@ -100,7 +98,7 @@ protected:
     ~HyperlinkHandler() {}
 };
 
-typedef ::boost::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;
+typedef ::std::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;
 
 /** Interface for handling user paint state changes.
 
@@ -121,7 +119,7 @@ public:
     virtual bool disable() = 0;
 };
 
-typedef ::boost::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
+typedef ::std::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
 
 /** This class multiplexes user-activated and
     slide-show global events.
@@ -587,7 +585,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAnimationStart( const boost::shared_ptr<AnimationNode>& rNode );
+    bool notifyAnimationStart( const std::shared_ptr<AnimationNode>& rNode );
 
     /** Notify that the given node leaves its active duration.
 
@@ -603,7 +601,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAnimationEnd( const boost::shared_ptr<AnimationNode>& rNode );
+    bool notifyAnimationEnd( const std::shared_ptr<AnimationNode>& rNode );
 
     /** Notify that the slide animations sequence leaves its
         active duration.
@@ -628,7 +626,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAudioStopped( const boost::shared_ptr<AnimationNode>& rNode );
+    bool notifyAudioStopped( const std::shared_ptr<AnimationNode>& rNode );
 
     /** Notify that the show has entered or exited pause mode
 
@@ -649,7 +647,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyCommandStopAudio( const boost::shared_ptr<AnimationNode>& rNode );
+    bool notifyCommandStopAudio( const std::shared_ptr<AnimationNode>& rNode );
 
     /** Notifies that a hyperlink has been clicked.
     */

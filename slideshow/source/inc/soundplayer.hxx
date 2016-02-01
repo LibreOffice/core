@@ -26,7 +26,7 @@
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "pauseeventhandler.hxx"
 #include "disposable.hxx"
@@ -61,7 +61,7 @@ namespace slideshow
                 the sound file is invalid, or not supported by the
                 player service.
              */
-            static ::boost::shared_ptr<SoundPlayer> create(
+            static ::std::shared_ptr<SoundPlayer> create(
                 EventMultiplexer & rEventMultiplexer,
                 const OUString& rSoundURL,
                 const css::uno::Reference< css::uno::XComponentContext>& rComponentContext );
@@ -97,11 +97,11 @@ namespace slideshow
             EventMultiplexer & mrEventMultiplexer;
             // TODO(Q3): obsolete when boost::enable_shared_ptr_from_this
             //           is available
-            ::boost::shared_ptr<SoundPlayer> mThis;
+            ::std::shared_ptr<SoundPlayer> mThis;
             css::uno::Reference< css::media::XPlayer > mxPlayer;
         };
 
-        typedef ::boost::shared_ptr< SoundPlayer > SoundPlayerSharedPtr;
+        typedef ::std::shared_ptr< SoundPlayer > SoundPlayerSharedPtr;
     }
 }
 

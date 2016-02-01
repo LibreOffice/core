@@ -32,7 +32,7 @@
 #include "rgbcolor.hxx"
 
 #include <stack>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace slideshow
@@ -67,11 +67,11 @@ namespace slideshow
             ;
         };
 
-        typedef ::boost::shared_ptr< State > StateSharedPtr;
+        typedef ::std::shared_ptr< State > StateSharedPtr;
 
         class ShapeAttributeLayer;
 
-        typedef ::boost::shared_ptr< ShapeAttributeLayer > ShapeAttributeLayerSharedPtr;
+        typedef ::std::shared_ptr< ShapeAttributeLayer > ShapeAttributeLayerSharedPtr;
 
         /** Encapsulates all modifiable attributes of a shape.
 

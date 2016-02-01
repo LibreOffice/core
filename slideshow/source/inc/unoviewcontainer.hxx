@@ -22,10 +22,10 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <vector>
+#include <memory>
 
 #include "unoview.hxx"
 
@@ -82,7 +82,7 @@ namespace slideshow
             UnoViewVector   maViews;
         };
 
-        typedef ::boost::shared_ptr< UnoViewContainer > UnoViewContainerSharedPtr;
+        typedef ::std::shared_ptr< UnoViewContainer > UnoViewContainerSharedPtr;
 
     }
 }

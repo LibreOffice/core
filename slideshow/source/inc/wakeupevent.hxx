@@ -76,7 +76,7 @@ private:
     ActivitiesQueue&                mrActivityQueue;
 };
 
-typedef ::boost::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
+typedef ::std::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
 
 } // namespace internal
 } // namespace presentation

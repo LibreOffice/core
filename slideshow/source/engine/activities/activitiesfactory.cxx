@@ -35,8 +35,8 @@
 #include "continuouskeytimeactivitybase.hxx"
 
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
 
+#include <memory>
 #include <cmath>
 #include <vector>
 #include <algorithm>
@@ -145,7 +145,7 @@ public:
         const OptionalValueType&                      rTo,
         const OptionalValueType&                      rBy,
         const ActivityParameters&                     rParms,
-        const ::boost::shared_ptr< AnimationType >&   rAnim,
+        const ::std::shared_ptr< AnimationType >&   rAnim,
         const Interpolator< ValueType >&              rInterpolator,
         bool                                          bCumulative )
         : BaseType( rParms ),
@@ -361,7 +361,7 @@ private:
     mutable ValueType                               maStartInterpolationValue;
     mutable sal_uInt32                              mnIteration;
 
-    ::boost::shared_ptr< AnimationType >    mpAnim;
+    ::std::shared_ptr< AnimationType >    mpAnim;
     Interpolator< ValueType >               maInterpolator;
     bool                                    mbDynamicStartValue;
     bool                                    mbCumulative;
@@ -382,7 +382,7 @@ AnimationActivitySharedPtr createFromToByActivity(
     const uno::Any&                                          rToAny,
     const uno::Any&                                          rByAny,
     const ActivityParameters&                                rParms,
-    const ::boost::shared_ptr< AnimationType >&              rAnim,
+    const ::std::shared_ptr< AnimationType >&              rAnim,
     const Interpolator< typename AnimationType::ValueType >& rInterpolator,
     bool                                                     bCumulative,
     const ShapeSharedPtr&                                    rShape,
@@ -509,7 +509,7 @@ public:
     ValuesActivity(
         const ValueVectorType&                      rValues,
         const ActivityParameters&                   rParms,
-        const boost::shared_ptr<AnimationType>&     rAnim,
+        const std::shared_ptr<AnimationType>&     rAnim,
         const Interpolator< ValueType >&            rInterpolator,
         bool                                        bCumulative )
         : BaseType( rParms ),
@@ -591,7 +591,7 @@ private:
 
     ExpressionNodeSharedPtr                 mpFormula;
 
-    boost::shared_ptr<AnimationType>        mpAnim;
+    std::shared_ptr<AnimationType>        mpAnim;
     Interpolator< ValueType >               maInterpolator;
     bool                                    mbCumulative;
 };
@@ -608,7 +608,7 @@ template<class BaseType, typename AnimationType>
 AnimationActivitySharedPtr createValueListActivity(
     const uno::Sequence<uno::Any>&                            rValues,
     const ActivityParameters&                                 rParms,
-    const boost::shared_ptr<AnimationType>&                   rAnim,
+    const std::shared_ptr<AnimationType>&                   rAnim,
     const Interpolator<typename AnimationType::ValueType>&    rInterpolator,
     bool                                                      bCumulative,
     const ShapeSharedPtr&                                     rShape,
@@ -663,7 +663,7 @@ template<typename AnimationType>
 AnimationActivitySharedPtr createActivity(
     const ActivitiesFactory::CommonParameters&               rParms,
     const uno::Reference< animations::XAnimate >&            xNode,
-    const ::boost::shared_ptr< AnimationType >&              rAnim,
+    const ::std::shared_ptr< AnimationType >&              rAnim,
     const Interpolator< typename AnimationType::ValueType >& rInterpolator
     = Interpolator< typename AnimationType::ValueType >() )
 {

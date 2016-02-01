@@ -26,7 +26,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include "tools.hxx"
@@ -36,6 +35,7 @@
 #include "doctreenode.hxx"
 
 #include <vector>
+#include <memory>
 
 
 namespace slideshow
@@ -314,7 +314,7 @@ namespace slideshow
             mutable bool                                mbForceUpdate;
         };
 
-        typedef ::boost::shared_ptr< ViewShape > ViewShapeSharedPtr;
+        typedef ::std::shared_ptr< ViewShape > ViewShapeSharedPtr;
 
     }
 }
