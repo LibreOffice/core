@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_2ca353a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-02-01T08:31:16Z",
+      "side": 1,
+      "message": "You\u0027re not deleting Sequence, you\u0027re deleting the uses of it, right? :-)",
+      "revId": "fd83cdebf69ff1fefef2bc1dde53d17f8061b163",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
