@@ -55,7 +55,7 @@ void OpenGLX11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
     }
 }
 
-void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
+void OpenGLX11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
     // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
