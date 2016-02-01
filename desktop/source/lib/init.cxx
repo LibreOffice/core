@@ -33,6 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -529,6 +530,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler(::comphelper::getProcessComponentContext(), pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
+        comphelper::ScopeGuard const g([&] () {
+                if (pair.second)
+                {
+                    pLib->mInteractionMap.erase(aURL.toUtf8());
+                }
+            });
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
@@ -549,10 +556,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                             aFilterOptions);
 
         assert(!xComponent.is() || pair.second); // concurrent loading of same URL ought to fail
-        if (!pair.second)
-        {
-            pLib->mInteractionMap.erase(aURL.toUtf8());
-        }
 
         if (!xComponent.is())
         {
