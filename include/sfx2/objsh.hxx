@@ -327,7 +327,7 @@ public:
     bool                        DoSaveObjectAs( SfxMedium &rNewStor, bool bCommit );
 
     // TODO/LATER: currently only overridden in Calc, should be made non-virtual
-    virtual bool                DoSaveCompleted( SfxMedium* pNewStor=nullptr );
+    virtual bool                DoSaveCompleted( SfxMedium* pNewStor=nullptr, bool bRegisterRecent=true );
 
     bool                        LoadOwnFormat( SfxMedium& pMedium );
     virtual bool                SaveAsOwnFormat( SfxMedium& pMedium );
