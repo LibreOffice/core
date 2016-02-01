@@ -9,6 +9,7 @@
 
 #include "headless/svpcairotextrender.hxx"
 #include "headless/svpgdi.hxx"
+#include <cairo.h>
 
 SvpCairoTextRender::SvpCairoTextRender(SvpSalGraphics& rParent)
     : mrParent(rParent)
@@ -36,8 +37,9 @@ void SvpCairoTextRender::clipRegion(cairo_t* cr)
     mrParent.clipRegion(cr);
 }
 
-void SvpCairoTextRender::releaseCairoContext(cairo_t*)
+void SvpCairoTextRender::releaseCairoContext(cairo_t* cr)
 {
+    mrParent.releaseCairoContext(cr, false, basegfx::B2DRange());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

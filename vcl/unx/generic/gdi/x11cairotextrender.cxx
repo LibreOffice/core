@@ -146,8 +146,9 @@ size_t X11CairoTextRender::GetHeight() const
         return 1;
 }
 
-void X11CairoTextRender::releaseCairoContext(cairo_t* /*cr*/)
+void X11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
+    cairo_destroy(cr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

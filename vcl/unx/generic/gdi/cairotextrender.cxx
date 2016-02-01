@@ -344,9 +344,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         aI = aNext;
     }
 
-    cairo_surface_flush(cairo_get_target(cr));
     releaseCairoContext(cr);
-    cairo_destroy(cr);
 }
 
 const FontCharMapPtr CairoTextRender::GetFontCharMap() const
