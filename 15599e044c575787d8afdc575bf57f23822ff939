@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_ecdcab48",
+        "filename": "sw/source/core/doc/doccomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-01T05:17:56Z",
+      "side": 1,
+      "message": "This is very wrong. There is an important difference between pLineNum[nCount++] and pLineNum[ ++nCount].",
+      "range": {
+        "startLine": 786,
+        "startChar": 26,
+        "endLine": 786,
+        "endChar": 28
+      },
+      "revId": "15599e044c575787d8afdc575bf57f23822ff939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_cce1ef00",
+        "filename": "sw/source/core/doc/doccomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-01T05:17:56Z",
+      "side": 1,
+      "message": "Also in this case blindly changing from post-increment to pre-increment will make the code do the wrong thing.",
+      "range": {
+        "startLine": 832,
+        "startChar": 39,
+        "endLine": 832,
+        "endChar": 49
+      },
+      "revId": "15599e044c575787d8afdc575bf57f23822ff939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_0ce4970b",
+        "filename": "sw/source/core/doc/doccomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-01T05:17:56Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 836,
+        "startChar": 50,
+        "endLine": 836,
+        "endChar": 51
+      },
+      "revId": "15599e044c575787d8afdc575bf57f23822ff939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_2ce7d313",
+        "filename": "sw/source/core/doc/doccomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-01T05:17:56Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 949,
+        "startChar": 35,
+        "endLine": 949,
+        "endChar": 45
+      },
+      "revId": "15599e044c575787d8afdc575bf57f23822ff939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6cf1dbcd",
+        "filename": "sw/source/core/doc/doccomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-01T05:17:56Z",
+      "side": 1,
+      "message": "etc",
+      "range": {
+        "startLine": 983,
+        "startChar": 39,
+        "endLine": 983,
+        "endChar": 41
+      },
+      "revId": "15599e044c575787d8afdc575bf57f23822ff939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
