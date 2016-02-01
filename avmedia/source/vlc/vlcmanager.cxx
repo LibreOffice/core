@@ -121,8 +121,7 @@ sal_Bool SAL_CALL Manager::supportsService( const rtl::OUString& serviceName )
 uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    ::uno::Sequence< OUString > aRet { VLC_SERVICENAME };
-    return aRet;
+    return { VLC_SERVICENAME };
 }
 
 } // end namespace vlc
