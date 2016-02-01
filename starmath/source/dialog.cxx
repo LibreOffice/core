@@ -218,7 +218,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
         nPrintSize = PRINT_SIZE_ZOOMED;
 
     rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), nPrintSize));
-    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), (sal_uInt16) m_pZoom->GetValue()));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), sal::static_int_cast<sal_uInt16>(m_pZoom->GetValue())));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_pTitle->IsChecked()));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_pText->IsChecked()));
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_pFrame->IsChecked()));
@@ -483,11 +483,11 @@ void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
     rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_pBaseSize->GetValue()))) );
 
-    rFormat.SetRelSize(SIZ_TEXT,     (sal_uInt16) m_pTextSize->GetValue());
-    rFormat.SetRelSize(SIZ_INDEX,    (sal_uInt16) m_pIndexSize->GetValue());
-    rFormat.SetRelSize(SIZ_FUNCTION, (sal_uInt16) m_pFunctionSize->GetValue());
-    rFormat.SetRelSize(SIZ_OPERATOR, (sal_uInt16) m_pOperatorSize->GetValue());
-    rFormat.SetRelSize(SIZ_LIMITS,   (sal_uInt16) m_pBorderSize->GetValue());
+    rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_pTextSize->GetValue()));
+    rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_pIndexSize->GetValue()));
+    rFormat.SetRelSize(SIZ_FUNCTION, sal::static_int_cast<sal_uInt16>(m_pFunctionSize->GetValue()));
+    rFormat.SetRelSize(SIZ_OPERATOR, sal::static_int_cast<sal_uInt16>(m_pOperatorSize->GetValue()));
+    rFormat.SetRelSize(SIZ_LIMITS,   sal::static_int_cast<sal_uInt16>(m_pBorderSize->GetValue()));
 
     const Size aTmp (rFormat.GetBaseSize());
     for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
@@ -805,10 +805,10 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     if (nActiveCategory != CATEGORY_NONE)
     {
         pCat = Categories[nActiveCategory];
-        pCat->SetValue(0, (sal_uInt16) m_pMetricField1->GetValue());
-        pCat->SetValue(1, (sal_uInt16) m_pMetricField2->GetValue());
-        pCat->SetValue(2, (sal_uInt16) m_pMetricField3->GetValue());
-        pCat->SetValue(3, (sal_uInt16) m_pMetricField4->GetValue());
+        pCat->SetValue(0, sal::static_int_cast<sal_uInt16>(m_pMetricField1->GetValue()));
+        pCat->SetValue(1, sal::static_int_cast<sal_uInt16>(m_pMetricField2->GetValue()));
+        pCat->SetValue(2, sal::static_int_cast<sal_uInt16>(m_pMetricField3->GetValue()));
+        pCat->SetValue(3, sal::static_int_cast<sal_uInt16>(m_pMetricField4->GetValue()));
 
         if (nActiveCategory == 5)
             bScaleAllBrackets = m_pCheckBox1->IsChecked();
@@ -1233,8 +1233,8 @@ void SmShowSymbolSetWindow::KeyInput(const KeyEvent& rKEvt)
         n = nSelectSymbol;
 
     // adjust scrollbar
-    if ((n < (sal_uInt16) (m_pVScrollBar->GetThumbPos() * nColumns)) ||
-        (n >= (sal_uInt16) ((m_pVScrollBar->GetThumbPos() + nRows) * nColumns)))
+    if ((n < sal::static_int_cast<sal_uInt16>(m_pVScrollBar->GetThumbPos() * nColumns)) ||
+        (n >= sal::static_int_cast<sal_uInt16>((m_pVScrollBar->GetThumbPos() + nRows) * nColumns)))
     {
         m_pVScrollBar->SetThumbPos(n / nColumns);
         Invalidate();

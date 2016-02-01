@@ -598,7 +598,7 @@ bool SmStructureNode::IsVisible() const
 
 sal_uInt16 SmStructureNode::GetNumSubNodes() const
 {
-    return (sal_uInt16) aSubNodes.size();
+    return sal::static_int_cast<sal_uInt16>(aSubNodes.size());
 }
 
 

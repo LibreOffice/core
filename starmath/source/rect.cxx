@@ -227,7 +227,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
     if (nEBorderWidth < 0)
         nEBorderWidth = 0;
-    Init(rDev, pFormat, rText, (sal_uInt16) nEBorderWidth);
+    Init(rDev, pFormat, rText, sal::static_int_cast<sal_uInt16>(nEBorderWidth));
 }
 
 
