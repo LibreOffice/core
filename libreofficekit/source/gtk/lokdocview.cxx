@@ -128,6 +128,12 @@ struct LOKDocViewPrivateImpl
     /// View ID, returned by createView() or 0 by default.
     int m_nViewId;
 
+    /**
+     * Contains a freshly set zoom level: logic size of a tile.
+     * It gets reset back to 0 when LOK was informed about this zoom change.
+    */
+    int m_nTileSizeTwips;
+
     LOKDocViewPrivateImpl()
         : m_aLOPath(nullptr),
         m_pUserProfileURL(nullptr),
@@ -166,7 +172,8 @@ struct LOKDocViewPrivateImpl
         m_aHandleEndRect({0, 0, 0, 0}),
         m_bInDragEndHandle(false),
         m_pGraphicHandle(nullptr),
-        m_nViewId(0)
+        m_nViewId(0),
+        m_nTileSizeTwips(0)
     {
         memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
         memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
@@ -558,6 +565,20 @@ postKeyEventInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+
+    if (priv->m_nTileSizeTwips)
+    {
+        std::stringstream ss;
+        ss << "lok::Document::setClientZoom(" << nTileSizePixels << ", " << nTileSizePixels << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
+        g_info("%s", ss.str().c_str());
+        priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
+                                                 nTileSizePixels,
+                                                 nTileSizePixels,
+                                                 priv->m_nTileSizeTwips,
+                                                 priv->m_nTileSizeTwips);
+        priv->m_nTileSizeTwips = 0;
+    }
+
     std::stringstream ss;
     ss << "lok::Document::postKeyEvent(" << pLOEvent->m_nKeyEvent << ", " << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
     g_info("%s", ss.str().c_str());
@@ -2724,6 +2745,8 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
         g_clear_error(&error);
     }
     g_object_unref(task);
+
+    priv->m_nTileSizeTwips = pixelToTwip(nTileSizePixels, priv->m_fZoom);
 }
 
 SAL_DLLPUBLIC_EXPORT gfloat
