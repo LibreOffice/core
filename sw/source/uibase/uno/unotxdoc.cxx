@@ -3218,6 +3218,15 @@ bool SwXTextDocument::isMimeTypeSupported()
     return aDataHelper.GetXTransferable().is() && SwTransferable::IsPaste(*pWrtShell, aDataHelper);
 }
 
+void SwXTextDocument::setClientVisibleArea(const Rectangle& rRectangle)
+{
+    SwView* pView = pDocShell->GetView();
+    if (!pView)
+        return;
+
+    pView->SetVisArea(rRectangle);
+}
+
 Pointer SwXTextDocument::getPointer()
 {
     SolarMutexGuard aGuard;
