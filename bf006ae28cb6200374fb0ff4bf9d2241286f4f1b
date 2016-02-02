@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_af30d508",
+        "filename": "chart2/source/tools/LifeTime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-02T09:19:48Z",
+      "side": 1,
+      "message": "It is not uncommon to see the elements of a constructor\u0027s initalizer list lined up as in the original code, the first prefixed with \": \" and the remaining ones each prefixed with \", \".  (The other common scheme is to place the colon at the end of the preceding line, and put a trailing comma after each but the last element of the initializer list.)\n\nPulling the first element of the initializer list out of the aligned list, to the end of the preceding line, makes the code less readable than it was before.",
+      "revId": "bf006ae28cb6200374fb0ff4bf9d2241286f4f1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
