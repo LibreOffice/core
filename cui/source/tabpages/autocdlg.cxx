@@ -351,7 +351,7 @@ void OfaImpBrwString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Ren
         {
             aFont = *pUserData->pFont;
             aFont.SetColor(aOldFont.GetColor());
-            aFont.SetSize(aOldFont.GetSize());
+            aFont.SetFontSize(aOldFont.GetFontSize());
         }
         aFont.SetWeight(WEIGHT_BOLD);
 

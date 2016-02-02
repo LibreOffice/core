@@ -301,10 +301,10 @@ DayOfWeek Calendar::ImplGetWeekStart() const
 void Calendar::ImplGetWeekFont( vcl::Font& rFont ) const
 {
     // weeknumber is displayed in WEEKNUMBER_HEIGHT%-Fontheight
-    Size aFontSize = rFont.GetSize();
+    Size aFontSize = rFont.GetFontSize();
     aFontSize.Height() *= WEEKNUMBER_HEIGHT;
     aFontSize.Height() /= 100;
-    rFont.SetSize( aFontSize );
+    rFont.SetFontSize( aFontSize );
     rFont.SetWeight( WEIGHT_NORMAL );
 }
 

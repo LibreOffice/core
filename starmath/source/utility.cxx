@@ -233,7 +233,7 @@ bool IsBold( const vcl::Font &rFont )
 
 void SmFace::Impl_Init()
 {
-    SetSize( GetSize() );
+    SetSize( GetFontSize() );
     SetTransparent( true );
     SetAlignment( ALIGN_BASELINE );
     SetColor( COL_AUTO );
@@ -254,7 +254,7 @@ void SmFace::SetSize(const Size& rSize)
     //! bodies (eg stack{...} with many entries).
     //! Of course this is holds only if characters are used and not polygons.
 
-    Font::SetSize(aSize);
+    Font::SetFontSize(aSize);
 }
 
 
@@ -278,7 +278,7 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
     // scales the width and height of 'rFace' by 'rFrac' and returns a
     // reference to 'rFace'.
     // It's main use is to make scaling fonts look easier.
-{   const Size &rFaceSize = rFace.GetSize();
+{   const Size &rFaceSize = rFace.GetFontSize();
 
     rFace.SetSize(Size(Fraction(rFaceSize.Width())  *= rFrac,
                        Fraction(rFaceSize.Height()) *= rFrac));

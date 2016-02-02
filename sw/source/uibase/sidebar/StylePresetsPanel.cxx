@@ -95,7 +95,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
         pVirtualDev->DrawRect(aNameRect);
 
         vcl::Font aFont;
-        aFont.SetSize(Size(0, nNameFontSize));
+        aFont.SetFontSize(Size(0, nNameFontSize));
 
         pVirtualDev->SetFont(aFont);
 

@@ -476,7 +476,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     vcl::Font       aFont( GetSettings().GetStyleSettings().GetMenuFont() );
     const vcl::Font aOldFont( GetFont() );
 
-    aFont.SetSize( aTextSize );
+    aFont.SetFontSize( aTextSize );
     aFont.SetColor( COL_WHITE );
     aFont.SetCharSet( aOldFont.GetCharSet() );
     aFont.SetLanguage( aOldFont.GetLanguage() );
@@ -545,7 +545,7 @@ void ShowWindow::DrawEndScene()
     const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
     const OUString  aText( SdResId( STR_PRES_SOFTEND ) );
 
-    aFont.SetSize( aTextSize );
+    aFont.SetFontSize( aTextSize );
     aFont.SetColor( COL_WHITE );
     aFont.SetCharSet( aOldFont.GetCharSet() );
     aFont.SetLanguage( aOldFont.GetLanguage() );

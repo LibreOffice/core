@@ -304,7 +304,7 @@ long ScColumn::GetNeededSize(
                 if ( bBreak && !rOptions.bTotalSize )
                 {
                     //  limit size for line break
-                    long nCmp = pDev->GetFont().GetSize().Height() * SC_ROT_BREAK_FACTOR;
+                    long nCmp = pDev->GetFont().GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
                     if ( nHeight > nCmp )
                         nHeight = nCmp;
                 }
@@ -485,7 +485,7 @@ long ScColumn::GetNeededSize(
                 if ( bBreak && !rOptions.bTotalSize )
                 {
                     //  limit size for line break
-                    long nCmp = aOldFont.GetSize().Height() * SC_ROT_BREAK_FACTOR;
+                    long nCmp = aOldFont.GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
                     if ( nValue > nCmp )
                         nValue = nCmp;
                 }

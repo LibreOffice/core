@@ -84,8 +84,8 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
     css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetFamilyName();
     aFD.StyleName = rFont.GetStyleName();
-    aFD.Height = (sal_Int16)rFont.GetSize().Height();
-    aFD.Width = (sal_Int16)rFont.GetSize().Width();
+    aFD.Height = (sal_Int16)rFont.GetFontSize().Height();
+    aFD.Width = (sal_Int16)rFont.GetFontSize().Width();
     aFD.Family = (sal_Int16)rFont.GetFamilyType();
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = (sal_Int16)rFont.GetPitch();
@@ -107,7 +107,7 @@ vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
     vcl::Font aFont;
     aFont.SetFamilyName( rDescr.Name );
     aFont.SetStyleName( rDescr.StyleName );
-    aFont.SetSize( ::Size( rDescr.Width, rDescr.Height ) );
+    aFont.SetFontSize( ::Size( rDescr.Width, rDescr.Height ) );
     aFont.SetFamily( (FontFamily)rDescr.Family );
     aFont.SetCharSet( (rtl_TextEncoding)rDescr.CharSet );
     aFont.SetPitch( (FontPitch)rDescr.Pitch );

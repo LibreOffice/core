@@ -109,7 +109,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
 
     //  everything else from application font
     vcl::Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
-    aAppFont.SetSize( aAttrFont.GetSize() );
+    aAppFont.SetFontSize( aAttrFont.GetFontSize() );
 
     aAppFont.SetAlignment( ALIGN_TOP );
     pDev->SetFont( aAppFont );
@@ -1281,14 +1281,14 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 else
                                 {
                                     //  find right font size for DrawText
-                                    aFont.SetSize( Size( 0,100 ) );
+                                    aFont.SetFontSize( Size( 0,100 ) );
                                     rRenderContext.SetFont( aFont );
                                     Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
 
                                     //  40% of width or 60% of height
                                     long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
                                     long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
-                                    aFont.SetSize( Size( 0,std::min(nSizeX,nSizeY) ) );
+                                    aFont.SetFontSize( Size( 0,std::min(nSizeX,nSizeY) ) );
                                     rRenderContext.SetFont( aFont );
 
                                     //  centered output with DrawText

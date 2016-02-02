@@ -68,7 +68,7 @@ namespace vclcanvas
             const bool bOldMapState( rOutDev.IsMapModeEnabled() );
             rOutDev.EnableMapMode(false);
 
-            const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
+            const Size aSize = rOutDev.GetFontMetric( *maFont ).GetFontSize();
 
             const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
             double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
@@ -78,7 +78,7 @@ namespace vclcanvas
 
             const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
 
-            maFont->SetWidth( nNewWidth );
+            maFont->SetAverageFontWidth( nNewWidth );
 
             rOutDev.EnableMapMode(bOldMapState);
         }

@@ -126,7 +126,7 @@ IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
             {
                 m_aFontName = pFontItem->GetFamilyName();
                 eCharSet  = pFontItem->GetCharSet();
-                vcl::Font aFont( m_aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetSize() );
+                vcl::Font aFont( m_aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetFontSize() );
                 aFont.SetCharSet( pFontItem->GetCharSet() );
                 aFont.SetPitch( pFontItem->GetPitch() );
                 m_pNumberCharEdit->SetFont( aFont  );

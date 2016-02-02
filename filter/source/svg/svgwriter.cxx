@@ -298,7 +298,7 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
 
         // Font Size
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
-                               OUString::number( rFont.GetHeight() ) + "px" );
+                               OUString::number( rFont.GetFontHeight() ) + "px" );
 
         // Font Style
         if( rFont.GetItalic() != ITALIC_NONE )
@@ -475,9 +475,9 @@ void SVGTextWriter::implSetCurrentFont()
         maCurrentFont = mpVDev->GetFont();
         Size aSz;
 
-        implMap( Size( 0, maCurrentFont.GetHeight() ), aSz );
+        implMap( Size( 0, maCurrentFont.GetFontHeight() ), aSz );
 
-        maCurrentFont.SetHeight( aSz.Height() );
+        maCurrentFont.SetFontHeight( aSz.Height() );
     }
     else
     {
@@ -730,12 +730,12 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
     if( maCurrentFont !=  maParentFont )
     {
         const OUString& rsCurFontName               = maCurrentFont.GetFamilyName();
-        long int nCurFontSize                       = maCurrentFont.GetHeight();
+        long int nCurFontSize                       = maCurrentFont.GetFontHeight();
         FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
         FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
 
         const OUString& rsParFontName               = maParentFont.GetFamilyName();
-        long int nParFontSize                       = maParentFont.GetHeight();
+        long int nParFontSize                       = maParentFont.GetFontHeight();
         FontItalic eParFontItalic                   = maParentFont.GetItalic();
         FontWeight eParFontWeight                   = maParentFont.GetWeight();
 
@@ -1606,7 +1606,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
             {
                 sId += ".bp";
                 BulletListItemInfo& aBulletListItemInfo = maBulletListItemMap[ sId ];
-                aBulletListItemInfo.nFontSize = rFont.GetHeight();
+                aBulletListItemInfo.nFontSize = rFont.GetFontHeight();
                 aBulletListItemInfo.aColor = aTextColor;
                 aBulletListItemInfo.aPos = maTextPos;
                 aBulletListItemInfo.cBulletChar = mcBulletChar;
@@ -3592,9 +3592,9 @@ vcl::Font SVGActionWriter::ImplSetCorrectFontHeight() const
     vcl::Font aFont( mpVDev->GetFont() );
     Size      aSz;
 
-    ImplMap( Size( 0, aFont.GetHeight() ), aSz );
+    ImplMap( Size( 0, aFont.GetFontHeight() ), aSz );
 
-    aFont.SetHeight( aSz.Height() );
+    aFont.SetFontHeight( aSz.Height() );
 
     return aFont;
 }

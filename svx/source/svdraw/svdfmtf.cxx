@@ -406,7 +406,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
     if(bText && mbFntDirty)
     {
         vcl::Font aFnt(mpVD->GetFont());
-        const sal_uInt32 nHeight(FRound(aFnt.GetSize().Height() * mfScaleY));
+        const sal_uInt32 nHeight(FRound(aFnt.GetFontSize().Height() * mfScaleY));
 
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO ) );
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
@@ -1005,7 +1005,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     pText->SetMergedItem ( makeSdrTextRightDistItem (0));
     pText->SetMergedItem ( makeSdrTextLeftDistItem (0));
 
-    if ( aFnt.GetWidth() || ( rAct.GetType() == MetaActionType::STRETCHTEXT ) )
+    if ( aFnt.GetAverageFontWidth() || ( rAct.GetType() == MetaActionType::STRETCHTEXT ) )
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
         pText->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );

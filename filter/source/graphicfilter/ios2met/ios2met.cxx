@@ -978,7 +978,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     if (pF!=nullptr)
         aFont = pF->aFont;
     aFont.SetColor(aAttr.aChrCol);
-    aFont.SetSize(Size(0,aAttr.aChrCellSize.Height()));
+    aFont.SetFontSize(Size(0,aAttr.aChrCellSize.Height()));
     if ( aAttr.nChrAng != 0 )
         aFont.SetOrientation(aAttr.nChrAng);
 

@@ -804,7 +804,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     vcl::Font aFont( GetEditEngine()->GetFont() );
     aFont.SetAlignment( ALIGN_BOTTOM );
     aFont.SetTransparent( true );
-    aFont.SetSize( Size( 0, 360 ) );
+    aFont.SetFontSize( Size( 0, 360 ) );
     pPrinter->SetFont( aFont );
     pPrinter->SetMapMode( MAP_100TH_MM );
 
