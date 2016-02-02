@@ -836,7 +836,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
                 if ( IsFixedCellHeight() )
-                    nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+                    nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
                 else
                     nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice(), OUString() ).Height();
                 // Metrics can be greater
@@ -1090,7 +1090,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + pPortion->GetLen() ) < pNode->Len() ) )
                         pPortion->GetSize().Width() += aTmpFont.GetFixKerning();
                     if ( IsFixedCellHeight() )
-                        pPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+                        pPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
                 }
                 if ( bCalcCharPositions )
                 {
@@ -1304,7 +1304,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             ImplInitDigitMode(pRefDev, aTmpFont.GetLanguage());
 
             if ( IsFixedCellHeight() )
-                aTextSize.Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+                aTextSize.Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
             else
                 aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, OUString() ).Height();
             pLine->SetHeight( (sal_uInt16)aTextSize.Height() );
@@ -1638,7 +1638,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     TextPortion* pDummyPortion = new TextPortion( 0 );
     pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev, OUString() );
     if ( IsFixedCellHeight() )
-        pDummyPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+        pDummyPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
     pParaPortion->GetTextPortions().Append(pDummyPortion);
     FormatterFontMetric aFormatterMetrics;
     RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
@@ -2599,9 +2599,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
-        Size aSz( rFont.GetSize() );
+        Size aSz( rFont.GetFontSize() );
         aSz.Height() = static_cast<const SvxFontHeightItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) ).GetHeight();
-        rFont.SetSize( aSz );
+        rFont.SetFontSize( aSz );
         rFont.SetWeight( static_cast<const SvxWeightItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ))).GetWeight() );
         rFont.SetItalic( static_cast<const SvxPostureItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ))).GetPosture() );
         rFont.SetLanguage( static_cast<const SvxLanguageItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ))).GetLanguage() );
@@ -2694,7 +2694,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
         // Set the font as we want it to look like & reset the Propr attribute
         // so that it is not counted twice.
-        Size aRealSz( aMetric.GetSize() );
+        Size aRealSz( aMetric.GetFontSize() );
         rFont.SetPropr( 100 );
 
         if ( aStatus.DoStretch() )
@@ -2750,7 +2750,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             aRealSz.Width() *= nRelWidth;
             aRealSz.Width() /= 100;
         }
-        rFont.SetSize( aRealSz );
+        rFont.SetFontSize( aRealSz );
         // Font is not restored ...
     }
 
@@ -2827,8 +2827,8 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
 
     if ( IsFixedCellHeight() )
     {
-        nAscent = sal::static_int_cast< sal_uInt16 >( rFont.GetHeight() );
-        nDescent= sal::static_int_cast< sal_uInt16 >( ImplCalculateFontIndependentLineSpacing( rFont.GetHeight() ) - nAscent );
+        nAscent = sal::static_int_cast< sal_uInt16 >( rFont.GetFontHeight() );
+        nDescent= sal::static_int_cast< sal_uInt16 >( ImplCalculateFontIndependentLineSpacing( rFont.GetFontHeight() ) - nAscent );
     }
     else
     {
@@ -2856,7 +2856,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     {
         // Now in consideration of Escape/Propr
         // possibly enlarge Ascent or Descent
-        short nDiff = (short)(rFont.GetSize().Height()*rFont.GetEscapement()/100L);
+        short nDiff = (short)(rFont.GetFontSize().Height()*rFont.GetEscapement()/100L);
         if ( rFont.GetEscapement() > 0 )
         {
             nAscent = (sal_uInt16) (((long)nAscent)*nPropr/100 + nDiff);
@@ -3368,7 +3368,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         // In case of high/low do it yourself:
                                         if ( aTmpFont.GetEscapement() )
                                         {
-                                            long nDiff = aTmpFont.GetSize().Height() * aTmpFont.GetEscapement() / 100L;
+                                            long nDiff = aTmpFont.GetFontSize().Height() * aTmpFont.GetEscapement() / 100L;
                                             if ( !IsVertical() )
                                                 aOutPos.Y() -= nDiff;
                                             else
@@ -3498,7 +3498,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                             short _nEsc = aTmpFont.GetEscapement();
                                             if( _nEsc )
                                             {
-                                                long nShift = ((_nEsc*long(aTmpFont.GetSize().Height()))/ 100L);
+                                                long nShift = ((_nEsc*long(aTmpFont.GetFontSize().Height()))/ 100L);
                                                 if( !IsVertical() )
                                                     aRedLineTmpPos.Y() -= nShift;
                                                 else
@@ -3507,7 +3507,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                         Color aOldColor( pOutDev->GetLineColor() );
                                         pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svtools::SPELL ).nColor ) );
-                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, (size_t)nIndex, (size_t)nIndex + rTextPortion.GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
+                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, (size_t)nIndex, (size_t)nIndex + rTextPortion.GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
                                         pOutDev->SetLineColor( aOldColor );
                                     }
                                 }

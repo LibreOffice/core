@@ -123,7 +123,7 @@ void ScDPFieldButton::draw()
             vcl::Font aAttrFont;
             static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                 GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
-            aTextFont.SetSize( aAttrFont.GetSize() );
+            aTextFont.SetFontSize( aAttrFont.GetFontSize() );
         }
         mpOutDev->SetFont(aTextFont);
         mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());

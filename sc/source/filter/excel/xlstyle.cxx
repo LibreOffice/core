@@ -203,7 +203,7 @@ void XclFontData::FillFromVclFont( const vcl::Font& rFont )
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );
     mnEscapem = EXC_FONTESC_NONE;
-    SetScHeight( rFont.GetSize().Height() );
+    SetScHeight( rFont.GetFontSize().Height() );
     SetScWeight( rFont.GetWeight() );
     SetScFamily( rFont.GetFamilyType() );
     SetFontEncoding( rFont.GetCharSet() );

@@ -235,9 +235,9 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, SvtScriptType nScript )
         aFraction *= pOutput->aZoomY;
     vcl::Font aTmpFont;
     pPattern->GetFont( aTmpFont, SC_AUTOCOL_RAW, pFmtDevice, &aFraction, pCondSet, nScript );
-    long nNewHeight = aTmpFont.GetHeight();
+    long nNewHeight = aTmpFont.GetFontHeight();
     if ( nNewHeight > 0 )
-        aFont.SetHeight( nNewHeight );
+        aFont.SetFontHeight( nNewHeight );
 
     // set font and dependent variables as in SetPattern
 

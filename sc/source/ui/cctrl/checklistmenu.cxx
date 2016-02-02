@@ -89,7 +89,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDo
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
     const sal_uInt16 nPopupFontHeight = 12 * nScaleFactor;
     maLabelFont = rStyle.GetLabelFont();
-    maLabelFont.SetHeight(nPopupFontHeight);
+    maLabelFont.SetFontHeight(nPopupFontHeight);
 }
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()
@@ -361,14 +361,14 @@ void ScMenuFloatingWindow::drawMenuItem(vcl::RenderContext& rRenderContext, size
 
     DecorationView aDecoView(&rRenderContext);
     long nXOffset = 5;
-    long nYOffset = (aSize.Height() - maLabelFont.GetHeight())/2;
+    long nYOffset = (aSize.Height() - maLabelFont.GetFontHeight())/2;
     rRenderContext. DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0,
                                  maMenuItems[nPos].maText.getLength(),
                                  maMenuItems[nPos].mbEnabled ? DrawTextFlags::Mnemonic : DrawTextFlags::Disable);
 
     if (maMenuItems[nPos].mpSubMenuWin)
     {
-        long nFontHeight = maLabelFont.GetHeight();
+        long nFontHeight = maLabelFont.GetFontHeight();
         Point aMarkerPos = aPos;
         aMarkerPos.Y() += aSize.Height() / 2 - nFontHeight / 4 + 1;
         aMarkerPos.X() += aSize.Width() - nFontHeight + nFontHeight / 4;
@@ -723,8 +723,8 @@ void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rS
 
     const sal_uInt16 nLeftMargin = 5;
     const sal_uInt16 nTopMargin = 5;
-    const sal_uInt16 nMenuItemHeight = static_cast<sal_uInt16>(maLabelFont.GetHeight()*1.8);
-    const sal_uInt16 nSepHeight = static_cast<sal_uInt16>(maLabelFont.GetHeight()*0.8);
+    const sal_uInt16 nMenuItemHeight = static_cast<sal_uInt16>(maLabelFont.GetFontHeight()*1.8);
+    const sal_uInt16 nSepHeight = static_cast<sal_uInt16>(maLabelFont.GetFontHeight()*0.8);
 
     Point aPos1(nLeftMargin, nTopMargin);
     rPos = aPos1;
@@ -939,7 +939,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
     const long nSingleItemBtnAreaHeight = 32 * nScaleFactor; // height of the middle area below the list box where the single-action buttons are.
     const long nBottomBtnAreaHeight = 50 * nScaleFactor;     // height of the bottom area where the OK and Cancel buttons are.
     const long nBtnWidth = 90 * nScaleFactor;
-    const long nLabelHeight = getLabelFont().GetHeight();
+    const long nLabelHeight = getLabelFont().GetFontHeight();
     const long nBtnHeight = nLabelHeight * 2;
     const long nBottomMargin = 10 * nScaleFactor;
     const long nMenuListMargin = 5 * nScaleFactor;

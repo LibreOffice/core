@@ -137,7 +137,7 @@ namespace drawinglayer
                     }
 
                     // Don't draw fonts without height
-                    if( aFont.GetHeight() <= 0 )
+                    if( aFont.GetFontHeight() <= 0 )
                         return;
 
                     // handle additional font attributes

@@ -98,9 +98,9 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Color aOldFillColor = pDev->GetFillColor();
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
-    Size aSize = aFont.GetSize();
+    Size aSize = aFont.GetFontSize();
     aSize.Height() = nRectHeight*3/5;
-    aFont.SetSize( aSize );
+    aFont.SetFontSize( aSize );
 
     Point aLineStart(aBLPos.X() + 5,            aBLPos.Y() + ( nRectHeight - nItemId )/2);
     Point aLineEnd(aBLPos.X() + nRectWidth * 7 / 9 - 10, aBLPos.Y() + ( nRectHeight - nItemId )/2);

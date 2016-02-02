@@ -46,7 +46,7 @@ namespace {
 void SetMessageFont(vcl::RenderContext& rRenderContext)
 {
     vcl::Font aFont(rRenderContext.GetFont());
-    aFont.SetHeight(aFont.GetHeight() * 1.3);
+    aFont.SetFontHeight(aFont.GetFontHeight() * 1.3);
     rRenderContext.SetFont(aFont);
 }
 

@@ -2153,7 +2153,7 @@ bool SdrPowerPointImport::ReadFontCollection()
                 aFont.SetFamilyName( pFont->aName );
                 aFont.SetFamily( pFont->eFamily );
                 aFont.SetPitch( pFont->ePitch );
-                aFont.SetHeight( 100 );
+                aFont.SetFontHeight( 100 );
 
                 // following block is necessary, because our old PowerPoint export did not set the
                 // correct charset

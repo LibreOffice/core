@@ -2127,7 +2127,7 @@ void MessageDialog::SetMessagesWidths(vcl::Window *pParent,
     {
         assert(pPrimaryMessage);
         vcl::Font aFont = pParent->GetSettings().GetStyleSettings().GetLabelFont();
-        aFont.SetSize(Size(0, aFont.GetSize().Height() * 1.2));
+        aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * 1.2));
         aFont.SetWeight(WEIGHT_BOLD);
         pPrimaryMessage->SetControlFont(aFont);
         pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 44);

@@ -892,7 +892,7 @@ void SmMathConfig::LoadFormat()
             }
             ++pVal;
 
-            aFnt.SetSize( pFormat->GetBaseSize() );
+            aFnt.SetFontSize( pFormat->GetBaseSize() );
             pFormat->SetFont( i, aFnt, bUseDefaultFont );
         }
 

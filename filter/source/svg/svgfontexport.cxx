@@ -195,7 +195,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
                 vcl::Font           aFont( rFont );
 
-                aFont.SetSize( Size( 0, nFontEM ) );
+                aFont.SetFontSize( Size( 0, nFontEM ) );
                 aFont.SetAlignment( ALIGN_BASELINE );
 
                 pVDev->SetMapMode( MAP_100TH_MM );

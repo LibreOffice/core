@@ -116,7 +116,7 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font
     if ( pCurData )
     {
         rFont = rCJKFont = rCTLFont = GetFont();
-        Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
+        Size aFontSize( rFont.GetFontSize().Width(), 10 * GetDPIScaleFactor() );
 
         const SvxFontItem*        pFontItem       = static_cast<const SvxFontItem*>      (pCurData->GetItem( nIndex, ATTR_FONT ));
         const SvxWeightItem*      pWeightItem     = static_cast<const SvxWeightItem*>    (pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT ));
@@ -145,14 +145,14 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font
 #define SETONALLFONTS( MethodName, Value ) \
 rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Value );
 
-        SETONALLFONTS( SetUnderline,    (FontLineStyle)pUnderlineItem->GetValue() )
-        SETONALLFONTS( SetOverline,     (FontLineStyle)pOverlineItem->GetValue() )
-        SETONALLFONTS( SetStrikeout,    (FontStrikeout)pCrossedOutItem->GetValue() )
-        SETONALLFONTS( SetOutline,      pContourItem->GetValue() )
-        SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )
-        SETONALLFONTS( SetColor,        aColor )
-        SETONALLFONTS( SetSize,         aFontSize )
-        SETONALLFONTS( SetTransparent,  true )
+        SETONALLFONTS( SetUnderline,        (FontLineStyle)pUnderlineItem->GetValue() )
+        SETONALLFONTS( SetOverline,         (FontLineStyle)pOverlineItem->GetValue() )
+        SETONALLFONTS( SetStrikeout,        (FontStrikeout)pCrossedOutItem->GetValue() )
+        SETONALLFONTS( SetOutline,          pContourItem->GetValue() )
+        SETONALLFONTS( SetShadow,           pShadowedItem->GetValue() )
+        SETONALLFONTS( SetColor,            aColor )
+        SETONALLFONTS( SetFontSize,  aFontSize )
+        SETONALLFONTS( SetTransparent,      true )
 
 #undef SETONALLFONTS
     }

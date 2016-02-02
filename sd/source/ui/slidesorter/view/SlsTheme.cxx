@@ -147,8 +147,8 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
             pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_NORMAL);
             {
-                const Size aSize (pFont->GetSize());
-                pFont->SetSize(Size(aSize.Width()*5/3, aSize.Height()*5/3));
+                const Size aSize (pFont->GetFontSize());
+                pFont->SetFontSize(Size(aSize.Width()*5/3, aSize.Height()*5/3));
             }
             break;
     }
@@ -157,10 +157,10 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
     {
         // Transform the point size to pixel size.
         const MapMode aFontMapMode (MAP_POINT);
-        const Size aFontSize (rDevice.LogicToPixel(pFont->GetSize(), aFontMapMode));
+        const Size aFontSize (rDevice.LogicToPixel(pFont->GetFontSize(), aFontMapMode));
 
         // Transform the font size to the logical coordinates of the device.
-        pFont->SetSize(rDevice.PixelToLogic(aFontSize));
+        pFont->SetFontSize(rDevice.PixelToLogic(aFontSize));
     }
 
     return pFont;

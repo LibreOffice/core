@@ -117,7 +117,7 @@ namespace vclcanvas
             if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
             {
                 // retrieve true font width
-                const sal_Int32 nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetWidth() );
+                const sal_Int32 nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetAverageFontWidth() );
 
                 const sal_Int32 nScaledFontWidth( ::basegfx::fround(nFontWidth * aScale.getX()) );
 
@@ -128,13 +128,13 @@ namespace vclcanvas
                     return false;
                 }
 
-                io_rVCLFont.SetWidth( nScaledFontWidth );
+                io_rVCLFont.SetAverageFontWidth( nScaledFontWidth );
             }
 
             if( !::rtl::math::approxEqual(aScale.getY(), 1.0) )
             {
-                const sal_Int32 nFontHeight( io_rVCLFont.GetHeight() );
-                io_rVCLFont.SetHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
+                const sal_Int32 nFontHeight( io_rVCLFont.GetFontHeight() );
+                io_rVCLFont.SetFontHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
             }
 
             io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)*(1800.0/M_PI)) ) );

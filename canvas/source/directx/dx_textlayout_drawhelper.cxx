@@ -130,7 +130,7 @@ namespace dxcanvas
             // adjust to stretched font
             if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
             {
-                const Size aSize = xVirtualDevice->GetFontMetric( aFont ).GetSize();
+                const Size aSize = xVirtualDevice->GetFontMetric( aFont ).GetFontSize();
                 const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
                 double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
@@ -139,7 +139,7 @@ namespace dxcanvas
 
                 const sal_Int32 nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
 
-                aFont.SetWidth( nNewWidth );
+                aFont.SetAverageFontWidth( nNewWidth );
             }
 
             // set font
@@ -259,7 +259,7 @@ namespace dxcanvas
         // adjust to stretched font
         if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
         {
-            const Size aSize = xVirtualDevice->GetFontMetric( aFont ).GetSize();
+            const Size aSize = xVirtualDevice->GetFontMetric( aFont ).GetFontSize();
             const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
             double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
@@ -268,7 +268,7 @@ namespace dxcanvas
 
             const sal_Int32 nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
 
-            aFont.SetWidth( nNewWidth );
+            aFont.SetAverageFontWidth( nNewWidth );
         }
 
         // set font
