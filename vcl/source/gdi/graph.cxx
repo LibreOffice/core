@@ -102,7 +102,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
 
         for(;; aSz.Height() -= nStep )
         {
-            pFont->SetSize( aSz );
+            pFont->SetAverageFontSize( aSz );
             pOutDev->SetFont( *pFont );
 
             long nTextHeight = pOutDev->GetTextHeight();

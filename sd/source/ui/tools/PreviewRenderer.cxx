@@ -334,7 +334,7 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
         const vcl::Font& rOriginalFont (mpPreviewDevice->GetFont());
         vcl::Font aFont (mpPreviewDevice->GetSettings().GetStyleSettings().GetAppFont());
         sal_Int32 nHeight (mpPreviewDevice->PixelToLogic(Size(0,snSubstitutionTextSize)).Height());
-        aFont.SetHeight(nHeight);
+        aFont.SetFontHeight(nHeight);
         mpPreviewDevice->SetFont (aFont);
 
         // Paint the substitution text.

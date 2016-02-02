@@ -430,8 +430,8 @@ namespace cairocanvas
                 continue;
 
             vcl::Font aFont = rOutDev.GetFont();
-            long nWidth = aFont.GetWidth();
-            long nHeight = aFont.GetHeight();
+            long nWidth = aFont.GetAverageFontWidth();
+            long nHeight = aFont.GetFontHeight();
             if (nWidth == 0)
                 nWidth = nHeight;
             if (nWidth == 0 || nHeight == 0)
@@ -487,7 +487,7 @@ namespace cairocanvas
 
             SAL_INFO(
                 "canvas.cairo",
-                "Size:(" << aFont.GetWidth() << "," << aFont.GetHeight()
+                "Size:(" << aFont.GetAverageFontWidth() << "," << aFont.GetFontHeight()
                     << "), Pos (" << rOutpos.X() << "," << rOutpos.Y()
                     << "), G("
                     << (cairo_glyphs.size() > 0 ? cairo_glyphs[0].index : -1)
@@ -507,7 +507,7 @@ namespace cairocanvas
             //faux bold
             if (rSysFontData.bFakeBold)
             {
-                double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
+                double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetFontHeight() );
                 int total_steps = 1 * ((int) (bold_dx + 0.5));
 
                 // loop to draw the text for every half pixel of displacement
