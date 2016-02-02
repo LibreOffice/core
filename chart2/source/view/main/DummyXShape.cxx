@@ -767,7 +767,7 @@ struct FontAttribSetter
         else if(rPropName == "CharHeight")
         {
             float fHeight = rProp.second.get<float>();
-            mrFont.SetSize(Size(0,(fHeight*127+36)/72)); //taken from the MCW implementation
+            mrFont.SetFontSize(Size(0,(fHeight*127+36)/72)); //taken from the MCW implementation
         }
         else if(rPropName == "CharUnderline")
         {
@@ -784,7 +784,7 @@ struct FontAttribSetter
         {
             float fWidth = rProp.second.get<float>();
             FontWidth eFontWidth = VCLUnoHelper::ConvertFontWidth(fWidth);
-            mrFont.SetWidth(eFontWidth);
+            mrFont.SetAverageFontWidth(eFontWidth);
         }
     }
 private:

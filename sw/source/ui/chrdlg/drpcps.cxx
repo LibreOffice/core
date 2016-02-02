@@ -312,9 +312,9 @@ void SwDropCapsPict::UpdatePaintSettings()
     }
 
     mnTextH = mnLines * mnTotLineH;
-    aFont.SetSize(Size(0, mnTextH));
-    maCJKFont.SetSize(Size(0, mnTextH));
-    maCTLFont.SetSize(Size(0, mnTextH));
+    aFont.SetFontSize(Size(0, mnTextH));
+    maCJKFont.SetFontSize(Size(0, mnTextH));
+    maCTLFont.SetFontSize(Size(0, mnTextH));
 
     aFont.SetTransparent(true);
     maCJKFont.SetTransparent(true);
@@ -328,11 +328,11 @@ void SwDropCapsPict::UpdatePaintSettings()
     maCJKFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     maCTLFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
 
-    maCJKFont.SetSize(Size(0, maCJKFont.GetSize().Height()));
-    maCTLFont.SetSize(Size(0, maCTLFont.GetSize().Height()));
+    maCJKFont.SetFontSize(Size(0, maCJKFont.GetFontSize().Height()));
+    maCTLFont.SetFontSize(Size(0, maCTLFont.GetFontSize().Height()));
 
     SetFont(aFont);
-    aFont.SetSize(Size(0, aFont.GetSize().Height()));
+    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height()));
     SetFont(aFont);
     maFont = aFont;
 

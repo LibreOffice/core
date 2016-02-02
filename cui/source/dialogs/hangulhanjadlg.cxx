@@ -130,7 +130,7 @@ namespace svx
         // the font for the secondary text:
         vcl::Font aSmallerFont(rRenderContext.GetFont());
         // heuristic: 80% of the original size
-        aSmallerFont.SetHeight( (long)( 0.8 * aSmallerFont.GetHeight() ) );
+        aSmallerFont.SetFontHeight( (long)( 0.8 * aSmallerFont.GetFontHeight() ) );
 
         // let's calculate the size of our two texts
         Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
@@ -309,7 +309,7 @@ namespace svx
     Size RubyRadioButton::GetOptimalSize() const
     {
         vcl::Font aSmallerFont( GetFont() );
-        aSmallerFont.SetHeight( static_cast<long>( 0.8 * aSmallerFont.GetHeight() ) );
+        aSmallerFont.SetFontHeight( static_cast<long>( 0.8 * aSmallerFont.GetFontHeight() ) );
         Rectangle rect( Point(), Size( SAL_MAX_INT32, SAL_MAX_INT32 ) );
 
         Size aPrimarySize = GetTextRect( rect, m_aRubyText.getPrimaryText() ).GetSize();

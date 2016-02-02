@@ -352,8 +352,8 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 rWriter.attribute("fillcolor", convertColorToString(aFont.GetFillColor()));
                 rWriter.attribute("name", aFont.GetFamilyName());
                 rWriter.attribute("stylename", aFont.GetStyleName());
-                rWriter.attribute("width", aFont.GetSize().Width());
-                rWriter.attribute("height", aFont.GetSize().Height());
+                rWriter.attribute("width", aFont.GetFontSize().Width());
+                rWriter.attribute("height", aFont.GetFontSize().Height());
                 rWriter.attribute("orientation", aFont.GetOrientation());
                 rWriter.attribute("weight", convertFontWeigthToString(aFont.GetWeight()));
 

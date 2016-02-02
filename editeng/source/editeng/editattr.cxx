@@ -163,7 +163,7 @@ EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAt
 void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
 {
     // Property is ignored
-    rFont.SetSize( Size( rFont.GetSize().Width(), static_cast<const SvxFontHeightItem*>(GetItem())->GetHeight() ) );
+    rFont.SetFontSize( Size( rFont.GetFontSize().Width(), static_cast<const SvxFontHeightItem*>(GetItem())->GetHeight() ) );
 }
 
 

@@ -113,12 +113,12 @@ public:
 
     void                SetTransparent( bool bTransparent );
 
-    void                SetSize( const Size& );
-    const Size&         GetSize() const;
-    void                SetHeight( long nHeight );
-    long                GetHeight() const;
-    void                SetWidth( long nWidth );
-    long                GetWidth() const;
+    void                SetFontSize( const Size& );
+    const Size&         GetFontSize() const;
+    void                SetFontHeight( long nHeight );
+    long                GetFontHeight() const;
+    void                SetAverageFontWidth( long nWidth );
+    long                GetAverageFontWidth() const;
 
     // Prefer LanguageTag over LanguageType
     void                SetLanguageTag( const LanguageTag & );

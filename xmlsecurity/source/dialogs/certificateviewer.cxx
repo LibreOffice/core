@@ -224,7 +224,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     nStyle &= ~WB_HSCROLL;
     m_pElementsLB->SetStyle( nStyle );
 
-    m_aFixedWidthFont.SetHeight( m_aStdFont.GetHeight() );
+    m_aFixedWidthFont.SetFontHeight( m_aStdFont.GetFontHeight() );
 
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
     m_pElementsLB->SetTabs( &nTabs[ 0 ] );

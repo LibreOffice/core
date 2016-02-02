@@ -931,7 +931,7 @@ void BubbleWindow::RecalcTextRects()
             maTextRect.setHeight( 10 );
 
         aTotalSize.setHeight( maTitleRect.GetHeight() +
-                              aBoldFont.GetHeight() * 3 / 4 +
+                              aBoldFont.GetFontHeight() * 3 / 4 +
                               maTextRect.GetHeight() +
                               3 * BUBBLE_BORDER + TIP_HEIGHT );
         if ( aTotalSize.Height() > maMaxTextSize.Height() )
@@ -943,7 +943,7 @@ void BubbleWindow::RecalcTextRects()
             bFinished = true;
     }
     maTitleRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT );
-    maTextRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT + maTitleRect.GetHeight() + aBoldFont.GetHeight() * 3 / 4 );
+    maTextRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT + maTitleRect.GetHeight() + aBoldFont.GetFontHeight() * 3 / 4 );
 }
 
 

@@ -332,7 +332,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
 
     int nPages = mnRows * mnColumns;
     Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetFieldFont());
-    aFont.SetSize(Size(0, 24));
+    aFont.SetFontSize(Size(0, 24));
     rRenderContext.SetFont(aFont);
     Size aSampleTextSize(rRenderContext.GetTextWidth(OUString::number(nPages + 1)), rRenderContext.GetTextHeight());
     Size aOutSize(GetOutputSizePixel());
@@ -344,7 +344,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
     long nFontHeight = long(24.0 * fScale) - 3;
     if (nFontHeight < 5)
         nFontHeight = 5;
-    aFont.SetSize(Size( 0, nFontHeight));
+    aFont.SetFontSize(Size( 0, nFontHeight));
     rRenderContext.SetFont(aFont);
     long nTextHeight = rRenderContext.GetTextHeight();
     for (int i = 0; i < nPages; i++)

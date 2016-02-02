@@ -1384,7 +1384,7 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     //  always use application font, so a font with cjk chars can be installed
     vcl::Font aAppFont = GetFont();
     aTextFont = aAppFont;
-    aTextFont.SetSize(PixelToLogic(aAppFont.GetSize(), MAP_TWIP));  // AppFont is in pixels
+    aTextFont.SetFontSize(PixelToLogic(aAppFont.GetFontSize(), MAP_TWIP));  // AppFont is in pixels
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 

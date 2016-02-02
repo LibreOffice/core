@@ -1403,7 +1403,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x000d:   // TxSize
     {
         pPict->ReadUInt16( nUSHORT );
-        aActFont.SetSize( Size( 0, (long)nUSHORT ) );
+        aActFont.SetFontSize( Size( 0, (long)nUSHORT ) );
         eActMethod=PDM_UNDEFINED;
         nDataSize=2;
     }
@@ -1873,7 +1873,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     aActFont.SetCharSet( GetTextEncoding());
     aActFont.SetFamily(FAMILY_SWISS);
-    aActFont.SetSize(Size(0,12));
+    aActFont.SetFontSize(Size(0,12));
     aActFont.SetAlignment(ALIGN_BASELINE);
 
     aHRes = aVRes = Fraction( 1, 1 );

@@ -46,7 +46,7 @@ awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault
     if (aHeight)
     {
         nHeight = aHeight->second.get<double>() * 35; // points -> mm100
-        aFont.SetSize(Size(0, nHeight));
+        aFont.SetFontSize(Size(0, nHeight));
     }
     pOut->SetFont(aFont);
     pOut->SetMapMode(aMap);
