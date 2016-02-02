@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_9551a611",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-02T18:35:35Z",
+      "side": 1,
+      "message": "We can combine these two lines now.",
+      "revId": "eb63b429db1b775fb75504517d8fe679689a4529",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b54ca277",
+        "filename": "xmloff/source/draw/ximpnote.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-02T18:35:35Z",
+      "side": 1,
+      "message": "Maybe we can remove that method in a future patch. If it only calls the parent method it does not need to be implemented at all.",
+      "revId": "eb63b429db1b775fb75504517d8fe679689a4529",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
