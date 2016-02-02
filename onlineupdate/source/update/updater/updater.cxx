@@ -1016,7 +1016,7 @@ public:
 
   // Perform the operation.  Return OK to indicate success.  After all actions
   // have been executed, Finish will be called.  A requirement of Execute is
-  // that its operation be reversable from Finish.
+  // that its operation be reversible from Finish.
   virtual int Execute() = 0;
 
   // Finish is called after execution of all actions.  If status is OK, then
@@ -1560,7 +1560,7 @@ PatchFile::Execute()
   AutoFile ofile(ensure_open(mFile, NS_T("wb+"), ss.st_mode));
   // Modified code from FileUtils.cpp
   fstore_t store = {F_ALLOCATECONTIG, F_PEOFPOSMODE, 0, header.dlen};
-  // Try to get a continous chunk of disk space
+  // Try to get a continuous chunk of disk space
   rv = fcntl(fileno((FILE *)ofile), F_PREALLOCATE, &store);
   if (rv == -1) {
     // OK, perhaps we are too fragmented, allocate non-continuous
