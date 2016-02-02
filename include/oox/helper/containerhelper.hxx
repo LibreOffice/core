@@ -49,7 +49,6 @@ struct ValueRange
     explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
 
     bool         operator==( const ValueRange& rRange ) const { return (mnFirst == rRange.mnFirst) && (mnLast == rRange.mnLast); }
-    bool         operator!=( const ValueRange& rRange ) const { return !(*this == rRange); }
     bool         contains( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnFirst) && (rRange.mnLast <= mnLast); }
     bool         intersects( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnLast) && (rRange.mnFirst <= mnLast); }
 };

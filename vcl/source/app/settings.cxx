@@ -2678,12 +2678,6 @@ HelpSettings::GetBalloonDelay() const
     return mxData->mnBalloonDelay;
 }
 
-bool
-HelpSettings::operator !=( const HelpSettings& rSet ) const
-{
-    return !(*this == rSet);
-}
-
 ImplAllSettingsData::ImplAllSettingsData()
     :
         maLocale( LANGUAGE_SYSTEM ),
@@ -3131,12 +3125,6 @@ AllSettingsFlags
 AllSettings::GetWindowUpdate() const
 {
     return mxData->mnWindowUpdate;
-}
-
-bool
-AllSettings::operator !=( const AllSettings& rSet ) const
-{
-    return !(*this == rSet);
 }
 
 SvtSysLocale&

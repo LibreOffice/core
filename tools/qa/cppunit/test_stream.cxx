@@ -196,18 +196,6 @@ namespace
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(!aMemStream.eof());
-
-        aMemStream.SetEndian(SvStreamEndian::LITTLE);
-        aMemStream.Seek(0);
-        foo[0] = 3;
-        foo[1] = 0;
-        foo[2] = 0;
-        foo[3] = 0;
-        aFoo = read_uInt32_lenPrefixed_uInt8s_ToOString(aMemStream);
-        CPPUNIT_ASSERT(aFoo == "bar");
-        CPPUNIT_ASSERT(aMemStream.good());
-        CPPUNIT_ASSERT(!aMemStream.bad());
-        CPPUNIT_ASSERT(!aMemStream.eof());
     }
 
     void Test::test_readline()

@@ -48,9 +48,6 @@ namespace connectivity
         ODatabaseMetaDataResultSetMetaData( )
         {
         }
-        /// Avoid ambigous cast error from the compiler.
-        inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
-        { return this; }
 
         virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;

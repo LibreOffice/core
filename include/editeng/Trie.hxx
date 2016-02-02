@@ -32,7 +32,7 @@ public:
 
     void insert(const OUString& sInputString) const;
     void findSuggestions(const OUString& sWordPart, std::vector<OUString>& rSuggestionList) const;
-    void getAllEntries(std::vector<OUString>& entries);
+    size_t size() const;
 };
 
 }

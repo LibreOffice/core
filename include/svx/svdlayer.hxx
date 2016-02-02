@@ -112,7 +112,6 @@ public:
     SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
     ~SdrLayerAdmin();
     const SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
-    bool               operator==(const SdrLayerAdmin& rCmpLayerAdmin) const;
     void               SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
     void               SetModel(SdrModel* pNewModel);
     void               InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)

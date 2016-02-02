@@ -91,8 +91,6 @@ public:
 
     Cursor&         operator=( const Cursor& rCursor );
     bool            operator==( const Cursor& rCursor ) const;
-    bool            operator!=( const Cursor& rCursor ) const
-                        { return !(Cursor::operator==( rCursor )); }
 
 private:
     void ImplRestore();

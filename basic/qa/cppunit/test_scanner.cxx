@@ -25,7 +25,6 @@ namespace
   {
     sal_uInt16 line;
     sal_uInt16 col1;
-    sal_uInt16 col2;
     OUString text;
     double number;
     SbxDataType type;
@@ -85,7 +84,6 @@ namespace
       Symbol symbol;
       symbol.line = scanner.GetLine();
       symbol.col1 = scanner.GetCol1();
-      symbol.col2 = scanner.GetCol2();
       symbol.text = scanner.GetSym();
       symbol.number = scanner.GetDbl();
       symbol.type = scanner.GetType();
