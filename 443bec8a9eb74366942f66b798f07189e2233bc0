@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_cf5e0176",
+        "filename": "svx/source/sdr/properties/emptyproperties.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-02T08:30:51Z",
+      "side": 1,
+      "message": "This can be a simple SAL_WARN.\n\nAnd actually, it would be useful to investigate if it could even be a real assert(). Or alternatively, whether this code path is reached all the time without anything being wrong, and in that vase the warning is totally useless.\n\nWe much prefer real assert() to wishy-washy SAL_WARNs. One never knows whether a SAL_WARN is something serious that should actually be acted upon, or a rare or perhaps a bit unexpected situation that the code anyway handles just fine. At least, that is how I feel, when I see the tons of warnings one gets in a perfectly normally working LibreOffice. Sorry for the rant.",
+      "range": {
+        "startLine": 37,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 23
+      },
+      "revId": "443bec8a9eb74366942f66b798f07189e2233bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
