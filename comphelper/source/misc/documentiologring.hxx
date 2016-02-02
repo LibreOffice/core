@@ -48,16 +48,6 @@ public:
     OSimpleLogRing();
     virtual ~OSimpleLogRing();
 
-    static css::uno::Sequence< OUString > SAL_CALL
-            getSupportedServiceNames_static();
-
-    static OUString SAL_CALL getImplementationName_static();
-
-    static OUString SAL_CALL getServiceName_static();
-
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
-        Create( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-
 // XSimpleLogRing
     virtual void SAL_CALL logString( const OUString& aMessage ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getCollectedLog() throw (css::uno::RuntimeException, std::exception) override;

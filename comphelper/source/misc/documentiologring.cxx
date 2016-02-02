@@ -20,12 +20,11 @@
 
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
-#include <comphelper_module.hxx>
-#include <comphelper_services.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "documentiologring.hxx"
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 
@@ -44,31 +43,6 @@ OSimpleLogRing::OSimpleLogRing()
 
 OSimpleLogRing::~OSimpleLogRing()
 {
-}
-
-
-uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
-{
-    uno::Sequence<OUString> aResult { getServiceName_static() };
-    return aResult;
-}
-
-
-OUString SAL_CALL OSimpleLogRing::getImplementationName_static()
-{
-    return OUString( "com.sun.star.comp.logging.SimpleLogRing" );
-}
-
-
-OUString SAL_CALL OSimpleLogRing::getServiceName_static()
-{
-    return OUString( "com.sun.star.logging.SimpleLogRing" );
-}
-
-
-uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( SAL_UNUSED_PARAMETER const uno::Reference< uno::XComponentContext >& )
-{
-    return static_cast< cppu::OWeakObject* >( new OSimpleLogRing );
 }
 
 // XSimpleLogRing
@@ -135,7 +109,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 // XServiceInfo
 OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.comp.logging.SimpleLogRing");
 }
 
 sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
@@ -145,15 +119,33 @@ sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName 
 
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.logging.SimpleLogRing" };
 }
 
 } // namespace comphelper
 
-void createRegistryInfo_OSimpleLogRing()
+namespace {
+
+struct Instance {
+    explicit Instance():
+        instance(new comphelper::OSimpleLogRing())
+    {}
+
+    css::uno::Reference<cppu::OWeakObject> instance;
+};
+
+struct Singleton:
+    public rtl::Static<Instance, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_logging_SimpleLogRing(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::comphelper::module::OAutoRegistration< ::comphelper::OSimpleLogRing > aAutoRegistration;
-    static ::comphelper::module::OSingletonRegistration< ::comphelper::OSimpleLogRing > aSingletonRegistration;
+    return cppu::acquire(Singleton::get().instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
