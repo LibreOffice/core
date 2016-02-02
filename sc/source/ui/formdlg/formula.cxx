@@ -246,7 +246,7 @@ void ScFormulaDlg::dispose()
     ScFormEditData* pData = pScMod->GetFormEditData();
     m_aHelper.dispose();
 
-    if (pData) // close dosen't destroy;
+    if (pData) // close doesn't destroy;
     {
         //set back reference input handler
         pScMod->SetRefInputHdl(nullptr);

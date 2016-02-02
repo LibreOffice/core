@@ -8503,7 +8503,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptCurvedConnector4 :          pCustomShape = &msoCurvedConnector4; break;
         case mso_sptCurvedConnector5 :          pCustomShape = &msoCurvedConnector5; break;
 
-        // Dont know, simply mapping to TextSimple
+        // Don't know, simply mapping to TextSimple
         case mso_sptTextOnRing :
         case mso_sptTextOnCurve :
         case mso_sptTextRing :

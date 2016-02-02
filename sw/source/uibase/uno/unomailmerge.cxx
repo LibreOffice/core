@@ -548,7 +548,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     // need to translate the selection: the API here requires a sequence of bookmarks, but the MergeNew
-    // method we will call below requires a sequence of indicies.
+    // method we will call below requires a sequence of indices.
     if ( aCurSelection.getLength() )
     {
         Sequence< Any > aTranslated( aCurSelection.getLength() );

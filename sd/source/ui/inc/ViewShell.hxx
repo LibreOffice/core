@@ -350,7 +350,7 @@ public:
     // This is to be replaced by Resize.
     //  virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
 
-    /** Set position and size of the GUI elements that are controllerd by
+    /** Set position and size of the GUI elements that are controlled by
         the view shell like rulers and scroll bars as well as the actual
         document view according to the position and size that were given
         with the last Resize() call.

@@ -114,7 +114,7 @@ private:
 
 public:
     /**
-      * Construtor.
+      * Constructor.
       *
       * @param rxContext is a Service Manager.
       * @param rCommand is the parameter for the open command that produces

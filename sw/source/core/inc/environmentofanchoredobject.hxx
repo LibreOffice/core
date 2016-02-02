@@ -31,7 +31,7 @@ namespace objectpositioning
         const bool mbFollowTextFlow;
 
     public:
-        /** construtor
+        /** constructor
 
             @param _bFollowTextFlow
             input parameter - indicates, if the anchored object, for which

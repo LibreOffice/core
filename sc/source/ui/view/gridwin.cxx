@@ -4738,7 +4738,7 @@ void ScGridWindow::UpdateFormulas()
 
     if ( nPaintCount )
     {
-        // Do nto start, switched to paint
+        // Do not start, switched to paint
         //  (then at least the MapMode would no longer be right)
 
         bNeedsRepaint = true;           // -> at end of paint run Invalidate on all
@@ -5079,7 +5079,7 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
 
         lcl_PaintOneRange( pDocSh, aOld, SCE_ALL );
     }
-    else        // Test all four corners seperately
+    else        // Test all four corners separately
     {
         // upper part
         if ( nNewRow1 < nOldRow1 )                  // only delete upper line
