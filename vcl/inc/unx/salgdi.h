@@ -284,7 +284,7 @@ public:
     void                            YieldGraphicsExpose();
 
     cairo_t* getCairoContext();
-    void releaseCairoContext(cairo_t* cr);
+    static void releaseCairoContext(cairo_t* cr);
 
 
     // do XCopyArea or XGet/PutImage depending on screen numbers

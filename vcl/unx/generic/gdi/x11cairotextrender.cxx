@@ -121,7 +121,7 @@ size_t X11CairoTextRender::GetHeight() const
 
 void X11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
-    mrParent.releaseCairoContext(cr);
+    X11SalGraphics::releaseCairoContext(cr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
