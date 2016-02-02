@@ -72,7 +72,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
 
             const SvxFontHeightItem& rFHItem =
                 static_cast<const SvxFontHeightItem&>(rSet.Get(GetWhich( (sal_uInt16)nFontHeightID )));
-            aMyFont.SetSize(Size(0, rFHItem.GetHeight()));
+            aMyFont.SetFontSize(Size(0, rFHItem.GetHeight()));
 
             const SvxWeightItem& rWItem =
                 static_cast<const SvxWeightItem&>(rSet.Get(GetWhich( (sal_uInt16)nWeightID )));

@@ -81,9 +81,9 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Color aOldFillColor = pDev->GetFillColor();
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
-    Size aSize = aFont.GetSize();
+    Size aSize = aFont.GetFontSize();
     aSize.Height() = nRectHeight*3/5;
-    aFont.SetSize( aSize );
+    aFont.SetFontSize( aSize );
 
     long  nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     long  nTRX = aBLPos.X() + nRectWidth * 7 / 9 - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;

@@ -298,7 +298,7 @@ void BackingWindow::initControls()
     // setup nice colors
     mpCreateLabel->SetControlForeground(maButtonsTextColor);
     vcl::Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
-    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     mpCreateLabel->SetControlFont(aFont);
 
     mpHelpButton->SetControlForeground(maButtonsTextColor);
@@ -347,7 +347,7 @@ void BackingWindow::setupButton( PushButton* pButton )
 {
     // the buttons should have a bit bigger font
     vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
-    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
@@ -358,7 +358,7 @@ void BackingWindow::setupButton( PushButton* pButton )
 void BackingWindow::setupButton( MenuButton* pButton )
 {
     vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
-    aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     pButton->SetControlFont(aFont);
 
     // color that fits the theme

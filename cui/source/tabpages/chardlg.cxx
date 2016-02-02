@@ -484,7 +484,7 @@ namespace
                     sal_uInt16 _nFontWhich,
                     sal_uInt16 _nFontHeightWhich)
     {
-        Size aSize = _rFont.GetSize();
+        Size aSize = _rFont.GetFontSize();
         aSize.Width() = 0;
         FontMetric aFontMetrics;
         OUString sFontName(_pFontNameLB->GetText());
@@ -525,7 +525,7 @@ namespace
             aSize.Height() = PointToTwips( static_cast<long>(_pFontSizeLB->GetValue() / 10) );
         else
             aSize.Height() = 200;   // default 10pt
-        aFontMetrics.SetSize( aSize );
+        aFontMetrics.SetFontSize( aSize );
 
         _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
 
@@ -536,7 +536,7 @@ namespace
         _rFont.SetCharSet( aFontMetrics.GetCharSet() );
         _rFont.SetWeight( aFontMetrics.GetWeight() );
         _rFont.SetItalic( aFontMetrics.GetItalic() );
-        _rFont.SetSize( aFontMetrics.GetSize() );
+        _rFont.SetFontSize( aFontMetrics.GetFontSize() );
 
         return aFontMetrics;
     }
@@ -550,11 +550,11 @@ void SvxCharNamePage::UpdatePreview_Impl()
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
     // Size
-    Size aSize = rFont.GetSize();
+    Size aSize = rFont.GetFontSize();
     aSize.Width() = 0;
-    Size aCJKSize = rCJKFont.GetSize();
+    Size aCJKSize = rCJKFont.GetFontSize();
     aCJKSize.Width() = 0;
-    Size aCTLSize = rCTLFont.GetSize();
+    Size aCTLSize = rCTLFont.GetFontSize();
     aCTLSize.Width() = 0;
     // Font
     const FontList* pFontList = GetFontList();
@@ -2710,9 +2710,9 @@ void SvxCharPositionPage::Initialize()
     // to handle the changes of the other pages
     SetExchangeSupport();
 
-    GetPreviewFont().SetSize( Size( 0, 240 ) );
-    GetPreviewCJKFont().SetSize( Size( 0, 240 ) );
-    GetPreviewCTLFont().SetSize( Size( 0, 240 ) );
+    GetPreviewFont().SetFontSize( Size( 0, 240 ) );
+    GetPreviewCJKFont().SetFontSize( Size( 0, 240 ) );
+    GetPreviewCTLFont().SetFontSize( Size( 0, 240 ) );
 
     m_pNormalPosBtn->Check();
     PositionHdl_Impl( m_pNormalPosBtn );
@@ -2876,7 +2876,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningSelectHdl_Impl, ListBox&, void
         {
             // Condensed -> max value == 1/6 of the current font height
             SvxFont& rFont = GetPreviewFont();
-            long nMax = rFont.GetSize().Height() / 6;
+            long nMax = rFont.GetFontSize().Height() / 6;
             m_pKerningMF->SetMax( m_pKerningMF->Normalize( nMax ), FUNIT_TWIP );
             m_pKerningMF->SetLast( m_pKerningMF->GetMax( m_pKerningMF->GetUnit() ) );
         }
@@ -2961,7 +2961,7 @@ void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
     {
         // Condensed -> max value == 1/6 of the current font height
         SvxFont& rFont = GetPreviewFont();
-        long nMax = rFont.GetSize().Height() / 6;
+        long nMax = rFont.GetFontSize().Height() / 6;
         long nKern = (short)m_pKerningMF->Denormalize( LogicToLogic( static_cast<long>(m_pKerningMF->GetValue()), MAP_POINT, MAP_TWIP ) );
         m_pKerningMF->SetMax( m_pKerningMF->Normalize( nKern > nMax ? nKern : nMax ), FUNIT_TWIP );
         m_pKerningMF->SetLast( m_pKerningMF->GetMax( m_pKerningMF->GetUnit() ) );
@@ -3445,9 +3445,9 @@ void SvxCharTwoLinesPage::Initialize()
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
-    rFont.SetSize( Size( 0, 220 ) );
-    rCJKFont.SetSize( Size( 0, 220 ) );
-    rCTLFont.SetSize( Size( 0, 220 ) );
+    rFont.SetFontSize( Size( 0, 220 ) );
+    rCJKFont.SetFontSize( Size( 0, 220 ) );
+    rCTLFont.SetFontSize( Size( 0, 220 ) );
 }
 
 

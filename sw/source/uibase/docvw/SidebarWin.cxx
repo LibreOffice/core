@@ -572,7 +572,7 @@ void SwSidebarWin::InitControls()
         AllSettings aSettings = mpMetadataAuthor->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         vcl::Font aFont = aStyleSettings.GetFieldFont();
-        aFont.SetHeight(8);
+        aFont.SetFontHeight(8);
         aStyleSettings.SetFieldFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataAuthor->SetSettings(aSettings);
@@ -591,7 +591,7 @@ void SwSidebarWin::InitControls()
         AllSettings aSettings = mpMetadataDate->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         vcl::Font aFont = aStyleSettings.GetFieldFont();
-        aFont.SetHeight(8);
+        aFont.SetFontHeight(8);
         aStyleSettings.SetFieldFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataDate->SetSettings(aSettings);
@@ -720,17 +720,17 @@ void SwSidebarWin::Rescale()
     if ( mpMetadataAuthor )
     {
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
-        sal_Int32 nHeight = aFont.GetHeight();
+        sal_Int32 nHeight = aFont.GetFontHeight();
         nHeight = nHeight * rFraction.GetNumerator() / rFraction.GetDenominator();
-        aFont.SetHeight( nHeight );
+        aFont.SetFontHeight( nHeight );
         mpMetadataAuthor->SetControlFont( aFont );
     }
     if ( mpMetadataDate )
     {
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
-        sal_Int32 nHeight = aFont.GetHeight();
+        sal_Int32 nHeight = aFont.GetFontHeight();
         nHeight = nHeight * rFraction.GetNumerator() / rFraction.GetDenominator();
-        aFont.SetHeight( nHeight );
+        aFont.SetFontHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
     }
 }

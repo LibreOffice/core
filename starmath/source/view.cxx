@@ -1149,14 +1149,14 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
         aFont.SetAlignment(ALIGN_TOP);
         aFont.SetWeight(WEIGHT_BOLD);
-        aFont.SetSize(aSize650);
+        aFont.SetFontSize(aSize650);
         aFont.SetColor( Color(COL_BLACK) );
         rOutDev.SetFont(aFont);
 
         Size aTitleSize (GetTextSize(rOutDev, GetDoc()->GetTitle(), aOutRect.GetWidth() - 200));
 
         aFont.SetWeight(WEIGHT_NORMAL);
-        aFont.SetSize(aSize600);
+        aFont.SetFontSize(aSize600);
         rOutDev.SetFont(aFont);
 
         Size aDescSize (GetTextSize(rOutDev, GetDoc()->GetComment(), aOutRect.GetWidth() - 200));
@@ -1168,7 +1168,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
         // output title
         aFont.SetWeight(WEIGHT_BOLD);
-        aFont.SetSize(aSize650);
+        aFont.SetFontSize(aSize650);
         rOutDev.SetFont(aFont);
         Point aPoint(aOutRect.Left() + (aOutRect.GetWidth() - aTitleSize.Width())  / 2,
                      aOutRect.Top());
@@ -1178,7 +1178,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
         // output description
         aFont.SetWeight(WEIGHT_NORMAL);
-        aFont.SetSize(aSize600);
+        aFont.SetFontSize(aSize600);
         rOutDev.SetFont(aFont);
         aPoint.X() = aOutRect.Left() + (aOutRect.GetWidth()  - aDescSize.Width())  / 2;
         aPoint.Y() = aOutRect.Top();

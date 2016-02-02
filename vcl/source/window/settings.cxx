@@ -161,7 +161,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         maxFontheight = (int) ((( 8.0 * (double) GetDesktopRectPixel().getHeight()) / 600.0) + 1.5);
 
     vcl::Font aFont = aStyleSettings.GetMenuFont();
-    int defFontheight = aFont.GetHeight();
+    int defFontheight = aFont.GetFontHeight();
     if( defFontheight > maxFontheight )
         defFontheight = maxFontheight;
 
@@ -178,59 +178,59 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         toolfontheight = (defFontheight+8) / 2;
 
     aFont = aStyleSettings.GetAppFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetAppFont( aFont );
     aFont = aStyleSettings.GetTitleFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetTitleFont( aFont );
     aFont = aStyleSettings.GetFloatTitleFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetFloatTitleFont( aFont );
     // keep menu and help font size from system unless in broken locale size
     if( bBrokenLangFontHeight )
     {
         aFont = aStyleSettings.GetMenuFont();
-        if( aFont.GetHeight() < defFontheight )
+        if( aFont.GetFontHeight() < defFontheight )
         {
-            aFont.SetHeight( defFontheight );
+            aFont.SetFontHeight( defFontheight );
             aStyleSettings.SetMenuFont( aFont );
         }
         aFont = aStyleSettings.GetHelpFont();
-        if( aFont.GetHeight() < defFontheight )
+        if( aFont.GetFontHeight() < defFontheight )
         {
-            aFont.SetHeight( defFontheight );
+            aFont.SetFontHeight( defFontheight );
             aStyleSettings.SetHelpFont( aFont );
         }
     }
 
     // use different height for toolfont
     aFont = aStyleSettings.GetToolFont();
-    aFont.SetHeight( toolfontheight );
+    aFont.SetFontHeight( toolfontheight );
     aStyleSettings.SetToolFont( aFont );
 
     aFont = aStyleSettings.GetLabelFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetLabelFont( aFont );
     aFont = aStyleSettings.GetInfoFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetInfoFont( aFont );
     aFont = aStyleSettings.GetRadioCheckFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetRadioCheckFont( aFont );
     aFont = aStyleSettings.GetPushButtonFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetPushButtonFont( aFont );
     aFont = aStyleSettings.GetFieldFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetFieldFont( aFont );
     aFont = aStyleSettings.GetIconFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetIconFont( aFont );
     aFont = aStyleSettings.GetTabFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetTabFont( aFont );
     aFont = aStyleSettings.GetGroupFont();
-    aFont.SetHeight( defFontheight );
+    aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetGroupFont( aFont );
 
     rSettings.SetStyleSettings( aStyleSettings );

@@ -440,7 +440,7 @@ namespace frm
             m_pVScroll->SetVisibleSize( aViewportPlaygroundLogic.Height() );
 
             // the default height of a text line ....
-            long nFontHeight = m_pEngine->GetStandardFont(0).GetSize().Height();
+            long nFontHeight = m_pEngine->GetStandardFont(0).GetFontSize().Height();
             // ... is the scroll size for the vertical scrollbar
             m_pVScroll->SetLineSize( nFontHeight );
             // the viewport width, minus one line, is the page scroll size
@@ -452,7 +452,7 @@ namespace frm
         {
             m_pHScroll->SetVisibleSize( aViewportPlaygroundLogic.Width() );
 
-            long nFontWidth = m_pEngine->GetStandardFont(0).GetSize().Width();
+            long nFontWidth = m_pEngine->GetStandardFont(0).GetFontSize().Width();
             if ( !nFontWidth )
             {
                 m_pViewport->Push( PushFlags::FONT );

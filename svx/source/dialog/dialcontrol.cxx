@@ -470,7 +470,7 @@ void DialControl::Init( const Size& rWinSize )
     vcl::Font aFont( OutputDevice::GetDefaultFont(
         DefaultFontType::UI_SANS, Application::GetSettings().GetUILanguageTag().getLanguageType(), GetDefaultFontFlags::OnlyOne ) );
 
-    aFont.SetHeight(aDefaultSize.GetHeight());
+    aFont.SetFontHeight(aDefaultSize.GetFontHeight());
     Init( rWinSize, aFont );
 }
 

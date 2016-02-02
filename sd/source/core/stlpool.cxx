@@ -371,7 +371,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         // #i16874# enable kerning by default but only for new documents
         rTitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
-        aBulletFont.SetSize(Size(0,1552));                  // 44 pt
+        aBulletFont.SetFontSize(Size(0,1552));                  // 44 pt
         PutNumBulletItem( pSheet, aBulletFont );
     }
 
@@ -420,7 +420,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
         vcl::Font aTmpFont( GetBulletFont() );
-        aTmpFont.SetSize(Size(0, 1129));        // 32 pt
+        aTmpFont.SetFontSize(Size(0, 1129));        // 32 pt
         PutNumBulletItem( pSheet, aTmpFont );
     }
 
@@ -1199,7 +1199,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 }
 
                 nFontSize = (sal_uInt16)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
-                rBulletFont.SetSize(Size(0,846));       // 24 pt
+                rBulletFont.SetFontSize(Size(0,846));       // 24 pt
                 aNumberFormat.SetBulletFont(&rBulletFont);
                 aNumRule.SetLevel( i, aNumberFormat );
             }

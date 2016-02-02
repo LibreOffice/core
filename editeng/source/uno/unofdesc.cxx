@@ -42,7 +42,7 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl:
 {
     rFont.SetFamilyName( rDesc.Name );
     rFont.SetStyleName( rDesc.StyleName );
-    rFont.SetSize( Size( rDesc.Width, rDesc.Height ) );
+    rFont.SetFontSize( Size( rDesc.Width, rDesc.Height ) );
     rFont.SetFamily( (FontFamily)rDesc.Family );
     rFont.SetCharSet( (rtl_TextEncoding)rDesc.CharSet );
     rFont.SetPitch( (FontPitch)rDesc.Pitch );
@@ -59,8 +59,8 @@ void SvxUnoFontDescriptor::ConvertFromFont( const vcl::Font& rFont, awt::FontDes
 {
     rDesc.Name = rFont.GetFamilyName();
     rDesc.StyleName = rFont.GetStyleName();
-    rDesc.Width = sal::static_int_cast< sal_Int16 >(rFont.GetSize().Width());
-    rDesc.Height = sal::static_int_cast< sal_Int16 >(rFont.GetSize().Height());
+    rDesc.Width = sal::static_int_cast< sal_Int16 >(rFont.GetFontSize().Width());
+    rDesc.Height = sal::static_int_cast< sal_Int16 >(rFont.GetFontSize().Height());
     rDesc.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
     rDesc.CharSet = rFont.GetCharSet();
     rDesc.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());

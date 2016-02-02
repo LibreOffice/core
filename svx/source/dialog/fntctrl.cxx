@@ -85,8 +85,8 @@ namespace
 {
 void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext& rRenderContext,long& n100PercentFont)
 {
-    rFont.SetWidth(0);
-    n100PercentFont = rRenderContext.GetFontMetric(rFont).GetWidth();
+    rFont.SetAverageFontWidth(0);
+    n100PercentFont = rRenderContext.GetFontMetric(rFont).GetAverageFontWidth();
 }
 
 void initFont(vcl::Font& rFont)
@@ -97,10 +97,10 @@ void initFont(vcl::Font& rFont)
 
 void setFontSize(vcl::Font& rFont)
 {
-    Size aSize(rFont.GetSize());
+    Size aSize(rFont.GetFontSize());
     aSize.Height() = (aSize.Height() * 3) / 5;
     aSize.Width() = (aSize.Width() * 3) / 5;
-    rFont.SetSize(aSize);
+    rFont.SetFontSize(aSize);
 }
 
 void calcFontHeightAnyAscent(vcl::RenderContext& rRenderContext, const vcl::Font& rFont, long& nHeight, long& nAscent)
@@ -446,9 +446,9 @@ void FontPrevWin_Impl::ScaleFontWidth(vcl::RenderContext& rOutDev)
         scaleFontWidth(maCTLFont, rOutDev, mn100PercentFontWidthCTL);
     }
 
-    maFont.SetWidth(mn100PercentFontWidth * mnFontWidthScale / 100);
-    maCJKFont.SetWidth(mn100PercentFontWidthCJK * mnFontWidthScale / 100);
-    maCTLFont.SetWidth(mn100PercentFontWidthCTL * mnFontWidthScale / 100);
+    maFont.SetAverageFontWidth(mn100PercentFontWidth * mnFontWidthScale / 100);
+    maCJKFont.SetAverageFontWidth(mn100PercentFontWidthCJK * mnFontWidthScale / 100);
+    maCTLFont.SetAverageFontWidth(mn100PercentFontWidthCTL * mnFontWidthScale / 100);
 }
 
 void SvxFontPrevWindow::ResetSettings(bool bForeground, bool bBackground)
@@ -763,7 +763,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         if (IsTwoLines())
         {
             SvxFont aSmallFont(rFont);
-            Size aOldSize = pImpl->maCJKFont.GetSize();
+            Size aOldSize = pImpl->maCJKFont.GetFontSize();
             setFontSize(aSmallFont);
             setFontSize(pImpl->maCJKFont);
 
@@ -811,7 +811,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                 OUString sBracket(pImpl->mcEndBracket);
                 rFont.DrawPrev(&rRenderContext, pPrinter, aTmpPoint, sBracket);
             }
-            pImpl->maCJKFont.SetSize(aOldSize);
+            pImpl->maCJKFont.SetFontSize(aOldSize);
         }
         else
         {
@@ -914,7 +914,7 @@ void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, S
     else
         nH = 240;// as default 12pt
 
-    rFont.SetSize(Size(0, nH));
+    rFont.SetFontSize(Size(0, nH));
 }
 
 void SvxFontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)

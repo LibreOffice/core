@@ -312,7 +312,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
     sal_uInt8 nPitchFamily;
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
-    WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
+    WriteHeightWidth(Size(rFont.GetFontSize().Width(),-rFont.GetFontSize().Height()));
     pWMF->WriteInt16( rFont.GetOrientation() ).WriteInt16( rFont.GetOrientation() );
 
     switch (rFont.GetWeight()) {

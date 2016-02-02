@@ -2413,7 +2413,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     // in case of a height of zero it is drawed in original height
     if(!aTmpSize.Height())
         aTmpSize.Height() = 1;
-    aFont.SetSize(aTmpSize);
+    aFont.SetFontSize(aTmpSize);
     aFont.SetTransparent(true);
     Color aBulletColor = rFmt.GetBulletColor();
     if(aBulletColor.GetColor() == COL_AUTO)
@@ -2494,7 +2494,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
         sal_uInt16 nFontHeight = nYStep * 6 / 10;
         if (bPosition)
             nFontHeight = nYStep * 15 / 10;
-        aStdFont.SetSize(Size( 0, nFontHeight ));
+        aStdFont.SetFontSize(Size( 0, nFontHeight ));
 
         SvxNodeNum aNum(sal_uInt8(0));
         sal_uInt16 nPreNum = pActNum->GetLevel(0).GetStart();
@@ -2553,7 +2553,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
                 {
-                    nBulletWidth =  rFmt.IsShowSymbol() ? lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetSize()) : 0;
+                    nBulletWidth =  rFmt.IsShowSymbol() ? lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart, aStdFont.GetFontSize()) : 0;
                 }
                 else
                 {
@@ -2676,7 +2676,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 {
                     if (rFmt.IsShowSymbol())
                     {
-                        nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetSize());
+                        nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetFontSize());
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }

@@ -1074,14 +1074,14 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     {
         if (w == 0)
             break;
-        long nNewHeight = aFont.GetHeight() * nTextWidth / w;
-        if( nNewHeight == aFont.GetHeight() )
+        long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
+        if( nNewHeight == aFont.GetFontHeight() )
         {
             nNewHeight--;
             if( nNewHeight <= 0 )
                 break;
         }
-        aFont.SetHeight( nNewHeight );
+        aFont.SetFontHeight( nNewHeight );
         pDev->SetFont( aFont );
     }
     long nTextHeight = pDev->GetTextHeight();

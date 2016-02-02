@@ -1590,7 +1590,7 @@ namespace cppcanvas
                                      VirtualDevice&     rVDev )
             {
                 const ::basegfx::B2DSize aFontSize( 0,
-                                                    rVDev.GetFont().GetHeight() / 64.0 );
+                                                    rVDev.GetFont().GetFontHeight() / 64.0 );
 
                 const double nOutlineWidth(
                     (rState.mapModeTransform * aFontSize).getY() );
