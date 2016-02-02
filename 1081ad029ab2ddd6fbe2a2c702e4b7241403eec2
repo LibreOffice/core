@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_5248f45b",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-02T10:34:12Z",
+      "side": 1,
+      "message": "Agreed, that should be\n\n eOp \u003c\u003d 0 || sal_uInt16(eOp) \u003e\u003d mnSymbols\n\ninstead.\n\nBUT, as the following if-statement already checks\n\n if (0 \u003c eOp \u0026\u0026 sal_uInt16(eOp) \u003c mnSymbols)\n\nwe could simply introduce an else branch and there use\n\n SAL_WARN( \"formula.core\", ...);\n\nto not unnecessarily check the condition again.",
+      "parentUuid": "3aaa91ec_efe77daa",
+      "revId": "1081ad029ab2ddd6fbe2a2c702e4b7241403eec2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_cfec4192",
         "filename": "formula/source/core/api/token.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-02T08:55:22Z",
       "side": 1,
       "message": "Why the ! ??",
+      "revId": "1081ad029ab2ddd6fbe2a2c702e4b7241403eec2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d27224ad",
+        "filename": "formula/source/core/api/token.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-02T10:34:12Z",
+      "side": 1,
+      "message": "Because the assert checks that Fn\u003e0, so we want to warn if Fn is not greater than zero, but better write\n\n Fn \u003c\u003d 0\n\ninstead.",
+      "parentUuid": "3aaa91ec_cfec4192",
       "revId": "1081ad029ab2ddd6fbe2a2c702e4b7241403eec2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
