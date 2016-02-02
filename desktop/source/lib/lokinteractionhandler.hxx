@@ -25,6 +25,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 namespace desktop { struct LibLibreOffice_Impl; }
@@ -49,6 +50,8 @@ private:
 
     LOKInteractionHandler(const LOKInteractionHandler&) = delete;
     LOKInteractionHandler& operator=(const LOKInteractionHandler&) = delete;
+
+    sal_Bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::task::DocumentPasswordRequest2& passwordRequest);
 
 public:
     void SetPassword(char const* pPassword);

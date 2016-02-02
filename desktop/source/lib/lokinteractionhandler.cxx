@@ -25,7 +25,6 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
-#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 
 #include <../../inc/lib/init.hxx>
 
@@ -79,6 +78,65 @@ throw (uno::RuntimeException, std::exception)
     handleInteractionRequest(xRequest);
 }
 
+sal_Bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const task::DocumentPasswordRequest2& passwordRequest)
+{
+    if (m_pLOKit->hasOptionalFeature((passwordRequest.IsRequestPasswordToModify)
+                ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
+                : LOK_FEATURE_DOCUMENT_PASSWORD))
+    {
+        OString const url(passwordRequest.Name.toUtf8());
+        m_pLOKit->mpCallback(passwordRequest.IsRequestPasswordToModify
+                ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
+                : LOK_CALLBACK_DOCUMENT_PASSWORD,
+                url.getStr(),
+                m_pLOKit->mpCallbackData);
+
+        // block until SetPassword is called
+        m_havePassword.wait();
+        m_havePassword.reset();
+    }
+
+    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    {
+        if (m_usePassword)
+        {
+            if (passwordRequest.IsRequestPasswordToModify)
+            {
+                uno::Reference<task::XInteractionPassword2> const xIPW2(rContinuations[i], uno::UNO_QUERY);
+                xIPW2->setPasswordToModify(m_Password);
+                xIPW2->select();
+            }
+            else
+            {
+                uno::Reference<task::XInteractionPassword> const xIPW(rContinuations[i], uno::UNO_QUERY);
+                if (xIPW.is())
+                {
+                    xIPW->setPassword(m_Password);
+                    xIPW->select();
+                }
+            }
+        }
+        else
+        {
+            if (passwordRequest.IsRequestPasswordToModify)
+            {
+                uno::Reference<task::XInteractionPassword2> const xIPW2(rContinuations[i], uno::UNO_QUERY);
+                xIPW2->setRecommendReadOnly(true);
+                xIPW2->select();
+            }
+            else
+            {
+                uno::Reference<task::XInteractionAbort> const xAbort(rContinuations[i], uno::UNO_QUERY);
+                if (xAbort.is())
+                {
+                    xAbort->select();
+                }
+            }
+        }
+    }
+    return sal_True;
+}
+
 sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 throw (uno::RuntimeException, std::exception)
@@ -88,67 +146,7 @@ throw (uno::RuntimeException, std::exception)
     uno::Any const request(xRequest->getRequest());
     task::DocumentPasswordRequest2 passwordRequest;
     if (request >>= passwordRequest)
-    {
-        if (m_pLOKit->hasOptionalFeature((passwordRequest.IsRequestPasswordToModify)
-                    ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
-                    : LOK_FEATURE_DOCUMENT_PASSWORD))
-        {
-            OString const url(passwordRequest.Name.toUtf8());
-            m_pLOKit->mpCallback(passwordRequest.IsRequestPasswordToModify
-                        ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
-                        : LOK_CALLBACK_DOCUMENT_PASSWORD,
-                    url.getStr(),
-                    m_pLOKit->mpCallbackData);
-
-            // block until SetPassword is called
-            m_havePassword.wait();
-            m_havePassword.reset();
-        }
-
-        for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
-        {
-            if (m_usePassword)
-            {
-                if (passwordRequest.IsRequestPasswordToModify)
-                {
-                    uno::Reference<task::XInteractionPassword2> const xIPW2(
-                            rContinuations[i], uno::UNO_QUERY);
-                    xIPW2->setPasswordToModify(m_Password);
-                    xIPW2->select();
-                }
-                else
-                {
-                    uno::Reference<task::XInteractionPassword> const xIPW(
-                            rContinuations[i], uno::UNO_QUERY);
-                    if (xIPW.is())
-                    {
-                        xIPW->setPassword(m_Password);
-                        xIPW->select();
-                    }
-                }
-            }
-            else
-            {
-                if (passwordRequest.IsRequestPasswordToModify)
-                {
-                    uno::Reference<task::XInteractionPassword2> const xIPW2(
-                            rContinuations[i], uno::UNO_QUERY);
-                    xIPW2->setRecommendReadOnly(true);
-                    xIPW2->select();
-                }
-                else
-                {
-                    uno::Reference<task::XInteractionAbort> const xAbort(
-                            rContinuations[i], uno::UNO_QUERY);
-                    if (xAbort.is())
-                    {
-                        xAbort->select();
-                    }
-                }
-            }
-        }
-        return sal_True;
-    }
+        return handlePasswordRequest(rContinuations, passwordRequest);
 
     // TODO: add LOK api that allows handling this for real, for the moment we
     // just set the interaction as 'Approved'
