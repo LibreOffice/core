@@ -34,8 +34,7 @@ OUString lclRemoveFileName( const OUString& rPath )
 
 OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
 {
-    return rPath.isEmpty() ? rFileName :
-        OUStringBuffer( rPath ).append( '/' ).append( rFileName ).makeStringAndClear();
+    return rPath.isEmpty() ? rFileName : return rPath.isEmpty() ? rFileName : rPath + "/" + rFileName;
 }
 
 OUString createOfficeDocRelationTypeTransitional(const OUString& rType)

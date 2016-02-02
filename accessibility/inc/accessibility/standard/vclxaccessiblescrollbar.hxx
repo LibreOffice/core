@@ -70,7 +70,7 @@ public:
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleContext
-    ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

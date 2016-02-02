@@ -183,7 +183,7 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     }
 }
 
-void VCLXAccessibleList::UpdateSelection_Acc (const ::rtl::OUString& /*sTextOfSelectedItem*/, bool b_IsDropDownList)
+void VCLXAccessibleList::UpdateSelection_Acc (const OUString& /*sTextOfSelectedItem*/, bool b_IsDropDownList)
 {
     if ( m_aBoxType == COMBOBOX )
     {
