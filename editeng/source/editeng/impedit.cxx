@@ -1397,12 +1397,13 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
 
         }
 
-        if ( bCut )
+        if (bCut)
         {
-            pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_CUT );
+            pEditEngine->pImpEditEngine->EnterBlockNotifications();
+            pEditEngine->pImpEditEngine->UndoActionStart(EDITUNDO_CUT);
             DeleteSelected();
-            pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_CUT );
-
+            pEditEngine->pImpEditEngine->UndoActionEnd(EDITUNDO_CUT);
+            pEditEngine->pImpEditEngine->LeaveBlockNotifications();
         }
     }
 }
