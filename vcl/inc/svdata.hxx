@@ -375,19 +375,6 @@ struct ImplDelData
     ImplDelData*        mpNext;
     VclPtr<vcl::Window> mpWindow;
     bool                mbDel;
-
-                        ImplDelData( vcl::Window* pWindow = nullptr );
-    virtual             ~ImplDelData();
-
-    bool                IsDead() const
-    {
-        DBG_ASSERT( !mbDel, "object deleted while in use !" );
-        return mbDel;
-    }
-
-private:
-    void                AttachToWindow( const vcl::Window* );
-
 };
 
 struct ImplSVEvent

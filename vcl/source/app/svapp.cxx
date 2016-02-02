@@ -1783,38 +1783,4 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     pSVData->maAppData.mbInAppMain = true;
 }
 
-ImplDelData::ImplDelData( vcl::Window* pWindow ) :
-                             mpNext( nullptr ),
-                             mpWindow( nullptr ),
-                             mbDel( false )
-{
-    if( pWindow ) AttachToWindow( pWindow );
-}
-
-// helper method to allow inline constructor even for pWindow!=NULL case
-void ImplDelData::AttachToWindow( const vcl::Window* pWindow )
-{
-    if( pWindow )
-    {
-        if( pWindow->IsDisposed() )
-            mbDel = true;
-        else
-            pWindow->ImplAddDel( this );
-    }
-}
-
-// define dtor for ImplDelData
-ImplDelData::~ImplDelData()
-{
-    // #112873# auto remove of ImplDelData
-    // due to this code actively calling ImplRemoveDel() is not mandatory anymore
-    if( !mbDel && mpWindow )
-    {
-        // the window still exists but we were not removed
-        mpWindow.get()->ImplRemoveDel( this );
-        mpWindow = nullptr;
-    }
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
