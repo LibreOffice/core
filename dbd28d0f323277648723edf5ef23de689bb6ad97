@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_fd561305",
+        "filename": "sw/source/uibase/utlui/navipi.src",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-02T11:52:06Z",
+      "side": 1,
+      "message": "How is this called elsewhere? Really \"Masterview\"?",
+      "revId": "dbd28d0f323277648723edf5ef23de689bb6ad97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
