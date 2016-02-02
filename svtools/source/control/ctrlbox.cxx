@@ -1089,7 +1089,7 @@ namespace
     {
         long nWidth = 0;
 
-        Size aSize( rFont.GetSize() );
+        Size aSize( rFont.GetFontSize() );
 
         //Make sure it fits in the available height
         while (aSize.Height() > 0)
@@ -1103,7 +1103,7 @@ namespace
             }
 
             aSize.Height() -= EXTRAFONTSIZE;
-            rFont.SetSize(aSize);
+            rFont.SetFontSize(aSize);
             rDevice.SetFont(rFont);
         }
 
@@ -1129,10 +1129,10 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
         Color aTextColor = pRenderContext->GetTextColor();
         vcl::Font aOldFont(pRenderContext->GetFont());
-        Size aSize( aOldFont.GetSize() );
+        Size aSize( aOldFont.GetFontSize() );
         aSize.Height() += EXTRAFONTSIZE;
         vcl::Font aFont( rFontMetric );
-        aFont.SetSize( aSize );
+        aFont.SetFontSize( aSize );
         pRenderContext->SetFont(aFont);
         pRenderContext->SetTextColor(aTextColor);
 

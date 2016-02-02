@@ -232,7 +232,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     vcl::Font aFont( GetFont() );
     aFont.SetOrientation( 0 );
-    aFont.SetSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
+    aFont.SetFontSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
     pVDev->SetFont( aFont );
     pVDev->SetTextColor( Color( COL_BLACK ) );
     pVDev->SetTextFillColor();
@@ -2508,7 +2508,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     aFont.SetOutline( false );
     aFont.SetRelief( RELIEF_NONE );
     aFont.SetOrientation( 0 );
-    aFont.SetSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
+    aFont.SetFontSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
     aVDev->SetFont( aFont );
     aVDev->SetTextAlign( ALIGN_TOP );
 
@@ -2735,7 +2735,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     aFont.SetOrientation(0);
     if( bOptimize )
     {
-        aFont.SetSize( Size( 0, GLYPH_FONT_HEIGHT ) );
+        aFont.SetFontSize( Size( 0, GLYPH_FONT_HEIGHT ) );
         aVDev->SetMapMode( MAP_PIXEL );
     }
     aVDev->SetFont( aFont );

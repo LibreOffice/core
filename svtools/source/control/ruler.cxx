@@ -1052,8 +1052,8 @@ void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
 
     vcl::Font aFont = rStyleSettings.GetToolFont();
     // make the font a bit smaller than default
-    Size aSize(adjustSize(aFont.GetSize().Width()), adjustSize(aFont.GetSize().Height()));
-    aFont.SetSize(aSize);
+    Size aSize(adjustSize(aFont.GetFontSize().Width()), adjustSize(aFont.GetFontSize().Height()));
+    aFont.SetFontSize(aSize);
 
     ApplyControlFont(rRenderContext, aFont);
 
@@ -1074,8 +1074,8 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     {
         vcl::Font aFont = rStyleSettings.GetToolFont();
         // make the font a bit smaller than default
-        Size aSize(adjustSize(aFont.GetSize().Width()), adjustSize(aFont.GetSize().Height()));
-        aFont.SetSize(aSize);
+        Size aSize(adjustSize(aFont.GetFontSize().Width()), adjustSize(aFont.GetFontSize().Height()));
+        aFont.SetFontSize(aSize);
 
         ApplyControlFont(*this, aFont);
     }

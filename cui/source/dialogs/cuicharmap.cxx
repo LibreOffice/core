@@ -88,7 +88,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     const SfxStringItem* pFontNameItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FONT_NAME, false);
     if ( pFontItem )
     {
-        vcl::Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );
+        vcl::Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetFontSize() );
         aTmpFont.SetCharSet( pFontItem->GetCharSet() );
         aTmpFont.SetPitch( pFontItem->GetPitch() );
         SetCharFont( aTmpFont );
@@ -204,7 +204,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     bool bGotBoundary = true;
     bool bShrankFont = false;
     vcl::Font aOrigFont(rRenderContext.GetFont());
-    Size aFontSize(aOrigFont.GetSize());
+    Size aFontSize(aOrigFont.GetFontSize());
     Rectangle aBoundRect;
 
     for (long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 5)
@@ -222,7 +222,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
             break;
         vcl::Font aFont(aOrigFont);
         aFontSize.Height() = nFontHeight;
-        aFont.SetSize(aFontSize);
+        aFont.SetFontSize(aFontSize);
         rRenderContext.SetFont(aFont);
         mnY = (nWinHeight - GetTextHeight()) / 2;
         bShrankFont = true;
@@ -276,7 +276,7 @@ void SvxShowText::SetFont( const vcl::Font& rFont )
     maFont = vcl::Font(rFont);
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);
-    maFont.SetSize(PixelToLogic(Size(0, nWinHeight / 2)));
+    maFont.SetFontSize(PixelToLogic(Size(0, nWinHeight / 2)));
     maFont.SetTransparent(true);
     Control::SetFont(maFont);
 
@@ -288,7 +288,7 @@ void SvxShowText::SetFont( const vcl::Font& rFont )
 Size SvxShowText::GetOptimalSize() const
 {
     const vcl::Font &rFont = GetFont();
-    const Size rFontSize = rFont.GetSize();
+    const Size rFontSize = rFont.GetFontSize();
     long nWinHeight = LogicToPixel(rFontSize).Height() * 2;
     return Size( GetTextWidth( GetText() ) + 2 * 12, nWinHeight );
 }

@@ -453,7 +453,7 @@ namespace drawinglayer
             // TODO: eKerning
 
             // set FontHeight and init to no FontScaling
-            o_rSize.setY(rFont.GetSize().getHeight() > 0 ? rFont.GetSize().getHeight() : 0);
+            o_rSize.setY(rFont.GetFontSize().getHeight() > 0 ? rFont.GetFontSize().getHeight() : 0);
             o_rSize.setX(o_rSize.getY());
 
 #ifdef WIN32
@@ -462,7 +462,7 @@ namespace drawinglayer
             // needs to do extra stuff to detect the correct width (since it's
             // zero and not equal the font height) and its relationship to
             // the height
-            if(rFont.GetSize().getWidth() > 0)
+            if(rFont.GetFontSize().getWidth() > 0)
             {
                 vcl::Font aUnscaledFont(rFont);
                 aUnscaledFont.SetWidth(0);
@@ -470,7 +470,7 @@ namespace drawinglayer
 
                 if(aUnscaledFontMetric.GetWidth() > 0)
                 {
-                    const double fScaleFactor((double)rFont.GetSize().getWidth() / (double)aUnscaledFontMetric.GetWidth());
+                    const double fScaleFactor((double)rFont.GetFontSize().getWidth() / (double)aUnscaledFontMetric.GetWidth());
                     o_rSize.setX(fScaleFactor * o_rSize.getY());
                 }
             }
@@ -479,9 +479,9 @@ namespace drawinglayer
             // is easier achieved since width == height is interpreted as no
             // scaling. Ergo, Width == 0 means width == height, and width != 0
             // means the scaling is in the direct relation of width to height
-            if(rFont.GetSize().getWidth() > 0)
+            if(rFont.GetFontSize().getWidth() > 0)
             {
-                o_rSize.setX((double)rFont.GetSize().getWidth());
+                o_rSize.setX((double)rFont.GetFontSize().getWidth());
             }
 #endif
             return aRetval;

@@ -243,7 +243,7 @@ void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
     ImplWriteColor( rOStm, rFont.GetColor() );
     ImplWriteColor( rOStm, rFont.GetFillColor() );
     rOStm.Write( aName, 32 );
-    WritePair( rOStm, rFont.GetSize() );
+    WritePair( rOStm, rFont.GetFontSize() );
     rOStm.WriteInt16( 0 ); // no character orientation anymore
     rOStm.WriteInt16( rFont.GetOrientation() );
     rOStm.WriteInt16( rActualCharSet );
@@ -824,7 +824,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm.ReadInt16( nCharSet ).ReadInt16( nFamily ).ReadInt16( nPitch ).ReadInt16( nAlign ).ReadInt16( nWeight ).ReadInt16( nUnderline ).ReadInt16( nStrikeout );
                     rIStm.ReadCharAsBool( bItalic ).ReadCharAsBool( bOutline ).ReadCharAsBool( bShadow ).ReadCharAsBool( bTransparent );
 
-                    aFont.SetSize( Size( nWidth, nHeight ) );
+                    aFont.SetFontSize( Size( nWidth, nHeight ) );
                     aFont.SetCharSet( (rtl_TextEncoding) nCharSet );
                     aFont.SetFamily( (FontFamily) nFamily );
                     aFont.SetPitch( (FontPitch) nPitch );

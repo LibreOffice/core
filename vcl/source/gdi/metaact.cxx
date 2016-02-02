@@ -2797,9 +2797,9 @@ MetaAction* MetaFontAction::Clone()
 void MetaFontAction::Scale( double fScaleX, double fScaleY )
 {
     const Size aSize(
-        FRound(maFont.GetSize().Width() * fabs(fScaleX)),
-        FRound(maFont.GetSize().Height() * fabs(fScaleY)));
-    maFont.SetSize( aSize );
+        FRound(maFont.GetFontSize().Width() * fabs(fScaleX)),
+        FRound(maFont.GetFontSize().Height() * fabs(fScaleY)));
+    maFont.SetFontSize( aSize );
 }
 
 void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )

@@ -2730,7 +2730,7 @@ namespace
                     /** SIMPLE, DONE */
                     const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
                     rPropertyHolders.Current().setFont(pA->GetFont());
-                    Size aFontSize(pA->GetFont().GetSize());
+                    Size aFontSize(pA->GetFont().GetFontSize());
 
                     if(0 == aFontSize.Height())
                     {
@@ -2745,7 +2745,7 @@ namespace
                         aFontSize = OutputDevice::LogicToLogic(
                             aFontSize, MAP_PIXEL, rPropertyHolders.Current().getMapUnit());
 
-                        aCorrectedFont.SetSize(aFontSize);
+                        aCorrectedFont.SetFontSize(aFontSize);
                         rPropertyHolders.Current().setFont(aCorrectedFont);
                     }
 

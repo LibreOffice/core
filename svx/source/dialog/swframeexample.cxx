@@ -175,13 +175,13 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
 
         if (nAnchor == TextContentAnchorType_AS_CHARACTER)
         {
-            aFont.SetSize(Size(0, aParaPrtArea.GetHeight() - 2));
+            aFont.SetFontSize(Size(0, aParaPrtArea.GetHeight() - 2));
             SetFont(aFont);
             aParaPrtArea.SetSize(Size(GetTextWidth(DEMOTEXT), GetTextHeight()));
         }
         else
         {
-            aFont.SetSize(Size(0, aParaPrtArea.GetHeight() / 2));
+            aFont.SetFontSize(Size(0, aParaPrtArea.GetHeight() / 2));
             rRenderContext.SetFont(aFont);
             aAutoCharFrame.SetSize(Size(GetTextWidth(OUString('A')), GetTextHeight()));
             aAutoCharFrame.SetPos(Point(aParaPrtArea.Left() + (aParaPrtArea.GetWidth() - aAutoCharFrame.GetWidth()) / 2,

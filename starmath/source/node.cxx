@@ -172,7 +172,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
                         rSize.GetDenominator());
         long      nHeight = (long)aVal;
 
-        aFntSize = GetFont().GetSize();
+        aFntSize = GetFont().GetFontSize();
         aFntSize.Width() = 0;
         switch(nType)
         {
@@ -686,7 +686,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // make distance depend on font size
     long  nDist = +(rFormat.GetDistance(DIS_VERTICAL)
-                    * GetFont().GetSize().Height()) / 100L;
+                    * GetFont().GetFontSize().Height()) / 100L;
 
     if (nSize < 1)
         return;
@@ -794,7 +794,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     // make distance depend on font size
-    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
+    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetFontSize().Height()) / 100L;
     if (!IsUseExtraSpaces())
         nDist = 0;
 
@@ -852,7 +852,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                         RHA_CENTER, RVA_BASELINE);
     // add a bit space between operator and argument
     // (worst case -{1 over 2} where - and over have almost no space inbetween)
-    long  nDelta = pOper->GetFont().GetSize().Height() / 20;
+    long  nDelta = pOper->GetFont().GetFontSize().Height() / 20;
     if (bIsPostfix)
         aPos.X() += nDelta;
     else
@@ -926,7 +926,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
           nVerOffset;
     GetHeightVerOffset(*pBody, nHeight, nVerOffset);
     nHeight += rFormat.GetDistance(DIS_ROOT)
-               * GetFont().GetSize().Height() / 100L;
+               * GetFont().GetFontSize().Height() / 100L;
 
     // font specialist advised to change the width first
     pRootSym->AdaptToY(rDev, nHeight);
@@ -1086,7 +1086,7 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pNum  ->Arrange(rDev, rFormat);
     pDenom->Arrange(rDev, rFormat);
 
-    long  nFontHeight = GetFont().GetSize().Height(),
+    long  nFontHeight = GetFont().GetFontSize().Height(),
           nExtLen     = nFontHeight * rFormat.GetDistance(DIS_FRACTION) / 100L,
           nThick      = nFontHeight * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L,
           nWidth      = std::max(pNum->GetItalicWidth(), pDenom->GetItalicWidth()),
@@ -1403,7 +1403,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmNode *pBody = GetBody();
     OSL_ENSURE(pBody, "Sm: NULL pointer");
 
-    long  nOrigHeight = pBody->GetFont().GetSize().Height();
+    long  nOrigHeight = pBody->GetFont().GetFontSize().Height();
 
     pBody->Arrange(rDev, rFormat);
 
@@ -1436,7 +1436,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
         // prevent sub-/supscripts from diminishing in size
         // (as would be in "a_{1_{2_{3_4}}}")
-        if (GetFont().GetSize().Height() > rFormat.GetBaseSize().Height() / 3)
+        if (GetFont().GetFontSize().Height() > rFormat.GetBaseSize().Height() / 3)
         {
             sal_uInt16 nIndex = (eSubSup == CSUB  ||  eSubSup == CSUP) ?
                                     SIZ_LIMITS : SIZ_INDEX;
@@ -1614,7 +1614,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                            (GetScaleMode() == SCALE_HEIGHT  ||  bIsScaleNormal),
           bIsABS         = GetToken().eType == TABS;
 
-    long  nFaceHeight = GetFont().GetSize().Height();
+    long  nFaceHeight = GetFont().GetFontSize().Height();
 
     // determine oversize in %
     sal_uInt16  nPerc = 0;
@@ -1644,8 +1644,8 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // if wanted, scale the braces to the wanted size
     if (bScale)
     {
-        Size  aTmpSize (pLeft->GetFont().GetSize());
-        OSL_ENSURE(pRight->GetFont().GetSize() == aTmpSize,
+        Size  aTmpSize (pLeft->GetFont().GetFontSize());
+        OSL_ENSURE(pRight->GetFont().GetFontSize() == aTmpSize,
                     "Sm : different font sizes");
         aTmpSize.Width() = std::min((long) nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
@@ -1716,7 +1716,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // scale separators to required height and arrange them
     bool bScale  = GetScaleMode() == SCALE_HEIGHT  ||  rFormat.IsScaleNormalBrackets();
-    long nHeight = bScale ? aRefRect.GetHeight() : GetFont().GetSize().Height();
+    long nHeight = bScale ? aRefRect.GetHeight() : GetFont().GetFontSize().Height();
     sal_uInt16 nIndex  = GetScaleMode() == SCALE_HEIGHT ?
                         DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
     sal_uInt16 nPerc   = rFormat.GetDistance(nIndex);
@@ -1730,7 +1730,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     // horizontal distance between argument and brackets or separators
-    long  nDist = GetFont().GetSize().Height()
+    long  nDist = GetFont().GetFontSize().Height()
                   * rFormat.GetDistance(DIS_BRACKETSPACE) / 100L;
 
     SmNode *pLeft = GetSubNode(0);
@@ -1784,7 +1784,7 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // determine the relative position and the distances between each other
     RectPos  eRectPos;
-    long nFontHeight = pBody->GetFont().GetSize().Height();
+    long nFontHeight = pBody->GetFont().GetFontSize().Height();
     long nDistBody   = nFontHeight * rFormat.GetDistance(DIS_ORNAMENTSIZE),
          nDistScript = nFontHeight;
     if (GetToken().eType == TOVERBRACE)
@@ -1834,7 +1834,7 @@ long SmOperNode::CalcSymbolHeight(const SmNode &rSymbol,
                                   const SmFormat &rFormat) const
     // returns the font height to be used for operator-symbol
 {
-    long  nHeight = GetFont().GetSize().Height();
+    long  nHeight = GetFont().GetFontSize().Height();
 
     SmTokenType  eTmpType = GetToken().eType;
     if (eTmpType == TLIM  ||  eTmpType == TLIMINF  ||  eTmpType == TLIMSUP)
@@ -1868,12 +1868,12 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     SmNode *pSymbol = GetSymbol();
     pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
-                              pSymbol->GetFont().GetSize().Height()));
+                              pSymbol->GetFont().GetFontSize().Height()));
 
     pBody->Arrange(rDev, rFormat);
     pOper->Arrange(rDev, rFormat);
 
-    long  nOrigHeight = GetFont().GetSize().Height(),
+    long  nOrigHeight = GetFont().GetFontSize().Height(),
           nDist = nOrigHeight
                   * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
 
@@ -1942,7 +1942,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         default :
             eVerAlign = RVA_ATTRIBUT_HI;
             if (pBody->GetType() == NATTRIBUT)
-                nDist = GetFont().GetSize().Height()
+                nDist = GetFont().GetFontSize().Height()
                         * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100L;
     }
     Point  aPos = pAttr->AlignTo(*pBody, RectPos::Attribute, RHA_CENTER, eVerAlign);
@@ -2206,7 +2206,7 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     aPoly.SetPoint(aPointA, 0);
     aPoly.SetPoint(aPointB, 1);
 
-    long  nThick       = GetFont().GetSize().Height()
+    long  nThick       = GetFont().GetFontSize().Height()
                             * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L;
     nWidth = nThick + 2 * nBorderwidth;
 
@@ -2265,7 +2265,7 @@ void SmRectangleNode::AdaptToY(OutputDevice &/*rDev*/, sal_uLong nHeight)
 
 void SmRectangleNode::Arrange(OutputDevice &rDev, const SmFormat &/*rFormat*/)
 {
-    long  nFontHeight = GetFont().GetSize().Height();
+    long  nFontHeight = GetFont().GetFontSize().Height();
     long  nWidth  = aToSize.Width(),
           nHeight = aToSize.Height();
     if (nHeight == 0)
@@ -2507,7 +2507,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     // norm distance from which the following two are calculated
-    const long  nNormDist = 3 * GetFont().GetSize().Height();
+    const long  nNormDist = 3 * GetFont().GetFontSize().Height();
 
     // define horizontal and vertical minimal distances that separate
     // the elements
@@ -2606,7 +2606,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, sal_uLong nWidth)
 {
     // Since there is no function to do this, we try to approximate it:
-    Size  aFntSize (GetFont().GetSize());
+    Size  aFntSize (GetFont().GetFontSize());
 
     //! however the result is a bit better with 'nWidth' as initial font width
     aFntSize.Width() = nWidth;
@@ -2629,7 +2629,7 @@ void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, sal_uLong nWidth)
 void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
 {
     GetFont().FreezeBorderWidth();
-    Size  aFntSize (GetFont().GetSize());
+    Size  aFntSize (GetFont().GetFontSize());
 
     // Since we only want to scale the height, we might have
     // to determine the font width in order to keep it
@@ -2637,7 +2637,7 @@ void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
     {
         rDev.Push(PushFlags::FONT | PushFlags::MAPMODE);
         rDev.SetFont(GetFont());
-        aFntSize.Width() = rDev.GetFontMetric().GetSize().Width();
+        aFntSize.Width() = rDev.GetFontMetric().GetFontSize().Width();
         rDev.Pop();
     }
     OSL_ENSURE(aFntSize.Width() != 0, "Sm: ");
@@ -2668,7 +2668,7 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
 
     GetFont() = rFormat.GetFont(GetFontDesc());
     // use same font size as is used for variables
-    GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetSize() );
+    GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetFontSize() );
 
     OSL_ENSURE(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL  ||
                GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
@@ -2866,7 +2866,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         GetFont() = rFormat.GetFont(FNT_VARIABLE);
     }
     // use same font size as is used for variables
-    GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetSize() );
+    GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetFontSize() );
 
     // Actually only WEIGHT_NORMAL and WEIGHT_BOLD should occur... However, the sms-file also
     // contains e.g. 'WEIGHT_ULTRALIGHT'. Consequently, compare here with '>' instead of '!='.
@@ -3016,7 +3016,7 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // make distance depend on the font height
     // (so that it increases when scaling (e.g. size *2 {a ~ b})
-    long  nDist  = GetFont().GetSize().Height() / 10L,
+    long  nDist  = GetFont().GetFontSize().Height() / 10L,
           nSpace = nNum * nDist;
 
     // get a SmRect with Baseline and all the bells and whistles

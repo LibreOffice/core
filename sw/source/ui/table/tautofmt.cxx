@@ -584,20 +584,20 @@ void AutoFormatPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font
     const SwBoxAutoFormat& rBoxFormat = aCurData.GetBoxFormat( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
-    Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
+    Size aFontSize( rFont.GetFontSize().Width(), 10 * GetDPIScaleFactor() );
 
     lcl_SetFontProperties( rFont, rBoxFormat.GetFont(), rBoxFormat.GetWeight(), rBoxFormat.GetPosture() );
     lcl_SetFontProperties( rCJKFont, rBoxFormat.GetCJKFont(), rBoxFormat.GetCJKWeight(), rBoxFormat.GetCJKPosture() );
     lcl_SetFontProperties( rCTLFont, rBoxFormat.GetCTLFont(), rBoxFormat.GetCTLWeight(), rBoxFormat.GetCTLPosture() );
 
-    SETONALLFONTS( SetUnderline,    (FontLineStyle)rBoxFormat.GetUnderline().GetValue() );
-    SETONALLFONTS( SetOverline,     (FontLineStyle)rBoxFormat.GetOverline().GetValue() );
-    SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFormat.GetCrossedOut().GetValue() );
-    SETONALLFONTS( SetOutline,      rBoxFormat.GetContour().GetValue() );
-    SETONALLFONTS( SetShadow,       rBoxFormat.GetShadowed().GetValue() );
-    SETONALLFONTS( SetColor,        rBoxFormat.GetColor().GetValue() );
-    SETONALLFONTS( SetSize,         aFontSize );
-    SETONALLFONTS( SetTransparent,  true );
+    SETONALLFONTS( SetUnderline,        (FontLineStyle)rBoxFormat.GetUnderline().GetValue() );
+    SETONALLFONTS( SetOverline,         (FontLineStyle)rBoxFormat.GetOverline().GetValue() );
+    SETONALLFONTS( SetStrikeout,        (FontStrikeout)rBoxFormat.GetCrossedOut().GetValue() );
+    SETONALLFONTS( SetOutline,          rBoxFormat.GetContour().GetValue() );
+    SETONALLFONTS( SetShadow,           rBoxFormat.GetShadowed().GetValue() );
+    SETONALLFONTS( SetColor,            rBoxFormat.GetColor().GetValue() );
+    SETONALLFONTS( SetFontSize,  aFontSize );
+    SETONALLFONTS( SetTransparent,      true );
 }
 
 sal_uInt8 AutoFormatPreview::GetFormatIndex( size_t nCol, size_t nRow ) const

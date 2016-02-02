@@ -244,7 +244,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
 
-    aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
+    aBulletFont.SetFontSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
 
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetSymbol( 0x25CF );                    // In points
@@ -1198,7 +1198,7 @@ void SdDrawDocument::SetTextDefaults() const
     // BulletItem and BulletFont for Titel and Outline
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
     vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
-    aBulletFont.SetSize(Size(0,846));       // 24 pt
+    aBulletFont.SetFontSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(SvxBulletStyle::BULLET);
     aBulletItem.SetStart(1);

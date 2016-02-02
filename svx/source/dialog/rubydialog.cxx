@@ -803,7 +803,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
     Size aWinSize = rRenderContext.GetOutputSize();
 
     vcl::Font aSaveFont = rRenderContext.GetFont();
-    aSaveFont.SetHeight(aWinSize.Height() / 4);
+    aSaveFont.SetFontHeight(aWinSize.Height() / 4);
     rRenderContext.SetFont(aSaveFont);
 
     Rectangle aRect(Point(0, 0), aWinSize);
@@ -818,7 +818,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
     long nBaseWidth = rRenderContext.GetTextWidth(sBaseText);
 
     vcl::Font aRubyFont(aSaveFont);
-    aRubyFont.SetHeight(aRubyFont.GetHeight() * 70 / 100);
+    aRubyFont.SetFontHeight(aRubyFont.GetFontHeight() * 70 / 100);
     rRenderContext.SetFont(aRubyFont);
     long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
     rRenderContext.SetFont(aSaveFont);

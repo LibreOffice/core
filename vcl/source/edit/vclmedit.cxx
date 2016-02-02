@@ -1366,10 +1366,10 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     Size aSize = pDev->LogicToPixel( rSize );
 
     vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetPointFont(*this);
-    Size aFontSize = aFont.GetSize();
+    Size aFontSize = aFont.GetFontSize();
     MapMode aPtMapMode(MAP_POINT);
     aFontSize = pDev->LogicToPixel(aFontSize, aPtMapMode);
-    aFont.SetSize(aFontSize);
+    aFont.SetFontSize(aFontSize);
 
     aFont.SetTransparent( true );
     OutDevType eOutDevType = pDev->GetOutDevType();

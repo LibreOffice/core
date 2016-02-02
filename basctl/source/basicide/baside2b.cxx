@@ -2870,12 +2870,12 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         pListBox->SetSizePixel( aSize );
 
         //calculate position
-        const Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );//the visible area
+        const Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
         const Point& aBottomPoint = aVisArea.BottomRight();
 
         if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
         {//clipped at the bottom: move it up
-            const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetHeight();//parent's font (in the IDE): needed for height
+            const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
             aPos.Y() -= aSize.getHeight() + nParentFontHeight + nCursorPad;
         }
 

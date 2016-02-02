@@ -1022,7 +1022,7 @@ Document::retrieveCharacterAttributes(
     //character height
     aAttribs[i].Name = "CharHeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetHeight() );
+    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetFontHeight() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 

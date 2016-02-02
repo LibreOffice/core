@@ -103,7 +103,7 @@ namespace vclcanvas
                              const Point&           rPos )
         {
             vcl::Font aVCLFont;
-            aVCLFont.SetHeight( 20 );
+            aVCLFont.SetFontHeight( 20 );
             aVCLFont.SetColor( Color( INFO_COLOR ) );
 
             rOutDev.SetTextAlign(ALIGN_TOP);

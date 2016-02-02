@@ -600,17 +600,17 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         double scale = 1.0;
 
         // scale width if we have a stretched text
-        if( 0 != aFont.GetSize().Width() )
+        if( 0 != aFont.GetFontSize().Width() )
         {
             vcl::Font aTmpFont( aFont );
-            aTmpFont.SetWidth(0);
+            aTmpFont.SetAverageFontWidth(0);
             mpVDev->SetFont( aTmpFont );
 
             const FontMetric aMetric2( mpVDev->GetFontMetric() );
             mpVDev->SetFont( aFont );
 
-            const long n1 = aFont.GetSize().Width();
-            const long n2 = aMetric2.GetSize().Width();
+            const long n1 = aFont.GetFontSize().Width();
+            const long n2 = aMetric2.GetFontSize().Width();
             scale =  (double)n1 / (double)n2;
         }
 
@@ -618,7 +618,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         m.translate( double(aPt.X() / scale), double(aPt.Y()) );
         m.scale( scale, scale );
 
-        sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetHeight() ) ).Height() );
+        sal_Int16 nHeight = _Int16( map( Size( 0, aFont.GetFontHeight() ) ).Height() );
 
         startTag( TAG_DEFINETEXT );
 

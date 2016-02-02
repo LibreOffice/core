@@ -280,7 +280,7 @@ public:
     sal_uInt8 GetPropr() const { return m_aSub[m_nActual].GetPropr(); }
     FontItalic GetItalic() const { return m_aSub[m_nActual].GetItalic(); }
     LanguageType GetLanguage() const { return m_aSub[m_nActual].GetLanguage(); }
-    long GetHeight() const { return m_aSub[m_nActual].GetSize().Height(); }
+    long GetHeight() const { return m_aSub[m_nActual].GetFontSize().Height(); }
     FontWeight GetWeight() const { return m_aSub[m_nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return m_aSub[m_nActual].GetEmphasisMark(); }
@@ -293,7 +293,7 @@ public:
     inline rtl_TextEncoding GetCharSet( const sal_uInt8 nWhich ) const
         { return m_aSub[nWhich].GetCharSet(); }
     inline long GetHeight( const sal_uInt8 nWhich ) const
-        { return m_aSub[nWhich].GetSize().Height(); }
+        { return m_aSub[nWhich].GetFontSize().Height(); }
 
     // makes the logical font be effective in the OutputDevice
     void ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut );
@@ -715,10 +715,10 @@ inline void SwSubFont::SetSize( const Size& rSize )
 {
     m_aSize = rSize;
     if ( GetPropr() == 100 )
-        Font::SetSize( m_aSize );
+        Font::SetFontSize( m_aSize );
     else
     {
-        Font::SetSize( Size(
+        Font::SetFontSize( Size(
             (long) m_aSize.Width() * GetPropr() / 100L,
             (long) m_aSize.Height() * GetPropr() / 100L ) );
     }
@@ -748,7 +748,7 @@ inline void SwFont::SetActual( sal_uInt8 nNew )
 inline void SwSubFont::SetProportion( const sal_uInt8 nNewPropr )
 {
     m_pMagic = nullptr;
-    Font::SetSize( Size( (long) m_aSize.Width() * nNewPropr / 100L,
+    Font::SetFontSize( Size( (long) m_aSize.Width() * nNewPropr / 100L,
                          (long) m_aSize.Height() * nNewPropr / 100L ) );
     SvxFont::SetPropr( nNewPropr );
 }

@@ -68,7 +68,7 @@ namespace cairocanvas
                 const bool bOldMapState( pOutDev->IsMapModeEnabled() );
                 pOutDev->EnableMapMode(false);
 
-                const Size aSize = pOutDev->GetFontMetric( *maFont ).GetSize();
+                const Size aSize = pOutDev->GetFontMetric( *maFont ).GetFontSize();
 
                 const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
                 double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
@@ -78,7 +78,7 @@ namespace cairocanvas
 
                 const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
 
-                maFont->SetWidth( nNewWidth );
+                maFont->SetAverageFontWidth( nNewWidth );
 
                 pOutDev->EnableMapMode(bOldMapState);
             }

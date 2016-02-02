@@ -1161,7 +1161,7 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
         pPrinter->SetMapMode( aMap );
         vcl::Font aFont;
         aFont.SetAlignment( ALIGN_BOTTOM );
-        aFont.SetSize( Size( 0, 360 ));
+        aFont.SetFontSize( Size( 0, 360 ));
         pPrinter->SetFont( aFont );
 
         Size aPaperSz = pPrinter->GetOutputSize();

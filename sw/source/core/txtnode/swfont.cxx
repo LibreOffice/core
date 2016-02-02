@@ -502,7 +502,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             m_aSub[SW_LATIN].SvxFont::SetPropr( 100 );
-            m_aSub[SW_LATIN].m_aSize = m_aSub[SW_LATIN].Font::GetSize();
+            m_aSub[SW_LATIN].m_aSize = m_aSub[SW_LATIN].Font::GetFontSize();
             Size aTmpSize = m_aSub[SW_LATIN].m_aSize;
             aTmpSize.Height() = pHeight->GetHeight();
             m_aSub[SW_LATIN].SetSize( aTmpSize );
@@ -532,7 +532,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             m_aSub[SW_CJK].SvxFont::SetPropr( 100 );
-            m_aSub[SW_CJK].m_aSize = m_aSub[SW_CJK].Font::GetSize();
+            m_aSub[SW_CJK].m_aSize = m_aSub[SW_CJK].Font::GetFontSize();
             Size aTmpSize = m_aSub[SW_CJK].m_aSize;
             aTmpSize.Height() = pHeight->GetHeight();
             m_aSub[SW_CJK].SetSize( aTmpSize );
@@ -568,7 +568,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             m_aSub[SW_CTL].SvxFont::SetPropr( 100 );
-            m_aSub[SW_CTL].m_aSize = m_aSub[SW_CTL].Font::GetSize();
+            m_aSub[SW_CTL].m_aSize = m_aSub[SW_CTL].Font::GetFontSize();
             Size aTmpSize = m_aSub[SW_CTL].m_aSize;
             aTmpSize.Height() = pHeight->GetHeight();
             m_aSub[SW_CTL].SetSize( aTmpSize );
@@ -1035,7 +1035,7 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
 
 short SwSubFont::_CheckKerning( )
 {
-    short nKernx = - short( Font::GetSize().Height() / 6 );
+    short nKernx = - short( Font::GetFontSize().Height() / 6 );
 
     if ( nKernx < GetFixKerning() )
         return GetFixKerning();

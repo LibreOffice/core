@@ -155,9 +155,9 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     {
-        Size aSize = aFont.GetSize();
+        Size aSize = aFont.GetFontSize();
         aSize.Height() = (nRectHeight*4)/9;
-        aFont.SetSize( aSize );
+        aFont.SetFontSize( aSize );
     }
 
     {

@@ -1172,7 +1172,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
                 aWidth[ aScrType[i] ] =
-                        static_cast<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetSize().Width() / 3);
+                        static_cast<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetFontSize().Width() / 3);
             }
         }
     }
