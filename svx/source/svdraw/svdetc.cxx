@@ -554,68 +554,68 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 SvdProgressInfo::SvdProgressInfo( const Link<void*,bool>&_rLink )
 {
     maLink = _rLink;
-    nSumActionCount = 0;
-    nSumCurAction   = 0;
+    m_nSumActionCount = 0;
+    m_nSumCurAction   = 0;
 
-    nObjCount = 0;
-    nCurObj   = 0;
+    m_nObjCount = 0;
+    m_nCurObj   = 0;
 
-    nActionCount = 0;
-    nCurAction   = 0;
+    m_nActionCount = 0;
+    m_nCurAction   = 0;
 
-    nInsertCount = 0;
-    nCurInsert   = 0;
+    m_nInsertCount = 0;
+    m_nCurInsert   = 0;
 }
 
 void SvdProgressInfo::Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount )
 {
-    nSumActionCount = _nSumActionCount;
-    nObjCount = _nObjCount;
+    m_nSumActionCount = _nSumActionCount;
+    m_nObjCount = _nObjCount;
 }
 
 bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
 {
-    nSumCurAction += nAnzActions;
-    nCurAction += nAnzActions;
-    if(nCurAction > nActionCount)
-        nCurAction = nActionCount;
+    m_nSumCurAction += nAnzActions;
+    m_nCurAction += nAnzActions;
+    if(m_nCurAction > m_nActionCount)
+        m_nCurAction = m_nActionCount;
 
     return maLink.Call(nullptr);
 }
 
 void SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
 {
-    nSumCurAction += nAnzInserts;
-    nCurInsert += nAnzInserts;
+    m_nSumCurAction += nAnzInserts;
+    m_nCurInsert += nAnzInserts;
 
     maLink.Call(nullptr);
 }
 
 void SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
 {
-    nSumCurAction += nAnzRescales;
+    m_nSumCurAction += nAnzRescales;
     maLink.Call(nullptr);
 }
 
 void SvdProgressInfo::SetActionCount( sal_uIntPtr _nActionCount )
 {
-    nActionCount = _nActionCount;
+    m_nActionCount = _nActionCount;
 }
 
 void SvdProgressInfo::SetInsertCount( sal_uIntPtr _nInsertCount )
 {
-    nInsertCount = _nInsertCount;
+    m_nInsertCount = _nInsertCount;
 }
 
 void SvdProgressInfo::SetNextObject()
 {
-    nActionCount = 0;
-    nCurAction   = 0;
+    m_nActionCount = 0;
+    m_nCurAction   = 0;
 
-    nInsertCount = 0;
-    nCurInsert   = 0;
+    m_nInsertCount = 0;
+    m_nCurInsert   = 0;
 
-    nCurObj++;
+    m_nCurObj++;
     ReportActions(0);
 }
 
