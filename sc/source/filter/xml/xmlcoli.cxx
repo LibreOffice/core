@@ -94,12 +94,7 @@ SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLTableColContext::EndElement()

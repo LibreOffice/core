@@ -48,8 +48,6 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
     if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_S))
     {
         sal_Int32 nRepeat(0);
@@ -71,10 +69,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
             sOUText.append(' ');
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
 }
 
 void ScXMLContentContext::Characters( const OUString& rChars )

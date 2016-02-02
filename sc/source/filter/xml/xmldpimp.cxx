@@ -634,12 +634,7 @@ SvXMLImportContext *ScXMLDPSourceSQLContext::CreateChildContext( sal_uInt16 nPre
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDPSourceSQLContext::EndElement()
@@ -688,12 +683,7 @@ SvXMLImportContext *ScXMLDPSourceTableContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDPSourceTableContext::EndElement()
@@ -742,12 +732,7 @@ SvXMLImportContext *ScXMLDPSourceQueryContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDPSourceQueryContext::EndElement()
@@ -811,12 +796,7 @@ SvXMLImportContext *ScXMLSourceServiceContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLSourceServiceContext::EndElement()
@@ -1567,12 +1547,7 @@ SvXMLImportContext *ScXMLDataPilotSubTotalContext::CreateChildContext( sal_uInt1
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDataPilotSubTotalContext::EndElement()
@@ -1676,12 +1651,7 @@ SvXMLImportContext *ScXMLDataPilotMemberContext::CreateChildContext( sal_uInt16 
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDataPilotMemberContext::EndElement()
@@ -1905,12 +1875,7 @@ SvXMLImportContext *ScXMLDataPilotGroupMemberContext::CreateChildContext( sal_uI
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDataPilotGroupMemberContext::EndElement()

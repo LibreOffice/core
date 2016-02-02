@@ -723,12 +723,7 @@ SvXMLImportContext *ScXMLConResContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLConResContext::EndElement()
@@ -881,12 +876,7 @@ SvXMLImportContext *ScXMLSortGroupsContext::CreateChildContext( sal_uInt16 nPref
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLSortGroupsContext::EndElement()
@@ -997,12 +987,7 @@ SvXMLImportContext *ScXMLSubTotalFieldContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLSubTotalFieldContext::EndElement()
