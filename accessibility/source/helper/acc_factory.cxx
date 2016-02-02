@@ -214,13 +214,13 @@ AccessibleFactory::~AccessibleFactory()
 
 Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, bool _bIsMenuBar )
 {
-    OAccessibleMenuBaseComponent* pAccessible;
+    OAccessibleMenuBaseComponent* XAccessible;
     if ( _bIsMenuBar )
-        pAccessible = new VCLXAccessibleMenuBar( _pMenu );
+        XAccessible = new VCLXAccessibleMenuBar( _pMenu );
     else
-        pAccessible = new VCLXAccessiblePopupMenu( _pMenu );
-    pAccessible->SetStates();
-    return pAccessible;
+        XAccessible = new VCLXAccessiblePopupMenu( _pMenu );
+    XAccessible->SetStates();
+    return XAccessible;
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXButton* _pXWindow )
