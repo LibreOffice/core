@@ -186,7 +186,7 @@ void ScRangeManagerTable::CheckForFormulaString()
             GetLine( aLine, pEntry);
             const ScRangeData* pData = findRangeData( aLine );
             OUString aFormulaString;
-            pData->GetSymbol(aFormulaString, maPos);
+            pData->GetSymbol(aFormulaString);
             SetEntryText(aFormulaString, pEntry, 1);
             maCalculatedFormulaEntries.insert( std::pair<SvTreeListEntry*, bool>(pEntry, true) );
         }
