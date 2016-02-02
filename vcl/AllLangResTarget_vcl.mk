@@ -33,6 +33,7 @@ $(eval $(call gb_SrsTarget_set_include,vcl/source/src,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\
+    vcl/source/src/app.src \
     vcl/source/src/btntext.src \
     vcl/source/src/helptext.src \
     vcl/source/src/menu.src \
