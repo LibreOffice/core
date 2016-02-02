@@ -266,8 +266,6 @@ public:
 
     RegexpMapConstIter & operator ++();
 
-    RegexpMapConstIter operator ++(int);
-
     RegexpMapEntry< Val > const * operator ->() const;
 
     bool equals(RegexpMapConstIter const & rOther) const;
@@ -318,14 +316,6 @@ RegexpMapConstIter< Val > & RegexpMapConstIter< Val >::operator ++()
 }
 
 template< typename Val >
-RegexpMapConstIter< Val > RegexpMapConstIter< Val >::operator ++(int)
-{
-    RegexpMapConstIter aTemp(*this);
-    m_pImpl->next();
-    return aTemp;
-}
-
-template< typename Val >
 RegexpMapEntry< Val > const * RegexpMapConstIter< Val >::operator ->() const
 {
     return &m_pImpl->get();
@@ -347,10 +337,6 @@ class RegexpMapIter: public RegexpMapConstIter< Val >
 public:
     RegexpMapIter() {}
 
-    RegexpMapIter & operator ++();
-
-    RegexpMapIter operator ++(int);
-
     RegexpMapEntry< Val > * operator ->();
 
     RegexpMapEntry< Val > const * operator ->() const;
@@ -363,21 +349,6 @@ template< typename Val >
 RegexpMapIter< Val >::RegexpMapIter(RegexpMapIterImpl< Val > * pTheImpl):
     RegexpMapConstIter< Val >(pTheImpl)
 {}
-
-template< typename Val >
-RegexpMapIter< Val > & RegexpMapIter< Val >::operator ++()
-{
-    this->m_pImpl->next();
-    return *this;
-}
-
-template< typename Val >
-RegexpMapIter< Val > RegexpMapIter< Val >::operator ++(int)
-{
-    RegexpMapIter aTemp(*this);
-    this->m_pImpl->next();
-    return aTemp;
-}
 
 template< typename Val >
 RegexpMapEntry< Val > * RegexpMapIter< Val >::operator ->()

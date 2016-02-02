@@ -161,8 +161,6 @@ public:
 
     tools::Polygon&     operator=( const tools::Polygon& rPoly );
     bool                operator==( const tools::Polygon& rPoly ) const;
-    bool                operator!=( const tools::Polygon& rPoly ) const
-                            { return !(Polygon::operator==( rPoly )); }
     bool                IsEqual( const tools::Polygon& rPoly ) const;
 
     // streaming a Polygon does ignore PolyFlags, so use the Write Or Read
@@ -253,8 +251,6 @@ public:
 
     tools::PolyPolygon& operator=( const tools::PolyPolygon& rPolyPoly );
     bool                operator==( const tools::PolyPolygon& rPolyPoly ) const;
-    bool                operator!=( const tools::PolyPolygon& rPolyPoly ) const
-                            { return !(PolyPolygon::operator==( rPolyPoly )); }
 
     TOOLS_DLLPUBLIC friend SvStream&    ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly );
     TOOLS_DLLPUBLIC friend SvStream&    WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyPoly );

@@ -296,16 +296,6 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
 
 // SwIndex
 
-sal_Int32 SwIndex::operator++(int)
-{
-    SAL_WARN_IF( !(m_nIndex < SAL_MAX_INT32), "sw.core",
-                 "SwIndex::operator++(int) wraps around" );
-
-    const sal_Int32 nOldIndex = m_nIndex;
-    ChgValue( *this, m_nIndex+1 );
-    return nOldIndex;
-}
-
 sal_Int32 SwIndex::operator++()
 {
     SAL_WARN_IF( !(m_nIndex < SAL_MAX_INT32), "sw.core",
@@ -344,20 +334,6 @@ sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
     SAL_WARN_IF( !(m_nIndex >= nVal), "sw.core",
                  "SwIndex::operator-=(sal_Int32) wraps around" );
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
-}
-
-sal_Int32 SwIndex::operator+=( const SwIndex & rIndex )
-{
-    SAL_WARN_IF( !(m_nIndex <= SAL_MAX_INT32 - rIndex.m_nIndex), "sw.core",
-                 "SwIndex::operator+=(SwIndex) wraps around" );
-    return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
-}
-
-sal_Int32 SwIndex::operator-=( const SwIndex & rIndex )
-{
-    SAL_WARN_IF( !(m_nIndex >= rIndex.m_nIndex), "sw.core",
-                 "SwIndex::operator-=(SwIndex) wraps around" );
-    return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
 }
 
 bool SwIndex::operator< ( const SwIndex & rIndex ) const

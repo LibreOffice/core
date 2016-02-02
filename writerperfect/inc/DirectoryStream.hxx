@@ -40,7 +40,6 @@ public:
     explicit DirectoryStream(const css::uno::Reference<css::ucb::XContent> &xContent);
     virtual ~DirectoryStream();
 
-    static DirectoryStream *createForParent(const css::uno::Reference<css::ucb::XContent> &xContent);
     static bool isDirectory(const css::uno::Reference<css::ucb::XContent> &xContent);
 
     virtual bool isStructured() override;

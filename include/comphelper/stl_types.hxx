@@ -181,7 +181,6 @@ public:
     }
     Self & operator*() { return *this; } // so operator= works
     Self & operator++() { return *this; }
-    Self & operator++(int) { return *this; }
 
 private:
     OUStringBuffer & m_rBuffer;

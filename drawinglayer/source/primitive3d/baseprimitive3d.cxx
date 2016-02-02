@@ -221,16 +221,6 @@ namespace drawinglayer
             insert(end(), rSource.begin(), rSource.end());
         }
 
-        void Primitive3DContainer::append(Primitive3DContainer&& rSource)
-        {
-            size_t n = size();
-            resize(n + rSource.size());
-            for (size_t i = 0; i<rSource.size(); ++i)
-            {
-                (*this)[n + i] = std::move( rSource[i] );
-            }
-        }
-
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

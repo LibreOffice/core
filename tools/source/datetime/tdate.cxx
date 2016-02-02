@@ -437,20 +437,6 @@ Date& Date::operator --()
     return *this;
 }
 
-Date Date::operator ++( int )
-{
-    Date aOldDate = *this;
-    Date::operator++();
-    return aOldDate;
-}
-
-Date Date::operator --( int )
-{
-    Date aOldDate = *this;
-    Date::operator--();
-    return aOldDate;
-}
-
 Date operator +( const Date& rDate, long nDays )
 {
     Date aDate( rDate );

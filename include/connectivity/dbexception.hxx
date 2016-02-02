@@ -133,7 +133,6 @@ public:
     TYPE        getType() const { return m_eType; }
 
     operator const css::sdbc::SQLException*    () const;
-    operator const css::sdbc::SQLWarning*      () const;
     operator const css::sdb::SQLContext*       () const;
 
     const css::uno::Any& get() const { return m_aContent; }

@@ -220,16 +220,4 @@ void SbiBuffer::operator +=( sal_Int32 n )
 }
 
 
-void SbiBuffer::operator +=( const OUString& n )
-{
-    sal_uInt32 len = n.getLength() + 1;
-    if( Check( len ) )
-    {
-        OString aByteStr(OUStringToOString(n, osl_getThreadTextEncoding()));
-        memcpy( pCur, aByteStr.getStr(), len );
-        pCur += len;
-        nOff += len;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
