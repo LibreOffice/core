@@ -381,7 +381,7 @@ css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rF
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
-    aFD.Type = 0;   // ??? => Nur an Metric...
+    aFD.Type = 0;   // ??? => Only in Metric...
     return aFD;
 }
 
@@ -411,7 +411,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
     if ( (FontStrikeout)rDescr.Strikeout != STRIKEOUT_DONTKNOW )
         aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
 
-    // Kein DONTKNOW
+    // Not DONTKNOW
     aFont.SetOrientation( (short)rDescr.Orientation );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
