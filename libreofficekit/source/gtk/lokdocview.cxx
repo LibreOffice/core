@@ -569,7 +569,15 @@ postKeyEventInThread(gpointer data)
     }
     if (priv->m_bVisibleAreaSet)
     {
-        // TODO invoke lok::Document::setVisibleArea() here.
+        std::stringstream ss;
+        ss << "lok::Document::setClientVisibleArea(" << priv->m_aVisibleArea.x << ", " << priv->m_aVisibleArea.y << ", ";
+        ss << priv->m_aVisibleArea.width << ", " << priv->m_aVisibleArea.height << ")";
+        g_info("%s", ss.str().c_str());
+        priv->m_pDocument->pClass->setClientVisibleArea(priv->m_pDocument,
+                                                        priv->m_aVisibleArea.x,
+                                                        priv->m_aVisibleArea.y,
+                                                        priv->m_aVisibleArea.width,
+                                                        priv->m_aVisibleArea.height);
         priv->m_bVisibleAreaSet = false;
     }
 

@@ -350,6 +350,7 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis,
                                     int nTilePixelHeight,
                                     int nTileTwipWidth,
                                     int nTileTwipHeight);
+static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
 static int doc_createView(LibreOfficeKitDocument* pThis);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
@@ -396,6 +397,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->resetSelection = doc_resetSelection;
         m_pDocumentClass->getCommandValues = doc_getCommandValues;
         m_pDocumentClass->setClientZoom = doc_setClientZoom;
+        m_pDocumentClass->setClientVisibleArea = doc_setClientVisibleArea;
 
         m_pDocumentClass->createView = doc_createView;
         m_pDocumentClass->destroyView = doc_destroyView;
@@ -1494,6 +1496,19 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
     }
 
     pDoc->setClientZoom(nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+}
+
+static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
+    pDoc->setClientVisibleArea(aRectangle);
 }
 
 static int doc_createView(LibreOfficeKitDocument* /*pThis*/)

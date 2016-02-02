@@ -202,6 +202,11 @@ public:
         (void) nTileTwipWidth;
         (void) nTileTwipHeight;
     }
+
+    /// @see lok::Document::setClientVisibleArea().
+    virtual void setClientVisibleArea(const Rectangle& /*rRectangle*/)
+    {
+    }
 };
 
 } // namespace vcl

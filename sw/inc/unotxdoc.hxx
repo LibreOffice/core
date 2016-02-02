@@ -434,6 +434,8 @@ public:
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) override;
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().
     virtual bool isMimeTypeSupported() override;
+    /// @see vcl::ITiledRenderable::setClientVisibleArea().
+    virtual void setClientVisibleArea(const Rectangle& rRectangle);
     /// @see vcl::ITiledRenderable::getPointer().
     virtual Pointer getPointer() override;
 

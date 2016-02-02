@@ -333,6 +333,21 @@ public:
     }
 
     /**
+     * Inform core about the currently visible area of the document on the
+     * client, so that it can perform e.g. page down (which depends on the
+     * visible height) in a sane way.
+     *
+     * @param nX - top left corner horizontal position
+     * @param nY - top left corner vertical position
+     * @param nWidth - area width
+     * @param nHeight - area height
+     */
+    inline void setClientVisibleArea(int nX, int nY, int nWidth, int nHeight)
+    {
+        mpDoc->pClass->setClientVisibleArea(mpDoc, nX, nY, nWidth, nHeight);
+    }
+
+    /**
      * Create a new view for an existing document.
      * By default a loaded document has 1 view.
      * @return the ID of the new view.
