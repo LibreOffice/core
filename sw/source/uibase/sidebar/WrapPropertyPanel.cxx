@@ -201,6 +201,7 @@ void WrapPropertyPanel::Initialize()
 
 void WrapPropertyPanel::UpdateSpacingLB()
 {
+
     if( (nLeft == nRight) && (nTop == nBottom) && (nLeft == nTop) )
     {
         for(sal_Int32 i = 0; i < mpSpacingLB->GetEntryCount(); i++)
@@ -214,7 +215,8 @@ void WrapPropertyPanel::UpdateSpacingLB()
         }
     }
 
-    mpSpacingLB->InsertEntry(aCustomEntry);
+    if(mpSpacingLB->GetEntryPos(aCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
+        mpSpacingLB->InsertEntry(aCustomEntry);
     mpSpacingLB->SelectEntry(aCustomEntry);
 }
 
