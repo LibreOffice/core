@@ -1765,11 +1765,6 @@ bool WriteDIBBitmapEx(
     return false;
 }
 
-sal_uInt32 getDIBInfoHeaderSize()
-{
-    return DIBINFOHEADERSIZE;
-}
-
 sal_uInt32 getDIBV5HeaderSize()
 {
     return DIBV5HEADERSIZE;

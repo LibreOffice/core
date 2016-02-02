@@ -125,27 +125,18 @@ void LookupTreeTest::testTrieGetAllEntries()
 {
     editeng::Trie trie;
 
-    std::vector<OUString> entries;
-
-    trie.getAllEntries(entries);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 0, entries.size() );
+    CPPUNIT_ASSERT_EQUAL( (size_t) 0, trie.size() );
 
     trie.insert("A");
-    trie.getAllEntries(entries);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 1, entries.size() );
-    entries.clear();
+    CPPUNIT_ASSERT_EQUAL( (size_t) 1, trie.size() );
 
     trie.insert("B");
     trie.insert("C");
-    trie.getAllEntries(entries);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 3, entries.size() );
-    entries.clear();
+    CPPUNIT_ASSERT_EQUAL( (size_t) 3, trie.size() );
 
     trie.insert("AA");
     trie.insert("AAA");
-    trie.getAllEntries(entries);
-    CPPUNIT_ASSERT_EQUAL( (size_t) 5, entries.size() );
-    entries.clear();
+    CPPUNIT_ASSERT_EQUAL( (size_t) 5, trie.size() );
 }
 
 } // namespace end

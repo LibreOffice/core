@@ -209,38 +209,6 @@ namespace drawinglayer
             return (pA->operator==(*pB));
         }
 
-        bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
-        {
-            const bool bAHasElements(rA.hasElements());
-
-            if(bAHasElements != rB.hasElements())
-            {
-                return false;
-            }
-
-            if(!bAHasElements)
-            {
-                return true;
-            }
-
-            const sal_Int32 nCount(rA.getLength());
-
-            if(nCount != rB.getLength())
-            {
-                return false;
-            }
-
-            for(sal_Int32 a(0L); a < nCount; a++)
-            {
-                if(!arePrimitive2DReferencesEqual(rA[a], rB[a]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         bool Primitive2DContainer::operator==(const Primitive2DContainer& rB) const
         {
             const bool bAHasElements(!empty());

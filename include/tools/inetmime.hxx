@@ -302,28 +302,6 @@ public:
      */
     inline INetMIMEOutputSink & operator <<(const sal_Char * pOctets);
 
-    /** Write a sequence of octets.
-
-        @param rOctets  A OString, interpreted as a sequence of octets.
-
-        @return  This instance.
-     */
-    INetMIMEOutputSink & operator <<(const OString& rOctets)
-    {
-        writeSequence(rOctets.getStr(), rOctets.getStr() + rOctets.getLength());
-        return *this;
-    }
-
-    /** Call a manipulator function.
-
-        @param  pManipulator  A manipulator function.
-
-        @return  Whatever the manipulator function returns.
-     */
-    INetMIMEOutputSink &
-    operator <<(INetMIMEOutputSink & (* pManipulator)(INetMIMEOutputSink &))
-    { return pManipulator(*this); }
-
     OString takeBuffer()
     {
         return m_aBuffer.makeStringAndClear();

@@ -64,7 +64,6 @@ namespace drawinglayer { namespace primitive3d {
         Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : vector(init) {}
 
         void append(const Primitive3DContainer& rSource);
-        void append(Primitive3DContainer&& rSource);
         Primitive3DContainer& operator=(const Primitive3DContainer& r) { vector::operator=(r); return *this; }
         Primitive3DContainer& operator=(const Primitive3DContainer&& r) { vector::operator=(r); return *this; }
         bool operator==(const Primitive3DContainer& rB) const;
@@ -111,7 +110,6 @@ namespace drawinglayer
                 Overridden implementation are then based on this implementation.
              */
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
-            bool operator!=( const BasePrimitive3D& rPrimitive ) const { return !operator==(rPrimitive); }
 
             /** This method is for places where using the C++ implementation directly is possible. The subprocessing
                 and range merging is more efficient when working directly on basegfx::B3DRange. The default implementation

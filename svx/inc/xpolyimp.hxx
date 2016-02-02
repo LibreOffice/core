@@ -68,8 +68,6 @@ public:
                 ImpXPolyPolygon() { nRefCount = 1; }
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
                 ~ImpXPolyPolygon();
-
-    bool operator==(const ImpXPolyPolygon& rImpXPolyPoly) const;
 };
 
 

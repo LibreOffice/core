@@ -207,9 +207,6 @@ public:
     /// prefix increment
     const TypeIterator& operator++();
 
-    /// prefix decrement
-    const TypeIterator& operator--();
-
 protected:
     TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);
 };

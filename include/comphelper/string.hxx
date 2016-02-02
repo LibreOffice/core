@@ -38,16 +38,6 @@
 // go into the stable URE API:
 namespace comphelper { namespace string {
 
-/** Compare an OString to a single char
-
-    @param rIn      The input OString
-    @param c        The character to compare againsg
-
-    @return         true if rIn has one char and its equal to c
- */
-inline bool equals(const OString& rIn, sal_Char c)
-{ return rIn.getLength() == 1 && rIn[0] == c; }
-
 /** Compare an OUString to a single char
 
     @param rIn      The input OUString
@@ -398,15 +388,6 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
                     true otherwise, including for empty string
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
-
-/** Compare two strings containing software version numbers
-
-    Inspired by the GNU strverscmp(), but there is no guarantee that the exact
-    same semantics are used, or that the semantics are stable between LibreOffice versions.
-
-    @return -1, 0 or 1
-*/
-COMPHELPER_DLLPUBLIC int compareVersionStrings(const OUString& a, const OUString& b);
 
 } }
 

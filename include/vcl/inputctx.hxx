@@ -68,8 +68,6 @@ public:
 
     InputContext&   operator=( const InputContext& rInputContext );
     bool            operator==( const InputContext& rInputContext ) const;
-    bool            operator!=( const InputContext& rInputContext ) const
-                        { return !(InputContext::operator==( rInputContext )); }
 };
 
 inline InputContext& InputContext::operator=( const InputContext& rInputContext )

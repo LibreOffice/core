@@ -64,7 +64,6 @@ public:
     virtual void ObjectInDestruction(const SdrObject& rObject) override;
 
     SdrMark& operator=(const SdrMark& rMark);
-    bool operator==(const SdrMark& rMark) const;
 
     void SetMarkedSdrObj(SdrObject* pNewObj);
     SdrObject* GetMarkedSdrObj() const { return mpSelectedSdrObject;}

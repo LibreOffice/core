@@ -168,8 +168,6 @@ public:
     Date&           operator -=( long nDays );
     Date&           operator ++();
     Date&           operator --();
-    Date            operator ++( int );
-    Date            operator --( int );
 
     TOOLS_DLLPUBLIC friend Date     operator +( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
