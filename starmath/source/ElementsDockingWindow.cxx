@@ -28,6 +28,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
 SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText) :
@@ -387,10 +388,55 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     rRenderContext.Pop();
 }
 
+void SmElementsControl::RequestHelp(const HelpEvent& rHEvt)
+{
+    if (rHEvt.GetMode() & (HelpEventMode::BALLOON | HelpEventMode::QUICK))
+    {
+        SmElement* pHelpElement = mpCurrentElement;
+
+        if (!rHEvt.KeyboardActivated())
+        {
+            Point aHelpEventPos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+            for (size_t i = 0; i < maElementList.size() ; i++)
+            {
+                SmElement* pElement = maElementList[i].get();
+                Rectangle aRect(pElement->mBoxLocation, pElement->mBoxSize);
+                if (aRect.IsInside(aHelpEventPos))
+                {
+                    pHelpElement = pElement;
+                    break;
+                }
+            }
+        }
+
+        if (!pHelpElement)
+            return;
+
+        Rectangle aHelpRect(pHelpElement->mBoxLocation, pHelpElement->mBoxSize);
+        Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
+        aHelpRect.Left() = aPt.X();
+        aHelpRect.Top()= aPt.Y();
+        aPt = OutputToScreenPixel( aHelpRect.BottomRight() );
+        aHelpRect.Right() = aPt.X();
+        aHelpRect.Bottom() = aPt.Y();
+
+        // get text and display it
+        OUString aStr = pHelpElement->getHelpText();
+        if (rHEvt.GetMode() & HelpEventMode::BALLOON)
+        {
+            Help::ShowBalloon(this, aHelpRect.Center(), aHelpRect, aStr);
+        }
+        else
+            Help::ShowQuickHelp(this, aHelpRect, aStr, aStr, QuickHelpFlags::CtrlText);
+        return;
+    }
+
+    Control::RequestHelp(rHEvt);
+}
+
 void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
 {
     mpCurrentElement = nullptr;
-    OUString tooltip;
     if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
         for (size_t i = 0; i < maElementList.size() ; i++)
@@ -404,17 +450,13 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
                     mpCurrentElement = element;
                     LayoutOrPaintContents();
                     Invalidate();
-                    tooltip = element->getHelpText();
                 }
             }
         }
-    }
-    else
-    {
-        Control::MouseMove (rMouseEvent);
+        return;
     }
 
-    SetQuickHelpText(tooltip);
+    Control::MouseMove(rMouseEvent);
 }
 
 void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
