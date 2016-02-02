@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_8f67d924",
+        "filename": "avmedia/source/vlc/vlcframegrabber.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-02T09:08:41Z",
+      "side": 1,
+      "message": "This would not even compile, would it?",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 12
+      },
+      "revId": "c9435722dade26beaf841eacf6345b171ae1be9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
