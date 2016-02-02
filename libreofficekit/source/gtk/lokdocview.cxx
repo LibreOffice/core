@@ -199,6 +199,8 @@ struct LOKDocView_Impl
     void searchNotFound(const std::string& rPayload);
     /// LOK decided to change parts, need to update UI.
     void setPart(const std::string& rPayload);
+    /// LOK got an error callback.
+    void reportError(const std::string& rPayload);
 };
 
 namespace {
@@ -935,6 +937,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_DOCUMENT_SIZE_CHANGED";
     case LOK_CALLBACK_SET_PART:
         return "LOK_CALLBACK_SET_PART";
+    case LOK_CALLBACK_ERROR:
+        return "LOK_CALLBACK_ERROR";
     }
     return 0;
 }
@@ -1042,6 +1046,11 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         setPart(pCallback->m_aPayload);
     }
     break;
+    case LOK_CALLBACK_ERROR:
+    {
+        reportError(pCallback->m_aPayload);
+    }
+    break;
     default:
         g_assert(false);
         break;
@@ -1107,6 +1116,18 @@ void LOKDocView_Impl::setPart(const std::string& rString)
 {
     g_signal_emit(m_pDocView, docview_signals[PART_CHANGED], 0, std::stoi(rString));
     renderDocument(0);
+}
+
+void LOKDocView_Impl::reportError(const std::string& rString)
+{
+    GtkWidget *dialog = gtk_message_dialog_new(nullptr,
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_CLOSE,
+            "%s",
+            rString.c_str());
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
 }
 
 static void lok_docview_class_init( gpointer ptr )

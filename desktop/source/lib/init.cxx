@@ -271,7 +271,7 @@ static OUString getAbsoluteURL(const char* pURL)
     return OUString();
 }
 
-static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::PropertyValue>& rPropertyValues)
+static std::vector<beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON)
 {
     std::vector<beans::PropertyValue> aArguments;
     if (pJSON)
@@ -298,11 +298,11 @@ static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::Propert
             else if (rType == "unsigned short")
                 aValue.Value <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
             else
-                SAL_WARN("desktop.lib", "jsonToPropertyValues: unhandled type '"<<rType<<"'");
+                SAL_WARN("desktop.lib", "jsonToPropertyValuesVector: unhandled type '"<<rType<<"'");
             aArguments.push_back(aValue);
         }
     }
-    rPropertyValues = comphelper::containerToSequence(aArguments);
+    return aArguments;
 }
 
 extern "C"
@@ -549,7 +549,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                                        beans::PropertyState_DIRECT_VALUE);
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), pLib));
+            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "load", pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
         aFilterOptions[1].Name = "InteractionHandler";
@@ -1034,9 +1034,9 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     if (pDoc)
     {
         doc_iniUnoCommands();
-        uno::Sequence<beans::PropertyValue> aPropertyValues;
-        jsonToPropertyValues(pArguments, aPropertyValues);
-        pDoc->initializeForTiledRendering(aPropertyValues);
+
+        pDoc->initializeForTiledRendering(
+                comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
     }
 }
 
@@ -1126,20 +1126,33 @@ public:
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
-
-    uno::Sequence<beans::PropertyValue> aPropertyValues;
-    jsonToPropertyValues(pArguments, aPropertyValues);
-    bool bResult = false;
-
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
+
+    // handle potential interaction
+    if (aCommand == ".uno:Save")
+    {
+        rtl::Reference<LOKInteractionHandler> const pInteraction(
+            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "save", gImpl, pDocument));
+        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
+
+        beans::PropertyValue aValue;
+        aValue.Name = "InteractionHandler";
+        aValue.Value <<= xInteraction;
+
+        aPropertyValuesVector.push_back(aValue);
+    }
+
+    bool bResult = false;
 
     if (bNotifyWhenFinished && pDocument->mpCallback)
     {
-        bResult = comphelper::dispatchCommand(aCommand, aPropertyValues,
+        bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
                 new DispatchResultListener(pCommand, pDocument->mpCallback, pDocument->mpCallbackData));
     }
     else
-        bResult = comphelper::dispatchCommand(aCommand, aPropertyValues);
+        bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
 
     if (!bResult)
     {
