@@ -294,7 +294,7 @@ namespace vclcanvas
         static ::canvas::tools::ElapsedTime aElapsedTime;
 
         // log time immediately after surface flip
-        SAL_INFO("canvas.vcl", "SpriteCanvasHelper::updateScreen(): flip done at %f"<<
+        SAL_INFO("canvas.vcl", "SpriteCanvasHelper::updateScreen(): flip done at " <<
                    aElapsedTime.getElapsedTime() );
 #endif
 
