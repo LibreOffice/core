@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_cf39e143",
+        "filename": "svx/source/dialog/rlrcitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-02T07:58:30Z",
+      "side": 1,
+      "message": "Please read up on De Morgan\u0027s Law.",
+      "range": {
+        "startLine": 65,
+        "startChar": 42,
+        "endLine": 65,
+        "endChar": 44
+      },
+      "revId": "e26e5589358c56508949e2524bbee1daa911a659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
