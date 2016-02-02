@@ -57,9 +57,6 @@
 using namespace ::com::sun::star;
 
 
-//  class VCLUnoHelper
-
-
 uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -513,8 +510,6 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
 
 using namespace ::com::sun::star::util;
 
-
-//= file-local helpers
 
 namespace
 {
