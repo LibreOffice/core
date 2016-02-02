@@ -570,6 +570,32 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_ON:
         {
+            OUString m_sToolboxName = "private:resource/toolbar/changes";
+            css::uno::Reference< css::frame::XFrame > xFrame =
+                          GetViewFrame()->GetFrame().GetFrameInterface();
+            if (xFrame.is())
+            {
+                css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+                if (xPropSet.is())
+                {
+                    uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutMgr;
+                    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutMgr;
+                    if ( xLayoutMgr.is() )
+                    {
+                        if ( xLayoutMgr->isElementVisible( m_sToolboxName ))
+                        {
+                            xLayoutMgr->hideElement( m_sToolboxName );
+                            xLayoutMgr->destroyElement( m_sToolboxName );
+                        }
+                        else
+                        {
+                            xLayoutMgr->createElement( m_sToolboxName );
+                            xLayoutMgr->showElement( m_sToolboxName );
+                        }
+                    }
+               }
+           }
+
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
             {
