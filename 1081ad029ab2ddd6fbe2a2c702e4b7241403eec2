@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_efe77daa",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T08:55:22Z",
+      "side": 1,
+      "message": "adding a ! in front of the whole expression, makes it very hard to read, the logic needs to be changed (or use another macro).",
+      "revId": "1081ad029ab2ddd6fbe2a2c702e4b7241403eec2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_cfec4192",
+        "filename": "formula/source/core/api/token.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T08:55:22Z",
+      "side": 1,
+      "message": "Why the ! ??",
+      "revId": "1081ad029ab2ddd6fbe2a2c702e4b7241403eec2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
