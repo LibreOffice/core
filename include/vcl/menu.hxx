@@ -447,9 +447,6 @@ public:
     /// Close the 'pStartedFrom' menu window.
     virtual void ClosePopup(Menu* pMenu) override;
 
-    /// Deactivate the MenuBarWindow.
-    void DeactivateMenuBar(VclPtr<vcl::Window>& xFocusId);
-
     /// Forward the KeyInput call to the MenuBar.
     virtual void MenuBarKeyInput(const KeyEvent& rEvent) override;
 

@@ -3695,51 +3695,6 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     }
 }
 
-bool INetURLObject::operator <(INetURLObject const & rObject) const
-{
-    sal_Int32 nCompare = m_aScheme.compare(
-        rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef);
-    if (nCompare < 0) {
-        return true;
-    } else if (nCompare > 0) {
-        return false;
-    }
-    sal_uInt32 nPort1 = GetPort();
-    sal_uInt32 nPort2 = rObject.GetPort();
-    if (nPort1 < nPort2)
-        return true;
-    else if (nPort1 > nPort2)
-        return false;
-    nCompare = GetUser(NO_DECODE).compareTo(rObject.GetUser(NO_DECODE));
-    if (nCompare < 0)
-        return true;
-    else if (nCompare > 0)
-        return false;
-    nCompare = GetPass(NO_DECODE).compareTo(rObject.GetPass(NO_DECODE));
-    if (nCompare < 0)
-        return true;
-    else if (nCompare > 0)
-        return false;
-    nCompare = GetHost(NO_DECODE).compareTo(rObject.GetHost(NO_DECODE));
-    if (nCompare < 0)
-        return true;
-    else if (nCompare > 0)
-        return false;
-    const OUString &rPath1(GetURLPath(NO_DECODE));
-    const OUString &rPath2(rObject.GetURLPath(NO_DECODE));
-    nCompare = rPath1.compareTo(rPath2);
-    if (nCompare < 0)
-        return true;
-    else if (nCompare > 0)
-        return false;
-    nCompare = GetParam(NO_DECODE).compareTo(rObject.GetParam(NO_DECODE));
-    if (nCompare < 0)
-        return true;
-    else if (nCompare > 0)
-        return false;
-    return GetMsgId(NO_DECODE).compareTo(INetURLObject::GetMsgId(NO_DECODE)) < 0;
-}
-
 bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                                OUString const & rTheUser,
                                OUString const & rThePassword,

@@ -68,41 +68,6 @@ class CheckedIterator
 
         // interface methods
 
-        /*-****************************************************************************************************
-            @short      step to next element in container.
-            @descr      If end of container is reached we change our internal "m_eEndState".
-                        If end reached for first time; we set it to E_END;
-                        If you step to next element again; we set it to E_AFTEREND.
-                        So you have a chance to differ between "exact end" and "after end"!
-
-            @return     A reference to our changed object himself.
-        *//*-*****************************************************************************************************/
-
-        inline CheckedIterator& operator++()
-        {
-            // Warn programmer if he forget to initialize object!
-            SAL_WARN_IF( m_pContainer==nullptr, "fwk", "CheckedIterator::operator++(): Object not initialized!" );
-            // Step to next element if any exist or set our end states.
-            switch( m_eEndState )
-            {
-                case E_BEFOREEND:   {
-                                        ++m_pPosition;
-                                        // If iterator reaching end ... set right state!
-                                        if( m_pPosition == m_pContainer->end() )
-                                        {
-                                            m_eEndState = E_END;
-                                        }
-                                    }
-                                    break;
-                case E_END      :   {
-                                        // Set state only ... iterator already points to end of container!
-                                        m_eEndState = E_AFTEREND;
-                                    }
-                                    break;
-            }
-            return *this;
-        }
-
     //  private member
 
     private:

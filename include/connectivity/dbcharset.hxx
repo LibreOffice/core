@@ -141,13 +141,9 @@ namespace dbtools
 
         /// prefix increment
         const CharsetIterator&  operator++();
-        /// postfix increment
-        const CharsetIterator   operator++(int) { CharsetIterator hold(*this); ++*this; return hold; }
 
         /// prefix decrement
         const CharsetIterator&  operator--();
-        /// postfix decrement
-        const CharsetIterator   operator--(int) { CharsetIterator hold(*this); --*this; return hold; }
 
     protected:
         CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos );

@@ -897,20 +897,6 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
     aXPolyList.clear();
 }
 
-bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
-{
-    size_t nCount = aXPolyList.size();
-    const XPolygonList& rCmpList = rImpXPolyPoly.aXPolyList;
-    if ( nCount != rCmpList.size() ) return false;
-    bool bEq=true;
-    for ( size_t i = nCount; i > 0 && bEq; )
-    {
-        i--;
-        bEq = ( *aXPolyList[ i ] == *rCmpList[ i ] );
-    }
-    return bEq;
-}
-
 XPolyPolygon::XPolyPolygon( sal_uInt16 /*nInitSize*/, sal_uInt16 /*nResize*/ )
 {
     pImpXPolyPolygon = new ImpXPolyPolygon();
