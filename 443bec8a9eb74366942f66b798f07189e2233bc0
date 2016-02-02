@@ -22,6 +22,30 @@
       "revId": "443bec8a9eb74366942f66b798f07189e2233bc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6fe54da7",
+        "filename": "svx/source/sdr/properties/emptyproperties.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001104
+      },
+      "writtenOn": "2016-02-02T09:47:56Z",
+      "side": 1,
+      "message": "Okay, I will abandon this patch.",
+      "parentUuid": "3aaa91ec_cf5e0176",
+      "range": {
+        "startLine": 37,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 23
+      },
+      "revId": "443bec8a9eb74366942f66b798f07189e2233bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
