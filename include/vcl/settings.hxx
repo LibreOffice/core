@@ -671,7 +671,6 @@ public:
     sal_uLong                       GetBalloonDelay() const;
 
     bool                            operator ==( const HelpSettings& rSet ) const;
-    bool                            operator !=( const HelpSettings& rSet ) const;
 };
 
 
@@ -729,7 +728,6 @@ public:
     AllSettingsFlags                        GetChangeFlags( const AllSettings& rSettings ) const;
 
     bool                                    operator ==( const AllSettings& rSet ) const;
-    bool                                    operator !=( const AllSettings& rSet ) const;
     static void                             LocaleSettingsChanged( sal_uInt32 nHint );
     SvtSysLocale&                           GetSysLocale();
 };

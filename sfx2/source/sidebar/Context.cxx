@@ -68,12 +68,6 @@ sal_Int32 Context::EvaluateMatch (
     return NoMatch;
 }
 
-bool Context::operator== (const Context& rOther) const
-{
-    return msApplication.equals(rOther.msApplication)
-        && msContext.equals(rOther.msContext);
-}
-
 bool Context::operator!= (const Context& rOther) const
 {
     return ( ! msApplication.equals(rOther.msApplication))

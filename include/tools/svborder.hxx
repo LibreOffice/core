@@ -67,14 +67,6 @@ public:
                 Bottom() += rBorder.Bottom();
                 return *this;
             }
-    SvBorder & operator -= ( const SvBorder & rBorder )
-            {
-                Left()   -= rBorder.Left();
-                Top()    -= rBorder.Top();
-                Right()  -= rBorder.Right();
-                Bottom() -= rBorder.Bottom();
-                return *this;
-            }
     long &  Top()    { return nTop; }
     long &  Right()  { return nRight; }
     long &  Bottom() { return nBottom; }
@@ -86,7 +78,6 @@ public:
 };
 
 TOOLS_DLLPUBLIC Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder );
-TOOLS_DLLPUBLIC Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder );
 
 #endif
 

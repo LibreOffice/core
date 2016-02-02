@@ -95,12 +95,6 @@ bool EnumContext::operator== (const EnumContext& rOther)
         && meContext==rOther.meContext;
 }
 
-bool EnumContext::operator!= (const EnumContext& rOther)
-{
-    return meApplication!=rOther.meApplication
-        || meContext!=rOther.meContext;
-}
-
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eApplication)
 {
     maApplicationMap[rsName] = eApplication;

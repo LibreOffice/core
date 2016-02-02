@@ -37,7 +37,6 @@ public:
    ~SbiBuffer();
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
-    void operator += (const OUString&); // save basic-string
     void operator += (sal_Int8);        // save character
     void operator += (sal_Int16);       // save integer
     bool operator += (sal_uInt8);       // save character

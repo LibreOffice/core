@@ -102,8 +102,6 @@ public:
 
     Animation&      operator=( const Animation& rAnimation );
     bool            operator==( const Animation& rAnimation ) const;
-    bool            operator!=( const Animation& rAnimation ) const
-                        { return !(*this==rAnimation); }
 
     void            Clear();
 
