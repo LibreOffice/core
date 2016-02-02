@@ -188,8 +188,8 @@ bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SfxTabPage::Reset( const SfxItemSet* rSet )
 {
-    pImpl->maItemConn.DoApplyFlags( *rSet );
-    pImpl->maItemConn.DoReset( *rSet );
+    pImpl->maItemConn.DoApplyFlags( rSet );
+    pImpl->maItemConn.DoReset( rSet );
 }
 
 void SfxTabPage::ActivatePage( const SfxItemSet& )

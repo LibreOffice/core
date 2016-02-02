@@ -184,9 +184,9 @@ public:
     bool                IsActive() const;
 
     /** Calls the virtual ApplyFlags() function, if connection is active. */
-    void                DoApplyFlags( const SfxItemSet& rItemSet );
+    void                DoApplyFlags( const SfxItemSet* pItemSet );
     /** Calls the virtual Reset() function, if connection is active. */
-    void                DoReset( const SfxItemSet& rItemSet );
+    void                DoReset( const SfxItemSet* pItemSet );
     /** Calls the virtual FillItemSet() function, if connection is active. */
     bool                DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
@@ -194,9 +194,9 @@ protected:
     explicit            ItemConnectionBase( ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
     /** Derived classes implement actions according to current flags here. */
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) = 0;
+    virtual void        ApplyFlags( const SfxItemSet* pItemSet ) = 0;
     /** Derived classes implement initializing controls from item sets here. */
-    virtual void        Reset( const SfxItemSet& rItemSet ) = 0;
+    virtual void        Reset( const SfxItemSet* pItemSet ) = 0;
     /** Derived classes implement filling item sets from controls here. */
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) = 0;
 
@@ -252,9 +252,9 @@ public:
 
 protected:
     /** Actions according to current flags for the control. */
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) override;
+    virtual void        ApplyFlags( const SfxItemSet* pItemSet ) override;
     /** Resets the control according to the item contents. */
-    virtual void        Reset( const SfxItemSet& rItemSet ) override;
+    virtual void        Reset( const SfxItemSet* pItemSet ) override;
     /** Fills the item set according to the control's state. */
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
@@ -281,8 +281,8 @@ public:
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
 protected:
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) override;
-    virtual void        Reset( const SfxItemSet& rItemSet ) override;
+    virtual void        ApplyFlags( const SfxItemSet* pItemSet ) override;
+    virtual void        Reset( const SfxItemSet* pItemSet ) override;
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
 private:
@@ -421,8 +421,8 @@ public:
     void                AddConnection( ItemConnectionBase* pConnection );
 
 protected:
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) override;
-    virtual void        Reset( const SfxItemSet& rItemSet ) override;
+    virtual void        ApplyFlags( const SfxItemSet* pItemSet ) override;
+    virtual void        Reset( const SfxItemSet* pItemSet ) override;
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
 private:
@@ -463,16 +463,16 @@ ItemControlConnection< ItemWrpT, ControlWrpT >::~ItemControlConnection()
 }
 
 template< typename ItemWrpT, typename ControlWrpT >
-void ItemControlConnection< ItemWrpT, ControlWrpT >::ApplyFlags( const SfxItemSet& rItemSet )
+void ItemControlConnection< ItemWrpT, ControlWrpT >::ApplyFlags( const SfxItemSet* pItemSet )
 {
-    bool bKnown = ItemWrapperHelper::IsKnownItem( rItemSet, maItemWrp.GetSlotId() );
+    bool bKnown = ItemWrapperHelper::IsKnownItem( *pItemSet, maItemWrp.GetSlotId() );
     mxCtrlWrp->ModifyControl( GetEnableState( bKnown ), GetShowState( bKnown ) );
 }
 
 template< typename ItemWrpT, typename ControlWrpT >
-void ItemControlConnection< ItemWrpT, ControlWrpT >::Reset( const SfxItemSet& rItemSet )
+void ItemControlConnection< ItemWrpT, ControlWrpT >::Reset( const SfxItemSet* pItemSet )
 {
-    const ItemType* pItem = maItemWrp.GetUniqueItem( rItemSet );
+    const ItemType* pItem = maItemWrp.GetUniqueItem( *pItemSet );
     mxCtrlWrp->SetControlDontKnow( pItem == nullptr );
     if( pItem )
         mxCtrlWrp->SetControlValue( maItemWrp.GetItemValue( *pItem ) );

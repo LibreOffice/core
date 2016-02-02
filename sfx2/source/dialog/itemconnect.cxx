@@ -222,16 +222,16 @@ bool ItemConnectionBase::IsActive() const
     return !(mnFlags & ITEMCONN_INACTIVE);
 }
 
-void ItemConnectionBase::DoApplyFlags( const SfxItemSet& rItemSet )
+void ItemConnectionBase::DoApplyFlags( const SfxItemSet* pItemSet )
 {
     if( IsActive() )
-        ApplyFlags( rItemSet );
+        ApplyFlags( pItemSet );
 }
 
-void ItemConnectionBase::DoReset( const SfxItemSet& rItemSet )
+void ItemConnectionBase::DoReset( const SfxItemSet* pItemSet )
 {
     if( IsActive() )
-        Reset( rItemSet );
+        Reset( pItemSet );
 }
 
 bool ItemConnectionBase::DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
@@ -260,13 +260,13 @@ DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow
 {
 }
 
-void DummyItemConnection::ApplyFlags( const SfxItemSet& rItemSet )
+void DummyItemConnection::ApplyFlags( const SfxItemSet* pItemSet )
 {
-    bool bKnown = ItemWrapperHelper::IsKnownItem( rItemSet, mnSlot );
+    bool bKnown = ItemWrapperHelper::IsKnownItem( *pItemSet, mnSlot );
     ModifyControl( GetEnableState( bKnown ), GetShowState( bKnown ) );
 }
 
-void DummyItemConnection::Reset( const SfxItemSet& /*rItemSet*/ )
+void DummyItemConnection::Reset( const SfxItemSet* )
 {
 }
 
@@ -284,8 +284,8 @@ class ItemConnectionArrayImpl
 public:
     void                        Append( ItemConnectionBase* pConnection );
 
-    void                        ApplyFlags( const SfxItemSet& rItemSet );
-    void                        Reset( const SfxItemSet& rItemSet );
+    void                        ApplyFlags( const SfxItemSet* pItemSet );
+    void                        Reset( const SfxItemSet* pItemSet );
     bool                        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
 private:
@@ -302,16 +302,16 @@ void ItemConnectionArrayImpl::Append( ItemConnectionBase* pConnection )
         maList.push_back( ItemConnectionRef( pConnection ) );
 }
 
-void ItemConnectionArrayImpl::ApplyFlags( const SfxItemSet& rItemSet )
+void ItemConnectionArrayImpl::ApplyFlags( const SfxItemSet* pItemSet )
 {
     for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
-        (*aIt)->DoApplyFlags( rItemSet );
+        (*aIt)->DoApplyFlags( pItemSet );
 }
 
-void ItemConnectionArrayImpl::Reset( const SfxItemSet& rItemSet )
+void ItemConnectionArrayImpl::Reset( const SfxItemSet* pItemSet )
 {
     for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
-        (*aIt)->DoReset( rItemSet );
+        (*aIt)->DoReset( pItemSet );
 }
 
 bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
@@ -338,14 +338,14 @@ void ItemConnectionArray::AddConnection( ItemConnectionBase* pConnection )
     mxImpl->Append( pConnection );
 }
 
-void ItemConnectionArray::ApplyFlags( const SfxItemSet& rItemSet )
+void ItemConnectionArray::ApplyFlags( const SfxItemSet* pItemSet )
 {
-    mxImpl->ApplyFlags( rItemSet );
+    mxImpl->ApplyFlags( pItemSet );
 }
 
-void ItemConnectionArray::Reset( const SfxItemSet& rItemSet )
+void ItemConnectionArray::Reset( const SfxItemSet* pItemSet )
 {
-    mxImpl->Reset( rItemSet );
+    mxImpl->Reset( pItemSet );
 }
 
 bool ItemConnectionArray::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
