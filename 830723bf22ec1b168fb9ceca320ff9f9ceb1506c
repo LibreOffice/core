@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_6faa6d1b",
+        "filename": "framework/source/fwi/helper/mischelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "Why use SAL_WARN_IF when it is alwys true ??\n\nthat is a case for SAL_WARNING.",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_af629514",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "why use SAL_WARN_IF, if it is always true ?",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_ef6c9d0a",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "why use SAL_WARN_IF, if it is always true",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_cf71e1e2",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "why use SAL_WARN_IF, if it is always true",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_2f77c5d5",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "why use SAL_WARN_IF, if it is always true",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6f81cd8f",
+        "filename": "framework/source/uielement/langselectionstatusbarcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "this is Not the opposite logic of the DBG_ASSERT, please control the logic.",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_4f7e91af",
+        "filename": "framework/source/uielement/langselectionstatusbarcontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-02T09:10:46Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "830723bf22ec1b168fb9ceca320ff9f9ceb1506c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
