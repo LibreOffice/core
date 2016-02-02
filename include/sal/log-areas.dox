@@ -526,6 +526,7 @@ certain functionality.
 @li @c drawinglayer
 @li @c helpcompiler
 @li @c jvmaccess
+@li @c lingucomponent
 @li @c linguistic
 @li @c lwp - lotuswordpro
 @li @c mysqlc

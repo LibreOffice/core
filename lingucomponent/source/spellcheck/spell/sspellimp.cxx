@@ -43,6 +43,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
+#include <sal/log.hxx>
 
 #include <list>
 #include <set>
@@ -153,12 +154,24 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             {
                 uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                 uno::Sequence< OUString > aLocations( aDictIt->aLocations );
-                sal_Int32 nLen2 = aLocaleNames.getLength();
-                for (k = 0;  k < nLen2;  ++k)
+                SAL_WARN_IF(
+                    aLocaleNames.hasElements() && !aLocations.hasElements(),
+                    "lingucomponent", "no locations");
+                if (aLocations.hasElements())
                 {
-                    if (xAccess.is() && xAccess->exists(aLocations[k]))
+                    if (xAccess.is() && xAccess->exists(aLocations[0]))
                     {
-                        aLocaleNamesSet.insert( aLocaleNames[k] );
+                        sal_Int32 nLen2 = aLocaleNames.getLength();
+                        for (k = 0;  k < nLen2;  ++k)
+                        {
+                            aLocaleNamesSet.insert( aLocaleNames[k] );
+                        }
+                    }
+                    else
+                    {
+                        SAL_WARN(
+                            "lingucomponent",
+                            "missing <" << aLocations[0] << ">");
                     }
                 }
             }
