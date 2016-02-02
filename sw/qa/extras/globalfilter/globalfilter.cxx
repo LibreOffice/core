@@ -516,7 +516,7 @@ void Test::testCharHighlightODF()
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OUString::createFromAscii("writer8");
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
