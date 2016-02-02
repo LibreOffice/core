@@ -30,6 +30,7 @@ public:
     void testImageWithSpecialID();
     void testGraphicShape();
     void testCharHighlight();
+    void testCharHighlightODF();
     void testCharHighlightBody();
     void testMSCharBackgroundEditing();
     void testCharBackgroundToHighlighting();
@@ -43,6 +44,7 @@ public:
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testGraphicShape);
     CPPUNIT_TEST(testCharHighlight);
+    CPPUNIT_TEST(testCharHighlightODF);
     CPPUNIT_TEST(testMSCharBackgroundEditing);
     CPPUNIT_TEST(testCharBackgroundToHighlighting);
 #if !defined(WNT)
@@ -471,6 +473,84 @@ void Test::testCharHighlight()
     rOpt.SetCharBackground2Highlighting();
 
     testCharHighlightBody();
+}
+
+void Test::testCharHighlightODF()
+{
+    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
+                                      "com.sun.star.text.TextDocument");
+
+    // don't check import, testMSCharBackgroundEditing already does that
+
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    for (int i = 1; i <= 4; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xRun(getRun(xPara,i), uno::UNO_QUERY);
+        switch (i)
+        {
+            case 1: // non-transparent highlight
+            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(true));
+            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(64)));
+            break;
+
+            case 2: // transparent backcolor
+            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(true));
+            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
+            break;
+
+            case 3: // non-transparent backcolor
+            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(false));
+            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
+            break;
+
+            case 4: // non-transparent highlight again
+            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(false));
+            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(64)));
+            break;
+        }
+    }
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString::createFromAscii("writer8");
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+    xComponent->dispose();
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+    xPara.set(getParagraph(1));
+    for (int i = 1; i <= 4; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xRun(getRun(xPara,i), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun, "CharHighlight"));
+        switch (i)
+        {
+            case 1: // non-transparent highlight
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(64), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            break;
+            case 2: // transparent backcolor
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            break;
+            case 3: // non-transparent backcolor
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(128), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            break;
+            case 4: // non-transparent highlight again
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(64), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(sal_False, getProperty<sal_Bool>(xRun, "CharBackTransparent"));
+            break;
+        }
+    }
 }
 
 void Test::testMSCharBackgroundEditing()

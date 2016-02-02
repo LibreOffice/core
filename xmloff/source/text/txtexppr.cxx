@@ -669,6 +669,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     // character background and highlight
     XMLPropertyState* pCharBackground = nullptr;
+    XMLPropertyState* pCharBackgroundTransparency = nullptr;
     XMLPropertyState* pCharHighlight = nullptr;
 
     bool bNeedsAnchor = false;
@@ -831,6 +832,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             break;
 
         case CTF_CHAR_BACKGROUND: pCharBackground = propertyState; break;
+        case CTF_CHAR_BACKGROUND_TRANSPARENCY: pCharBackgroundTransparency = propertyState; break;
         case CTF_CHAR_HIGHLIGHT: pCharHighlight = propertyState; break;
         }
     }
@@ -1137,12 +1139,20 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     // When both background attributes are available export the visible one
     if( pCharHighlight && pCharBackground )
     {
+        assert(pCharBackgroundTransparency); // always together
         sal_uInt32 nColor = COL_TRANSPARENT;
         pCharHighlight->maValue >>= nColor;
         if( nColor == COL_TRANSPARENT )
+        {
+            // actually this would not be exported as transparent anyway
+            // and we'd need another property CharHighlightTransparent for that
             pCharHighlight->mnIndex = -1;
+        }
         else
+        {
             pCharBackground->mnIndex = -1;
+            pCharBackgroundTransparency->mnIndex = -1;
+        }
     }
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
