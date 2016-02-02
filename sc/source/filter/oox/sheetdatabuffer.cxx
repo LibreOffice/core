@@ -753,16 +753,6 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
     // do merge
     if( bMultiCol || bMultiRow )
         rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
-    // #i93609# merged range in a single row: test if manual row height is needed
-    if( !bMultiRow )
-    {
-        bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
-        if( !bTextWrap && (rDoc.GetCellType( rStart ) == CELLTYPE_EDIT) )
-        {
-            if (const EditTextObject* pEditObj = rDoc.GetEditText(rStart))
-                bTextWrap = pEditObj->GetParagraphCount() > 1;
-        }
-    }
 }
 
 } // namespace xls
