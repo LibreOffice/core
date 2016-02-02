@@ -43,7 +43,7 @@ SfxStyleDialog::SfxStyleDialog
 */
 
     : SfxTabDialog(pParent, rID, rUIXMLDescription,
-                  rStyle.GetItemSet().Clone(), true)
+                  &rStyle.GetItemSet(), true)
     , pStyle( &rStyle )
 
 {
