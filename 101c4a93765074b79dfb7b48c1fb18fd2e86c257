@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_2f6d0533",
+        "filename": "svx/source/dialog/rlrcitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-02T08:17:08Z",
+      "side": 1,
+      "message": "This one still wrong",
+      "range": {
+        "startLine": 98,
+        "startChar": 42,
+        "endLine": 98,
+        "endChar": 44
+      },
+      "revId": "101c4a93765074b79dfb7b48c1fb18fd2e86c257",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
