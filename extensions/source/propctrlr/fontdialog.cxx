@@ -494,7 +494,7 @@ namespace pcr
 
         SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
         *pCounter++ = new SvxFontItem(aDefaultVCLFont.GetFamilyType(), aDefaultVCLFont.GetFamilyName(), aDefaultVCLFont.GetStyleName(), aDefaultVCLFont.GetPitch(), aDefaultVCLFont.GetCharSet(), CFID_FONT);
-        *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_HEIGHT);
+        *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetFontHeight(), 100, CFID_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_WEIGHT);
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_POSTURE);
         *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
@@ -506,7 +506,7 @@ namespace pcr
         *pCounter++ = new SvxEmphasisMarkItem(aDefaultVCLFont.GetEmphasisMark(), CFID_EMPHASIS);
 
         *pCounter++ = new SvxFontItem(aDefaultVCLFont.GetFamilyType(), aDefaultVCLFont.GetFamilyName(), aDefaultVCLFont.GetStyleName(), aDefaultVCLFont.GetPitch(), aDefaultVCLFont.GetCharSet(), CFID_CJK_FONT);
-        *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_CJK_HEIGHT);
+        *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetFontHeight(), 100, CFID_CJK_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_CJK_WEIGHT);
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_CJK_POSTURE);
         *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_CJK_LANGUAGE);

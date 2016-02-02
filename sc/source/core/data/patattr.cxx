@@ -399,11 +399,11 @@ void ScPatternAttr::GetFont(
             aDestMode.SetScaleY( aFractOne );
             aEffSize = OutputDevice::LogicToLogic( aSize, aSrcMode, aDestMode );
         }
-        rFont.SetSize( aEffSize );
+        rFont.SetFontSize( aEffSize );
     }
     else /* if pOutDev != NULL */
     {
-        rFont.SetSize( Size( 0, (long) nFontHeight ) );
+        rFont.SetFontSize( Size( 0, (long) nFontHeight ) );
     }
 
     //  determine effective font color

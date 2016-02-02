@@ -2047,7 +2047,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SfxItemState::SET ) )
         rFont.SetFillColor( static_cast<const SvxBackgroundColorItem&>(rSet.Get( EE_CHAR_BKGCOLOR )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SfxItemState::SET ) )
-        rFont.SetSize( Size( rFont.GetSize().Width(), static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
+        rFont.SetFontSize( Size( rFont.GetFontSize().Width(), static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SfxItemState::SET ) )
         rFont.SetWeight( static_cast<const SvxWeightItem&>(rSet.Get( nWhich_Weight )).GetWeight() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET ) )

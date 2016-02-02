@@ -238,7 +238,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         SolarMutexGuard aGuard;
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         // converting the cell height into a font height
-        aFont.SetSize( aFontSize );
+        aFont.SetFontSize( aFontSize );
         pVDev->SetFont( aFont );
         FontMetric aMetric( pVDev->GetFontMetric() );
         long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
@@ -252,7 +252,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     // Convert height to positive
     aFontSize.Height() = std::abs(aFontSize.Height());
 
-    aFont.SetSize(aFontSize);
+    aFont.SetFontSize(aFontSize);
 };
 
 WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem )
@@ -482,12 +482,12 @@ void WinMtfOutput::ImplMap( vcl::Font& rFont )
 {
     // !!! HACK: we now always set the width to zero because the OS width is interpreted differently;
     // must later be made portable in SV (KA 1996-02-08)
-    Size  aFontSize = ImplMap (rFont.GetSize(), false);
+    Size  aFontSize = ImplMap (rFont.GetFontSize(), false);
 
     if( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
 
-    rFont.SetSize( aFontSize );
+    rFont.SetFontSize( aFontSize );
 
     if( ( mnWinExtX * mnWinExtY ) < 0 )
         rFont.SetOrientation( 3600 - rFont.GetOrientation() );
@@ -687,8 +687,8 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
         if ( eType == GDI_FONT )
         {
             WinMtfFontStyle* pFontStyle = static_cast<WinMtfFontStyle*>(pStyle);
-            if (pFontStyle->aFont.GetHeight() == 0)
-                pFontStyle->aFont.SetHeight(423);
+            if (pFontStyle->aFont.GetFontHeight() == 0)
+                pFontStyle->aFont.SetFontHeight(423);
             ImplMap(pFontStyle->aFont); // defaulting to 12pt
         }
         else if ( eType == GDI_PEN )
@@ -721,8 +721,8 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
             if ( eType == GDI_FONT )
             {
                 WinMtfFontStyle* pFontStyle = static_cast<WinMtfFontStyle*>(pStyle);
-                if (pFontStyle->aFont.GetHeight() == 0)
-                    pFontStyle->aFont.SetHeight(423);
+                if (pFontStyle->aFont.GetFontHeight() == 0)
+                    pFontStyle->aFont.SetFontHeight(423);
                 ImplMap(pFontStyle->aFont);
             }
             else if ( eType == GDI_PEN )
@@ -858,7 +858,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 
     maFont.SetFamilyName( "Arial" );                                         // sj: #i57205#, we do have some scaling problems if using
     maFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );                           // the default font then most times a x11 font is used, we
-    maFont.SetHeight( 423 );                                                 // will prevent this defining a font
+    maFont.SetFontHeight( 423 );                                      // will prevent this defining a font
 
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );

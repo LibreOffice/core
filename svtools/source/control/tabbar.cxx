@@ -638,9 +638,9 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
         while (GetTextHeight() > (GetOutputSizePixel().Height() - 1))
         {
             vcl::Font aFont = GetFont();
-            if (aFont.GetHeight() <= 6)
+            if (aFont.GetFontHeight() <= 6)
                 break;
-            aFont.SetHeight(aFont.GetHeight() - 1);
+            aFont.SetFontHeight(aFont.GetFontHeight() - 1);
             SetFont(aFont);
         }
     }
@@ -723,7 +723,7 @@ bool TabBar::ImplCalcWidth()
         }
 
         // Padding is dependent on font height - bigger font = bigger padding
-        long nFontWidth = aFont.GetHeight();
+        long nFontWidth = aFont.GetFontHeight();
         nNewWidth += nFontWidth * 2;
 
         if (pItem->mnWidth != nNewWidth)

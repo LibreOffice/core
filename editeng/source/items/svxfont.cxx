@@ -321,8 +321,8 @@ void SvxFont::SetPhysFont( OutputDevice *pOut ) const
     else
     {
         Font aNewFont( *this );
-        Size aSize( aNewFont.GetSize() );
-        aNewFont.SetSize( Size( aSize.Width() * nPropr / 100L,
+        Size aSize( aNewFont.GetFontSize() );
+        aNewFont.SetFontSize( Size( aSize.Width() * nPropr / 100L,
                                     aSize.Height() * nPropr / 100L ) );
         if ( !rCurrentFont.IsSameInstance( aNewFont ) )
             pOut->SetFont( aNewFont );
@@ -460,7 +460,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     if ( nEsc )
     {
-        long nDiff = GetSize().Height();
+        long nDiff = GetFontSize().Height();
         nDiff *= nEsc;
         nDiff /= 100;
 
@@ -518,7 +518,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
             nTmpEsc = -20;
         else
             nTmpEsc = nEsc;
-        Size aSize = ( this->GetSize() );
+        Size aSize = ( this->GetFontSize() );
         aPos.Y() -= ( ( nTmpEsc * long( aSize.Height() ) ) / 100L );
     }
     Font aOldFont( ChgPhysFont( pOut ) );

@@ -135,7 +135,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     const FontMetric  aFM (rDev.GetFontMetric());
     bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FONTNAME_MATH );
     bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
-    const long        nFontHeight = rDev.GetFont().GetSize().Height();
+    const long        nFontHeight = rDev.GetFont().GetFontSize().Height();
 
     nBorderWidth  = nBorder;
     bHasAlignInfo = true;
@@ -185,7 +185,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     long  nDist = 0;
     if (pFormat)
-        nDist = (rDev.GetFont().GetSize().Height()
+        nDist = (rDev.GetFont().GetFontSize().Height()
                 * pFormat->GetDistance(DIS_ORNAMENTSIZE)) / 100L;
 
     nHiAttrFence = aGlyphRect.TopLeft().Y() - 1 - nBorderWidth - nDist;
@@ -620,14 +620,14 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     // use scale factor when calling GetTextBoundRect to counter
     // negative effects from antialiasing which may otherwise result
     // in significant incorrect bounding rectangles for some characters.
-    Size aFntSize = aFnt.GetSize();
+    Size aFntSize = aFnt.GetFontSize();
 
     // Workaround to avoid HUGE font sizes and resulting problems
     long nScaleFactor = 1;
     while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;
 
-    aFnt.SetSize( Size( aFntSize.Width() / nScaleFactor, aFntSize.Height() / nScaleFactor ) );
+    aFnt.SetFontSize( Size( aFntSize.Width() / nScaleFactor, aFntSize.Height() / nScaleFactor ) );
     pGlyphDev->SetFont(aFnt);
 
     long nTextWidth = rDev.GetTextWidth(rText);

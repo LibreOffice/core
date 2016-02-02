@@ -1410,7 +1410,7 @@ void Window::ImplInitResolutionSettings()
 
 void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
-    Size aSize = rFont.GetSize();
+    Size aSize = rFont.GetFontSize();
     sal_uInt16 nScreenFontZoom;
     if (!utl::ConfigManager::IsAvoidConfig())
         nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
@@ -1434,12 +1434,12 @@ void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFo
     if (rRenderContext.IsMapModeEnabled())
         aSize = rRenderContext.PixelToLogic(aSize);
 
-    rFont.SetSize(aSize);
+    rFont.SetFontSize(aSize);
 }
 
 void Window::ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
-    Size aSize = rFont.GetSize();
+    Size aSize = rFont.GetFontSize();
     sal_uInt16 nScreenFontZoom;
     if (!utl::ConfigManager::IsAvoidConfig())
         nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
@@ -1463,7 +1463,7 @@ void Window::ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFo
     aSize.Height() += mpWindowImpl->mpFrameData->mnDPIY / 2;
     aSize.Height() /= mpWindowImpl->mpFrameData->mnDPIY;
 
-    rFont.SetSize(aSize);
+    rFont.SetFontSize(aSize);
 }
 
 bool Window::ImplUpdatePos()
@@ -1828,12 +1828,12 @@ void Window::ImplNewInputContext()
     if (!rFontName.isEmpty())
     {
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
-        Size aSize = pFocusWinOutDev->ImplLogicToDevicePixel( rFont.GetSize() );
+        Size aSize = pFocusWinOutDev->ImplLogicToDevicePixel( rFont.GetFontSize() );
         if ( !aSize.Height() )
         {
             // only set default sizes if the font height in logical
             // coordinates equals 0
-            if ( rFont.GetSize().Height() )
+            if ( rFont.GetFontSize().Height() )
                 aSize.Height() = 1;
             else
                 aSize.Height() = (12*pFocusWin->mnDPIY)/72;

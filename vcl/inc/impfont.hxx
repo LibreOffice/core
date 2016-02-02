@@ -47,6 +47,7 @@ public:
     FontWidth           GetWidthType()                                  { if(meWidthType==WIDTH_DONTKNOW) AskConfig(); return meWidthType; }
     TextAlign           GetAlignment() const                            { return meAlign; }
     rtl_TextEncoding    GetCharSet() const                              { return meCharSet; }
+    const Size&         GetFontSize() const                      { return maAverageFontSize; }
 
     bool                IsSymbolFont() const                            { return mbSymbolFlag; }
 
@@ -60,6 +61,7 @@ public:
     void                SetWidthType( const FontWidth eWidthType )      { meWidthType = eWidthType; }
     void                SetAlignment( const TextAlign eAlignment )      { meAlign = eAlignment; }
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
+    void                SetFontSize( const Size& rSize )         { maAverageFontSize = rSize; }
 
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbolFlag = bSymbolFlag; }
 
@@ -91,11 +93,6 @@ public:
     void                SetSubsettableFlag( bool bSubsettable )         { mbSubsettable = bSubsettable; }
     void                SetOrientationFlag( bool bCanRotate )           { mbRotatable = bCanRotate; }
 
-    // Metric data
-    const Size&         GetFontSize() const                             { return maSize; }
-
-    void                SetFontSize( const Size& rSize )                { maSize = rSize; }
-
     bool                operator==( const ImplFont& ) const;
 
 private:
@@ -122,7 +119,7 @@ private:
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;
     FontKerning         meKerning;
-    Size                maSize;
+    Size                maAverageFontSize;
     rtl_TextEncoding    meCharSet;
 
     LanguageTag         maLanguageTag;

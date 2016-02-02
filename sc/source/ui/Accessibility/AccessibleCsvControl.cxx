@@ -315,7 +315,7 @@ static inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropN
 static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::Font& rFont )
 {
     SvxFontItem aFontItem( rFont.GetFamilyType(), rFont.GetFamilyName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), ATTR_FONT );
-    SvxFontHeightItem aHeightItem( rFont.GetSize().Height(), 100, ATTR_FONT_HEIGHT );
+    SvxFontHeightItem aHeightItem( rFont.GetFontSize().Height(), 100, ATTR_FONT_HEIGHT );
     SvxLanguageItem aLangItem( rFont.GetLanguage(), ATTR_FONT_LANGUAGE );
 
     sal_Int32 nIndex = lcl_ExpandSequence( rSeq, 7 );

@@ -148,7 +148,7 @@ void Font::SetStyleName( const OUString& rStyleName )
     mpImplFont->maStyleName = rStyleName;
 }
 
-void Font::SetSize( const Size& rSize )
+void Font::SetFontSize( const Size& rSize )
 {
     if( mpImplFont->GetFontSize() != rSize )
     {
@@ -428,8 +428,8 @@ void Font::Merge( const vcl::Font& rFont )
     if ( rFont.mpImplFont->GetWidthTypeNoAsk() != WIDTH_DONTKNOW )
         SetWidthType( rFont.GetWidthType() );
 
-    if ( rFont.GetSize().Height() )
-        SetSize( rFont.GetSize() );
+    if ( rFont.GetFontSize().Height() )
+        SetFontSize( rFont.GetFontSize() );
     if ( rFont.GetUnderline() != LINESTYLE_DONTKNOW )
     {
         SetUnderline( rFont.GetUnderline() );
@@ -477,7 +477,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 
     rImplFont.SetFamilyName( rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet()) );
     rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
-    ReadPair( rIStm, rImplFont.maSize );
+    ReadPair( rIStm, rImplFont.maAverageFontSize );
 
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( (rtl_TextEncoding) nTmp16 );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetFamilyType( (FontFamily) nTmp16 );
@@ -520,7 +520,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
     rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamCharSet() );
     rOStm.WriteUniOrByteString( rImplFont.GetStyleName(), rOStm.GetStreamCharSet() );
-    WritePair( rOStm, rImplFont.maSize );
+    WritePair( rOStm, rImplFont.maAverageFontSize );
 
     rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );
     rOStm.WriteUInt16( rImplFont.GetFamilyTypeNoAsk() );
@@ -605,23 +605,23 @@ namespace
             if( aInfo.width )
             {
                 if( aInfo.width == FWIDTH_ULTRA_CONDENSED )
-                    o_rResult.SetWidth( WIDTH_ULTRA_CONDENSED );
+                    o_rResult.SetAverageFontWidth( WIDTH_ULTRA_CONDENSED );
                 else if( aInfo.width == FWIDTH_EXTRA_CONDENSED )
-                    o_rResult.SetWidth( WIDTH_EXTRA_CONDENSED );
+                    o_rResult.SetAverageFontWidth( WIDTH_EXTRA_CONDENSED );
                 else if( aInfo.width == FWIDTH_CONDENSED )
-                    o_rResult.SetWidth( WIDTH_CONDENSED );
+                    o_rResult.SetAverageFontWidth( WIDTH_CONDENSED );
                 else if( aInfo.width == FWIDTH_SEMI_CONDENSED )
-                    o_rResult.SetWidth( WIDTH_SEMI_CONDENSED );
+                    o_rResult.SetAverageFontWidth( WIDTH_SEMI_CONDENSED );
                 else if( aInfo.width == FWIDTH_NORMAL )
-                    o_rResult.SetWidth( WIDTH_NORMAL );
+                    o_rResult.SetAverageFontWidth( WIDTH_NORMAL );
                 else if( aInfo.width == FWIDTH_SEMI_EXPANDED )
-                    o_rResult.SetWidth( WIDTH_SEMI_EXPANDED );
+                    o_rResult.SetAverageFontWidth( WIDTH_SEMI_EXPANDED );
                 else if( aInfo.width == FWIDTH_EXPANDED )
-                    o_rResult.SetWidth( WIDTH_EXPANDED );
+                    o_rResult.SetAverageFontWidth( WIDTH_EXPANDED );
                 else if( aInfo.width == FWIDTH_EXTRA_EXPANDED )
-                    o_rResult.SetWidth( WIDTH_EXTRA_EXPANDED );
+                    o_rResult.SetAverageFontWidth( WIDTH_EXTRA_EXPANDED );
                 else if( aInfo.width >= FWIDTH_ULTRA_EXPANDED )
-                    o_rResult.SetWidth( WIDTH_ULTRA_EXPANDED );
+                    o_rResult.SetAverageFontWidth( WIDTH_ULTRA_EXPANDED );
             }
             // set italic
             o_rResult.SetItalic( (aInfo.italicAngle != 0) ? ITALIC_NORMAL : ITALIC_NONE );
@@ -780,11 +780,11 @@ FontAlign Font::GetAlignment() const { return mpImplFont->GetAlignment(); }
 const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName(); }
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 
-const Size& Font::GetSize() const { return mpImplFont->maSize; }
-void Font::SetHeight( long nHeight ) { SetSize( Size( mpImplFont->GetFontSize().Width(), nHeight ) ); }
-long Font::GetHeight() const { return mpImplFont->GetFontSize().Height(); }
-void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->GetFontSize().Height() ) ); }
-long Font::GetWidth() const { return mpImplFont->GetFontSize().Width(); }
+const Size& Font::GetFontSize() const { return mpImplFont->GetFontSize(); }
+void Font::SetFontHeight( long nHeight ) { SetFontSize( Size( mpImplFont->GetFontSize().Width(), nHeight ) ); }
+long Font::GetFontHeight() const { return mpImplFont->GetFontSize().Height(); }
+void Font::SetAverageFontWidth( long nWidth ) { SetFontSize( Size( nWidth, mpImplFont->GetFontSize().Height() ) ); }
+long Font::GetAverageFontWidth() const { return mpImplFont->GetFontSize().Width(); }
 
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->GetCharSet(); }
 
@@ -888,7 +888,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     meRelief( rImplFont.meRelief ),
     meEmphasisMark( rImplFont.meEmphasisMark ),
     meKerning( rImplFont.meKerning ),
-    maSize( rImplFont.maSize ),
+    maAverageFontSize( rImplFont.maAverageFontSize ),
     meCharSet( rImplFont.meCharSet ),
     maLanguageTag( rImplFont.maLanguageTag ),
     maCJKLanguageTag( rImplFont.maCJKLanguageTag ),
@@ -925,7 +925,7 @@ bool ImplFont::operator==( const ImplFont& rOther ) const
     ||  (meAlign          != rOther.meAlign) )
         return false;
 
-    if( (maSize         != rOther.maSize)
+    if( (maAverageFontSize       != rOther.maAverageFontSize)
     ||  (mnOrientation  != rOther.mnOrientation)
     ||  (mbVertical     != rOther.mbVertical) )
         return false;

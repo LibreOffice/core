@@ -889,12 +889,12 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     GetGlobalCharStretching(nStretchX, nStretchY);
 
     sal_uInt16 nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
-    sal_uLong nScaledLineHeight = aStdFont.GetSize().Height();
+    sal_uLong nScaledLineHeight = aStdFont.GetFontSize().Height();
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
 
     aBulletFont.SetAlignment( ALIGN_BOTTOM );
-    aBulletFont.SetSize( Size( 0, nScaledLineHeight ) );
+    aBulletFont.SetFontSize( Size( 0, nScaledLineHeight ) );
     bool bVertical = IsVertical();
     aBulletFont.SetVertical( bVertical );
     aBulletFont.SetOrientation( bVertical ? 2700 : 0 );
