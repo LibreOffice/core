@@ -144,33 +144,31 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     ::sal_Int32 nNumberFormatKey ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    OUString aBuf = "f(x) = ";
 
     if( m_fIntercept == 0.0 )
     {
-        aBuf.append( '0' );
+        aBuf += "0";
     }
     else if( m_fSlope == 0.0 )
     {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+        aBuf += getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept );
     }
     else
     {
         if( ! rtl::math::approxEqual( fabs(m_fIntercept), 1.0 ) )
         {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
-            aBuf.append( ' ');
+            aBuf += getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ) + " ";
         }
         else // skip intercept if its value is 1 (or near 1)
         {
             if ( m_fIntercept < 0.0 )
-                aBuf.append( "- " );
+                aBuf += "- ";
         }
-        aBuf.append( "x^" );
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
+        aBuf += "x^" + getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope );
     }
 
-    return aBuf.makeStringAndClear();
+    return aBuf;
 }
 
 } //  namespace chart
