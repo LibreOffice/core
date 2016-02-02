@@ -747,11 +747,11 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
             switch( eLineJoint )
             {
                 case LineJoint_NONE:
-                case LineJoint_MIDDLE:
                 case LineJoint_BEVEL:
                     mpFS->singleElementNS( XML_a, XML_bevel, FSEND );
                     break;
                 default:
+                case LineJoint_MIDDLE:
                 case LineJoint_MITER:
                     mpFS->singleElementNS( XML_a, XML_miter, FSEND );
                     break;

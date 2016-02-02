@@ -266,10 +266,10 @@ public:
                     drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT
                 };
                 basegfx::B2DLineJoin eJoins[] = {
-                    basegfx::B2DLineJoin::NONE,  basegfx::B2DLineJoin::Middle, basegfx::B2DLineJoin::Bevel,  basegfx::B2DLineJoin::Miter,
-                    basegfx::B2DLineJoin::Round, basegfx::B2DLineJoin::NONE,   basegfx::B2DLineJoin::Middle, basegfx::B2DLineJoin::Bevel,
-                    basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,  basegfx::B2DLineJoin::NONE,   basegfx::B2DLineJoin::Middle,
-                    basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter,  basegfx::B2DLineJoin::Round,  basegfx::B2DLineJoin::NONE
+                    basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,
+                    basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,
+                    basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,
+                    basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round
                 };
                 double aLineWidths[] = {
                     10.0, 15.0, 20.0, 10.0,

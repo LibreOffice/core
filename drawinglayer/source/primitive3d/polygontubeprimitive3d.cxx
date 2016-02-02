@@ -325,9 +325,8 @@ namespace drawinglayer
                         }
                     }
 
-                    if(basegfx::B2DLineJoin::Middle == aLineJoin
-                        || basegfx::B2DLineJoin::Bevel == aLineJoin
-                        || basegfx::B2DLineJoin::Miter == aLineJoin)
+                    if (basegfx::B2DLineJoin::Bevel == aLineJoin ||
+                        basegfx::B2DLineJoin::Miter == aLineJoin)
                     {
                         if(basegfx::B2DLineJoin::Miter == aLineJoin)
                         {

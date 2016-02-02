@@ -56,14 +56,11 @@ namespace
     {
         switch(eLineJoint)
         {
-            case css::drawing::LineJoint_MIDDLE :
-            {
-                return basegfx::B2DLineJoin::Middle;
-            }
             case css::drawing::LineJoint_BEVEL :
             {
                 return basegfx::B2DLineJoin::Bevel;
             }
+            case css::drawing::LineJoint_MIDDLE :
             case css::drawing::LineJoint_MITER :
             {
                 return basegfx::B2DLineJoin::Miter;

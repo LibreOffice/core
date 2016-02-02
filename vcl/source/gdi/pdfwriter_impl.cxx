@@ -10541,9 +10541,8 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
             rOut.m_eJoin = PDFWriter::joinBevel;
             break;
         }
-        default : // basegfx::B2DLineJoin::NONE :
         // Pdf has no 'none' lineJoin, default is miter
-        case basegfx::B2DLineJoin::Middle :
+        case basegfx::B2DLineJoin::NONE :
         case basegfx::B2DLineJoin::Miter :
         {
             rOut.m_eJoin = PDFWriter::joinMiter;

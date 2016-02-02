@@ -707,7 +707,6 @@ bool SvpSalGraphics::drawPolyLine(
             eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
             break;
         case basegfx::B2DLineJoin::NONE:
-        case basegfx::B2DLineJoin::Middle:
         case basegfx::B2DLineJoin::Miter:
             eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
             break;

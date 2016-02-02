@@ -455,7 +455,7 @@ namespace drawinglayer
                     // get Join
                     switch(pLineAttribute->getLineJoin())
                     {
-                        default : // basegfx::B2DLineJoin::NONE :
+                        case basegfx::B2DLineJoin::NONE :
                         {
                             eJoin = SvtGraphicStroke::joinNone;
                             break;
@@ -465,7 +465,6 @@ namespace drawinglayer
                             eJoin = SvtGraphicStroke::joinBevel;
                             break;
                         }
-                        case basegfx::B2DLineJoin::Middle :
                         case basegfx::B2DLineJoin::Miter :
                         {
                             eJoin = SvtGraphicStroke::joinMiter;

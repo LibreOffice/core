@@ -1092,11 +1092,11 @@ void EscherPropertyContainer::CreateLineProperties(
             switch ( eLJ )
             {
                 case css::drawing::LineJoint_NONE :
-                case css::drawing::LineJoint_MIDDLE :
                 case css::drawing::LineJoint_BEVEL :
                     eLineJoin = ESCHER_LineJoinBevel;
                 break;
                 default:
+                case css::drawing::LineJoint_MIDDLE :
                 case css::drawing::LineJoint_MITER :
                     eLineJoin = ESCHER_LineJoinMiter;
                 break;

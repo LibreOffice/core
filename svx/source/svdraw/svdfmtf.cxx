@@ -355,11 +355,8 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
         switch(maLineJoin)
         {
-            default : // basegfx::B2DLineJoin::NONE
+            case basegfx::B2DLineJoin::NONE:
                 mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_NONE));
-                break;
-            case basegfx::B2DLineJoin::Middle:
-                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_MIDDLE));
                 break;
             case basegfx::B2DLineJoin::Bevel:
                 mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_BEVEL));

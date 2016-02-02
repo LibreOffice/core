@@ -996,7 +996,6 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     switch( eLineJoin )
     {
     case basegfx::B2DLineJoin::NONE: aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
-    case basegfx::B2DLineJoin::Middle: aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
     case basegfx::B2DLineJoin::Bevel: aCGLineJoin = kCGLineJoinBevel; break;
     case basegfx::B2DLineJoin::Miter: aCGLineJoin = kCGLineJoinMiter; break;
     case basegfx::B2DLineJoin::Round: aCGLineJoin = kCGLineJoinRound; break;

@@ -462,7 +462,6 @@ void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
 
             switch(pItem->GetValue())
             {
-                case drawing::LineJoint_MIDDLE:
                 case drawing::LineJoint_ROUND:
                 {
                     nEntryPos = 1;
@@ -473,6 +472,7 @@ void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
                     nEntryPos = 2;
                     break;
                 }
+                case drawing::LineJoint_MIDDLE:
                 case drawing::LineJoint_MITER:
                 {
                     nEntryPos = 3;

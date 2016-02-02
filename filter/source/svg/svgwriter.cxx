@@ -1900,7 +1900,7 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
     // support for LineJoint
     switch(rAttrs.GetLineJoin())
     {
-        default: // B2DLineJoin::NONE, B2DLineJoin::Middle
+        case basegfx::B2DLineJoin::NONE:
         case basegfx::B2DLineJoin::Miter:
         {
             mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
@@ -1989,7 +1989,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bAp
     // support for LineJoin
     switch(rShape.maLineJoin)
     {
-        default: // B2DLineJoin::NONE, B2DLineJoin::Middle
+        case basegfx::B2DLineJoin::NONE:
         case basegfx::B2DLineJoin::Miter:
         {
             // miter is Svg default, so no need to write until the exporter might write styles.

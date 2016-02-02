@@ -2052,7 +2052,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
         switch(eLineJoin)
         {
-            default : // basegfx::B2DLineJoin::NONE :
+            case basegfx::B2DLineJoin::NONE :
             {
                 if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
                 {
@@ -2065,7 +2065,6 @@ bool WinSalGraphicsImpl::drawPolyLine(
                 Gdiplus::DllExports::GdipSetPenLineJoin(pTestPen, Gdiplus::LineJoinBevel);
                 break;
             }
-            case basegfx::B2DLineJoin::Middle :
             case basegfx::B2DLineJoin::Miter :
             {
                 const Gdiplus::REAL aMiterLimit(15.0);

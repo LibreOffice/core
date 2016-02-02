@@ -120,9 +120,9 @@ namespace
         o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
         o_rStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
 
-        switch(rLineInfo.GetLineJoin())
+        switch (rLineInfo.GetLineJoin())
         {
-            default: // B2DLineJoin::NONE, B2DLineJoin::Middle
+            case basegfx::B2DLineJoin::NONE:
                 o_rStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
                 break;
             case basegfx::B2DLineJoin::Bevel:

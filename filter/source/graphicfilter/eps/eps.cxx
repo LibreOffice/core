@@ -2462,7 +2462,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
     switch(rLineInfo.GetLineJoin())
     {
-        default: // B2DLineJoin::NONE, B2DLineJoin::Middle
+        case basegfx::B2DLineJoin::NONE:
             // do NOT use SvtGraphicStroke::joinNone here
             // since it will be written as numerical value directly
             // and is NOT a valid EPS value

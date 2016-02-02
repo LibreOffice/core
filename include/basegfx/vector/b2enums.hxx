@@ -56,11 +56,11 @@ namespace basegfx
     */
     enum class B2DLineJoin
     {
-        NONE,       // no rounding
-        Middle,     // calc middle value between joints
-        Bevel,      // join edges with line
-        Miter,      // extend till cut
-        Round       // create arc
+        NONE  = 0,      // no rounding
+                        // removed unused Middle join type
+        Bevel = 2,      // join edges with line
+        Miter = 3,      // extend till cut
+        Round = 4       // create arc
     };
 
 } // end of namespace basegfx
