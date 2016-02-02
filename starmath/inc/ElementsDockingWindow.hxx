@@ -83,7 +83,8 @@ class SmElementsControl : public Control
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
+    virtual void MouseMove(const MouseEvent& rMEvt) override;
+    virtual void RequestHelp(const HelpEvent& rHEvt) override;
 
     typedef std::shared_ptr<SmElement>    SmElementPointer;
     typedef std::vector< SmElementPointer > SmElementList;
