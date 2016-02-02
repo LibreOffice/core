@@ -644,11 +644,8 @@ OUString SAL_CALL ODocumentContainer::getHierarchicalName() throw (RuntimeExcept
 
 OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException, std::exception)
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append( getHierarchicalName() );
-    aBuffer.append( '/' );
-    aBuffer.append( i_rRelativeName );
-    return aBuffer.makeStringAndClear();
+    OUString aBuffer = getHierarchicalName() + "/" + i_rRelativeName;
+    return aBuffer;
 }
 
 ::rtl::Reference<OContentHelper> ODocumentContainer::getContent(const OUString& _sName) const
