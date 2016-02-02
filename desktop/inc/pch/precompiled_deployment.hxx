@@ -27,7 +27,6 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

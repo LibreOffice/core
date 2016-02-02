@@ -87,7 +87,11 @@ private:
     }
 
     css::uno::Any m_exc;
+#ifdef _MSC_VER
+    FuncT m_func; // "const" and std::bind() results in Error C3848 expression would lose const-volatile qualifiers
+#else
     FuncT const m_func;
+#endif
     // using boost::optional here omits the need that ResultT is default
     // constructable:
     ::boost::optional<ResultT> m_result;
