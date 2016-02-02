@@ -439,7 +439,7 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
         case XIMLineStart:    direction = "Line start";    break;
         case XIMLineEnd:      direction = "Line end";      break;
         case XIMAbsolutePosition: direction = "Absolute";  break;
-        case XIMDontChange:   direction = "Dont change";   break;
+        case XIMDontChange:   direction = "Don't change";  break;
     }
 
     fprintf (stderr, "PreeditCaretCallback( ic=%p, client=%p,\n",

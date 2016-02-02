@@ -1273,7 +1273,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                     // Only force and Dispatcher-Update, if it is done next
                     // anyway, otherwise flickering or GPF is possibel since
-                    // the Writer for example prefers in Resize preform some
+                    // the Writer for example prefers in Resize perform some
                     // actions which has a SetReadOnlyUI in Dispatcher as a
                     // result!
 

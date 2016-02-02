@@ -531,7 +531,7 @@ ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
     return dir;
 }
 
-/** Convinience query function may even realized with
+/** Convenience query function may even realized with
     iterating over a ZipFileDirectory returned by
     GetDirectory */
 bool ZipFile::HasContent(const std::string &ContentName) const

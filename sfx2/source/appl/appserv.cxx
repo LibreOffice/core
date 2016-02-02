@@ -306,7 +306,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // aus verschachtelten Requests nach 100ms nochmal probieren
             if( Application::GetDispatchLevel() > 1 )
             {
-                /* Dont save the request for closing the application and try it later
+                /* Don't save the request for closing the application and try it later
                    again. This is an UI bound functionality ... and the user will  try it again
                    if the dialog is closed. But we should not close the application automatically
                    if this dialog is closed by the user ...

@@ -165,7 +165,7 @@ BitSet& BitSet::operator=( sal_uInt16 nBit )
 
 
 
-// creates the asymetric difference with another bitset
+// creates the asymmetric difference with another bitset
 
 BitSet& BitSet::operator-=(sal_uInt16 nBit)
 {

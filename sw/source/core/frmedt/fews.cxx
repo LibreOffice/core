@@ -471,7 +471,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
             //content was a frame/graphic, then set the contained element
             //to as-char anchoring because that's all msword is able to
             //do when inside a frame, and in writer for freshly captioned
-            //elements it's largely irrelevent what the anchor of the contained
+            //elements it's largely irrelevant what the anchor of the contained
             //type is but making it as-char by default results in very
             //good roundtripping
             if (pFlyFormat && bInnerCntIsFly)

@@ -174,7 +174,7 @@ namespace /* private */
 
 
     // This function returns true if the calling
-    // thread belongs to a Multithreaded Appartment
+    // thread belongs to a Multithreaded Apartment
     // (MTA)
 
 

@@ -35,7 +35,7 @@
 /*
     A simple wrapper around the GetOpenFileName/GetSaveFileName API.
     Because currently the Win32 API functions GetOpenFileName/GetSaveFileName
-    work only properly in an Single Threaded Appartment.
+    work only properly in an Single Threaded Apartment.
 */
 
 class CGetFileNameWrapper

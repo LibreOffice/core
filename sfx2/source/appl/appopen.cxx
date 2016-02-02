@@ -152,7 +152,7 @@ private:
     {
         // check the encryption data
         // if the data correct is the stream will be opened successfully
-        // and immediatelly closed
+        // and immediately closed
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
         mxStorage->openStreamElement(

@@ -53,7 +53,7 @@ public class DataStreamRetriever {
     /**
      * Constructor.
      *
-     *@param      args   This construtor requires the arguments:
+     *@param      args   This constructor requires the arguments:
      *                          -url=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a

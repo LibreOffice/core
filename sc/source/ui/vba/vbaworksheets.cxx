@@ -52,7 +52,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// a map ( or hashmap ) wont do as we need also to preserve the order
+// a map ( or hashmap ) won't do as we need also to preserve the order
 // (as added ) of the items
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
 
@@ -154,7 +154,7 @@ public:
         if ( !xIf.is() )
         {
             // if the Sheet is in a document created by the api unfortunately ( at the
-            // moment, it actually wont have the special Document modules
+            // moment, it actually won't have the special Document modules
             uno::Reference< excel::XWorksheet > xNewSheet( new ScVbaWorksheet( m_xParent, m_xContext, xSheet, m_xModel ) );
             aRet <<= xNewSheet;
         }
@@ -201,7 +201,7 @@ ScVbaWorksheets::createCollectionObject( const uno::Any& aSource )
     if ( !xIf.is() )
     {
         // if the Sheet is in a document created by the api unfortunately ( at the
-        // moment, it actually wont have the special Document modules
+        // moment, it actually won't have the special Document modules
         uno::Reference< excel::XWorksheet > xNewSheet( new ScVbaWorksheet( getParent(), mxContext, xSheet, mxModel ) );
         aRet <<= xNewSheet;
     }

@@ -3874,7 +3874,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
                     // TextRight does the same as Text and is for
-                    // compatability only.
+                    // compatibility only.
                     if( bLeft && !bShare )
                     {
                         pFrameFormat = &pDesc->GetLeft();

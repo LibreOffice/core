@@ -588,7 +588,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     if( p && pEntry->m_nRefCnt == 1 )
         p->m_bDirect = bDirect;
 
-    // Dont check direct conflict if opening readonly
+    // Don't check direct conflict if opening readonly
     if( p && (m & StreamMode::WRITE ))
     {
         if( p->m_bDirect != bDirect )

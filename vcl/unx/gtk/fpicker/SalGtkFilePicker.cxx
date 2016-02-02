@@ -1062,7 +1062,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
 GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
 {
     OSL_TRACE("control id is %d", nControlId);
-    GType      tType = GTK_TYPE_TOGGLE_BUTTON; //prevent waring by initializing
+    GType      tType = GTK_TYPE_TOGGLE_BUTTON; //prevent warning by initializing
     GtkWidget *pWidget = nullptr;
 
 #define MAP_TOGGLE( elem ) \

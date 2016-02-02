@@ -3023,7 +3023,7 @@ void Content::lock(
                 break;
             case DAVException::DAV_LOCKED_SELF:
                 // we already hold the lock and it is in our internal lockstore
-                // just return as if the lock was successfull
+                // just return as if the lock was successful
                 return;
                 break;
             default:

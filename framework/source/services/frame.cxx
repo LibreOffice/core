@@ -2001,7 +2001,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     impl_disablePropertySet();
 
     // interception/dispatch chain must be destructed explicitly
-    // Otherwhise some dispatches and/or interception objects wont die.
+    // Otherwise some dispatches and/or interception objects won't die.
     css::uno::Reference< css::lang::XEventListener > xDispatchHelper(m_xDispatchHelper, css::uno::UNO_QUERY_THROW);
     xDispatchHelper->disposing(aEvent);
     xDispatchHelper.clear();

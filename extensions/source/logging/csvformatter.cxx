@@ -129,7 +129,7 @@ namespace
             // special treatment for the last character
             if(quote_char==str[str_length-1])
                 buf.append(quote_char);
-            // iterating backwards because the index at which we insert wont be shifted
+            // iterating backwards because the index at which we insert won't be shifted
             // when moving that way.
             for(sal_Int32 i = str_length; i>=0; )
             {

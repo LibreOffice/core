@@ -73,7 +73,7 @@ namespace drawinglayer
                 @param rProjection
                 A part of the 3D ViewTransformation, the Camera to Device transformation which
                 transforms coordinates to a [0.0 .. 1.0] device range in X,Y and Z. Z may be used
-                as source for Z-Buffers. This transformation may be e.g. a parallell projection,
+                as source for Z-Buffers. This transformation may be e.g. a parallel projection,
                 but also a perspective one and thus may use the last line of the matrix.
 
                 @param rDeviceToView

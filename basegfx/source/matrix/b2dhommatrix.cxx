@@ -349,7 +349,7 @@ namespace basegfx
                 double fCrossXY(aUnitVecX.cross(aUnitVecY));
 
                 // get rotation by calculating angle of X unit vector relative to (1, 0).
-                // This is before the parallell test following the motto to extract
+                // This is before the parallel test following the motto to extract
                 // as much as possible
                 rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
 
@@ -364,7 +364,7 @@ namespace basegfx
 
                     // unit vectors are parallel, thus not linear independent. No
                     // useful decomposition possible. This should not happen since
-                    // the only way to get the unit vectors nearly parallell is
+                    // the only way to get the unit vectors nearly parallel is
                     // a very big shearing. Anyways, be prepared for hand-filled
                     // matrices
                     // Eventually used rotations or shears are lost

@@ -1379,7 +1379,7 @@ void SAL_CALL ZipPackage::commitChanges()
     }
     catch (const ucb::ContentCreationException& r)
     {
-        throw WrappedTargetException(THROW_WHERE "Temporary file should be createable!",
+        throw WrappedTargetException(THROW_WHERE "Temporary file should be creatable!",
                     static_cast < OWeakObject * > ( this ), makeAny ( r ) );
     }
     if ( xTempInStream.is() )

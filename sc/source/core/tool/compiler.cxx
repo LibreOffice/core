@@ -316,7 +316,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 // tdf#56036: Allow tabs/newlines in imported formulas (for now simply treat them as (and convert to) space)
 // TODO: tdf#76310: allow saving newlines as is (as per OpenFormula specification v.1.2, clause 5.14 "Whitespace")
 // This is compliant with the OASIS decision (see https://issues.oasis-open.org/browse/OFFICE-701)
-// Also, this would enable correct roundtrip from/to OOXML without loosing tabs/newlines
+// Also, this would enable correct roundtrip from/to OOXML without losing tabs/newlines
 // This requires saving actual space characters in ocSpaces token, using them in UI and saving
 /* tab */   t[ 9] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 /* lf  */   t[10] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;

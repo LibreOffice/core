@@ -57,7 +57,7 @@ public class ResourceCreator {
     /**
      * Constructor.
      *
-     *@param      args   This construtor requires the arguments:
+     *@param      args   This constructor requires the arguments:
      *                          -url=...     (optional)
      *                          -name=...    (optional)
      *                          -srcURL=...  (optional)

@@ -153,14 +153,14 @@ namespace svt { namespace table
                 <TRUE/> if and only if the table control currently has the focus
                 <br/>
                 Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convinience
+                previous ->PrepareRow call, it's passed here for convenience
                 only.
             @param _bSelected
                 <TRUE/> if and only if the row whose header cell is to be
                 painted is selected currently.
                 <br/>
                 Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convinience
+                previous ->PrepareRow call, it's passed here for convenience
                 only.
             @param _rDevice
                 denotes the device to paint onto
@@ -184,13 +184,13 @@ namespace svt { namespace table
                 the row or the column of the cell is currently selected.
                 <br/>
                 Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convinience
+                previous ->PrepareRow call, it's passed here for convenience
                 only.
             @param i_hasControlFocus
                 <TRUE/> if and only if the table control currently has the focus
                 <br/>
                 Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convinience
+                previous ->PrepareRow call, it's passed here for convenience
                 only.
             @param _rDevice
                 denotes the device to paint onto

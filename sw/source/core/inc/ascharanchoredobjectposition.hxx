@@ -87,7 +87,7 @@ namespace objectpositioning
                                   const SwFormatVertOrient& _rVert );
 
     public:
-        /** construtor; provided object to be positioned and needed data
+        /** constructor; provided object to be positioned and needed data
             for calculation of the object position
 
             @param _rDrawObj

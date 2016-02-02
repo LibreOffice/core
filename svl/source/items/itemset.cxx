@@ -1226,7 +1226,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
                     MergeValue( rSet.GetPool()->GetDefaultItem( nWhich ), bIgnoreDefaults );
             }
             else if( IsInvalidItem( pItem ) )
-                // dont care
+                // don't care
                 InvalidateItem( nWhich );
             else
                 MergeValue( *pItem, bIgnoreDefaults );

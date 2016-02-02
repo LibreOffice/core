@@ -89,7 +89,7 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  * @callback:
  * @userdata:
  *
- * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
+ * Returns: %TRUE if the document is loaded successfully, %FALSE otherwise
  */
 void                           lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     const gchar* pPath,
@@ -104,7 +104,7 @@ void                           lok_doc_view_open_document          (LOKDocView* 
  * @res:
  * @error:
  *
- * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
+ * Returns: %TRUE if the document is loaded successfully, %FALSE otherwise
  */
 gboolean                       lok_doc_view_open_document_finish   (LOKDocView* pDocView,
                                                                     GAsyncResult* res,

@@ -12576,7 +12576,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     // check whether to emit structure henceforth
     m_bEmitStructure = checkEmitStructure();
 
-    if( m_bEmitStructure ) // don't create nonexistant objects
+    if( m_bEmitStructure ) // don't create nonexistent objects
     {
         rEle.m_nObject      = createObject();
         // update parent's kids list

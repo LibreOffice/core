@@ -3229,7 +3229,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 // partial 1st paragraph of redline is not copied.
 // But the DelFlyInRange() that is called from DelCopyOfSection() does not
 // delete it either, and it also does not delete those on partial last para of
-// redline, so copying those is supressed here too ...
+// redline, so copying those is suppressed here too ...
 void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
@@ -4361,7 +4361,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             else if( bCanMoveBack )
             {   //Insertion at the first position of a text node. It will not be splitted, the table
                 // will be inserted before the text node.
-                // See below, before the SetInsertRange funciton of the undo object will be called,
+                // See below, before the SetInsertRange function of the undo object will be called,
                 // the CpyPam would be moved to the next content position. This has to be avoided
                 // We want to be moved to the table node itself thus we have to set bCanMoveBack
                 // and to manipulate pCopyPam.

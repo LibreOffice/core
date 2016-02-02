@@ -32,7 +32,7 @@ namespace basegfx
 
     namespace tools
     {
-        // This method clips the given tools::PolyPolygon against a horizontal or vertical axis (parallell to X or Y axis). The axis is
+        // This method clips the given tools::PolyPolygon against a horizontal or vertical axis (parallel to X or Y axis). The axis is
         // defined by bParallelToXAxis (true -> it's parallel to the X-Axis of the coordinate system, else to the Y-Axis) and the
         // fValueOnOtherAxis (gives the translation to the coordinate system axis). For example, when You want to define
         // a clip axis parallel to X.Axis and 100 above it, use bParallelToXAxis = true and fValueOnOtherAxis = 100.

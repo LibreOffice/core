@@ -3035,7 +3035,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
 
-    /// Dont export X ErrorBars for older ODF versions.
+    /// Don't export X ErrorBars for older ODF versions.
     if ( !bYError && nCurrentVersion < SvtSaveOptions::ODFVER_012 )
         return;
 

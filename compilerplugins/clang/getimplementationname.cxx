@@ -8,7 +8,7 @@
  */
 
 // only compile this on unixy system
-// as we dont want to bother with x-platform system()/mkdir()
+// as we don't want to bother with x-platform system()/mkdir()
 #if defined(__unix__)
 // only compile this on clang 3.7 or higher, which is known to work
 // there were problems on clang 3.5 at least
@@ -282,7 +282,7 @@ std::string GetImplementationName::initOutdir() {
         return result;
     }
     report(
-        clang::DiagnosticsEngine::Error, "WORKDIR unset, dont know where to write service implementation info.");
+        clang::DiagnosticsEngine::Error, "WORKDIR unset, don't know where to write service implementation info.");
     return std::string();
     }
 }
@@ -292,7 +292,7 @@ std::string GetImplementationName::initSrcdir() {
     char* pSrcdir = getenv("SRCDIR");
     if(!pSrcdir) {
         report(
-            clang::DiagnosticsEngine::Error, "SRCDIR unset, dont know where the source base is.");
+            clang::DiagnosticsEngine::Error, "SRCDIR unset, don't know where the source base is.");
     }
     return std::string(pSrcdir);
     }

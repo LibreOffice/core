@@ -633,7 +633,7 @@ bool TypeDetection::impl_getPreselectionForType(
     bool bBreakDetection = false;
 
     // Further we must know if it matches by pattern
-    // Every flat detected type by pattern wont be detected deep!
+    // Every flat detected type by pattern won't be detected deep!
     bool bMatchByPattern = false;
 
     // And we must know if a preselection must be preferred, because

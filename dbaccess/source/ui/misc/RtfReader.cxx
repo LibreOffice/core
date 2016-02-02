@@ -99,7 +99,7 @@ SvParserState ORTFReader::CallParser()
 
 void ORTFReader::NextToken( int nToken )
 {
-    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
+    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediately
         return;
 
     if(m_xConnection.is())    // names, which CTOR was called and hence, if a table should be created

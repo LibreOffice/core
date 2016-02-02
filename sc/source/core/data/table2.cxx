@@ -2004,7 +2004,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
                     bool bHitOne = true;
                     if ( nCol > nX2+1 )
                     {
-                        // Does the rotated cell extend into the visable range?
+                        // Does the rotated cell extend into the visible range?
 
                         SCCOL nTouchedCol = nCol;
                         long nWidth = static_cast<long>(mpRowHeights->getValue(nRow) * nFactor);

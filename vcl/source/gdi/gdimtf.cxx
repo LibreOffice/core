@@ -498,7 +498,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
 
             if(xGraphic.is() && xRenderer.is() && xInit.is())
             {
-                // delay intialization of XGraphic, to only expose
+                // delay initialization of XGraphic, to only expose
                 // XGraphic-generating services to arbitrary binary data
                 uno::Sequence< sal_Int8 > aSeq(
                     reinterpret_cast<sal_Int8 const *>(pData), pEndData-pData );

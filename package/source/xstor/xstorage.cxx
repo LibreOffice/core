@@ -1504,7 +1504,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
             SAL_WARN_IF( !(*pElementIter)->m_bIsRemoved, "package.xstor", "Try to insert an element instead of existing one!" );
             if ( (*pElementIter)->m_bIsRemoved )
             {
-                SAL_WARN_IF( (*pElementIter)->m_bIsInserted, "package.xstor", "Inserted elements must be deleted immediatelly!" );
+                SAL_WARN_IF( (*pElementIter)->m_bIsInserted, "package.xstor", "Inserted elements must be deleted immediately!" );
                 pDeletedElm = *pElementIter;
                 break;
             }

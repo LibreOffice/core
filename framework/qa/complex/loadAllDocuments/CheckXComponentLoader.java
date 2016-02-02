@@ -285,7 +285,7 @@ public class CheckXComponentLoader
         XStorable xStore = UnoRuntime.queryInterface(XStorable.class, xDoc);
         xStore.storeAsURL(sTargetURL, lSaveProps);
 
-        // Dont forget to close this file. Otherwise the temp file is locked!
+        // Don't forget to close this file. Otherwise the temp file is locked!
         XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xDoc);
         xClose.close(false);
     }

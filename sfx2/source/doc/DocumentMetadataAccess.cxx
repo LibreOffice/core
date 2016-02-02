@@ -771,7 +771,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
         const IXmlIdRegistrySupplier & i_rRegistrySupplier)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {
-    // no initalization: must call loadFrom...
+    // no initialization: must call loadFrom...
 }
 
 DocumentMetadataAccess::DocumentMetadataAccess(

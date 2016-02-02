@@ -65,7 +65,7 @@ namespace frm
 
         // ImageProducer stuff
         css::uno::Reference< css::awt::XImageProducer>    m_xProducer;
-        // Store the image in a graphic object to make it accesible via graphic cache using graphic ID.
+        // Store the image in a graphic object to make it accessible via graphic cache using graphic ID.
         css::uno::Reference< css::graphic::XGraphicObject > m_xGraphicObject;
         SfxMedium*                          m_pMedium;     // Download medium
         ImageProducer*                      m_pProducer;

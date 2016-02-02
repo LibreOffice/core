@@ -1864,7 +1864,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
 
     // *** Fill gaps with BLANK/MULBLANK cell records *** ---------------------
 
-    /*  This is needed because nonexistant cells in Calc are not formatted at all,
+    /*  This is needed because nonexistent cells in Calc are not formatted at all,
         but in Excel they would have the column default format. Blank cells that
         are equal to the respective column default are removed later in this function. */
     if( !mbAlwaysEmpty )
@@ -2196,7 +2196,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
             if ( pPrev->IsDefaultable())
             {
                 // if the previous row we processed is not
-                // defaultable then afaict the rows inbetween are
+                // defaultable then afaict the rows in between are
                 // not used ( and not repeatable )
                 sal_uInt32 nRpt =  rRow->GetXclRow() - pPrev->GetXclRow();
                 if ( nRpt > 1 )

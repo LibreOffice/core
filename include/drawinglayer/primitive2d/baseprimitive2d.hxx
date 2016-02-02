@@ -206,7 +206,7 @@ namespace drawinglayer
             to be done when the decomposition depends on parts of the parameter ViewInformation2D.
             This defines a standard method for processing these:
 
-            Implement a view-dependent get2DDecomposition doing te following steps:
+            Implement a view-dependent get2DDecomposition doing the following steps:
             (a) Locally extract needed parameters from ViewInformation2D to new, local parameters
                 (this may be a complete local copy of ViewInformation2D)
             (b) If a buffered decomposition exists, ckeck if one of the new local parameters

@@ -101,7 +101,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave()
 {
     // TODO: ???
-    // The object knows about document saving already since it controls it as ClienSite
+    // The object already knows about document saving, since it controls it as ClientSide
     // other interested listeners must be registered for the object
 }
 

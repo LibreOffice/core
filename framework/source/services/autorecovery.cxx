@@ -108,9 +108,9 @@ namespace {
 
     @descr  Because some operations are forced to be executed asynchronously
             (e.g. requested by our CreashSave/Recovery dialog) ... we must make sure
-            that these information wont be set as "normal" members of our AutoRecovery
+            that these information won't be set as "normal" members of our AutoRecovery
             instance. Otherwise they can disturb our normal AutoSave-timer handling.
-            e.g. it can be unclear then, which progress has to be used for storing documents ...
+            e.g. it can be unclear then, which progress has to be used for storing documents...
  */
 struct DispatchParams
 {
@@ -143,10 +143,10 @@ public:
                 backup or cleanUp operation ... which is may be done asynchronous */
     sal_Int32 m_nWorkingEntryID;
 
-    /** @short  used for asyncoperations, to prevent us from dying.
+    /** @short  used for async operations, to prevent us from dying.
 
         @descr  If our dispatch() method was forced to start the
-                internal operation asynchronous ... we send an event
+                internal operation asynchronous... we send an event
                 to start and return immediately. But we must be sure that
                 our instance live if the event callback reach us.
                 So we hold an uno reference to ourself.
@@ -1628,8 +1628,8 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
     }
     /* document saved as copy => mark it as "non used by concurrent save operation".
        so we can try to create a backup copy if next time AutoSave is started too.
-       Dont remove temp. files or change the modified state of the document!
-       It was not really saved to the original file ...
+       Don't remove temp. files or change the modified state of the document!
+       It was not really saved to the original file...
     */
     else if ( aEvent.EventName == EVENT_ON_SAVETODONE )
     {
@@ -2220,7 +2220,7 @@ void AutoRecovery::implts_stopListening()
     css::uno::Reference< css::document::XDocumentEventBroadcaster > xGlobalEventBroadcaster;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-    // Attention: Dont reset our internal members here too.
+    // Attention: Don't reset our internal members here too.
     // May be we must work with our configuration, but don't wish to be informed
     // about changes any longer. Needed e.g. during EMERGENCY_SAVE!
     xCFG.set                   (m_xRecoveryCFG      , css::uno::UNO_QUERY);
@@ -2453,7 +2453,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     {
         // Normally nothing must be done for this "late" notification.
         // But may be the modified state was changed inbetween.
-        // Check it ...
+        // Check it...
         implts_updateModifiedState(xDocument);
         return;
     }
@@ -2566,7 +2566,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    // Attention: Dont leave SAFE section, if you work with pIt!
+    // Attention: Don't leave SAFE section, if you work with pIt!
     // Because it points directly into the m_lDocCache list ...
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
@@ -3221,7 +3221,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
 
         // Such documents are already loaded by the last loop.
-        // Dont check E_SUCCEDED here! Its may be the final state of an AutoSave
+        // Don't check E_SUCCEDED here! It may be the final state of an AutoSave
         // operation before!!!
         if ((rInfo.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
             continue;
@@ -3388,7 +3388,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         implts_startModifyListeningOnDoc(rInfo);
 
         // /* SAFE */ {
-        // Needed for next loop. Dont unlock it again!
+        // Needed for next loop. Don't unlock it again!
         g.reset();
     }
 
@@ -3748,7 +3748,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
 
-    // try to make sure next time office will be started user wont be
+    // try to make sure next time office will be started user won't be
     // notified about any other might be running office instance
     // remove ".lock" file from disc !
     AutoRecovery::st_impl_removeLockFile();
@@ -3822,9 +3822,9 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionQuietQuit()");
 
-    // try to make sure next time office will be started user wont be
+    // try to make sure next time office will be started user won't be
     // notified about any other might be running office instance
-    // remove ".lock" file from disc !
+    // remove ".lock" file from disc!
     // it is done as a first action for session save since Gnome sessions
     // do not provide enough time for shutdown, and the dialog looks to be
     // confusing for the user
@@ -3912,7 +3912,7 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 
         // TODO: Check eResult and react for errors (InteractionHandler!?)
         // Currently we ignore it ...
-        // DONT UPDATE THE CACHE OR REMOVE ANY TEMP. FILES FROM DISK.
+        // DON'T UPDATE THE CACHE OR REMOVE ANY TEMP. FILES FROM DISK.
         // That has to be forced from outside explicitly.
         // See implts_cleanUpWorkingEntry() for further details.
     }

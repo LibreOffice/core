@@ -51,7 +51,7 @@ namespace drawinglayer
             basegfx::B3DHomMatrix                       maOrientation;
 
             // Camera to Device with X,Y and Z [-1.0 .. 1.0]. This is the
-            // 3D to 2D projection which may be parallell or perspective. When it is perspective,
+            // 3D to 2D projection which may be parallel or perspective. When it is perspective,
             // the last line of the homogen matrix will NOT be unused
             basegfx::B3DHomMatrix                       maProjection;
 

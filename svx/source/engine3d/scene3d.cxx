@@ -467,7 +467,7 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
     // and would create a lot of short living data structures.
     // It is currently better to flush that data, e.g. by using
     // ActionChanged at the VC which will for this class
-    // flush that cached data and initalize it's valid reconstruction
+    // flush that cached data and initialize its valid reconstruction
     GetViewContact().ActionChanged();
     return *this;
 }

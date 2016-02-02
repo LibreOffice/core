@@ -79,7 +79,7 @@ void SAL_CALL PropertySetHelper::impl_disablePropertySet()
 
 bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
 {
-    /*  Dont use the lock here!
+    /*  Don't use the lock here!
         The used helper is threadsafe and it lives for the whole lifetime of
         our own object.
     */
@@ -108,7 +108,7 @@ bool PropertySetHelper::impl_existsVeto(const css::beans::PropertyChangeEvent& a
 
 void PropertySetHelper::impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent)
 {
-    /*  Dont use the lock here!
+    /*  Don't use the lock here!
         The used helper is threadsafe and it lives for the whole lifetime of
         our own object.
     */

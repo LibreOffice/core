@@ -1635,7 +1635,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             awt::Size(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height));
 
         xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
-        // It is preferrable to use full size than minimum for pie charts
+        // It is preferable to use full size than minimum for pie charts
         if (!bIsPieOrDonut && !rParam.mbUseFixedInnerSize)
             aVDiagram.reduceToMimimumSize();
     }

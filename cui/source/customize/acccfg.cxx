@@ -1375,9 +1375,9 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*
         if (xCfgMgr.is())
         {
             // get the target configuration access and update with all shortcuts
-            // which are set currently at the UI !
-            // Dont copy the m_xAct content to it ... because m_xAct will be updated
-            // from the UI on pressing the button "OK" only. And inbetween it's not up to date !
+            // which are set currently at the UI!
+            // Don't copy the m_xAct content to it... because m_xAct will be updated
+            // from the UI on pressing the button "OK" only. And inbetween it's not up to date!
             uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
             Apply(xTargetAccMgr);
 

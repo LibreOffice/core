@@ -1489,7 +1489,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     const vcl::KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
     sal_Unicode aCh = aKeyEvent.GetCharCode();
 
-    // enable switching to notes ankor with Ctrl - Alt - Page Up/Down
+    // enable switching to notes anchor with Ctrl - Alt - Page Up/Down
     // pressing this inside a note will switch to next/previous note
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {

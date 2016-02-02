@@ -285,7 +285,7 @@ namespace basegfx
                 const sal_uInt32 nYDelta(static_cast<sal_uInt32>(nYEnd - nYStart));
                 const double fInvYDelta(1.0 / nYDelta);
 
-                // non-horizontal line, create two parallell entries. These will be sorted by
+                // non-horizontal line, create two parallel entries. These will be sorted by
                 // X anyways, so no need to distinguish the case here
                 maLineEntries.push_back(RasterConversionLineEntry3D(
                     aStart.getX(), (aEnd.getX() - aStart.getX()) * fInvYDelta,

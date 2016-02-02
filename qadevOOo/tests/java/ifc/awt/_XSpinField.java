@@ -155,7 +155,7 @@ public class _XSpinField extends MultiMethodTest {
 
     /**
     * Removes the listener, then calls <code>up</code> method and
-    * checks if te listener wasn't called. <p>
+    * checks if the listener wasn't called. <p>
     * Has <b>OK</b> status if listener wasn't called. <p>
     * The following method tests are to be completed successfully before :
     * <ul>

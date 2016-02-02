@@ -291,7 +291,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
 
     maVDev->EnableOutput( false );
     maVDev->SetMapMode( rMtf.GetPrefMapMode() );
-    // don't work with pixel as destination map mode -> higher resolution preferrable
+    // don't work with pixel as destination map mode -> higher resolution preferable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
     mpHandlesUsed = new bool[ MAXHANDLES ];
     memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( bool ) );

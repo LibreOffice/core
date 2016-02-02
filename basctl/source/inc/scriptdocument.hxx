@@ -359,7 +359,7 @@ namespace basctl
             @param  _rDialogName
                 the dialog's name
             @param  _out_rDialogSource
-                takes the provider for the dialog's desription, upon successful return
+                takes the provider for the dialog's description, upon successful return
             @return
                 <TRUE/> if and only if the dialog could be successfully retrieved, <FALSE/> otherwise
         */
@@ -394,7 +394,7 @@ namespace basctl
             @param  _rDialogName
                 the dialog's name
             @param  _out_rDialogSource
-                takes the provider for the dialog's desription, upon successful return
+                takes the provider for the dialog's description, upon successful return
             @return
                 <TRUE/> if and only if the dialog could be successfully retrieved, <FALSE/> otherwise
         */

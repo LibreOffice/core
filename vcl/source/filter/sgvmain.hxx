@@ -137,7 +137,7 @@ public:
 };
 
 #define ObjkSize 20                /* should be 21. due to alignment we shifted the flag */
-class ObjkType {  // basic componenents of all Stardraw objects
+class ObjkType {  // basic components of all Stardraw objects
 public:
     sal_uInt32     Last;
     sal_uInt32     Next;
@@ -242,7 +242,7 @@ public:
 class TextType: public ObjkType {
 public:
     sal_uInt8   Flags;       // (cheat due to alignment in NT)
-    sal_uInt8   Reserve;     // for Word Allign
+    sal_uInt8   Reserve;     // for Word Align
     ObjTextType T;           // 64 bytes  << DWord-Allign needed for FontID
     PointType   Pos1;        // reference point (upper left)
     PointType   Pos2;        //                 (lower right)

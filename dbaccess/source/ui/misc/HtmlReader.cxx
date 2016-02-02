@@ -121,7 +121,7 @@ SvParserState OHTMLReader::CallParser()
 
 void OHTMLReader::NextToken( int nToken )
 {
-    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
+    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediately
         return;
     if ( nToken ==  HTML_META )
         setTextEncoding();

@@ -430,7 +430,7 @@ void SvxSearchDialog::Construct_Impl()
 
     InitControls_Impl();
 
-    // Get attribute sets only once in construtor()
+    // Get attribute sets only once in constructor()
     const SfxPoolItem* ppArgs[] = { pSearchItem, nullptr };
     const SvxSetItem* pSrchSetItem =
         static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ) );

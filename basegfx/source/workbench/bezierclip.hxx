@@ -76,7 +76,7 @@ Polygon2D convexHull( const Polygon2D& rPoly );
 // TODO: find proper epsilon here (try ::std::numeric_limits<NumType>::epsilon()?)!
 #define DBL_EPSILON 1.0e-100
 
-/* little approximate comparions */
+/* little approximate comparisons */
 template <typename NumType> bool tolZero( NumType n ) { return fabs(n) < DBL_EPSILON; }
 template <typename NumType> bool tolEqual( NumType n1, NumType n2 ) { return tolZero(n1-n2); }
 template <typename NumType> bool tolLessEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1<n2; }

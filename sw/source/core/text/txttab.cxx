@@ -482,7 +482,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
         const sal_uInt16 nAdjDiff = nDiffWidth - nPorWidth;
         if( nAdjDiff > GetFixWidth() )
             PrtWidth( nAdjDiff );
-        // Dont be afraid: we have to move rInf further.
+        // Don't be afraid: we have to move rInf further.
         // The right-tab till now only had the width of one blank.
         // Now that we stretched, the difference had to be added to rInf.X() !
         rInf.X( rInf.X() + PrtWidth() - nOldWidth );

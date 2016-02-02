@@ -123,7 +123,7 @@ FilterCache* FilterCache::clone() const
 
     FilterCache* pClone = new FilterCache();
 
-    // Dont copy the configuration access points here.
+    // Don't copy the configuration access points here.
     // They will be created on demand inside the cloned instance,
     // if they are needed.
 
@@ -154,8 +154,8 @@ void FilterCache::takeOver(const FilterCache& rClone)
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // a)
-    // Dont copy the configuration access points here!
-    // We must use our own ones ...
+    // Don't copy the configuration access points here!
+    // We must use our own ones...
 
     // b)
     // Further we can ignore the uno service manager.
@@ -1092,7 +1092,7 @@ void FilterCache::impl_validateAndOptimize()
 
 #if OSL_DEBUG_LEVEL > 0
 
-        // Dont check cross references between types and filters, if
+        // Don't check cross references between types and filters, if
         // not all filters read from disk!
         // OK - this cache can read single filters on demand too ...
         // but then the fill state of this cache should not be set to E_CONTAINS_FILTERS!
@@ -2152,7 +2152,7 @@ void FilterCache::impl_readOldFormat()
                 m_lFilters[pItems[i]] = impl_readOldItem(xSet, E_FILTER, pItems[i]);
         }
     }
-    /* corrupt filter addon ? because it's external (optional) code .. we can ignore it. Addon wont work then ...
+    /* corrupt filter addon? Because it's external (optional) code.. we can ignore it. Addon won't work then...
        but that seems to be acceptable.
        see #139088# for further information
     */

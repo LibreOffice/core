@@ -1773,7 +1773,7 @@ bool SwTextNode::IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich)
     return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_COLOR || nWhich == RES_CHRATR_BACKGROUND || nWhich == RES_CHRATR_ESCAPEMENT);
 }
 
-//In MS Word, following properties of the paragraph end position wont affect the formatting of bullets, so we ignore them:
+//In MS Word, following properties of the paragraph end position won't affect the formatting of bullets, so we ignore them:
 //Font underline;
 //Font Italic of Western, CJK and CTL;
 //Font Bold of Wertern, CJK and CTL;

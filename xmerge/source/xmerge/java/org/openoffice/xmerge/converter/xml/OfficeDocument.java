@@ -274,7 +274,7 @@ public abstract class OfficeDocument
             // Need to read the manifest file and construct a list of objects
             NodeList nl = manifestDoc.getElementsByTagName(TAG_MANIFEST_FILE);
 
-            // Dont create the HashMap if there are no embedded objects
+            // Don't create the HashMap if there are no embedded objects
             int len = nl.getLength();
             for (int i = 0; i < len; i++) {
                 Node n = nl.item(i);

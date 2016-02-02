@@ -497,7 +497,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         DBG_ASSERT( pStdLib, "Standard-Lib not loaded?" );
         if ( !pStdLib )
         {
-            // Should never happen, but if it happens we wont crash...
+            // Should never happen, but if it happens we won't crash...
             pStdLib = new StarBASIC( nullptr, mbDocMgr );
 
             if (mpImpl->aLibs.empty())
