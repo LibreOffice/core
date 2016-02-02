@@ -236,15 +236,6 @@ friend class SwConnectionDisposedListener_Impl;
         GetRowSet(css::uno::Reference< css::sdbc::XConnection>,
         const OUString& rTableOrQuery, SwDBSelect   eTableOrQuery);
 
-    SAL_DLLPRIVATE static css::uno::Reference< css::beans::XPropertySet>
-        GetRowSupplier(css::uno::Reference< css::sdbc::XConnection> xConnection,
-        const OUString& rTableOrQuery,  SwDBSelect   eTableOrQuery)
-    {
-        css::uno::Reference<css::sdbc::XRowSet> xRowSet = GetRowSet(xConnection, rTableOrQuery, eTableOrQuery);
-
-        return css::uno::Reference<css::beans::XPropertySet>( xRowSet, css::uno::UNO_QUERY );
-    }
-
     SAL_DLLPRIVATE void CreateDumpDocs(sal_Int32 &nMaxDumpDocs);
 
     SAL_DLLPRIVATE void SetSourceProp(SwDocShell* pSourceDocSh);

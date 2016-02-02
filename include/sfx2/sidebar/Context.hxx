@@ -52,7 +52,6 @@ public:
     */
     sal_Int32 EvaluateMatch (const Context& rOther) const;
 
-    bool operator== (const Context& rOther) const;
     bool operator!= (const Context& rOther) const;
 };
 

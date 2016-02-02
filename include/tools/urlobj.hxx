@@ -189,8 +189,6 @@ public:
     inline bool operator !=(INetURLObject const & rObject) const
     { return !(*this == rObject); }
 
-    bool operator <(INetURLObject const & rObject) const;
-
     // Strict Parsing:
 
     inline explicit INetURLObject(

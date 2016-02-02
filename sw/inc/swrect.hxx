@@ -94,9 +94,6 @@ public:
     inline SwRect &operator+=( const Point &rPt );
     inline SwRect &operator-=( const Point &rPt );
 
-    inline SwRect &operator+=( const Size &rSz );
-    inline SwRect &operator-=( const Size &rSz );
-
     //SV-SS e.g. pWin->DrawRect( aSwRect.SVRect() );
     inline Rectangle  SVRect() const;
 
@@ -271,19 +268,6 @@ inline SwRect &SwRect::operator+=( const Point &rPt )
 inline SwRect &SwRect::operator-=( const Point &rPt )
 {
     m_Point -= rPt;
-    return *this;
-}
-
-inline SwRect &SwRect::operator+=( const Size &rSz )
-{
-    m_Size.Width() += rSz.Width();
-    m_Size.Height() += rSz.Height();
-    return *this;
-}
-inline SwRect &SwRect::operator-=( const Size &rSz )
-{
-    m_Size.Width() -= rSz.Width();
-    m_Size.Height() -= rSz.Height();
     return *this;
 }
 

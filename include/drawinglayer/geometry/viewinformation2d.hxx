@@ -123,7 +123,6 @@ namespace drawinglayer
 
             /// compare operators
             bool operator==(const ViewInformation2D& rCandidate) const;
-            bool operator!=(const ViewInformation2D& rCandidate) const { return !operator==(rCandidate); }
 
             /// data access
             const basegfx::B2DHomMatrix& getObjectTransformation() const;

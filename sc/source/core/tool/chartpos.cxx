@@ -89,13 +89,6 @@ ScChartPositioner::~ScChartPositioner()
     delete pPositionMap;
 }
 
-bool ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
-{
-    return bColHeaders == rCmp.bColHeaders
-        && bRowHeaders == rCmp.bRowHeaders
-        && *aRangeListRef == *rCmp.aRangeListRef;
-}
-
 void ScChartPositioner::SetRangeList( const ScRange& rRange )
 {
     aRangeListRef = new ScRangeList;

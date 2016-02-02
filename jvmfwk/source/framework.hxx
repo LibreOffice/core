@@ -97,7 +97,6 @@ public:
     ::JavaInfo * detach();
     const ::JavaInfo* operator ->() const { return pInfo;}
     operator ::JavaInfo* () { return pInfo;}
-    operator ::JavaInfo const * () const { return pInfo;}
     ::JavaInfo* cloneJavaInfo() const;
 
     OUString getLocation() const;

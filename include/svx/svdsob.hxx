@@ -41,11 +41,6 @@ public:
         memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
     }
 
-    bool operator==(const SetOfByte& rCmpSet) const
-    {
-        return (memcmp(aData, rCmpSet.aData, sizeof(aData)) == 0);
-    }
-
     bool operator!=(const SetOfByte& rCmpSet) const
     {
         return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0);
@@ -87,7 +82,6 @@ public:
     bool IsEmpty() const;
 
     void operator&=(const SetOfByte& r2ndSet);
-    void operator|=(const SetOfByte& r2ndSet);
 
     // initialize this set with a uno sequence of sal_Int8
     void PutValue(const css::uno::Any & rAny);

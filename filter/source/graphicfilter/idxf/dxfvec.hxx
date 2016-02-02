@@ -73,7 +73,6 @@ public:
     // summation/subtraktion:
     DXFVector & operator += (const DXFVector & rV);
     DXFVector   operator +  (const DXFVector & rV) const;
-    DXFVector & operator -= (const DXFVector & rV);
     DXFVector   operator -  (const DXFVector & rV) const;
 
     // vector product
@@ -193,13 +192,6 @@ inline DXFVector & DXFVector::operator += (const DXFVector & rV)
 inline DXFVector DXFVector::operator + (const DXFVector & rV) const
 {
     return DXFVector(fx+rV.fx, fy+rV.fy, fz+rV.fz);
-}
-
-
-inline DXFVector & DXFVector::operator -= (const DXFVector & rV)
-{
-    fx-=rV.fx; fy-=rV.fy; fz-=rV.fz;
-    return *this;
 }
 
 

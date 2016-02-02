@@ -1084,30 +1084,6 @@ void ScInputHandler::ShowTip( const OUString& rText )
     }
 }
 
-void ScInputHandler::ShowTipBelow( const OUString& rText )
-{
-    HideTipBelow();
-
-    EditView* pActiveView = pTopView ? pTopView : pTableView;
-    if ( pActiveView )
-    {
-        Point aPos;
-        pTipVisibleSecParent = pActiveView->GetWindow();
-        vcl::Cursor* pCur = pActiveView->GetCursor();
-        if ( pCur )
-        {
-            Point aLogicPos = pCur->GetPos();
-            aLogicPos.Y() += pCur->GetHeight();
-            aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
-        }
-        aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
-        Rectangle aRect( aPos, aPos );
-        QuickHelpFlags nAlign = QuickHelpFlags::Left | QuickHelpFlags::Top | QuickHelpFlags::NoEvadePointer;
-        nTipVisibleSec = Help::ShowTip(pTipVisibleSecParent, aRect, rText, nAlign);
-        pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
-    }
-}
-
 bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
 {
     if ( aStart.isEmpty() )

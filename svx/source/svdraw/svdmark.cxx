@@ -195,32 +195,6 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
     return *this;
 }
 
-bool SdrMark::operator==(const SdrMark& rMark) const
-{
-    bool bRet(mpSelectedSdrObject == rMark.mpSelectedSdrObject && mpPageView == rMark.mpPageView && mbCon1 == rMark.mbCon1 && mbCon2 == rMark.mbCon2 && mnUser == rMark.mnUser);
-
-    if((mpPoints != nullptr) != (rMark.mpPoints != nullptr))
-        bRet = false;
-
-    if((mpLines != nullptr) != (rMark.mpLines != nullptr))
-        bRet = false;
-
-    if((mpGluePoints != nullptr) != (rMark.mpGluePoints != nullptr))
-        bRet = false;
-
-    if(bRet && mpPoints && *mpPoints != *rMark.mpPoints)
-        bRet = false;
-
-    if(bRet && mpLines && *mpLines != *rMark.mpLines)
-        bRet = false;
-
-    if(bRet && mpGluePoints && *mpGluePoints != *rMark.mpGluePoints)
-        bRet = false;
-
-    return bRet;
-}
-
-
 
 static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
 {

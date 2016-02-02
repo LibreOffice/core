@@ -54,7 +54,6 @@ public:
                     ~MultiSelection();
 
     MultiSelection& operator= ( const MultiSelection& rOrig );
-    bool            operator== ( MultiSelection& rOrig );
 
     void            SelectAll( bool bSelect = true );
     bool            Select( long nIndex, bool bSelect = true );

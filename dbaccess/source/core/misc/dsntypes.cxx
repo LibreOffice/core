@@ -577,14 +577,6 @@ const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operat
     return *this;
 }
 
-const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator--()
-{
-    OSL_ENSURE(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
-    if (m_nPosition >= 0)
-        --m_nPosition;
-    return *this;
-}
-
 bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeCollection::TypeIterator& rhs)
 {
     return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);

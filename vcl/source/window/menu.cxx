@@ -2511,21 +2511,6 @@ void MenuBar::ClosePopup(Menu *pMenu)
     pMenuWin->PopupClosed(pMenu);
 }
 
-void MenuBar::DeactivateMenuBar(VclPtr<vcl::Window>& xFocusId)
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    if (!pMenuWin)
-    {
-        xFocusId = nullptr;
-        return;
-    }
-    xFocusId = pMenuWin->GetFocusId();
-    if (xFocusId == nullptr)
-        return;
-    pMenuWin->SetFocusId(nullptr);
-    ImplGetSVData()->maWinData.mbNoDeactivate = false;
-}
-
 void MenuBar::MenuBarKeyInput(const KeyEvent& rEvent)
 {
     pWindow->KeyInput(rEvent);
