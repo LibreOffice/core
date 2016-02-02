@@ -159,8 +159,7 @@ OUString ThesaurusMenuController::getImplementationName()
 css::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.PopupMenuController" };
-    return aRet;
+    return { "com.sun.star.frame.PopupMenuController" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
