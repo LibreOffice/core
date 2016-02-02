@@ -16,6 +16,24 @@
       "revId": "b5aed5e3887d3915d7c91f44b3f363233c383534",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d5a96ee1",
+        "filename": "sc/source/filter/oox/sheetdatabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-02T19:53:06Z",
+      "side": 1,
+      "message": "guess I worded it wrong, the code in !bMultiRow branch does nothing and will get optimized out\n\nit had a use, which is gone since 2012\nsee commit 764752f5d85cb7c86ad21340dfdda4b62754790c\nnow bTextWrap is assigned but never used",
+      "parentUuid": "3aaa91ec_754b5a5a",
+      "revId": "b5aed5e3887d3915d7c91f44b3f363233c383534",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
