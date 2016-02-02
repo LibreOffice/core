@@ -178,6 +178,12 @@
 
 #define SV_FUNIT_STRINGS                            10700
 
+#define SV_APP_CPUTHREADS                           10800
+#define SV_APP_OSVERSION                            10801
+#define SV_APP_UIRENDER                             10802
+#define SV_APP_GL                                   10803
+#define SV_APP_DEFAULT                              10804
+
 #define SV_ICON_SIZE48_START                        20000
 #define SV_ICON_SIZE32_START                        21000
 #define SV_ICON_SIZE16_START                        23000
