@@ -277,7 +277,14 @@ void stparmscan(int delim)
         {
 #ifdef SOLAR
             *wp++ = DEL;
-            *wp++ = (char)(MAC_PARM + PAR_MAC); /* Stuff a magic marker */
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wconstant-conversion"
+#endif
+            *wp++ = MAC_PARM + PAR_MAC;     /* Stuff a magic marker */
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
             *wp++ = (char)(i + MAC_PARM);   /* Make a formal marker */
             *wp = wp[-4];                   /* Add on closing quote */
             workp = wp + 1;                 /* Reset string end     */
