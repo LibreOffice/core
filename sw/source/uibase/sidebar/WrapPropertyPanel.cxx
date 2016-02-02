@@ -36,6 +36,8 @@
 #include <hintids.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#define PRESET_SPACING 8
+
 const char UNO_WRAPOFF[] = ".uno:WrapOff";
 const char UNO_WRAPLEFT[] = ".uno:WrapLeft";
 const char UNO_WRAPRIGHT[] = ".uno:WrapRight";
@@ -201,6 +203,13 @@ void WrapPropertyPanel::Initialize()
 
 void WrapPropertyPanel::UpdateSpacingLB()
 {
+    // Check for 'custom' entry
+    // Remove custom entry to avoid duplicate entries (#tdf97407)
+    // Custom entry is not a Preset entry and should not
+    // be visible in List if a preset entry is selected
+    if(mpSpacingLB->GetEntryCount() > PRESET_SPACING)
+        mpSpacingLB->RemoveEntry(aCustomEntry);
+
     if( (nLeft == nRight) && (nTop == nBottom) && (nLeft == nTop) )
     {
         for(sal_Int32 i = 0; i < mpSpacingLB->GetEntryCount(); i++)
@@ -208,7 +217,6 @@ void WrapPropertyPanel::UpdateSpacingLB()
             if(reinterpret_cast<sal_uLong>(mpSpacingLB->GetEntryData(i)) == nLeft )
             {
                 mpSpacingLB->SelectEntryPos(i);
-                mpSpacingLB->RemoveEntry(aCustomEntry);
                 return;
             }
         }
