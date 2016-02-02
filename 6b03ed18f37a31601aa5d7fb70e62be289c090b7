@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_72e7f040",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-02T11:35:34Z",
+      "side": 1,
+      "message": "I\u0027d rather make this something like\n\n sal_Unicode cLastChar \u003d 0;\n sal_Int32 nPos \u003d aText.getLength() - 1;\n while (nPos \u003e\u003d 0 \u0026\u0026 ((cLastChar \u003d aText[nPos]) \u003d\u003d 0x20))\n     --nPos;\n\nso we catch any number of trailing spaces and also don\u0027t attempt to access aText out of bounds.",
+      "revId": "6b03ed18f37a31601aa5d7fb70e62be289c090b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_52e4743a",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2992,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-02T11:35:34Z",
+      "side": 1,
+      "message": "Here please use the literal characters instead of their hexadecimal representation, so\n\n (cLastChar !\u003d \u0027\u003d\u0027 \u0026\u0026 cLastChar !\u003d \u0027(\u0027 \u0026\u0026 cLastChar !\u003d \u0027,\u0027)\n\nwhich makes it more obvious to the reader what we actually check for.",
+      "revId": "6b03ed18f37a31601aa5d7fb70e62be289c090b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
