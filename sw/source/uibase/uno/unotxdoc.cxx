@@ -189,30 +189,35 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
 
     // Get current page number
     sal_uInt16 nCurrentPage = 1;
-    SwWrtShell* pSh = pDocShell->GetWrtShell();
+    const SwWrtShell* pSh = pDocShell->GetWrtShell();
+    const SwRootFrame *pFrame = nullptr;
     if (pSh)
     {
         SwPaM* pShellCursor = pSh->GetCursor();
         nCurrentPage = pShellCursor->GetPageNum();
+        pFrame = pSh->GetLayout();
     }
     else if (!bSwSrcView)
     {
         const SwPagePreview* pPreview = dynamic_cast< const SwPagePreview* >(pView);
         OSL_ENSURE(pPreview, "Unexpected type of the view shell");
         if (pPreview)
+        {
             nCurrentPage = pPreview->GetSelectedPage();
+            pFrame = pPreview->GetViewShell()->GetLayout();
+        }
     }
 
     // If blanks are skipped, account for them in initial page range value
-    if (pSh && !rPrintData.IsPrintEmptyPages())
+    if (pFrame && !rPrintData.IsPrintEmptyPages())
     {
         sal_uInt16 nMax = nCurrentPage;
-        SwPageFrame *pPage = dynamic_cast<SwPageFrame*>(pSh->GetLayout()->Lower());
+        const SwPageFrame *pPage = dynamic_cast<const SwPageFrame*>(pFrame->Lower());
         for ( ; nMax-- > 0; )
         {
             if (pPage->Frame().Height() == 0)
                 nCurrentPage--;
-            pPage = static_cast<SwPageFrame*>(pPage->GetNext());
+            pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
         }
     }
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
