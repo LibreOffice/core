@@ -42,8 +42,8 @@ namespace vlc {
 
 namespace
 {
-    const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
-    const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
+    const OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
+    const OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
     const int MSEC_IN_SEC = 1000;
 
     const char * const VLC_ARGS[] = {
@@ -112,18 +112,18 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
     return Graphic( bitmap ).GetXGraphic();
 }
 
-::rtl::OUString SAL_CALL VLCFrameGrabber::getImplementationName() throw ( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL VLCFrameGrabber::getImplementationName() throw ( css::uno::RuntimeException, std::exception )
 {
     return AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME;
 }
 
-sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName )
+sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const OUString& serviceName )
         throw ( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-::uno::Sequence< ::rtl::OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames()
+::uno::Sequence< OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames()
         throw ( css::uno::RuntimeException, std::exception )
 {
     ::uno::Sequence< OUString > aRet { AVMEDIA_VLC_GRABBER_SERVICENAME };

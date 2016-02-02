@@ -1845,9 +1845,7 @@ OUString Dbg_SbxDataType2String( SbxDataType eType )
 // Debugging help method to display the properties of a SbUnoObjects
 OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 {
-    OUStringBuffer aRet;
-    aRet.append("Properties of object ");
-    aRet.append(getDbgObjectName(rUnoObj));
+    OUString aRet ="Properties of object " + getDbgObjectName(rUnoObj);
 
     // analyse the Uno-Infos to recognise the arrays
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
@@ -1922,9 +1920,7 @@ OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 // Debugging help method to display the methods of an SbUnoObjects
 OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
 {
-    OUStringBuffer aRet;
-    aRet.append("Methods of object ");
-    aRet.append(getDbgObjectName(rUnoObj));
+    OUString aRet = "Methods of object " + getDbgObjectName(rUnoObj);
 
     // XIntrospectionAccess, so that the types of the parameter could be outputted
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
@@ -4910,9 +4906,7 @@ Any SbUnoStructRefObject::getUnoAny()
 
 OUString SbUnoStructRefObject::Impl_DumpProperties()
 {
-    OUStringBuffer aRet;
-    aRet.append("Properties of object ");
-    aRet.append( getDbgObjectName() );
+    OUString aRet = "Properties of object " + getDbgObjectName();
 
     sal_uInt16 nPropCount = pProps->Count();
     sal_uInt16 nPropsPerLine = 1 + nPropCount / 30;
@@ -5005,10 +4999,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         // by now all properties must be established
                         implCreateAll();
-                        OUStringBuffer aRet;
-                        aRet.append("Methods of object ");
-                        aRet.append( getDbgObjectName() );
-                        aRet.append( "\nNo methods found\n" );
+                        OUString aRet = "Methods of object " + getDbgObjectName() + "\nNo methods found\n";
                         pVar->PutString( aRet.makeStringAndClear() );
                     }
                     return;
