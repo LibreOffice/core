@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_92d7fc22",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-02T12:21:54Z",
+      "side": 1,
+      "message": "I\u0027d rather use this \"paint to MAXCOL/MAXROW\" only if bRowInfo is true, else use the original PostPaint() call. Otherwise it unnecessarily triggers a repaint in unchanged areas below/right of the pasted ranges.",
+      "revId": "a83b18235906a1f7e9854c01a78f788929ef31d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
