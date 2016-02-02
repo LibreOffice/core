@@ -690,8 +690,7 @@ bool SvpSalGraphics::drawPolyLine(
         return true;
     }
 
-    // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    bool bNoJoin = (basegfx::B2DLineJoin::NONE == eLineJoin && rLineWidths.getX() > 1.3);
+    const bool bNoJoin = (basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(rLineWidths.getX(), 0.0));
 
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
