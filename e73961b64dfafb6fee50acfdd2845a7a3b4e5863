@@ -1,0 +1,242 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_d5f7aef3",
+        "filename": "fpicker/source/office/asyncfilepicker.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "numerous member functions unconditionally dereference m_pDialog and m_pView - this is an indication that the class requires the caller to pass in valid pointers, and null pointers here are not handled gracefully, and are presumably an error in the program logic (of the caller) if they happen - and therefore assert() is more appropriate than SAL_WARN().\n\nassert() is for situations where we know that it\u0027s always a bug if the condition does not hold, and SAL_WARN() means only that it is suspicious.",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_75e7da40",
+        "filename": "fpicker/source/office/fpsmartcontent.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "this should be assert() ...",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_55e45e3a",
+        "filename": "fpicker/source/office/fpsmartcontent.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "... because there is no null check of m_pContent before it is dereferenced unconditionally here and 2 lines below.",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b5cf82b2",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "this should be assert(), see next line",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_15c13681",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "next line unconditionally dereferences pEntry, so this should be an assert()",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_35c43291",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "only non-null pointers are inserted in m_aFilter, and in line 2242 the elements of m_aFilter are dereferenced without null pointer check.\n\nso a null pointer here would be a bug, use assert()",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_95d40648",
+        "filename": "fpicker/source/office/iodlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "nPos is used to index m_aFilter, and m_aFilter is a std::deque - it is a bug if nPos \u003c 0 or nPos \u003e m_aFilter.size(), so assert() is better here",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_75beba00",
+        "filename": "fpicker/source/office/iodlgimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "_aURLs (has a horrible underscore name and) is a std::vector, so nId \u003e _aURLs.size() is a bug, so this should be assert()",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_55bbbe0e",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "the message text indicates that if this is triggered it\u0027s a bug - use assert()",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b53662b2",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "... same here, use assert()",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d545ee17",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_354b922d",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1548162d",
+        "filename": "framework/source/uiconfiguration/windowstateconfiguration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_75551ac5",
+        "filename": "framework/source/uielement/menubarmanager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-02T21:28:55Z",
+      "side": 1,
+      "message": "that would be a bug -\u003e assert()",
+      "revId": "e73961b64dfafb6fee50acfdd2845a7a3b4e5863",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
