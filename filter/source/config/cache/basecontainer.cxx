@@ -480,7 +480,7 @@ void SAL_CALL BaseContainer::flush()
     }
     catch(const css::uno::Exception& ex)
     {
-        // Dont remove the clone. May be the outside
+        // Don't remove the clone. May be the outside
         // user wish to repair it now and calls flush()
         // later again ...
 
@@ -515,7 +515,7 @@ void SAL_CALL BaseContainer::flush()
             try
             {
                 // ... this pointer can be interesting to find out, where will be called as listener
-                // Dont optimize it to a direct iterator cast :-)
+                // Don't optimize it to a direct iterator cast :-)
                 css::util::XFlushListener* pListener = static_cast<css::util::XFlushListener*>(pIterator.next());
                 pListener->flushed(aSource);
             }

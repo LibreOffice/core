@@ -28,7 +28,7 @@
       </info>
       <prop oor:name="SortedFilterList" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>Its a sorted list of internal filter names. All filters which are not listed here are appended alphabeticly at the end of this list</desc>
+          <desc>It's a sorted list of internal filter names. All filters which are not listed here are appended alphabetically at the end of this list</desc>
         </info>
         <value/>
       </prop>

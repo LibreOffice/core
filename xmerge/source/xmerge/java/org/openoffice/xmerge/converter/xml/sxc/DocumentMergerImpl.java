@@ -91,7 +91,7 @@ public class DocumentMergerImpl implements DocumentMerger {
             if (matchingWorkSheet != null) {
 
                 // need to put it into a row Iterator
-                // use a straight comparision algorithm then do a merge on it
+                // use a straight comparison algorithm then do a merge on it
                 Iterator i1 = new RowIterator(cc_, workSheet);
                 Iterator i2 = new RowIterator(cc_, matchingWorkSheet);
 

@@ -94,7 +94,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
                 @descr  Such constructed object can't be used really.
                         Might it will crash if its used!
-                        Dont forget to initialize all(!) members ...
+                        Don't forget to initialize all(!) members ...
              */
             InterceptedRequest()
             {
@@ -219,7 +219,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         void setInterceptions(const ::std::vector< InterceptedRequest >& lInterceptions);
 
 
-        /** @short  extract a requested continuation from te list of available ones.
+        /** @short  extract a requested continuation from the list of available ones.
 
             @param  lContinuations
                     the list of available continuations.
@@ -228,7 +228,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     is used to locate the right continuation,
                     by checking its interface type.
 
-            @return A valid reference to the continuation, if it could be located ...
+            @return A valid reference to the continuation, if it could be located...
                     or an empty reference otherwise.
          */
         static css::uno::Reference< css::task::XInteractionContinuation > extractContinuation(

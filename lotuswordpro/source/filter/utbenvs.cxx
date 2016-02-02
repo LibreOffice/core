@@ -115,7 +115,7 @@ sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
     return;
 }
 /**
-*   Flush data funciton, not supported now
+*   Flush data function, not supported now
 */
 void    LtcUtBenValueStream::FlushData()
 {
