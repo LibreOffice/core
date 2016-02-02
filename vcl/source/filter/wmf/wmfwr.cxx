@@ -802,7 +802,12 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
         }
     }
 
-    pWMF->WriteUInt32( nROP ).             WriteInt16( 0 ).             WriteInt16( rBitmap.GetSizePixel().Height() ).             WriteInt16( rBitmap.GetSizePixel().Width() ).             WriteInt16( 0 ).             WriteInt16( 0 );
+    pWMF->WriteUInt32( nROP ).
+        WriteInt16( 0 ).
+        WriteInt16( rBitmap.GetSizePixel().Height() ).
+        WriteInt16( rBitmap.GetSizePixel().Width() ).
+        WriteInt16( 0 ).
+        WriteInt16( 0 );
 
     WriteHeightWidth(rSize);
     WritePointYX(rPoint);
