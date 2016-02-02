@@ -2184,7 +2184,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     long nRotation = maFont.GetOrientation();
     ImplWriteTextColor();
 
-    Size aSize = maFont.GetSize();
+    Size aSize = maFont.GetFontSize();
 
     if ( maLastFont != maFont )
     {
@@ -2198,7 +2198,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
             ImplDefineFont( "Times", "Italic" );
 
         maLastFont = maFont;
-        aSize = maFont.GetSize();
+        aSize = maFont.GetFontSize();
         ImplWriteDouble( aSize.Height() );
         mpPS->WriteCharPtr( "sf " );
     }

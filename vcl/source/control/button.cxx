@@ -1071,7 +1071,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
 
         // prepare single line hint (needed on mac to decide between normal push button and
         // rectangular bevel button look)
-        Size aFontSize(Application::GetSettings().GetStyleSettings().GetPushButtonFont().GetSize());
+        Size aFontSize(Application::GetSettings().GetStyleSettings().GetPushButtonFont().GetFontSize());
         aFontSize = rRenderContext.LogicToPixel(aFontSize, MapMode(MAP_POINT));
         Size aInRectSize(rRenderContext.LogicToPixel(Size(aInRect.GetWidth(), aInRect.GetHeight())));
         aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height());

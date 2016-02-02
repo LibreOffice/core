@@ -578,10 +578,10 @@ bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle&
         // the text does not fit, adjust the font size
         double ratio = static_cast< double >( nHeight ) / rTextRect.Bottom();
         vcl::Font aFont(pDevice->GetFont());
-        Size aPixelSize(aFont.GetSize());
+        Size aPixelSize(aFont.GetFontSize());
         aPixelSize.Width() *= ratio;
         aPixelSize.Height() *= ratio;
-        aFont.SetSize(aPixelSize);
+        aFont.SetFontSize(aPixelSize);
         pDevice->SetFont(aFont);
         return true;
     }
@@ -659,7 +659,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                 SvxFont aFont;
                 aFont.SetFamilyName(pFontItem->GetFamilyName());
                 aFont.SetStyleName(pFontItem->GetStyleName());
-                aFont.SetSize(aPixelSize);
+                aFont.SetFontSize(aPixelSize);
 
                 const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_WEIGHT );
                 if ( pItem )

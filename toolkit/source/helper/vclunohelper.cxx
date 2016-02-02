@@ -365,8 +365,8 @@ css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rF
     css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetFamilyName();
     aFD.StyleName = rFont.GetStyleName();
-    aFD.Height = (sal_Int16)rFont.GetSize().Height();
-    aFD.Width = (sal_Int16)rFont.GetSize().Width();
+    aFD.Height = (sal_Int16)rFont.GetFontSize().Height();
+    aFD.Width = (sal_Int16)rFont.GetFontSize().Width();
     aFD.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
@@ -390,7 +390,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
     if ( !rDescr.StyleName.isEmpty() )
         aFont.SetStyleName( rDescr.StyleName );
     if ( rDescr.Height )
-        aFont.SetSize( Size( rDescr.Width, rDescr.Height ) );
+        aFont.SetFontSize( Size( rDescr.Width, rDescr.Height ) );
     if ( (FontFamily)rDescr.Family != FAMILY_DONTKNOW )
         aFont.SetFamily( (FontFamily)rDescr.Family );
     if ( (rtl_TextEncoding)rDescr.CharSet != RTL_TEXTENCODING_DONTKNOW )

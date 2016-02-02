@@ -2360,11 +2360,11 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
 
         case RES_CHRATR_FONTSIZE:
             {
-                Size aSize( aFont.GetSize().Width(),
+                Size aSize( aFont.GetFontSize().Width(),
                             static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() );
                 aTmp <<= ((float)aSize.Height()) / 20.0;
 
-                aFont.SetSize(OutputDevice::LogicToLogic(aSize, MAP_TWIP,
+                aFont.SetFontSize(OutputDevice::LogicToLogic(aSize, MAP_TWIP,
                     MAP_100TH_MM));
             }
             break;

@@ -1187,7 +1187,7 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         return;
 
     Size aTabBarSize;
-    aTabBarSize.Height() = GetViewFrame()->GetWindow().GetFont().GetHeight() + 4;
+    aTabBarSize.Height() = GetViewFrame()->GetWindow().GetFont().GetFontHeight() + 4;
     aTabBarSize.Width() = rSize.Width();
 
     Size aSz( rSize );

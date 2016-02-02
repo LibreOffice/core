@@ -162,7 +162,7 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
         vcl::Font aFont(aOldFont);
         Color aCol(COL_BLACK);
         aFont.SetColor(aCol);
-        aFont.SetHeight(200);
+        aFont.SetFontHeight(200);
         aFont.SetWeight(WEIGHT_MEDIUM);
         rRenderContext.SetFont(aFont);
         rRenderContext.DrawText(aRect, OUString("Edit Note"), DrawTextFlags::Center);

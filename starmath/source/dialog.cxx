@@ -266,7 +266,7 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
     rRenderContext.SetBackground(Wallpaper(aBackColor));
 
     vcl::Font aFont(maFont);
-    aFont.SetSize(Size(0, 24 * rRenderContext.GetDPIScaleFactor()));
+    aFont.SetFontSize(Size(0, 24 * rRenderContext.GetDPIScaleFactor()));
     aFont.SetAlignment(ALIGN_TOP);
     rRenderContext.SetFont(aFont);
     rRenderContext.SetTextColor(aTextColor);
@@ -362,7 +362,7 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
         {
             m_pFontBox->InsertEntry( aFontList.GetFontName(i).GetFamilyName() );
         }
-        maFont.SetSize(Size(0, 24));
+        maFont.SetFontSize(Size(0, 24));
         maFont.SetWeight(WEIGHT_NORMAL);
         maFont.SetItalic(ITALIC_NONE);
         maFont.SetFamily(FAMILY_DONTKNOW);
@@ -1152,7 +1152,7 @@ void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
 
         // taking a FontSize which is a bit smaller (compared to nLen) in order to have a buffer
         // (hopefully enough for left and right, too)
-        aFont.SetSize(Size(0, nLen - (nLen / 3)));
+        aFont.SetFontSize(Size(0, nLen - (nLen / 3)));
         rRenderContext.SetFont(aFont);
         // keep text color
         rRenderContext.SetTextColor(aTxtColor);
@@ -1385,7 +1385,7 @@ void SmShowSymbol::ApplySettings(vcl::RenderContext& /*rRenderContext*/ )
 
 void SmShowSymbol::setFontSize(vcl::Font &rFont) const
 {
-    rFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
+    rFont.SetFontSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 }
 
 void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
@@ -1687,7 +1687,7 @@ void SmShowChar::SetSymbol( const SmSym *pSym )
 void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
 {
     vcl::Font aFont( rFont );
-    aFont.SetSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3) );
+    aFont.SetFontSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3) );
     aFont.SetAlignment(ALIGN_BASELINE);
     SetFont(aFont);
     aFont.SetTransparent(true);

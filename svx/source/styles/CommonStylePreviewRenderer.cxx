@@ -146,7 +146,7 @@ bool CommonStylePreviewRenderer::recalculate()
         const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
         Size aFontSize(0, pFontHeightItem->GetHeight());
         maPixelSize = Size(mrOutputDev.LogicToPixel(aFontSize, mrShell.GetMapUnit()));
-        pFont->SetSize(maPixelSize);
+        pFont->SetFontSize(maPixelSize);
 
         vcl::Font aOldFont(mrOutputDev.GetFont());
 
@@ -158,7 +158,7 @@ bool CommonStylePreviewRenderer::recalculate()
             double ratio = double(mnMaxHeight) / aTextRect.Bottom();
             maPixelSize.Width() *= ratio;
             maPixelSize.Height() *= ratio;
-            pFont->SetSize(maPixelSize);
+            pFont->SetFontSize(maPixelSize);
         }
         mrOutputDev.SetFont(aOldFont);
     }
@@ -202,7 +202,7 @@ bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle, RenderAlign
     if (maFontColor != COL_AUTO)
         mrOutputDev.SetTextColor(maFontColor);
 
-    Size aPixelSize((m_pFont) ? maPixelSize : mrOutputDev.GetFont().GetSize());
+    Size aPixelSize((m_pFont) ? maPixelSize : mrOutputDev.GetFont().GetFontSize());
 
     Point aFontDrawPosition = aRectangle.TopLeft();
     if (eRenderAlign == RenderAlign::CENTER)

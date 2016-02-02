@@ -1585,7 +1585,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                     nullptr, Size(1, 1), DeviceFormat::DEFAULT));
             ::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
-            aFont.SetSize(Size(0, 25));
+            aFont.SetFontSize(Size(0, 25));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aFontName);
             int nFontWidth = aRect.BottomRight().X() + 1;

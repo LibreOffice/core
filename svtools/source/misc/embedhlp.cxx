@@ -669,7 +669,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         if( bTiny )
         {
             // decrease for small images
-            aFnt.SetSize( Size( 0, aAppFontSz.Height() * i / 8 ) );
+            aFnt.SetFontSize( Size( 0, aAppFontSz.Height() * i / 8 ) );
             pOut->SetFont( aFnt );
         }
         else

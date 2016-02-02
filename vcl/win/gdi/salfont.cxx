@@ -883,7 +883,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         nFontHeight *= 72;
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
-        rFont.SetSize( Size( 0, nFontHeight ) );
+        rFont.SetFontSize( Size( 0, nFontHeight ) );
         rFont.SetOrientation( (short)rLogFont.lfEscapement );
         if ( rLogFont.lfItalic )
             rFont.SetItalic( ITALIC_NORMAL );

@@ -1307,8 +1307,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                             //value specified in points.
 
                             //Must fix StarMath to retain the original pt values
-                            Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().
-                                GetSize().Height());
+                            Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().GetFontSize().Height());
 
                             if (pFontNode->GetSizeType() == FontSizeType::MINUS)
                                 aTemp-=aFrac;

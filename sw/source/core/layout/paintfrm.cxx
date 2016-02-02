@@ -3849,7 +3849,7 @@ void SwColumnFrame::PaintBreak( ) const
                     basegfx::B2DVector aFontSize;
                     OutputDevice* pOut = gProp.pSGlobalShell->GetOut();
                     vcl::Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
-                    aFont.SetHeight( 8 * 20 );
+                    aFont.SetFontHeight( 8 * 20 );
                     pOut->SetFont( aFont );
                     drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
                             aFontSize, aFont, false, false );
@@ -7367,7 +7367,7 @@ const vcl::Font& SwPageFrame::GetEmptyPageFont()
     if ( nullptr == pEmptyPgFont )
     {
         pEmptyPgFont = new vcl::Font;
-        pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
+        pEmptyPgFont->SetFontSize( Size( 0, 80 * 20 )); // == 80 pt
         pEmptyPgFont->SetWeight( WEIGHT_BOLD );
         pEmptyPgFont->SetStyleName( aEmptyOUStr );
         pEmptyPgFont->SetFamilyName("Helvetica");

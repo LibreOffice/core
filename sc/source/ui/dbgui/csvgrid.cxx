@@ -227,7 +227,7 @@ void ScCsvGrid::InitColors()
 void ScCsvGrid::InitFonts()
 {
     maMonoFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, GetDefaultFontFlags::NONE );
-    maMonoFont.SetSize( Size( maMonoFont.GetSize().Width(), maHeaderFont.GetSize().Height() ) );
+    maMonoFont.SetFontSize( Size( maMonoFont.GetFontSize().Width(), maHeaderFont.GetFontSize().Height() ) );
 
     /* *** Set edit engine defaults ***
         maMonoFont for Latin script, smaller default font for Asian and Complex script. */
@@ -245,7 +245,7 @@ void ScCsvGrid::InitFonts()
     aDefSet.Put( aComplexItem );
 
     // set Asian/Complex font size to height of character in Latin font
-    sal_uLong nFontHt = static_cast< sal_uLong >( maMonoFont.GetSize().Height() );
+    sal_uLong nFontHt = static_cast< sal_uLong >( maMonoFont.GetFontSize().Height() );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 

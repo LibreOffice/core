@@ -808,7 +808,7 @@ namespace cppcanvas
             // TODO(Q3): This code smells of programming by
             // coincidence (the next two if statements)
 
-            ::Size rFontSizeLog( rFont.GetSize() );
+            ::Size rFontSizeLog( rFont.GetFontSize() );
 
             if (rFontSizeLog.Height() == 0)
             {
@@ -823,8 +823,8 @@ namespace cppcanvas
             if( nFontWidthLog != 0 )
             {
                 vcl::Font aTestFont = rFont;
-                aTestFont.SetWidth( 0 );
-                sal_Int32 nNormalWidth = rParms.mrVDev.GetFontMetric( aTestFont ).GetWidth();
+                aTestFont.SetAverageFontWidth( 0 );
+                sal_Int32 nNormalWidth = rParms.mrVDev.GetFontMetric( aTestFont ).GetAverageFontWidth();
                 if( nNormalWidth != nFontWidthLog )
                     if( nNormalWidth )
                         aFontMatrix.m00 = (double)nFontWidthLog / nNormalWidth;
@@ -888,7 +888,7 @@ namespace cppcanvas
             {
                 // calculate shadow offset (similar to outdev3.cxx)
                 // TODO(F3): better match with outdev3.cxx
-                sal_Int32 nShadowOffset = static_cast<sal_Int32>(1.5 + ((rParms.mrVDev.GetFont().GetHeight()-24.0)/24.0));
+                sal_Int32 nShadowOffset = static_cast<sal_Int32>(1.5 + ((rParms.mrVDev.GetFont().GetFontHeight()-24.0)/24.0));
                 if( nShadowOffset < 1 )
                     nShadowOffset = 1;
 

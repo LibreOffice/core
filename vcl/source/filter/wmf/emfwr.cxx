@@ -511,8 +511,8 @@ void EMFWriter::ImplCheckTextAttr()
 
         ImplBeginRecord( WIN_EMR_EXTCREATEFONTINDIRECTW );
         m_rStm.WriteUInt32( mnTextHandle );
-        ImplWriteExtent( -rFont.GetSize().Height() );
-        ImplWriteExtent( rFont.GetSize().Width() );
+        ImplWriteExtent( -rFont.GetFontSize().Height() );
+        ImplWriteExtent( rFont.GetFontSize().Width() );
         m_rStm.WriteInt32( rFont.GetOrientation() ).WriteInt32( rFont.GetOrientation() );
 
         switch( rFont.GetWeight() )

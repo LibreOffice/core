@@ -129,10 +129,10 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
 
     LanguageType eLang = mrOutliner.GetDefaultLanguage();
     maPageNumberFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE );
-    maPageNumberFont.SetHeight( 500 );
+    maPageNumberFont.SetFontHeight( 500 );
 
     maBulletFont.SetColor( COL_AUTO );
-    maBulletFont.SetHeight( 1000 );
+    maBulletFont.SetFontHeight( 1000 );
     maBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
     maBulletFont.SetFamilyName( "StarSymbol" );
     maBulletFont.SetWeight(WEIGHT_NORMAL);
@@ -1686,7 +1686,7 @@ IMPL_LINK_TYPED(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, v
 
         Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
         vcl::Font aNewFont( OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE ) );
-        aNewFont.SetSize( aFontSz );
+        aNewFont.SetFontSize( aFontSz );
         aNewFont.SetVertical( bVertical );
         aNewFont.SetOrientation( bVertical ? 2700 : 0 );
         aNewFont.SetColor( COL_AUTO );
