@@ -265,6 +265,20 @@ typedef enum
      * lok::Office::setDocumentPassword().
      */
     LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY,
+
+    /**
+     * An error happened.
+     *
+     * The payload returns information further identifying the error, like:
+     *
+     * {
+     *     "classification": "error" | "warning" | "info"
+     *     "kind": "network" etc.
+     *     "code": 403 | 404 | ...
+     *     "message": freeform description
+     * }
+     */
+    LOK_CALLBACK_ERROR,
 }
 LibreOfficeKitCallbackType;
 

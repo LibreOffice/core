@@ -781,6 +781,18 @@ static void formulaChanged(LOKDocView* pDocView, const std::string& rString)
     g_signal_emit(pDocView, doc_view_signals[FORMULA_CHANGED], 0, rString.c_str());
 }
 
+static void reportError(LOKDocView* /*pDocView*/, const std::string& rString)
+{
+    GtkWidget *dialog = gtk_message_dialog_new(nullptr,
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_CLOSE,
+            "%s",
+            rString.c_str());
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+}
+
 static void
 setPart(LOKDocView* pDocView, const std::string& rString)
 {
@@ -1117,6 +1129,11 @@ callback (gpointer pData)
     case LOK_CALLBACK_CELL_FORMULA:
     {
         formulaChanged(pDocView, pCallback->m_aPayload);
+    }
+    break;
+    case LOK_CALLBACK_ERROR:
+    {
+        reportError(pDocView, pCallback->m_aPayload);
     }
     break;
     default:
