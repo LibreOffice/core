@@ -77,7 +77,7 @@ public:
 
         @descr  The load environment must know, if a content
                 is related to a target frame or not. Only "visible"
-                components, which fullfill the requirements of the
+                components, which fulfill the requirements of the
                 model-controller-view paradigm can be loaded into a frame.
                 Such contents are classified as E_CAN_BE_LOADED.
 
@@ -497,7 +497,7 @@ private:
 
                 If a suitable target is located it will be locked. Thats why the last rule
                 exists! If this method returns a valid frame reference, it was locked to be useable
-                for this load request only. (Dont forget to reset this state later!)
+                for this load request only. (Don't forget to reset this state later!)
                 Concurrent LoadEnv instances can synchronize her work be using such locks :-) HOPEFULLY
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
@@ -518,7 +518,7 @@ private:
                    Showing of such frame is not needed really.. because we recycle
                    visible frames only!
                 b) If the document was already shown (e.g. by our progress implementation)
-                   we do nothing here. The reason  behind: The document was already shown...
+                   we do nothing here. The reason behind: The document was already shown...
                    and it was already make a top window...
                    If the user activated another frame inbetween (because loading needed some time)
                    it's not allowed to disturb the user again. Then the frame must resists in the background.

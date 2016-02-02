@@ -25,7 +25,7 @@ Killing the 1-argument vector fill constructor:
 
 in general is probably a Good Thing(tm). It can just be too misleading.
 Requiring at least the explicit two-value fill constructor for the rare cases where
-someone wants a filled vector isnt too much to ask and less prone to
+someone wants a filled vector isn't too much to ask and less prone to
 misunderstandings:
 
  std::vector< basebmp::Color > aDevPal(2, basebmp::Color(0,0,0));

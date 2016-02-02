@@ -44,7 +44,7 @@ public class NativeView extends java.awt.Canvas
      * Does nothing really.
      * We can use our JNI mechanism for an already visible
      * canvas only. So we override the method for showing ( "setVisible()" )
-     * and make our intialization there. BUt we try to show an empty clean
+     * and make our initialization there. BUt we try to show an empty clean
      * window till there.
      */
     public NativeView()

@@ -3681,7 +3681,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" COMMENTS") );
                         // A parameter with COMMENTS shouldn't set fixed
                         // ( or at least the binary filter doesn't )
-                        // If we set fixed then we wont export a field cmd.
+                        // If we set fixed then we won't export a field cmd.
                         // Additionally the para in COMMENTS is more like an
                         // instruction to set the document property comments
                         // with the param ( e.g. each COMMENT with a param will

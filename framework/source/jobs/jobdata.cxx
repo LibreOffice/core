@@ -97,7 +97,7 @@ JobData::~JobData()
 }
 
 /**
-    @short      initalize this instance as a job with configuration
+    @short      initialize this instance as a job with configuration
     @descr      They given alias can be used to address some configuration data.
                 We read it and fill our internal structures. Of course old information
                 will be lost doing so.
@@ -164,7 +164,7 @@ void JobData::setAlias( const OUString& sAlias )
 }
 
 /**
-    @short      initalize this instance as a job without configuration
+    @short      initialize this instance as a job without configuration
     @descr      This job has no configuration data. We have to forget all old information
                 and set only some of them new, so this instance can work.
 

@@ -153,7 +153,7 @@ class SFX2_DLLPUBLIC SfxChildWindow
     SfxChildAlignment          eChildAlignment; // Current css::drawing::Alignment
     SfxChildWindow_Impl*       pImp;            // Implementation data
     SfxChildWindowContext*     pContext;        // With context-sensitive ChildWindows:
-                                                 // Annother window in pWindow
+                                                 // Another window in pWindow
     SAL_DLLPRIVATE void ClearWorkwin();
 
 protected:

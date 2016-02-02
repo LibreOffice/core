@@ -390,7 +390,7 @@ bool SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
 
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
-    // view shell.  (One is created earlier while the construtor of the base
+    // view shell.  (One is created earlier while the constructor of the base
     // class is executed.  But because at that time the correct
     // accessibility object can not be constructed we do that now.)
     if (mpContentWindow.get() !=nullptr)

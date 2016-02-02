@@ -486,7 +486,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 /**
     Use as follows:
-        SAL_DEPRECATED("Dont use, its evil.") void doit(int nPara);
+        SAL_DEPRECATED("Don't use, it's evil.") void doit(int nPara);
 */
 
 #if HAVE_GCC_DEPRECATED_MESSAGE
@@ -506,7 +506,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
    SAL_DEPRECATED, and then removed.
 
    Use as follows:
-        SAL_DEPRECATED_INTERNAL("Dont use, its evil.") void doit(int nPara);
+        SAL_DEPRECATED_INTERNAL("Don't use, it's evil.") void doit(int nPara);
  */
 #ifdef LIBO_INTERNAL_ONLY
 #    define SAL_DEPRECATED_INTERNAL(message)

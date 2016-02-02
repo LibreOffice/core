@@ -1803,7 +1803,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     try
     {
-        SAL_INFO("lok", "Attempting to initalize UNO");
+        SAL_INFO("lok", "Attempting to initialize UNO");
         if (!initialize_uno(aAppURL))
         {
             return false;
