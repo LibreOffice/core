@@ -3414,6 +3414,13 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             bool bSetModified = !bCursorKey;
             DataChanged(false, bSetModified); // also calls UpdateParenthesis()
             InvalidateAttribs();        //! in DataChanged?
+            const OUString& rText = pEngine->GetText(0);
+            if ( !rText.isEmpty() && bFormulaMode )
+            {
+                sal_Int32 nPos = rText.getLength()-1;
+                if (nPos >= 0 && (rText[nPos] >= 48 && rText[nPos] <= 57) && nCode != KEY_DELETE && nCode != KEY_BACKSPACE && !bCursorKey )
+                    InitRangeFinder(rText);
+            }
         }
     }
 
