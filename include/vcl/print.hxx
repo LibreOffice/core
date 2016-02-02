@@ -96,8 +96,6 @@ public:
     const OUString&            GetComment() const { return maComment; }
     PrintQueueFlags            GetStatus() const { return mnStatus; }
     sal_uInt32                 GetJobs() const { return mnJobs; }
-
-    bool                       operator==( const QueueInfo& rInfo ) const;
 };
 
 

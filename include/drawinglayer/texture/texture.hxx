@@ -41,7 +41,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const;
-            bool operator!=(const GeoTexSvx& rGeoTexSvx) const { return !operator==(rGeoTexSvx); }
 
             // virtual base methods
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;

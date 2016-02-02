@@ -43,24 +43,6 @@ namespace connectivity
 
     java_util_Properties* createStringPropertyArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    template<class T,class JT> ::com::sun::star::uno::Sequence< T > copyArrayAndDelete(JNIEnv *pEnv,jobjectArray _Array, const T*, const JT* )
-    {
-                ::com::sun::star::uno::Sequence< T > xOut;
-        if(_Array)
-        {
-            jsize  nLen = pEnv->GetArrayLength(_Array);
-            xOut.realloc(nLen);
-            for(jsize i=0;i<nLen;++i)
-            {
-                JT xInfo(pEnv,pEnv->GetObjectArrayElement(_Array,i));
-                java_lang_Object::ThrowSQLException(pEnv,nullptr);
-                xOut.getArray()[i] = xInfo;
-            }
-            pEnv->DeleteLocalRef(_Array);
-        }
-        return xOut;
-    }
-
     jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
 
     /** return if a exception occurred

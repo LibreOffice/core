@@ -319,8 +319,6 @@ public:
     inline bool operator!=( const ScAddress& rAddress ) const;
     inline bool operator<( const ScAddress& rAddress ) const;
     inline bool operator<=( const ScAddress& rAddress ) const;
-    inline bool operator>( const ScAddress& rAddress ) const;
-    inline bool operator>=( const ScAddress& rAddress ) const;
 
     inline size_t hash() const;
 
@@ -394,16 +392,6 @@ inline bool ScAddress::operator<( const ScAddress& rAddress ) const
 inline bool ScAddress::operator<=( const ScAddress& rAddress ) const
 {
     return operator<( rAddress ) || operator==( rAddress );
-}
-
-inline bool ScAddress::operator>( const ScAddress& rAddress ) const
-{
-    return !operator<=( rAddress );
-}
-
-inline bool ScAddress::operator>=( const ScAddress& rAddress ) const
-{
-    return !operator<( rAddress );
 }
 
 inline size_t ScAddress::hash() const
@@ -572,8 +560,6 @@ public:
     inline bool operator!=( const ScRange& rRange ) const;
     inline bool operator<( const ScRange& rRange ) const;
     inline bool operator<=( const ScRange& rRange ) const;
-    inline bool operator>( const ScRange& rRange ) const;
-    inline bool operator>=( const ScRange& rRange ) const;
 
     /// Hash 2D area ignoring table number.
     inline size_t hashArea() const;
@@ -619,16 +605,6 @@ inline bool ScRange::operator<( const ScRange& r ) const
 inline bool ScRange::operator<=( const ScRange& rRange ) const
 {
     return operator<( rRange ) || operator==( rRange );
-}
-
-inline bool ScRange::operator>( const ScRange& rRange ) const
-{
-    return !operator<=( rRange );
-}
-
-inline bool ScRange::operator>=( const ScRange& rRange ) const
-{
-    return !operator<( rRange );
 }
 
 inline bool ScRange::In( const ScAddress& rAddress ) const
@@ -708,7 +684,6 @@ public:
     {
         return aRange[n];
     }
-    inline bool operator==( const ScRangePair& ) const;
 };
 
 inline ScRangePair& ScRangePair::operator= ( const ScRangePair& rRange )
@@ -716,12 +691,6 @@ inline ScRangePair& ScRangePair::operator= ( const ScRangePair& rRange )
     aRange[0] = rRange.aRange[0];
     aRange[1] = rRange.aRange[1];
     return *this;
-}
-
-inline bool ScRangePair::operator==( const ScRangePair& rRange ) const
-{
-    return (aRange[0] == rRange.aRange[0]) &&
-           (aRange[1] == rRange.aRange[1]);
 }
 
 //  ScRefAddress

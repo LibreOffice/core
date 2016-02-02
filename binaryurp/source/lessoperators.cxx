@@ -42,28 +42,6 @@ bool operator <(TypeDescription const & left, TypeDescription const & right) {
           OUString::unacquired(&right.get()->pTypeName)));
 }
 
-bool TypeDescEqual::operator()( const TypeDescription& rLeft, const TypeDescription& rRight) const
-{
-	assert( rLeft.is() && rRight.is());
-	const typelib_TypeDescription& rA = *rLeft.get();
-	const typelib_TypeDescription& rB = *rRight.get();
-	if( rA.eTypeClass != rB.eTypeClass)
-		return false;
-	const sal_Int32 nCmp = rtl_ustr_compare_WithLength(
-			rA.pTypeName->buffer, rA.pTypeName->length,
-			rB.pTypeName->buffer, rB.pTypeName->length);
-	return (nCmp == 0);
-}
-
-sal_Int32 TypeDescHash::operator()( const TypeDescription& rTD) const
-{
-	assert( rTD.is());
-	const typelib_TypeDescription& rA = *rTD.get();
-	sal_Int32 h = rtl_ustr_hashCode_WithLength( rA.pTypeName->buffer, rA.pTypeName->length);
-	h ^= static_cast<sal_Int32>(rA.eTypeClass);
-	return h;
-}
-
 } } } }
 
 namespace rtl {

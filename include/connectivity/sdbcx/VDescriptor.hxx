@@ -72,12 +72,6 @@ namespace connectivity
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception);
 
-            // compare
-            inline bool operator == ( const OUString & _rRH )
-            {
-                return m_aCase(m_Name,_rRH);
-            }
-
             // css::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

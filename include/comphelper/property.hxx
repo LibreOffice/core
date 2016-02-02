@@ -40,28 +40,6 @@ namespace comphelper
         }
     };
 
-    struct PropertyStringEqualFunctor : ::std::binary_function< css::beans::Property, OUString, bool >
-    {
-
-        inline bool operator()( const css::beans::Property& lhs, const OUString& rhs ) const
-        {
-            return lhs.Name == rhs ;
-        }
-
-        inline bool operator()( const OUString& lhs, const css::beans::Property& rhs ) const
-        {
-            return lhs == rhs.Name ;
-        }
-    };
-
-    struct PropertyEqualByName : public ::std::binary_function< css::beans::Property, css::beans::Property, bool >
-    {
-        bool operator() (const css::beans::Property& x, const css::beans::Property& y) const
-        {
-            return x.Name == y.Name ;
-        }
-    };
-
 /// remove the property with the given name from the given sequence
 COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property>& seqProps, const OUString& _rPropName);
 

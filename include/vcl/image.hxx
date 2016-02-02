@@ -124,7 +124,6 @@ public:
 
     ImageList&      operator=( const ImageList& rImageList );
     bool            operator==( const ImageList& rImageList ) const;
-    bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
 private:
 

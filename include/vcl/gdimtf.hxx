@@ -117,7 +117,6 @@ public:
 
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
     bool            operator==( const GDIMetaFile& rMtf ) const;
-    bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
     bool            Mirror( BmpMirrorFlags nMirrorFlags );

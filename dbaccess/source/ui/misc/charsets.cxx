@@ -128,14 +128,6 @@ namespace dbaui
         return *this;
     }
 
-    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
-    {
-        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
-        if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin() )
-            --m_aPosition;
-        return *this;
-    }
-
     bool operator==(const OCharsetDisplay::ExtendedCharsetIterator& lhs, const OCharsetDisplay::ExtendedCharsetIterator& rhs)
     {
         return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_aPosition == rhs.m_aPosition);

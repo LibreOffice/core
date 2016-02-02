@@ -32,17 +32,4 @@ Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder )
     return rRect;
 }
 
-Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder )
-{
-    // call GetSize first due to Empty-Rect
-    Size aS( rRect.GetSize() );
-    aS.Width()  -= rBorder.Left() + rBorder.Right();
-    aS.Height() -= rBorder.Top() + rBorder.Bottom();
-
-    rRect.Left()   += rBorder.Left();
-    rRect.Top()    += rBorder.Top();
-    rRect.SetSize( aS );
-    return rRect;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

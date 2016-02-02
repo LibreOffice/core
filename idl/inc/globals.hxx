@@ -43,7 +43,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_Get;
     SvStringHashEntryRef MM_Set;
     SvStringHashEntryRef MM_SlotId;
-    SvStringHashEntryRef MM_HasCoreId;
     SvStringHashEntryRef MM_Cachable;
     SvStringHashEntryRef MM_Volatile;
     SvStringHashEntryRef MM_Toggle;
@@ -148,7 +147,6 @@ HASH_INLINE(shell)
 HASH_INLINE(Get)
 HASH_INLINE(Set)
 HASH_INLINE(SlotId)
-HASH_INLINE(HasCoreId)
 HASH_INLINE(Cachable)
 HASH_INLINE(Volatile)
 HASH_INLINE(Toggle)
