@@ -21,8 +21,6 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 	build \
 ))
 
-FB_PRLL_ARG:=$(shell if [ "0$(PARALLELISM)" -gt 0 ]; then echo "CPU=$(PARALLELISM)"; fi)
-
 # note: this can intentionally only build against internal atomic_op
 # note: this can intentionally only build against internal tommath
 
@@ -30,6 +28,12 @@ FB_PRLL_ARG:=$(shell if [ "0$(PARALLELISM)" -gt 0 ]; then echo "CPU=$(PARALLELIS
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
+		&& FB_CPU_ARG='$(filter --jobserver-fds=%,$(MAKEFLAGS))' \
+		&& if [ -n "$${FB_CPU_ARG}" ]; then \
+		  FB_PRLL_ARG="CPU=\$$(EMPTY) $${FB_CPU_ARG}"; \
+		else \
+		  FB_PRLL_ARG="-m"; \
+		fi \
 		&& export PKG_CONFIG="" \
 		&& export CPPFLAGS=" \
 			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_CFLAGS), \
@@ -62,7 +66,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& $(if $(filter WNT,$(OS)),\
 			   PATH="$(shell cygpath -u $(call gb_UnpackedTarball_get_dir,icu)/source/lib):$$PATH",\
 			   $(gb_Helper_set_ld_path)) \
-		   $(MAKE) $(FB_PRLL_ARG) SHELL=$(SHELL) firebird_embedded \
+		   $(MAKE) "$${FB_PRLL_ARG}" SHELL='$(SHELL)' firebird_embedded \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.5) \
