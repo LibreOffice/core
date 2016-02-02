@@ -591,9 +591,6 @@ public:
 
     SAL_DLLPRIVATE void                 ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags );
 
-    SAL_DLLPRIVATE void                 ImplAddDel( ImplDelData* pDel ) const;
-    SAL_DLLPRIVATE void                 ImplRemoveDel( ImplDelData* pDel ) const;
-
     SAL_DLLPRIVATE void                 ImplCallResize();
     SAL_DLLPRIVATE void                 ImplCallMove();
 
