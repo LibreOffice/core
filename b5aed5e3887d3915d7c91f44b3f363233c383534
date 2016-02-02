@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_754b5a5a",
+        "filename": "sc/source/filter/oox/sheetdatabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-02T18:42:07Z",
+      "side": 1,
+      "message": "Why do we know that bMultiRow will always be true? That would mean that all checks before that check for bMultiRow are also unnecessary.",
+      "revId": "b5aed5e3887d3915d7c91f44b3f363233c383534",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
