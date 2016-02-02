@@ -292,12 +292,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         {
             // convert to window coordinates ....
             aClipRect = pView->pImpEditView->GetWindowPos( aClipRect );
-
-            // For tiled rendering, we have to always go via Invalidate().
-            if ( pView == pCurView && !comphelper::LibreOfficeKit::isActive())
-                Paint( pView->pImpEditView, aClipRect, nullptr, true );
-            else
-                pView->GetWindow()->Invalidate( aClipRect );
+            pView->GetWindow()->Invalidate( aClipRect );
         }
     }
 
