@@ -54,14 +54,14 @@
 #include <com/sun/star/deployment/Prerequisites.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
-#include <boost/bind.hpp>
 #include <unotools/tempfile.hxx>
 
-#include <vector>
-#include <list>
 #include "dp_descriptioninfoset.hxx"
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
+
+#include <vector>
+#include <list>
 #include <algorithm>
 
 using namespace ::dp_misc;
@@ -431,8 +431,8 @@ void PackageManagerImpl::fireModified()
         cppu::UnoType<util::XModifyListener>::get() );
     if (pContainer != nullptr) {
         pContainer->forEach<util::XModifyListener>(
-            boost::bind(&util::XModifyListener::modified, _1,
-                        lang::EventObject(static_cast<OWeakObject *>(this))) );
+            [this] (uno::Reference<util::XModifyListener> const& xListener)
+                { return xListener->modified(lang::EventObject(static_cast<OWeakObject *>(this))); });
     }
 }
 
