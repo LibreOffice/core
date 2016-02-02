@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_f51f4a59",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-02T18:27:30Z",
+      "side": 1,
+      "message": "How is this supposed to work?\n\nYou are actually writing here a forced null pointer access. You are not even creating a ScDBData instance.",
+      "revId": "6b20bcd5e4164edaa002d866ae9a5b59da01ce37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_952a467d",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-02T18:27:30Z",
+      "side": 1,
+      "message": "Obviously it does not set the properties anymore now.\n\nIt is not enough to remove the UNO code, you also need to make sure to set the properties the same way.",
+      "revId": "6b20bcd5e4164edaa002d866ae9a5b59da01ce37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d524ceb0",
+        "filename": "sc/source/filter/oox/tablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-02T18:27:30Z",
+      "side": 1,
+      "message": "You can\u0027t just remove that code without adding some corresponding code doing the same work through the internal API.",
+      "revId": "6b20bcd5e4164edaa002d866ae9a5b59da01ce37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
