@@ -515,14 +515,10 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
             // take base URL and append current input
             bool bWasAbsolute = false;
 #ifdef UNX
-            INetURLObject::FSysStyle eStyle = static_cast< INetURLObject::FSysStyle >( INetURLObject::FSYS_VOS | INetURLObject::FSYS_UNX | INetURLObject::FSYS_DOS );
             // encode file URL correctly
             aSmart = INetURLObject::encode( aSmart, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
-            INetURLObject aTmp( aObj.smartRel2Abs(
-                aSmart, bWasAbsolute, false, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8, false, eStyle ) );
-#else
-            INetURLObject aTmp( aObj.smartRel2Abs( aSmart, bWasAbsolute ) );
 #endif
+            INetURLObject aTmp( aObj.smartRel2Abs( aSmart, bWasAbsolute ) );
 
             if ( aText.endsWith(".") )
                 // INetURLObject appends a final slash for the directories "." and "..", this is a bug!
