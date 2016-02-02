@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_3272887d",
+        "filename": "svx/source/sdr/contact/objectcontactofpageview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-02T12:08:16Z",
+      "side": 0,
+      "message": "This number is a valid openoffice bug # (https://bz.apache.org/ooo/show_bug.cgi?id\u003d99876). Please leave the number around.\nYou can of course remove the \"OD 2009-03-05\" comment.",
+      "revId": "83b9c51803b3acef078892e4f233339e57dd53e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
