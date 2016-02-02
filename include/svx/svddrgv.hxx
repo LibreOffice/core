@@ -163,7 +163,7 @@ public:
     void SetNoDragXorPolys(bool bOn);
     bool IsNoDragXorPolys() const { return mbNoDragXorPolys; }
 
-    // If the number of selected objects exceeds te value set here,
+    // If the number of selected objects exceeds the value set here,
     // NoDragPolys is (temporarily) activated implicitely.
     // PolyPolygons etc. are regarded as multiple objects respectively.
     // Default=100

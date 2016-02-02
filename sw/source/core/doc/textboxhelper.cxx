@@ -643,7 +643,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
 
                 aTextBoxSet.Put(aOrient);
 
-                // restore height (shrinked for extending beyond the page bottom - tdf#91260)
+                // restore height (shrunk for extending beyond the page bottom - tdf#91260)
                 SwFormatFrameSize aSize(pFormat->GetFrameSize());
                 if (!aRect.IsEmpty())
                 {

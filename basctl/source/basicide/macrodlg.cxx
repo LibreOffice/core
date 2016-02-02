@@ -596,7 +596,7 @@ IMPL_LINK_NOARG_TYPED( MacroChooser, EditModifyHdl, Edit&, void )
             if ( !bFound )
             {
                 SvTreeListEntry* pEntry = m_pMacroBox->FirstSelected();
-                // if the entry exists ->Select ->Desription...
+                // if the entry exists ->Select ->Description...
                 if ( pEntry )
                     m_pMacroBox->Select( pEntry, false );
             }

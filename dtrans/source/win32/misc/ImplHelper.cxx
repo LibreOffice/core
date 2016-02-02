@@ -216,7 +216,7 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 //
 // Return Value:
 //    pointer to allocated copy of ptdSrc
-//    if ptdSrc==NULL then retuns NULL is returned.
+//    if ptdSrc==NULL then returns NULL is returned.
 //    if ptdSrc!=NULL and memory allocation fails, then NULL is returned
 DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 {
@@ -270,7 +270,7 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 //
 // Return Value:
 //  returns TRUE if copy was successful;
-//  retuns FALSE if not successful, e.g. one or both of the pointers
+//  returns FALSE if not successful, e.g. one or both of the pointers
 //  were invalid or the pointers were equal
 sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 {

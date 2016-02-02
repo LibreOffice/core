@@ -463,7 +463,7 @@ public class TypeDetection extends ComplexTestCase {
                     String fileType = helper.getTypeforfileAlias(fileAlias);
 
                     PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
-                        new String[] {"URL", "DocumentSerivce"},
+                        new String[] {"URL", "DocumentService"},
                         new Object[] {fileURL, serviceName});
                     log.println("check " + fileAlias);
 

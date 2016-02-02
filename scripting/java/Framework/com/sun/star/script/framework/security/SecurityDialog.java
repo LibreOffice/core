@@ -280,7 +280,7 @@ public class SecurityDialog extends WeakBase implements
         xPSetButton.setPropertyValue("TabIndex", Short.valueOf((short)1));
         xPSetButton.setPropertyValue("Label", _runMacro);
 
-        // create the Dont Run Macro button model and set the properties
+        // create the Don't Run Macro button model and set the properties
         Object doNotRunButtonModel =
             xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlButtonModel");

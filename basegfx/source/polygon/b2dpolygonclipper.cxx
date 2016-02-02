@@ -226,7 +226,7 @@ namespace basegfx
 
             if(!bInside)
             {
-                // cutting off the outer parts of filled polygons at parallell
+                // cutting off the outer parts of filled polygons at parallel
                 // lines to the axes is only possible for the inner part, not for
                 // the outer part which means cutting a hole into the original polygon.
                 // This is because the inner part is a logical AND-operation of
@@ -326,7 +326,7 @@ namespace basegfx
             else
             {
                 // for details, see comment in clipPolygonOnRange for the "cutting off
-                // the outer parts of filled polygons at parallell lines" explanations
+                // the outer parts of filled polygons at parallel lines" explanations
                 const B2DPolygon aClip(createPolygonFromRect(rRange));
 
                 return clipPolyPolygonOnPolyPolygon(rCandidate, B2DPolyPolygon(aClip), bInside, bStroke);
