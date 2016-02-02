@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_12930ca5",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-02T11:01:24Z",
+      "side": 1,
+      "message": "This is not good, we\u0027d now end up with two independent reference mechanisms for the same pointer.",
+      "revId": "fd119c801456e2c5ad0af999792d1f0f0a2e8cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
