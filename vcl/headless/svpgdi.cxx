@@ -1271,8 +1271,21 @@ cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
 
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
 {
-    sal_Int32 nExtentsLeft(rExtents.getMinX()), nExtentsTop(rExtents.getMinY());
-    sal_Int32 nExtentsRight(rExtents.getMaxX()), nExtentsBottom(rExtents.getMaxY());
+    sal_Int32 nExtentsLeft;
+    sal_Int32 nExtentsTop;
+    sal_Int32 nExtentsRight;
+    sal_Int32 nExtentsBottom;
+    if (rExtents.isEmpty()) {
+        nExtentsLeft = 0;
+        nExtentsTop = 0;
+        nExtentsRight = 0;
+        nExtentsBottom = 0;
+    } else {
+        nExtentsLeft = rExtents.getMinX();
+        nExtentsTop = rExtents.getMinY();
+        nExtentsRight = rExtents.getMaxX();
+        nExtentsBottom = rExtents.getMaxY();
+    }
     sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
     sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
     nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
