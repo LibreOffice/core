@@ -1267,7 +1267,7 @@ lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
             i_rBuffer.append('-');
         }
         const sal_Int32 nHours  (abs(nOffset) / 60);
-        const sal_Int32 nMinutes(abs(nOffset) % 60);
+        const sal_Int32 nMinutes(abs((int) nOffset) % 60);
         SAL_WARN_IF(nHours > 14 || (nHours == 14 && nMinutes > 0),
                 "sax", "convertDateTime: timezone overflow");
         if (nHours < 10)
@@ -1438,7 +1438,7 @@ static void lcl_ConvertToUTC(
         sal_Int16 const nSourceOffset)
 {
     sal_Int16 nOffsetHours(abs(nSourceOffset) / 60);
-    sal_Int16 const nOffsetMinutes(abs(nSourceOffset) % 60);
+    sal_Int16 const nOffsetMinutes(abs((int) nSourceOffset) % 60);
     o_rMinutes += nOffsetMinutes;
     if (nSourceOffset < 0)
     {
