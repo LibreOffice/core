@@ -132,7 +132,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     ::sal_Int32 nNumberFormatKey ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    OUString aBuf = "f(x) = ";
 
     if( m_fSlope != 0.0 )
     {
@@ -140,33 +140,30 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
         {
             if( m_fSlope < 0.0 )
             {
-                aBuf.append( "-" );
+                aBuf += "-";
             }
         }
         else
         {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
-            aBuf.append( " " );
+            aBuf += getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ) + " ";
         }
-        aBuf.append( "ln(x)" );
+        aBuf += "ln(x)";
 
         if( m_fIntercept < 0.0 )
         {
-            aBuf.append( " - " );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs( m_fIntercept )));
+            aBuf += " - " + getFormattedString( xNumFormatter, nNumberFormatKey, fabs( m_fIntercept ));
         }
         else if( m_fIntercept > 0.0 )
         {
-            aBuf.append( " + " );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+            aBuf += " + " + getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept );
         }
     }
     else
     {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+        aBuf += getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept );
     }
 
-    return aBuf.makeStringAndClear();
+    return aBuf;
 }
 
 } //  namespace chart
