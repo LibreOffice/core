@@ -56,12 +56,8 @@ namespace framework
 // global function needed by both implementations
 static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
 {
-    OUStringBuffer aKey( aType );
-    aKey.append( "^" );
-    aKey.append( aName );
-    aKey.append( "^" );
-    aKey.append( aModuleName );
-    return aKey.makeStringAndClear();
+    OUString aKey = aType + "^" + aName + "^" + aModuleName;
+    return aKey;
 }
 
 ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
