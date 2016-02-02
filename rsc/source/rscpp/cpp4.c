@@ -277,7 +277,7 @@ void stparmscan(int delim)
         {
 #ifdef SOLAR
             *wp++ = DEL;
-            *wp++ = MAC_PARM + PAR_MAC;     /* Stuff a magic marker */
+            *wp++ = (char)(MAC_PARM + PAR_MAC); /* Stuff a magic marker */
             *wp++ = (char)(i + MAC_PARM);   /* Make a formal marker */
             *wp = wp[-4];                   /* Add on closing quote */
             workp = wp + 1;                 /* Reset string end     */
