@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_92ba5cbf",
+        "filename": "sw/UIConfig_swriter.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-02-02T12:57:00Z",
+      "side": 1,
+      "message": "Please use the same indentation as other items here.",
+      "revId": "3fbf39031ca4853ab8abf2926614d985b17cc47b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f2af607b",
+        "filename": "sw/sdi/viewsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-02-02T12:57:00Z",
+      "side": 1,
+      "message": "SID_DRAWTBX_LINES is just a dropdown button. It isn\u0027t supposed to be executed by itself.",
+      "revId": "3fbf39031ca4853ab8abf2926614d985b17cc47b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_92e1bcd3",
+        "filename": "sw/sdi/viewsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-02-02T12:57:00Z",
+      "side": 1,
+      "message": "Please use ExecMethod \u003d ExecDraw and StateMethod \u003d GetDrawState and integrate to the existing code there. You might need to rebase on top of current master to have commit 11d605cc5a0c221d2423b6e63f502db660d085d2.",
+      "revId": "3fbf39031ca4853ab8abf2926614d985b17cc47b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
