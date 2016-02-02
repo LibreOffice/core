@@ -2267,9 +2267,9 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     vcl::Font           aCTLFont( OutputDevice::GetDefaultFont( DefaultFontType::CTL_TEXT, eLangType,
                                                         GetDefaultFontFlags::OnlyOne, &rExampleWin ) );
     const Size          aDefSize( 0, 12 );
-    aFont.SetSize( aDefSize );
-    aCJKFont.SetSize( aDefSize );
-    aCTLFont.SetSize( aDefSize );
+    aFont.SetAverageFontSize( aDefSize );
+    aCJKFont.SetAverageFontSize( aDefSize );
+    aCTLFont.SetAverageFontSize( aDefSize );
 
     aFont.SetFillColor( aBackCol );
     aCJKFont.SetFillColor( aBackCol );
@@ -2284,8 +2284,8 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     rCTLFont = aCTLFont;
 
     const Size          aNewSize( 0, rExampleWin.GetOutputSize().Height() * 2 / 3 );
-    rFont.SetSize( aNewSize );
-    rCJKFont.SetSize( aNewSize );
+    rFont.SetAverageFontSize( aNewSize );
+    rCJKFont.SetAverageFontSize( aNewSize );
 
     rExampleWin.SetFont( rFont, rCJKFont,rCTLFont );
 

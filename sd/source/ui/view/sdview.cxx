@@ -379,7 +379,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             static sal_uInt32 nTextSizeFactor(100);
 
                             // use a factor to get more linear text size calculations
-                            aScaledVclFont.SetHeight( 500 * nTextSizeFactor );
+                            aScaledVclFont.SetFontHeight( 500 * nTextSizeFactor );
 
                             // get basic geometry and get text size
                             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
@@ -404,7 +404,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             vcl::Font aVclFont;
                             basegfx::B2DVector aTextSizeAttribute;
 
-                            aVclFont.SetHeight( 500 );
+                            aVclFont.SetFontHeight( 500 );
 
                             const drawinglayer::attribute::FontAttribute aFontAttribute(
                                 drawinglayer::primitive2d::getFontAttributeFromVclFont(

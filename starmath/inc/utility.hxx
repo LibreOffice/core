@@ -98,7 +98,7 @@ public:
 
     void    SetBorderWidth(long nWidth)     { nBorderWidth = nWidth; }
     long    GetBorderWidth() const;
-    long    GetDefaultBorderWidth() const   { return GetSize().Height() / 20 ; }
+    long    GetDefaultBorderWidth() const   { return GetFontSize().Height() / 20 ; }
     void    FreezeBorderWidth()     { nBorderWidth = GetDefaultBorderWidth(); }
 
     SmFace & operator = (const SmFace &rFace);

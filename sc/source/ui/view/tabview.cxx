@@ -348,7 +348,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
     const StyleSettings& rStyleSettings = pFrameWin->GetSettings().GetStyleSettings();
 
-    sal_Int32 nTabWidth = pFrameWin->GetFont().GetHeight() + WIDTH_MARGIN;
+    sal_Int32 nTabWidth = pFrameWin->GetFont().GetFontHeight() + WIDTH_MARGIN;
 
     if ( aViewData.GetHSplitMode() != SC_SPLIT_NONE )
     {

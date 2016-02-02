@@ -145,7 +145,7 @@ void XIMStatusWindow::layout()
 {
     m_aWindowSize.Width() = m_aStatusText->GetTextWidth( m_aStatusText->GetText() )+8;
     Font aFont( m_aStatusText->GetFont() );
-    m_aWindowSize.Height() = aFont.GetHeight()+10;
+    m_aWindowSize.Height() = aFont.GetFontHeight()+10;
     m_aWindowSize = LogicToPixel( m_aWindowSize );
 
     Size aControlSize( m_aWindowSize );
@@ -371,7 +371,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 void IIIMPStatusWindow::layout()
 {
     Font aFont( m_aStatusBtn->GetFont() );
-    Size aSize( 15*aFont.GetHeight(), aFont.GetHeight()+14 );
+    Size aSize( 15*aFont.GetFontHeight(), aFont.GetFontHeight()+14 );
     aSize = m_aStatusBtn->LogicToPixel( aSize );
 
     m_aStatusBtn->SetPosSizePixel( Point( 0, 0 ), aSize );

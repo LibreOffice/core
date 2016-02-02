@@ -362,7 +362,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
         const OUString sFullstop( sal_Unicode( 0x3001 ) ); // Fullwidth fullstop
         Rectangle aRect;
         pDev->GetTextBoundRect( aRect, sFullstop );
-        const sal_uInt16 nH = rFont.GetSize().Height();
+        const sal_uInt16 nH = rFont.GetFontSize().Height();
         const sal_uInt16 nB = aRect.Left();
         // Use 18.75% as a threshold to define a centered fullwidth fullstop.
         // In general, nB/nH < 5% for most Japanese fonts.
