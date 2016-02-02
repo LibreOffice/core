@@ -40,7 +40,6 @@ namespace comphelper { namespace module
                 createRegistryInfo_UNOMemoryStream();
                 createRegistryInfo_OInstanceLocker();
                 createRegistryInfo_Map();
-                createRegistryInfo_OSimpleLogRing();
             }
         };
 
