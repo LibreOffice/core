@@ -290,7 +290,7 @@ public class PentahoReportJob implements ReportJob
     /**
      * Although we might want to run the job as soon as it has been created, sometimes it is
      * wiser to let the user add some listeners first. If we execute at once, the user
-     * either has to deal with threading code or wont receive any progress information in
+     * either has to deal with threading code or won't receive any progress information in
      * single threaded environments.
      */
     public void execute()

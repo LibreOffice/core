@@ -55,7 +55,7 @@ namespace svt
                         css::frame::XDispatchProvider      ,
                         css::frame::XDispatch > PopupMenuControllerBaseType;
 
-    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::comphelper::OBaseMutex,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::comphelper::OBaseMutex,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                                                   public PopupMenuControllerBaseType
     {
         public:

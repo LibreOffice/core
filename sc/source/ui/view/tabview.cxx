@@ -245,7 +245,7 @@ void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
 {
     rScrollBar.SetRange( Range( 0, nMaxVal ) );
     rScrollBar.SetLineSize( 1 );
-    rScrollBar.SetPageSize( 1 );                // is queried seperately
+    rScrollBar.SetPageSize( 1 );                // is queried separately
     rScrollBar.SetVisibleSize( 10 );            // is reset by Resize
 
     rScrollBar.SetScrollHdl( LINK(this, ScTabView, ScrollHdl) );

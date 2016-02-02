@@ -63,7 +63,7 @@ namespace TextFormatCollFunc
     */
     void AddToNumRule( SwTextFormatColl& rTextFormatColl );
 
-    /** removes te given paragraph style from the directly set list style
+    /** removes the given paragraph style from the directly set list style
 
         Note: If the given paragraph style has no directly set list style, nothing happens
 

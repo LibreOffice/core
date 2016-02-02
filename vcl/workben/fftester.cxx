@@ -26,7 +26,7 @@
 
         On slower file formats like .doc you can probably drop the -t and rely on the
         estimations, on faster file formats ironically not specifing a timeout will
-        result in a hillarious dramatic falloff in performance from thousands per second
+        result in a hilarious dramatic falloff in performance from thousands per second
         to teens per second as tiny variations from the initial calculated
         timeout will trigger a shutdown of the fftester and a restart and the
         startup time is woeful (hence the AFL_PERSISTENT mode in the first place)
