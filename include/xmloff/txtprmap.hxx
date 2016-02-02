@@ -197,9 +197,10 @@
 #define CTF_RELWIDTHREL                     (XML_TEXT_CTF_START + 168)
 #define CTF_RELHEIGHTREL                    (XML_TEXT_CTF_START + 169)
 #define CTF_CHAR_BACKGROUND                 (XML_TEXT_CTF_START + 170)
-#define CTF_CHAR_HIGHLIGHT                  (XML_TEXT_CTF_START + 171)
-#define CTF_FILLSTYLE                       (XML_TEXT_CTF_START + 172)
-#define CTF_FILLCOLOR                       (XML_TEXT_CTF_START + 173)
+#define CTF_CHAR_BACKGROUND_TRANSPARENCY    (XML_TEXT_CTF_START + 171)
+#define CTF_CHAR_HIGHLIGHT                  (XML_TEXT_CTF_START + 172)
+#define CTF_FILLSTYLE                       (XML_TEXT_CTF_START + 173)
+#define CTF_FILLCOLOR                       (XML_TEXT_CTF_START + 174)
 
 
 enum class TextPropMap {
