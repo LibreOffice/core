@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_7276d03f",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-02T12:36:21Z",
+      "side": 1,
+      "message": "Hm do you really need to remove\u0026insert this custom entry each time you update the listbox?",
+      "revId": "9dd0c256520cc08880ab1accabd57ca755bf62e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
