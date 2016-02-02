@@ -78,7 +78,6 @@ public:
     void                Execute( const Point& rPos, vcl::Window *pWindow );
 
     void                RemoveDisabledEntries();
-    Menu*               GetSVMenu();
 };
 
 #endif // INCLUDED_SFX2_MNUMGR_HXX

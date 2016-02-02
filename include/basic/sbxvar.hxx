@@ -192,34 +192,14 @@ public:
     // TODO: Ensure error conditions (overflow, conversions)
     // are taken into consideration in Compute and Compare
 
-    inline bool operator ==( const SbxValue& ) const;
-    inline bool operator !=( const SbxValue& ) const;
-    inline bool operator <( const SbxValue& ) const;
-    inline bool operator >( const SbxValue& ) const;
     inline bool operator <=( const SbxValue& ) const;
     inline bool operator >=( const SbxValue& ) const;
 
     inline SbxValue& operator *=( const SbxValue& );
     inline SbxValue& operator /=( const SbxValue& );
-    inline SbxValue& operator %=( const SbxValue& );
     inline SbxValue& operator +=( const SbxValue& );
     inline SbxValue& operator -=( const SbxValue& );
-    inline SbxValue& operator &=( const SbxValue& );
-    inline SbxValue& operator |=( const SbxValue& );
-    inline SbxValue& operator ^=( const SbxValue& );
 };
-
-inline bool SbxValue::operator==( const SbxValue& r ) const
-{ return Compare( SbxEQ, r ); }
-
-inline bool SbxValue::operator!=( const SbxValue& r ) const
-{ return Compare( SbxNE, r ); }
-
-inline bool SbxValue::operator<( const SbxValue& r ) const
-{ return Compare( SbxLT, r ); }
-
-inline bool SbxValue::operator>( const SbxValue& r ) const
-{ return Compare( SbxGT, r ); }
 
 inline bool SbxValue::operator<=( const SbxValue& r ) const
 { return Compare( SbxLE, r ); }
@@ -233,23 +213,11 @@ inline SbxValue& SbxValue::operator*=( const SbxValue& r )
 inline SbxValue& SbxValue::operator/=( const SbxValue& r )
 { Compute( SbxDIV, r ); return *this; }
 
-inline SbxValue& SbxValue::operator%=( const SbxValue& r )
-{ Compute( SbxMOD, r ); return *this; }
-
 inline SbxValue& SbxValue::operator+=( const SbxValue& r )
 { Compute( SbxPLUS, r ); return *this; }
 
 inline SbxValue& SbxValue::operator-=( const SbxValue& r )
 { Compute( SbxMINUS, r ); return *this; }
-
-inline SbxValue& SbxValue::operator&=( const SbxValue& r )
-{ Compute( SbxAND, r ); return *this; }
-
-inline SbxValue& SbxValue::operator|=( const SbxValue& r )
-{ Compute( SbxOR, r ); return *this; }
-
-inline SbxValue& SbxValue::operator^=( const SbxValue& r )
-{ Compute( SbxXOR, r ); return *this; }
 
 class SbxArray;
 class SbxInfo;

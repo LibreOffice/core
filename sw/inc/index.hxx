@@ -63,13 +63,10 @@ public:
 
     sal_Int32 operator++();
     sal_Int32 operator--();
-    sal_Int32 operator++(int);
     sal_Int32 operator--(int);
 
     sal_Int32 operator+=( sal_Int32 const );
     sal_Int32 operator-=( sal_Int32 const );
-    sal_Int32 operator+=( const SwIndex& );
-    sal_Int32 operator-=( const SwIndex& );
 
     bool operator< ( const SwIndex& ) const;
     bool operator<=( const SwIndex& ) const;
@@ -144,13 +141,6 @@ inline sal_Int32 SwIndex::operator--()
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
-inline sal_Int32 SwIndex::operator++(int)
-{
-    sal_Int32 const nOldIndex = m_nIndex;
-    ChgValue( *this, m_nIndex+1 );
-    return nOldIndex;
-}
-
 inline sal_Int32 SwIndex::operator--(int)
 {
     sal_Int32 const nOldIndex = m_nIndex;
@@ -166,16 +156,6 @@ inline sal_Int32 SwIndex::operator+=( sal_Int32 const nVal )
 inline sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
 {
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
-}
-
-inline sal_Int32 SwIndex::operator+=( const SwIndex& rIndex )
-{
-    return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
-}
-
-inline sal_Int32 SwIndex::operator-=( const SwIndex& rIndex )
-{
-    return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
 }
 
 inline bool SwIndex::operator< ( const SwIndex& rIndex ) const

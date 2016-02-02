@@ -52,7 +52,6 @@ public:
     explicit CXPathContextPtr(xmlXPathContextPtr aContext);
     CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
-    xmlXPathContext* operator -> () { return _object;}
     operator xmlXPathContext* () const { return _object;}
 };
 
@@ -71,7 +70,6 @@ public:
      */
     CXmlDocPtr & operator = (xmlDoc* pObj);
     ~CXmlDocPtr();
-    xmlDoc* operator -> () { return _object;}
     operator xmlDoc* () const { return _object;}
 };
 

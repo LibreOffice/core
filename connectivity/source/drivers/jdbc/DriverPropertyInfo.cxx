@@ -48,17 +48,4 @@ jclass java_sql_DriverPropertyInfo::getMyClass() const
 }
 
 
-bool java_sql_DriverPropertyInfo::required()
-{
-    jboolean out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
-    {
-        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"required","Z");
-        if(id)
-            out = t.pEnv->GetBooleanField( object, id);
-    } //t.pEnv
-    return out;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

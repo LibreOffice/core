@@ -121,17 +121,6 @@ public:
             Returns a reference to this iterator pointing to the next object.
     */
     Iterator& operator++ ();
-    /** The postfix increment operator returns the iterator still pointing
-        to the current object.  Only the next call to
-        <member>operator*()</member> will return the next object.  When in
-        doubt rather use the prefix increment operator.
-        @param dummy
-            A dummy operator used by the compiler.
-        @return
-            Returns a copy of the iterator as it where before the operator
-            was called.
-    */
-    Iterator operator++ (int);
     /** Test equality of two iterators.  Two iterators are taken to be equal
         when they point are of the same type (their implementation objects
         are instances of the same class) and point to the same object.

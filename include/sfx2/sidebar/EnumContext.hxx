@@ -130,7 +130,6 @@ public:
     Application GetApplication_DI() const;
 
     bool operator == (const EnumContext& rOther);
-    bool operator != (const EnumContext& rOther);
 
     /** When two contexts are matched against each other then
         application or context name may have the wildcard value 'any'.

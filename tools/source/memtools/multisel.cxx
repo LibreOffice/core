@@ -133,19 +133,6 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
     return *this;
 }
 
-bool MultiSelection::operator== ( MultiSelection& rWith )
-{
-    if ( aTotRange != rWith.aTotRange || nSelCount != rWith.nSelCount ||
-         aSels.size() != rWith.aSels.size() )
-        return false;
-
-    // compare the sub selections
-    for ( size_t n = 0; n < aSels.size(); ++n )
-        if ( *aSels[ n ] != *rWith.aSels[ n ] )
-            return false;
-    return true;
-}
-
 void MultiSelection::SelectAll( bool bSelect )
 {
     ImplClear();

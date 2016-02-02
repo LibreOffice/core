@@ -31,7 +31,6 @@ namespace
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
-using drawinglayer::primitive2d::arePrimitive2DSequencesEqual;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 
@@ -94,6 +93,22 @@ void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#ff0000"); // rect stroke color
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "3"); // rect stroke width
 
+}
+
+
+static bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
+{
+    const sal_Int32 nCount(rA.getLength());
+
+    if(nCount != rB.getLength())
+        return false;
+
+    for(sal_Int32 a(0L); a < nCount; a++) {
+        if(!drawinglayer::primitive2d::arePrimitive2DReferencesEqual(rA[a], rB[a]))
+            return false;
+    }
+
+    return true;
 }
 
 // Attributes for an object (like rect as in this case) can be defined
