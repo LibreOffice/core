@@ -132,8 +132,7 @@ bool LifeTimeManager::dispose()
 
     //--do the disposing of listeners after calling this method
     {
-        uno::Reference< lang::XComponent > xComponent =
-            uno::Reference< lang::XComponent >(m_pComponent);
+        uno::Reference< lang::XComponent > xComponent = uno::Reference< lang::XComponent >(m_pComponent);
         if(xComponent.is())
         {
             // notify XCLoseListeners
@@ -221,13 +220,11 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
 
     try
     {
-        uno::Reference< util::XCloseable > xCloseable =
-            uno::Reference< util::XCloseable >(m_pCloseable);
+        uno::Reference< util::XCloseable > xCloseable = uno::Reference< util::XCloseable >(m_pCloseable);
         if(xCloseable.is())
         {
             //--call queryClosing on all registered close listeners
-            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        cppu::UnoType<util::XCloseListener>::get());
+            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(cppu::UnoType<util::XCloseListener>::get());
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
@@ -297,7 +294,7 @@ void CloseableLifeTimeManager::g_close_endTryClose_doClose()
     //this method is called, if the try to close was successful
     osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
 
-    m_bInTryClose       = false;
+    m_bInTryClose = false;
     m_aEndTryClosingCondition.set();
 
     //Mutex needs to be acquired exactly ones
@@ -308,7 +305,7 @@ void CloseableLifeTimeManager::g_close_endTryClose_doClose()
 
 void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool bMyVeto )
 {
-    m_bOwnership            = bDeliverOwnership && bMyVeto;
+    m_bOwnership = bDeliverOwnership && bMyVeto;
 }
 
 void CloseableLifeTimeManager::impl_apiCallCountReachedNull()
@@ -340,8 +337,7 @@ void CloseableLifeTimeManager::impl_doClose()
         if(xCloseable.is())
         {
             //--call notifyClosing on all registered close listeners
-            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        cppu::UnoType<util::XCloseListener>::get());
+            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(cppu::UnoType<util::XCloseListener>::get());
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
@@ -362,8 +358,7 @@ void CloseableLifeTimeManager::impl_doClose()
 
     if(xCloseable.is())
     {
-        uno::Reference< lang::XComponent > xComponent =
-            uno::Reference< lang::XComponent >( xCloseable, uno::UNO_QUERY );
+        uno::Reference< lang::XComponent > xComponent = uno::Reference< lang::XComponent >( xCloseable, uno::UNO_QUERY );
         if(xComponent.is())
         {
             OSL_ENSURE( m_bClosed, "a not closed component will be disposed " );
