@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_4fc1712e",
+        "filename": "canvas/source/vcl/spritecanvashelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-02T06:41:01Z",
+      "side": 1,
+      "message": "Leftover %f there... ;)",
+      "range": {
+        "startLine": 297,
+        "startChar": 81,
+        "endLine": 297,
+        "endChar": 82
+      },
+      "revId": "91c072b473beadda01a38dbc26086207c7b4d145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
