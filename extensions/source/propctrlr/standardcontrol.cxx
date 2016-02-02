@@ -48,7 +48,6 @@
 
 #include <cstdlib>
 #include <limits>
-#include <boost/bind.hpp>
 #include <memory>
 
 
@@ -464,9 +463,8 @@ namespace pcr
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
-            boost::bind(
-                &XActionListener::actionPerformed,
-                _1, boost::cref(aEvent) ) );
+            [this, &aEvent] (uno::Reference<awt::XActionListener> const& xListener)
+                { return xListener->actionPerformed(aEvent); });
     }
 
 
