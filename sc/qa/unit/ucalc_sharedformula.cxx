@@ -603,6 +603,29 @@ void Test::testSharedFormulasRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
+struct SortByArea : std::binary_function<sc::AreaListener, sc::AreaListener, bool>
+{
+    bool operator ()( const sc::AreaListener& rLeft, const sc::AreaListener& rRight ) const
+    {
+        if (rLeft.maArea.aStart.Tab() != rRight.maArea.aStart.Tab())
+            return rLeft.maArea.aStart.Tab() < rRight.maArea.aStart.Tab();
+
+        if (rLeft.maArea.aStart.Col() != rRight.maArea.aStart.Col())
+            return rLeft.maArea.aStart.Col() < rRight.maArea.aStart.Col();
+
+        if (rLeft.maArea.aStart.Row() != rRight.maArea.aStart.Row())
+            return rLeft.maArea.aStart.Row() < rRight.maArea.aStart.Row();
+
+        if (rLeft.maArea.aEnd.Tab() != rRight.maArea.aEnd.Tab())
+            return rLeft.maArea.aEnd.Tab() < rRight.maArea.aEnd.Tab();
+
+        if (rLeft.maArea.aEnd.Col() != rRight.maArea.aEnd.Col())
+            return rLeft.maArea.aEnd.Col() < rRight.maArea.aEnd.Col();
+
+        return rLeft.maArea.aEnd.Row() < rRight.maArea.aEnd.Row();
+    }
+};
+
 void Test::testSharedFormulasRefUpdateRangeDeleteRow()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
@@ -630,7 +653,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     ScBroadcastAreaSlotMachine* pBASM = m_pDoc->GetBASM();
     CPPUNIT_ASSERT(pBASM);
     std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
-    std::sort(aListeners.begin(), aListeners.end(), sc::AreaListener::SortByArea());
+    std::sort(aListeners.begin(), aListeners.end(), SortByArea());
 
     // This check makes only sense if group listeners are activated.
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
@@ -696,7 +719,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(2,4,0)));
 
     aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
-    std::sort(aListeners.begin(), aListeners.end(), sc::AreaListener::SortByArea());
+    std::sort(aListeners.begin(), aListeners.end(), SortByArea());
 
     // This check makes only sense if group listeners are activated.
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER

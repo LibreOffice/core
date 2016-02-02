@@ -1300,7 +1300,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
     rExtras.DeleteAllTableRedlines(pDoc, rTable, false, sal_uInt16(USHRT_MAX));
-    CPPUNIT_ASSERT(rExtras.IsEmpty());
+    CPPUNIT_ASSERT(rExtras.GetSize() == 0);
 }
 
 void SwUiWriterTest::testXFlatParagraph()

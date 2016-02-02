@@ -362,17 +362,6 @@ QueueInfo::~QueueInfo()
 {
 }
 
-bool QueueInfo::operator==( const QueueInfo& rInfo ) const
-{
-    return
-        maPrinterName   == rInfo.maPrinterName  &&
-        maDriver        == rInfo.maDriver       &&
-        maLocation      == rInfo.maLocation     &&
-        maComment       == rInfo.maComment      &&
-        mnStatus        == rInfo.mnStatus       &&
-        mnJobs          == rInfo.mnJobs;
-}
-
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
     mnStatus    = PrintQueueFlags::NONE;

@@ -173,7 +173,6 @@ namespace drawinglayer
                 Overridden implementations are then based on this implementation
              */
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-            bool operator!=( const BasePrimitive2D& rPrimitive ) const { return !operator==(rPrimitive); }
 
             /// The default implementation will use getDecomposition results to create the range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
@@ -289,9 +288,6 @@ namespace drawinglayer
             and using compare operator
          */
         bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
-
-        /// compare two Primitive2DReferences for equality, uses arePrimitive2DReferencesEqual internally
-        bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB);
 
         OUString DRAWINGLAYER_DLLPUBLIC idToString(sal_uInt32 nId);
 

@@ -103,9 +103,6 @@ namespace dbaui
         /// prefix increment
         const ExtendedCharsetIterator&  operator++();
 
-        /// prefix decrement
-        const ExtendedCharsetIterator&  operator--();
-
     protected:
         ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition );
     };

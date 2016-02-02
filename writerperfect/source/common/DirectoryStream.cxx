@@ -113,38 +113,6 @@ DirectoryStream::~DirectoryStream()
 {
 }
 
-DirectoryStream *DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
-{
-    try
-    {
-        if (!xContent.is())
-            return nullptr;
-
-        DirectoryStream *pDir(nullptr);
-
-        const uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
-        if (xChild.is())
-        {
-            const uno::Reference<ucb::XContent> xDirContent(xChild->getParent(), uno::UNO_QUERY);
-            if (xDirContent.is())
-            {
-                pDir = new writerperfect::DirectoryStream(xDirContent);
-                if (!pDir->isStructured())
-                {
-                    delete pDir;
-                    pDir = nullptr;
-                }
-            }
-        }
-
-        return pDir;
-    }
-    catch (...)
-    {
-        return nullptr;
-    }
-}
-
 bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent> &xContent)
 {
     try

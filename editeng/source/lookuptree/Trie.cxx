@@ -196,12 +196,13 @@ void Trie::findSuggestions(const OUString& sWordPart, vector<OUString>& rSuggest
     }
 }
 
-void Trie::getAllEntries(std::vector<OUString>& entries)
+size_t Trie::size() const
 {
-    if (mRoot)
-    {
-        mRoot->collectSuggestions(OUString(), entries);
-    }
+    if (!mRoot)
+        return 0;
+    std::vector<OUString> entries;
+    mRoot->collectSuggestions(OUString(), entries);
+    return entries.size();
 }
 
 }

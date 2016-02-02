@@ -253,7 +253,6 @@ public:
 
     sal_uInt16 GetSize() const                              {     return m_aExtraRedlines.size();                }
     SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }
-    bool IsEmpty() const                              {     return m_aExtraRedlines.empty();               }
 
     SW_DLLPUBLIC bool DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete );
     bool DeleteTableRowRedline ( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete );

@@ -753,8 +753,6 @@ struct SvxMSDffShapeOrder
     explicit SvxMSDffShapeOrder( sal_uLong nId ):
         nShapeId( nId ), nTxBxComp( 0 ), pFly( nullptr ), nHdFtSection( 0 ), pObj( nullptr ){}
 
-    bool operator==( const SvxMSDffShapeOrder& rEntry ) const
-    { return (nTxBxComp == rEntry.nTxBxComp); }
     bool operator<( const SvxMSDffShapeOrder& rEntry ) const
     { return (nTxBxComp < rEntry.nTxBxComp); }
 };

@@ -78,7 +78,6 @@ public:
     sal_Int32 GetErrors()           { return nErrors; }
     sal_Int32 GetLine()             { return nLine;   }
     sal_Int32 GetCol1()             { return nCol1;   }
-    sal_Int32 GetCol2()             { return nCol2;   }
     void  SetCol1( sal_Int32 n )    { nCol1 = n;      }
     StarBASIC* GetBasic()           { return pBasic;  }
     void  SaveLine()            { pSaveLine = pLine; }

@@ -1212,52 +1212,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mbEnableRTL         = AllSettings::GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
 
-void Window::getFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize, OutputDevice& rDev )
-{
-    bool bOldMap = mbMap;
-    mbMap = false;
-    rDev.DrawOutDev( rDevPt, rDevSize, rPt, rDevSize, *this );
-    mbMap = bOldMap;
-}
-
-void Window::drawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                           const OutputDevice& rOutDev, const vcl::Region& rRegion )
-{
-
-    GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    bool            bOldMap = mbMap;
-    RasterOp        eOldROP = GetRasterOp();
-    mpMetaFile = nullptr;
-    mbMap = false;
-    SetRasterOp( ROP_OVERPAINT );
-
-    if ( !IsDeviceOutputNecessary() )
-        return;
-
-    if ( !mpGraphics )
-    {
-        if ( !AcquireGraphics() )
-            return;
-    }
-
-    if ( rRegion.IsNull() )
-        mpGraphics->ResetClipRegion();
-    else
-        SelectClipRegion( rRegion );
-
-    SalTwoRect aPosAry(rDevPt.X(), rDevPt.Y(), rDevSize.Width(), rDevSize.Height(),
-                       rPt.X(), rPt.Y(), rDevSize.Width(), rDevSize.Height());
-    drawOutDevDirect( &rOutDev, aPosAry );
-
-    // Ensure that ClipRegion is recalculated and set
-    mbInitClipRegion = true;
-
-    SetRasterOp( eOldROP );
-    mbMap = bOldMap;
-    mpMetaFile = pOldMetaFile;
-}
-
-
 ImplWinData* Window::ImplGetWinData() const
 {
     if ( !mpWindowImpl->mpWinData )
