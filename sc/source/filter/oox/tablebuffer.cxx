@@ -19,14 +19,15 @@
 
 #include "tablebuffer.hxx"
 
-#include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include "addressconverter.hxx"
+#include "address.hxx"
+
+#include "dbdata.hxx"
 
 namespace oox {
 namespace xls {
@@ -85,14 +86,14 @@ void Table::finalizeImport()
     // ranges (or tables in their terminology) as Table1, Table2 etc.  We need
     // to import them as named db ranges because they may be referenced by
     // name in formula expressions.
+    ScDBData* pDBData;
     if( (maModel.mnId > 0) && !maModel.maDisplayName.isEmpty() ) try
     {
         maDBRangeName = maModel.maDisplayName;
-        Reference< XDatabaseRange > xDatabaseRange(
-            createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
-        maDestRange = xDatabaseRange->getDataArea();
-
-        PropertySet aPropSet( xDatabaseRange );
+        ScRange aRange (ScAddress::UNINITIALIZED);
+        pDBData = nullptr;
+        pDBData->GetArea(aRange);
+        PropertySet aPropSet;
 
         // Default HasHeader is true at ScDBData.
         if (maModel.mnHeaderRows != 1)
@@ -128,9 +129,6 @@ void Table::applyAutoFilters()
         {
             // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
             PropertySet aDocProps( getDocument() );
-            Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-            Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
-            maAutoFilters.finalizeImport( xDatabaseRange );
         }
         catch( Exception& )
         {
