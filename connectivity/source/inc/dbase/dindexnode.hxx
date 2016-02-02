@@ -69,7 +69,6 @@ namespace connectivity
             bool operator <  (const ONDXKey& rKey) const;
             bool operator <= (const ONDXKey& rKey) const;
             bool operator >  (const ONDXKey& rKey) const;
-            bool operator >= (const ONDXKey& rKey) const;
 
             static bool IsText(sal_Int32 eType);
 
@@ -309,10 +308,6 @@ namespace connectivity
         inline bool ONDXKey::operator <= (const ONDXKey& rKey) const
         {
             return !operator > (rKey);
-        }
-        inline bool ONDXKey::operator >= (const ONDXKey& rKey) const
-        {
-            return !operator< (rKey);
         }
 
         inline void ONDXNode::SetChild(ONDXPagePtr aCh, ONDXPage* pParent)

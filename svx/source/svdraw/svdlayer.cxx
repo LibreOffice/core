@@ -43,14 +43,6 @@ void SetOfByte::operator&=(const SetOfByte& r2ndSet)
     }
 }
 
-void SetOfByte::operator|=(const SetOfByte& r2ndSet)
-{
-    for(sal_uInt16 i(0); i < 32; i++)
-    {
-        aData[i] |= r2ndSet.aData[i];
-    }
-}
-
 /** initialize this set with a uno sequence of sal_Int8
 */
 void SetOfByte::PutValue( const css::uno::Any & rAny )
@@ -180,21 +172,6 @@ const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmi
         aLayer.push_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
     }
     return *this;
-}
-
-bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
-{
-    if (pParent!=rCmpLayerAdmin.pParent ||
-        aLayer.size()!=rCmpLayerAdmin.aLayer.size())
-        return false;
-    bool bOk = true;
-    sal_uInt16 nCount=GetLayerCount();
-    sal_uInt16 i=0;
-    while (bOk && i<nCount) {
-        bOk=*GetLayer(i)==*rCmpLayerAdmin.GetLayer(i);
-        i++;
-    }
-    return bOk;
 }
 
 void SdrLayerAdmin::SetModel(SdrModel* pNewModel)

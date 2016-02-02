@@ -63,13 +63,10 @@ public:
 
     sal_Int32 operator++();
     sal_Int32 operator--();
-    sal_Int32 operator++(int);
     sal_Int32 operator--(int);
 
     sal_Int32 operator+=( sal_Int32 const );
     sal_Int32 operator-=( sal_Int32 const );
-    sal_Int32 operator+=( const SwIndex& );
-    sal_Int32 operator-=( const SwIndex& );
 
     bool operator< ( const SwIndex& ) const;
     bool operator<=( const SwIndex& ) const;

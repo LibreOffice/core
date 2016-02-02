@@ -133,8 +133,6 @@ public:
     bool    HasColHeaders() const            { return bColHeaders; }
     bool    HasRowHeaders() const            { return bRowHeaders; }
 
-    bool    operator==(const ScChartPositioner& rCmp) const;
-
     void                    InvalidateGlue()
                                 {
                                     eGlue = SC_CHARTGLUE_NA;

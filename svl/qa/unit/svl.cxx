@@ -56,7 +56,6 @@ public:
     void testNumberFormat();
     void testSharedString();
     void testSharedStringPool();
-    void testSharedStringPoolPurge();
     void testFdo60915();
     void testI116701();
     void testDateInput();
@@ -66,7 +65,6 @@ public:
     CPPUNIT_TEST(testNumberFormat);
     CPPUNIT_TEST(testSharedString);
     CPPUNIT_TEST(testSharedStringPool);
-    CPPUNIT_TEST(testSharedStringPoolPurge);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST(testDateInput);
@@ -331,66 +329,6 @@ void Test::testSharedStringPool()
     CPPUNIT_ASSERT_MESSAGE("Failed to intern string.", p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should be equal.", p1.getDataIgnoreCase() == p2.getDataIgnoreCase());
-}
-
-void Test::testSharedStringPoolPurge()
-{
-    SvtSysLocale aSysLocale;
-    svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
-    aPool.intern("Andy");
-    aPool.intern("andy");
-    aPool.intern("ANDY");
-
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 3);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 1);
-
-    // Since no string objects referencing the pooled strings exist, purging
-    // the pool should empty it.
-    aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
-
-    // Now, create string objects on the heap.
-    std::unique_ptr<OUString> pStr1(new OUString("Andy"));
-    std::unique_ptr<OUString> pStr2(new OUString("andy"));
-    std::unique_ptr<OUString> pStr3(new OUString("ANDY"));
-    std::unique_ptr<OUString> pStr4(new OUString("Bruce"));
-    aPool.intern(*pStr1);
-    aPool.intern(*pStr2);
-    aPool.intern(*pStr3);
-    aPool.intern(*pStr4);
-
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
-
-    // This shouldn't purge anything.
-    aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
-
-    // Delete one heap string object, and purge. That should purge one string.
-    pStr1.reset();
-    aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
-
-    // Ditto...
-    pStr3.reset();
-    aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
-
-    // Again.
-    pStr2.reset();
-    aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCountIgnoreCase());
-
-    // Delete 'Bruce' and purge.
-    pStr4.reset();
-    aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 }
 
 void Test::checkPreviewString(SvNumberFormatter& aFormatter,

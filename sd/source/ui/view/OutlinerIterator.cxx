@@ -124,14 +124,6 @@ Iterator& Iterator::operator++ ()
     return *this;
 }
 
-Iterator Iterator::operator++ (int)
-{
-    Iterator aTmp (*this);
-    if (mpIterator!=nullptr)
-        mpIterator->GotoNextText();
-    return aTmp;
-}
-
 bool Iterator::operator== (const Iterator& rIterator)
 {
     if (mpIterator == nullptr || rIterator.mpIterator==nullptr)
