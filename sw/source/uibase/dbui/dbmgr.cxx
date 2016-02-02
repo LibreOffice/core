@@ -788,20 +788,26 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
 
 SwDBManager::~SwDBManager()
 {
+    // copy required, m_DataSourceParams can be modifed while disposing components
+    std::vector<uno::Reference<sdbc::XConnection>> aCopiedConnections;
     for (auto & pParam : m_DataSourceParams)
     {
         if(pParam->xConnection.is())
         {
-            try
-            {
-                uno::Reference<lang::XComponent> xComp(pParam->xConnection, uno::UNO_QUERY);
-                if(xComp.is())
-                    xComp->dispose();
-            }
-            catch(const uno::RuntimeException&)
-            {
-                //may be disposed already since multiple entries may have used the same connection
-            }
+            aCopiedConnections.push_back(pParam->xConnection);
+        }
+    }
+    for (auto & xConnection : aCopiedConnections)
+    {
+        try
+        {
+            uno::Reference<lang::XComponent> xComp(xConnection, uno::UNO_QUERY);
+            if(xComp.is())
+                xComp->dispose();
+        }
+        catch(const uno::RuntimeException&)
+        {
+            //may be disposed already since multiple entries may have used the same connection
         }
     }
 }
