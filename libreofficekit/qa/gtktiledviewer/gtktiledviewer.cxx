@@ -422,6 +422,9 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
         if ( pDocView )
         {
             lok_doc_view_set_zoom( LOK_DOC_VIEW(pDocView), fZoom );
+            GdkRectangle aVisibleArea;
+            getVisibleAreaTwips(pDocView, &aVisibleArea);
+            lok_doc_view_set_visible_area(LOK_DOC_VIEW(pDocView), &aVisibleArea);
         }
     }
     std::string aZoom = std::to_string(int(fZoom * 100)) + std::string("%");

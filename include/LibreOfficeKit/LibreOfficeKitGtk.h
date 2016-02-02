@@ -131,6 +131,17 @@ LibreOfficeKitDocument*        lok_doc_view_get_document           (LOKDocView* 
  */
 void                           lok_doc_view_set_zoom               (LOKDocView* pDocView,
                                                                     float fZoom);
+/**
+ * lok_doc_view_set_visible_area:
+ * @pDocView: The #LOKDocView instance
+ * @fZoom: The new visible area of pDocView in twips.
+ *
+ * Sets the new visible area of the widget. This helps e.g. the page down key
+ * to jump the correct length, which depends on the amount of visible height of
+ * the document.
+ */
+void                           lok_doc_view_set_visible_area       (LOKDocView* pDocView,
+                                                                    GdkRectangle* pVisibleArea);
 
 /**
  * lok_doc_view_get_zoom:
