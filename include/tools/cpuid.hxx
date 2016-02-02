@@ -16,7 +16,7 @@
 
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)) && defined(__SSE2__)
 #define LO_SSE2_AVAILABLE 1
-#elif defined(_MSC_VER) && (defined(_M_AMD64) || (defined(_M_IX86) && defined(_M_IX86_FP) && _M_IX86_FP >= 2))
+#elif defined(_MSC_VER)
 #define LO_SSE2_AVAILABLE 1
 #endif
 
