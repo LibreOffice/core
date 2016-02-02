@@ -235,7 +235,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
+    OUString aBuf = "f(x) = ";
 
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
     bool bFindValue = false;
@@ -248,34 +248,33 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         }
         else if (aValue < 0.0)
         {
-            aBuf.append( " - " );
+            aBuf += " - ";
             aValue = - aValue;
         }
         else
         {
             if ( bFindValue )
-                aBuf.append( " + " );
+                aBuf += " + ";
         }
         bFindValue = true;
 
         if ( i == 0 || !rtl::math::approxEqual( aValue , 1.0 ) )
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, aValue ) );
+            aBuf += getFormattedString( xNumFormatter, nNumberFormatKey, aValue );
 
         if(i > 0)
         {
             if (i == 1)
             {
-                aBuf.append( "x" );
+                aBuf += "x";
             }
             else
             {
-                aBuf.append( "x^" );
-                aBuf.append(i);
+                aBuf += "x^" + OUString::valueOf(i);
             }
         }
     }
 
-    return aBuf.makeStringAndClear();
+    return aBuf;
 }
 
 } //  namespace chart
