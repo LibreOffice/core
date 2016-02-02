@@ -42,19 +42,16 @@ SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPre
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext(nullptr);
+    SvXMLImportContext *pContext = nullptr;
 
-    if (!pContext)
+    ScXMLImport& rXMLImport(GetScImport());
+    uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
+    if (xShapes.is())
     {
-        ScXMLImport& rXMLImport(GetScImport());
-        uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
-        if (xShapes.is())
-        {
-            XMLTableShapeImportHelper* pTableShapeImport(static_cast<XMLTableShapeImportHelper*>(rXMLImport.GetShapeImport().get()));
-            pTableShapeImport->SetOnTable(true);
-            pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-                rXMLImport, nPrefix, rLName, xAttrList, xShapes);
-        }
+        XMLTableShapeImportHelper* pTableShapeImport(static_cast<XMLTableShapeImportHelper*>(rXMLImport.GetShapeImport().get()));
+        pTableShapeImport->SetOnTable(true);
+        pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
+            rXMLImport, nPrefix, rLName, xAttrList, xShapes);
     }
 
     if( !pContext )
