@@ -214,7 +214,8 @@ void WrapPropertyPanel::UpdateSpacingLB()
         }
     }
 
-    mpSpacingLB->InsertEntry(aCustomEntry);
+    if(mpSpacingLB->GetEntryPos(aCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
+        mpSpacingLB->InsertEntry(aCustomEntry);
     mpSpacingLB->SelectEntry(aCustomEntry);
 }
 
