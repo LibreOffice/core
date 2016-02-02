@@ -14,6 +14,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
@@ -129,6 +130,9 @@ struct LOKDocViewPrivateImpl
     */
     int m_nTileSizeTwips;
 
+    GdkRectangle m_aVisibleArea;
+    bool m_bVisibleAreaSet;
+
     LOKDocViewPrivateImpl()
         : m_aLOPath(nullptr),
         m_aDocPath(nullptr),
@@ -166,7 +170,9 @@ struct LOKDocViewPrivateImpl
         m_bInDragEndHandle(false),
         m_pGraphicHandle(nullptr),
         m_nViewId(0),
-        m_nTileSizeTwips(0)
+        m_nTileSizeTwips(0),
+        m_aVisibleArea({0, 0, 0, 0}),
+        m_bVisibleAreaSet(false)
     {
         memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
         memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
@@ -560,6 +566,11 @@ postKeyEventInThread(gpointer data)
                                                  priv->m_nTileSizeTwips,
                                                  priv->m_nTileSizeTwips);
         priv->m_nTileSizeTwips = 0;
+    }
+    if (priv->m_bVisibleAreaSet)
+    {
+        // TODO invoke lok::Document::setVisibleArea() here.
+        priv->m_bVisibleAreaSet = false;
     }
 
     std::stringstream ss;
@@ -2518,6 +2529,17 @@ lok_doc_view_get_document (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     return priv->m_pDocument;
+}
+
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_set_visible_area (LOKDocView* pDocView, GdkRectangle* pVisibleArea)
+{
+    if (!pVisibleArea)
+        return;
+
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    priv->m_aVisibleArea = *pVisibleArea;
+    priv->m_bVisibleAreaSet = true;
 }
 
 SAL_DLLPUBLIC_EXPORT void
