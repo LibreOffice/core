@@ -134,7 +134,7 @@ void FileControl::StateChanged( StateChangedType nType )
         // Only use height of the button, as in HTML
         // always Courier is used
         vcl::Font aFont = GetButton().GetControlFont();
-        aFont.SetSize( GetControlFont().GetSize() );
+        aFont.SetFontSize( GetControlFont().GetFontSize() );
         GetButton().SetControlFont( aFont );
     }
     else if ( nType == StateChangedType::ControlForeground )

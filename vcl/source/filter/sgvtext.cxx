@@ -524,9 +524,9 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
         }
         Brei=Brei*sal_uLong(Atr.Breite)/100;
         Brei=Brei*sal_uLong(StdBrei)/100;
-        aFont.SetSize(Size(hPoint2Sgf(sal_uInt16(Brei)),hPoint2Sgf(sal_uInt16(Grad))));
+        aFont.SetFontSize(Size(hPoint2Sgf(sal_uInt16(Brei)),hPoint2Sgf(sal_uInt16(Grad))));
     } else {
-        aFont.SetSize(Size(0,hPoint2Sgf(sal_uInt16(Grad))));
+        aFont.SetFontSize(Size(0,hPoint2Sgf(sal_uInt16(Grad))));
     }
 
     aColor=Sgv2SvFarbe(Atr.L.LFarbe,Atr.L.LBFarbe,Atr.L.LIntens); aFont.SetColor(aColor);

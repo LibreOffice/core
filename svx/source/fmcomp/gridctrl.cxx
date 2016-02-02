@@ -446,7 +446,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     {
         vcl::Font aApplFont (m_aAbsolute->GetFont());
         const Size pointAbsoluteSize(m_aAbsolute->PixelToLogic( Size( 0, nH - 2 ), MapMode(MAP_POINT) ));
-        aApplFont.SetSize( pointAbsoluteSize );
+        aApplFont.SetFontSize( pointAbsoluteSize );
         m_aAbsolute->SetControlFont( aApplFont );
 
         aApplFont.SetTransparent( true );

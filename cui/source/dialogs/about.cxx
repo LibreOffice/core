@@ -162,17 +162,17 @@ void AboutDialog::StyleControls()
 
     vcl::Font aLabelFont = rStyleSettings.GetLabelFont();
     vcl::Font aLargeFont = aLabelFont;
-    aLargeFont.SetSize(Size( 0, aLabelFont.GetSize().Height() * 3));
+    aLargeFont.SetFontSize(Size( 0, aLabelFont.GetFontSize().Height() * 3));
 
     // Logo Replacement Text
     m_pLogoReplacement->SetControlFont(aLargeFont);
 
     // Description Text
-    aLargeFont.SetSize(Size(0, aLabelFont.GetSize().Height() * 1.3));
+    aLargeFont.SetFontSize(Size(0, aLabelFont.GetFontSize().Height() * 1.3));
     m_pDescriptionText->SetControlFont(aLargeFont);
 
     // Version Text
-    aLargeFont.SetSize(Size(0, aLabelFont.GetSize().Height() * 1.2));
+    aLargeFont.SetFontSize(Size(0, aLabelFont.GetFontSize().Height() * 1.2));
     m_pVersion->SetControlFont(aLargeFont);
 
     // If not in high-contrast mode, hard-code colors

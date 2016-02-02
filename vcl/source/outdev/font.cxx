@@ -177,7 +177,7 @@ FontMetric OutputDevice::GetFontMetric() const
     // set aMetric with info from font
     aMetric.SetFamilyName( maFont.GetFamilyName() );
     aMetric.SetStyleName( xFontMetric->GetStyleName() );
-    aMetric.SetSize( PixelToLogic( Size( xFontMetric->GetWidth(), xFontMetric->GetAscent() + xFontMetric->GetDescent() - xFontMetric->GetInternalLeading() ) ) );
+    aMetric.SetFontSize( PixelToLogic( Size( xFontMetric->GetWidth(), xFontMetric->GetAscent() + xFontMetric->GetDescent() - xFontMetric->GetInternalLeading() ) ) );
     aMetric.SetCharSet( xFontMetric->IsSymbolFont() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
     aMetric.SetFamily( xFontMetric->GetFamilyType() );
     aMetric.SetPitch( xFontMetric->GetPitch() );
@@ -838,7 +838,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
     if ( !aSearch.isEmpty() )
     {
-        aFont.SetHeight( 12 ); // corresponds to nDefaultHeight
+        aFont.SetFontHeight( 12 ); // corresponds to nDefaultHeight
         aFont.SetWeight( WEIGHT_NORMAL );
         aFont.SetLanguage( eLang );
 
@@ -885,18 +885,18 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                     aFont.SetFamilyName( aSearch );
 
                     // convert to pixel height
-                    Size aSize = pOutDev->ImplLogicToDevicePixel( aFont.GetSize() );
+                    Size aSize = pOutDev->ImplLogicToDevicePixel( aFont.GetFontSize() );
                     if ( !aSize.Height() )
                     {
                         // use default pixel height only when logical height is zero
-                        if ( aFont.GetHeight() )
+                        if ( aFont.GetFontHeight() )
                             aSize.Height() = 1;
                         else
                             aSize.Height() = (12*pOutDev->mnDPIY)/72;
                     }
 
                     // use default width only when logical width is zero
-                    if( (0 == aSize.Width()) && (0 != aFont.GetSize().Width()) )
+                    if( (0 == aSize.Width()) && (0 != aFont.GetFontSize().Width()) )
                         aSize.Width() = 1;
 
                     // get the name of the first available font
@@ -1038,12 +1038,12 @@ bool OutputDevice::ImplNewFont() const
 
     // convert to pixel height
     // TODO: replace integer based aSize completely with subpixel accurate type
-    float fExactHeight = ImplFloatLogicHeightToDevicePixel( static_cast<float>(maFont.GetHeight()) );
-    Size aSize = ImplLogicToDevicePixel( maFont.GetSize() );
+    float fExactHeight = ImplFloatLogicHeightToDevicePixel( static_cast<float>(maFont.GetFontHeight()) );
+    Size aSize = ImplLogicToDevicePixel( maFont.GetFontSize() );
     if ( !aSize.Height() )
     {
         // use default pixel height only when logical height is zero
-        if ( maFont.GetSize().Height() )
+        if ( maFont.GetFontSize().Height() )
             aSize.Height() = 1;
         else
             aSize.Height() = (12*mnDPIY)/72;
@@ -1051,7 +1051,7 @@ bool OutputDevice::ImplNewFont() const
     }
 
     // select the default width only when logical width is zero
-    if( (0 == aSize.Width()) && (0 != maFont.GetSize().Width()) )
+    if( (0 == aSize.Width()) && (0 != maFont.GetFontSize().Width()) )
         aSize.Width() = 1;
 
     // get font entry
@@ -1169,13 +1169,13 @@ bool OutputDevice::ImplNewFont() const
         int nNewWidth = (int)(nOrigWidth * fStretch + 0.5);
         if( (nNewWidth != nOrigWidth) && (nNewWidth != 0) )
         {
-            Size aOrigSize = maFont.GetSize();
-            const_cast<vcl::Font&>(maFont).SetSize( Size( nNewWidth, aSize.Height() ) );
+            Size aOrigSize = maFont.GetFontSize();
+            const_cast<vcl::Font&>(maFont).SetFontSize( Size( nNewWidth, aSize.Height() ) );
             mbMap = false;
             mbNewFont = true;
             ImplNewFont();  // recurse once using stretched width
             mbMap = true;
-            const_cast<vcl::Font&>(maFont).SetSize( aOrigSize );
+            const_cast<vcl::Font&>(maFont).SetFontSize( aOrigSize );
         }
     }
 

@@ -87,7 +87,7 @@ vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     {
         sal_Int32 nHeight(0), nWidth(0);
         rStream.ReadInt32( nHeight ); rStream.ReadInt32( nWidth ); Size aSize( nWidth, nHeight );
-        aFont.SetSize( aSize );
+        aFont.SetFontSize( aSize );
     }
 
     bool bTemp;

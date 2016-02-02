@@ -133,7 +133,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     m_pVisibleCell->GetBox().EnableTriState( false );
 
     vcl::Font aTitleFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE,Window::GetSettings().GetLanguageTag().getLanguageType(),GetDefaultFontFlags::OnlyOne);
-    aTitleFont.SetSize(Size(0, 6));
+    aTitleFont.SetFontSize(Size(0, 6));
     SetTitleFont(aTitleFont);
 
     OUString aTxt(ModuleRes(STR_QUERY_SORTTEXT));

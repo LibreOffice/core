@@ -453,7 +453,7 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     if (rZoom.GetNumerator() != rZoom.GetDenominator())
     {
         vcl::Font aFont(rFont);
-        Size aSize = aFont.GetSize();
+        Size aSize = aFont.GetFontSize();
         double n = double(aSize.Width());
         n *= double(rZoom.GetNumerator());
         n /= double(rZoom.GetDenominator());
@@ -462,13 +462,13 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
         n *= double(rZoom.GetNumerator());
         n /= double(rZoom.GetDenominator());
         aSize.Height() = WinFloatRound(n);
-        aFont.SetSize(aSize);
+        aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
 
         // Use another font if the representation is to be scaled,
         // and the actual font is not scalable
         FontMetric aMetric = rRenderContext.GetFontMetric();
-        long nFontDiff = std::abs(rRenderContext.GetFont().GetSize().Height() - aMetric.GetSize().Height());
+        long nFontDiff = std::abs(rRenderContext.GetFont().GetFontSize().Height() - aMetric.GetFontSize().Height());
         if ((aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2))
         {
             DefaultFontType nType;
@@ -649,10 +649,10 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
 vcl::Font Window::GetDrawPixelFont(OutputDevice* pDev) const
 {
     vcl::Font aFont = GetPointFont(*pDev);
-    Size aFontSize = aFont.GetSize();
+    Size aFontSize = aFont.GetFontSize();
     MapMode aPtMapMode(MAP_POINT);
     aFontSize = pDev->LogicToPixel( aFontSize, aPtMapMode );
-    aFont.SetSize( aFontSize );
+    aFont.SetFontSize( aFontSize );
     return aFont;
 }
 
@@ -1493,7 +1493,7 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
     {
         vcl::Font aFont(GetControlFont());
         sal_Int32 nHeight = rValue.toInt32() / 1000;
-        aFont.SetHeight(nHeight);
+        aFont.SetFontHeight(nHeight);
         SetControlFont(aFont);
     }
     else

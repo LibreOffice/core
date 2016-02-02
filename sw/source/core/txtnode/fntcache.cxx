@@ -148,12 +148,12 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
         ((OutputDevice&)rPrt).SetFont( aFont );
         const FontMetric aWinMet( rPrt.GetFontMetric() );
         ((OutputDevice&)rPrt).SetFont( aOldFnt );
-        long nWidth = ( aWinMet.GetSize().Width() * nPropWidth ) / 100;
+        long nWidth = ( aWinMet.GetFontSize().Width() * nPropWidth ) / 100;
 
         if( !nWidth )
             ++nWidth;
         pPrtFont = new vcl::Font( aFont );
-        pPrtFont->SetSize( Size( nWidth, aFont.GetSize().Height() ) );
+        pPrtFont->SetFontSize( Size( nWidth, aFont.GetFontSize().Height() ) );
         pScrFont = nullptr;
     }
 }
@@ -515,7 +515,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
         const vcl::Font aOldFnt( pWin->GetFont() );
         pWin->SetFont( *pPrtFont );
         const FontMetric aWinMet( pWin->GetFontMetric() );
-        const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetSize().Height() );
+        const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetFontSize().Height() );
         if( pPrtFont->GetFamilyName().indexOf( aWinMet.GetFamilyName() ) != -1 )
         {
             // If the Leading on the Window is also 0, then it has to stay
@@ -1059,7 +1059,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
                         pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
+                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
                         bSpecialJust = true;
                     }
                     ///Asian Justification
@@ -1230,7 +1230,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
-                                   (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
+                                   (sal_uInt16)aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
                     bSpecialJust = true;
                 }
 
@@ -1440,10 +1440,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 Point aTmpPos( aTextOriginPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
+                               (sal_uInt16)aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTmpPos );
                 pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
+                               (sal_uInt16)aFont.GetFontSize().Height(), lcl_IsFullstopCentered( rInf.GetOut() ), &aTextOriginPos );
             }
 
             // Asian Justification
@@ -1657,7 +1657,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if( rInf.GetLen() )
                 {
                     long nHght = rInf.GetOut().LogicToPixel(
-                                    pPrtFont->GetSize() ).Height();
+                                    pPrtFont->GetFontSize() ).Height();
                     if( WRONG_SHOW_MIN < nHght )
                     {
                         if ( rInf.GetOut().GetConnectMetaFile() )
@@ -1736,9 +1736,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     // draw them BEFORE the grammar check lines to 'override' the latter in case of conflict.
                     // reason: some grammar errors can only be found if spelling errors are fixed,
                     // therefore we don't want the user to miss a spelling error.
-                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetWrong(), aCalcLinePosData, pPrtFont->GetSize() );
+                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetWrong(), aCalcLinePosData, pPrtFont->GetFontSize() );
                     // draw wave line for grammar check errors
-                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetGrammarCheck(), aCalcLinePosData, pPrtFont->GetSize() );
+                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetGrammarCheck(), aCalcLinePosData, pPrtFont->GetFontSize() );
                 }
             }
 
@@ -1932,7 +1932,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( bCompress )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16)aFont.GetSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
+                (sal_uInt16)aFont.GetFontSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
         else
             rInf.SetKanaDiff( 0 );
 
@@ -1995,7 +1995,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                         rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                (sal_uInt16) aFont.GetSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
+                (sal_uInt16) aFont.GetFontSize().Height() ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
             aTextSize.Width() = pKernArray[ nLn - 1 ];
             delete[] pKernArray;
         }
@@ -2055,7 +2055,7 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         {
             pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
-                           (sal_uInt16) aFont.GetSize().Height(),
+                           (sal_uInt16) aFont.GetFontSize().Height(),
                            lcl_IsFullstopCentered( rInf.GetOut() ) );
         }
 

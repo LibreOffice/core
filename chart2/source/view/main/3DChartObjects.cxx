@@ -83,7 +83,7 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
         aFont = vcl::Font("Brillante St",Size(0,0));
     else
         aFont = pDevice->GetFont();
-    aFont.SetSize(Size(0, 96));
+    aFont.SetFontSize(Size(0, 96));
     aFont.SetColor(COL_GREEN); // RGB_COLORDATA(0xf0, 0xf0, 0xf0));
     pDevice->SetFont(aFont);
     pDevice->Erase();

@@ -911,9 +911,9 @@ namespace drawinglayer
                                     (sal_Int32)ceil(aRangeLogic.getMaxX()), (sal_Int32)ceil(aRangeLogic.getMaxY()));
                                 pPDFControl->Location = aRectLogic;
 
-                                Size aFontSize(pPDFControl->TextFont.GetSize());
+                                Size aFontSize(pPDFControl->TextFont.GetFontSize());
                                 aFontSize = OutputDevice::LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
-                                pPDFControl->TextFont.SetSize(aFontSize);
+                                pPDFControl->TextFont.SetFontSize(aFontSize);
 
                                 mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
                                 mpPDFExtOutDevData->CreateControl(*pPDFControl.get());

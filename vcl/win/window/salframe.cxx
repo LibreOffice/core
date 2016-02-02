@@ -2580,12 +2580,12 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Fon
     // So if it is MS Sans Serif, a none scalable font we use
     // 8 Point as the minimum control height, in all other cases
     // 6 Point is the smallest one
-    if ( rFont.GetHeight() < 8 )
+    if ( rFont.GetFontHeight() < 8 )
     {
         if ( rtl_ustr_compareIgnoreAsciiCase( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName), reinterpret_cast<const sal_Unicode*>(L"MS Sans Serif") ) == 0 )
-            rFont.SetHeight( 8 );
-        else if ( rFont.GetHeight() < 6 )
-            rFont.SetHeight( 6 );
+            rFont.SetFontHeight( 8 );
+        else if ( rFont.GetFontHeight() < 6 )
+            rFont.SetFontHeight( 6 );
     }
 }
 

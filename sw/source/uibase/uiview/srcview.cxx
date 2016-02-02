@@ -704,9 +704,9 @@ sal_Int32 SwSrcView::PrintSource(
     TextEngine* pTextEngine = aEditWin->GetTextEngine();
     pOutDev->SetMapMode( MAP_100TH_MM );
     vcl::Font aFont( aEditWin->GetOutWin()->GetFont() );
-    Size aSize( aFont.GetSize() );
+    Size aSize( aFont.GetFontSize() );
     aSize = aEditWin->GetOutWin()->PixelToLogic( aSize, MAP_100TH_MM );
-    aFont.SetSize( aSize );
+    aFont.SetFontSize( aSize );
     aFont.SetColor( COL_BLACK );
     pOutDev->SetFont( aFont );
 

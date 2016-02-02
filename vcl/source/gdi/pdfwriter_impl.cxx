@@ -1783,7 +1783,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 
     Font aFont;
     aFont.SetFamilyName( "Times" );
-    aFont.SetSize( Size( 0, 12 ) );
+    aFont.SetFontSize( Size( 0, 12 ) );
 
     GraphicsState aState;
     aState.m_aMapMode       = m_aMapMode;
@@ -2316,7 +2316,7 @@ void PDFWriterImpl::endPage()
         // reset the default font
         Font aFont;
         aFont.SetFamilyName( "Times" );
-        aFont.SetSize( Size( 0, 12 ) );
+        aFont.SetFontSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();
         m_aGraphicsStack.front().m_aFont =  aFont;
@@ -4694,8 +4694,8 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
     if( aFont.GetFamilyName().isEmpty() )
     {
         aFont = rAppSetFont;
-        if( rControlFont.GetHeight() )
-            aFont.SetSize( Size( 0, rControlFont.GetHeight() ) );
+        if( rControlFont.GetFontHeight() )
+            aFont.SetFontSize( Size( 0, rControlFont.GetFontHeight() ) );
         else
             bAdjustSize = true;
         if( rControlFont.GetItalic() != ITALIC_DONTKNOW )
@@ -4703,17 +4703,17 @@ Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&
         if( rControlFont.GetWeight() != WEIGHT_DONTKNOW )
             aFont.SetWeight( rControlFont.GetWeight() );
     }
-    else if( ! aFont.GetHeight() )
+    else if( ! aFont.GetFontHeight() )
     {
-        aFont.SetSize( rAppSetFont.GetSize() );
+        aFont.SetFontSize( rAppSetFont.GetFontSize() );
         bAdjustSize = true;
     }
     if( bAdjustSize )
     {
-        Size aFontSize = aFont.GetSize();
+        Size aFontSize = aFont.GetFontSize();
         OutputDevice* pDefDev = Application::GetDefaultDevice();
         aFontSize = OutputDevice::LogicToLogic( aFontSize, pDefDev->GetMapMode(), getMapMode() );
-        aFont.SetSize( aFontSize );
+        aFont.SetFontSize( aFontSize );
     }
     return aFont;
 }
@@ -4779,12 +4779,12 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     // (that is before endRedirect())
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
-    Font aDummyFont( OUString( "Helvetica" ), aFont.GetSize() );
+    Font aDummyFont( OUString( "Helvetica" ), aFont.GetFontSize() );
     sal_Int32 nDummyBuiltin = getBestBuiltinFont( aDummyFont );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nDummyBuiltin].getNameObject() );
     aDA.append( ' ' );
-    m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aFont.GetHeight() ), aDA );
+    m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
     rButton.m_aDAString = aDA.makeStringAndClear();
 
@@ -4846,7 +4846,7 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
         if( rWidget.Border )
         {
             // adjust edit area accounting for border
-            sal_Int32 nDelta = aFont.GetHeight()/4;
+            sal_Int32 nDelta = aFont.GetFontHeight()/4;
             if( nDelta < 1 )
                 nDelta = 1;
             rIntern.m_aRect.Left()  += nDelta;
@@ -4887,7 +4887,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
     else
         aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( ' ' );
-    m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetHeight() ), aDA );
+    m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
 
     /*  create an empty appearance stream, let the viewer create
@@ -4956,7 +4956,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     else
         aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( ' ' );
-    m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetHeight() ), aDA );
+    m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
 }
@@ -4977,7 +4977,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     Font aFont = replaceFont( rWidget.TextFont, rSettings.GetRadioCheckFont() );
     setFont( aFont );
-    Size aFontSize = aFont.GetSize();
+    Size aFontSize = aFont.GetFontSize();
     if( aFontSize.Height() > rBox.m_aRect.GetHeight() )
         aFontSize.Height() = rBox.m_aRect.GetHeight();
     sal_Int32 nDelta = aFontSize.Height()/10;
@@ -5041,7 +5041,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetFontSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
@@ -5102,7 +5102,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     Font aFont = replaceFont( rWidget.TextFont, rSettings.GetRadioCheckFont() );
     setFont( aFont );
-    Size aFontSize = aFont.GetSize();
+    Size aFontSize = aFont.GetFontSize();
     if( aFontSize.Height() > rBox.m_aRect.GetHeight() )
         aFontSize.Height() = rBox.m_aRect.GetHeight();
     sal_Int32 nDelta = aFontSize.Height()/10;
@@ -5166,7 +5166,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetFontSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
@@ -8851,16 +8851,16 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // transform font height back to current units
     // note: the layout calculates in outdevs device pixel !!
     sal_Int32 nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicHeight( nPixelFontHeight );
-    if( m_aCurrentPDFState.m_aFont.GetWidth() )
+    if( m_aCurrentPDFState.m_aFont.GetAverageFontWidth() )
     {
         Font aFont( m_aCurrentPDFState.m_aFont );
-        aFont.SetWidth( 0 );
+        aFont.SetAverageFontWidth( 0 );
         FontMetric aMetric = m_pReferenceDevice->GetFontMetric( aFont );
-        if( aMetric.GetWidth() != m_aCurrentPDFState.m_aFont.GetWidth() )
+        if( aMetric.GetAverageFontWidth() != m_aCurrentPDFState.m_aFont.GetAverageFontWidth() )
         {
             fXScale =
-                (double)m_aCurrentPDFState.m_aFont.GetWidth() /
-                (double)aMetric.GetWidth();
+                (double)m_aCurrentPDFState.m_aFont.GetAverageFontWidth() /
+                (double)aMetric.GetAverageFontWidth();
         }
         // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
@@ -8952,7 +8952,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
         else
         {
-            double fW = (double)m_aCurrentPDFState.m_aFont.GetHeight() / 30.0;
+            double fW = (double)m_aCurrentPDFState.m_aFont.GetFontHeight() / 30.0;
             m_aPages.back().appendMappedLength( fW, aLine );
             aLine.append ( " w\n" );
         }

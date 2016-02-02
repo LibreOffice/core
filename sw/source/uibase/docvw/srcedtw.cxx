@@ -992,11 +992,11 @@ void SwSrcEditWindow::SetFont()
 
     const vcl::Font& rFont = GetTextEngine()->GetFont();
     vcl::Font aFont(aFontMetric);
-    Size aSize(rFont.GetSize());
+    Size aSize(rFont.GetFontSize());
     //font height is stored in point and set in twip
     aSize.Height() =
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20;
-    aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
+    aFont.SetFontSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
     GetTextEngine()->SetFont( aFont );
     pOutWin->SetFont(aFont);
 }
