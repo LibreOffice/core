@@ -43,11 +43,11 @@ public:
     css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime )
             throw ( css::uno::RuntimeException, std::exception ) override;
 
-    ::rtl::OUString SAL_CALL getImplementationName()
+    SAL_CALL getImplementationName()
             throw ( css::uno::RuntimeException, std::exception ) override;
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
+    sal_Bool SAL_CALL supportsService( const OUString& serviceName )
             throw ( css::uno::RuntimeException, std::exception ) override;
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw ( css::uno::RuntimeException, std::exception ) override;
 };
 
