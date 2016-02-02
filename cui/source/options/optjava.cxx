@@ -665,6 +665,8 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
         bModified = true;
+        ScopedVclPtrInstance< MessageDialog > aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
+        aWarnBox->Execute();
     }
 
     if ( m_pMacroCB->IsValueChangedFromSaved() )
