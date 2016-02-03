@@ -116,6 +116,7 @@
 #include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>
 #include <numrule.hxx>
@@ -3263,6 +3264,12 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // directly in twips.
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     rEditWin.EnableMapMode(false);
+
+    // when the "This document may contain formatting or content that cannot
+    // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
+    // causing 'Save' being disabled; so let's always save to the original
+    // format
+    SvtSaveOptions().SetWarnAlienFormat(false);
 }
 
 void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)

@@ -44,6 +44,7 @@
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <ctype.h>
 #include <float.h>
@@ -930,6 +931,12 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     aInputOptions.SetTextWysiwyg(true);
     SC_MOD()->SetInputOptions(aInputOptions);
     pDocShell->CalcOutputFactor();
+
+    // when the "This document may contain formatting or content that cannot
+    // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
+    // causing 'Save' being disabled; so let's always save to the original
+    // format
+    SvtSaveOptions().SetWarnAlienFormat(false);
 
     // default tile size in pixels
     mnTilePixelWidth = 256;
