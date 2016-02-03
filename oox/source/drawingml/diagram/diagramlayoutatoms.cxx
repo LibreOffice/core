@@ -20,7 +20,6 @@
 #include "diagramlayoutatoms.hxx"
 
 #include <functional>
-#include <boost/bind.hpp>
 
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
@@ -86,7 +85,7 @@ void LayoutAtom::dump(int level)
                typeid(*this).name() );
     const std::vector<LayoutAtomPtr>& pChildren=getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
-                   boost::bind( &LayoutAtom::dump, _1, level + 1 ) );
+        [level] (LayoutAtomPtr const& pAtom) { pAtom->dump(level + 1); } );
 }
 
 ForEachAtom::ForEachAtom(const Reference< XFastAttributeList >& xAttributes)
@@ -584,9 +583,7 @@ void ShapeCreationVisitor::defaultVisit(LayoutAtom& rAtom)
 {
     const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
-                   boost::bind( &LayoutAtom::accept,
-                                _1,
-                                boost::ref(*this)) );
+        [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
 }
 
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
@@ -611,9 +608,7 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
         // getPointsPresNameMap()
         ShallowPresNameVisitor aVisitor(mrDgm);
         std::for_each( pChildren.begin(), pChildren.end(),
-                       boost::bind( &LayoutAtom::accept,
-                                    _1,
-                                    boost::ref(aVisitor)) );
+            [&] (LayoutAtomPtr const& pAtom) { pAtom->accept(aVisitor); } );
         nChildren = aVisitor.getCount();
     }
 
@@ -627,9 +622,7 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     {
         // TODO there is likely some conditions
         std::for_each( pChildren.begin(), pChildren.end(),
-                       boost::bind( &LayoutAtom::accept,
-                                    _1,
-                                    boost::ref(*this)) );
+            [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
     }
 
     // and restore idx
@@ -697,9 +690,7 @@ void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
     // visit all children, one of them needs to be the layout algorithm
     const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
-                   boost::bind( &LayoutAtom::accept,
-                                _1,
-                                boost::ref(*this)) );
+        [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
 }
 
 void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
@@ -738,9 +729,7 @@ void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
     // name set
     const std::vector<LayoutAtomPtr>& pChildren=rAtom.getChildren();
     std::for_each( pChildren.begin(), pChildren.end(),
-                   boost::bind( &LayoutAtom::accept,
-                                _1,
-                                boost::ref(*this)) );
+        [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
 }
 
 void ShallowPresNameVisitor::visit(ConstraintAtom& /*rAtom*/)

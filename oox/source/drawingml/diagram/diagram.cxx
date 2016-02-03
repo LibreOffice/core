@@ -18,7 +18,6 @@
  */
 
 #include <functional>
-#include <boost/bind.hpp>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -76,10 +75,10 @@ void DiagramData::dump()
 {
     OSL_TRACE("Dgm: DiagramData # of cnx: %zu", maConnections.size() );
     std::for_each( maConnections.begin(), maConnections.end(),
-                  boost::bind( &dgm::Connection::dump, _1 ) );
+            [] (dgm::Connection & rConnection) { rConnection.dump(); } );
     OSL_TRACE("Dgm: DiagramData # of pt: %zu", maPoints.size() );
     std::for_each( maPoints.begin(), maPoints.end(),
-                  boost::bind( &dgm::Point::dump, _1 ) );
+            [] (dgm::Point & rPoint) { rPoint.dump(); } );
 }
 
 void Diagram::setData( const DiagramDataPtr & pData)
