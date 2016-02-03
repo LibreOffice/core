@@ -77,8 +77,8 @@
 #include "ElementsDockingWindow.hxx"
 #include <memory>
 
-#define MINZOOM         25
-#define MAXZOOM         800
+#define MINZOOM sal_uInt16(25)
+#define MAXZOOM sal_uInt16(800)
 
 // space around the edit window, in pixels
 // fdo#69111: Increased border on the top so that the window is
@@ -601,7 +601,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
-    nZoom = std::min(std::max((sal_uInt16) Factor, (sal_uInt16) MINZOOM), (sal_uInt16) MAXZOOM);
+    nZoom = std::min(std::max(Factor, MINZOOM), MAXZOOM);
     Fraction   aFraction (nZoom, 100);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction) );
     SetTotalSize();
@@ -954,7 +954,7 @@ void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = rX < rY ? rX : rY;
-    GetGraphicWindow().SetZoom( (sal_uInt16) long(rFrac * Fraction( 100, 1 )) );
+    GetGraphicWindow().SetZoom(sal::static_int_cast<sal_uInt16>(long(rFrac * Fraction( 100, 1 ))));
 
     //To avoid rounding errors base class regulates crooked values too
     //if necessary
@@ -1238,9 +1238,10 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MAP_100TH_MM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
-                sal_uInt16   nZ = (sal_uInt16) std::min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
-                                              (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
-                Fraction aFraction ((sal_uInt16) std::max ((sal_uInt16) MINZOOM, std::min((sal_uInt16) MAXZOOM, (sal_uInt16) (nZ - 10))), (sal_uInt16) 100);
+                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100L, GraphicSize.Width())),
+                                                                          long(Fraction(OutputSize.Height() * 100L, GraphicSize.Height()))));
+                nZ -= 10;
+                Fraction aFraction (std::max(MINZOOM, std::min(MAXZOOM, nZ)), 100);
 
                 OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             }
@@ -1780,7 +1781,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     switch( rZoom.GetType() )
                     {
                         case SvxZoomType::PERCENT:
-                            aGraphic->SetZoom((sal_uInt16)rZoom.GetValue ());
+                            aGraphic->SetZoom(sal::static_int_cast<sal_uInt16>(rZoom.GetValue ()));
                             break;
 
                         case SvxZoomType::OPTIMAL:
@@ -1797,8 +1798,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                                               OutputRect.GetHeight()), aMap));
                             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-                            sal_uInt16     nZ = (sal_uInt16) std::min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
-                                                         (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
+                            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100L, GraphicSize.Width())),
+                                                                                      long(Fraction(OutputSize.Height() * 100L, GraphicSize.Height()))));
                             aGraphic->SetZoom (nZ);
                             break;
                         }
