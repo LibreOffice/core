@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_20c19281",
+        "filename": "sc/inc/colcontainer.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-03T13:00:52Z",
+      "side": 1,
+      "message": "I would instead call this method size and return aCols.size();\n\nThis is more in line with std containers and avoids the -1 in a number of places.\n\nHowever this is nothing we can\u0027t fix later.",
+      "revId": "3ee8d6e850c453e16045a481725a17fcc3df5baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
