@@ -24,11 +24,15 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 # note: this can intentionally only build against internal atomic_op
 # note: this can intentionally only build against internal tommath
 
+ifneq ($(OS),WNT)
+SET_FCA=&& FB_CPU_ARG='$(filter --jobserver-fds=%,$(MAKEFLAGS))'
+endif
+
 # do not set LDFLAGS - it is mysteriously not used by firebird on MacOSX
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
-		&& FB_CPU_ARG='$(filter --jobserver-fds=%,$(MAKEFLAGS))' \
+		$(SET_FCA) \
 		&& if [ -n "$${FB_CPU_ARG}" ]; then \
 		  FB_PRLL_ARG="CPU=\$$(EMPTY) $${FB_CPU_ARG}"; \
 		else \
