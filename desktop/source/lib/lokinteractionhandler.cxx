@@ -114,9 +114,9 @@ void LOKInteractionHandler::postError(css::task::InteractionClassification class
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    if (m_pLOKDocument)
+    if (m_pLOKDocument && m_pLOKDocument->mpCallback)
         m_pLOKDocument->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKDocument->mpCallbackData);
-    else
+    else if (m_pLOKit->mpCallback)
         m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKit->mpCallbackData);
 }
 
@@ -242,7 +242,8 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
     if (!(rRequest >>= passwordRequest))
         return false;
 
-    if (m_pLOKit->hasOptionalFeature((passwordRequest.IsRequestPasswordToModify)
+    if (m_pLOKit->mpCallback &&
+        m_pLOKit->hasOptionalFeature((passwordRequest.IsRequestPasswordToModify)
                 ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
                 : LOK_FEATURE_DOCUMENT_PASSWORD))
     {
