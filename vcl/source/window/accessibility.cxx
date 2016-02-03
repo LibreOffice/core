@@ -544,8 +544,6 @@ OUString Window::getDefaultAccessibleName() const
 
         case WINDOW_TOOLBOX:
             aAccessibleName = GetText();
-            if( aAccessibleName.isEmpty() )
-                aAccessibleName = "Tool Bar";
             break;
 
         case WINDOW_MOREBUTTON:
