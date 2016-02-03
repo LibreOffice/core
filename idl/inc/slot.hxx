@@ -44,7 +44,6 @@ class SvMetaSlot : public SvMetaAttribute
 
     SvBOOL          aRecordPerItem;// exclusive
     SvBOOL          aRecordPerSet;
-    SvBOOL          aRecordManual;
     SvBOOL          aNoRecord;
     SvBOOL          aRecordAbsolute;
 
@@ -95,25 +94,19 @@ protected:
             {
                 aRecordPerItem = bSet;
                 if( bSet )
-                    aRecordPerSet = aRecordManual = aNoRecord = false;
+                    aRecordPerSet = aNoRecord = false;
             }
     void    SetRecordPerSet( bool bSet )
             {
                 aRecordPerSet = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordManual = aNoRecord = false;
-            }
-    void    SetRecordManual( bool bSet )
-            {
-                aRecordManual = bSet;
-                if( bSet )
-                    aRecordPerItem = aRecordPerSet = aNoRecord = false;
+                    aRecordPerItem = aNoRecord = false;
             }
     void    SetNoRecord( bool bSet )
             {
                 aNoRecord = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordPerSet = aRecordManual = false;
+                    aRecordPerItem = aRecordPerSet = false;
             }
     void    SetRecordAbsolute( bool bSet )
             { aRecordAbsolute = bSet; }
@@ -153,7 +146,6 @@ public:
 
     bool                GetRecordPerItem() const;
     bool                GetRecordPerSet() const;
-    bool                GetRecordManual() const;
     bool                GetNoRecord() const;
     bool                GetRecordAbsolute() const;
 

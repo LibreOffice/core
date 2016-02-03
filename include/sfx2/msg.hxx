@@ -38,7 +38,6 @@ enum class SfxSlotMode {
     NORECORD        =    0x0100L, // no recording
     RECORDPERITEM   =    0x0200L, // each item, one statement
     RECORDPERSET    =    0x0400L, // The whole Set is a Statement, default
-    RECORDMANUAL    =    0x0800L, // Recording by the application developer is default
     RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
     STANDARD        =   0x00400L, // RECORDPERSET;
 
@@ -61,7 +60,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffff2eL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1fff72eL> {};
 }
 
 

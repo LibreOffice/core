@@ -521,7 +521,6 @@ SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -705,7 +704,6 @@ SfxBoolItem BezierFill SID_DRAW_BEZIER_FILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -1659,7 +1657,6 @@ SfxVoidItem Circle SID_DRAW_CIRCLE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1683,7 +1680,6 @@ SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1707,7 +1703,6 @@ SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1755,7 +1750,6 @@ SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1779,7 +1773,6 @@ SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1803,7 +1796,6 @@ SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -2980,7 +2972,6 @@ SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3004,7 +2995,6 @@ SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3028,7 +3018,6 @@ SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -6259,7 +6248,6 @@ SfxBoolItem Line_Diagonal SID_DRAW_XLINE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -7317,7 +7305,6 @@ SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7363,7 +7350,6 @@ SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -7386,7 +7372,6 @@ SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -7409,7 +7394,6 @@ SfxBoolItem Polygon_Unfilled SID_DRAW_POLYGON_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -7921,7 +7905,6 @@ SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7945,7 +7928,6 @@ SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7969,7 +7951,6 @@ SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -9313,7 +9294,6 @@ SfxVoidItem Square SID_DRAW_SQUARE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -9337,7 +9317,6 @@ SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -9361,7 +9340,6 @@ SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -9385,7 +9363,6 @@ SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* status: */
     SlotType = SfxBoolItem

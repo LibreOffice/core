@@ -91,7 +91,7 @@ char const * SyntaxStrings[] = {
 "\t\tPseudoSlots",
 "\t\tReadOnly",
 "\t\tReadOnlyDoc*",
-"\t\tRecordPerSet*, RecordPerItem, RecordManual, NoRecord",
+"\t\tRecordPerSet*, RecordPerItem, NoRecord",
 "\t\tRecordAbsolute",
 "\t\tStateMethod    = Identifier",
 "\t\tAsynchron",
