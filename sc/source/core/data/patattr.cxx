@@ -1291,12 +1291,24 @@ bool ScPatternAttr::IsSymbolFont() const
         return false;
 }
 
+namespace {
+
+sal_uInt32 getNumberFormatKey(const SfxItemSet& rSet)
+{
+    return static_cast<const SfxUInt32Item&>(rSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+}
+
+LanguageType getLanguageType(const SfxItemSet& rSet)
+{
+    return static_cast<const SvxLanguageItem&>(rSet.Get(ATTR_LANGUAGE_FORMAT)).GetLanguage();
+}
+
+}
+
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 {
-    sal_uLong nFormat =
-        static_cast<const SfxUInt32Item*>(&GetItemSet().Get( ATTR_VALUE_FORMAT ))->GetValue();
-    LanguageType eLang =
-        static_cast<const SvxLanguageItem*>(&GetItemSet().Get( ATTR_LANGUAGE_FORMAT ))->GetLanguage();
+    sal_uLong nFormat = getNumberFormatKey(GetItemSet());
+    LanguageType eLang = getLanguageType(GetItemSet());
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
         ;       // it remains as it is
     else if ( pFormatter )
@@ -1313,17 +1325,33 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
     if (!pCondSet)
         return GetNumberFormat(pFormatter);
 
+    /* In the case of a conditional format we need to overwrite a cell style
+     * but leave a hard cell formatting alone. So check first if the number
+     * format is set in the cell format, then the conditional format and
+     * finally in the style.
+     *
+     * The style is represented here if the name is empty.
+     */
+
     const SfxPoolItem* pFormItem;
-    if ( pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SfxItemState::SET )
-        pFormItem = &GetItemSet().Get(ATTR_VALUE_FORMAT);
+    sal_uLong nFormat = 0;
+    if (GetItemSet().GetItemState(ATTR_VALUE_FORMAT, false, &pFormItem) == SfxItemState::SET)
+        nFormat = static_cast<const SfxUInt32Item*>(pFormItem)->GetValue();
+    else if (pCondSet->GetItemState(ATTR_VALUE_FORMAT, true, &pFormItem) == SfxItemState::SET )
+        nFormat = getNumberFormatKey(*pCondSet);
+    else
+        nFormat = getNumberFormatKey(GetItemSet());
 
     const SfxPoolItem* pLangItem;
-    if ( pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SfxItemState::SET )
-        pLangItem = &GetItemSet().Get(ATTR_LANGUAGE_FORMAT);
+    LanguageType eLang;
+    if (GetItemSet().GetItemState(ATTR_LANGUAGE_FORMAT, false, &pLangItem) == SfxItemState::SET)
+        eLang = static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage();
+    else if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT, true, &pLangItem) == SfxItemState::SET)
+        eLang = getLanguageType(*pCondSet);
+    else
+        eLang = getLanguageType(GetItemSet());
 
-    return pFormatter->GetFormatForLanguageIfBuiltIn(
-                    static_cast<const SfxUInt32Item*>(pFormItem)->GetValue(),
-                    static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage() );
+    return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
 }
 
 const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
