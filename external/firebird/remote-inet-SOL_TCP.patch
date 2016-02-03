@@ -1,0 +1,15 @@
+--- src/remote/inet.cpp
++++ src/remote/inet.cpp
+@@ -803,11 +803,7 @@
+ 	gai_hints.ai_family = ((packet || host.hasData() || !ipv6) ? AF_UNSPEC : AF_INET6);
+ 	gai_hints.ai_socktype = SOCK_STREAM;
+ 
+-#if !defined(WIN_NT) && !defined(__clang__)
+-	gai_hints.ai_protocol = SOL_TCP;
+-#else
+-	gai_hints.ai_protocol = IPPROTO_TCP;
+-#endif
++	gai_hints.ai_protocol = getprotobyname("TCP")->p_proto;
+ 
+ 	gai_hints.ai_flags =
+ #ifndef ANDROID

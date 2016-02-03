@@ -1,0 +1,51 @@
+--- src/auth/SecureRemotePassword/Message.h
++++ src/auth/SecureRemotePassword/Message.h
+@@ -19,6 +19,14 @@
+ 
+ #endif // INTERNAL_FIREBIRD
+ 
++/* My implementation of strnlen */
++static size_t my_strnlen( const char *s, size_t maxlen )
++{
++    const char *end = static_cast< const char * >( memchr( s, 0, maxlen ) );
++    return end ? static_cast< size_t >( end - s ) : maxlen;
++}
++
++
+ #ifdef INTERNAL_FIREBIRD
+ // This class helps to work with metadata iface
+ class Meta : public Firebird::RefPtr<Firebird::IMessageMetadata>
+@@ -347,7 +355,7 @@
+ 	const char* operator= (const char* newVal)
+ 	{
+ 		msg->getBuffer();
+-		setStrValue(newVal, static_cast<unsigned>(strnlen(newVal, size)));
++		setStrValue(newVal, static_cast< unsigned >( my_strnlen( newVal, size ) ));
+ 		null = FB_FALSE;
+ 		return newVal;
+ 	}
+--- src/isql/isql.epp
++++ src/isql/isql.epp
+@@ -89,6 +89,13 @@
+ #include "editline.h"
+ #endif
+ 
++/* My implementation of strnlen */
++size_t my_strnlen( const char *s, size_t maxlen )
++{
++    const char *end = static_cast< const char * >( memchr( s, 0, maxlen ) );
++    return end ? static_cast< size_t >( end - s ) : maxlen;
++}
++
+ enum literal_string_type
+ {
+ 	INIT_STR_FLAG			= 0,
+@@ -7179,7 +7186,7 @@
+ 			else
+ 			{
+ 				IcuUtil::pad(p, var->charSet,
+-					static_cast<unsigned>(strnlen(var->value.asChar, var->length)),
++					static_cast<unsigned>( my_strnlen( var->value.asChar, var->length ) ),
+ 					var->value.asChar, length, false);
+ 				strcat(p, " ");
+ 			}

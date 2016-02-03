@@ -1,0 +1,13 @@
+--- src/common/os/posix/os_utils.cpp
++++ src/common/os/posix/os_utils.cpp
+@@ -251,6 +251,10 @@
+ #endif
+ }
+ 
++#ifndef O_CLOEXEC
++#define O_CLOEXEC 0
++#endif
++
+ // setting flag is not absolutely required, therefore ignore errors here
+ void setCloseOnExec(int fd)
+ {

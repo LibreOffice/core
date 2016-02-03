@@ -1,0 +1,44 @@
+--- configure
++++ configure
+@@ -2925,7 +2925,7 @@
+ 
+ $as_echo "#define DARWIN 1" >>confdefs.h
+ 
+-	LIBS="$LIBS -framework CoreFoundation"
++	LIBS="$LIBS -lSystemStubs -framework CoreFoundation"
+     EDITLINE_FLG=Y
+     SHRLIB_EXT=dylib
+ 	EXPORT_SYMBOLS_STYLE=darwin
+--- configure.ac
++++ configure.ac
+@@ -117,7 +117,7 @@
+     PLATFORM=DARWIN
+     INSTALL_PREFIX=darwin
+     AC_DEFINE(DARWIN, 1, [Define this if OS is DARWIN])
+-	XE_APPEND(-framework CoreFoundation,LIBS)
++	XE_APPEND(-lSystemStubs -framework CoreFoundation,LIBS)
+     EDITLINE_FLG=Y
+     SHRLIB_EXT=dylib
+ dnl CPU_TYPE=ppc64
+--- extern/btyacc/Makefile
++++ extern/btyacc/Makefile
+@@ -17,7 +17,7 @@
+ # No LDFLAGS
+ #LDFLAGS=
+ 
+-LIBS=
++LIBS = -lSystemStubs
+ 
+ # For GNU environment, gmake will set $CC to gcc
+ # Other environments will have different values, maybe no GNU installed!
+--- extern/cloop/Makefile
++++ extern/cloop/Makefile
+@@ -4,7 +4,7 @@
+
+ TARGET	:= release
+
+-LD	:= $(CXX)
++LD	:= $(CXX) -lSystemStubs
+
+ SRC_DIR		:= src
+ BUILD_DIR	:= build

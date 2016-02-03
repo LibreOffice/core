@@ -1,0 +1,46 @@
+From: asfernandes <asfernandes@users.sourceforge.net>
+Date: Sat, 5 Mar 2016 03:39:36 +0000
+Subject: Make the generated code compatible with gcc 6 in C++-14 mode.
+ (cherry picked from commit 3618aa2171674babf79ef935aa049c40a3db1321)
+Patch-mainline: 
+Git-commit: 3618aa2171674babf79ef935aa049c40a3db1321
+References: bsc#964466 CORE-5099
+​
+--- src/gpre/c_cxx.cpp
++++ src/gpre/c_cxx.cpp
+@@ -2004,7 +2004,7 @@
+ 	int ident = CMP_next_ident();
+ 	init->nod_arg[2] = (gpre_nod*)(IPTR)ident;
+ 
+-	printa(0, "static %schar\n   *isc_%da, *isc_%db;", CONST_STR, ident, ident);
++	printa(0, "static %sunsigned char\n   *isc_%da, *isc_%db;", CONST_STR, ident, ident);
+ 	printa(0, "static short\n   isc_%dl;", ident);
+ 
+ 	const gpre_nod* list = init->nod_arg[1];
+@@ -2820,7 +2820,7 @@
+ 		printa(0, "static %sshort\n   isc_%dl = %d;",
+ 			   (request->req_flags & REQ_extend_dpb) ? "" : CONST_STR,
+ 			   request->req_ident, request->req_length);
+-		printa(0, "static %schar\n   isc_%d [] = {", CONST_STR, request->req_ident);
++		printa(0, "static %sunsigned char\n   isc_%d [] = {", CONST_STR, request->req_ident);
+ 
+ 		const TEXT* string_type = "blr";
+ 		if (gpreGlob.sw_raw)
+@@ -2891,7 +2891,7 @@
+ 			{
+ 				printa(0, "static %sshort\n   isc_%dl = %d;", CONST_STR,
+ 					   reference->ref_sdl_ident, reference->ref_sdl_length);
+-				printa(0, "static %schar\n   isc_%d [] = {", CONST_STR, reference->ref_sdl_ident);
++				printa(0, "static %sunsigned char\n   isc_%d [] = {", CONST_STR, reference->ref_sdl_ident);
+ 				if (gpreGlob.sw_raw)
+ 					gen_raw(reference->ref_sdl, reference->ref_sdl_length);
+ 				else if (PRETTY_print_sdl(reference->ref_sdl, gen_blr, 0, 0))
+@@ -2909,7 +2909,7 @@
+ 	{
+ 		if (blob->blb_bpb_length)
+ 		{
+-			printa(0, "static %schar\n   isc_%d [] = {", CONST_STR, blob->blb_bpb_ident);
++			printa(0, "static %sunsigned char\n   isc_%d [] = {", CONST_STR, blob->blb_bpb_ident);
+ 			gen_raw(blob->blb_bpb, blob->blb_bpb_length);
+ 			printa(INDENT, "};\n");
+ 		}

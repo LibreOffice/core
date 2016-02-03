@@ -1,0 +1,27 @@
+﻿From: Michal Kubecek <mkubecek@suse.cz>
+Date: Mon, 25 Apr 2016 08:55:36 +0200
+Subject: Provide sized global delete operators when compiled in C++14 mode
+Patch-mainline: submitted
+Git-commit: 038f9fbf559e56032e4cb49eb7ce4c3ead23fda9
+References: bsc#964466 CORE-5099
+​
+--- src/common/classes/alloc.h
++++ src/common/classes/alloc.h
+@@ -331,6 +331,17 @@
+ 	MemoryPool::globalFree(mem);
+ }
+ 
++#if __cplusplus >= 201402L
++inline void operator delete(void* mem, std::size_t s ALLOC_PARAMS) throw()
++{
++	MemoryPool::globalFree(mem);
++}
++inline void operator delete[](void* mem, std::size_t s ALLOC_PARAMS) throw()
++{
++	MemoryPool::globalFree(mem);
++}
++#endif
++
+ #ifdef DEBUG_GDS_ALLOC
+ 
+ #ifdef __clang__

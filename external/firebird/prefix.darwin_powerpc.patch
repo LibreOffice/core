@@ -1,0 +1,17 @@
+--- builds/posix/prefix.darwin_powerpc
++++ builds/posix/prefix.darwin_powerpc
+@@ -20,11 +20,11 @@
+ DYLD_LIBRARY_PATH=$(FIREBIRD)/lib
+ export DYLD_LIBRARY_PATH
+
+-MACOSX_DEPLOYMENT_TARGET=10.2
++MACOSX_DEPLOYMENT_TARGET=10.5
+ export MACOSX_DEPLOYMENT_TARGET
+
+-PROD_FLAGS=-DDARWIN -pipe -p -MMD -fPIC -fno-common -arch ppc -mmacosx-version-min=10.2
+-DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -arch ppc -mmacosx-version-min=10.2 -Wno-non-virtual-dtor
++PROD_FLAGS=-DDARWIN -pipe -p -MMD -fPIC -fno-common
++DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -Wno-non-virtual-dtor
+ CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
+
+ EXE_LINK_OPTIONS:=

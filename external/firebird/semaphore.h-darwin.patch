@@ -1,0 +1,57 @@
+--- src/common/classes/semaphore.h
++++ src/common/classes/semaphore.h
+@@ -78,53 +78,7 @@
+ 
+ #else // WINNT
+ 
+-#if defined(DARWIN)
+-
+-// dispatch semaphore
+-#define COMMON_CLASSES_SEMAPHORE_DISPATCH
+-#include <dispatch/dispatch.h>
+-
+-namespace Firebird
+-{
+-
+-class MemoryPool;
+-
+-class SignalSafeSemaphore
+-{
+-private:
+-	dispatch_semaphore_t semaphore;
+-
+-	void init();
+-
+-	// Forbid copying
+-	SignalSafeSemaphore(const SignalSafeSemaphore&);
+-	SignalSafeSemaphore& operator=(const SignalSafeSemaphore&);
+-
+-public:
+-	SignalSafeSemaphore() { init(); }
+-	explicit SignalSafeSemaphore(MemoryPool&) { init(); }
+-
+-	~SignalSafeSemaphore();
+-
+-	void enter()
+-	{
+-		dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+-	}
+-
+-	void release(SLONG count = 1)
+-	{
+-		fb_assert(count >= 0);
+-		while (count--)
+-		{
+-			dispatch_semaphore_signal(semaphore);
+-		}
+-	}
+-};
+-
+-} // namespace Firebird
+-
+-
+-#elif defined(HAVE_SEMAPHORE_H)
++#if defined(HAVE_SEMAPHORE_H)
+ 
+ #define COMMON_CLASSES_SEMAPHORE_POSIX_RT
+ #include <semaphore.h>
