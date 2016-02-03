@@ -21,8 +21,6 @@
 
 #include "excimp8.hxx"
 
-#include <boost/bind.hpp>
-
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
