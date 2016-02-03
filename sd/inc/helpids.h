@@ -28,7 +28,6 @@
 #define HID_SD_NAVIGATOR                                        "SD_HID_SD_NAVIGATOR"
 #define HID_SD_NAVIGATOR_TBX                                    "SD_HID_SD_NAVIGATOR_TBX"
 #define HID_SD_NAVIGATOR_LB                                     "SD_HID_SD_NAVIGATOR_LB"
-#define HID_SD_NAVIGATOR_TBI_PEN                                "SD_HID_SD_NAVIGATOR_TBI_PEN"
 #define HID_SD_NAVIGATOR_TBI_FIRST                              "SD_HID_SD_NAVIGATOR_TBI_FIRST"
 #define HID_SD_NAVIGATOR_TBI_PREV                               "SD_HID_SD_NAVIGATOR_TBI_PREV"
 #define HID_SD_NAVIGATOR_TBI_NEXT                               "SD_HID_SD_NAVIGATOR_TBI_NEXT"

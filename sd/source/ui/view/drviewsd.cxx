@@ -66,7 +66,6 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
         }
         break;
 
-        case SID_NAVIGATOR_PEN:
         case SID_NAVIGATOR_PAGE:
         case SID_NAVIGATOR_OBJECT:
         {
@@ -160,7 +159,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     bool   bEndless = false;
     OUString aPageName;
 
-    nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
+    nState |= NAVTLB_UPDATE;
 
     if (mpActualPage != nullptr)
     {
