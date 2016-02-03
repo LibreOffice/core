@@ -154,6 +154,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
     // somewhat generous ( free for up to 15 )
     m_pFormatA = new SwFormat*[ nAlloc ];
     memset( m_pFormatA, 0, nAlloc * sizeof( SwFormat* ) );
+    memset( m_aHeadingParagraphStyles, -1 , MAXLEVEL * sizeof( sal_uInt16));
 
     BuildStylesTable();
     BuildStyleIds();
@@ -289,7 +290,14 @@ void MSWordStyles::BuildStylesTable()
     for( size_t n = 1; n < rArr2.size(); n++ )
     {
         SwTextFormatColl* pFormat = rArr2[n];
-        m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
+        sal_uInt16 nId ;
+        m_pFormatA[ nId = BuildGetSlot( *pFormat ) ] = pFormat;
+        if ( pFormat->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            int nLvl = pFormat->GetAssignedOutlineStyleLevel() ;
+            if (nLvl >= 0 && nLvl < MAXLEVEL)
+                m_aHeadingParagraphStyles[nLvl] = nId ;
+        }
     }
 
     if (!m_bListStyles)
