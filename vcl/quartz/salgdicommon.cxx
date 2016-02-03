@@ -1578,6 +1578,7 @@ void AquaSalGraphics::initResolution( NSWindow* )
     if( pSalData->mnDPIX == 0 || pSalData->mnDPIY == 0 )
     {
         NSScreen* pScreen = nil;
+        mnRealDPIX = mnRealDPIY = 72;
 
         /* #i91301#
         many woes went into the try to have different resolutions
@@ -1593,22 +1594,26 @@ void AquaSalGraphics::initResolution( NSWindow* )
 
         if( pWin )
         pScreen = [pWin screen];
-        */
         if( pScreen == nil )
         {
-            NSArray* pScreens = [NSScreen screens];
-            if( pScreens && [pScreens count] > 0)
-            {
-                pScreen = [pScreens objectAtIndex: 0];
-            }
-        }
+        */
+        NSArray* pScreens = [NSScreen screens];
+        if( pScreens && [pScreens count] > 0)
+            pScreen = [pScreens objectAtIndex: 0];
+        /*}*/
 
-        mnRealDPIX = mnRealDPIY = 96;
         if( pScreen )
         {
+            ///CGFloat scaleFactor = [ pScreen userSpaceScaleFactor ];
+            ///mnRealDPIX = mnRealDPIY = static_cast<long>( 72.0 * scaleFactor );
+
             NSDictionary* pDev = [pScreen deviceDescription];
             if( pDev )
             {
+                ///NSSize dpiFromDescription = [[ pDev objectForKey: NSDeviceResolution ] sizeValue];
+                ///mnRealDPIX = static_cast<long>( dpiFromDescription.width );
+                ///mnRealDPIY = static_cast<long>( dpiFromDescription.height );
+
                 NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
                 if( pVal )
                 {
