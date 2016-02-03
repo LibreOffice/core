@@ -1309,14 +1309,16 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
 {
-    OSL_ENSURE(pFormatter,"GetNumberFormat without Formatter");
+    assert(pFormatter);
+    if (!pCondSet)
+        return GetNumberFormat(pFormatter);
 
     const SfxPoolItem* pFormItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SfxItemState::SET )
+    if ( pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SfxItemState::SET )
         pFormItem = &GetItemSet().Get(ATTR_VALUE_FORMAT);
 
     const SfxPoolItem* pLangItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SfxItemState::SET )
+    if ( pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SfxItemState::SET )
         pLangItem = &GetItemSet().Get(ATTR_LANGUAGE_FORMAT);
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(
