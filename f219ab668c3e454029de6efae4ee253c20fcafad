@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a0be22d2",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T14:51:28Z",
+      "side": 1,
+      "message": "This is not what I described. Please re-read my comment on the previous patch. It was about to introduce an else{} of the if{} and there use SAL_WARN() so the condition doesn\u0027t have to be checked again. Not an unconditional SAL_WARN() that fires whenever this code is executed.",
+      "revId": "f219ab668c3e454029de6efae4ee253c20fcafad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
