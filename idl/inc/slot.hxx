@@ -28,7 +28,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvMetaTypeRef   aSlotType;
     SvMetaAttributeRef aMethod;
     SvIdentifier    aGroupId;
-    SvBOOL          aHasCoreId;
     SvIdentifier    aConfigId;
     SvIdentifier    aExecMethod;
     SvIdentifier    aStateMethod;
@@ -158,7 +157,6 @@ public:
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
-    bool                GetHasCoreId() const;
     const OString&     GetGroupId() const;
     const OString&     GetConfigId() const;
     const OString&     GetExecMethod() const;

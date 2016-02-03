@@ -98,11 +98,6 @@ SvMetaAttribute * SvMetaSlot::GetMethod() const
     if( aMethod.Is() || !GetRef() ) return aMethod;
     return static_cast<SvMetaSlot *>(GetRef())->GetMethod();
 }
-bool SvMetaSlot::GetHasCoreId() const
-{
-    if( aHasCoreId.IsSet() || !GetRef() ) return aHasCoreId;
-    return static_cast<SvMetaSlot *>(GetRef())->GetHasCoreId();
-}
 const OString& SvMetaSlot::GetGroupId() const
 {
     if( !aGroupId.getString().isEmpty() || !GetRef() ) return aGroupId.getString();
@@ -281,7 +276,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bool bOk = false;
     bOk |= aDefault.ReadSvIdl( SvHash_Default(), rInStm );
     bOk |= aPseudoSlots.ReadSvIdl( SvHash_PseudoSlots(), rInStm );
-    bOk |= aHasCoreId.ReadSvIdl( SvHash_HasCoreId(), rInStm );
     bOk |= aGroupId.ReadSvIdl( SvHash_GroupId(), rInStm );
     bOk |= aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
     bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
@@ -832,8 +826,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     WriteTab( rOutStm, 4 );
 
     // write flags
-    if( GetHasCoreId() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_HasCoreId() ).getStr() ).WriteChar( '|' );
     if( GetCachable() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_Cachable() ).getStr() ).WriteChar( '|' );
     if( GetVolatile() )
