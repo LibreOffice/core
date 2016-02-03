@@ -45,6 +45,7 @@
 #include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svtools/miscopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <ctype.h>
 #include <float.h>
@@ -932,6 +933,12 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     // tdf#93154: in tiled rendering LO doesn't always detect changes
     SvtMiscOptions aMiscOpt;
     aMiscOpt.SetSaveAlwaysAllowed(true);
+
+    // when the "This document may contain formatting or content that cannot
+    // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
+    // causing 'Save' being disabled; so let's always save to the original
+    // format
+    SvtSaveOptions().SetWarnAlienFormat(false);
 
     // default tile size in pixels
     nTilePixelWidth = 256;

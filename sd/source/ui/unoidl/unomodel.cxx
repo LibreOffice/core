@@ -64,6 +64,7 @@
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
+#include <unotools/saveopt.hxx>
 
 // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
@@ -2406,6 +2407,12 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     // tdf#93154: in tiled rendering LO doesn't always detect changes
     SvtMiscOptions aMiscOpt;
     aMiscOpt.SetSaveAlwaysAllowed(true);
+
+    // when the "This document may contain formatting or content that cannot
+    // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
+    // causing 'Save' being disabled; so let's always save to the original
+    // format
+    SvtSaveOptions().SetWarnAlienFormat(false);
 }
 
 void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
