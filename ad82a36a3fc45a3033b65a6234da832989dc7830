@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_20e4f20b",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T14:34:33Z",
+      "side": 1,
+      "message": "Unfortunately this still ends up with two independent reference counting mechanisms for the same pointer. One rtl::Reference\u003cSmGraphicAccessible\u003e mxAccessible, and the other one the uno::Reference\u003cXAccessible\u003e returned.",
+      "revId": "ad82a36a3fc45a3033b65a6234da832989dc7830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
