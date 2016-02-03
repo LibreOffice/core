@@ -46,7 +46,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_Volatile;
     SvStringHashEntryRef MM_Toggle;
     SvStringHashEntryRef MM_AutoUpdate;
-    SvStringHashEntryRef MM_Synchron;
     SvStringHashEntryRef MM_Asynchron;
     SvStringHashEntryRef MM_RecordPerSet;
     SvStringHashEntryRef MM_RecordPerItem;
@@ -149,7 +148,6 @@ HASH_INLINE(SlotId)
 HASH_INLINE(Volatile)
 HASH_INLINE(Toggle)
 HASH_INLINE(AutoUpdate)
-HASH_INLINE(Synchron)
 HASH_INLINE(Asynchron)
 HASH_INLINE(RecordPerItem)
 HASH_INLINE(RecordPerSet)

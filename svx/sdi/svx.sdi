@@ -27,7 +27,6 @@ SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxInt32Item
@@ -78,7 +77,6 @@ SfxVoidItem AddTable SID_FM_ADDTABLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -101,7 +99,6 @@ SfxVoidItem AlignCenter SID_OBJECT_ALIGN_CENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -124,7 +121,6 @@ SfxVoidItem AlignDown SID_OBJECT_ALIGN_DOWN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -147,7 +143,6 @@ SfxVoidItem ObjectAlignLeft SID_OBJECT_ALIGN_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -170,7 +165,6 @@ SvxAdjustItem Alignment SID_ATTR_PARA_ADJUST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -195,7 +189,6 @@ SfxVoidItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -218,7 +211,6 @@ SfxVoidItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -241,7 +233,6 @@ SfxVoidItem AlignUp SID_OBJECT_ALIGN_UP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -264,7 +255,6 @@ SfxVoidItem Arc SID_DRAW_ARC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -290,7 +280,6 @@ SfxBoolItem Assign3D SID_3D_ASSIGN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -340,7 +329,6 @@ SfxVoidItem AutoFilter SID_FM_AUTOFILTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -387,7 +375,6 @@ SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -443,7 +430,6 @@ SfxVoidItem TableStyleSettings SID_TABLE_STYLE_SETTINGS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -487,7 +473,6 @@ SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -512,7 +497,6 @@ SvxBrushItem BackgroundPattern SID_ATTR_BRUSH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -537,7 +521,6 @@ SvxBrushItem BackgroundPatternController SID_BACKGROUND_PATTERN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -562,7 +545,6 @@ SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -587,7 +569,6 @@ SfxBoolItem BezierAppend SID_BEZIER_APPEND
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -612,7 +593,6 @@ SfxStringItem BezierClose SID_BEZIER_CLOSE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -637,7 +617,6 @@ SfxStringItem BezierConvert SID_BEZIER_CONVERT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -662,7 +641,6 @@ SfxBoolItem BezierCutLine SID_BEZIER_CUTLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -687,7 +665,6 @@ SfxBoolItem BezierDelete SID_BEZIER_DELETE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -712,7 +689,6 @@ SfxBoolItem BezierEdge SID_BEZIER_EDGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -737,7 +713,6 @@ SfxBoolItem BezierEliminatePoints SID_BEZIER_ELIMINATE_POINTS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -762,7 +737,6 @@ SfxBoolItem BezierFill SID_DRAW_BEZIER_FILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -787,7 +761,6 @@ SfxBoolItem BezierInsert SID_BEZIER_INSERT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -812,7 +785,6 @@ SfxBoolItem BezierMove SID_BEZIER_MOVE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -837,7 +809,6 @@ SfxBoolItem BezierSmooth SID_BEZIER_SMOOTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -862,7 +833,6 @@ SfxBoolItem BezierSymmetric SID_BEZIER_SYMMTR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -887,7 +857,6 @@ SfxVoidItem BezierTo SID_BEZIERTO
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -910,7 +879,6 @@ SfxBoolItem BmpMask SID_BMPMASK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -935,7 +903,6 @@ SfxBoolItem BmpMaskExec SID_BMPMASK_EXEC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -960,7 +927,6 @@ SfxBoolItem BmpMaskPipette SID_BMPMASK_PIPETTE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -985,7 +951,6 @@ SvxWeightItem Bold SID_ATTR_CHAR_WEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1010,7 +975,6 @@ SvxWeightItem BoldLatin SID_ATTR_CHAR_LATIN_WEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1035,7 +999,6 @@ SvxWeightItem BoldCJK SID_ATTR_CHAR_CJK_WEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1060,7 +1023,6 @@ SvxWeightItem BoldCTL SID_ATTR_CHAR_CTL_WEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1085,7 +1047,6 @@ SfxObjectItem Border SID_BORDER_OBJECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = TRUE,
 
@@ -1110,7 +1071,6 @@ SvxBoxInfoItem BorderInner SID_ATTR_BORDER_INNER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1135,7 +1095,6 @@ SvxBoxItem BorderOuter SID_ATTR_BORDER_OUTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1160,7 +1119,6 @@ SfxVoidItem SetBorderStyle SID_ATTR_BORDER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SvxBoxItem
@@ -1186,7 +1144,6 @@ SfxVoidItem BringToFront SID_FRAME_TO_TOP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1209,7 +1166,6 @@ SfxBoolItem DrawCaption SID_DRAW_CAPTION
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1234,7 +1190,6 @@ SvxCaseMapItem CaseMap SID_ATTR_CHAR_CASEMAP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1259,7 +1214,6 @@ SfxBoolItem CenterPara SID_ATTR_PARA_ADJUST_CENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     Readonly = FALSE,
@@ -1515,7 +1469,6 @@ SfxBoolItem ChangeControlType SID_FM_CHANGECONTROLTYPE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1540,7 +1493,6 @@ SvxFontItem CharFontName SID_ATTR_CHAR_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1564,7 +1516,6 @@ SvxFontItem CharPreviewFontName SID_ATTR_CHAR_PREVIEW_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     NoRecord;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1588,7 +1539,6 @@ SvxFontItem CharEndPreviewFontName SID_ATTR_CHAR_ENDPREVIEW_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     NoRecord;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1613,7 +1563,6 @@ SvxFontItem CharFontNameLatin SID_ATTR_CHAR_LATIN_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1638,7 +1587,6 @@ SvxFontItem CharFontNameCJK SID_ATTR_CHAR_CJK_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1663,7 +1611,6 @@ SvxFontItem CharFontNameCTL SID_ATTR_CHAR_CTL_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1688,7 +1635,6 @@ SfxBoolItem Checkbox SID_INSERT_CHECKBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1713,7 +1659,6 @@ SfxBoolItem CheckBox SID_FM_CHECKBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1738,7 +1683,6 @@ SvxChooseControlItem ChooseControls SID_CHOOSE_CONTROLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1765,7 +1709,6 @@ SfxBoolItem ChoosePolygon SID_CHOOSE_POLYGON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -1790,7 +1733,6 @@ SfxVoidItem Circle SID_DRAW_CIRCLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1816,7 +1758,6 @@ SfxVoidItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1842,7 +1783,6 @@ SfxVoidItem CircleArc SID_DRAW_CIRCLEARC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1868,7 +1808,6 @@ SfxVoidItem CircleCut SID_DRAW_CIRCLECUT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1894,7 +1833,6 @@ SfxVoidItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1920,7 +1858,6 @@ SfxVoidItem CirclePie SID_DRAW_CIRCLEPIE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1946,7 +1883,6 @@ SfxVoidItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -1972,7 +1908,6 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -1995,7 +1930,6 @@ SvxColorItem Color SID_ATTR_CHAR_COLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2019,7 +1953,6 @@ SvxBackgroundColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2043,7 +1976,6 @@ SfxBoolItem ColorControl SID_COLOR_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2068,7 +2000,6 @@ SfxBoolItem ComboBox SID_FM_COMBOBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2092,7 +2023,6 @@ SfxBoolItem NavigationBar SID_FM_NAVIGATIONBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2117,7 +2047,6 @@ SfxBoolItem Combobox SID_INSERT_COMBOBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2142,7 +2071,6 @@ SfxUInt16Item Config SID_FM_CONFIG
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2169,7 +2097,6 @@ SfxBoolItem MoreControls SID_FM_MORE_CONTROLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2196,7 +2123,6 @@ SfxBoolItem FormDesignTools SID_FM_FORM_DESIGN_TOOLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2223,7 +2149,6 @@ SfxBoolItem ContourDialog SID_CONTOUR_DLG
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2248,7 +2173,6 @@ SfxBoolItem ContourExecute SID_CONTOUR_EXEC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2273,7 +2197,6 @@ SfxBoolItem ControlProperties SID_FM_CTL_PROPERTIES
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2298,7 +2221,6 @@ SfxBoolItem ConvertToButton SID_FM_CONVERTTO_BUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2323,7 +2245,6 @@ SfxBoolItem ConvertToCheckBox SID_FM_CONVERTTO_CHECKBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2348,7 +2269,6 @@ SfxBoolItem ConvertToCombo SID_FM_CONVERTTO_COMBOBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2373,7 +2293,6 @@ SfxBoolItem ConvertToCurrency SID_FM_CONVERTTO_CURRENCY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2398,7 +2317,6 @@ SfxBoolItem ConvertToDate SID_FM_CONVERTTO_DATE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2423,7 +2341,6 @@ SfxBoolItem ConvertToEdit SID_FM_CONVERTTO_EDIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2448,7 +2365,6 @@ SfxBoolItem ConvertToFileControl SID_FM_CONVERTTO_FILECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2473,7 +2389,6 @@ SfxBoolItem ConvertToFixed SID_FM_CONVERTTO_FIXEDTEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2498,7 +2413,6 @@ SfxBoolItem ConvertToFormatted SID_FM_CONVERTTO_FORMATTED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2523,7 +2437,6 @@ SfxBoolItem ConvertToScrollBar SID_FM_CONVERTTO_SCROLLBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2548,7 +2461,6 @@ SfxBoolItem ConvertToSpinButton SID_FM_CONVERTTO_SPINBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2573,7 +2485,6 @@ SfxBoolItem ConvertToGroup SID_FM_CONVERTTO_GROUPBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2598,7 +2509,6 @@ SfxBoolItem ConvertToImageBtn SID_FM_CONVERTTO_IMAGEBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2623,7 +2533,6 @@ SfxBoolItem ConvertToImageControl SID_FM_CONVERTTO_IMAGECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2648,7 +2557,6 @@ SfxBoolItem ConvertToList SID_FM_CONVERTTO_LISTBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2673,7 +2581,6 @@ SfxBoolItem ConvertToNumeric SID_FM_CONVERTTO_NUMERIC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2698,7 +2605,6 @@ SfxBoolItem ConvertToPattern SID_FM_CONVERTTO_PATTERN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2723,7 +2629,6 @@ SfxBoolItem ConvertToRadio SID_FM_CONVERTTO_RADIOBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2748,7 +2653,6 @@ SfxBoolItem ConvertToTime SID_FM_CONVERTTO_TIME
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2773,7 +2677,6 @@ SfxBoolItem ConvertToNavigationBar SID_FM_CONVERTTO_NAVIGATIONBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2798,7 +2701,6 @@ SfxVoidItem CountAll SID_FM_COUNTALL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -2821,7 +2723,6 @@ SfxBoolItem CreateControl SID_FM_CREATE_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -2847,7 +2748,6 @@ SfxBoolItem InsertCurrencyField SID_INSERT_CURRENCYFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2872,7 +2772,6 @@ SfxBoolItem CurrencyField SID_FM_CURRENCYFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2897,7 +2796,6 @@ SfxVoidItem Dash SID_DASH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -2920,7 +2818,6 @@ SfxBoolItem AddDateField SID_INSERT_DATEFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2945,7 +2842,6 @@ SfxBoolItem DateField SID_FM_DATEFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -2970,7 +2866,6 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -2998,7 +2893,6 @@ SfxBoolItem DeleteRecord SID_FM_RECORD_DELETE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3072,7 +2966,6 @@ SfxBoolItem DrawSelect SID_DRAW_SELECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3097,7 +2990,6 @@ SfxBoolItem InsertDraw SID_INSERT_DRAW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3122,7 +3014,6 @@ SfxBoolItem DSBrowserExplorer SID_DSBROWSER_EXPLORER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3147,7 +3038,6 @@ SfxBoolItem Edit SID_FM_EDIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3172,7 +3062,6 @@ SfxBoolItem InsertEdit SID_INSERT_EDIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3197,7 +3086,6 @@ SfxVoidItem Ellipse SID_DRAW_ELLIPSE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3223,7 +3111,6 @@ SfxVoidItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3249,7 +3136,6 @@ SfxVoidItem EllipseCut SID_DRAW_ELLIPSECUT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3275,7 +3161,6 @@ SfxVoidItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3301,7 +3186,6 @@ SfxVoidItem EnterGroup SID_ENTER_GROUP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -3324,7 +3208,6 @@ SvxEscapementItem Escapement SID_ATTR_CHAR_ESCAPEMENT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3349,7 +3232,6 @@ SfxObjectItem FieldController SID_FM_FIELDS_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3374,7 +3256,6 @@ SfxBoolItem FileControl SID_FM_FILECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3399,7 +3280,6 @@ SfxBoolItem InsertFileControl SID_INSERT_FILECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3424,7 +3304,6 @@ SfxBoolItem InsertTreeControl SID_INSERT_TREECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3450,7 +3329,6 @@ XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3475,7 +3353,6 @@ XFillColorItem FillColor SID_ATTR_FILL_COLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3500,7 +3377,6 @@ XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3525,7 +3401,6 @@ XFillHatchItem FillHatch SID_ATTR_FILL_HATCH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3550,7 +3425,6 @@ XFillStyleItem FillStyle SID_ATTR_FILL_STYLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3575,7 +3449,6 @@ SfxVoidItem FilterCrit SID_FM_FILTERCRIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -3598,7 +3471,6 @@ SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -3624,7 +3496,6 @@ SvxBlinkItem Flash SID_ATTR_FLASH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3649,7 +3520,6 @@ SfxObjectItem FmExplorerController SID_FM_FMEXPLORER_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3674,7 +3544,6 @@ SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3744,7 +3613,6 @@ SvxFontHeightItem  FontHeight SID_ATTR_CHAR_FONTHEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3769,7 +3637,6 @@ SvxFontHeightItem FontHeighLatin SID_ATTR_CHAR_LATIN_FONTHEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3794,7 +3661,6 @@ SvxFontHeightItem FontHeightCJK SID_ATTR_CHAR_CJK_FONTHEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3819,7 +3685,6 @@ SvxFontHeightItem FontHeightCTL SID_ATTR_CHAR_CTL_FONTHEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3844,7 +3709,6 @@ SfxBoolItem FontWork SID_FONTWORK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3869,7 +3733,6 @@ XFormTextAdjustItem FontWorkTextAdjust SID_FORMTEXT_ADJUST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3894,7 +3757,6 @@ XFormTextDistanceItem FontWorkTextDistance SID_FORMTEXT_DISTANCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3919,7 +3781,6 @@ XFormTextMirrorItem FontWorkTextMirror SID_FORMTEXT_MIRROR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3944,7 +3805,6 @@ XFormTextOutlineItem FontWorkTextOutline SID_FORMTEXT_OUTLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3969,7 +3829,6 @@ XFormTextShadowItem FontWorkTextShadow SID_FORMTEXT_SHADOW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -3994,7 +3853,6 @@ XFormTextShadowColorItem FontWorkTextShadowColor SID_FORMTEXT_SHDWCOLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4019,7 +3877,6 @@ XFormTextShadowXValItem FontWorkTextShadowXVal SID_FORMTEXT_SHDWXVAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4044,7 +3901,6 @@ XFormTextShadowYValItem FontWorkTextShadowYVal SID_FORMTEXT_SHDWYVAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4069,7 +3925,6 @@ XFormTextStartItem FontWorkTextStart SID_FORMTEXT_START
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4094,7 +3949,6 @@ XFormTextStyleItem FontWorkTextStyle SID_FORMTEXT_STYLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4119,7 +3973,6 @@ SfxVoidItem FormatArea SID_ATTRIBUTES_AREA
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4142,7 +3995,6 @@ XFormTextHideFormItem FormatFontWorkClose SID_FORMTEXT_HIDEFORM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4167,7 +4019,6 @@ SfxVoidItem FormatGroup SID_GROUP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4190,7 +4041,6 @@ SfxVoidItem FormatLine SID_ATTRIBUTES_LINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4213,7 +4063,6 @@ SfxBoolItem FormattedField SID_FM_FORMATTEDFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4238,7 +4087,6 @@ SfxBoolItem ScrollBar SID_FM_SCROLLBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4263,7 +4111,6 @@ SfxBoolItem SpinButton SID_FM_SPINBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4288,7 +4135,6 @@ SfxBoolItem InsertFormattedField SID_INSERT_FORMATTEDFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4313,7 +4159,6 @@ SfxVoidItem FormatUngroup SID_UNGROUP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4336,7 +4181,6 @@ SfxVoidItem FormFilter SID_FM_FILTER_START
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -4359,7 +4203,6 @@ SfxBoolItem FormFiltered SID_FM_FORM_FILTERED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -4385,7 +4228,6 @@ SfxVoidItem FormFilterExecute SID_FM_FILTER_EXECUTE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -4408,7 +4250,6 @@ SfxVoidItem FormFilterExit SID_FM_FILTER_EXIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -4431,7 +4272,6 @@ SfxBoolItem FormFilterNavigator SID_FM_FILTER_NAVIGATOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -4454,7 +4294,6 @@ SfxBoolItem FormProperties SID_FM_PROPERTIES
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4479,7 +4318,6 @@ SfxBoolItem Freeline SID_DRAW_FREELINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4504,7 +4342,6 @@ SfxBoolItem Freeline_Unfilled SID_DRAW_FREELINE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4529,7 +4366,6 @@ SfxBoolItem AutoColorInvalid SID_ATTR_AUTO_COLOR_INVALID
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4579,7 +4415,6 @@ SfxBoolItem GalleryEnableAddCopy SID_GALLERY_ENABLE_ADDCOPY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4604,7 +4439,6 @@ SfxStringListItem GetRedoStrings SID_GETREDOSTRINGS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4629,7 +4463,6 @@ SfxStringListItem GetUndoStrings SID_GETUNDOSTRINGS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4654,7 +4487,6 @@ SfxVoidItem GrafAttrCrop SID_ATTR_GRAF_CROP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4677,7 +4509,6 @@ SfxInt16Item GrafBlue SID_ATTR_GRAF_BLUE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4702,7 +4533,6 @@ SfxInt16Item GrafContrast SID_ATTR_GRAF_CONTRAST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4727,7 +4557,6 @@ SfxUInt32Item GrafGamma SID_ATTR_GRAF_GAMMA
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4752,7 +4581,6 @@ SfxInt16Item GrafGreen SID_ATTR_GRAF_GREEN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4777,7 +4605,6 @@ SfxBoolItem GrafInvert SID_ATTR_GRAF_INVERT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4802,7 +4629,6 @@ SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4827,7 +4653,6 @@ SfxUInt16Item GrafMode SID_ATTR_GRAF_MODE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4852,7 +4677,6 @@ SfxInt16Item GrafRed SID_ATTR_GRAF_RED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4877,7 +4701,6 @@ SfxUInt16Item GrafTransparence SID_ATTR_GRAF_TRANSPARENCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -4902,7 +4725,6 @@ SfxVoidItem GraphicFilterInvert SID_GRFFILTER_INVERT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4925,7 +4747,6 @@ SfxVoidItem GraphicFilterMosaic SID_GRFFILTER_MOSAIC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4948,7 +4769,6 @@ SfxVoidItem GraphicFilterPopart SID_GRFFILTER_POPART
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4971,7 +4791,6 @@ SfxVoidItem GraphicFilterPoster SID_GRFFILTER_POSTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4994,7 +4813,6 @@ SfxVoidItem GraphicFilterRelief SID_GRFFILTER_EMBOSS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5017,7 +4835,6 @@ SfxVoidItem GraphicFilterRemoveNoise SID_GRFFILTER_REMOVENOISE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5040,7 +4857,6 @@ SfxVoidItem GraphicFilterSepia SID_GRFFILTER_SEPIA
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5063,7 +4879,6 @@ SfxVoidItem GraphicFilterSharpen SID_GRFFILTER_SHARPEN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5086,7 +4901,6 @@ SfxVoidItem GraphicFilterSmooth SID_GRFFILTER_SMOOTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5109,7 +4923,6 @@ SfxVoidItem GraphicFilterSobel SID_GRFFILTER_SOBEL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5132,7 +4945,6 @@ SfxVoidItem GraphicFilterSolarize SID_GRFFILTER_SOLARIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5155,7 +4967,6 @@ SfxVoidItem GraphicFilterToolbox SID_GRFFILTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5180,7 +4991,6 @@ SfxBoolItem Grid SID_FM_DBGRID
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5205,7 +5015,6 @@ SfxBoolItem GridUse SID_GRID_USE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5230,7 +5039,6 @@ SfxBoolItem GridVisible SID_GRID_VISIBLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5255,7 +5063,6 @@ SfxBoolItem GroupBox SID_FM_GROUPBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5280,7 +5087,6 @@ SfxBoolItem Groupbox SID_INSERT_GROUPBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5305,7 +5111,6 @@ SfxRectangleItem HeaderFooterBorder SID_RULER_LR_MIN_MAX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5330,7 +5135,6 @@ SfxBoolItem HelplinesMove SID_HELPLINES_MOVE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5355,7 +5159,6 @@ SfxBoolItem HFixedLine SID_INSERT_HFIXEDLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5380,7 +5183,6 @@ SfxBoolItem HScrollbar SID_INSERT_HSCROLLBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5405,7 +5207,6 @@ SvxHyperlinkItem Hyperlink SID_HYPERLINK_GETLINK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = TRUE,
 
@@ -5430,7 +5231,6 @@ SfxBoolItem Imagebutton SID_FM_IMAGEBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5455,7 +5255,6 @@ SfxBoolItem ImageControl SID_FM_IMAGECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5480,7 +5279,6 @@ SfxBoolItem InsertImageControl SID_INSERT_IMAGECONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5505,7 +5303,6 @@ SfxBoolItem ImageMapDialog SID_IMAP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5530,7 +5327,6 @@ SfxBoolItem ImageMapExecute SID_IMAP_EXEC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5553,7 +5349,6 @@ SfxVoidItem ExternalEdit SID_EXTERNAL_EDIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5575,7 +5370,6 @@ SfxVoidItem RotateLeft SID_ROTATE_GRAPHIC_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5597,7 +5391,6 @@ SfxVoidItem RotateRight SID_ROTATE_GRAPHIC_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5619,7 +5412,6 @@ SfxVoidItem Crop SID_OBJECT_CROP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -5644,7 +5436,6 @@ SfxVoidItem ChangePicture SID_CHANGE_PICTURE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -5666,7 +5457,6 @@ SfxVoidItem SaveGraphic SID_SAVE_GRAPHIC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -5688,7 +5478,6 @@ SfxVoidItem CompressGraphic SID_COMPRESS_GRAPHIC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -5711,7 +5500,6 @@ SfxBoolItem Init3D SID_3D_INIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -5736,7 +5524,6 @@ SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -5759,7 +5546,6 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5781,7 +5567,6 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5803,7 +5588,6 @@ SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5827,7 +5611,6 @@ SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -5851,7 +5634,6 @@ SfxVoidItem DeleteAnnotation SID_DELETE_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5875,7 +5657,6 @@ SfxVoidItem DeleteAllAnnotation SID_DELETEALL_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5897,7 +5678,6 @@ SfxVoidItem DeleteAllAnnotationByAuthor SID_DELETEALLBYAUTHOR_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -5921,7 +5701,6 @@ SfxVoidItem NextAnnotation SID_NEXT_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5945,7 +5724,6 @@ SfxVoidItem PreviousAnnotation SID_PREVIOUS_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -5968,7 +5746,6 @@ SfxVoidItem InsertGalleryPic SID_GALLERY_FORMATS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -6060,7 +5837,6 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6085,7 +5861,6 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -6111,7 +5886,6 @@ SfxUInt16Item CurrentBulletListType FN_BUL_NUM_RULE_INDEX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -6131,7 +5905,6 @@ SfxUInt16Item CurrentNumListType FN_NUM_NUM_RULE_INDEX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -6223,7 +5996,6 @@ SfxVoidItem InsertSymbol SID_CHARMAP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6246,7 +6018,6 @@ SfxVoidItem InsertSpreadsheet SID_ATTR_TABLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6296,7 +6067,6 @@ SfxVoidItem InsertTextFrame SID_INSERT_FRAME
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6319,7 +6089,6 @@ SfxVoidItem InternetDialog SID_INET_DLG
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6342,7 +6111,6 @@ SfxVoidItem Intersect SID_POLY_INTERSECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6365,7 +6133,6 @@ SvxPostureItem Italic SID_ATTR_CHAR_POSTURE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6390,7 +6157,6 @@ SvxPostureItem ItalicLatin SID_ATTR_CHAR_LATIN_POSTURE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6415,7 +6181,6 @@ SvxPostureItem ItalicCJK SID_ATTR_CHAR_CJK_POSTURE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6440,7 +6205,6 @@ SvxPostureItem ItalicCTL SID_ATTR_CHAR_CTL_POSTURE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6465,7 +6229,6 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -6492,7 +6255,6 @@ SfxBoolItem InsertFixedText SID_INSERT_FIXEDTEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6517,7 +6279,6 @@ SfxBoolItem Label SID_FM_FIXEDTEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6542,7 +6303,6 @@ SvxLanguageItem Language SID_ATTR_CHAR_LANGUAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6567,7 +6327,6 @@ SvxLanguageItem LanguageLatin SID_ATTR_CHAR_LATIN_LANGUAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6592,7 +6351,6 @@ SfxBoolItem LastRecord SID_FM_RECORD_LAST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -6618,7 +6376,6 @@ SfxVoidItem LeaveFMCreateMode SID_FM_LEAVE_CREATE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -6641,7 +6398,6 @@ SfxVoidItem LeaveGroup SID_LEAVE_GROUP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -6664,7 +6420,6 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     Readonly = FALSE,
@@ -6690,7 +6445,6 @@ SvxLRSpaceItem LeftRightMargin SID_ATTR_LRSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6715,7 +6469,6 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -6738,7 +6491,6 @@ SfxVoidItem LeftRightParaMargin_Vertical SID_ATTR_PARA_LRSPACE_VERTICAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -6761,7 +6513,6 @@ SfxBoolItem Line SID_DRAW_LINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6786,7 +6537,6 @@ SfxBoolItem Line_Diagonal SID_DRAW_XLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6811,7 +6561,6 @@ SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6836,7 +6585,6 @@ XLineDashItem LineDash SID_ATTR_LINE_DASH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6861,7 +6609,6 @@ SfxBoolItem LineEndStyle SID_ATTR_LINEEND_STYLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -6887,7 +6634,6 @@ SvxLineSpacingItem LineSpacing SID_ATTR_PARA_LINESPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6911,7 +6657,6 @@ SvxULSpaceItem ULSpacing SID_ATTR_PARA_ULSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6936,7 +6681,6 @@ SvxLineItem LineStyle SID_FRAME_LINESTYLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6961,7 +6705,6 @@ XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -6986,7 +6729,6 @@ SfxBoolItem ListBox SID_FM_LISTBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7011,7 +6753,6 @@ SfxBoolItem InsertListbox SID_INSERT_LISTBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7036,7 +6777,6 @@ SfxVoidItem Merge SID_POLY_MERGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -7082,7 +6822,6 @@ SfxBoolItem NewRecord SID_FM_RECORD_NEW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7108,7 +6847,6 @@ SfxBoolItem NextRecord SID_FM_RECORD_NEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7134,7 +6872,6 @@ SfxBoolItem NumericField SID_FM_NUMERICFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7159,7 +6896,6 @@ SfxBoolItem InsertNumericField SID_INSERT_NUMERICFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7184,7 +6920,6 @@ SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7211,7 +6946,6 @@ SfxVoidItem ObjectBackOne SID_FRAME_DOWN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7234,7 +6968,6 @@ SfxVoidItem ObjectForwardOne SID_FRAME_UP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7282,7 +7015,6 @@ SfxVoidItem OrderCrit SID_FM_ORDERCRIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7305,7 +7037,6 @@ SvxOrphansItem Orphan SID_ATTR_PARA_ORPHANS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7330,7 +7061,6 @@ SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -7353,7 +7083,6 @@ SfxUInt16Item SetNumber FN_SVX_SET_NUMBER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7377,7 +7106,6 @@ SfxUInt16Item SetBullet FN_SVX_SET_BULLET
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7402,7 +7130,6 @@ SfxVoidItem OutlineCollapse SID_OUTLINE_COLLAPSE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7425,7 +7152,6 @@ SfxVoidItem OutlineCollapseAll SID_OUTLINE_COLLAPSE_ALL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7448,7 +7174,6 @@ SfxVoidItem OutlineDown SID_OUTLINE_DOWN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7471,7 +7196,6 @@ SfxVoidItem OutlineExpand SID_OUTLINE_EXPAND
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7494,7 +7218,6 @@ SfxVoidItem OutlineExpandAll SID_OUTLINE_EXPAND_ALL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7517,7 +7240,6 @@ SvxContourItem OutlineFont SID_ATTR_CHAR_CONTOUR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7542,7 +7264,6 @@ SfxBoolItem OutlineFormat SID_OUTLINE_FORMAT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7567,7 +7288,6 @@ SfxVoidItem OutlineLeft SID_OUTLINE_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7590,7 +7310,6 @@ SfxVoidItem OutlineRight SID_OUTLINE_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7613,7 +7332,6 @@ SfxVoidItem OutlineUp SID_OUTLINE_UP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -7636,7 +7354,6 @@ SvxFormatBreakItem Pagebreak SID_ATTR_PARA_PAGEBREAK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7661,7 +7378,6 @@ SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7686,7 +7402,6 @@ SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7711,7 +7426,6 @@ SvxPageModelItem AttributeParaModel SID_ATTR_PARA_MODEL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7736,7 +7450,6 @@ SvxPageItem AttributePage SID_ATTR_PAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = TRUE,
 
@@ -7761,7 +7474,6 @@ SvxAutoKernItem PairKerning SID_ATTR_CHAR_AUTOKERN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7809,7 +7521,6 @@ SvxFormatKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7834,7 +7545,6 @@ SvxFormatSplitItem ParaSplit SID_ATTR_PARA_SPLIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7859,7 +7569,6 @@ SfxBoolItem InsertPatternField SID_INSERT_PATTERNFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7884,7 +7593,6 @@ SfxBoolItem PatternField SID_FM_PATTERNFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -7909,7 +7617,6 @@ SfxVoidItem Pie SID_DRAW_PIE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7935,7 +7642,6 @@ SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -7984,7 +7690,6 @@ SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8009,7 +7714,6 @@ SfxBoolItem Polygon_Diagonal_Unfilled SID_DRAW_XPOLYGON_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8034,7 +7738,6 @@ SfxBoolItem Polygon_Unfilled SID_DRAW_POLYGON_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8059,7 +7762,6 @@ SfxPointItem Position SID_ATTR_POSITION
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8084,7 +7786,6 @@ SfxBoolItem Preview SID_INSERT_PREVIEW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8109,7 +7810,6 @@ SfxBoolItem PrevRecord SID_FM_RECORD_PREV
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8135,7 +7835,6 @@ SfxBoolItem ProgressBar SID_INSERT_PROGRESSBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8160,7 +7859,6 @@ SfxObjectItem PropertyController SID_FM_PROPERTY_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8185,7 +7883,6 @@ SfxBoolItem Pushbutton SID_FM_PUSHBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8210,7 +7907,6 @@ SfxBoolItem InsertPushbutton SID_INSERT_PUSHBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8236,7 +7932,6 @@ SfxBoolItem InsertFormRadio SID_INSERT_FORM_RADIO
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8261,7 +7956,6 @@ SfxBoolItem InsertFormCheck SID_INSERT_FORM_CHECK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8286,7 +7980,6 @@ SfxBoolItem InsertFormList SID_INSERT_FORM_LIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8311,7 +8004,6 @@ SfxBoolItem InsertFormCombo SID_INSERT_FORM_COMBO
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8335,7 +8027,6 @@ SfxBoolItem InsertFormSpin SID_INSERT_FORM_SPIN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8360,7 +8051,6 @@ SfxBoolItem InsertFormVScroll SID_INSERT_FORM_VSCROLL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8386,7 +8076,6 @@ SfxBoolItem InsertFormHScroll SID_INSERT_FORM_HSCROLL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8411,7 +8100,6 @@ SfxBoolItem Radiobutton SID_INSERT_RADIOBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8436,7 +8124,6 @@ SfxBoolItem RadioButton SID_FM_RADIOBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8461,7 +8148,6 @@ SfxBoolItem ReadOnlyMode SID_READONLY_MODE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = TRUE,
 
@@ -8486,7 +8172,6 @@ SfxBoolItem RecFromText SID_FM_RECORD_FROM_TEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8512,7 +8197,6 @@ SfxBoolItem RecSave SID_FM_RECORD_SAVE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8538,7 +8222,6 @@ SfxVoidItem RecSearch SID_FM_SEARCH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxVoidItem
@@ -8564,7 +8247,6 @@ SfxVoidItem Rect SID_DRAW_RECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8590,7 +8272,6 @@ SfxVoidItem Rect_Rounded SID_DRAW_RECT_ROUND
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8616,7 +8297,6 @@ SfxVoidItem Rect_Rounded_Unfilled SID_DRAW_RECT_ROUND_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8642,7 +8322,6 @@ SfxVoidItem Rect_Unfilled SID_DRAW_RECT_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8668,7 +8347,6 @@ SfxBoolItem RecText SID_FM_RECORD_TEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8694,7 +8372,6 @@ SfxStringItem RecTotal SID_FM_RECORD_TOTAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -8720,7 +8397,6 @@ SfxBoolItem RecUndo SID_FM_RECORD_UNDO
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -8746,7 +8422,6 @@ SfxVoidItem Refresh SID_FM_REFRESH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -8769,7 +8444,6 @@ SfxVoidItem RefreshFormControl SID_FM_REFRESH_FORM_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -8792,7 +8466,6 @@ SfxVoidItem RemoveFilter SID_FM_FILTER_REMOVE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -8815,7 +8488,6 @@ SfxVoidItem RemoveFilterSort SID_FM_REMOVE_FILTER_SORT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -8838,7 +8510,6 @@ SfxSetItem ReplaceSet FID_SEARCH_REPLACESET
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -8861,7 +8532,6 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     Readonly = FALSE,
@@ -8887,7 +8557,6 @@ SvxLRSpaceItem RulerBorderDistance SID_RULER_BORDER_DISTANCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8912,7 +8581,6 @@ SvxColumnItem RulerBorders SID_RULER_BORDERS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8937,7 +8605,6 @@ SvxColumnItem RulerBordersVertical SID_RULER_BORDERS_VERTICAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8962,7 +8629,6 @@ SfxPointItem RulerNullOffset SID_RULER_NULL_OFFSET
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -8987,7 +8653,6 @@ SvxPagePosSizeItem RulerPagePos SID_RULER_PAGE_POS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9012,7 +8677,6 @@ SvxProtectItem RulerProtect SID_RULER_PROTECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9037,7 +8701,6 @@ SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9060,7 +8723,6 @@ SfxBoolItem SbaNativeSql SID_FM_NATIVESQL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9106,7 +8768,6 @@ SfxVoidItem ScEditOptions SID_SC_EDITOPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9129,7 +8790,6 @@ SfxVoidItem SchEditOptions SID_SCH_EDITOPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9152,7 +8812,6 @@ SfxVoidItem SdEditOptions SID_SD_EDITOPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9175,7 +8834,6 @@ SfxVoidItem SdGraphicOptions SID_SD_GRAPHIC_OPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9198,7 +8856,6 @@ SfxVoidItem SearchOff FID_SEARCH_OFF
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9221,7 +8878,6 @@ SfxVoidItem SearchOn FID_SEARCH_ON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9244,7 +8900,6 @@ SfxSetItem SearchSet FID_SEARCH_SEARCHSET
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9267,7 +8922,6 @@ SfxVoidItem Select SID_SELECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9290,7 +8944,6 @@ SfxVoidItem SendToBack SID_FRAME_TO_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9313,7 +8966,6 @@ SfxVoidItem SetDefault SID_SET_DEFAULT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9336,7 +8988,6 @@ SfxVoidItem SetHyperlink SID_HYPERLINK_SETLINK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9359,7 +9010,6 @@ SvxHyphenZoneItem SetHyphenZone SID_ATTR_PARA_HYPHENZONE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9384,7 +9034,6 @@ SvxLongLRSpaceItem SetLongLeftRightMargin SID_ATTR_LONG_LRSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9409,7 +9058,6 @@ SvxLongULSpaceItem SetLongTopBottomMargin SID_ATTR_LONG_ULSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SvxLongULSpaceItem
@@ -9435,7 +9083,6 @@ SfxVoidItem SetObjectToBackground SID_OBJECT_HELL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9458,7 +9105,6 @@ SfxVoidItem SetObjectToForeground SID_OBJECT_HEAVEN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9481,7 +9127,6 @@ SfxVoidItem SetPageMaxSize SID_ATTR_PAGE_MAXSIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9504,7 +9149,6 @@ SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9530,7 +9174,6 @@ SdrOnOffItem FillShadow SID_ATTR_FILL_SHADOW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9555,7 +9198,6 @@ XColorItem FillShadowColor SID_ATTR_SHADOW_COLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9580,7 +9222,6 @@ SdrPercentItem FillShadowTransparency SID_ATTR_SHADOW_TRANSPARENCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9605,7 +9246,6 @@ SdrMetricItem FillShadowXDistance SID_ATTR_SHADOW_XDISTANCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9630,7 +9270,6 @@ SdrMetricItem FillShadowYDistance SID_ATTR_SHADOW_YDISTANCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9654,7 +9293,6 @@ SvxShadowedItem Shadowed SID_ATTR_CHAR_SHADOWED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9705,7 +9343,6 @@ SfxBoolItem ShowItemBrowser SID_SHOW_ITEMBROWSER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9730,7 +9367,6 @@ SfxBoolItem ShowPropBrowser SID_SHOW_PROPERTYBROWSER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9780,7 +9416,6 @@ SfxBoolItem ShowPropertyBrowser SID_FM_SHOW_PROPERTY_BROWSER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -9806,7 +9441,6 @@ SfxBoolItem ShowRuler SID_RULER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9831,7 +9465,6 @@ SfxVoidItem SimEditOptions SID_SIM_EDITOPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9854,7 +9487,6 @@ SvxSizeItem Size SID_ATTR_SIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -9879,7 +9511,6 @@ SfxVoidItem SmEditOptions SID_SM_EDITOPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9902,7 +9533,6 @@ SfxVoidItem SortDown SID_FM_SORTDOWN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9925,7 +9555,6 @@ SfxVoidItem Sortup SID_FM_SORTUP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -9947,7 +9576,6 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -9974,7 +9602,6 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -10001,7 +9628,6 @@ SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     ImageReflection = TRUE;
@@ -10028,7 +9654,6 @@ SvxKerningItem Spacing SID_ATTR_CHAR_KERNING
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10053,7 +9678,6 @@ SfxBoolItem SpellOnline SID_AUTOSPELL_CHECK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10078,7 +9702,6 @@ SfxBoolItem Spinbutton SID_INSERT_SPINBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10103,7 +9726,6 @@ SfxVoidItem Square SID_DRAW_SQUARE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -10129,7 +9751,6 @@ SfxVoidItem Square_Rounded SID_DRAW_SQUARE_ROUND
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -10155,7 +9776,6 @@ SfxVoidItem Square_Rounded_Unfilled SID_DRAW_SQUARE_ROUND_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -10181,7 +9801,6 @@ SfxVoidItem Square_Unfilled SID_DRAW_SQUARE_NOFILL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordManual;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -10207,7 +9826,6 @@ SfxUInt32Item State3D SID_3D_STATE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10232,7 +9850,6 @@ SvxCrossedOutItem Strikeout SID_ATTR_CHAR_STRIKEOUT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10257,7 +9874,6 @@ SfxBoolItem SubScript SID_SET_SUB_SCRIPT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10282,7 +9898,6 @@ SfxVoidItem Substract SID_POLY_SUBSTRACT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -10304,7 +9919,6 @@ SfxVoidItem EqualizeWidth SID_EQUALIZEWIDTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -10326,7 +9940,6 @@ SfxVoidItem EqualizeHeight SID_EQUALIZEHEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -10348,7 +9961,6 @@ SfxBoolItem SuperScript SID_SET_SUPER_SCRIPT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10373,7 +9985,6 @@ SfxVoidItem SwEditOptions SID_SW_EDITOPTIONS
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -10500,7 +10111,6 @@ SfxBoolItem Text SID_ATTR_CHAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10525,7 +10135,6 @@ SfxBoolItem DrawText SID_DRAW_TEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -10553,7 +10162,6 @@ SfxBoolItem Text_Marquee SID_DRAW_TEXT_MARQUEE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10578,7 +10186,6 @@ SfxBoolItem TextdirectionLeftToRight SID_TEXTDIRECTION_LEFT_TO_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10603,7 +10210,6 @@ SfxBoolItem TextdirectionTopToBottom SID_TEXTDIRECTION_TOP_TO_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10628,7 +10234,6 @@ SdrTextFitToSizeTypeItem TextFitToSize SID_ATTR_TEXT_FITTOSIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10676,7 +10281,6 @@ SfxBoolItem InsertTimeField SID_INSERT_TIMEFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10701,7 +10305,6 @@ SfxBoolItem TimeField SID_FM_TIMEFIELD
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10749,7 +10352,6 @@ SfxBoolItem ToggleObjectRotateMode SID_OBJECT_ROTATE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -10772,7 +10374,6 @@ SfxBoolItem ToolEdit SID_TEXTEDIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10797,7 +10398,6 @@ SfxBoolItem SelectObject SID_OBJECT_SELECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10822,7 +10422,6 @@ SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10847,7 +10446,6 @@ SfxVoidItem TransformDialog SID_ATTR_TRANSFORM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -10916,7 +10514,6 @@ SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10941,7 +10538,6 @@ SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -10966,7 +10562,6 @@ SfxBoolItem URLButton SID_INSERT_URLBUTTON
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11016,7 +10611,6 @@ SfxBoolItem VerticalCaption SID_DRAW_CAPTION_VERTICAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11041,7 +10635,6 @@ SfxBoolItem VerticalText SID_DRAW_TEXT_VERTICAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11066,7 +10659,6 @@ SfxBoolItem VFixedLine SID_INSERT_VFIXEDLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11091,7 +10683,6 @@ SfxVoidItem ViewFormAsGrid SID_FM_VIEW_AS_GRID
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -11117,7 +10708,6 @@ SfxBoolItem VScrollbar SID_INSERT_VSCROLLBAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11142,7 +10732,6 @@ SvxWidowsItem Widow SID_ATTR_PARA_WIDOWS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11167,7 +10756,6 @@ SfxBoolItem Window3D SID_3D_WIN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11192,7 +10780,6 @@ SvxWordLineModeItem WordMode SID_ATTR_CHAR_WORDLINEMODE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11217,7 +10804,6 @@ XLineColorItem XLineColor SID_ATTR_LINE_COLOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11242,7 +10828,6 @@ XLineStyleItem XLineStyle SID_ATTR_LINE_STYLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11267,7 +10852,6 @@ SfxVoidItem Zoom100Percent SID_SIZE_REAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -11290,7 +10874,6 @@ SfxVoidItem ZoomObjects SID_SIZE_OPTIMAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -11313,7 +10896,6 @@ SfxVoidItem ZoomOptimal SID_SIZE_ALL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -11336,7 +10918,6 @@ SfxVoidItem ZoomPage SID_SIZE_PAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -11359,7 +10940,6 @@ SfxVoidItem ZoomPageWidth SID_SIZE_PAGE_WIDTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -11382,7 +10962,6 @@ SfxVoidItem ZoomVisArea SID_SIZE_VISAREA
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -11405,7 +10984,6 @@ SfxVoidItem ToggleControlFocus SID_FM_TOGGLECONTROLFOCUS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxVoidItem
@@ -11431,7 +11009,6 @@ SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxVoidItem
@@ -11457,7 +11034,6 @@ SfxBoolItem SelectMode SID_INSERT_SELECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11482,7 +11058,6 @@ SvxParaVertAlignItem VerticalParagraphAlignment SID_PARA_VERTALIGN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11507,7 +11082,6 @@ SvxCharReliefItem CharacterRelief SID_ATTR_CHAR_RELIEF
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11532,7 +11106,6 @@ SvxBrushItem CharacterBackgroundPattern SID_ATTR_BRUSH_CHAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11557,7 +11130,6 @@ SvxCharRotateItem CharacterRotation SID_ATTR_CHAR_ROTATED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11582,7 +11154,6 @@ SvxCharScaleWidthItem CharacterWidthScalingFactor SID_ATTR_CHAR_SCALEWIDTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11607,7 +11178,6 @@ SfxUInt32Item NumberFormatValue SID_ATTR_NUMBERFORMAT_VALUE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11632,7 +11202,6 @@ SvxHorJustifyItem HorizontalJustification SID_ATTR_ALIGN_HOR_JUSTIFY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11657,7 +11226,6 @@ SvxVerJustifyItem VerticalJustification SID_ATTR_ALIGN_VER_JUSTIFY
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11682,7 +11250,6 @@ SfxUInt16Item AlignmentIndent SID_ATTR_ALIGN_INDENT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11707,7 +11274,6 @@ SfxBoolItem AlignmentHyphenation SID_ATTR_ALIGN_HYPHENATION
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11732,7 +11298,6 @@ SfxInt32Item AlignmentRotation SID_ATTR_ALIGN_DEGREES
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11757,7 +11322,6 @@ SvxRotateModeItem AlignmentRotationMode SID_ATTR_ALIGN_LOCKPOS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11782,7 +11346,6 @@ SvxMarginItem AlignmentMargin SID_ATTR_ALIGN_MARGIN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11807,7 +11370,6 @@ SfxBoolItem AlignmentStacked SID_ATTR_ALIGN_STACKED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -11832,7 +11394,6 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     Readonly = FALSE,
@@ -11858,7 +11419,6 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
     Readonly = FALSE,
@@ -11908,7 +11468,6 @@ SfxVoidItem OpenHyperlinkOnCursor SID_OPEN_HYPERLINK
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
 
         /* config: */
         AccelConfig = TRUE,
@@ -11929,7 +11488,6 @@ SfxBoolItem CTLFontState SID_CTLFONT_STATE
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
 
         /* config: */
         AccelConfig = FALSE,
@@ -11950,7 +11508,6 @@ SfxBoolItem VerticalTextState SID_VERTICALTEXT_STATE
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
 
         /* config: */
         AccelConfig = FALSE,
@@ -11973,7 +11530,6 @@ SfxVoidItem OpenXMLFilterSettings SID_OPEN_XML_FILTERSETTINGS
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
 
         /* config: */
         AccelConfig = TRUE,
@@ -12041,7 +11597,6 @@ SfxBoolItem SpellDialog SID_SPELL_DIALOG
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12064,7 +11619,6 @@ SvxColumnItem RulerRows SID_RULER_ROWS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12087,7 +11641,6 @@ SvxColumnItem RulerRowsVertical SID_RULER_ROWS_VERTICAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12113,7 +11666,6 @@ SvxFontListItem FontNameList SID_ATTR_CHAR_FONTLIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     // config:
     AccelConfig = FALSE,
@@ -12234,7 +11786,6 @@ SfxVoidItem ExtrusionDepthFloater SID_EXTRUSION_DEPTH_FLOATER
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -12257,7 +11808,6 @@ SfxVoidItem ExtrusionDepthDialog SID_EXTRUSION_DEPTH_DIALOG
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    Synchron;
 
     /* status: */
     SlotType = SvxDoubleItem
@@ -12280,7 +11830,6 @@ SfxVoidItem ExtrusionDirectionFloater SID_EXTRUSION_DIRECTION_FLOATER
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -12515,7 +12064,6 @@ SfxBoolItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -12661,7 +12209,6 @@ SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    Synchron;
 
     /* status: */
     SlotType = SfxInt32Item
@@ -12706,7 +12253,6 @@ OfaRefItem GetColorTable SID_GET_COLORLIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -12729,7 +12275,6 @@ SfxVoidItem SpellCheckerChanged SID_SPELLCHECKER_CHANGED
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -12752,7 +12297,6 @@ SfxUInt16Item Year2000 SID_ATTR_YEAR2000
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -12775,7 +12319,6 @@ SfxVoidItem IncrementIndent SID_INC_INDENT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
         ImageReflection = TRUE;
@@ -12801,7 +12344,6 @@ SfxVoidItem DecrementIndent SID_DEC_INDENT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     ImageRotation = TRUE;
         ImageReflection = TRUE;
@@ -12827,7 +12369,6 @@ SfxStringItem StateTableCell SID_TABLE_CELL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12852,7 +12393,6 @@ SfxVoidItem SendOutlineToImpress SID_OUTLINE_TO_IMPRESS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -12875,7 +12415,6 @@ SfxUInt16Item DefTabStop SID_ATTR_DEFTABSTOP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12900,7 +12439,6 @@ SvxLanguageItem DocumentLanguage SID_ATTR_LANGUAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12925,7 +12463,6 @@ SvxLanguageItem DocumentLanguageCJK SID_ATTR_CHAR_CJK_LANGUAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12950,7 +12487,6 @@ SvxLanguageItem DocumentLanguageCTL SID_ATTR_CHAR_CTL_LANGUAGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -12975,7 +12511,6 @@ SfxBoolItem OptionsLocaleChanged SID_OPT_LOCALE_CHANGED
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -13000,7 +12535,6 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13023,7 +12557,6 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -13049,7 +12582,6 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -13075,7 +12607,6 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -13101,7 +12632,6 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -13127,7 +12657,6 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -13153,7 +12682,6 @@ SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringItem
@@ -13197,7 +12725,6 @@ SvxDashListItem DashListState SID_DASH_LIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13219,7 +12746,6 @@ SvxLineEndListItem LineEndListState SID_LINEEND_LIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13240,7 +12766,6 @@ SvxColorListItem ColorTableState SID_COLOR_TABLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13261,7 +12786,6 @@ SvxGradientListItem GradientListState SID_GRADIENT_LIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13282,7 +12806,6 @@ SvxHatchListItem HatchListState SID_HATCH_LIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13303,7 +12826,6 @@ SvxBitmapListItem BitmapListState SID_BITMAP_LIST
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13325,7 +12847,6 @@ SvxEmphasisMarkItem EmphasisMark SID_ATTR_CHAR_EMPHASISMARK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13348,7 +12869,6 @@ SfxBoolItem ShowDataNavigator SID_FM_SHOW_DATANAVIGATOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -13374,7 +12894,6 @@ SfxObjectItem FmDataNavigatorController SID_FM_DATANAVIGATOR_CONTROL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerItem;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -13399,7 +12918,6 @@ SfxVoidItem CommonAlignLeft SID_ALIGN_ANY_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13422,7 +12940,6 @@ SfxVoidItem CommonAlignHorizontalCenter SID_ALIGN_ANY_HCENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13444,7 +12961,6 @@ SfxVoidItem CommonAlignRight SID_ALIGN_ANY_RIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13466,7 +12982,6 @@ SfxVoidItem CommonAlignJustified SID_ALIGN_ANY_JUSTIFIED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13488,7 +13003,6 @@ SfxVoidItem CommonAlignTop SID_ALIGN_ANY_TOP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13510,7 +13024,6 @@ SfxVoidItem CommonAlignVerticalCenter SID_ALIGN_ANY_VCENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13532,7 +13045,6 @@ SfxVoidItem CommonAlignBottom SID_ALIGN_ANY_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13554,7 +13066,6 @@ SfxVoidItem CommonAlignHorizontalDefault SID_ALIGN_ANY_HDEFAULT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13576,7 +13087,6 @@ SfxVoidItem CommonAlignVerticalDefault SID_ALIGN_ANY_VDEFAULT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13598,7 +13108,6 @@ SfxVoidItem AVMediaToolBox SID_AVMEDIA_TOOLBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
     SlotType = avmedia_MediaItem;
 
     /* config: */
@@ -13647,7 +13156,6 @@ SfxBoolItem ColorSettings SID_COLOR_SETTINGS
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
 
         Readonly = FALSE,
 
@@ -13674,7 +13182,6 @@ SfxVoidItem MailExportFinished SID_MAIL_EXPORT_FINISHED
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13696,7 +13203,6 @@ SfxVoidItem InsertZWSP SID_INSERT_ZWSP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13718,7 +13224,6 @@ SfxVoidItem InsertZWNBSP SID_INSERT_ZWNBSP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13740,7 +13245,6 @@ SfxVoidItem InsertLRM SID_INSERT_LRM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13762,7 +13266,6 @@ SfxVoidItem InsertRLM SID_INSERT_RLM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13784,7 +13287,6 @@ SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13806,7 +13308,6 @@ SfxVoidItem InsertHardHyphen FN_INSERT_HARDHYPHEN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13828,7 +13329,6 @@ SfxVoidItem InsertNonBreakingSpace FN_INSERT_HARD_SPACE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13851,7 +13351,6 @@ SfxVoidItem ManageLanguage SID_BASICIDE_MANAGE_LANG
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13874,7 +13373,6 @@ SfxStringItem CurrentLanguage SID_BASICIDE_CURRENT_LANG
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -13896,7 +13394,6 @@ SfxVoidItem MergeCells SID_TABLE_MERGE_CELLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13918,7 +13415,6 @@ SfxVoidItem SplitCell SID_TABLE_SPLIT_CELLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -13940,7 +13436,6 @@ SfxVoidItem OptimizeTable SID_OPTIMIZE_TABLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -13964,7 +13459,6 @@ SfxBoolItem CellVertBottom SID_TABLE_VERT_BOTTOM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -13989,7 +13483,6 @@ SfxBoolItem CellVertCenter SID_TABLE_VERT_CENTER
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14014,7 +13507,6 @@ SfxBoolItem CellVertTop SID_TABLE_VERT_NONE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14082,7 +13574,6 @@ SfxVoidItem DeleteRows SID_TABLE_DELETE_ROW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14104,7 +13595,6 @@ SfxVoidItem DeleteColumns SID_TABLE_DELETE_COL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14126,7 +13616,6 @@ SfxVoidItem SelectTable SID_TABLE_SELECT_ALL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14148,7 +13637,6 @@ SfxVoidItem EntireColumn SID_TABLE_SELECT_COL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14171,7 +13659,6 @@ SfxVoidItem EntireRow SID_TABLE_SELECT_ROW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14215,7 +13702,6 @@ SfxVoidItem AutoSum SID_TABLE_AUTOSUM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14261,7 +13747,6 @@ SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
         SlotType = SvxSmartTagItem;
 
         /* config: */
@@ -14285,7 +13770,6 @@ SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
         Container = FALSE,
         RecordAbsolute = FALSE,
         RecordPerSet;
-        Synchron;
 
         /* config: */
         AccelConfig = FALSE,
@@ -14307,7 +13791,6 @@ SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
      Container = FALSE,
      RecordAbsolute = FALSE,
      RecordPerSet;
-     Synchron;
 
      // config:
      AccelConfig = FALSE,
@@ -14330,7 +13813,6 @@ SfxVoidItem LanguageStatus SID_LANGUAGE_STATUS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxStringListItem
@@ -14381,7 +13863,6 @@ SfxVoidItem Grow SID_GROW_FONT_SIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14405,7 +13886,6 @@ SfxVoidItem Shrink SID_SHRINK_FONT_SIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -14498,7 +13978,6 @@ SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* status: */
     SlotType = SfxBoolItem
@@ -14524,7 +14003,6 @@ SfxUInt16Item FillTransparence SID_ATTR_FILL_TRANSPARENCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14549,7 +14027,6 @@ XFillFloatTransparenceItem FillFloatTransparence SID_ATTR_FILL_FLOATTRANSPARENCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14574,7 +14051,6 @@ SfxUInt16Item LineTransparence SID_ATTR_LINE_TRANSPARENCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14602,7 +14078,6 @@ XLineJointItem LineJoint SID_ATTR_LINE_JOINT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14627,7 +14102,6 @@ XLineCapItem LineCap SID_ATTR_LINE_CAP
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14652,7 +14126,6 @@ XLineStartItem LineStart SID_ATTR_LINE_START
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14677,7 +14150,6 @@ XLineEndItem LineEnd SID_ATTR_LINE_END
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14702,7 +14174,6 @@ SfxUInt32Item TransformPosX SID_ATTR_TRANSFORM_POS_X
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14727,7 +14198,6 @@ SfxUInt32Item TransformPosY SID_ATTR_TRANSFORM_POS_Y
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14752,7 +14222,6 @@ SfxUInt32Item TransformWidth SID_ATTR_TRANSFORM_WIDTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14777,7 +14246,6 @@ SfxUInt32Item TransformHeight SID_ATTR_TRANSFORM_HEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14801,7 +14269,6 @@ SfxUInt32Item TransformRotationAngle SID_ATTR_TRANSFORM_ANGLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14824,7 +14291,6 @@ SfxUInt32Item TransformRotationX SID_ATTR_TRANSFORM_ROT_X
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14847,7 +14313,6 @@ SfxUInt32Item TransformRotationY SID_ATTR_TRANSFORM_ROT_Y
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14870,7 +14335,6 @@ SfxBoolItem ProtectPos SID_ATTR_TRANSFORM_PROTECT_POS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14893,7 +14357,6 @@ SfxBoolItem ProtectSize SID_ATTR_TRANSFORM_PROTECT_SIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14917,7 +14380,6 @@ SfxVoidItem FlipHorizontal SID_FLIP_HORIZONTAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14942,7 +14404,6 @@ SfxVoidItem FlipVertical SID_FLIP_VERTICAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14967,7 +14428,6 @@ SfxBoolItem AutomaticWidth SID_ATTR_TRANSFORM_AUTOWIDTH
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -14992,7 +14452,6 @@ SfxBoolItem AutomaticHeight SID_ATTR_TRANSFORM_AUTOHEIGHT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -15016,7 +14475,6 @@ SvxLineItem BorderTLBR SID_ATTR_BORDER_DIAG_TLBR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -15039,7 +14497,6 @@ SvxLineItem BorderBLTR SID_ATTR_BORDER_DIAG_BLTR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -15087,7 +14544,6 @@ SfxVoidItem ParaspaceDecrease SID_PARASPACE_DECREASE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -15109,7 +14565,6 @@ SfxVoidItem ParaspaceIncrease SID_PARASPACE_INCREASE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -15131,7 +14586,6 @@ SfxVoidItem SetOutline FN_SVX_SET_OUTLINE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -15152,7 +14606,6 @@ SfxUInt16Item CurrentOutlineType FN_OUTLINE_RULE_INDEX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,

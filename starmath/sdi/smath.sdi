@@ -28,7 +28,6 @@ SfxVoidItem ChangeAlignment SID_ALIGN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -51,7 +50,6 @@ SfxVoidItem ChangeDistance SID_DISTANCE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -74,7 +72,6 @@ SfxVoidItem ChangeFont SID_FONT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -97,7 +94,6 @@ SfxVoidItem ChangeFontSize SID_FONTSIZE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -120,7 +116,6 @@ SfxVoidItem CommandWindow SID_CMDBOXWINDOW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -143,7 +138,6 @@ SfxVoidItem ElementsDockingWindow SID_ELEMENTSDOCKINGWINDOW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -166,7 +160,6 @@ SfxVoidItem Preferences SID_PREFERENCES
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -189,7 +182,6 @@ SfxStringItem ConfigName SID_TEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -214,7 +206,6 @@ SfxVoidItem CopyObject SID_COPYOBJECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -237,7 +228,6 @@ SfxVoidItem Draw SID_DRAW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -260,7 +250,6 @@ SfxBoolItem FormelCursor SID_FORMULACURSOR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -283,7 +272,6 @@ SfxInt16Item Graphic SID_GAPHIC_SM
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -398,7 +386,6 @@ SfxBoolItem ImportMathMLClipboard SID_IMPORT_MATHML_CLIPBOARD
     Container = FALSE,
     RecordAbsolute = FALSE, /*obsolete */
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -443,7 +430,6 @@ SfxStringItem ModifyStatus SID_MODIFYSTATUS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -468,7 +454,6 @@ SfxVoidItem NextError SID_NEXTERR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -491,7 +476,6 @@ SfxVoidItem NextMark SID_NEXTMARK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -514,7 +498,6 @@ SfxVoidItem PasteObject SID_PASTEOBJECT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -537,7 +520,6 @@ SfxVoidItem PrevError SID_PREVERR
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -560,7 +542,6 @@ SfxVoidItem PrevMark SID_PREVMARK
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -583,7 +564,6 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -608,7 +588,6 @@ SfxVoidItem SaveSymbols SID_SAVESYMBOLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -631,7 +610,6 @@ SfxVoidItem SetPaperSize SID_GETEDITTEXT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -654,7 +632,6 @@ SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -677,7 +654,6 @@ SfxVoidItem Symbols SID_SYMBOLS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -700,7 +676,6 @@ SfxBoolItem Textmode SID_TEXTMODE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -725,7 +700,6 @@ SfxStringItem TextStatus SID_TEXTSTATUS
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -750,7 +724,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -773,7 +746,6 @@ SfxVoidItem ToolBoxWindow SID_TOOLBOXWINDOW
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
@@ -796,7 +768,6 @@ SfxBoolItem ToolBox SID_TOOLBOX
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     Readonly = FALSE,
 
@@ -821,7 +792,6 @@ SfxVoidItem ZoomIn SID_ZOOMIN
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -844,7 +814,6 @@ SfxVoidItem ZoomOut SID_ZOOMOUT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,

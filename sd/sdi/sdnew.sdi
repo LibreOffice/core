@@ -26,7 +26,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    Synchron;
 
     Readonly = FALSE,
     /* config: */
@@ -46,7 +45,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
 
     /* plugin: */
     Container = FALSE,

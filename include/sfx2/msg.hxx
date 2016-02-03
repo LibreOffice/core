@@ -33,8 +33,7 @@ enum class SfxSlotMode {
 
     TOGGLE          =    0x0004L, // inverted for Execute old value
     AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
-    SYNCHRON        =    0x0010L, // exclusive to ASYNCHRON, default
-    ASYNCHRON       =    0x0020L, // via Post-Message, exclusive to SYNCHRON
+    ASYNCHRON       =    0x0020L, // via Post-Message
     HASDIALOG       =    0x0080L, // Coordinates for dialogue after reconfig
 
     NORECORD        =    0x0100L, // no recording
@@ -42,7 +41,7 @@ enum class SfxSlotMode {
     RECORDPERSET    =    0x0400L, // The whole Set is a Statement, default
     RECORDMANUAL    =    0x0800L, // Recording by the application developer is default
     RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
-    STANDARD        =   0x00410L, // SYNCHRON | RECORDPERSET;
+    STANDARD        =   0x00400L, // RECORDPERSET;
 
     PROPGET         =    0x1000L, // get property
     PROPSET         =    0x2000L, // set property, exclusive to METHOD
@@ -63,7 +62,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffffbeL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffffaeL> {};
 }
 
 
