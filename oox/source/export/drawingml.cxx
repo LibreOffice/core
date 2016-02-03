@@ -1491,6 +1491,14 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
                 {
                     aFieldValue = "slidenum";
                 }
+                else if( aFieldKind == "Pages" )
+                {
+                    aFieldValue = "slidecount";
+                }
+                else if( aFieldKind == "PageName" )
+                {
+                    aFieldValue = "slidename";
+                }
                 else if( aFieldKind == "URL" )
                 {
                     bIsURLField = true;
@@ -1544,6 +1552,10 @@ OUString DrawingML::GetFieldValue( css::uno::Reference< css::text::XTextRange > 
                                 break;
                         case 3: aFieldValue = "file3"; // File name with extension
                     }
+                }
+                else if(aFieldKind == "Author")
+                {
+                    aFieldValue = "author";
                 }
             }
         }

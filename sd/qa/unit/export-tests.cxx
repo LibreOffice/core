@@ -67,7 +67,6 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -139,7 +138,12 @@ public:
     void testExportTransitionsPPTX();
     void testDatetimeFieldNumberFormat();
     void testDatetimeFieldNumberFormatPPTX();
+    void testSlideNumberField();
+    void testSlideNumberFieldPPTX();
+    void testSlideCountField();
+    void testSlideNameField();
     void testExtFileField();
+    void testAuthorField();
 
     void testFdo90607();
     void testTdf91378();
@@ -193,7 +197,12 @@ public:
     CPPUNIT_TEST(testTdf92527);
     CPPUNIT_TEST(testDatetimeFieldNumberFormat);
     CPPUNIT_TEST(testDatetimeFieldNumberFormatPPTX);
+    CPPUNIT_TEST(testSlideNumberField);
+    CPPUNIT_TEST(testSlideNumberFieldPPTX);
+    CPPUNIT_TEST(testSlideCountField);
+    CPPUNIT_TEST(testSlideNameField);
     CPPUNIT_TEST(testExtFileField);
+    CPPUNIT_TEST(testAuthorField);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1507,15 +1516,9 @@ void SdExportTest::testTdf92527()
 
 namespace {
 
-void matchNumberFormat( int nPage, uno::Reference< text::XTextRange > xRun)
+void matchNumberFormat( int nPage, uno::Reference< text::XTextField > xField)
 {
-    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
-
-    uno::Reference<text::XTextField> xField;
-    xPropSet->getPropertyValue("TextField") >>= xField;
-    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
-
-    xPropSet.set(xField, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropSet( xField, uno::UNO_QUERY_THROW );
     sal_Int32 nNumFmt;
     xPropSet->getPropertyValue("NumberFormat") >>= nNumFmt;
     switch( nPage )
@@ -1553,16 +1556,7 @@ void SdExportTest::testDatetimeFieldNumberFormat()
 
     for(sal_uInt16 i = 0; i <= 6; ++i)
     {
-        // get TextShape 1 from page i
-        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, i, xDocShRef ) );
-
-        // Get first paragraph
-        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
-
-        // first chunk of text
-        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
-
-        matchNumberFormat( i, xRun );
+        matchNumberFormat( i, getTextFieldFromPage(0, 0, 0, i, xDocShRef) );
     }
 
     xDocShRef->DoClose();
@@ -1576,17 +1570,56 @@ void SdExportTest::testDatetimeFieldNumberFormatPPTX()
 
     for(sal_uInt16 i = 0; i <= 6; ++i)
     {
-        // get TextShape 1 from page i
-        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, i, xDocShRef ) );
-
-        // Get first paragraph
-        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
-
-        // first chunk of text
-        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
-
-        matchNumberFormat( i, xRun );
+        matchNumberFormat( i, getTextFieldFromPage(0, 0, 0, i, xDocShRef) );
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testSlideNumberField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/slidenum_field.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testSlideNumberFieldPPTX()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/slidenum_field.pptx"), PPTX);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testSlideCountField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/slidecount_field.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testSlideNameField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/slidename_field.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
 
     xDocShRef->DoClose();
 }
@@ -1599,21 +1632,10 @@ void SdExportTest::testExtFileField()
 
     for(sal_uInt16 i = 0; i <= 3; ++i)
     {
-        // get TextShape i + 1 from the first page
-        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( i, 0, xDocShRef ) );
-
-        // Get first paragraph
-        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
-
-        // first chunk of text
-        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
-        uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
-
-        uno::Reference<text::XTextField> xField;
-        xPropSet->getPropertyValue("TextField") >>= xField;
+        uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, i, 0, xDocShRef);
         CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
 
-        xPropSet.set(xField, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xPropSet( xField, uno::UNO_QUERY_THROW );
         sal_Int32 nNumFmt;
         xPropSet->getPropertyValue("FileFormat") >>= nNumFmt;
         switch( i )
@@ -1631,6 +1653,18 @@ void SdExportTest::testExtFileField()
                         CPPUNIT_ASSERT_EQUAL_MESSAGE("File formats don't match", sal_Int32(3), nNumFmt);
         }
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testAuthorField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/author_field.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
 
     xDocShRef->DoClose();
 }
