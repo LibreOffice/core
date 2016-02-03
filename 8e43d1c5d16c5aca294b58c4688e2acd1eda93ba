@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_559c5e69",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-03T00:22:44Z",
+      "side": 0,
+      "message": "removes custom entry if it fits a preset\ne.g. change one spacing adds custom entry, reset all to 0 selects entry for none and removes custom entry again\n\nleave this",
+      "range": {
+        "startLine": 211,
+        "startChar": 14,
+        "endLine": 211,
+        "endChar": 55
+      },
+      "revId": "8e43d1c5d16c5aca294b58c4688e2acd1eda93ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

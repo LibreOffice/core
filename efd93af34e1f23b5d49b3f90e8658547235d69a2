@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_b5878211",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-03T00:22:44Z",
+      "side": 1,
+      "message": "we need a check for an existing custom entry here skip adding a new one\nmpSpacingLB-\u003eGetEntry(aCustomEntry) !\u003d LISTBOX_ENTRY_NOTFOUND",
+      "revId": "efd93af34e1f23b5d49b3f90e8658547235d69a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
