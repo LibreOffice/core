@@ -5179,24 +5179,17 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
     if (nWwId == ww::stiUser)
         return true;
 
+    // Allow exported built-in styles UI language neutral
+    if ( nWwId == ww::stiNormal ||
+        ( nWwId>= ww::stiLev1 && nWwId <= ww::stiLev9 ) ||
+            nWwId == ww::stiCaption || nWwId == ww::stiTitle ||
+            nWwId == ww::stiSubtitle || nWwId == ww::stiStrong ||
+            nWwId == ww::stiEmphasis )
+        return true;
+
     static std::set<OUString, OUStringIgnoreCase> aWhitelist;
     if (aWhitelist.empty())
     {
-        aWhitelist.insert("Normal");
-        aWhitelist.insert("Heading 1");
-        aWhitelist.insert("Heading 2");
-        aWhitelist.insert("Heading 3");
-        aWhitelist.insert("Heading 4");
-        aWhitelist.insert("Heading 5");
-        aWhitelist.insert("Heading 6");
-        aWhitelist.insert("Heading 7");
-        aWhitelist.insert("Heading 8");
-        aWhitelist.insert("Heading 9");
-        aWhitelist.insert("Caption");
-        aWhitelist.insert("Title");
-        aWhitelist.insert("Subtitle");
-        aWhitelist.insert("Strong");
-        aWhitelist.insert("Emphasis");
         aWhitelist.insert("No Spacing");
         aWhitelist.insert("List Paragraph");
         aWhitelist.insert("Quote");
@@ -5255,10 +5248,16 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
     }
 
+    // MSO exports English names and writerfilter only recognize them.
+    const sal_Char *pEnglishName = nullptr;
     const char* pType = nullptr;
     switch (eType)
     {
-        case STYLE_TYPE_PARA: pType = "paragraph"; break;
+        case STYLE_TYPE_PARA:
+            pType = "paragraph";
+            if ( nWwId < ww::stiMax)
+                pEnglishName = ww::GetEnglishNameFromSti( static_cast<ww::sti>(nWwId ) );
+            break;
         case STYLE_TYPE_CHAR: pType = "character"; break;
         case STYLE_TYPE_LIST: pType = "numbering"; break;
     }
@@ -5270,9 +5269,8 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
     XFastAttributeListRef xStyleAttributeList(pStyleAttributeList);
     m_pSerializer->startElementNS( XML_w, XML_style, xStyleAttributeList);
-
     m_pSerializer->singleElementNS( XML_w, XML_name,
-            FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_w, XML_val ), pEnglishName ? pEnglishName : OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
@@ -5992,6 +5990,8 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
 
 void DocxAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 {
+    const SwNumRule* pRule = (*m_rExport.m_pUsedNumTable)[nId - 1];
+    m_bExportingOutline = pRule && pRule->IsOutlineRule();
     m_pSerializer->startElementNS( XML_w, XML_abstractNum,
             FSNS( XML_w, XML_abstractNumId ), OString::number( nId ).getStr(),
             FSEND );
@@ -6030,6 +6030,14 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                 FSEND );
     }
 
+    if (m_bExportingOutline)
+    {
+        sal_uInt16 nId = m_rExport.m_pStyles->GetHeadingParagraphStyleId( nLevel );
+        if ( nId != SAL_MAX_UINT16 )
+            m_pSerializer->singleElementNS( XML_w, XML_pStyle ,
+                FSNS( XML_w, XML_val ), m_rExport.m_pStyles->GetStyleId(nId).getStr(),
+                FSEND );
+    }
     // format
     OString aFormat( impl_LevelNFC( nNumberingType ,pOutSet) );
 

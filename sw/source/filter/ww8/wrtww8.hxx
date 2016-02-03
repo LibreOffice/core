@@ -1515,6 +1515,7 @@ public:
 class MSWordStyles
 {
     MSWordExportBase& m_rExport;
+    sal_uInt16 m_aHeadingParagraphStyles[MAXLEVEL];
     SwFormat** m_pFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
     sal_uInt16 m_nUsedSlots;
     bool m_bListStyles; ///< If list styles are requested to be exported as well.
@@ -1566,6 +1567,7 @@ public:
     const SwFormat* GetSwFormat(sal_uInt16 nId) const { return m_pFormatA[nId]; }
     /// Get numbering rule of the nId-th style
     const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
+    sal_uInt16 GetHeadingParagraphStyleId(sal_uInt16 nLevel) const { return m_aHeadingParagraphStyles[ nLevel ]; }
 };
 
 #define MSWORD_MAX_STYLES_LIMIT 4091
