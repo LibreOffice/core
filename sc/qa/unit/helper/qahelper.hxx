@@ -15,6 +15,8 @@
 #include "docsh.hxx"
 #include "address.hxx"
 
+#include <cppunit/SourceLine.h>
+
 #include <test/bootstrapfixture.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -243,6 +245,12 @@ public:
 
 #define ASSERT_EQUAL_TYPE( type, expected, result ) \
     CPPUNIT_ASSERT_EQUAL( static_cast<type>(expected), static_cast<type>(result) );
+
+SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos,
+        const char* expected, const char* msg, CppUnit::SourceLine sourceLine);
+
+#define ASSERT_FORMULA_EQUAL(doc, pos, expected, msg) \
+    checkFormula(doc, pos, expected, msg, CPPUNIT_SOURCELINE())
 
 SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat);
 
