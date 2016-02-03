@@ -16,6 +16,24 @@
       "revId": "ad82a36a3fc45a3033b65a6234da832989dc7830",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_80c84676",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-02-03T15:14:32Z",
+      "side": 1,
+      "message": "Eike: Do you sure about this? Stephan said in [1] that \"both css::uno::Reference\u003cT\u003e and rtl::Reference\u003cT\u003e rely on T\u0027s \nacquire and release functions\". Or maybe I misunderstood?\n\n[1] http://lists.freedesktop.org/archives/libreoffice/2014-June/061954.html",
+      "parentUuid": "3aaa91ec_20e4f20b",
+      "revId": "ad82a36a3fc45a3033b65a6234da832989dc7830",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
