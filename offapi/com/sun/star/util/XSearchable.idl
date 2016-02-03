@@ -77,6 +77,8 @@ published interface XSearchable: com::sun::star::uno::XInterface
             represents a position within the component at which the search continues.
             This position is returned by XSearchable::findFirst() or
             the previous XSearchable::findNext().
+        @param xDesc
+            the descriptor used for searching.
 
         @see SearchDescriptor
      */

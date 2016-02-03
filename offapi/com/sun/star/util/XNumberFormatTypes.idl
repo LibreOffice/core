@@ -41,9 +41,12 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
     /** @returns
                 the key of the standard format within a specified type for a given locale.
 
-                @param nType
+        @param nType
                 the type of the number format. Must be one of the
                 NumberFormat constants.
+        @param nLocale
+            the locale for which the number format is requested.
+
      */
     long getStandardFormat( [in] short nType,
              [in] com::sun::star::lang::Locale nLocale );
@@ -52,11 +55,13 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
     /** @returns
                 the key of a built-in format for a locale:
 
-                @param  nIndex
+        @param  nIndex
                 the index of the wanted number format within the formats for
                 the given locale. One of the
                  com::sun::star::i18n::NumberFormatIndex
                 constants.
+        @param nLocale
+            the locale for which the key is requested.
      */
     long getFormatIndex( [in] short nIndex,
              [in] com::sun::star::lang::Locale nLocale );
@@ -72,10 +77,10 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
                 the index of the converted number format if successful,
                 the old index if the number format could not be converted.
 
-                @param nKey
+        @param nKey
                 index of the old number format
 
-                @param nLocale
+        @param nLocale
                 the locale to which the number format is converted
      */
     long getFormatForLocale( [in] long nKey,

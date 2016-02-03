@@ -122,6 +122,7 @@ interface XFastParser: com::sun::star::uno::XInterface
 
 
     /** registers a known namespace url with the given integer token.<br>
+        @param NamespaceURL the namespace URL.
         @param NamespaceToken
             an integer token that must be greater than FastToken::NAMESPACE.
      */
