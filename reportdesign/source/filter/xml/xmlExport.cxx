@@ -246,6 +246,13 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        // loext, needed for paragraphs inside shapes
+        if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            _GetNamespaceMap().Add(
+                GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT),
+                XML_NAMESPACE_LO_EXT);
+        }
     }
     // GRDDL: to convert RDFa and meta.xml to RDF
     if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
