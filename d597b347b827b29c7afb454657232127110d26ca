@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_c0736eb3",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 0,
+      "message": "Please remove this line -- it makes no sense to have a widget labelled by itself",
+      "revId": "d597b347b827b29c7afb454657232127110d26ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a078e290",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 0,
+      "message": "Please remove this line -- it makes no sense to have a widget labelled by itself",
+      "revId": "d597b347b827b29c7afb454657232127110d26ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_97ba4ebf",
         "filename": "svx/source/sidebar/graphic/GraphicPropertyPanel.cxx",
         "patchSetId": 5

@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_00a57603",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 1,
+      "message": "Maybe \"Fill Type\" would be better here",
+      "revId": "5727c107c62dafb359e13258a89f60aa7b6a3de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_e0802a49",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 1,
+      "message": "In related .cxx file, you\u0027ve removed accessible relations for this widget, but you haven\u0027t added them here",
+      "revId": "5727c107c62dafb359e13258a89f60aa7b6a3de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_007c5671",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 1,
+      "message": "This widget has no label, only accessible name \u003d\u003e please remove this chunk",
+      "revId": "5727c107c62dafb359e13258a89f60aa7b6a3de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c09a4ec5",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 1,
+      "message": "This label should read \"Gradient angle\" or somesuch",
+      "revId": "5727c107c62dafb359e13258a89f60aa7b6a3de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_605f1a0f",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 1,
+      "message": "This widget has no label, only accessible name \u003d\u003e please remove this chunk",
+      "revId": "5727c107c62dafb359e13258a89f60aa7b6a3de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a09f42b3",
+        "filename": "svx/uiconfig/ui/sidebararea.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-03T12:08:36Z",
+      "side": 1,
+      "message": "This label should read .. uhm, dunno what exactly, but it has lot to do with the amount of transparency of the fill",
+      "revId": "5727c107c62dafb359e13258a89f60aa7b6a3de0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
