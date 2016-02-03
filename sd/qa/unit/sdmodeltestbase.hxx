@@ -27,6 +27,7 @@
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
+#include <com/sun/star/text/XTextField.hpp>
 
 using namespace ::com::sun::star;
 
@@ -326,6 +327,24 @@ protected:
         uno::Reference< text::XTextRange > xRun( runEnum->nextElement(), uno::UNO_QUERY);
 
         return xRun;
+    }
+
+    uno::Reference<text::XTextField> getTextFieldFromPage(int nRun, int nPara, int nShape, int nPage, sd::DrawDocShellRef xDocShRef)
+    {
+        // get TextShape 1 from the first page
+        uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( nShape, nPage, xDocShRef ) );
+
+        // Get first paragraph
+        uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( nPara, xShape ) );
+
+        // first chunk of text
+        uno::Reference<text::XTextRange> xRun( getRunFromParagraph( nRun, xParagraph ) );
+
+        uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+        uno::Reference<text::XTextField> xField;
+        xPropSet->getPropertyValue("TextField") >>= xField;
+        return xField;
     }
 };
 
