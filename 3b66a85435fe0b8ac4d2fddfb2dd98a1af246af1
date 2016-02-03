@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_60c55a5a",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T15:24:26Z",
+      "side": 1,
+      "message": "And of course instead of a comma it should be the used separator cSep, sorry for not noticing earlier. I\u0027ll submit an amended commit.",
+      "range": {
+        "startLine": 2993,
+        "startChar": 78,
+        "endLine": 2993,
+        "endChar": 81
+      },
+      "revId": "3b66a85435fe0b8ac4d2fddfb2dd98a1af246af1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
