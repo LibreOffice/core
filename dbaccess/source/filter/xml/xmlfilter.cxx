@@ -700,9 +700,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUString& rLocalName,
                                      const uno::Reference< XAttributeList>& xAttrList, bool bIsAutoStyle )
 {
-    SvXMLImportContext *pContext;
-
-    pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
+    SvXMLImportContext *pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
     if (bIsAutoStyle)
         SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
     else

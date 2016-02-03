@@ -732,7 +732,7 @@ SvXMLImportContext *ScXMLDPSourceQueryContext::CreateChildContext( sal_uInt16 nP
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    return pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLDPSourceQueryContext::EndElement()
