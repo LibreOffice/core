@@ -191,11 +191,6 @@ bool SvMetaSlot::GetRecordAbsolute() const
         return aRecordAbsolute;
     return static_cast<SvMetaSlot *>(GetRef())->GetRecordAbsolute();
 }
-bool SvMetaSlot::GetHasDialog() const
-{
-    if( aHasDialog.IsSet() || !GetRef() ) return aHasDialog;
-    return static_cast<SvMetaSlot *>(GetRef())->GetHasDialog();
-}
 const OString& SvMetaSlot::GetPseudoPrefix() const
 {
     if( !aPseudoPrefix.getString().isEmpty() || !GetRef() ) return aPseudoPrefix.getString();
@@ -298,7 +293,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     if( aNoRecord.ReadSvIdl( SvHash_NoRecord(), rInStm ) )
         SetNoRecord( aNoRecord ), bOk = true;
 
-    bOk |= aHasDialog.ReadSvIdl( SvHash_HasDialog(), rInStm );
     bOk |= aPseudoPrefix.ReadSvIdl( SvHash_PseudoPrefix(), rInStm );
     bOk |= aMenuConfig.ReadSvIdl( SvHash_MenuConfig(), rInStm );
     bOk |= aToolBoxConfig.ReadSvIdl( SvHash_ToolBoxConfig(), rInStm );
@@ -822,8 +816,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_NoRecord() ).getStr() ).WriteChar( '|' );
     if( GetRecordAbsolute() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordAbsolute() ).getStr() ).WriteChar( '|' );
-    if( GetHasDialog() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_HasDialog() ).getStr() ).WriteChar( '|' );
     if( GetMenuConfig() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_MenuConfig() ).getStr() ).WriteChar( '|' );
     if( GetToolBoxConfig() )

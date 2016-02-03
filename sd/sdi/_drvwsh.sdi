@@ -297,7 +297,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        HasDialog , Export ,
+        Export ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_CHARMAP // ole : no, status : ?
@@ -352,7 +352,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_INSERT ;
-        HasDialog , Export , Asynchron ,
+        Export , Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_MANAGE_LINKS // ole : no, status : ?
@@ -376,7 +376,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        HasDialog , Export , Asynchron ,
+        Export , Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_BMPMASK // ole : yes, status : ?
