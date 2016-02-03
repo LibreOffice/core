@@ -22,7 +22,6 @@ SfxVoidItem ChangeAlignment SID_ALIGN
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -44,7 +43,6 @@ SfxVoidItem ChangeDistance SID_DISTANCE
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -66,7 +64,6 @@ SfxVoidItem ChangeFont SID_FONT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -88,7 +85,6 @@ SfxVoidItem ChangeFontSize SID_FONTSIZE
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -110,7 +106,6 @@ SfxVoidItem CommandWindow SID_CMDBOXWINDOW
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -132,7 +127,6 @@ SfxVoidItem ElementsDockingWindow SID_ELEMENTSDOCKINGWINDOW
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -154,7 +148,6 @@ SfxVoidItem Preferences SID_PREFERENCES
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -176,7 +169,6 @@ SfxStringItem ConfigName SID_TEXT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -200,7 +192,6 @@ SfxVoidItem CopyObject SID_COPYOBJECT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -222,7 +213,6 @@ SfxVoidItem Draw SID_DRAW
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -244,7 +234,6 @@ SfxBoolItem FormelCursor SID_FORMULACURSOR
     /* flags: */
     AutoUpdate = TRUE,
     FastCall = TRUE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = FALSE,
@@ -266,7 +255,6 @@ SfxInt16Item Graphic SID_GAPHIC_SM
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -290,7 +278,6 @@ SfxVoidItem InsertCommand SID_INSERTCOMMAND
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -312,7 +299,6 @@ SfxVoidItem InsertCommandText SID_INSERTCOMMANDTEXT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -335,7 +321,6 @@ SfxVoidItem InsertConfigName SID_INSERTSYMBOL
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -358,7 +343,6 @@ SfxBoolItem ImportFormula SID_IMPORT_FORMULA
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -380,7 +364,6 @@ SfxBoolItem ImportMathMLClipboard SID_IMPORT_MATHML_CLIPBOARD
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    HasDialog = FALSE, /*obsolete */
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -401,7 +384,6 @@ SfxVoidItem LoadSymbols SID_LOADSYMBOLS
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -424,7 +406,6 @@ SfxStringItem ModifyStatus SID_MODIFYSTATUS
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -448,7 +429,6 @@ SfxVoidItem NextError SID_NEXTERR
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -470,7 +450,6 @@ SfxVoidItem NextMark SID_NEXTMARK
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -492,7 +471,6 @@ SfxVoidItem PasteObject SID_PASTEOBJECT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -514,7 +492,6 @@ SfxVoidItem PrevError SID_PREVERR
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -536,7 +513,6 @@ SfxVoidItem PrevMark SID_PREVMARK
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -558,7 +534,6 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
     /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -582,7 +557,6 @@ SfxVoidItem SaveSymbols SID_SAVESYMBOLS
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -604,7 +578,6 @@ SfxVoidItem SetPaperSize SID_GETEDITTEXT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -626,7 +599,6 @@ SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -648,7 +620,6 @@ SfxVoidItem Symbols SID_SYMBOLS
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -670,7 +641,6 @@ SfxBoolItem Textmode SID_TEXTMODE
     /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -694,7 +664,6 @@ SfxStringItem TextStatus SID_TEXTSTATUS
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -718,7 +687,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -740,7 +708,6 @@ SfxVoidItem ToolBoxWindow SID_TOOLBOXWINDOW
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -762,7 +729,6 @@ SfxBoolItem ToolBox SID_TOOLBOX
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
@@ -786,7 +752,6 @@ SfxVoidItem ZoomIn SID_ZOOMIN
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -808,7 +773,6 @@ SfxVoidItem ZoomOut SID_ZOOMOUT
     /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,

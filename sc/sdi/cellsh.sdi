@@ -139,7 +139,6 @@ interface CellSelection
         ExecMethod = ExecuteEdit ;
         StateMethod = GetBlockState ;
         GroupId = GID_EDIT ;  //FS
-        HasDialog ;
         MenuConfig , AccelConfig ;
     ]
     SID_DELETE_CONTENTS [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]

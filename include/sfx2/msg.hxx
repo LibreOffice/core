@@ -34,7 +34,6 @@ enum class SfxSlotMode {
     TOGGLE          =    0x0004L, // inverted for Execute old value
     AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
     ASYNCHRON       =    0x0020L, // via Post-Message
-    HASDIALOG       =    0x0080L, // Coordinates for dialogue after reconfig
 
     NORECORD        =    0x0100L, // no recording
     RECORDPERITEM   =    0x0200L, // each item, one statement
@@ -62,7 +61,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffffaeL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffff2eL> {};
 }
 
 

@@ -48,7 +48,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aNoRecord;
     SvBOOL          aRecordAbsolute;
 
-    SvBOOL          aHasDialog;
     SvBOOL          aMenuConfig;
     SvBOOL          aToolBoxConfig;
     SvBOOL          aStatusBarConfig;
@@ -158,7 +157,6 @@ public:
     bool                GetNoRecord() const;
     bool                GetRecordAbsolute() const;
 
-    bool                GetHasDialog() const;
     const OString&     GetPseudoPrefix() const;
     const OString&     GetUnoName() const;
     bool                GetMenuConfig() const;
