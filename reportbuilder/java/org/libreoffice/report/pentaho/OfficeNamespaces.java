@@ -51,6 +51,7 @@ public class OfficeNamespaces
     public static final String OOREPORT_NS = "http://openoffice.org/2005/report";
     public static final String GRDDL_NS = "http://www.w3.org/2003/g/data-view#";
     public static final String CONFIG = "urn:oasis:names:tc:opendocument:xmlns:config:1.0";
+    public static final String LOEXT_NS = "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0";
 
 
     private OfficeNamespaces()
