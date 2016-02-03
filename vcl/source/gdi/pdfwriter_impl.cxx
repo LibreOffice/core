@@ -11390,7 +11390,8 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         beginCompression();
         if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
         {
-            const int nScanLineBytes = pAccess->GetScanlineSize();
+            //With PDF bitmaps, each row is padded to a BYTE boundary (multiple of 8 bits).
+            const int nScanLineBytes = ((pAccess->GetBitCount() * pAccess->Width()) + 7U) / 8U;
 
             for( long i = 0; i < pAccess->Height(); i++ )
             {
