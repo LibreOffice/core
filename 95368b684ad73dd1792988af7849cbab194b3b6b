@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_c081ae4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-03T11:56:18Z",
+      "side": 1,
+      "message": "this message is misleading - not a single thing changed in the patch is actually a function prototype.",
+      "revId": "95368b684ad73dd1792988af7849cbab194b3b6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_20acf2ec",
+        "filename": "chart2/source/tools/LifeTime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-03T11:56:18Z",
+      "side": 1,
+      "message": "i think joining these lines into one long line is rather pointless.\n\nbut, this is unnecessarily complex and can be cleaned up: the \" \u003d \" assignment is superfluous, it should be sufficient to just write \"uno::Reference\u003clang::XComponent xComponent(m_pComponent)\" - i.e. use syntax for invoking the constructor directly to init the variable xComponent.",
+      "revId": "95368b684ad73dd1792988af7849cbab194b3b6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_80b96631",
+        "filename": "chart2/source/tools/LifeTime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-03T11:56:18Z",
+      "side": 1,
+      "message": "same here.",
+      "revId": "95368b684ad73dd1792988af7849cbab194b3b6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_60b6fa3e",
+        "filename": "chart2/source/tools/LifeTime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-03T11:56:18Z",
+      "side": 1,
+      "message": "same here.",
+      "revId": "95368b684ad73dd1792988af7849cbab194b3b6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
