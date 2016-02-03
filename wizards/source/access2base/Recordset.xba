@@ -16,6 +16,7 @@ REM ----------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be RECORDSET
 Private _Name					As String				&apos;	Unique, generated
+Private _This					As Object
 Private _ParentName				As String
 Private _ParentType				As String
 Private _ParentDatabase			As Object
@@ -32,7 +33,16 @@ Private _EditMode				As Integer				&apos;	dbEditxxx constants
 Private _BookmarkBeforeNew		As Variant
 Private _BookmarkLastModified	As Variant
 Private _IsClone				As Boolean
+Private _ManageChunks			As Variant				&apos;	Array of ChunkDescriptors
 Private RowSet					As Object				&apos;	com.sun.star.comp.dba.ORowSet
+
+Type ChunkDescriptor
+	ChunksRequested				As Boolean
+	FieldName					As String
+	ChunkType					As Integer				&apos;	vbString or vbByte
+	FileName					As String
+	FileHandler					As Object
+End Type
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---
@@ -40,6 +50,7 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJRECORDSET
 	_Name = &quot;&quot;
+	Set _This = Nothing
 	_ParentName = &quot;&quot;
 	Set _ParentDatabase = Nothing
 	_ParentType = &quot;&quot;
@@ -56,6 +67,7 @@ Private Sub Class_Initialize()
 	_BookmarkBeforeNew = Null
 	_BookmarkLastModified = Null
 	_IsClone = False
+	Set _ManageChunks = Array()
 	Set RowSet = Nothing
 End Sub		&apos;	Constructor
 
@@ -296,6 +308,7 @@ Const cstThisSub = &quot;Recordset.CancelUpdate&quot;
 		Select Case _EditMode
 			Case dbEditNone
 			Case dbEditAdd
+				_AppendChunkClose(True)
 				If Not IsNull(_BookmarkBeforeNew) Then
 					Select Case _BookmarkBeforeNew
 						Case &quot;_BOF_&quot;		:		.beforeFirst()
@@ -305,6 +318,7 @@ Const cstThisSub = &quot;Recordset.CancelUpdate&quot;
 				End If
 			Case dbEditInProgress
 				.cancelRowUpdates()
+				_AppendChunkClose(True)
 		End Select
 	End With
 	
@@ -507,6 +521,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 	oObject._ParentName = _Name
 	oObject._ParentType = _Type
 	Set oObject._ParentDatabase = _ParentDatabase
+	Set oObject._ParentRecordset = _This
 
 Exit_Function:
 	Set Fields = oObject
@@ -673,6 +688,7 @@ Dim oObject As Object
 		._ParentName = _Name
 		._ParentType = _Type
 		Set ._ParentDatabase = _ParentDatabase
+		Set ._This = oObject
 		._ForwardOnly = ( pvType = dbOpenForwardOnly )
 		._PassThrough = ( pvOptions = dbSQLPassThrough )
 		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
@@ -752,6 +768,7 @@ Const cstThisSub = &quot;Recordset.Update&quot;
 			Case dbEditNone
 				Goto Trace_Error_Update
 			Case dbEditAdd
+				_AppendChunkClose(False)
 				If .IsNew And .IsModified Then .insertRow()
 				_BookmarkLastModified = .getBookmark()
 				If Not IsNull(_BookmarkBeforeNew) Then
@@ -762,6 +779,7 @@ Const cstThisSub = &quot;Recordset.Update&quot;
 					End Select
 				End If
 			Case dbEditInProgress
+				_AppendChunkClose(False)
 				If .IsModified Then
 					.updateRow()
 					_BookmarkLastModified = .getBookmark()
@@ -791,6 +809,118 @@ End Function		&apos;	Update
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _AppendChunk(ByVal psFieldName As String, ByRef pvChunk As Variant, piChunkType) As Boolean
+&apos;	Write chunk at the end of the file dedicated to the given field
+
+	If _ErrorHandler() Then On Local Error GoTo Error_Function
+Dim oFileAccess As Object
+Dim i As Integer, oChunk As Object, iChunk As Integer, sRandom As String
+
+	&apos;	Do nothing if chunk meaningless
+	_AppendChunk = False
+	If IsNull(pvChunk) Then GoTo Exit_Function
+	If IsArray(pvChunk) Then
+		If UBound(pvChunk) &lt; LBound(pvChunk) Then GoTo Exit_Function		&apos;	Empty array
+	End If
+
+	&apos;	Find or create relevant chunk entry
+	iChunk = -1
+	For i = 0 To UBound(_ManageChunks)
+		Set oChunk = _ManageChunks(i)
+		If oChunk.FieldName = psFieldName Then
+			iChunk = i
+			Exit For
+		End If
+	Next i
+	If iChunk = -1 Then
+		_AppendChunkInit(psFieldName)
+		iChunk = UBound(_ManageChunks)
+	End If
+
+	Set oChunk = _ManageChunks(iChunk)
+	With oChunk
+		If Not .ChunksRequested Then		&apos;	First chunk
+			.ChunksRequested = True
+			.ChunkType = piChunkType
+			sRandom = Right(&quot;000000&quot; &amp; Int(999999 * Rnd), 6)
+			.FileName = DoCmd._getTempDirectoryURL() &amp; &quot;/&quot; &amp; &quot;A2B_TEMP_&quot; &amp; _Name &amp; &quot;_&quot; &amp; sRandom
+			Set oFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+			.FileHandler = oFileAccess.openFileWrite(.FileName)
+		End If
+		.FileHandler.writeBytes(pvChunk)
+	End With
+	_AppendChunk = True
+
+Exit_Function:
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Recordset._AppendChunk&quot;, Erl)
+	GoTo Exit_Function
+End Function	&apos;	AppendChunk	V1.5.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _AppendChunkClose(ByVal pbCancel As Boolean) As Boolean
+&apos;	Stores file content to database field(s)
+&apos;	Called from Update() [pbCancel = False] or CancelUpdate() [pbCancel = True]
+
+	If _ErrorHandler() Then On Local Error GoTo Error_Function
+Dim oFileAccess As Object, oStream As Object, lFileLength As Long, oField As Object
+Dim i As Integer, oChunk As Object
+
+	_AppendChunkClose = False
+	For i = 0 To UBound(_ManageChunks)
+		Set oChunk = _ManageChunks(i)
+		With oChunk
+			If Not .ChunksRequested Then GoTo Exit_Function
+			If IsNull(.FileHandler) Then GoTo Exit_Function
+			.Filehandler.closeOutput
+			Set oFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+			&apos;	Copy file to field
+			If Not pbCancel Then
+				Set oStream = oFileAccess.openFileRead(.FileName)
+				lFileLength = oStream.getLength()
+				If lFileLength &gt; 0 Then
+					Set oField = RowSet.getColumns.getByName(.FieldName)
+					Select Case .ChunkType
+						Case vbByte
+							oField.updateBinaryStream(oStream, lFileLength)
+&apos;						Case vbString			&apos;	DOES NOT WORK FOR CHARACTER TYPES
+&apos;							oField.updateCharacterStream(oStream, lFileLength)
+					End Select
+				End If
+				oStream.closeInput()
+			End If
+			If oFileAccess.exists(.FileName) Then oFileAccess.kill(.FileName)
+		End With
+	Next i
+	Set _ManageChunks = Array()
+	_AppendChunkClose = True
+
+Exit_Function:
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Recordset._AppendChunkClose&quot;, Erl)
+	GoTo Exit_Function
+End Function	&apos;	AppendChunkClose	V1.5.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _AppendChunkInit(psFieldName As String) As Boolean
+&apos;	Initialize chunks manager
+
+Dim iSize As Integer
+	iSize = UBound(_ManageChunks) + 1
+	ReDim Preserve _ManageChunks(0 To iSize)
+	Set _ManageChunks(iSize) = New ChunkDescriptor
+	With _ManageChunks(iSize)
+		.ChunksRequested = False
+		.FieldName = psFieldName
+		.FileName = &quot;&quot;
+		Set .FileHandler = Nothing
+	End With
+
+End Function	&apos;	AppendChunkInit	V1.5.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _Initialize(ByVal Optional pvFilter As Variant, Optional poRowSet As Object)

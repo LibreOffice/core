@@ -197,6 +197,7 @@ Const cstThisSub = &quot;Database.CreateTableDef&quot;
 
 Dim oTable As Object, oTables As Object, sTables() As String
 Dim i As Integer, sTableName As String, oNewTable As Object
+Dim vNameComponents() As Variant, iNames As Integer
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
@@ -224,9 +225,17 @@ Dim i As Integer, sTableName As String, oNewTable As Object
 		Set oNewTable = New DataDef
 		oNewTable._Type = OBJTABLEDEF
 		oNewTable._Name = pvTableName
+		vNameComponents = Split(pvTableName, &quot;.&quot;)
+		iNames = UBound(vNameComponents)
+		If iNames &gt;= 2 Then oNewtable.CatalogName = vNameComponents(iNames - 2) Else oNewTable.CatalogName = &quot;&quot;
+		If iNames &gt;= 1 Then oNewtable.SchemaName = vNameComponents(iNames - 1) Else oNewTable.SchemaName = &quot;&quot;
+		oNewtable.TableName = vNameComponents(iNames)
 		Set oNewTable._ParentDatabase = _This
 		Set oNewTable.TableDescriptor = .createDataDescriptor()
-		oNewTable.TableDescriptor.Name = pvTableName
+		oNewTable.TableDescriptor.CatalogName = oNewTable.CatalogName
+		oNewTable.TableDescriptor.SchemaName = oNewTable.SchemaName
+		oNewTable.TableDescriptor.Name = oNewTable.TableName
+		oNewTable.TableDescriptor.Type = &quot;TABLE&quot;
 	End With
 
 	Set CreateTabledef = oNewTable
@@ -503,6 +512,7 @@ Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Obje
 		._ForwardOnly = ( pvType = dbOpenForwardOnly )
 		._PassThrough = ( pvOptions = dbSQLPassThrough )
 		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
+		Set ._This = oObject
 		Set ._ParentDatabase = _This
 		Call ._Initialize()
 		RecordsetMax = RecordsetMax + 1
@@ -876,8 +886,9 @@ Public Function TableDefs(ByVal Optional pvIndex As Variant, ByVal Optional pbCh
 &apos;	Collect all tables in the database
 &apos;	pbCheck unpublished
 
+Const cstThisSub = &quot;Database.TableDefs&quot;
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	Utils._SetCalledSub(&quot;Database.TableDefs&quot;)
+	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pbCheck) Then pbCheck = False
 
 Dim sObjects() As String, sObjectName As String, oObject As Object
@@ -915,19 +926,24 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 	End Select
 
 	Set oObject = New DataDef
-	oObject._Type = OBJTABLEDEF
-	oObject._Name = sObjectName
-	Set oObject._ParentDatabase = _This
-	oObject._ReadOnly = _ReadOnly
-	Set oObject.Table = oTables.getByName(sObjectName)
+	With oObject
+		._Type = OBJTABLEDEF
+		._Name = sObjectName
+		Set ._ParentDatabase = _This
+		._ReadOnly = _ReadOnly
+		Set .Table = oTables.getByName(sObjectName)
+		.CatalogName = .Table.CatalogName
+		.SchemaName = .Table.SchemaName
+		.TableName = .Table.Name
+	End With
 
 Exit_Function:
 	Set TableDefs = oObject
 	Set oObject = Nothing
-	Utils._ResetCalledSub(&quot;Database.TableDefs&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;Database.TableDefs&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
 	If Not pbCheck Then TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;TABLE&quot;), pvIndex))

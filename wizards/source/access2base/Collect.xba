@@ -206,6 +206,9 @@ Dim vObject As Variant, oTempVar As Object
 				Set oTables = oConnection.getTables()
 				oTables.appendByDescriptor(.TableDescriptor)
 				Set .Table = oTables.getByName(._Name)
+				.CatalogName = .Table.CatalogName
+				.SchemaName = .Table.SchemaName
+				.TableName = .Table.Name
 				.TableDescriptor.dispose()
 				Set .TableDescriptor = Nothing
 				.TableFieldsCount = 0

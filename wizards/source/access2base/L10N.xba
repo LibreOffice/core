@@ -65,7 +65,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRRECORDSETFORWARD	:	sLocal = &quot;Action rejected in a forward-only or not bookmarkable recordset&quot;
 				Case &quot;ERR&quot; &amp; ERRFIELDNULL			:	sLocal = &quot;Field is null or empty. Action rejected&quot;
 				Case &quot;ERR&quot; &amp; ERRFILEACCESS			:	sLocal = &quot;File access error on file &apos;%0&apos;&quot;
-				Case &quot;ERR&quot; &amp; ERRMEMOLENGTH			:	sLocal = &quot;Field length (%0) exceeds maximum length. Use WriteAllText instead&quot;
+				Case &quot;ERR&quot; &amp; ERROVERFLOW			:	sLocal = &quot;Field length (%0) exceeds maximum length. Use the &apos;%1&apos; method instead&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTACTIONQUERY		:	sLocal = &quot;Query &apos;%0&apos; is not an action query&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTUPDATABLE		:	sLocal = &quot;Database, recordset or field is read only&quot;
 				Case &quot;ERR&quot; &amp; ERRUPDATESEQUENCE		:	sLocal = &quot;Recordset update sequence error&quot;
@@ -164,7 +164,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRMETHOD				:	sLocal = &quot;La méthode &apos;%0&apos; n&apos;est pas applicable dans ce contexte&quot;
 				Case &quot;ERR&quot; &amp; ERRPROPERTYINIT		:	sLocal = &quot;Propriété &apos;%0&apos; applicable mais non initialisée&quot;
 				Case &quot;ERR&quot; &amp; ERRFILENOTCREATED		:	sLocal = &quot;Erreur de création du fichier &apos;%0&apos;&quot;
-				Case &quot;ERR&quot; &amp; ERRDIALOGNOTFOUND		:	sLocal = &quot;Dialogue &apos;%0&apos; introuvable dans les libraries chargées actuellement&quot;
+				Case &quot;ERR&quot; &amp; ERRDIALOGNOTFOUND		:	sLocal = &quot;Dialogue &apos;%0&apos; introuvable dans les librairies chargées actuellement&quot;
 				Case &quot;ERR&quot; &amp; ERRDIALOGUNDEFINED		:	sLocal = &quot;Boîte de dialogue inconnue&quot;
 				Case &quot;ERR&quot; &amp; ERRDIALOGSTARTED		:	sLocal = &quot;Dialogue déjà initialisé précédemment&quot;
 				Case &quot;ERR&quot; &amp; ERRDIALOGNOTSTARTED	:	sLocal = &quot;Dialogue &apos;%0&apos; non initialisé&quot;
@@ -174,7 +174,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRRECORDSETFORWARD	:	sLocal = &quot;Action rejetée car recordset lisible seulement vers l&apos;avant ou n&apos;acceptant pas de signets&quot;
 				Case &quot;ERR&quot; &amp; ERRFIELDNULL			:	sLocal = &quot;Champ nul ou vide. Action rejetée&quot;
 				Case &quot;ERR&quot; &amp; ERRFILEACCESS			:	sLocal = &quot;Erreur d&apos;accès au fichier &apos;%0&apos;&quot;
-				Case &quot;ERR&quot; &amp; ERRMEMOLENGTH			:	sLocal = &quot;La longueur du champ (%0) dépasse la taille maximale autorisée.. Remplacer par WriteAllText&quot;
+				Case &quot;ERR&quot; &amp; ERROVERFLOW			:	sLocal = &quot;La longueur du champ (%0) dépasse la taille maximale autorisée. Utiliser de préférence la méthode &apos;%1&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTACTIONQUERY		:	sLocal = &quot;La requête &apos;%0&apos; n&apos;est pas une requête d&apos;action&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTUPDATABLE		:	sLocal = &quot;La banque de données, le recordset ou le champ sont en lecture seulement&quot;
 				Case &quot;ERR&quot; &amp; ERRUPDATESEQUENCE		:	sLocal = &quot;Erreur de séquence lors de la mise à jour d&apos;un Recordset&quot;

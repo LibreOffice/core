@@ -126,13 +126,23 @@ Const cstObject = &quot;[com.sun.star.script.NativeObjectWrapper]&quot;
 End Function	&apos;	CheckArgument	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _CStr(pvArg As Variant, ByVal Optional pbShort As Boolean) As String
+Public Function _CStr(ByVal pvArg As Variant, ByVal Optional pbShort As Boolean) As String
 &apos;	Convert pvArg into a readable string (truncated if too long and pbShort = True or missing)
+&apos;	pvArg may be a byte-array. Other arrays are rejected
 
-Dim sArg As String, sObject As String, oArg As Object, sLength As String
+Dim sArg As String, sObject As String, oArg As Object, sLength As String, i As Long, iMax As Long
 Const cstLength = 50
+Const cstByteLength = 25
 	If IsArray(pvArg) Then
-		sArg = &quot;[ARRAY]&quot;
+		If VarType(pvArg) = vbByte Or VarType(pvArg) - 8192 = vbByte Then
+			sArg = &quot;&quot;
+			If pbShort And UBound(pvArg) &gt; cstByteLength Then iMax = cstByteLength Else iMax = UBound(pvArg)
+			For i = 0 To iMax
+				sArg = sArg &amp; Right(&quot;00&quot; &amp; Hex(pvArg(i)), 2)
+			Next i
+		Else
+			sArg = &quot;[ARRAY]&quot;
+		End If
 	Else
 		Select Case VarType(pvArg)
 			Case vbEmpty			:		sArg = &quot;[EMPTY]&quot;
@@ -143,7 +153,8 @@ Const cstLength = 50
 				Else
 					sObject = Utils._ImplementationName(pvArg)
 					If Utils._IsPseudo(pvArg, Array(OBJDATABASE, OBJCOLLECTION, OBJPROPERTY, OBJFORM, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP _
-								, OBJEVENT, OBJFIELD, OBJTABLEDEF, OBJQUERYDEF, OBJRECORDSET _
+								, OBJEVENT, OBJFIELD, OBJTABLEDEF, OBJQUERYDEF, OBJRECORDSET, OBJTEMPVAR, OBJCOMMANDBAR, OBJCOMMANDBARCONTROL _
+								, OBJDIALOG _
 								)) Then
 						Set oArg = pvArg		&apos;	To avoid &quot;Object variable not set&quot; error message
 						sArg = &quot;[&quot; &amp; oArg._Type &amp; &quot;] &quot; &amp; oArg._Name
@@ -156,6 +167,7 @@ Const cstLength = 50
 			Case vbVariant			:		sArg = &quot;[VARIANT]&quot;
 			Case vbString			:		sArg = pvArg
 			Case vbBoolean			:		sArg = Iif(pvArg, &quot;TRUE&quot;, &quot;FALSE&quot;)
+			Case vbByte				:		sArg = Right(&quot;00&quot; &amp; Hex(pvArg), 2)
 			Case Else				:		sArg = CStr(pvArg)
 		End Select
 	End If
@@ -597,13 +609,13 @@ Private Function _PercentEncode(ByVal psChar As String) As String
 
 Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 	lChar = Asc(psChar)
-
+	
 	Select Case lChar
 		Case 48 To 57, 65 To 90, 97 To 122		&apos;	0-9, A-Z, a-z
 			_PercentEncode = psChar
 		Case Asc(&quot;-&quot;), Asc(&quot;.&quot;), Asc(&quot;_&quot;), Asc(&quot;~&quot;)
 			_PercentEncode = psChar
-		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimiters in query strings
+		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimitors in query strings
 			_PercentEncode = psChar
 		Case Asc(&quot; &quot;), Asc(&quot;%&quot;)
 			_PercentEncode = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(lChar), 2)

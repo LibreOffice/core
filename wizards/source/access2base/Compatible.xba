@@ -19,7 +19,7 @@ Dim vVarTypes() As Variant, i As Integer
 Const cstTab = 5
 	On Local Error Goto Exit_Sub	&apos;	Never interrupt processing
 	Utils._SetCalledSub(&quot;DebugPrint&quot;)
-	vVarTypes = Utils._AddNumeric(Array(vbEmpty, vbNull, vbDate, vbString, vbBoolean, vbObject, vbVariant))
+	vVarTypes = Utils._AddNumeric(Array(vbEmpty, vbNull, vbDate, vbString, vbBoolean, vbObject, vbVariant, vbByte, 8192 + vbByte))
 	
 	If UBound(pvArgs) &gt;= 0 Then
 		For i = 0 To UBound(pvArgs)

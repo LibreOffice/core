@@ -19,6 +19,7 @@ Private _Name					As String
 Private _ParentName				As String
 Private _ParentType				As String
 Private _ParentDatabase			As Object
+Private _ParentRecordset		As Object
 Private Column					As Object				&apos;	com.sun.star.sdb.OTableColumnWrapper
 											&apos;			or	org.openoffice.comp.dbaccess.OQueryColumn
 											&apos;			or	com.sun.star.sdb.ODataColumn
@@ -127,6 +128,119 @@ End Property		&apos;	Value (set)
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function AppendChunk(ByRef Optional pvValue As Variant) As Boolean
+&apos;	Store a chunk of string or binary characters into the current field, presumably a large object (CLOB or BLOB)
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;Field.AppendChunk&quot;
+	Utils._SetCalledSub(cstThisSub)
+	AppendChunk = False
+
+	If IsMissing(pvValue) Then Call _TraceArguments()
+
+	If _ParentType &lt;&gt; OBJRECORDSET Then Goto Trace_Error		&apos;	Not on table- or querydefs ... !
+	If Not Column.IsWritable Then Goto Trace_Error_Updatable
+	If Column.IsReadOnly Then Goto Trace_Error_Updatable
+	If _ParentDatabase.Recordsets(_ParentName)._EditMode = dbEditNone Then Goto Trace_Error_Update
+
+Dim iChunkType As Integer
+
+	With com.sun.star.sdbc.DataType
+		Select Case Column.Type			&apos;	DOES NOT WORK FOR CHARACTER TYPES
+&apos;			Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
+&apos;				iChunkType = vbString
+			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+				iChunkType = vbByte
+			Case Else
+				Goto Trace_Error
+		End Select
+	End With
+	
+	AppendChunk = _ParentRecordset._AppendChunk(_Name, pvValue, iChunkType)
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Trace_Error_Update:
+	TraceError(TRACEFATAL, ERRUPDATESEQUENCE, Utils._CalledSub(), 0, 1)
+	_PropertySet = False
+	Goto Exit_Function
+Trace_Error_Updatable:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0, 1)
+	_PropertySet = False
+	Goto Exit_Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, , cstThisSub)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	_PropertySet = False
+	GoTo Exit_Function
+End Function		&apos;	AppendChunk	V1.5.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function GetChunk(ByVal Optional pvOffset As Variant, ByVal Optional pvBytes As Variant) As Variant
+&apos;	Get a chunk of string or binary characters from the current field, presumably a large object (CLOB or BLOB)
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;Field.GetChunk&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+Dim oValue As Object, bNullable As Boolean, bNull As Boolean, vValue() As Variant
+
+	If IsMissing(pvOffset) Or IsMissing(pvBytes) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvOffset, 1, _AddNumeric()) Then Goto Exit_Function
+	If pvOffset &lt; 0 Then
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvOffset))
+		Goto Exit_Function
+	End If
+	If Not Utils._CheckArgument(pvBytes, 2, _AddNumeric()) Then Goto Exit_Function
+	If pvBytes &lt; 0 Then
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvBytes))
+		Goto Exit_Function
+	End If
+
+	bNullable = ( Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE )
+	bNull = False
+	GetChunk = Null
+	With com.sun.star.sdbc.DataType
+		Select Case Column.Type			&apos;	DOES NOT WORK FOR CHARACTER TYPES
+&apos;			Case .CHAR, .VARCHAR, .LONGVARCHAR
+&apos;				Set oValue = Column.getCharacterStream()
+&apos;			Case .CLOB
+&apos;				Set oValue = Column.getClob.getCharacterStream()
+			Case .BINARY, .VARBINARY, .LONGVARBINARY
+				Set oValue = Column.getBinaryStream()
+			Case .BLOB
+				Set oValue = Column.getBlob.getBinaryStream()
+			Case Else
+				Goto Trace_Error
+		End Select
+	End With
+	If bNullable Then bNull = Column.wasNull()
+	If Not bNull Then
+		If pvOffset &gt; 0 Then oValue.skipBytes(pvOffset)
+		oValue.readBytes(vValue, pvBytes)
+		GetChunk = vValue
+	End If
+	oValue.closeInput()
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, , cstThisSub)
+	Goto Exit_Function
+Trace_Argument:
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(iArg, pvIndex))
+	Set vForms = Nothing
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	GetChunk	V1.5.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
@@ -284,6 +398,8 @@ Dim cstThisSub As String
 Dim vEMPTY As Variant, bCond1 As Boolean, bCond2 As Boolean, vValue As Variant, oValue As Object, sValue As String
 Dim oSize As Object, lSize As Long, bNullable As Boolean, bNull As Boolean
 Const cstMaxTextLength = 65535
+Const cstMaxBinlength = 2 * 65535
+
 	_PropertyGet = vEMPTY
 	
 	Select Case UCase(psProperty)
@@ -292,7 +408,7 @@ Const cstMaxTextLength = 65535
 		Case UCase(&quot;DbType&quot;)
 			With com.sun.star.sdbc.DataType
 				Select Case Column.Type
-					Case .BIT				:	_PropertyGet = dbUndefined
+					Case .BIT				:	_PropertyGet = dbBoolean
 					Case .TINYINT			:	_PropertyGet = dbInteger
 					Case .SMALLINT			:	_PropertyGet = dbLong
 					Case .INTEGER			:	_PropertyGet = dbLong
@@ -302,8 +418,8 @@ Const cstMaxTextLength = 65535
 					Case .DOUBLE			:	_PropertyGet = dbDouble
 					Case .NUMERIC			:	_PropertyGet = dbNumeric
 					Case .DECIMAL			:	_PropertyGet = dbDecimal
-					Case .CHAR				:	_PropertyGet = dbText
-					Case .VARCHAR			:	_PropertyGet = dbChar
+					Case .CHAR				:	_PropertyGet = dbChar
+					Case .VARCHAR			:	_PropertyGet = dbText
 					Case .LONGVARCHAR		:	_PropertyGet = dbMemo
 					Case .CLOB				:	_PropertyGet = dbMemo
 					Case .DATE				:	_PropertyGet = dbDate
@@ -351,7 +467,7 @@ Const cstMaxTextLength = 65535
 				Case Else
 					_PropertyGet = &quot;&quot;
 			End Select
-		Case UCase(&quot;FieldSize&quot;)					&apos;	Probably physical size = 2 * unicode string length
+		Case UCase(&quot;FieldSize&quot;)
 			With com.sun.star.sdbc.DataType
 				Select Case Column.Type
 					Case .VARCHAR, .LONGVARCHAR, .CLOB
@@ -380,7 +496,7 @@ Const cstMaxTextLength = 65535
 		Case UCase(&quot;Size&quot;)
 			With com.sun.star.sdbc.DataType
 				Select Case Column.Type
-					Case .LONGVARCHAR, .LONGVARBINARY
+					Case .LONGVARCHAR, .LONGVARBINARY, .VARBINARY, .BINARY, .BLOB, .CLOB
 						_PropertyGet = 0											&apos;	Always 0 (MSAccess)
 					Case Else
 						If Utils._hasUNOProperty(Column, &quot;Precision&quot;) Then _PropertyGet = Column.Precision Else _PropertyGet = 0
@@ -426,7 +542,7 @@ Const cstMaxTextLength = 65535
 						End If
 					Case .CHAR				:	vValue = Column.getString()
 					Case .VARCHAR			:	vValue = Column.getString()				&apos;	vbString
-					Case .LONGVARCHAR
+					Case .LONGVARCHAR, .CLOB
 						Set oValue = Column.getCharacterStream()
 						If bNullable Then bNull = Column.wasNull()
 						If Not bNull Then
@@ -447,21 +563,22 @@ Const cstMaxTextLength = 65535
 												If bNullable Then bNull = Column.wasNull()
 												If Not bNull Then vValue = DateSerial(CInt(oValue.Year), CInt(oValue.Month), CInt(oValue.Day)) _
 															+ TimeSerial(oValue.Hours, oValue.Minutes, oValue.Seconds)&apos;, oValue.HundredthSeconds)
-					Case .BINARY, .VARBINARY, .LONGVARBINARY
+					Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
 						Set oValue = Column.getBinaryStream()
 						If bNullable Then bNull = Column.wasNull()
-						If Not bNull Then vValue = CLng(oValue.getLength())								&apos;	vbLong =&gt; equivalent to FieldSize
+						If Not bNull Then
+							lSize = CLng(oValue.getLength())								&apos;	vbLong =&gt; equivalent to FieldSize
+							If lSize &gt; cstMaxBinlength Then Goto Trace_Length
+							vValue = Array()
+							oValue.readBytes(vValue, lSize)
+						End If
 						oValue.closeInput()
-					Case .BLOB				:	vValue = Column.getBlob()				&apos;	TBC HSQLDB 2.0 ?
-					Case .CLOB				:	vValue = Column.getClob()
-						&apos;getArray
-						&apos;getRef
 					Case Else
 						vValue = Column.getString()							&apos;GIVE STRING A TRY
 						If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
 				End Select
 				If bNullable Then
-					If Column.wasNull() Then vValue = Nothing				&apos;getXXX must precede wasNull()
+					If Column.wasNull() Then vValue = Null				&apos;getXXX must precede wasNull()
 				End If
 			End With
 			_PropertyGet = vValue
@@ -477,7 +594,7 @@ Trace_Error:
 	_PropertyGet = vEMPTY
 	Goto Exit_Function
 Trace_Length:
-	TraceError(TRACEFATAL, ERRMEMOLENGTH, Utils._CalledSub(), 0, , lSize)
+	TraceError(TRACEFATAL, ERROVERFLOW, Utils._CalledSub(), 0, , Array(lSize, &quot;GetChunk&quot;))
 	_PropertyGet = vEMPTY
 	Goto Exit_Function
 Error_Function:
@@ -564,7 +681,7 @@ Dim oParent As Object
 							Else
 								Column.updateString(CStr(pvValue))
 							End If
-						Case .CHAR, .VARCHAR, .LONGVARCHAR
+						Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
 							If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
 							Column.updateString(pvValue)						&apos;	vbString
 						Case .DATE
@@ -599,9 +716,11 @@ Dim oParent As Object
 								&apos;.HundredthSeconds = 0
 							End With
 							Column.updateTimestamp(vTemp)
-&apos;						Case .BINARY, .VARBINARY, .LONGVARBINARY
-&apos;						Case .BLOB
-&apos;						Case .CLOB
+						Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
+							If Not IsArray(pvValue) Then Goto Trace_Error_Value
+							If UBound(pvValue) &lt; LBound(pvValue) Then Goto Trace_Error_Value
+							If Not Utils._CheckArgument(pvValue(LBound(pvValue)), iArgNr, vbInteger, , False) Then Goto Trace_Error_Value
+							Column.updateBytes(pvValue)
 						Case Else
 							Goto trace_Error
 					End Select

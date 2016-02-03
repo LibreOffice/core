@@ -19,6 +19,9 @@ Private _Name					As String
 Private _ParentDatabase			As Object
 Private _ReadOnly				As Boolean
 Private Table					As Object				&apos;	com.sun.star.sdb.dbaccess.ODBTable
+Private CatalogName				As String
+Private SchemaName				As String
+Private TableName				As String
 Private Query					As Object				&apos;	com.sun.star.sdb.dbaccess.OQuery
 Private TableDescriptor			As Object				&apos;	com.sun.star.sdb.dbaccess.ODBTable
 Private TableFieldsCount		As Integer
@@ -33,6 +36,9 @@ Private Sub Class_Initialize()
 	Set _ParentDatabase = Nothing
 	_ReadOnly = False
 	Set Table = Nothing
+	CatalogName = &quot;&quot;
+	SchemaName = &quot;&quot;
+	TableName = &quot;&quot;
 	Set Query = Nothing
 	Set TableDescriptor = Nothing
 	TableFieldsCount = 0
@@ -151,6 +157,9 @@ Const cstMaxKeyLength = 30
 		.Precision = Int(pvSize)
 		If pvType = dbNumeric Or pvType = dbDecimal Or pvType = dbCurrency Then .Scale = Int(pvSize * 10) - Int(pvSize) * 10
 		.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE
+		If Utils._hasUNOProperty(oNewField.Column, &quot;CatalogName&quot;) Then .CatalogName = CatalogName
+		If Utils._hasUNOProperty(oNewField.Column, &quot;SchemaName&quot;) Then .SchemaName = SchemaName
+		If Utils._hasUNOProperty(oNewField.Column, &quot;TableName&quot;) Then .TableName = TableName
 		If Not IsNull(TableDescriptor) Then TableFieldsCount = TableFieldsCount + 1
 		If pvAttributes = dbAutoIncrField Then
 			If Not IsNull(Table) Then Goto Error_Sequence			&apos;	Do not accept adding an AutoValue field when table exists
@@ -158,9 +167,14 @@ Const cstMaxKeyLength = 30
 			Set oPrimaryKey = oKeys.createDataDescriptor()
 			Set oColumn = oPrimaryKey.Columns.createDataDescriptor()
 			oColumn.Name = pvFieldName
+			oColumn.CatalogName = CatalogName
+			oColumn.SchemaName = SchemaName
+			oColumn.TableName = TableName
 			oColumn.IsAutoIncrement = True
+			oColumn.IsNullable = com.sun.star.sdbc.ColumnValue.NO_NULLS
 			oPrimaryKey.Columns.appendByDescriptor(oColumn)
-			oPrimaryKey.Name = Left(&quot;PK_&quot; &amp; Join(Split(oNewField._ParentName, &quot; &quot;), &quot;_&quot;) &amp; &quot;_&quot; &amp; Join(Split(pvFieldName, &quot; &quot;), &quot;_&quot;), cstMaxKeyLength)
+			oPrimaryKey.Name = Left(&quot;PK_&quot; &amp; Join(Split(TableName, &quot; &quot;), &quot;_&quot;) &amp; &quot;_&quot; &amp; Join(Split(pvFieldName, &quot; &quot;), &quot;_&quot;), cstMaxKeyLength)
+			oPrimaryKey.Type = com.sun.star.sdbcx.KeyType.PRIMARY
 			oKeys.appendByDescriptor(oPrimaryKey)
 			.IsAutoIncrement = True
 			.IsNullable = com.sun.star.sdbc.ColumnValue.NO_NULLS
@@ -380,6 +394,7 @@ Dim lCommandType As Long, sCommand As String, oObject As Object,bPassThrough As 
 		._PassThrough = bPassThrough
 		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
 		Set ._ParentDatabase = _ParentDatabase
+		Set ._This = oObject
 		Call ._Initialize()
 	End With
 	With _ParentDatabase
