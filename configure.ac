@@ -5163,7 +5163,7 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     # explicitly. Or put /path/to/compiler in PATH yourself.
 
     # Use wrappers for LTO
-    if test "$ENABLE_LTO" == "TRUE" -a "$COM_IS_CLANG" != "TRUE"; then
+    if test "$ENABLE_LTO" = "TRUE" -a "$COM_IS_CLANG" != "TRUE"; then
         AC_CHECK_TOOL(AR,gcc-ar)
         AC_CHECK_TOOL(NM,gcc-nm)
         AC_CHECK_TOOL(RANLIB,gcc-ranlib)
@@ -6905,7 +6905,7 @@ dnl ===================================================================
 dnl Set target Java bytecode version
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
-    if test "$HAVE_JAVA9" == "TRUE"; then
+    if test "$HAVE_JAVA9" = "TRUE"; then
         _java_target_ver="1.6"
     else
         _java_target_ver="1.5"
