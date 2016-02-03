@@ -265,11 +265,13 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
         if( NSS_InitReadWrite( sCertDir.getStr() ) != SECSuccess )
         {
             xmlsec_trace("Initializing NSS with profile failed.");
-            char * error = NULL;
-
+            PRInt32 errorLength = PR_GetErrorTextLength();
+            char *error = new char[errorLength + 1];
+            error[0] = '\0'; // as per https://bugzilla.mozilla.org/show_bug.cgi?id=538940
             PR_GetErrorText(error);
-            if (error)
+            if (error[0])
                 xmlsec_trace("%s",error);
+            delete[] error;
             return false ;
         }
     }
@@ -279,10 +281,13 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
         if ( NSS_NoDB_Init(NULL) != SECSuccess )
         {
             xmlsec_trace("Initializing NSS without profile failed.");
-            char * error = NULL;
+            PRInt32 errorLength = PR_GetErrorTextLength();
+            char *error = new char[errorLength + 1];
+            error[0] = '\0';
             PR_GetErrorText(error);
-            if (error)
+            if (error[0])
                 xmlsec_trace("%s",error);
+            delete[] error;
             return false ;
         }
     }
