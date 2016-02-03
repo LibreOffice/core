@@ -337,7 +337,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
 
-    basegfx::B2DRange extents;
+    basegfx::B2DRange extents(0, 0, 0, 0);
 
     cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
@@ -744,7 +744,7 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_miter_limit(cr, 15.0);
 
 
-    basegfx::B2DRange extents;
+    basegfx::B2DRange extents(0, 0, 0, 0);
 
     if (!bNoJoin)
     {
@@ -824,7 +824,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
 
     setupPolyPolygon(cr, rPolyPoly);
 
-    basegfx::B2DRange extents;
+    basegfx::B2DRange extents(0, 0, 0, 0);
 
     if (m_aFillColor != SALCOLOR_NONE)
     {
@@ -879,7 +879,7 @@ void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
 
     setupPolyPolygon(cr, rPolyPoly);
 
-    basegfx::B2DRange extents;
+    basegfx::B2DRange extents(0, 0, 0, 0);
 
     if (m_aFillColor != SALCOLOR_NONE)
     {
@@ -1128,7 +1128,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
-    basegfx::B2DRange extents;
+    basegfx::B2DRange extents(0, 0, 0, 0);
 
     AddPolygonToPath(cr, rPoly, true, !getAntiAliasB2DDraw(), false);
 
@@ -1271,21 +1271,8 @@ cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
 
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
 {
-    sal_Int32 nExtentsLeft;
-    sal_Int32 nExtentsTop;
-    sal_Int32 nExtentsRight;
-    sal_Int32 nExtentsBottom;
-    if (rExtents.isEmpty()) {
-        nExtentsLeft = 0;
-        nExtentsTop = 0;
-        nExtentsRight = 0;
-        nExtentsBottom = 0;
-    } else {
-        nExtentsLeft = rExtents.getMinX();
-        nExtentsTop = rExtents.getMinY();
-        nExtentsRight = rExtents.getMaxX();
-        nExtentsBottom = rExtents.getMaxY();
-    }
+    sal_Int32 nExtentsLeft(rExtents.getMinX()), nExtentsTop(rExtents.getMinY());
+    sal_Int32 nExtentsRight(rExtents.getMaxX()), nExtentsBottom(rExtents.getMaxY());
     sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
     sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
     nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
