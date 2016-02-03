@@ -19,7 +19,6 @@
 #define FLT_NAVIGATOR 575
 #define  STR_OBJECTS_TREE (FLT_NAVIGATOR+1)
 #define TLB_OBJECTS 1
-#define TBI_PEN 2
 #define TBI_FIRST 3
 #define TBI_PREVIOUS 4
 #define TBI_NEXT 5

@@ -4097,31 +4097,6 @@ SfxStringItem NavigatorPageName SID_NAVIGATOR_PAGENAME
     GroupId = GID_EDIT;
 ]
 
-SfxBoolItem NavigatorPen SID_NAVIGATOR_PEN
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
 SfxUInt32Item NavigatorState SID_NAVIGATOR_STATE
 
 [

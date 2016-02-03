@@ -266,49 +266,22 @@ sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
 IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();
-    sal_uInt16 nSId = 0;
     PageJump ePage = PAGE_NONE;
 
-    switch( nId )
+    if( nId == TBI_FIRST )
+        ePage = PAGE_FIRST;
+    else if( nId == TBI_PREVIOUS )
+        ePage = PAGE_PREVIOUS;
+    else if( nId == TBI_NEXT )
+        ePage = PAGE_NEXT;
+    else if( nId == TBI_LAST )
+        ePage = PAGE_LAST;
+
+    if( ePage != PAGE_NONE )
     {
-        case TBI_PEN:
-        {
-            if( nId == TBI_PEN )
-            {
-                nSId = SID_NAVIGATOR_PEN;
-            }
-
-            if( nSId > 0 )
-            {
-                SfxBoolItem aItem( nSId, true );
-                mpBindings->GetDispatcher()->Execute(
-                    nSId, SfxCallMode::SLOT |SfxCallMode::RECORD, &aItem, 0L );
-            }
-        }
-        break;
-
-        case TBI_FIRST:
-        case TBI_PREVIOUS:
-        case TBI_NEXT:
-        case TBI_LAST:
-        {
-            if( nId == TBI_FIRST )
-                ePage = PAGE_FIRST;
-            else if( nId == TBI_PREVIOUS )
-                ePage = PAGE_PREVIOUS;
-            else if( nId == TBI_NEXT )
-                ePage = PAGE_NEXT;
-            else if( nId == TBI_LAST )
-                ePage = PAGE_LAST;
-
-            if( ePage != PAGE_NONE )
-            {
-                SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, (sal_uInt16)ePage );
-                mpBindings->GetDispatcher()->Execute(
-                    SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
-            }
-        }
-        break;
+        SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, (sal_uInt16)ePage );
+        mpBindings->GetDispatcher()->Execute(
+        SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
     }
 }
 
@@ -870,17 +843,6 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     {
         const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
         sal_uInt32 nState = rStateItem.GetValue();
-
-        // pen
-        if( nState & NAVBTN_PEN_DISABLED &&
-            pNavigatorWin->maToolbox->IsItemEnabled( TBI_PEN ) )
-            pNavigatorWin->maToolbox->EnableItem( TBI_PEN, false );
-        if( nState & NAVBTN_PEN_CHECKED &&
-            !pNavigatorWin->maToolbox->IsItemChecked( TBI_PEN ) )
-            pNavigatorWin->maToolbox->CheckItem( TBI_PEN );
-        if( nState & NAVBTN_PEN_UNCHECKED &&
-            pNavigatorWin->maToolbox->IsItemChecked( TBI_PEN ) )
-            pNavigatorWin->maToolbox->CheckItem( TBI_PEN, false );
 
         // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
