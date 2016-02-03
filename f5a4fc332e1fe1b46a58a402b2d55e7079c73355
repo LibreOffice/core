@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_b55f8274",
+        "filename": "dbaccess/source/core/dataaccess/documentcontainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-03T07:17:53Z",
+      "side": 1,
+      "message": "just return the result without an intermediate var",
+      "revId": "f5a4fc332e1fe1b46a58a402b2d55e7079c73355",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
