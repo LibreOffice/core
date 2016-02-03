@@ -224,7 +224,23 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     //error recorder feature to get the ONE error that made the verification fail, because there is no
     //documentation/specification as to how to interpret the number of recorded errors and what is the initial
     //error.
-    if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) == 0 )
+    int rs = xmlSecDSigCtxVerify(pDsigCtx , pNode);
+
+    // Also verify manifest: this is empty for ODF, but contains everything (except signature metadata) for OOXML.
+    xmlSecSize nReferenceCount = xmlSecPtrListGetSize(&pDsigCtx->manifestReferences);
+    // Require that all manifest references are also good.
+    xmlSecSize nReferenceGood = 0;
+    for (xmlSecSize nReference = 0; nReference < nReferenceCount; ++nReference)
+    {
+        xmlSecDSigReferenceCtxPtr pReference = static_cast<xmlSecDSigReferenceCtxPtr>(xmlSecPtrListGetItem(&pDsigCtx->manifestReferences, nReference));
+        if (pReference)
+        {
+             if (pReference->status == xmlSecDSigStatusSucceeded)
+                 ++nReferenceGood;
+        }
+    }
+
+    if (rs == 0 && nReferenceCount == nReferenceGood)
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
