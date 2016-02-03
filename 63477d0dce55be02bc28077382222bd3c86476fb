@@ -16,6 +16,24 @@
       "revId": "63477d0dce55be02bc28077382222bd3c86476fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6048ba5c",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-03T11:24:28Z",
+      "side": 1,
+      "message": "Argh, well, since I am nitpicking anyway: Even better use constexpr instead of const to not have static globals.",
+      "parentUuid": "3aaa91ec_5503be0f",
+      "revId": "63477d0dce55be02bc28077382222bd3c86476fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
