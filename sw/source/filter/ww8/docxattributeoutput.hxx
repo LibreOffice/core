@@ -821,6 +821,9 @@ private:
     sal_Int32 m_nHyperLinkCount;
     sal_Int16 m_nFieldsInHyperlink;
 
+    // If the exported numbering rule defines the outlines
+    bool m_bExportingOutline;
+
     struct PostponedGraphic
     {
         PostponedGraphic( const SwGrfNode* n, Size s, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* sObj )
