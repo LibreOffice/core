@@ -31,30 +31,30 @@ class SvTokenStream;
 
 class Svint
 {
-    int     nVal;
+    int     bVal;
     bool    bSet;
 public:
-                Svint() { nVal = 0; bSet = false; }
-                Svint( int n ) : nVal( n ), bSet( true ) {}
-                Svint( int n, bool bSetP ) : nVal( n ), bSet( bSetP ) {}
-    Svint    &  operator = ( int n ) { nVal = n; bSet = true; return *this; }
+                Svint() { bVal = 0; bSet = false; }
+                Svint( int n ) : bVal( n ), bSet( true ) {}
+                Svint( int n, bool bSetP ) : bVal( n ), bSet( bSetP ) {}
+    Svint    &  operator = ( int n ) { bVal = n; bSet = true; return *this; }
 
-    operator    int ()const { return nVal; }
+    operator    int ()const { return bVal; }
     bool        IsSet() const { return bSet; }
 };
 
 
 class SvBOOL
 {
-    bool  nVal:1,
+    bool  bVal:1,
           bSet:1;
 public:
-                SvBOOL() { bSet = nVal = false; }
-                SvBOOL( bool n ) : nVal( n ), bSet( true ) {}
-                SvBOOL( bool n, bool bSetP ) : nVal( n ), bSet( bSetP ) {}
-    SvBOOL &    operator = ( bool n ) { nVal = n; bSet = true; return *this; }
+                SvBOOL() { bSet = bVal = false; }
+                SvBOOL( bool b ) : bVal( b ), bSet( true ) {}
+                SvBOOL( bool b, bool bSetP ) : bVal( b ), bSet( bSetP ) {}
+    SvBOOL &    operator = ( bool n ) { bVal = n; bSet = true; return *this; }
 
-    operator    bool() const { return nVal; }
+    operator    bool() const { return bVal; }
     bool        IsSet() const { return bSet; }
 
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
@@ -77,7 +77,7 @@ public:
                     return !m_aStr.isEmpty() || nValue != 0;
                 }
     sal_uInt32  GetValue() const { return nValue; }
-    void        SetValue( sal_uInt32 nVal ) { nValue = nVal; }
+    void        SetValue( sal_uInt32 bVal ) { nValue = bVal; }
 
     void        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     void        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,

@@ -375,7 +375,7 @@ private:
     XclExpString                sName;
     XclExpString                sComment;
     XclExpString                sUserName;
-    bool                        nProtected;
+    bool                        bProtected;
 
     std::vector<ExcEScenarioCell> aCells;
 

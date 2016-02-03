@@ -1346,7 +1346,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
     if( sComment.Len() )
         nRecLen += sComment.GetSize();
-    nProtected = (nFlags & SC_SCENARIO_PROTECT);
+    bProtected = (nFlags & SC_SCENARIO_PROTECT);
 
     sUserName.Assign( rRoot.GetUserName(), EXC_STR_DEFAULT, 255 );
     nRecLen += sUserName.GetSize();
@@ -1404,7 +1404,7 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
     sal_uInt16 count = aCells.size();
 
     rStrm   << (sal_uInt16) count               // number of cells
-            << sal_uInt8(nProtected)            // fProtection
+            << sal_uInt8(bProtected)            // fProtection
             << (sal_uInt8) 0                    // fHidden
             << (sal_uInt8) sName.Len()          // length of scen name
             << (sal_uInt8) sComment.Len()       // length of comment
@@ -1441,7 +1441,7 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_scenario,
             XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
-            XML_locked,     XclXmlUtils::ToPsz( nProtected ),
+            XML_locked,     XclXmlUtils::ToPsz( bProtected ),
             // OOXTODO: XML_hidden,
             XML_count,      OString::number(  aCells.size() ).getStr(),
             XML_user,       XESTRING_TO_PSZ( sUserName ),

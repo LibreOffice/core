@@ -42,7 +42,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
-    bool        nSuccess    = false;
+    bool        bSuccess    = false;
     sal_Int32       nPointPos   = rAreaStr.indexOf('.');
     sal_Int32       nColonPos   = rAreaStr.indexOf(':');
     OUString      aStrArea( rAreaStr );
@@ -55,14 +55,14 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
         aStrArea += rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
     }
 
-    nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
+    bSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
 
-    if ( nSuccess )
+    if ( bSuccess )
         rArea = ScArea( startPos.Tab(),
                         startPos.Col(), startPos.Row(),
                         endPos.Col(),   endPos.Row() );
 
-    return nSuccess;
+    return bSuccess;
 }
 
 void ScRangeUtil::CutPosString( const OUString&   theAreaStr,

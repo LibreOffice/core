@@ -43,7 +43,7 @@ private:
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
     sal_uInt8*          pPalette;
-    bool                nStatus;            // from now on do not read status from stream ( SJ )
+    bool                bStatus;            // from now on do not read status from stream ( SJ )
 
 
     void                ImplReadBody(BitmapWriteAccess * pAcc);
@@ -72,7 +72,7 @@ PCXReader::PCXReader(SvStream &rStream)
     , nResX(0)
     , nResY(0)
     , nDestBitsPerPixel(0)
-    , nStatus(false)
+    , bStatus(false)
 {
     pPalette = new sal_uInt8[ 768 ];
 }
@@ -91,12 +91,12 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
 
     // read header:
 
-    nStatus = true;
+    bStatus = true;
 
     ImplReadHeader();
 
     // Write BMP header and conditionally (maybe invalid for now) color palette:
-    if ( nStatus )
+    if ( bStatus )
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
         Bitmap::ScopedWriteAccess pAcc(aBmp);
@@ -118,7 +118,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
 
         // If an extended color palette exists at the end of the file, then read it and
         // and write again in palette:
-        if ( nDestBitsPerPixel == 8 && nStatus )
+        if ( nDestBitsPerPixel == 8 && bStatus )
         {
             sal_uInt8* pPal = pPalette;
             m_rPCX.SeekRel(1);
@@ -136,7 +136,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
             rBitmap.SetPrefMapMode(aMapMode);
             rBitmap.SetPrefSize(Size(nWidth,nHeight));
         }
-    */  if ( nStatus )
+    */  if ( bStatus )
         {
             rGraphic = aBmp;
             return true;
@@ -151,7 +151,7 @@ void PCXReader::ImplReadHeader()
     m_rPCX.ReadUChar( nbyte ).ReadUChar( nVersion ).ReadUChar( nEncoding );
     if ( nbyte!=0x0a || (nVersion != 0 && nVersion != 2 && nVersion != 3 && nVersion != 5) || nEncoding > 1 )
     {
-        nStatus = false;
+        bStatus = false;
         return;
     }
 
@@ -162,7 +162,7 @@ void PCXReader::ImplReadHeader()
 
     if ((nMinX > nMaxX) || (nMinY > nMaxY))
     {
-        nStatus = false;
+        bStatus = false;
         return;
     }
 
@@ -191,7 +191,7 @@ void PCXReader::ImplReadHeader()
     if ( ( nDestBitsPerPixel != 1 && nDestBitsPerPixel != 4 && nDestBitsPerPixel != 8 && nDestBitsPerPixel != 24 )
         || nPlanes > 4 || nBytesPerPlaneLin < ( ( nWidth * nBitsPerPlanePix+7 ) >> 3 ) )
     {
-        nStatus = false;
+        bStatus = false;
         return;
     }
 
@@ -214,7 +214,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
     //sanity check there is enough data before trying allocation
     if (nBytesPerPlaneLin > m_rPCX.remainingSize() / nPlanes)
     {
-        nStatus = false;
+        bStatus = false;
         return;
     }
 
@@ -226,7 +226,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
     {
         if (!m_rPCX.good())
         {
-            nStatus = false;
+            bStatus = false;
             break;
         }
         nPercent = ny * 60 / nHeight + 10;
@@ -378,7 +378,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                 }
                 break;
             default :
-                nStatus = false;
+                bStatus = false;
                 break;
         }
     }

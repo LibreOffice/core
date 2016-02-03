@@ -1213,7 +1213,7 @@ static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
 {
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
-    bool        nRet = false;
+    bool        bRet = false;
 
     if ( pChild )
     {
@@ -1230,10 +1230,10 @@ static bool ImplHandleEndExtTextInput( vcl::Window* /* pWindow */ )
             delete [] pWinData->mpExtOldAttrAry;
             pWinData->mpExtOldAttrAry = nullptr;
         }
-        nRet = !ImplCallCommand( pChild, CommandEventId::EndExtTextInput );
+        bRet = !ImplCallCommand( pChild, CommandEventId::EndExtTextInput );
     }
 
-    return nRet;
+    return bRet;
 }
 
 static void ImplHandleExtTextInputPos( vcl::Window* pWindow,

@@ -69,7 +69,7 @@ private:
 public:
     OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
         sal_Int16 nOldNumberingStartValue, sal_Int16 mnNewNumberingStartValue,
-        bool  nOldbParaIsNumberingRestart, bool nbNewParaIsNumberingRestart );
+        bool  bOldbParaIsNumberingRestart, bool bNewParaIsNumberingRestart );
 
     virtual void    Undo() override;
     virtual void    Redo() override;
