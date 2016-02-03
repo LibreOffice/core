@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_75819a8f",
+        "filename": "extras/source/autocorr/lang/hu/DocumentList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2016-02-03T09:22:57Z",
+      "side": 1,
+      "message": "Please do not autocorrect \u0027e-mail\u0027 to this awful orthography, it is not a correction of a common typo.",
+      "range": {
+        "startLine": 92,
+        "startChar": 78,
+        "endLine": 92,
+        "endChar": 85
+      },
+      "revId": "122b1fd6e57abb716e849466aefb1a5142f0b672",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
