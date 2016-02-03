@@ -325,7 +325,6 @@
 #define SID_NAVIGATOR_STATE                 (SID_SD_START+288)
 #define SID_NAVIGATOR_INIT                  (SID_SD_START+289)
     // FREE
-#define SID_NAVIGATOR_PEN                   (SID_SD_START+291)
 #define SID_NAVIGATOR_PAGE                  (SID_SD_START+292)
 #define SID_NAVIGATOR_OBJECT                (SID_SD_START+293)
 #define SID_ANIMATOR_INIT                   (SID_SD_START+294)

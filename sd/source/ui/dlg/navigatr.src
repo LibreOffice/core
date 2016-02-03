@@ -48,17 +48,6 @@ Window FLT_NAVIGATOR
         {
             ToolBoxItem
             {
-                AutoCheck = TRUE ;
-                Identifier = TBI_PEN ;
-                HelpId = HID_SD_NAVIGATOR_TBI_PEN ;
-                Text [ en-US ] = "Pointer" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SEPARATOR ;
-            };
-            ToolBoxItem
-            {
                 Identifier = TBI_FIRST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
                 Text [ en-US ] = "First Slide" ;
@@ -115,7 +104,6 @@ Window FLT_NAVIGATOR
     #define NAVIGATR_IDLIST \
         IdList =            \
         {                   \
-            TBI_PEN ;   \
             TBI_FIRST ; \
             TBI_PREVIOUS ;  \
             TBI_NEXT ;  \

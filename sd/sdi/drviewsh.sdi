@@ -106,11 +106,6 @@ interface ImpressEditView : DrawView
         ExecMethod = ExecAnimationWin ;
         StateMethod = GetAnimationWinState ;
     ]
-    SID_NAVIGATOR_PEN // ole : no, status : ?
-    [
-        ExecMethod = ExecNavigatorWin ;
-        StateMethod = GetNavigatorWinState ;
-    ]
     SID_PRESENTATION_DLG
     [
         ExecMethod = FuTemporary ;
