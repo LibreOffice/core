@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_5503be0f",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-02-03T10:15:01Z",
+      "side": 1,
+      "message": "While at it, why use the preprocessor here at all?\n\n static const sal_uInt16 nMinZoom \u003d 25;\n\n(adding a possible anonymous namespace is a matter of taste.)\n\nshould be generally preferable. see:\n* http://stackoverflow.com/questions/1637332/static-const-vs-define\n* http://stackoverflow.com/questions/1674032/static-const-vs-define-vs-enum#1674040\nfor a bikeshedding discussion.",
+      "revId": "63477d0dce55be02bc28077382222bd3c86476fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
