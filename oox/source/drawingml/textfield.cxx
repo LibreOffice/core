@@ -140,6 +140,16 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
         aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
     }
+    else if ( sType == "slidecount" )
+    {
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageCount" );
+        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+    }
+    else if ( sType == "slidename" )
+    {
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageName" );
+        aFields.push_back( Reference< XTextField > ( xIface, uno::UNO_QUERY ) );
+    }
     else if ( sType.startsWith("file") )
     {
         OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
@@ -163,6 +173,11 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             default: // Path/File name
                 xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(0));
         }
+    }
+    else if( sType == "author" )
+    {
+        xIface = xFactory->createInstance( "com.sun.star.text.TextField.Author" );
+        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
     }
 }
 
