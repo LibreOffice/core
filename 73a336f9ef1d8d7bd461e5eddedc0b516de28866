@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_b5c66214",
+        "filename": "framework/source/uifactory/uielementfactorymanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-03T07:22:40Z",
+      "side": 1,
+      "message": "just return the value without an intermediate var",
+      "revId": "73a336f9ef1d8d7bd461e5eddedc0b516de28866",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
