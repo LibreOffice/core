@@ -383,6 +383,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             rootAttributes.addNamespaceDeclaration("xsd", OfficeNamespaces.XSD_NS);
             rootAttributes.addNamespaceDeclaration("xsi", OfficeNamespaces.XSI_NS);
             rootAttributes.addNamespaceDeclaration("grddl", OfficeNamespaces.GRDDL_NS);
+            rootAttributes.addNamespaceDeclaration("loext", OfficeNamespaces.LOEXT_NS);
             rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version",
                     ODF_VERSION);
 
