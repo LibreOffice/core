@@ -95,7 +95,7 @@ char const * SyntaxStrings[] = {
 "\t\tRecordPerSet*, RecordPerItem, RecordManual, NoRecord",
 "\t\tRecordAbsolute",
 "\t\tStateMethod    = Identifier",
-"\t\tSynchron*, Asynchron",
+"\t\tAsynchron",
 "\t\tToggle",
 "\t']'\n",
 

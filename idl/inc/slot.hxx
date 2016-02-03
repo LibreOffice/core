@@ -40,7 +40,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aToggle;
     SvBOOL          aAutoUpdate;
 
-    SvBOOL          aSynchron;  // exclusive
     SvBOOL          aAsynchron;
 
     SvBOOL          aRecordPerItem;// exclusive
@@ -88,17 +87,9 @@ protected:
                 aAutoUpdate = bSet;
             }
 
-    void    SetSynchron( bool bSet )
-            {
-                aSynchron = bSet;
-                if( bSet )
-                    aAsynchron = false;
-            }
     void    SetAsynchron( bool bSet )
             {
                 aAsynchron = bSet;
-                if( bSet )
-                    aSynchron = false;
             }
 
     void    SetRecordPerItem( bool bSet )
@@ -159,7 +150,6 @@ public:
     bool                GetToggle() const;
     bool                GetAutoUpdate() const;
 
-    bool                GetSynchron() const;
     bool                GetAsynchron() const;
 
     bool                GetRecordPerItem() const;

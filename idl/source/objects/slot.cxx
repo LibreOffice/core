@@ -34,8 +34,7 @@ SvMetaObject *SvMetaSlot::MakeClone() const
 }
 
 SvMetaSlot::SvMetaSlot()
-    : aSynchron( true, false )
-    , aRecordPerSet( true, false )
+    : aRecordPerSet( true, false )
     , aRecordAbsolute( false, false )
     , pLinkedSlot(nullptr)
     , pNextSlot(nullptr)
@@ -46,7 +45,6 @@ SvMetaSlot::SvMetaSlot()
 
 SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     : SvMetaAttribute( pType )
-    , aSynchron( true, false )
     , aRecordPerSet( true, false )
     , aRecordAbsolute( false, false )
     , pLinkedSlot(nullptr)
@@ -148,17 +146,10 @@ bool SvMetaSlot::GetAutoUpdate() const
     if( aAutoUpdate.IsSet() || !GetRef() ) return aAutoUpdate;
     return static_cast<SvMetaSlot *>(GetRef())->GetAutoUpdate();
 }
-bool SvMetaSlot::GetSynchron() const
-{
-    // Synchron and Asynchron are exclusive
-    if( !GetRef() || aSynchron.IsSet() || aAsynchron.IsSet() )
-        return aSynchron;
-    return static_cast<SvMetaSlot *>(GetRef())->GetSynchron();
-}
 bool SvMetaSlot::GetAsynchron() const
 {
     // Synchron and Asynchron are exclusive
-    if( !GetRef() || aAsynchron.IsSet() || aSynchron.IsSet() )
+    if( !GetRef() || aAsynchron.IsSet() )
         return aAsynchron;
     return static_cast<SvMetaSlot *>(GetRef())->GetAsynchron();
 }
@@ -293,8 +284,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     if( aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm ) )
         SetAutoUpdate( aAutoUpdate ), bOk = true;
 
-    if( aSynchron.ReadSvIdl( SvHash_Synchron(), rInStm ) )
-        SetSynchron( aSynchron ), bOk = true;
     if( aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm ) )
         SetAsynchron( aAsynchron ), bOk = true;
 
@@ -821,8 +810,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_Toggle() ).getStr() ).WriteChar( '|' );
     if( GetAutoUpdate() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_AutoUpdate() ).getStr() ).WriteChar( '|' );
-    if( GetSynchron() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Synchron() ).getStr() ).WriteChar( '|' );
     if( GetAsynchron() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_Asynchron() ).getStr() ).WriteChar( '|' );
     if( GetRecordPerItem() )
