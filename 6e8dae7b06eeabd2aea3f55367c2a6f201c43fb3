@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a0e102d3",
+        "filename": "sc/inc/appoptio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T16:48:24Z",
+      "side": 1,
+      "message": "This is going to be a problem. The status bar function is stored in the user configuration, reading the old item\u0027s value as if it was a new value and storing the new value in the old value\u0027s item field will create compatibility problems between different releases that use the same configuration.\n\nSee appoptio.cxx\n\nInstead, I suggest to add a new configuration item and if not present convert the old item\u0027s value to the corresponding new value, and always store both, the new item and one of its functions as old item.",
+      "revId": "6e8dae7b06eeabd2aea3f55367c2a6f201c43fb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_00e736e5",
+        "filename": "sc/source/core/tool/appoptio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T16:48:24Z",
+      "side": 1,
+      "message": "Problem here. See comment in .hxx",
+      "revId": "6e8dae7b06eeabd2aea3f55367c2a6f201c43fb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_e0eb0aaf",
+        "filename": "sc/source/core/tool/appoptio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T16:48:24Z",
+      "side": 1,
+      "message": "Problem here. See comment in .hxx",
+      "revId": "6e8dae7b06eeabd2aea3f55367c2a6f201c43fb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_20c7d246",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T16:48:24Z",
+      "side": 1,
+      "message": "Using a comma can be confusing in locales that use a comma as decimal separator, or in case the number format uses a comma group separator. Rather use a semicolon instead.",
+      "range": {
+        "startLine": 141,
+        "startChar": 29,
+        "endLine": 141,
+        "endChar": 32
+      },
+      "revId": "6e8dae7b06eeabd2aea3f55367c2a6f201c43fb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_80c4c640",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T16:48:24Z",
+      "side": 1,
+      "message": "Nitpick: I\u0027d place that in the if(bFirst) branch so the value isn\u0027t assigned in each loop iteration (the compiler might optimize that anyway, but..)",
+      "revId": "6e8dae7b06eeabd2aea3f55367c2a6f201c43fb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c0dc0e1b",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T16:48:24Z",
+      "side": 1,
+      "message": "Or simply\n\n return !rFuncStr.isEmpty();",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 16
+      },
+      "revId": "6e8dae7b06eeabd2aea3f55367c2a6f201c43fb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
