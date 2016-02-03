@@ -26,7 +26,6 @@ interface Text : BaseText
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-        Cachable ;
     ]
      // Here should the slots be integrated, which are not supported
      // in StarWriter/WEB

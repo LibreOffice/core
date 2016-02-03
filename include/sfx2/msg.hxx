@@ -28,9 +28,8 @@
 #include <functional>
 
 enum class SfxSlotMode {
-    NONE            =    0x0000L, // exclusiv to VOLATILE, default
-    CACHABLE        =    0x0001L, // exclusiv to VOLATILE, default
-    VOLATILE        =    0x0002L, // per Timer every 2s get new, exclusive to CACHABLE
+    NONE            =    0x0000L, // default
+    VOLATILE        =    0x0002L, // per Timer every 2s get new,
 
     TOGGLE          =    0x0004L, // inverted for Execute old value
     AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
@@ -43,7 +42,7 @@ enum class SfxSlotMode {
     RECORDPERSET    =    0x0400L, // The whole Set is a Statement, default
     RECORDMANUAL    =    0x0800L, // Recording by the application developer is default
     RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
-    STANDARD        =   0x00411L, // CACHABLE | SYNCHRON | RECORDPERSET;
+    STANDARD        =   0x00410L, // SYNCHRON | RECORDPERSET;
 
     PROPGET         =    0x1000L, // get property
     PROPSET         =    0x2000L, // set property, exclusive to METHOD
@@ -64,7 +63,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffffbfL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffffbeL> {};
 }
 
 

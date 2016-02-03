@@ -26,7 +26,7 @@ interface StarImpress
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_APPLICATION ;
-        Cachable , Container ;
+        Container ;
     ]
 
     SID_ATTR_METRIC

@@ -21,7 +21,6 @@ SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -43,7 +42,6 @@ SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -68,7 +66,6 @@ SfxBoolItem TrackChanges FN_REDLINE_ON
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -93,7 +90,6 @@ SfxBoolItem TrackChangesBar SID_TRACK_CHANGES_BAR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -116,7 +112,6 @@ SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -139,7 +134,6 @@ SfxVoidItem AlignBottom FN_FRAME_ALIGN_VERT_BOTTOM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -165,7 +159,6 @@ SfxVoidItem AlignCharBottom FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -191,7 +184,6 @@ SfxVoidItem AlignCharTop FN_FRAME_ALIGN_VERT_CHAR_TOP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -217,7 +209,6 @@ SfxVoidItem AlignHorizontalCenter FN_FRAME_ALIGN_HORZ_CENTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -240,7 +231,6 @@ SfxVoidItem AlignLeft FN_FRAME_ALIGN_HORZ_LEFT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -263,7 +253,6 @@ SfxVoidItem AlignRight FN_FRAME_ALIGN_HORZ_RIGHT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -286,7 +275,6 @@ SfxVoidItem AlignRowBottom FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -312,7 +300,6 @@ SfxVoidItem AlignRowTop FN_FRAME_ALIGN_VERT_ROW_TOP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -338,7 +325,6 @@ SfxVoidItem AlignTop FN_FRAME_ALIGN_VERT_TOP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -364,7 +350,6 @@ SfxVoidItem AlignVerticalCenter FN_FRAME_ALIGN_VERT_CENTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -390,7 +375,6 @@ SfxVoidItem AlignVerticalCharCenter FN_FRAME_ALIGN_VERT_CHAR_CENTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -416,7 +400,6 @@ SfxVoidItem AlignVerticalRowCenter FN_FRAME_ALIGN_VERT_ROW_CENTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -442,7 +425,6 @@ SfxVoidItem AuthoritiesEntryDialog FN_EDIT_AUTH_ENTRY_DLG
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -465,7 +447,6 @@ SfxVoidItem AutoFormatApply FN_AUTOFORMAT_APPLY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -488,7 +469,6 @@ SfxVoidItem AutoFormatRedlineApply FN_AUTOFORMAT_REDLINE_APPLY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -511,7 +491,6 @@ SfxVoidItem AutoSum FN_TABLE_AUTOSUM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -534,7 +513,6 @@ SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -559,7 +537,6 @@ SfxVoidItem BackgroundDialog FN_FORMAT_BACKGROUND_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -582,7 +559,6 @@ SfxVoidItem SwBackspace FN_BACKSPACE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -605,7 +581,6 @@ SfxVoidItem BorderDialog FN_FORMAT_BORDER_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -628,7 +603,6 @@ SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -653,7 +627,6 @@ SfxVoidItem Calc FN_CALC_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -676,7 +649,6 @@ SfxVoidItem CalculateSel FN_CALCULATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -699,7 +671,6 @@ SfxBoolItem ChainFrames FN_FRAME_CHAIN
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -724,7 +695,6 @@ SfxVoidItem ChangeDatabaseField FN_CHANGE_DBFIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -747,7 +717,6 @@ SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -770,7 +739,6 @@ SfxVoidItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -796,7 +764,6 @@ SfxVoidItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -822,7 +789,6 @@ SfxVoidItem CharLeftSel FN_CHAR_LEFT_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -845,7 +811,6 @@ SfxVoidItem CharRightSel FN_CHAR_RIGHT_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -868,7 +833,6 @@ SfxVoidItem ClosePreview FN_CLOSE_PAGEPREVIEW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -891,7 +855,6 @@ SfxVoidItem CommentChangeTracking FN_REDLINE_COMMENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -914,7 +877,6 @@ SfxBoolItem ControlCodes FN_VIEW_META_CHARS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -939,7 +901,6 @@ SfxVoidItem ConvertTableText FN_CONVERT_TEXT_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -962,7 +923,6 @@ SfxVoidItem CreateAbstract FN_ABSTRACT_NEWDOC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -985,7 +945,6 @@ SfxVoidItem DecrementIndentValue FN_DEC_INDENT_OFFSET
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1008,7 +967,6 @@ SfxVoidItem DecrementLevel FN_NUM_BULLET_DOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1033,7 +991,6 @@ SfxVoidItem DecrementSubLevels FN_NUM_BULLET_OUTLINE_DOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1058,7 +1015,6 @@ SfxVoidItem DeleteColumns FN_TABLE_DELETE_COL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1081,7 +1037,6 @@ SfxVoidItem DeleteRows FN_TABLE_DELETE_ROW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1104,7 +1059,6 @@ SfxVoidItem DelLine FN_DELETE_WHOLE_LINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1127,7 +1081,6 @@ SfxVoidItem DelToEndOfLine FN_DELETE_LINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1150,7 +1103,6 @@ SfxVoidItem DelToEndOfPara FN_DELETE_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1173,7 +1125,6 @@ SfxVoidItem DelToEndOfSentence FN_DELETE_SENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1196,7 +1147,6 @@ SfxVoidItem DelToEndOfWord FN_DELETE_WORD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1219,7 +1169,6 @@ SfxVoidItem DelToStartOfLine FN_DELETE_BACK_LINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1242,7 +1191,6 @@ SfxVoidItem DelToStartOfPara FN_DELETE_BACK_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1265,7 +1213,6 @@ SfxVoidItem DelToStartOfSentence FN_DELETE_BACK_SENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1288,7 +1235,6 @@ SfxVoidItem DelToStartOfWord FN_DELETE_BACK_WORD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1311,7 +1257,6 @@ SfxVoidItem DistributeColumns FN_TABLE_BALANCE_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1334,7 +1279,6 @@ SfxVoidItem DistributeRows FN_TABLE_BALANCE_ROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1357,7 +1301,6 @@ SfxVoidItem EditCurIndex FN_EDIT_CURRENT_TOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1380,7 +1323,6 @@ SfxVoidItem EditGlossary FN_GLOSSARY_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -1403,7 +1345,6 @@ SfxVoidItem EditHyperlink FN_EDIT_HYPERLINK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1426,7 +1367,6 @@ SfxVoidItem EditRegion FN_EDIT_REGION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1449,7 +1389,6 @@ SfxVoidItem EndOfDocumentSel FN_END_OF_DOCUMENT_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1472,7 +1411,6 @@ SfxVoidItem EndOfLineSel FN_END_OF_LINE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1495,7 +1433,6 @@ SfxVoidItem EndOfParaSel FN_END_OF_PARA_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1518,7 +1455,6 @@ SfxVoidItem EntireColumn FN_TABLE_SELECT_COL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1541,7 +1477,6 @@ SfxVoidItem EntireRow FN_TABLE_SELECT_ROW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1564,7 +1499,6 @@ SfxVoidItem Escape FN_ESCAPE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1587,7 +1521,6 @@ SfxVoidItem ExecuteMacroField FN_EXECUTE_MACROFIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1610,7 +1543,6 @@ SfxBoolItem ExpandGlossary FN_EXPAND_GLOSSARY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1633,7 +1565,6 @@ SfxVoidItem FieldDialog FN_EDIT_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1656,7 +1587,6 @@ SfxBoolItem Fieldnames FN_VIEW_FIELDNAME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1681,7 +1611,6 @@ SfxBoolItem Fields FN_VIEW_FIELDS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1706,7 +1635,6 @@ SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1731,7 +1659,6 @@ SfxVoidItem FootnoteDialog FN_FORMAT_FOOTNOTE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1754,7 +1681,6 @@ SfxVoidItem EditFootnote FN_EDIT_FOOTNOTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1777,7 +1703,6 @@ SfxVoidItem FormatColumns FN_FORMAT_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1800,7 +1725,6 @@ SwFormatDrop FormatDropcap FN_FORMAT_DROPCAPS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1825,7 +1749,6 @@ SfxVoidItem FrameDialog FN_FORMAT_FRAME_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1848,7 +1771,6 @@ SfxBoolItem GoDown FN_LINE_DOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1871,7 +1793,6 @@ SfxBoolItem GoLeft FN_CHAR_LEFT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1894,7 +1815,6 @@ SfxBoolItem GoRight FN_CHAR_RIGHT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1917,7 +1837,6 @@ SfxVoidItem GoToAnchor FN_FRAME_TO_ANCHOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1940,7 +1859,6 @@ SfxVoidItem GoToEnd FN_END_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1963,7 +1881,6 @@ SfxVoidItem GoToEndOfColumn FN_END_OF_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1986,7 +1903,6 @@ SfxBoolItem GoToEndOfDoc FN_END_OF_DOCUMENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2009,7 +1925,6 @@ SfxBoolItem GoToEndOfLine FN_END_OF_LINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2032,7 +1947,6 @@ SfxVoidItem GoToEndOfNextColumn FN_END_OF_NEXT_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2055,7 +1969,6 @@ SfxVoidItem GoToEndOfNextPage FN_END_OF_NEXT_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2078,7 +1991,6 @@ SfxVoidItem GoToEndOfNextPageSel FN_END_OF_NEXT_PAGE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2101,7 +2013,6 @@ SfxVoidItem GoToEndOfPage FN_END_OF_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2124,7 +2035,6 @@ SfxVoidItem GoToEndOfPageSel FN_END_OF_PAGE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2147,7 +2057,6 @@ SfxBoolItem GoToEndOfPara FN_END_OF_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2170,7 +2079,6 @@ SfxVoidItem GoToEndOfPrevColumn FN_END_OF_PREV_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2193,7 +2101,6 @@ SfxVoidItem GoToEndOfPrevPage FN_END_OF_PREV_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2216,7 +2123,6 @@ SfxVoidItem GoToEndOfPrevPageSel FN_END_OF_PREV_PAGE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2239,7 +2145,6 @@ SfxBoolItem GotoNextIndexMark FN_NEXT_TOXMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2262,7 +2167,6 @@ SfxBoolItem GotoNextInputField FN_GOTO_NEXT_INPUTFLD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2285,7 +2189,6 @@ SfxBoolItem GotoNextObject FN_GOTO_NEXT_OBJ
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2308,7 +2211,6 @@ SfxBoolItem GoToNextPara FN_NEXT_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2331,7 +2233,6 @@ SfxBoolItem GotoNextPlacemarker FN_GOTO_NEXT_MARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2354,7 +2255,6 @@ SfxBoolItem GoToNextSentence FN_NEXT_SENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2377,7 +2277,6 @@ SfxVoidItem GotoNextSentenceSel FN_NEXT_SENT_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2400,7 +2299,6 @@ SfxBoolItem GotoNextTableFormula FN_NEXT_TBLFML
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2423,7 +2321,6 @@ SfxBoolItem GoToNextWord FN_NEXT_WORD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2446,7 +2343,6 @@ SfxBoolItem GotoNextWrongTableFormula FN_NEXT_TBLFML_ERR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2469,7 +2365,6 @@ SfxVoidItem GotoPage FN_NAVIGATION_PI_GOTO_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2492,7 +2387,6 @@ SfxBoolItem GotoPrevIndexMark FN_PREV_TOXMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2515,7 +2409,6 @@ SfxBoolItem GotoPrevInputField FN_GOTO_PREV_INPUTFLD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2538,7 +2431,6 @@ SfxBoolItem GotoPrevObject FN_GOTO_PREV_OBJ
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2561,7 +2453,6 @@ SfxBoolItem GoToPrevPara FN_PREV_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2584,7 +2475,6 @@ SfxBoolItem GotoPrevPlacemarker FN_GOTO_PREV_MARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2607,7 +2497,6 @@ SfxBoolItem GoToPrevSentence FN_PREV_SENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2630,7 +2519,6 @@ SfxVoidItem GotoPrevSentenceSel FN_PREV_SENT_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2653,7 +2541,6 @@ SfxBoolItem GotoPrevTableFormula FN_PREV_TBLFML
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2676,7 +2563,6 @@ SfxBoolItem GoToPrevWord FN_PREV_WORD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2699,7 +2585,6 @@ SfxBoolItem GotoPrevWrongTableFormula FN_PREV_TBLFML_ERR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2722,7 +2607,6 @@ SfxVoidItem GoToStartOfTable FN_START_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2745,7 +2629,6 @@ SfxVoidItem GoToStartOfColumn FN_START_OF_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2768,7 +2651,6 @@ SfxBoolItem GoToStartOfDoc FN_START_OF_DOCUMENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2791,7 +2673,6 @@ SfxBoolItem GoToStartOfLine FN_START_OF_LINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2814,7 +2695,6 @@ SfxVoidItem GoToStartOfNextColumn FN_START_OF_NEXT_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2837,7 +2717,6 @@ SfxVoidItem GoToStartOfNextPage FN_START_OF_NEXT_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2860,7 +2739,6 @@ SfxVoidItem GoToStartOfNextPageSel FN_START_OF_NEXT_PAGE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2883,7 +2761,6 @@ SfxVoidItem GoToStartOfPage FN_START_OF_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2906,7 +2783,6 @@ SfxVoidItem GoToStartOfPageSel FN_START_OF_PAGE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2929,7 +2805,6 @@ SfxBoolItem GoToStartOfPara FN_START_OF_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2952,7 +2827,6 @@ SfxVoidItem GoToStartOfPrevColumn FN_START_OF_PREV_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2975,7 +2849,6 @@ SfxVoidItem GoToStartOfPrevPage FN_START_OF_PREV_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2998,7 +2871,6 @@ SfxVoidItem GoToStartOfPrevPageSel FN_START_OF_PREV_PAGE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3021,7 +2893,6 @@ SfxBoolItem GoUp FN_LINE_UP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3044,7 +2915,6 @@ SfxBoolItem ShowGraphics FN_VIEW_GRAPHIC
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3069,7 +2939,6 @@ SfxVoidItem GraphicDialog FN_FORMAT_GRAFIC_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3092,7 +2961,6 @@ SfxVoidItem Grow FN_GROW_FONT_SIZE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3115,7 +2983,6 @@ SfxBoolItem HScroll FN_HSCROLLBAR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3140,7 +3007,6 @@ SfxUInt16Item HtmlMode SID_HTML_MODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3165,7 +3031,6 @@ SfxVoidItem Hyphenate FN_HYPHENATE_OPT_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3188,7 +3053,6 @@ SfxVoidItem IncrementIndentValue FN_INC_INDENT_OFFSET
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3211,7 +3075,6 @@ SfxVoidItem IncrementLevel FN_NUM_BULLET_UP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3236,7 +3099,6 @@ SfxVoidItem IncrementSubLevels FN_NUM_BULLET_OUTLINE_UP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3261,7 +3123,6 @@ SfxVoidItem IndexEntryDialog FN_EDIT_IDX_ENTRY_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3284,7 +3145,6 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3307,7 +3167,6 @@ SfxVoidItem InsertAnnotation FN_POSTIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3330,7 +3189,6 @@ SfxVoidItem InsertAuthorField FN_INSERT_FLD_AUTHOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3353,7 +3211,6 @@ SfxVoidItem InsertAuthoritiesEntry FN_INSERT_AUTH_ENTRY_DLG
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3376,7 +3233,6 @@ SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3399,7 +3255,6 @@ SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3422,7 +3277,6 @@ SfxVoidItem InsertCaptionDialog FN_INSERT_CAPTION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3445,7 +3299,6 @@ SfxVoidItem InsertColumnBreak FN_INSERT_COLUMN_BREAK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3468,7 +3321,6 @@ SfxVoidItem InsertColumnDialog FN_TABLE_INSERT_COL_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3491,7 +3343,6 @@ SfxVoidItem InsertColumnsBefore FN_TABLE_INSERT_COL_BEFORE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3515,7 +3366,6 @@ SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3538,7 +3388,6 @@ SfxVoidItem InsertColumnsAfter FN_TABLE_INSERT_COL_AFTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3561,7 +3410,6 @@ SfxStringItem InsertSection FN_INSERT_REGION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3587,7 +3435,6 @@ SfxVoidItem InsertCtrl FN_INSERT_CTRL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3612,7 +3459,6 @@ SfxVoidItem InsertDateField FN_INSERT_FLD_DATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3635,7 +3481,6 @@ SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3658,7 +3503,6 @@ SfxVoidItem InsertEnvelope FN_ENVELOP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3681,7 +3525,6 @@ SfxBoolItem InsertField FN_INSERT_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3707,7 +3550,6 @@ SfxBoolItem InsertFieldCtrl FN_INSERT_FIELD_CTRL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3732,7 +3574,6 @@ SfxVoidItem InsertFootnoteDialog FN_INSERT_FOOTNOTE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3755,7 +3596,6 @@ SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3778,7 +3618,6 @@ SfxVoidItem InsertFormula FN_EDIT_FORMULA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3801,7 +3640,6 @@ SfxVoidItem InsertFrame FN_INSERT_FRAME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3827,7 +3665,6 @@ SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3853,7 +3690,6 @@ SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3876,7 +3712,6 @@ SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3899,7 +3734,6 @@ SfxVoidItem InsertIndexesEntry FN_INSERT_IDX_ENTRY_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3922,7 +3756,6 @@ SfxVoidItem InsertLinebreak FN_INSERT_LINEBREAK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3945,7 +3778,6 @@ SfxVoidItem InsertMultiIndex FN_INSERT_MULTI_TOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3968,7 +3800,6 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3993,7 +3824,6 @@ SfxVoidItem InsertObjCtrl FN_INSERT_OBJ_CTRL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4018,7 +3848,6 @@ SfxVoidItem InsertObjectDialog FN_INSERT_OBJECT_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4041,7 +3870,6 @@ SfxVoidItem InsertObjectStarMath FN_INSERT_SMA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4064,7 +3892,6 @@ SfxVoidItem InsertPagebreak FN_INSERT_PAGEBREAK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4087,7 +3914,6 @@ SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4110,7 +3936,6 @@ SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4136,7 +3961,6 @@ SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4162,7 +3986,6 @@ SfxVoidItem InsertPageNumberField FN_INSERT_FLD_PGNUMBER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4185,7 +4008,6 @@ SfxVoidItem InsertPara FN_INSERT_BREAK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4208,7 +4030,6 @@ SfxVoidItem InsertReferenceField FN_INSERT_REF_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4231,7 +4052,6 @@ SfxVoidItem InsertRowDialog FN_TABLE_INSERT_ROW_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4254,7 +4074,6 @@ SfxVoidItem InsertRowsBefore FN_TABLE_INSERT_ROW_BEFORE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4278,7 +4097,6 @@ SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4301,7 +4119,6 @@ SfxVoidItem InsertRowsAfter FN_TABLE_INSERT_ROW_AFTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4324,7 +4141,6 @@ SfxVoidItem InsertScript FN_JAVAEDIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4347,7 +4163,6 @@ SfxVoidItem InsertTable FN_INSERT_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4373,7 +4188,6 @@ SfxVoidItem InsertTimeField FN_INSERT_FLD_TIME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4396,7 +4210,6 @@ SfxVoidItem InsertTitleField FN_INSERT_FLD_TITLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4419,7 +4232,6 @@ SfxVoidItem InsertTopicField FN_INSERT_FLD_TOPIC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4442,7 +4254,6 @@ SfxVoidItem JumpDownThisLevel FN_NUM_BULLET_NEXT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4465,7 +4276,6 @@ SfxVoidItem JumpToEndOfDoc FN_END_DOC_DIRECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4488,7 +4298,6 @@ SfxVoidItem JumpToFooter FN_TO_FOOTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4511,7 +4320,6 @@ SfxVoidItem JumpToFootnoteOrAnchor FN_FOOTNOTE_TO_ANCHOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4534,7 +4342,6 @@ SfxVoidItem JumpToHeader FN_TO_HEADER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4557,7 +4364,6 @@ SfxBoolItem JumpToNextBookmark FN_NEXT_BOOKMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4580,7 +4386,6 @@ SfxBoolItem JumpToNextFootnote FN_NEXT_FOOTNOTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4603,7 +4408,6 @@ SfxBoolItem JumpToNextFrame FN_CNTNT_TO_NEXT_FRAME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4626,7 +4430,6 @@ SfxBoolItem JumpToNextRegion FN_GOTO_NEXT_REGION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4649,7 +4452,6 @@ SfxBoolItem JumpToNextTable FN_NEXT_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4672,7 +4474,6 @@ SfxBoolItem JumpToPrevBookmark FN_PREV_BOOKMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4695,7 +4496,6 @@ SfxBoolItem JumpToPrevFootnote FN_PREV_FOOTNOTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4718,7 +4518,6 @@ SfxBoolItem JumpToPrevRegion FN_GOTO_PREV_REGION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4741,7 +4540,6 @@ SfxBoolItem JumpToPrevTable FN_PREV_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4764,7 +4562,6 @@ SfxVoidItem JumpToReference FN_GOTO_REFERENCE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4787,7 +4584,6 @@ SfxVoidItem JumpToStartOfDoc FN_START_DOC_DIRECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4810,7 +4606,6 @@ SfxVoidItem JumpUpThisLevel FN_NUM_BULLET_PREV
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4833,7 +4628,6 @@ SfxVoidItem LineDownSel FN_LINE_DOWN_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4856,7 +4650,6 @@ SfxVoidItem LineNumberingDialog FN_LINE_NUMBERING_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4879,7 +4672,6 @@ SfxVoidItem LineUpSel FN_LINE_UP_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4902,7 +4694,6 @@ SfxVoidItem LinkDialog FN_EDIT_LINK_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4925,7 +4716,6 @@ SfxVoidItem LoadStyles SID_TEMPLATE_LOAD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4948,7 +4738,6 @@ SfxBoolItem Marks FN_VIEW_MARKS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4973,7 +4762,6 @@ SfxVoidItem MergeCells FN_TABLE_MERGE_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4996,7 +4784,6 @@ SfxVoidItem MergeDialog FN_QRY_MERGE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5019,7 +4806,6 @@ SfxVoidItem MailMergeWizard FN_MAILMERGE_WIZARD
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5042,7 +4828,6 @@ SfxBoolItem MergeTable FN_TABLE_MERGE_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5065,7 +4850,6 @@ SfxVoidItem ApplyStyleHead1 FN_FORMAT_APPLY_HEAD1
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5088,7 +4872,6 @@ SfxVoidItem ApplyStyleHead2 FN_FORMAT_APPLY_HEAD2
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5111,7 +4894,6 @@ SfxVoidItem ApplyStyleHead3 FN_FORMAT_APPLY_HEAD3
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5134,7 +4916,6 @@ SfxVoidItem ApplyStyleDefault FN_FORMAT_APPLY_DEFAULT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5157,7 +4938,6 @@ SfxVoidItem ApplyStyleTextbody FN_FORMAT_APPLY_TEXTBODY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5180,7 +4960,6 @@ SfxBoolItem MirrorGraphicOnEvenPages FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5206,7 +4985,6 @@ SfxBoolItem MirrorOnEvenPages FN_FRAME_MIRROR_ON_EVEN_PAGES
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5232,7 +5010,6 @@ SfxVoidItem MoveDown FN_NUM_BULLET_MOVEDOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5257,7 +5034,6 @@ SfxVoidItem MoveDownSubItems FN_NUM_BULLET_OUTLINE_MOVEDOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5282,7 +5058,6 @@ SfxVoidItem MoveUp FN_NUM_BULLET_MOVEUP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5307,7 +5082,6 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5333,7 +5107,6 @@ SfxVoidItem ObjectTitleDescription FN_TITLE_DESCRIPTION_SHAPE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5359,7 +5132,6 @@ SfxVoidItem NameGroup FN_NAME_SHAPE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5385,7 +5157,6 @@ SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5408,7 +5179,6 @@ SfxBoolItem NewHtmlDoc FN_NEW_HTML_DOC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5431,7 +5201,6 @@ SfxStringItem NumberFormat FN_NUMBER_FORMAT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5456,7 +5225,6 @@ SfxVoidItem NumberFormatCurrency FN_NUMBER_CURRENCY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5479,7 +5247,6 @@ SfxVoidItem NumberFormatDate FN_NUMBER_DATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5502,7 +5269,6 @@ SfxVoidItem NumberFormatDecimal FN_NUMBER_TWODEC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5525,7 +5291,6 @@ SfxVoidItem NumberFormatPercent FN_NUMBER_PERCENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5548,7 +5313,6 @@ SfxVoidItem NumberFormatScientific FN_NUMBER_SCIENTIFIC
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5571,7 +5335,6 @@ SfxVoidItem NumberFormatStandard FN_NUMBER_STANDARD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5594,7 +5357,6 @@ SfxVoidItem NumberFormatTime FN_NUMBER_TIME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5617,7 +5379,6 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5644,7 +5405,6 @@ SfxBoolItem NumberOrNoNumber FN_NUM_OR_NONUM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5669,7 +5429,6 @@ SfxVoidItem ObjectBackOne FN_FRAME_DOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5692,7 +5451,6 @@ SfxVoidItem ObjectForwardOne FN_FRAME_UP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5715,7 +5473,6 @@ SfxBoolItem OnlineAutoFormat FN_AUTOFORMAT_AUTO
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5740,7 +5497,6 @@ SfxVoidItem OptimizeTable FN_OPTIMIZE_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5765,7 +5521,6 @@ SfxVoidItem PageColumnDialog FN_FORMAT_PAGE_COLUMN_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5788,7 +5543,6 @@ SfxVoidItem PageDialog FN_FORMAT_PAGE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5811,7 +5565,6 @@ SfxVoidItem PageSettingDialog FN_FORMAT_PAGE_SETTING_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5834,7 +5587,6 @@ SfxVoidItem TitlePageDialog FN_FORMAT_TITLEPAGE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5857,7 +5609,6 @@ SfxVoidItem PageDown FN_PAGEDOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5880,7 +5631,6 @@ SfxVoidItem PageDownSel FN_PAGEDOWN_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5904,7 +5654,6 @@ SfxUInt16Item PageOffset FN_CHANGE_PAGENUM
 
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5929,7 +5678,6 @@ SfxVoidItem PageStyleApply FN_SET_PAGE_STYLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5952,7 +5700,6 @@ SfxStringItem PageStyleName FN_STAT_TEMPLATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5977,7 +5724,6 @@ SfxVoidItem PageUp FN_PAGEUP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6000,7 +5746,6 @@ SfxVoidItem PageUpSel FN_PAGEUP_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6023,7 +5768,6 @@ SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6049,7 +5793,6 @@ SfxBoolItem PrintLayout FN_PRINT_LAYOUT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6074,7 +5817,6 @@ SfxVoidItem PrintPagePreview FN_PRINT_PAGEPREVIEW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6097,7 +5839,6 @@ SfxVoidItem Protect FN_TABLE_SET_READ_ONLY_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6120,7 +5861,6 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6145,7 +5885,6 @@ SfxVoidItem RefreshView FN_REFRESH_VIEW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6168,7 +5907,6 @@ SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6193,7 +5931,6 @@ SfxVoidItem RemoveTableOf FN_REMOVE_CUR_TOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6216,7 +5953,6 @@ SfxVoidItem Repaginate FN_REPAGINATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6239,7 +5975,6 @@ SfxBoolItem RepeatSearch FN_REPEAT_SEARCH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6262,7 +5997,6 @@ SfxVoidItem ResetAttributes FN_FORMAT_RESET
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6285,7 +6019,6 @@ SfxVoidItem ResetTableProtection FN_TABLE_UNSET_READ_ONLY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6308,7 +6041,6 @@ SfxBoolItem Ruler FN_RULER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6333,7 +6065,6 @@ SfxVoidItem SbaInsert FN_QRY_INSERT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6356,7 +6087,6 @@ SfxVoidItem SbaInsertField FN_QRY_INSERT_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6379,7 +6109,6 @@ SfxVoidItem SbaMerge FN_QRY_MERGE_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6402,7 +6131,6 @@ SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6427,7 +6155,6 @@ SfxVoidItem NavigationPopup FN_NAVIGATION_POPUP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6450,7 +6177,6 @@ SfxVoidItem ScrollToPrevious FN_SCROLL_PREV
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6473,7 +6199,6 @@ SfxVoidItem ScrollToNext FN_SCROLL_NEXT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6496,7 +6221,6 @@ SfxVoidItem SelectTable FN_TABLE_SELECT_ALL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6519,7 +6243,6 @@ SfxUInt16Item SelectionMode FN_STAT_SELMODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6544,7 +6267,6 @@ SfxVoidItem SelectText FN_SELECT_PARA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6567,7 +6289,6 @@ SfxVoidItem SelectWord FN_SELECT_WORD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6590,7 +6311,6 @@ SfxVoidItem SendAbstractToStarImpress FN_ABSTRACT_STARIMPRESS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6613,7 +6333,6 @@ SfxVoidItem SendOutlineToClipboard FN_OUTLINE_TO_CLIPBOARD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6636,7 +6355,6 @@ SfxVoidItem SendOutlineToStarImpress FN_OUTLINE_TO_IMPRESS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6659,7 +6377,6 @@ SfxVoidItem SetAnchorAtChar FN_TOOL_ANCHOR_AT_CHAR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6685,7 +6402,6 @@ SfxVoidItem SetAnchorToChar FN_TOOL_ANCHOR_CHAR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6711,7 +6427,6 @@ SfxVoidItem SetAnchorToFrame FN_TOOL_ANCHOR_FRAME
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6737,7 +6452,6 @@ SfxVoidItem SetAnchorToPage FN_TOOL_ANCHOR_PAGE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6763,7 +6477,6 @@ SfxVoidItem SetAnchorToPara FN_TOOL_ANCHOR_PARAGRAPH
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6789,7 +6502,6 @@ SfxVoidItem SetColumnWidth FN_TABLE_SET_COL_WIDTH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6812,7 +6524,6 @@ SfxVoidItem SetExtSelection FN_SET_EXT_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6835,7 +6546,6 @@ SfxVoidItem SetMultiSelection FN_SET_ADD_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6858,7 +6568,6 @@ SfxVoidItem SetOptimalColumnWidth FN_TABLE_ADJUST_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6881,7 +6590,6 @@ SfxVoidItem SetOptimalRowHeight FN_TABLE_OPTIMAL_HEIGHT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6904,7 +6612,6 @@ SfxVoidItem SetRowHeight FN_TABLE_SET_ROW_HEIGHT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6927,7 +6634,6 @@ SfxBoolItem ShadowCursor FN_SHADOWCURSOR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6952,7 +6658,6 @@ SfxVoidItem ShiftBackspace FN_SHIFT_BACKSPACE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6975,7 +6680,6 @@ SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6999,7 +6703,6 @@ SfxBoolItem ShowAnnotations FN_VIEW_NOTES
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7024,7 +6727,6 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7049,7 +6751,6 @@ SfxBoolItem HideWhitespace FN_VIEW_HIDE_WHITESPACE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7074,7 +6775,6 @@ SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7099,7 +6799,6 @@ SfxVoidItem ShowTwoPages FN_SHOW_TWO_PAGES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7122,7 +6821,6 @@ SfxVoidItem ShowSinglePage FN_SHOW_SINGLE_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7145,7 +6843,6 @@ SfxBoolItem ShowBookview FN_SHOW_BOOKVIEW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7170,7 +6867,6 @@ SfxVoidItem Shrink FN_SHRINK_FONT_SIZE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7193,7 +6889,6 @@ SfxVoidItem SortDialog FN_SORTING_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -7217,7 +6912,6 @@ SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7240,7 +6934,6 @@ SfxVoidItem SplitTable FN_TABLE_SPLIT_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7263,7 +6956,6 @@ SfxVoidItem StartAutoCorrect FN_AUTO_CORRECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7286,7 +6978,6 @@ SfxVoidItem StartOfDocumentSel FN_START_OF_DOCUMENT_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7309,7 +7000,6 @@ SfxVoidItem StartOfLineSel FN_START_OF_LINE_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7332,7 +7022,6 @@ SfxVoidItem StartOfParaSel FN_START_OF_PARA_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7355,7 +7044,6 @@ SfxVoidItem StateBookmark FN_STAT_BOOKMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7378,7 +7066,6 @@ SfxStringItem StatePageNumber FN_STAT_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7403,7 +7090,6 @@ SfxStringItem StateZoom FN_STAT_ZOOM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7426,7 +7112,6 @@ SfxStringItem StateWordCount FN_STAT_WORDCOUNT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7449,7 +7134,6 @@ SfxBoolItem SubScript FN_SET_SUB_SCRIPT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7474,7 +7158,6 @@ SfxBoolItem SuperScript FN_SET_SUPER_SCRIPT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7499,7 +7182,6 @@ SfxVoidItem SwBrwInsert FN_SBA_BRW_INSERT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7522,7 +7204,6 @@ SfxVoidItem SwMailMerge FN_SBA_BRW_MERGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7545,7 +7226,6 @@ SfxVoidItem SwUpdate FN_SBA_BRW_UPDATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7568,7 +7248,6 @@ SfxBoolItem SynchronizeLabelsDlg FN_SYNC_LABELS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7591,7 +7270,6 @@ SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7616,7 +7294,6 @@ SfxVoidItem TableDialog FN_FORMAT_TABLE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -7639,7 +7316,6 @@ SfxVoidItem TableModeFix FN_TABLE_MODE_FIX
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7665,7 +7341,6 @@ SfxVoidItem TableModeFixProp FN_TABLE_MODE_FIX_PROP
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7691,7 +7366,6 @@ SfxVoidItem TableModeVariable FN_TABLE_MODE_VARIABLE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7717,7 +7391,6 @@ SfxVoidItem TableNumberFormatDialog FN_NUM_FORMAT_TABLE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -7740,7 +7413,6 @@ SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -7765,7 +7437,6 @@ SfxVoidItem TextAttributes FN_DRAWTEXT_ATTR_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -7788,7 +7459,6 @@ SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -7811,7 +7481,6 @@ SfxVoidItem ToggleAnchorType FN_TOOL_ANCHOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7837,7 +7506,6 @@ SfxVoidItem ToggleObjectLayer FN_TOOL_HIERARCHIE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7860,7 +7528,6 @@ SfxBoolItem UnderlineDouble FN_UNDERLINE_DOUBLE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7885,7 +7552,6 @@ SfxVoidItem UnhainFrames FN_FRAME_UNCHAIN
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7910,7 +7576,6 @@ SfxVoidItem UnsetCellsReadOnly FN_TABLE_UNSET_READ_ONLY_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7933,7 +7598,6 @@ SfxVoidItem UpdateAll FN_UPDATE_ALL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7956,7 +7620,6 @@ SfxVoidItem UpdateAllIndexes FN_UPDATE_TOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -7979,7 +7642,6 @@ SfxVoidItem UpdateAllLinks FN_UPDATE_ALL_LINKS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8002,7 +7664,6 @@ SfxVoidItem UpdateCharts FN_UPDATE_CHARTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8025,7 +7686,6 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8050,7 +7710,6 @@ SfxVoidItem UpdateFields FN_UPDATE_FIELDS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8073,7 +7732,6 @@ SfxVoidItem UpdateInputFields FN_UPDATE_INPUTFIELDS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8096,7 +7754,6 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8121,7 +7778,6 @@ SfxBoolItem VRuler FN_VLINEAL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8146,7 +7802,6 @@ SfxBoolItem VScroll FN_VSCROLLBAR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8171,7 +7826,6 @@ SfxVoidItem WordLeftSel FN_PREV_WORD_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8194,7 +7848,6 @@ SfxVoidItem WordRightSel FN_NEXT_WORD_SEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8217,7 +7870,6 @@ SfxBoolItem WrapAnchorOnly FN_WRAP_ANCHOR_ONLY
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8240,7 +7892,6 @@ SfxBoolItem WrapContour FN_FRAME_WRAP_CONTOUR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8265,7 +7916,6 @@ SfxBoolItem WrapIdeal FN_FRAME_WRAP_IDEAL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8288,7 +7938,6 @@ SfxBoolItem WrapLeft FN_FRAME_WRAP_LEFT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8311,7 +7960,6 @@ SfxBoolItem WrapOff FN_FRAME_NOWRAP
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8336,7 +7984,6 @@ SfxBoolItem WrapOn FN_FRAME_WRAP
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8361,7 +8008,6 @@ SfxBoolItem WrapRight FN_FRAME_WRAP_RIGHT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8384,7 +8030,6 @@ SfxBoolItem WrapThrough FN_FRAME_WRAPTHRU
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8409,7 +8054,6 @@ SfxBoolItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8432,7 +8076,6 @@ SfxVoidItem InsertText FN_INSERT_STRING
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8455,7 +8098,6 @@ SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8480,7 +8122,6 @@ SfxUInt16Item OutlineLevel SID_ATTR_PARA_OUTLINE_LEVEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8505,7 +8146,6 @@ SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8530,7 +8170,6 @@ SwFormatLineNumber LineNumber FN_FORMAT_LINENUMBER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8555,7 +8194,6 @@ SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8580,7 +8218,6 @@ SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8605,7 +8242,6 @@ SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8628,7 +8264,6 @@ SwFormatINetFormat HyperlinkAttributes FN_TXTATR_INET
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8653,7 +8288,6 @@ SfxVoidItem InsertGlossary FN_INSERT_GLOSSARY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8676,7 +8310,6 @@ SfxVoidItem NewGlossary FN_NEW_GLOSSARY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8699,7 +8332,6 @@ SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8722,7 +8354,6 @@ SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8745,7 +8376,6 @@ SfxVoidItem SetDropCapText FN_DROP_TEXT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8768,7 +8398,6 @@ SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8791,7 +8420,6 @@ SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8816,7 +8444,6 @@ SfxBoolItem InsertDBField FN_INSERT_DBFIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -8839,7 +8466,6 @@ SfxBoolItem JumpToNextCell FN_GOTO_NEXT_CELL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8862,7 +8488,6 @@ SfxBoolItem JumpToPrevCell FN_GOTO_PREV_CELL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8884,7 +8509,6 @@ SfxBoolItem InsertFieldDataOnly FN_INSERT_FIELD_DATA_ONLY()
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8910,7 +8534,6 @@ SvxBrushItem TableRowBackground SID_ATTR_BRUSH_ROW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8935,7 +8558,6 @@ SvxBrushItem TableBackground SID_ATTR_BRUSH_TABLE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -8960,7 +8582,6 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
 [
         /* flags: */
         AutoUpdate = FALSE,
-        Cachable = Cachable,
         FastCall = FALSE,
         HasDialog = FALSE,
         ReadOnlyDoc = TRUE,
@@ -8985,7 +8606,6 @@ SfxBoolItem MailmergeChildWindow FN_MAILMERGE_CHILDWINDOW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9008,7 +8628,6 @@ SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -9031,7 +8650,6 @@ SfxBoolItem SendMailChildWindow FN_MAILMERGE_SENDMAIL_CHILDWINDOW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9054,7 +8672,6 @@ SfxVoidItem DeleteTable FN_TABLE_DELETE_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9077,7 +8694,6 @@ SfxVoidItem EntireCell FN_TABLE_SELECT_CELL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9102,7 +8718,6 @@ SfxVoidItem ConvertTableToText FN_CONVERT_TABLE_TO_TEXT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -9132,7 +8747,6 @@ SfxVoidItem ConvertTextToTable FN_CONVERT_TEXT_TO_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -9155,7 +8769,6 @@ SfxVoidItem HeadingRowsRepeat FN_TABLE_HEADLINE_REPEAT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9178,7 +8791,6 @@ SfxVoidItem TableSort FN_TABLE_SORT_DIALOG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -9201,7 +8813,6 @@ SfxBoolItem SwitchXFormsDesignMode FN_XFORMS_DESIGN_MODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -9225,7 +8836,6 @@ SfxVoidItem RemoveDirectCharFormats FN_REMOVE_DIRECT_CHAR_FORMATS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9250,7 +8860,6 @@ SfxVoidItem ContinueNumbering FN_NUM_CONTINUE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9272,7 +8881,6 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9296,7 +8904,6 @@ SfxVoidItem ReplyComment FN_REPLY
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9319,7 +8926,6 @@ SfxVoidItem DeleteComment FN_DELETE_COMMENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9341,7 +8947,6 @@ SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9367,7 +8972,6 @@ SfxVoidItem DeleteAllNotes FN_DELETE_ALL_NOTES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9390,7 +8994,6 @@ SfxVoidItem FormatAllNotes FN_FORMAT_ALL_NOTES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9413,7 +9016,6 @@ SfxVoidItem HideNote FN_HIDE_NOTE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9435,7 +9037,6 @@ SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_A
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9460,7 +9061,6 @@ SvxViewLayoutItem ViewLayout SID_ATTR_VIEWLAYOUT
 [
         /* flags: */
         AutoUpdate = FALSE,
-        Cachable = Cachable,
         FastCall = TRUE,
         HasDialog = FALSE,
         ReadOnlyDoc = TRUE,
@@ -9483,7 +9083,6 @@ SfxVoidItem HideAllNotes FN_HIDE_ALL_NOTES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9505,7 +9104,6 @@ SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9530,7 +9128,6 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9554,7 +9151,6 @@ SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9578,7 +9174,6 @@ SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9602,7 +9197,6 @@ SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9626,7 +9220,6 @@ SfxVoidItem PreviousTrackedChange FN_REDLINE_PREV_CHANGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9650,7 +9243,6 @@ SfxVoidItem RemoveHyperlink FN_REMOVE_HYPERLINK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9674,7 +9266,6 @@ SfxVoidItem CopyHyperlinkLocation FN_COPY_HYPERLINK_LOCATION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9698,7 +9289,6 @@ SfxVoidItem NavigateBack FN_NAVIGATION_BACK
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9722,7 +9312,6 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9747,7 +9336,6 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9773,7 +9361,6 @@ SfxInt16Item PageColumnType SID_ATTR_PAGE_COLUMN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -9798,7 +9385,6 @@ SvxLongULSpaceItem SwPageULMargin SID_ATTR_PAGE_ULSPACE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9823,7 +9409,6 @@ SvxLongLRSpaceItem SwPageLRMargin SID_ATTR_PAGE_LRSPACE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9848,7 +9433,6 @@ SfxVoidItem AddTextBox FN_ADD_TEXT_BOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9871,7 +9455,6 @@ SfxVoidItem RemoveTextBox FN_REMOVE_TEXT_BOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9894,7 +9477,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -9917,7 +9499,6 @@ SfxVoidItem JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,

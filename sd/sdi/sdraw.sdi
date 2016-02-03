@@ -21,7 +21,6 @@ SfxVoidItem AdvancedMode SID_OBJECT_CHOOSE_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -46,7 +45,6 @@ SfxVoidItem AnimationEffects SID_ANIMATION_EFFECTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -69,7 +67,6 @@ SfxBoolItem AnimationObjects SID_ANIMATION_OBJECTS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -94,7 +91,6 @@ SfxBoolItem AnimatorAddObject SID_ANIMATOR_ADD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -119,7 +115,6 @@ SfxBoolItem AnimatorCreateObject SID_ANIMATOR_CREATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -144,7 +139,6 @@ SfxBoolItem AnimatorInit SID_ANIMATOR_INIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -169,7 +163,6 @@ SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -194,7 +187,6 @@ SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -219,7 +211,6 @@ SfxVoidItem Backward SID_MOREBACK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -242,7 +233,6 @@ SfxVoidItem BeforeObject SID_BEFORE_OBJ
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -265,7 +255,6 @@ SfxVoidItem BehindObject SID_BEHIND_OBJ
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -288,7 +277,6 @@ SfxVoidItem Break SID_BREAK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -311,7 +299,6 @@ SfxVoidItem CapturePoint SID_CAPTUREPOINT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -334,7 +321,6 @@ SfxVoidItem ChangeBezier SID_CHANGEBEZIER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -357,7 +343,6 @@ SfxVoidItem ChangePolygon SID_CHANGEPOLYGON
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -380,7 +365,6 @@ SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -405,7 +389,6 @@ SfxVoidItem CloseObject SID_OBJECT_CLOSE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -428,7 +411,6 @@ SfxBoolItem ColorView SID_COLORVIEW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -453,7 +435,6 @@ SfxVoidItem Combine SID_COMBINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -476,7 +457,6 @@ SfxBoolItem Cone SID_3D_CONE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -501,7 +481,6 @@ SfxVoidItem Connect SID_CONNECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -524,7 +503,6 @@ SfxBoolItem Connector SID_TOOL_CONNECTOR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -549,7 +527,6 @@ SfxBoolItem ConnectorArrowEnd SID_CONNECTOR_ARROW_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -574,7 +551,6 @@ SfxBoolItem ConnectorArrows SID_CONNECTOR_ARROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -599,7 +575,6 @@ SfxBoolItem ConnectorArrowStart SID_CONNECTOR_ARROW_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -624,7 +599,6 @@ SfxVoidItem ConnectorAttributes SID_CONNECTION_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -647,7 +621,6 @@ SfxBoolItem ConnectorCircleEnd SID_CONNECTOR_CIRCLE_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -672,7 +645,6 @@ SfxBoolItem ConnectorCircles SID_CONNECTOR_CIRCLES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -697,7 +669,6 @@ SfxBoolItem ConnectorCircleStart SID_CONNECTOR_CIRCLE_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -722,7 +693,6 @@ SfxBoolItem ConnectorCurve SID_CONNECTOR_CURVE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -747,7 +717,6 @@ SfxBoolItem ConnectorCurveArrowEnd SID_CONNECTOR_CURVE_ARROW_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -772,7 +741,6 @@ SfxBoolItem ConnectorCurveArrows SID_CONNECTOR_CURVE_ARROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -797,7 +765,6 @@ SfxBoolItem ConnectorCurveArrowStart SID_CONNECTOR_CURVE_ARROW_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -822,7 +789,6 @@ SfxBoolItem ConnectorCurveCircleEnd SID_CONNECTOR_CURVE_CIRCLE_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -847,7 +813,6 @@ SfxBoolItem ConnectorCurveCircles SID_CONNECTOR_CURVE_CIRCLES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -872,7 +837,6 @@ SfxBoolItem ConnectorCurveCircleStart SID_CONNECTOR_CURVE_CIRCLE_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -897,7 +861,6 @@ SfxBoolItem ConnectorLine SID_CONNECTOR_LINE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -922,7 +885,6 @@ SfxBoolItem ConnectorLineArrowEnd SID_CONNECTOR_LINE_ARROW_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -947,7 +909,6 @@ SfxBoolItem ConnectorLineArrows SID_CONNECTOR_LINE_ARROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -972,7 +933,6 @@ SfxBoolItem ConnectorLineArrowStart SID_CONNECTOR_LINE_ARROW_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -997,7 +957,6 @@ SfxBoolItem ConnectorLineCircleEnd SID_CONNECTOR_LINE_CIRCLE_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1022,7 +981,6 @@ SfxBoolItem ConnectorLineCircles SID_CONNECTOR_LINE_CIRCLES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1047,7 +1005,6 @@ SfxBoolItem ConnectorLineCircleStart SID_CONNECTOR_LINE_CIRCLE_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1072,7 +1029,6 @@ SfxBoolItem ConnectorLines SID_CONNECTOR_LINES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1097,7 +1053,6 @@ SfxBoolItem ConnectorLinesArrowEnd SID_CONNECTOR_LINES_ARROW_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1122,7 +1077,6 @@ SfxBoolItem ConnectorLinesArrows SID_CONNECTOR_LINES_ARROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1147,7 +1101,6 @@ SfxBoolItem ConnectorLinesArrowStart SID_CONNECTOR_LINES_ARROW_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1172,7 +1125,6 @@ SfxBoolItem ConnectorLinesCircleEnd SID_CONNECTOR_LINES_CIRCLE_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1197,7 +1149,6 @@ SfxBoolItem ConnectorLinesCircles SID_CONNECTOR_LINES_CIRCLES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1222,7 +1173,6 @@ SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1247,7 +1197,6 @@ SfxVoidItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1272,7 +1221,6 @@ SfxVoidItem convert_to_contour SID_CONVERT_TO_CONTOUR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1295,7 +1243,6 @@ SfxVoidItem ConvertInto3D SID_CONVERT_TO_3D
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1318,7 +1265,6 @@ SfxVoidItem ConvertInto3DLathe SID_CONVERT_TO_3D_LATHE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1341,7 +1287,6 @@ SfxVoidItem ConvertInto3DLatheFast SID_CONVERT_TO_3D_LATHE_FAST
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1364,7 +1309,6 @@ SfxVoidItem ConvertIntoBitmap SID_CONVERT_TO_BITMAP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1387,7 +1331,6 @@ SfxVoidItem ConvertIntoMetaFile SID_CONVERT_TO_METAFILE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1410,7 +1353,6 @@ SfxVoidItem CopyObjects SID_COPYOBJECTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1433,7 +1375,6 @@ SfxBoolItem CrookRotate SID_OBJECT_CROOK_ROTATE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1458,7 +1399,6 @@ SfxBoolItem CrookSlant SID_OBJECT_CROOK_SLANT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1483,7 +1423,6 @@ SfxBoolItem CrookStretch SID_OBJECT_CROOK_STRETCH
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1508,7 +1447,6 @@ SfxBoolItem Cube SID_3D_CUBE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1533,7 +1471,6 @@ SfxVoidItem CustomShowDialog SID_CUSTOMSHOW_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1556,7 +1493,6 @@ SfxBoolItem Cylinder SID_3D_CYLINDER
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1581,7 +1517,6 @@ SfxBoolItem Cyramid SID_3D_PYRAMID
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1606,7 +1541,6 @@ SfxVoidItem DeleteLayer SID_DELETE_LAYER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1629,7 +1563,6 @@ SfxVoidItem DeletePage SID_DELETE_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1652,7 +1585,6 @@ SfxStringItem DeleteSnapItem SID_DELETE_SNAPITEM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1677,7 +1609,6 @@ SfxVoidItem DeSelect SID_UNSELECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1699,7 +1630,6 @@ SfxBoolItem DiaMode SID_SLIDE_SORTER_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1724,7 +1654,6 @@ SfxVoidItem Dismantle SID_DISMANTLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1747,7 +1676,6 @@ SfxBoolItem DoubleClickTextEdit SID_DOUBLECLICK_TEXTEDIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1772,7 +1700,6 @@ SfxBoolItem DrawingMode SID_DRAWINGMODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1797,7 +1724,6 @@ SfxVoidItem DuplicatePage SID_DUPLICATE_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1820,7 +1746,6 @@ SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1843,7 +1768,6 @@ SfxVoidItem EditOutline SID_EDIT_OUTLINER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1866,7 +1790,6 @@ SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1890,7 +1813,6 @@ SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1915,7 +1837,6 @@ SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1940,7 +1861,6 @@ SfxVoidItem ExpandPage SID_EXPAND_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1963,7 +1883,6 @@ SfxVoidItem SetFillColor SID_SETFILLCOLOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1986,7 +1905,6 @@ SfxVoidItem Forward SID_MOREFRONT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2009,7 +1927,6 @@ SfxUInt32Item GetBlue SID_GETBLUE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2032,7 +1949,6 @@ SfxUInt32Item GetFillStyle SID_GETFILLSTYLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2057,7 +1973,6 @@ SfxUInt32Item GetGreen SID_GETGREEN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2080,7 +1995,6 @@ SfxUInt32Item GetLineStyle SID_GETLINESTYLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2105,7 +2019,6 @@ SfxUInt32Item GetLineWidth SID_GETLINEWIDTH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2130,7 +2043,6 @@ SfxUInt32Item GetRed SID_GETRED
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2153,7 +2065,6 @@ SfxBoolItem GlueEditMode SID_GLUE_EDITMODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2178,7 +2089,6 @@ SfxUInt16Item GlueEscapeDirection SID_GLUE_ESCDIR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2203,7 +2113,6 @@ SfxBoolItem GlueEscapeDirectionBottom SID_GLUE_ESCDIR_BOTTOM
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2228,7 +2137,6 @@ SfxBoolItem GlueEscapeDirectionLeft SID_GLUE_ESCDIR_LEFT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2253,7 +2161,6 @@ SfxBoolItem GlueEscapeDirectionRight SID_GLUE_ESCDIR_RIGHT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2278,7 +2185,6 @@ SfxBoolItem GlueEscapeDirectionTop SID_GLUE_ESCDIR_TOP
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2303,7 +2209,6 @@ SfxBoolItem GlueHorzAlignCenter SID_GLUE_HORZALIGN_CENTER
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2328,7 +2233,6 @@ SfxBoolItem GlueHorzAlignLeft SID_GLUE_HORZALIGN_LEFT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2353,7 +2257,6 @@ SfxBoolItem GlueHorzAlignRight SID_GLUE_HORZALIGN_RIGHT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2378,7 +2281,6 @@ SfxBoolItem GlueInsertPoint SID_GLUE_INSERT_POINT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2403,7 +2305,6 @@ SfxBoolItem GluePercent SID_GLUE_PERCENT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2428,7 +2329,6 @@ SfxBoolItem GlueVertAlignBottom SID_GLUE_VERTALIGN_BOTTOM
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2453,7 +2353,6 @@ SfxBoolItem GlueVertAlignCenter SID_GLUE_VERTALIGN_CENTER
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2478,7 +2377,6 @@ SfxBoolItem GlueVertAlignTop SID_GLUE_VERTALIGN_TOP
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2503,7 +2401,6 @@ SfxVoidItem Gradient SID_GRADIENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2526,7 +2423,6 @@ SfxVoidItem GradientEndColor SID_SETGRADENDCOLOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2549,7 +2445,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2572,7 +2467,6 @@ SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -2595,7 +2489,6 @@ SfxBoolItem GridFront SID_GRID_FRONT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2620,7 +2513,6 @@ SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2645,7 +2537,6 @@ SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2671,7 +2562,6 @@ SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2696,7 +2586,6 @@ SfxVoidItem Hatch SID_HATCH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2719,7 +2608,6 @@ SfxVoidItem HatchColor SID_SETHATCHCOLOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2742,7 +2630,6 @@ SfxBoolItem HelplinesFront SID_HELPLINES_FRONT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2767,7 +2654,6 @@ SfxBoolItem HelplinesUse SID_HELPLINES_USE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2792,7 +2678,6 @@ SfxBoolItem HelplinesVisible SID_HELPLINES_VISIBLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2817,7 +2702,6 @@ SfxVoidItem HideSlide SID_HIDE_SLIDE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2840,7 +2724,6 @@ SfxVoidItem ShowSlide SID_SHOW_SLIDE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2863,7 +2746,6 @@ SfxBoolItem Hyphenation SID_HYPHENATION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2888,7 +2770,6 @@ SfxVoidItem ImportFromFile SID_INSERTFILE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -2911,7 +2792,6 @@ SfxVoidItem InsertAuthorField SID_INSERT_FLD_AUTHOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2934,7 +2814,6 @@ SfxVoidItem InsertDateFieldFix SID_INSERT_FLD_DATE_FIX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2957,7 +2836,6 @@ SfxVoidItem InsertDateFieldVar SID_INSERT_FLD_DATE_VAR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2980,7 +2858,6 @@ SfxVoidItem InsertFileField SID_INSERT_FLD_FILE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3003,7 +2880,6 @@ SfxVoidItem InsertLayer SID_INSERTLAYER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3026,7 +2902,6 @@ SfxVoidItem InsertPage SID_INSERTPAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3049,7 +2924,6 @@ SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3072,7 +2946,6 @@ SfxVoidItem InsertPageTitleField SID_INSERT_FLD_PAGE_TITLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3095,7 +2968,6 @@ SfxVoidItem InsertPagesField SID_INSERT_FLD_PAGES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3118,7 +2990,6 @@ SfxVoidItem InsertPageQuick SID_INSERTPAGE_QUICK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3141,7 +3012,6 @@ SfxVoidItem InsertTimeFieldFix SID_INSERT_FLD_TIME_FIX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3164,7 +3034,6 @@ SfxVoidItem InsertTimeFieldVar SID_INSERT_FLD_TIME_VAR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3187,7 +3056,6 @@ SfxVoidItem InsertToolbox SID_DRAWTBX_INSERT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3212,7 +3080,6 @@ SfxVoidItem InteractiveGradient SID_OBJECT_GRADIENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3235,7 +3102,6 @@ SfxVoidItem InteractiveTransparence SID_OBJECT_TRANSPARENCE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3258,7 +3124,6 @@ SfxVoidItem LayerMode SID_LAYERMODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3284,7 +3149,6 @@ SfxStringItem LayoutStatus SID_STATUS_LAYOUT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3309,7 +3173,6 @@ SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3334,7 +3197,6 @@ SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3359,7 +3221,6 @@ SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3384,7 +3245,6 @@ SfxBoolItem LineArrows SID_LINE_ARROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3409,7 +3269,6 @@ SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3434,7 +3293,6 @@ SfxBoolItem LineArrowStart SID_LINE_ARROW_START
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3459,7 +3317,6 @@ SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3484,7 +3341,6 @@ SfxVoidItem LineColor SID_SETLINECOLOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3507,7 +3363,6 @@ SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3530,7 +3385,6 @@ SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3555,7 +3409,6 @@ SfxVoidItem LineTo SID_LINETO
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3578,7 +3431,6 @@ SfxVoidItem LineToolbox SID_DRAWTBX_LINES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3603,7 +3455,6 @@ SfxVoidItem ManageLinks SID_MANAGE_LINKS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3626,7 +3477,6 @@ SfxVoidItem MasterPage SID_MASTERPAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3652,7 +3502,6 @@ SfxVoidItem MeasureAttributes SID_MEASURE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3675,7 +3524,6 @@ SfxBoolItem MeasureLine SID_DRAW_MEASURELINE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3700,7 +3548,6 @@ SfxVoidItem MirrorHorz SID_HORIZONTAL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3723,7 +3570,6 @@ SfxVoidItem MirrorVert SID_VERTICAL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3746,7 +3592,6 @@ SfxVoidItem ModifyField SID_MODIFY_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3769,7 +3614,6 @@ SfxVoidItem ModifyLayer SID_MODIFYLAYER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3792,7 +3636,6 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3815,7 +3658,6 @@ SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3839,7 +3681,6 @@ SfxBoolItem ToggleTabBarVisibility SID_TOGGLE_TABBAR_VISIBILITY
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3863,7 +3704,6 @@ SfxVoidItem DisplayMode SID_DISPLAY_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3886,7 +3726,6 @@ SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3909,7 +3748,6 @@ SfxVoidItem Morphing SID_POLYGON_MORPHING
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3932,7 +3770,6 @@ SfxVoidItem MoveTo SID_MOVETO
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3955,7 +3792,6 @@ SfxVoidItem NameGroup SID_NAME_GROUP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3979,7 +3815,6 @@ SfxVoidItem ObjectTitleDescription SID_OBJECT_TITLE_DESCRIPTION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4002,7 +3837,6 @@ SfxBoolItem NavigatorInit SID_NAVIGATOR_INIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4027,7 +3861,6 @@ SfxStringItem NavigatorObject SID_NAVIGATOR_OBJECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4052,7 +3885,6 @@ SfxUInt16Item NavigatorPage SID_NAVIGATOR_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4077,7 +3909,6 @@ SfxStringItem NavigatorPageName SID_NAVIGATOR_PAGENAME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4102,7 +3933,6 @@ SfxBoolItem NavigatorPen SID_NAVIGATOR_PEN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4127,7 +3957,6 @@ SfxUInt32Item NavigatorState SID_NAVIGATOR_STATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4152,7 +3981,6 @@ SfxBoolItem NewRouting SID_CONNECTION_NEW_ROUTING
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4177,7 +4005,6 @@ SfxVoidItem NotesMasterPage SID_NOTES_MASTER_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4200,7 +4027,6 @@ SfxVoidItem NotesMode SID_NOTES_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4225,7 +4051,6 @@ SfxVoidItem ObjectPosition SID_POSITION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4250,7 +4075,6 @@ SfxVoidItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4275,7 +4099,6 @@ SfxVoidItem OriginalSize SID_ORIGINAL_SIZE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4298,7 +4121,6 @@ SfxVoidItem OutlineMode SID_OUTLINE_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4323,7 +4145,6 @@ SfxBoolItem OutputQualityBlackWhite SID_OUTPUT_QUALITY_BLACKWHITE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4348,7 +4169,6 @@ SfxBoolItem OutputQualityColor SID_OUTPUT_QUALITY_COLOR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4373,7 +4193,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4398,7 +4217,6 @@ SfxBoolItem OutputQualityGrayscale SID_OUTPUT_QUALITY_GRAYSCALE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4423,7 +4241,6 @@ SfxVoidItem PackAndGo SID_PACKNGO
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -4446,7 +4263,6 @@ SfxVoidItem PageMargin SID_PAGEMARGIN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4469,7 +4285,6 @@ SfxVoidItem PageMode SID_PAGEMODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4495,7 +4310,6 @@ SfxVoidItem PageSetup SID_PAGESETUP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4518,7 +4332,6 @@ SfxVoidItem PageSize SID_PAGESIZE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4541,7 +4354,6 @@ SfxUInt16Item PagesPerRow SID_PAGES_PER_ROW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4566,7 +4378,6 @@ SfxStringItem PageStatus SID_STATUS_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4591,7 +4402,6 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4616,7 +4426,6 @@ SfxBoolItem Polygon SID_DRAW_POLYGON
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4641,7 +4450,6 @@ SfxVoidItem Presentation SID_PRESENTATION
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -4664,7 +4472,6 @@ SfxVoidItem PresentationCurrentSlide SID_PRESENTATION_CURRENT_SLIDE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -4687,7 +4494,6 @@ SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4710,7 +4516,6 @@ SfxVoidItem Remote SID_REMOTE_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4733,7 +4538,6 @@ SfxVoidItem PresentationEnd SID_PRESENTATION_END
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -4756,7 +4560,6 @@ SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4779,7 +4582,6 @@ SfxVoidItem PresentationLayout SID_PRESENTATION_LAYOUT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4802,7 +4604,6 @@ SfxUInt32Item PreviewState SID_PREVIEW_STATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4827,7 +4628,6 @@ SfxBoolItem PreviewWindow SID_PREVIEW_WIN
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -4852,7 +4652,6 @@ SfxBoolItem QuickEdit SID_QUICKEDIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4877,7 +4676,6 @@ SfxVoidItem RectangleToolbox SID_DRAWTBX_RECTANGLES
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4902,7 +4700,6 @@ SfxVoidItem RehearseTimings SID_REHEARSE_TIMINGS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4925,7 +4722,6 @@ SfxVoidItem RenameLayer SID_RENAMELAYER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4948,7 +4744,6 @@ SfxVoidItem RenamePage SID_RENAMEPAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4971,7 +4766,6 @@ SfxVoidItem RenamePageQuick SID_RENAMEPAGE_QUICK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4994,7 +4788,6 @@ SfxVoidItem ReverseOrder SID_REVERSE_ORDER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5017,7 +4810,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5042,7 +4834,6 @@ SfxVoidItem SelectAt SID_SELECTAT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5065,7 +4856,6 @@ SfxVoidItem SelectGradient SID_SELECTGRADIENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5088,7 +4878,6 @@ SfxVoidItem SelectHatch SID_SELECTHATCH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5111,7 +4900,6 @@ SfxVoidItem SetFillStyle SID_SETFILLSTYLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5134,7 +4922,6 @@ SfxVoidItem SetLineStyle SID_SETLINESTYLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5157,7 +4944,6 @@ SfxVoidItem SetLineWidth SID_SETLINEWIDTH
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5180,7 +4966,6 @@ SfxStringItem SetSnapItem SID_SET_SNAPITEM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5205,7 +4990,6 @@ SfxBoolItem Shear SID_OBJECT_SHEAR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5230,7 +5014,6 @@ SfxBoolItem Shell3D SID_3D_SHELL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5255,7 +5038,6 @@ SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5280,7 +5062,6 @@ SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5303,7 +5084,6 @@ SfxBoolItem SnapBorder SID_SNAP_BORDER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5328,7 +5108,6 @@ SfxBoolItem SnapFrame SID_SNAP_FRAME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5353,7 +5132,6 @@ SfxBoolItem SnapPoints SID_SNAP_POINTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5378,7 +5156,6 @@ SfxBoolItem SolidCreate SID_SOLID_CREATE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5403,7 +5180,6 @@ SfxBoolItem Sphere SID_3D_SPHERE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5428,7 +5204,6 @@ SfxVoidItem StartApplication SID_STARTAPP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5451,7 +5226,6 @@ SfxVoidItem SummaryPage SID_SUMMARY_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5474,7 +5248,6 @@ SfxVoidItem SwitchLayer SID_SWITCHLAYER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5497,7 +5270,6 @@ SfxVoidItem SwitchPage SID_SWITCHPAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5520,7 +5292,6 @@ SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5543,7 +5314,6 @@ SfxBoolItem TextAlignment SID_TEXTALIGNMENT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5568,7 +5338,6 @@ SfxVoidItem TextAttributes SID_TEXTATTR_DLG
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5591,7 +5360,6 @@ SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5616,7 +5384,6 @@ SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5641,7 +5408,6 @@ SfxVoidItem TextToolbox SID_DRAWTBX_TEXT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5666,7 +5432,6 @@ SfxBoolItem Torus SID_3D_TORUS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5691,7 +5456,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5716,7 +5480,6 @@ SfxVoidItem ZoomPanning SID_ZOOM_PANNING
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5739,7 +5502,6 @@ SfxVoidItem ZoomMode SID_ZOOM_MODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5762,7 +5524,6 @@ SfxVoidItem Mirror SID_OBJECT_MIRROR
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5788,7 +5549,6 @@ SfxVoidItem HeaderAndFooter SID_HEADER_AND_FOOTER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5811,7 +5571,6 @@ SfxVoidItem InsertPageNumber SID_INSERT_PAGE_NUMBER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5834,7 +5593,6 @@ SfxVoidItem InsertDateAndTime SID_INSERT_DATE_TIME
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5857,7 +5615,6 @@ SfxVoidItem MasterLayouts SID_MASTER_LAYOUTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5879,7 +5636,6 @@ SfxBoolItem DrawFontwork SID_DRAW_FONTWORK
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5903,7 +5659,6 @@ SfxBoolItem DrawFontworkVertical SID_DRAW_FONTWORK_VERTICAL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5931,7 +5686,6 @@ SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5953,7 +5707,6 @@ SfxVoidItem DeleteMasterPage SID_DELETE_MASTER_PAGE()
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5974,7 +5727,6 @@ SfxVoidItem RenameMasterPage SID_RENAME_MASTER_PAGE()
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5996,7 +5748,6 @@ SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6019,7 +5770,6 @@ SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6042,7 +5792,6 @@ SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6064,7 +5813,6 @@ SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6087,7 +5835,6 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6111,7 +5858,6 @@ SfxVoidItem TableToolBox SID_TABLE_TOOLBOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6134,7 +5880,6 @@ SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6157,7 +5902,6 @@ SfxVoidItem DistributeRows SID_TABLE_DISTRIBUTE_ROWS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6179,7 +5923,6 @@ SfxVoidItem TaskPaneApplyToAllSlides SID_TP_APPLY_TO_ALL_SLIDES
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6203,7 +5946,6 @@ SfxVoidItem TaskPaneApplyToSelectedSlides SID_TP_APPLY_TO_SELECTED_SLIDES
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6227,7 +5969,6 @@ SfxVoidItem TaskPaneUseForNewPresentations SID_TP_USE_FOR_NEW_PRESENTATIONS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6251,7 +5992,6 @@ SfxVoidItem TaskPaneShowSmallPreview SID_TP_SHOW_SMALL_PREVIEW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6275,7 +6015,6 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6299,7 +6038,6 @@ SfxVoidItem TaskPaneEditMaster SID_TP_EDIT_MASTER
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6323,7 +6061,6 @@ SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6350,7 +6087,6 @@ SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6378,7 +6114,6 @@ SfxInt32Item SwitchViewShellPane SID_SWITCH_SHELL_PANE
 [
     // flags:
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -6403,7 +6138,6 @@ SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6428,7 +6162,6 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6453,7 +6186,6 @@ SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -6478,7 +6210,6 @@ SfxBoolItem NormalMultiPaneGUI SID_NORMAL_MULTI_PANE_GUI
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
@@ -6503,7 +6234,6 @@ SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6528,7 +6258,6 @@ SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6551,7 +6280,6 @@ SfxVoidItem PresentationMinimizer SID_PRESENTATION_MINIMIZER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = TRUE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6574,7 +6302,6 @@ SfxVoidItem HideLastLevel SID_HIDE_LAST_LEVEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6597,7 +6324,6 @@ SfxVoidItem ShowNextLevel SID_SHOW_NEXT_LEVEL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6620,7 +6346,6 @@ SfxVoidItem NextPage SID_GO_TO_NEXT_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6643,7 +6368,6 @@ SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6666,7 +6390,6 @@ SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6689,7 +6412,6 @@ SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6712,7 +6434,6 @@ SfxVoidItem MovePageUp SID_MOVE_PAGE_UP
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6735,7 +6456,6 @@ SfxVoidItem MovePageDown SID_MOVE_PAGE_DOWN
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6758,7 +6478,6 @@ SfxVoidItem MovePageFirst SID_MOVE_PAGE_FIRST
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6781,7 +6500,6 @@ SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
@@ -6803,7 +6521,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,

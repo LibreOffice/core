@@ -139,7 +139,7 @@ interface CellSelection
         ExecMethod = ExecuteEdit ;
         StateMethod = GetBlockState ;
         GroupId = GID_EDIT ;  //FS
-        Cachable , HasDialog ;
+        HasDialog ;
         MenuConfig , AccelConfig ;
     ]
     SID_DELETE_CONTENTS [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
@@ -251,28 +251,24 @@ interface CellMovement
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SID_PREV_TABLE
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SID_NEXT_TABLE_SEL
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SID_PREV_TABLE_SEL
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SfxVoidItem GoDown SID_CURSORDOWN
@@ -283,7 +279,6 @@ interface CellMovement
     [
         ExecMethod = ExecuteCursor ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SfxVoidItem GoDownSel SID_CURSORDOWN_SEL
@@ -294,7 +289,6 @@ interface CellMovement
         Export = FALSE ;
         ExecMethod = ExecuteCursorSel ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORBLKDOWN       [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
     SID_CURSORBLKDOWN_SEL   [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
@@ -307,7 +301,6 @@ interface CellMovement
     [
         ExecMethod = ExecuteCursor ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORUP_SEL    [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
     SID_CURSORBLKUP     [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
@@ -321,7 +314,6 @@ interface CellMovement
     [
         ExecMethod = ExecuteCursor ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORLEFT_SEL      [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
     SID_CURSORBLKLEFT       [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
@@ -335,7 +327,6 @@ interface CellMovement
     [
         ExecMethod = ExecuteCursor ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SID_CURSORRIGHT_SEL     [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
@@ -354,7 +345,6 @@ interface CellMovement
     [
         ExecMethod = ExecuteCursor ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORPAGEDOWN_SEL  [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
 
@@ -366,7 +356,6 @@ interface CellMovement
     [
         ExecMethod = ExecuteCursor ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORPAGEUP_SEL    [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
     SID_CURSORPAGELEFT_     [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
@@ -382,7 +371,6 @@ interface CellMovement
     [
         ExecMethod = ExecutePage ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORENDOFFILE_SEL [ ExecMethod = ExecutePageSel; StateMethod = GetStateCursor; ]
 
@@ -393,7 +381,6 @@ interface CellMovement
     [
         ExecMethod = ExecutePage ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
     SID_CURSORTOPOFSCREEN   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_CURSORENDOFSCREEN   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
@@ -405,7 +392,6 @@ interface CellMovement
     [
         ExecMethod = ExecutePage ;
         StateMethod = GetStateCursor ;
-        Cachable ;
     ]
 
     SID_CURSOREND   [ ExecMethod = ExecutePage; StateMethod = GetStateCursor; ]

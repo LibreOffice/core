@@ -213,7 +213,7 @@ interface BaseTextSelection
     [
         ExecMethod = ExecBckCol ;
         StateMethod = GetBckColState ;
-        Cachable , AutoUpdate ;
+        AutoUpdate ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 

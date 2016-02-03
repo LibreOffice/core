@@ -127,7 +127,6 @@ interface TableDraw
         ExecMethod = ExecDrawFunc ;
         StateMethod = GetDrawFuncState ;
         GroupId = GID_FORMAT ;
-        FastCall , Cachable ;
         ToolBoxConfig ;
     ]
     SID_OBJECT_ALIGN_LEFT   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
@@ -166,7 +165,6 @@ interface TableDraw
         StateMethod = GetDrawFuncState ;
         Export = FALSE ;
         GroupId = GID_EDIT ;
-        FastCall , Cachable ;
         ToolBoxConfig , MenuConfig , AccelConfig ;
     ]
     */
@@ -185,7 +183,6 @@ interface TableDraw
         StateMethod = GetDrawFuncState ;
         Export = FALSE ;
         GroupId = GID_FORMAT ;
-        Cachable ;
         MenuConfig ;  //FS
     ]
     */

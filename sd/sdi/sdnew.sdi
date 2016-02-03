@@ -21,7 +21,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
@@ -43,7 +42,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
@@ -73,7 +71,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
     FastCall = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
