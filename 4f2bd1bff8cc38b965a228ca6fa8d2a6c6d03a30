@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_c0252eaf",
+        "filename": "tools/source/generic/config.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-03T10:27:21Z",
+      "side": 1,
+      "message": "No real need for the temp variable, put it directly in the OSL_TRACE",
+      "revId": "4f2bd1bff8cc38b965a228ca6fa8d2a6c6d03a30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a02aa27c",
+        "filename": "tools/source/stream/strmunx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-03T10:27:21Z",
+      "side": 1,
+      "message": "no need to have a temp variable, put it in the OSL_TRACE",
+      "revId": "4f2bd1bff8cc38b965a228ca6fa8d2a6c6d03a30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
