@@ -263,8 +263,8 @@ void SdrLinkList::Clear()
 
 unsigned SdrLinkList::FindEntry(const Link<SdrObjFactory*,void>& rLink) const
 {
-    unsigned nAnz=GetLinkCount();
-    for (unsigned i=0; i<nAnz; i++) {
+    unsigned nCount=GetLinkCount();
+    for (unsigned i=0; i<nCount; i++) {
         if (GetLink(i)==rLink) return i;
     }
     return 0xFFFF;
@@ -357,7 +357,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 const sal_uInt32 nMaxSteps(8L);
                 const sal_uInt32 nXStep((nWidth > nMaxSteps) ? nWidth / nMaxSteps : 1L);
                 const sal_uInt32 nYStep((nHeight > nMaxSteps) ? nHeight / nMaxSteps : 1L);
-                sal_uInt32 nAnz(0L);
+                sal_uInt32 nCount(0L);
 
                 for(sal_uInt32 nY(0L); nY < nHeight; nY += nYStep)
                 {
@@ -368,13 +368,13 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                         nRt += rCol2.GetRed();
                         nGn += rCol2.GetGreen();
                         nBl += rCol2.GetBlue();
-                        nAnz++;
+                        nCount++;
                     }
                 }
 
-                nRt /= nAnz;
-                nGn /= nAnz;
-                nBl /= nAnz;
+                nRt /= nCount;
+                nGn /= nCount;
+                nBl /= nCount;
 
                 rCol = Color(sal_uInt8(nRt), sal_uInt8(nGn), sal_uInt8(nBl));
 
@@ -493,13 +493,13 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
     // [b..e]    [b..e]    [b..e]  Cases 1,3,2: doesn't matter, delete, doesn't matter  + Ranges
     // [b........e]  [b........e]  Cases 4,5  : shrink range                            | in
     // [b......................e]  Case  6    : splitting                               + pOldWhichTable
-    sal_uInt16 nAnz=0;
-    while (pOldWhichTable[nAnz]!=0) nAnz++;
-    nAnz++; // nAnz should now be an odd number (0 for end of array)
-    DBG_ASSERT((nAnz&1)==1,"RemoveWhichRange: WhichTable doesn't have an odd number of entries.");
-    sal_uInt16 nAlloc=nAnz;
+    sal_uInt16 nCount=0;
+    while (pOldWhichTable[nCount]!=0) nCount++;
+    nCount++; // nCount should now be an odd number (0 for end of array)
+    DBG_ASSERT((nCount&1)==1,"RemoveWhichRange: WhichTable doesn't have an odd number of entries.");
+    sal_uInt16 nAlloc=nCount;
     // check necessary size of new array
-    sal_uInt16 nNum=nAnz-1;
+    sal_uInt16 nNum=nCount-1;
     while (nNum!=0) {
         nNum-=2;
         sal_uInt16 nBeg=pOldWhichTable[nNum];
@@ -530,16 +530,16 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
         else nCase=6;
         switch (nCase) {
             case 3: {
-                unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(sal_uInt16);
+                unsigned nTailBytes=(nCount-(nNum+2))*sizeof(sal_uInt16);
                 memcpy(&pNewWhichTable[nNum],&pNewWhichTable[nNum+2],nTailBytes);
-                nAnz-=2; // remember: array is now smaller
+                nCount-=2; // remember: array is now smaller
             } break;
             case 4: pNewWhichTable[nNum+1]=nRangeBeg-1; break;
             case 5: pNewWhichTable[nNum]=nRangeEnd+1;     break;
             case 6: {
-                unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(sal_uInt16);
+                unsigned nTailBytes=(nCount-(nNum+2))*sizeof(sal_uInt16);
                 memcpy(&pNewWhichTable[nNum+4],&pNewWhichTable[nNum+2],nTailBytes);
-                nAnz+=2; // remember:array is now larger
+                nCount+=2; // remember:array is now larger
                 pNewWhichTable[nNum+2]=nRangeEnd+1;
                 pNewWhichTable[nNum+3]=pNewWhichTable[nNum+1];
                 pNewWhichTable[nNum+1]=nRangeBeg-1;
@@ -567,44 +567,44 @@ SvdProgressInfo::SvdProgressInfo( const Link<void*,bool>&_rLink )
     m_nCurInsert   = 0;
 }
 
-void SvdProgressInfo::Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount )
+void SvdProgressInfo::Init( sal_uIntPtr nSumActionCount, sal_uIntPtr nObjCount )
 {
-    m_nSumActionCount = _nSumActionCount;
-    m_nObjCount = _nObjCount;
+    m_nSumActionCount = nSumActionCount;
+    m_nObjCount = nObjCount;
 }
 
-bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
+bool SvdProgressInfo::ReportActions( sal_uIntPtr nActionCount )
 {
-    m_nSumCurAction += nAnzActions;
-    m_nCurAction += nAnzActions;
+    m_nSumCurAction += nActionCount;
+    m_nCurAction += nActionCount;
     if(m_nCurAction > m_nActionCount)
         m_nCurAction = m_nActionCount;
 
     return maLink.Call(nullptr);
 }
 
-void SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
+void SvdProgressInfo::ReportInserts( sal_uIntPtr nInsertCount )
 {
-    m_nSumCurAction += nAnzInserts;
-    m_nCurInsert += nAnzInserts;
+    m_nSumCurAction += nInsertCount;
+    m_nCurInsert += nInsertCount;
 
     maLink.Call(nullptr);
 }
 
-void SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
+void SvdProgressInfo::ReportRescales( sal_uIntPtr nRescaleCount )
 {
-    m_nSumCurAction += nAnzRescales;
+    m_nSumCurAction += nRescaleCount;
     maLink.Call(nullptr);
 }
 
-void SvdProgressInfo::SetActionCount( sal_uIntPtr _nActionCount )
+void SvdProgressInfo::SetActionCount( sal_uIntPtr nActionCount )
 {
-    m_nActionCount = _nActionCount;
+    m_nActionCount = nActionCount;
 }
 
-void SvdProgressInfo::SetInsertCount( sal_uIntPtr _nInsertCount )
+void SvdProgressInfo::SetInsertCount( sal_uIntPtr nInsertCount )
 {
-    m_nInsertCount = _nInsertCount;
+    m_nInsertCount = nInsertCount;
 }
 
 void SvdProgressInfo::SetNextObject()

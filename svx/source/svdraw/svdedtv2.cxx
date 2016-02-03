@@ -63,8 +63,8 @@ void SdrEditView::ObjOrderChanged(SdrObject* /*pObj*/, sal_uIntPtr /*nOldPos*/, 
 
 void SdrEditView::MovMarkedToTop()
 {
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz!=0)
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount!=0)
     {
         const bool bUndo = IsUndoEnabled();
 
@@ -72,14 +72,14 @@ void SdrEditView::MovMarkedToTop()
             BegUndo(ImpGetResStr(STR_EditMovToTop),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVTOTOP);
 
         SortMarkedObjects();
-        for (size_t nm=0; nm<nAnz; ++nm)
+        for (size_t nm=0; nm<nCount; ++nm)
         { // All Ordnums have to be correct!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
         bool bChg=false;
         SdrObjList* pOL0=nullptr;
         size_t nNewPos=0;
-        for (size_t nm=nAnz; nm>0;)
+        for (size_t nm=nCount; nm>0;)
         {
             --nm;
             SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -150,8 +150,8 @@ void SdrEditView::MovMarkedToTop()
 
 void SdrEditView::MovMarkedToBtm()
 {
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz!=0)
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount!=0)
     {
         const bool bUndo = IsUndoEnabled();
 
@@ -159,7 +159,7 @@ void SdrEditView::MovMarkedToBtm()
             BegUndo(ImpGetResStr(STR_EditMovToBtm),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVTOBTM);
 
         SortMarkedObjects();
-        for (size_t nm=0; nm<nAnz; ++nm)
+        for (size_t nm=0; nm<nCount; ++nm)
         { // All Ordnums have to be correct!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
@@ -167,7 +167,7 @@ void SdrEditView::MovMarkedToBtm()
         bool bChg=false;
         SdrObjList* pOL0=nullptr;
         size_t nNewPos=0;
-        for (size_t nm=0; nm<nAnz; ++nm)
+        for (size_t nm=0; nm<nCount; ++nm)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -245,8 +245,8 @@ void SdrEditView::PutMarkedToTop()
 
 void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
 {
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz!=0)
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount!=0)
     {
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
@@ -272,14 +272,14 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
                 SortMarkedObjects();
             }
         }
-        for (size_t nm=0; nm<nAnz; ++nm)
+        for (size_t nm=0; nm<nCount; ++nm)
         { // All Ordnums have to be correct!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
         bool bChg=false;
         SdrObjList* pOL0=nullptr;
         size_t nNewPos=0;
-        for (size_t nm=nAnz; nm>0;)
+        for (size_t nm=nCount; nm>0;)
         {
             --nm;
             SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -346,8 +346,8 @@ void SdrEditView::PutMarkedToBtm()
 
 void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 {
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz!=0)
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount!=0)
     {
         const bool bUndo = IsUndoEnabled();
 
@@ -373,13 +373,13 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                 SortMarkedObjects();
             }
         }
-        for (size_t nm=0; nm<nAnz; ++nm) { // All Ordnums have to be correct!
+        for (size_t nm=0; nm<nCount; ++nm) { // All Ordnums have to be correct!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
         bool bChg=false;
         SdrObjList* pOL0=nullptr;
         size_t nNewPos=0;
-        for (size_t nm=0; nm<nAnz; ++nm) {
+        for (size_t nm=0; nm<nCount; ++nm) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
             if (pObj!=pRefObj) {
@@ -477,10 +477,10 @@ void SdrEditView::ReverseOrderOfMarked()
 
 void SdrEditView::ImpCheckToTopBtmPossible()
 {
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz==0)
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount==0)
         return;
-    if (nAnz==1)
+    if (nCount==1)
     { // special-casing for single selection
         SdrObject* pObj=GetMarkedObjectByIndex(0);
         SdrObjList* pOL=pObj->GetObjList();
@@ -503,7 +503,7 @@ void SdrEditView::ImpCheckToTopBtmPossible()
     } else { // multiple selection
         SdrObjList* pOL0=nullptr;
         size_t nPos0 = 0;
-        for (size_t nm = 0; !bToBtmPossible && nm<nAnz; ++nm) { // check 'send to background'
+        for (size_t nm = 0; !bToBtmPossible && nm<nCount; ++nm) { // check 'send to background'
             SdrObject* pObj=GetMarkedObjectByIndex(nm);
             SdrObjList* pOL=pObj->GetObjList();
             if (pOL!=pOL0) {
@@ -517,7 +517,7 @@ void SdrEditView::ImpCheckToTopBtmPossible()
 
         pOL0=nullptr;
         nPos0 = SAL_MAX_SIZE;
-        for (size_t nm=nAnz; !bToTopPossible && nm>0; ) { // check 'bring to front'
+        for (size_t nm=nCount; !bToTopPossible && nm>0; ) { // check 'bring to front'
             --nm;
             SdrObject* pObj=GetMarkedObjectByIndex(nm);
             SdrObjList* pOL=pObj->GetObjList();
@@ -1796,13 +1796,13 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
             if (pGrp!=nullptr)
             {
                 aNewMark.InsertEntry(SdrMark(pGrp,pPV));
-                const size_t nAnz=pDstLst->GetObjCount();
+                const size_t nCount=pDstLst->GetObjCount();
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pAktLst->InsertObject(pGrp,nInsPos,&aReason);
                 if( bUndo )
                 {
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pGrp,true)); // no recalculation!
-                    for (size_t no=0; no<nAnz; ++no)
+                    for (size_t no=0; no<nCount; ++no)
                     {
                         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pDstLst->GetObj(no)));
                     }
@@ -2019,9 +2019,9 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     SortMarkedObjects();
     SdrMarkList aForTheDescription;
     SdrMarkList aNewMarked;
-    const size_t nAnz=GetMarkedObjectCount();
+    const size_t nCount=GetMarkedObjectCount();
 
-    for (size_t nm=nAnz; nm>0;)
+    for (size_t nm=nCount; nm>0;)
     { // create Undo objects for all new objects
         // check for cancellation between the metafiles
         if( pProgrInfo != nullptr )
