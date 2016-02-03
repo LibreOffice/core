@@ -19,6 +19,9 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 
+#include <cppunit/Asserter.h>
+#include <cppunit/AdditionalMessage.h>
+
 #include <config_orcus.h>
 
 #if ENABLE_ORCUS
@@ -731,6 +734,32 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
             }
         }
         xShell->DoClose();
+    }
+}
+
+namespace {
+
+std::string to_std_string(const OUString& rStr)
+{
+    return std::string(rStr.toUtf8().getStr());
+}
+
+}
+
+void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* expected, const char* msg, CppUnit::SourceLine sourceLine)
+{
+    ScTokenArray* pCode = getTokens(rDoc, rPos);
+    if (!pCode)
+    {
+        CppUnit::Asserter::fail("empty token array", sourceLine);
+    }
+
+    OUString aFormula = toString(rDoc, rPos, *pCode, rDoc.GetGrammar());
+    OUString aExpectedFormula = OUString::createFromAscii(expected);
+    if (aFormula != aExpectedFormula)
+    {
+        CppUnit::Asserter::failNotEqual(to_std_string(aExpectedFormula),
+                to_std_string(aFormula), sourceLine, CppUnit::AdditionalMessage(msg));
     }
 }
 

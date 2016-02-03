@@ -1295,8 +1295,7 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->SetString(ScAddress(0,6,0), "=SUM(B2:C5)");
     m_pDoc->SetString(ScAddress(0,7,0), "=SUM($B$2:$C$5)");
 
-    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM(B2:C5)"))
-        CPPUNIT_FAIL("Wrong formula in A7.");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,6,0), "SUM(B2:C5)", "Wrong formula in A7.");
 
     if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM($B$2:$C$5)"))
         CPPUNIT_FAIL("Wrong formula in A8.");
