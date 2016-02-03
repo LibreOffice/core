@@ -42,7 +42,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
@@ -54,7 +53,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SID_CURSORHOME  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
@@ -69,7 +67,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
     SfxVoidItem GoUp SID_CURSORUP
     (
@@ -80,7 +77,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
     SfxVoidItem GoLeft SID_CURSORLEFT
     (
@@ -91,7 +87,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SfxVoidItem GoRight SID_CURSORRIGHT
@@ -103,7 +98,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SID_PREV_TABLE
@@ -112,7 +106,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SID_NEXT_TABLE
@@ -121,7 +114,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SfxVoidItem GoToStart SID_CURSORTOPOFFILE ()
@@ -130,7 +122,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
 
     SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE ()
@@ -139,7 +130,6 @@ interface TablePrintPreview
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_INTERN ;
-        Cachable ;
     ]
     SID_PREVIEW_ZOOMIN  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PREVIEW_ZOOMOUT [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

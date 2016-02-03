@@ -45,7 +45,7 @@ interface OutlineView
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
-        Cachable , Asynchron ;
+        Asynchron ;
     ]
     SID_DRAWINGMODE // ole : no, status : play rec
     [
@@ -186,26 +186,25 @@ interface OutlineView
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
-        Cachable , HasDialog , Export ;
+        HasDialog , Export ;
     ]
     SID_CHAR_DLG // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
-         //        Cachable , HasDialog , Export ;
+         //        HasDialog , Export ;
     ]
     SID_CHAR_DLG_EFFECT // wj for sym2_1876
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
-         //        Cachable , HasDialog , Export ;
+         //        HasDialog , Export ;
     ]
     SID_SELECTALL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_INSERTFILE // ole : no, status : ?
     [
@@ -280,14 +279,12 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_FAMILY3 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // Templates
      // no menu entry
@@ -302,7 +299,6 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // no menu entry
     SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
@@ -310,7 +306,6 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // no menu entry
     SID_STYLE_WATERCAN // ole : no, status : ?
@@ -318,7 +313,6 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // no menu entry
     SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
@@ -326,7 +320,6 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // no menu entry
     SID_STYLE_NEW // ole : no, status : ?
@@ -334,7 +327,6 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // no menu entry
     SID_STYLE_DELETE // ole : no, status : ?
@@ -342,21 +334,18 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_HIDE
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_SHOW
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_AUTOSPELL_CHECK // ole : no, status : play rec
     [
@@ -543,7 +532,6 @@ interface OutlineView
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_SEARCH_ITEM // ole : ?, status : ?
     [

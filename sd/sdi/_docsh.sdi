@@ -48,7 +48,6 @@ interface DrawDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // ?
     FID_SEARCH_ON // ole : ?, status : ?
@@ -56,7 +55,6 @@ interface DrawDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
      // ?
     FID_SEARCH_OFF // ole : ?, status : ?
@@ -64,7 +62,6 @@ interface DrawDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
 
     SID_GET_COLORLIST

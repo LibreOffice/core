@@ -146,7 +146,6 @@ interface ImpressEditView : DrawView
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_SEARCH_ITEM // ole : ?, status : ?
     [

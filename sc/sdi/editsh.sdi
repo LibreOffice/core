@@ -27,7 +27,6 @@ interface TableText
         StateMethod = GetState ;
         Export = FALSE;
         GroupId = GID_EDIT ;
-        Cachable ;
     ]
     SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

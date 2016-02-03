@@ -34,8 +34,7 @@ SvMetaObject *SvMetaSlot::MakeClone() const
 }
 
 SvMetaSlot::SvMetaSlot()
-    : aCachable( true, false )
-    , aSynchron( true, false )
+    : aSynchron( true, false )
     , aRecordPerSet( true, false )
     , aRecordAbsolute( false, false )
     , pLinkedSlot(nullptr)
@@ -47,7 +46,6 @@ SvMetaSlot::SvMetaSlot()
 
 SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     : SvMetaAttribute( pType )
-    , aCachable( true, false )
     , aSynchron( true, false )
     , aRecordPerSet( true, false )
     , aRecordAbsolute( false, false )
@@ -133,17 +131,10 @@ bool SvMetaSlot::GetPseudoSlots() const
     if( aPseudoSlots.IsSet() || !GetRef() ) return aPseudoSlots;
     return static_cast<SvMetaSlot *>(GetRef())->GetPseudoSlots();
 }
-bool SvMetaSlot::GetCachable() const
-{
-    // Cachable and Volatile are exclusive
-    if( !GetRef() || aCachable.IsSet() || aVolatile.IsSet() )
-         return aCachable;
-    return static_cast<SvMetaSlot *>(GetRef())->GetCachable();
-}
 bool SvMetaSlot::GetVolatile() const
 {
     // Cachable and Volatile are exclusive
-    if( !GetRef() || aVolatile.IsSet() || aCachable.IsSet() )
+    if( !GetRef() || aVolatile.IsSet() )
         return aVolatile;
     return static_cast<SvMetaSlot *>(GetRef())->GetVolatile();
 }
@@ -295,8 +286,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                     rInStm.GetToken().GetColumn() );
     }
 
-    if( aCachable.ReadSvIdl( SvHash_Cachable(), rInStm ) )
-        SetCachable( aCachable ), bOk = true;
     if( aVolatile.ReadSvIdl( SvHash_Volatile(), rInStm ) )
         SetVolatile( aVolatile ), bOk = true;
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
@@ -826,8 +815,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     WriteTab( rOutStm, 4 );
 
     // write flags
-    if( GetCachable() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Cachable() ).getStr() ).WriteChar( '|' );
     if( GetVolatile() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_Volatile() ).getStr() ).WriteChar( '|' );
     if( GetToggle() )

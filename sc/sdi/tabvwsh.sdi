@@ -80,7 +80,7 @@ interface BaseSelection
     [
         ExecMethod = ExecDrawIns ;
         StateMethod = GetDrawInsState ;
-        Cachable , Asynchron ;
+        Asynchron ;
     ]
 
     SID_PIVOT_CREATE        [ ExecMethod = ExecuteSbx; StateMethod = GetSbxState; ]

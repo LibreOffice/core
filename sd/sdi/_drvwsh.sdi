@@ -297,7 +297,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable , HasDialog , Export ,
+        HasDialog , Export ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_CHARMAP // ole : no, status : ?
@@ -352,7 +352,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_INSERT ;
-        Cachable , HasDialog , Export , Asynchron ,
+        HasDialog , Export , Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_MANAGE_LINKS // ole : no, status : ?
@@ -376,7 +376,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable , HasDialog , Export , Asynchron ,
+        HasDialog , Export , Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_BMPMASK // ole : yes, status : ?
@@ -681,7 +681,7 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable , Asynchron ,
+        Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_CHANGEBEZIER // ole : no, status : ?
@@ -794,7 +794,7 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable , AutoUpdate ,
+        AutoUpdate ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_OBJECT_SHEAR // ole : no, status : ?
@@ -1258,7 +1258,7 @@ interface DrawView
     [
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable , Export ;
+        Export ;
         PseudoSlots = FALSE ;
         ToolBoxConfig ;
         MenuConfig = TRUE;
@@ -1484,7 +1484,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_DRAGHIERARCHIE // ole : no, status : ?
     [
@@ -1495,56 +1494,48 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_DELETE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_HIDE
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_SHOW
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_APPLY // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_WATERCAN // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_SET_DEFAULT // ole : no, status : ?
     [
@@ -1572,13 +1563,11 @@ interface DrawView
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
-        Cachable ;
     ]
     SID_ATTR_LONG_ULSPACE // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
-        Cachable ;
     ]
     SID_RULER_LR_MIN_MAX // ole : no, status : ?
     [
@@ -1704,7 +1693,6 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     MenuConfig = TRUE ;
     ]
     SID_TEXTALIGNMENT // ole : no, status : ?
@@ -1785,7 +1773,6 @@ interface DrawView
     [
         ExecMethod = ExecGallery ;
         GroupId = GID_DOCUMENT ;
-        Cachable ;
     ]
     SID_NAVIGATOR_INIT // ole : no, status : ?
     [

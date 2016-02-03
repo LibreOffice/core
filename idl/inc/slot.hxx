@@ -36,7 +36,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aGet;
     SvBOOL          aSet;
 
-    SvBOOL          aCachable;  // exclusive
     SvBOOL          aVolatile;
     SvBOOL          aToggle;
     SvBOOL          aAutoUpdate;
@@ -76,17 +75,9 @@ class SvMetaSlot : public SvMetaAttribute
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
 protected:
-    void    SetCachable( bool bSet )
-            {
-                aCachable = bSet;
-                if( bSet )
-                    aVolatile = false;
-            }
     void    SetVolatile( bool bSet )
             {
                 aVolatile = bSet;
-                if( bSet )
-                    aCachable = false;
             }
     void    SetToggle( bool bSet )
             {
@@ -164,7 +155,6 @@ public:
     const OString&     GetDefault() const;
     const OString&     GetDisableFlags() const;
     bool                GetPseudoSlots() const;
-    bool                GetCachable() const;
     bool                GetVolatile() const;
     bool                GetToggle() const;
     bool                GetAutoUpdate() const;
