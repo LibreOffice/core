@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a062a2ab",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-03T13:21:26Z",
+      "side": 1,
+      "message": "I\u0027d rather move this up above where the listeners are started, so all variable are set at that point, effectively to where the other variables are set. I\u0027ll submit an amended commit.",
+      "revId": "f92f662878b7ca6271bf369d8846279e737d71c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
