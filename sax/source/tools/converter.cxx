@@ -1250,7 +1250,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
 
 
 static void
-lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
+lcl_AppendTimezone(OUStringBuffer & i_rBuffer, int const nOffset)
 {
     if (0 == nOffset)
     {
@@ -1435,7 +1435,7 @@ lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
 static void lcl_ConvertToUTC(
         sal_Int16 & o_rYear, sal_uInt16 & o_rMonth, sal_uInt16 & o_rDay,
         sal_uInt16 & o_rHours, sal_uInt16 & o_rMinutes,
-        sal_Int16 const nSourceOffset)
+        int const nSourceOffset)
 {
     sal_Int16 nOffsetHours(abs(nSourceOffset) / 60);
     sal_Int16 const nOffsetMinutes(abs(nSourceOffset) % 60);
