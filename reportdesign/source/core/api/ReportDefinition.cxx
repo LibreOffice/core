@@ -2549,7 +2549,23 @@ bool OReportDefinition::isEnableSetModified() const
 
 OUString OReportDefinition::getDocumentBaseURL() const
 {
-    return const_cast<OReportDefinition*>(this)->getURL();
+    // TODO: should this be in getURL()? not sure...
+    uno::Reference<frame::XModel> const xParent(
+        const_cast<OReportDefinition*>(this)->getParent(), uno::UNO_QUERY);
+    if (xParent.is())
+    {
+        return xParent->getURL();
+    }
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+    for (beans::PropertyValue const& it : m_pImpl->m_aArgs)
+    {
+        if (it.Name == "DocumentBaseURL")
+            return it.Value.get<OUString>();
+    }
+
+    return OUString();
 }
 
 uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
