@@ -142,7 +142,9 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
     // Set base URI
     OUString const baseURI(rMedium.GetBaseURL());
-    assert(!baseURI.isEmpty()); // needed for relative URLs
+    // needed for relative URLs; but it's OK to import e.g. MathML from the
+    // clipboard without one
+    SAL_INFO_IF(baseURI.isEmpty(), "starmath", "SmXMLImportWrapper: no base URL");
     xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
 
     sal_Int32 nSteps=3;
