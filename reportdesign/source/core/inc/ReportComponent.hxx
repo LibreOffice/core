@@ -37,44 +37,45 @@ namespace reportdesign
     class OReportComponentProperties
     {
     public:
-        css::uno::WeakReference< css::container::XChild >                           m_xParent;
-        css::uno::Reference< css::uno::XComponentContext >                          m_xContext;
-        css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xFactory;
-        css::uno::Reference< css::drawing::XShape >                                 m_xShape;
-        css::uno::Reference< css::uno::XAggregation >                               m_xProxy;
-        css::uno::Reference< css::beans::XPropertySet >                             m_xProperty;
-        css::uno::Reference< css::lang::XTypeProvider >                             m_xTypeProvider;
-        css::uno::Reference< css::lang::XUnoTunnel >                                m_xUnoTunnel;
-        css::uno::Reference< css::lang::XServiceInfo >                              m_xServiceInfo;
-        css::uno::Sequence< OUString >                                              m_aMasterFields;
-        css::uno::Sequence< OUString >                                              m_aDetailFields;
-        OUString                                                                    m_sName;
-        ::sal_Int32                                                                 m_nHeight;
-        ::sal_Int32                                                                 m_nWidth;
-        ::sal_Int32                                                                 m_nPosX;
-        ::sal_Int32                                                                 m_nPosY;
-        ::sal_Int32                                                                 m_nBorderColor;
-        ::sal_Int16                                                                 m_nBorder;
-        bool                                                                        m_bPrintRepeatedValues;
+        css::uno::WeakReference<css::container::XChild> m_xParent;
+        css::uno::Reference<css::uno::XComponentContext> m_xContext;
+        css::uno::Reference<css::lang::XMultiServiceFactory> m_xFactory;
+        css::uno::Reference<css::drawing::XShape> m_xShape;
+        css::uno::Reference<css::uno::XAggregation> m_xProxy;
+        css::uno::Reference<css::beans::XPropertySet> m_xProperty;
+        css::uno::Reference<css::lang::XTypeProvider> m_xTypeProvider;
+        css::uno::Reference<css::lang::XUnoTunnel> m_xUnoTunnel;
+        css::uno::Reference<css::lang::XServiceInfo> m_xServiceInfo;
+        css::uno::Sequence<OUString> m_aMasterFields;
+        css::uno::Sequence<OUString> m_aDetailFields;
+        OUString m_sName;
+        ::sal_Int32 m_nHeight;
+        ::sal_Int32 m_nWidth;
+        ::sal_Int32 m_nPosX;
+        ::sal_Int32 m_nPosY;
+        ::sal_Int32 m_nBorderColor;
+        ::sal_Int16 m_nBorder;
+        bool m_bPrintRepeatedValues;
 
-        OReportComponentProperties(css::uno::Reference< css::uno::XComponentContext > const & _xContext
-            )
-            :m_xContext(_xContext)
-            ,m_nHeight(0)
-            ,m_nWidth(0)
-            ,m_nPosX(0)
-            ,m_nPosY(0)
-            ,m_nBorderColor(0)
-            ,m_nBorder(2)
-            ,m_bPrintRepeatedValues(true)
+        OReportComponentProperties(
+                css::uno::Reference<css::uno::XComponentContext> const& xContext)
+            : m_xContext(xContext)
+            , m_nHeight(0)
+            , m_nWidth(0)
+            , m_nPosX(0)
+            , m_nPosY(0)
+            , m_nBorderColor(0)
+            , m_nBorder(2)
+            , m_bPrintRepeatedValues(true)
         {}
         ~OReportComponentProperties();
 
-        void setShape(css::uno::Reference< css::drawing::XShape >& _xShape
-                    ,const css::uno::Reference< css::report::XReportComponent>& _xTunnel
-                    ,oslInterlockedCount& _rRefCount);
+        void setShape(css::uno::Reference<css::drawing::XShape>& xShape,
+             const css::uno::Reference<css::report::XReportComponent>& xTunnel,
+             oslInterlockedCount& rRefCount);
     };
 }
+
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTCOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
