@@ -157,7 +157,7 @@ bool SvMetaSlot::GetRecordPerItem() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
+      || aRecordPerSet.IsSet() )
         return aRecordPerItem;
     return static_cast<SvMetaSlot *>(GetRef())->GetRecordPerItem();
 }
@@ -165,23 +165,15 @@ bool SvMetaSlot::GetRecordPerSet() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
+      || aRecordPerSet.IsSet() )
         return aRecordPerSet;
     return static_cast<SvMetaSlot *>(GetRef())->GetRecordPerSet();
-}
-bool SvMetaSlot::GetRecordManual() const
-{
-    // Record- PerItem, No, PerSet and Manual are exclusive
-    if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
-        return aRecordManual;
-    return static_cast<SvMetaSlot *>(GetRef())->GetRecordManual();
 }
 bool SvMetaSlot::GetNoRecord() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
+      || aRecordPerSet.IsSet()  )
         return aNoRecord;
     return static_cast<SvMetaSlot *>(GetRef())->GetNoRecord();
 }
@@ -288,8 +280,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         SetRecordPerItem( aRecordPerItem ), bOk = true;
     if( aRecordPerSet.ReadSvIdl( SvHash_RecordPerSet(), rInStm ) )
         SetRecordPerSet( aRecordPerSet ), bOk = true;
-    if( aRecordManual.ReadSvIdl( SvHash_RecordManual(), rInStm ) )
-        SetRecordManual( aRecordManual ), bOk = true;
     if( aNoRecord.ReadSvIdl( SvHash_NoRecord(), rInStm ) )
         SetNoRecord( aNoRecord ), bOk = true;
 
@@ -810,8 +800,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordPerItem() ).getStr() ).WriteChar( '|' );
     if( GetRecordPerSet() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordPerSet() ).getStr() ).WriteChar( '|' );
-    if( GetRecordManual() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordManual() ).getStr() ).WriteChar( '|' );
     if( GetNoRecord() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_NoRecord() ).getStr() ).WriteChar( '|' );
     if( GetRecordAbsolute() )

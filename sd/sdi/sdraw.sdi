@@ -424,7 +424,6 @@ SfxBoolItem Cone SID_3D_CONE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -466,7 +465,6 @@ SfxBoolItem Connector SID_TOOL_CONNECTOR
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -1333,7 +1331,6 @@ SfxBoolItem Cube SID_3D_CUBE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -1375,7 +1372,6 @@ SfxBoolItem Cylinder SID_3D_CYLINDER
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -1397,7 +1393,6 @@ SfxBoolItem Cyramid SID_3D_PYRAMID
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -2307,7 +2302,6 @@ SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -4598,7 +4592,6 @@ SfxBoolItem Shell3D SID_3D_SHELL
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -4750,7 +4743,6 @@ SfxBoolItem Sphere SID_3D_SPHERE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 
@@ -4852,7 +4844,6 @@ SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     /* config: */
     AccelConfig = FALSE,
@@ -4980,7 +4971,6 @@ SfxBoolItem Torus SID_3D_TORUS
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordManual;
 
     Readonly = FALSE,
 

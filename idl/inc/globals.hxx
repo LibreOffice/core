@@ -49,7 +49,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_Asynchron;
     SvStringHashEntryRef MM_RecordPerSet;
     SvStringHashEntryRef MM_RecordPerItem;
-    SvStringHashEntryRef MM_RecordManual;
     SvStringHashEntryRef MM_NoRecord;
     SvStringHashEntryRef MM_RecordAbsolute;
     SvStringHashEntryRef MM_enum;
@@ -150,7 +149,6 @@ HASH_INLINE(AutoUpdate)
 HASH_INLINE(Asynchron)
 HASH_INLINE(RecordPerItem)
 HASH_INLINE(RecordPerSet)
-HASH_INLINE(RecordManual)
 HASH_INLINE(NoRecord)
 HASH_INLINE(RecordAbsolute)
 HASH_INLINE(enum)
