@@ -2009,6 +2009,12 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         }
         else
         {
+            if (pImp->m_bSavingForSigning && pFilter && pFilter->GetSupportsSigning())
+                // So that pMedium->pImp->xStream becomes a non-empty
+                // reference, and at the end we attempt locking again in
+                // SfxMedium::LockOrigFileOnDemand().
+                pMedium->GetMedium_Impl();
+
             if( pMedium->GetOpenMode() & StreamMode::WRITE )
                 pMedium->GetInStream();
             xStorage = GetStorage();

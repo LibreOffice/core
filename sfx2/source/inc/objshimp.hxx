@@ -146,6 +146,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt32          m_nModifyPasswordHash;
     css::uno::Sequence< css::beans::PropertyValue > m_aModifyPasswordInfo;
     bool                m_bModifyPasswordEntered;
+    /// If true, then this is not a real save, just the signatures change.
+    bool m_bSavingForSigning;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();

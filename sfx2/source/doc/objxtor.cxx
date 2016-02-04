@@ -264,6 +264,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bIncomplEncrWarnShown( false )
     ,m_nModifyPasswordHash( 0 )
     ,m_bModifyPasswordEntered( false )
+    ,m_bSavingForSigning( false )
 {
     SfxObjectShell* pDoc = &_rDocShell;
     SfxObjectShellArr_Impl &rArr = SfxGetpApp()->GetObjectShells_Impl();
