@@ -48,6 +48,7 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
             aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "impress_" ), OUString() );
             aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "calc_"    ),  OUString() );
             aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "writer_"  ),  OUString() );
+            aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "web_"  ),  OUString() );
         }
         else if ( aProperty.Name == "FilterData" )
         {
