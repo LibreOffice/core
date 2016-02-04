@@ -23,9 +23,11 @@ namespace connectivity
 {
     namespace mork
     {
-        css::uno::Reference< css::uno::XInterface > create(css::uno::Reference< css::uno::XComponentContext > const & context)
+        extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL mork_get_implementation(
+            css::uno::XComponentContext* context,
+            css::uno::Sequence<css::uno::Any> const &)
         {
-            return static_cast< cppu::OWeakObject * >(new MorkDriver(context));
+            return cppu::acquire(new MorkDriver(context));
         }
     }
 }
@@ -37,24 +39,10 @@ MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const 
     SAL_INFO("connectivity.mork", "=> MorkDriver::MorkDriver()" );
 }
 
-// static ServiceInfo
-
-OUString MorkDriver::getImplementationName_Static(  ) throw(css::uno::RuntimeException)
-{
-    return OUString(MORK_DRIVER_IMPL_NAME);
-}
-
-
-css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException)
-{
-    css::uno::Sequence< OUString > aSNS { "com.sun.star.sdbc.Driver" };
-    return aSNS;
-}
-
 OUString SAL_CALL MorkDriver::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return getImplementationName_Static();
+    return OUString(MORK_DRIVER_IMPL_NAME);
 }
 
 sal_Bool SAL_CALL MorkDriver::supportsService(const OUString& serviceName)
@@ -66,7 +54,7 @@ sal_Bool SAL_CALL MorkDriver::supportsService(const OUString& serviceName)
 css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_Static();
+    return { "com.sun.star.sdbc.Driver" };
 }
 
 css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
