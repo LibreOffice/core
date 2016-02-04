@@ -71,7 +71,9 @@ public class PlainSourceView extends JScrollPane implements
         try {
             int line = ta.getLineStartOffset(model.getCurrentPosition());
             Rectangle rect = ta.modelToView(line);
-            ta.scrollRectToVisible(rect);
+            if (rect != null) {
+                ta.scrollRectToVisible(rect);
+            }
         } catch (BadLocationException e) {
             // couldn't scroll to line, do nothing
         }
