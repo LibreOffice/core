@@ -17,9 +17,6 @@
  */
 
 interface TextOLEObject : BaseTextOLEObject
-[
-    uuid = "B156B300-39FC-101D-9757-C667E8298000"
-]
 {
     import TextFrame;
 }

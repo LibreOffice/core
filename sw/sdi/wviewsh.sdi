@@ -17,14 +17,12 @@
  */
 
 interface WebTextInTable
-[ uuid = "B47F0DE7-1E1F-11d1-89CA-008029E4B0B1" ]
 {
     import WebText;
         import WebTable;
 }
 
 interface WebListInTable
-[ uuid="B47F0DE8-1E1F-11d1-89CA-008029E4B0B1" ]
 {
     import WebText;
         import WebList;
@@ -32,16 +30,12 @@ interface WebListInTable
 }
 
 interface WebListInText
-[ uuid = "B47F0DE9-1E1F-11d1-89CA-008029E4B0B1"]
 {
     import WebList;
     import WebText;
 }
 
 interface WebEditView : BaseTextEditView
-[
-    uuid = "B47F0DEA-1E1F-11d1-89CA-008029E4B0B1"
-]
 {
     SID_DRAW_TEXT_MARQUEE // status()
     [
@@ -62,7 +56,6 @@ shell SwWebView
 }
 
 interface WebSourceView
-[ uuid = "95069CE0-69D8-101D-9757-C667E8298000"]
 {
     SID_TABLE_CELL // status()
     [

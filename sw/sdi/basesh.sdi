@@ -17,9 +17,6 @@
  */
 
 interface TextSelection : BaseTextSelection
-[
-    uuid = "F23BA0A8-73A0-11d0-89CA-008029E4B0B1"
-]
 {
     // Here shall the slots are inserted which are not supported by
     // StarWriter/WEB

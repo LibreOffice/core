@@ -17,9 +17,6 @@
  */
 
 interface OutlineView
-[
-    uuid ( "92E2F580-2FB4-11CF-89CA-008029E4B0B1" ) ;
-]
 {
     SID_CUT // ole : no, status : ?
     [

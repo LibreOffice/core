@@ -18,9 +18,6 @@
 
 
 interface TableFont
-[
-    uuid ( "2E4AC1C0-137C-11D3-B25B-006097DA68F3" )
-]
 {
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_PREVIEW_FONT  [ ExecMethod = ExecuteAttr; ]
@@ -40,9 +37,6 @@ interface TableFont
 
 
 interface FormatForSelection
-[
-    uuid ( "40F448A0-137C-11D3-B25B-006097DA68F3" )
-]
 {
     //Auch das Basic muss wieder laufen
     SbxObject Font SID_PROP_FONT

@@ -43,19 +43,6 @@ bool SvMetaModule::SetName( const OString& rName, SvIdlDataBase * pBase )
     return SvMetaExtern::SetName( rName );
 }
 
-bool SvMetaModule::FillNextName( SvGlobalName * pName )
-{
-    *pName = aNextName;
-
-    if( aNextName < aEndName )
-    {
-        ++aNextName;
-        bIsModified = true;
-        return true;
-    }
-    return false;
-}
-
 void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
@@ -216,8 +203,6 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     rInStm.ReadDelemiter();
     if( bOk )
     {
-        aNextName = aBeginName;
-
         rBase.Push( this ); // onto the context stack
 
         if( ReadNameSvIdl( rBase, rInStm ) )

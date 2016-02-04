@@ -17,9 +17,6 @@
  */
 
 interface StarCalc
-[
-    uuid ( "AB3257C0-07D7-11CF-89CB-008029E4B0B1" )
-]
 {
     FID_AUTOCOMPLETE    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DETECTIVE_AUTO  [ ExecMethod = Execute; StateMethod = GetState; ]

@@ -17,14 +17,12 @@
  */
 
 interface TextInTable
-[ uuid = "63C33940-69D8-101D-9757-C667E8298000" ]
 {
     import Text;
         import TextTable;
 }
 
 interface ListInTable
-[ uuid="7F1A6E20-69D8-101D-9757-C667E8298000" ]
 {
     import Text;
         import TextList;
@@ -32,16 +30,12 @@ interface ListInTable
 }
 
 interface ListInText
-[ uuid = "8A4C07E0-69D8-101D-9757-C667E8298000"]
 {
     import TextList;
     import Text;
 }
 
 interface TextEditView : BaseTextEditView
-[
-    uuid = "09782660-111A-101D-9757-6E74207A7520"
-]
 {
      // Slots, which are not needed in the WebDocShell
     FN_INSERT_OBJ_CTRL
@@ -211,7 +205,6 @@ shell SwView
 }
 
 interface TextPrintPreview
-[ uuid = "1622A480-111A-101D-9757-6E74207A7520" ]
 {
     SID_BROWSER_MODE
     [

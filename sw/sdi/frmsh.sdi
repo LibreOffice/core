@@ -17,9 +17,6 @@
  */
 
 interface TextFrame : BaseTextFrame
-[
-    uuid = "564CBAA0-111A-101D-9757-6E74207A7520"
-]
 {
     import TextSelection;
 }

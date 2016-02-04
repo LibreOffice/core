@@ -35,7 +35,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_String;
     SvStringHashEntryRef MM_UCHAR;
     SvStringHashEntryRef MM_USHORT;
-    SvStringHashEntryRef MM_uuid;
     SvStringHashEntryRef MM_HelpContext;
     SvStringHashEntryRef MM_HelpText;
     SvStringHashEntryRef MM_void;
@@ -65,7 +64,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_map;
     SvStringHashEntryRef MM_Default;
     SvStringHashEntryRef MM_HelpFile;
-    SvStringHashEntryRef MM_Version;
     SvStringHashEntryRef MM_import;
     SvStringHashEntryRef MM_SlotIdFile;
     SvStringHashEntryRef MM_SvName;
@@ -89,7 +87,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_Container;
     SvStringHashEntryRef MM_ImageRotation;
     SvStringHashEntryRef MM_ImageReflection;
-    SvStringHashEntryRef MM_IsCollection;
     SvStringHashEntryRef MM_ReadOnlyDoc;
     SvStringHashEntryRef MM_union;
     SvStringHashEntryRef MM_struct;
@@ -130,7 +127,6 @@ HASH_INLINE(interface)
 HASH_INLINE(in)
 HASH_INLINE(out)
 HASH_INLINE(inout)
-HASH_INLINE(uuid)
 HASH_INLINE(HelpContext)
 HASH_INLINE(HelpText)
 HASH_INLINE(shell)
@@ -156,7 +152,6 @@ HASH_INLINE(item)
 HASH_INLINE(PseudoSlots)
 HASH_INLINE(Default)
 HASH_INLINE(HelpFile)
-HASH_INLINE(Version)
 HASH_INLINE(import)
 HASH_INLINE(SlotIdFile)
 HASH_INLINE(SvName)
@@ -181,7 +176,6 @@ HASH_INLINE(SbxObject)
 HASH_INLINE(Container)
 HASH_INLINE(ImageRotation)
 HASH_INLINE(ImageReflection)
-HASH_INLINE(IsCollection)
 HASH_INLINE(ReadOnlyDoc)
 HASH_INLINE(union)
 HASH_INLINE(struct)

@@ -38,7 +38,6 @@ class SvMetaModule : public SvMetaExtern
                             bIsModified : 1;
     SvGlobalName            aBeginName;
     SvGlobalName            aEndName;
-    SvGlobalName            aNextName;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
@@ -48,7 +47,6 @@ public:
 
                         SvMetaModule( bool bImported );
 
-    bool                FillNextName( SvGlobalName * );
     bool                IsImported() const { return bImported; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;

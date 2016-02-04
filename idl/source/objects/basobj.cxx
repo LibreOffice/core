@@ -164,8 +164,6 @@ SvMetaReference::SvMetaReference()
 
 SvMetaExtern::SvMetaExtern()
     : pModule( nullptr )
-    , bReadUUId( false )
-    , bReadVersion( false )
 {
 }
 
@@ -175,31 +173,14 @@ SvMetaModule * SvMetaExtern::GetModule() const
     return pModule;
 }
 
-void SvMetaExtern::GetUUId() const
-{
-    if( aUUId == SvGlobalName() )
-        GetModule()->FillNextName( &const_cast<SvMetaExtern *>(this)->aUUId );
-}
-
 void SvMetaExtern::SetModule( SvIdlDataBase & rBase )
 {
     pModule = static_cast<SvMetaModule *>(rBase.GetStack().Get( checkSvMetaObject<SvMetaModule> ));
 }
 
-void SvMetaExtern::ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                        SvTokenStream & rInStm )
-{
-    SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
-    if( aUUId.ReadSvIdl( rBase, rInStm ) )
-        bReadUUId = true;
-    if( aVersion.ReadSvIdl( rInStm ) )
-        bReadVersion = true;
-}
-
 bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     SetModule( rBase );
-    GetUUId(); // id gets created
     return SvMetaReference::ReadSvIdl( rBase, rInStm );
 }
 

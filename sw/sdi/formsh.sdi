@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 interface TextDrawForm: BaseTextDrawForm
-[
-    uuid = "1D396B40-B8CC-11d1-AB80-006097B418C2"
-]
 {
     import TextDrawBase;
 }

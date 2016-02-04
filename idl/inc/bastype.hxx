@@ -120,24 +120,6 @@ class SvHelpContext : public SvIdentifier
 {
 };
 
-class SvUUId : public SvGlobalName
-{
-public:
-                SvUUId() {}
-    bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-};
-
-
-class SvVersion
-{
-    sal_uInt16  nMajorVersion;
-    sal_uInt16  nMinorVersion;
-public:
-                SvVersion() : nMajorVersion( 1 ), nMinorVersion( 0 ) {}
-    bool        ReadSvIdl( SvTokenStream & rInStm );
-};
-
-
 #endif // INCLUDED_IDL_INC_BASTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

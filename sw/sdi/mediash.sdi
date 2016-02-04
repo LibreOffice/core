@@ -17,9 +17,6 @@
  */
 
 interface TextMedia : BaseTextMedia
-[
-    uuid = "54268616-9970-4ad9-8798-280206fc160a"
-]
 {
 }
 

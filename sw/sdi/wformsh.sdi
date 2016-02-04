@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 interface WebDrawForm: BaseTextDrawForm
-[
-    uuid = "4bac4490-fede-11d1-abff-006097b418c2"
-]
 {
     import WebDrawBase;
 }

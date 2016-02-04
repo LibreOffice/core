@@ -17,9 +17,6 @@
  */
 
 interface Annotation : _Annotation
-[
-    uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
-]
 {
 
     SID_THESAURUS // api:

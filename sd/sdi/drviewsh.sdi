@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 interface ImpressEditView : DrawView
-[
-    uuid ( "661B07E0-2FB4-11CF-89CA-008029E4B0B1" ) ;
-]
 {
     SID_MODIFYPAGE // ole : no, status : play rec
     [

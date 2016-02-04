@@ -17,9 +17,6 @@
  */
 
 interface TextDocument : BaseTextDocument
-[
-    uuid = "0D960120-111C-101D-9757-6E74207A7520"
-]
 {
     // Slots, which are not needed in the WebDocShell
 

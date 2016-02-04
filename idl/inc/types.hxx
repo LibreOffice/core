@@ -37,7 +37,6 @@ class SvMetaAttribute : public SvMetaReference
     SvMetaTypeRef       aType;
     SvIdentifier        aSlotId;
     SvBOOL              aExport;
-    SvBOOL              aIsCollection;
     SvBOOL              aReadOnlyDoc;
     SvBOOL              aHidden;
     bool                bNewAttr;
@@ -56,7 +55,6 @@ public:
     const SvIdentifier & GetSlotId() const;
     bool                GetExport() const;
     bool                GetHidden() const;
-    bool                GetIsCollection() const;
     bool                GetReadOnlyDoc() const;
     SvMetaType *        GetType() const;
 

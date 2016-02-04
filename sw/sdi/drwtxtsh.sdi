@@ -17,9 +17,6 @@
  */
 
 interface TextDrawText
-[
-    uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
-]
 {
     SID_SELECTALL  // api:
     [
@@ -634,7 +631,6 @@ interface TextDrawText
 }
 
 interface TextDrawFont
-[ uuid = "074C35E0-11EF-101D-9757-6E74207A7520"; ]
 {
     SID_ATTR_CHAR_FONT // status()
     [

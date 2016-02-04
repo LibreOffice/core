@@ -17,8 +17,6 @@
  */
 
 interface TextBezier : TextSelection
-[
-    uuid = "68EF7EA0-6876-11D0-A887-008029E86826" ]
 {
     SID_DELETE
     [
