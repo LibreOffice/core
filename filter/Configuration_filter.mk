@@ -416,6 +416,8 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xc
 	writer_web_StarOffice_XML_Writer \
 	writer_web_StarOffice_XML_Writer_Web_Template \
 	writer_web_pdf_Export\
+	writer_web_png_Export\
+	writer_web_jpg_Export\
 	writerweb8_writer_template\
 	writerweb8_writer \
 ))
