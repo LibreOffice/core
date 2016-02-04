@@ -285,8 +285,6 @@ SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 {
-    bool bIn    = false;
-    bool bOut   = false;
     int nCall0  = CALL_VALUE;
     int nCall1  = CALL_VALUE;
     bool bSet   = false; // any attribute set
@@ -300,25 +298,6 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
-            if( pTok->Is( SvHash_in() ) )
-            {
-                bIn  = true;
-                pTok = rInStm.GetToken_Next();
-                bSet = true;
-            }
-            if( pTok->Is( SvHash_out() ) )
-            {
-                bOut = true;
-                pTok = rInStm.GetToken_Next();
-                bSet = true;
-            }
-            if( pTok->Is( SvHash_inout() ) )
-            {
-                bIn  = true;
-                bOut = true;
-                pTok = rInStm.GetToken_Next();
-                bSet = true;
-            }
         }
     }
 
@@ -365,8 +344,6 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
             DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
             SvMetaTypeRef xType = new SvMetaType( pType->GetName().getString(), 'h', "dummy" );
             xType->SetRef( pType );
-            xType->SetIn( bIn );
-            xType->SetOut( bOut );
             xType->SetCall0( nCall0 );
             xType->SetCall1( nCall1 );
 

@@ -79,8 +79,6 @@ enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
       TYPE_CLASS, TYPE_POINTER };
 class SvMetaType : public SvMetaExtern
 {
-    SvBOOL                      aIn;    // input parameter
-    SvBOOL                      aOut;   // return parameter
     Svint                       aCall0, aCall1;
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
@@ -122,12 +120,6 @@ public:
     SvMetaType *        GetReturnType() const;
     bool                IsItem() const { return bIsItem; }
     bool                IsShell() const { return bIsShell; }
-
-    void                SetIn( bool b ) { aIn = b; }
-    bool                GetIn() const;
-
-    void                SetOut( bool b ) { aOut = b; }
-    bool                GetOut() const;
 
     void                SetCall0( int e );
     int                 GetCall0() const;
