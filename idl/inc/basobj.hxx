@@ -88,7 +88,6 @@ class SvMetaObject : public SvRttiBase
 {
 protected:
     SvString      aName;
-    SvHelpContext aHelpContext;
     SvHelpText    aHelpText;
     SvString      aDescription;
 
