@@ -185,21 +185,21 @@ public class Control extends Shape
         else
         {
             Size aPeerSize = getPeerSize();
-            int  aWidth;
+            int nWidth;
             if (aPeerSize == null)
-                aWidth = 0;
+                nWidth = 0;
             else
-                aWidth = aPeerSize.Width;
+                nWidth = aPeerSize.Width;
 
             // We increase the preferred Width a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
             if (getControlType() == FormHandler.SOCHECKBOX)
             {
-                return aWidth * oFormHandler.getXPixelFactor();
+                return nWidth * oFormHandler.getXPixelFactor();
             }
             else
             {
-                return (aWidth * oFormHandler.getXPixelFactor()) + 200;
+                return (nWidth * oFormHandler.getXPixelFactor()) + 200;
             }
         }
     }
@@ -213,11 +213,11 @@ public class Control extends Shape
         else
         {
             Size aPeerSize = getPeerSize();
-            int nHeight = aPeerSize.Height;
+            int nHeight;
             if (aPeerSize == null)
-                 nHeight = 0;
+                nHeight = 0;
             else
-                 nHeight = aPeerSize.Height;
+                nHeight = aPeerSize.Height;
 
             // We increase the preferred Height a bit so that the control does not become too small
             // when we change the border from "3D" to "Flat"
