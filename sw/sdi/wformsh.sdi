@@ -25,6 +25,6 @@ interface WebDrawForm: BaseTextDrawForm
 
 shell SwWebDrawFormShell : SwWebDrawBaseShell
 {
-    import WebDrawForm[Automation];
+    import WebDrawForm;
 }
 

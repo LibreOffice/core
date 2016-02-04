@@ -40,9 +40,8 @@ typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 typedef tools::SvRef<SvMetaClass> SvMetaClassRef;
 class SvClassElement : public SvRttiBase
 {
-    SvBOOL                      aAutomation;
     OString                aPrefix;
-    SvMetaClassRef              xClass;
+    SvMetaClassRef         xClass;
 public:
             SvClassElement();
 
@@ -51,8 +50,6 @@ public:
     const OString&  GetPrefix() const
                     { return aPrefix; }
 
-    void            SetAutomation( bool rAutomation )
-                    { aAutomation = rAutomation; }
     void            SetClass( SvMetaClass * pClass )
                     { xClass = pClass; }
     SvMetaClass *   GetClass() const
@@ -68,8 +65,6 @@ class SvMetaClass : public SvMetaType
     SvMetaAttributeMemberList   aAttrList;
     SvClassElementMemberList    aClassList;
     SvMetaClassRef              aSuperClass;
-    SvBOOL                      aAutomation;
-    SvMetaClassRef              xAutomationInterface;
 
     bool                    TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;

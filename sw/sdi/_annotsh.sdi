@@ -17,7 +17,6 @@
  */
 
 interface _Annotation
-[ Automation = FALSE; ]
 {
     FN_DELETE_COMMENT
     [

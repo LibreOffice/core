@@ -78,7 +78,7 @@ interface StarCalc
 
 shell ScModule
 {
-            import StarCalc[Automation];
+            import StarCalc;
 }
 
 

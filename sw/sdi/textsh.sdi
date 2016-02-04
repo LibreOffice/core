@@ -89,6 +89,6 @@ enum TOXTypes
 
 shell SwTextShell : SwBaseShell
 {
-    import Text[Automation];
+    import Text;
 }
 

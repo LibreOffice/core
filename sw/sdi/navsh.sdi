@@ -9,7 +9,7 @@
 
 shell SwNavigationShell
 {
-    import _Navigation[Automation];
+    import _Navigation;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

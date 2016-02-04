@@ -17,9 +17,6 @@
  */
 
 interface Window
-[
-    Automation = FALSE ;
-]
 {
     SID_HYPERLINK_DIALOG
     [
@@ -312,9 +309,6 @@ interface Window
 }
 
 interface BrowseWindow : Window
-[
-    Automation = FALSE ;
-]
 {
     SID_ACTIVATE // ole(no) api(final/play/rec)
     [
@@ -368,9 +362,6 @@ interface BrowseWindow : Window
 }
 
 interface TopWindow : BrowseWindow
-[
-    Automation = FALSE ;
-]
 {
     SID_NEWDOCDIRECT // ole(no) api(no)
     [
@@ -413,7 +404,7 @@ interface TopWindow : BrowseWindow
 
 shell SfxViewFrame
 {
-    import TopWindow [Automation];
+    import TopWindow;
 
     SID_FORMATMENUSTATE
     [

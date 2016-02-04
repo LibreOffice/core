@@ -97,6 +97,6 @@ interface StarImpress
 
 shell SdModule
 {
-    import StarImpress[Automation];
+    import StarImpress;
 }
 

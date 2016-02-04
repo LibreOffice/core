@@ -25,6 +25,6 @@ interface WebList : BaseTextList
 
 shell SwWebListShell : SwBaseShell
 {
-        import WebList[Automation];
+        import WebList;
 }
 

@@ -26,6 +26,6 @@ interface WebFrame : BaseTextFrame
 
 shell SwWebFrameShell : SwBaseShell
 {
-        import WebFrame[Automation];
+        import WebFrame;
 }
 

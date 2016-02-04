@@ -75,6 +75,6 @@ interface StarWriter
 
 shell SwModule
 {
-    import StarWriter[Automation];
+    import StarWriter;
 }
 

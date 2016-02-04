@@ -112,5 +112,5 @@ shell ScDocShell
     uuid ( "3F543FA0-B6A6-101B-9961-04021C007002" )
 ]
 {
-        import TableDocument[Automation];
+        import TableDocument;
 }

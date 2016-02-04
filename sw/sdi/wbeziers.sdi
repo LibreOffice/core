@@ -23,6 +23,6 @@ interface Bezier : _Bezier
 
 shell SwBezierShell: SwBaseShell
 {
-    import Bezier[Automation];
+    import Bezier;
 }
 

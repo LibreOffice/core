@@ -17,9 +17,6 @@
  */
 
 interface View
-[
-    Automation = FALSE ;
-]
 {
 
     SID_MAIL_SENDDOC // ole(no) api(todo)
@@ -97,5 +94,5 @@ interface View
 
 shell SfxViewShell
 {
-    import View [Automation];
+    import View;
 }

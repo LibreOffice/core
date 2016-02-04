@@ -26,5 +26,5 @@ interface TextMedia : BaseTextMedia
 shell SwMediaShell : SwBaseShell
 
 {
-    import TextMedia[Automation];
+    import TextMedia;
 }

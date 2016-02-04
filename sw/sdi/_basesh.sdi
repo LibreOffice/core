@@ -17,9 +17,6 @@
  */
 
 interface BaseTextSelection
-[
-    Automation = FALSE;
-]
 {
     SID_ATTR_BRUSH
     [

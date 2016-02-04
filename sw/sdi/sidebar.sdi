@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-interface Sidebar [ Automation = FALSE; ]
+interface Sidebar
 {
     SID_ATTR_TRANSFORM_WIDTH    [ StateMethod = GetDrawAttrStateForIFBX; ]
     SID_ATTR_TRANSFORM_HEIGHT   [ StateMethod = GetDrawAttrStateForIFBX; ]

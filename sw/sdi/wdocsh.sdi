@@ -37,7 +37,7 @@ interface WebDocument : BaseTextDocument
 
 shell SwWebDocShell
 {
-        import WebDocument[Automation];
+        import WebDocument;
 }
 
 shell SwWebGlosDocShell : SwWebDocShell

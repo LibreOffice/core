@@ -17,9 +17,6 @@
  */
 
 interface WebSelection : BaseTextSelection
-[
-    Automation = FALSE;
-]
 {
     // hier kommt nur dann etwas hinein, wenn es im
     // kompletten StarWriter nicht benoetigt wird
@@ -27,7 +24,7 @@ interface WebSelection : BaseTextSelection
 
 shell SwWebBaseShell
 {
-        import WebSelection[Automation];
+        import WebSelection;
         import Interior "Interior";
         import Shadow "Shadow";
 

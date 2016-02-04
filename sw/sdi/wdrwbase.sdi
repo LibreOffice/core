@@ -17,16 +17,13 @@
  */
 
 interface WebDrawBase : BaseTextDrawBase
-[
-    Automation = FALSE;
-]
 {
     import BaseTextSelection;
 }
 
 shell SwWebDrawBaseShell: SwBaseShell
 {
-        import WebDrawBase[Automation];
+        import WebDrawBase;
         import Sidebar;
 
     SID_OBJECT_ALIGN

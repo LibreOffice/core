@@ -196,17 +196,17 @@ interface ImpressEditView : DrawView
 
 shell DrawViewShell
 {
-    import ImpressEditView[Automation];
+    import ImpressEditView;
 }
 
 
 shell PresentationViewShell
 {
-    import ImpressEditView[Automation];
+    import ImpressEditView;
 }
 
 
 shell PreviewViewShell
 {
-    import ImpressEditView[Automation];
+    import ImpressEditView;
 }

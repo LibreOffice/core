@@ -34,6 +34,6 @@ interface WebText : BaseText
 
 shell SwWebTextShell : SwBaseShell
 {
-    import WebText[Automation];
+    import WebText;
 }
 

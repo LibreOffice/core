@@ -26,6 +26,6 @@ interface TextList : BaseTextList
 
 shell SwListShell : SwBaseShell
 {
-        import TextList[Automation];
+        import TextList;
 }
 

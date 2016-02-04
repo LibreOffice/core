@@ -78,7 +78,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_GroupId;
     SvStringHashEntryRef MM_TypeLibFile;
     SvStringHashEntryRef MM_Export;
-    SvStringHashEntryRef MM_Automation;
     SvStringHashEntryRef MM_PseudoPrefix;
     SvStringHashEntryRef MM_define;
     SvStringHashEntryRef MM_MenuConfig;
@@ -172,7 +171,6 @@ HASH_INLINE(float)
 HASH_INLINE(double)
 HASH_INLINE(TypeLibFile)
 HASH_INLINE(Export)
-HASH_INLINE(Automation)
 HASH_INLINE(PseudoPrefix)
 HASH_INLINE(define)
 HASH_INLINE(MenuConfig)

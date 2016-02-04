@@ -273,7 +273,7 @@ shell ScTabViewShell
     import TableOLEObject "SelectedObject";
     import Tables "ActiveDocument.Tables";
     import BaseSelection;
-    import TableEditView[Automation];
+    import TableEditView;
 //  import SearchSettings;
 
 
