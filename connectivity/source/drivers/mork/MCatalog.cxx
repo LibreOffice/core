@@ -20,19 +20,12 @@
 #include "MCatalog.hxx"
 #include "MConnection.hxx"
 #include "MTables.hxx"
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <cppuhelper/interfacecontainer.h>
 
 
 using namespace connectivity::mork;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::cppu;
 
 
 OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)

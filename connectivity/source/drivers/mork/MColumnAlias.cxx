@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
 #include "MColumnAlias.hxx"
-#include "MConnection.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <officecfg/Office/DataAccess.hxx>
 
 #include <tools/diagnose_ex.h>
@@ -30,11 +27,8 @@
 #include <algorithm>
 #include <functional>
 
-using namespace ::connectivity;
 using namespace ::connectivity::mork;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 

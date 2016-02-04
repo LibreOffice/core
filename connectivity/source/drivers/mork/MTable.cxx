@@ -18,33 +18,13 @@
  */
 
 #include "MTable.hxx"
-#include "MTables.hxx"
 #include "MColumns.hxx"
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <comphelper/sequence.hxx>
-#include <comphelper/extract.hxx>
-#include <comphelper/types.hxx>
-#include <connectivity/dbtools.hxx>
 #include <connectivity/TKeys.hxx>
 #include <connectivity/TIndexes.hxx>
-#include "MCatalog.hxx"
 
 
-using namespace ::comphelper;
 using namespace connectivity::mork;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 
 
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,

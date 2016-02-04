@@ -7,15 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppuhelper/supportsservice.hxx>
 #include "MDriver.hxx"
 #include "MConnection.hxx"
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
-#include <com/sun/star/mozilla/MozillaProductType.hpp>
-
-#include "resource/mork_res.hrc"
-#include "resource/common_res.hrc"
 
 using namespace connectivity::mork;
 
