@@ -92,8 +92,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         }
     }
     else if( rInStm.GetToken().Is( SvHash_item() )
-      || rInStm.GetToken().Is( SvHash_struct() )
-      || rInStm.GetToken().Is( SvHash_typedef() ) )
+      || rInStm.GetToken().Is( SvHash_struct() ) )
     {
         SvMetaTypeRef xItem = new SvMetaType();
 

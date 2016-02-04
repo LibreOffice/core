@@ -355,8 +355,7 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         SetType( TYPE_ENUM );
         bOk = ReadNameSvIdl( rBase, rInStm );
     }
-    else if( pTok->Is( SvHash_typedef() )
-      || pTok->Is( SvHash_item() ) )
+    else if( pTok->Is( SvHash_item() ) )
     {
           if( pTok->Is( SvHash_item() ) )
             bIsItem = true;
