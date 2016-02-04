@@ -90,6 +90,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 
     // delete content if ClpDocument contains content
     SwNodeIndex aSttIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
+    SwNodeIndex aEndNdIdx( *aSttIdx.GetNode().EndOfSectionNode() );
     SwTextNode* pTextNd = aSttIdx.GetNode().GetTextNode();
     if (!pTextNd || !pTextNd->GetText().isEmpty() ||
         aSttIdx.GetIndex()+1 != pClpDoc->GetNodes().GetEndOfContent().GetIndex() )
@@ -101,12 +102,8 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
         --aSttIdx;
     }
 
-    // also delete surrounding FlyFrames if any
-    for( auto pFormat : *pClpDoc->GetSpzFrameFormats() )
-    {
-        SwFlyFrameFormat* pFly = static_cast<SwFlyFrameFormat*>(pFormat);
-        pClpDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );
-    }
+    DelFlyInRange(aSttIdx, aEndNdIdx);
+
     pClpDoc->GetDocumentFieldsManager().GCFieldTypes();        // delete the FieldTypes
 
     // if a string was passed, copy it to the clipboard-
