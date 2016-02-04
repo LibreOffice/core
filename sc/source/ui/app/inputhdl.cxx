@@ -1019,13 +1019,13 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                                 aBuf.append( " : " );
                                 aBuf.append( ppFDesc->getParameterDescription(nActive-1) );
                                 aNew = aBuf.makeStringAndClear();
-                                ShowTip( aNew );
+                                ShowTipBelow( aNew );
                                 bFound = true;
                             }
                         }
                         else
                         {
-                            ShowTip( aNew );
+                            ShowTipBelow( aNew );
                             bFound = true;
                         }
                     }
@@ -1066,7 +1066,10 @@ void ScInputHandler::ShowTipCursor()
 void ScInputHandler::ShowTip( const OUString& rText )
 {
     // aManualTip needs to be set afterwards from outside
+
     HideTip();
+    HideTipBelow();
+
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
     {
