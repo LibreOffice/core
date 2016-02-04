@@ -30,7 +30,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
@@ -57,7 +56,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = ;
 ]
@@ -77,7 +75,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]

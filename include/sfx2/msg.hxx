@@ -41,13 +41,10 @@ enum class SfxSlotMode {
     RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
     STANDARD        =   0x00400L, // RECORDPERSET;
 
-    PROPGET         =    0x1000L, // get property
-    PROPSET         =    0x2000L, // set property, exclusive to METHOD
-    METHOD          =    0x4000L, // Method, exclusiv to PROPSET
+    METHOD          =    0x4000L,
 
     FASTCALL        =    0x8000L, // No test if disabled before Execute
 
-    STATUSBARCONFIG =   0x10000L, // configurable status row
     MENUCONFIG      =   0x20000L, // configurable Menu
     TOOLBOXCONFIG   =   0x40000L, // configurable Toolboxen
     ACCELCONFIG     =   0x80000L, // configurable keys
@@ -60,7 +57,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1fff72eL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1fec72eL> {};
 }
 
 

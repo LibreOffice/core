@@ -198,11 +198,6 @@ bool SvMetaSlot::GetToolBoxConfig() const
     if( aToolBoxConfig.IsSet() || !GetRef() ) return aToolBoxConfig;
     return static_cast<SvMetaSlot *>(GetRef())->GetToolBoxConfig();
 }
-bool SvMetaSlot::GetStatusBarConfig() const
-{
-    if( aStatusBarConfig.IsSet() || !GetRef() ) return aStatusBarConfig;
-    return static_cast<SvMetaSlot *>(GetRef())->GetStatusBarConfig();
-}
 bool SvMetaSlot::GetAccelConfig() const
 {
     if( aAccelConfig.IsSet() || !GetRef() ) return aAccelConfig;
@@ -249,20 +244,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
     bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
     bOk |= aDisableFlags.ReadSvIdl( SvHash_DisableFlags(), rInStm );
-    if( aGet.ReadSvIdl( SvHash_Get(), rInStm ) )
-    {
-        SvIdlDataBase::WriteError( "warning", OUStringToOString(rInStm.GetFileName(), RTL_TEXTENCODING_UTF8),
-                    "<Get> old style, use Readonly",
-                    rInStm.GetToken().GetLine(),
-                    rInStm.GetToken().GetColumn() );
-    }
-    if( aSet.ReadSvIdl( SvHash_Set(), rInStm ) )
-    {
-        SvIdlDataBase::WriteError( "warning", OUStringToOString(rInStm.GetFileName(), RTL_TEXTENCODING_UTF8),
-                    "<Set> old style, use method declaration",
-                    rInStm.GetToken().GetLine(),
-                    rInStm.GetToken().GetColumn() );
-    }
 
     if( aVolatile.ReadSvIdl( SvHash_Volatile(), rInStm ) )
         SetVolatile( aVolatile ), bOk = true;
@@ -286,7 +267,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aPseudoPrefix.ReadSvIdl( SvHash_PseudoPrefix(), rInStm );
     bOk |= aMenuConfig.ReadSvIdl( SvHash_MenuConfig(), rInStm );
     bOk |= aToolBoxConfig.ReadSvIdl( SvHash_ToolBoxConfig(), rInStm );
-    bOk |= aStatusBarConfig.ReadSvIdl( SvHash_StatusBarConfig(), rInStm );
     bOk |= aAccelConfig.ReadSvIdl( SvHash_AccelConfig(), rInStm );
 
     SvBOOL aAllConfig;
@@ -808,8 +788,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_MenuConfig() ).getStr() ).WriteChar( '|' );
     if( GetToolBoxConfig() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_ToolBoxConfig() ).getStr() ).WriteChar( '|' );
-    if( GetStatusBarConfig() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_StatusBarConfig() ).getStr() ).WriteChar( '|' );
     if( GetAccelConfig() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_AccelConfig() ).getStr() ).WriteChar( '|' );
     if( GetFastCall() )
@@ -890,12 +868,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         // Method/Property flags
         if( IsMethod() )
             rOutStm.WriteCharPtr( "SfxSlotMode::METHOD|" );
-        if( IsVariable() )
-        {
-            rOutStm.WriteCharPtr( "SfxSlotMode::PROPGET|" );
-            if( !GetReadonly() )
-                rOutStm.WriteCharPtr( "SfxSlotMode::PROPSET|" );
-        }
 
         rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
     }

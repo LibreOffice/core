@@ -413,7 +413,6 @@ interface CellMovement
     SID_TABLE_CELL
     [
          // "Tabellenzelle" soll nicht im Anpassen-Dialog auftauchen:
-        StatusBarConfig = FALSE ;
         StateMethod = GetState ;
     ]
     SID_DATA_SELECT         [ ExecMethod = Execute; StateMethod = GetState; ]

@@ -40,8 +40,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_HelpText;
     SvStringHashEntryRef MM_void;
     SvStringHashEntryRef MM_shell;
-    SvStringHashEntryRef MM_Get;
-    SvStringHashEntryRef MM_Set;
     SvStringHashEntryRef MM_SlotId;
     SvStringHashEntryRef MM_Volatile;
     SvStringHashEntryRef MM_Toggle;
@@ -85,7 +83,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_define;
     SvStringHashEntryRef MM_MenuConfig;
     SvStringHashEntryRef MM_ToolBoxConfig;
-    SvStringHashEntryRef MM_StatusBarConfig;
     SvStringHashEntryRef MM_AccelConfig;
     SvStringHashEntryRef MM_AllConfig;
     SvStringHashEntryRef MM_FastCall;
@@ -140,8 +137,6 @@ HASH_INLINE(uuid)
 HASH_INLINE(HelpContext)
 HASH_INLINE(HelpText)
 HASH_INLINE(shell)
-HASH_INLINE(Get)
-HASH_INLINE(Set)
 HASH_INLINE(SlotId)
 HASH_INLINE(Volatile)
 HASH_INLINE(Toggle)
@@ -183,7 +178,6 @@ HASH_INLINE(PseudoPrefix)
 HASH_INLINE(define)
 HASH_INLINE(MenuConfig)
 HASH_INLINE(ToolBoxConfig)
-HASH_INLINE(StatusBarConfig)
 HASH_INLINE(AccelConfig)
 HASH_INLINE(AllConfig)
 HASH_INLINE(FastCall)
