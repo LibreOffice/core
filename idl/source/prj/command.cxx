@@ -88,7 +88,6 @@ char const * SyntaxStrings[] = {
 "\t\tImageReflection",
 "\t\tPseudoPrefix   = Identifier",
 "\t\tPseudoSlots",
-"\t\tReadOnly",
 "\t\tReadOnlyDoc*",
 "\t\tRecordPerSet*, RecordPerItem, NoRecord",
 "\t\tRecordAbsolute",

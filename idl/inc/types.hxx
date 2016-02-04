@@ -37,7 +37,6 @@ class SvMetaAttribute : public SvMetaReference
     SvMetaTypeRef       aType;
     SvIdentifier        aSlotId;
     SvBOOL              aExport;
-    SvBOOL              aReadonly;
     SvBOOL              aIsCollection;
     SvBOOL              aReadOnlyDoc;
     SvBOOL              aHidden;
@@ -52,7 +51,6 @@ public:
 
     void                SetNewAttribute( bool bNew )
                         { bNewAttr = bNew; }
-    bool                GetReadonly() const;
     void                SetSlotId( const SvIdentifier & rId )
                         { aSlotId = rId; }
     const SvIdentifier & GetSlotId() const;

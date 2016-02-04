@@ -26,7 +26,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
     Toggle = FALSE,
     Container = FALSE,
 
-    Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -49,7 +48,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     /* api: */
     Export = TRUE,
     IsCollection = FALSE,
-    Readonly = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
 
@@ -71,7 +69,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
     Container = FALSE,
     Asynchron;
 
-    Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,

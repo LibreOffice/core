@@ -94,7 +94,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_union;
     SvStringHashEntryRef MM_struct;
     SvStringHashEntryRef MM_typedef;
-    SvStringHashEntryRef MM_Readonly;
     SvStringHashEntryRef MM_SlotType;
     SvStringHashEntryRef MM_ModulePrefix;
     SvStringHashEntryRef MM_DisableFlags;
@@ -187,7 +186,6 @@ HASH_INLINE(ReadOnlyDoc)
 HASH_INLINE(union)
 HASH_INLINE(struct)
 HASH_INLINE(typedef)
-HASH_INLINE(Readonly)
 HASH_INLINE(SlotType)
 HASH_INLINE(ModulePrefix)
 HASH_INLINE(DisableFlags)

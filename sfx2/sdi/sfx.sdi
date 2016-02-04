@@ -30,7 +30,6 @@ SfxBoolItem _SwitchViewShell0 SID_VIEWSHELL0
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -53,7 +52,6 @@ SfxBoolItem _SwitchViewShell1 SID_VIEWSHELL1
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -76,7 +74,6 @@ SfxBoolItem _SwitchViewShell2 SID_VIEWSHELL2
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -99,7 +96,6 @@ SfxBoolItem _SwitchViewShell3 SID_VIEWSHELL3
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -122,7 +118,6 @@ SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -184,7 +179,6 @@ SfxBoolItem ActiveHelp SID_HELPBALLOONS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -206,7 +200,6 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -338,7 +331,6 @@ SfxStringItem Author SID_DOCINFO_AUTHOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -528,7 +520,6 @@ SfxBoolItem Beamer SID_BROWSER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -619,7 +610,6 @@ SfxBoolItem BrowseView SID_BROWSER_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -640,7 +630,6 @@ SfxTemplateItem CharStyle SID_STYLE_FAMILY1
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -768,7 +757,6 @@ SfxBoolItem Closing SID_CLOSING
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -790,7 +778,6 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -874,7 +861,6 @@ SfxStringItem Context SID_CONTEXT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -938,7 +924,6 @@ SfxStringItem CurrentURL SID_CURRENT_URL
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1019,7 +1004,6 @@ SfxStringItem DefaultFilePath SID_DEFAULTFILEPATH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1041,7 +1025,6 @@ SfxStringItem DefaultFileName SID_DEFAULTFILENAME
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1124,7 +1107,6 @@ SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1290,7 +1272,6 @@ SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1312,7 +1293,6 @@ SfxStringItem FileName SID_FILE_NAME
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1377,7 +1357,6 @@ SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1398,7 +1377,6 @@ SfxStringItem FullName SID_DOCFULLNAME
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1421,7 +1399,6 @@ SfxBoolItem FullScreen SID_WIN_FULLSCREEN
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1444,7 +1421,6 @@ SfxVoidItem ZoomPageWidth SID_ZOOM_PAGE_WIDTH
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1468,7 +1444,6 @@ SfxVoidItem ZoomOptimal SID_ZOOM_OPTIMAL
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1492,7 +1467,6 @@ SfxVoidItem ZoomPage SID_ZOOM_ENTIRE_PAGE
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1516,7 +1490,6 @@ SfxVoidItem Zoom200Percent SID_ZOOM_200_PERCENT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1540,7 +1513,6 @@ SfxVoidItem Zoom150Percent SID_ZOOM_150_PERCENT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1564,7 +1536,6 @@ SfxVoidItem Zoom100Percent SID_ZOOM_100_PERCENT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1588,7 +1559,6 @@ SfxVoidItem Zoom75Percent SID_ZOOM_75_PERCENT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1611,7 +1581,6 @@ SfxVoidItem Zoom50Percent SID_ZOOM_50_PERCENT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2132,7 +2101,6 @@ SfxBoolItem HelpTip SID_HELPTIPS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2175,7 +2143,6 @@ SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2245,7 +2212,6 @@ SfxBoolItem IsLoading SID_DOC_LOADING
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2267,7 +2233,6 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2290,7 +2255,6 @@ SfxBoolItem IsPrinting SID_PRINTOUT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2332,7 +2296,6 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2423,7 +2386,6 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2780,7 +2742,6 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2801,7 +2762,6 @@ SfxBoolItem Modified SID_MODIFIED
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2823,7 +2783,6 @@ SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -2886,7 +2845,6 @@ SfxBoolItem Navigator SID_NAVIGATOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2906,7 +2864,6 @@ SfxBoolItem InfoBar SID_INFOBAR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2927,7 +2884,6 @@ SfxBoolItem Sidebar SID_SIDEBAR
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2949,7 +2905,6 @@ SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -3074,7 +3029,6 @@ SfxStringItem ObjectMenue SID_OBJECT
     RecordPerSet;
     Asynchron;
 
-    /* Readonly = FALSE, */
 
     /* config: */
     AccelConfig = FALSE,
@@ -3178,7 +3132,6 @@ SfxStringItem DocInfoTitle SID_DOCINFO_TITLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3285,7 +3238,6 @@ SfxStringItem OpenUrl SID_OPENURL
     /* status: */
     SlotType = SfxStringItem
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3347,7 +3299,6 @@ SfxTemplateItem PageStyle SID_STYLE_FAMILY4
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3369,7 +3320,6 @@ SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3391,7 +3341,6 @@ SfxBoolItem PartWindow SID_PARTWIN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3553,7 +3502,6 @@ SfxStringItem DocPath SID_DOCPATH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3595,7 +3543,6 @@ SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -3660,7 +3607,6 @@ SfxStringItem Printer SID_PRINTER_NAME
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3704,7 +3650,6 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -3770,7 +3715,6 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3792,7 +3736,6 @@ SfxBoolItem MacroRecorder SID_RECORDMACRO
     RecordAbsolute = FALSE,
     NoRecord;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -3834,7 +3777,6 @@ SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
     RecordAbsolute = FALSE,
     NoRecord;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3965,7 +3907,6 @@ SfxStringItem RepeatAction SID_REPEAT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -3987,7 +3928,6 @@ SfxBoolItem RubyDialog SID_RUBY_DIALOG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4243,7 +4183,6 @@ SfxBoolItem Saved SID_DOC_SAVED
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4344,7 +4283,6 @@ SfxBoolItem SearchDialog SID_SEARCH_DLG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4365,7 +4303,6 @@ SfxUInt16Item SearchOptions SID_SEARCH_OPTIONS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4387,7 +4324,6 @@ SvxSearchItem SearchProperties SID_SEARCH_ITEM
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4611,7 +4547,6 @@ SfxBoolItem ShowBrowser SID_SHOW_BROWSER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4633,7 +4568,6 @@ SfxBoolItem ShowPopups SID_SHOWPOPUPS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4676,7 +4610,6 @@ SfxBoolItem SourceView SID_SOURCEVIEW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4698,7 +4631,6 @@ SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4720,7 +4652,6 @@ SfxStringItem StatusGetDate SID_BASICIDE_STAT_DATE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4742,7 +4673,6 @@ SfxStringItem StatusGetPosition SID_BASICIDE_STAT_POS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4764,7 +4694,6 @@ SfxStringItem StatusGetTitle SID_BASICIDE_STAT_TITLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4864,7 +4793,6 @@ SfxTemplateItem StyleApplyState SID_STYLE_APPLY
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4926,7 +4854,6 @@ SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4949,7 +4876,6 @@ SfxUInt16Item SwitchViewShell SID_VIEWSHELL
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4970,7 +4896,6 @@ SfxTemplateItem ListStyle SID_STYLE_FAMILY5
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4992,7 +4917,6 @@ SfxBoolItem TipsDialog SID_TIPWINDOW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5014,7 +4938,6 @@ SfxStringItem Title SID_DOCTITLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5124,7 +5047,6 @@ SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5310,7 +5232,6 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5451,7 +5372,6 @@ SfxVoidItem ZoomToolBox SID_ZOOM_TOOLBOX
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5532,7 +5452,6 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5554,7 +5473,6 @@ SfxBoolItem SaveVersionOnClose SID_SAVE_VERSION_ON_CLOSE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5575,7 +5493,6 @@ SfxVoidItem Addons SID_ADDONS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5595,7 +5512,6 @@ SfxBoolItem ShowImeStatusWindow SID_SHOW_IME_STATUS_WINDOW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6110,7 +6026,6 @@ SfxBoolItem DockingWindow0 SID_DOCKWIN_0
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6132,7 +6047,6 @@ SfxBoolItem DockingWindow1 SID_DOCKWIN_1
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6154,7 +6068,6 @@ SfxBoolItem DockingWindow2 SID_DOCKWIN_2
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6176,7 +6089,6 @@ SfxBoolItem DockingWindow3 SID_DOCKWIN_3
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6198,7 +6110,6 @@ SfxBoolItem DockingWindow4 SID_DOCKWIN_4
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6220,7 +6131,6 @@ SfxBoolItem DockingWindow5 SID_DOCKWIN_5
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6242,7 +6152,6 @@ SfxBoolItem DockingWindow6 SID_DOCKWIN_6
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6264,7 +6173,6 @@ SfxBoolItem DockingWindow7 SID_DOCKWIN_7
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6286,7 +6194,6 @@ SfxBoolItem DockingWindow8 SID_DOCKWIN_8
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6308,7 +6215,6 @@ SfxBoolItem DockingWindow9 SID_DOCKWIN_9
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6373,7 +6279,6 @@ SvxZoomItem Zoom SID_ATTR_ZOOM
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,

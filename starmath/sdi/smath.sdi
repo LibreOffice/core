@@ -168,7 +168,6 @@ SfxStringItem ConfigName SID_TEXT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -250,7 +249,6 @@ SfxInt16Item Graphic SID_GAPHIC_SM
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -394,7 +392,6 @@ SfxStringItem ModifyStatus SID_MODIFYSTATUS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -516,7 +513,6 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -618,7 +614,6 @@ SfxBoolItem Textmode SID_TEXTMODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -640,7 +635,6 @@ SfxStringItem TextStatus SID_TEXTSTATUS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -702,7 +696,6 @@ SfxBoolItem ToolBox SID_TOOLBOX
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
