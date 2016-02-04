@@ -97,8 +97,7 @@ bool FpComparison::ignore(FunctionDecl* function)
 
 static bool isZeroConstant(ASTContext& context, const Expr* expr)
 {
-    // calling isCXX11ConstantExpr with non-arithmetic types sometimes results in a crash
-    if (!expr->getType()->isArithmeticType()) {
+    if (!expr->getType()->isFloatingType()) {
         return false;
     }
     // prevent clang crash
@@ -106,12 +105,11 @@ static bool isZeroConstant(ASTContext& context, const Expr* expr)
         return false;
     }
     APValue result;
-    if (expr->isCXX11ConstantExpr(context, &result)
-        && result.isFloat() && result.getFloat().isZero())
-    {
-        return true;
+    if (!expr->isCXX11ConstantExpr(context, &result)) {
+        return false;
     }
-    return false;
+    assert(result.isFloat());
+    return result.getFloat().isZero();
 }
 bool FpComparison::VisitBinaryOperator(const BinaryOperator* binaryOp)
 {
