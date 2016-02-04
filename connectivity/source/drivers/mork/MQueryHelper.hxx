@@ -26,7 +26,6 @@
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #include <connectivity/FValue.hxx>
-#include <boost/noncopyable.hpp>
 #include "MErrorResource.hxx"
 #include <unordered_map>
 
@@ -105,7 +104,7 @@ namespace connectivity
             const OUString&    getValue() const { return m_aValue; }
         };
 
-        class MQueryExpression : public MQueryExpressionBase, private boost::noncopyable
+        class MQueryExpression : public MQueryExpressionBase
         {
             friend class MQueryHelper;
 
@@ -147,6 +146,9 @@ namespace connectivity
             ExprVector          m_aExprVector;
             bool_cond           m_aExprCondType;
 
+        private:
+           MQueryExpression(const MQueryExpression&) SAL_DELETED_FUNCTION;
+            MQueryExpression& operator=(const MQueryExpression&) SAL_DELETED_FUNCTION;
         };
 
         class MQueryHelperResultEntry

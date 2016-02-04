@@ -14,7 +14,6 @@
 
 #include <cassert>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
@@ -47,8 +46,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL
 create(css::uno::Reference< css::uno::XComponentContext > const &);
 
 class MorkDriver:
-    public cppu::WeakImplHelper< css::lang::XServiceInfo, css::sdbc::XDriver >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper< css::lang::XServiceInfo, css::sdbc::XDriver >
 {
 public:
     explicit MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context);
@@ -60,6 +58,9 @@ public:
     css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getFactory(){return m_xFactory;}
     OUString getProfilePath() {return m_sProfilePath;}
 private:
+
+    MorkDriver(const MorkDriver&) SAL_DELETED_FUNCTION;
+    MorkDriver& operator=(const MorkDriver&) SAL_DELETED_FUNCTION;
 
     virtual ~MorkDriver() {}
 
