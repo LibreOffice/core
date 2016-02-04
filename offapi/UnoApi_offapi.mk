@@ -444,6 +444,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/util,\
 	PathSubstitution \
 	PathSettings \
 	TextSearch \
+	TextSearch2 \
 	theOfficeInstallationDirectories \
 	UriAbbreviation \
 	URLTransformer \
@@ -4090,8 +4091,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	NumberFormat \
 	RevisionTag \
 	SearchAlgorithms \
+	SearchAlgorithms2 \
 	SearchFlags \
 	SearchOptions \
+	SearchOptions2 \
 	SearchResult \
 	SortField \
 	SortFieldType \
@@ -4154,6 +4157,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	XStringSubstitution \
 	XStringWidth \
 	XTextSearch \
+	XTextSearch2 \
 	XTimeStamped \
 	XURLTransformer \
 	XUniqueIDFactory \
