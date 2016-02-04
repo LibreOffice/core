@@ -33,7 +33,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvIdentifier    aStateMethod;
     SvBOOL          aPseudoSlots;
 
-    SvBOOL          aVolatile;
     SvBOOL          aToggle;
     SvBOOL          aAutoUpdate;
 
@@ -68,10 +67,6 @@ class SvMetaSlot : public SvMetaAttribute
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
 protected:
-    void    SetVolatile( bool bSet )
-            {
-                aVolatile = bSet;
-            }
     void    SetToggle( bool bSet )
             {
                 aToggle = bSet;

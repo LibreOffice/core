@@ -124,13 +124,6 @@ bool SvMetaSlot::GetPseudoSlots() const
     if( aPseudoSlots.IsSet() || !GetRef() ) return aPseudoSlots;
     return static_cast<SvMetaSlot *>(GetRef())->GetPseudoSlots();
 }
-bool SvMetaSlot::GetVolatile() const
-{
-    // Cachable and Volatile are exclusive
-    if( !GetRef() || aVolatile.IsSet() )
-        return aVolatile;
-    return static_cast<SvMetaSlot *>(GetRef())->GetVolatile();
-}
 bool SvMetaSlot::GetToggle() const
 {
     if( aToggle.IsSet() || !GetRef() ) return aToggle;
@@ -239,8 +232,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
     bOk |= aDisableFlags.ReadSvIdl( SvHash_DisableFlags(), rInStm );
 
-    if( aVolatile.ReadSvIdl( SvHash_Volatile(), rInStm ) )
-        SetVolatile( aVolatile ), bOk = true;
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
         SetToggle( aToggle ), bOk = true;
     if( aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm ) )
@@ -762,8 +753,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     WriteTab( rOutStm, 4 );
 
     // write flags
-    if( GetVolatile() )
-        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Volatile() ).getStr() ).WriteChar( '|' );
     if( GetToggle() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_Toggle() ).getStr() ).WriteChar( '|' );
     if( GetAutoUpdate() )
