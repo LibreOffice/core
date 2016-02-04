@@ -25,7 +25,6 @@ SlotIdFile( "svxslots.hrc" )
 ]
 {
 
-
     include "sfxitems.sdi"
     include "sfx.sdi"
     include "svxitems.sdi"
@@ -33,27 +32,5 @@ SlotIdFile( "svxslots.hrc" )
     include "svx.sdi"
     include "fmslots.sdi"
 
-/*  interface SearchSettings: Object
-    {
-        SID_SEARCH_ITEM
-        [
-            ExecMethod = _ExecSearch;
-            StateMethod = _StateSearch;
-        ]
-    }
-
-    interface Interior : Object
-    {
-        SID_ATTR_BRUSH // status(final|play)
-        [
-            ExecMethod = ExecBckCol ;
-            StateMethod = GetBckColState ;
-        ]
-    }
-
-    interface OLEObjects : Collection
-    {
-    }
-*/
 }
 

@@ -33,25 +33,7 @@ ModulePrefix( "Sw" )
     include "svx.sdi"
 
     item String TbxDummyItem;
-/*
-    item String XFillAttrSetItem;
-    item String XFillBitmapItem;
-    item String XFillColorItem;
-    item String XFillGradientItem;
-    item String XFillHatchItem;
-    item String XFillStyleItem;
-    item String XLineAttrSetItem;
-    item String XLineColorItem;
-    item String XLineDashItem;
-    item String XLineEndItem;
-    item String XLineEndWidthItem;
-    item String XLineEndCenterItem;
-    item String XLineStartItem;
-    item String XLineStartWidthItem;
-    item String XLineStartCenterItem;
-    item String XLineStyleItem;
-    item String XLineWidthItem;
-*/
+
     include "switems.sdi"
     include "swriter.sdi"
 

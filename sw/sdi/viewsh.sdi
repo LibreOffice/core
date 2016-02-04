@@ -195,13 +195,8 @@ interface TextEditView : BaseTextEditView
 }
 
 shell SwView
-
 {
     import TextEditView;
-//  import TextPage "Page";
-//  import SearchSettings;
-//  import SearchAttributes;
-//  import ReplaceAttributes;
 }
 
 interface TextPrintPreview

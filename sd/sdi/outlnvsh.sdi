@@ -427,20 +427,6 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
-    /*
-    SID_PRINTDOC // ole : no, status : ?
-    [
-        StateMethod = GetMenuState ;
-    ]
-    SID_PRINTDOCDIRECT // ole : no, status : ?
-    [
-        StateMethod = GetMenuState ;
-    ]
-    SID_SETUPPRINTER // ole : no, status : ?
-    [
-        StateMethod = GetMenuState ;
-    ]
-*/
 
     SID_MAIL_SCROLLBODY_PAGEDOWN // ole : no, status : ?
     [

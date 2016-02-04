@@ -48,11 +48,6 @@ interface WebEditView : BaseTextEditView
 shell SwWebView
 {
     import WebEditView;
-//  import SearchSettings;
-//  import TextPage "Page";
-//  import SearchAttributes;
-//  import ReplaceAttributes;
-
 }
 
 interface WebSourceView

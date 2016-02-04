@@ -284,13 +284,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    /* -> SVX
-    SID_PARA_DLG // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-*/
 
     SID_PARA_DLG // ole : no, status : ?
     [
@@ -781,13 +774,6 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
 
-    /* -> SVX
-    SID_OBJECT_ROTATE // ole : no, status : ?
-    [
-        ExecMethod = FuPermanent ;
-        StateMethod = GetMenuState ;
-    ]
-*/
 
     SID_OBJECT_ROTATE // ole : no, status : ?
     [
@@ -802,13 +788,6 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    /* -> DB
-    SID_OBJECT_MIRROR // ole : no, status : play rec
-    [
-        ExecMethod = FuPermanent ;
-        StateMethod = GetMenuState ;
-    ]
-*/
 
     SID_OBJECT_MIRROR // ole : no, status : play rec
     [
@@ -2127,15 +2106,11 @@ interface DrawView
     [
         ExecMethod = ExecOptionsBar ;
         StateMethod = GetOptionsBarState ;
-         //ExecMethod = FuTemporary ;
-         //StateMethod = GetMenuState ;
     ]
     SID_HELPLINES_VISIBLE // ole : no, status : ?
     [
         ExecMethod = ExecOptionsBar ;
         StateMethod = GetOptionsBarState ;
-         //ExecMethod = FuTemporary ;
-         //StateMethod = GetMenuState ;
     ]
     SID_SOLID_CREATE // ole : ?, status : ?
     [

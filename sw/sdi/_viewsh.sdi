@@ -472,9 +472,8 @@ interface BaseTextEditView
                 StateMethod = GetState ;
                 DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ]
-    /*
-    search and replace
-*/
+
+    /* search and replace */
 
     SID_SEARCH_ITEM // status()
     [
