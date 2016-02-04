@@ -395,7 +395,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
     SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
         embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false );
 
-    if (aStreamHelper.xSignatureStream.is())
+    if (aStreamHelper.xSignatureStream.is() && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
     {
         // ODF
         uno::Reference< io::XOutputStream > xOutputStream(

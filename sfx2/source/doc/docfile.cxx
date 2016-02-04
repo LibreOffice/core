@@ -3545,11 +3545,16 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 if ( !xWriteableZipStor.is() )
                     throw uno::RuntimeException();
 
-                uno::Reference< embed::XStorage > xMetaInf = xWriteableZipStor->openStorageElement(
-                                                "META-INF",
-                                                embed::ElementModes::READWRITE );
-                if ( !xMetaInf.is() )
-                    throw uno::RuntimeException();
+                uno::Reference< embed::XStorage > xMetaInf;
+                uno::Reference<container::XNameAccess> xNameAccess(xWriteableZipStor, uno::UNO_QUERY);
+                if (xNameAccess.is() && xNameAccess->hasByName("META-INF"))
+                {
+                    xMetaInf = xWriteableZipStor->openStorageElement(
+                                                    "META-INF",
+                                                    embed::ElementModes::READWRITE );
+                    if ( !xMetaInf.is() )
+                        throw uno::RuntimeException();
+                }
 
                 if ( bScriptingContent )
                 {
@@ -3579,20 +3584,38 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 }
                 else
                 {
-                     uno::Reference< io::XStream > xStream;
-                     if (GetFilter() && GetFilter()->IsOwnFormat())
-                         xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
-
-                    if ( xSigner->signDocumentContent( GetZipStorageToSign_Impl(), xStream ) )
+                    if (xMetaInf.is())
                     {
-                        uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
-                        xTransact->commit();
-                        xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
-                        xTransact->commit();
+                        // ODF.
+                        uno::Reference< io::XStream > xStream;
+                        if (GetFilter() && GetFilter()->IsOwnFormat())
+                            xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
-                        // the temporary file has been written, commit it to the original file
-                        Commit();
-                        bChanges = true;
+                        if ( xSigner->signDocumentContent( GetZipStorageToSign_Impl(), xStream ) )
+                        {
+                            uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
+                            xTransact->commit();
+                            xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
+                            xTransact->commit();
+
+                            // the temporary file has been written, commit it to the original file
+                            Commit();
+                            bChanges = true;
+                        }
+                    }
+                    else
+                    {
+                        // OOXML.
+                        uno::Reference<io::XStream> xStream;
+                        if (xSigner->signDocumentContent(GetZipStorageToSign_Impl(), xStream))
+                        {
+                            uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
+                            xTransact->commit();
+
+                            // the temporary file has been written, commit it to the original file
+                            Commit();
+                            bChanges = true;
+                        }
                     }
                 }
             }
