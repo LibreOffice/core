@@ -844,7 +844,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                             case PROPERTY_CONTEXTACTIVE:
                                 aWindowStateInfo.bContextActive = bValue; break;
                             default:
-                                SAL_WARN( "framework.uiconfiguration", "Unknown boolean property in WindowState found!" );
+                                SAL_WARN( "fwk.uiconfiguration", "Unknown boolean property in WindowState found!" );
                         }
                     }
                 }

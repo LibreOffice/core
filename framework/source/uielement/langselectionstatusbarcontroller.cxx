@@ -159,7 +159,7 @@ throw (css::uno::RuntimeException, std::exception)
              !rStr.isEmpty()) // 'no language found' from language guessing
         {
             SAL_WARN_IF( MID_LANG_SEL_1 > nItemId || nItemId > MID_LANG_SEL_9,
-                    "framework.uielement", "nItemId outside of expected range!" );
+                    "fwk.uielement", "nItemId outside of expected range!" );
             xPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
             if ( rStr == m_aCurLang )
             {
@@ -187,7 +187,7 @@ throw (css::uno::RuntimeException, std::exception)
             !rStr.isEmpty()) // 'no language found' from language guessing
         {
             SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
-                    "framework.uielement", "nItemId outside of expected range!" );
+                    "fwk.uielement", "nItemId outside of expected range!" );
             subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
             aLangMap[nItemId] = rStr;
             ++nItemId;
