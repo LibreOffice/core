@@ -137,7 +137,12 @@ class GtkDragSource : public cppu::WeakComponentImplHelper<css::datatransfer::dn
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
     VclToGtkHelper m_aConversionHelper;
 public:
-    GtkDragSource() : WeakComponentImplHelper( m_aMutex ) {}
+    GtkDragSource()
+        : WeakComponentImplHelper(m_aMutex)
+        , m_pFrame(nullptr)
+    {
+    }
+
     virtual ~GtkDragSource();
 
     // XDragSource
