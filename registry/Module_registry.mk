@@ -24,6 +24,10 @@ $(eval $(call gb_Module_add_targets,registry,\
 	Executable_regcompare \
 ))
 
+$(eval $(call gb_Module_add_check_targets,registry, \
+    CustomTarget_regcompare_test \
+))
+
 endif
 
 # vim:set noet sw=4 ts=4:
