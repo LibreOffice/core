@@ -29,7 +29,6 @@
 
 enum class SfxSlotMode {
     NONE            =    0x0000L, // default
-    VOLATILE        =    0x0002L, // per Timer every 2s get new,
 
     TOGGLE          =    0x0004L, // inverted for Execute old value
     AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
@@ -57,7 +56,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1fec72eL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1fec72cL> {};
 }
 
 

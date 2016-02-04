@@ -32,8 +32,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_HelpText;
     SvStringHashEntryRef MM_void;
     SvStringHashEntryRef MM_shell;
-    SvStringHashEntryRef MM_SlotId;
-    SvStringHashEntryRef MM_Volatile;
     SvStringHashEntryRef MM_Toggle;
     SvStringHashEntryRef MM_AutoUpdate;
     SvStringHashEntryRef MM_Asynchron;
@@ -112,8 +110,6 @@ HASH_INLINE(module)
 HASH_INLINE(interface)
 HASH_INLINE(HelpText)
 HASH_INLINE(shell)
-HASH_INLINE(SlotId)
-HASH_INLINE(Volatile)
 HASH_INLINE(Toggle)
 HASH_INLINE(AutoUpdate)
 HASH_INLINE(Asynchron)

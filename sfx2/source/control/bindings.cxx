@@ -75,7 +75,6 @@ static sal_uInt16 nTimeOut = 300;
 
 #define TIMEOUT_FIRST       nTimeOut
 #define TIMEOUT_UPDATING     20
-#define TIMEOUT_IDLE       2500
 
 typedef std::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
@@ -505,9 +504,7 @@ void SfxBindings::Update
             {
                 // Query Status
                 const SfxSlotServer* pMsgServer = pDispatcher ? pCache->GetSlotServer(*pDispatcher, pImp->xProv) : nullptr;
-                if ( !pCache->IsControllerDirty() &&
-                    ( !pMsgServer ||
-                    !pMsgServer->GetSlot()->IsMode(SfxSlotMode::VOLATILE) ) )
+                if ( !pCache->IsControllerDirty() )
                 {
                     pImp->bInUpdate = false;
                     InvalidateSlotsInMap_Impl();
@@ -1644,23 +1641,7 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
 
     pImp->nMsgPos = 0;
 
-    // check for volatile slots
-    bool bVolatileSlotsPresent = false;
-    for ( sal_uInt16 n = 0; n < nCount; ++n )
-    {
-        SfxStateCache* pCache = (*pImp->pCaches)[n];
-        const SfxSlotServer *pSlotServer = pCache->GetSlotServer(*pDispatcher, pImp->xProv);
-        if ( pSlotServer && pSlotServer->GetSlot()->IsMode(SfxSlotMode::VOLATILE) )
-        {
-            pCache->Invalidate(false);
-            bVolatileSlotsPresent = true;
-        }
-    }
-
-    if (bVolatileSlotsPresent)
-        pImp->aTimer.SetTimeout(TIMEOUT_IDLE);
-    else
-        pImp->aTimer.Stop();
+    pImp->aTimer.Stop();
 
     // Update round is finished
     pImp->bInNextJob = false;

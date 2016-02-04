@@ -155,7 +155,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm )
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
-    aSlotId.ReadSvIdl( rBase, SvHash_SlotId(), rInStm );
     aExport.ReadSvIdl( SvHash_Export(), rInStm );
     aHidden.ReadSvIdl( SvHash_Hidden(), rInStm );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
