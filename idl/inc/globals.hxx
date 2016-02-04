@@ -72,9 +72,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_SlotType;
     SvStringHashEntryRef MM_ModulePrefix;
     SvStringHashEntryRef MM_DisableFlags;
-    SvStringHashEntryRef MM_Hidden;
-    SvStringHashEntryRef MM_Description;
-    SvStringHashEntryRef MM_UnoName;
 
     SvGlobalHashNames();
 };
@@ -143,9 +140,6 @@ HASH_INLINE(struct)
 HASH_INLINE(SlotType)
 HASH_INLINE(ModulePrefix)
 HASH_INLINE(DisableFlags)
-HASH_INLINE(Hidden)
-HASH_INLINE(Description)
-HASH_INLINE(UnoName)
 
 
 #endif // INCLUDED_IDL_INC_GLOBALS_HXX

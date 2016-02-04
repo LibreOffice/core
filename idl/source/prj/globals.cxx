@@ -100,9 +100,6 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(SlotType)
     A_ENTRY(ModulePrefix)
     A_ENTRY(DisableFlags)
-    A_ENTRY(Hidden)
-    A_ENTRY(Description)
-    A_ENTRY(UnoName)
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

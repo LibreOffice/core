@@ -32,7 +32,6 @@
 SvMetaAttribute::SvMetaAttribute()
     : aExport( true, false )
     , aReadOnlyDoc ( true, false )
-    , aHidden( false, false )
     , bNewAttr( false )
 {
 }
@@ -41,7 +40,6 @@ SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
     , aExport( true, false )
     , aReadOnlyDoc ( true, false)
-    , aHidden( false, false )
     , bNewAttr( false )
 {
 }
@@ -67,10 +65,10 @@ bool SvMetaAttribute::GetExport() const
 bool SvMetaAttribute::GetHidden() const
 {
     // when export is set, but hidden is not the default is used
-    if ( aExport.IsSet() && !aHidden.IsSet() )
+    if ( aExport.IsSet() )
         return !aExport;
-    else if( aHidden.IsSet() || !GetRef() )
-        return aHidden;
+    else if( !GetRef() )
+        return false;
     else
         return static_cast<SvMetaAttribute *>(GetRef())->GetHidden();
 }
@@ -156,7 +154,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
     aExport.ReadSvIdl( SvHash_Export(), rInStm );
-    aHidden.ReadSvIdl( SvHash_Hidden(), rInStm );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
 }
 

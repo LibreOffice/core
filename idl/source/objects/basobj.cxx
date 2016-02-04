@@ -91,7 +91,6 @@ void SvMetaObject::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
     aHelpText.ReadSvIdl( rBase, rInStm );
-    aDescription.ReadSvIdl( SvHash_Description(), rInStm );
 }
 
 void SvMetaObject::DoReadContextSvIdl( SvIdlDataBase & rBase,

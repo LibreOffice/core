@@ -214,12 +214,6 @@ bool SvMetaSlot::GetImageReflection() const
     return static_cast<SvMetaSlot *>(GetRef())->GetImageReflection();
 }
 
-const OString& SvMetaSlot::GetUnoName() const
-{
-    if( aUnoName.IsSet() || !GetRef() ) return aUnoName.getString();
-    return static_cast<SvMetaSlot *>(GetRef())->GetUnoName();
-}
-
 void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
@@ -258,7 +252,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
     bOk |= aImageRotation.ReadSvIdl( SvHash_ImageRotation(), rInStm );
     bOk |= aImageReflection.ReadSvIdl( SvHash_ImageReflection(), rInStm );
-    bOk |= aUnoName.ReadSvIdl( SvHash_UnoName(), rInStm );
 
     if( !bOk )
     {

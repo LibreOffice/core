@@ -54,9 +54,8 @@ class SvMetaSlot : public SvMetaAttribute
     SvString        aDisableFlags;
     SvMetaSlot*     pLinkedSlot;
     SvMetaSlot*     pNextSlot;
-    sal_uLong           nListPos;
+    sal_uLong        nListPos;
     SvMetaEnumValue* pEnumValue;
-    SvString    aUnoName;
 
     void            WriteSlot( const OString& rShellName,
                             sal_uInt16 nCount, const OString& rSlotId,
@@ -133,7 +132,6 @@ public:
     bool                GetRecordAbsolute() const;
 
     const OString&      GetPseudoPrefix() const;
-    const OString&      GetUnoName() const;
     bool                GetMenuConfig() const;
     bool                GetToolBoxConfig() const;
     bool                GetAccelConfig() const;
