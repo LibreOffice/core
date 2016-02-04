@@ -537,16 +537,20 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             styleName = tableStyleNode.getNodeValue();
         }
 
+        CellStyle cStyle = null;
+
         if(styleName.equalsIgnoreCase("Default")) {
 
             Debug.log(Debug.TRACE, "No defined Style Attribute was found");
 
         } else if(styleName.length()!=0) {
 
-            CellStyle cStyle = (CellStyle)styleCat.lookup(styleName,
+            cStyle = (CellStyle)styleCat.lookup(styleName,
                                 SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
                                 CellStyle.class);
+        }
 
+        if (cStyle != null) {
             Format definedFormat = cStyle.getFormat();
             fmt = new Format(definedFormat);
         }
