@@ -44,18 +44,14 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_INT16;
     SvStringHashEntryRef MM_UINT32;
     SvStringHashEntryRef MM_INT32;
-    SvStringHashEntryRef MM_int;
     SvStringHashEntryRef MM_BOOL;
-    SvStringHashEntryRef MM_char;
     SvStringHashEntryRef MM_BYTE;
     SvStringHashEntryRef MM_float;
     SvStringHashEntryRef MM_double;
     SvStringHashEntryRef MM_item;
     SvStringHashEntryRef MM_PseudoSlots;
-    SvStringHashEntryRef MM_map;
     SvStringHashEntryRef MM_import;
     SvStringHashEntryRef MM_SlotIdFile;
-    SvStringHashEntryRef MM_ItemName;
     SvStringHashEntryRef MM_include;
     SvStringHashEntryRef MM_ExecMethod;
     SvStringHashEntryRef MM_StateMethod;
@@ -66,7 +62,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_MenuConfig;
     SvStringHashEntryRef MM_ToolBoxConfig;
     SvStringHashEntryRef MM_AccelConfig;
-    SvStringHashEntryRef MM_AllConfig;
     SvStringHashEntryRef MM_FastCall;
     SvStringHashEntryRef MM_SbxObject;
     SvStringHashEntryRef MM_Container;
@@ -122,9 +117,7 @@ HASH_INLINE(UINT16)
 HASH_INLINE(INT16)
 HASH_INLINE(UINT32)
 HASH_INLINE(INT32)
-HASH_INLINE(int)
 HASH_INLINE(BOOL)
-HASH_INLINE(char)
 HASH_INLINE(BYTE)
 HASH_INLINE(item)
 HASH_INLINE(PseudoSlots)
@@ -142,7 +135,6 @@ HASH_INLINE(define)
 HASH_INLINE(MenuConfig)
 HASH_INLINE(ToolBoxConfig)
 HASH_INLINE(AccelConfig)
-HASH_INLINE(AllConfig)
 HASH_INLINE(FastCall)
 HASH_INLINE(SbxObject)
 HASH_INLINE(Container)
