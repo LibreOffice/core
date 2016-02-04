@@ -37,6 +37,7 @@
 
 #include "FormControlHelper.hxx"
 #include <xmloff/odffields.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -233,15 +234,13 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
         else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
         {
             xFormField->setFieldType(ODF_FORMDROPDOWN);
-            uno::Sequence< OUString > sItems;
-            sItems.realloc( m_pFFData->getDropDownEntries().size() );
-            ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), sItems.begin());
-            if ( sItems.getLength() )
+            const FFDataHandler::DropDownEntries_t& rEntries = m_pFFData->getDropDownEntries();
+            if (!rEntries.empty())
             {
                 if ( xNameCont->hasByName(ODF_FORMDROPDOWN_LISTENTRY) )
-                    xNameCont->replaceByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny( sItems ) );
+                    xNameCont->replaceByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny(comphelper::containerToSequence(rEntries)));
                 else
-                    xNameCont->insertByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny( sItems ) );
+                    xNameCont->insertByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny(comphelper::containerToSequence(rEntries)));
 
                 sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
                 if ( nResult )
