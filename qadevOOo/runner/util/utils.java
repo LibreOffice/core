@@ -193,10 +193,6 @@ public class utils {
         return fulldocURL;
     }
 
-
-
-
-
     /**
      *
      * This method get's the user dir of the connected office
@@ -229,22 +225,15 @@ public class utils {
      * @return the value as String
      */
     private static String getOfficeSettingsValue(XMultiServiceFactory msf, String setting) {
-
-        String settingPath = null;
         try {
             Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
-            try {
-                XPropertySet pthSettings = (XPropertySet) AnyConverter.toObject(
-                    new Type(XPropertySet.class), settings);
-                settingPath = (String) pthSettings.getPropertyValue(setting);
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                System.out.println("### couldn't get Office Settings");
-            }
-        } catch (Exception e) {
-            System.out.println("Couldn't get string value for " + setting);
+            XPropertySet pthSettings = (XPropertySet) AnyConverter.toObject(
+                new Type(XPropertySet.class), settings);
+            return (String) pthSettings.getPropertyValue(setting);
+        } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return settingPath;
     }
 
     /**
