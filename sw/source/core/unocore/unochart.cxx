@@ -2146,7 +2146,7 @@ std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::Get
     SwRangeDescriptor aDesc;
     if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *m_pTableCursor)))
         return std::vector< css::uno::Reference< css::table::XCell > >();
-    return SwXCellRange(m_pTableCursor, *pTableFormat, aDesc).GetCells();
+    return SwXCellRange::CreateXCellRange(m_pTableCursor, *pTableFormat, aDesc)->GetCells();
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
