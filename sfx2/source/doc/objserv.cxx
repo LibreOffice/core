@@ -1486,7 +1486,9 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
             || pImp->nDocumentSignatureState == SignatureState::NOTVALIDATED
             || pImp->nDocumentSignatureState == SignatureState::PARTIAL_OK);
 
+        pImp->m_bSavingForSigning = true;
         DoSaveCompleted( GetMedium() );
+        pImp->m_bSavingForSigning = false;
 
         if ( bSigned )
         {
