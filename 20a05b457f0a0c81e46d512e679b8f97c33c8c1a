@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_06a58e03",
+        "filename": "connectivity/source/drivers/mork/MDriver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-04T16:26:32Z",
+      "side": 1,
+      "message": "arguably better to put this extern \"C\" function into the global namespace",
+      "revId": "20a05b457f0a0c81e46d512e679b8f97c33c8c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c69a66c5",
+        "filename": "connectivity/source/drivers/mork/MDriver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-04T16:26:32Z",
+      "side": 1,
+      "message": "to make it more likely that these constructor function names are globally unique, they should use the same naming as the corresponding implementation names (i.e., com_sun_star_comp_sdbc_MorkDriver_get_implementation)",
+      "revId": "20a05b457f0a0c81e46d512e679b8f97c33c8c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a69f5ab3",
+        "filename": "connectivity/source/drivers/mork/mork.component",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-04T16:26:32Z",
+      "side": 1,
+      "message": "prefix\u003d\"mork\" is no longer needed now that every implementation in this file has a constructor",
+      "revId": "20a05b457f0a0c81e46d512e679b8f97c33c8c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
