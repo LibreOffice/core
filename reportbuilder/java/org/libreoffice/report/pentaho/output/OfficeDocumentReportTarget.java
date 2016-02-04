@@ -1254,6 +1254,10 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
         final LexicalUnit cssValue = styleSheetParserUtil.parseLexicalStyleValue(
                 text);
+        if (cssValue == null) {
+            CSSNumericValue zeroLength = CSSNumericValue.createValue(CSSNumericType.CM, 0);
+            return zeroLength;
+        }
         return CSSValueFactory.createLengthValue(cssValue);
     }
 
