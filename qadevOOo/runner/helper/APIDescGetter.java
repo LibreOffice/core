@@ -802,7 +802,9 @@ public class APIDescGetter extends DescGetter
             }
         }
 
-        for (int i = 0; i < modules.length; i++)
+        int moduleLength = modules != null ? modules.length : 0;
+
+        for (int i = 0; i < moduleLength; ++i)
         {
             if (!isUnusedModule(modules[i]))
             {
