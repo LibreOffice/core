@@ -76,17 +76,17 @@ XMLTextListsHelper::~XMLTextListsHelper()
 void XMLTextListsHelper::PushListContext(
     XMLTextListBlockContext *i_pListBlock)
 {
-    mListStack.push(std::make_tuple(i_pListBlock,
+    mListStack.emplace(i_pListBlock,
         static_cast<XMLTextListItemContext*>(nullptr),
-        static_cast<XMLNumberedParaContext*>(nullptr)));
+        static_cast<XMLNumberedParaContext*>(nullptr));
 }
 
 void XMLTextListsHelper::PushListContext(
     XMLNumberedParaContext *i_pNumberedParagraph)
 {
-    mListStack.push(std::make_tuple(
+    mListStack.emplace(
         static_cast<XMLTextListBlockContext*>(nullptr),
-        static_cast<XMLTextListItemContext*>(nullptr), i_pNumberedParagraph));
+        static_cast<XMLTextListItemContext*>(nullptr), i_pNumberedParagraph);
 }
 
 void XMLTextListsHelper::PopListContext()
