@@ -42,9 +42,6 @@ namespace com { namespace sun { namespace star {
 namespace connectivity { namespace mork {
 class ProfileAccess;
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-create(css::uno::Reference< css::uno::XComponentContext > const &);
-
 class MorkDriver:
     public cppu::WeakImplHelper< css::lang::XServiceInfo, css::sdbc::XDriver >
 {

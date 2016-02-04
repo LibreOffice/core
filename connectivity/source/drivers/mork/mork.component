@@ -9,8 +9,9 @@
 -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="mork" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sdbc.MorkDriver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.sdbc.MorkDriver"
+      constructor="com_sun_star_comp_sdbc_MorkDriver_get_implementation">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>
 </component>
