@@ -268,22 +268,6 @@ const OString& SvMetaType::GetBasicName() const
         return static_cast<SvMetaType*>(GetRef())->GetBasicName();
 }
 
-bool SvMetaType::GetIn() const
-{
-    if( aIn.IsSet() || !GetRef() )
-        return aIn;
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetIn();
-}
-
-bool SvMetaType::GetOut() const
-{
-    if( aOut.IsSet() || !GetRef() )
-        return aOut;
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetOut();
-}
-
 void SvMetaType::SetCall0( int e )
 {
     aCall0 = (int)e;

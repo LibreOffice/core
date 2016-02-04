@@ -29,9 +29,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_Name;
     SvStringHashEntryRef MM_module;
     SvStringHashEntryRef MM_interface;
-    SvStringHashEntryRef MM_in;
-    SvStringHashEntryRef MM_out;
-    SvStringHashEntryRef MM_inout;
     SvStringHashEntryRef MM_String;
     SvStringHashEntryRef MM_UCHAR;
     SvStringHashEntryRef MM_USHORT;
@@ -118,9 +115,6 @@ inline SvStringHashEntry * SvHash_##Name()                   \
 HASH_INLINE(Name)
 HASH_INLINE(module)
 HASH_INLINE(interface)
-HASH_INLINE(in)
-HASH_INLINE(out)
-HASH_INLINE(inout)
 HASH_INLINE(HelpContext)
 HASH_INLINE(HelpText)
 HASH_INLINE(shell)
