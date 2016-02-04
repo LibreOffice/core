@@ -522,7 +522,8 @@ void SAL_CALL ToolBarManager::elementRemoved( const css::ui::ConfigurationEvent&
 {
     impl_elementChanged(true,Event);
 }
-void ToolBarManager::impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event )
+void ToolBarManager::impl_elementChanged(bool const isRemove,
+        const css::ui::ConfigurationEvent& Event)
 {
     SolarMutexGuard g;
 
@@ -551,7 +552,7 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const css::ui::Configurat
             CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
             if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
             {
-                if ( _bRemove )
+                if (isRemove)
                 {
                     Image aImage;
                     if (( pIter->second.nImageInfo == 0 ) && ( pIter->second.nImageInfo == nImageInfo ))
@@ -567,7 +568,7 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const css::ui::Configurat
                     }
 
                     setToolBarImage(aImage,pIter);
-                } // if ( _bRemove )
+                } // if (isRemove)
                 else
                 {
                     Reference< XGraphic > xGraphic;
@@ -582,13 +583,14 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const css::ui::Configurat
         }
     }
 }
-void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter)
+void ToolBarManager::setToolBarImage(const Image& rImage,
+        const CommandToInfoMap::const_iterator& rIter)
 {
-    const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
-    m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
-    for (auto const& it : _rIDs)
+    const ::std::vector<sal_uInt16>& rIDs = rIter->second.aIds;
+    m_pToolBar->SetItemImage( rIter->second.nId, rImage );
+    for (auto const& it : rIDs)
     {
-        m_pToolBar->SetItemImage(it, _aImage);
+        m_pToolBar->SetItemImage(it, rImage);
     }
 }
 
