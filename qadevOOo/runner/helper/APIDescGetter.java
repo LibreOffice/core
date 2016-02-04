@@ -715,7 +715,7 @@ public class APIDescGetter extends DescGetter
 
         DescEntry[] subEntries = getSubEntries(csvFile, aEntry);
 
-        aEntry.SubEntryCount = subEntries.length;
+        aEntry.SubEntryCount = subEntries != null ? subEntries.length : 0;
         aEntry.SubEntries = subEntries;
 
         return aEntry;
