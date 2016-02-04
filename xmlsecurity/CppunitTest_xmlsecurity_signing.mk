@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_signing, \
 	cppu \
 	sal \
 	sax \
+	sfx \
 	test \
 	tl \
 	unotest \
