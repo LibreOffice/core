@@ -73,9 +73,10 @@ namespace {
 void badUsage() {
     std::cerr
         << "Usage:" << std::endl << std::endl
-        << ("  unoidl-check [<extra registries A>] <registry A> -- [<extra"
-            " registries B>]")
-        << std::endl << "    <registry B>" << std::endl << std::endl
+        << ("  unoidl-check [--ignore-unpublished] [<extra registries A>]"
+            " <registry A> --")
+        << std::endl << "    [<extra registries B>] <registry B>" << std::endl
+        << std::endl
         << ("where each <registry> is either a new- or legacy-format .rdb file,"
             " a single .idl")
         << std::endl
@@ -87,15 +88,24 @@ void badUsage() {
     std::exit(EXIT_FAILURE);
 }
 
-OUString getArgumentUri(sal_uInt32 argument, bool * delimiter) {
+bool getArgument(
+    sal_uInt32 argument, bool * ignoreUnpublished, bool * delimiter,
+    OUString * uri)
+{
+    assert(ignoreUnpublished != nullptr);
+    assert(uri != nullptr);
     OUString arg;
     rtl_getAppCommandArg(argument, &arg.pData);
+    if (argument == 0 && arg == "--ignore-unpublished") {
+        *ignoreUnpublished = true;
+        return false;
+    }
     if (arg == "--") {
         if (delimiter == nullptr) {
             badUsage();
         }
         *delimiter = true;
-        return OUString();
+        return false;
     }
     OUString url;
     osl::FileBase::RC e1 = osl::FileBase::getFileURLFromSystemPath(arg, url);
@@ -113,15 +123,14 @@ OUString getArgumentUri(sal_uInt32 argument, bool * delimiter) {
             << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    OUString abs;
-    e1 = osl::FileBase::getAbsoluteFileURL(cwd, url, abs);
+    e1 = osl::FileBase::getAbsoluteFileURL(cwd, url, *uri);
     if (e1 != osl::FileBase::E_None) {
         std::cerr
             << "Cannot make \"" << url
             << "\" into an absolute file URL, error code " << +e1 << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    return abs;
+    return true;
 }
 
 OUString showDirection(
@@ -151,7 +160,7 @@ private:
 
 void checkMap(
     rtl::Reference<unoidl::Provider> const & providerB, OUString const & prefix,
-    rtl::Reference<unoidl::MapCursor> const & cursor)
+    rtl::Reference<unoidl::MapCursor> const & cursor, bool ignoreUnpublished)
 {
     assert(providerB.is());
     assert(cursor.is());
@@ -166,8 +175,14 @@ void checkMap(
             checkMap(
                 providerB, name + ".",
                 (static_cast<unoidl::ModuleEntity *>(entA.get())
-                 ->createCursor()));
+                 ->createCursor()),
+                ignoreUnpublished);
         } else {
+            bool pubA = dynamic_cast<unoidl::PublishableEntity &>(*entA.get())
+                .isPublished();
+            if (!pubA && ignoreUnpublished) {
+                continue;
+            }
             rtl::Reference<unoidl::Entity> entB(providerB->findEntity(name));
             if (!entB.is()) {
                 std::cerr
@@ -181,8 +196,7 @@ void checkMap(
                     << std::endl;
                 std::exit(EXIT_FAILURE);
             }
-            if ((dynamic_cast<unoidl::PublishableEntity &>(*entA.get())
-                 .isPublished())
+            if (pubA
                 && (!dynamic_cast<unoidl::PublishableEntity &>(*entB.get())
                     .isPublished()))
             {
@@ -1170,12 +1184,14 @@ SAL_IMPLEMENT_MAIN() {
         mgr[1] = new unoidl::Manager;
         rtl::Reference<unoidl::Provider> prov[2];
         int side = 0;
+        bool ignoreUnpublished = false;
         for (sal_uInt32 i = 0; i != args; ++i) {
             bool delimiter = false;
-            OUString uri(getArgumentUri(i, side == 0 ? &delimiter : nullptr));
-            if (delimiter) {
-                side = 1;
-            } else {
+            OUString uri;
+            if (getArgument(
+                    i, &ignoreUnpublished, side == 0 ? &delimiter : nullptr,
+                    &uri))
+            {
                 try {
                     prov[side] = mgr[side]->addProvider(uri);
                 } catch (unoidl::NoSuchFileException &) {
@@ -1183,12 +1199,14 @@ SAL_IMPLEMENT_MAIN() {
                         << "Input <" << uri << "> does not exist" << std::endl;
                     std::exit(EXIT_FAILURE);
                 }
+            } else if (delimiter) {
+                side = 1;
             }
         }
         if (side == 0 || !(prov[0].is() && prov[1].is())) {
             badUsage();
         }
-        checkMap(prov[1], "", prov[0]->createRootCursor());
+        checkMap(prov[1], "", prov[0]->createRootCursor(), ignoreUnpublished);
         checkIds(prov[0], "", prov[1]->createRootCursor());
         return EXIT_SUCCESS;
     } catch (unoidl::FileFormatException & e1) {
