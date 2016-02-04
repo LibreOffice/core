@@ -622,6 +622,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             break;
         case LOK_DOCTYPE_OTHER:
         default:
+            SAL_INFO("lok", "Can't save document - unsopported document type.");
             return false;
         }
 
@@ -765,7 +766,7 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
         {
             return LOK_DOCTYPE_DRAWING;
         }
-        else if (xDocument->supportsService("com.sun.star.text.TextDocument"))
+        else if (xDocument->supportsService("com.sun.star.text.TextDocument") || xDocument->supportsService("com.sun.star.text.WebDocument"))
         {
             return LOK_DOCTYPE_TEXT;
         }
