@@ -26,13 +26,9 @@
 class SvClassManager;
 struct SvGlobalHashNames
 {
-    SvStringHashEntryRef MM_Name;
     SvStringHashEntryRef MM_module;
     SvStringHashEntryRef MM_interface;
     SvStringHashEntryRef MM_String;
-    SvStringHashEntryRef MM_UCHAR;
-    SvStringHashEntryRef MM_USHORT;
-    SvStringHashEntryRef MM_HelpContext;
     SvStringHashEntryRef MM_HelpText;
     SvStringHashEntryRef MM_void;
     SvStringHashEntryRef MM_shell;
@@ -112,10 +108,8 @@ inline SvStringHashEntry * SvHash_##Name()                   \
     return GetIdlApp().pGlobalNames->MM_##Name;              \
 }
 
-HASH_INLINE(Name)
 HASH_INLINE(module)
 HASH_INLINE(interface)
-HASH_INLINE(HelpContext)
 HASH_INLINE(HelpText)
 HASH_INLINE(shell)
 HASH_INLINE(SlotId)
