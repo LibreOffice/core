@@ -18,11 +18,7 @@ $(eval $(call gb_Module_add_targets,registry,\
 	) \
 ))
 
-ifneq (,$(filter ODK,$(BUILD_TYPE)))
-
-$(eval $(call gb_Module_add_targets,registry,\
-	Executable_regcompare \
-))
+ifneq ($(OS),IOS) # missing regmerge (see above), needed within test
 
 $(eval $(call gb_Module_add_check_targets,registry, \
     CustomTarget_regcompare_test \

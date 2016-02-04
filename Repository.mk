@@ -58,7 +58,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	treex \
 	uiex \
 	ulfex \
-	unoidl-check \
 	unoidl-read \
 	unoidl-write \
 	xrmex \
@@ -82,9 +81,9 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	cppumaker \
 	idlc \
 	javamaker \
-	regcompare \
 	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
+	unoidl-check \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
