@@ -47,7 +47,7 @@ SvIdlDataBase::~SvIdlDataBase()
 
 #define ADD_TYPE( Name, ParserChar, CName, BasName, BasPost )            \
     aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName(),   \
-                     BasName, ParserChar, CName, BasName, BasPost ) );
+                     ParserChar, CName, BasName, BasPost ) );
 
 SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 {
