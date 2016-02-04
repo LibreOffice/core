@@ -34,98 +34,160 @@ $(call gb_CustomTarget_get_target,registry/regcompare_test): \
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-        && echo 1 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb \
-        && echo 2 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-        && echo 3 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb \
-        && echo 4 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb \
-        && echo 5 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb \
-        && echo 6 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb \
-        && echo 7 && ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb \
-        && echo 8 && $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-        && echo 9 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb \
-        && echo 10 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-        && echo 11 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb \
-        && echo 12 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb \
-        && echo 13 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb \
-        && echo 14 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb \
-        && echo 15 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb \
-        && echo 16 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-        && echo 17 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb \
-        && echo 18 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-        && echo 19 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb \
-        && echo 20 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb \
-        && echo 21 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb \
-        && echo 22 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb \
-        && echo 23 && $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb \
-        && echo 24 && $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
-        && echo 25 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb \
-        && echo 26 && $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-        && echo 27 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb \
-        && echo 28 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb \
-        && echo 29 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/pe.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb \
-        && echo 30 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
-            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb \
-        && echo 31 && ! $(call gb_Executable_get_command,unoidl-check) \
+            -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other1.rdb) \
+        > $@.log 2>&1 || (cat $@.log && false))
+	$(call gb_Helper_abbreviate_dirs,( \
+        ! $(call gb_Executable_get_command,unoidl-check) \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
             -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
