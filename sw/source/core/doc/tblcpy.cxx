@@ -556,19 +556,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             SwDoc::CorrAbs( aInsIdx, aEndNdIdx, aMvPos );
         }
 
-        // If we still have FlyFrames hanging around, delete them too
-        for( const auto pFly : *pDoc->GetSpzFrameFormats() )
-        {
-            SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
-            SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-            if (pAPos &&
-                ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                 (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                aInsIdx <= pAPos->nNode && pAPos->nNode <= aEndNdIdx )
-            {
-                pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );
-            }
-        }
+        DelFlyInRange(aInsIdx, aEndNdIdx);
 
         // If DestBox is a Headline Box and has Table style set, then
         // DO NOT automatically set the TableHeadline style!

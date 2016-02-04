@@ -51,6 +51,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <mvsave.hxx>
 
 using namespace ::com::sun::star;
 
@@ -371,23 +372,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             // Move Bookmarks and so forth
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), true);
 
-                            // If FlyFrames are still around, delete these too
-                            for( SwFrameFormats::size_type n = 0; n < GetSpzFrameFormats()->size(); ++n )
-                            {
-                                SwFrameFormat* pFly = (*GetSpzFrameFormats())[n];
-                                const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
-                                SwPosition const*const pAPos =
-                                    pAnchor->GetContentAnchor();
-                                if (pAPos &&
-                                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                                    aSIdx <= pAPos->nNode &&
-                                    pAPos->nNode < aEIdx )
-                                {
-                                    getIDocumentLayoutAccess().DelLayoutFormat( pFly );
-                                    --n;
-                                }
-                            }
+                            DelFlyInRange( aSIdx, aEIdx );
 
                             GetNodes().Delete( aSIdx, nNodeDiff );
                         }
