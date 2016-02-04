@@ -332,14 +332,6 @@ int SvMetaType::GetCall1() const
         return static_cast<SvMetaType *>(GetRef())->GetCall1();
 }
 
-const OString& SvMetaType::GetSvName() const
-{
-    if( aSvName.IsSet() || !GetRef() )
-        return aSvName.getString();
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetSvName();
-}
-
 const OString& SvMetaType::GetCName() const
 {
     if( aCName.IsSet() || !GetRef() )
@@ -350,7 +342,6 @@ const OString& SvMetaType::GetCName() const
 
 bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
 {
-    aSvName.setString(rName);
     aCName.setString(rName);
     return SvMetaReference::SetName( rName, pBase );
 }
@@ -445,13 +436,6 @@ bool SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
     bool bOk = ReadNameSvIdl( rBase, rInStm );
 
     return bOk;
-}
-
-void SvMetaType::ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm )
-{
-    SvMetaExtern::ReadAttributesSvIdl( rBase, rInStm );
-    aSvName.ReadSvIdl( SvHash_SvName(), rInStm );
 }
 
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
