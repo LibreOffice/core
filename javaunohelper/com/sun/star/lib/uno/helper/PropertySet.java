@@ -896,9 +896,9 @@ XMultiPropertySet
                     lc= aVetoableLC.getContainer(arEvts[i].PropertyName);
                 else
                     lc= aBoundLC.getContainer(arEvts[i].PropertyName);
-                if (lc != null)
+                Iterator it = lc != null ? lc.iterator() : null;
+                if (it != null)
                 {
-                    Iterator it= lc.iterator();
                     while( it.hasNext())
                     {
                         Object listener= it.next();
@@ -913,9 +913,9 @@ XMultiPropertySet
                     lc= listenerContainer.getContainer(XVetoableChangeListener.class);
                 else
                     lc= listenerContainer.getContainer(XPropertyChangeListener.class);
-                if(lc != null)
+                it = lc != null ? lc.iterator() : null;
+                if (it != null)
                 {
-                    Iterator it= lc.iterator();
                     while(it.hasNext() )
                     {
                         Object listener= it.next();
@@ -934,9 +934,9 @@ XMultiPropertySet
                 PropertyChangeEvent[] arReduced= new PropertyChangeEvent[nAffectedProps];
                 System.arraycopy(arEvts, 0, arReduced, 0, nAffectedProps);
                 InterfaceContainer lc= listenerContainer.getContainer(XPropertiesChangeListener.class);
-                if (lc != null)
+                Iterator it = lc != null ? lc.iterator() : null;
+                if (it != null)
                 {
-                    Iterator it= lc.iterator();
                     while (it.hasNext())
                     {
                         XPropertiesChangeListener listener = (XPropertiesChangeListener) it.next();
