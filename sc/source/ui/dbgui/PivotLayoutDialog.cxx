@@ -517,12 +517,16 @@ void ScPivotLayoutDialog::ApplyChanges()
         {
             const ScRange& rOldRange = pOldDPObj->GetOutRange();
 
+            ScDPObject *pDPObj = nullptr;
             // FIXME: if the new range overlaps with the old one, the table actually doesn't move
             // and shouldn't therefore be deleted
             if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.In( aDestinationRange ) )
                  || bToNewSheet )
             {
-                ScDPObject *pDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+                mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+            }
+            if (pDPObj)
+            {
                 ScDBDocFunc aFunc( *(mpViewData->GetDocShell() ));
                 aFunc.RemovePivotTable( *pDPObj, true, false);
                 mpViewData->GetView()->CursorPosChanged();
