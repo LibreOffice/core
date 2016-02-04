@@ -366,17 +366,6 @@ bool ImplInitAccessBridge();
 FieldUnitStringList* ImplGetFieldUnits();
 FieldUnitStringList* ImplGetCleanedFieldUnits();
 
-// ImplDelData is used as a "dog tag" by a window when it
-// does something that could indirectly destroy the window
-// TODO: wild destruction of a window should not be possible
-
-struct ImplDelData
-{
-    ImplDelData*        mpNext;
-    VclPtr<vcl::Window> mpWindow;
-    bool                mbDel;
-};
-
 struct ImplSVEvent
 {
     void*               mpData;

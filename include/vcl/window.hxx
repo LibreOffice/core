@@ -40,7 +40,6 @@
 #include <memory>
 
 class VirtualDevice;
-struct ImplDelData;
 struct ImplSVEvent;
 struct ImplWinData;
 struct ImplFrameData;
