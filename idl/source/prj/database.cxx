@@ -45,9 +45,9 @@ SvIdlDataBase::~SvIdlDataBase()
     delete pIdTable;
 }
 
-#define ADD_TYPE( Name, OdlName, ParserChar, CName, BasName, BasPost )            \
+#define ADD_TYPE( Name, ParserChar, CName, BasName, BasPost )            \
     aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName(),   \
-                     BasName, OdlName, ParserChar, CName, BasName, BasPost ) );
+                     BasName, ParserChar, CName, BasName, BasPost ) );
 
 SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 {
@@ -57,17 +57,17 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
         aTypeList.push_back( new SvMetaTypevoid() );
 
         // MI: IDispatch::Invoke can not unsigned
-        ADD_TYPE( UINT16,    "long", 'h', "unsigned short", "Long", "&" );
-        ADD_TYPE( INT16,     "short", 'h', "short", "Integer", "%" );
-        ADD_TYPE( UINT32,    "long", 'l', "unsigned long", "Long", "&" );
-        ADD_TYPE( INT32,     "long", 'l', "long", "Long", "&" );
-        ADD_TYPE( int,       "int", 'i', "int", "Integer", "%" );
-        ADD_TYPE( BOOL,      "boolean", 'b', "unsigned char", "Boolean", "" );
-        ADD_TYPE( char,      "char", 'c', "char", "Integer", "%" );
-        ADD_TYPE( BYTE,      "char", 'c', "unsigned char", "Integer", "%" );
-        ADD_TYPE( float,     "float", 'f', "float", "Single", "!" );
-        ADD_TYPE( double,    "double", 'F', "double", "Double", "#" );
-        ADD_TYPE( SbxObject, "VARIANT", 'o', "C_Object", "Object", "" );
+        ADD_TYPE( UINT16,    'h', "unsigned short", "Long", "&" );
+        ADD_TYPE( INT16,     'h', "short", "Integer", "%" );
+        ADD_TYPE( UINT32,    'l', "unsigned long", "Long", "&" );
+        ADD_TYPE( INT32,     'l', "long", "Long", "&" );
+        ADD_TYPE( int,       'i', "int", "Integer", "%" );
+        ADD_TYPE( BOOL,      'b', "unsigned char", "Boolean", "" );
+        ADD_TYPE( char,      'c', "char", "Integer", "%" );
+        ADD_TYPE( BYTE,      'c', "unsigned char", "Integer", "%" );
+        ADD_TYPE( float,     'f', "float", "Single", "!" );
+        ADD_TYPE( double,    'F', "double", "Double", "#" );
+        ADD_TYPE( SbxObject, 'o', "C_Object", "Object", "" );
 
         // Attention! When adding types all binary data bases get incompatible
 
