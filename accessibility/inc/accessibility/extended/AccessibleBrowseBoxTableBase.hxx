@@ -59,7 +59,7 @@ protected:
     virtual ~AccessibleBrowseBoxTableBase();
 
 public:
-    // XAccessibleContext -----------------------------------------------------
+    // XAccessibleContext
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
@@ -73,13 +73,13 @@ public:
         -   getAccessibleChild,
         -   getAccessibleIndexInParent. */
 
-    // XAccessibleComponent ---------------------------------------------------
+    // XAccessibleComponent
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
         -   grabFocus. */
 
-    // XAccessibleTable -------------------------------------------------------
+    // XAccessibleTable
 
     /** @return  The number of used rows in the table (0 = empty table). */
     virtual sal_Int32 SAL_CALL getAccessibleRowCount()
@@ -140,7 +140,7 @@ public:
         -   getAccessibleCellAt,
         -   isAccessibleSelected. */
 
-    // XInterface -------------------------------------------------------------
+    // XInterface
 
     /** Queries for a new interface. */
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
@@ -152,7 +152,7 @@ public:
     /** Releases the object (calls release() on base class). */
     virtual void SAL_CALL release() throw () override;
 
-    // XTypeProvider ----------------------------------------------------------
+    // XTypeProvider
 
     /** @return  A sequence of possible types (received from base classes). */
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
@@ -162,13 +162,13 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw ( css::uno::RuntimeException, std::exception ) override;
 
-    // XServiceInfo -----------------------------------------------------------
+    // XServiceInfo
 
     /*  Derived classes have to implement:
         -   getImplementationName */
 
 protected:
-    // internal virtual methods -----------------------------------------------
+    // internal virtual methods
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The count of data rows without header bar. */
@@ -177,9 +177,9 @@ protected:
         @return  The count of data columns without "handle column". */
     virtual sal_Int32 implGetColumnCount() const;
 
-    // internal helper methods ------------------------------------------------
+    // internal helper methods
 
-    /** @return  <TRUE/>, if first BrowseBox column is the "handle column". */
+    /** @return  TRUE, if first BrowseBox column is the "handle column". */
     bool implHasHandleColumn() const;
 
     /** @attention  This method requires locked mutex's and a living object.
@@ -205,19 +205,19 @@ protected:
     sal_Int32 implGetChildIndex( sal_Int32 nRow, sal_Int32 nColumn ) const;
 
     /** @attention  This method requires locked mutex's and a living object.
-        @return  <TRUE/>, if the specified row is selected. */
+        @return  TRUE, if the specified row is selected. */
     bool implIsRowSelected( sal_Int32 nRow ) const;
     /** @attention  This method requires locked mutex's and a living object.
-        @return  <TRUE/>, if the specified column is selected. */
+        @return  TRUE, if the specified column is selected. */
     bool implIsColumnSelected( sal_Int32 nColumn ) const;
 
     /** Selects/deselects a row (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
-        @param bSelect  <TRUE/> = select, <FALSE/> = deselect */
+        @param bSelect  TRUE = select, FALSE = deselect */
     void implSelectRow( sal_Int32 nRow, bool bSelect );
     /** Selects/deselects a column (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
-        @param bSelect  <TRUE/> = select, <FALSE/> = deselect */
+        @param bSelect  TRUE = select, FALSE = deselect */
     void implSelectColumn( sal_Int32 nColumnPos, bool bSelect );
 
     /** @attention  This method requires locked mutex's and a living object.

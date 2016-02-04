@@ -73,7 +73,7 @@ typedef ::cppu::WeakAggComponentImplHelper5<
 
 /** The BrowseBox accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces and
-    the event broadcaster and contains the ::osl::Mutex. */
+    the event broadcaster and contains the osl::Mutex. */
 class AccessibleBrowseBoxBase :
     public ::comphelper::OBaseMutex,
     public AccessibleBrowseBoxImplHelper

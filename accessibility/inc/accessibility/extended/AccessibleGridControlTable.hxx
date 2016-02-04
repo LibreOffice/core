@@ -50,7 +50,7 @@ private:
     std::vector< AccessibleGridControlTableCell* > m_pCellVector;
     std::vector< css::uno::Reference< css::accessibility::XAccessible> > m_pAccessCellVector;
 public:
-    // XAccessibleContext -----------------------------------------------------
+    // XAccessibleContext
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
@@ -62,7 +62,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
         throw ( css::uno::RuntimeException, std::exception ) override;
 
-    // XAccessibleComponent ---------------------------------------------------
+    // XAccessibleComponent
 
     /** @return  The accessible child rendered under the given point. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
@@ -73,7 +73,7 @@ public:
     virtual void SAL_CALL grabFocus()
         throw ( css::uno::RuntimeException, std::exception ) override;
 
-    // XAccessibleTable -------------------------------------------------------
+    // XAccessibleTable
 
     /** @return  The description text of the specified row. */
     virtual OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
@@ -105,12 +105,12 @@ public:
     getSelectedAccessibleColumns()
         throw ( css::uno::RuntimeException, std::exception ) override;
 
-    /** @return  <TRUE/>, if the specified row is completely selected. */
+    /** @return  TRUE, if the specified row is completely selected. */
     virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
 
-    /** @return  <TRUE/>, if the specified column is completely selected. */
+    /** @return  TRUE, if the specified column is completely selected. */
     virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
@@ -122,19 +122,19 @@ public:
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
 
-    /** @return  <TRUE/>, if the specified cell is selected. */
+    /** @return  TRUE, if the specified cell is selected. */
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
 
-    // XAccessibleSelection ---------------------------------------------------
+    // XAccessibleSelection
 
     /** Selects the specified child (row or column of the table). */
     virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
 
-    /** @return  <TRUE/>, if the specified child (row/column) is selected. */
+    /** @return  TRUE, if the specified child (row/column) is selected. */
     virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
@@ -161,7 +161,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw ( css::lang::IndexOutOfBoundsException,
                 css::uno::RuntimeException, std::exception ) override;
-     // XInterface -------------------------------------------------------------
+     // XInterface
 
     /** Queries for a new interface. */
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
@@ -172,7 +172,7 @@ public:
 
     /** Releases the object (calls release() on base class). */
     virtual void SAL_CALL release() throw () override;
-    // XServiceInfo -----------------------------------------------------------
+    // XServiceInfo
 
     /** @return  The name of this class. */
     virtual OUString SAL_CALL getImplementationName()
@@ -184,7 +184,7 @@ public:
     std::vector< css::uno::Reference< css::accessibility::XAccessible > >& getAccessibleCellVector() { return m_pAccessCellVector;}
 
 protected:
-    // internal virtual methods -----------------------------------------------
+    // internal virtual methods
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) relative to the parent window. */
@@ -194,7 +194,7 @@ protected:
     virtual Rectangle implGetBoundingBoxOnScreen() override;
 
 
-    //// internal helper methods ------------------------------------------------
+    //// internal helper methods
     ///** @attention  This method requires a locked mutex.
     //    @return  The XAccessibleTable interface of the specified header bar. */
     css::uno::Reference< css::accessibility::XAccessibleTable >
