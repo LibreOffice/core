@@ -47,7 +47,6 @@ SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -68,7 +67,6 @@ SfxBoolItem TrackChanges FN_REDLINE_ON
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -87,7 +85,6 @@ SfxBoolItem TrackChangesBar SID_TRACK_CHANGES_BAR
     Toggle = FALSE,
     Container = FALSE,
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -461,7 +458,6 @@ SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -601,7 +597,6 @@ SfxBoolItem ChainFrames FN_FRAME_CHAIN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -784,7 +779,6 @@ SfxBoolItem ControlCodes FN_VIEW_META_CHARS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1404,7 +1398,6 @@ SfxBoolItem Fieldnames FN_VIEW_FIELDNAME
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1425,7 +1418,6 @@ SfxBoolItem Fields FN_VIEW_FIELDS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -1446,7 +1438,6 @@ SvxColorItem FontColor SID_ATTR_CHAR_COLOR2
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -1527,7 +1518,6 @@ SwFormatDrop FormatDropcap FN_FORMAT_DROPCAPS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2556,7 +2546,6 @@ SfxBoolItem ShowGraphics FN_VIEW_GRAPHIC
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2616,7 +2605,6 @@ SfxBoolItem HScroll FN_HSCROLLBAR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2637,7 +2625,6 @@ SfxUInt16Item HtmlMode SID_HTML_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3020,7 +3007,6 @@ SfxVoidItem InsertCtrl FN_INSERT_CTRL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3121,7 +3107,6 @@ SfxBoolItem InsertFieldCtrl FN_INSERT_FIELD_CTRL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -3364,7 +3349,6 @@ SfxVoidItem InsertObjCtrl FN_INSERT_OBJ_CTRL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4169,7 +4153,6 @@ SfxBoolItem Marks FN_VIEW_MARKS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4574,7 +4557,6 @@ SfxStringItem NumberFormat FN_NUMBER_FORMAT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4730,7 +4712,6 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
 
     ImageRotation = TRUE;
         ImageReflection = TRUE;
-        Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -4751,7 +4732,6 @@ SfxBoolItem NumberOrNoNumber FN_NUM_OR_NONUM
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4810,7 +4790,6 @@ SfxBoolItem OnlineAutoFormat FN_AUTOFORMAT_AUTO
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4831,7 +4810,6 @@ SfxVoidItem OptimizeTable FN_OPTIMIZE_TABLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4972,7 +4950,6 @@ SfxUInt16Item PageOffset FN_CHANGE_PAGENUM
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5013,7 +4990,6 @@ SfxStringItem PageStyleName FN_STAT_TEMPLATE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5094,7 +5070,6 @@ SfxBoolItem PrintLayout FN_PRINT_LAYOUT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5154,7 +5129,6 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5312,7 +5286,6 @@ SfxBoolItem Ruler FN_RULER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5393,7 +5366,6 @@ SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5490,7 +5462,6 @@ SfxUInt16Item SelectionMode FN_STAT_SELMODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -5830,7 +5801,6 @@ SfxBoolItem ShadowCursor FN_SHADOWCURSOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5890,7 +5860,6 @@ SfxBoolItem ShowAnnotations FN_VIEW_NOTES
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5911,7 +5880,6 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5932,7 +5900,6 @@ SfxBoolItem HideWhitespace FN_VIEW_HIDE_WHITESPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -5953,7 +5920,6 @@ SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6012,7 +5978,6 @@ SfxBoolItem ShowBookview FN_SHOW_BOOKVIEW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6206,7 +6171,6 @@ SfxStringItem StatePageNumber FN_STAT_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6265,7 +6229,6 @@ SfxBoolItem SubScript FN_SET_SUB_SCRIPT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6286,7 +6249,6 @@ SfxBoolItem SuperScript FN_SET_SUPER_SCRIPT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6384,7 +6346,6 @@ SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6511,7 +6472,6 @@ SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6613,7 +6573,6 @@ SfxBoolItem UnderlineDouble FN_UNDERLINE_DOUBLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6634,7 +6593,6 @@ SfxVoidItem UnhainFrames FN_FRAME_UNCHAIN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -6752,7 +6710,6 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6811,7 +6768,6 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6832,7 +6788,6 @@ SfxBoolItem VRuler FN_VLINEAL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -6853,7 +6808,6 @@ SfxBoolItem VScroll FN_VSCROLLBAR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -7110,7 +7064,6 @@ SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7131,7 +7084,6 @@ SfxUInt16Item OutlineLevel SID_ATTR_PARA_OUTLINE_LEVEL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7152,7 +7104,6 @@ SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7173,7 +7124,6 @@ SwFormatLineNumber LineNumber FN_FORMAT_LINENUMBER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7194,7 +7144,6 @@ SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7215,7 +7164,6 @@ SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7255,7 +7203,6 @@ SwFormatINetFormat HyperlinkAttributes FN_TXTATR_INET
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7390,7 +7337,6 @@ SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -7489,7 +7435,6 @@ SvxBrushItem TableRowBackground SID_ATTR_BRUSH_ROW
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7510,7 +7455,6 @@ SvxBrushItem TableBackground SID_ATTR_BRUSH_TABLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -7531,7 +7475,6 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
         RecordAbsolute = FALSE,
         RecordPerSet;
 
-        Readonly = FALSE,
 
         /* config: */
         AccelConfig = TRUE,
@@ -7739,7 +7682,6 @@ SfxBoolItem SwitchXFormsDesignMode FN_XFORMS_DESIGN_MODE
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -7760,7 +7702,6 @@ SfxVoidItem RemoveDirectCharFormats FN_REMOVE_DIRECT_CHAR_FORMATS
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -7798,7 +7739,6 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Readonly = FALSE,
 
    /* config: */
     AccelConfig = TRUE,
@@ -7992,7 +7932,6 @@ SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8013,7 +7952,6 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8034,7 +7972,6 @@ SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8055,7 +7992,6 @@ SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8076,7 +8012,6 @@ SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8097,7 +8032,6 @@ SfxVoidItem PreviousTrackedChange FN_REDLINE_PREV_CHANGE
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8118,7 +8052,6 @@ SfxVoidItem RemoveHyperlink FN_REMOVE_HYPERLINK
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8139,7 +8072,6 @@ SfxVoidItem CopyHyperlinkLocation FN_COPY_HYPERLINK_LOCATION
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8160,7 +8092,6 @@ SfxVoidItem NavigateBack FN_NAVIGATION_BACK
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8181,7 +8112,6 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
     RecordPerSet;
     Asynchron;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -8224,7 +8154,6 @@ SfxInt16Item PageColumnType SID_ATTR_PAGE_COLUMN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -8245,7 +8174,6 @@ SvxLongULSpaceItem SwPageULMargin SID_ATTR_PAGE_ULSPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,
@@ -8266,7 +8194,6 @@ SvxLongLRSpaceItem SwPageLRMargin SID_ATTR_PAGE_LRSPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = FALSE,

@@ -60,12 +60,6 @@ const SvIdentifier & SvMetaAttribute::GetSlotId() const
     return static_cast<SvMetaAttribute *>(GetRef())->GetSlotId();
 }
 
-bool SvMetaAttribute::GetReadonly() const
-{
-    if( aReadonly.IsSet() || !GetRef() ) return aReadonly;
-    return static_cast<SvMetaAttribute *>(GetRef())->GetReadonly();
-}
-
 bool SvMetaAttribute::GetExport() const
 {
     if( aExport.IsSet() || !GetRef() ) return aExport;
@@ -178,15 +172,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aHidden.ReadSvIdl( SvHash_Hidden(), rInStm );
     aIsCollection.ReadSvIdl( SvHash_IsCollection(), rInStm );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
-    if( aReadonly.ReadSvIdl( SvHash_Readonly(), rInStm ) )
-    {
-        if( GetType()->GetType() == TYPE_METHOD )
-        {
-            // set error
-            rBase.SetError( "Readonly in function attribute", rInStm.GetToken() );
-            rBase.WriteError( rInStm );
-        }
-    }
 }
 
 sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )

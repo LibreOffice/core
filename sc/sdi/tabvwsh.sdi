@@ -138,7 +138,6 @@ interface TableEditView
 {
     SbxObject SearchSettings
     [
-        Readonly ;
     ]
 
     SbxObject Table

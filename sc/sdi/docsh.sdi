@@ -36,7 +36,6 @@ interface TableSelection
     ]
     UINT16 Index FID_TAB_INDEX
     [
-        Readonly ;
     ]
     FID_PROTECT_TABLE       [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_PROTECT_DOC         [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -80,7 +79,6 @@ interface TableDocument
     SID_ATTR_YEAR2000   [ StateMethod = GetState; ExecMethod = Execute; ]
     SbxObject OLEObjects
     [
-        Readonly ;
         IsCollection ;
     ]
     SID_CHART_SOURCE    [ ExecMethod = Execute; ]
