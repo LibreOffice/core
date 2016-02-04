@@ -57,6 +57,7 @@
 
 #include <vcl/layout.hxx>
 #include <unotools/configitem.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using namespace css::security;
 using namespace css::uno;
@@ -796,13 +797,26 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
     sal_Int32 nStreamOpenMode, bool bTempStream)
 {
     SignatureStreamHelper aHelper;
+    if (mxStore.is())
+    {
+        uno::Reference<container::XNameAccess> xNameAccess(mxStore, uno::UNO_QUERY);
+        if (xNameAccess.is() && xNameAccess->hasByName("[Content_Types].xml"))
+            aHelper.nStorageFormat = embed::StorageFormats::OFOPXML;
+    }
+
     if (bTempStream)
     {
         if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
         {
             //We write always into a new temporary stream.
             mxTempSignatureStream.set(css::io::TempFile::create(mxCtx), UNO_QUERY_THROW);
-            aHelper.xSignatureStream = mxTempSignatureStream;
+            if (aHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
+                aHelper.xSignatureStream = mxTempSignatureStream;
+            else
+            {
+                mxTempSignatureStorage = comphelper::OStorageHelper::GetStorageOfFormatFromStream(ZIP_STORAGE_FORMAT_STRING, mxTempSignatureStream);
+                aHelper.xSignatureStorage = mxTempSignatureStorage;
+            }
         }
         else
         {
@@ -833,7 +847,7 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
 
     if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
     {
-        if (aHelper.xSignatureStream.is())
+        if (aHelper.xSignatureStream.is() && aHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
         {
             css::uno::Reference < css::io::XTruncate > xTruncate(
                 aHelper.xSignatureStream, UNO_QUERY_THROW);
