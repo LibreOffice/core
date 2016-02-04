@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <defs>
+  <radialGradient id="svg_2" cx="0.5" cy="0.5" r="0.5">
+   <stop offset="0" stop-color="#ff0000"/>
+   <stop offset="1" stop-color="#000000"/>
+  </radialGradient>
+ </defs>
+ <g fill="url(#svg_2)" >
+  <title>Layer 1</title>
+  <rect id="svg_1" height="50" width="200" y="0" x="0"/>
+  <text x="50" y="40" id="svg_12" font-size="48" font-family="serif" fill="#ffff00">Text</text>
+ </g>
+</svg>

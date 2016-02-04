@@ -45,6 +45,8 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf45771();
     void testTdf85770();
     void testTdf79163();
+    void testTdf97542_1();
+    void testTdf97542_2();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -60,6 +62,8 @@ public:
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf85770);
     CPPUNIT_TEST(testTdf79163);
+    CPPUNIT_TEST(testTdf97542_1);
+    CPPUNIT_TEST(testTdf97542_2);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -235,6 +239,34 @@ void Test::testTdf79163()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/mask/unifiedtransparence", "transparence", "0");
+}
+
+void Test::testTdf97542_1()
+{
+    Primitive2DSequence aSequenceTdf97542_1 = parseSvg("/svgio/qa/cppunit/data/tdf97542_1.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf97542_1.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97542_1));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "fontcolor", "#ffff00");
+}
+
+void Test::testTdf97542_2()
+{
+    Primitive2DSequence aSequenceTdf97542_2 = parseSvg("/svgio/qa/cppunit/data/tdf97542_2.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf97542_2.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97542_2));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "x", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "y", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "radius", "3");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
