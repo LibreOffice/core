@@ -412,10 +412,10 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             break;
 
         case SymbolType::PLUS:
-            pDev->DrawRect( Rectangle( nRect.Left(), aCenter.Y()-n8,
-                                       nRect.Right(), aCenter.Y()+n8 ) );
-            pDev->DrawRect( Rectangle( aCenter.X()-n8, nRect.Top(),
-                                       aCenter.X()+n8, nRect.Bottom() ) );
+            pDev->DrawRect( Rectangle( nRect.Left(), aCenter.Y()-n8/3,
+                                       nRect.Right()+1, aCenter.Y()+n8/3+1 ) );
+            pDev->DrawRect( Rectangle( aCenter.X()-n8/3, nRect.Top(),
+                                       aCenter.X()+n8/3+1, nRect.Bottom()+1 ) );
             break;
         case SymbolType::DONTKNOW:
         case SymbolType::IMAGE:
