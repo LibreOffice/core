@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MTABLE_HXX
 
 #include <connectivity/TTableHelper.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "MConnection.hxx"
 
 namespace connectivity

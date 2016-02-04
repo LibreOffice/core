@@ -7,18 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "MConnection.hxx"
 #include "MDatabaseMetaDataHelper.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
-#include <connectivity/dbexception.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/sequence.hxx>
-#include <osl/mutex.hxx>
-#include <osl/conditn.hxx>
 
 // do we need it?
 static ::osl::Mutex m_aMetaMutex;
 
-#include <osl/diagnose.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>

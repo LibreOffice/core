@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MERRORRESOURCE_HXX
 
-#include <rtl/ustring.hxx>
-
 namespace connectivity
 {
     namespace mork

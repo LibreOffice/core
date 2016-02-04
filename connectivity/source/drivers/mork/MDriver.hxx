@@ -10,25 +10,12 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDRIVER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDRIVER_HXX
 
-#include <sal/config.h>
-
-#include <cassert>
-
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
+
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
-#include <sal/types.h>
 
 #define MORK_DRIVER_IMPL_NAME "com.sun.star.comp.sdbc.MorkDriver"
 
