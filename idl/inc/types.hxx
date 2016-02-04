@@ -84,7 +84,6 @@ class SvMetaType : public SvMetaExtern
     Svint                       aCall0, aCall1;
     SvIdentifier                aSvName;
     SvIdentifier                aSbxName;
-    SvIdentifier                aOdlName;
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
     SvIdentifier                aBasicName;
@@ -108,7 +107,7 @@ public:
             SvMetaType( const OString& rTypeName, char cParserChar,
                                 const OString& rCName );
             SvMetaType( const OString& rTypeName, const OString& rSbxName,
-                        const OString& rOdlName, char cParserChar,
+                        char cParserChar,
                         const OString& rCName, const OString& rBasicName,
                         const OString& rBasicPostfix );
 
@@ -142,11 +141,10 @@ public:
     void                SetBasicName(const OString& rName)
                         { aBasicName.setString(rName); }
 
-    const OString& GetBasicName() const;
-    const OString& GetSvName() const;
-    const OString& GetSbxName() const;
-    const OString& GetOdlName() const;
-    const OString& GetCName() const;
+    const OString&      GetBasicName() const;
+    const OString&      GetSvName() const;
+    const OString&      GetSbxName() const;
+    const OString&      GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
     virtual bool        SetName( const OString& rName, SvIdlDataBase * = nullptr ) override;

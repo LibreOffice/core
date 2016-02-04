@@ -209,7 +209,6 @@ SvMetaType::SvMetaType( const OString& rName, char cPC,
 
 SvMetaType::SvMetaType( const OString& rName,
                         const OString& rSbxName,
-                        const OString& rOdlName,
                         char cPc,
                         const OString& rCName,
                         const OString& rBasicName,
@@ -218,7 +217,6 @@ SvMetaType::SvMetaType( const OString& rName,
 {
     SetName( rName );
     aSbxName.setString(rSbxName);
-    aOdlName.setString(rOdlName);
     cParserChar = cPc;
     aCName.setString(rCName);
     aBasicName.setString(rBasicName);
@@ -241,7 +239,6 @@ void SvMetaType::SetType( int nT )
     nType = nT;
     if( nType == TYPE_ENUM )
     {
-        aOdlName.setString("short");
     }
     else if( nType == TYPE_CLASS )
     {
@@ -353,14 +350,6 @@ const OString& SvMetaType::GetSbxName() const
         return static_cast<SvMetaType *>(GetRef())->GetSbxName();
 }
 
-const OString& SvMetaType::GetOdlName() const
-{
-    if( aOdlName.IsSet() || !GetRef() )
-        return aOdlName.getString();
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetOdlName();
-}
-
 const OString& SvMetaType::GetCName() const
 {
     if( aCName.IsSet() || !GetRef() )
@@ -374,8 +363,6 @@ bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
     aSvName.setString(rName);
     aSbxName.setString(rName);
     aCName.setString(rName);
-    if( GetType() != TYPE_ENUM )
-        aOdlName.setString(rName);
     return SvMetaReference::SetName( rName, pBase );
 }
 
@@ -477,7 +464,6 @@ void SvMetaType::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     SvMetaExtern::ReadAttributesSvIdl( rBase, rInStm );
     aSvName.ReadSvIdl( SvHash_SvName(), rInStm );
     aSbxName.ReadSvIdl( SvHash_SbxName(), rInStm );
-    aOdlName.ReadSvIdl( SvHash_OdlName(), rInStm );
 }
 
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
@@ -623,7 +609,7 @@ OString SvMetaType::GetParserString() const
 }
 
 SvMetaTypeString::SvMetaTypeString()
-    : SvMetaType( "String", "SbxSTRING", "BSTR", 's', "char *", "String", "$" )
+    : SvMetaType( "String", "SbxSTRING", 's', "char *", "String", "$" )
 {
 }
 
@@ -699,7 +685,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 }
 
 SvMetaTypevoid::SvMetaTypevoid()
-    : SvMetaType( "void", "SbxVOID", "void", 'v', "void", "", "" )
+    : SvMetaType( "void", "SbxVOID", 'v', "void", "", "" )
 {
 }
 
