@@ -393,25 +393,30 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
     // Export all other signatures...
     SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
         embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, false );
-    uno::Reference< io::XOutputStream > xOutputStream(
-        aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-    uno::Reference< com::sun::star::xml::sax::XWriter> xSaxWriter =
-        maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-    uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
-    size_t nInfos = maCurrentSignatureInformations.size();
-    for( size_t n = 0 ; n < nInfos ; ++n )
-        XMLSignatureHelper::ExportSignature(
-        xDocumentHandler, maCurrentSignatureInformations[ n ] );
-
-    XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
-
-    // If stream was not provided, we are responsible for committing it....
-    if ( !mxSignatureStream.is() )
+    if (aStreamHelper.xSignatureStream.is())
     {
-        uno::Reference< embed::XTransactedObject > xTrans(
-            aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-        xTrans->commit();
+        // ODF
+        uno::Reference< io::XOutputStream > xOutputStream(
+            aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+        uno::Reference< com::sun::star::xml::sax::XWriter> xSaxWriter =
+            maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
+
+        uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
+        size_t nInfos = maCurrentSignatureInformations.size();
+        for( size_t n = 0 ; n < nInfos ; ++n )
+            XMLSignatureHelper::ExportSignature(
+            xDocumentHandler, maCurrentSignatureInformations[ n ] );
+
+        XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
+
+        // If stream was not provided, we are responsible for committing it....
+        if ( !mxSignatureStream.is() )
+        {
+            uno::Reference< embed::XTransactedObject > xTrans(
+                aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+            xTrans->commit();
+        }
     }
 
     EndDialog(RET_OK);
@@ -828,10 +833,13 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
 
     if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
     {
-        css::uno::Reference < css::io::XTruncate > xTruncate(
-            aHelper.xSignatureStream, UNO_QUERY_THROW);
-        DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
-        xTruncate->truncate();
+        if (aHelper.xSignatureStream.is())
+        {
+            css::uno::Reference < css::io::XTruncate > xTruncate(
+                aHelper.xSignatureStream, UNO_QUERY_THROW);
+            DBG_ASSERT( xTruncate.is(), "ImplOpenSignatureStream - Stream does not support xTruncate!" );
+            xTruncate->truncate();
+        }
     }
     else if ( bTempStream || mxSignatureStream.is())
     {
