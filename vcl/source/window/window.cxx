@@ -510,15 +510,6 @@ void Window::dispose()
     OutputDevice *pOutDev = GetOutDev();
     pOutDev->ReleaseGraphics();
 
-    // notify ImplDelData subscribers of this window about the window deletion
-    ImplDelData* pDelData = mpWindowImpl->mpFirstDel;
-    while ( pDelData )
-    {
-        pDelData->mbDel = true;
-        pDelData->mpWindow.clear();  // #112873# pDel is not associated with a Window anymore
-        pDelData = pDelData->mpNext;
-    }
-
     // remove window from the lists
     ImplRemoveWindow( true );
 
@@ -628,7 +619,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mpLastFocusWindow                   = nullptr;                      // window for focus restore
     mpDlgCtrlDownWindow                 = nullptr;                      // window for dialog control
     mnChildEventListenersIteratingCount = 0;
-    mpFirstDel                          = nullptr;                      // Dtor notification list
     mpUserData                          = nullptr;                      // user data
     mpCursor                            = nullptr;                      // cursor
     mpControlFont                       = nullptr;                      // font properties

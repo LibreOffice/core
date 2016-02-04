@@ -28,8 +28,6 @@
 #include <vector>
 #include <set>
 
-struct ImplDelData;
-
 namespace vcl {
     class Window;
 }
@@ -209,7 +207,6 @@ public:
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
     css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
-    ImplDelData*        mpFirstDel;
     void*               mpUserData;
     vcl::Cursor*        mpCursor;
     Pointer             maPointer;
