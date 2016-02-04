@@ -90,7 +90,6 @@ protected:
     SvString      aName;
     SvHelpContext aHelpContext;
     SvHelpText    aHelpText;
-    SvString      aConfigName;
     SvString      aDescription;
 
     bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -109,7 +108,6 @@ public:
     virtual bool                SetName( const OString& rName, SvIdlDataBase * = nullptr  );
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
-    virtual const SvString &    GetConfigName() const{ return aConfigName; }
     virtual const SvString&     GetDescription() const{ return aDescription; }
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -161,14 +159,6 @@ public:
                                     || !SvMetaObject::GetHelpText().getString().isEmpty() )
                                 ? SvMetaObject::GetHelpText()
                                 : aRef->GetHelpText();
-                        }
-
-    const SvString &    GetConfigName() const override
-                        {
-                            return ( !aRef.Is()
-                                    || !SvMetaObject::GetConfigName().getString().isEmpty() )
-                                ? SvMetaObject::GetConfigName()
-                                : aRef->GetConfigName();
                         }
 
     const SvString &    GetDescription() const override

@@ -92,7 +92,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_ImageReflection;
     SvStringHashEntryRef MM_IsCollection;
     SvStringHashEntryRef MM_ReadOnlyDoc;
-    SvStringHashEntryRef MM_ConfigName;
     SvStringHashEntryRef MM_union;
     SvStringHashEntryRef MM_struct;
     SvStringHashEntryRef MM_typedef;
@@ -187,7 +186,6 @@ HASH_INLINE(ImageRotation)
 HASH_INLINE(ImageReflection)
 HASH_INLINE(IsCollection)
 HASH_INLINE(ReadOnlyDoc)
-HASH_INLINE(ConfigName)
 HASH_INLINE(union)
 HASH_INLINE(struct)
 HASH_INLINE(typedef)
