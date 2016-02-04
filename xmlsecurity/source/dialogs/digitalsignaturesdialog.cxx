@@ -492,22 +492,26 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
             //a sax writer are used to write the information.
             SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
                 css::embed::ElementModes::WRITE|css::embed::ElementModes::TRUNCATE, true);
-            Reference< css::io::XOutputStream > xOutputStream(
-                aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
-            Reference< css::xml::sax::XWriter> xSaxWriter =
-                maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            // Export old signatures...
-            uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
-            size_t nInfos = maCurrentSignatureInformations.size();
-            for ( size_t n = 0; n < nInfos; n++ )
-                XMLSignatureHelper::ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
+            if (aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
+            {
+                Reference< css::io::XOutputStream > xOutputStream(
+                    aStreamHelper.xSignatureStream, UNO_QUERY_THROW);
+                Reference< css::xml::sax::XWriter> xSaxWriter =
+                    maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            // Create a new one...
-            maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
+                // Export old signatures...
+                uno::Reference< xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, UNO_QUERY_THROW);
+                size_t nInfos = maCurrentSignatureInformations.size();
+                for ( size_t n = 0; n < nInfos; n++ )
+                    XMLSignatureHelper::ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
-            // That's it...
-            XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
+                // Create a new one...
+                maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
+
+                // That's it...
+                XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
+            }
 
             maSignatureHelper.EndMission();
 
