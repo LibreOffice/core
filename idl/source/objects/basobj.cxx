@@ -99,7 +99,6 @@ void SvMetaObject::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
     aHelpContext.ReadSvIdl( rBase, SvHash_HelpContext(), rInStm );
     aHelpText.ReadSvIdl( rBase, rInStm );
-    aConfigName.ReadSvIdl( SvHash_ConfigName(), rInStm );
     aDescription.ReadSvIdl( SvHash_Description(), rInStm );
 }
 
