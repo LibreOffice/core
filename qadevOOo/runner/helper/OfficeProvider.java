@@ -744,7 +744,8 @@ public class OfficeProvider implements AppProvider
         if(f.isDirectory())
         {
             File files[] = f.listFiles();
-            for(int i = 0; i < files.length; i++)
+            int filesLength = files != null ? files.length : 0;
+            for(int i = 0; i < filesLength; ++i)
             {
                 deleteFilesAndDirector(files[i]);
             }
