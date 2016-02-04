@@ -20,14 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MQUERYHELPER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MQUERYHELPER_HXX
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
-#include <osl/conditn.hxx>
-#include <osl/thread.hxx>
 #include <connectivity/FValue.hxx>
 #include "MErrorResource.hxx"
-#include <unordered_map>
 
 namespace connectivity
 {

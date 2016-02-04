@@ -7,17 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <osl/diagnose.h>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include "MPreparedStatement.hxx"
-#include <com/sun/star/sdbc/DataType.hpp>
 #include "MResultSetMetaData.hxx"
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -30,12 +23,8 @@ using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::mork;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
-using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.mork.PreparedStatement","com.sun.star.sdbc.PreparedStatement");

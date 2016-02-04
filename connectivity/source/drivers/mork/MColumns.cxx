@@ -19,26 +19,14 @@
 
 #include "MColumns.hxx"
 #include <connectivity/sdbcx/VColumn.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "MTable.hxx"
-#include "MTables.hxx"
-#include "MCatalog.hxx"
-#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
-
-using namespace ::comphelper;
 
 using namespace connectivity::mork;
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
+
 
 sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
 {

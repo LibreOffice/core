@@ -19,30 +19,13 @@
 
 #include "MTables.hxx"
 #include "MTable.hxx"
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include "MCatalog.hxx"
-#include "MConnection.hxx"
-#include <comphelper/extract.hxx>
-#include <connectivity/dbtools.hxx>
-#include <connectivity/dbexception.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/types.hxx>
 
-using namespace ::comphelper;
 using namespace connectivity;
-using namespace ::cppu;
 using namespace connectivity::mork;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace dbtools;
 
 sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {

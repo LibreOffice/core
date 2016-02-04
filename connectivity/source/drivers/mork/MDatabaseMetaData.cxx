@@ -7,31 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "MConnection.hxx"
 #include "MDatabaseMetaData.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include <connectivity/FValue.hxx>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include "resource/common_res.hrc"
 #include <vector>
 
 #include "MDatabaseMetaDataHelper.hxx"
-#include "MorkParser.hxx"
 #include <connectivity/dbtools.hxx>
 
-using namespace dbtools;
 using namespace connectivity::mork;
 using namespace connectivity;
 
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
 
 
 namespace connectivity

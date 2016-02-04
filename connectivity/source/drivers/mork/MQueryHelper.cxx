@@ -31,9 +31,7 @@
 #include <string.h>
 
 #include "resource/mork_res.hrc"
-#include "resource/common_res.hrc"
 
-#include <connectivity/dbexception.hxx>
 #include <unotools/textsearch.hxx>
 
 using namespace connectivity::mork;
