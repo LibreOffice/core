@@ -32,7 +32,7 @@
 #include "svx/dialmgr.hxx"
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
-#include <boost/bind.hpp>
+
 using namespace css;
 using namespace css::uno;
 

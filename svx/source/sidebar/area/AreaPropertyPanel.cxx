@@ -38,7 +38,6 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/toolbarmenu.hxx>
 
-#include <boost/bind.hpp>
 
 using namespace css;
 using namespace css::uno;

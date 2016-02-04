@@ -40,7 +40,6 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 
-#include <boost/bind.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -82,7 +81,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maImgRadial(SVX_RES(IMG_RADIAL)),
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
-      maTrGrPopup(this, ::boost::bind(&AreaPropertyPanelBase::CreateTransparencyGradientControl, this, _1)),
+      maTrGrPopup(this, [this] (PopupContainer *const pContainer) { return this->CreateTransparencyGradientControl(pContainer); }),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
       mxFrame(rxFrame),
