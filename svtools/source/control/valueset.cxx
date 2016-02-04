@@ -817,13 +817,37 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
         WinBits nStyle = GetStyle();
         if (nStyle & WB_MENUSTYLEVALUESET)
         {
-            if (bFocus)
-                ShowFocus(aRect);
-
-            if (bDrawSel)
+            if ((-aRect.Top() + aRect.Bottom()) == 65 && bDrawSel)
             {
-                rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
-                rRenderContext.DrawRect(aRect);
+                aRect.Left()   = (aRect.Left() + aRect.Right() - 1)/2 - 62/2;
+                aRect.Top()    = (aRect.Top() + aRect.Bottom())/2 - 48/2;
+                aRect.Right()  = aRect.Left() + 62;
+                aRect.Bottom() = aRect.Top() + 48;
+
+                Color background = rStyleSettings.GetWorkspaceColor();
+                if (background == Color(COL_WHITE))
+                {
+                    rRenderContext.SetLineColor(rStyleSettings.GetHighlightColor());
+                    for (int i = 0; i <= 6; i++)
+                        rRenderContext.DrawRect(Rectangle(aRect.Left()-i, aRect.Top()-i, aRect.Right()+i, aRect.Bottom()+i));
+                }
+                else
+                {
+                    rRenderContext.SetLineColor(Color(COL_BLACK));
+                    rRenderContext.DrawRect(Rectangle(aRect.Left()-4, aRect.Top()-4, aRect.Right()+4, aRect.Bottom()+4));
+                    rRenderContext.DrawRect(Rectangle(aRect.Left()-6, aRect.Top()-6, aRect.Right()+6, aRect.Bottom()+6));
+                }
+            }
+            else
+            {
+                if (bFocus)
+                    ShowFocus(aRect);
+
+                if (bDrawSel)
+                {
+                    rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
+                    rRenderContext.DrawRect(aRect);
+                }
             }
         }
         else if (nStyle & WB_RADIOSEL)
