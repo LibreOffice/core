@@ -75,7 +75,7 @@ typedef tools::SvRef<SvMetaAttribute> SvMetaAttributeRef;
 class SvMetaAttributeMemberList : public SvRefMemberList<SvMetaAttribute *> {};
 
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
-enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
+enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM,
       TYPE_CLASS, TYPE_POINTER };
 class SvMetaType : public SvMetaExtern
 {
