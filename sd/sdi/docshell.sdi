@@ -25,5 +25,5 @@ interface ImpressDocument : DrawDocument
 
 shell DrawDocShell
 {
-    import ImpressDocument[Automation];
+    import ImpressDocument;
 }

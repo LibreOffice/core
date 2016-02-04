@@ -26,6 +26,6 @@ interface TextOLEObject : BaseTextOLEObject
 
 shell SwOleShell: SwFrameShell
 {
-    import TextOLEObject[Automation];
+    import TextOLEObject;
 }
 

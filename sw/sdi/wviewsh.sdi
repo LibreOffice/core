@@ -53,7 +53,7 @@ interface WebEditView : BaseTextEditView
 
 shell SwWebView
 {
-    import WebEditView [Automation];
+    import WebEditView;
 //  import SearchSettings;
 //  import TextPage "Page";
 //  import SearchAttributes;
@@ -190,6 +190,6 @@ interface WebSourceView
 shell SwSrcView
 
 {
-        import WebSourceView [Automation];
+        import WebSourceView;
 }
 

@@ -143,5 +143,5 @@ interface ViewShellBaseView
 
 shell ViewShellBase
 {
-    import ViewShellBaseView[Automation];
+    import ViewShellBaseView;
 }

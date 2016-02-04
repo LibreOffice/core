@@ -443,5 +443,5 @@ interface Cell
 
 shell ScCellShell : ScFormatShell
 {
-    import Cell[Automation];
+    import Cell;
 }

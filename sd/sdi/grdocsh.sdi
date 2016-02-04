@@ -25,5 +25,5 @@ interface GraphicDocument : DrawDocument
 
 shell GraphicDocShell
 {
-    import GraphicDocument[Automation];
+    import GraphicDocument;
 }

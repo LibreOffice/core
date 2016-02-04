@@ -145,7 +145,7 @@ interface FormatForSelection
 
 shell ScFormatShell
 {
-    import FormatForSelection[Automation];
+    import FormatForSelection;
 //  import Interior ".Interior";
     import TableFont ".Font";
 }

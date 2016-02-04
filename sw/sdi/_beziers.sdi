@@ -17,7 +17,6 @@
  */
 
 interface _Bezier : Base
-[ Automation = FALSE; ]
 {
     SID_DELETE
     [

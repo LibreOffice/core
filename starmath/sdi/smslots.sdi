@@ -47,7 +47,7 @@ StarMath
 
 shell SmModule
 {
-    import StarMath[Automation];
+    import StarMath;
 }
 
 interface FormulaDocument
@@ -142,7 +142,7 @@ interface FormulaDocument
 
 shell SmDocShell
 {
-    import FormulaDocument[Automation];
+    import FormulaDocument;
 }
 
 
@@ -315,7 +315,7 @@ interface FormulaView
 
 shell SmViewShell
 {
-    import FormulaView[Automation];
+    import FormulaView;
 }
 
 }

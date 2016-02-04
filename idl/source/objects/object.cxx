@@ -36,7 +36,6 @@ SvClassElement::SvClassElement()
 };
 
 SvMetaClass::SvMetaClass()
-    : aAutomation( true, false )
 {
 }
 
@@ -44,7 +43,6 @@ void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
     SvMetaType::ReadAttributesSvIdl( rBase, rInStm );
-    aAutomation.ReadSvIdl( SvHash_Automation(), rInStm );
 }
 
 void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
@@ -62,36 +60,6 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
             xEle->SetClass( pClass );
             aClassList.push_back( xEle );
 
-            if( rInStm.Read( '[' ) )
-            {
-                pTok = rInStm.GetToken_Next();
-                if( pTok->Is( SvHash_Automation() ) )
-                {
-                    if( rInStm.Read( ']' ) )
-                    {
-                        if( xAutomationInterface.Is() )
-                        {
-                            // set error
-                            rBase.SetError( "Automation already set", rInStm.GetToken() );
-                            rBase.WriteError( rInStm );
-                        }
-                        xAutomationInterface = pClass;
-                        xEle->SetAutomation( true );
-                    }
-                    else
-                    {
-                        // set error
-                        rBase.SetError( "missing ]", rInStm.GetToken() );
-                        rBase.WriteError( rInStm );
-                    }
-                }
-                else
-                {
-                    // set error
-                    rBase.SetError( "only attribute Automation allowed", rInStm.GetToken() );
-                    rBase.WriteError( rInStm );
-                }
-            }
             pTok = &rInStm.GetToken();
             if( pTok->IsString() )
             {

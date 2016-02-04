@@ -25,6 +25,6 @@ interface WebGraphic : BaseTextGraphic
 
 shell SwWebGrfShell : SwBaseShell
 {
-        import WebGraphic[Automation];
+        import WebGraphic;
 }
 

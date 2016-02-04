@@ -710,7 +710,7 @@ interface TextDrawFont
 
 shell SwDrawTextShell
 {
-        import TextDrawText[Automation];
+        import TextDrawText;
         import TextDrawFont ".DrawFont";
 }
 

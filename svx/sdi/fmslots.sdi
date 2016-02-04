@@ -627,7 +627,7 @@ interface FormTextAttributeShell
 shell FmFormShell
 {
     import FormTextAttributeShell;
-    import Form [Automation];
+    import Form;
 
     SID_FM_CONFIG // ole : no, status : ?
     [

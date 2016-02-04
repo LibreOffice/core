@@ -8,7 +8,6 @@
  */
 
 interface _Navigation
-[ Automation = FALSE; ]
 {
     SfxVoidItem NavigateBack FN_NAVIGATION_BACK
     [

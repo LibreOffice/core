@@ -17,9 +17,6 @@
  */
 
 interface BaseTextFrame
-[
-    Automation = FALSE;
-]
 {
     //UUUU
     SID_ATTR_FILL_STYLE

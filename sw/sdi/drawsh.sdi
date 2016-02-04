@@ -408,7 +408,7 @@ interface TextDraw : TextDrawBase
 
 shell SwDrawShell : SwDrawBaseShell
 {
-        import TextDraw [Automation];
+        import TextDraw;
 
      // no export
 

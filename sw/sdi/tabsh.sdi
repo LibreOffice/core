@@ -51,6 +51,6 @@ interface TextTable : BaseTextTable
 shell SwTableShell : SwBaseShell
 
 {
-        import TextTable[Automation];
+        import TextTable;
 }
 

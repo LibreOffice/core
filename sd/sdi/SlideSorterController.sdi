@@ -322,10 +322,10 @@ interface SlideSorterView
 
 shell SlideSorterController
 {
-    import SlideSorterView[Automation];
+    import SlideSorterView;
 }
 
 shell SlideSorterViewShell
 {
-    import SlideSorterView[Automation];
+    import SlideSorterView;
 }

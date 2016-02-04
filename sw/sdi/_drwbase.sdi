@@ -17,9 +17,6 @@
  */
 
 interface BaseTextDrawBase
-[
-    Automation = FALSE;
-]
 {
     FN_DRAW_WRAP_DLG
     [

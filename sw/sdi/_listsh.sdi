@@ -17,9 +17,6 @@
  */
 
 interface BaseTextList
-[
-    Automation = FALSE
-]
 {
     FN_NUM_BULLET_DOWN // status(final|play)
     [

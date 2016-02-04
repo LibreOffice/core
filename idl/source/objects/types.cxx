@@ -30,8 +30,7 @@
 #include <database.hxx>
 
 SvMetaAttribute::SvMetaAttribute()
-    : aAutomation( true, false )
-    , aExport( true, false )
+    : aExport( true, false )
     , aIsCollection ( false, false )
     , aReadOnlyDoc ( true, false )
     , aHidden( false, false )
@@ -41,7 +40,6 @@ SvMetaAttribute::SvMetaAttribute()
 
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
-    , aAutomation( true, false )
     , aExport( true, false )
     , aIsCollection ( false, false)
     , aReadOnlyDoc ( true, false)
@@ -83,12 +81,6 @@ bool SvMetaAttribute::GetHidden() const
         return aHidden;
     else
         return static_cast<SvMetaAttribute *>(GetRef())->GetHidden();
-}
-
-bool SvMetaAttribute::GetAutomation() const
-{
-    if( aAutomation.IsSet() || !GetRef() ) return aAutomation;
-    return static_cast<SvMetaAttribute *>(GetRef())->GetAutomation();
 }
 
 bool SvMetaAttribute::GetIsCollection() const
@@ -184,7 +176,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aSlotId.ReadSvIdl( rBase, SvHash_SlotId(), rInStm );
     aExport.ReadSvIdl( SvHash_Export(), rInStm );
     aHidden.ReadSvIdl( SvHash_Hidden(), rInStm );
-    aAutomation.ReadSvIdl( SvHash_Automation(), rInStm );
     aIsCollection.ReadSvIdl( SvHash_IsCollection(), rInStm );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
     if( aReadonly.ReadSvIdl( SvHash_Readonly(), rInStm ) )

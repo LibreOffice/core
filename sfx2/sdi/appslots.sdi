@@ -17,9 +17,6 @@
  */
 
 interface Application
-[
-    Automation = FALSE ;
-]
 {
     SID_AUTOPILOTMENU // ole(no) api(final/play/rec)
     [
@@ -220,7 +217,7 @@ interface Application
 
 shell SfxApplication
 {
-    import Application [Automation];
+    import Application;
     import Documents "Documents";
 
     SID_NEWDOCDIRECT // ole(no) api(no)

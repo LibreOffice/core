@@ -59,9 +59,6 @@ interface Documents
 
 
 interface Document
-[
-    Automation = FALSE ;
-]
 {
     SID_DOCTITLE // ole(opt) api(final/norec)
     [
@@ -95,9 +92,6 @@ interface Document
 }
 
 interface OfficeDocument : Document
-[
-    Automation = FALSE
-]
 {
     SID_DOCINFO_AUTHOR // ole(opt) api(todo)
     [
@@ -212,7 +206,7 @@ interface OfficeDocument : Document
 
 shell SfxObjectShell
 {
-    import OfficeDocument [Automation];
+    import OfficeDocument;
 
     SID_DOCINFO // ole(no) api(final/play)
     [

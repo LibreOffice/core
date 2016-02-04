@@ -24,6 +24,6 @@ interface WebTable : BaseTextTable
 
 shell SwWebTableShell : SwBaseShell
 {
-        import WebTable[Automation];
+        import WebTable;
 }
 

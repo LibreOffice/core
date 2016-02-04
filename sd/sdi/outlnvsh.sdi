@@ -552,6 +552,6 @@ interface OutlineView
 
 shell OutlineViewShell
 {
-    import OutlineView[Automation];
+    import OutlineView;
 }
 

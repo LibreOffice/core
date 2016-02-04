@@ -17,9 +17,6 @@
  */
 
 interface BaseTextEditView
-[
-    Automation = FALSE;
-]
 {
     FN_REFRESH_VIEW // status(final|play)
     [

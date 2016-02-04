@@ -63,12 +63,12 @@ interface TextDocument : BaseTextDocument
 
 shell SwDocShell
 {
-    import TextDocument[Automation];
+    import TextDocument;
 }
 
 shell SwGlosDocShell : SwDocShell
 {
-    import TextDocument[Automation];
+    import TextDocument;
 
     SID_SAVEDOC  // status()
     [

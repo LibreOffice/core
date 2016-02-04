@@ -26,6 +26,6 @@ interface TextGraphic : BaseTextGraphic
 shell SwGrfShell : SwBaseShell
 
 {
-    import TextGraphic[Automation];
+    import TextGraphic;
 }
 

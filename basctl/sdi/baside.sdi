@@ -25,7 +25,7 @@ interface BasicIDEView
 
 shell basctl_Shell
 {
-    import BasicIDEView [Automation];
+    import BasicIDEView;
 
 
     // Current, je nach aktuellem Fenster:
@@ -516,6 +516,6 @@ interface BasicIDEDocument
 
 shell basctl_DocShell
 {
-    import BasicIDEDocument [Automation];
+    import BasicIDEDocument;
 }
 

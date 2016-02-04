@@ -379,5 +379,5 @@ interface Annotation : _Annotation
 
 shell SwAnnotationShell
 {
-    import Annotation[Automation];
+    import Annotation;
 }
