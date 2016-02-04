@@ -90,6 +90,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 
     // delete content if ClpDocument contains content
     SwNodeIndex aSttIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
+    SwNodeIndex aEndNdIdx( *aSttIdx.GetNode().EndOfSectionNode() );
     SwTextNode* pTextNd = aSttIdx.GetNode().GetTextNode();
     if (!pTextNd || !pTextNd->GetText().isEmpty() ||
         aSttIdx.GetIndex()+1 != pClpDoc->GetNodes().GetEndOfContent().GetIndex() )
@@ -102,11 +103,19 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
     }
 
     // also delete surrounding FlyFrames if any
-    for( auto pFormat : *pClpDoc->GetSpzFrameFormats() )
+    for( const auto pFly : *pClpDoc->GetSpzFrameFormats() )
     {
-        SwFlyFrameFormat* pFly = static_cast<SwFlyFrameFormat*>(pFormat);
-        pClpDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );
+        SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetContentAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+            aSttIdx <= pAPos->nNode && pAPos->nNode <= aEndNdIdx )
+        {
+            pClpDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );
+        }
     }
+
     pClpDoc->GetDocumentFieldsManager().GCFieldTypes();        // delete the FieldTypes
 
     // if a string was passed, copy it to the clipboard-
