@@ -1127,10 +1127,6 @@ Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
     return [self window];
 }
 
-// These four are for AXTextAreas only. They are needed, because bold and italic
-// attributes have to be bound to a font on the Mac. Our UNO-API instead handles
-// and reports them independently. When they occur we bundle them to a font with
-// this information here to create a according NSFont.
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup {
     mActsAsRadioGroup = actsAsRadioGroup;
 }
