@@ -154,6 +154,8 @@ public:
         m_pCenterpara(nullptr),
         m_pRightpara(nullptr),
         m_pJustifypara(nullptr),
+        m_pInsertAnnotation(nullptr),
+        m_pDeleteComment(nullptr),
         m_pFormulabarEntry(nullptr),
         m_pScrolledWindow(nullptr),
         m_bToolItemBroadcast(true),
