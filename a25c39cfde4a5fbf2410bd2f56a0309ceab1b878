@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_bb62d314",
+        "filename": "sc/qa/unit/ucalc_sharedformula.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T14:05:32Z",
+      "side": 1,
+      "message": "Why move this from sc/source/core/data/bcaslot.cxx and expose implementation details to the unit test? If we decided to order AreaListeners differently we\u0027d had to adapt the unit test instead of the code where it belongs to.",
+      "revId": "a25c39cfde4a5fbf2410bd2f56a0309ceab1b878",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_bb493391",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T14:05:32Z",
+      "side": 0,
+      "message": "I\u0027ll use this again in one of my next patches..",
+      "revId": "198f20238330e60172f67e9c6a21aeefc50136c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
