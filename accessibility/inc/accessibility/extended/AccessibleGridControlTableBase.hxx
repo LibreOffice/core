@@ -43,9 +43,8 @@ class AccessibleGridControlTableBase :
 public:
     /** Constructor sets specified name and description.
         @param rxParent  XAccessible interface of the parent object.
-        @param rTable  The Table control.
-        @param eNameText  The constant for the name text.
-        @param eDescrText  The constant for the description text. */
+        @param rTable    The Table control.
+        @param eObjType  Type of table control object */
     AccessibleGridControlTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::svt::table::IAccessibleTable& rTable,
@@ -55,7 +54,7 @@ protected:
     virtual ~AccessibleGridControlTableBase();
 
 public:
-    // XAccessibleContext -----------------------------------------------------
+    // XAccessibleContext
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
@@ -69,13 +68,13 @@ public:
         -   getAccessibleChild,
         -   getAccessibleIndexInParent. */
 
-    // XAccessibleComponent ---------------------------------------------------
+    // XAccessibleComponent
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
         -   grabFocus. */
 
-    // XAccessibleTable -------------------------------------------------------
+    // XAccessibleTable
 
     /** @return  The number of used rows in the table (0 = empty table). */
     virtual sal_Int32 SAL_CALL getAccessibleRowCount()
@@ -134,7 +133,7 @@ public:
         -   getAccessibleCellAt,
         -   isAccessibleSelected. */
 
-    // XInterface -------------------------------------------------------------
+    // XInterface
 
     /** Queries for a new interface. */
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
@@ -146,7 +145,7 @@ public:
     /** Releases the object (calls release() on base class). */
     virtual void SAL_CALL release() throw () override;
 
-    // XTypeProvider ----------------------------------------------------------
+    // XTypeProvider
 
     /** @return  A sequence of possible types (received from base classes). */
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
@@ -157,7 +156,7 @@ public:
         throw ( css::uno::RuntimeException, std::exception ) override;
 
 protected:
-    // internal helper methods ------------------------------------------------
+    // internal helper methods
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The number of cells of the table. */

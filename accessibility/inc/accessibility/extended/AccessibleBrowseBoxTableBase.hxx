@@ -46,14 +46,13 @@ public:
         implSetName() and implSetDescription() (in Ctor) or later via
         setAccessibleName() and setAccessibleDescription() (these methods
         notify the listeners about the change).
-        @param rxParent  XAccessible interface of the parent object.
-        @param rBrowseBox  The BrowseBox control.
-        @param eNameText  The constant for the name text.
-        @param eDescrText  The constant for the description text. */
+        @param rxParent         XAccessible interface of the parent object.
+        @param rBrowseBox       The BrowseBox control.
+        @param eObjType         Type of BrowseBox object. */
     AccessibleBrowseBoxTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider&                  rBrowseBox,
-        ::svt::AccessibleBrowseBoxObjType  eObjType );
+        ::svt::IAccessibleTableProvider& rBrowseBox,
+        ::svt::AccessibleBrowseBoxObjType eObjType );
 
 protected:
     virtual ~AccessibleBrowseBoxTableBase();
@@ -213,10 +212,12 @@ protected:
 
     /** Selects/deselects a row (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
+        @param nRow     Row to select
         @param bSelect  TRUE = select, FALSE = deselect */
     void implSelectRow( sal_Int32 nRow, bool bSelect );
     /** Selects/deselects a column (tries to expand selection).
         @attention  This method requires locked mutex's and a living object.
+        @param nColumnPos column number to select
         @param bSelect  TRUE = select, FALSE = deselect */
     void implSelectColumn( sal_Int32 nColumnPos, bool bSelect );
 

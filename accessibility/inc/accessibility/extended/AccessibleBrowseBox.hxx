@@ -105,6 +105,8 @@ public:
             the new value
         @param rOldValue
             the old value
+        @param _bColumnHeaderBar
+            true if a column based header bar, false if a row based header bar
     */
     void commitHeaderBarEvent(sal_Int16 nEventId,
             const css::uno::Any& rNewValue,

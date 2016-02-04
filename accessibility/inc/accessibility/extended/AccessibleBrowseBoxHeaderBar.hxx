@@ -43,12 +43,14 @@ class AccessibleBrowseBoxHeaderBar :
     public AccessibleBrowseBoxHeaderBarImplHelper
 {
 public:
-    /** @param eObjType  One of the two allowed types BBTYPE_ROWHEADERBAR or
+    /** @param rxParent         Parent that holds the browsebox headerbar control
+        @param rBrowseBox       The BrowseBox control.
+        @param eObjType  One of the two allowed types BBTYPE_ROWHEADERBAR or
                          BBTYPE_COLUMNHEADERBAR. */
     AccessibleBrowseBoxHeaderBar(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::IAccessibleTableProvider&                  rBrowseBox,
-        ::svt::AccessibleBrowseBoxObjType  eObjType );
+        ::svt::IAccessibleTableProvider& rBrowseBox,
+        ::svt::AccessibleBrowseBoxObjType eObjType );
 
 protected:
     virtual ~AccessibleBrowseBoxHeaderBar();

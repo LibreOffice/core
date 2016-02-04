@@ -61,7 +61,7 @@ typedef ::cppu::WeakAggComponentImplHelper4<
 
 /** The GridControl accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces and
-    the event broadcaster and contains the ::osl::Mutex. */
+    the event broadcaster and contains the osl::Mutex. */
 class AccessibleGridControlBase :
     public ::comphelper::OBaseMutex,
     public AccessibleGridControlImplHelper
@@ -69,9 +69,8 @@ class AccessibleGridControlBase :
 public:
     /** Constructor sets specified name and description.
         @param rxParent  XAccessible interface of the parent object.
-        @param rTable  The Table control.
-        @param eNameText  The constant for the name text.
-        @param eDescrText  The constant for the description text. */
+        @param rTable    The Table control.
+        @param eObjType  Type of accessible table control. */
     AccessibleGridControlBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::svt::table::IAccessibleTable& rTable,
@@ -305,10 +304,9 @@ class GridControlAccessibleElement
 protected:
     /** Constructor sets specified name and description.
 
-        @param rxParent  XAccessible interface of the parent object.
-        @param rTable  The Table control.
-        @param eNameText  The constant for the name text.
-        @param eDescrText  The constant for the description text.
+        @param rxParent    XAccessible interface of the parent object.
+        @param rTable      The Table control.
+        @param eObjType    Type of table control
     */
     GridControlAccessibleElement(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,

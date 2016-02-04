@@ -21,15 +21,10 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
 
-
-#include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
-#include "accessibility/extended/AccessibleGridControlTableBase.hxx"
-
-
+#include <accessibility/extended/AccessibleGridControlHeaderCell.hxx>
+#include <accessibility/extended/AccessibleGridControlTableBase.hxx>
 
 namespace accessibility {
-
-
 
 /** This class represents the accessible object of a header bar of a Grid Control
    (row or column header bar). This object supports the
@@ -38,7 +33,9 @@ namespace accessibility {
 class AccessibleGridControlHeader : public AccessibleGridControlTableBase
 {
 public:
-    /** @param eObjType  One of the two allowed types TCTYPE_ROWHEADERBAR or
+    /**  @param rxParent  accessible parent control
+         @param rTable    accessible table
+         @param eObjType  One of the two allowed types TCTYPE_ROWHEADERBAR or
                          TCTYPE_COLUMNHEADERBAR. */
     AccessibleGridControlHeader(
         const css::uno::Reference<

@@ -42,7 +42,6 @@
 class SvxIconChoiceCtrlEntry;
 class SvtIconChoiceCtrl;
 
-
 namespace accessibility
 {
 
@@ -100,10 +99,10 @@ namespace accessibility
 
     public:
         /** Ctor()
-            @param  _rListBox
-                the view control
-            @param  _pEntry
-                the entry
+            @param  _rIconCtrl
+                the icon control
+            @param  _nPos
+                the entry number
             @param  _xParent
                 is our parent accessible object
         */

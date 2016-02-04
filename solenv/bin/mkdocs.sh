@@ -221,7 +221,7 @@ for module_name in *; do
       text="<p><b>View module in:</b>"
 	  text="${text} &nbsp; <a href=\"http://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">cgit</a>"
       if $(echo $INPUT_PROJECTS | grep -q $module_name); then
-        text="${text} &nbsp; <a href=\"${module_name}/html/classes.html\">Doxygen</a>"
+        text="${text} &nbsp; <a href=\"${module_name}/html/classes.xhtml\">Doxygen</a>"
       fi
       text="${text} </p><p>&nbsp;</p>"
 	  echo -e $text >> "$BASE_OUTPUT/${module_name}.html"
