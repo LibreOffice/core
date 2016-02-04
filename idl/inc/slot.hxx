@@ -31,7 +31,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvIdentifier    aConfigId;
     SvIdentifier    aExecMethod;
     SvIdentifier    aStateMethod;
-    SvIdentifier    aDefault;
     SvBOOL          aPseudoSlots;
 
     SvBOOL          aVolatile;
@@ -121,18 +120,17 @@ public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
-    virtual bool    IsVariable() const override;
-    virtual bool    IsMethod() const override;
-    virtual OString GetMangleName( bool bVariable ) const override;
+    virtual bool        IsVariable() const override;
+    virtual bool        IsMethod() const override;
+    virtual OString     GetMangleName( bool bVariable ) const override;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
-    const OString&     GetGroupId() const;
-    const OString&     GetConfigId() const;
-    const OString&     GetExecMethod() const;
-    const OString&     GetStateMethod() const;
-    const OString&     GetDefault() const;
-    const OString&     GetDisableFlags() const;
+    const OString&      GetGroupId() const;
+    const OString&      GetConfigId() const;
+    const OString&      GetExecMethod() const;
+    const OString&      GetStateMethod() const;
+    const OString&      GetDisableFlags() const;
     bool                GetPseudoSlots() const;
     bool                GetVolatile() const;
     bool                GetToggle() const;
@@ -145,8 +143,8 @@ public:
     bool                GetNoRecord() const;
     bool                GetRecordAbsolute() const;
 
-    const OString&     GetPseudoPrefix() const;
-    const OString&     GetUnoName() const;
+    const OString&      GetPseudoPrefix() const;
+    const OString&      GetUnoName() const;
     bool                GetMenuConfig() const;
     bool                GetToolBoxConfig() const;
     bool                GetAccelConfig() const;

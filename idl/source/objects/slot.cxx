@@ -119,11 +119,6 @@ const OString& SvMetaSlot::GetStateMethod() const
     if( !aStateMethod.getString().isEmpty() || !GetRef() ) return aStateMethod.getString();
     return static_cast<SvMetaSlot *>(GetRef())->GetStateMethod();
 }
-const OString& SvMetaSlot::GetDefault() const
-{
-    if( !aDefault.getString().isEmpty() || !GetRef() ) return aDefault.getString();
-    return static_cast<SvMetaSlot *>(GetRef())->GetDefault();
-}
 bool SvMetaSlot::GetPseudoSlots() const
 {
     if( aPseudoSlots.IsSet() || !GetRef() ) return aPseudoSlots;
@@ -238,7 +233,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     SvMetaAttribute::ReadAttributesSvIdl( rBase, rInStm );
 
     bool bOk = false;
-    bOk |= aDefault.ReadSvIdl( SvHash_Default(), rInStm );
     bOk |= aPseudoSlots.ReadSvIdl( SvHash_PseudoSlots(), rInStm );
     bOk |= aGroupId.ReadSvIdl( SvHash_GroupId(), rInStm );
     bOk |= aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
