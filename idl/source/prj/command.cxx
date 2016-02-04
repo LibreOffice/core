@@ -74,7 +74,7 @@ char const * SyntaxStrings[] = {
 "\t'['\n",
 
 "\t\titem-method-args",
-"\t\tAccelConfig, MenuConfig, StatusBarConfig, ToolbarConfig",
+"\t\tAccelConfig, MenuConfig, ToolbarConfig",
 "\t\tAutomation*",
 "\t\tAutoUpdate",
 "\t\tContainer",

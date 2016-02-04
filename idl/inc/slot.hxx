@@ -33,8 +33,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvIdentifier    aStateMethod;
     SvIdentifier    aDefault;
     SvBOOL          aPseudoSlots;
-    SvBOOL          aGet;
-    SvBOOL          aSet;
 
     SvBOOL          aVolatile;
     SvBOOL          aToggle;
@@ -49,7 +47,6 @@ class SvMetaSlot : public SvMetaAttribute
 
     SvBOOL          aMenuConfig;
     SvBOOL          aToolBoxConfig;
-    SvBOOL          aStatusBarConfig;
     SvBOOL          aAccelConfig;
     SvBOOL          aFastCall;
     SvBOOL          aContainer;
@@ -114,7 +111,6 @@ protected:
             {
                 aMenuConfig     = bSet;
                 aToolBoxConfig  = bSet;
-                aStatusBarConfig = bSet;
                 aAccelConfig    = bSet;
             }
 
@@ -153,7 +149,6 @@ public:
     const OString&     GetUnoName() const;
     bool                GetMenuConfig() const;
     bool                GetToolBoxConfig() const;
-    bool                GetStatusBarConfig() const;
     bool                GetAccelConfig() const;
     bool                GetFastCall() const;
     bool                GetContainer() const;
