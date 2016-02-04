@@ -59,8 +59,8 @@ public:
     OUString getProfilePath() {return m_sProfilePath;}
 private:
 
-    MorkDriver(const MorkDriver&) SAL_DELETED_FUNCTION;
-    MorkDriver& operator=(const MorkDriver&) SAL_DELETED_FUNCTION;
+    MorkDriver(const MorkDriver&) = delete;
+    MorkDriver& operator=(const MorkDriver&) = delete;
 
     virtual ~MorkDriver() {}
 

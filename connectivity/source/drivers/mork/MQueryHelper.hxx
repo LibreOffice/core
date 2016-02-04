@@ -147,8 +147,8 @@ namespace connectivity
             bool_cond           m_aExprCondType;
 
         private:
-           MQueryExpression(const MQueryExpression&) SAL_DELETED_FUNCTION;
-            MQueryExpression& operator=(const MQueryExpression&) SAL_DELETED_FUNCTION;
+           MQueryExpression(const MQueryExpression&) = delete;
+           MQueryExpression& operator=(const MQueryExpression&) = delete;
         };
 
         class MQueryHelperResultEntry
