@@ -19,14 +19,12 @@
 SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -36,7 +34,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
 SvxObjectItem RulerObject SID_RULER_OBJECT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -51,7 +48,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -61,7 +57,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
 SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -69,7 +64,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
     Container = FALSE,
     Asynchron;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,

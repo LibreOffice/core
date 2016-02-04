@@ -19,7 +19,6 @@
 SfxVoidItem AdvancedMode SID_OBJECT_CHOOSE_MODE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -29,7 +28,6 @@ SfxVoidItem AdvancedMode SID_OBJECT_CHOOSE_MODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -39,7 +37,6 @@ SfxVoidItem AdvancedMode SID_OBJECT_CHOOSE_MODE
 SfxVoidItem AnimationEffects SID_ANIMATION_EFFECTS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -48,7 +45,6 @@ SfxVoidItem AnimationEffects SID_ANIMATION_EFFECTS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -58,7 +54,6 @@ SfxVoidItem AnimationEffects SID_ANIMATION_EFFECTS
 SfxBoolItem AnimationObjects SID_ANIMATION_OBJECTS
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -68,7 +63,6 @@ SfxBoolItem AnimationObjects SID_ANIMATION_OBJECTS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -78,7 +72,6 @@ SfxBoolItem AnimationObjects SID_ANIMATION_OBJECTS
 SfxBoolItem AnimatorAddObject SID_ANIMATOR_ADD
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -88,7 +81,6 @@ SfxBoolItem AnimatorAddObject SID_ANIMATOR_ADD
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -98,7 +90,6 @@ SfxBoolItem AnimatorAddObject SID_ANIMATOR_ADD
 SfxBoolItem AnimatorCreateObject SID_ANIMATOR_CREATE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -108,7 +99,6 @@ SfxBoolItem AnimatorCreateObject SID_ANIMATOR_CREATE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -118,7 +108,6 @@ SfxBoolItem AnimatorCreateObject SID_ANIMATOR_CREATE
 SfxBoolItem AnimatorInit SID_ANIMATOR_INIT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -128,7 +117,6 @@ SfxBoolItem AnimatorInit SID_ANIMATOR_INIT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -138,7 +126,6 @@ SfxBoolItem AnimatorInit SID_ANIMATOR_INIT
 SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -148,7 +135,6 @@ SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -158,7 +144,6 @@ SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
 SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -168,7 +153,6 @@ SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -178,7 +162,6 @@ SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
 SfxVoidItem Backward SID_MOREBACK
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -187,7 +170,6 @@ SfxVoidItem Backward SID_MOREBACK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -197,7 +179,6 @@ SfxVoidItem Backward SID_MOREBACK
 SfxVoidItem BeforeObject SID_BEFORE_OBJ
 ()
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -206,7 +187,6 @@ SfxVoidItem BeforeObject SID_BEFORE_OBJ
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -216,7 +196,6 @@ SfxVoidItem BeforeObject SID_BEFORE_OBJ
 SfxVoidItem BehindObject SID_BEHIND_OBJ
 ()
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -225,7 +204,6 @@ SfxVoidItem BehindObject SID_BEHIND_OBJ
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -235,7 +213,6 @@ SfxVoidItem BehindObject SID_BEHIND_OBJ
 SfxVoidItem Break SID_BREAK
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -244,7 +221,6 @@ SfxVoidItem Break SID_BREAK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -254,7 +230,6 @@ SfxVoidItem Break SID_BREAK
 SfxVoidItem CapturePoint SID_CAPTUREPOINT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -263,7 +238,6 @@ SfxVoidItem CapturePoint SID_CAPTUREPOINT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
@@ -273,7 +247,6 @@ SfxVoidItem CapturePoint SID_CAPTUREPOINT
 SfxVoidItem ChangeBezier SID_CHANGEBEZIER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -282,7 +255,6 @@ SfxVoidItem ChangeBezier SID_CHANGEBEZIER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -292,7 +264,6 @@ SfxVoidItem ChangeBezier SID_CHANGEBEZIER
 SfxVoidItem ChangePolygon SID_CHANGEPOLYGON
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -301,7 +272,6 @@ SfxVoidItem ChangePolygon SID_CHANGEPOLYGON
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -311,7 +281,6 @@ SfxVoidItem ChangePolygon SID_CHANGEPOLYGON
 SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -321,7 +290,6 @@ SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -331,7 +299,6 @@ SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
 SfxVoidItem CloseObject SID_OBJECT_CLOSE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -340,7 +307,6 @@ SfxVoidItem CloseObject SID_OBJECT_CLOSE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -350,7 +316,6 @@ SfxVoidItem CloseObject SID_OBJECT_CLOSE
 SfxBoolItem ColorView SID_COLORVIEW
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -360,7 +325,6 @@ SfxBoolItem ColorView SID_COLORVIEW
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -370,7 +334,6 @@ SfxBoolItem ColorView SID_COLORVIEW
 SfxVoidItem Combine SID_COMBINE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -379,7 +342,6 @@ SfxVoidItem Combine SID_COMBINE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -389,7 +351,6 @@ SfxVoidItem Combine SID_COMBINE
 SfxBoolItem Cone SID_3D_CONE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -398,7 +359,6 @@ SfxBoolItem Cone SID_3D_CONE
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -408,7 +368,6 @@ SfxBoolItem Cone SID_3D_CONE
 SfxVoidItem Connect SID_CONNECT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -417,7 +376,6 @@ SfxVoidItem Connect SID_CONNECT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -427,7 +385,6 @@ SfxVoidItem Connect SID_CONNECT
 SfxBoolItem Connector SID_TOOL_CONNECTOR
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -436,7 +393,6 @@ SfxBoolItem Connector SID_TOOL_CONNECTOR
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -446,7 +402,6 @@ SfxBoolItem Connector SID_TOOL_CONNECTOR
 SfxBoolItem ConnectorArrowEnd SID_CONNECTOR_ARROW_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -456,7 +411,6 @@ SfxBoolItem ConnectorArrowEnd SID_CONNECTOR_ARROW_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -466,7 +420,6 @@ SfxBoolItem ConnectorArrowEnd SID_CONNECTOR_ARROW_END
 SfxBoolItem ConnectorArrows SID_CONNECTOR_ARROWS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -476,7 +429,6 @@ SfxBoolItem ConnectorArrows SID_CONNECTOR_ARROWS
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -486,7 +438,6 @@ SfxBoolItem ConnectorArrows SID_CONNECTOR_ARROWS
 SfxBoolItem ConnectorArrowStart SID_CONNECTOR_ARROW_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -496,7 +447,6 @@ SfxBoolItem ConnectorArrowStart SID_CONNECTOR_ARROW_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -506,7 +456,6 @@ SfxBoolItem ConnectorArrowStart SID_CONNECTOR_ARROW_START
 SfxVoidItem ConnectorAttributes SID_CONNECTION_DLG
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -515,7 +464,6 @@ SfxVoidItem ConnectorAttributes SID_CONNECTION_DLG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -525,7 +473,6 @@ SfxVoidItem ConnectorAttributes SID_CONNECTION_DLG
 SfxBoolItem ConnectorCircleEnd SID_CONNECTOR_CIRCLE_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -535,7 +482,6 @@ SfxBoolItem ConnectorCircleEnd SID_CONNECTOR_CIRCLE_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -545,7 +491,6 @@ SfxBoolItem ConnectorCircleEnd SID_CONNECTOR_CIRCLE_END
 SfxBoolItem ConnectorCircles SID_CONNECTOR_CIRCLES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -555,7 +500,6 @@ SfxBoolItem ConnectorCircles SID_CONNECTOR_CIRCLES
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -565,7 +509,6 @@ SfxBoolItem ConnectorCircles SID_CONNECTOR_CIRCLES
 SfxBoolItem ConnectorCircleStart SID_CONNECTOR_CIRCLE_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -575,7 +518,6 @@ SfxBoolItem ConnectorCircleStart SID_CONNECTOR_CIRCLE_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -585,7 +527,6 @@ SfxBoolItem ConnectorCircleStart SID_CONNECTOR_CIRCLE_START
 SfxBoolItem ConnectorCurve SID_CONNECTOR_CURVE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -595,7 +536,6 @@ SfxBoolItem ConnectorCurve SID_CONNECTOR_CURVE
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -605,7 +545,6 @@ SfxBoolItem ConnectorCurve SID_CONNECTOR_CURVE
 SfxBoolItem ConnectorCurveArrowEnd SID_CONNECTOR_CURVE_ARROW_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -615,7 +554,6 @@ SfxBoolItem ConnectorCurveArrowEnd SID_CONNECTOR_CURVE_ARROW_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -625,7 +563,6 @@ SfxBoolItem ConnectorCurveArrowEnd SID_CONNECTOR_CURVE_ARROW_END
 SfxBoolItem ConnectorCurveArrows SID_CONNECTOR_CURVE_ARROWS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -635,7 +572,6 @@ SfxBoolItem ConnectorCurveArrows SID_CONNECTOR_CURVE_ARROWS
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -645,7 +581,6 @@ SfxBoolItem ConnectorCurveArrows SID_CONNECTOR_CURVE_ARROWS
 SfxBoolItem ConnectorCurveArrowStart SID_CONNECTOR_CURVE_ARROW_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -655,7 +590,6 @@ SfxBoolItem ConnectorCurveArrowStart SID_CONNECTOR_CURVE_ARROW_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -665,7 +599,6 @@ SfxBoolItem ConnectorCurveArrowStart SID_CONNECTOR_CURVE_ARROW_START
 SfxBoolItem ConnectorCurveCircleEnd SID_CONNECTOR_CURVE_CIRCLE_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -675,7 +608,6 @@ SfxBoolItem ConnectorCurveCircleEnd SID_CONNECTOR_CURVE_CIRCLE_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -685,7 +617,6 @@ SfxBoolItem ConnectorCurveCircleEnd SID_CONNECTOR_CURVE_CIRCLE_END
 SfxBoolItem ConnectorCurveCircles SID_CONNECTOR_CURVE_CIRCLES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -695,7 +626,6 @@ SfxBoolItem ConnectorCurveCircles SID_CONNECTOR_CURVE_CIRCLES
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -705,7 +635,6 @@ SfxBoolItem ConnectorCurveCircles SID_CONNECTOR_CURVE_CIRCLES
 SfxBoolItem ConnectorCurveCircleStart SID_CONNECTOR_CURVE_CIRCLE_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -715,7 +644,6 @@ SfxBoolItem ConnectorCurveCircleStart SID_CONNECTOR_CURVE_CIRCLE_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -725,7 +653,6 @@ SfxBoolItem ConnectorCurveCircleStart SID_CONNECTOR_CURVE_CIRCLE_START
 SfxBoolItem ConnectorLine SID_CONNECTOR_LINE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -735,7 +662,6 @@ SfxBoolItem ConnectorLine SID_CONNECTOR_LINE
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -745,7 +671,6 @@ SfxBoolItem ConnectorLine SID_CONNECTOR_LINE
 SfxBoolItem ConnectorLineArrowEnd SID_CONNECTOR_LINE_ARROW_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -755,7 +680,6 @@ SfxBoolItem ConnectorLineArrowEnd SID_CONNECTOR_LINE_ARROW_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -765,7 +689,6 @@ SfxBoolItem ConnectorLineArrowEnd SID_CONNECTOR_LINE_ARROW_END
 SfxBoolItem ConnectorLineArrows SID_CONNECTOR_LINE_ARROWS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -775,7 +698,6 @@ SfxBoolItem ConnectorLineArrows SID_CONNECTOR_LINE_ARROWS
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -785,7 +707,6 @@ SfxBoolItem ConnectorLineArrows SID_CONNECTOR_LINE_ARROWS
 SfxBoolItem ConnectorLineArrowStart SID_CONNECTOR_LINE_ARROW_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -795,7 +716,6 @@ SfxBoolItem ConnectorLineArrowStart SID_CONNECTOR_LINE_ARROW_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -805,7 +725,6 @@ SfxBoolItem ConnectorLineArrowStart SID_CONNECTOR_LINE_ARROW_START
 SfxBoolItem ConnectorLineCircleEnd SID_CONNECTOR_LINE_CIRCLE_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -815,7 +734,6 @@ SfxBoolItem ConnectorLineCircleEnd SID_CONNECTOR_LINE_CIRCLE_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -825,7 +743,6 @@ SfxBoolItem ConnectorLineCircleEnd SID_CONNECTOR_LINE_CIRCLE_END
 SfxBoolItem ConnectorLineCircles SID_CONNECTOR_LINE_CIRCLES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -835,7 +752,6 @@ SfxBoolItem ConnectorLineCircles SID_CONNECTOR_LINE_CIRCLES
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -845,7 +761,6 @@ SfxBoolItem ConnectorLineCircles SID_CONNECTOR_LINE_CIRCLES
 SfxBoolItem ConnectorLineCircleStart SID_CONNECTOR_LINE_CIRCLE_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -855,7 +770,6 @@ SfxBoolItem ConnectorLineCircleStart SID_CONNECTOR_LINE_CIRCLE_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -865,7 +779,6 @@ SfxBoolItem ConnectorLineCircleStart SID_CONNECTOR_LINE_CIRCLE_START
 SfxBoolItem ConnectorLines SID_CONNECTOR_LINES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -875,7 +788,6 @@ SfxBoolItem ConnectorLines SID_CONNECTOR_LINES
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -885,7 +797,6 @@ SfxBoolItem ConnectorLines SID_CONNECTOR_LINES
 SfxBoolItem ConnectorLinesArrowEnd SID_CONNECTOR_LINES_ARROW_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -895,7 +806,6 @@ SfxBoolItem ConnectorLinesArrowEnd SID_CONNECTOR_LINES_ARROW_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -905,7 +815,6 @@ SfxBoolItem ConnectorLinesArrowEnd SID_CONNECTOR_LINES_ARROW_END
 SfxBoolItem ConnectorLinesArrows SID_CONNECTOR_LINES_ARROWS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -915,7 +824,6 @@ SfxBoolItem ConnectorLinesArrows SID_CONNECTOR_LINES_ARROWS
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -925,7 +833,6 @@ SfxBoolItem ConnectorLinesArrows SID_CONNECTOR_LINES_ARROWS
 SfxBoolItem ConnectorLinesArrowStart SID_CONNECTOR_LINES_ARROW_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -935,7 +842,6 @@ SfxBoolItem ConnectorLinesArrowStart SID_CONNECTOR_LINES_ARROW_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -945,7 +851,6 @@ SfxBoolItem ConnectorLinesArrowStart SID_CONNECTOR_LINES_ARROW_START
 SfxBoolItem ConnectorLinesCircleEnd SID_CONNECTOR_LINES_CIRCLE_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -955,7 +860,6 @@ SfxBoolItem ConnectorLinesCircleEnd SID_CONNECTOR_LINES_CIRCLE_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -965,7 +869,6 @@ SfxBoolItem ConnectorLinesCircleEnd SID_CONNECTOR_LINES_CIRCLE_END
 SfxBoolItem ConnectorLinesCircles SID_CONNECTOR_LINES_CIRCLES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -975,7 +878,6 @@ SfxBoolItem ConnectorLinesCircles SID_CONNECTOR_LINES_CIRCLES
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -985,7 +887,6 @@ SfxBoolItem ConnectorLinesCircles SID_CONNECTOR_LINES_CIRCLES
 SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -995,7 +896,6 @@ SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1005,7 +905,6 @@ SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
 SfxVoidItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1015,7 +914,6 @@ SfxVoidItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1025,7 +923,6 @@ SfxVoidItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
 SfxVoidItem convert_to_contour SID_CONVERT_TO_CONTOUR
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1034,7 +931,6 @@ SfxVoidItem convert_to_contour SID_CONVERT_TO_CONTOUR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1044,7 +940,6 @@ SfxVoidItem convert_to_contour SID_CONVERT_TO_CONTOUR
 SfxVoidItem ConvertInto3D SID_CONVERT_TO_3D
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1053,7 +948,6 @@ SfxVoidItem ConvertInto3D SID_CONVERT_TO_3D
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1063,7 +957,6 @@ SfxVoidItem ConvertInto3D SID_CONVERT_TO_3D
 SfxVoidItem ConvertInto3DLathe SID_CONVERT_TO_3D_LATHE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1072,7 +965,6 @@ SfxVoidItem ConvertInto3DLathe SID_CONVERT_TO_3D_LATHE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1082,7 +974,6 @@ SfxVoidItem ConvertInto3DLathe SID_CONVERT_TO_3D_LATHE
 SfxVoidItem ConvertInto3DLatheFast SID_CONVERT_TO_3D_LATHE_FAST
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1091,7 +982,6 @@ SfxVoidItem ConvertInto3DLatheFast SID_CONVERT_TO_3D_LATHE_FAST
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1101,7 +991,6 @@ SfxVoidItem ConvertInto3DLatheFast SID_CONVERT_TO_3D_LATHE_FAST
 SfxVoidItem ConvertIntoBitmap SID_CONVERT_TO_BITMAP
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1110,7 +999,6 @@ SfxVoidItem ConvertIntoBitmap SID_CONVERT_TO_BITMAP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1120,7 +1008,6 @@ SfxVoidItem ConvertIntoBitmap SID_CONVERT_TO_BITMAP
 SfxVoidItem ConvertIntoMetaFile SID_CONVERT_TO_METAFILE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1129,7 +1016,6 @@ SfxVoidItem ConvertIntoMetaFile SID_CONVERT_TO_METAFILE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1139,7 +1025,6 @@ SfxVoidItem ConvertIntoMetaFile SID_CONVERT_TO_METAFILE
 SfxVoidItem CopyObjects SID_COPYOBJECTS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1148,7 +1033,6 @@ SfxVoidItem CopyObjects SID_COPYOBJECTS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1158,7 +1042,6 @@ SfxVoidItem CopyObjects SID_COPYOBJECTS
 SfxBoolItem CrookRotate SID_OBJECT_CROOK_ROTATE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1169,7 +1052,6 @@ SfxBoolItem CrookRotate SID_OBJECT_CROOK_ROTATE
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1179,7 +1061,6 @@ SfxBoolItem CrookRotate SID_OBJECT_CROOK_ROTATE
 SfxBoolItem CrookSlant SID_OBJECT_CROOK_SLANT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1190,7 +1071,6 @@ SfxBoolItem CrookSlant SID_OBJECT_CROOK_SLANT
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1200,7 +1080,6 @@ SfxBoolItem CrookSlant SID_OBJECT_CROOK_SLANT
 SfxBoolItem CrookStretch SID_OBJECT_CROOK_STRETCH
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1211,7 +1090,6 @@ SfxBoolItem CrookStretch SID_OBJECT_CROOK_STRETCH
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1221,7 +1099,6 @@ SfxBoolItem CrookStretch SID_OBJECT_CROOK_STRETCH
 SfxBoolItem Cube SID_3D_CUBE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1230,7 +1107,6 @@ SfxBoolItem Cube SID_3D_CUBE
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1240,7 +1116,6 @@ SfxBoolItem Cube SID_3D_CUBE
 SfxVoidItem CustomShowDialog SID_CUSTOMSHOW_DLG
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -1249,7 +1124,6 @@ SfxVoidItem CustomShowDialog SID_CUSTOMSHOW_DLG
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1259,7 +1133,6 @@ SfxVoidItem CustomShowDialog SID_CUSTOMSHOW_DLG
 SfxBoolItem Cylinder SID_3D_CYLINDER
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1268,7 +1141,6 @@ SfxBoolItem Cylinder SID_3D_CYLINDER
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1278,7 +1150,6 @@ SfxBoolItem Cylinder SID_3D_CYLINDER
 SfxBoolItem Cyramid SID_3D_PYRAMID
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1287,7 +1158,6 @@ SfxBoolItem Cyramid SID_3D_PYRAMID
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1297,7 +1167,6 @@ SfxBoolItem Cyramid SID_3D_PYRAMID
 SfxVoidItem DeleteLayer SID_DELETE_LAYER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1306,7 +1175,6 @@ SfxVoidItem DeleteLayer SID_DELETE_LAYER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1316,7 +1184,6 @@ SfxVoidItem DeleteLayer SID_DELETE_LAYER
 SfxVoidItem DeletePage SID_DELETE_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1325,7 +1192,6 @@ SfxVoidItem DeletePage SID_DELETE_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1335,7 +1201,6 @@ SfxVoidItem DeletePage SID_DELETE_PAGE
 SfxStringItem DeleteSnapItem SID_DELETE_SNAPITEM
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1345,7 +1210,6 @@ SfxStringItem DeleteSnapItem SID_DELETE_SNAPITEM
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1355,7 +1219,6 @@ SfxStringItem DeleteSnapItem SID_DELETE_SNAPITEM
 SfxVoidItem DeSelect SID_UNSELECT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1364,7 +1227,6 @@ SfxVoidItem DeSelect SID_UNSELECT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1373,7 +1235,6 @@ SfxVoidItem DeSelect SID_UNSELECT
 
 SfxBoolItem DiaMode SID_SLIDE_SORTER_MODE
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1383,7 +1244,6 @@ SfxBoolItem DiaMode SID_SLIDE_SORTER_MODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1393,7 +1253,6 @@ SfxBoolItem DiaMode SID_SLIDE_SORTER_MODE
 SfxVoidItem Dismantle SID_DISMANTLE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1402,7 +1261,6 @@ SfxVoidItem Dismantle SID_DISMANTLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1412,7 +1270,6 @@ SfxVoidItem Dismantle SID_DISMANTLE
 SfxBoolItem DoubleClickTextEdit SID_DOUBLECLICK_TEXTEDIT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1422,7 +1279,6 @@ SfxBoolItem DoubleClickTextEdit SID_DOUBLECLICK_TEXTEDIT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1432,7 +1288,6 @@ SfxBoolItem DoubleClickTextEdit SID_DOUBLECLICK_TEXTEDIT
 SfxBoolItem DrawingMode SID_DRAWINGMODE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1442,7 +1297,6 @@ SfxBoolItem DrawingMode SID_DRAWINGMODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1452,7 +1306,6 @@ SfxBoolItem DrawingMode SID_DRAWINGMODE
 SfxVoidItem DuplicatePage SID_DUPLICATE_PAGE
 (SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1461,7 +1314,6 @@ SfxVoidItem DuplicatePage SID_DUPLICATE_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1471,7 +1323,6 @@ SfxVoidItem DuplicatePage SID_DUPLICATE_PAGE
 SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1480,7 +1331,6 @@ SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
@@ -1490,7 +1340,6 @@ SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
 SfxVoidItem EditOutline SID_EDIT_OUTLINER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1499,7 +1348,6 @@ SfxVoidItem EditOutline SID_EDIT_OUTLINER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1509,7 +1357,6 @@ SfxVoidItem EditOutline SID_EDIT_OUTLINER
 SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1519,7 +1366,6 @@ SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1528,7 +1374,6 @@ SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
 
 SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1538,7 +1383,6 @@ SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1548,7 +1392,6 @@ SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
 SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1558,7 +1401,6 @@ SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1568,7 +1410,6 @@ SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 SfxVoidItem ExpandPage SID_EXPAND_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1577,7 +1418,6 @@ SfxVoidItem ExpandPage SID_EXPAND_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1587,7 +1427,6 @@ SfxVoidItem ExpandPage SID_EXPAND_PAGE
 SfxVoidItem SetFillColor SID_SETFILLCOLOR
 (SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1596,7 +1435,6 @@ SfxVoidItem SetFillColor SID_SETFILLCOLOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1606,7 +1444,6 @@ SfxVoidItem SetFillColor SID_SETFILLCOLOR
 SfxVoidItem Forward SID_MOREFRONT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1615,7 +1452,6 @@ SfxVoidItem Forward SID_MOREFRONT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1625,7 +1461,6 @@ SfxVoidItem Forward SID_MOREFRONT
 SfxUInt32Item GetBlue SID_GETBLUE
 (SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1634,7 +1469,6 @@ SfxUInt32Item GetBlue SID_GETBLUE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1644,7 +1478,6 @@ SfxUInt32Item GetBlue SID_GETBLUE
 SfxUInt32Item GetFillStyle SID_GETFILLSTYLE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1654,7 +1487,6 @@ SfxUInt32Item GetFillStyle SID_GETFILLSTYLE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1664,7 +1496,6 @@ SfxUInt32Item GetFillStyle SID_GETFILLSTYLE
 SfxUInt32Item GetGreen SID_GETGREEN
 (SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1673,7 +1504,6 @@ SfxUInt32Item GetGreen SID_GETGREEN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1683,7 +1513,6 @@ SfxUInt32Item GetGreen SID_GETGREEN
 SfxUInt32Item GetLineStyle SID_GETLINESTYLE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1693,7 +1522,6 @@ SfxUInt32Item GetLineStyle SID_GETLINESTYLE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1703,7 +1531,6 @@ SfxUInt32Item GetLineStyle SID_GETLINESTYLE
 SfxUInt32Item GetLineWidth SID_GETLINEWIDTH
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1713,7 +1540,6 @@ SfxUInt32Item GetLineWidth SID_GETLINEWIDTH
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1723,7 +1549,6 @@ SfxUInt32Item GetLineWidth SID_GETLINEWIDTH
 SfxUInt32Item GetRed SID_GETRED
 (SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -1732,7 +1557,6 @@ SfxUInt32Item GetRed SID_GETRED
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -1742,7 +1566,6 @@ SfxUInt32Item GetRed SID_GETRED
 SfxBoolItem GlueEditMode SID_GLUE_EDITMODE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1752,7 +1575,6 @@ SfxBoolItem GlueEditMode SID_GLUE_EDITMODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -1762,7 +1584,6 @@ SfxBoolItem GlueEditMode SID_GLUE_EDITMODE
 SfxUInt16Item GlueEscapeDirection SID_GLUE_ESCDIR
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1772,7 +1593,6 @@ SfxUInt16Item GlueEscapeDirection SID_GLUE_ESCDIR
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1782,7 +1602,6 @@ SfxUInt16Item GlueEscapeDirection SID_GLUE_ESCDIR
 SfxBoolItem GlueEscapeDirectionBottom SID_GLUE_ESCDIR_BOTTOM
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1792,7 +1611,6 @@ SfxBoolItem GlueEscapeDirectionBottom SID_GLUE_ESCDIR_BOTTOM
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1802,7 +1620,6 @@ SfxBoolItem GlueEscapeDirectionBottom SID_GLUE_ESCDIR_BOTTOM
 SfxBoolItem GlueEscapeDirectionLeft SID_GLUE_ESCDIR_LEFT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1812,7 +1629,6 @@ SfxBoolItem GlueEscapeDirectionLeft SID_GLUE_ESCDIR_LEFT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1822,7 +1638,6 @@ SfxBoolItem GlueEscapeDirectionLeft SID_GLUE_ESCDIR_LEFT
 SfxBoolItem GlueEscapeDirectionRight SID_GLUE_ESCDIR_RIGHT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1832,7 +1647,6 @@ SfxBoolItem GlueEscapeDirectionRight SID_GLUE_ESCDIR_RIGHT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1842,7 +1656,6 @@ SfxBoolItem GlueEscapeDirectionRight SID_GLUE_ESCDIR_RIGHT
 SfxBoolItem GlueEscapeDirectionTop SID_GLUE_ESCDIR_TOP
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1852,7 +1665,6 @@ SfxBoolItem GlueEscapeDirectionTop SID_GLUE_ESCDIR_TOP
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1862,7 +1674,6 @@ SfxBoolItem GlueEscapeDirectionTop SID_GLUE_ESCDIR_TOP
 SfxBoolItem GlueHorzAlignCenter SID_GLUE_HORZALIGN_CENTER
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1872,7 +1683,6 @@ SfxBoolItem GlueHorzAlignCenter SID_GLUE_HORZALIGN_CENTER
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1882,7 +1692,6 @@ SfxBoolItem GlueHorzAlignCenter SID_GLUE_HORZALIGN_CENTER
 SfxBoolItem GlueHorzAlignLeft SID_GLUE_HORZALIGN_LEFT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1892,7 +1701,6 @@ SfxBoolItem GlueHorzAlignLeft SID_GLUE_HORZALIGN_LEFT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1902,7 +1710,6 @@ SfxBoolItem GlueHorzAlignLeft SID_GLUE_HORZALIGN_LEFT
 SfxBoolItem GlueHorzAlignRight SID_GLUE_HORZALIGN_RIGHT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1912,7 +1719,6 @@ SfxBoolItem GlueHorzAlignRight SID_GLUE_HORZALIGN_RIGHT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1922,7 +1728,6 @@ SfxBoolItem GlueHorzAlignRight SID_GLUE_HORZALIGN_RIGHT
 SfxBoolItem GlueInsertPoint SID_GLUE_INSERT_POINT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1932,7 +1737,6 @@ SfxBoolItem GlueInsertPoint SID_GLUE_INSERT_POINT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1942,7 +1746,6 @@ SfxBoolItem GlueInsertPoint SID_GLUE_INSERT_POINT
 SfxBoolItem GluePercent SID_GLUE_PERCENT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1952,7 +1755,6 @@ SfxBoolItem GluePercent SID_GLUE_PERCENT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1962,7 +1764,6 @@ SfxBoolItem GluePercent SID_GLUE_PERCENT
 SfxBoolItem GlueVertAlignBottom SID_GLUE_VERTALIGN_BOTTOM
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1972,7 +1773,6 @@ SfxBoolItem GlueVertAlignBottom SID_GLUE_VERTALIGN_BOTTOM
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -1982,7 +1782,6 @@ SfxBoolItem GlueVertAlignBottom SID_GLUE_VERTALIGN_BOTTOM
 SfxBoolItem GlueVertAlignCenter SID_GLUE_VERTALIGN_CENTER
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -1992,7 +1791,6 @@ SfxBoolItem GlueVertAlignCenter SID_GLUE_VERTALIGN_CENTER
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2002,7 +1800,6 @@ SfxBoolItem GlueVertAlignCenter SID_GLUE_VERTALIGN_CENTER
 SfxBoolItem GlueVertAlignTop SID_GLUE_VERTALIGN_TOP
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2012,7 +1809,6 @@ SfxBoolItem GlueVertAlignTop SID_GLUE_VERTALIGN_TOP
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2022,7 +1818,6 @@ SfxBoolItem GlueVertAlignTop SID_GLUE_VERTALIGN_TOP
 SfxVoidItem Gradient SID_GRADIENT
 (SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Style ID_VAL_STYLE,SfxUInt32Item Angle ID_VAL_ANGLE,SfxUInt32Item Border ID_VAL_BORDER,SfxUInt32Item XOffset ID_VAL_CENTER_X,SfxUInt32Item YOffset ID_VAL_CENTER_Y,SfxUInt32Item StartIntens ID_VAL_STARTINTENS,SfxUInt32Item EndIntens ID_VAL_ENDINTENS)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2031,7 +1826,6 @@ SfxVoidItem Gradient SID_GRADIENT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2041,7 +1835,6 @@ SfxVoidItem Gradient SID_GRADIENT
 SfxVoidItem GradientEndColor SID_SETGRADENDCOLOR
 (SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2050,7 +1843,6 @@ SfxVoidItem GradientEndColor SID_SETGRADENDCOLOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2060,7 +1852,6 @@ SfxVoidItem GradientEndColor SID_SETGRADENDCOLOR
 SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
 (SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2069,7 +1860,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2079,7 +1869,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
 SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2088,7 +1877,6 @@ SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2098,7 +1886,6 @@ SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
 SfxBoolItem GridFront SID_GRID_FRONT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2108,7 +1895,6 @@ SfxBoolItem GridFront SID_GRID_FRONT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2118,7 +1904,6 @@ SfxBoolItem GridFront SID_GRID_FRONT
 SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2127,7 +1912,6 @@ SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2137,7 +1921,6 @@ SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
 SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
 (SfxBoolItem Isactive ID_VAL_ISACTIVE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2146,10 +1929,8 @@ SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* status: */
     SlotType = SfxBoolItem
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2159,7 +1940,6 @@ SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
 SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2169,7 +1949,6 @@ SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
@@ -2179,7 +1958,6 @@ SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
 SfxVoidItem Hatch SID_HATCH
 (SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Style ID_VAL_STYLE,SfxUInt32Item Distance ID_VAL_DISTANCE,SfxUInt32Item Angle ID_VAL_ANGLE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2188,7 +1966,6 @@ SfxVoidItem Hatch SID_HATCH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2198,7 +1975,6 @@ SfxVoidItem Hatch SID_HATCH
 SfxVoidItem HatchColor SID_SETHATCHCOLOR
 (SfxStringItem Name ID_VAL_INDEX,SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2207,7 +1983,6 @@ SfxVoidItem HatchColor SID_SETHATCHCOLOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2217,7 +1992,6 @@ SfxVoidItem HatchColor SID_SETHATCHCOLOR
 SfxBoolItem HelplinesFront SID_HELPLINES_FRONT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2227,7 +2001,6 @@ SfxBoolItem HelplinesFront SID_HELPLINES_FRONT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2237,7 +2010,6 @@ SfxBoolItem HelplinesFront SID_HELPLINES_FRONT
 SfxBoolItem HelplinesUse SID_HELPLINES_USE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2247,7 +2019,6 @@ SfxBoolItem HelplinesUse SID_HELPLINES_USE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2257,7 +2028,6 @@ SfxBoolItem HelplinesUse SID_HELPLINES_USE
 SfxBoolItem HelplinesVisible SID_HELPLINES_VISIBLE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2267,7 +2037,6 @@ SfxBoolItem HelplinesVisible SID_HELPLINES_VISIBLE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2277,7 +2046,6 @@ SfxBoolItem HelplinesVisible SID_HELPLINES_VISIBLE
 SfxVoidItem HideSlide SID_HIDE_SLIDE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2286,7 +2054,6 @@ SfxVoidItem HideSlide SID_HIDE_SLIDE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2296,7 +2063,6 @@ SfxVoidItem HideSlide SID_HIDE_SLIDE
 SfxVoidItem ShowSlide SID_SHOW_SLIDE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2305,7 +2071,6 @@ SfxVoidItem ShowSlide SID_SHOW_SLIDE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2315,7 +2080,6 @@ SfxVoidItem ShowSlide SID_SHOW_SLIDE
 SfxBoolItem Hyphenation SID_HYPHENATION
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2325,7 +2089,6 @@ SfxBoolItem Hyphenation SID_HYPHENATION
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2335,7 +2098,6 @@ SfxBoolItem Hyphenation SID_HYPHENATION
 SfxVoidItem ImportFromFile SID_INSERTFILE
 (SfxStringItem FileName ID_VAL_DUMMY1,SfxStringItem FilterName ID_VAL_DUMMY2)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2344,7 +2106,6 @@ SfxVoidItem ImportFromFile SID_INSERTFILE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2354,7 +2115,6 @@ SfxVoidItem ImportFromFile SID_INSERTFILE
 SfxVoidItem InsertAuthorField SID_INSERT_FLD_AUTHOR
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2363,7 +2123,6 @@ SfxVoidItem InsertAuthorField SID_INSERT_FLD_AUTHOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2373,7 +2132,6 @@ SfxVoidItem InsertAuthorField SID_INSERT_FLD_AUTHOR
 SfxVoidItem InsertDateFieldFix SID_INSERT_FLD_DATE_FIX
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2382,7 +2140,6 @@ SfxVoidItem InsertDateFieldFix SID_INSERT_FLD_DATE_FIX
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2392,7 +2149,6 @@ SfxVoidItem InsertDateFieldFix SID_INSERT_FLD_DATE_FIX
 SfxVoidItem InsertDateFieldVar SID_INSERT_FLD_DATE_VAR
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2401,7 +2157,6 @@ SfxVoidItem InsertDateFieldVar SID_INSERT_FLD_DATE_VAR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2411,7 +2166,6 @@ SfxVoidItem InsertDateFieldVar SID_INSERT_FLD_DATE_VAR
 SfxVoidItem InsertFileField SID_INSERT_FLD_FILE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2420,7 +2174,6 @@ SfxVoidItem InsertFileField SID_INSERT_FLD_FILE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2430,7 +2183,6 @@ SfxVoidItem InsertFileField SID_INSERT_FLD_FILE
 SfxVoidItem InsertLayer SID_INSERTLAYER
 (SfxStringItem LayerName ID_VAL_LAYERNAME,SfxBoolItem IsVisible ID_VAL_ISVISIBLE,SfxBoolItem IsLocked ID_VAL_ISLOCKED,SfxBoolItem IsPrintable ID_VAL_ISPRINTABLE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2439,7 +2191,6 @@ SfxVoidItem InsertLayer SID_INSERTLAYER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2449,7 +2200,6 @@ SfxVoidItem InsertLayer SID_INSERTLAYER
 SfxVoidItem InsertPage SID_INSERTPAGE
 (SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2458,7 +2208,6 @@ SfxVoidItem InsertPage SID_INSERTPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2468,7 +2217,6 @@ SfxVoidItem InsertPage SID_INSERTPAGE
 SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2477,7 +2225,6 @@ SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2487,7 +2234,6 @@ SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
 SfxVoidItem InsertPageTitleField SID_INSERT_FLD_PAGE_TITLE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2496,7 +2242,6 @@ SfxVoidItem InsertPageTitleField SID_INSERT_FLD_PAGE_TITLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2506,7 +2251,6 @@ SfxVoidItem InsertPageTitleField SID_INSERT_FLD_PAGE_TITLE
 SfxVoidItem InsertPagesField SID_INSERT_FLD_PAGES
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2515,7 +2259,6 @@ SfxVoidItem InsertPagesField SID_INSERT_FLD_PAGES
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2525,7 +2268,6 @@ SfxVoidItem InsertPagesField SID_INSERT_FLD_PAGES
 SfxVoidItem InsertPageQuick SID_INSERTPAGE_QUICK
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2534,7 +2276,6 @@ SfxVoidItem InsertPageQuick SID_INSERTPAGE_QUICK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2544,7 +2285,6 @@ SfxVoidItem InsertPageQuick SID_INSERTPAGE_QUICK
 SfxVoidItem InsertTimeFieldFix SID_INSERT_FLD_TIME_FIX
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2553,7 +2293,6 @@ SfxVoidItem InsertTimeFieldFix SID_INSERT_FLD_TIME_FIX
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2563,7 +2302,6 @@ SfxVoidItem InsertTimeFieldFix SID_INSERT_FLD_TIME_FIX
 SfxVoidItem InsertTimeFieldVar SID_INSERT_FLD_TIME_VAR
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2572,7 +2310,6 @@ SfxVoidItem InsertTimeFieldVar SID_INSERT_FLD_TIME_VAR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2582,7 +2319,6 @@ SfxVoidItem InsertTimeFieldVar SID_INSERT_FLD_TIME_VAR
 SfxVoidItem InsertToolbox SID_DRAWTBX_INSERT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2592,7 +2328,6 @@ SfxVoidItem InsertToolbox SID_DRAWTBX_INSERT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2602,7 +2337,6 @@ SfxVoidItem InsertToolbox SID_DRAWTBX_INSERT
 SfxVoidItem InteractiveGradient SID_OBJECT_GRADIENT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2611,7 +2345,6 @@ SfxVoidItem InteractiveGradient SID_OBJECT_GRADIENT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2621,7 +2354,6 @@ SfxVoidItem InteractiveGradient SID_OBJECT_GRADIENT
 SfxVoidItem InteractiveTransparence SID_OBJECT_TRANSPARENCE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2630,7 +2362,6 @@ SfxVoidItem InteractiveTransparence SID_OBJECT_TRANSPARENCE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2640,7 +2371,6 @@ SfxVoidItem InteractiveTransparence SID_OBJECT_TRANSPARENCE
 SfxVoidItem LayerMode SID_LAYERMODE
 (SfxBoolItem IsActive ID_VAL_ISACTIVE,SfxUInt32Item WhatLayer ID_VAL_WHATLAYER)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2649,10 +2379,8 @@ SfxVoidItem LayerMode SID_LAYERMODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* status: */
     SlotType = SfxBoolItem
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2662,7 +2390,6 @@ SfxVoidItem LayerMode SID_LAYERMODE
 SfxStringItem LayoutStatus SID_STATUS_LAYOUT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2672,7 +2399,6 @@ SfxStringItem LayoutStatus SID_STATUS_LAYOUT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2682,7 +2408,6 @@ SfxStringItem LayoutStatus SID_STATUS_LAYOUT
 SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2692,7 +2417,6 @@ SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2702,7 +2426,6 @@ SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
 SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2712,7 +2435,6 @@ SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2722,7 +2444,6 @@ SfxBoolItem LineArrowCircle SID_LINE_ARROW_CIRCLE
 SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2732,7 +2453,6 @@ SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2742,7 +2462,6 @@ SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
 SfxBoolItem LineArrows SID_LINE_ARROWS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2752,7 +2471,6 @@ SfxBoolItem LineArrows SID_LINE_ARROWS
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2762,7 +2480,6 @@ SfxBoolItem LineArrows SID_LINE_ARROWS
 SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2772,7 +2489,6 @@ SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2782,7 +2498,6 @@ SfxBoolItem LineArrowSquare SID_LINE_ARROW_SQUARE
 SfxBoolItem LineArrowStart SID_LINE_ARROW_START
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2792,7 +2507,6 @@ SfxBoolItem LineArrowStart SID_LINE_ARROW_START
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2802,7 +2516,6 @@ SfxBoolItem LineArrowStart SID_LINE_ARROW_START
 SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2812,7 +2525,6 @@ SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2822,7 +2534,6 @@ SfxBoolItem LineCircleArrow SID_LINE_CIRCLE_ARROW
 SfxVoidItem LineColor SID_SETLINECOLOR
 (SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2831,7 +2542,6 @@ SfxVoidItem LineColor SID_SETLINECOLOR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2841,7 +2551,6 @@ SfxVoidItem LineColor SID_SETLINECOLOR
 SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2850,7 +2559,6 @@ SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2860,7 +2568,6 @@ SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
 SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2870,7 +2577,6 @@ SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -2880,7 +2586,6 @@ SfxBoolItem LineSquareArrow SID_LINE_SQUARE_ARROW
 SfxVoidItem LineTo SID_LINETO
 (SfxUInt32Item MouseEndX ID_VAL_MOUSEEND_X,SfxUInt32Item MouseEndY ID_VAL_MOUSEEND_Y)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2889,7 +2594,6 @@ SfxVoidItem LineTo SID_LINETO
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -2899,7 +2603,6 @@ SfxVoidItem LineTo SID_LINETO
 SfxVoidItem LineToolbox SID_DRAWTBX_LINES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2909,7 +2612,6 @@ SfxVoidItem LineToolbox SID_DRAWTBX_LINES
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2919,7 +2621,6 @@ SfxVoidItem LineToolbox SID_DRAWTBX_LINES
 SfxVoidItem ManageLinks SID_MANAGE_LINKS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2928,7 +2629,6 @@ SfxVoidItem ManageLinks SID_MANAGE_LINKS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2938,7 +2638,6 @@ SfxVoidItem ManageLinks SID_MANAGE_LINKS
 SfxVoidItem MasterPage SID_MASTERPAGE
 (SfxBoolItem Isactive ID_VAL_ISACTIVE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -2947,10 +2646,8 @@ SfxVoidItem MasterPage SID_MASTERPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* status: */
     SlotType = SfxBoolItem
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2960,7 +2657,6 @@ SfxVoidItem MasterPage SID_MASTERPAGE
 SfxVoidItem MeasureAttributes SID_MEASURE_DLG
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2969,7 +2665,6 @@ SfxVoidItem MeasureAttributes SID_MEASURE_DLG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2979,7 +2674,6 @@ SfxVoidItem MeasureAttributes SID_MEASURE_DLG
 SfxBoolItem MeasureLine SID_DRAW_MEASURELINE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -2989,7 +2683,6 @@ SfxBoolItem MeasureLine SID_DRAW_MEASURELINE
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2999,7 +2692,6 @@ SfxBoolItem MeasureLine SID_DRAW_MEASURELINE
 SfxVoidItem MirrorHorz SID_HORIZONTAL
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3008,7 +2700,6 @@ SfxVoidItem MirrorHorz SID_HORIZONTAL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
@@ -3018,7 +2709,6 @@ SfxVoidItem MirrorHorz SID_HORIZONTAL
 SfxVoidItem MirrorVert SID_VERTICAL
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3027,7 +2717,6 @@ SfxVoidItem MirrorVert SID_VERTICAL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
@@ -3037,7 +2726,6 @@ SfxVoidItem MirrorVert SID_VERTICAL
 SfxVoidItem ModifyField SID_MODIFY_FIELD
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3046,7 +2734,6 @@ SfxVoidItem ModifyField SID_MODIFY_FIELD
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3056,7 +2743,6 @@ SfxVoidItem ModifyField SID_MODIFY_FIELD
 SfxVoidItem ModifyLayer SID_MODIFYLAYER
 (SfxStringItem LayerName ID_VAL_LAYERNAME,SfxBoolItem IsVisible ID_VAL_ISVISIBLE,SfxBoolItem IsLocked ID_VAL_ISLOCKED,SfxBoolItem IsPrintable ID_VAL_ISPRINTABLE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3065,7 +2751,6 @@ SfxVoidItem ModifyLayer SID_MODIFYLAYER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3075,7 +2760,6 @@ SfxVoidItem ModifyLayer SID_MODIFYLAYER
 SfxVoidItem ModifyPage SID_MODIFYPAGE
 (SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3084,7 +2768,6 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3094,7 +2777,6 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
 SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
 (SfxUInt32Item WhatPage ID_VAL_WHATPAGE, SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3103,7 +2785,6 @@ SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3114,7 +2795,6 @@ SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
 SfxBoolItem ToggleTabBarVisibility SID_TOGGLE_TABBAR_VISIBILITY
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3123,7 +2803,6 @@ SfxBoolItem ToggleTabBarVisibility SID_TOGGLE_TABBAR_VISIBILITY
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3134,7 +2813,6 @@ SfxBoolItem ToggleTabBarVisibility SID_TOGGLE_TABBAR_VISIBILITY
 SfxVoidItem DisplayMode SID_DISPLAY_MODE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3143,7 +2821,6 @@ SfxVoidItem DisplayMode SID_DISPLAY_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -3153,7 +2830,6 @@ SfxVoidItem DisplayMode SID_DISPLAY_MODE
 SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3162,7 +2838,6 @@ SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3172,7 +2847,6 @@ SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 SfxVoidItem Morphing SID_POLYGON_MORPHING
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3181,7 +2855,6 @@ SfxVoidItem Morphing SID_POLYGON_MORPHING
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3191,7 +2864,6 @@ SfxVoidItem Morphing SID_POLYGON_MORPHING
 SfxVoidItem MoveTo SID_MOVETO
 (SfxUInt32Item MouseStartX ID_VAL_MOUSESTART_X,SfxUInt32Item MouseStartY ID_VAL_MOUSESTART_Y)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3200,7 +2872,6 @@ SfxVoidItem MoveTo SID_MOVETO
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3210,7 +2881,6 @@ SfxVoidItem MoveTo SID_MOVETO
 SfxVoidItem NameGroup SID_NAME_GROUP
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3219,7 +2889,6 @@ SfxVoidItem NameGroup SID_NAME_GROUP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3230,7 +2899,6 @@ SfxVoidItem NameGroup SID_NAME_GROUP
 SfxVoidItem ObjectTitleDescription SID_OBJECT_TITLE_DESCRIPTION
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3239,7 +2907,6 @@ SfxVoidItem ObjectTitleDescription SID_OBJECT_TITLE_DESCRIPTION
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3249,7 +2916,6 @@ SfxVoidItem ObjectTitleDescription SID_OBJECT_TITLE_DESCRIPTION
 SfxBoolItem NavigatorInit SID_NAVIGATOR_INIT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3259,7 +2925,6 @@ SfxBoolItem NavigatorInit SID_NAVIGATOR_INIT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3269,7 +2934,6 @@ SfxBoolItem NavigatorInit SID_NAVIGATOR_INIT
 SfxStringItem NavigatorObject SID_NAVIGATOR_OBJECT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3279,7 +2943,6 @@ SfxStringItem NavigatorObject SID_NAVIGATOR_OBJECT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3289,7 +2952,6 @@ SfxStringItem NavigatorObject SID_NAVIGATOR_OBJECT
 SfxUInt16Item NavigatorPage SID_NAVIGATOR_PAGE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3299,7 +2961,6 @@ SfxUInt16Item NavigatorPage SID_NAVIGATOR_PAGE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3309,7 +2970,6 @@ SfxUInt16Item NavigatorPage SID_NAVIGATOR_PAGE
 SfxStringItem NavigatorPageName SID_NAVIGATOR_PAGENAME
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3319,7 +2979,6 @@ SfxStringItem NavigatorPageName SID_NAVIGATOR_PAGENAME
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3329,7 +2988,6 @@ SfxStringItem NavigatorPageName SID_NAVIGATOR_PAGENAME
 SfxUInt32Item NavigatorState SID_NAVIGATOR_STATE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3339,7 +2997,6 @@ SfxUInt32Item NavigatorState SID_NAVIGATOR_STATE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3349,7 +3006,6 @@ SfxUInt32Item NavigatorState SID_NAVIGATOR_STATE
 SfxBoolItem NewRouting SID_CONNECTION_NEW_ROUTING
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3359,7 +3015,6 @@ SfxBoolItem NewRouting SID_CONNECTION_NEW_ROUTING
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3369,7 +3024,6 @@ SfxBoolItem NewRouting SID_CONNECTION_NEW_ROUTING
 SfxVoidItem NotesMasterPage SID_NOTES_MASTER_MODE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3378,7 +3032,6 @@ SfxVoidItem NotesMasterPage SID_NOTES_MASTER_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3388,7 +3041,6 @@ SfxVoidItem NotesMasterPage SID_NOTES_MASTER_MODE
 SfxVoidItem NotesMode SID_NOTES_MODE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3398,7 +3050,6 @@ SfxVoidItem NotesMode SID_NOTES_MODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3408,7 +3059,6 @@ SfxVoidItem NotesMode SID_NOTES_MODE
 SfxVoidItem ObjectPosition SID_POSITION
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3418,7 +3068,6 @@ SfxVoidItem ObjectPosition SID_POSITION
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3428,7 +3077,6 @@ SfxVoidItem ObjectPosition SID_POSITION
 SfxVoidItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3438,7 +3086,6 @@ SfxVoidItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3448,7 +3095,6 @@ SfxVoidItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
 SfxVoidItem OriginalSize SID_ORIGINAL_SIZE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3457,7 +3103,6 @@ SfxVoidItem OriginalSize SID_ORIGINAL_SIZE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3467,7 +3112,6 @@ SfxVoidItem OriginalSize SID_ORIGINAL_SIZE
 SfxVoidItem OutlineMode SID_OUTLINE_MODE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3477,7 +3121,6 @@ SfxVoidItem OutlineMode SID_OUTLINE_MODE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3487,7 +3130,6 @@ SfxVoidItem OutlineMode SID_OUTLINE_MODE
 SfxBoolItem OutputQualityBlackWhite SID_OUTPUT_QUALITY_BLACKWHITE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3498,7 +3140,6 @@ SfxBoolItem OutputQualityBlackWhite SID_OUTPUT_QUALITY_BLACKWHITE
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3508,7 +3149,6 @@ SfxBoolItem OutputQualityBlackWhite SID_OUTPUT_QUALITY_BLACKWHITE
 SfxBoolItem OutputQualityColor SID_OUTPUT_QUALITY_COLOR
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3519,7 +3159,6 @@ SfxBoolItem OutputQualityColor SID_OUTPUT_QUALITY_COLOR
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3529,7 +3168,6 @@ SfxBoolItem OutputQualityColor SID_OUTPUT_QUALITY_COLOR
 SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3540,7 +3178,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3550,7 +3187,6 @@ SfxBoolItem OutputQualityContrast SID_OUTPUT_QUALITY_CONTRAST
 SfxBoolItem OutputQualityGrayscale SID_OUTPUT_QUALITY_GRAYSCALE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3561,7 +3197,6 @@ SfxBoolItem OutputQualityGrayscale SID_OUTPUT_QUALITY_GRAYSCALE
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3571,7 +3206,6 @@ SfxBoolItem OutputQualityGrayscale SID_OUTPUT_QUALITY_GRAYSCALE
 SfxVoidItem PackAndGo SID_PACKNGO
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3580,7 +3214,6 @@ SfxVoidItem PackAndGo SID_PACKNGO
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
@@ -3590,7 +3223,6 @@ SfxVoidItem PackAndGo SID_PACKNGO
 SfxVoidItem PageMargin SID_PAGEMARGIN
 (SfxUInt32Item PageLeft ID_VAL_PAGELEFT,SfxUInt32Item PageRight ID_VAL_PAGERIGHT,SfxUInt32Item PageTop ID_VAL_PAGETOP,SfxUInt32Item PageBottom ID_VAL_PAGEBOTTOM,SfxBoolItem ScaleObjects ID_VAL_SCALEOBJECTS)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3599,7 +3231,6 @@ SfxVoidItem PageMargin SID_PAGEMARGIN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3609,7 +3240,6 @@ SfxVoidItem PageMargin SID_PAGEMARGIN
 SfxVoidItem PageMode SID_PAGEMODE
 (SfxBoolItem IsActive ID_VAL_ISACTIVE,SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3618,10 +3248,8 @@ SfxVoidItem PageMode SID_PAGEMODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* status: */
     SlotType = SfxBoolItem
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3631,7 +3259,6 @@ SfxVoidItem PageMode SID_PAGEMODE
 SfxVoidItem PageSetup SID_PAGESETUP
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3640,7 +3267,6 @@ SfxVoidItem PageSetup SID_PAGESETUP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3650,7 +3276,6 @@ SfxVoidItem PageSetup SID_PAGESETUP
 SfxVoidItem PageSize SID_PAGESIZE
 (SfxUInt32Item PageWidth ID_VAL_PAGEWIDTH,SfxUInt32Item PageHeight ID_VAL_PAGEHEIGHT,SfxBoolItem ScaleObjects ID_VAL_SCALEOBJECTS)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3659,7 +3284,6 @@ SfxVoidItem PageSize SID_PAGESIZE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3669,7 +3293,6 @@ SfxVoidItem PageSize SID_PAGESIZE
 SfxUInt16Item PagesPerRow SID_PAGES_PER_ROW
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3680,7 +3303,6 @@ SfxUInt16Item PagesPerRow SID_PAGES_PER_ROW
     Asynchron;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -3690,7 +3312,6 @@ SfxUInt16Item PagesPerRow SID_PAGES_PER_ROW
 SfxStringItem PageStatus SID_STATUS_PAGE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3700,7 +3321,6 @@ SfxStringItem PageStatus SID_STATUS_PAGE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3710,7 +3330,6 @@ SfxStringItem PageStatus SID_STATUS_PAGE
 SfxBoolItem PickThrough SID_PICK_THROUGH
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3720,7 +3339,6 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3730,7 +3348,6 @@ SfxBoolItem PickThrough SID_PICK_THROUGH
 SfxBoolItem Polygon SID_DRAW_POLYGON
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3740,7 +3357,6 @@ SfxBoolItem Polygon SID_DRAW_POLYGON
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3750,7 +3366,6 @@ SfxBoolItem Polygon SID_DRAW_POLYGON
 SfxVoidItem Presentation SID_PRESENTATION
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3760,7 +3375,6 @@ SfxVoidItem Presentation SID_PRESENTATION
     RecordPerSet;
     Asynchron;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3770,7 +3384,6 @@ SfxVoidItem Presentation SID_PRESENTATION
 SfxVoidItem PresentationCurrentSlide SID_PRESENTATION_CURRENT_SLIDE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3780,7 +3393,6 @@ SfxVoidItem PresentationCurrentSlide SID_PRESENTATION_CURRENT_SLIDE
     RecordPerSet;
     Asynchron;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3790,7 +3402,6 @@ SfxVoidItem PresentationCurrentSlide SID_PRESENTATION_CURRENT_SLIDE
 SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3799,7 +3410,6 @@ SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3809,7 +3419,6 @@ SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
 SfxVoidItem Remote SID_REMOTE_DLG
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -3818,7 +3427,6 @@ SfxVoidItem Remote SID_REMOTE_DLG
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3828,7 +3436,6 @@ SfxVoidItem Remote SID_REMOTE_DLG
 SfxVoidItem PresentationEnd SID_PRESENTATION_END
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3837,7 +3444,6 @@ SfxVoidItem PresentationEnd SID_PRESENTATION_END
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3847,7 +3453,6 @@ SfxVoidItem PresentationEnd SID_PRESENTATION_END
 SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3856,7 +3461,6 @@ SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3866,7 +3470,6 @@ SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
 SfxVoidItem PresentationLayout SID_PRESENTATION_LAYOUT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3875,7 +3478,6 @@ SfxVoidItem PresentationLayout SID_PRESENTATION_LAYOUT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3885,7 +3487,6 @@ SfxVoidItem PresentationLayout SID_PRESENTATION_LAYOUT
 SfxUInt32Item PreviewState SID_PREVIEW_STATE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3895,7 +3496,6 @@ SfxUInt32Item PreviewState SID_PREVIEW_STATE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -3905,7 +3505,6 @@ SfxUInt32Item PreviewState SID_PREVIEW_STATE
 SfxBoolItem PreviewWindow SID_PREVIEW_WIN
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -3915,7 +3514,6 @@ SfxBoolItem PreviewWindow SID_PREVIEW_WIN
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3925,7 +3523,6 @@ SfxBoolItem PreviewWindow SID_PREVIEW_WIN
 SfxBoolItem QuickEdit SID_QUICKEDIT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3935,7 +3532,6 @@ SfxBoolItem QuickEdit SID_QUICKEDIT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3945,7 +3541,6 @@ SfxBoolItem QuickEdit SID_QUICKEDIT
 SfxVoidItem RectangleToolbox SID_DRAWTBX_RECTANGLES
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3955,7 +3550,6 @@ SfxVoidItem RectangleToolbox SID_DRAWTBX_RECTANGLES
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3965,7 +3559,6 @@ SfxVoidItem RectangleToolbox SID_DRAWTBX_RECTANGLES
 SfxVoidItem RehearseTimings SID_REHEARSE_TIMINGS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3974,7 +3567,6 @@ SfxVoidItem RehearseTimings SID_REHEARSE_TIMINGS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -3984,7 +3576,6 @@ SfxVoidItem RehearseTimings SID_REHEARSE_TIMINGS
 SfxVoidItem RenameLayer SID_RENAMELAYER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -3993,7 +3584,6 @@ SfxVoidItem RenameLayer SID_RENAMELAYER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4003,7 +3593,6 @@ SfxVoidItem RenameLayer SID_RENAMELAYER
 SfxVoidItem RenamePage SID_RENAMEPAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4012,7 +3601,6 @@ SfxVoidItem RenamePage SID_RENAMEPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4022,7 +3610,6 @@ SfxVoidItem RenamePage SID_RENAMEPAGE
 SfxVoidItem RenamePageQuick SID_RENAMEPAGE_QUICK
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4031,7 +3618,6 @@ SfxVoidItem RenamePageQuick SID_RENAMEPAGE_QUICK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4041,7 +3627,6 @@ SfxVoidItem RenamePageQuick SID_RENAMEPAGE_QUICK
 SfxVoidItem ReverseOrder SID_REVERSE_ORDER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4050,7 +3635,6 @@ SfxVoidItem ReverseOrder SID_REVERSE_ORDER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4060,7 +3644,6 @@ SfxVoidItem ReverseOrder SID_REVERSE_ORDER
 SvxObjectItem RulerObject SID_RULER_OBJECT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4070,7 +3653,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4080,7 +3662,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
 SfxVoidItem SelectAt SID_SELECTAT
 (SfxUInt32Item AnchorX ID_VAL_ANCHOR_X,SfxUInt32Item AnchorY ID_VAL_ANCHOR_Y,SfxUInt32Item Left ID_VAL_MOUSESTART_X,SfxUInt32Item Top ID_VAL_MOUSESTART_Y,SfxUInt32Item Right ID_VAL_LENGTH_X,SfxUInt32Item Bottom ID_VAL_LENGTH_Y)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4089,7 +3670,6 @@ SfxVoidItem SelectAt SID_SELECTAT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4099,7 +3679,6 @@ SfxVoidItem SelectAt SID_SELECTAT
 SfxVoidItem SelectGradient SID_SELECTGRADIENT
 (SfxStringItem Name ID_VAL_INDEX)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4108,7 +3687,6 @@ SfxVoidItem SelectGradient SID_SELECTGRADIENT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4118,7 +3696,6 @@ SfxVoidItem SelectGradient SID_SELECTGRADIENT
 SfxVoidItem SelectHatch SID_SELECTHATCH
 (SfxStringItem Name ID_VAL_INDEX)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4127,7 +3704,6 @@ SfxVoidItem SelectHatch SID_SELECTHATCH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4137,7 +3713,6 @@ SfxVoidItem SelectHatch SID_SELECTHATCH
 SfxVoidItem SetFillStyle SID_SETFILLSTYLE
 (SfxUInt32Item Style ID_VAL_STYLE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4146,7 +3721,6 @@ SfxVoidItem SetFillStyle SID_SETFILLSTYLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4156,7 +3730,6 @@ SfxVoidItem SetFillStyle SID_SETFILLSTYLE
 SfxVoidItem SetLineStyle SID_SETLINESTYLE
 (SfxUInt32Item Style ID_VAL_STYLE)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4165,7 +3738,6 @@ SfxVoidItem SetLineStyle SID_SETLINESTYLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4175,7 +3747,6 @@ SfxVoidItem SetLineStyle SID_SETLINESTYLE
 SfxVoidItem SetLineWidth SID_SETLINEWIDTH
 (SfxUInt32Item Width ID_VAL_WIDTH)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4184,7 +3755,6 @@ SfxVoidItem SetLineWidth SID_SETLINEWIDTH
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4194,7 +3764,6 @@ SfxVoidItem SetLineWidth SID_SETLINEWIDTH
 SfxStringItem SetSnapItem SID_SET_SNAPITEM
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4204,7 +3773,6 @@ SfxStringItem SetSnapItem SID_SET_SNAPITEM
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4214,7 +3782,6 @@ SfxStringItem SetSnapItem SID_SET_SNAPITEM
 SfxBoolItem Shear SID_OBJECT_SHEAR
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4225,7 +3792,6 @@ SfxBoolItem Shear SID_OBJECT_SHEAR
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4235,7 +3801,6 @@ SfxBoolItem Shear SID_OBJECT_SHEAR
 SfxBoolItem Shell3D SID_3D_SHELL
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4244,7 +3809,6 @@ SfxBoolItem Shell3D SID_3D_SHELL
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4254,7 +3818,6 @@ SfxBoolItem Shell3D SID_3D_SHELL
 SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4264,7 +3827,6 @@ SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4274,7 +3836,6 @@ SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
 SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4283,7 +3844,6 @@ SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4293,7 +3853,6 @@ SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
 SfxBoolItem SnapBorder SID_SNAP_BORDER
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4303,7 +3862,6 @@ SfxBoolItem SnapBorder SID_SNAP_BORDER
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4313,7 +3871,6 @@ SfxBoolItem SnapBorder SID_SNAP_BORDER
 SfxBoolItem SnapFrame SID_SNAP_FRAME
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4323,7 +3880,6 @@ SfxBoolItem SnapFrame SID_SNAP_FRAME
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4333,7 +3889,6 @@ SfxBoolItem SnapFrame SID_SNAP_FRAME
 SfxBoolItem SnapPoints SID_SNAP_POINTS
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4343,7 +3898,6 @@ SfxBoolItem SnapPoints SID_SNAP_POINTS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4353,7 +3907,6 @@ SfxBoolItem SnapPoints SID_SNAP_POINTS
 SfxBoolItem SolidCreate SID_SOLID_CREATE
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4363,7 +3916,6 @@ SfxBoolItem SolidCreate SID_SOLID_CREATE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4373,7 +3925,6 @@ SfxBoolItem SolidCreate SID_SOLID_CREATE
 SfxBoolItem Sphere SID_3D_SPHERE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4382,7 +3933,6 @@ SfxBoolItem Sphere SID_3D_SPHERE
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4392,7 +3942,6 @@ SfxBoolItem Sphere SID_3D_SPHERE
 SfxVoidItem StartApplication SID_STARTAPP
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4401,7 +3950,6 @@ SfxVoidItem StartApplication SID_STARTAPP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4411,7 +3959,6 @@ SfxVoidItem StartApplication SID_STARTAPP
 SfxVoidItem SummaryPage SID_SUMMARY_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4420,7 +3967,6 @@ SfxVoidItem SummaryPage SID_SUMMARY_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4430,7 +3976,6 @@ SfxVoidItem SummaryPage SID_SUMMARY_PAGE
 SfxVoidItem SwitchLayer SID_SWITCHLAYER
 (SfxUInt32Item WhatLayer ID_VAL_WHATLAYER)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4439,7 +3984,6 @@ SfxVoidItem SwitchLayer SID_SWITCHLAYER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4449,7 +3993,6 @@ SfxVoidItem SwitchLayer SID_SWITCHLAYER
 SfxVoidItem SwitchPage SID_SWITCHPAGE
 (SfxUInt32Item WhatPage ID_VAL_WHATPAGE,SfxUInt32Item WhatKind ID_VAL_WHATKIND)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4458,7 +4001,6 @@ SfxVoidItem SwitchPage SID_SWITCHPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4468,7 +4010,6 @@ SfxVoidItem SwitchPage SID_SWITCHPAGE
 SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4476,7 +4017,6 @@ SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
     Container = FALSE,
     RecordAbsolute = FALSE,
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4486,7 +4026,6 @@ SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
 SfxBoolItem TextAlignment SID_TEXTALIGNMENT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4496,7 +4035,6 @@ SfxBoolItem TextAlignment SID_TEXTALIGNMENT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4506,7 +4044,6 @@ SfxBoolItem TextAlignment SID_TEXTALIGNMENT
 SfxVoidItem TextAttributes SID_TEXTATTR_DLG
 (SfxBoolItem IsAutoGrow ID_VAL_DUMMY0,SfxBoolItem IsCenter ID_VAL_DUMMY1,SfxBoolItem IsFitToSize ID_VAL_DUMMY2,SfxUInt32Item LeftBorder ID_VAL_DUMMY3,SfxUInt32Item RightBorder ID_VAL_DUMMY4,SfxUInt32Item TopBorder ID_VAL_DUMMY5,SfxUInt32Item BottomBorder ID_VAL_DUMMY6)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4515,7 +4052,6 @@ SfxVoidItem TextAttributes SID_TEXTATTR_DLG
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4525,7 +4061,6 @@ SfxVoidItem TextAttributes SID_TEXTATTR_DLG
 SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4535,7 +4070,6 @@ SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4545,7 +4079,6 @@ SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
 SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4555,7 +4088,6 @@ SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4565,7 +4097,6 @@ SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
 SfxVoidItem TextToolbox SID_DRAWTBX_TEXT
 
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4575,7 +4106,6 @@ SfxVoidItem TextToolbox SID_DRAWTBX_TEXT
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4585,7 +4115,6 @@ SfxVoidItem TextToolbox SID_DRAWTBX_TEXT
 SfxBoolItem Torus SID_3D_TORUS
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4594,7 +4123,6 @@ SfxBoolItem Torus SID_3D_TORUS
     RecordAbsolute = FALSE,
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4604,7 +4132,6 @@ SfxBoolItem Torus SID_3D_TORUS
 SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4614,7 +4141,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4624,7 +4150,6 @@ SfxBoolItem VerticalTextFitToSizeTool SID_TEXT_FITTOSIZE_VERTICAL
 SfxVoidItem ZoomPanning SID_ZOOM_PANNING
 ()
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4633,7 +4158,6 @@ SfxVoidItem ZoomPanning SID_ZOOM_PANNING
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4643,7 +4167,6 @@ SfxVoidItem ZoomPanning SID_ZOOM_PANNING
 SfxVoidItem ZoomMode SID_ZOOM_MODE
 ()
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4652,7 +4175,6 @@ SfxVoidItem ZoomMode SID_ZOOM_MODE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4662,7 +4184,6 @@ SfxVoidItem ZoomMode SID_ZOOM_MODE
 SfxVoidItem Mirror SID_OBJECT_MIRROR
 ( SfxBoolItem MirrorVert ID_VAL_MIRRORVERT )
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4671,10 +4192,8 @@ SfxVoidItem Mirror SID_OBJECT_MIRROR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* status: */
     SlotType = SfxBoolItem
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4684,7 +4203,6 @@ SfxVoidItem Mirror SID_OBJECT_MIRROR
 SfxVoidItem HeaderAndFooter SID_HEADER_AND_FOOTER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4693,7 +4211,6 @@ SfxVoidItem HeaderAndFooter SID_HEADER_AND_FOOTER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4703,7 +4220,6 @@ SfxVoidItem HeaderAndFooter SID_HEADER_AND_FOOTER
 SfxVoidItem InsertPageNumber SID_INSERT_PAGE_NUMBER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4712,7 +4228,6 @@ SfxVoidItem InsertPageNumber SID_INSERT_PAGE_NUMBER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4722,7 +4237,6 @@ SfxVoidItem InsertPageNumber SID_INSERT_PAGE_NUMBER
 SfxVoidItem InsertDateAndTime SID_INSERT_DATE_TIME
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4731,7 +4245,6 @@ SfxVoidItem InsertDateAndTime SID_INSERT_DATE_TIME
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4741,7 +4254,6 @@ SfxVoidItem InsertDateAndTime SID_INSERT_DATE_TIME
 SfxVoidItem MasterLayouts SID_MASTER_LAYOUTS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4750,7 +4262,6 @@ SfxVoidItem MasterLayouts SID_MASTER_LAYOUTS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4759,7 +4270,6 @@ SfxVoidItem MasterLayouts SID_MASTER_LAYOUTS
 
 SfxBoolItem DrawFontwork SID_DRAW_FONTWORK
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4769,7 +4279,6 @@ SfxBoolItem DrawFontwork SID_DRAW_FONTWORK
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4778,7 +4287,6 @@ SfxBoolItem DrawFontwork SID_DRAW_FONTWORK
 
 SfxBoolItem DrawFontworkVertical SID_DRAW_FONTWORK_VERTICAL
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4788,7 +4296,6 @@ SfxBoolItem DrawFontworkVertical SID_DRAW_FONTWORK_VERTICAL
     RecordPerItem;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4801,7 +4308,6 @@ SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,
 SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,
 SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4810,7 +4316,6 @@ SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4819,7 +4324,6 @@ SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
 
 SfxVoidItem DeleteMasterPage SID_DELETE_MASTER_PAGE()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4828,7 +4332,6 @@ SfxVoidItem DeleteMasterPage SID_DELETE_MASTER_PAGE()
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4836,7 +4339,6 @@ SfxVoidItem DeleteMasterPage SID_DELETE_MASTER_PAGE()
 ]
 SfxVoidItem RenameMasterPage SID_RENAME_MASTER_PAGE()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4845,7 +4347,6 @@ SfxVoidItem RenameMasterPage SID_RENAME_MASTER_PAGE()
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4854,7 +4355,6 @@ SfxVoidItem RenameMasterPage SID_RENAME_MASTER_PAGE()
 
 SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4863,7 +4363,6 @@ SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4873,7 +4372,6 @@ SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
 SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4882,7 +4380,6 @@ SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4892,7 +4389,6 @@ SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
 SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4901,7 +4397,6 @@ SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4910,7 +4405,6 @@ SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 
 SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4920,7 +4414,6 @@ SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4928,7 +4421,6 @@ SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 ]
 SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -4938,7 +4430,6 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4947,7 +4438,6 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
 
 SfxVoidItem TableToolBox SID_TABLE_TOOLBOX
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -4956,7 +4446,6 @@ SfxVoidItem TableToolBox SID_TABLE_TOOLBOX
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -4966,7 +4455,6 @@ SfxVoidItem TableToolBox SID_TABLE_TOOLBOX
 SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4975,7 +4463,6 @@ SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4985,7 +4472,6 @@ SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
 SfxVoidItem DistributeRows SID_TABLE_DISTRIBUTE_ROWS
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -4994,7 +4480,6 @@ SfxVoidItem DistributeRows SID_TABLE_DISTRIBUTE_ROWS
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5003,7 +4488,6 @@ SfxVoidItem DistributeRows SID_TABLE_DISTRIBUTE_ROWS
 
 SfxVoidItem TaskPaneApplyToAllSlides SID_TP_APPLY_TO_ALL_SLIDES
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5013,7 +4497,6 @@ SfxVoidItem TaskPaneApplyToAllSlides SID_TP_APPLY_TO_ALL_SLIDES
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5022,7 +4505,6 @@ SfxVoidItem TaskPaneApplyToAllSlides SID_TP_APPLY_TO_ALL_SLIDES
 
 SfxVoidItem TaskPaneApplyToSelectedSlides SID_TP_APPLY_TO_SELECTED_SLIDES
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5032,7 +4514,6 @@ SfxVoidItem TaskPaneApplyToSelectedSlides SID_TP_APPLY_TO_SELECTED_SLIDES
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5041,7 +4522,6 @@ SfxVoidItem TaskPaneApplyToSelectedSlides SID_TP_APPLY_TO_SELECTED_SLIDES
 
 SfxVoidItem TaskPaneUseForNewPresentations SID_TP_USE_FOR_NEW_PRESENTATIONS
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5051,7 +4531,6 @@ SfxVoidItem TaskPaneUseForNewPresentations SID_TP_USE_FOR_NEW_PRESENTATIONS
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5060,7 +4539,6 @@ SfxVoidItem TaskPaneUseForNewPresentations SID_TP_USE_FOR_NEW_PRESENTATIONS
 
 SfxVoidItem TaskPaneShowSmallPreview SID_TP_SHOW_SMALL_PREVIEW
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5070,7 +4548,6 @@ SfxVoidItem TaskPaneShowSmallPreview SID_TP_SHOW_SMALL_PREVIEW
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5079,7 +4556,6 @@ SfxVoidItem TaskPaneShowSmallPreview SID_TP_SHOW_SMALL_PREVIEW
 
 SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5089,7 +4565,6 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5098,7 +4573,6 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
 
 SfxVoidItem TaskPaneEditMaster SID_TP_EDIT_MASTER
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5108,7 +4582,6 @@ SfxVoidItem TaskPaneEditMaster SID_TP_EDIT_MASTER
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5117,7 +4590,6 @@ SfxVoidItem TaskPaneEditMaster SID_TP_EDIT_MASTER
 
 SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5127,7 +4599,6 @@ SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
     RecordPerSet;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5139,7 +4610,6 @@ SfxVoidItem TaskPaneInsertPage SID_INSERTPAGE_LAYOUT_MENU
 */
 SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5150,7 +4620,6 @@ SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
     Asynchron;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5184,7 +4653,6 @@ SfxInt32Item SwitchViewShellPane SID_SWITCH_SHELL_PANE
 SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5195,7 +4663,6 @@ SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5205,7 +4672,6 @@ SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
 SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5216,7 +4682,6 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5226,7 +4691,6 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
 SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5237,7 +4701,6 @@ SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
     Asynchron;
 
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5247,7 +4710,6 @@ SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
 SfxBoolItem NormalMultiPaneGUI SID_NORMAL_MULTI_PANE_GUI
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
@@ -5258,7 +4720,6 @@ SfxBoolItem NormalMultiPaneGUI SID_NORMAL_MULTI_PANE_GUI
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5268,7 +4729,6 @@ SfxBoolItem NormalMultiPaneGUI SID_NORMAL_MULTI_PANE_GUI
 SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
 
 [
-    /* flags: */
     AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5279,7 +4739,6 @@ SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
     Asynchron;
 
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5289,7 +4748,6 @@ SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
 SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5298,7 +4756,6 @@ SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5308,7 +4765,6 @@ SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
 SfxVoidItem PresentationMinimizer SID_PRESENTATION_MINIMIZER
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
@@ -5317,7 +4773,6 @@ SfxVoidItem PresentationMinimizer SID_PRESENTATION_MINIMIZER
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5327,7 +4782,6 @@ SfxVoidItem PresentationMinimizer SID_PRESENTATION_MINIMIZER
 SfxVoidItem HideLastLevel SID_HIDE_LAST_LEVEL
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5336,7 +4790,6 @@ SfxVoidItem HideLastLevel SID_HIDE_LAST_LEVEL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5346,7 +4799,6 @@ SfxVoidItem HideLastLevel SID_HIDE_LAST_LEVEL
 SfxVoidItem ShowNextLevel SID_SHOW_NEXT_LEVEL
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5355,7 +4807,6 @@ SfxVoidItem ShowNextLevel SID_SHOW_NEXT_LEVEL
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
@@ -5365,7 +4816,6 @@ SfxVoidItem ShowNextLevel SID_SHOW_NEXT_LEVEL
 SfxVoidItem NextPage SID_GO_TO_NEXT_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5374,7 +4824,6 @@ SfxVoidItem NextPage SID_GO_TO_NEXT_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5384,7 +4833,6 @@ SfxVoidItem NextPage SID_GO_TO_NEXT_PAGE
 SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5393,7 +4841,6 @@ SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5403,7 +4850,6 @@ SfxVoidItem PreviousPage SID_GO_TO_PREVIOUS_PAGE
 SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5412,7 +4858,6 @@ SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5422,7 +4867,6 @@ SfxVoidItem FirstPage SID_GO_TO_FIRST_PAGE
 SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5431,7 +4875,6 @@ SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5441,7 +4884,6 @@ SfxVoidItem LastPage SID_GO_TO_LAST_PAGE
 SfxVoidItem MovePageUp SID_MOVE_PAGE_UP
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5450,7 +4892,6 @@ SfxVoidItem MovePageUp SID_MOVE_PAGE_UP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5460,7 +4901,6 @@ SfxVoidItem MovePageUp SID_MOVE_PAGE_UP
 SfxVoidItem MovePageDown SID_MOVE_PAGE_DOWN
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5469,7 +4909,6 @@ SfxVoidItem MovePageDown SID_MOVE_PAGE_DOWN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5479,7 +4918,6 @@ SfxVoidItem MovePageDown SID_MOVE_PAGE_DOWN
 SfxVoidItem MovePageFirst SID_MOVE_PAGE_FIRST
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5488,7 +4926,6 @@ SfxVoidItem MovePageFirst SID_MOVE_PAGE_FIRST
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5498,7 +4935,6 @@ SfxVoidItem MovePageFirst SID_MOVE_PAGE_FIRST
 SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5507,7 +4943,6 @@ SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5516,7 +4951,6 @@ SfxVoidItem MovePageLast SID_MOVE_PAGE_LAST
 SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 ()
 [
-    /* flags: */
     AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
@@ -5525,7 +4959,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    /* config: */
     AccelConfig = TRUE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
