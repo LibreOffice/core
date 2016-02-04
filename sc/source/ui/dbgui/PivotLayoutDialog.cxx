@@ -512,28 +512,23 @@ void ScPivotLayoutDialog::ApplyChanges()
 
     if (pResult != nullptr)
     {
-        const SfxBoolItem* pItem = reinterpret_cast<const SfxBoolItem*>(pResult);
-
-        if (pItem)
+        // existing pivot table might have moved to a new range or a new sheet
+        if ( pOldDPObj != nullptr  )
         {
-           // existing pivot table might have moved to a new range or a new sheet
-           if ( pOldDPObj != nullptr  )
-           {
-               const ScRange& rOldRange = pOldDPObj->GetOutRange();
+            const ScRange& rOldRange = pOldDPObj->GetOutRange();
 
-               // FIXME: if the new range overlaps with the old one, the table actually doesn't move
-               // and shouldn't therefore be deleted
-               if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.In( aDestinationRange ) )
-                    || bToNewSheet )
-               {
-                   ScDPObject *pDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
-                   ScDBDocFunc aFunc( *(mpViewData->GetDocShell() ));
-                   aFunc.RemovePivotTable( *pDPObj, true, false);
-                   mpViewData->GetView()->CursorPosChanged();
-               }
-           }
-           return;
+            // FIXME: if the new range overlaps with the old one, the table actually doesn't move
+            // and shouldn't therefore be deleted
+            if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.In( aDestinationRange ) )
+                 || bToNewSheet )
+            {
+                ScDPObject *pDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+                ScDBDocFunc aFunc( *(mpViewData->GetDocShell() ));
+                aFunc.RemovePivotTable( *pDPObj, true, false);
+                mpViewData->GetView()->CursorPosChanged();
+            }
         }
+        return;
     }
 
     SetDispatcherLock(true);
