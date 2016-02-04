@@ -24,6 +24,8 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 
@@ -180,8 +182,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 {
                     rWriter.attribute("height", aScale.getY());
                 }
-
                 rWriter.attribute("text", pTextSimplePortionPrimitive2D->getText());
+                rWriter.attribute("fontcolor", convertColorToString(pTextSimplePortionPrimitive2D->getFontColor()));
                 rWriter.endElement();
             }
             break;
@@ -202,6 +204,30 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("unifiedtransparence");
 
                 rWriter.attribute("transparence", pUnifiedTransparencePrimitive2D->getTransparence());
+
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D:
+            {
+                const ObjectInfoPrimitive2D* pObjectInfoPrimitive2D = dynamic_cast<const ObjectInfoPrimitive2D*>(pBasePrimitive);
+                rWriter.startElement("objectinfo");
+
+                decomposeAndWrite(pObjectInfoPrimitive2D->getChildren(), rWriter);
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
+            {
+                const SvgRadialGradientPrimitive2D* pSvgRadialGradientPrimitive2D = dynamic_cast<const SvgRadialGradientPrimitive2D*>(pBasePrimitive);
+                rWriter.startElement("svgradialgradient");
+                basegfx::B2DPoint aFocusAttribute = pSvgRadialGradientPrimitive2D->getFocal();
+
+                rWriter.attribute("radius", pSvgRadialGradientPrimitive2D->getRadius());
+                rWriter.attribute("x", aFocusAttribute.getX());
+                rWriter.attribute("y", aFocusAttribute.getY());
 
                 rWriter.endElement();
             }
