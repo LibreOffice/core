@@ -51,7 +51,7 @@ char const * SyntaxStrings[] = {
 "\titem type item-name;\n",
 
 "\ttype definition:",
-"\tstruct | union identifier",
+"\tstruct identifier",
 "\t'{'",
 "\t\t{ type idetifier }",
 "\t'}'",

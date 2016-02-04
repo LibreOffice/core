@@ -350,12 +350,6 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         SetType( TYPE_STRUCT );
         bOk = ReadNamesSvIdl( rBase, rInStm );
     }
-    else if( pTok->Is( SvHash_union() ) )
-    {
-        SetType( TYPE_UNION );
-        if( ReadNameSvIdl( rBase, rInStm ) )
-            return true;
-    }
     else if( pTok->Is( SvHash_enum() ) )
     {
         SetType( TYPE_ENUM );
