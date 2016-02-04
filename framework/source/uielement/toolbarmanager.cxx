@@ -63,7 +63,6 @@
 #include <vcl/commandinfoprovider.hxx>
 
 #include <svtools/menuoptions.hxx>
-#include <boost/bind.hpp>
 
 //  namespaces
 
@@ -587,7 +586,10 @@ void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap
 {
     const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
     m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
-    ::std::for_each(_rIDs.begin(), _rIDs.end(), ::boost::bind(&ToolBox::SetItemImage, m_pToolBar.get(), _1,_aImage));
+    for (auto const& it : _rIDs)
+    {
+        m_pToolBar->SetItemImage(it, _aImage);
+    }
 }
 
 void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)

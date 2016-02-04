@@ -48,7 +48,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
