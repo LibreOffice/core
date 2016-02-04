@@ -62,7 +62,6 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
             rInStm.Seek( nTokPos );
         }
     }
-    aTypeLibFile.ReadSvIdl( SvHash_TypeLibFile(), rInStm );
     aModulePrefix.ReadSvIdl( SvHash_ModulePrefix(), rInStm );
 }
 
