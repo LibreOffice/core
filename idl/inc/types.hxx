@@ -83,7 +83,6 @@ class SvMetaType : public SvMetaExtern
     SvBOOL                      aOut;   // return parameter
     Svint                       aCall0, aCall1;
     SvIdentifier                aSvName;
-    SvIdentifier                aSbxName;
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
     SvIdentifier                aBasicName;
@@ -106,7 +105,7 @@ public:
             SvMetaType();
             SvMetaType( const OString& rTypeName, char cParserChar,
                                 const OString& rCName );
-            SvMetaType( const OString& rTypeName, const OString& rSbxName,
+            SvMetaType( const OString& rTypeName,
                         char cParserChar,
                         const OString& rCName, const OString& rBasicName,
                         const OString& rBasicPostfix );
@@ -143,7 +142,6 @@ public:
 
     const OString&      GetBasicName() const;
     const OString&      GetSvName() const;
-    const OString&      GetSbxName() const;
     const OString&      GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 

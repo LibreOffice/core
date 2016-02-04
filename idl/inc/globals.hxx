@@ -67,7 +67,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_import;
     SvStringHashEntryRef MM_SlotIdFile;
     SvStringHashEntryRef MM_SvName;
-    SvStringHashEntryRef MM_SbxName;
     SvStringHashEntryRef MM_ItemName;
     SvStringHashEntryRef MM_include;
     SvStringHashEntryRef MM_ExecMethod;
@@ -153,7 +152,6 @@ HASH_INLINE(HelpFile)
 HASH_INLINE(import)
 HASH_INLINE(SlotIdFile)
 HASH_INLINE(SvName)
-HASH_INLINE(SbxName)
 HASH_INLINE(include)
 HASH_INLINE(ExecMethod)
 HASH_INLINE(StateMethod)

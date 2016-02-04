@@ -208,7 +208,6 @@ SvMetaType::SvMetaType( const OString& rName, char cPC,
 }
 
 SvMetaType::SvMetaType( const OString& rName,
-                        const OString& rSbxName,
                         char cPc,
                         const OString& rCName,
                         const OString& rBasicName,
@@ -216,7 +215,6 @@ SvMetaType::SvMetaType( const OString& rName,
     CTOR
 {
     SetName( rName );
-    aSbxName.setString(rSbxName);
     cParserChar = cPc;
     aCName.setString(rCName);
     aBasicName.setString(rBasicName);
@@ -342,14 +340,6 @@ const OString& SvMetaType::GetSvName() const
         return static_cast<SvMetaType *>(GetRef())->GetSvName();
 }
 
-const OString& SvMetaType::GetSbxName() const
-{
-    if( aSbxName.IsSet() || !GetRef() )
-        return aSbxName.getString();
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetSbxName();
-}
-
 const OString& SvMetaType::GetCName() const
 {
     if( aCName.IsSet() || !GetRef() )
@@ -361,7 +351,6 @@ const OString& SvMetaType::GetCName() const
 bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
 {
     aSvName.setString(rName);
-    aSbxName.setString(rName);
     aCName.setString(rName);
     return SvMetaReference::SetName( rName, pBase );
 }
@@ -463,7 +452,6 @@ void SvMetaType::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaExtern::ReadAttributesSvIdl( rBase, rInStm );
     aSvName.ReadSvIdl( SvHash_SvName(), rInStm );
-    aSbxName.ReadSvIdl( SvHash_SbxName(), rInStm );
 }
 
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
@@ -609,7 +597,7 @@ OString SvMetaType::GetParserString() const
 }
 
 SvMetaTypeString::SvMetaTypeString()
-    : SvMetaType( "String", "SbxSTRING", 's', "char *", "String", "$" )
+    : SvMetaType( "String", 's', "char *", "String", "$" )
 {
 }
 
@@ -685,7 +673,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 }
 
 SvMetaTypevoid::SvMetaTypevoid()
-    : SvMetaType( "void", "SbxVOID", 'v', "void", "", "" )
+    : SvMetaType( "void", 'v', "void", "", "" )
 {
 }
 
