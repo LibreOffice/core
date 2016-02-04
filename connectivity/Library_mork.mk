@@ -25,8 +25,6 @@ $(eval $(call gb_Library_use_custom_headers,mork,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_external,mork,boost_headers))
-
 $(eval $(call gb_Library_use_libraries,mork, \
     comphelper \
     cppu \

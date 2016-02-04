@@ -33,7 +33,6 @@
  */
 
 #include "MorkParser.hxx"
-#include <boost/io/ios_state.hpp>
 #include <stdlib.h>
 #include <sstream>
 #include <string>
@@ -601,11 +600,6 @@ std::string &MorkParser::getColumn( int oid )
 
 void MorkParser::retrieveLists(std::set<std::string>& lists)
 {
-#ifdef VERBOSE
-    boost::io::ios_all_saver ias(std::cout);
-    std::cout << std::hex << std::uppercase;
-#endif
-
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
     for (MorkTableMap::Map::iterator TableIter = tables->map.begin();
@@ -643,11 +637,6 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 
 void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>& records)
 {
-#ifdef VERBOSE
-    boost::io::ios_all_saver ias(std::cout);
-    std::cout << std::hex << std::uppercase;
-#endif
-
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
     for (MorkTableMap::Map::iterator TableIter = tables->map.begin();
@@ -696,9 +685,6 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
 
 void MorkParser::dump()
 {
-    boost::io::ios_all_saver ias(std::cout);
-    std::cout << std::hex << std::uppercase;
-
     std::cout << "Column Dict:\r\n";
     std::cout << "=============================================\r\n\r\n";
 
