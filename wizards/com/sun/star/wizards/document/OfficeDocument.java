@@ -66,7 +66,7 @@ public class OfficeDocument
                 Desktop.dispatchURL(xMSF, ".uno:CloseDoc", xFrame);
             }
         }
-        catch (PropertyVetoException exception)
+        catch (Exception exception)
         {
             exception.printStackTrace(System.err);
         }

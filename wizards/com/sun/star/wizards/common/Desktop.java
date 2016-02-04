@@ -82,33 +82,25 @@ public class Desktop
         return null;
     }
 
-    private static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL)
+    private static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL) throws com.sun.star.uno.Exception
     {
-        try
-        {
-            Object oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer");
-            XURLTransformer xTransformer = UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
-            com.sun.star.util.URL[] oURL = new com.sun.star.util.URL[1];
-            oURL[0] = new com.sun.star.util.URL();
-            oURL[0].Complete = _sURL;
-            xTransformer.parseStrict(oURL);
-            return oURL[0];
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-        return null;
+        Object oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer");
+        XURLTransformer xTransformer = UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
+        com.sun.star.util.URL[] oURL = new com.sun.star.util.URL[1];
+        oURL[0] = new com.sun.star.util.URL();
+        oURL[0].Complete = _sURL;
+        xTransformer.parseStrict(oURL);
+        return oURL[0];
     }
 
-    private static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe)
+    private static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe) throws com.sun.star.uno.Exception
     {
         com.sun.star.util.URL oURL = getDispatchURL(xMSF, sURL);
         XDispatch xDispatch = getDispatcher(xFrame, _stargetframe, oURL);
         dispatchURL(xDispatch, oURL);
     }
 
-    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame)
+    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame) throws com.sun.star.uno.Exception
     {
         dispatchURL(xMSF, sURL, xFrame, PropertyNames.EMPTY_STRING);
     }
