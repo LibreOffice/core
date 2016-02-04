@@ -113,14 +113,6 @@ public class DBTools {
         * Representation of <code>'IsPasswordRequired'</code> property.
         */
         public Boolean IsPasswordRequired = null ;
-        /**
-        * Representation of <code>'IsReadOnly'</code> property.
-        */
-        private Boolean IsReadOnly = null ;
-        /**
-        * Representation of <code>'TableFilter'</code> property.
-        */
-        private String[] TableFilter = null ;
 
         /**
         * Creates new <code>com.sun.star.sdb.DataSource</code> service
@@ -141,9 +133,6 @@ public class DBTools {
             if (User != null) props.setPropertyValue("User", User) ;
             if (Password != null) props.setPropertyValue("Password", Password) ;
             if (IsPasswordRequired != null) props.setPropertyValue("IsPasswordRequired", IsPasswordRequired) ;
-            if (IsReadOnly != null) props.setPropertyValue("IsReadOnly", IsReadOnly) ;
-            if (TableFilter != null) props.setPropertyValue("TableFilter", TableFilter) ;
-
             return src ;
         }
     }
