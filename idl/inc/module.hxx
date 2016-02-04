@@ -29,7 +29,6 @@ class SvMetaModule : public SvMetaExtern
     SvMetaTypeMemberList        aTypeList;
     SvMetaAttributeMemberList   aAttrList;
 // browser
-    SvString                aHelpFileName;
     SvString                aSlotIdFile;
     SvString                aModulePrefix;
 

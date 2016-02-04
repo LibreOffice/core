@@ -63,7 +63,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_PseudoSlots;
     SvStringHashEntryRef MM_map;
     SvStringHashEntryRef MM_Default;
-    SvStringHashEntryRef MM_HelpFile;
     SvStringHashEntryRef MM_import;
     SvStringHashEntryRef MM_SlotIdFile;
     SvStringHashEntryRef MM_ItemName;
@@ -147,7 +146,6 @@ HASH_INLINE(BYTE)
 HASH_INLINE(item)
 HASH_INLINE(PseudoSlots)
 HASH_INLINE(Default)
-HASH_INLINE(HelpFile)
 HASH_INLINE(import)
 HASH_INLINE(SlotIdFile)
 HASH_INLINE(include)

@@ -48,7 +48,6 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaExtern::ReadAttributesSvIdl( rBase, rInStm );
 
-    aHelpFileName.ReadSvIdl( SvHash_HelpFile(), rInStm );
     if( aSlotIdFile.ReadSvIdl( SvHash_SlotIdFile(), rInStm ) )
     {
         sal_uInt32 nTokPos = rInStm.Tell();
