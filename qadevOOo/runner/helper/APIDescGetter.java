@@ -361,9 +361,12 @@ public class APIDescGetter extends DescGetter
             {
                 parent.hasErrorMsg = true;
                 parent.ErrorMsg = "IOException while reading the description";
-
-                return null;
+                break;
             }
+        }
+
+        if (ifcDesc == null) {
+            return null;
         }
 
         ifcDesc.SubEntries = getDescArray(meth_names.toArray());
