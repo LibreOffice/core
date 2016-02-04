@@ -25,9 +25,9 @@
 
 /** The accessible drop down combobox has two children.  The first is the
     text field represented by an object of the
-    <type>VCLXAccessibleTextField</type> class which can not be edited.  The
+    VCLXAccessibleTextField class which can not be edited.  The
     second is the list containing all items and is represented by an object
-    of the <type>VCLXAccessibleListBoxList</type> class which does support
+    of the VCLXAccessibleListBoxList class which does support
     selection.
 */
 class VCLXAccessibleDropDownListBox : public VCLXAccessibleBox

@@ -169,7 +169,7 @@ public:
     // XAccessibleComponent ---------------------------------------------------
 
     /** @return
-        <TRUE/>, if the point lies within the bounding box of this object. */
+        TRUE, if the point lies within the bounding box of this object. */
     virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& rPoint )
         throw ( css::uno::RuntimeException, std::exception ) override;
 
@@ -255,7 +255,7 @@ public:
             sal_Int16 nEventId,
             const css::uno::Any& rNewValue,
             const css::uno::Any& rOldValue );
-    /** @return  <TRUE/>, if the object is not disposed or disposing. */
+    /** @return  TRUE, if the object is not disposed or disposing. */
     bool isAlive() const;
 
 protected:
@@ -265,7 +265,7 @@ protected:
         its parent accessible window. Derived classes may implement different
         behaviour.
         @attention  This method requires locked mutex's and a living object.
-        @return  <TRUE/>, if the object is really showing. */
+        @return  TRUE, if the object is really showing. */
     bool implIsShowing();
 
     /** Derived classes return the bounding box relative to the parent window.

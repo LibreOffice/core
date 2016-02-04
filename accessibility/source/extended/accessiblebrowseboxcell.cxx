@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/accessiblebrowseboxcell.hxx"
+#include <sal/types.h>
 #include <svtools/accessibletableprovider.hxx>
+#include <accessibility/extended/accessiblebrowseboxcell.hxx>
 
 namespace accessibility
 {
@@ -29,9 +30,9 @@ namespace accessibility
 
     // AccessibleBrowseBoxCell
     AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
-            const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox,
-            const Reference< XWindow >& _xFocusWindow,
-            sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleBrowseBoxObjType _eType )
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::svt::IAccessibleTableProvider& _rBrowseBox,
+            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+            sal_Int32 _nRowPos, sal_uInt16 _nColPos, ::svt::AccessibleBrowseBoxObjType _eType )
         :AccessibleBrowseBoxBase( _rxParent, _rBrowseBox, _xFocusWindow, _eType )
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )

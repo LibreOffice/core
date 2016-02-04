@@ -85,7 +85,7 @@ namespace accessibility
         osl_atomic_decrement( &m_refCount );
     }
 
-    void AccessibleIconChoiceCtrlEntry::disposing( const EventObject& _rSource )
+    void AccessibleIconChoiceCtrlEntry::disposing( const css::lang::EventObject& _rSource )
 throw(RuntimeException, std::exception)
     {
         if ( _rSource.Source == m_xParent )

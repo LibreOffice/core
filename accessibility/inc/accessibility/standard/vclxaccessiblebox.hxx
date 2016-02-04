@@ -37,7 +37,7 @@ typedef ::cppu::ImplHelper3<
 
 /** Base class for list- and combo boxes.  This class manages the box'
     children.  The classed derived from this one have only to implement the
-    <member>IsValid</member> method and return the correct implementation name.
+    IsValid method and return the correct implementation name.
 */
 class VCLXAccessibleBox
     : public VCLXAccessibleComponent,
@@ -47,7 +47,7 @@ public:
     enum BoxType {COMBOBOX, LISTBOX};
 
     /** The constructor is initialized with the box type which may be
-        either <const>COMBOBOX</const> or <const>LISTBOX</const> and a flag
+        either COMBOBOX or LISTBOX and a flag
         indicating whether the box is a drop down box.
     */
     VCLXAccessibleBox (VCLXWindow* pVCLXindow, BoxType aType, bool bIsDropDownBox);
@@ -74,14 +74,13 @@ public:
     sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (css::uno::RuntimeException, std::exception) override;
     /** For drop down list boxes the text field is a not editable
-        <type>VCLXAccessibleTextField</type>, for combo boxes it is an
-        editable <type>VLCAccessibleEdit</type>.
+        VCLXAccessibleTextField, for combo boxes it is an
+        editable VLCAccessibleEdit.
     */
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
         throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    /** The role is always <const
-        scope="com::sun::star::accessibility">AccessibleRole::COMBO_BOX</const>.
+    /** The role is always AccessibleRole::COMBO_BOX.
     */
     sal_Int16 SAL_CALL getAccessibleRole()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -102,7 +101,7 @@ public:
         throw (css::lang::IndexOutOfBoundsException,
             css::uno::RuntimeException, std::exception) override;
     /** The returned string is associated with resource
-        <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
+        RID_STR_ACC_ACTION_TOGGLEPOPUP.
     */
     virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException,
@@ -168,7 +167,7 @@ protected:
 
     virtual ~VCLXAccessibleBox();
 
-    /** Returns </true> when the object is valid.
+    /** Returns true when the object is valid.
     */
     virtual bool IsValid() const = 0;
 

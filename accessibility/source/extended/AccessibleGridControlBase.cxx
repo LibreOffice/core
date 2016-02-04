@@ -17,18 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/AccessibleGridControlBase.hxx"
+#include <accessibility/extended/AccessibleGridControlBase.hxx>
 #include <svtools/accessibletable.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sal/types.h>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-
-
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
@@ -39,17 +37,15 @@ using namespace ::svt;
 using namespace ::svt::table;
 
 
-
-
 namespace accessibility {
 
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
 
 AccessibleGridControlBase::AccessibleGridControlBase(
-        const Reference< XAccessible >& rxParent,
-        svt::table::IAccessibleTable& rTable,
-        AccessibleTableControlObjType      eObjType ) :
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        ::svt::table::IAccessibleTable& rTable,
+        ::svt::table::AccessibleTableControlObjType      eObjType ) :
     AccessibleGridControlImplHelper( m_aMutex ),
     m_xParent( rxParent ),
     m_aTable( rTable),
@@ -85,9 +81,9 @@ void SAL_CALL AccessibleGridControlBase::disposing()
     //m_aTable = NULL;
 }
 
-// XAccessibleContext ---------------------------------------------------------
+// css::accessibility::XAccessibleContext
 
-Reference< XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()
+css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()
     throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
@@ -106,16 +102,16 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
     // -1 for child not found/no parent (according to specification)
     sal_Int32 nRet = -1;
 
-    Reference< uno::XInterface > xMeMyselfAndI( static_cast< XAccessibleContext* >( this ), uno::UNO_QUERY );
+    css::uno::Reference< uno::XInterface > xMeMyselfAndI( static_cast< css::accessibility::XAccessibleContext* >( this ), uno::UNO_QUERY );
 
     //  iterate over parent's children and search for this object
     if( m_xParent.is() )
     {
-        Reference< XAccessibleContext >
+        css::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
-        Reference< uno::XInterface > xChild;
+        css::uno::Reference< uno::XInterface > xChild;
 
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
             for( sal_Int32 nChild = 0; nChild < nChildCount; ++nChild )
@@ -150,7 +146,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
     return m_aName;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleRelationSet()
     throw ( uno::RuntimeException, std::exception )
 {
@@ -161,7 +157,7 @@ AccessibleGridControlBase::getAccessibleRelationSet()
    return new utl::AccessibleRelationSetHelper;
 }
 
-Reference< XAccessibleStateSet > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleStateSet()
     throw ( uno::RuntimeException, std::exception )
 {
@@ -179,7 +175,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     ensureIsAlive();
     if( m_xParent.is() )
     {
-        Reference< XAccessibleContext >
+        css::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
         return xParentContext->getLocale();
@@ -187,7 +183,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-// XAccessibleComponent -------------------------------------------------------
+// css::accessibility::XAccessibleComponent
 
 sal_Bool SAL_CALL AccessibleGridControlBase::containsPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException, std::exception )
@@ -219,10 +215,10 @@ awt::Size SAL_CALL AccessibleGridControlBase::getSize()
     return AWTSize( getBoundingBox().GetSize() );
 }
 
-// XAccessibleEventBroadcaster ------------------------------------------------
+// css::accessibility::XAccessibleEventBroadcaster
 
 void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
-        const Reference< XAccessibleEventListener>& _rxListener )
+        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException, std::exception )
 {
     if ( _rxListener.is() )
@@ -237,7 +233,7 @@ void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
 }
 
 void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
-        const Reference< XAccessibleEventListener>& _rxListener )
+        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException, std::exception )
 {
     if( _rxListener.is() && getClientId( ) )
@@ -258,7 +254,7 @@ void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
     }
 }
 
-// XTypeProvider --------------------------------------------------------------
+// XTypeProvider
 
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
@@ -266,7 +262,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// XServiceInfo ---------------------------------------------------------------
+// XServiceInfo
 
 sal_Bool SAL_CALL AccessibleGridControlBase::supportsService(
         const OUString& rServiceName )
@@ -281,14 +277,14 @@ Sequence< OUString > SAL_CALL AccessibleGridControlBase::getSupportedServiceName
     const OUString aServiceName( "com.sun.star.accessibility.AccessibleContext" );
     return Sequence< OUString >( &aServiceName, 1 );
 }
-// internal virtual methods ---------------------------------------------------
+// internal virtual methods
 
 bool AccessibleGridControlBase::implIsShowing()
 {
     bool bShowing = false;
     if( m_xParent.is() )
     {
-        Reference< XAccessibleComponent >
+        css::uno::Reference< css::accessibility::XAccessibleComponent >
             xParentComp( m_xParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().IsOver(
@@ -315,7 +311,7 @@ bool AccessibleGridControlBase::implIsShowing()
     return pStateSetHelper;
 }
 
-// internal helper methods ----------------------------------------------------
+// internal helper methods
 
 bool AccessibleGridControlBase::isAlive() const
 {
@@ -406,7 +402,7 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     return nRole;
 }
 
-Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
+css::uno::Reference<css::accessibility::XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {
     return nullptr;
@@ -455,22 +451,22 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (css::uno:
 }
 
 
-GridControlAccessibleElement::GridControlAccessibleElement( const Reference< XAccessible >& rxParent,
-                        IAccessibleTable& rTable,
-                        AccessibleTableControlObjType  eObjType )
+GridControlAccessibleElement::GridControlAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+                        ::svt::table::IAccessibleTable& rTable,
+                        ::svt::table::AccessibleTableControlObjType  eObjType )
     :AccessibleGridControlBase( rxParent, rTable, eObjType )
 {
 }
 
-// XInterface -----------------------------------------------------------------
+// XInterface
 IMPLEMENT_FORWARD_XINTERFACE2( GridControlAccessibleElement, AccessibleGridControlBase, GridControlAccessibleElement_Base)
 
-// XTypeProvider --------------------------------------------------------------
+// XTypeProvider
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridControlAccessibleElement, AccessibleGridControlBase, GridControlAccessibleElement_Base )
 
-// XAccessible ----------------------------------------------------------------
+// css::accessibility::XAccessible
 
-Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException, std::exception )
+css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 

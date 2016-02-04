@@ -45,13 +45,13 @@ namespace accessibility {
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
 
-// Ctor/Dtor/disposing --------------------------------------------------------
+// Ctor/Dtor/disposing
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-        const Reference< XAccessible >& rxParent,
-        IAccessibleTableProvider&                      rBrowseBox,
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        ::svt::IAccessibleTableProvider&                      rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        AccessibleBrowseBoxObjType      eObjType ) :
+        ::svt::AccessibleBrowseBoxObjType      eObjType ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
     mxParent( rxParent ),
     mpBrowseBox( &rBrowseBox ),
@@ -66,10 +66,10 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
 }
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-        const Reference< XAccessible >& rxParent,
-        IAccessibleTableProvider&                      rBrowseBox,
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        ::svt::IAccessibleTableProvider&                      rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        AccessibleBrowseBoxObjType      eObjType,
+        ::svt::AccessibleBrowseBoxObjType      eObjType,
         const OUString&          rName,
         const OUString&          rDescription ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
@@ -115,9 +115,9 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
     mpBrowseBox = nullptr;
 }
 
-// XAccessibleContext ---------------------------------------------------------
+// css::accessibility::XAccessibleContext
 
-Reference< XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
+Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
     throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
@@ -134,16 +134,16 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
     // -1 for child not found/no parent (according to specification)
     sal_Int32 nRet = -1;
 
-    Reference< uno::XInterface > xMeMyselfAndI( static_cast< XAccessibleContext* >( this ), uno::UNO_QUERY );
+    css::uno::Reference< uno::XInterface > xMeMyselfAndI( static_cast< css::accessibility::XAccessibleContext* >( this ), uno::UNO_QUERY );
 
     //  iterate over parent's children and search for this object
     if( mxParent.is() )
     {
-        Reference< XAccessibleContext >
+        css::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( mxParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
-            Reference< uno::XInterface > xChild;
+            css::uno::Reference< uno::XInterface > xChild;
 
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
             for( sal_Int32 nChild = 0; nChild < nChildCount; ++nChild )
@@ -177,7 +177,7 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
     return maName;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL
+Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleRelationSet()
     throw ( uno::RuntimeException, std::exception )
 {
@@ -186,7 +186,7 @@ AccessibleBrowseBoxBase::getAccessibleRelationSet()
        return new utl::AccessibleRelationSetHelper;
 }
 
-Reference< XAccessibleStateSet > SAL_CALL
+Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleStateSet()
     throw ( uno::RuntimeException, std::exception )
 {
@@ -203,7 +203,7 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
     ensureIsAlive();
     if( mxParent.is() )
     {
-        Reference< XAccessibleContext >
+        css::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( mxParent->getAccessibleContext() );
         if( xParentContext.is() )
             return xParentContext->getLocale();
@@ -211,9 +211,9 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-// XAccessibleComponent -------------------------------------------------------
+// css::accessibility::XAccessibleComponent
 
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const awt::Point& rPoint )
+sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const css::awt::Point& rPoint )
     throw ( uno::RuntimeException, std::exception )
 {
     return Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
@@ -261,10 +261,10 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& ) 
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);
 }
-// XAccessibleEventBroadcaster ------------------------------------------------
+// css::accessibility::XAccessibleEventBroadcaster
 
 void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
-        const Reference< XAccessibleEventListener>& _rxListener )
+        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException, std::exception )
 {
     if ( _rxListener.is() )
@@ -278,7 +278,7 @@ void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
 }
 
 void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
-        const Reference< XAccessibleEventListener>& _rxListener )
+        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException, std::exception )
 {
     if( _rxListener.is() && getClientId( ) )
@@ -299,7 +299,7 @@ void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
     }
 }
 
-// XTypeProvider --------------------------------------------------------------
+// XTypeProvider
 
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
@@ -307,7 +307,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// XServiceInfo ---------------------------------------------------------------
+// XServiceInfo
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
@@ -323,7 +323,7 @@ Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames(
     return Sequence< OUString >( &aServiceName, 1 );
 }
 
-// other public methods -------------------------------------------------------
+// other public methods
 
 void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )
 {
@@ -355,14 +355,14 @@ void AccessibleBrowseBoxBase::setAccessibleDescription( const OUString& rDescrip
         aOld );
 }
 
-// internal virtual methods ---------------------------------------------------
+// internal virtual methods
 
 bool AccessibleBrowseBoxBase::implIsShowing()
 {
     bool bShowing = false;
     if( mxParent.is() )
     {
-        Reference< XAccessibleComponent >
+        css::uno::Reference< css::accessibility::XAccessibleComponent >
             xParentComp( mxParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().IsOver(
@@ -390,7 +390,7 @@ bool AccessibleBrowseBoxBase::implIsShowing()
     return pStateSetHelper;
 }
 
-// internal helper methods ----------------------------------------------------
+// internal helper methods
 
 bool AccessibleBrowseBoxBase::isAlive() const
 {
@@ -540,30 +540,30 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (css::uno::R
 }
 
 
-// XInterface -----------------------------------------------------------------
+// XInterface
 IMPLEMENT_FORWARD_XINTERFACE2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
 
-// XTypeProvider --------------------------------------------------------------
+// XTypeProvider
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
 
-// XAccessible ----------------------------------------------------------------
+// css::accessibility::XAccessible
 
-Reference< XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException, std::exception )
+Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
     return this;
 }
 
 
-BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
-        const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType )
+BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::svt::IAccessibleTableProvider& rBrowseBox,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, ::svt::AccessibleBrowseBoxObjType  eObjType )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType )
 {
 }
 
 
-BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
-        const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
+BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::svt::IAccessibleTableProvider& rBrowseBox,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, ::svt::AccessibleBrowseBoxObjType  eObjType,
         const OUString& rName, const OUString& rDescription )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription )
 {

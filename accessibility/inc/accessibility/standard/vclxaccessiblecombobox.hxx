@@ -26,9 +26,9 @@
 
 
 /** The accessible combobox has two children.  The first is the text field
-    represented by an object of the <type>VCLXAccessibleEdit</type> class.
+    represented by an object of the VCLXAccessibleEdit class.
     The second is the list containing all items and is represented by an
-    object of the <type>VCLXAccessibleList</type> class which does not
+    object of the VCLXAccessibleList class which does not
     support selection at the moment.
 */
 class VCLXAccessibleComboBox

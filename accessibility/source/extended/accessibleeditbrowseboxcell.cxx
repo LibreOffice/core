@@ -33,11 +33,11 @@ namespace accessibility
     using namespace ::svt;
 
     EditBrowseBoxTableCell::EditBrowseBoxTableCell(
-                const css::uno::Reference< XAccessible >& _rxParent,
-                const css::uno::Reference< XAccessible >& _rxOwningAccessible,
-                const css::uno::Reference< XAccessibleContext >& _xControlChild,
-                IAccessibleTableProvider& _rBrowseBox,
-                const Reference< XWindow >& _xFocusWindow,
+                const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+                const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
+                const css::uno::Reference< css::accessibility::XAccessibleContext >& _xControlChild,
+                ::svt::IAccessibleTableProvider& _rBrowseBox,
+                const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos)
         :AccessibleBrowseBoxCell( _rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos )
@@ -69,11 +69,11 @@ namespace accessibility
         commitEvent( _rEvent.EventId, _rEvent.NewValue, _rEvent.OldValue );
     }
 
-    // XAccessibleComponent
+    // css::accessibility::XAccessibleComponent
     sal_Int32 SAL_CALL EditBrowseBoxTableCell::getForeground(  ) throw (RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
-        Reference< XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
+        css::uno::Reference< css::accessibility::XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
         if ( xAccComp.is() )
             return xAccComp->getForeground();
         return 0;
@@ -82,13 +82,13 @@ namespace accessibility
     sal_Int32 SAL_CALL EditBrowseBoxTableCell::getBackground(  ) throw (RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
-        Reference< XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
+        css::uno::Reference< css::accessibility::XAccessibleComponent > xAccComp( m_xInnerContext, UNO_QUERY );
         if ( xAccComp.is() )
             return xAccComp->getBackground();
         return 0;
     }
 
-    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleParent(  ) throw (RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
         return m_xParentAccessible;
     }
@@ -107,13 +107,13 @@ namespace accessibility
         return "Column " + OUString::number(getColumnPos()-1) + ", Row " + OUString::number(getRowPos());
     }
 
-    Reference< XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
+    css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
         return baseGetAccessibleRelationSet( );
     }
 
-    Reference<XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException, std::exception )
+    css::uno::Reference<css::accessibility::XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
         return m_xInnerContext->getAccessibleStateSet();
@@ -126,7 +126,7 @@ namespace accessibility
         return baseGetAccessibleChildCount();
     }
 
-    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
         return baseGetAccessibleChild( i );
@@ -146,7 +146,7 @@ namespace accessibility
         AccessibleBrowseBoxCell::dispose();
     }
 
-    void SAL_CALL EditBrowseBoxTableCell::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
+    void SAL_CALL EditBrowseBoxTableCell::disposing( const css::lang::EventObject& _rSource ) throw (RuntimeException, std::exception)
     {
         AccessibleBrowseBoxCell::disposing( _rSource );
         OAccessibleContextWrapperHelper::disposing( _rSource );
@@ -162,9 +162,9 @@ namespace accessibility
 
     // EditBrowseBoxTableCell
     EditBrowseBoxTableCellAccess::EditBrowseBoxTableCellAccess(
-            const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxControlAccessible,
-            const Reference< XWindow >& _rxFocusWindow,
-            IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
+            const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
+            ::svt::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
         :WeakComponentImplHelper( m_aMutex )
         ,m_xParent( _rxParent )
         ,m_xControlAccessible( _rxControlAccessible )
@@ -179,15 +179,15 @@ namespace accessibility
     {
     }
 
-    Reference< XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  ) throw (RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  ) throw (RuntimeException, std::exception)
     {
         if ( !m_pBrowseBox || !m_xControlAccessible.is() )
             throw DisposedException();
-        Reference< XAccessibleContext > xMyContext( m_aContext );
+        css::uno::Reference< css::accessibility::XAccessibleContext > xMyContext( m_aContext );
         if ( !xMyContext.is() )
         {
-            Reference< XAccessibleContext > xInnerContext = m_xControlAccessible->getAccessibleContext();
-            Reference< XAccessible > xMe( this );
+            css::uno::Reference< css::accessibility::XAccessibleContext > xInnerContext = m_xControlAccessible->getAccessibleContext();
+            css::uno::Reference< css::accessibility::XAccessible > xMe( this );
 
             xMyContext = new EditBrowseBoxTableCell( m_xParent, xMe, xInnerContext, *m_pBrowseBox, m_xFocusWindow, m_nRowPos, m_nColPos );
             m_aContext = xMyContext;
@@ -198,7 +198,7 @@ namespace accessibility
     void SAL_CALL EditBrowseBoxTableCellAccess::disposing()
     {
         // dispose our context, if it still alive
-        Reference< XComponent > xMyContext( m_aContext.get(), UNO_QUERY );
+        css::uno::Reference< XComponent > xMyContext( m_aContext.get(), UNO_QUERY );
         if ( xMyContext.is() )
         {
             try
@@ -215,7 +215,7 @@ namespace accessibility
         m_pBrowseBox = nullptr;
         m_xControlAccessible.clear();
         m_aContext.clear();
-        // NO dispose of the inner object there: it is the XAccessible of an window, and disposing
+        // NO dispose of the inner object there: it is the css::accessibility::XAccessible of an window, and disposing
         // it would delete the respective VCL window
     }
 } // namespace accessibility

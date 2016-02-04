@@ -61,7 +61,7 @@ public:
                             css::accessibility::XAccessible >& _xParent);
 
     /** The index that is passed to this method is returned on following
-        calls to <member>getAccessibleIndexInParent</member>.
+        calls to getAccessibleIndexInParent.
     */
     void SetIndexInParent (sal_Int32 nIndex);
 
@@ -103,7 +103,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     /** The index returned as index in parent is always the one set with the
-        <member>SetIndexInParent()</member> method.
+        SetIndexInParent() method.
     */
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -158,8 +158,8 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     /** This method adds the states
-        <const>AccessibleStateType::FOCUSABLE</const> and possibly
-        <const>AccessibleStateType::MULTI_SELECTABLE</const> to the state set
+        AccessibleStateType::FOCUSABLE and possibly
+        AccessibleStateType::MULTI_SELECTABLE to the state set
         of the base classes.
     */
     virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) override;
@@ -173,8 +173,7 @@ protected:
     /** Call this method when the item list has been changed, i.e. items
         have been deleted or inserted.
         @param bItemInserted
-            Indicate whether items have been inserted (<TRUE/>) or removed
-            (<FALSE/>).
+            Indicate whether items have been inserted (TRUE) or removed (FALSE).
         @param nIndex
             Index of the new or removed item.  A value of -1 indicates that
             the whole list has been cleared.
@@ -185,7 +184,7 @@ protected:
     virtual css::awt::Rectangle implGetBounds(  ) throw (css::uno::RuntimeException) override;
 
 private:
-    /** We need to save the accessible parent to return it in <type>getAccessibleParent()</type>,
+    /** We need to save the accessible parent to return it in getAccessibleParent(),
         because this method of the base class returns the wrong parent.
     */
     css::uno::Reference< css::accessibility::XAccessible >  m_xParent;

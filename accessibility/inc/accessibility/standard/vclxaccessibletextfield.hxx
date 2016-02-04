@@ -24,13 +24,11 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-typedef ::cppu::ImplHelper1<
-    css::accessibility::XAccessible
-    > VCLXAccessible_BASE;
+typedef ::cppu::ImplHelper1< css::accessibility::XAccessible > VCLXAccessible_BASE;
 
 
 /** This class represents non editable text fields.  The object passed to
-    the constructor is expected to be a list (a <type>ListBox</type> to be
+    the constructor is expected to be a list (a ListBox to be
     more specific).  From this always the selected item is token to be made
     accessible by this class.  When the selected item changes then also the
     exported text changes.
@@ -78,12 +76,12 @@ protected:
     virtual ~VCLXAccessibleTextField();
 
     /** With this method the text of the currently selected item is made
-        available to the <type>VCLXAccessibleTextComponent</type> base class.
+        available to the VCLXAccessibleTextComponent base class.
     */
     OUString implGetText() override;
 
 private:
-    /** We need to save the accessible parent to return it in <type>getAccessibleParent()</type>,
+    /** We need to save the accessible parent to return it in getAccessibleParent(),
         because this method of the base class returns the wrong parent.
     */
     css::uno::Reference< css::accessibility::XAccessible >  m_xParent;

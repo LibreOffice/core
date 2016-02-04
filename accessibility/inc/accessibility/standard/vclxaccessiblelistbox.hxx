@@ -28,7 +28,7 @@
 
 /** The accessible drop down combobox has one children.  It is the list
     containing all items and is represented by an object of the
-    <type>VCLXAccessibleListBoxList</type> class which does support
+    VCLXAccessibleListBoxList class which does support
     selection.
 */
 class VCLXAccessibleListBox : public VCLXAccessibleBox
