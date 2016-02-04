@@ -156,9 +156,11 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             std::none_of(pRGBStart,pRGBEnd,&rangeCheck));
 
     CPPUNIT_ASSERT_MESSAGE( "First pixel is not white",
-                            pRGBStart[0].Red == 1.0 && pRGBStart[0].Green == 1.0 && pRGBStart[0].Blue == 1.0);
+                            rtl::math::approxEqual(pRGBStart[0].Red, 1.0) &&
+                            rtl::math::approxEqual(pRGBStart[0].Green, 1.0) &&
+                            rtl::math::approxEqual(pRGBStart[0].Blue, 1.0) );
     CPPUNIT_ASSERT_MESSAGE( "Second pixel is not opaque",
-                            pARGBStart[1].Alpha == 1.0);
+                            rtl::math::approxEqual(pARGBStart[1].Alpha, 1.0) );
     if( aContainedBmpEx.IsTransparent() )
     {
         CPPUNIT_ASSERT_MESSAGE( "First pixel is not fully transparent",
@@ -198,9 +200,9 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     }
 
     CPPUNIT_ASSERT_MESSAGE( "150th pixel is not white",
-                            pRGBStart[150].Red == 1.0 &&
-                            pRGBStart[150].Green == 1.0 &&
-                            pRGBStart[150].Blue == 1.0);
+                            rtl::math::approxEqual(pRGBStart[150].Red, 1.0) &&
+                            rtl::math::approxEqual(pRGBStart[150].Green, 1.0) &&
+                            rtl::math::approxEqual(pRGBStart[150].Blue, 1.0) );
 
     if( nOriginalDepth > 8 )
     {
