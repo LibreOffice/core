@@ -33,7 +33,6 @@
 #include <com/sun/star/table/XAutoFormattable.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 
 #include <comphelper/uno3.hxx>
 
@@ -447,16 +446,14 @@ class SwXCellRange : public cppu::WeakImplHelper
     css::chart::XChartDataArray,
     css::util::XSortable,
     css::sheet::XCellRangeData
->,
-    public SwClient
+>
 {
-    ::osl::Mutex m_Mutex;
-    ::comphelper::OInterfaceContainerHelper2 m_ChartListeners;
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     SwRangeDescriptor           aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
-
-    sw::UnoCursorPointer m_pTableCursor;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
@@ -464,11 +461,16 @@ class SwXCellRange : public cppu::WeakImplHelper
     css::uno::Sequence<OUString> getLabelDescriptions(bool bRow);
     void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
 
-public:
     SwXCellRange(sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
+    virtual ~SwXCellRange();
+
+public:
+    static ::rtl::Reference<SwXCellRange> CreateXCellRange(
+            sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat,
+            SwRangeDescriptor& rDesc);
+
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
-    virtual ~SwXCellRange() {};
     std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 
 
@@ -533,10 +535,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
-
-    SwFrameFormat*   GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     sal_uInt16      getRowCount();
     sal_uInt16      getColumnCount();
 
