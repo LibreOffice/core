@@ -82,7 +82,6 @@ class SvMetaType : public SvMetaExtern
     SvBOOL                      aIn;    // input parameter
     SvBOOL                      aOut;   // return parameter
     Svint                       aCall0, aCall1;
-    SvIdentifier                aSvName;
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
     SvIdentifier                aBasicName;
@@ -97,7 +96,6 @@ class SvMetaType : public SvMetaExtern
 protected:
     bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
                                          SvTokenStream & rInStm );
-    virtual void ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -141,7 +139,6 @@ public:
                         { aBasicName.setString(rName); }
 
     const OString&      GetBasicName() const;
-    const OString&      GetSvName() const;
     const OString&      GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
