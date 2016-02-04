@@ -101,12 +101,6 @@ protected:
             }
     void    SetRecordAbsolute( bool bSet )
             { aRecordAbsolute = bSet; }
-    void    SetAllConfig( bool bSet )
-            {
-                aMenuConfig     = bSet;
-                aToolBoxConfig  = bSet;
-                aAccelConfig    = bSet;
-            }
 
 public:
             SvMetaObject *  MakeClone() const;

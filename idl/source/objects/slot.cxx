@@ -254,9 +254,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aToolBoxConfig.ReadSvIdl( SvHash_ToolBoxConfig(), rInStm );
     bOk |= aAccelConfig.ReadSvIdl( SvHash_AccelConfig(), rInStm );
 
-    SvBOOL aAllConfig;
-    if( aAllConfig.ReadSvIdl( SvHash_AllConfig(), rInStm ) )
-        SetAllConfig( aAllConfig ), bOk = true;
     bOk |= aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
     bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
     bOk |= aImageRotation.ReadSvIdl( SvHash_ImageRotation(), rInStm );

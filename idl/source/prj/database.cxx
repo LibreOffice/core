@@ -61,9 +61,7 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
         ADD_TYPE( INT16,     'h', "short", "Integer", "%" );
         ADD_TYPE( UINT32,    'l', "unsigned long", "Long", "&" );
         ADD_TYPE( INT32,     'l', "long", "Long", "&" );
-        ADD_TYPE( int,       'i', "int", "Integer", "%" );
         ADD_TYPE( BOOL,      'b', "unsigned char", "Boolean", "" );
-        ADD_TYPE( char,      'c', "char", "Integer", "%" );
         ADD_TYPE( BYTE,      'c', "unsigned char", "Integer", "%" );
         ADD_TYPE( float,     'f', "float", "Single", "!" );
         ADD_TYPE( double,    'F', "double", "Double", "#" );
