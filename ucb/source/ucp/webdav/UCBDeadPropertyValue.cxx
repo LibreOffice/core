@@ -42,7 +42,7 @@ const OUString UCBDeadPropertyValue::aTypeByte
 const OUString UCBDeadPropertyValue::aTypeHyper
     = "hyper";
 const OUString UCBDeadPropertyValue::aTypeFloat
-    = "float);
+    = "float";
 const OUString UCBDeadPropertyValue::aTypeDouble
     = "double";
 
