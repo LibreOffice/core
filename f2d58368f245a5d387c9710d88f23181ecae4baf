@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_5b7e4faf",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_7bc86b75",
+      "range": {
+        "startLine": 632,
+        "startChar": 90,
+        "endLine": 632,
+        "endChar": 91
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_5bc5af59",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 10
@@ -36,6 +60,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "No :)",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_fb43bb6a",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "I must have missed commit I9a5940027423ff0791fa7da0b79b617412ce6b86 when merging my files with current git.\n\nCorrected, of course.",
+      "parentUuid": "3aaa91ec_5bc5af59",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_3b5ee345",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_7b76ab3f",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_fb98db6c",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -70,6 +130,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "Shouldn\u0027t this set mnErrorValue before return false?\n\nScInterpreter::ScForecast_Ets() calls aETSCalc.GetError() if aETSCalc.PreprocessDataRange() returns false, so I think it should.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c62546af",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Well, I see that I did something \u0027smart\u0027 here. mnErrorValue is set to an appropiate value in ScETSForecastCalculation::prefillTrendData() and ScETSForecastCalculation::prefillPeridx().\nIt works, but is neither clear, even you didn\u0027t see the mechanism ;-), nor robust as code changers may oversee the neccessity to set mnErrorValue in the prefill functions.\n\nBut as mnErrorValue gets a value depending on the error, I can\u0027t simply set mnErrorValue here.\n\nI have added a comment stating that mnErrorValue is set in the prefill functions to rectify both mentioned disadvantages.",
+      "parentUuid": "3aaa91ec_fb98db6c",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_463af6ce",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Well, yes, it is a situation that should never happen as when mnSmplInPrd equals 0, bEDS is true.\nBut it is good to put in a safeguard, so I did that.",
+      "parentUuid": "3aaa91ec_db9d1f5b",
+      "range": {
+        "startLine": 436,
+        "startChar": 36,
+        "endLine": 436,
+        "endChar": 47
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_bbb5b3d1",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -110,6 +212,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "Declaration of fI can be moved to the scope where it is used, i.e. line 454 where initialized fI \u003d 0.0",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_2637eae4",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_bbb5b3d1",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -133,6 +253,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_8634dede",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "I can\u0027t agree more and wonder why I didn\u0027t do that from the start..\nDone.",
+      "parentUuid": "3aaa91ec_dbb4ffd2",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_3bca6350",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -144,6 +282,30 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "If nCalcCount can be 1, this may lead to an unexpected result.\n\n nCalcCount * fSumDivisor / ( nCalcCount - 1 )\n\nwould result in Infinity and then\n\n fSumAbsErr / Infinity\n\nwould result in 0. This can be correct or not..",
+      "range": {
+        "startLine": 512,
+        "startChar": 54,
+        "endLine": 512,
+        "endChar": 74
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a6511a11",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "With ETS this can\u0027t happen (when there are less than 2 periods of observations an error is returned in ScETSForecastCalculation::prefillTrendData(), but with EDS (mnSmplInPrd being 0) this could happen.\nAs it is not possible to calculate a forecast on only 1 observation, I have expanded the test in ScETSForecastCalculation::prefillTrendData(). No calculation should start in such a situation.",
+      "parentUuid": "3aaa91ec_3bca6350",
       "range": {
         "startLine": 512,
         "startChar": 54,
@@ -179,6 +341,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_e65b222d",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Yes, indeed it should.\nDone.",
+      "parentUuid": "3aaa91ec_5bc12f2e",
+      "range": {
+        "startLine": 528,
+        "startChar": 11,
+        "endLine": 528,
+        "endChar": 19
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_1bc7a746",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -190,6 +376,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "Please declare local variables where they are first used.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_263ecab8",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_1bc7a746",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -219,6 +423,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_864b3e59",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "I must have been distracted at the time (I do quite some SQL programming at work), but I\u0027m even more surprised that the compiler accepted it!\n\nI found 4 instances, corrected them all.",
+      "parentUuid": "3aaa91ec_9be1d7d3",
+      "range": {
+        "startLine": 586,
+        "startChar": 22,
+        "endLine": 586,
+        "endChar": 25
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_bbdc9319",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -230,6 +458,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "Please declare local variables where they are first used.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6648d25c",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_bbdc9319",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -259,6 +505,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_c67386b3",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_fbe61be7",
+      "range": {
+        "startLine": 668,
+        "startChar": 22,
+        "endLine": 668,
+        "endChar": 25
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_dbeb5faf",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -270,6 +540,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "Please declare local variables where they are first used.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a678fa90",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_dbeb5faf",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -299,6 +587,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_066e2ec9",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_3bd1c3fc",
+      "range": {
+        "startLine": 732,
+        "startChar": 22,
+        "endLine": 732,
+        "endChar": 25
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_1bf5e782",
         "filename": "sc/source/core/tool/interpr8.cxx",
         "patchSetId": 10
@@ -310,6 +622,24 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "rand() is an awkward random number generator, better use ::comphelper::rng::uniform_real_distribution(), see include/comphelper/random.hxx",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_466836bb",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Didn\u0027t know of its existence, thank you for mentioning.\nDone.",
+      "parentUuid": "3aaa91ec_1bf5e782",
       "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -339,6 +669,30 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_665f320f",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_bb2ad3e5",
+      "range": {
+        "startLine": 1325,
+        "startChar": 16,
+        "endLine": 1325,
+        "endChar": 34
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_5b464fc0",
         "filename": "sc/source/filter/excel/xlformula.cxx",
         "patchSetId": 10
@@ -350,6 +704,30 @@
       "writtenOn": "2016-02-04T11:59:50Z",
       "side": 1,
       "message": "Do not prepend _xlfn. here, the EXC_FUNCENTRY_OOO() macro does that already, so this would end up as _xlfn._xlfn.ORG...",
+      "range": {
+        "startLine": 610,
+        "startChar": 56,
+        "endLine": 610,
+        "endChar": 62
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_db487f8a",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-02-04T16:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_5b464fc0",
       "range": {
         "startLine": 610,
         "startChar": 56,
