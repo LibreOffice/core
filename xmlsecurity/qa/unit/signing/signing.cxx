@@ -28,6 +28,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
@@ -51,13 +53,16 @@ public:
     virtual void tearDown() override;
 
     void testDescription();
+    /// Test a typical OOXML where a number of (but not all) streams are signed.
+    void testOOXMLPartial();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
+    CPPUNIT_TEST(testOOXMLPartial);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void createDoc();
+    void createDoc(const OUString& rURL = OUString());
     uno::Reference<security::XCertificate> getCertificate(XMLSignatureHelper& rSignatureHelper);
     void sign(utl::TempFile& rTempFile, XMLSignatureHelper& rSignatureHelper, const uno::Reference<io::XOutputStream>& xOutputStream);
     std::vector<SignatureInformation> verify(XMLSignatureHelper& rSignatureHelper, const uno::Reference<io::XInputStream>& xInputStream);
@@ -83,11 +88,14 @@ void SigningTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void SigningTest::createDoc()
+void SigningTest::createDoc(const OUString& rURL)
 {
     if (mxComponent.is())
         mxComponent->dispose();
-    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    if (rURL.isEmpty())
+        mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    else
+        mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument");
 }
 
 uno::Reference<security::XCertificate> SigningTest::getCertificate(XMLSignatureHelper& rSignatureHelper)
@@ -183,6 +191,19 @@ void SigningTest::testDescription()
     std::vector<SignatureInformation> aSignatureInformations = verify(aSignatureHelper, xInputStream);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatureInformations.size());
     CPPUNIT_ASSERT_EQUAL(OUString("SigningTest::sign"), aSignatureInformations[0].ouDescription);
+}
+
+void SigningTest::testOOXMLPartial()
+{
+    createDoc(getURLFromSrc(DATA_DIRECTORY) + "partial.docx");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // This was SignatureState::BROKEN due to missing RelationshipTransform and SHA-256 support.
+    // We expect NOTVALIDATED in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
+    int nActual = static_cast<int>(pObjectShell->GetDocumentSignatureState());
+    CPPUNIT_ASSERT(nActual == static_cast<int>(SignatureState::NOTVALIDATED) || nActual == static_cast<int>(SignatureState::PARTIAL_OK));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SigningTest);
