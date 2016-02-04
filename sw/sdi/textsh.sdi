@@ -37,14 +37,6 @@ interface Text : BaseText
         ReadOnlyDoc = FALSE ;
     ]
 
-/*
-enum TOXTypes
-{
-   TOX_INDEX,
-   TOX_USER,
-   TOX_CONTENT
-};
-*/
 
     FN_INSERT_IDX_ENTRY_DLG // status(final|play)
     [

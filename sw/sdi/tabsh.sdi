@@ -29,20 +29,6 @@ interface TextTable : BaseTextTable
         StateMethod = NoState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-/*
-    SvxFormatSplitItem TableSplit SID_ATTR_PARA_SPLIT // status(final|play)
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-        GroupId = GID_TABLE ;
-    ]
-    SvxFormatKeepItem TableKeepTogether SID_ATTR_PARA_KEEP // status(final|play)
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-        GroupId = GID_TABLE ;
-    ]
-*/
 }
 
 shell SwTableShell : SwBaseShell

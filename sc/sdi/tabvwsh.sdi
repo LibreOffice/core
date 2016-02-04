@@ -86,7 +86,6 @@ interface BaseSelection
     SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
-     //SID_CHOOSE_CONTROLS          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OBJECT_SELECT               [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_DRAW_LINE                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_DRAW_RECT                   [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
