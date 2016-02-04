@@ -31,7 +31,6 @@ class SvMetaModule : public SvMetaExtern
 // browser
     SvString                aHelpFileName;
     SvString                aSlotIdFile;
-    SvString                aTypeLibFile;
     SvString                aModulePrefix;
 
     bool                    bImported   : 1,

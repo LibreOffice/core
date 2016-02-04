@@ -74,7 +74,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_ExecMethod;
     SvStringHashEntryRef MM_StateMethod;
     SvStringHashEntryRef MM_GroupId;
-    SvStringHashEntryRef MM_TypeLibFile;
     SvStringHashEntryRef MM_Export;
     SvStringHashEntryRef MM_PseudoPrefix;
     SvStringHashEntryRef MM_define;
@@ -163,7 +162,6 @@ HASH_INLINE(StateMethod)
 HASH_INLINE(GroupId)
 HASH_INLINE(float)
 HASH_INLINE(double)
-HASH_INLINE(TypeLibFile)
 HASH_INLINE(Export)
 HASH_INLINE(PseudoPrefix)
 HASH_INLINE(define)
