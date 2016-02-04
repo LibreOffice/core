@@ -89,7 +89,6 @@ class SvMetaObject : public SvRttiBase
 protected:
     SvString      aName;
     SvHelpText    aHelpText;
-    SvString      aDescription;
 
     bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
@@ -107,7 +106,6 @@ public:
     virtual bool                SetName( const OString& rName, SvIdlDataBase * = nullptr  );
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
-    virtual const SvString&     GetDescription() const{ return aDescription; }
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -160,13 +158,6 @@ public:
                                 : aRef->GetHelpText();
                         }
 
-    const SvString &    GetDescription() const override
-                        {
-                            return ( !aRef.Is()
-                                    || !SvMetaObject::GetDescription().getString().isEmpty() )
-                                ? SvMetaObject::GetDescription()
-                                : aRef->GetDescription();
-                        }
     SvMetaReference *   GetRef() const { return aRef; }
     void                SetRef( SvMetaReference * pRef  )
                         { aRef = pRef; }

@@ -38,7 +38,6 @@ class SvMetaAttribute : public SvMetaReference
     SvIdentifier        aSlotId;
     SvBOOL              aExport;
     SvBOOL              aReadOnlyDoc;
-    SvBOOL              aHidden;
     bool                bNewAttr;
 
 protected:
