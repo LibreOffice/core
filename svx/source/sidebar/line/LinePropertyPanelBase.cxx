@@ -49,7 +49,6 @@
 #include "svx/sidebar/PopupContainer.hxx"
 #include "svx/sidebar/PopupControl.hxx"
 #include "LineWidthControl.hxx"
-#include <boost/bind.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -175,7 +174,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mnWidthCoreValue(0),
     mpStartItem(),
     mpEndItem(),
-    maLineWidthPopup(this, ::boost::bind(&LinePropertyPanelBase::CreateLineWidthPopupControl, this, _1)),
+    maLineWidthPopup(this, [this] (PopupContainer *const pContainer) { return this->CreateLineWidthPopupControl(pContainer); }),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
     mbWidthValuable(true),

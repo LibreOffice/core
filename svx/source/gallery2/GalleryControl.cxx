@@ -29,8 +29,6 @@
 #include <vcl/settings.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <boost/bind.hpp>
-
 namespace svx { namespace sidebar {
 
 static const sal_Int32 gnInitialVerticalSplitPosition (150);
@@ -44,13 +42,14 @@ GalleryControl::GalleryControl (
 
               this,
               WB_HSCROLL,
-              ::boost::bind(&GalleryControl::InitSettings, this))),
+              [this] () { return this->InitSettings(); })),
       mpBrowser1(VclPtr<GalleryBrowser1>::Create(
 
               this,
               mpGallery,
-              ::boost::bind(&GalleryControl::GalleryKeyInput,this,_1,_2),
-              ::boost::bind(&GalleryControl::ThemeSelectionHasChanged, this))),
+              [this] (KeyEvent const& rEvent, vcl::Window *const pWindow)
+                  { return this->GalleryKeyInput(rEvent, pWindow); },
+              [this] () { return this->ThemeSelectionHasChanged(); })),
       mpBrowser2(VclPtr<GalleryBrowser2>::Create(this, mpGallery)),
       maLastSize(GetOutputSizePixel()),
       mbIsInitialResize(true)

@@ -49,7 +49,6 @@
 #include "svx/sidebar/PopupContainer.hxx"
 #include "svx/sidebar/PopupControl.hxx"
 #include "LineWidthControl.hxx"
-#include <boost/bind.hpp>
 
 using namespace css;
 using namespace css::uno;
