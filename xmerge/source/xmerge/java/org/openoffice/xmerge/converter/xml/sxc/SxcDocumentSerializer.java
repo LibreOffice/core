@@ -366,7 +366,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                                         SxcConstants.ROW_STYLE_FAMILY, null,
                                         RowStyle.class);
 
-                int rowHeight = rStyle.getRowHeight();
+                int rowHeight = rStyle != null ? rStyle.getRowHeight() : 0;
 
                 Debug.log(Debug.TRACE, "traverseTableRow() Row Height : " + rowHeight);
                 ColumnRowInfo ri = new ColumnRowInfo(   rowHeight,
