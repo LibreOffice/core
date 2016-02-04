@@ -17,9 +17,6 @@
  */
 
 interface StarWriter
-[
-    uuid ( "4BF0AA20-E6B9-101C-8A0E-040224007802" )
-]
 {
     FN_ENVELOP  // status(final|play)
     [

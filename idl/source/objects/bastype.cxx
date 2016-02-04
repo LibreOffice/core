@@ -28,36 +28,6 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
-static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
-                            sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )
-{
-    sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
-    if( pTok->Is( pName ) )
-    {
-        bool bOk = false;
-        if( rInStm.Read( '=' ) )
-        {
-            pTok = rInStm.GetToken_Next();
-            if( pTok->IsInteger() )
-            {
-                sal_uLong n = pTok->GetNumber();
-                if ( n >= nMin && n <= nMax )
-                {
-                    *pValue = n;
-                    bOk = true;
-                }
-            }
-        }
-
-        if( bOk )
-            return true;
-    }
-
-    rInStm.Seek( nTokPos );
-    return false;
-}
-
 bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -193,57 +163,6 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 void SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
     SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
-}
-
-bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
-{
-    sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
-
-    if( pTok->Is( SvHash_uuid() ) )
-    {
-        bool bOk = true;
-        bool bBraket = rInStm.Read( '(' );
-        if( bBraket || rInStm.Read( '=' ) )
-        {
-            pTok = &rInStm.GetToken();
-            if( pTok->IsString() )
-            {
-                pTok = rInStm.GetToken_Next();
-                bOk = MakeId(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
-            }
-            if( bOk && bBraket )
-                bOk = rInStm.Read( ')' );
-        }
-        if( bOk )
-            return true;
-    }
-    rInStm.Seek( nTokPos );
-    return false;
-}
-
-bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
-{
-    sal_uLong n = 0;
-
-    sal_uInt32 nTokPos = rInStm.Tell();
-    if( ReadRangeSvIdl( SvHash_Version(), rInStm, 0 , 0xFFFF, &n ) )
-    {
-        nMajorVersion = (sal_uInt16)n;
-        if( rInStm.Read( '.' ) )
-        {
-            SvToken * pTok = rInStm.GetToken_Next();
-            if( pTok->IsInteger() && pTok->GetNumber() <= 0xFFFF )
-            {
-                nMinorVersion = (sal_uInt16)pTok->GetNumber();
-                return true;
-            }
-        }
-        else
-            return true;
-    }
-    rInStm.Seek( nTokPos );
-    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

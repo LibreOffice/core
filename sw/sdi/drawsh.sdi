@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 interface TextDraw : TextDrawBase
-[
-    uuid = "626DE480-111A-101D-9757-6E74207A7520"
-]
 {
     SID_ATTR_LINEEND_STYLE
     [

@@ -17,7 +17,6 @@
  */
 
 interface WebTable : BaseTextTable
-[ uuid = "B47F0DEC-1E1F-11d1-89CA-008029E4B0B1" ]
 {
     import BaseTextSelection;
 }

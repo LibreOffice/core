@@ -18,9 +18,6 @@
 
 
 interface CellSelection
-[
-    uuid ( "D7680520-137B-11D3-B25B-006097DA68F3" )
-]
 {
     SbxObject Movement
     [
@@ -242,9 +239,6 @@ interface CellSelection
 
 
 interface CellMovement
-[
-    uuid ( "FF2E35C0-137B-11D3-B25B-006097DA68F3" )
-]
 {
     SID_NEXT_TABLE
     [
@@ -421,9 +415,6 @@ interface CellMovement
 
 
 interface RangeSelection
-[
-    uuid ( "0CAB4620-137C-11D3-B25B-006097DA68F3" )
-]
 {
     import CellSelection;
     import FormatForSelection;
@@ -432,9 +423,6 @@ interface RangeSelection
 }
 
 interface Cell
-[
-    uuid ( "F0645A00-1921-11D3-B25B-006097DA68F3" )
-]
 {
     import CellSelection;
     import CellMovement;

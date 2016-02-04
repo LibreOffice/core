@@ -17,9 +17,6 @@
  */
 
 interface Text : BaseText
-[
-    uuid = "1BD56200-111A-101D-9757-6E74207A7520"
-]
 {
     FN_INSERT_FRAME_INTERACT // status()
     [

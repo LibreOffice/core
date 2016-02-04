@@ -17,9 +17,6 @@
  */
 
 interface Documents
-[
-    uuid = "61753B60-1114-101D-B8ED-3273768855A7" ;
-]
 {
     SID_NEWDOC // ole(opt) api(final/play/rec)
     [

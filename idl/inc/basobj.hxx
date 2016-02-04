@@ -181,21 +181,13 @@ class SvMetaExtern : public SvMetaReference
 {
     SvMetaModule *          pModule;    // included in which module
 
-    SvUUId                  aUUId;
-    SvVersion               aVersion;
-    bool                    bReadUUId;
-    bool                    bReadVersion;
 public:
                         SvMetaExtern();
 
     SvMetaModule *      GetModule() const;
 
-    void                GetUUId() const;
     void                SetModule( SvIdlDataBase & rBase );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-
-protected:
-    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
 class SvMetaExternMemberList : public SvRefMemberList<SvMetaExtern *> {};

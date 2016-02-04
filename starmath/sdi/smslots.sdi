@@ -35,9 +35,6 @@ StarMath
     include "svx.sdi"
     include "smath.sdi"
     interface StarMath
-    [
-        uuid ( "92B0FD20-2FC1-11CF-89CA-008029E4B0B1" )
-    ]
     {
     SID_CONFIGEVENT //idlpp ole : no , status : no
     [
@@ -51,9 +48,6 @@ shell SmModule
 }
 
 interface FormulaDocument
-[
-    uuid ( "815CBB20-2FC3-11CF-89CA-008029E4B0B1" )
-]
 {
     SID_DOCTEMPLATE //idlpp ole : no , status : no
     [
@@ -147,9 +141,6 @@ shell SmDocShell
 
 
 interface FormulaView
-[
-    uuid ( "CE1A6C00-2FC3-11CF-89CA-008029E4B0B1" )
-]
 {
     SID_FORMULACURSOR
     [

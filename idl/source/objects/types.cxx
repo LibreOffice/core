@@ -31,7 +31,6 @@
 
 SvMetaAttribute::SvMetaAttribute()
     : aExport( true, false )
-    , aIsCollection ( false, false )
     , aReadOnlyDoc ( true, false )
     , aHidden( false, false )
     , bNewAttr( false )
@@ -41,7 +40,6 @@ SvMetaAttribute::SvMetaAttribute()
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
     , aExport( true, false )
-    , aIsCollection ( false, false)
     , aReadOnlyDoc ( true, false)
     , aHidden( false, false )
     , bNewAttr( false )
@@ -75,16 +73,6 @@ bool SvMetaAttribute::GetHidden() const
         return aHidden;
     else
         return static_cast<SvMetaAttribute *>(GetRef())->GetHidden();
-}
-
-bool SvMetaAttribute::GetIsCollection() const
-{
-    if( aIsCollection.IsSet() || !GetRef() )
-    {
-        return aIsCollection;
-    }
-
-    return static_cast<SvMetaSlot *>(GetRef())->GetIsCollection();
 }
 
 bool SvMetaAttribute::GetReadOnlyDoc() const
@@ -170,7 +158,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aSlotId.ReadSvIdl( rBase, SvHash_SlotId(), rInStm );
     aExport.ReadSvIdl( SvHash_Export(), rInStm );
     aHidden.ReadSvIdl( SvHash_Hidden(), rInStm );
-    aIsCollection.ReadSvIdl( SvHash_IsCollection(), rInStm );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
 }
 
