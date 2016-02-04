@@ -55,10 +55,13 @@ public:
     void testDescription();
     /// Test a typical OOXML where a number of (but not all) streams are signed.
     void testOOXMLPartial();
+    /// Test a typical broken OOXML signature where one stream is corrupted.
+    void testOOXMLBroken();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
     CPPUNIT_TEST(testOOXMLPartial);
+    CPPUNIT_TEST(testOOXMLBroken);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -204,6 +207,17 @@ void SigningTest::testOOXMLPartial()
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
     int nActual = static_cast<int>(pObjectShell->GetDocumentSignatureState());
     CPPUNIT_ASSERT(nActual == static_cast<int>(SignatureState::NOTVALIDATED) || nActual == static_cast<int>(SignatureState::PARTIAL_OK));
+}
+
+void SigningTest::testOOXMLBroken()
+{
+    createDoc(getURLFromSrc(DATA_DIRECTORY) + "bad.docx");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // This was SignatureState::NOTVALIDATED/PARTIAL_OK as we did not validate manifest references.
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SigningTest);
