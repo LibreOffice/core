@@ -74,7 +74,6 @@ public:
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& );
-    OString        Compare( SvMetaAttribute *pAttr );
 };
 
 typedef tools::SvRef<SvMetaAttribute> SvMetaAttributeRef;
