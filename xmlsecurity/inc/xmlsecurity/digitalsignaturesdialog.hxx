@@ -57,6 +57,8 @@ private:
     css::uno::Reference < css::embed::XStorage > mxStore;
     css::uno::Reference < css::io::XStream > mxSignatureStream;
     css::uno::Reference < css::io::XStream > mxTempSignatureStream;
+    /// Storage containing all OOXML signatures, unused for ODF.
+    css::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
     SignatureInformations   maCurrentSignatureInformations;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
