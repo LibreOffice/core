@@ -303,19 +303,19 @@ namespace svgio
 
                 const bool bStrokeUsed(pStroke || pStrokeGradient || pStrokePattern);
 
+                if(pFill)
+                {
+                    // add the already prepared primitives for single color fill
+                    rTarget.append(rSource);
+                }
                 // add fill. Use geometry even for simple color fill when stroke
                 // is used, else text rendering and the geometry-based stroke will
                 // normally not really match optically due to diverse system text
                 // renderers
-                if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
+                else if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
                 {
                     // create text fill content based on geometry
                     add_fill(aMergedArea, rTarget, aMergedArea.getB2DRange());
-                }
-                else if(pFill)
-                {
-                    // add the already prepared primitives for single color fill
-                    rTarget.append(rSource);
                 }
 
                 // add stroke
