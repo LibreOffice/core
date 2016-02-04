@@ -40,7 +40,6 @@
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
 #include <frmfmt.hxx>
-#include <tuple>
 #include <unocrsr.hxx>
 
 class SwTable;
@@ -452,15 +451,6 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwRangeDescriptor           aRgDesc;
-    const SfxItemPropertySet*   m_pPropSet;
-
-    bool m_bFirstRowAsLabel;
-    bool m_bFirstColumnAsLabel;
-    std::tuple<sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32> getLabelCoordinates(bool bRow);
-    css::uno::Sequence<OUString> getLabelDescriptions(bool bRow);
-    void setLabelDescriptions(const css::uno::Sequence<OUString>& rDesc, bool bRow);
-
     SwXCellRange(sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
     virtual ~SwXCellRange();
 
@@ -469,12 +459,13 @@ public:
             sw::UnoCursorPointer pCursor, SwFrameFormat& rFrameFormat,
             SwRangeDescriptor& rDesc);
 
-    void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
-        { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
-    std::vector< css::uno::Reference< css::table::XCell > > GetCells();
-
-
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel);
+
+    std::vector<css::uno::Reference<css::table::XCell>> GetCells();
+
+    const SwUnoCursor* GetTableCursor() const;
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
@@ -535,10 +526,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    sal_uInt16      getRowCount();
-    sal_uInt16      getColumnCount();
-
-    const SwUnoCursor* GetTableCursor() const;
 };
 
 class SwXTableRows final : public cppu::WeakImplHelper
