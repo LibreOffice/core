@@ -498,7 +498,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                                 SxcConstants.COLUMN_STYLE_FAMILY, null,
                                 ColumnStyle.class);
 
-            columnWidth = cStyle.getColWidth();
+            columnWidth = cStyle != null ? cStyle.getColWidth() : 0;
             col.setSize(columnWidth);
             Debug.log(Debug.TRACE, "traverseColumn() Column Width : " + columnWidth);
 
