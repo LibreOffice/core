@@ -20,23 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MSTATEMENT_HXX
 
-#include <com/sun/star/sdbc/XStatement.hpp>
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <com/sun/star/sdbc/XBatchExecution.hpp>
-#include <com/sun/star/sdbc/XCloseable.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <comphelper/uno3.hxx>
-#include <connectivity/CommonTools.hxx>
-#include <list>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <connectivity/FValue.hxx>
 #include "TSortIndex.hxx"
-#include "MConnection.hxx"
 #include "MTable.hxx"
 
 #include <memory>

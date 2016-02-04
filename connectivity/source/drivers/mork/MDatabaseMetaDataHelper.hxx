@@ -10,14 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
 
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
-#include "MErrorResource.hxx"
-
-#include "MConnection.hxx"
-#include <com/sun/star/uno/Sequence.hxx>
-
 
 namespace connectivity
 {

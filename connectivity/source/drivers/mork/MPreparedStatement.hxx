@@ -21,11 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MPREPAREDSTATEMENT_HXX
 
 #include "MResultSet.hxx"
-#include "MStatement.hxx"
-#include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
 #include <cppuhelper/compbase5.hxx>
 

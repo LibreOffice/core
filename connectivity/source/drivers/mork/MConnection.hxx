@@ -10,17 +10,11 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 
-#include <connectivity/CommonTools.hxx>
-
 #include <connectivity/OSubComponent.hxx>
 #include "TConnection.hxx"
 #include "MColumnAlias.hxx"
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-
-#include <cppuhelper/weakref.hxx>
 
 // do we want here namespace too?
 class MorkParser;

@@ -18,32 +18,17 @@
  */
 
 
-#include <osl/diagnose.h>
-#include <comphelper/property.hxx>
-#include <comphelper/uno3.hxx>
-#include <osl/thread.h>
 #include <tools/diagnose_ex.h>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/extract.hxx>
-#include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <algorithm>
 
 #include "MDriver.hxx"
 #include "MStatement.hxx"
 #include "sqlbison.hxx"
-#include "MConnection.hxx"
 #include "MResultSet.hxx"
-#include "MDatabaseMetaData.hxx"
 
 #include "resource/mork_res.hrc"
 #include "resource/common_res.hrc"

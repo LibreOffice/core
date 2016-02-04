@@ -14,18 +14,13 @@
 #include "MPreparedStatement.hxx"
 #include "MorkParser.hxx"
 
-#include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/sqlerror.hxx>
 
 #include "resource/mork_res.hrc"
 #include "resource/common_res.hrc"
 
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
-#include <comphelper/officeresourcebundle.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace dbtools;

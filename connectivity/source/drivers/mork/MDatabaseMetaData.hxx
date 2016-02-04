@@ -10,18 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATA_HXX
 
-#include <connectivity/CommonTools.hxx>
-#include <connectivity/OSubComponent.hxx>
-
-#include "MConnection.hxx"
-#include "MDatabaseMetaDataHelper.hxx"
 #include "TDatabaseMetaDataBase.hxx"
-
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-
-#include <cppuhelper/weakref.hxx>
 
 namespace connectivity
 {
