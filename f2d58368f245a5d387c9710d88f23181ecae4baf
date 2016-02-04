@@ -1,0 +1,364 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_7bc86b75",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Nitpick: let\u0027s have the same spelling in HIDs as in OpCodes, so ..._ADD and ..._MUL",
+      "range": {
+        "startLine": 632,
+        "startChar": 90,
+        "endLine": 632,
+        "endChar": 91
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_5bc5af59",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "No :)",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_7b76ab3f",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Nitpick: please use the m... prefix also here, and it doesn\u0027t hurt to spell it out, so mpFormatter.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_fb98db6c",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this set mnErrorValue before return false?\n\nScInterpreter::ScForecast_Ets() calls aETSCalc.GetError() if aETSCalc.PreprocessDataRange() returns false, so I think it should.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_db9d1f5b",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Can mnSmplInPrd ever be 0? If yes, that needs to be checked, otherwise we\u0027d get an integer div/0 abort.\n\nPreprocessDataRange() does\n\n    bEDS \u003d ( rSmplInPrd \u003d\u003d 0 );\n\nand\n\n    if ( rSmplInPrd !\u003d 1 )\n        mnSmplInPrd \u003d rSmplInPrd;\n    else\n        mnSmplInPrd \u003d CalcPeriodLen();\n\nso theoretically mnSmplInPrd could be 0.",
+      "range": {
+        "startLine": 436,
+        "startChar": 36,
+        "endLine": 436,
+        "endChar": 47
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_bbb5b3d1",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Declaration of fI can be moved to the scope where it is used, i.e. line 454 where initialized fI \u003d 0.0",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_dbb4ffd2",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Nitpick: please add block braces {} to the for()... scope with the nested ifs, makes reading the code easier.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_3bca6350",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "If nCalcCount can be 1, this may lead to an unexpected result.\n\n nCalcCount * fSumDivisor / ( nCalcCount - 1 )\n\nwould result in Infinity and then\n\n fSumAbsErr / Infinity\n\nwould result in 0. This can be correct or not..",
+      "range": {
+        "startLine": 512,
+        "startChar": 54,
+        "endLine": 512,
+        "endChar": 74
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_5bc12f2e",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Doesn\u0027t this need to be initialized? It would be returned undefined if mnCount\u003c\u003d3 as then the loop is not executed.",
+      "range": {
+        "startLine": 528,
+        "startChar": 11,
+        "endLine": 528,
+        "endChar": 19
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1bc7a746",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Please declare local variables where they are first used.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_9be1d7d3",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Please use \u0026\u0026 instead of \u0027and\u0027.",
+      "range": {
+        "startLine": 586,
+        "startChar": 22,
+        "endLine": 586,
+        "endChar": 25
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_bbdc9319",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Please declare local variables where they are first used.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_fbe61be7",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Please use \u0026\u0026 instead of \u0027and\u0027.",
+      "range": {
+        "startLine": 668,
+        "startChar": 22,
+        "endLine": 668,
+        "endChar": 25
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_dbeb5faf",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Please declare local variables where they are first used.",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_3bd1c3fc",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Please use \u0026\u0026 instead of \u0027and\u0027.",
+      "range": {
+        "startLine": 732,
+        "startChar": 22,
+        "endLine": 732,
+        "endChar": 25
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1bf5e782",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "rand() is an awkward random number generator, better use ::comphelper::rng::uniform_real_distribution(), see include/comphelper/random.hxx",
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_bb2ad3e5",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "If you move the declaration to the definition, the compiler has an easier job to not initialize an empty ScMatrixRef before it is set anyway with the GetNewMat() result. And as always, declaring variables where they are used first eases reading the code.",
+      "range": {
+        "startLine": 1325,
+        "startChar": 16,
+        "endLine": 1325,
+        "endChar": 34
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_5b464fc0",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-04T11:59:50Z",
+      "side": 1,
+      "message": "Do not prepend _xlfn. here, the EXC_FUNCENTRY_OOO() macro does that already, so this would end up as _xlfn._xlfn.ORG...",
+      "range": {
+        "startLine": 610,
+        "startChar": 56,
+        "endLine": 610,
+        "endChar": 62
+      },
+      "revId": "f2d58368f245a5d387c9710d88f23181ecae4baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
