@@ -46,29 +46,9 @@ public:
         return *aCols[nIndex];
     }
 
-    const ScColumn& operator[] ( SCCOL nIndex ) const
-    {
-        return ( *this )[ static_cast<const size_t>( nIndex ) ];
-    }
-
-    const ScColumn& operator[] ( int nIndex ) const
-    {
-        return ( *this )[ static_cast<const size_t>( nIndex ) ];
-    }
-
     ScColumn& operator[] ( const size_t nIndex )
     {
         return *aCols[nIndex];
-    }
-
-    ScColumn& operator[] ( SCCOL nIndex )
-    {
-        return ( *this )[ static_cast<const size_t>( nIndex ) ];
-    }
-
-    ScColumn& operator[] ( int nIndex )
-    {
-        return ( *this )[ static_cast<const size_t>( nIndex ) ];
     }
 
     SCCOL size() const
