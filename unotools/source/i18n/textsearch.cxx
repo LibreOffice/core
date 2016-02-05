@@ -212,7 +212,7 @@ void TextSearch::Init( const SearchParam & rParam,
         break;
 
     default:
-        assert(!"default what?");
+        assert(!"utl::TextSearch::Init - default what?");
         // fallthru
     case SearchParam::SRCH_NORMAL:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
