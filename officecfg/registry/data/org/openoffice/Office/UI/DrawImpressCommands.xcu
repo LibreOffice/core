@@ -377,6 +377,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:MasterPages" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Master Pages...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:CustomAnimationSchemes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Animation Schemes...</value>

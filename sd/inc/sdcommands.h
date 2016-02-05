@@ -42,6 +42,7 @@
 #define CMD_SID_DELETE_SNAPITEM                     ".uno:DeleteSnapItem"
 #define CMD_SID_DISMANTLE                           ".uno:Dismantle"
 #define CMD_SID_CUSTOM_ANIMATION_PANEL              ".uno:CustomAnimation"
+#define CMD_SID_MASTER_PAGES_PANEL                  ".uno:MasterPages"
 #define CMD_SID_MOREFRONT                           ".uno:Forward"
 #define CMD_SID_GLUE_ESCDIR_BOTTOM                  ".uno:GlueEscapeDirectionBottom"
 #define CMD_SID_GLUE_ESCDIR_LEFT                    ".uno:GlueEscapeDirectionLeft"

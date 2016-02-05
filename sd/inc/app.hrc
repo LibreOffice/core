@@ -369,7 +369,7 @@
     // FREE
 #define SID_CUSTOM_ANIMATION_SCHEMES_PANEL  (SID_SD_START+333)
 #define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
-    // FREE
+#define SID_MASTER_PAGES_PANEL              (SID_SD_START+335)
 #define SID_PHOTOALBUM                      (SID_SD_START+336)
 #define SID_REMOTE_DLG                      (SID_SD_START+337)
 #define SID_CONNECTION_DLG                  (SID_SD_START+338)

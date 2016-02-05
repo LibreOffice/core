@@ -1886,6 +1886,30 @@ SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
     GroupId = GID_OPTIONS;
 ]
 
+SfxBoolItem MasterPages SID_MASTER_PAGES_PANEL
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
 [
     /* flags: */

@@ -223,6 +223,14 @@
         AutoCheck = TRUE ; \
     };
 
+#define TBI_MASTER_PAGES \
+    ToolBoxItem\
+    {\
+        Identifier = SID_MASTER_PAGES_PANEL ; \
+        HelpID = SID_MASTER_PAGES_PANEL ; \
+        AutoCheck = TRUE ; \
+    };
+
 #define TBI_ANIMATION_EFFECTS \
     ToolBoxItem\
     {\

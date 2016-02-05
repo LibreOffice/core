@@ -2703,6 +2703,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_SLIDE_TRANSITIONS_PANEL:
         case SID_CUSTOM_ANIMATION_PANEL:
         case SID_GALLERY:
+        case SID_MASTER_PAGES_PANEL:
         {
             // First make sure that the sidebar is visible
             GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
@@ -2714,6 +2715,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 panelId = "GalleryPanel";
             else if (nSId == SID_SLIDE_TRANSITIONS_PANEL)
                 panelId = "SdSlideTransitionPanel";
+            else if (nSId == SID_MASTER_PAGES_PANEL)
+                panelId = "SdAllMasterPagesPanel";
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 panelId,

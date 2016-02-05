@@ -55,6 +55,11 @@ interface ImpressEditView : DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_MASTER_PAGES_PANEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_REHEARSE_TIMINGS // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
