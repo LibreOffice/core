@@ -432,6 +432,10 @@ public class LOKitTileProvider implements TileProvider {
         mouseButton(Document.MOUSE_EVENT_BUTTON_UP, documentCoordinate, numberOfClicks, zoomFactor);
     }
 
+    /**
+     * @param command   UNO command string
+     * @param arguments Arguments to UNO command
+     */
     @Override
     public void postUnoCommand(String command, String arguments) {
         mDocument.postUnoCommand(command, arguments);

@@ -982,7 +982,7 @@ public class JavaPanZoomController
     /**
      * Zoom to a specified rect IN CSS PIXELS.
      *
-     * While we usually use device pixels, @zoomToRect must be specified in CSS
+     * While we usually use device pixels, zoomToRect must be specified in CSS
      * pixels.
      */
     public boolean animatedZoomTo(RectF zoomToRect) {
