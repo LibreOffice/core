@@ -191,13 +191,13 @@ $(eval $(call gb_Library_set_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 ## handle fontconfig
-ifneq ($(ENABLE_FONTCONFIG),)
+ifeq ($(ENABLE_FONTCONFIG),TRUE)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DENABLE_FONTCONFIG \
 ))
 ## handle CUPS
-ifneq ($(ENABLE_CUPS),)
+ifeq ($(ENABLE_CUPS),TRUE)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DENABLE_CUPS \
@@ -522,6 +522,7 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
     -framework Carbon \
     -framework CoreFoundation \
 ))
+# ??? what about this
 ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.7)
 $(eval $(call gb_Library_set_ldflags,vcl, $$(LDFLAGS) -framework QuickTime ))
 endif
