@@ -22,6 +22,7 @@
 
 #include "address.hxx"
 #include "rangelst.hxx"
+#include "markmulti.hxx"
 #include "scdllapi.h"
 
 #include <set>
@@ -50,7 +51,7 @@ private:
 
     ScRange         aMarkRange;             // area
     ScRange         aMultiRange;            // maximum area altogether
-    ScMarkArray*    pMultiSel;              // multi selection
+    ScMultiSel      aMultiSel;              // multi selection
     bool            bMarked:1;                // rectangle marked
     bool            bMultiMarked:1;
 
@@ -72,7 +73,8 @@ public:
     void        ResetMark();
     void        SetMarkArea( const ScRange& rRange );
 
-    void        SetMultiMarkArea( const ScRange& rRange, bool bMark = true );
+    // bSetupMulti must be set to true only for recursive calls to SetMultiMarkArea
+    void        SetMultiMarkArea( const ScRange& rRange, bool bMark = true, bool bSetupMulti = false );
 
     void        MarkToMulti();
     void        MarkToSimple();
@@ -102,7 +104,8 @@ public:
     bool        GetMarkingFlag() const          { return bMarking;    }
 
     //  for FillInfo / Document etc.
-    const ScMarkArray* GetArray() const         { return pMultiSel; }
+    const ScMultiSel& GetMultiSelData() const   { return aMultiSel;   }
+    ScMarkArray GetMarkArray( SCCOL nCol ) const;
 
     bool        IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
     void        FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const;

@@ -617,17 +617,17 @@ void ScDocument::FillInfo(
                     if (pMarkData && pMarkData->IsMultiMarked())
                     {
                         //  Block marks
-                        const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nX;
+                        ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nX ));
                         nArrRow = 1;
                         nCurRow = nRow1;                                      // single rows
                         nThisRow = nRow1;                                     // End of range
 
-                        if ( pThisMarkArr->Search( nRow1, nIndex ) )
+                        if ( aThisMarkArr.Search( nRow1, nIndex ) )
                         {
                             do
                             {
-                                nThisRow=pThisMarkArr->pData[nIndex].nRow;      // End of range
-                                const bool bThisMarked=pThisMarkArr->pData[nIndex].bMarked;
+                                nThisRow=aThisMarkArr.pData[nIndex].nRow;      // End of range
+                                const bool bThisMarked=aThisMarkArr.pData[nIndex].bMarked;
 
                                 do
                                 {
@@ -654,7 +654,7 @@ void ScDocument::FillInfo(
                                 while (nCurRow <= nThisRow && nCurRow <= nRow2);
                                 ++nIndex;
                             }
-                            while ( nIndex < pThisMarkArr->nCount && nThisRow < nRow2 );
+                            while ( nIndex < aThisMarkArr.nCount && nThisRow < nRow2 );
                         }
                     }
                 }
@@ -794,10 +794,10 @@ void ScDocument::FillInfo(
                                     && nStartY <= (SCsROW) nBlockEndY );
                     if (pMarkData && pMarkData->IsMultiMarked() && !bCellMarked)
                     {
-                        const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nStartX;
+                        ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nStartX ));
                         SCSIZE nIndex;
-                        if ( pThisMarkArr->Search( nStartY, nIndex ) )
-                            bCellMarked=pThisMarkArr->pData[nIndex].bMarked;
+                        if ( aThisMarkArr.Search( nStartY, nIndex ) )
+                            bCellMarked=aThisMarkArr.pData[nIndex].bMarked;
                     }
 
                     pInfo->bMarked = bCellMarked;
