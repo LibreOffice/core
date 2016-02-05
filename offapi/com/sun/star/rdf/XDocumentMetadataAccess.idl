@@ -156,6 +156,12 @@ interface XDocumentMetadataAccess
         </ol>
         </p>
 
+        @param Format
+            the file format, see FileFormat
+
+        @param InStream
+            the input stream
+
         @param FileName
             the name of the stream in the ODF storage where the graph will
             be stored

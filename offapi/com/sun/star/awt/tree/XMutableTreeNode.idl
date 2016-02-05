@@ -45,6 +45,9 @@ interface XMutableTreeNode : XTreeNode
         @param Index
             the index where the node will be inserted to this instance.
 
+        @param ChildNode
+            the node to insert.
+
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <var>ChildNode</var> is not a valid node of the corresponding XTreeDataModel.
 

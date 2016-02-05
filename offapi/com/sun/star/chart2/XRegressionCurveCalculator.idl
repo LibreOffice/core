@@ -103,6 +103,11 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
         account. When one of these parameters is unknown, no
         optimization must be done.</p>
 
+        @param min the abscissa value for the starting point.
+        @param max the abscissa value for the ending point.
+
+        @param nPointCount the number of points to calculate.
+
         @param bMaySkipPointsInCalculation determines whether it is
                allowed to skip points in the calculation. When this
                parameter is `TRUE` it is assumed that the underlying

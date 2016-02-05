@@ -80,6 +80,9 @@ published interface XFont: com::sun::star::uno::XInterface
                 the width of the specified string of characters
                 measured in pixels for the device.
 
+        @param str
+                the input string.
+
         @param aDXArray
                 receives the width of every single character
                 measured in pixels for the device.

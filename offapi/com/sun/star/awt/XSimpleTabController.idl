@@ -55,7 +55,8 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
 
     /** change some properties of the specified tab.
 
-        Such properties can be:
+        @param Properties
+            Such properties can be:
                 <table>
                     <tr>
                         <td><b>Property</b></td>

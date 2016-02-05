@@ -94,6 +94,9 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         given diagram should return `TRUE` before this method is
         called.</p>
 
+        @param xDiagram
+            The diagram to be changed.
+
         @param xDataSource
             This data source will be interpreted in a chart-type
             specific way and the DataSeries found in

@@ -50,10 +50,12 @@ interface XSortableGridData
     /** returns the current sort order.
 
         @return
-            a structure describing the current sort order. ::com::sun::star::beans::Pair::First
-            denotes the column by which the data is sorted, or -1 if the data is currently unsorted.
-            ::com::sun::star::beans::Pair::Second is `TRUE` if the data is sorted ascending,
-            `FALSE` otherwise.
+            a structure describing the current sort order.
+            com::sun::star::beans::Pair::First
+            denotes the column by which the data is sorted, or -1 if
+            the data is currently unsorted.
+            com::sun::star::beans::Pair::Second
+            is `TRUE` if the data is sorted ascending, `FALSE` otherwise.
     */
     ::com::sun::star::beans::Pair< long, boolean >
             getCurrentSortOrder();

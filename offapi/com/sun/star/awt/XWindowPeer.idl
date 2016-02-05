@@ -62,6 +62,7 @@ published interface XWindowPeer: com::sun::star::lang::XComponent
     /** invalidates a rectangular area of the window with the specified
         InvalidateStyle.
 
+        @param Rect the area to invalidate.
         @param Flags see com.sun.star.awt.InvalidateStyle
      */
     void invalidateRect( [in] Rectangle Rect, [in] short Flags );

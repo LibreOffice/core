@@ -55,9 +55,10 @@ service Legend
     /** Determines how the aspect ratio of the legend should roughly
         be.
 
-        <p>Set the Expansion to ::com::sun::star::chart::ChartLegendExpansion::HIGH
+        <p>Set the Expansion to
+        ::com::sun::star::chart#HIGH
         for a legend that is positioned on the right or left hand
-        side.  Use LegendExpansion::WIDE for a legend
+        side.  Use ::com::sun::star::chart::WIDE for a legend
         that is positioned on top or the bottom.</p>
      */
     [property] ::com::sun::star::chart::ChartLegendExpansion Expansion;

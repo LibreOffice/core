@@ -41,6 +41,9 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
 {
     /** Interprets the given data.
 
+        @param xSource
+            the data source.
+
         @param aArguments
             Arguments that tell the template how to slice the given
             range.  The properties should be defined in a separate
