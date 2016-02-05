@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <postx.h>
 
 #include <unx/desktops.hxx>
 

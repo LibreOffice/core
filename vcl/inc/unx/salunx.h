@@ -20,9 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALUNX_H
 #define INCLUDED_VCL_INC_UNX_SALUNX_H
 
-#include <prex.h>
-#include <postx.h>
-
 #include "unx/salunxtime.h"
 
 inline long Divide( long nDividend, long nDivisor )

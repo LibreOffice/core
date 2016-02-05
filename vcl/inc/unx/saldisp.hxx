@@ -25,6 +25,10 @@ class   SalColormap;
 class   SalVisual;
 class   SalXLib;
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrender.h>
+
 #include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <vcl/salgtype.hxx>
@@ -41,6 +45,9 @@ class   SalXLib;
 #include <o3tl/enumarray.hxx>
 
 #include <vclpluginapi.h>
+
+/* From <X11/Intrinsic.h> */
+typedef unsigned long Pixel;
 
 class   BitmapPalette;
 class   SalFrame;

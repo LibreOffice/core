@@ -24,9 +24,9 @@
 #include <sys/types.h>
 #endif
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xproto.h>
-#include <postx.h>
 
 #include <osl/endian.h>
 

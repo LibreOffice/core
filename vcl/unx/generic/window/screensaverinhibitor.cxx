@@ -10,10 +10,9 @@
 #include <unx/gensys.h>
 #include <unx/screensaverinhibitor.hxx>
 
-#include <prex.h>
-#include <X11/Xatom.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 #include <config_dbus.h>
 

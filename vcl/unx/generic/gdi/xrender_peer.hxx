@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_UNX_GENERIC_GDI_XRENDER_PEER_HXX
 #define INCLUDED_VCL_UNX_GENERIC_GDI_XRENDER_PEER_HXX
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <X11/extensions/Xrender.h>
-#include <postx.h>
 
 #include <vcl/salgtype.hxx>
 #include <osl/module.h>

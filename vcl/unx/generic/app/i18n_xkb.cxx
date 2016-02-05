@@ -19,6 +19,9 @@
 
 #include <stdio.h>
 
+#include <X11/Xlib.h>
+#include <X11/XKBlib.h>
+
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"
 #include "unx/i18n_xkb.hxx"
