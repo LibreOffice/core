@@ -116,7 +116,7 @@ $(eval $(call gb_Library_set_defs,vclplug_gen,\
 
 
 ## handle RandR 
-ifneq ($(ENABLE_RANDR),)
+ifeq ($(ENABLE_RANDR),TRUE)
 $(eval $(call gb_Library_set_defs,vclplug_gen,\
     $$(DEFS) \
     -DUSE_RANDR \
