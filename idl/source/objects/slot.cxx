@@ -316,7 +316,7 @@ bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     if( bOk )
     {
         SvMetaType * pType = GetType();
-        if( pType->GetType() == TYPE_METHOD )
+        if( pType->GetType() == MetaTypeType::Method )
             pType = pType->GetReturnType();
         if( !pType->IsItem() )
         {

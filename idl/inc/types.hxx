@@ -68,15 +68,15 @@ public:
                                 SvIdlDataBase& );
 };
 
-enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM,
-      TYPE_CLASS };
+enum MetaTypeType { Method, Struct, Base, Enum, Class };
+
 class SvMetaType : public SvMetaExtern
 {
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
     SvIdentifier                aBasicName;
     SvRefMemberList<SvMetaAttribute *>* pAttrList;
-    int                         nType;
+    MetaTypeType                nType;
     bool                        bIsItem;
     bool                        bIsShell;
     char                        cParserChar;
@@ -106,8 +106,8 @@ public:
                             return pAttrList ? pAttrList->size() : 0L;
                         }
 
-    void                SetType( int nT );
-    int                 GetType() const { return nType; }
+    void                SetType( MetaTypeType nT );
+    MetaTypeType        GetType() const { return nType; }
     SvMetaType *        GetBaseType() const;
     SvMetaType *        GetReturnType() const;
     bool                IsItem() const { return bIsItem; }
