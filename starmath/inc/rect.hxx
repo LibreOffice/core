@@ -67,9 +67,17 @@ enum class RectHorAlign
     Center,
     Right
 };
-enum RectVerAlign
-{   RVA_TOP, RVA_MID, RVA_BOTTOM, RVA_BASELINE, RVA_CENTERY,
-    RVA_ATTRIBUT_HI, RVA_ATTRIBUT_MID, RVA_ATTRIBUT_LO
+
+enum class RectVerAlign
+{
+    Top,
+    Mid,
+    Bottom,
+    Baseline,
+    CenterY,
+    AttributeHi,
+    AttributeMid,
+    AttributeLo
 };
 
 // different methods of copying baselines and mid's in 'ExtendBy' function
