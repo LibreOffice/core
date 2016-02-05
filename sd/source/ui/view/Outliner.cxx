@@ -654,6 +654,7 @@ bool Outliner::SearchAndReplaceAll()
         {
             boost::property_tree::ptree aTree;
             aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
+            aTree.put("highlightAll", true);
 
             boost::property_tree::ptree aChildren;
             for (const SearchSelection& rSelection : aSelections)
@@ -802,6 +803,7 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
             // also about search result selections
             boost::property_tree::ptree aTree;
             aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
+            aTree.put("highlightAll", false);
 
             boost::property_tree::ptree aChildren;
             boost::property_tree::ptree aChild;
