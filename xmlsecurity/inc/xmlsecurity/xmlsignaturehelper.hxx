@@ -182,6 +182,8 @@ public:
     bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage);
     /// Read and verify a single OOXML signature.
     bool ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    /// Adds an OOXML digital signature relation to _rels/.rels if there wasn't any before.
+    void EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX

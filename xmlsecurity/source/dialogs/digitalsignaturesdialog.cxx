@@ -512,6 +512,11 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 // That's it...
                 XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
             }
+            else
+            {
+                // OOXML
+                maSignatureHelper.EnsureSignaturesRelation(mxStore);
+            }
 
             maSignatureHelper.EndMission();
 
