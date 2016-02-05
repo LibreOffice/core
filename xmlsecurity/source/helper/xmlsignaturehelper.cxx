@@ -492,4 +492,25 @@ void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
+bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureIndex)
+{
+    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
+    uno::Reference<io::XOutputStream> xOutputStream(xStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
+    xSaxWriter->setOutputStream(xOutputStream);
+    xSaxWriter->startDocument();
+
+    SvXMLAttributeList* pAttributeList = new SvXMLAttributeList();
+    pAttributeList->AddAttribute(ATTR_XMLNS, NS_XMLDSIG);
+    pAttributeList->AddAttribute(ATTR_ID, "idPackageSignature");
+    xSaxWriter->startElement(TAG_SIGNATURE, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
+
+    mbError = false;
+
+    xSaxWriter->endElement(TAG_SIGNATURE);
+    xSaxWriter->endDocument();
+
+    return !mbError;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

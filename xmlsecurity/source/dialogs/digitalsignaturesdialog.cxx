@@ -522,6 +522,9 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 int nSignatureCount = maCurrentSignatureInformations.size() + 1;
                 maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
 
+                // Create a new signature.
+                maSignatureHelper.CreateAndWriteOOXMLSignature(aStreamHelper.xSignatureStorage, nSignatureCount);
+
                 // Flush objects.
                 uno::Reference<embed::XTransactedObject> xTransact(aStreamHelper.xSignatureStorage, uno::UNO_QUERY);
                 xTransact->commit();
