@@ -2622,7 +2622,7 @@ bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         nEndNode = bBack ? 0 : aEditDoc.Count()-1;
     }
 
-    utl::TextSearch aSearcher( aSearchOptions );
+    utl::TextSearch aSearcher( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions) );
 
     // iterate over the paragraphs ...
     for ( sal_Int32 nNode = nStartNode;

@@ -744,7 +744,7 @@ bool ScTable::SearchAndReplace(
                     ( css::i18n::TransliterationModules_IGNORE_CASE |
                       css::i18n::TransliterationModules_IGNORE_WIDTH );
 
-            pSearchText = new utl::TextSearch( aSearchOptions );
+            pSearchText = new utl::TextSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions) );
 
             if (nCommand == SvxSearchCmd::FIND)
                 bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);

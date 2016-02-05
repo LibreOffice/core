@@ -833,7 +833,7 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, SearchHdl_Impl, Button*, void)
     else
     {
         m_options.searchString = m_pSearchEdit->GetText();
-        utl::TextSearch textSearch( m_options );
+        utl::TextSearch textSearch( utl::TextSearch::UpgradeToSearchOptions2( m_options) );
         for (auto const& it : m_prefBoxEntries)
         {
             sal_Int32 endPos, startPos = 0;

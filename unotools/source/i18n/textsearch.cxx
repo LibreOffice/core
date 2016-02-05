@@ -19,7 +19,8 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/TextSearch.hpp>
+#include <com/sun/star/util/TextSearch2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <sal/log.hxx>
@@ -78,9 +79,11 @@ SearchParam::SearchParam( const SearchParam& rParam )
 
 SearchParam::~SearchParam() {}
 
-static bool lcl_Equals( const SearchOptions& rSO1, const SearchOptions& rSO2 )
+static bool lcl_Equals( const SearchOptions2& rSO1, const SearchOptions2& rSO2 )
 {
-    return rSO1.algorithmType == rSO2.algorithmType &&
+    return
+        rSO1.AlgorithmType2 == rSO2.AlgorithmType2 &&
+        rSO1.algorithmType == rSO2.algorithmType &&
         rSO1.searchFlag == rSO2.searchFlag &&
         rSO1.searchString.equals(rSO2.searchString) &&
         rSO1.replaceString.equals(rSO2.replaceString) &&
@@ -98,15 +101,15 @@ namespace
     struct CachedTextSearch
     {
         ::osl::Mutex mutex;
-        css::util::SearchOptions Options;
-        css::uno::Reference< css::util::XTextSearch > xTextSearch;
+        css::util::SearchOptions2 Options;
+        css::uno::Reference< css::util::XTextSearch2 > xTextSearch;
     };
 
     struct theCachedTextSearch
         : public rtl::Static< CachedTextSearch, theCachedTextSearch > {};
 }
 
-Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
+Reference<XTextSearch2> TextSearch::getXTextSearch( const SearchOptions2& rPara )
 {
     CachedTextSearch &rCache = theCachedTextSearch::get();
 
@@ -116,8 +119,8 @@ Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
         return rCache.xTextSearch;
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    rCache.xTextSearch.set( ::TextSearch::create(xContext) );
-    rCache.xTextSearch->setOptions( rPara );
+    rCache.xTextSearch.set( ::TextSearch2::create(xContext) );
+    rCache.xTextSearch->setOptions2( rPara );
     rCache.Options = rPara;
 
     return rCache.xTextSearch;
@@ -137,20 +140,61 @@ TextSearch::TextSearch(const SearchParam & rParam, const CharClass& rCClass )
     Init( rParam, rCClass.getLanguageTag().getLocale() );
 }
 
-TextSearch::TextSearch( const SearchOptions& rPara )
+TextSearch::TextSearch( const SearchOptions2& rPara )
 {
     xTextSearch = getXTextSearch( rPara );
+}
+
+css::util::SearchOptions2 TextSearch::UpgradeToSearchOptions2( const css::util::SearchOptions& rOptions )
+{
+    sal_Int16 nAlgorithmType2;
+    switch (rOptions.algorithmType)
+    {
+        case SearchAlgorithms_REGEXP:
+            nAlgorithmType2 = SearchAlgorithms2::REGEXP;
+            break;
+        case SearchAlgorithms_APPROXIMATE:
+            nAlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
+            break;
+        default:
+            assert(!"utl::TextSearch::UpgradeToSearchOptions2 - default what?");
+            // fallthru
+        case SearchAlgorithms_ABSOLUTE:
+            nAlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
+            break;
+    }
+    // It would be nice if an inherited struct had a ctor that takes an
+    // instance of the object the struct derived from..
+    SearchOptions2 aOptions2(
+            rOptions.algorithmType,
+            rOptions.searchFlag,
+            rOptions.searchString,
+            rOptions.replaceString,
+            rOptions.Locale,
+            rOptions.changedChars,
+            rOptions.deletedChars,
+            rOptions.insertedChars,
+            rOptions.transliterateFlags,
+            nAlgorithmType2
+            );
+    return aOptions2;
 }
 
 void TextSearch::Init( const SearchParam & rParam,
                         const css::lang::Locale& rLocale )
 {
-    // convert SearchParam to the UNO SearchOptions
-    SearchOptions aSOpt;
+    // convert SearchParam to the UNO SearchOptions2
+    SearchOptions2 aSOpt;
 
     switch( rParam.GetSrchType() )
     {
+    case SearchParam::SRCH_WILDCARD:
+        aSOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
+        aSOpt.algorithmType = static_cast<SearchAlgorithms>(-1);    // no old enum for that
+        break;
+
     case SearchParam::SRCH_REGEXP:
+        aSOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
         aSOpt.algorithmType = SearchAlgorithms_REGEXP;
         if( rParam.IsSrchInSelection() )
             aSOpt.searchFlag |= SearchFlags::REG_NOT_BEGINOFLINE |
@@ -158,6 +202,7 @@ void TextSearch::Init( const SearchParam & rParam,
         break;
 
     case SearchParam::SRCH_LEVDIST:
+        aSOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
         aSOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
         aSOpt.changedChars = rParam.GetLEVOther();
         aSOpt.deletedChars = rParam.GetLEVLonger();
@@ -166,8 +211,11 @@ void TextSearch::Init( const SearchParam & rParam,
             aSOpt.searchFlag |= SearchFlags::LEV_RELAXED;
         break;
 
-//  case SearchParam::SRCH_NORMAL:
     default:
+        assert(!"default what?");
+        // fallthru
+    case SearchParam::SRCH_NORMAL:
+        aSOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
         if( rParam.IsSrchWordOnly() )
             aSOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
@@ -186,11 +234,11 @@ void TextSearch::Init( const SearchParam & rParam,
     xTextSearch = getXTextSearch( aSOpt );
 }
 
-void TextSearch::SetLocale( const css::util::SearchOptions& rOptions,
+void TextSearch::SetLocale( const css::util::SearchOptions2& rOptions,
                             const css::lang::Locale& rLocale )
 {
-    // convert SearchParam to the UNO SearchOptions
-    SearchOptions aSOpt( rOptions );
+    // convert SearchParam to the UNO SearchOptions2
+    SearchOptions2 aSOpt( rOptions );
     aSOpt.Locale = rLocale;
 
     xTextSearch = getXTextSearch( aSOpt );

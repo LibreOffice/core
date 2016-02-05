@@ -21,7 +21,7 @@
 #define INCLUDED_I18NPOOL_SOURCE_SEARCH_TEXTSEARCH_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/util/XTextSearch.hpp>
+#include <com/sun/star/util/XTextSearch2.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -39,13 +39,13 @@ typedef ::std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
 
 class TextSearch: public cppu::WeakImplHelper
 <
-    css::util::XTextSearch,
+    css::util::XTextSearch2,
     css::lang::XServiceInfo
 >
 {
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    css::util::SearchOptions aSrchPara;
+    css::util::SearchOptions2 aSrchPara;
     OUString sSrchStr;
     OUString sSrchStr2;
 
@@ -91,7 +91,7 @@ class TextSearch: public cppu::WeakImplHelper
         RESrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(css::uno::RuntimeException);
-    void RESrchPrepare( const css::util::SearchOptions&);
+    void RESrchPrepare( const css::util::SearchOptions2&);
 
     // Members and methods for the "Weight Levenshtein-Distance" search
     int nLimit;
@@ -118,7 +118,7 @@ public:
 
     virtual ~TextSearch();
 
-    // Methods
+    // XTextSearch
     virtual void SAL_CALL
         setOptions( const css::util::SearchOptions& options )
                             throw(css::uno::RuntimeException, std::exception) override;
@@ -129,6 +129,11 @@ public:
     virtual css::util::SearchResult SAL_CALL
         searchBackward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
+                            throw(css::uno::RuntimeException, std::exception) override;
+
+    // XTextSearch2
+    virtual void SAL_CALL
+        setOptions2( const css::util::SearchOptions2& options )
                             throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo

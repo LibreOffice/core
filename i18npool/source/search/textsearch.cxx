@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -112,7 +113,8 @@ TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         , pRegexMatcher( nullptr )
         , pWLD( nullptr )
 {
-    SearchOptions aOpt;
+    SearchOptions2 aOpt;
+    aOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
     aOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
     aOpt.searchFlag = SearchFlags::ALL_IGNORE_CASE;
     //aOpt.Locale = ???;
@@ -127,7 +129,7 @@ TextSearch::~TextSearch()
     delete pJumpTable2;
 }
 
-void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeException, std::exception )
+void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeException, std::exception )
 {
     aSrchPara = rOptions;
 
@@ -165,7 +167,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     sSrchStr = aSrchPara.searchString;
 
     // Transliterate search string.
-    if (aSrchPara.algorithmType == SearchAlgorithms_REGEXP)
+    if (aSrchPara.AlgorithmType2 == SearchAlgorithms2::REGEXP)
     {
         if (isSimpleRegexTrans( aSrchPara.transliterateFlags))
         {
@@ -212,15 +214,17 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     checkCTLEnd = (xBreak.is() && (xBreak->getScriptType(sSrchStr,
                     sSrchStr.getLength()-1) == ScriptType::COMPLEX));
 
-    switch( aSrchPara.algorithmType)
+    // Take the new SearchOptions2::AlgorithmType2 field and ignore
+    // SearchOptions::algorithmType
+    switch( aSrchPara.AlgorithmType2)
     {
-        case SearchAlgorithms_REGEXP:
+        case SearchAlgorithms2::REGEXP:
             fnForward = &TextSearch::RESrchFrwrd;
             fnBackward = &TextSearch::RESrchBkwrd;
             RESrchPrepare( aSrchPara);
             break;
 
-        case SearchAlgorithms_APPROXIMATE:
+        case SearchAlgorithms2::APPROXIMATE:
             fnForward = &TextSearch::ApproxSrchFrwrd;
             fnBackward = &TextSearch::ApproxSrchBkwrd;
 
@@ -232,10 +236,49 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
             break;
 
         default:
+        case SearchAlgorithms2::WILDCARD:   /* FIXME: temporary */
+            SAL_WARN("i18npool","TextSearch::setOptions2 - default what?");
+            // fallthru
+        case SearchAlgorithms2::ABSOLUTE:
             fnForward = &TextSearch::NSrchFrwrd;
             fnBackward = &TextSearch::NSrchBkwrd;
             break;
     }
+}
+
+void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeException, std::exception )
+{
+    sal_Int16 nAlgorithmType2;
+    switch (rOptions.algorithmType)
+    {
+        case SearchAlgorithms_REGEXP:
+            nAlgorithmType2 = SearchAlgorithms2::REGEXP;
+            break;
+        case SearchAlgorithms_APPROXIMATE:
+            nAlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
+            break;
+        default:
+            SAL_WARN("i18npool","TextSearch::setOptions - default what?");
+            // fallthru
+        case SearchAlgorithms_ABSOLUTE:
+            nAlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
+            break;
+    }
+    // It would be nice if an inherited struct had a ctor that takes an
+    // instance of the object the struct derived from..
+    SearchOptions2 aOptions2(
+            rOptions.algorithmType,
+            rOptions.searchFlag,
+            rOptions.searchString,
+            rOptions.replaceString,
+            rOptions.Locale,
+            rOptions.changedChars,
+            rOptions.deletedChars,
+            rOptions.insertedChars,
+            rOptions.transliterateFlags,
+            nAlgorithmType2
+            );
+    setOptions2( aOptions2);
 }
 
 sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
@@ -325,7 +368,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         sres = (this->*fnForward)( in_str, startPos, endPos );
     }
 
-    if ( xTranslit2.is() && aSrchPara.algorithmType != SearchAlgorithms_REGEXP)
+    if ( xTranslit2.is() && aSrchPara.AlgorithmType2 != SearchAlgorithms2::REGEXP)
     {
         SearchResult sres2;
 
@@ -432,7 +475,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         sres = (this->*fnBackward)( in_str, startPos, endPos );
     }
 
-    if ( xTranslit2.is() && aSrchPara.algorithmType != SearchAlgorithms_REGEXP )
+    if ( xTranslit2.is() && aSrchPara.AlgorithmType2 != SearchAlgorithms2::REGEXP )
     {
         SearchResult sres2;
 
@@ -776,7 +819,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     return aRet;
 }
 
-void TextSearch::RESrchPrepare( const css::util::SearchOptions& rOptions)
+void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
 {
     // select the transliterated pattern string
     const OUString& rPatternStr =
@@ -1080,9 +1123,12 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
 
 static const sal_Char cSearchImpl[] = "com.sun.star.util.TextSearch_i18n";
 
-static OUString getServiceName_Static()
+static uno::Sequence< OUString > getServiceName_Static()
 {
-    return OUString( "com.sun.star.util.TextSearch" );
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = "com.sun.star.util.TextSearch";
+    aRet[1] = "com.sun.star.util.TextSearch2";
+    return aRet;
 }
 
 static OUString getImplementationName_Static()

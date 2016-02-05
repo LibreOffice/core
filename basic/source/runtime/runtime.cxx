@@ -1569,7 +1569,7 @@ void SbiRuntime::StepLIKE()
         aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
     }
     SbxVariable* pRes = new SbxVariable;
-    utl::TextSearch aSearch(aSearchOpt);
+    utl::TextSearch aSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOpt));
     sal_Int32 nStart=0, nEnd=value.getLength();
     bool bRes = aSearch.SearchForward(value, &nStart, &nEnd);
     pRes->PutBool( bRes );

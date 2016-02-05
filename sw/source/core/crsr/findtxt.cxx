@@ -540,7 +540,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
                 {
                     const lang::Locale aLocale(
                             g_pBreakIt->GetLocale( eCurrLang ) );
-                    rSText.SetLocale( rSearchOpt, aLocale );
+                    rSText.SetLocale( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt), aLocale );
                     eLastLang = eCurrLang;
                 }
             }
@@ -635,7 +635,8 @@ struct SwFindParaText : public SwFindParas
     bool m_bSearchInNotes;
 
     SwFindParaText( const SearchOptions& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
-        : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( rOpt ), m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
+        : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( utl::TextSearch::UpgradeToSearchOptions2( rOpt) ),
+        m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, bool bInReadOnly ) override;
     virtual bool IsReplaceMode() const override;
@@ -749,7 +750,7 @@ OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         const SwContentNode* pTextNode = pPam->GetContentNode();
         if( pTextNode && pTextNode->IsTextNode() && pTextNode == pPam->GetContentNode( false ) )
         {
-            utl::TextSearch aSText( rSearchOpt );
+            utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );
             const OUString& rStr = pTextNode->GetTextNode()->GetText();
             sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
             sal_Int32 nEnd = pPam->End()->nContent.GetIndex();

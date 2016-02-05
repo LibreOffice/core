@@ -568,7 +568,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     }
     aParam.searchString = strExpression;
     aParam.Locale = SvtSysLocale().GetLanguageTag().getLocale();
-    ::utl::TextSearch aLocalEngine(aParam);
+    ::utl::TextSearch aLocalEngine( utl::TextSearch::UpgradeToSearchOptions2( aParam));
 
 
     bool bFound = false;

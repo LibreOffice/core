@@ -25,8 +25,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/XTextSearch.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/XTextSearch2.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
 
 class CharClass;
 
@@ -47,7 +47,7 @@ namespace utl
 class UNOTOOLS_DLLPUBLIC SearchParam
 {
 public:
-    enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST };
+    enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST, SRCH_WILDCARD };
 
 private:
     OUString sSrchStr;            // the search string
@@ -100,15 +100,16 @@ public:
 //      - ordinary text (Bayer/Moore)
 //      - regular expressions
 //      - weighted Levenshtein distance
+//      - wildcards '*' and '?'
 
 //  This class allows forward and backward searching!
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
-    static css::uno::Reference< css::util::XTextSearch >
-        getXTextSearch( const css::util::SearchOptions& rPara );
+    static css::uno::Reference< css::util::XTextSearch2 >
+        getXTextSearch( const css::util::SearchOptions2& rPara );
 
-    css::uno::Reference < css::util::XTextSearch >
+    css::uno::Reference < css::util::XTextSearch2 >
             xTextSearch;
 
     void Init( const SearchParam & rParam,
@@ -120,7 +121,7 @@ public:
     TextSearch( const SearchParam & rPara, LanguageType nLanguage );
     TextSearch( const SearchParam & rPara, const CharClass& rCClass );
 
-    TextSearch( const css::util::SearchOptions& rPara );
+    TextSearch( const css::util::SearchOptions2& rPara );
     ~TextSearch();
 
     /* search in the (selected) text the search string:
@@ -149,11 +150,17 @@ public:
                         sal_Int32* pStart, sal_Int32* pEnd,
                         css::util::SearchResult* pRes = nullptr );
 
-    void SetLocale( const css::util::SearchOptions& rOpt,
+    void SetLocale( const css::util::SearchOptions2& rOpt,
                     const css::lang::Locale& rLocale );
 
     /* replace back references in the replace string by the sub expressions from the search result */
     void ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const css::util::SearchResult& rResult );
+
+    /** Upgrade SearchOptions to SearchOptions2 for places that don't handle
+        SearchOptions2 yet. Better fix your module if you want to support
+        wildcard search.
+     */
+    static css::util::SearchOptions2 UpgradeToSearchOptions2( const css::util::SearchOptions& rOptions );
 
 };
 

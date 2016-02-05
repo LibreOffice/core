@@ -1117,7 +1117,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
 
                 aTmp.Locale = SvtSysLocale().GetLanguageTag().getLocale();
 
-                pSText = new utl::TextSearch( aTmp );
+                pSText = new utl::TextSearch( utl::TextSearch::UpgradeToSearchOptions2( aTmp) );
             }
 
             // TODO: searching for attributes in Outliner text?!

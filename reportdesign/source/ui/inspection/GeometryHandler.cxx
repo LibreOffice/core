@@ -1858,13 +1858,13 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
         for (; aIter != aDeEnd; ++aIter)
         {
             aSearchOptions.searchString = aIter->m_sSearchString;
-            utl::TextSearch aTextSearch(aSearchOptions);
+            utl::TextSearch aTextSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions));
             sal_Int32 start = 0;
             sal_Int32 end = sFormula.getLength();
             if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.getLength()) // default function found
             {
                 aSearchOptions.searchString = "\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
-                utl::TextSearch aDataSearch(aSearchOptions);
+                utl::TextSearch aDataSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions));
                 aDataSearch.SearchForward(sFormula,&start,&end );
                 ++start;
                 _rDataField = sFormula.copy(start,end-start-1);
@@ -2075,7 +2075,7 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
             aSearchOptions.algorithmType = util::SearchAlgorithms_REGEXP;
             aSearchOptions.searchFlag = 0x00000100;
             aSearchOptions.searchString = m_aCounterFunction.m_sSearchString;
-            utl::TextSearch aTextSearch(aSearchOptions);
+            utl::TextSearch aTextSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions));
             sal_Int32 start = 0;
             sal_Int32 end = sFormula.getLength();
             if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.getLength()) // counter function found

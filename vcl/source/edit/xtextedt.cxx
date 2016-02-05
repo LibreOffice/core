@@ -158,7 +158,7 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
 
     util::SearchOptions aOptions( rSearchOptions );
     aOptions.Locale = Application::GetSettings().GetLanguageTag().getLocale();
-    utl::TextSearch aSearcher( aOptions );
+    utl::TextSearch aSearcher( utl::TextSearch::UpgradeToSearchOptions2( aOptions));
 
     // iterate over the paragraphs
     for ( sal_uInt32 nNode = nStartNode;

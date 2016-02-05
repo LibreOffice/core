@@ -91,7 +91,7 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     SearchOptions aSearchOptions;
     aSearchOptions.algorithmType = SearchAlgorithms_REGEXP;
     aSearchOptions.searchString = OUString( pExpression, strlen(pExpression), RTL_TEXTENCODING_ASCII_US );
-    utl::TextSearch aTextSearch( aSearchOptions );
+    utl::TextSearch aTextSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions) );
 
     sal_Int32 nLength =  msExpression.getLength();
     sal_Int32 nStart = 0;
