@@ -42,7 +42,9 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,FONTCONFIG,fontconfig) \
 	$(call gb_Helper_optional,FREEHAND,libfreehand) \
 	$(call gb_Helper_optional,FREETYPE,freetype) \
-	$(call gb_Helper_optional,GLEW,glew) \
+	$(if $(ENABLE_OPENGL), \
+		$(call gb_Helper_optional,GLEW,glew) \
+	) \
 	$(call gb_Helper_optional,GLM,glm) \
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \

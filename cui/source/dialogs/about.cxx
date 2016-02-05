@@ -49,6 +49,7 @@
 #include <vcl/bitmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+#include <config_features.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -296,12 +297,12 @@ OUString AboutDialog::GetVersionString()
         }
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
-
+#if HAVE_FEATURE_OPENGL
     if (OpenGLWrapper::isVCLOpenGLEnabled())
     {
         sVersion += "-GL";
     }
-
+#endif
     if (EXTRA_BUILDID[0] != '\0')
     {
         sVersion += "\n" EXTRA_BUILDID;
