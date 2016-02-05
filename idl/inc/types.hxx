@@ -30,15 +30,14 @@ typedef std::vector< SvSlotElement* > SvSlotElementList;
 class SvMetaSlot;
 
 class SvMetaType;
-typedef tools::SvRef<SvMetaType> SvMetaTypeRef;
 
 class SvMetaAttribute : public SvMetaReference
 {
-    SvMetaTypeRef       aType;
-    SvIdentifier        aSlotId;
-    SvBOOL              aExport;
-    SvBOOL              aReadOnlyDoc;
-    bool                bNewAttr;
+    tools::SvRef<SvMetaType> aType;
+    SvIdentifier             aSlotId;
+    SvBOOL                   aExport;
+    SvBOOL                   aReadOnlyDoc;
+    bool                     bNewAttr;
 
 protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -69,10 +68,6 @@ public:
                                 SvIdlDataBase& );
 };
 
-typedef tools::SvRef<SvMetaAttribute> SvMetaAttributeRef;
-
-class SvMetaAttributeMemberList : public SvRefMemberList<SvMetaAttribute *> {};
-
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM,
       TYPE_CLASS, TYPE_POINTER };
@@ -82,7 +77,7 @@ class SvMetaType : public SvMetaExtern
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
     SvIdentifier                aBasicName;
-    SvMetaAttributeMemberList * pAttrList;
+    SvRefMemberList<SvMetaAttribute *>* pAttrList;
     int                         nType;
     bool                        bIsItem;
     bool                        bIsShell;
@@ -107,8 +102,8 @@ public:
 
     virtual ~SvMetaType();
 
-    SvMetaAttributeMemberList & GetAttrList() const;
-    sal_uLong               GetAttrCount() const
+    SvRefMemberList<SvMetaAttribute *>& GetAttrList() const;
+    sal_uLong           GetAttrCount() const
                         {
                             return pAttrList ? pAttrList->size() : 0L;
                         }
@@ -145,15 +140,11 @@ public:
     OString             GetParserString() const;
 };
 
-class SvMetaTypeMemberList : public SvRefMemberList<SvMetaType *> {};
-
 class SvMetaTypeString : public SvMetaType
 {
 public:
             SvMetaTypeString();
 };
-
-class SvMetaTypeStringMemberList : public SvRefMemberList<SvMetaTypeString *> {};
 
 class SvMetaEnumValue : public SvMetaObject
 {
@@ -163,11 +154,9 @@ public:
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
-class SvMetaEnumValueMemberList : public SvRefMemberList<SvMetaEnumValue *> {};
-
 class SvMetaTypeEnum : public SvMetaType
 {
-    SvMetaEnumValueMemberList   aEnumValueList;
+    SvRefMemberList<SvMetaEnumValue *> aEnumValueList;
     OString aPrefix;
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
@@ -182,14 +171,11 @@ public:
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
-class SvMetaTypeEnumMemberList : public SvRefMemberList<SvMetaTypeEnum *> {};
-
 class SvMetaTypevoid : public SvMetaType
 {
 public:
             SvMetaTypevoid();
 };
-class SvMetaTypevoidMemberList : public SvRefMemberList<SvMetaTypevoid *> {};
 
 
 #endif // INCLUDED_IDL_INC_TYPES_HXX

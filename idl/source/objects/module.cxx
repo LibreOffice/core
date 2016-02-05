@@ -71,7 +71,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     if( rInStm.GetToken().Is( SvHash_interface() )
       || rInStm.GetToken().Is( SvHash_shell() ) )
     {
-        SvMetaClassRef aClass = new SvMetaClass();
+        tools::SvRef<SvMetaClass> aClass( new SvMetaClass() );
         if( aClass->ReadSvIdl( rBase, rInStm ) )
         {
             aClassList.push_back( aClass );
@@ -81,7 +81,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
     else if( rInStm.GetToken().Is( SvHash_enum() ) )
     {
-        tools::SvRef<SvMetaTypeEnum> aEnum = new SvMetaTypeEnum();
+        tools::SvRef<SvMetaTypeEnum> aEnum( new SvMetaTypeEnum() );
 
         if( aEnum->ReadSvIdl( rBase, rInStm ) )
         {
@@ -94,7 +94,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     else if( rInStm.GetToken().Is( SvHash_item() )
       || rInStm.GetToken().Is( SvHash_struct() ) )
     {
-        SvMetaTypeRef xItem = new SvMetaType();
+        tools::SvRef<SvMetaType> xItem(new SvMetaType() );
 
         if( xItem->ReadSvIdl( rBase, rInStm ) )
         {
@@ -162,7 +162,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
     else
     {
-        SvMetaSlotRef xSlot = new SvMetaSlot();
+        tools::SvRef<SvMetaSlot> xSlot( new SvMetaSlot() );
 
         if( xSlot->ReadSvIdl( rBase, rInStm ) )
         {

@@ -127,7 +127,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
         SvToken& rTok  = rInStm.GetToken();
         if( bOk && rTok.IsChar() && rTok.GetChar() == '(' )
         {
-            SvMetaTypeRef xT = new SvMetaType();
+            tools::SvRef<SvMetaType> xT(new SvMetaType() );
             xT->SetRef( GetType() );
             aType = xT;
             bOk = aType->ReadMethodArgs( rBase, rInStm );
@@ -221,10 +221,10 @@ SvMetaType::~SvMetaType() {
     delete pAttrList;
 }
 
-SvMetaAttributeMemberList & SvMetaType::GetAttrList() const
+SvRefMemberList<SvMetaAttribute *>& SvMetaType::GetAttrList() const
 {
     if( !pAttrList )
-        const_cast<SvMetaType *>(this)->pAttrList = new SvMetaAttributeMemberList();
+        const_cast<SvMetaType *>(this)->pAttrList = new SvRefMemberList<SvMetaAttribute *>();
     return *pAttrList;
 }
 
@@ -414,7 +414,7 @@ bool SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
-    SvMetaAttributeRef xAttr = new SvMetaAttribute();
+    tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
     if( xAttr->ReadSvIdl( rBase, rInStm ) )
     {
         if( xAttr->Test( rBase, rInStm ) )

@@ -469,7 +469,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     if( GetPseudoSlots() && pEnum && pEnum->Count() )
     {
         // clone the MasterSlot
-        SvMetaSlotRef xEnumSlot;
+        tools::SvRef<SvMetaSlot> xEnumSlot;
         SvMetaSlot *pFirstEnumSlot = nullptr;
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
@@ -871,7 +871,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
         if( !SvIdlDataBase::FindType( pType, rBase.aUsedTypes ) )
             rBase.aUsedTypes.push_back( pType );
 
-        const SvMetaAttributeMemberList & rList =
+        const SvRefMemberList<SvMetaAttribute *>& rList =
                     pType->GetAttrList();
         for( sal_uLong n = 0; n < rList.size(); n++ )
         {

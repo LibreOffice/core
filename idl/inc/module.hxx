@@ -25,9 +25,9 @@
 
 class SvMetaModule : public SvMetaExtern
 {
-    SvMetaClassMemberList       aClassList;
-    SvMetaTypeMemberList        aTypeList;
-    SvMetaAttributeMemberList   aAttrList;
+    SvRefMemberList<SvMetaClass *>      aClassList;
+    SvRefMemberList<SvMetaType *>       aTypeList;
+    SvRefMemberList<SvMetaAttribute *>  aAttrList;
 // browser
     SvString                aSlotIdFile;
     SvString                aModulePrefix;
@@ -51,9 +51,6 @@ public:
 
     void                WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
 };
-
-class SvMetaModuleMemberList : public SvRefMemberList<SvMetaModule *> {};
-
 
 #endif // INCLUDED_IDL_INC_MODULE_HXX
 

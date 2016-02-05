@@ -87,9 +87,6 @@ public:
         }
 };
 
-typedef tools::SvRef<SvStringHashEntry> SvStringHashEntryRef;
-
-
 class SvStringHashTable : public SvHashTable
 {
     SvStringHashEntry*      pEntries;

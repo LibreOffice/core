@@ -81,7 +81,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
 
         bool bOk = false;
-        SvMetaAttributeRef xAttr;
+        tools::SvRef<SvMetaAttribute> xAttr;
         if( !pType || pType->IsItem() )
         {
             xAttr = new SvMetaSlot( pType );
