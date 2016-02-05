@@ -49,12 +49,13 @@
 #include "svids.hrc"
 #include "helpwin.hxx"
 #include "../window/scrwnd.hxx"
-
+#include <config_features.h>
 #include "com/sun/star/accessibility/MSAAService.hpp"
 
 #include "officecfg/Office/Common.hxx"
-
+#if HAVE_FEATURE_OPENGL
 #include "vcl/opengl/OpenGLContext.hxx"
+#endif
 
 #include <stdio.h>
 
@@ -140,9 +141,11 @@ vcl::Window* ImplGetDefaultWindow()
             pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
 
             // Add a reference to the default context so it never gets deleted
+#if HAVE_FEATURE_OPENGL
             rtl::Reference<OpenGLContext> pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
             if( pContext.is() )
                 pContext->acquire();
+#endif
         }
         Application::GetSolarMutex().release();
     }

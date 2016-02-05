@@ -44,7 +44,7 @@
 #include <outdata.hxx>
 #include <boost/scoped_array.hpp>
 #include <memory>
-
+#include <config_features.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 // The only common SalFrame method
@@ -79,10 +79,11 @@ SalGraphics::~SalGraphics()
 
 rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
+#if HAVE_FEATURE_OPENGL
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
     if (pImpl)
         return pImpl->GetOpenGLContext();
-
+#endif
     return NULL;
 }
 

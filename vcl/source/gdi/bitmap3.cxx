@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include <config_features.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -1003,7 +1003,11 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 
 bool Bitmap::HasFastScale()
 {
+#if HAVE_FEATURE_OPENGL
     return OpenGLHelper::isVCLOpenGLEnabled();
+#else
+    return false;
+#endif
 }
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const

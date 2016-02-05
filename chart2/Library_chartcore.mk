@@ -83,7 +83,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/axes/VPolarCoordinateSystem \
     chart2/source/view/axes/VPolarGrid \
     chart2/source/view/axes/VPolarRadiusAxis \
-    chart2/source/view/charttypes/GL3DBarChart \
     chart2/source/view/charttypes/AreaChart \
     chart2/source/view/charttypes/BarChart \
     chart2/source/view/charttypes/BarPositionHelper \
@@ -95,16 +94,12 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/charttypes/Splines \
     chart2/source/view/charttypes/VSeriesPlotter \
     chart2/source/view/diagram/VDiagram \
-    chart2/source/view/main/3DChartObjects \
     chart2/source/view/main/ChartItemPool \
     chart2/source/view/main/ChartView \
     chart2/source/view/main/Clipping \
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DrawModelWrapper \
-    chart2/source/view/main/GL3DPlotterBase \
-    chart2/source/view/main/GL3DRenderer \
     chart2/source/view/main/LabelPositionHelper \
-    chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \
     chart2/source/view/main/PlottingPositionHelper \
     chart2/source/view/main/PolarLabelPositionHelper \
@@ -119,7 +114,17 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/VPolarTransformation \
     chart2/source/view/main/VTitle \
 ))
-
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_add_exception_objects,chartcore,\
+    chart2/source/view/main/Linear3DTransformation \
+    chart2/source/view/main/3DChartObjects \
+    chart2/source/model/template/GL3DBarChartType \
+    chart2/source/model/template/GL3DBarChartTypeTemplate \
+    chart2/source/view/main/GL3DPlotterBase \
+    chart2/source/view/main/GL3DRenderer \
+    chart2/source/view/charttypes/GL3DBarChart \
+))
+endif
 # model pieces ...
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/filter/XMLFilter \
@@ -158,8 +163,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/template/ColumnLineDataInterpreter \
     chart2/source/model/template/DataInterpreter \
     chart2/source/model/template/FilledNetChartType \
-    chart2/source/model/template/GL3DBarChartType \
-    chart2/source/model/template/GL3DBarChartTypeTemplate \
     chart2/source/model/template/LineChartType \
     chart2/source/model/template/LineChartTypeTemplate \
     chart2/source/model/template/NetChartType \

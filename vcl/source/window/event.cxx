@@ -26,7 +26,7 @@
 #include <window.h>
 #include <svdata.hxx>
 #include <salframe.hxx>
-
+#include <config_features.h>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
@@ -457,11 +457,14 @@ void Window::ImplCallResize()
     // OpenGL has a charming feature of black clearing the whole window
     // some legacy code eg. the app-menu has the beautiful feature of
     // avoiding re-paints when width doesn't change => invalidate all.
+#if HAVE_FEATURE_OPENGL
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         Invalidate();
 
     // Normally we avoid blanking on re-size unless people might notice:
-    else if( GetBackground().IsGradient() )
+    else
+#endif
+        if( GetBackground().IsGradient() )
         Invalidate();
 
     Resize();
