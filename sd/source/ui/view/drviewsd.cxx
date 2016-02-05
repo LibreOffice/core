@@ -156,7 +156,6 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     sal_uInt16 nCurrentPage = 0;
     sal_uInt16 nFirstPage = 0;
     sal_uInt16 nLastPage;
-    bool   bEndless = false;
     OUString aPageName;
 
     nState |= NAVTLB_UPDATE;
@@ -172,11 +171,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     // first page / previous page
     if( nCurrentPage == nFirstPage )
     {
-        nState |= NAVBTN_FIRST_DISABLED;
-        if( !bEndless )
-            nState |= NAVBTN_PREV_DISABLED;
-        else
-            nState |= NAVBTN_PREV_ENABLED;
+        nState |= NAVBTN_FIRST_DISABLED | NAVBTN_PREV_DISABLED;
     }
     else
     {
@@ -186,11 +181,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     // last page / next page
     if( nCurrentPage == nLastPage )
     {
-        nState |= NAVBTN_LAST_DISABLED;
-        if( !bEndless )
-            nState |= NAVBTN_NEXT_DISABLED;
-        else
-            nState |= NAVBTN_NEXT_ENABLED;
+        nState |= NAVBTN_LAST_DISABLED | NAVBTN_NEXT_DISABLED;
     }
     else
     {
