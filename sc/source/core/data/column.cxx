@@ -314,8 +314,8 @@ bool ScColumn::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) c
 
     if (rMark.IsMultiMarked())
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray()+nCol );
-        while (aMarkIter.Next( nTop, nBottom ) && !bFound)
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ) && !bFound)
         {
             if (pAttrArray->HasAttrib( nTop, nBottom, nMask ))
                 bFound = true;
@@ -339,11 +339,11 @@ void ScColumn::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkD
 
     if ( rMark.IsMultiMarked() )
     {
-        const ScMarkArray* pArray = rMark.GetArray() + nCol;
-        if ( pArray->HasMarks() )
+        const ScMultiSel& rMultiSel = rMark.GetMultiSelData();
+        if ( rMultiSel.HasMarks( nCol ) )
         {
-            ScMarkArrayIter aMarkIter( pArray );
-            while (aMarkIter.Next( nTop, nBottom ))
+            ScMultiSelIter aMultiIter( rMultiSel, nCol );
+            while (aMultiIter.Next( nTop, nBottom ))
                 pAttrArray->MergePatternArea( nTop, nBottom, rState, bDeep );
         }
     }
@@ -430,8 +430,8 @@ SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData
 
     if ( rMark.IsMultiMarked() )
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
         {
             pAttrArray->ApplyCacheArea( nTop, nBottom, pCache, pDataArray );
             bFound = true;
@@ -453,8 +453,8 @@ void ScColumn::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
 
     if ( pAttrArray && rMark.IsMultiMarked() )
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ChangeIndent(nTop, nBottom, bIncrement);
     }
 }
@@ -466,8 +466,8 @@ void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& r
 
     if ( pAttrArray && rMark.IsMultiMarked() )
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ClearItems(nTop, nBottom, pWhich);
     }
 }
@@ -479,8 +479,8 @@ void ScColumn::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rM
 
     if ( rMark.IsMultiMarked() )
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
             DeleteArea(nTop, nBottom, nDelFlag, bBroadcast);
     }
 }
@@ -569,8 +569,8 @@ void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData&
 
     if ( rMark.IsMultiMarked() )
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ApplyStyleArea(nTop, nBottom, const_cast<ScStyleSheet*>(&rStyle));
     }
 }
@@ -586,8 +586,8 @@ void ScColumn::ApplySelectionLineStyle( const ScMarkData& rMark,
 
     if (rMark.IsMultiMarked())
     {
-        ScMarkArrayIter aMarkIter( rMark.GetArray()+nCol );
-        while (aMarkIter.Next( nTop, nBottom ))
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ApplyLineStyleArea(nTop, nBottom, pLine, bColorOnly );
     }
 }
@@ -611,10 +611,10 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     const ScStyleSheet* pStyle = nullptr;
     const ScStyleSheet* pNewStyle;
 
-    ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
+    ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
     SCROW nTop;
     SCROW nBottom;
-    while (bEqual && aMarkIter.Next( nTop, nBottom ))
+    while (bEqual && aMultiIter.Next( nTop, nBottom ))
     {
         ScAttrIterator aAttrIter( pAttrArray, nTop, nBottom );
         SCROW nRow;
@@ -1631,7 +1631,7 @@ void ScColumn::CopyToColumn(
         SCROW nStart, nEnd;
         if (pMarkData && pMarkData->IsMultiMarked())
         {
-            ScMarkArrayIter aIter( pMarkData->GetArray()+nCol );
+            ScMultiSelIter aIter( pMarkData->GetMultiSelData(), nCol );
 
             while ( aIter.Next( nStart, nEnd ) && nStart <= nRow2 )
             {
@@ -3427,7 +3427,10 @@ SCsROW ScColumn::SearchStyle(
     if (bInSelection)
     {
         if (rMark.IsMultiMarked())
-            return pAttrArray->SearchStyle(nRow, pSearchStyle, bUp, rMark.GetArray()+nCol);
+        {
+            ScMarkArray aArray(rMark.GetMarkArray(nCol));
+            return pAttrArray->SearchStyle(nRow, pSearchStyle, bUp, &aArray);
+        }
         else
             return -1;
     }
@@ -3442,8 +3445,11 @@ bool ScColumn::SearchStyleRange(
     if (bInSelection)
     {
         if (rMark.IsMultiMarked())
+        {
+            ScMarkArray aArray(rMark.GetMarkArray(nCol));
             return pAttrArray->SearchStyleRange(
-                rRow, rEndRow, pSearchStyle, bUp, rMark.GetArray() + nCol);
+                rRow, rEndRow, pSearchStyle, bUp, &aArray);
+        }
         else
             return false;
     }

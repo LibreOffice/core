@@ -1388,22 +1388,17 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 
 bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const
 {
-    const ScMarkArray* pMarkArray = rMark.GetArray();
-    OSL_ENSURE(pMarkArray,"GetNextMarkedCell without MarkArray");
-    if ( !pMarkArray )
-        return false;
-
     ++rRow;                 // next row
 
     while ( rCol <= MAXCOL )
     {
-        const ScMarkArray& rArray = pMarkArray[rCol];
+        ScMarkArray aArray( rMark.GetMarkArray( rCol ) );
         while ( rRow <= MAXROW )
         {
-            SCROW nStart = (SCROW) rArray.GetNextMarked( (SCsROW) rRow, false );
+            SCROW nStart = (SCROW) aArray.GetNextMarked( (SCsROW) rRow, false );
             if ( nStart <= MAXROW )
             {
-                SCROW nEnd = rArray.GetMarkEnd( nStart, false );
+                SCROW nEnd = aArray.GetMarkEnd( nStart, false );
 
                 const sc::CellStoreType& rCells = aCol[rCol].maCells;
                 std::pair<sc::CellStoreType::const_iterator,size_t> aPos = rCells.position(nStart);

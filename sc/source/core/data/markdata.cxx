@@ -19,6 +19,7 @@
 
 #include "markdata.hxx"
 #include "markarr.hxx"
+#include "markmulti.hxx"
 #include "rangelst.hxx"
 #include "segmenttree.hxx"
 #include <columnspanset.hxx>
@@ -29,9 +30,10 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
+
 ScMarkData::ScMarkData() :
     maTabMarked(),
-    pMultiSel( nullptr )
+    aMultiSel()
 {
     ResetMark();
 }
@@ -40,7 +42,7 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     maTabMarked( rData.maTabMarked ),
     aMarkRange( rData.aMarkRange ),
     aMultiRange( rData.aMultiRange ),
-    pMultiSel( nullptr ),
+    aMultiSel( rData.aMultiSel ),
     aTopEnvelope( rData.aTopEnvelope ),
     aBottomEnvelope( rData.aBottomEnvelope ),
     aLeftEnvelope( rData.aLeftEnvelope ),
@@ -50,22 +52,12 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     bMultiMarked = rData.bMultiMarked;
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
-
-    if (rData.pMultiSel)
-    {
-        pMultiSel = new ScMarkArray[MAXCOLCOUNT];
-        for (SCCOL j=0; j<MAXCOLCOUNT; j++)
-            rData.pMultiSel[j].CopyMarksTo( pMultiSel[j] );
-    }
 }
 
 ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
 {
     if ( &rData == this )
         return *this;
-
-    delete[] pMultiSel;
-    pMultiSel = nullptr;
 
     aMarkRange   = rData.aMarkRange;
     aMultiRange  = rData.aMultiRange;
@@ -79,26 +71,18 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     aRightEnvelope  = rData.aRightEnvelope;
 
     maTabMarked = rData.maTabMarked;
-
-    if (rData.pMultiSel)
-    {
-        pMultiSel = new ScMarkArray[MAXCOLCOUNT];
-        for (SCCOL j=0; j<MAXCOLCOUNT; j++)
-            rData.pMultiSel[j].CopyMarksTo( pMultiSel[j] );
-    }
+    aMultiSel = rData.aMultiSel;
 
     return *this;
 }
 
 ScMarkData::~ScMarkData()
 {
-    delete[] pMultiSel;
 }
 
 void ScMarkData::ResetMark()
 {
-    delete[] pMultiSel;
-    pMultiSel = nullptr;
+    aMultiSel.Clear();
 
     bMarked = bMultiMarked = false;
     bMarking = bMarkIsNeg = false;
@@ -133,17 +117,18 @@ void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
     rRange = aMultiRange;
 }
 
-void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
+void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark, bool bSetupMulti )
 {
-    if (!pMultiSel)
+    if ( aMultiSel.IsEmpty() )
     {
-        pMultiSel = new ScMarkArray[MAXCOL+1];
-
         // if simple mark range is set, copy to multi marks
-        if ( bMarked && !bMarkIsNeg )
+        if ( bMarked && !bMarkIsNeg && !bSetupMulti )
         {
             bMarked = false;
-            SetMultiMarkArea( aMarkRange );
+            SCCOL nStartCol = aMarkRange.aStart.Col();
+            SCCOL nEndCol = aMarkRange.aEnd.Col();
+            PutInOrder( nStartCol, nEndCol );
+            SetMultiMarkArea( aMarkRange, true, true );
         }
     }
 
@@ -154,9 +139,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartCol, nEndCol );
 
-    SCCOL nCol;
-    for (nCol=nStartCol; nCol<=nEndCol; nCol++)
-        pMultiSel[nCol].SetMarkArea( nStartRow, nEndRow, bMark );
+    aMultiSel.SetMarkArea( nStartCol, nEndCol, nStartRow, nEndRow, bMark );
 
     if ( bMultiMarked )                 // Update aMultiRange
     {
@@ -259,27 +242,25 @@ void ScMarkData::MarkToSimple()
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
         ScRange aNew = aMultiRange;
 
         bool bOk = false;
         SCCOL nStartCol = aNew.aStart.Col();
         SCCOL nEndCol   = aNew.aEnd.Col();
 
-        while ( nStartCol < nEndCol && !pMultiSel[nStartCol].HasMarks() )
+        while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nStartCol ) )
             ++nStartCol;
-        while ( nStartCol < nEndCol && !pMultiSel[nEndCol].HasMarks() )
+        while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nEndCol ) )
             --nEndCol;
 
         // Rows are only taken from MarkArray
         SCROW nStartRow, nEndRow;
-        if ( pMultiSel[nStartCol].HasOneMark( nStartRow, nEndRow ) )
+        if ( aMultiSel.HasOneMark( nStartCol, nStartRow, nEndRow ) )
         {
             bOk = true;
             SCROW nCmpStart, nCmpEnd;
             for (SCCOL nCol=nStartCol+1; nCol<=nEndCol && bOk; nCol++)
-                if ( !pMultiSel[nCol].HasOneMark( nCmpStart, nCmpEnd )
+                if ( !aMultiSel.HasOneMark( nCol, nCmpStart, nCmpEnd )
                         || nCmpStart != nStartRow || nCmpEnd != nEndRow )
                     bOk = false;
         }
@@ -310,8 +291,7 @@ bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple ) const
     {
         //TODO: test here for negative Marking ?
 
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-        return pMultiSel[nCol].GetMark( nRow );
+        return aMultiSel.GetMark( nCol, nRow );
     }
 
     return false;
@@ -327,7 +307,7 @@ bool ScMarkData::IsColumnMarked( SCCOL nCol ) const
                     aMarkRange.aStart.Row() == 0    && aMarkRange.aEnd.Row() == MAXROW )
         return true;
 
-    if ( bMultiMarked && pMultiSel[nCol].IsAllMarked(0,MAXROW) )
+    if ( bMultiMarked && aMultiSel.IsAllMarked( nCol, 0, MAXROW ) )
         return true;
 
     return false;
@@ -344,13 +324,7 @@ bool ScMarkData::IsRowMarked( SCROW nRow ) const
         return true;
 
     if ( bMultiMarked )
-    {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-        for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-            if (!pMultiSel[nCol].GetMark(nRow))
-                return false;
-        return true;
-    }
+        return aMultiSel.IsRowMarked( nRow );
 
     return false;
 }
@@ -393,15 +367,13 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
         SCTAB nTab = aMultiRange.aStart.Tab();
 
         SCCOL nStartCol = aMultiRange.aStart.Col();
         SCCOL nEndCol = aMultiRange.aEnd.Col();
         for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
         {
-            if (pMultiSel[nCol].HasMarks())
+            if (aMultiSel.HasMarks( nCol ))
             {
                 // Feeding column-wise fragments to ScRangeList::Join() is a
                 // huge bottleneck, speed this up for multiple columns
@@ -411,14 +383,14 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
                 SCCOL nToCol = nCol+1;
                 for ( ; nToCol <= nEndCol; ++nToCol)
                 {
-                    if (!pMultiSel[nCol].HasEqualRowsMarked( pMultiSel[nToCol]))
+                    if (!aMultiSel.HasEqualRowsMarked(nCol, nToCol))
                         break;
                 }
                 --nToCol;
                 ScRange aRange( nCol, 0, nTab, nToCol, 0, nTab );
                 SCROW nTop, nBottom;
-                ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
-                while ( aMarkIter.Next( nTop, nBottom ) )
+                ScMultiSelIter aMultiIter( aMultiSel, nCol );
+                while ( aMultiIter.Next( nTop, nBottom ) )
                 {
                     aRange.aStart.SetRow( nTop );
                     aRange.aEnd.SetRow( nBottom );
@@ -498,15 +470,17 @@ bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
     bool bOk = true;
+
+    if ( nStartCol == 0 && nEndCol == MAXCOL )
+        return aMultiSel.IsRowRangeMarked( nStartRow, nEndRow );
+
     for (SCCOL nCol=nStartCol; nCol<=nEndCol && bOk; nCol++)
-        if ( !pMultiSel[nCol].IsAllMarked( nStartRow, nEndRow ) )
+        if ( !aMultiSel.IsAllMarked( nCol, nStartRow, nEndRow ) )
             bOk = false;
 
     return bOk;
@@ -517,9 +491,7 @@ SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const
     if ( !bMultiMarked )
         return nRow;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
-    return pMultiSel[nCol].GetNextMarked( nRow, bUp );
+    return aMultiSel.GetNextMarked( nCol, nRow, bUp );
 }
 
 bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
@@ -527,9 +499,7 @@ bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
-    return pMultiSel[nCol].HasMarks();
+    return aMultiSel.HasMarks( nCol );
 }
 
 bool ScMarkData::HasAnyMultiMarks() const
@@ -537,13 +507,7 @@ bool ScMarkData::HasAnyMultiMarks() const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
-    for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-        if ( pMultiSel[nCol].HasMarks() )
-            return true;
-
-    return false;       // no
+    return aMultiSel.HasAnyMarks();
 }
 
 void ScMarkData::InsertTab( SCTAB nTab )
@@ -599,22 +563,21 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
         ScFlatBoolRowSegments aNoRowsMarked;
         aNoRowsMarked.setFalse( 0, MAXROW );
 
-        const ScMarkArray* pArray = pMultiSel;
         bool bPrevColUnMarked = false;
 
         for ( SCCOL nCol=nStartCol; nCol <= nEndCol; nCol++ )
         {
             SCROW nTop, nBottom;
-            bool bCurColUnMarked = !pArray[nCol].HasMarks();
+            bool bCurColUnMarked = !aMultiSel.HasMarks( nCol );
             if ( !bCurColUnMarked )
             {
                 pCurColMarkedRows.reset( new ScFlatBoolRowSegments() );
                 pCurColMarkedRows->setFalse( 0, MAXROW );
-                ScMarkArrayIter aMarkIter( pArray + nCol );
+                ScMultiSelIter aMultiIter( aMultiSel, nCol );
                 ScFlatBoolRowSegments::ForwardIterator aPrevItr ( pPrevColMarkedRows.get() ? *pPrevColMarkedRows : aNoRowsMarked ); // For finding left envelope
                 ScFlatBoolRowSegments::ForwardIterator aPrevItr1( pPrevColMarkedRows.get() ? *pPrevColMarkedRows : aNoRowsMarked ); // For finding right envelope
                 SCROW nTopPrev = 0, nBottomPrev = 0; // For right envelope
-                while ( aMarkIter.Next( nTop, nBottom ) )
+                while ( aMultiIter.Next( nTop, nBottom ) )
                 {
                     pCurColMarkedRows->setTrue( nTop, nBottom );
                     if( bPrevColUnMarked && ( nCol > nStartCol ))
@@ -814,6 +777,11 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
         }
         rRange = ScRange( nCol1New, nRow1New, nTab1, nCol2New, nRow2New, nTab2 );
     }
+}
+
+ScMarkArray ScMarkData::GetMarkArray( SCCOL nCol ) const
+{
+    return aMultiSel.GetMarkArray( nCol );
 }
 
 //iterators
