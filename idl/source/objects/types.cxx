@@ -83,13 +83,13 @@ bool SvMetaAttribute::IsMethod() const
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
-    return pType->GetType() == TYPE_METHOD;
+    return pType->GetType() == MetaTypeType::Method;
 }
 
 bool SvMetaAttribute::IsVariable() const
 {
     SvMetaType * pType = GetType();
-    return pType->GetType() != TYPE_METHOD;
+    return pType->GetType() != MetaTypeType::Method;
 }
 
 OString SvMetaAttribute::GetMangleName( bool ) const
@@ -163,7 +163,7 @@ sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
     DBG_ASSERT( pType, "no type for attribute" );
     SvMetaType * pBaseType = pType->GetBaseType();
     DBG_ASSERT( pBaseType, "no base type for attribute" );
-    if( pBaseType->GetType() == TYPE_STRUCT )
+    if( pBaseType->GetType() == MetaTypeType::Struct )
         return pBaseType->MakeSfx( rAttrArray );
     else
     {
@@ -181,8 +181,8 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
 }
 
 #define CTOR                            \
-    : pAttrList( nullptr )                 \
-    , nType( TYPE_BASE )                \
+    : pAttrList( nullptr )              \
+    , nType( MetaTypeType::Base )       \
     , bIsItem( false )                  \
     , bIsShell( false )                 \
     , cParserChar( 'h' )
@@ -226,13 +226,10 @@ SvRefMemberList<SvMetaAttribute *>& SvMetaType::GetAttrList() const
     return *pAttrList;
 }
 
-void SvMetaType::SetType( int nT )
+void SvMetaType::SetType( MetaTypeType nT )
 {
     nType = nT;
-    if( nType == TYPE_ENUM )
-    {
-    }
-    else if( nType == TYPE_CLASS )
+    if( nType == MetaTypeType::Class )
     {
         OStringBuffer aTmp(C_PREF);
         aTmp.append("Object *");
@@ -242,14 +239,14 @@ void SvMetaType::SetType( int nT )
 
 SvMetaType * SvMetaType::GetBaseType() const
 {
-    if( GetRef() && GetType() == TYPE_BASE )
+    if( GetRef() && GetType() == MetaTypeType::Base )
         return static_cast<SvMetaType *>(GetRef())->GetBaseType();
     return const_cast<SvMetaType *>(this);
 }
 
 SvMetaType * SvMetaType::GetReturnType() const
 {
-    DBG_ASSERT( GetType() == TYPE_METHOD, "no method" );
+    DBG_ASSERT( GetType() == MetaTypeType::Method, "no method" );
     DBG_ASSERT( GetRef(), "no return type" );
     return static_cast<SvMetaType *>(GetRef());
 }
@@ -288,18 +285,18 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     {
         if( pTok->Is( SvHash_shell() ) )
             bIsShell = true;
-        SetType( TYPE_CLASS );
+        SetType( MetaTypeType::Class );
         bOk = ReadNamesSvIdl( rBase, rInStm );
 
     }
     else if( pTok->Is( SvHash_struct() ) )
     {
-        SetType( TYPE_STRUCT );
+        SetType( MetaTypeType::Struct );
         bOk = ReadNamesSvIdl( rBase, rInStm );
     }
     else if( pTok->Is( SvHash_enum() ) )
     {
-        SetType( TYPE_ENUM );
+        SetType( MetaTypeType::Enum );
         bOk = ReadNameSvIdl( rBase, rInStm );
     }
     else if( pTok->Is( SvHash_item() ) )
@@ -318,7 +315,7 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
                     DoReadContextSvIdl( rBase, rInStm );
                     if( rInStm.Read( ')' ) )
                     {
-                        SetType( TYPE_METHOD );
+                        SetType( MetaTypeType::Method );
                         bOk = true;
                     }
                 }
@@ -376,7 +373,7 @@ sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 {
     sal_uLong nC = 0;
 
-    if( GetBaseType()->GetType() == TYPE_STRUCT )
+    if( GetBaseType()->GetType() == MetaTypeType::Struct )
     {
         sal_uLong nAttrCount = GetAttrCount();
         // write the single attributes
@@ -455,7 +452,7 @@ void SvMetaType::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     if( IsItem() )
     {
-        if( GetBaseType()->GetType() == TYPE_STRUCT )
+        if( GetBaseType()->GetType() == MetaTypeType::Struct )
             GetBaseType()->WriteSfxItem( GetName().getString(), rBase, rOutStm );
         else
             WriteSfxItem( GetName().getString(), rBase, rOutStm );
@@ -471,7 +468,7 @@ bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
         DoReadContextSvIdl( rBase, rInStm );
         if( rInStm.Read( ')' ) )
         {
-            SetType( TYPE_METHOD );
+            SetType( MetaTypeType::Method );
             return true;
         }
     }
@@ -485,10 +482,10 @@ OString SvMetaType::GetParserString() const
     if( pBT != this )
         return pBT->GetParserString();
 
-    int type = GetType();
+    MetaTypeType type = GetType();
     OString aPStr;
 
-    if( TYPE_METHOD == type || TYPE_STRUCT == type )
+    if( MetaTypeType::Method == type || MetaTypeType::Struct == type )
     {
         sal_uLong nAttrCount = GetAttrCount();
         // write the single attributes
@@ -570,7 +567,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 {
     sal_uInt32  nTokPos = rInStm.Tell();
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm )
-      && GetType() == TYPE_ENUM )
+      && GetType() == MetaTypeType::Enum )
     {
         if( SvMetaObject::ReadSvIdl( rBase, rInStm ) )
              return true;
