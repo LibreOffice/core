@@ -283,10 +283,6 @@ SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 {
-    int nCall0  = CALL_VALUE;
-    int nCall1  = CALL_VALUE;
-    bool bSet   = false; // any attribute set
-
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
@@ -316,37 +312,8 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         }
         if( pType )
         {
-            pTok = &rInStm.GetToken();
-            if( pTok->IsChar() )
-            {
-                if( pTok->GetChar() == '&' || pTok->GetChar() == '*' )
-                {
-                    nCall0 = (pTok->GetChar() == '&') ? CALL_REFERENCE :
-                                                        CALL_POINTER;
-                    rInStm.GetToken_Next();
-                    pTok = &rInStm.GetToken();
-                    if( pTok->GetChar() == '&' || pTok->GetChar() == '*' )
-                    {
-                        nCall1 = (pTok->GetChar() == '&') ? CALL_REFERENCE :
-                                                            CALL_POINTER;
-                        rInStm.GetToken_Next();
-                    }
-                    bSet = true;
-                }
-            }
-
-            if( !bSet )
-                // is exactly this type
-                return pType;
-
-            DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
-            tools::SvRef<SvMetaType> xType( new SvMetaType( pType->GetName().getString(), 'h', "dummy" ) );
-            xType->SetRef( pType );
-            xType->SetCall0( nCall0 );
-            xType->SetCall1( nCall1 );
-
-            aTmpTypeList.push_back( xType );
-            return xType;
+            // is exactly this type
+            return pType;
         }
     }
     rInStm.Seek( nTokPos );

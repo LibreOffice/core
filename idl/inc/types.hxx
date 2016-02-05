@@ -68,12 +68,10 @@ public:
                                 SvIdlDataBase& );
 };
 
-enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM,
       TYPE_CLASS, TYPE_POINTER };
 class SvMetaType : public SvMetaExtern
 {
-    Svint                       aCall0, aCall1;
     SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
     SvIdentifier                aBasicName;
@@ -114,12 +112,6 @@ public:
     SvMetaType *        GetReturnType() const;
     bool                IsItem() const { return bIsItem; }
     bool                IsShell() const { return bIsShell; }
-
-    void                SetCall0( int e );
-    int                 GetCall0() const;
-
-    void                SetCall1( int e);
-    int                 GetCall1() const;
 
     void                SetBasicName(const OString& rName)
                         { aBasicName.setString(rName); }

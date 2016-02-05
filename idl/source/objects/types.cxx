@@ -181,9 +181,7 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
 }
 
 #define CTOR                            \
-    : aCall0( CALL_VALUE, false )       \
-    , aCall1( CALL_VALUE, false )       \
-    , pAttrList( nullptr )                 \
+    : pAttrList( nullptr )                 \
     , nType( TYPE_BASE )                \
     , bIsItem( false )                  \
     , bIsShell( false )                 \
@@ -262,54 +260,6 @@ const OString& SvMetaType::GetBasicName() const
         return aBasicName.getString();
     else
         return static_cast<SvMetaType*>(GetRef())->GetBasicName();
-}
-
-void SvMetaType::SetCall0( int e )
-{
-    aCall0 = (int)e;
-    if( aCall0 == CALL_VALUE && aCall1 == CALL_VALUE )
-    {
-          if( GetType() == TYPE_POINTER )
-            SetType( TYPE_BASE );
-    }
-    else
-    {
-        DBG_ASSERT( nType == TYPE_POINTER || nType == TYPE_BASE,
-                    "set no base type to pointer" );
-        SetType( TYPE_POINTER );
-    }
-}
-
-int SvMetaType::GetCall0() const
-{
-    if( aCall0.IsSet() || !GetRef() )
-        return aCall0;
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetCall0();
-}
-
-void SvMetaType::SetCall1( int e )
-{
-    aCall1 = (int)e;
-    if( aCall0 == CALL_VALUE && aCall1 == CALL_VALUE )
-    {
-          if( GetType() == TYPE_POINTER )
-            SetType( TYPE_BASE );
-    }
-    else
-    {
-        DBG_ASSERT( nType == TYPE_POINTER || nType == TYPE_BASE,
-                    "set no base type to pointer" );
-        SetType( TYPE_POINTER );
-    }
-}
-
-int SvMetaType::GetCall1() const
-{
-    if( aCall1.IsSet() || !GetRef() )
-        return aCall1;
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetCall1();
 }
 
 const OString& SvMetaType::GetCName() const
