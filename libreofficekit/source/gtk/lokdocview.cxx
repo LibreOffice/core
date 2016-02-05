@@ -877,6 +877,7 @@ globalCallback (gpointer pData)
     break;
     case LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
         bModify = true;
+        // fallthrough
     case LOK_CALLBACK_DOCUMENT_PASSWORD:
     {
         char const*const pURL(pCallback->m_aPayload.c_str());
