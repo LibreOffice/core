@@ -12,6 +12,7 @@
 #define INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
 
 #include <cstdint>
+#include <rtl/math.hxx>
 #include <tools/cpuid.hxx>
 
 #if defined(LO_SSE2_AVAILABLE)
@@ -65,6 +66,27 @@ public:
         for (; i < mnSize; ++i)
             fSum += mpArray[i];
 
+        // If the sum is a NaN, some of the terms were empty cells, probably.
+        // Re-calculate, carefully
+        if (!rtl::math::isFinite(fSum))
+        {
+            sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >(&fSum)->nan_parts.fraction_lo;
+            if (nErr & 0xffff0000)
+            {
+                fSum = 0;
+                for (i = 0; i < mnSize; i++)
+                {
+                    if (!rtl::math::isFinite(mpArray[i]))
+                    {
+                        nErr = reinterpret_cast< const sal_math_Double * >(&mpArray[i])->nan_parts.fraction_lo;
+                        if (!(nErr & 0xffff0000))
+                            fSum += mpArray[i]; // Let errors encoded as NaNs propagate ???
+                    }
+                    else
+                        fSum += mpArray[i];
+                }
+            }
+        }
         return fSum;
     }
 
