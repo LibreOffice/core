@@ -292,7 +292,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
 
     return InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
 }
-
+#if HAVE_FEATURE_OPENGL
 #if HAVE_FEATURE_GLTF
 SdrMediaObj* View::Insert3DModelURL(
     const OUString& rModelURL, sal_Int8& rAction,
@@ -319,7 +319,7 @@ SdrMediaObj* View::Insert3DModelURL(
     return pRetObject;
 }
 #endif
-
+#endif
 SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rMimeType, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize )
 {
