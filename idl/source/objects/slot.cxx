@@ -104,11 +104,6 @@ const OString& SvMetaSlot::GetDisableFlags() const
     if( !aDisableFlags.getString().isEmpty() || !GetRef() ) return aDisableFlags.getString();
     return static_cast<SvMetaSlot *>(GetRef())->GetDisableFlags();
 }
-const OString& SvMetaSlot::GetConfigId() const
-{
-    if( !aConfigId.getString().isEmpty() || !GetRef() ) return aConfigId.getString();
-    return static_cast<SvMetaSlot *>(GetRef())->GetConfigId();
-}
 const OString& SvMetaSlot::GetExecMethod() const
 {
     if( !aExecMethod.getString().isEmpty() || !GetRef() ) return aExecMethod.getString();
@@ -342,7 +337,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( pKnownSlot )
         {
             SetRef( pKnownSlot );
-            SetName( pKnownSlot->GetName().getString(), &rBase );
+            SetName( pKnownSlot->GetName().getString() );
             bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
         else
@@ -376,7 +371,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
                     return false;
                 }
 
-                  SetName( pKnownSlot->GetName().getString(), &rBase );
+                  SetName( pKnownSlot->GetName().getString() );
             }
             else
             {

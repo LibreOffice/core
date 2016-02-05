@@ -66,22 +66,22 @@ SvMetaObject::SvMetaObject()
 {
 }
 
-bool SvMetaObject::SetName( const OString& rName, SvIdlDataBase * )
+void SvMetaObject::SetName( const OString& rName )
 {
     aName.setString(rName);
-    return true;
 }
 
-bool SvMetaObject::ReadNameSvIdl( SvIdlDataBase & rBase,
-                                SvTokenStream & rInStm )
+bool SvMetaObject::ReadNameSvIdl( SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     // read module name
     if( pTok->IsIdentifier() )
-        if( SetName( pTok->GetString(), &rBase ) )
-            return true;
+    {
+        SetName( pTok->GetString() );
+        return true;
+    }
 
     rInStm.Seek( nTokPos );
     return false;
@@ -94,17 +94,14 @@ void SvMetaObject::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 }
 
 void SvMetaObject::DoReadContextSvIdl( SvIdlDataBase & rBase,
-                                   SvTokenStream & rInStm, char cDel )
+                                   SvTokenStream & rInStm )
 {
     sal_uInt32 nBeginPos = 0; // can not happen with Tell
     while( nBeginPos != rInStm.Tell() )
     {
         nBeginPos = rInStm.Tell();
         ReadContextSvIdl( rBase, rInStm );
-        if( cDel == '\0' )
-            rInStm.ReadDelemiter();
-        else
-            (void)rInStm.Read( cDel );
+        rInStm.ReadDelemiter();
     }
 }
 
@@ -156,12 +153,6 @@ SvMetaReference::SvMetaReference()
 SvMetaExtern::SvMetaExtern()
     : pModule( nullptr )
 {
-}
-
-SvMetaModule * SvMetaExtern::GetModule() const
-{
-    DBG_ASSERT( pModule != nullptr, "module not set" );
-    return pModule;
 }
 
 void SvMetaExtern::SetModule( SvIdlDataBase & rBase )

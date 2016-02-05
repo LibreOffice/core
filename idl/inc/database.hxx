@@ -87,7 +87,6 @@ public:
     SvRefMemberList<SvMetaType *>&       GetTypeList();
     SvRefMemberList<SvMetaClass *>&      GetClassList()  { return aClassList; }
     SvRefMemberList<SvMetaModule *>&     GetModuleList() { return aModuleList; }
-    SvMetaModule *              GetModule( const OString& rName );
 
     // list of used types while writing
     SvRefMemberList<SvMetaType *>    aUsedTypes;

@@ -86,28 +86,6 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
 }
 
 void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
-                                    SvStringHashEntry * pName,
-                                    SvTokenStream & rInStm )
-{
-    if( SvIdentifier::ReadSvIdl( pName, rInStm ) )
-    {
-        sal_uLong n;
-        if( rBase.FindId( getString(), &n ) )
-        {
-            nValue = n;
-            return;
-        }
-        else
-        {
-            OStringBuffer aStr("no value for identifier <");
-            aStr.append(getString()).append("> ");
-            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
-            rBase.WriteError( rInStm );
-        }
-    }
-}
-
-void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();

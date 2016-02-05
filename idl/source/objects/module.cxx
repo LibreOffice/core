@@ -33,16 +33,6 @@ SvMetaModule::SvMetaModule( bool bImp )
 {
 }
 
-bool SvMetaModule::SetName( const OString& rName, SvIdlDataBase * pBase )
-{
-    if( pBase )
-    {
-        if( pBase->GetModule( rName ) )
-            return false;
-    }
-    return SvMetaExtern::SetName( rName );
-}
-
 void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
@@ -202,7 +192,7 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     {
         rBase.Push( this ); // onto the context stack
 
-        if( ReadNameSvIdl( rBase, rInStm ) )
+        if( ReadNameSvIdl( rInStm ) )
         {
             // set pointer to itself
             SetModule( rBase );

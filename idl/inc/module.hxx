@@ -41,8 +41,6 @@ protected:
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 public:
 
-    virtual bool        SetName( const OString& rName, SvIdlDataBase * = nullptr  ) override;
-
                         SvMetaModule( bool bImported );
 
     bool                IsImported() const { return bImported; }

@@ -37,7 +37,6 @@ class SvMetaAttribute : public SvMetaReference
     SvIdentifier             aSlotId;
     SvBOOL                   aExport;
     SvBOOL                   aReadOnlyDoc;
-    bool                     bNewAttr;
 
 protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -46,8 +45,6 @@ public:
                         SvMetaAttribute();
                         SvMetaAttribute( SvMetaType * );
 
-    void                SetNewAttribute( bool bNew )
-                        { bNewAttr = bNew; }
     void                SetSlotId( const SvIdentifier & rId )
                         { aSlotId = rId; }
     const SvIdentifier & GetSlotId() const;
@@ -72,9 +69,7 @@ enum MetaTypeType { Method, Struct, Base, Enum, Class };
 
 class SvMetaType : public SvMetaExtern
 {
-    SvIdentifier                aCName;
     SvIdentifier                aBasicPostfix;
-    SvIdentifier                aBasicName;
     SvRefMemberList<SvMetaAttribute *>* pAttrList;
     MetaTypeType                nType;
     bool                        bIsItem;
@@ -84,18 +79,14 @@ class SvMetaType : public SvMetaExtern
     void    WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
                         SvStream & rOutStm );
 protected:
-    bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
-                                         SvTokenStream & rInStm );
+    bool        ReadNamesSvIdl( SvTokenStream & rInStm );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
             SvMetaType();
-            SvMetaType( const OString& rTypeName, char cParserChar,
-                                const OString& rCName );
             SvMetaType( const OString& rTypeName,
                         char cParserChar,
-                        const OString& rCName, const OString& rBasicName,
                         const OString& rBasicPostfix );
 
     virtual ~SvMetaType();
@@ -113,23 +104,12 @@ public:
     bool                IsItem() const { return bIsItem; }
     bool                IsShell() const { return bIsShell; }
 
-    void                SetBasicName(const OString& rName)
-                        { aBasicName.setString(rName); }
-
-    const OString&      GetBasicName() const;
-    const OString&      GetCName() const;
-    char                GetParserChar() const { return cParserChar; }
-
-    virtual bool        SetName( const OString& rName, SvIdlDataBase * = nullptr ) override;
-
-
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
-    OString             GetParserString() const;
 };
 
 class SvMetaTypeString : public SvMetaType
