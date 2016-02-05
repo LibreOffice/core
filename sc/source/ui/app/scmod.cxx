@@ -1828,7 +1828,7 @@ static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
 
 IMPL_LINK_NOARG_TYPED(ScModule, IdleHandler, Timer *, void)
 {
-    if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
+    if ( Application::AnyInput( VclInputFlags::MOUSE | VclInputFlags::KEYBOARD ) )
     {
         aIdleTimer.Start(); // Timeout unchanged
         return;

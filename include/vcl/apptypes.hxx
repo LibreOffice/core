@@ -45,8 +45,7 @@ namespace o3tl
     template<> struct typed_flags<VclInputFlags> : is_typed_flags<VclInputFlags, 0x003f> {};
 }
 
-#define VCL_INPUT_MOUSEANDKEYBOARD    (VclInputFlags::MOUSE | VclInputFlags::KEYBOARD)
-#define VCL_INPUT_ANY                 (VCL_INPUT_MOUSEANDKEYBOARD | VclInputFlags::PAINT | VclInputFlags::TIMER | VclInputFlags::OTHER | VclInputFlags::APPEVENT)
+#define VCL_INPUT_ANY                 (VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT | VclInputFlags::TIMER | VclInputFlags::OTHER | VclInputFlags::APPEVENT)
 
 #endif // INCLUDED_VCL_APPTYPES_HXX
 
