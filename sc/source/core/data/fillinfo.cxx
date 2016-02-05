@@ -617,7 +617,7 @@ void ScDocument::FillInfo(
                     if (pMarkData && pMarkData->IsMultiMarked())
                     {
                         //  Block marks
-                        const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nX;
+                        std::unique_ptr<ScMarkArray> pThisMarkArr(pMarkData->GetMarkArray( nX ));
                         nArrRow = 1;
                         nCurRow = nRow1;                                      // single rows
                         nThisRow = nRow1;                                     // End of range
@@ -794,7 +794,7 @@ void ScDocument::FillInfo(
                                     && nStartY <= (SCsROW) nBlockEndY );
                     if (pMarkData && pMarkData->IsMultiMarked() && !bCellMarked)
                     {
-                        const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nStartX;
+                        std::unique_ptr<ScMarkArray> pThisMarkArr(pMarkData->GetMarkArray( nStartX ));
                         SCSIZE nIndex;
                         if ( pThisMarkArr->Search( nStartY, nIndex ) )
                             bCellMarked=pThisMarkArr->pData[nIndex].bMarked;

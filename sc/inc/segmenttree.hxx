@@ -68,7 +68,7 @@ public:
 
     bool setTrue(SCROW nRow1, SCROW nRow2);
     bool setFalse(SCROW nRow1, SCROW nRow2);
-    bool getRangeData(SCROW nRow, RangeData& rData);
+    bool getRangeData(SCROW nRow, RangeData& rData) const;
     bool getRangeDataLeaf(SCROW nRow, RangeData& rData);
     void removeSegment(SCROW nRow1, SCROW nRow2);
     void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);

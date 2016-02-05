@@ -2716,21 +2716,18 @@ short ScFormatShell::GetCurrentNumberFormatType()
         ScRange aRange;
         aMark.GetMultiMarkArea(aRange);
 
-        const ScMarkArray* pArray = aMark.GetArray();
-        if (!pArray)
-            return nType;
+        const ScMultiSel& rMultiSel = aMark.GetMultiSelData();
 
         short nComboType = css::util::NumberFormat::ALL;
         bool bFirstItem = true;
         for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
         {
-            const ScMarkArray& rColArray = pArray[nCol];
-            if (!rColArray.HasMarks())
+            if (!rMultiSel.HasMarks(nCol))
                 continue;
 
             SCROW nRow1, nRow2;
-            ScMarkArrayIter aMarkIter(&rColArray);
-            while (aMarkIter.Next(nRow1, nRow2))
+            ScMultiSelIter aMultiIter(rMultiSel, nCol);
+            while (aMultiIter.Next(nRow1, nRow2))
             {
                 ScRange aColRange(nCol, nRow1, aRange.aStart.Tab());
                 aColRange.aEnd.SetRow(nRow2);
