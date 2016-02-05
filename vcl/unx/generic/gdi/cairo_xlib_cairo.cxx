@@ -19,10 +19,9 @@
 
 #include <utility>
 
-#include <prex.h>
-#include <X11/extensions/Xrender.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrender.h>
 
 #include "cairo_cairo.hxx"
 #include "cairo_xlib_cairo.hxx"

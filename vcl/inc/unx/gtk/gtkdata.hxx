@@ -20,12 +20,12 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-#include <postx.h>
 
 #include <unx/gendata.hxx>
 #include <unx/saldisp.hxx>

@@ -10,11 +10,11 @@
 #ifndef INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 #define INCLUDED_VCL_INC_UNX_SCREENSAVERINHIBITOR_HXX
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #if !defined(SOLARIS) && !defined(AIX)
 #include <X11/extensions/dpms.h>
 #endif
-#include <postx.h>
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>

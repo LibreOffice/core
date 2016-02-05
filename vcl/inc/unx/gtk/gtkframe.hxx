@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <cairo.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
@@ -29,7 +30,6 @@
 #  include <gtk/gtkx.h>
 #endif
 #include <gdk/gdkkeysyms.h>
-#include <postx.h>
 
 #include <salframe.hxx>
 #include <vcl/sysdata.hxx>

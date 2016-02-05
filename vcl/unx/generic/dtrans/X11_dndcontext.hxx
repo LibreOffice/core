@@ -25,9 +25,8 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <prex.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <X11/Xutil.h>
 
 namespace x11 {
 

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include <postx.h>
 
 #include <unx/gtk/gtkframe.hxx>
 

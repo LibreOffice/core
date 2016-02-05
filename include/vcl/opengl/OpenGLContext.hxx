@@ -19,9 +19,9 @@
 #elif defined( ANDROID )
 #elif defined( LIBO_HEADLESS )
 #elif defined( UNX )
-#  include <prex.h>
+#  include <X11/Xlib.h>
+#  include <X11/Xutil.h>
 #  include "GL/glxew.h"
-#  include <postx.h>
 #elif defined( _WIN32 )
 #ifndef INCLUDED_PRE_POST_WIN_H
 #define INCLUDED_PRE_POST_WIN_H

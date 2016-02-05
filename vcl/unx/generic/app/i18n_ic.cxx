@@ -21,10 +21,9 @@
 
 #include <osl/thread.h>
 
-#include <prex.h>
-#include <X11/Xlocale.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <X11/Xutil.h>
+#include <X11/Xlocale.h>
 
 #include <unx/salunx.h>
 #include <unx/XIM.h>

@@ -25,9 +25,8 @@
 #include <salinst.hxx>
 #include "unx/geninst.h"
 
-#include <prex.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <X11/Xutil.h>
 
 namespace com { namespace sun { namespace star { namespace datatransfer {
     namespace clipboard { class XClipboard; }

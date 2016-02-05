@@ -48,9 +48,11 @@
 #include "unx/sm.hxx"
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
-#include <prex.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xproto.h>
-#include <postx.h>
+
 #include "salinst.hxx"
 
 #include <osl/signal.h>

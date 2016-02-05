@@ -21,9 +21,10 @@
 #include <stdio.h>
 #endif
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/extensions/shape.h>
-#include <postx.h>
+
 #include <tools/debug.hxx>
 
 #include <vcl/keycodes.hxx>

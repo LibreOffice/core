@@ -36,12 +36,12 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include "FWS.hxx"
 #include <X11/extensions/shape.h>
-#include <postx.h>
 
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"

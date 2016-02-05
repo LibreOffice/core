@@ -30,7 +30,10 @@
 #include <osl/module.h>
 #endif
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/XKBlib.h>
+
 #include <X11/cursorfont.h>
 #include "unx/x11_cursors/salcursors.h"
 #include "unx/x11_cursors/invert50.h"
@@ -38,14 +41,11 @@
 #define XK_KOREAN
 #endif
 #include <X11/keysym.h>
-#include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 
 #ifdef USE_XINERAMA_XORG
 #include <X11/extensions/Xinerama.h>
 #endif
-
-#include <postx.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -76,6 +76,9 @@
 
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <officecfg/Office/Common.hxx>
+
+/* From <X11/Intrinsic.h> */
+typedef unsigned long Pixel;
 
 using namespace vcl_sal;
 

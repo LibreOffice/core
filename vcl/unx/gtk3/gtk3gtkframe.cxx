@@ -48,7 +48,9 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <prex.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #if defined(GDK_WINDOWING_X11)
 #   include <gdk/gdkx.h>
@@ -56,7 +58,6 @@
 #if defined(GDK_WINDOWING_WAYLAND)
 #   include <gdk/gdkwayland.h>
 #endif
-#include <postx.h>
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>

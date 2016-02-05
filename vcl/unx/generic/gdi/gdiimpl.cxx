@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrender.h>
 #include <X11/Xproto.h>
-#include <postx.h>
 
 #include "gdiimpl.hxx"
 
@@ -64,6 +65,9 @@
 #endif // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 
 #define STATIC_POINTS 64
+
+/* From <X11/Intrinsic.h> */
+typedef unsigned long Pixel;
 
 class SalPolyLine
 {
