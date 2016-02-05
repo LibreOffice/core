@@ -119,6 +119,7 @@ if [ -z "$INPUT_PROJECTS" ]; then
     INPUT_PROJECTS="`ls */Module_*.mk | sed 's#/.*##'`"
 fi
 
+
 # output directory for generated documentation
 BASE_OUTPUT="$1"
 mkdir -p "$BASE_OUTPUT" || {
@@ -163,14 +164,12 @@ do
   # project header files can be in $PROJECT/inc and/pr include/$PROJECT
   if [ -d "$PROJECT/inc" ]; then
       PROJECT_INCLUDE="$PROJECT/inc"
+  else
+      PROJECT_INCLUDE=""
   fi
 
   if [ -d "include/$PROJECT" ]; then
       PROJECT_INCLUDE="$PROJECT_INCLUDE include/$PROJECT"
-  fi
-
-  if [ "$PROJECT" == "vcl" ]; then
-      PROJECT_INCLUDE="$PROJECT_INCLUDE $PROJECT/source/filter/igif/ $PROJECT/source/filter/ixbm $PROJECT/source/filter/igif/ $PROJECT/source/filter/jpeg"
   fi
 
   DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT_INCLUDE"`
