@@ -26,10 +26,6 @@
 
 #include "com/sun/star/media/XPlayerWindow.hdl"
 
-// ---------------
-// - MyMediaView -
-// ---------------
-
 @interface MyMediaView : NSView
 @property (nonatomic, readonly, strong) AVPlayer* player;
 @property (nonatomic, readonly, strong) AVPlayerLayer* playerLayer;
@@ -38,10 +34,6 @@
 @end
 
 namespace avmedia { namespace macavf {
-
-// ---------------
-// - Window -
-// ---------------
 
 class Player;
 
@@ -70,8 +62,8 @@ public:
     // XWindow
     virtual void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (css::uno::RuntimeException) override;
     virtual css::awt::Rectangle SAL_CALL getPosSize(  ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL setVisible( sal_Bool Visible ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL setEnable( sal_Bool Enable ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw (css::uno::RuntimeException) override;
     virtual void SAL_CALL setFocus(  ) throw (css::uno::RuntimeException) override;
     virtual void SAL_CALL addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) throw (css::uno::RuntimeException) override;
     virtual void SAL_CALL removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) throw (css::uno::RuntimeException) override;
@@ -89,7 +81,7 @@ public:
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException) override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException) override;
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) override;

@@ -31,45 +31,22 @@ __declspec(uuid("65BD0710-24D2-4ff7-9324-ED2E5D3ABAFA")) __declspec(novtable)
 IMediaDet : public IUnknown
 {
 public:
-    virtual  HRESULT __stdcall get_Filter(
-          IUnknown **pVal) = 0;
-    virtual  HRESULT __stdcall put_Filter(
-          IUnknown *newVal) = 0;
-    virtual  HRESULT __stdcall get_OutputStreams(
-          long *pVal) = 0;
-    virtual  HRESULT __stdcall get_CurrentStream(
-          long *pVal) = 0;
-    virtual  HRESULT __stdcall put_CurrentStream(
-         long newVal) = 0;
-    virtual  HRESULT __stdcall get_StreamType(
-          GUID *pVal) = 0;
-    virtual  HRESULT __stdcall get_StreamTypeB(
-          BSTR *pVal) = 0;
-    virtual  HRESULT __stdcall get_StreamLength(
-          double *pVal) = 0;
-    virtual  HRESULT __stdcall get_Filename(
-          BSTR *pVal) = 0;
-    virtual  HRESULT __stdcall put_Filename(
-          BSTR newVal) = 0;
-    virtual  HRESULT __stdcall GetBitmapBits(
-        double StreamTime,
-         long *pBufferSize,
-         char *pBuffer,
-        long Width,
-        long Height) = 0;
-    virtual  HRESULT __stdcall WriteBitmapBits(
-        double StreamTime,
-        long Width,
-        long Height,
-         BSTR Filename) = 0;
-    virtual  HRESULT __stdcall get_StreamMediaType(
-          AM_MEDIA_TYPE *pVal) = 0;
-    virtual  HRESULT __stdcall GetSampleGrabber(
-          ISampleGrabber **ppVal) = 0;
-    virtual  HRESULT __stdcall get_FrameRate(
-          double *pVal) = 0;
-    virtual  HRESULT __stdcall EnterBitmapGrabMode(
-        double SeekTime) = 0;
+    virtual  HRESULT __stdcall get_Filter( IUnknown **pVal) = 0;
+    virtual  HRESULT __stdcall put_Filter( IUnknown *newVal) = 0;
+    virtual  HRESULT __stdcall get_OutputStreams( long *pVal) = 0;
+    virtual  HRESULT __stdcall get_CurrentStream( long *pVal) = 0;
+    virtual  HRESULT __stdcall put_CurrentStream( long newVal) = 0;
+    virtual  HRESULT __stdcall get_StreamType( GUID *pVal) = 0;
+    virtual  HRESULT __stdcall get_StreamTypeB( BSTR *pVal) = 0;
+    virtual  HRESULT __stdcall get_StreamLength( double *pVal) = 0;
+    virtual  HRESULT __stdcall get_Filename( BSTR *pVal) = 0;
+    virtual  HRESULT __stdcall put_Filename( BSTR newVal) = 0;
+    virtual  HRESULT __stdcall GetBitmapBits( double StreamTime, long *pBufferSize, char *pBuffer, long Width, long Height) = 0;
+    virtual  HRESULT __stdcall WriteBitmapBits( double StreamTime, long Width, long Height, BSTR Filename) = 0;
+    virtual  HRESULT __stdcall get_StreamMediaType( AM_MEDIA_TYPE *pVal) = 0;
+    virtual  HRESULT __stdcall GetSampleGrabber( ISampleGrabber **ppVal) = 0;
+    virtual  HRESULT __stdcall get_FrameRate( double *pVal) = 0;
+    virtual  HRESULT __stdcall EnterBitmapGrabMode( double SeekTime) = 0;
 };
 
 extern "C" const IID IID_ISampleGrabberCB;
@@ -80,13 +57,8 @@ __declspec(uuid("0579154A-2B53-4994-B0D0-E773148EFF85")) __declspec(novtable)
 ISampleGrabberCB : public IUnknown
 {
 public:
-    virtual HRESULT __stdcall SampleCB(
-        double SampleTime,
-        IMediaSample *pSample) = 0;
-    virtual HRESULT __stdcall BufferCB(
-        double SampleTime,
-        BYTE *pBuffer,
-        long BufferLen) = 0;
+    virtual HRESULT __stdcall SampleCB( double SampleTime, IMediaSample *pSample) = 0;
+    virtual HRESULT __stdcall BufferCB( double SampleTime, BYTE *pBuffer, long BufferLen) = 0;
 };
 
 extern "C" const IID IID_ISampleGrabber;
@@ -97,22 +69,13 @@ __declspec(uuid("6B652FFF-11FE-4fce-92AD-0266B5D7C78F")) __declspec(novtable)
 ISampleGrabber : public IUnknown
 {
 public:
-    virtual HRESULT __stdcall SetOneShot(
-        BOOL OneShot) = 0;
-    virtual HRESULT __stdcall SetMediaType(
-        const AM_MEDIA_TYPE *pType) = 0;
-    virtual HRESULT __stdcall GetConnectedMediaType(
-        AM_MEDIA_TYPE *pType) = 0;
-    virtual HRESULT __stdcall SetBufferSamples(
-        BOOL BufferThem) = 0;
-    virtual HRESULT __stdcall GetCurrentBuffer(
-         long *pBufferSize,
-         long *pBuffer) = 0;
-    virtual HRESULT __stdcall GetCurrentSample(
-         IMediaSample **ppSample) = 0;
-    virtual HRESULT __stdcall SetCallback(
-        ISampleGrabberCB *pCallback,
-        long WhichMethodToCallback) = 0;
+    virtual HRESULT __stdcall SetOneShot( BOOL OneShot) = 0;
+    virtual HRESULT __stdcall SetMediaType( const AM_MEDIA_TYPE *pType) = 0;
+    virtual HRESULT __stdcall GetConnectedMediaType( AM_MEDIA_TYPE *pType) = 0;
+    virtual HRESULT __stdcall SetBufferSamples( BOOL BufferThem) = 0;
+    virtual HRESULT __stdcall GetCurrentBuffer( long *pBufferSize, long *pBuffer) = 0;
+    virtual HRESULT __stdcall GetCurrentSample( IMediaSample **ppSample) = 0;
+    virtual HRESULT __stdcall SetCallback( ISampleGrabberCB *pCallback, long WhichMethodToCallback) = 0;
 
 };
 

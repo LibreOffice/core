@@ -153,18 +153,18 @@ void MediaWindowImpl::dispose()
 
     if (mxPlayerWindow.is())
     {
-        mxPlayerWindow->removeKeyListener( uno::Reference< awt::XKeyListener >( mxEventsIf, uno::UNO_QUERY ) );
-        mxPlayerWindow->removeMouseListener( uno::Reference< awt::XMouseListener >( mxEventsIf, uno::UNO_QUERY ) );
-        mxPlayerWindow->removeMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( mxEventsIf, uno::UNO_QUERY ) );
+        mxPlayerWindow->removeKeyListener( css::uno::Reference< awt::XKeyListener >( mxEventsIf, css::uno::UNO_QUERY ) );
+        mxPlayerWindow->removeMouseListener( css::uno::Reference< awt::XMouseListener >( mxEventsIf, css::uno::UNO_QUERY ) );
+        mxPlayerWindow->removeMouseMotionListener( css::uno::Reference< awt::XMouseMotionListener >( mxEventsIf, css::uno::UNO_QUERY ) );
 
-        uno::Reference< lang::XComponent > xComponent( mxPlayerWindow, uno::UNO_QUERY );
+        css::uno::Reference< lang::XComponent > xComponent( mxPlayerWindow, css::uno::UNO_QUERY );
         if (xComponent.is())
             xComponent->dispose();
 
         mxPlayerWindow.clear();
     }
 
-    uno::Reference< lang::XComponent > xComponent( mxPlayer, uno::UNO_QUERY );
+    css::uno::Reference< lang::XComponent > xComponent( mxPlayer, css::uno::UNO_QUERY );
     if (xComponent.is()) // this stops the player
         xComponent->dispose();
 
@@ -182,9 +182,9 @@ void MediaWindowImpl::dispose()
     Control::dispose();
 }
 
-uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType)
+css::uno::Reference<css::media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType)
 {
-    uno::Reference<media::XPlayer> xPlayer;
+    css::uno::Reference<css::media::XPlayer> xPlayer;
 
     if( rURL.isEmpty() )
         return xPlayer;
@@ -193,7 +193,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     {
         return xPlayer;
     }
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    css::uno::Reference<css::uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
     if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
@@ -232,21 +232,21 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     return xPlayer;
 }
 
-uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
+css::uno::Reference< css::media::XPlayer > MediaWindowImpl::createPlayer(
     const OUString& rURL, const OUString& rManagerServName,
-    uno::Reference< uno::XComponentContext > xContext)
+    css::uno::Reference< css::uno::XComponentContext > xContext)
 {
-    uno::Reference< media::XPlayer > xPlayer;
+    css::uno::Reference< css::media::XPlayer > xPlayer;
     try
     {
-        uno::Reference< media::XManager > xManager (
+        css::uno::Reference< css::media::XManager > xManager (
             xContext->getServiceManager()->createInstanceWithContext(rManagerServName, xContext),
-            uno::UNO_QUERY );
+            css::uno::UNO_QUERY );
         if( xManager.is() )
-            xPlayer.set( xManager->createPlayer( rURL ), uno::UNO_QUERY );
+            xPlayer.set( xManager->createPlayer( rURL ), css::uno::UNO_QUERY );
         else
             SAL_WARN( "avmedia", "failed to create media player service " << rManagerServName );
-    } catch ( const uno::Exception &e )
+    } catch ( const css::uno::Exception &e )
     {
         SAL_WARN( "avmedia", "couldn't create media player " << rManagerServName
                               << ", exception '" << e.Message << '\'');
@@ -405,7 +405,7 @@ bool MediaWindowImpl::setZoom(css::media::ZoomLevel eLevel)
 
 css::media::ZoomLevel MediaWindowImpl::getZoom() const
 {
-    return( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
+    return( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : css::media::ZoomLevel_NOT_AVAILABLE );
 }
 
 void MediaWindowImpl::stop()
@@ -500,20 +500,20 @@ void MediaWindowImpl::onURLChanged()
     if (mxPlayer.is())
     {
         Resize();
-        uno::Sequence<uno::Any> aArgs( 3 );
-        uno::Reference<media::XPlayerWindow> xPlayerWindow;
+        css::uno::Sequence<css::uno::Any> aArgs( 3 );
+        css::uno::Reference<css::media::XPlayerWindow> xPlayerWindow;
         const Point aPoint;
         const Size aSize(mpChildWindow->GetSizePixel());
 
-        aArgs[0] = uno::makeAny(mpChildWindow->GetParentWindowHandle());
-        aArgs[1] = uno::makeAny(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height()));
-        aArgs[2] = uno::makeAny(reinterpret_cast<sal_IntPtr>(mpChildWindow.get()));
+        aArgs[0] = css::uno::makeAny(mpChildWindow->GetParentWindowHandle());
+        aArgs[1] = css::uno::makeAny(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height()));
+        aArgs[2] = css::uno::makeAny(reinterpret_cast<sal_IntPtr>(mpChildWindow.get()));
 
         try
         {
             xPlayerWindow = mxPlayer->createPlayerWindow( aArgs );
         }
-        catch( const uno::RuntimeException& )
+        catch( const css::uno::RuntimeException& )
         {
             // happens eg, on MacOSX where Java frames cannot be created from X11 window handles
         }
@@ -522,10 +522,10 @@ void MediaWindowImpl::onURLChanged()
 
         if( xPlayerWindow.is() )
         {
-            xPlayerWindow->addKeyListener( uno::Reference< awt::XKeyListener >( mxEventsIf, uno::UNO_QUERY ) );
-            xPlayerWindow->addMouseListener( uno::Reference< awt::XMouseListener >( mxEventsIf, uno::UNO_QUERY ) );
-            xPlayerWindow->addMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( mxEventsIf, uno::UNO_QUERY ) );
-            xPlayerWindow->addFocusListener( uno::Reference< awt::XFocusListener >( mxEventsIf, uno::UNO_QUERY ) );
+            xPlayerWindow->addKeyListener( css::uno::Reference< awt::XKeyListener >( mxEventsIf, css::uno::UNO_QUERY ) );
+            xPlayerWindow->addMouseListener( css::uno::Reference< awt::XMouseListener >( mxEventsIf, css::uno::UNO_QUERY ) );
+            xPlayerWindow->addMouseMotionListener( css::uno::Reference< awt::XMouseMotionListener >( mxEventsIf, css::uno::UNO_QUERY ) );
+            xPlayerWindow->addFocusListener( css::uno::Reference< awt::XFocusListener >( mxEventsIf, css::uno::UNO_QUERY ) );
         }
     }
     else

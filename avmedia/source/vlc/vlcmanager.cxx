@@ -37,7 +37,7 @@ namespace
     };
 }
 
-Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
+Manager::Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr )
     : mEventHandler()
     , mxMgr( rxMgr )
 {
@@ -82,11 +82,11 @@ Manager::~Manager()
     mEventHandler.stop();
 }
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUString& rURL )
-    throw (uno::RuntimeException, std::exception)
+css::uno::Reference< css::media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUString& rURL )
+    throw (css::uno::RuntimeException, std::exception)
 {
     if ( !m_is_vlc_found )
-        throw uno::RuntimeException("VLC not found", nullptr);
+        throw css::uno::RuntimeException("VLC not found", nullptr);
 
     if ( !rURL.isEmpty() )
     {
@@ -107,21 +107,21 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
 }
 
 rtl::OUString SAL_CALL Manager::getImplementationName()
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return VLC_IMPLEMENTATION_NAME;
 }
 
 sal_Bool SAL_CALL Manager::supportsService( const rtl::OUString& serviceName )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
+css::uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    ::uno::Sequence< OUString > aRet { VLC_SERVICENAME };
+    css::uno::Sequence< OUString > aRet { VLC_SERVICENAME };
     return aRet;
 }
 

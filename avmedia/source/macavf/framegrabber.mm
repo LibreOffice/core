@@ -29,23 +29,16 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace macavf {
 
-// ----------------
-// - FrameGrabber -
-// ----------------
 
-FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& /*rxMgr*/ )
+FrameGrabber::FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& /*rxMgr*/ )
 :   mpImageGen( nullptr )
 {}
-
-// ------------------------------------------------------------------------------
 
 FrameGrabber::~FrameGrabber()
 {
     if( mpImageGen )
         CFRelease( mpImageGen );
 }
-
-// ------------------------------------------------------------------------------
 
 bool FrameGrabber::create( const ::rtl::OUString& rURL )
 {
@@ -64,8 +57,6 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
     return create( pMovie );
 }
 
-// ------------------------------------------------------------------------------
-
 bool FrameGrabber::create( AVAsset* pMovie )
 {
     if( [[pMovie tracksWithMediaType:AVMediaTypeVideo] count] == 0)
@@ -79,12 +70,10 @@ bool FrameGrabber::create( AVAsset* pMovie )
     return true;
 }
 
-// ------------------------------------------------------------------------------
-
-uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
+css::uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
     throw (uno::RuntimeException)
 {
-    uno::Reference< graphic::XGraphic > xRet;
+    css::uno::Reference< graphic::XGraphic > xRet;
     if( !mpImageGen )
         return xRet;
     OSL_TRACE( "AVPlayer::grabFrame( %.3fsec)", fMediaTime );
@@ -112,23 +101,17 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
-
 ::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MACAVF_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME ) );
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

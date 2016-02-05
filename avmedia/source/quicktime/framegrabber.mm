@@ -38,7 +38,7 @@ namespace avmedia { namespace quicktime {
 // - FrameGrabber -
 
 
-FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+FrameGrabber::FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -64,7 +64,7 @@ FrameGrabber::~FrameGrabber()
 
 
 
-bool FrameGrabber::create( const ::rtl::OUString& rURL )
+bool FrameGrabber::create( const OUString& rURL )
 {
     bool bRet = false;
     maURL = rURL;
@@ -88,10 +88,10 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
 
 
 
-uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
-    throw (uno::RuntimeException)
+css::uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
+    throw (css::uno::RuntimeException)
 {
-    uno::Reference< graphic::XGraphic > xRet;
+    css::uno::Reference< graphic::XGraphic > xRet;
 
     NSImage* pImage = [mpMovie frameImageAtTime: QTMakeTimeWithTimeInterval(fMediaTime)];
     NSData *pBitmap = [pImage TIFFRepresentation];
@@ -109,26 +109,26 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
 
 
-::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
-    throw (uno::RuntimeException)
+OUString SAL_CALL FrameGrabber::getImplementationName(  )
+    throw (css::uno::RuntimeException)
 {
-    return ::rtl::OUString( AVMEDIA_QUICKTIME_FRAMEGRABBER_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_QUICKTIME_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
 
 
-sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
-    throw (uno::RuntimeException)
+sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
+    throw (css::uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_FRAMEGRABBER_SERVICENAME );
 }
 
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_FRAMEGRABBER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_FRAMEGRABBER_SERVICENAME };
 
     return aRet;
 }

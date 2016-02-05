@@ -52,7 +52,7 @@ namespace avmedia { namespace win {
 // - FrameGrabber -
 
 
-FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+FrameGrabber::FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
     ::CoInitialize( NULL );
@@ -102,10 +102,10 @@ bool FrameGrabber::create( const OUString& rURL )
     return !maURL.isEmpty();
 }
 
-uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
-    throw (uno::RuntimeException)
+css::uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
+    throw (css::uno::RuntimeException)
 {
-    uno::Reference< graphic::XGraphic > xRet;
+    css::uno::Reference< graphic::XGraphic > xRet;
     IMediaDet*                          pDet = implCreateMediaDet( maURL );
 
     if( pDet )
@@ -199,21 +199,21 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 }
 
 OUString SAL_CALL FrameGrabber::getImplementationName(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME };
 
     return aRet;
 }

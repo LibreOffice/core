@@ -87,8 +87,7 @@ bool isWindowsVistaOrHigher()
 
 // - Player -
 
-
-Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+Player::Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr ) :
     Player_BASE(m_aMutex),
     mxMgr( rxMgr ),
     mpGB( NULL ),
@@ -242,7 +241,7 @@ long Player::processEvent()
 }
 
 void SAL_CALL Player::start(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if( mpMC )
@@ -285,7 +284,7 @@ void SAL_CALL Player::start(  )
 }
 
 void SAL_CALL Player::stop(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if( mpMC )
@@ -293,7 +292,7 @@ void SAL_CALL Player::stop(  )
 }
 
 sal_Bool SAL_CALL Player::isPlaying()
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -307,7 +306,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 }
 
 double SAL_CALL Player::getDuration(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -320,7 +319,7 @@ double SAL_CALL Player::getDuration(  )
 }
 
 void SAL_CALL Player::setMediaTime( double fTime )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -336,7 +335,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
 }
 
 double SAL_CALL Player::getMediaTime(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -349,7 +348,7 @@ double SAL_CALL Player::getMediaTime(  )
 }
 
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -357,7 +356,7 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 }
 
 sal_Bool SAL_CALL Player::isPlaybackLoop(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -365,7 +364,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 }
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -377,7 +376,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 }
 
 sal_Bool SAL_CALL Player::isMute(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -385,7 +384,7 @@ sal_Bool SAL_CALL Player::isMute(  )
 }
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -396,7 +395,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 }
 
 sal_Int16 SAL_CALL Player::getVolumeDB(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -404,7 +403,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 }
 
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -422,12 +421,12 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     return aSize;
 }
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
-    throw (uno::RuntimeException)
+css::uno::Reference< ::css::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw (css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    uno::Reference< ::media::XPlayerWindow >    xRet;
+    css::uno::Reference< ::css::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 
     if( mpVW && aSize.Width > 0 && aSize.Height > 0 )
@@ -443,10 +442,10 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     return xRet;
 }
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
-    throw (uno::RuntimeException)
+css::uno::Reference< css::media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Reference< media::XFrameGrabber > xRet;
+    css::uno::Reference< css::media::XFrameGrabber > xRet;
 
     if( !maURL.isEmpty() )
     {
@@ -462,21 +461,21 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 }
 
 OUString SAL_CALL Player::getImplementationName(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_WIN_PLAYER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_WIN_PLAYER_SERVICENAME };
 
     return aRet;
 }

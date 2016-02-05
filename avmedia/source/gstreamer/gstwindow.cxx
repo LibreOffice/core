@@ -53,8 +53,8 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 
 
 Window::Window() :
-    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
-    mnPointerType( awt::SystemPointer::ARROW )
+    meZoomLevel( css::media::ZoomLevel_NOT_AVAILABLE ),
+    mnPointerType( css::awt::SystemPointer::ARROW )
 {
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
 }
@@ -67,17 +67,17 @@ Window::~Window()
 
 
 void SAL_CALL Window::update(  )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
-    throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL Window::setZoomLevel( css::media::ZoomLevel eZoomLevel )
+    throw (css::uno::RuntimeException, std::exception)
 {
         bool bRet = false;
 
-        if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
-            media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
+        if( css::media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
+            css::media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
         {
             if( eZoomLevel != meZoomLevel )
             {
@@ -90,14 +90,14 @@ sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
         return bRet;
 }
 
-media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
-    throw (uno::RuntimeException, std::exception)
+css::media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
+    throw (css::uno::RuntimeException, std::exception)
 {
     return meZoomLevel;
 }
 
 void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     mnPointerType = nPointerType;
 }
@@ -106,14 +106,14 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 
 
 void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-awt::Rectangle SAL_CALL Window::getPosSize()
-    throw (uno::RuntimeException, std::exception)
+css::awt::Rectangle SAL_CALL Window::getPosSize()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    awt::Rectangle aRet;
+    css::awt::Rectangle aRet;
 
     aRet.X = aRet.Y = 0;
     aRet.Width = 320;
@@ -123,77 +123,77 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 }
 
 void SAL_CALL Window::setVisible( sal_Bool /*bVisible*/ )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Window::setEnable( sal_Bool /*bEnable*/ )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Window::setFocus(  )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -201,17 +201,17 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
 
 
 void SAL_CALL Window::dispose(  )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& )
-    throw (uno::RuntimeException, std::exception)
+void SAL_CALL Window::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -219,21 +219,21 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 
 
 OUString SAL_CALL Window::getImplementationName(  )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString( AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
-    throw (uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_GST_WINDOW_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_GST_WINDOW_SERVICENAME };
 
     return aRet;
 }

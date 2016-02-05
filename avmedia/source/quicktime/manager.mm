@@ -29,7 +29,7 @@ namespace avmedia { namespace quicktime {
 // - Manager -
 
 
-Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+Manager::Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
     SAL_INFO( "avmedia.quicktime", "Manager::Manager" );
@@ -43,11 +43,11 @@ Manager::~Manager()
 
 
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
-    throw (uno::RuntimeException)
+css::uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
+    throw (css::uno::RuntimeException)
 {
     Player*                             pPlayer( new Player( mxMgr ) );
-    uno::Reference< media::XPlayer >    xRet( pPlayer );
+    css::uno::Reference< media::XPlayer >    xRet( pPlayer );
     INetURLObject                       aURL( rURL );
 
     SAL_INFO( "avmedia.quicktime", "Manager::createPlayer" );
@@ -60,26 +60,26 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
 
 
 
-::rtl::OUString SAL_CALL Manager::getImplementationName(  )
-    throw (uno::RuntimeException)
+OUString SAL_CALL Manager::getImplementationName(  )
+    throw (css::uno::RuntimeException)
 {
-    return ::rtl::OUString( AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME );
 }
 
 
 
-sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
-    throw (uno::RuntimeException)
+sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
+    throw (css::uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_MANAGER_SERVICENAME );
 }
 
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_MANAGER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_MANAGER_SERVICENAME };
 
     return aRet;
 }

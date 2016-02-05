@@ -33,7 +33,7 @@ namespace avmedia { namespace win {
 // - Manager -
 
 
-Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+Manager::Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
 }
@@ -42,11 +42,11 @@ Manager::~Manager()
 {
 }
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
-    throw (uno::RuntimeException)
+css::uno::Reference< css::media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
+    throw (css::uno::RuntimeException)
 {
     Player*                             pPlayer( new Player( mxMgr ) );
-    uno::Reference< media::XPlayer >    xRet( pPlayer );
+    css::uno::Reference< css::media::XPlayer >    xRet( pPlayer );
     const INetURLObject                 aURL( rURL );
 
     if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) )  )
@@ -56,21 +56,21 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 }
 
 OUString SAL_CALL Manager::getImplementationName(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_WIN_MANAGER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_WIN_MANAGER_SERVICENAME };
 
     return aRet;
 }

@@ -855,12 +855,12 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
 
 
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
+css::uno::Reference< css::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const css::uno::Sequence< css::uno::Any >& rArguments )
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    uno::Reference< ::media::XPlayerWindow >    xRet;
+    css::uno::Reference< css::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 
     if( mbFakeVideo )
@@ -897,7 +897,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
+css::uno::Reference< css::media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -929,10 +929,10 @@ sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
 
 
 
-uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_GST_PLAYER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_GST_PLAYER_SERVICENAME };
 
     return aRet;
 }

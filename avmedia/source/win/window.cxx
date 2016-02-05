@@ -85,7 +85,7 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
             case( WM_MBUTTONUP ):
             case( WM_RBUTTONUP ):
             {
-                awt::MouseEvent aUNOEvt;
+                css::awt::MouseEvent aUNOEvt;
                 POINT           aWinPoint;
 
                 if( !::GetCursorPos( &aWinPoint ) || !::ScreenToClient( hWnd, &aWinPoint ) )
@@ -101,20 +101,20 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
 
                 // Modifiers
                 if( nPar1 & MK_SHIFT )
-                    aUNOEvt.Modifiers |= awt::KeyModifier::SHIFT;
+                    aUNOEvt.Modifiers |= css::awt::KeyModifier::SHIFT;
 
                 if( nPar1 & MK_CONTROL )
-                    aUNOEvt.Modifiers |= awt::KeyModifier::MOD1;
+                    aUNOEvt.Modifiers |= css::awt::KeyModifier::MOD1;
 
                 // Buttons
                 if( WM_LBUTTONDOWN == nMsg || WM_LBUTTONUP == nMsg )
-                    aUNOEvt.Buttons |= awt::MouseButton::LEFT;
+                    aUNOEvt.Buttons |= css::awt::MouseButton::LEFT;
 
                 if( WM_MBUTTONDOWN == nMsg || WM_MBUTTONUP == nMsg )
-                    aUNOEvt.Buttons |= awt::MouseButton::MIDDLE;
+                    aUNOEvt.Buttons |= css::awt::MouseButton::MIDDLE;
 
                 if( WM_RBUTTONDOWN == nMsg || WM_RBUTTONUP == nMsg )
-                    aUNOEvt.Buttons |= awt::MouseButton::RIGHT;
+                    aUNOEvt.Buttons |= css::awt::MouseButton::RIGHT;
 
                 // event type
                 if( WM_LBUTTONDOWN == nMsg ||
@@ -142,7 +142,7 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
 
             case( WM_SETFOCUS ):
             {
-                const awt::FocusEvent aUNOEvt;
+                const css::awt::FocusEvent aUNOEvt;
                 pWindow->fireSetFocusEvent( aUNOEvt );
             }
             break;
@@ -178,14 +178,14 @@ WNDCLASS* lcl_getWndClass()
     return s_pWndClass;
 }
 
-Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
+Window::Window( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
     mxMgr( rxMgr ),
     maListeners( maMutex ),
-    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
+    meZoomLevel( css::media::ZoomLevel_NOT_AVAILABLE ),
     mrPlayer( rPlayer ),
     mnFrameWnd( 0 ),
     mnParentWnd( 0 ),
-    mnPointerType( awt::SystemPointer::ARROW )
+    mnPointerType( css::awt::SystemPointer::ARROW )
 {
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
 
@@ -200,44 +200,44 @@ Window::~Window()
 
 void Window::ImplLayoutVideoWindow()
 {
-    if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel )
+    if( css::media::ZoomLevel_NOT_AVAILABLE != meZoomLevel )
     {
-        awt::Size           aPrefSize( mrPlayer.getPreferredPlayerWindowSize() );
-        awt::Rectangle      aRect = getPosSize();
+        css::awt::Size           aPrefSize( mrPlayer.getPreferredPlayerWindowSize() );
+        css::awt::Rectangle      aRect = getPosSize();
         int                 nW = aRect.Width, nH = aRect.Height;
         int                 nVideoW = nW, nVideoH = nH;
         int                 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
         bool                bDone = false, bZoom = false;
 
-        if( media::ZoomLevel_ORIGINAL == meZoomLevel )
+        if( css::media::ZoomLevel_ORIGINAL == meZoomLevel )
         {
             bZoom = true;
         }
-        else if( media::ZoomLevel_ZOOM_1_TO_4 == meZoomLevel )
+        else if( css::media::ZoomLevel_ZOOM_1_TO_4 == meZoomLevel )
         {
             aPrefSize.Width >>= 2;
             aPrefSize.Height >>= 2;
             bZoom = true;
         }
-        else if( media::ZoomLevel_ZOOM_1_TO_2 == meZoomLevel )
+        else if( css::media::ZoomLevel_ZOOM_1_TO_2 == meZoomLevel )
         {
             aPrefSize.Width >>= 1;
             aPrefSize.Height >>= 1;
             bZoom = true;
         }
-        else if( media::ZoomLevel_ZOOM_2_TO_1 == meZoomLevel )
+        else if( css::media::ZoomLevel_ZOOM_2_TO_1 == meZoomLevel )
         {
             aPrefSize.Width <<= 1;
             aPrefSize.Height <<= 1;
             bZoom = true;
         }
-        else if( media::ZoomLevel_ZOOM_4_TO_1 == meZoomLevel )
+        else if( css::media::ZoomLevel_ZOOM_4_TO_1 == meZoomLevel )
         {
             aPrefSize.Width <<= 2;
             aPrefSize.Height <<= 2;
             bZoom = true;
         }
-        else if( media::ZoomLevel_FIT_TO_WINDOW == meZoomLevel )
+        else if( css::media::ZoomLevel_FIT_TO_WINDOW == meZoomLevel )
         {
             nWidth = nVideoW;
             nHeight = nVideoH;
@@ -283,14 +283,14 @@ void Window::ImplLayoutVideoWindow()
     }
 }
 
-bool Window::create( const uno::Sequence< uno::Any >& rArguments )
+bool Window::create( const css::uno::Sequence< css::uno::Any >& rArguments )
 {
     IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
     WNDCLASS* mpWndClass = lcl_getWndClass();
 
     if( !mnFrameWnd && pVideoWindow && mpWndClass )
     {
-        awt::Rectangle  aRect;
+        css::awt::Rectangle  aRect;
         sal_IntPtr       nWnd;
 
         rArguments[ 0 ] >>= nWnd;
@@ -313,7 +313,7 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
                         mrPlayer.setNotifyWnd( mnFrameWnd );
 
-                        meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
+                        meZoomLevel = css::media::ZoomLevel_FIT_TO_WINDOW;
                         ImplLayoutVideoWindow();
         }
     }
@@ -332,9 +332,9 @@ void Window::updatePointer()
 
     switch( mnPointerType )
     {
-        case( awt::SystemPointer::CROSS ): pCursorName = IDC_CROSS; break;
-        case( awt::SystemPointer::MOVE ): pCursorName = IDC_SIZEALL; break;
-        case( awt::SystemPointer::WAIT ): pCursorName = IDC_WAIT; break;
+        case( css::awt::SystemPointer::CROSS ): pCursorName = IDC_CROSS; break;
+        case( css::awt::SystemPointer::MOVE ): pCursorName = IDC_SIZEALL; break;
+        case( css::awt::SystemPointer::WAIT ): pCursorName = IDC_WAIT; break;
 
         default:
             pCursorName = IDC_ARROW;
@@ -345,18 +345,18 @@ void Window::updatePointer()
 }
 
 void SAL_CALL Window::update(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     ::RedrawWindow( (HWND) mnFrameWnd, NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
 }
 
-sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
-    throw (uno::RuntimeException)
+sal_Bool SAL_CALL Window::setZoomLevel( css::media::ZoomLevel eZoomLevel )
+    throw (css::uno::RuntimeException)
 {
         boolean bRet = false;
 
-        if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
-            media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
+        if( css::media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
+            css::media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
         {
             if( eZoomLevel != meZoomLevel )
             {
@@ -371,19 +371,19 @@ sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
 }
 
 media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return meZoomLevel;
 }
 
 void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     mnPointerType = nPointerType;
 }
 
 void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     if( mnFrameWnd )
     {
@@ -392,10 +392,10 @@ void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal
     }
 }
 
-awt::Rectangle SAL_CALL Window::getPosSize()
-    throw (uno::RuntimeException)
+css::awt::Rectangle SAL_CALL Window::getPosSize()
+    throw (css::uno::RuntimeException)
 {
-    awt::Rectangle aRet;
+    css::awt::Rectangle aRet;
 
     if( mnFrameWnd )
     {
@@ -414,7 +414,7 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 }
 
 void SAL_CALL Window::setVisible( sal_Bool bVisible )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     if( mnFrameWnd )
     {
@@ -428,176 +428,176 @@ void SAL_CALL Window::setVisible( sal_Bool bVisible )
 }
 
 void SAL_CALL Window::setEnable( sal_Bool bEnable )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     if( mnFrameWnd )
         ::EnableWindow( mnFrameWnd, bEnable );
 }
 
 void SAL_CALL Window::setFocus(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     if( mnFrameWnd )
         ::SetFocus( mnFrameWnd );
 }
 
-void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::dispose(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
 }
 
-void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
+void SAL_CALL Window::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+    throw (css::uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
-void Window::fireMousePressedEvent( const css::awt::MouseEvent& rEvt )
+void Window::fireMousePressedEvent( const css::css::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<css::awt::XMouseListener>::get());
 
     if( pContainer )
     {
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XMouseListener >( aIter.next(), uno::UNO_QUERY )->mousePressed( rEvt );
+            css::uno::Reference< css::awt::XMouseListener >( aIter.next(), css::uno::UNO_QUERY )->mousePressed( rEvt );
     }
 }
 
-void Window::fireMouseReleasedEvent( const css::awt::MouseEvent& rEvt )
+void Window::fireMouseReleasedEvent( const css::css::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<css::awt::XMouseListener>::get());
 
     if( pContainer )
     {
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XMouseListener >( aIter.next(), uno::UNO_QUERY )->mouseReleased( rEvt );
+            css::uno::Reference< css::awt::XMouseListener >( aIter.next(), css::uno::UNO_QUERY )->mouseReleased( rEvt );
     }
 }
 
-void Window::fireMouseMovedEvent( const css::awt::MouseEvent& rEvt )
+void Window::fireMouseMovedEvent( const css::css::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseMotionListener>::get());
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<css::awt::XMouseMotionListener>::get());
 
     if( pContainer )
     {
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XMouseMotionListener >( aIter.next(), uno::UNO_QUERY )->mouseMoved( rEvt );
+            css::uno::Reference< css::awt::XMouseMotionListener >( aIter.next(), css::uno::UNO_QUERY )->mouseMoved( rEvt );
     }
 }
 
-void Window::fireSetFocusEvent( const css::awt::FocusEvent& rEvt )
+void Window::fireSetFocusEvent( const css::css::awt::FocusEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XFocusListener>::get());
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<css::awt::XFocusListener>::get());
 
     if( pContainer )
     {
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XFocusListener >( aIter.next(), uno::UNO_QUERY )->focusGained( rEvt );
+            css::uno::Reference< css::awt::XFocusListener >( aIter.next(), css::uno::UNO_QUERY )->focusGained( rEvt );
     }
 }
 
 OUString SAL_CALL Window::getImplementationName(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_WIN_WINDOW_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_WIN_WINDOW_SERVICENAME };
 
     return aRet;
 }

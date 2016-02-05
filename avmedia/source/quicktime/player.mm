@@ -33,7 +33,7 @@ namespace avmedia { namespace quicktime {
 // - Player -
 
 
-Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+Player::Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr ),
     mpMovie( nil ),
     /* GST
@@ -70,7 +70,7 @@ QTMovie* Player::getMovie()
 
 
 
-bool Player::create( const ::rtl::OUString& rURL )
+bool Player::create( const OUString& rURL )
 {
     bool    bRet = false;
     // create the Movie
@@ -111,7 +111,7 @@ bool Player::create( const ::rtl::OUString& rURL )
 
 
 void SAL_CALL Player::start(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
   SAL_INFO ( "avmedia.quicktime", "Player::start" );
 
@@ -124,7 +124,7 @@ void SAL_CALL Player::start(  )
 
 
 void SAL_CALL Player::stop(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime", "Player::stop" );
     if( mpMovie )
@@ -136,7 +136,7 @@ void SAL_CALL Player::stop(  )
 
 
 sal_Bool SAL_CALL Player::isPlaying()
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     bool bRet = false;
 
@@ -154,7 +154,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 
 
 double SAL_CALL Player::getDuration(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     // slideshow checks for non-zero duration, so cheat here
     double duration = 0.01;
@@ -171,7 +171,7 @@ double SAL_CALL Player::getDuration(  )
 
 
 void SAL_CALL Player::setMediaTime( double fTime )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime", "Player::setMediaTime" );
 
@@ -184,7 +184,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
 
 
 double SAL_CALL Player::getMediaTime(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
   double position = 0.0;
 
@@ -203,7 +203,7 @@ double SAL_CALL Player::getMediaTime(  )
 }
 
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime",
                "Player::setPlaybackLoop ? " << ( bSet?"True":"False" ) );
@@ -221,7 +221,7 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 
 
 sal_Bool SAL_CALL Player::isPlaybackLoop(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     bool bRet = [[mpMovie attributeForKey:QTMovieLoopsAttribute] boolValue];
 
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime",
                "set mute: " << bSet <<
@@ -253,7 +253,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 
 
 sal_Bool SAL_CALL Player::isMute(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime", "Player::isMuted" );
 
@@ -263,7 +263,7 @@ sal_Bool SAL_CALL Player::isMute(  )
 
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     // OOo db volume -40 = QTVolume 0
     // OOo db volume 0   = QTvolume 1
@@ -290,7 +290,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 
 
 sal_Int16 SAL_CALL Player::getVolumeDB(  )
-    throw (uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     sal_Int16 nVolumeDB = 0.0;
 
@@ -314,21 +314,21 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 
 
 
-awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
-    throw (uno::RuntimeException)
+css::awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
+    throw (css::uno::RuntimeException)
 {
     NSSize  nsSize = [[mpMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
-    awt::Size aSize( nsSize.width, nsSize.height );
+    css::awt::Size aSize( nsSize.width, nsSize.height );
     return aSize;
 }
 
 
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
-    throw (uno::RuntimeException)
+css::uno::Reference< ::css::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw (css::uno::RuntimeException)
 {
-    uno::Reference< ::media::XPlayerWindow >    xRet;
-    awt::Size                                   aSize( getPreferredPlayerWindowSize() );
+    css::uno::Reference< ::css::media::XPlayerWindow >    xRet;
+    css::awt::Size                                   aSize( getPreferredPlayerWindowSize() );
 
     SAL_INFO ( "avmedia.quicktime",
                "Player::createPlayerWindow " << aSize.Width << " x " << aSize.Height <<
@@ -349,10 +349,10 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+css::uno::Reference< css::media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
     throw (css::uno::RuntimeException)
 {
-  uno::Reference< media::XFrameGrabber > xRet;
+  css::uno::Reference< css::media::XFrameGrabber > xRet;
   SAL_INFO ( "avmedia.quicktime", "Player::createFrameGrabber" );
 
   if( !maURL.isEmpty() )
@@ -372,26 +372,26 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
 
 
-::rtl::OUString SAL_CALL Player::getImplementationName(  )
-    throw (uno::RuntimeException)
+OUString SAL_CALL Player::getImplementationName(  )
+    throw (css::uno::RuntimeException)
 {
-    return ::rtl::OUString( AVMEDIA_QUICKTIME_PLAYER_IMPLEMENTATIONNAME );
+    return OUString( AVMEDIA_QUICKTIME_PLAYER_IMPLEMENTATIONNAME );
 }
 
 
 
-sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
-    throw (uno::RuntimeException)
+sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
+    throw (css::uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_PLAYER_SERVICENAME );
 }
 
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
+    throw (css::uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_PLAYER_SERVICENAME };
+    css::uno::Sequence<OUString> aRet { AVMEDIA_QUICKTIME_PLAYER_SERVICENAME };
 
     return aRet;
 }
