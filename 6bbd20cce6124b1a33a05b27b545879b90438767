@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_c17370b3",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-02-05T14:18:51Z",
+      "side": 1,
+      "message": "What kind of doxygen error is fixed with this change? If doxygen fails to see there was a \"using namespace css;\" or similar statement before, then doxygen has to be fixed. It\u0027s a matter of style if you prefer that in .cxx files or prefer to spell out the \"css::\" prefix everywhere, please don\u0027t change that, unless you plan to do functional changes to avamedia as well. Thanks!",
+      "revId": "6bbd20cce6124b1a33a05b27b545879b90438767",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
