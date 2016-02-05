@@ -26,8 +26,6 @@
 #define EXC_RSCNOTLOADED   ((sal_uInt16)0x0100)
 #define EXC_SYSTEM         ((sal_uInt16)0x0300)
 #define EXC_DISPLAY        ((sal_uInt16)0x0400)
-#define EXC_REMOTE         ((sal_uInt16)0x0500)
-#define EXC_USER           ((sal_uInt16)0x1000)
 #define EXC_MAJORTYPE      ((sal_uInt16)0xFF00)
 #define EXC_MINORTYPE      ((sal_uInt16)0x00FF)
 

@@ -122,11 +122,6 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
             (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
             nVCLException = EXC_DISPLAY;
 
-        // Remote-Client
-        if ((pInfo->Signal == osl_Signal_User) &&
-            (pInfo->UserSignal == OSL_SIGNAL_USER_RVPCONNECTIONERROR) )
-            nVCLException = EXC_REMOTE;
-
         if ( nVCLException )
         {
             bIn = true;

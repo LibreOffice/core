@@ -284,7 +284,6 @@ void Application::Exception( sal_uInt16 nError )
         // System has precedence (so do nothing)
         case EXC_SYSTEM:
         case EXC_DISPLAY:
-        case EXC_REMOTE:
             break;
 
 #ifdef DBG_UTIL
