@@ -58,6 +58,9 @@ interface XAnnotation
     /** stores the full name of the author who created this annotation. */
     [attribute] string Author;
 
+    /** stores the initials of the author who created this annotation. */
+    [attribute] string Initials;
+
     /** stores the date and time this annotation was last edited. */
     [attribute] ::com::sun::star::util::DateTime DateTime;
 
