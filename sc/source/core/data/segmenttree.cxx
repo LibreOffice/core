@@ -344,7 +344,7 @@ bool ScFlatBoolRowSegments::setFalse(SCROW nRow1, SCROW nRow2)
     return mpImpl->setFalse(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
 }
 
-bool ScFlatBoolRowSegments::getRangeData(SCROW nRow, RangeData& rData)
+bool ScFlatBoolRowSegments::getRangeData(SCROW nRow, RangeData& rData) const
 {
     ScFlatBoolSegmentsImpl::RangeData aData;
     if (!mpImpl->getRangeData(static_cast<SCCOLROW>(nRow), aData))

@@ -1117,7 +1117,7 @@ void ScColumn::MixMarked(
 
     if (rMark.IsMultiMarked())
     {
-        ScMarkArrayIter aIter( rMark.GetArray()+nCol );
+        ScMultiSelIter aIter( rMark.GetMultiSelData(), nCol );
         while (aIter.Next( nRow1, nRow2 ))
             MixData(rCxt, nRow1, nRow2, nFunction, bSkipEmpty, rSrcCol);
     }
