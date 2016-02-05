@@ -347,6 +347,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 *rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->getForbiddenCharacters( aLang, true ) );
 
         const bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
+                                      ! rInf.GetTextFrame()->IsInTab() &&
                                       ! rPor.InFieldGrp();
 
         LineBreakUserOptions aUserOpt(
