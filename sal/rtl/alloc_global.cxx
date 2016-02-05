@@ -237,6 +237,7 @@ void rtl_memory_fini()
     int i, n;
 
     /* clear g_alloc_table */
+    // cppcheck-suppress sizeofwithsilentarraypointer
     memset (g_alloc_table, 0, sizeof(g_alloc_table));
 
     /* cleanup g_alloc_caches */
