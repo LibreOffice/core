@@ -57,9 +57,7 @@ public interface OfficeConnection
     XComponentContext getComponentContext();
 
     /**
-     * Creates an office window.
-     * The window is either a sub-class of java.awt.Canvas (local) or
-     * java.awt.Container (RVP).
+     * Creates an office java.awt.Canvas based window.
      *
      * This method does not add the office window to its container.
      *
