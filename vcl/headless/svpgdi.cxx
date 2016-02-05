@@ -179,7 +179,6 @@ namespace
     }
 }
 #endif
-
 #endif
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
@@ -644,8 +643,8 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
     }
     dbgOut( m_aDevice );
 }
-
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+#if ENABLE_CAIRO_CANVAS
+#if defined CAIRO_VERSION && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
 static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, bool bClosePath)
 {
     // short circuit if there is nothing to do
@@ -707,6 +706,7 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
     }
 }
 #endif
+#endif
 
 bool SvpSalGraphics::drawPolyLine(
     const ::basegfx::B2DPolygon& rPolyLine,
@@ -717,6 +717,7 @@ bool SvpSalGraphics::drawPolyLine(
 {
     bool bRet = false;
     (void)rPolyLine; (void)fTransparency; (void)rLineWidths; (void)eLineJoin; (void)eLineCap;
+#if ENABLE_CAIRO_CANVAS
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
@@ -825,6 +826,7 @@ bool SvpSalGraphics::drawPolyLine(
     }
     bRet = true;
 #endif
+#endif
     return bRet;
 }
 
@@ -857,6 +859,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
 {
     bool bRet = false;
     (void)rPolyPoly; (void)fTransparency;
+#if ENABLE_CAIRO_CANVAS
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
     {
@@ -900,6 +903,7 @@ bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, d
                                                 extents.y + extents.height));
     }
     bRet = true;
+#endif
 #endif
     return bRet;
 }
