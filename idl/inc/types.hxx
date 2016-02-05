@@ -69,7 +69,7 @@ public:
 };
 
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM,
-      TYPE_CLASS, TYPE_POINTER };
+      TYPE_CLASS };
 class SvMetaType : public SvMetaExtern
 {
     SvIdentifier                aCName;
