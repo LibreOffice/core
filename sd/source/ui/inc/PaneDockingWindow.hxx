@@ -65,6 +65,8 @@ public:
         Otherwise UnknownOrientation is returned.
     */
     Orientation GetOrientation() const;
+protected:
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea) SAL_OVERRIDE;
 };
 
 } // end of namespace ::sd

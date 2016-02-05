@@ -23,6 +23,9 @@
 #include "framework/FrameworkHelper.hxx"
 #include "sdresid.hxx"
 #include "res_bmp.hrc"
+#include "app.hrc"
+#include "strings.hrc"
+#include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -34,6 +37,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sfx2::TitledDockingWindow;
+
+#define VERT_POS_FIX 3
 
 namespace sd {
 
@@ -91,7 +96,22 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
         // docking window.
         GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
         GetContentWindow().GrabFocus();
+
+        ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
+        GetBindings().GetDispatcher()->GetFrame());
+        if (pBase != NULL)
+        {
+            SfxDispatcher* pDispatcher = pBase->GetViewFrame()->GetDispatcher();
+            Point aPos(rEvent.GetPosPixel());
+            if (aPos.Y() > m_nTitleBarHeight + EXTRA_SLIDEPANE_TOP_HEIGHT)
+                pDispatcher->Execute(SID_INSERTPAGE_QUICK,
+                                SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+            else if (aPos.Y() > m_nTitleBarHeight - VERT_POS_FIX - 10)
+                pDispatcher->Execute(SID_PRESENTATION,
+                                SfxCallMode::ASYNCHRON);
+        }
     }
+
     SfxDockingWindow::MouseButtonDown(rEvent);
 }
 
@@ -125,6 +145,68 @@ PaneDockingWindow::Orientation PaneDockingWindow::GetOrientation() const
         return HorizontalOrientation;
     else
         return VerticalOrientation;
+}
+
+void PaneDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea)
+{
+    TitledDockingWindow::Paint(rRenderContext, i_rArea);
+    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    // play icon and text
+    int nWidth = rRenderContext.GetTextWidth(SdResId(STR_DRAW_COMMONTASK_TOOLBOX));
+    int nPos = i_rArea.Right()/2 - (29 + 7 + nWidth)/2;
+    if (nPos < 20)
+        nPos = 20;
+    rRenderContext.SetLineColor(rStyleSettings.GetHighlightColor());
+    rRenderContext.SetFillColor();
+    int nHeight = m_nTitleBarHeight + EXTRA_SLIDEPANE_TOP_HEIGHT/2 - VERT_POS_FIX;
+    Rectangle aPlayBox(Rectangle(nPos, nHeight - 14, nPos + 29, nHeight + 14));
+    rRenderContext.DrawRect(aPlayBox, 3, 3);
+    aPlayBox.Left()++;
+    aPlayBox.Right()--;
+    aPlayBox.Top()++;
+    aPlayBox.Bottom()--;
+    rRenderContext.DrawRect(aPlayBox, 2, 2);
+    rRenderContext.DrawText(Rectangle(nPos + 29 + 7, nHeight - 14, i_rArea.Right() - 27 , nHeight + 14), SdResId(STR_DRAW_COMMONTASK_TOOLBOX),
+            DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::EndEllipsis | DrawTextFlags::Clip);
+
+    for (int i = 0; i <= 5; i++)
+    {
+        rRenderContext.DrawRect(Rectangle(aPlayBox.Left()+10+i*2, aPlayBox.Top()+9+i, aPlayBox.Left()+10+i*2, aPlayBox.Bottom()-7-i));
+        rRenderContext.DrawRect(Rectangle(aPlayBox.Left()+10+i*2+1, aPlayBox.Top()+9+i, aPlayBox.Left()+10+i*2+1, aPlayBox.Bottom()-7-i));
+    }
+
+    // don't draw new slide button without place for it
+    if (i_rArea.Bottom() < m_nTitleBarHeight + EXTRA_SLIDEPANE_TOP_HEIGHT + EXTRA_SLIDEPANE_BOTTOM_HEIGHT)
+        return;
+
+    nWidth = rRenderContext.GetTextWidth(SdResId(STR_INSERTPAGE));
+    nPos = i_rArea.Right()/2 - (14 + 7 + nWidth + 10)/2;
+    if (nPos < i_rArea.Right() * 0.1 + 7)
+        nPos = i_rArea.Right() * 0.1 + 7;
+
+    Rectangle aNewBox(i_rArea.Right() * 0.1, i_rArea.Bottom() - EXTRA_SLIDEPANE_BOTTOM_HEIGHT * 5/6, i_rArea.Right() * 0.9, i_rArea.Bottom() - EXTRA_SLIDEPANE_BOTTOM_HEIGHT / 6);
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.SetFillColor();
+    rRenderContext.DrawRect(aNewBox);
+    aNewBox.Left()++;
+    aNewBox.Right()--;
+    aNewBox.Top()++;
+    aNewBox.Bottom()--;
+    rRenderContext.DrawRect(aNewBox);
+
+    rRenderContext.DrawRect(Rectangle(nPos + 7, i_rArea.Bottom() - EXTRA_SLIDEPANE_BOTTOM_HEIGHT/2-1, nPos + 7 + 13, i_rArea.Bottom() - EXTRA_SLIDEPANE_BOTTOM_HEIGHT/2));
+    rRenderContext.DrawRect(Rectangle(nPos + 7 + 6, i_rArea.Bottom() - EXTRA_SLIDEPANE_BOTTOM_HEIGHT/2-1 - 6, nPos + 7 + 7, i_rArea.Bottom() - EXTRA_SLIDEPANE_BOTTOM_HEIGHT/2 + 6));
+
+    aNewBox.Left() = nPos + 7 + 14 + 7;
+    aNewBox.Right() -= 10;
+
+    rRenderContext.DrawText(aNewBox, SdResId(STR_INSERTPAGE),
+            DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::EndEllipsis | DrawTextFlags::Clip);
+
+    rRenderContext.Pop();
+
 }
 
 } // end of namespace ::sd

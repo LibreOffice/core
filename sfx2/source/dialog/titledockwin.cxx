@@ -27,7 +27,6 @@
 #include <svl/eitem.hxx>
 #include <vcl/settings.hxx>
 
-
 namespace sfx2
 {
     //= TitledDockingWindow
@@ -37,7 +36,7 @@ namespace sfx2
         ,m_sTitle()
         ,m_aToolbox( VclPtr<ToolBox>::Create(this) )
         ,m_aContentWindow( VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL) )
-        ,m_aBorder( 3, 1, 3, 3 )
+        ,m_aBorder( 3, 1 + EXTRA_SLIDEPANE_TOP_HEIGHT, 3, 3 + EXTRA_SLIDEPANE_BOTTOM_HEIGHT )
         ,m_bLayoutPending( false )
         ,m_nTitleBarHeight(0)
     {
@@ -201,6 +200,7 @@ namespace sfx2
         // Paint title bar text.
         rRenderContext.SetLineColor(rStyleSettings.GetActiveTextColor());
         aTitleBarBox.Left() += 3;
+        aTitleBarBox.Bottom() -= EXTRA_SLIDEPANE_TOP_HEIGHT;
         rRenderContext.DrawText(aTitleBarBox, impl_getTitle(),
                                DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
 

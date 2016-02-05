@@ -27,6 +27,9 @@
 #include <vcl/vclptr.hxx>
 #include <tools/svborder.hxx>
 
+#define EXTRA_SLIDEPANE_TOP_HEIGHT 35
+#define EXTRA_SLIDEPANE_BOTTOM_HEIGHT 60
+
 namespace sfx2
 {
     class SFX2_DLLPUBLIC TitledDockingWindow : public SfxDockingWindow
@@ -103,6 +106,7 @@ namespace sfx2
         */
         bool                m_bLayoutPending;
 
+    protected:
         /** Height of the title bar.  Calculated in impl_layout().
         */
         int                 m_nTitleBarHeight;
