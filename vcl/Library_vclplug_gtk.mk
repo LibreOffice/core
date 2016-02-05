@@ -44,7 +44,7 @@ $(eval $(call gb_Library_set_defs,vclplug_gtk,\
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
-ifneq ($(ENABLE_DBUS),)
+ifeq ($(ENABLE_DBUS),TRUE)
 $(eval $(call gb_Library_set_include,vclplug_gtk,\
     $$(INCLUDE) \
     $(shell pkg-config --cflags-only-I dbus-glib-1) \
