@@ -81,7 +81,7 @@ enum FontHintStyle { HINT_NONE, HINT_SLIGHT, HINT_MEDIUM, HINT_FULL };
 
 typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 
-enum OutDevSupportType { OutDevSupport_TransparentRect, OutDevSupport_B2DClip, OutDevSupport_B2DDraw };
+enum OutDevSupportType { OutDevSupport_TransparentRect, OutDevSupport_B2DDraw };
 
 struct ItalicMatrix
 {

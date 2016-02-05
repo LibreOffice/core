@@ -1380,8 +1380,6 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
         case OutDevSupport_TransparentRect:
         case OutDevSupport_B2DDraw:
             return true;
-        case OutDevSupport_B2DClip: //what's this one ?
-            return false;
     }
     return false;
 }
