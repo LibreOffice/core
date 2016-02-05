@@ -827,9 +827,9 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
             aPos.X() -= aSize.Width() >> 1;
             aPos.Y() -= aSize.Height() >> 1;
         }
-
+#if HAVE_FEATURE_OPENGL
         mpView->Insert3DModelURL( sURL, nAction, aPos, aSize, false ) ;
-
+#endif
         if( mpWindow )
             mpWindow->LeaveWait();
     }

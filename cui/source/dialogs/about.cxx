@@ -296,12 +296,12 @@ OUString AboutDialog::GetVersionString()
         }
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
-
+#ifdef OPENGL_ENABLE
     if (OpenGLWrapper::isVCLOpenGLEnabled())
     {
         sVersion += "-GL";
     }
-
+#endif
     if (EXTRA_BUILDID[0] != '\0')
     {
         sVersion += "\n" EXTRA_BUILDID;
