@@ -285,7 +285,6 @@ struct SwRangeDescriptor
     void Normalize();
 };
 
-class SwTableProperties_Impl;
 class SwXTextTable : public cppu::WeakImplHelper
 <
     css::text::XTextTable,
@@ -307,13 +306,6 @@ private:
     css::uno::WeakReference< css::table::XTableColumns > m_xColumns;
 
     const SfxItemPropertySet*       m_pPropSet;
-
-    // Descriptor-interface
-    SwTableProperties_Impl*     pTableProps;
-    OUString                    m_sTableName;
-    bool                    bIsDescriptor;
-    unsigned short              nRows;
-    unsigned short              nColumns;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
