@@ -1065,6 +1065,7 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
+        aEvent.FeatureURL.Path == "CharBackgroundExt" ||
         aEvent.FeatureURL.Path == "DefaultBullet" ||
         aEvent.FeatureURL.Path == "DefaultNumbering" ||
         aEvent.FeatureURL.Path == "Italic" ||
@@ -1082,7 +1083,6 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
         bool bTemp = false;
         aEvent.State >>= bTemp;
         aBuffer.append(bTemp);
-
     }
     else if (aEvent.FeatureURL.Path == "CharFontName")
     {
