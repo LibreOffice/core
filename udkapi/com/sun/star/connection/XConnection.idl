@@ -43,6 +43,8 @@ published interface XConnection: com::sun::star::uno::XInterface
         @return The read number of bytes.
                 The return value and the length of the
                 returned sequence must be identical.
+        @param aReadBytes
+                The buffer to receive the read bytes.
         @param nBytesToRead
                 The number of bytes to be read from the stream.
 

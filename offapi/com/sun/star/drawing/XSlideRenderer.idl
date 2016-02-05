@@ -70,6 +70,12 @@ interface XSlideRenderer
         com::sun::star::rendering::XBitmap instead
         of com::sun::star::awt::XBitmap.
         @see createPreview
+        @param xSlide
+            See description in #createPreview.
+        @param aMaximumPreviewPixelSize
+            See description in #createPreview.
+        @param nSuperSampleFactor
+            See description in #createPreview.
         @param xCanvas
             This canvas is used create a canvas specific bitmap.
     */

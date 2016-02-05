@@ -54,6 +54,12 @@ interface XGraphicTransformer : ::com::sun::star::uno::XInterface
 
     /** changes brightness/contrast
 
+        @param In
+            The input Graphic.
+        @param brightness
+            The brightness that shall be applied.
+        @param contrast
+            The contrast that shall be applied.
         @param mso whether to use MSOffice brightness/contrast formula
         @returns
             The modified graphic

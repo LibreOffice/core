@@ -69,6 +69,9 @@ interface XPackage
         After return of this function no code from the extension may be used
         anymore, so that the extension can be safely removed from the hard disk.
 
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or `NULL`
         @param xCmdEnv
                command environment for error handling and other interaction.
         @param alreadyInstalled
@@ -76,7 +79,7 @@ interface XPackage
 
         @return
             `NULL` - all prerequisites are met. Otherwise, a value from
-            #Prerequisites indicating what prerequisites are missing.
+            Prerequisites indicating what prerequisites are missing.
      */
     long checkPrerequisites(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
