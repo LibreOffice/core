@@ -21,6 +21,8 @@
 #define INCLUDED_SC_INC_MARKDATA_HXX
 
 #include "address.hxx"
+#include "rangelst.hxx"
+#include "markmulti.hxx"
 #include "scdllapi.h"
 
 #include <set>
@@ -49,12 +51,17 @@ private:
 
     ScRange         aMarkRange;             // area
     ScRange         aMultiRange;            // maximum area altogether
-    ScMarkArray*    pMultiSel;              // multi selection
+    ScMultiSel      aMultiSel;              // multi selection
     bool            bMarked:1;                // rectangle marked
     bool            bMultiMarked:1;
 
     bool            bMarking:1;               // area is being marked -> no MarkToMulti
     bool            bMarkIsNeg:1;             // cancel if multi selection
+    ScRangeList     aTopEnvelope;             // list of ranges in the top envelope of the multi selection
+    ScRangeList     aBottomEnvelope;          // list of ranges in the bottom envelope of the multi selection
+    ScRangeList     aLeftEnvelope;            // list of ranges in the left envelope of the multi selection
+    ScRangeList     aRightEnvelope;           // list of ranges in the right envelope of the multi selection
+
 
 public:
                 ScMarkData();
@@ -66,7 +73,8 @@ public:
     void        ResetMark();
     void        SetMarkArea( const ScRange& rRange );
 
-    void        SetMultiMarkArea( const ScRange& rRange, bool bMark = true );
+    // bSetupMulti must be set to true only for recursive calls to SetMultiMarkArea
+    void        SetMultiMarkArea( const ScRange& rRange, bool bMark = true, bool bSetupMulti = false );
 
     void        MarkToMulti();
     void        MarkToSimple();
@@ -96,7 +104,8 @@ public:
     bool        GetMarkingFlag() const          { return bMarking;    }
 
     //  for FillInfo / Document etc.
-    const ScMarkArray* GetArray() const         { return pMultiSel; }
+    const ScMultiSel& GetMultiSelData() const   { return aMultiSel;   }
+    ScMarkArray GetMarkArray( SCCOL nCol ) const;
 
     bool        IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
     void        FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const;
@@ -121,6 +130,15 @@ public:
     //  adjust table marking:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
+
+    // Generate envelopes if mutimarked and fills the passed ScRange object with
+    // the smallest range that includes the marked area plus its envelopes.
+    void        GetSelectionCover( ScRange& rRange );
+    // Get top, bottom, left and right envelopes
+    const ScRangeList& GetTopEnvelope() const    { return aTopEnvelope;    }
+    const ScRangeList& GetBottomEnvelope() const { return aBottomEnvelope; }
+    const ScRangeList& GetLeftEnvelope() const   { return aLeftEnvelope;   }
+    const ScRangeList& GetRightEnvelope() const  { return aRightEnvelope;  }
 
     // iterators for table access
     typedef std::set<SCTAB>::iterator iterator;

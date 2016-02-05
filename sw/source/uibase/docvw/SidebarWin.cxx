@@ -1220,7 +1220,7 @@ void SwSidebarWin::ShowNote()
 
     // Invalidate.
     mpSidebarTextControl->Push(PushFlags::MAPMODE);
-    lcl_translateTwips(*EditWin(), *mpSidebarTextControl, nullptr);
+    lcl_translateTwips(EditWin(), *mpSidebarTextControl, nullptr);
     mpSidebarTextControl->Invalidate();
     mpSidebarTextControl->Pop();
 }

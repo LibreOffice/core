@@ -19,19 +19,21 @@
 
 #include "markdata.hxx"
 #include "markarr.hxx"
+#include "markmulti.hxx"
 #include "rangelst.hxx"
+#include "segmenttree.hxx"
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
+#include <unordered_map>
 
 #include <osl/diagnose.h>
 
 #include <mdds/flat_segment_tree.hpp>
 
-// STATIC DATA -----------------------------------------------------------
 
 ScMarkData::ScMarkData() :
     maTabMarked(),
-    pMultiSel( nullptr )
+    aMultiSel()
 {
     ResetMark();
 }
@@ -40,19 +42,16 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     maTabMarked( rData.maTabMarked ),
     aMarkRange( rData.aMarkRange ),
     aMultiRange( rData.aMultiRange ),
-    pMultiSel( nullptr )
+    aMultiSel( rData.aMultiSel ),
+    aTopEnvelope( rData.aTopEnvelope ),
+    aBottomEnvelope( rData.aBottomEnvelope ),
+    aLeftEnvelope( rData.aLeftEnvelope ),
+    aRightEnvelope( rData.aRightEnvelope )
 {
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
-
-    if (rData.pMultiSel)
-    {
-        pMultiSel = new ScMarkArray[MAXCOLCOUNT];
-        for (SCCOL j=0; j<MAXCOLCOUNT; j++)
-            rData.pMultiSel[j].CopyMarksTo( pMultiSel[j] );
-    }
 }
 
 ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
@@ -60,40 +59,37 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     if ( &rData == this )
         return *this;
 
-    delete[] pMultiSel;
-    pMultiSel = nullptr;
-
     aMarkRange   = rData.aMarkRange;
     aMultiRange  = rData.aMultiRange;
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
+    aTopEnvelope = rData.aTopEnvelope;
+    aBottomEnvelope = rData.aBottomEnvelope;
+    aLeftEnvelope   = rData.aLeftEnvelope;
+    aRightEnvelope  = rData.aRightEnvelope;
 
     maTabMarked = rData.maTabMarked;
-
-    if (rData.pMultiSel)
-    {
-        pMultiSel = new ScMarkArray[MAXCOLCOUNT];
-        for (SCCOL j=0; j<MAXCOLCOUNT; j++)
-            rData.pMultiSel[j].CopyMarksTo( pMultiSel[j] );
-    }
+    aMultiSel = rData.aMultiSel;
 
     return *this;
 }
 
 ScMarkData::~ScMarkData()
 {
-    delete[] pMultiSel;
 }
 
 void ScMarkData::ResetMark()
 {
-    delete[] pMultiSel;
-    pMultiSel = nullptr;
+    aMultiSel.Clear();
 
     bMarked = bMultiMarked = false;
     bMarking = bMarkIsNeg = false;
+    aTopEnvelope.RemoveAll();
+    aBottomEnvelope.RemoveAll();
+    aLeftEnvelope.RemoveAll();
+    aRightEnvelope.RemoveAll();
 }
 
 void ScMarkData::SetMarkArea( const ScRange& rRange )
@@ -121,17 +117,18 @@ void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
     rRange = aMultiRange;
 }
 
-void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
+void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark, bool bSetupMulti )
 {
-    if (!pMultiSel)
+    if ( aMultiSel.IsEmpty() )
     {
-        pMultiSel = new ScMarkArray[MAXCOL+1];
-
         // if simple mark range is set, copy to multi marks
-        if ( bMarked && !bMarkIsNeg )
+        if ( bMarked && !bMarkIsNeg && !bSetupMulti )
         {
             bMarked = false;
-            SetMultiMarkArea( aMarkRange );
+            SCCOL nStartCol = aMarkRange.aStart.Col();
+            SCCOL nEndCol = aMarkRange.aEnd.Col();
+            PutInOrder( nStartCol, nEndCol );
+            SetMultiMarkArea( aMarkRange, true, true );
         }
     }
 
@@ -142,9 +139,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartCol, nEndCol );
 
-    SCCOL nCol;
-    for (nCol=nStartCol; nCol<=nEndCol; nCol++)
-        pMultiSel[nCol].SetMarkArea( nStartRow, nEndRow, bMark );
+    aMultiSel.SetMarkArea( nStartCol, nEndCol, nStartRow, nEndRow, bMark );
 
     if ( bMultiMarked )                 // Update aMultiRange
     {
@@ -247,27 +242,25 @@ void ScMarkData::MarkToSimple()
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
         ScRange aNew = aMultiRange;
 
         bool bOk = false;
         SCCOL nStartCol = aNew.aStart.Col();
         SCCOL nEndCol   = aNew.aEnd.Col();
 
-        while ( nStartCol < nEndCol && !pMultiSel[nStartCol].HasMarks() )
+        while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nStartCol ) )
             ++nStartCol;
-        while ( nStartCol < nEndCol && !pMultiSel[nEndCol].HasMarks() )
+        while ( nStartCol < nEndCol && !aMultiSel.HasMarks( nEndCol ) )
             --nEndCol;
 
         // Rows are only taken from MarkArray
         SCROW nStartRow, nEndRow;
-        if ( pMultiSel[nStartCol].HasOneMark( nStartRow, nEndRow ) )
+        if ( aMultiSel.HasOneMark( nStartCol, nStartRow, nEndRow ) )
         {
             bOk = true;
             SCROW nCmpStart, nCmpEnd;
             for (SCCOL nCol=nStartCol+1; nCol<=nEndCol && bOk; nCol++)
-                if ( !pMultiSel[nCol].HasOneMark( nCmpStart, nCmpEnd )
+                if ( !aMultiSel.HasOneMark( nCol, nCmpStart, nCmpEnd )
                         || nCmpStart != nStartRow || nCmpEnd != nEndRow )
                     bOk = false;
         }
@@ -298,8 +291,7 @@ bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple ) const
     {
         //TODO: test here for negative Marking ?
 
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-        return pMultiSel[nCol].GetMark( nRow );
+        return aMultiSel.GetMark( nCol, nRow );
     }
 
     return false;
@@ -315,7 +307,7 @@ bool ScMarkData::IsColumnMarked( SCCOL nCol ) const
                     aMarkRange.aStart.Row() == 0    && aMarkRange.aEnd.Row() == MAXROW )
         return true;
 
-    if ( bMultiMarked && pMultiSel[nCol].IsAllMarked(0,MAXROW) )
+    if ( bMultiMarked && aMultiSel.IsAllMarked( nCol, 0, MAXROW ) )
         return true;
 
     return false;
@@ -332,13 +324,7 @@ bool ScMarkData::IsRowMarked( SCROW nRow ) const
         return true;
 
     if ( bMultiMarked )
-    {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-        for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-            if (!pMultiSel[nCol].GetMark(nRow))
-                return false;
-        return true;
-    }
+        return aMultiSel.IsRowMarked( nRow );
 
     return false;
 }
@@ -381,15 +367,13 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
         SCTAB nTab = aMultiRange.aStart.Tab();
 
         SCCOL nStartCol = aMultiRange.aStart.Col();
         SCCOL nEndCol = aMultiRange.aEnd.Col();
         for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
         {
-            if (pMultiSel[nCol].HasMarks())
+            if (aMultiSel.HasMarks( nCol ))
             {
                 // Feeding column-wise fragments to ScRangeList::Join() is a
                 // huge bottleneck, speed this up for multiple columns
@@ -399,14 +383,14 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
                 SCCOL nToCol = nCol+1;
                 for ( ; nToCol <= nEndCol; ++nToCol)
                 {
-                    if (!pMultiSel[nCol].HasEqualRowsMarked( pMultiSel[nToCol]))
+                    if (!aMultiSel.HasEqualRowsMarked(nCol, nToCol))
                         break;
                 }
                 --nToCol;
                 ScRange aRange( nCol, 0, nTab, nToCol, 0, nTab );
                 SCROW nTop, nBottom;
-                ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
-                while ( aMarkIter.Next( nTop, nBottom ) )
+                ScMultiSelIter aMultiIter( aMultiSel, nCol );
+                while ( aMultiIter.Next( nTop, nBottom ) )
                 {
                     aRange.aStart.SetRow( nTop );
                     aRange.aEnd.SetRow( nBottom );
@@ -486,15 +470,17 @@ bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
     bool bOk = true;
+
+    if ( nStartCol == 0 && nEndCol == MAXCOL )
+        return aMultiSel.IsRowRangeMarked( nStartRow, nEndRow );
+
     for (SCCOL nCol=nStartCol; nCol<=nEndCol && bOk; nCol++)
-        if ( !pMultiSel[nCol].IsAllMarked( nStartRow, nEndRow ) )
+        if ( !aMultiSel.IsAllMarked( nCol, nStartRow, nEndRow ) )
             bOk = false;
 
     return bOk;
@@ -505,9 +491,7 @@ SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const
     if ( !bMultiMarked )
         return nRow;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
-    return pMultiSel[nCol].GetNextMarked( nRow, bUp );
+    return aMultiSel.GetNextMarked( nCol, nRow, bUp );
 }
 
 bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
@@ -515,9 +499,7 @@ bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
-    return pMultiSel[nCol].HasMarks();
+    return aMultiSel.HasMarks( nCol );
 }
 
 bool ScMarkData::HasAnyMultiMarks() const
@@ -525,13 +507,7 @@ bool ScMarkData::HasAnyMultiMarks() const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
-
-    for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-        if ( pMultiSel[nCol].HasMarks() )
-            return true;
-
-    return false;       // no
+    return aMultiSel.HasAnyMarks();
 }
 
 void ScMarkData::InsertTab( SCTAB nTab )
@@ -551,6 +527,261 @@ void ScMarkData::DeleteTab( SCTAB nTab )
     for (; it != maTabMarked.end(); ++it)
         tabMarked.insert(*it + 1);
     maTabMarked.swap(tabMarked);
+}
+
+static void lcl_AddRanges(ScRange& rRangeDest, const ScRange& rNewRange )
+{
+    SCCOL nStartCol = rNewRange.aStart.Col();
+    SCROW nStartRow = rNewRange.aStart.Row();
+    SCCOL nEndCol = rNewRange.aEnd.Col();
+    SCROW nEndRow = rNewRange.aEnd.Row();
+    PutInOrder( nStartRow, nEndRow );
+    PutInOrder( nStartCol, nEndCol );
+    if ( nStartCol < rRangeDest.aStart.Col() )
+        rRangeDest.aStart.SetCol( nStartCol );
+    if ( nStartRow < rRangeDest.aStart.Row() )
+        rRangeDest.aStart.SetRow( nStartRow );
+    if ( nEndCol > rRangeDest.aEnd.Col() )
+        rRangeDest.aEnd.SetCol( nEndCol );
+    if ( nEndRow > rRangeDest.aEnd.Row() )
+        rRangeDest.aEnd.SetRow( nEndRow );
+}
+
+void ScMarkData::GetSelectionCover( ScRange& rRange )
+{
+    if( bMultiMarked )
+    {
+        rRange = aMultiRange;
+        SCCOL nStartCol = aMultiRange.aStart.Col(), nEndCol = aMultiRange.aEnd.Col();
+        PutInOrder( nStartCol, nEndCol );
+        nStartCol = ( nStartCol == 0 ) ? nStartCol : nStartCol - 1;
+        nEndCol = ( nEndCol == MAXCOL ) ? nEndCol : nEndCol + 1;
+        std::unique_ptr<ScFlatBoolRowSegments> pPrevColMarkedRows;
+        std::unique_ptr<ScFlatBoolRowSegments> pCurColMarkedRows;
+        std::unordered_map<SCROW,ScFlatBoolColSegments> aRowToColSegmentsInTopEnvelope;
+        std::unordered_map<SCROW,ScFlatBoolColSegments> aRowToColSegmentsInBottomEnvelope;
+        ScFlatBoolRowSegments aNoRowsMarked;
+        aNoRowsMarked.setFalse( 0, MAXROW );
+
+        bool bPrevColUnMarked = false;
+
+        for ( SCCOL nCol=nStartCol; nCol <= nEndCol; nCol++ )
+        {
+            SCROW nTop, nBottom;
+            bool bCurColUnMarked = !aMultiSel.HasMarks( nCol );
+            if ( !bCurColUnMarked )
+            {
+                pCurColMarkedRows.reset( new ScFlatBoolRowSegments() );
+                pCurColMarkedRows->setFalse( 0, MAXROW );
+                ScMultiSelIter aMultiIter( aMultiSel, nCol );
+                ScFlatBoolRowSegments::ForwardIterator aPrevItr ( pPrevColMarkedRows.get() ? *pPrevColMarkedRows : aNoRowsMarked ); // For finding left envelope
+                ScFlatBoolRowSegments::ForwardIterator aPrevItr1( pPrevColMarkedRows.get() ? *pPrevColMarkedRows : aNoRowsMarked ); // For finding right envelope
+                SCROW nTopPrev = 0, nBottomPrev = 0; // For right envelope
+                while ( aMultiIter.Next( nTop, nBottom ) )
+                {
+                    pCurColMarkedRows->setTrue( nTop, nBottom );
+                    if( bPrevColUnMarked && ( nCol > nStartCol ))
+                    {
+                        ScRange aAddRange(nCol - 1, nTop, aMultiRange.aStart.Tab(),
+                                          nCol - 1, nBottom, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Left envelope
+                        aLeftEnvelope.Append( aAddRange );
+                    }
+                    else if( nCol > nStartCol )
+                    {
+                        SCROW nTop1 = nTop, nBottom1 = nTop;
+                        while( nTop1 <= nBottom && nBottom1 <= nBottom )
+                        {
+                            bool bRangeMarked = false;
+                            aPrevItr.getValue( nTop1, bRangeMarked );
+                            if( bRangeMarked )
+                            {
+                                nTop1 = aPrevItr.getLastPos() + 1;
+                                nBottom1 = nTop1;
+                            }
+                            else
+                            {
+                                nBottom1 = aPrevItr.getLastPos();
+                                if( nBottom1 > nBottom )
+                                    nBottom1 = nBottom;
+                                ScRange aAddRange( nCol - 1, nTop1, aMultiRange.aStart.Tab(),
+                                                   nCol - 1, nBottom1, aMultiRange.aStart.Tab() );
+                                lcl_AddRanges( rRange, aAddRange ); // Left envelope
+                                aLeftEnvelope.Append( aAddRange );
+                                nTop1 = ++nBottom1;
+                            }
+                        }
+                        while( nTopPrev <= nBottom && nBottomPrev <= nBottom )
+                        {
+                            bool bRangeMarked;
+                            aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                            if( bRangeMarked )
+                            {
+                                nBottomPrev = aPrevItr1.getLastPos();
+                                if( nTopPrev < nTop )
+                                {
+                                    if( nBottomPrev >= nTop )
+                                    {
+                                        nBottomPrev = nTop - 1;
+                                        ScRange aAddRange( nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                                           nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                                        aRightEnvelope.Append( aAddRange );
+                                        nTopPrev = nBottomPrev = (nBottom + 1);
+                                    }
+                                    else
+                                    {
+                                        ScRange aAddRange( nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                                           nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                                        aRightEnvelope.Append( aAddRange );
+                                        nTopPrev = ++nBottomPrev;
+                                    }
+                                }
+                                else
+                                    nTopPrev = nBottomPrev = ( nBottom + 1 );
+                            }
+                            else
+                            {
+                                nBottomPrev = aPrevItr1.getLastPos();
+                                nTopPrev = ++nBottomPrev;
+                            }
+                        }
+                    }
+                    if( nTop )
+                    {
+                        ScRange aAddRange( nCol, nTop - 1, aMultiRange.aStart.Tab(),
+                                           nCol, nTop - 1, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Top envelope
+                        aRowToColSegmentsInTopEnvelope[nTop - 1].setTrue( nCol, nCol );
+                    }
+                    if( nBottom < MAXROW )
+                    {
+                        ScRange aAddRange(nCol, nBottom + 1, aMultiRange.aStart.Tab(),
+                                          nCol, nBottom + 1, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Bottom envelope
+                        aRowToColSegmentsInBottomEnvelope[nBottom + 1].setTrue( nCol, nCol );
+                    }
+                }
+
+                while( nTopPrev <= MAXROW && nBottomPrev <= MAXROW && ( nCol > nStartCol ) )
+                {
+                    bool bRangeMarked;
+                    aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                    if( bRangeMarked )
+                    {
+                        nBottomPrev = aPrevItr1.getLastPos();
+                        ScRange aAddRange(nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                          nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                        aRightEnvelope.Append( aAddRange );
+                        nTopPrev = ++nBottomPrev;
+                    }
+                    else
+                    {
+                        nBottomPrev = aPrevItr1.getLastPos();
+                        nTopPrev = ++nBottomPrev;
+                    }
+                }
+            }
+            else if( nCol > nStartCol )
+            {
+                bPrevColUnMarked = true;
+                SCROW nTopPrev = 0, nBottomPrev = 0;
+                bool bRangeMarked = false;
+                ScFlatBoolRowSegments::ForwardIterator aPrevItr( pPrevColMarkedRows.get() ? *pPrevColMarkedRows : aNoRowsMarked );
+                while( nTopPrev <= MAXROW && nBottomPrev <= MAXROW )
+                {
+                    aPrevItr.getValue(nTopPrev, bRangeMarked);
+                    if( bRangeMarked )
+                    {
+                        nBottomPrev = aPrevItr.getLastPos();
+                        ScRange aAddRange(nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                          nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                        aRightEnvelope.Append( aAddRange );
+                        nTopPrev = ++nBottomPrev;
+                    }
+                    else
+                    {
+                        nBottomPrev = aPrevItr.getLastPos();
+                        nTopPrev = ++nBottomPrev;
+                    }
+                }
+            }
+            if ( bCurColUnMarked )
+                pPrevColMarkedRows.reset( nullptr );
+            else
+                pPrevColMarkedRows.reset( pCurColMarkedRows.release() );
+        }
+        for( auto& rKV : aRowToColSegmentsInTopEnvelope )
+        {
+            SCCOL nStart = nStartCol;
+            ScFlatBoolColSegments::RangeData aRange;
+            while( nStart <= nEndCol )
+            {
+                if( !rKV.second.getRangeData( nStart, aRange ) )
+                    break;
+                if( aRange.mbValue ) // is marked
+                    aTopEnvelope.Append( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
+                                                  aRange.mnCol2, rKV.first, aMultiRange.aStart.Tab() ) );
+                nStart = aRange.mnCol2 + 1;
+            }
+        }
+        for( auto& rKV : aRowToColSegmentsInBottomEnvelope )
+        {
+            SCCOL nStart = nStartCol;
+            ScFlatBoolColSegments::RangeData aRange;
+            while( nStart <= nEndCol )
+            {
+                if( !rKV.second.getRangeData( nStart, aRange ) )
+                    break;
+                if( aRange.mbValue ) // is marked
+                    aBottomEnvelope.Append( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
+                                                     aRange.mnCol2, rKV.first, aMultiRange.aStart.Tab() ) );
+                nStart = aRange.mnCol2 + 1;
+            }
+        }
+    }
+    else if( bMarked )
+    {
+        aMarkRange.PutInOrder();
+        SCROW nRow1, nRow2, nRow1New, nRow2New;
+        SCCOL nCol1, nCol2, nCol1New, nCol2New;
+        SCTAB nTab1, nTab2;
+        aMarkRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        nCol1New = nCol1;
+        nCol2New = nCol2;
+        nRow1New = nRow1;
+        nRow2New = nRow2;
+        // Each envelope will have zero or more ranges for single rectangle selection.
+        if( nCol1 > 0 )
+        {
+            aLeftEnvelope.Append( ScRange( nCol1 - 1, nRow1, nTab1, nCol1 - 1, nRow2, nTab2 ) );
+            --nCol1New;
+        }
+        if( nRow1 > 0 )
+        {
+            aTopEnvelope.Append( ScRange( nCol1, nRow1 - 1, nTab1, nCol2, nRow1 - 1, nTab2 ) );
+            --nRow1New;
+        }
+        if( nCol2 < MAXCOL )
+        {
+            aRightEnvelope.Append( ScRange( nCol2 + 1, nRow1, nTab1, nCol2 + 1, nRow2, nTab2 ) );
+            ++nCol2New;
+        }
+        if( nRow2 < MAXROW )
+        {
+            aBottomEnvelope.Append( ScRange( nCol1, nRow2 + 1, nTab1, nCol2, nRow2 + 1, nTab2 ) );
+            ++nRow2New;
+        }
+        rRange = ScRange( nCol1New, nRow1New, nTab1, nCol2New, nRow2New, nTab2 );
+    }
+}
+
+ScMarkArray ScMarkData::GetMarkArray( SCCOL nCol ) const
+{
+    return aMultiSel.GetMarkArray( nCol );
 }
 
 //iterators

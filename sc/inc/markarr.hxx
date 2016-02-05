@@ -41,6 +41,7 @@ friend class ScDocument;                // for FillInfo
 
 public:
             ScMarkArray();
+            ScMarkArray( ScMarkArray&& rArray );
             ~ScMarkArray();
     void    Reset( bool bMarked = false );
     bool    GetMark( SCROW nRow ) const;
