@@ -1646,6 +1646,10 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         {
             //don't call InputChanged for CommandEventId::Wheel
         }
+        else if ( nCommand == CommandEventId::Swipe )
+        {
+            //don't call InputChanged for CommandEventId::Swipe
+        }
         else
             SC_MOD()->InputChanged( pEditView );
     }
