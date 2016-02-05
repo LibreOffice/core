@@ -334,37 +334,37 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
     if (ePos == RectPos::Left || ePos == RectPos::Right || ePos == RectPos::Attribute)
         // correct error in current vertical position
         switch (eVer)
-        {   case RVA_TOP :
+        {   case RectVerAlign::Top :
                 aPos.Y() += rRect.GetAlignT() - GetAlignT();
                 break;
-            case RVA_MID :
+            case RectVerAlign::Mid :
                 aPos.Y() += rRect.GetAlignM() - GetAlignM();
                 break;
-            case RVA_BASELINE :
+            case RectVerAlign::Baseline :
                 // align baselines if possible else align mid's
                 if (HasBaseline() && rRect.HasBaseline())
                     aPos.Y() += rRect.GetBaseline() - GetBaseline();
                 else
                     aPos.Y() += rRect.GetAlignM() - GetAlignM();
                 break;
-            case RVA_BOTTOM :
+            case RectVerAlign::Bottom :
                 aPos.Y() += rRect.GetAlignB() - GetAlignB();
                 break;
-            case RVA_CENTERY :
+            case RectVerAlign::CenterY :
                 aPos.Y() += rRect.GetCenterY() - GetCenterY();
                 break;
-            case RVA_ATTRIBUT_HI:
+            case RectVerAlign::AttributeHi:
                 aPos.Y() += rRect.GetHiAttrFence() - GetBottom();
                 break;
-            case RVA_ATTRIBUT_MID :
+            case RectVerAlign::AttributeMid :
                 aPos.Y() += SmFromTo(rRect.GetAlignB(), rRect.GetAlignT(), 0.4)
                             - GetCenterY();
                 break;
-            case RVA_ATTRIBUT_LO :
+            case RectVerAlign::AttributeLo :
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
         default :
-                SAL_WARN("starmath", "unknown case");
+                assert(false);
         }
 
     // check if vertical position is already set
