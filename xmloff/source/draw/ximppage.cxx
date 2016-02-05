@@ -67,6 +67,7 @@ private:
     Reference< XTextCursor > mxCursor;
 
     OUStringBuffer maAuthorBuffer;
+    OUStringBuffer maInitialsBuffer;
     OUStringBuffer maDateBuffer;
 };
 
@@ -141,6 +142,11 @@ SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPref
             else if( IsXMLToken( rLocalName, XML_DATE ) )
                 pContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maDateBuffer);
         }
+        else if( (XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix) &&
+                 IsXMLToken(rLocalName, XML_SENDER_INITIALS) )
+        {
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maInitialsBuffer);
+        }
         else
         {
             // create text cursor on demand
@@ -188,6 +194,7 @@ void DrawAnnotationContext::EndElement()
     if( mxAnnotation.is() )
     {
         mxAnnotation->setAuthor( maAuthorBuffer.makeStringAndClear() );
+        mxAnnotation->setInitials( maInitialsBuffer.makeStringAndClear() );
 
         util::DateTime aDateTime;
         if (::sax::Converter::parseDateTime(aDateTime, nullptr,
