@@ -45,8 +45,13 @@ service DocumentDigitalSignatures : XDocumentDigitalSignatures
     /**
         @param ODFVersion
             the version of the signature
+
+        @param HasValidDocumentSignature
+            indicates if the document already contains a document signature.
+
      */
-    createWithVersionAndValidSignature([in] string ODFVersion, [in] boolean HasValidDocumentSignature);
+    createWithVersionAndValidSignature([in] string ODFVersion,
+            [in] boolean HasValidDocumentSignature);
 };
 
 } ; } ; } ; } ;

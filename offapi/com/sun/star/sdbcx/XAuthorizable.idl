@@ -28,17 +28,21 @@
 /** is used for accessing and setting the permissions of a user for a database
     object.
     @see com::sun::star::sdbcx::PrivilegeObject
+    @see com::sun::star::sdbcx::Privilege
  */
 published interface XAuthorizable: com::sun::star::uno::XInterface
 {
 
     /** retrieves the permissions for a specific object.
+
         @param objName
             the name of the object
         @param objType
             a value of com::sun::star::sdbcx::PrivilegeObject
+
         @returns
             the privileges
+
         @throws com::sun::star::sdbc::SQLException
                 if a database access error occurs.
      */
@@ -47,12 +51,15 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
 
     /** retrieves the permissions for a specific object, which could be granted
         to other users and groups.
+
         @param objName
             the name of the object
         @param objType
             a value of com::sun::star::sdbcx::PrivilegeObject
+
         @returns
             the grant privileges
+
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -60,10 +67,14 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
                         (com::sun::star::sdbc::SQLException);
 
     /** adds additional permissions for a specific object.
+
         @param objName
             the name of the object
         @param objType
             a value from the com::sun::star::sdbcx::PrivilegeObject constants group
+        @param objPrivileges
+            a value from the com::sun::star::sdbcx::Privilege constants group
+
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -72,10 +83,15 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         (com::sun::star::sdbc::SQLException);
 
     /** removes permissions for a specific object from a group or user.
+
         @param objName
             the name of the object
         @param objType
             a value from the com::sun::star::sdbcx::PrivilegeObject constants group
+        @param objPrivileges
+            a value from the com::sun::star::sdbcx::Privilege constants group
+
+
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

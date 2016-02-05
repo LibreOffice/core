@@ -99,6 +99,9 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
     /** Sets the "read only" of a file according to the boolean parameter,
         if the actual process has the right to do so.
 
+        @param FileURL
+            URL of the file
+
         @param bReadOnly
         true; "read only" flag will be set, false; "read only" flag will be reset
     */

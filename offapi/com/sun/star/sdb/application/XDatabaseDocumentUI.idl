@@ -285,13 +285,15 @@ interface XDatabaseDocumentUI
         <p>In opposite to createComponent(), this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
 
-        <p>The meaning of the arguments is defined at the service which is effectively
-        created. See the <a href="#component_types">above table</a> for a list of those
-        services.</p>
 
         @param ObjectType
             specifies the type of the object, must be one of the DatabaseObject
             constants.
+
+        @param Arguments
+            The meaning of the arguments is defined at the service which is
+            effectively created. See the <a href="#component_types">above
+            table</a> for a list of those services.
 
         @param DocumentDefinition
             Upon successful return, and if and only if ObjectType equals DatabaseObject::FORM

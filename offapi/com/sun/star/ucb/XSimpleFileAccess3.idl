@@ -48,6 +48,9 @@ published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
         if the actual process has the right to do so and the used
         operation system supports this operation.
 
+        @param FileURL
+            URL of the file
+
         @param bHidden
         true; "hidden" flag will be set, false; "hidden" flag will be reset
     */

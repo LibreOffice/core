@@ -149,6 +149,8 @@ published interface XColumnUpdate: com::sun::star::uno::XInterface
     /** updates a column with a stream value.
         @param x
             the new column value
+        @param length
+            the length of the stream
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

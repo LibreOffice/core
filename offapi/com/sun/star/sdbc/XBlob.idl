@@ -175,8 +175,11 @@ published interface XBlob: com::sun::star::uno::XInterface
         search for
         <code>pattern</code>
         begins at position <code>start</code>.
+
         @param pattern
             the pattern to search
+        @param start
+            the start position for the search
         @returns
             the position
         @throws SQLException

@@ -180,6 +180,14 @@ service CopyTableWizard : XCopyTableWizard
         can be used to intercept interactions (such as error messages) during the wizard
         run.</p>
 
+        @param Source
+            the com::sun::star::sdb::DataAccessDescriptor describing the
+            target for the copy operation.
+
+        @param Destination
+            the com::sun::star::sdb::DataAccessDescriptor describing the
+            target for the copy operation.
+
         @param InteractionHandler
             specifies an interaction handler to use when user input is required.
 

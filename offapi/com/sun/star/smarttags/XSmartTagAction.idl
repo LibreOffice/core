@@ -108,7 +108,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
-    /** obtains the number of actions provided for a specify smart tag
+    /** obtains the number of actions provided for a specified smart tag
         type.
 
         @param aSmartTagName
@@ -117,6 +117,10 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
 
         @param xController
                 The current controller of the document.
+
+        @param xProperties
+                Contains the smart tag properties collected by the smart
+                tag recognizer.
 
         @return
                 the number of actions available for the given smart tag
