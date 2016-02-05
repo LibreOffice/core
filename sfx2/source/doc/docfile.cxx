@@ -3607,7 +3607,8 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                     {
                         // OOXML.
                         uno::Reference<io::XStream> xStream;
-                        if (xSigner->signDocumentContent(GetZipStorageToSign_Impl(), xStream))
+                        // We need read-write to be able to add the signature relation.
+                        if (xSigner->signDocumentContent(GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream))
                         {
                             uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
                             xTransact->commit();
