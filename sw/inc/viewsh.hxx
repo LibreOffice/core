@@ -574,8 +574,6 @@ public:
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
-    /// Set if we are doing tiled rendering.
-    void setTiledRendering(bool bTiledRendering);
 
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;

@@ -3239,7 +3239,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // we already don't center the pages.
     SwDoc* pDoc = pDocShell->GetDoc();
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    pViewShell->setTiledRendering(true);
 
     bool      bBookMode = false;
     sal_Int16 nColumns = 1;

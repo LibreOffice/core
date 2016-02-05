@@ -127,11 +127,6 @@ void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
     getIDocumentDrawModelAccess().GetDrawModel()->libreOfficeKitCallback(nType, pPayload);
 }
 
-void SwViewShell::setTiledRendering(bool bTiledRendering)
-{
-    getIDocumentDrawModelAccess().GetDrawModel()->setTiledRendering(bTiledRendering);
-}
-
 void SwViewShell::setOutputToWindow(bool bOutputToWindow)
 {
     mbOutputToWindow = bOutputToWindow;
@@ -1863,8 +1858,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // TODO clean up SwViewShell's approach to output devices (the many of
     // them - mpBufferedOut, mpOut, mpWin, ...)
     OutputDevice *pSaveOut = mpOut;
-    bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
-    setTiledRendering(true);
     mbInLibreOfficeKitCallback = true;
     mpOut = &rDevice;
 
@@ -1919,7 +1912,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
     mbInLibreOfficeKitCallback = false;
-    setTiledRendering(bTiledRendering);
 }
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )
