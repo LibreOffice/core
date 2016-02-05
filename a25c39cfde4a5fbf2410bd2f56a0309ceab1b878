@@ -16,6 +16,24 @@
       "revId": "a25c39cfde4a5fbf2410bd2f56a0309ceab1b878",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a608fa92",
+        "filename": "sc/qa/unit/ucalc_sharedformula.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-05T06:21:28Z",
+      "side": 1,
+      "message": "Because this code is only used here, not anywhere else.",
+      "parentUuid": "3aaa91ec_bb62d314",
+      "revId": "a25c39cfde4a5fbf2410bd2f56a0309ceab1b878",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
