@@ -465,4 +465,13 @@ void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
+void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int /*nSignatureCount*/)
+{
+    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
+    uno::Reference<io::XOutputStream> xOriginStream(xStorage->openStreamElement("origin.sigs", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XTruncate> xTruncate(xOriginStream, uno::UNO_QUERY);
+    xTruncate->truncate();
+    xOriginStream->closeOutput();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
