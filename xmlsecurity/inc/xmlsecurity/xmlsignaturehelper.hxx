@@ -185,7 +185,7 @@ public:
     /// Adds an OOXML digital signature relation to _rels/.rels if there wasn't any before.
     void EnsureSignaturesRelation(css::uno::Reference<css::embed::XStorage> xStorage);
     /// Given that xStorage is an OOXML _xmlsignatures storage, create origin.sigs and its relations.
-    static void ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount);
+    void ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX

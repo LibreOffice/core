@@ -54,6 +54,7 @@
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
 #define OOXML_SIGNATURE_ORIGIN "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
+#define OOXML_SIGNATURE_SIGNATURE "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -352,7 +353,7 @@ namespace
 {
 bool lcl_isSignatureType(const beans::StringPair& rPair)
 {
-    return rPair.First == "Type" && rPair.Second == "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
+    return rPair.First == "Type" && rPair.Second == OOXML_SIGNATURE_SIGNATURE;
 }
 bool lcl_isSignatureOriginType(const beans::StringPair& rPair)
 {
@@ -465,13 +466,30 @@ void XMLSignatureHelper::EnsureSignaturesRelation(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
-void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int /*nSignatureCount*/)
+void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount)
 {
+    // Write the empty file, its relations will be the signatures.
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<io::XOutputStream> xOriginStream(xStorage->openStreamElement("origin.sigs", nOpenMode), uno::UNO_QUERY);
     uno::Reference<io::XTruncate> xTruncate(xOriginStream, uno::UNO_QUERY);
     xTruncate->truncate();
     xOriginStream->closeOutput();
+
+    // Write the relations.
+    uno::Reference<embed::XStorage> xSubStorage(xStorage->openStorageElement("_rels", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xRelStream(xSubStorage->openStreamElement("origin.sigs.rels", nOpenMode), uno::UNO_QUERY);
+    std::vector< uno::Sequence<beans::StringPair> > aRelations;
+    for (int i = 0; i < nSignatureCount; ++i)
+    {
+        std::vector<beans::StringPair> aRelation;
+        aRelation.push_back(beans::StringPair("Id", "rId" + OUString::number(i + 1)));
+        aRelation.push_back(beans::StringPair("Type", OOXML_SIGNATURE_SIGNATURE));
+        aRelation.push_back(beans::StringPair("Target", "sig" + OUString::number(i + 1) + ".xml"));
+        aRelations.push_back(comphelper::containerToSequence(aRelation));
+    }
+    comphelper::OFOPXMLHelper::WriteRelationsInfoSequence(xRelStream, comphelper::containerToSequence(aRelations), mxCtx);
+    uno::Reference<embed::XTransactedObject> xTransact(xSubStorage, uno::UNO_QUERY);
+    xTransact->commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

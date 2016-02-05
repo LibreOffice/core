@@ -515,11 +515,12 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
             else
             {
                 // OOXML
-                maSignatureHelper.EnsureSignaturesRelation(mxStore);
 
+                // Handle relations.
+                maSignatureHelper.EnsureSignaturesRelation(mxStore);
                 // Old signatures + the new one.
                 int nSignatureCount = maCurrentSignatureInformations.size() + 1;
-                XMLSignatureHelper::ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+                maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
 
                 // Flush objects.
                 uno::Reference<embed::XTransactedObject> xTransact(aStreamHelper.xSignatureStorage, uno::UNO_QUERY);
