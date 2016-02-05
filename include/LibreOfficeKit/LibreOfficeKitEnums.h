@@ -197,6 +197,7 @@ typedef enum
      *
      * {
      *     "searchString": "...",
+     *     "highlightAll": true|false, // this is a result of 'search all'
      *     "searchResultSelection": [
      *         {
      *             "part": "...",

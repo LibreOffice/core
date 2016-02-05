@@ -107,7 +107,7 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
 }
 
 /// Emits LOK callbacks (count, selection) for search results.
-static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell* pWrtShell)
+static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell* pWrtShell, bool bHighlightAll)
 {
     // Emit a callback also about the selection rectangles, grouped by matches.
     if (SwPaM* pPaM = pWrtShell->GetCursor())
@@ -133,6 +133,7 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell
         }
         boost::property_tree::ptree aTree;
         aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
+        aTree.put("highlightAll", bHighlightAll);
         lcl_addContainerToJson(aTree, "searchResultSelection", aMatches);
 
         std::stringstream aStream;
@@ -252,7 +253,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 {
                     Scroll(m_pWrtShell->GetCharRect().SVRect());
                     if (comphelper::LibreOfficeKit::isActive())
-                        lcl_emitSearchResultCallbacks(m_pSrchItem, m_pWrtShell);
+                        lcl_emitSearchResultCallbacks(m_pSrchItem, m_pWrtShell, /* bHighlightAll = */ false);
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
@@ -290,7 +291,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     m_bFound = false;
                 }
                 else if (comphelper::LibreOfficeKit::isActive())
-                    lcl_emitSearchResultCallbacks(m_pSrchItem, m_pWrtShell);
+                    lcl_emitSearchResultCallbacks(m_pSrchItem, m_pWrtShell, /* bHighlightAll = */ true);
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 #if HAVE_FEATURE_DESKTOP
                 {
