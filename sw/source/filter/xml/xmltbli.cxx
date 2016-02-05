@@ -1343,7 +1343,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     }
 
     Reference< XTextTable > xTable;
-    const SwXTextTable *pXTable = nullptr;
+    SwXTextTable *pXTable = nullptr;
     Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
                                               UNO_QUERY );
     OSL_ENSURE( xFactory.is(), "factory missing" );
@@ -1396,7 +1396,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     }
     if( pXTable )
     {
-        SwFrameFormat *pTableFrameFormat = pXTable->GetFrameFormat();
+        SwFrameFormat *const pTableFrameFormat = pXTable->GetFrameFormat();
         OSL_ENSURE( pTableFrameFormat, "table format missing" );
         SwTable *pTable = SwTable::FindTable( pTableFrameFormat );
         OSL_ENSURE( pTable, "table missing" );

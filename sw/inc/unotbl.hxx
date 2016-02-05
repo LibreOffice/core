@@ -298,8 +298,7 @@ class SwXTextTable : public cppu::WeakImplHelper
     css::util::XSortable,
     css::lang::XUnoTunnel,
     css::sheet::XCellRangeData
->,
-    public SwClient
+>
 {
 private:
     class Impl;
@@ -318,16 +317,18 @@ private:
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
-protected:
-    virtual ~SwXTextTable();
+
     SwXTextTable();
     SwXTextTable(SwFrameFormat& rFrameFormat);
+    virtual ~SwXTextTable();
 
 public:
     static css::uno::Reference<css::text::XTextTable>
             CreateXTextTable(SwFrameFormat * pFrameFormat);
 
     SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    SW_DLLPUBLIC SwFrameFormat* GetFrameFormat();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
@@ -428,10 +429,6 @@ public:
                         const OUString& sTLName, const OUString& sBRName,
                         SwRangeDescriptor& rDesc);
 
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
-
-    SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
 
 };

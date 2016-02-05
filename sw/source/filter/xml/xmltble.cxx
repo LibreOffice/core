@@ -1156,7 +1156,7 @@ void SwXMLTextParagraphExport::exportTable(
     OSL_ENSURE( xTextTable.is(), "text table missing" );
     if( xTextTable.is() )
     {
-        const SwXTextTable *pXTable = nullptr;
+        SwXTextTable *pXTable = nullptr;
         Reference<XUnoTunnel> xTableTunnel( rTextContent, UNO_QUERY);
         if( xTableTunnel.is() )
         {
@@ -1166,7 +1166,7 @@ void SwXMLTextParagraphExport::exportTable(
         }
         if( pXTable )
         {
-            SwFrameFormat *pFormat = pXTable->GetFrameFormat();
+            SwFrameFormat *const pFormat = pXTable->GetFrameFormat();
             OSL_ENSURE( pFormat, "table format missing" );
             const SwTable *pTable = SwTable::FindTable( pFormat );
             OSL_ENSURE( pTable, "table missing" );
