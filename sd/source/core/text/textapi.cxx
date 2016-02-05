@@ -185,11 +185,10 @@ TextApiObject* TextApiObject::getImplementation( const css::uno::Reference< css:
     return pImpl;
 }
 
-TextAPIEditSource::TextAPIEditSource( const TextAPIEditSource& rSource )
-: SvxEditSource( *this )
+TextAPIEditSource::TextAPIEditSource(const TextAPIEditSource& rSource)
+    : SvxEditSource(*this)
+    , m_xImpl(rSource.m_xImpl) // shallow copy; uses internal refcounting
 {
-    // shallow copy; uses internal refcounting
-    m_xImpl = rSource.m_xImpl;
 }
 
 SvxEditSource* TextAPIEditSource::Clone() const
