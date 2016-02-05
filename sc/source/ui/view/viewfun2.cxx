@@ -1870,6 +1870,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
                 boost::property_tree::ptree aTree;
                 aTree.put("searchString", pSearchItem->GetSearchString().toUtf8().getStr());
+                aTree.put("highlightAll", nCommand == SvxSearchCmd::FIND_ALL);
 
                 boost::property_tree::ptree aSelections;
                 for (const Rectangle& rLogicRect : aLogicRects)
