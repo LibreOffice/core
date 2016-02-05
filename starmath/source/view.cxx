@@ -75,6 +75,7 @@
 #include "cursor.hxx"
 #include "accessibility.hxx"
 #include "ElementsDockingWindow.hxx"
+#include <cassert>
 #include <memory>
 
 #define MINZOOM sal_uInt16(25)
@@ -1769,7 +1770,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     if(pFact)
                     {
                         xDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet));
-                        SAL_WARN_IF( !xDlg, "starmath", "Dialog creation failed!" );
+                        assert(xDlg);
                         xDlg->SetLimits( MINZOOM, MAXZOOM );
                         if (xDlg->Execute() != RET_CANCEL)
                             pSet = xDlg->GetOutputItemSet();

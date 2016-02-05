@@ -12,6 +12,7 @@
 #include "visitors.hxx"
 #include "tmpdevice.hxx"
 #include "cursor.hxx"
+#include <cassert>
 
 // SmDefaultingVisitor
 
@@ -848,8 +849,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
                          *bodyLeft,
                          *bodyRight;
 
+    assert(mpRightMost);
     left = mpRightMost;
-    SAL_WARN_IF( !mpRightMost, "starmath", "mpRightMost shouldn't be NULL here!" );
 
     //Create bodyLeft
     SAL_WARN_IF( !pNode->GetBody(), "starmath", "SmSubSupNode Doesn't have a body!" );
@@ -1140,9 +1141,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
                          *numLeft,
                          *denomLeft;
 
+    assert(mpRightMost);
     //Set left
     left = mpRightMost;
-    SAL_WARN_IF( !mpRightMost, "starmath", "There must be a position in front of this" );
 
     //Create right
     right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
@@ -1381,7 +1382,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
 {
     SmNode  *pExtra = pNode->GetSubNode( 0 ), //Argument, NULL for sqrt, and SmTextNode if cubicroot
             *pBody  = pNode->GetSubNode( 2 ); //Body of the root
-    SAL_WARN_IF( !pBody, "starmath", "pBody cannot be NULL" );
+    assert(pBody);
 
     SmCaretPosGraphEntry  *left,
                         *right,
@@ -1389,7 +1390,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    SAL_WARN_IF( !mpRightMost, "starmath", "There must be a position in front of this" );
+    assert(mpRightMost);
     left = mpRightMost;
 
     //Create body left
@@ -1421,7 +1422,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralNode* pNode )
 {
     //! To be changed: Integrals don't have args.
     SmNode  *pBody  = pNode->Body(); //Body of the root
-    SAL_WARN_IF( !pBody, "starmath", "pBody cannot be NULL" );
+    assert(pBody);
 
     SmCaretPosGraphEntry  *left,
                         *right,
@@ -1429,7 +1430,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    SAL_WARN_IF( !mpRightMost, "starmath", "There must be a position in front of this" );
+    assert(mpRightMost);
     left = mpRightMost;
 
     //Create body left
