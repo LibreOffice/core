@@ -631,6 +631,15 @@ public class APIDescGetter extends DescGetter
         theEntry.SubEntryCount = subEntries != null ? subEntries.length : 0;
         theEntry.SubEntries = subEntries;
 
+        try
+        {
+            csvFile.close();
+        }
+        catch (java.io.IOException ioe)
+        {
+            System.out.println("Exception while closing csvFile");
+        }
+
         return theEntry;
     }
 
@@ -714,6 +723,15 @@ public class APIDescGetter extends DescGetter
         }
 
         DescEntry[] subEntries = getSubEntries(csvFile, aEntry);
+
+        try
+        {
+            csvFile.close();
+        }
+        catch (java.io.IOException ioe)
+        {
+            System.out.println("Exception while closing csvFile");
+        }
 
         aEntry.SubEntryCount = subEntries != null ? subEntries.length : 0;
         aEntry.SubEntries = subEntries;
