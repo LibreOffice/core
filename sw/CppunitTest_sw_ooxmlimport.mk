@@ -11,7 +11,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_add_objcxxflags_exception_objects,sw_ooxmlimport, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlimport, \
     sw/qa/extras/ooxmlimport/ooxmlimport \
 ))
 
