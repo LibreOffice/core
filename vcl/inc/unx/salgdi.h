@@ -20,8 +20,10 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALGDI_H
 #define INCLUDED_VCL_INC_UNX_SALGDI_H
 
-#include <prex.h>
-#include <postx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrender.h>
+
 #include <tools/fract.hxx>
 
 #include <vcl/salgtype.hxx>
@@ -35,6 +37,9 @@
 
 #include <deque>
 #include <memory>
+
+/* From <X11/Intrinsic.h> */
+typedef unsigned long Pixel;
 
 class FontAttributes;
 class FontSelectPattern;

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALVD_H
 #define INCLUDED_VCL_INC_UNX_SALVD_H
 
-#include <prex.h>
-#include <postx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 #include <unx/saltype.h>
 #include <salvd.hxx>

@@ -20,8 +20,9 @@
 #ifndef INCLUDED_VCL_GENERIC_GDI_GDIIMPL_HXX
 #define INCLUDED_VCL_GENERIC_GDI_GDIIMPL_HXX
 
-#include <prex.h>
-#include <postx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrender.h>
 
 #include "unx/saltype.h"
 #include "unx/x11/x11gdiimpl.h"
@@ -29,6 +30,9 @@
 #include "salgdiimpl.hxx"
 
 #include <basegfx/polygon/b2dtrapezoid.hxx>
+
+/* From <X11/Intrinsic.h> */
+typedef unsigned long Pixel;
 
 class SalGraphics;
 class SalBitmap;

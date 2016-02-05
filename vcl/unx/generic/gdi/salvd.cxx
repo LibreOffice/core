@@ -19,9 +19,9 @@
 
 #include <vcl/sysdata.hxx>
 
-#include <prex.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
-#include <postx.h>
 
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>

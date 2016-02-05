@@ -18,9 +18,9 @@
 #include <rtl/ustring.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-#  include <prex.h>
+#  include <X11/Xlib.h>
+#  include <X11/Xutil.h>
 #  include "GL/glxew.h"
-#  include <postx.h>
 #endif
 
 /// Helper to do a SAL_INFO as well as a GL log.

@@ -22,11 +22,10 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#ifndef _PREX_H
-#include <prex.h>
+
 #include <X11/Xlib.h>
-#include <postx.h>
-#endif
+#include <X11/Xutil.h>
+
 #include <vclpluginapi.h>
 #include <vector>
 

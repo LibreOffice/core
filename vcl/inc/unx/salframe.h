@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALFRAME_H
 #define INCLUDED_VCL_INC_UNX_SALFRAME_H
 
-#include <prex.h>
-#include <postx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 #include <unx/salunx.h>
 #include <unx/saltype.h>

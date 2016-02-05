@@ -10,8 +10,7 @@
 #ifndef INCLUDED_VCL_UNX_X11WINDOWPROVIDER
 #define INCLUDED_VCL_UNX_X11WINDOWPROVIDER
 
-#include <prex.h>
-#include <postx.h>
+#include <X11/Xlib.h>
 
 #include <vcl/dllapi.h>
 

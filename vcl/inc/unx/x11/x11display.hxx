@@ -10,9 +10,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_X11_X11DISPLAY_HXX
 #define INCLUDED_VCL_INC_UNX_X11_X11DISPLAY_HXX
 
-#include <prex.h>
+#include <X11/Xlib.h>
 #include <X11/Xproto.h>
-#include <postx.h>
 
 #include <rtl/string.hxx>
 
