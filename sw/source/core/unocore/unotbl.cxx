@@ -1963,7 +1963,6 @@ public:
     // Descriptor-interface
     std::unique_ptr<SwTableProperties_Impl> m_pTableProps;
     OUString       m_sTableName;
-    bool           m_isDescriptor;
     unsigned short m_nRows;
     unsigned short m_nColumns;
 
@@ -1971,10 +1970,14 @@ public:
         : SwClient(pFrameFormat)
         , m_Listeners(m_Mutex)
         , m_pTableProps((pFrameFormat) ? nullptr : new SwTableProperties_Impl)
-        , m_isDescriptor((pFrameFormat) ? false : true)
         , m_nRows((pFrameFormat) ? 0 : 2)
         , m_nColumns((pFrameFormat) ? 0 : 2)
     {
+    }
+
+    bool IsDescriptor()
+    {
+        return m_pTableProps != nullptr;
     }
 
     // note: lock mutex before calling this to avoid concurrent update
@@ -2058,7 +2061,7 @@ SwFrameFormat* SwXTextTable::GetFrameFormat()
 
 void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeException, std::exception )
 {
-    if (!m_pImpl->m_isDescriptor || nR <= 0 || nC <= 0 || nR >= USHRT_MAX || nC >= USHRT_MAX)
+    if (!m_pImpl->IsDescriptor() || nR <= 0 || nC <= 0 || nR >= USHRT_MAX || nC >= USHRT_MAX)
         throw uno::RuntimeException();
     m_pImpl->m_nRows = static_cast<sal_uInt16>(nR);
     m_pImpl->m_nColumns = static_cast<sal_uInt16>(nC);
@@ -2132,7 +2135,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     // attachToRange must only be called once
-    if (!m_pImpl->m_isDescriptor)  /* already attached ? */
+    if (!m_pImpl->IsDescriptor())  /* already attached ? */
         throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast<cppu::OWeakObject*>(this));
 
     uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
@@ -2193,7 +2196,6 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
             const::uno::Any* pName;
             if (m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
                 setName(pName->get<OUString>());
-            m_pImpl->m_isDescriptor = false;
             m_pImpl->m_pTableProps.reset();
         }
         pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
@@ -2766,7 +2768,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
             }
         }
     }
-    else if (m_pImpl->m_isDescriptor)
+    else if (m_pImpl->IsDescriptor())
     {
         m_pImpl->m_pTableProps->SetProperty(pEntry->nWID, pEntry->nMemberId, aValue);
     }
@@ -3004,7 +3006,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
             }
         }
     }
-    else if (m_pImpl->m_isDescriptor)
+    else if (m_pImpl->IsDescriptor())
     {
         const uno::Any* pAny = nullptr;
         if (!m_pImpl->m_pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId, pAny))
@@ -3033,7 +3035,7 @@ OUString SwXTextTable::getName() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if (!pFormat && !m_pImpl->m_isDescriptor)
+    if (!pFormat && !m_pImpl->IsDescriptor())
         throw uno::RuntimeException();
     if(pFormat)
     {
@@ -3046,7 +3048,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if ((!pFormat && !m_pImpl->m_isDescriptor) ||
+    if ((!pFormat && !m_pImpl->IsDescriptor()) ||
        rName.isEmpty() ||
        rName.indexOf('.')>=0 ||
        rName.indexOf(' ')>=0 )
