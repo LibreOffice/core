@@ -3398,13 +3398,13 @@ ScMatrix::IterateResult ScVectorRefMatrix::Sum(bool bTextAsZero) const
     const std::vector<formula::VectorRefArray>& rArrays = mpToken->GetArrays();
     size_t nDataSize = mnRowSize;
 
-    if (mnRowStart >= mpToken->GetRefRowSize())
+    if (mnRowStart >= mpToken->GetArrayLength())
     {
         return ScMatrix::IterateResult(0.0, 0.0, 0);
     }
-    else if (nDataSize > mpToken->GetRefRowSize() + mnRowStart)
+    else if (nDataSize > mpToken->GetArrayLength() + mnRowStart)
     {
-        nDataSize = mpToken->GetRefRowSize() - mnRowStart;
+        nDataSize = mpToken->GetArrayLength() - mnRowStart;
     }
 
     double mfFirst = 0.0;
@@ -3435,11 +3435,10 @@ ScMatrix::IterateResult ScVectorRefMatrix::Sum(bool bTextAsZero) const
                 }
             }
             p += i;
-            nDataSize -= i;
-            if (nDataSize == 0)
+            if (i == nDataSize)
                 continue;
 
-            sc::ArraySumFunctor functor(p, nDataSize);
+            sc::ArraySumFunctor functor(p, nDataSize-i);
 
             mfRest += functor();
         }
