@@ -49,7 +49,7 @@ SvIdlDataBase::~SvIdlDataBase()
     aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName(),   \
                      ParserChar, CName, BasName, BasPost ) );
 
-SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
+SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
 {
     if( aTypeList.empty() )
     { // fill initially
@@ -265,9 +265,9 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
 }
 
 SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
-                                    SvMetaTypeMemberList & rList )
+                                    SvRefMemberList<SvMetaType *>& rList )
 {
-    for( SvMetaTypeMemberList::const_iterator it = rList.begin(); it != rList.end(); ++it )
+    for( SvRefMemberList<SvMetaType *>::const_iterator it = rList.begin(); it != rList.end(); ++it )
         if( *it == pPType )
             return *it;
     return nullptr;
@@ -275,7 +275,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
 
 SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 {
-    for( SvMetaTypeMemberList::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
+    for( SvRefMemberList<SvMetaType *>::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
         if( rName.equals((*it)->GetName().getString()) )
             return *it;
     return nullptr;
@@ -302,8 +302,8 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
     if( pTok->IsIdentifier() )
     {
         OString aName = pTok->GetString();
-        SvMetaTypeMemberList & rList = GetTypeList();
-        SvMetaTypeMemberList::const_iterator it = rList.begin();
+        SvRefMemberList<SvMetaType *> & rList = GetTypeList();
+        SvRefMemberList<SvMetaType *>::const_iterator it = rList.begin();
         SvMetaType * pType = nullptr;
         while( it != rList.end() )
         {
@@ -340,7 +340,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                 return pType;
 
             DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
-            SvMetaTypeRef xType = new SvMetaType( pType->GetName().getString(), 'h', "dummy" );
+            tools::SvRef<SvMetaType> xType( new SvMetaType( pType->GetName().getString(), 'h', "dummy" ) );
             xType->SetRef( pType );
             xType->SetCall0( nCall0 );
             xType->SetCall1( nCall1 );

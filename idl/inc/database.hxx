@@ -61,11 +61,11 @@ class SvIdlDataBase
     StringList                  aIdFileList;
     SvStringHashTable *         pIdTable;
 
-    SvMetaTypeMemberList        aTypeList;
-    SvMetaClassMemberList       aClassList;
-    SvMetaModuleMemberList      aModuleList;
-    SvMetaAttributeMemberList   aAttrList;
-    SvMetaTypeMemberList        aTmpTypeList; // not persistent
+    SvRefMemberList<SvMetaType *>      aTypeList;
+    SvRefMemberList<SvMetaClass *>     aClassList;
+    SvRefMemberList<SvMetaModule *>    aModuleList;
+    SvRefMemberList<SvMetaAttribute *> aAttrList;
+    SvRefMemberList<SvMetaType *>      aTmpTypeList; // not persistent
 
 protected:
     ::std::set< OUString > m_DepFiles;
@@ -83,15 +83,15 @@ public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
 
-    SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
-    SvMetaTypeMemberList &      GetTypeList();
-    SvMetaClassMemberList &     GetClassList()  { return aClassList; }
-    SvMetaModuleMemberList &    GetModuleList() { return aModuleList; }
+    SvRefMemberList<SvMetaAttribute *>&  GetAttrList() { return aAttrList; }
+    SvRefMemberList<SvMetaType *>&       GetTypeList();
+    SvRefMemberList<SvMetaClass *>&      GetClassList()  { return aClassList; }
+    SvRefMemberList<SvMetaModule *>&     GetModuleList() { return aModuleList; }
     SvMetaModule *              GetModule( const OString& rName );
 
     // list of used types while writing
-    SvMetaTypeMemberList    aUsedTypes;
-    OString                 aIFaceName;
+    SvRefMemberList<SvMetaType *>    aUsedTypes;
+    OString                          aIFaceName;
 
     void                    StartNewFile( const OUString& rName );
     void                    SetExportFile( const OUString& rName )
@@ -118,7 +118,7 @@ public:
     bool                    ReadIdFile( const OUString & rFileName );
 
     SvMetaType *            FindType( const OString& rName );
-    static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
+    static SvMetaType *     FindType( const SvMetaType *, SvRefMemberList<SvMetaType *>& );
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
     SvMetaAttribute *       ReadKnownAttr( SvTokenStream & rInStm,

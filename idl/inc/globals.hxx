@@ -22,6 +22,7 @@
 
 #include <hash.hxx>
 
+typedef tools::SvRef<SvStringHashEntry> SvStringHashEntryRef;
 
 class SvClassManager;
 struct SvGlobalHashNames

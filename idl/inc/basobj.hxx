@@ -82,8 +82,6 @@ public:
     }
 };
 
-class SvMetaObjectMemberList : public SvRefMemberList<SvMetaObject *> {};
-
 class SvMetaObject : public SvRttiBase
 {
 protected:
@@ -117,7 +115,7 @@ template<class T> bool checkSvMetaObject(const SvMetaObject* pObject)
 
 class SvMetaObjectMemberStack
 {
-    SvMetaObjectMemberList aList;
+    SvRefMemberList<SvMetaObject *> aList;
 public:
             SvMetaObjectMemberStack() {;}
 
@@ -126,14 +124,12 @@ public:
     void            Pop() { aList.pop_back(); }
     SvMetaObject *  Get( std::function<bool ( const SvMetaObject* )> isSvMetaObject )
                     {
-                        for( SvMetaObjectMemberList::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
+                        for( SvRefMemberList<SvMetaObject *>::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
                             if( isSvMetaObject(*it) )
                                 return *it;
                         return nullptr;
                     }
 };
-
-class SvMetaNameMemberList : public SvRefMemberList<SvMetaObject *> {};
 
 class SvMetaReference : public SvMetaObject
 {
@@ -163,9 +159,6 @@ public:
                         { aRef = pRef; }
 };
 
-class SvMetaReferenceMemberList : public SvRefMemberList<SvMetaReference *> {};
-
-
 class SvMetaModule;
 class SvMetaExtern : public SvMetaReference
 {
@@ -180,7 +173,6 @@ public:
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
-class SvMetaExternMemberList : public SvRefMemberList<SvMetaExtern *> {};
 
 #endif // INCLUDED_IDL_INC_BASOBJ_HXX
 

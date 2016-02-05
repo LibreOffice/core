@@ -25,8 +25,8 @@
 
 class SvMetaSlot : public SvMetaAttribute
 {
-    SvMetaTypeRef   aSlotType;
-    SvMetaAttributeRef aMethod;
+    tools::SvRef<SvMetaType>      aSlotType;
+    tools::SvRef<SvMetaAttribute> aMethod;
     SvIdentifier    aGroupId;
     SvIdentifier    aConfigId;
     SvIdentifier    aExecMethod;
@@ -165,9 +165,6 @@ public:
     sal_uInt16          WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
 };
-typedef tools::SvRef<SvMetaSlot> SvMetaSlotRef;
-
-class SvMetaSlotMemberList : public SvRefMemberList<SvMetaSlot *> {};
 
 #endif // INCLUDED_IDL_INC_SLOT_HXX
 

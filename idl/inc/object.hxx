@@ -26,22 +26,18 @@
 
 struct SvSlotElement
 {
-    SvMetaSlotRef   xSlot;
-    SvSlotElement( SvMetaSlot * pS )
-    : xSlot( pS )
-    {
-    }
+    tools::SvRef<SvMetaSlot>   xSlot;
+    SvSlotElement( SvMetaSlot * pS ) : xSlot( pS ) {}
 };
 typedef std::vector< SvSlotElement* > SvSlotElementList;
 
 class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
-typedef tools::SvRef<SvMetaClass> SvMetaClassRef;
 class SvClassElement : public SvRttiBase
 {
-    OString                aPrefix;
-    SvMetaClassRef         xClass;
+    OString                   aPrefix;
+    tools::SvRef<SvMetaClass> xClass;
 public:
             SvClassElement();
 
@@ -56,15 +52,12 @@ public:
                     { return xClass; }
 };
 
-class SvClassElementMemberList : public SvRefMemberList<SvClassElement *> {};
-
-class SvMetaClassMemberList : public SvRefMemberList<SvMetaClass *> {};
 
 class SvMetaClass : public SvMetaType
 {
-    SvMetaAttributeMemberList   aAttrList;
-    SvClassElementMemberList    aClassList;
-    SvMetaClassRef              aSuperClass;
+    SvRefMemberList<SvMetaAttribute *>  aAttrList;
+    SvRefMemberList<SvClassElement *>   aClassList;
+    tools::SvRef<SvMetaClass>           aSuperClass;
 
     bool                    TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
