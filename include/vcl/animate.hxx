@@ -91,18 +91,6 @@ struct VCL_DLLPUBLIC AnimationBitmap
     BitmapChecksum  GetChecksum() const;
 };
 
-struct AInfo
-{
-    Point           aStartOrg;
-    Size            aStartSize;
-    VclPtr<OutputDevice>   pOutDev;
-    void*           pViewData;
-    long            nExtraData;
-    bool            bPause;
-
-    AInfo();
-};
-
 class ImplAnimView;
 
 class VCL_DLLPUBLIC Animation

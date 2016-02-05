@@ -23,8 +23,9 @@
 #include <rtl/crc.h>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <impanmvw.hxx>
 #include <vcl/dibtools.hxx>
+
+#include "impanmvw.hxx"
 
 #define MIN_TIMEOUT 2L
 #define INC_TIMEOUT 0L

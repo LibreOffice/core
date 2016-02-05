@@ -27,6 +27,19 @@ class OutputDevice;
 class VirtualDevice;
 struct AnimationBitmap;
 
+struct AInfo
+{
+    Point           aStartOrg;
+    Size            aStartSize;
+    VclPtr<OutputDevice>   pOutDev;
+    void*           pViewData;
+    long            nExtraData;
+    bool            bPause;
+
+    AInfo();
+};
+
+
 class ImplAnimView
 {
 private:
