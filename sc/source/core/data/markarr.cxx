@@ -31,6 +31,17 @@ ScMarkArray::ScMarkArray() :
     // special case "no marks" with pData = NULL
 }
 
+// Move constructor
+ScMarkArray::ScMarkArray( ScMarkArray&& rArray ) :
+    nCount( rArray.nCount ),
+    nLimit( rArray.nLimit ),
+    pData( rArray.pData )
+{
+    rArray.nCount = 0;
+    rArray.nLimit = 0;
+    rArray.pData = nullptr;
+}
+
 ScMarkArray::~ScMarkArray()
 {
     delete[] pData;
