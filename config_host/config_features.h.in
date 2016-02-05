@@ -145,5 +145,9 @@
  * Whether we have COLLADA support.
  */
 #define HAVE_FEATURE_COLLADA 0
+/*
+ * Whether OpenGL is enabled
+ */
+#define HAVE_FEATURE_OPENGL 0
 
 #endif

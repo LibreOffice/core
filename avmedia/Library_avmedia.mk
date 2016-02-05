@@ -25,9 +25,13 @@ $(eval $(call gb_Library_add_defs,avmedia,\
 
 $(eval $(call gb_Library_use_externals,avmedia,\
 	boost_headers \
-	glew \
 	mesa_headers \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,avmedia,\
+    glew \
+))
+endif
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
 	comphelper \
@@ -46,9 +50,11 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 ))
 
 ifeq ($(ENABLE_GLTF),TRUE)
+ifeq ($(ENABLE_OPENGL),TRUE)
 $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/framework/modeltools \
 ))
+endif
 endif
 
 ifeq ($(ENABLE_COLLADA),TRUE)

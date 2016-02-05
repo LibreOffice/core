@@ -44,13 +44,14 @@
 #include <opengl/zone.hxx>
 
 // internal headers for OpenGLTests class.
+#if HAVE_FEATURE_OPENGL
 #include "salgdi.hxx"
 #include "salframe.hxx"
 #include "openglgdiimpl.hxx"
 #include "opengl/texture.hxx"
 #include "opengl/framebuffer.hxx"
 #include <vcl/opengl/OpenGLHelper.hxx>
-
+#endif
 #include <rtl/math.hxx>
 
 #define FIXME_SELF_INTERSECTING_WORKING 0
@@ -1771,13 +1772,16 @@ public:
             VclPtr<DemoPopup> xPopup;
 
             aMainWin->SetText("Interactive VCL demo #1");
+#if HAVE_FEATURE_OPENGL
 
             if (bGLTest)
             {
                 OpenGLTests aTests;
                 return aTests.execute();
             }
-            else if (bWidgets)
+            else
+#endif
+                 if (bWidgets)
                 xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();

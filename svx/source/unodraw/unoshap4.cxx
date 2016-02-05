@@ -51,10 +51,12 @@
 #include "svx/svdview.hxx"
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
+#if HAVE_FEATURE_OPENGL
 #include <svdoopengl.hxx>
+#endif
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
-
+#include <config_features.h>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -1025,12 +1027,20 @@ SvxDummyShapeContainer::~SvxDummyShapeContainer() throw()
 
 void SvxOpenGLObject::setRenderer(IOpenGLRenderer* pRenderer)
 {
+#if HAVE_FEATURE_OPENGL
     static_cast<SdrOpenGLObj*>(GetSdrObject())->setRenderer(pRenderer);
+#else
+    (void)pRenderer;
+#endif
 }
 
 IOpenGLRenderer* SvxOpenGLObject::getRenderer()
 {
+#if HAVE_FEATURE_OPENGL
     return static_cast<SdrOpenGLObj*>(GetSdrObject())->getRenderer();
+#else
+    return nullptr;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

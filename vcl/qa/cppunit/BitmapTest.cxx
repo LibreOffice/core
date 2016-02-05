@@ -21,8 +21,10 @@
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <config_features.h>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
-
+#endif
 #include "BitmapSymmetryCheck.hxx"
 
 namespace
@@ -51,6 +53,7 @@ void BitmapTest::testConvert()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
+#if HAVE_FEATURE_OPENGL
 #if defined WNT
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
@@ -58,6 +61,7 @@ void BitmapTest::testConvert()
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
         }
         else
+#endif
 #endif
         {
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
@@ -80,6 +84,7 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
 #else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
+#if HAVE_FEATURE_OPENGL
 #if defined WNT
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
@@ -87,6 +92,7 @@ void BitmapTest::testConvert()
             CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
         }
         else
+#endif
 #endif
         {
             CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());

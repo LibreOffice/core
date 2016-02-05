@@ -23,10 +23,12 @@ ViewObjectContactOfOpenGLObj::ViewObjectContactOfOpenGLObj(
     ObjectContact& rObjectContact, ViewContact& rViewContact )
     : ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
+#if HAVE_FEATURE_OPENGL
 #if HAVE_FEATURE_DESKTOP
     rtl::Reference<OpenGLContext> pContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
     if (pContext.is())
         pContext->init(getWindow());
+#endif
 #endif
 }
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 #include <svtools/grfmgr.hxx>
@@ -90,8 +91,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
-
+#endif
 #include "optgdlg.hxx"
 #include <svx/ofaitem.hxx>
 #include <svtools/apearcfg.hxx>
@@ -549,10 +551,12 @@ CanvasSettings::CanvasSettings() :
 
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
+#if HAVE_FEATURE_OPENGL
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         mbHWAccelAvailable = false;
-
-    else if( !mbHWAccelChecked )
+    else
+#endif
+          if( !mbHWAccelChecked )
     {
         mbHWAccelChecked = true;
 
