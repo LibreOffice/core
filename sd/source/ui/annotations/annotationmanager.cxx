@@ -396,6 +396,7 @@ void AnnotationManagerImpl::InsertAnnotation()
         // set current author to new annotation
         SvtUserOptions aUserOptions;
         xAnnotation->setAuthor( aUserOptions.GetFullName() );
+        xAnnotation->setInitials( aUserOptions.GetID() );
 
         // set current time to new annotation
         xAnnotation->setDateTime( getCurrentDateTime() );
@@ -467,6 +468,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
         SvtUserOptions aUserOptions;
         xAnnotation->setAuthor( aUserOptions.GetFullName() );
+        xAnnotation->setInitials( aUserOptions.GetID() );
 
         // set current time to reply
         xAnnotation->setDateTime( getCurrentDateTime() );
