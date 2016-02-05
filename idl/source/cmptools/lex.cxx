@@ -30,31 +30,31 @@ OString SvToken::GetTokenAsString() const
     OString aStr;
     switch( nType )
     {
-        case SVTOKEN_EMPTY:
+        case SVTOKENTYPE::Empty:
             break;
-        case SVTOKEN_COMMENT:
+        case SVTOKENTYPE::Comment:
             aStr = aString;
             break;
-        case SVTOKEN_INTEGER:
+        case SVTOKENTYPE::Integer:
             aStr = OString::number(nLong);
             break;
-        case SVTOKEN_STRING:
+        case SVTOKENTYPE::String:
             aStr = aString;
             break;
-        case SVTOKEN_BOOL:
+        case SVTOKENTYPE::Bool:
             aStr = bBool ? "TRUE" : "FALSE";
             break;
-        case SVTOKEN_IDENTIFIER:
+        case SVTOKENTYPE::Identifier:
             aStr = aString;
             break;
-        case SVTOKEN_CHAR:
+        case SVTOKENTYPE::Char:
             aStr = OString(cChar);
             break;
-        case SVTOKEN_RTTIBASE:
+        case SVTOKENTYPE::RttiBase:
             aStr = "RTTIBASE";
             break;
-        case SVTOKEN_EOF:
-        case SVTOKEN_HASHID:
+        case SVTOKENTYPE::EndOfFile:
+        case SVTOKENTYPE::HashId:
             break;
     }
 
@@ -240,7 +240,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
                 c = GetFastNextChar();
             }
             c = GetNextChar();
-            rToken.nType    = SVTOKEN_COMMENT;
+            rToken.nType    = SVTOKENTYPE::Comment;
         }
         else if( '*' == c )
         {
@@ -264,12 +264,12 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
             if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
                 return false;
             c = GetNextChar();
-            rToken.nType = SVTOKEN_COMMENT;
+            rToken.nType = SVTOKENTYPE::Comment;
             CalcColumn();
         }
         else
         {
-            rToken.nType = SVTOKEN_CHAR;
+            rToken.nType = SVTOKENTYPE::Char;
             rToken.cChar = (char)c1;
         }
     }
@@ -311,12 +311,12 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         }
         if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
             return false;
-        rToken.nType   = SVTOKEN_STRING;
+        rToken.nType   = SVTOKENTYPE::String;
         rToken.aString = aStr.makeStringAndClear();
     }
     else if( isdigit( c ) )
     {
-        rToken.nType = SVTOKEN_INTEGER;
+        rToken.nType = SVTOKENTYPE::Integer;
         rToken.nLong = GetNumber();
 
     }
@@ -331,12 +331,12 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         OString aStr = aBuf.makeStringAndClear();
         if( aStr.equalsIgnoreAsciiCase( aStrTrue ) )
         {
-            rToken.nType = SVTOKEN_BOOL;
+            rToken.nType = SVTOKENTYPE::Bool;
             rToken.bBool = true;
         }
         else if( aStr.equalsIgnoreAsciiCase( aStrFalse ) )
         {
-            rToken.nType = SVTOKEN_BOOL;
+            rToken.nType = SVTOKENTYPE::Bool;
             rToken.bBool = false;
         }
         else
@@ -346,18 +346,18 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
                 rToken.SetHash( GetIdlApp().pHashTable->Get( nHashId ) );
             else
             {
-                rToken.nType   = SVTOKEN_IDENTIFIER;
+                rToken.nType   = SVTOKENTYPE::Identifier;
                 rToken.aString = aStr;
             }
         }
     }
     else if( IsEof() )
     {
-        rToken.nType = SVTOKEN_EOF;
+        rToken.nType = SVTOKENTYPE::EndOfFile;
     }
     else
     {
-        rToken.nType = SVTOKEN_CHAR;
+        rToken.nType = SVTOKENTYPE::Char;
         rToken.cChar = (char)c;
         c = GetFastNextChar();
     }

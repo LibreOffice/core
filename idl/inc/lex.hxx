@@ -26,18 +26,18 @@
 #include <vector>
 #include <memory>
 
-enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
-                    SVTOKEN_INTEGER,    SVTOKEN_STRING,
-                    SVTOKEN_BOOL,       SVTOKEN_IDENTIFIER,
-                    SVTOKEN_CHAR,       SVTOKEN_RTTIBASE,
-                    SVTOKEN_EOF,        SVTOKEN_HASHID };
+enum class SVTOKENTYPE { Empty,      Comment,
+                         Integer,    String,
+                         Bool,       Identifier,
+                         Char,       RttiBase,
+                         EndOfFile,  HashId };
 
 class SvToken
 {
 friend class SvTokenStream;
     sal_uLong               nLine, nColumn;
-    SVTOKEN_ENUM            nType;
-    OString            aString;
+    SVTOKENTYPE             nType;
+    OString                 aString;
     union
     {
         sal_uLong           nLong;
@@ -48,11 +48,6 @@ friend class SvTokenStream;
 public:
             SvToken();
             SvToken( const SvToken & rObj );
-            SvToken( sal_uLong n );
-            SvToken( SVTOKEN_ENUM nTypeP, bool b );
-            SvToken( char c );
-            SvToken( SVTOKEN_ENUM nTypeP, const OString& rStr );
-            SvToken( SVTOKEN_ENUM nTypeP );
 
     SvToken & operator = ( const SvToken & rObj );
 
@@ -64,20 +59,20 @@ public:
     void        SetColumn( sal_uLong nColumnP ) { nColumn = nColumnP;   }
     sal_uLong   GetColumn() const           { return nColumn;       }
 
-    bool        IsEmpty() const     { return nType == SVTOKEN_EMPTY; }
-    bool        IsComment() const   { return nType == SVTOKEN_COMMENT; }
-    bool        IsInteger() const   { return nType == SVTOKEN_INTEGER; }
-    bool        IsString() const    { return nType == SVTOKEN_STRING; }
-    bool        IsBool() const      { return nType == SVTOKEN_BOOL; }
+    bool        IsEmpty() const     { return nType == SVTOKENTYPE::Empty; }
+    bool        IsComment() const   { return nType == SVTOKENTYPE::Comment; }
+    bool        IsInteger() const   { return nType == SVTOKENTYPE::Integer; }
+    bool        IsString() const    { return nType == SVTOKENTYPE::String; }
+    bool        IsBool() const      { return nType == SVTOKENTYPE::Bool; }
     bool        IsIdentifierHash() const
-                { return nType == SVTOKEN_HASHID; }
+                { return nType == SVTOKENTYPE::HashId; }
     bool        IsIdentifier() const
                 {
-                    return nType == SVTOKEN_IDENTIFIER
-                            || nType == SVTOKEN_HASHID;
+                    return nType == SVTOKENTYPE::Identifier
+                            || nType == SVTOKENTYPE::HashId;
                 }
-    bool        IsChar() const      { return nType == SVTOKEN_CHAR; }
-    bool        IsEof() const       { return nType == SVTOKEN_EOF; }
+    bool        IsChar() const      { return nType == SVTOKENTYPE::Char; }
+    bool        IsEof() const       { return nType == SVTOKENTYPE::EndOfFile; }
 
     const OString& GetString() const
                 {
@@ -90,9 +85,9 @@ public:
     char        GetChar() const         { return cChar;         }
 
     void        SetHash( SvStringHashEntry * pHashP )
-                { pHash = pHashP; nType = SVTOKEN_HASHID; }
+                { pHash = pHashP; nType = SVTOKENTYPE::HashId; }
     bool        HasHash() const
-                { return nType == SVTOKEN_HASHID; }
+                { return nType == SVTOKENTYPE::HashId; }
     bool        Is( SvStringHashEntry * pEntry ) const
                 { return IsIdentifierHash() && pHash == pEntry; }
 };
@@ -100,24 +95,9 @@ public:
 inline SvToken::SvToken()
     : nLine(0)
     , nColumn(0)
-    , nType( SVTOKEN_EMPTY )
+    , nType( SVTOKENTYPE::Empty )
 {
 }
-
-inline SvToken::SvToken( sal_uLong n )
-    : nType( SVTOKEN_INTEGER ), nLong( n ) {}
-
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, bool b )
-    : nType( nTypeP ), bBool( b ) {}
-
-inline SvToken::SvToken( char c )
-    : nType( SVTOKEN_CHAR ), cChar( c ) {}
-
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const OString& rStr )
-    : nType( nTypeP ), aString( rStr ) {}
-
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP )
-: nType( nTypeP ) {}
 
 class SvTokenStream
 {
