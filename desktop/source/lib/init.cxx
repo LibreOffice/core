@@ -684,6 +684,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Bold"),
         OUString(".uno:CenterPara"),
         OUString(".uno:CharBackColor"),
+        OUString(".uno:CharBackgroundExt"),
         OUString(".uno:CharFontName"),
         OUString(".uno:Color"),
         OUString(".uno:DecrementIndent"),
