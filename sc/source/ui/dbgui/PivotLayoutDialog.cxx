@@ -523,7 +523,7 @@ void ScPivotLayoutDialog::ApplyChanges()
             if ( ( ( rOldRange != aDestinationRange ) && !rOldRange.In( aDestinationRange ) )
                  || bToNewSheet )
             {
-                mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
+                pDPObj = mpDocument->GetDPAtCursor( maPivotParameters.nCol, maPivotParameters.nRow, maPivotParameters.nTab);
             }
             if (pDPObj)
             {
