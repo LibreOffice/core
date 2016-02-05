@@ -1960,6 +1960,14 @@ public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
 
+    const SfxItemPropertySet * m_pPropSet;
+
+    css::uno::WeakReference<css::table::XTableRows> m_xRows;
+    css::uno::WeakReference<css::table::XTableColumns> m_xColumns;
+
+    bool m_bFirstRowAsLabel;
+    bool m_bFirstColumnAsLabel;
+
     // Descriptor-interface
     std::unique_ptr<SwTableProperties_Impl> m_pTableProps;
     OUString       m_sTableName;
@@ -1969,10 +1977,18 @@ public:
     Impl(SwFrameFormat *const pFrameFormat)
         : SwClient(pFrameFormat)
         , m_Listeners(m_Mutex)
+        , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE))
+        , m_bFirstRowAsLabel(false)
+        , m_bFirstColumnAsLabel(false)
         , m_pTableProps((pFrameFormat) ? nullptr : new SwTableProperties_Impl)
         , m_nRows((pFrameFormat) ? 0 : 2)
         , m_nColumns((pFrameFormat) ? 0 : 2)
     {
+    }
+
+    SwFrameFormat * GetFrameFormat()
+    {
+        return static_cast<SwFrameFormat*>(GetRegisteredIn());
     }
 
     bool IsDescriptor()
@@ -1983,8 +1999,8 @@ public:
     // note: lock mutex before calling this to avoid concurrent update
     static std::pair<sal_uInt16, sal_uInt16> ThrowIfComplex(SwXTextTable &rThis)
     {
-        sal_uInt16 const nRowCount(rThis.getRowCount());
-        sal_uInt16 const nColCount(rThis.getColumnCount());
+        sal_uInt16 const nRowCount(rThis.m_pImpl->GetRowCount());
+        sal_uInt16 const nColCount(rThis.m_pImpl->GetColumnCount());
         if (!nRowCount || !nColCount)
         {
             throw uno::RuntimeException("Table too complex",
@@ -1992,6 +2008,9 @@ public:
         }
         return std::make_pair(nRowCount, nColCount);
     }
+
+    sal_uInt16 GetRowCount();
+    sal_uInt16 GetColumnCount();
 
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
@@ -2020,19 +2039,13 @@ sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& 
 
 SwXTextTable::SwXTextTable()
     : m_pImpl(new Impl(nullptr))
-    ,
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
-    m_bFirstRowAsLabel(false),
-    m_bFirstColumnAsLabel(false)
-{ }
+{
+}
 
 SwXTextTable::SwXTextTable(SwFrameFormat& rFrameFormat)
     : m_pImpl(new Impl(&rFrameFormat))
-    ,
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE)),
-    m_bFirstRowAsLabel(false),
-    m_bFirstColumnAsLabel(false)
-{ }
+{
+}
 
 SwXTextTable::~SwXTextTable()
 {
@@ -2056,7 +2069,7 @@ uno::Reference<text::XTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* c
 
 SwFrameFormat* SwXTextTable::GetFrameFormat()
 {
-    return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(m_pImpl->GetRegisteredIn()));
+    return m_pImpl->GetFrameFormat();
 }
 
 void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeException, std::exception )
@@ -2067,27 +2080,29 @@ void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeExc
     m_pImpl->m_nColumns = static_cast<sal_uInt16>(nC);
 }
 
-uno::Reference< table::XTableRows >  SwXTextTable::getRows() throw( uno::RuntimeException, std::exception )
+uno::Reference<table::XTableRows> SAL_CALL SwXTextTable::getRows()
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XTableRows> xResult(m_xRows);
+    uno::Reference<table::XTableRows> xResult(m_pImpl->m_xRows);
     if(xResult.is())
         return xResult;
     if(SwFrameFormat* pFormat = GetFrameFormat())
-        m_xRows = xResult = new SwXTableRows(*pFormat);
+        m_pImpl->m_xRows = xResult = new SwXTableRows(*pFormat);
     if(!xResult.is())
         throw uno::RuntimeException();
     return xResult;
 }
 
-uno::Reference< table::XTableColumns >  SwXTextTable::getColumns() throw( uno::RuntimeException, std::exception )
+uno::Reference<table::XTableColumns> SAL_CALL SwXTextTable::getColumns()
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XTableColumns> xResult(m_xColumns);
+    uno::Reference<table::XTableColumns> xResult(m_pImpl->m_xColumns);
     if(xResult.is())
         return xResult;
     if(SwFrameFormat* pFormat = GetFrameFormat())
-        m_xColumns = xResult = new SwXTableColumns(*pFormat);
+        m_pImpl->m_xColumns = xResult = new SwXTableColumns(*pFormat);
     if(!xResult.is())
         throw uno::RuntimeException();
     return xResult;
@@ -2131,10 +2146,13 @@ uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(cons
     return new SwXTextTableCursor(pFormat, pBox);
 }
 
-void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
+void SAL_CALL
+SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
-    // attachToRange must only be called once
+    SolarMutexGuard aGuard;
+
+    // attach() must only be called once
     if (!m_pImpl->IsDescriptor())  /* already attached ? */
         throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast<cppu::OWeakObject*>(this));
 
@@ -2202,13 +2220,6 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     }
 }
 
-void SwXTextTable::attach(const uno::Reference< text::XTextRange > & xTextRange)
-        throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    attachToRange(xTextRange);
-}
-
 uno::Reference<text::XTextRange>  SwXTextTable::getAnchor()
         throw( uno::RuntimeException, std::exception )
 {
@@ -2261,11 +2272,13 @@ uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn,
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrameFormat* pFormat, SwTable* pTable,
+namespace {
+
+static uno::Reference<table::XCellRange> GetRangeByName(
+        SwFrameFormat* pFormat, SwTable* pTable,
         const OUString& rTLName, const OUString& rBRName,
         SwRangeDescriptor& rDesc)
 {
-    SolarMutexGuard aGuard;
     const SwTableBox* pTLBox = pTable->GetTableBox(rTLName);
     if(!pTLBox)
         return nullptr;
@@ -2288,6 +2301,8 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrameFormat* p
     // pUnoCursor will be provided and will not be deleted
     return SwXCellRange::CreateXCellRange(pUnoCursor, *pFormat, rDesc).get();
 }
+
+} // namespace
 
 uno::Reference<table::XCellRange>  SwXTextTable::getCellRangeByPosition(sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom)
     throw(uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
@@ -2371,7 +2386,8 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData()
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
-    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
+            m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->getData();
 }
 
@@ -2383,7 +2399,8 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
-    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
+            m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     xAllRange->setData(rData);
     // this is rather inconsistent: setData on XTextTable sends events, but e.g. CellRanges do not
     lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -2397,7 +2414,8 @@ uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
-    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
+            m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->getRowDescriptions();
 }
 
@@ -2409,7 +2427,8 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
-    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
+            m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     xAllRange->setRowDescriptions(rRowDesc);
 }
 
@@ -2421,7 +2440,8 @@ uno::Sequence<OUString> SwXTextTable::getColumnDescriptions()
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
-    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
+            m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->getColumnDescriptions();
 }
 
@@ -2433,7 +2453,8 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence<OUString>& rColumnD
     uno::Reference<chart::XChartDataArray> const xAllRange(
         getCellRangeByPosition(0, 0, RowsAndColumns.second-1, RowsAndColumns.first-1),
         uno::UNO_QUERY);
-    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(m_bFirstRowAsLabel, m_bFirstColumnAsLabel);
+    static_cast<SwXCellRange*>(xAllRange.get())->SetLabels(
+            m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     return xAllRange->setColumnDescriptions(rColumnDesc);
 }
 
@@ -2526,7 +2547,7 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextTable::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
+    static uno::Reference<beans::XPropertySetInfo> xRef = m_pImpl->m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 
@@ -2540,7 +2561,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
     if(!aValue.hasValue())
         throw lang::IllegalArgumentException();
     const SfxItemPropertySimpleEntry* pEntry =
-                                m_pPropSet->getPropertyMap().getByName(rPropertyName);
+            m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if( !pEntry )
         throw lang::IllegalArgumentException();
     if(pFormat)
@@ -2567,10 +2588,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
-                    if(m_bFirstRowAsLabel != bTmp)
+                    if (m_pImpl->m_bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
-                        m_bFirstRowAsLabel = bTmp;
+                        m_pImpl->m_bFirstRowAsLabel = bTmp;
                     }
                 }
                 break;
@@ -2578,10 +2599,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_RANGE_COL_LABEL:
                 {
                     bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
-                    if(m_bFirstColumnAsLabel != bTmp)
+                    if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
-                        m_bFirstColumnAsLabel = bTmp;
+                        m_pImpl->m_bFirstColumnAsLabel = bTmp;
                     }
                 }
                 break;
@@ -2762,7 +2783,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 default:
                 {
                     SwAttrSet aSet(pFormat->GetAttrSet());
-                    m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+                    m_pImpl->m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
                     pFormat->GetDoc()->SetAttr(aSet, *pFormat);
                 }
             }
@@ -2786,7 +2807,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     SwFrameFormat* pFormat = GetFrameFormat();
     const SfxItemPropertySimpleEntry* pEntry =
-                                m_pPropSet->getPropertyMap().getByName(rPropertyName);
+            m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -2816,12 +2837,12 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    aRet <<= m_bFirstRowAsLabel;
+                    aRet <<= m_pImpl->m_bFirstRowAsLabel;
                 }
                 break;
 
                 case FN_UNO_RANGE_COL_LABEL:
-                    aRet <<= m_bFirstColumnAsLabel;
+                    aRet <<= m_pImpl->m_bFirstColumnAsLabel;
                 break;
 
                 case FN_UNO_TABLE_BORDER:
@@ -3001,7 +3022,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 default:
                 {
                     const SwAttrSet& rSet = pFormat->GetAttrSet();
-                    m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
+                    m_pImpl->m_pPropSet->getPropertyValue(*pEntry, rSet, aRet);
                 }
             }
         }
@@ -3096,9 +3117,8 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
         m_pImpl->m_sTableName = rName;
 }
 
-sal_uInt16 SwXTextTable::getRowCount()
+sal_uInt16 SwXTextTable::Impl::GetRowCount()
 {
-    SolarMutexGuard aGuard;
     sal_uInt16 nRet = 0;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
@@ -3112,9 +3132,8 @@ sal_uInt16 SwXTextTable::getRowCount()
     return nRet;
 }
 
-sal_uInt16 SwXTextTable::getColumnCount()
+sal_uInt16 SwXTextTable::Impl::GetColumnCount()
 {
-    SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
     sal_uInt16 nRet = 0;
     if(pFormat)

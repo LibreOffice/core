@@ -302,13 +302,6 @@ class SwXTextTable : public cppu::WeakImplHelper
 private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
-    css::uno::WeakReference< css::table::XTableRows > m_xRows;
-    css::uno::WeakReference< css::table::XTableColumns > m_xColumns;
-
-    const SfxItemPropertySet*       m_pPropSet;
-
-    bool m_bFirstRowAsLabel;
-    bool m_bFirstColumnAsLabel;
 
     SwXTextTable();
     SwXTextTable(SwFrameFormat& rFrameFormat);
@@ -319,6 +312,8 @@ public:
             CreateXTextTable(SwFrameFormat * pFrameFormat);
 
     SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
 
     SW_DLLPUBLIC SwFrameFormat* GetFrameFormat();
 
@@ -412,16 +407,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
-
-    void attachToRange(const css::uno::Reference< css::text::XTextRange > & xTextRange)throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception );
-
-    sal_uInt16          getRowCount();
-    sal_uInt16          getColumnCount();
-    static css::uno::Reference< css::table::XCellRange >     GetRangeByName(SwFrameFormat* pFormat, SwTable* pTable,
-                        const OUString& sTLName, const OUString& sBRName,
-                        SwRangeDescriptor& rDesc);
-
-    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
 
 };
 
