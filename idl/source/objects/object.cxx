@@ -39,12 +39,6 @@ SvMetaClass::SvMetaClass()
 {
 }
 
-void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                        SvTokenStream & rInStm )
-{
-    SvMetaType::ReadAttributesSvIdl( rBase, rInStm );
-}
-
 void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {

@@ -45,9 +45,9 @@ SvIdlDataBase::~SvIdlDataBase()
     delete pIdTable;
 }
 
-#define ADD_TYPE( Name, ParserChar, CName, BasName, BasPost )            \
+#define ADD_TYPE( Name, ParserChar, BasPost )            \
     aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName(),   \
-                     ParserChar, CName, BasName, BasPost ) );
+                     ParserChar, BasPost ) );
 
 SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
 {
@@ -57,28 +57,20 @@ SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
         aTypeList.push_back( new SvMetaTypevoid() );
 
         // MI: IDispatch::Invoke can not unsigned
-        ADD_TYPE( UINT16,    'h', "unsigned short", "Long", "&" );
-        ADD_TYPE( INT16,     'h', "short", "Integer", "%" );
-        ADD_TYPE( UINT32,    'l', "unsigned long", "Long", "&" );
-        ADD_TYPE( INT32,     'l', "long", "Long", "&" );
-        ADD_TYPE( BOOL,      'b', "unsigned char", "Boolean", "" );
-        ADD_TYPE( BYTE,      'c', "unsigned char", "Integer", "%" );
-        ADD_TYPE( float,     'f', "float", "Single", "!" );
-        ADD_TYPE( double,    'F', "double", "Double", "#" );
-        ADD_TYPE( SbxObject, 'o', "C_Object", "Object", "" );
+        ADD_TYPE( UINT16,    'h', "&" );
+        ADD_TYPE( INT16,     'h', "%" );
+        ADD_TYPE( UINT32,    'l', "&" );
+        ADD_TYPE( INT32,     'l', "&" );
+        ADD_TYPE( BOOL,      'b', "" );
+        ADD_TYPE( BYTE,      'c', "%" );
+        ADD_TYPE( float,     'f', "!" );
+        ADD_TYPE( double,    'F', "#" );
+        ADD_TYPE( SbxObject, 'o', "" );
 
         // Attention! When adding types all binary data bases get incompatible
 
     }
     return aTypeList;
-}
-
-SvMetaModule * SvIdlDataBase::GetModule( const OString& rName )
-{
-    for( sal_uLong n = 0; n < aModuleList.size(); n++ )
-        if( aModuleList[n]->GetName().getString().equals(rName) )
-            return aModuleList[n];
-    return nullptr;
 }
 
 void SvIdlDataBase::SetError( const OString& rError, SvToken& rTok )
@@ -577,14 +569,14 @@ bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
 
 void SvIdlDataBase::StartNewFile( const OUString& rName )
 {
-    bExport = ( aExportFile.equalsIgnoreAsciiCase( rName ) );
+    bExport = aExportFile.equalsIgnoreAsciiCase( rName );
+    assert ( !bExport );
 }
 
 void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
 {
     aAttrList.push_back( pAttr );
-    if ( bExport )
-        pAttr->SetNewAttribute( true );
+    assert ( !bExport );
 }
 
 void SvIdlDataBase::AddDepFile(OUString const& rFileName)

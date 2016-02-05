@@ -32,7 +32,6 @@
 SvMetaAttribute::SvMetaAttribute()
     : aExport( true, false )
     , aReadOnlyDoc ( true, false )
-    , bNewAttr( false )
 {
 }
 
@@ -40,7 +39,6 @@ SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
     , aExport( true, false )
     , aReadOnlyDoc ( true, false)
-    , bNewAttr( false )
 {
 }
 
@@ -120,7 +118,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
     bool bOk = false;
     if( GetType() )
     {
-        ReadNameSvIdl( rBase, rInStm );
+        ReadNameSvIdl( rInStm );
         aSlotId.ReadSvIdl( rBase, rInStm );
 
         bOk = true;
@@ -192,26 +190,13 @@ SvMetaType::SvMetaType()
 {
 }
 
-SvMetaType::SvMetaType( const OString& rName, char cPC,
-                        const OString& rCName )
-    CTOR
-{
-    SetName( rName );
-    cParserChar = cPC;
-    aCName.setString(rCName);
-}
-
 SvMetaType::SvMetaType( const OString& rName,
                         char cPc,
-                        const OString& rCName,
-                        const OString& rBasicName,
                         const OString& rBasicPostfix )
     CTOR
 {
     SetName( rName );
     cParserChar = cPc;
-    aCName.setString(rCName);
-    aBasicName.setString(rBasicName);
     aBasicPostfix.setString(rBasicPostfix);
 }
 
@@ -233,7 +218,6 @@ void SvMetaType::SetType( MetaTypeType nT )
     {
         OStringBuffer aTmp(C_PREF);
         aTmp.append("Object *");
-        aCName.setString(aTmp.makeStringAndClear());
     }
 }
 
@@ -251,28 +235,6 @@ SvMetaType * SvMetaType::GetReturnType() const
     return static_cast<SvMetaType *>(GetRef());
 }
 
-const OString& SvMetaType::GetBasicName() const
-{
-    if( aBasicName.IsSet() || !GetRef() )
-        return aBasicName.getString();
-    else
-        return static_cast<SvMetaType*>(GetRef())->GetBasicName();
-}
-
-const OString& SvMetaType::GetCName() const
-{
-    if( aCName.IsSet() || !GetRef() )
-        return aCName.getString();
-    else
-        return static_cast<SvMetaType *>(GetRef())->GetCName();
-}
-
-bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
-{
-    aCName.setString(rName);
-    return SvMetaReference::SetName( rName, pBase );
-}
-
 bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
                                   SvTokenStream & rInStm )
 {
@@ -286,18 +248,18 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         if( pTok->Is( SvHash_shell() ) )
             bIsShell = true;
         SetType( MetaTypeType::Class );
-        bOk = ReadNamesSvIdl( rBase, rInStm );
+        bOk = ReadNamesSvIdl( rInStm );
 
     }
     else if( pTok->Is( SvHash_struct() ) )
     {
         SetType( MetaTypeType::Struct );
-        bOk = ReadNamesSvIdl( rBase, rInStm );
+        bOk = ReadNamesSvIdl( rInStm );
     }
     else if( pTok->Is( SvHash_enum() ) )
     {
         SetType( MetaTypeType::Enum );
-        bOk = ReadNameSvIdl( rBase, rInStm );
+        bOk = ReadNameSvIdl( rInStm );
     }
     else if( pTok->Is( SvHash_item() ) )
     {
@@ -308,22 +270,7 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         if( pType )
         {
             SetRef( pType );
-            if( ReadNameSvIdl( rBase, rInStm ) )
-            {
-                if( rInStm.Read( '(' ) )
-                {
-                    DoReadContextSvIdl( rBase, rInStm );
-                    if( rInStm.Read( ')' ) )
-                    {
-                        SetType( MetaTypeType::Method );
-                        bOk = true;
-                    }
-                }
-                else
-                {
-                    bOk = true;
-                }
-            }
+            bOk = ReadNameSvIdl( rInStm );
         }
         else
         {
@@ -350,12 +297,9 @@ bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
     return false;
 }
 
-bool SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
-                                 SvTokenStream & rInStm )
+bool SvMetaType::ReadNamesSvIdl( SvTokenStream & rInStm )
 {
-    bool bOk = ReadNameSvIdl( rBase, rInStm );
-
-    return bOk;
+    return ReadNameSvIdl( rInStm );
 }
 
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
@@ -427,8 +371,6 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( "#if !defined(_WIN32) && ((defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS))) || STATIC_LINKING)" ) << endl;
     rOutStm.WriteCharPtr( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteCharPtr( "#endif" ) << endl;
-    if (bExport)
-        rOutStm.WriteCharPtr( "SFX2_DLLPUBLIC " );
     rOutStm.WriteCharPtr( aTypeName.getStr() ).WriteCharPtr( aVarName.getStr() )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
@@ -476,32 +418,8 @@ bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
     return false;
 }
 
-OString SvMetaType::GetParserString() const
-{
-    SvMetaType * pBT = GetBaseType();
-    if( pBT != this )
-        return pBT->GetParserString();
-
-    MetaTypeType type = GetType();
-    OString aPStr;
-
-    if( MetaTypeType::Method == type || MetaTypeType::Struct == type )
-    {
-        sal_uLong nAttrCount = GetAttrCount();
-        // write the single attributes
-        for( sal_uLong n = 0; n < nAttrCount; n++ )
-        {
-            SvMetaAttribute * pT = (*pAttrList)[n];
-            aPStr += pT->GetType()->GetParserString();
-        }
-    }
-    else
-        aPStr = OString(GetParserChar());
-    return aPStr;
-}
-
 SvMetaTypeString::SvMetaTypeString()
-    : SvMetaType( "String", 's', "char *", "String", "$" )
+    : SvMetaType( "String", 's', "$" )
 {
 }
 
@@ -509,17 +427,14 @@ SvMetaEnumValue::SvMetaEnumValue()
 {
 }
 
-bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & ,
                                  SvTokenStream & rInStm )
 {
-    if( !ReadNameSvIdl( rBase, rInStm ) )
-        return false;
-    return true;
+    return ReadNameSvIdl( rInStm );
 }
 
 SvMetaTypeEnum::SvMetaTypeEnum()
 {
-    SetBasicName("Integer");
 }
 
 namespace
@@ -577,7 +492,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 }
 
 SvMetaTypevoid::SvMetaTypevoid()
-    : SvMetaType( "void", 'v', "void", "", "" )
+    : SvMetaType( "void", 'v', "" )
 {
 }
 

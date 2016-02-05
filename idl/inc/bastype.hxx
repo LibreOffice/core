@@ -29,21 +29,6 @@ class SvIdlDataBase;
 class SvStream;
 class SvTokenStream;
 
-class Svint
-{
-    int     bVal;
-    bool    bSet;
-public:
-                Svint() { bVal = 0; bSet = false; }
-                Svint( int n ) : bVal( n ), bSet( true ) {}
-                Svint( int n, bool bSetP ) : bVal( n ), bSet( bSetP ) {}
-    Svint    &  operator = ( int n ) { bVal = n; bSet = true; return *this; }
-
-    operator    int ()const { return bVal; }
-    bool        IsSet() const { return bSet; }
-};
-
-
 class SvBOOL
 {
     bool  bVal:1,
@@ -80,8 +65,6 @@ public:
     void        SetValue( sal_uInt32 bVal ) { nValue = bVal; }
 
     void        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    void        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
-                           SvTokenStream & rInStm );
 };
 
 
@@ -99,11 +82,6 @@ public:
     {
         return m_aStr;
     }
-    bool IsSet() const
-    {
-        return !m_aStr.isEmpty();
-    }
-
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 };
 

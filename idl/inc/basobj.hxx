@@ -88,9 +88,8 @@ protected:
     SvString      aName;
     SvHelpText    aHelpText;
 
-    bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-            void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
-                                     char c = '\0' );
+    bool         ReadNameSvIdl( SvTokenStream & rInStm );
+            void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
@@ -101,9 +100,9 @@ public:
     static void         Back2Delemitter( SvStream & );
     static void         WriteStars( SvStream & );
 
-    virtual bool                SetName( const OString& rName, SvIdlDataBase * = nullptr  );
-    virtual const SvString &    GetName() const { return aName; }
-    virtual const SvString &    GetHelpText() const { return aHelpText; }
+    void                      SetName( const OString& rName );
+    virtual const SvString &  GetName() const { return aName; }
+    virtual const SvString &  GetHelpText() const { return aHelpText; }
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -166,8 +165,6 @@ class SvMetaExtern : public SvMetaReference
 
 public:
                         SvMetaExtern();
-
-    SvMetaModule *      GetModule() const;
 
     void                SetModule( SvIdlDataBase & rBase );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;

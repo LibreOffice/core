@@ -28,7 +28,6 @@ class SvMetaSlot : public SvMetaAttribute
     tools::SvRef<SvMetaType>      aSlotType;
     tools::SvRef<SvMetaAttribute> aMethod;
     SvIdentifier    aGroupId;
-    SvIdentifier    aConfigId;
     SvIdentifier    aExecMethod;
     SvIdentifier    aStateMethod;
     SvBOOL          aPseudoSlots;
@@ -115,12 +114,10 @@ public:
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
     const OString&      GetGroupId() const;
-    const OString&      GetConfigId() const;
     const OString&      GetExecMethod() const;
     const OString&      GetStateMethod() const;
     const OString&      GetDisableFlags() const;
     bool                GetPseudoSlots() const;
-    bool                GetVolatile() const;
     bool                GetToggle() const;
     bool                GetAutoUpdate() const;
 

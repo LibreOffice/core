@@ -78,8 +78,6 @@ class SvMetaClass : public SvMetaType
                                     const OString& rPrefix, SvIdlDataBase& rBase );
 
 protected:
-    virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm ) override;
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm ) override;
 public:
