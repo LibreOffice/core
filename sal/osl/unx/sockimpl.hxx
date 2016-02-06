@@ -48,7 +48,7 @@ struct oslPipeImpl {
     sal_Char m_Name[PATH_MAX + 1];
     oslInterlockedCount m_nRefCount;
     bool m_bClosed;
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     bool m_bIsAccepting;
     bool m_bIsInShutdown;
 #endif

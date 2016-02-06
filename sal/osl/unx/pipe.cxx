@@ -82,7 +82,7 @@ oslPipe __osl_createPipeImpl()
         return nullptr;
     pPipeImpl->m_nRefCount =1;
     pPipeImpl->m_bClosed = false;
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipeImpl->m_bIsInShutdown = false;
     pPipeImpl->m_bIsAccepting = false;
 #endif
@@ -359,7 +359,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
       Thread does not return from accept on linux, so
       connect to the accepting pipe
      */
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     struct sockaddr_un addr;
 
     if ( pPipe->m_bIsAccepting )
@@ -387,7 +387,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         }
         close(fd);
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
     nRet = shutdown(ConnFD, 2);
     if ( nRet < 0 )
@@ -421,13 +421,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
 
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = true;
 #endif
 
     s = accept(pPipe->m_Socket, nullptr, nullptr);
 
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = false;
 #endif
 
@@ -437,13 +437,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         return nullptr;
     }
 
-#if defined(LINUX)
+#if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     if ( pPipe->m_bIsInShutdown  )
     {
         close(s);
         return nullptr;
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
     else
     {
         /* alloc memory */
