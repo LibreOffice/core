@@ -26,10 +26,10 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace osl;
 
-ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< OUString >& sModules )
+ModuleSizeExceeded::ModuleSizeExceeded( const std::vector< OUString >& sModules )
 {
     script::ModuleSizeExceededRequest aReq;
-    aReq.Names = sModules;
+    aReq.Names = comphelper::containerToSequence(sModules);
 
     m_aRequest <<= aReq;
 
