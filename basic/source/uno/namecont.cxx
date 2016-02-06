@@ -35,6 +35,7 @@
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "namecont.hxx"
 #include <basic/basicmanagerrepository.hxx>
@@ -120,14 +121,14 @@ Any NameContainer::getByName( const OUString& aName )
         throw NoSuchElementException();
     }
     sal_Int32 iHashResult = (*aIt).second;
-    Any aRetAny = mValues.getConstArray()[ iHashResult ];
+    Any aRetAny = mValues[ iHashResult ];
     return aRetAny;
 }
 
 Sequence< OUString > NameContainer::getElementNames()
     throw(RuntimeException, std::exception)
 {
-    return mNames;
+    return comphelper::containerToSequence(mNames);
 }
 
 sal_Bool NameContainer::hasByName( const OUString& aName )
@@ -154,8 +155,8 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
         throw NoSuchElementException();
     }
     sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues.getConstArray()[ iHashResult ];
-    mValues.getArray()[ iHashResult ] = aElement;
+    Any aOldElement = mValues[ iHashResult ];
+    mValues[ iHashResult ] = aElement;
 
 
     // Fire event
@@ -205,11 +206,9 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
         throw IllegalArgumentException();
     }
 
-    sal_Int32 nCount = mNames.getLength();
-    mNames.realloc( nCount + 1 );
-    mValues.realloc( nCount + 1 );
-    mNames.getArray()[ nCount ] = aName;
-    mValues.getArray()[ nCount ] = aElement;
+    sal_Int32 nCount = mNames.size();
+    mNames.push_back( aName );
+    mValues.push_back( aElement );
 
     mHashMap[ aName ] = nCount;
     mnElementCount++;
@@ -257,19 +256,17 @@ void NameContainer::removeByName( const OUString& aName )
     }
 
     sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues.getConstArray()[ iHashResult ];
+    Any aOldElement = mValues[ iHashResult ];
     mHashMap.erase( aIt );
-    sal_Int32 iLast = mNames.getLength() - 1;
+    sal_Int32 iLast = mNames.size() - 1;
     if( iLast != iHashResult )
     {
-        OUString* pNames = mNames.getArray();
-        Any* pValues = mValues.getArray();
-        pNames[ iHashResult ] = pNames[ iLast ];
-        pValues[ iHashResult ] = pValues[ iLast ];
-        mHashMap[ pNames[ iHashResult ] ] = iHashResult;
+        mNames[ iHashResult ] = mNames[ iLast ];
+        mValues[ iHashResult ] = mValues[ iLast ];
+        mHashMap[ mNames[ iHashResult ] ] = iHashResult;
     }
-    mNames.realloc( iLast );
-    mValues.realloc( iLast );
+    mNames.resize( iLast );
+    mValues.resize( iLast );
     mnElementCount--;
 
     // Fire event
