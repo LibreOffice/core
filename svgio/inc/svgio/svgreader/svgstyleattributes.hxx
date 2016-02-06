@@ -170,6 +170,7 @@ namespace svgio
 
         enum Visibility
         {
+            Visibility_notset,
             Visibility_visible,
             Visibility_hidden,
             Visibility_collapse,
@@ -429,8 +430,8 @@ namespace svgio
             void setOpacity(const SvgNumber& rOpacity = SvgNumber()) { maOpacity = rOpacity; }
 
             /// Visibility
-            Visibility getVisibility() const { return maVisibility; }
-            void setVisibility(Visibility eVisibility) { maVisibility = eVisibility; }
+            Visibility getVisibility() const;
+            void setVisibility(const Visibility aVisibility = Visibility_notset) { maVisibility = aVisibility; }
 
             // Title content
             const OUString& getTitle() const { return maTitle; }
