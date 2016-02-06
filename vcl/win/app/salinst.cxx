@@ -24,23 +24,23 @@
 #include <osl/file.hxx>
 #include <comphelper/solarmutex.hxx>
 
-#include <vcl/apptypes.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 
-#include <opengl/salbmp.hxx>
-#include <win/wincomp.hxx>
-#include <win/salids.hrc>
-#include <win/saldata.hxx>
-#include <win/salinst.h>
-#include <win/salframe.h>
-#include <win/salobj.h>
-#include <win/saltimer.h>
-#include <win/salbmp.h>
+#include "opengl/salbmp.hxx"
+#include "win/wincomp.hxx"
+#include "win/salids.hrc"
+#include "win/saldata.hxx"
+#include "win/salinst.h"
+#include "win/salframe.h"
+#include "win/salobj.h"
+#include "win/saltimer.h"
+#include "win/salbmp.h"
 
-#include <salimestatus.hxx>
-#include <salsys.hxx>
+#include "salimestatus.hxx"
+#include "salsys.hxx"
 
 #if defined _MSC_VER
 #ifndef min

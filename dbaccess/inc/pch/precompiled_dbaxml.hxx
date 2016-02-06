@@ -13,14 +13,13 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-06 12:34:08 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbaxml.hxx "/opt/lo/bin/make dbaccess.build" --find-conflicts
+ ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbaxml.hxx "make dbaccess.build" --find-conflicts
 */
 
-#include <config_features.h>
 #include <cstddef>
 #include <memory>
 #include <vector>
@@ -40,11 +39,11 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/event.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>

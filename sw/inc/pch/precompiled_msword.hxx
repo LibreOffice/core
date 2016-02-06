@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 12:43:17 using:
+ Generated on 2016-02-06 12:31:43 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sw/inc/pch/precompiled_msword.hxx "/opt/lo/bin/make sw.build" --find-conflicts
+ ./bin/update_pch_bisect ./sw/inc/pch/precompiled_msword.hxx "make sw.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -59,13 +59,12 @@
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
@@ -117,7 +116,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
@@ -144,6 +142,7 @@
 #include <vcl/image.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/lineinfo.hxx>
@@ -199,6 +198,9 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basic/basicdllapi.h>
+#include <basic/codecompletecache.hxx>
+#include <basic/sbdef.hxx>
+#include <basic/sbx.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
@@ -303,7 +305,9 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -478,6 +482,7 @@
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/export/utils.hxx>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/refmap.hxx>
@@ -527,6 +532,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/grfmgr.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/XPropertyEntry.hxx>
@@ -619,7 +625,6 @@
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xtextit0.hxx>
-#include <swatrset.hxx>
 #include <swcrsr.hxx>
 #include <swdbdata.hxx>
 #include <swmodule.hxx>

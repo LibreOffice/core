@@ -13,16 +13,15 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:31 using:
+ Generated on 2016-02-06 12:33:25 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./drawinglayer/inc/pch/precompiled_drawinglayer.hxx "/opt/lo/bin/make drawinglayer.build" --find-conflicts
+ ./bin/update_pch_bisect ./drawinglayer/inc/pch/precompiled_drawinglayer.hxx "make drawinglayer.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
 #include <cstddef>
 #include <cstdlib>
 #include <limits.h>
@@ -30,7 +29,6 @@
 #include <new>
 #include <numeric>
 #include <ostream>
-#include <stdlib.h>
 #include <string.h>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
@@ -54,7 +52,6 @@
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
@@ -63,6 +60,7 @@
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
@@ -113,6 +111,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weakref.hxx>
@@ -171,7 +170,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>

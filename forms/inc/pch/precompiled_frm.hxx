@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:33 using:
+ Generated on 2016-02-06 12:33:06 using:
  ./bin/update_pch forms frm --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./forms/inc/pch/precompiled_frm.hxx "/opt/lo/bin/make forms.build" --find-conflicts
+ ./bin/update_pch_bisect ./forms/inc/pch/precompiled_frm.hxx "make forms.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -60,7 +60,6 @@
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
@@ -69,17 +68,16 @@
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>

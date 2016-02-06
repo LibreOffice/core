@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:55 using:
+ Generated on 2016-02-06 12:30:53 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sc/inc/pch/precompiled_sc.hxx "/opt/lo/bin/make sc.build" --find-conflicts
+ ./bin/update_pch_bisect ./sc/inc/pch/precompiled_sc.hxx "make sc.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -60,7 +60,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <osl/conditn.h>
@@ -117,7 +116,6 @@
 #include <salhelper/thread.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
@@ -130,7 +128,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
@@ -145,6 +142,7 @@
 #include <vcl/image.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
@@ -422,10 +420,10 @@
 #include <scmatrix.hxx>
 #include <scmod.hxx>
 #include <scresid.hxx>
+#include <segmenttree.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
-#include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
@@ -551,6 +549,7 @@
 #include <svx/xtextit0.hxx>
 #include <tablink.hxx>
 #include <tabprotection.hxx>
+#include <textuno.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 #include <tools/color.hxx>

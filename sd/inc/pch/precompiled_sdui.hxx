@@ -13,17 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-02-06 12:31:07 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sd/inc/pch/precompiled_sdui.hxx "/opt/lo/bin/make sd.build" --find-conflicts
+ ./bin/update_pch_bisect ./sd/inc/pch/precompiled_sdui.hxx "make sd.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <climits>
-#include <config_features.h>
 #include <config_global.h>
 #include <config_typesizes.h>
 #include <config_vcl.h>
@@ -51,12 +50,12 @@
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
@@ -110,7 +109,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
@@ -141,6 +139,7 @@
 #include <vcl/image.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
@@ -162,6 +161,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -389,6 +389,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/imgdef.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/transfer.hxx>

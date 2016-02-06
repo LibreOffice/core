@@ -13,16 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-02-06 12:33:42 using:
  ./bin/update_pch vbahelper vbahelper --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./vbahelper/inc/pch/precompiled_vbahelper.hxx "/opt/lo/bin/make vbahelper.build" --find-conflicts
+ ./bin/update_pch_bisect ./vbahelper/inc/pch/precompiled_vbahelper.hxx "make vbahelper.build" --find-conflicts
 */
 
 #include <cassert>
-#include <config_features.h>
 #include <cstddef>
+#include <deque>
 #include <exception>
 #include <functional>
 #include <memory>
@@ -51,24 +51,25 @@
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <sal/types.h>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/event.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 #include <basic/basicdllapi.h>
+#include <basic/codecompletecache.hxx>
 #include <basic/sbdef.hxx>
+#include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
@@ -91,6 +92,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
