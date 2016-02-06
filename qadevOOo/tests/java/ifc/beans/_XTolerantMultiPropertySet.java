@@ -162,15 +162,8 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
     public void _setPropertyValuesTolerant() {
         requiredMethod("getPropertyValuesTolerant()");
 
-        SetPropertyTolerantFailed[] SPTF = null;
-
-        try {
-            SPTF = oObj.setPropertyValuesTolerant(namesOfProperties,
-                                                  getNewValues(
-                                                          valuesOfProperties));
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-        }
+        SetPropertyTolerantFailed[] SPTF = oObj.setPropertyValuesTolerant(namesOfProperties,
+                                                  getNewValues(valuesOfProperties));
 
         //read only properties will throw a PropertyVetoExeption if they are set
         int failures = 0;
