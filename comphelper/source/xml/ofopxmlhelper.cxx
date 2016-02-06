@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <vector>
 
 #define RELATIONINFO_FORMAT 0
 #define CONTENTTYPE_FORMAT  1
@@ -62,7 +63,7 @@ class OFOPXMLHelper_Impl
     OUString m_aContentTypeAttr;
 
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aResultSeq;
-    css::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
+    std::vector< OUString > m_aElementsSeq; // stack of elements being parsed
 
 
 public:
@@ -285,7 +286,7 @@ OFOPXMLHelper_Impl::~OFOPXMLHelper_Impl()
 
 uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper_Impl::GetParsingResult()
 {
-    if ( m_aElementsSeq.getLength() )
+    if ( m_aElementsSeq.size() )
         throw uno::RuntimeException(); // the parsing has still not finished!
 
     return m_aResultSeq;
@@ -311,24 +312,22 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
     {
         if ( aName == m_aRelListElement )
         {
-            sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
+            sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
 
             if ( nNewLength != 1 )
                 throw css::xml::sax::SAXException(); // TODO: this element must be the first level element
 
-            m_aElementsSeq.realloc( nNewLength );
-            m_aElementsSeq[nNewLength-1] = aName;
+            m_aElementsSeq.push_back( aName );
 
             return; // nothing to do
         }
         else if ( aName == m_aRelElement )
         {
-            sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
+            sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
             if ( nNewLength != 2 )
                 throw css::xml::sax::SAXException(); // TODO: this element must be the second level element
 
-            m_aElementsSeq.realloc( nNewLength );
-            m_aElementsSeq[nNewLength-1] = aName;
+            m_aElementsSeq.push_back( aName );
 
             sal_Int32 nNewEntryNum = m_aResultSeq.getLength() + 1;
             m_aResultSeq.realloc( nNewEntryNum );
@@ -373,13 +372,12 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
     {
         if ( aName == m_aTypesElement )
         {
-            sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
+            sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
 
             if ( nNewLength != 1 )
                 throw css::xml::sax::SAXException(); // TODO: this element must be the first level element
 
-            m_aElementsSeq.realloc( nNewLength );
-            m_aElementsSeq[nNewLength-1] = aName;
+            m_aElementsSeq.push_back( aName );
 
             if ( !m_aResultSeq.getLength() )
                 m_aResultSeq.realloc( 2 );
@@ -388,12 +386,11 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
         }
         else if ( aName == m_aDefaultElement )
         {
-            sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
+            sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
             if ( nNewLength != 2 )
                 throw css::xml::sax::SAXException(); // TODO: this element must be the second level element
 
-            m_aElementsSeq.realloc( nNewLength );
-            m_aElementsSeq[nNewLength-1] = aName;
+            m_aElementsSeq.push_back( aName );
 
             if ( !m_aResultSeq.getLength() )
                 m_aResultSeq.realloc( 2 );
@@ -417,12 +414,11 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
         }
         else if ( aName == m_aOverrideElement )
         {
-            sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
+            sal_Int32 nNewLength = m_aElementsSeq.size() + 1;
             if ( nNewLength != 2 )
                 throw css::xml::sax::SAXException(); // TODO: this element must be the second level element
 
-            m_aElementsSeq.realloc( nNewLength );
-            m_aElementsSeq[nNewLength-1] = aName;
+            m_aElementsSeq.push_back( aName );
 
             if ( !m_aResultSeq.getLength() )
                 m_aResultSeq.realloc( 2 );
@@ -457,14 +453,14 @@ void SAL_CALL OFOPXMLHelper_Impl::endElement( const OUString& aName )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT || m_nFormat == CONTENTTYPE_FORMAT )
     {
-        sal_Int32 nLength = m_aElementsSeq.getLength();
+        sal_Int32 nLength = m_aElementsSeq.size();
         if ( nLength <= 0 )
             throw css::xml::sax::SAXException(); // TODO: no other end elements expected!
 
         if ( !m_aElementsSeq[nLength-1].equals( aName ) )
             throw css::xml::sax::SAXException(); // TODO: unexpected element ended
 
-        m_aElementsSeq.realloc( nLength - 1 );
+        m_aElementsSeq.resize( nLength - 1 );
     }
 }
 
