@@ -1211,7 +1211,7 @@ namespace svgio
             maTextAnchor(TextAnchor_notset),
             maColor(),
             maOpacity(),
-            maVisibility(Visibility_visible),
+            maVisibility(Visibility_notset),
             maTitle(),
             maDesc(),
             maClipPathXLink(),
@@ -1236,10 +1236,6 @@ namespace svgio
                 {
                     mbIsClipPathContent = pParentStyle->mbIsClipPathContent;
                 }
-            }
-            if(pParentStyle)
-            {
-                maVisibility = pParentStyle->maVisibility;
             }
         }
 
@@ -2183,6 +2179,23 @@ namespace svgio
 
             // default is 1
             return SvgNumber(1.0);
+        }
+
+        Visibility SvgStyleAttributes::getVisibility() const
+        {
+            if(Visibility_notset == maVisibility || Visibility_inherit == maVisibility)
+            {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    return pSvgStyleAttributes->getVisibility();
+                }
+                //default is Visible
+                return Visibility_visible;
+            }
+
+            return maVisibility;
         }
 
         FillRule SvgStyleAttributes::getFillRule() const
