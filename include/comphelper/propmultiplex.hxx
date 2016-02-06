@@ -72,7 +72,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper< css::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
-        css::uno::Sequence< OUString >                  m_aProperties;
+        std::vector< OUString >                         m_aProperties;
         css::uno::Reference< css::beans::XPropertySet>  m_xSet;
         OPropertyChangeListener*                        m_pListener;
         sal_Int32                                       m_nLockCount;
