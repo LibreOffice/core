@@ -18,8 +18,8 @@
  */
 
 #include <sal/config.h>
-#include <config_version.h>
 #include <config_folders.h>
+#include <config_features.h>
 
 #include <desktop/dllapi.h>
 
@@ -64,14 +64,6 @@
 
 #if HAVE_FEATURE_BREAKPAD
 
-OString getLibDir()
-{
-    OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER;
-    rtl::Bootstrap::expandMacros(aOriginal);
-
-    return rtl::OUStringToOString(aOriginal, RTL_TEXTENCODING_UTF8);
-}
-
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
 {
@@ -81,9 +73,6 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
     minidump_file.close();
     // send the minidump to the server (not yet implemented)
     SAL_WARN("crashreport", "minidump generated: " << descriptor.path());
-    OString aCommand = getLibDir().copy(7) + "/minidump_upload " + ini_path.c_str();
-    int retVal = std::system(aCommand.getStr());
-    SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
     return succeeded;
 }
 #endif
@@ -92,14 +81,6 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if HAVE_FEATURE_BREAKPAD
-    //limit the amount of code that needs to be executed before the crash reporting
-
-    std::string ini_path = CrashReporter::getIniFileName();
-    std::ofstream minidump_file(ini_path, std::ios_base::trunc);
-    minidump_file << "ProductName=LibreOffice\n";
-    minidump_file << "Version=" << LIBO_VERSION_DOTTED << "\n";
-    minidump_file << "URL=" << "http://127.0.0.1:8000/submit" << "\n";
-    minidump_file.close();
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
