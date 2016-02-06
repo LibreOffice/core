@@ -23,12 +23,13 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <basic/basicdllapi.h>
+#include <vector>
 
 class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< css::task::XInteractionRequest >
 {
 // C++ interface
 public:
-    ModuleSizeExceeded( const css::uno::Sequence<OUString>& sModules );
+    ModuleSizeExceeded( const std::vector<OUString>& sModules );
 
     bool isAbort() const;
     bool isApprove() const;

@@ -1508,7 +1508,7 @@ uno::Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const 
     return aOldValue;
 }
 
-bool BasicManager::LegacyPsswdBinaryLimitExceeded( uno::Sequence< OUString >& _out_rModuleNames )
+bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames )
 {
     try
     {
@@ -1531,7 +1531,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( uno::Sequence< OUString >& _o
             uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
             sal_Int32 nLen = aElementNames.getLength();
 
-            uno::Sequence< OUString > aBigModules( nLen );
+            std::vector< OUString > aBigModules( nLen );
             sal_Int32 nBigModules = 0;
 
             const OUString* pElementNames = aElementNames.getConstArray();
@@ -1545,8 +1545,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( uno::Sequence< OUString >& _o
 
             if ( nBigModules )
             {
-                aBigModules.realloc( nBigModules );
-                _out_rModuleNames = aBigModules;
+                 _out_rModuleNames.swap(aBigModules);
                 return true;
             }
         }

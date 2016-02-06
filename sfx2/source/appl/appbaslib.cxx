@@ -156,7 +156,7 @@ void SfxBasicManagerHolder::impl_releaseContainers()
     mxDialogContainer.clear();
 }
 
-bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sModules )
+bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& sModules )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) sModules;

@@ -3610,7 +3610,7 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
 
     if ( !pImp->aBasicManager.isValid() )
         GetBasicManager();
-    uno::Sequence< OUString > sModules;
+    std::vector< OUString > sModules;
     if ( xHandler.is() )
     {
         if( pImp->aBasicManager.LegacyPsswdBinaryLimitExceeded( sModules ) )

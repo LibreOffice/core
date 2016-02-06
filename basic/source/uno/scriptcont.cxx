@@ -574,7 +574,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
     // Only need to handle the export case here,
     // save/saveas etc are handled in sfxbasemodel::storeSelf &
     // sfxbasemodel::impl_store
-    uno::Sequence<OUString> aNames;
+    std::vector<OUString> aNames;
     if ( bExport && pBasicMgr->LegacyPsswdBinaryLimitExceeded(aNames) )
     {
         if ( xHandler.is() )

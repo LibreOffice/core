@@ -194,7 +194,7 @@ public:
         @param _out_rModuleNames
             takes the names of modules whose size exceeds the legacy limit
     */
-    bool            LegacyPsswdBinaryLimitExceeded( css::uno::Sequence< OUString >& _out_rModuleNames );
+    bool            LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames );
     bool HasExeCode( const OUString& );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
     bool            HasMacro( OUString const& i_fullyQualifiedName ) const;
