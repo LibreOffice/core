@@ -279,15 +279,15 @@ OUString Application::GetAppFileName()
 
 void Application::Exception( sal_uInt16 nError )
 {
-    switch ( nError & EXC_MAJORTYPE )
+    switch ( nError & EXCEPTION_MAJORTYPE )
     {
         // System has precedence (so do nothing)
-        case EXC_SYSTEM:
-        case EXC_DISPLAY:
+        case EXCEPTION_SYSTEM:
+        case EXCEPTION_DISPLAY:
             break;
 
 #ifdef DBG_UTIL
-        case EXC_RSCNOTLOADED:
+        case EXCEPTION_RESOURCENOTLOADED:
             Abort("Resource not loaded");
             break;
         default:

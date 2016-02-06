@@ -1207,7 +1207,7 @@ void Desktop::Exception(sal_uInt16 nError)
     bool bAllowRecoveryAndSessionManagement = (
                                                     ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
                                                     ( !rArgs.IsHeadless()                     ) &&
-                                                    (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
+                                                    (( nError & EXCEPTION_MAJORTYPE ) != EXCEPTION_DISPLAY ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
     if ( bAllowRecoveryAndSessionManagement )
@@ -1215,9 +1215,9 @@ void Desktop::Exception(sal_uInt16 nError)
 
     FlushConfiguration();
 
-    switch( nError & EXC_MAJORTYPE )
+    switch( nError & EXCEPTION_MAJORTYPE )
     {
-        case EXC_RSCNOTLOADED:
+        case EXCEPTION_RESOURCENOTLOADED:
         {
             OUString aResExceptionString;
             Application::Abort( aResExceptionString );

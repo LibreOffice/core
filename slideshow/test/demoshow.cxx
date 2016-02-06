@@ -483,9 +483,9 @@ void DemoWindow::Resize()
 
 sal_uInt16 DemoApp::Exception( sal_uInt16 nError )
 {
-    switch( nError & EXC_MAJORTYPE )
+    switch( nError & EXCEPTION_MAJORTYPE )
     {
-        case EXC_RSCNOTLOADED:
+        case EXCEPTION_RESOURCENOTLOADED:
             Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
             break;
     }

@@ -107,7 +107,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
              (pInfo->Signal == osl_Signal_FloatDivideByZero)   ||
              (pInfo->Signal == osl_Signal_DebugBreak) )
         {
-            nVCLException = EXC_SYSTEM;
+            nVCLException = EXCEPTION_SYSTEM;
             if (OpenGLZone::isInZone())
                 OpenGLZone::hardDisable();
         }
@@ -115,12 +115,12 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
         // RC
         if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_RESOURCEFAILURE) )
-            nVCLException = EXC_RSCNOTLOADED;
+            nVCLException = EXCEPTION_RESOURCENOTLOADED;
 
         // DISPLAY-Unix
         if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
-            nVCLException = EXC_DISPLAY;
+            nVCLException = EXCEPTION_DISPLAY;
 
         if ( nVCLException )
         {
