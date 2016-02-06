@@ -34,6 +34,7 @@ class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
     OUString  aName;
     OUString  aContent;
     sal_uInt16  nType;
+    sal_uInt32  aFormat = 0;
 
 public:
     SwUserFieldType( SwDoc* pDocPtr, const OUString& );
@@ -55,6 +56,9 @@ public:
 
     inline sal_uInt16           GetType() const;
     inline void             SetType(sal_uInt16);
+
+    inline sal_uInt32 GetFormat() const                 { return aFormat; }
+    inline void SetFormat(sal_uInt32 sFormat)           { aFormat = sFormat; }
 
     bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( bool b )    { bDeleted = b; }
@@ -90,6 +94,7 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     sal_uInt16  nSubType;
+    sal_uInt32  uFormat=0;
 
     virtual OUString        Expand() const override;
     virtual SwField*        Copy() const override;
@@ -104,6 +109,9 @@ public:
     virtual void            SetValue( const double& rVal ) override;
 
     virtual OUString        GetFieldName() const override;
+
+    inline sal_uInt32 GetFormat() const                 { return uFormat; }
+    inline void SetFormat(sal_uInt32 sFormat)           { uFormat = sFormat; }
 
     // Name cannot be changed.
     virtual OUString        GetPar1() const override;

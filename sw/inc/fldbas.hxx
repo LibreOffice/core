@@ -399,6 +399,7 @@ class SW_DLLPUBLIC SwValueField : public SwField
 {
 private:
     double m_fValue;
+    sal_uInt32 m_fFormat = 0;
 
 protected:
     SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
@@ -417,6 +418,10 @@ public:
 
     inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng=0) const
         { return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng); }
+
+
+    inline sal_uInt32 GetFormat() const                 { return m_fFormat; }
+    inline void SetFormat(sal_uInt32 sFormat)           { m_fFormat = sFormat; }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat);
 };

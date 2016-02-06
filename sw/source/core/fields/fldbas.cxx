@@ -539,12 +539,14 @@ SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
                             sal_uInt16 nLng, const double fVal )
     : SwField(pFieldType, nFormat, nLng)
     , m_fValue(fVal)
+    , m_fFormat(nFormat)
 {
 }
 
 SwValueField::SwValueField( const SwValueField& rField )
     : SwField(rField)
     , m_fValue(rField.GetValue())
+    , m_fFormat(rField.GetFormat())
 {
 }
 
@@ -686,8 +688,10 @@ void SwFormulaField::SetFormula(const OUString& rStr)
     {
         sal_Int32 nPos = 0;
         double fTmpValue;
-        if( SwCalc::Str2Double( rStr, nPos, fTmpValue, GetDoc() ) )
+        if( SwCalc::Str2Double( rStr, nPos, fTmpValue, GetDoc() ) ){
             SwValueField::SetValue( fTmpValue );
+            SwValueField::SetFormat( nFormat );
+        }
     }
 }
 
@@ -704,7 +708,7 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
         if (pFormatter->IsNumberFormat(rStr, nFormat, fTmpValue))
         {
             SwValueField::SetValue(fTmpValue);
-
+            SwValueField::SetFormat(nFormat);
             m_sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFormat);
             return;
         }
