@@ -59,8 +59,11 @@ public class ConverterInfoList {
         InputStream is          = c.getResourceAsStream(propsFile);
         BufferedInputStream bis = new BufferedInputStream(is);
         Properties        props = new Properties();
-        props.load(bis);
-        bis.close();
+        try {
+            props.load(bis);
+        } finally {
+            bis.close();
+        }
 
         int i              = 1;
         String jarFileName = "";
