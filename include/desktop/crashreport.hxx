@@ -18,6 +18,7 @@
 #include <config_features.h>
 
 #include <map>
+#include <string>
 
 /**
  * Provides access to the crash reporter service.
@@ -32,7 +33,9 @@ class CRASHREPORT_DLLPUBLIC CrashReporter
 public:
     static void AddKeyValue(const OUString& rKey, const OUString& rValue);
 
-    static const char* getIniFileName();
+    static std::string getIniFileName();
+
+    static void writeCommonInfo();
 
 private:
 
