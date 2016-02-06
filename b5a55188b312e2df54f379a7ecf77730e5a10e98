@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_81db281b",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-06T11:54:45Z",
+      "side": 1,
+      "message": "It is only the first lookup. For iterating we can use the iterators that are returned by std::map::find.",
+      "parentUuid": "3aaa91ec_a1baa4be",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_61c55c5a",
         "filename": "sc/inc/markmulti.hxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I had implemented the copy version of operator\u003d, but not the move version. Or are you saying there is some problem with current operator\u003d implementation ? \n\nI will have to read upon the move semantics as it is quite new to me.",
       "parentUuid": "3aaa91ec_61c55c5a",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_61d8bc1e",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-06T11:54:45Z",
+      "side": 1,
+      "message": "Ah sry. MIssed the operator\u003d. I think either implement the move versions or mark them deleted.",
+      "parentUuid": "3aaa91ec_c1b530d1",
       "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
