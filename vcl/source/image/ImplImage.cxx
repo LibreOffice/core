@@ -21,7 +21,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/window.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>

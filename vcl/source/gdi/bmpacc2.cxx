@@ -18,7 +18,7 @@
  */
 
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 BitmapColor BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL(ConstScanline pScanline, long nX, const ColorMask&)
 {

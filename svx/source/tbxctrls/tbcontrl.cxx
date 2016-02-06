@@ -25,7 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>

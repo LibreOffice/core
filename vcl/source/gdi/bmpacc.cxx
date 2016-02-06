@@ -19,7 +19,7 @@
 
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <impbmp.hxx>
 

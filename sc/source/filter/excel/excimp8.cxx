@@ -51,7 +51,7 @@
 #include <svx/xflclit.hxx>
 
 #include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <sot/exchange.hxx>
 
 #include <svl/stritem.hxx>

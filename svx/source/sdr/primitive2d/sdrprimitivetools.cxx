@@ -18,7 +18,7 @@
  */
 
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 

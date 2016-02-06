@@ -29,7 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <svx/sxekitm.hxx>
 #include "svx/svdstr.hrc"

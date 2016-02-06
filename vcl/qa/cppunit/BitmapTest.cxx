@@ -15,7 +15,7 @@
 #include <unordered_map>
 
 #include <vcl/bitmap.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 
 #include <rtl/strbuf.hxx>

@@ -27,7 +27,7 @@
 #include <gst/video/gstvideosink.h>
 
 #include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <string>
 

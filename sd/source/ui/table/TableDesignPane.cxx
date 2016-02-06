@@ -27,7 +27,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>

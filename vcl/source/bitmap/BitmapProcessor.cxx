@@ -9,7 +9,7 @@
  */
 
 #include <vcl/BitmapProcessor.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
 BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)

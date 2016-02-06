@@ -23,7 +23,7 @@
 #include <svx/xdef.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 

@@ -32,7 +32,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 

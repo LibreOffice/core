@@ -17,7 +17,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <test/unoapi_test.hxx>
 #include <unotest/macros_test.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/pngwrite.hxx>
 
 using namespace com::sun::star;

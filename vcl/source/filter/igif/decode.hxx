@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
 
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 struct GIFLZWTableEntry;
 

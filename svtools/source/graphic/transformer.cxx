@@ -28,7 +28,7 @@
 #include <svl/solar.hrc>
 #include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 #include "graphic.hxx"

@@ -29,7 +29,7 @@
 #include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>

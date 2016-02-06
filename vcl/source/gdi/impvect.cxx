@@ -18,7 +18,7 @@
  */
 
 #include <stdlib.h>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>

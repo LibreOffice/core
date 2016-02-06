@@ -35,7 +35,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 

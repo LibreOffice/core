@@ -31,7 +31,7 @@
 #include <win/salframe.h>
 
 #include "vcl/salbtype.hxx"
-#include "vcl/bmpacc.hxx"
+#include "vcl/bitmapaccess.hxx"
 #include "outdata.hxx"
 #include "salgdiimpl.hxx"
 #include "opengl/win/gdiimpl.hxx"

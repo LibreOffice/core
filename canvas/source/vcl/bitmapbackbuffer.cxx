@@ -21,7 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
 
 #include "bitmapbackbuffer.hxx"

@@ -19,7 +19,7 @@
 
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

@@ -65,7 +65,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <svx/xbitmap.hxx>
 
 void LwpBackgroundStuff::Read(LwpObjectStream* pStrm)

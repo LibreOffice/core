@@ -27,7 +27,7 @@
 #include "epptdef.hxx"
 #include "escherex.hxx"
 #include <tools/poly.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/gfxlink.hxx>
 #include <tools/stream.hxx>

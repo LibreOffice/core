@@ -130,7 +130,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/configsettings.hxx>

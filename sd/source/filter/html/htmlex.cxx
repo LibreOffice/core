@@ -65,7 +65,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdotable.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <svtools/sfxecode.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <tools/resmgr.hxx>

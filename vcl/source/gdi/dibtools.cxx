@@ -27,7 +27,7 @@
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <memory>
 

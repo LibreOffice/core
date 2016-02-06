@@ -23,7 +23,7 @@
 #include <tools/poly.hxx>
 #include <tools/rc.h>
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>

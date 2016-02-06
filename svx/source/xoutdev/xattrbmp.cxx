@@ -37,7 +37,7 @@
 #include <svx/xbitmap.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/dibtools.hxx>
 
 #include <libxml/xmlwriter.h>

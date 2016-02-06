@@ -52,7 +52,7 @@
 #include <rtl/uuid.h>
 
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 
 #include <canvasbitmap.hxx>

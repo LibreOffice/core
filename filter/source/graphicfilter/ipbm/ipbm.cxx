@@ -21,7 +21,7 @@
 
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 //============================ PBMReader ==================================
 

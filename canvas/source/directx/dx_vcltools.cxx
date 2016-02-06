@@ -25,7 +25,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 
 #include "dx_impltools.hxx"

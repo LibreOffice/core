@@ -27,7 +27,7 @@
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 namespace vcl
 {

@@ -63,7 +63,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
