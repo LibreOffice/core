@@ -448,16 +448,14 @@ public class InterfaceContainer implements Cloneable
     @Override
     synchronized public Object clone()
     {
-        Object ret= null;
+        InterfaceContainer cont = new InterfaceContainer();
         if (elementData != null)
         {
-            InterfaceContainer cont= new InterfaceContainer();
             cont.elementData = new Object[size];
-            cont.size= size;
+            cont.size = size;
             System.arraycopy(elementData, 0, cont.elementData, 0, size);
-            ret= cont;
         }
-        return ret;
+        return cont;
     }
     synchronized public ListIterator listIterator()
     {
