@@ -39,7 +39,8 @@ using namespace ::com::sun::star;
 
 SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
     : SwValueField(pTyp, nFormat),
-    nSubType(nSub)
+    nSubType(nSub),
+    uFormat(nFormat)
 {
 }
 
@@ -183,6 +184,7 @@ SwFieldType* SwUserFieldType::Copy() const
     pTmp->bValidValue   = bValidValue;
     pTmp->nValue        = nValue;
     pTmp->bDeleted      = bDeleted;
+    pTmp->aFormat       = aFormat;
 
     return pTmp;
 }
@@ -260,6 +262,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
             if (pFormatter->IsNumberFormat(rStr, nFormat, fValue))
             {
                 SetValue(fValue);
+                SetFormat(nFormat);
                 aContent = DoubleToString(fValue, nFormat);
             }
         }
