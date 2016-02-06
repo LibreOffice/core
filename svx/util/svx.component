@@ -32,6 +32,10 @@
       constructor="com_sun_star_comp_svx_RecoveryUI_get_implementation">
     <service name="com.sun.star.dialog.RecoveryUI"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.CrashReportUI"
+      constructor="com_sun_star_comp_svx_CrashReportUI_get_implementation">
+    <service name="com.sun.star.dialog.CrashReportUI"/>
+  </implementation>
   <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine"
       constructor="com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation">
     <service name="com.sun.star.drawing.CustomShapeEngine"/>
