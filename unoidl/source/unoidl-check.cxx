@@ -225,7 +225,7 @@ void checkMap(
                             << ent2B->getMembers().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::EnumTypeEntity::Member>::const_iterator
+                    for (auto
                              i(ent2A->getMembers().begin()),
                              j(ent2B->getMembers().begin());
                          i != ent2A->getMembers().end(); ++i, ++j)
@@ -272,7 +272,7 @@ void checkMap(
                             << ent2B->getDirectMembers().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::PlainStructTypeEntity::Member>::const_iterator
+                    for (auto
                              i(ent2A->getDirectMembers().begin()),
                              j(ent2B->getDirectMembers().begin());
                          i != ent2A->getDirectMembers().end(); ++i, ++j)
@@ -310,7 +310,7 @@ void checkMap(
                             << ent2B->getTypeParameters().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<OUString>::const_iterator
+                    for (auto
                              i(ent2A->getTypeParameters().begin()),
                              j(ent2B->getTypeParameters().begin());
                          i != ent2A->getTypeParameters().end(); ++i, ++j)
@@ -335,7 +335,7 @@ void checkMap(
                             << ent2B->getMembers().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member>::const_iterator
+                    for (auto
                              i(ent2A->getMembers().begin()),
                              j(ent2B->getMembers().begin());
                          i != ent2A->getMembers().end(); ++i, ++j)
@@ -389,7 +389,7 @@ void checkMap(
                             << ent2B->getDirectMembers().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::ExceptionTypeEntity::Member>::const_iterator
+                    for (auto
                              i(ent2A->getDirectMembers().begin()),
                              j(ent2B->getDirectMembers().begin());
                          i != ent2A->getDirectMembers().end(); ++i, ++j)
@@ -424,7 +424,7 @@ void checkMap(
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AnnotatedReference>::const_iterator
+                    for (auto
                              i(ent2A->getDirectMandatoryBases().begin()),
                              j(ent2B->getDirectMandatoryBases().begin());
                          i != ent2A->getDirectMandatoryBases().end(); ++i, ++j)
@@ -451,7 +451,7 @@ void checkMap(
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AnnotatedReference>::const_iterator
+                    for (auto
                              i(ent2A->getDirectOptionalBases().begin()),
                              j(ent2B->getDirectOptionalBases().begin());
                          i != ent2A->getDirectOptionalBases().end(); ++i, ++j)
@@ -477,7 +477,7 @@ void checkMap(
                             << ent2B->getDirectAttributes().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
+                    for (auto
                              i(ent2A->getDirectAttributes().begin()),
                              j(ent2B->getDirectAttributes().begin());
                          i != ent2A->getDirectAttributes().end(); ++i, ++j)
@@ -516,7 +516,7 @@ void checkMap(
                             << ent2B->getDirectMethods().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator
+                    for (auto
                              i(ent2A->getDirectMethods().begin()),
                              j(ent2B->getDirectMethods().begin());
                          i != ent2A->getDirectMethods().end(); ++i, ++j)
@@ -543,7 +543,7 @@ void checkMap(
                                 << j->parameters.size() << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
-                        for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::const_iterator
+                        for (auto
                                  k(i->parameters.begin()),
                                  l(j->parameters.begin());
                              k != i->parameters.end(); ++k, ++l)
@@ -597,20 +597,14 @@ void checkMap(
                         static_cast<unoidl::ConstantGroupEntity *>(entA.get()));
                     rtl::Reference<unoidl::ConstantGroupEntity> ent2B(
                         static_cast<unoidl::ConstantGroupEntity *>(entB.get()));
-                    for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
-                             i(ent2A->getMembers().begin());
-                         i != ent2A->getMembers().end(); ++i)
-                    {
+                    for (auto & i: ent2A->getMembers()) {
                         bool found = false;
-                        for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
-                                 j(ent2B->getMembers().begin());
-                             j != ent2B->getMembers().end(); ++j)
-                        {
-                            if (i->name == j->name) {
-                                if (i->value != j->value) {
+                        for (auto & j: ent2B->getMembers()) {
+                            if (i.name == j.name) {
+                                if (i.value != j.value) {
                                     std::cerr
                                         << "constant group " << name
-                                        << " member " << i->name
+                                        << " member " << i.name
                                         << " changed value" << std::endl;
                                     std::exit(EXIT_FAILURE);
                                 }
@@ -621,7 +615,7 @@ void checkMap(
                         if (!found) {
                             std::cerr
                                 << "A constant group " << name << " member "
-                                << i->name << " is not present in B"
+                                << i.name << " is not present in B"
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -656,7 +650,7 @@ void checkMap(
                             << ent2B->getConstructors().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>::const_iterator
+                    for (auto
                              i(ent2A->getConstructors().begin()),
                              j(ent2B->getConstructors().begin());
                          i != ent2A->getConstructors().end(); ++i, ++j)
@@ -704,7 +698,7 @@ void checkMap(
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AnnotatedReference>::const_iterator
+                    for (auto
                              i(ent2A->getDirectMandatoryBaseServices().begin()),
                              j(ent2B->getDirectMandatoryBaseServices().begin());
                          i != ent2A->getDirectMandatoryBaseServices().end();
@@ -736,20 +730,16 @@ void checkMap(
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AnnotatedReference>::const_iterator
-                             i(ent2A->getDirectOptionalBaseServices().begin());
-                         i != ent2A->getDirectOptionalBaseServices().end();
-                         ++i)
-                    {
+                    for (auto & i: ent2A->getDirectOptionalBaseServices()) {
                         if (std::find_if(
                                 ent2B->getDirectOptionalBaseServices().begin(),
                                 ent2B->getDirectOptionalBaseServices().end(),
-                                EqualsAnnotation(i->name))
+                                EqualsAnnotation(i.name))
                             == ent2B->getDirectOptionalBaseServices().end())
                         {
                             std::cerr
                                 << "accumulation-based service " << name
-                                << " direct optional base service " << i->name
+                                << " direct optional base service " << i.name
                                 << " was removed" << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -767,7 +757,7 @@ void checkMap(
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AnnotatedReference>::const_iterator
+                    for (auto
                              i(ent2A->getDirectMandatoryBaseInterfaces()
                                .begin()),
                              j(ent2B->getDirectMandatoryBaseInterfaces()
@@ -801,22 +791,17 @@ void checkMap(
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AnnotatedReference>::const_iterator
-                             i(ent2A->getDirectOptionalBaseInterfaces()
-                               .begin());
-                         i != ent2A->getDirectOptionalBaseInterfaces().end();
-                         ++i)
-                    {
+                    for (auto & i: ent2A->getDirectOptionalBaseInterfaces()) {
                         if (std::find_if(
                                 (ent2B->getDirectOptionalBaseInterfaces()
                                  .begin()),
                                 ent2B->getDirectOptionalBaseInterfaces().end(),
-                                EqualsAnnotation(i->name))
+                                EqualsAnnotation(i.name))
                             == ent2B->getDirectOptionalBaseInterfaces().end())
                         {
                             std::cerr
                                 << "accumulation-based service " << name
-                                << " direct optional base interface " << i->name
+                                << " direct optional base interface " << i.name
                                 << " was removed" << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -831,7 +816,7 @@ void checkMap(
                             << ent2B->getDirectProperties().size() << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::const_iterator
+                    for (auto
                              i(ent2A->getDirectProperties().begin()),
                              j(ent2B->getDirectProperties().begin());
                          i != ent2A->getDirectProperties().end(); ++i, ++j)
@@ -851,7 +836,7 @@ void checkMap(
                             std::exit(EXIT_FAILURE);
                         }
                     }
-                    for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::const_iterator
+                    for (auto
                              i(ent2B->getDirectProperties().begin()
                                + ent2A->getDirectProperties().size());
                          i != ent2B->getDirectProperties().end(); ++i)
@@ -948,13 +933,10 @@ void checkIds(
             if (!entA.is()) {
                 rtl::Reference<unoidl::EnumTypeEntity> ent2B(
                     static_cast<unoidl::EnumTypeEntity *>(entB.get()));
-                for (std::vector<unoidl::EnumTypeEntity::Member>::const_iterator
-                         i(ent2B->getMembers().begin());
-                     i != ent2B->getMembers().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getMembers()) {
+                    if (!valid(i.name)) {
                         std::cerr
-                            << "enum type " << name << " member " << i->name
+                            << "enum type " << name << " member " << i.name
                             << " uses an invalid identifier" << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -966,14 +948,11 @@ void checkIds(
                 rtl::Reference<unoidl::PlainStructTypeEntity> ent2B(
                     static_cast<unoidl::PlainStructTypeEntity *>(
                         entB.get()));
-                for (std::vector<unoidl::PlainStructTypeEntity::Member>::const_iterator
-                         i(ent2B->getDirectMembers().begin());
-                     i != ent2B->getDirectMembers().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getDirectMembers()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "plain struct type " << name << " direct member "
-                            << i->name << " uses an invalid identifier"
+                            << i.name << " uses an invalid identifier"
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -987,26 +966,20 @@ void checkIds(
                         static_cast<
                             unoidl::PolymorphicStructTypeTemplateEntity *>(
                                 entB.get()));
-                for (std::vector<OUString>::const_iterator i(
-                         ent2B->getTypeParameters().begin());
-                     i != ent2B->getTypeParameters().end(); ++i)
-                {
-                    if (!valid(*i)) {
+                for (auto & i: ent2B->getTypeParameters()) {
+                    if (!valid(i)) {
                         std::cerr
                             << "polymorphic struct type template " << name
-                            << " type parameter " << *i
+                            << " type parameter " << i
                             << " uses an invalid identifier" << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
                 }
-                for (std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member>::const_iterator
-                         i(ent2B->getMembers().begin());
-                     i != ent2B->getMembers().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getMembers()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "polymorphic struct type template " << name
-                            << " member " << i->name
+                            << " member " << i.name
                             << " uses an invalid identifier" << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -1017,14 +990,11 @@ void checkIds(
             if (!entA.is()) {
                 rtl::Reference<unoidl::ExceptionTypeEntity> ent2B(
                     static_cast<unoidl::ExceptionTypeEntity *>(entB.get()));
-                for (std::vector<unoidl::ExceptionTypeEntity::Member>::const_iterator
-                         i(ent2B->getDirectMembers().begin());
-                     i != ent2B->getDirectMembers().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getDirectMembers()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "exception type " << name << " direct member "
-                            << i->name << " uses an invalid identifier"
+                            << i.name << " uses an invalid identifier"
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -1035,38 +1005,29 @@ void checkIds(
             if (!entA.is()) {
                 rtl::Reference<unoidl::InterfaceTypeEntity> ent2B(
                     static_cast<unoidl::InterfaceTypeEntity *>(entB.get()));
-                for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
-                         i(ent2B->getDirectAttributes().begin());
-                     i != ent2B->getDirectAttributes().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getDirectAttributes()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "interface type " << name << " direct attribute "
-                            << i->name << " uses an invalid identifier"
+                            << i.name << " uses an invalid identifier"
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
                 }
-                for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator
-                         i(ent2B->getDirectMethods().begin());
-                     i != ent2B->getDirectMethods().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getDirectMethods()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "interface type " << name << " direct method "
-                            << i->name << " uses an invalid identifier"
+                            << i.name << " uses an invalid identifier"
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::const_iterator
-                             j(i->parameters.begin());
-                         j != i->parameters.end(); ++j)
-                    {
-                        if (!valid(j->name)) {
+                    for (auto & j: i.parameters) {
+                        if (!valid(j.name)) {
                             std::cerr
                                 << "interface type " << name
-                                << " direct method " << i->name << " parameter "
-                                << j->name << " uses an invalid identifier"
+                                << " direct method " << i.name << " parameter "
+                                << j.name << " uses an invalid identifier"
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -1082,29 +1043,23 @@ void checkIds(
             {
                 rtl::Reference<unoidl::ConstantGroupEntity> ent2B(
                     static_cast<unoidl::ConstantGroupEntity *>(entB.get()));
-                for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
-                             i(ent2B->getMembers().begin());
-                     i != ent2B->getMembers().end(); ++i)
-                {
+                for (auto & i: ent2B->getMembers()) {
                     bool found = false;
                     if (entA.is()) {
                         rtl::Reference<unoidl::ConstantGroupEntity> ent2A(
                             static_cast<unoidl::ConstantGroupEntity *>(
                                 entA.get()));
-                        for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
-                                 j(ent2A->getMembers().begin());
-                             j != ent2A->getMembers().end(); ++j)
-                        {
-                            if (i->name == j->name) {
+                        for (auto & j: ent2A->getMembers()) {
+                            if (i.name == j.name) {
                                 found = true;
                                 break;
                             }
                         }
                     }
-                    if (!(found || valid(i->name))) {
+                    if (!(found || valid(i.name))) {
                         std::cerr
                             << "Constant group " << name << " member "
-                            << i->name << " uses an invalid identifier"
+                            << i.name << " uses an invalid identifier"
                             << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
@@ -1117,26 +1072,20 @@ void checkIds(
                     ent2B(
                         static_cast<unoidl::SingleInterfaceBasedServiceEntity *>(
                             entB.get()));
-                for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>::const_iterator
-                         i(ent2B->getConstructors().begin());
-                     i != ent2B->getConstructors().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getConstructors()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "single-interface--based service " << name
-                            << " constructor " << i->name
+                            << " constructor " << i.name
                             << " uses an invalid identifier" << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
-                    for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter>::const_iterator
-                             j(i->parameters.begin());
-                         j != i->parameters.end(); ++j)
-                    {
-                        if (!valid(j->name)) {
+                    for (auto & j: i.parameters) {
+                        if (!valid(j.name)) {
                             std::cerr
                                 << "single-interface--based service " << name
-                                << " constructor " << i->name << " parameter "
-                                << j->name << " uses an invalid identifier"
+                                << " constructor " << i.name << " parameter "
+                                << j.name << " uses an invalid identifier"
                                 << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
@@ -1156,14 +1105,11 @@ void checkIds(
                          ->getDirectProperties().size())
                       : 0);
                 assert(n <= ent2B->getDirectProperties().size());
-                for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::const_iterator
-                         i(ent2B->getDirectProperties().begin() + n);
-                     i != ent2B->getDirectProperties().end(); ++i)
-                {
-                    if (!valid(i->name)) {
+                for (auto & i: ent2B->getDirectProperties()) {
+                    if (!valid(i.name)) {
                         std::cerr
                             << "accumulation-based service " << name
-                            << " direct property " << i->name
+                            << " direct property " << i.name
                             << " uses an invalid identifier" << std::endl;
                         std::exit(EXIT_FAILURE);
                     }

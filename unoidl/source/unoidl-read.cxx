@@ -180,10 +180,8 @@ void insertEntityDependencies(
     std::map<OUString, Entity>::iterator const & iterator,
     std::vector<OUString> const & names)
 {
-    for (std::vector<OUString>::const_iterator i(names.begin());
-         i != names.end(); ++i)
-    {
-        insertEntityDependency(manager, iterator, *i);
+    for (auto & i: names) {
+        insertEntityDependency(manager, iterator, i);
     }
 }
 
@@ -192,11 +190,8 @@ void insertEntityDependencies(
     std::map<OUString, Entity>::iterator const & iterator,
     std::vector<unoidl::AnnotatedReference> const & references)
 {
-    for (std::vector<unoidl::AnnotatedReference>::const_iterator i(
-             references.begin());
-         i != references.end(); ++i)
-    {
-        insertEntityDependency(manager, iterator, i->name);
+    for (auto & i: references) {
+        insertEntityDependency(manager, iterator, i.name);
     }
 }
 
@@ -211,10 +206,8 @@ void insertTypeDependency(
     OUString nucl(decomposeType(type, &rank, &args, &entity));
     if (entity) {
         insertEntityDependency(manager, iterator, nucl, true);
-        for (std::vector<OUString>::iterator i(args.begin()); i != args.end();
-             ++i)
-        {
-            insertTypeDependency(manager, iterator, *i);
+        for (auto & i: args) {
+            insertTypeDependency(manager, iterator, i);
         }
     }
 }
@@ -264,11 +257,8 @@ void scanMap(
                         insertEntityDependency(
                             manager, i, ent2->getDirectBase());
                     }
-                    for (std::vector<unoidl::PlainStructTypeEntity::Member>::const_iterator
-                             j(ent2->getDirectMembers().begin());
-                         j != ent2->getDirectMembers().end(); ++j)
-                    {
-                        insertTypeDependency(manager, i, j->type);
+                    for (auto & j: ent2->getDirectMembers()) {
+                        insertTypeDependency(manager, i, j.type);
                     }
                     break;
                 }
@@ -278,12 +268,9 @@ void scanMap(
                         ent2(
                             static_cast<unoidl::PolymorphicStructTypeTemplateEntity *>(
                                 ent.get()));
-                    for (std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member>::const_iterator
-                             j(ent2->getMembers().begin());
-                         j != ent2->getMembers().end(); ++j)
-                    {
-                        if (!j->parameterized) {
-                            insertTypeDependency(manager, i, j->type);
+                    for (auto & j: ent2->getMembers()) {
+                        if (!j.parameterized) {
+                            insertTypeDependency(manager, i, j.type);
                         }
                     }
                     break;
@@ -296,11 +283,8 @@ void scanMap(
                         insertEntityDependency(
                             manager, i, ent2->getDirectBase());
                     }
-                    for (std::vector<unoidl::ExceptionTypeEntity::Member>::const_iterator
-                             j(ent2->getDirectMembers().begin());
-                         j != ent2->getDirectMembers().end(); ++j)
-                    {
-                        insertTypeDependency(manager, i, j->type);
+                    for (auto & j: ent2->getDirectMembers()) {
+                        insertTypeDependency(manager, i, j.type);
                     }
                     break;
                 }
@@ -313,24 +297,15 @@ void scanMap(
                         manager, i, ent2->getDirectMandatoryBases());
                     insertEntityDependencies(
                         manager, i, ent2->getDirectOptionalBases());
-                    for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
-                             j(ent2->getDirectAttributes().begin());
-                         j != ent2->getDirectAttributes().end(); ++j)
-                    {
-                        insertTypeDependency(manager, i, j->type);
+                    for (auto & j: ent2->getDirectAttributes()) {
+                        insertTypeDependency(manager, i, j.type);
                     }
-                    for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator
-                             j(ent2->getDirectMethods().begin());
-                         j != ent2->getDirectMethods().end(); ++j)
-                    {
-                        insertTypeDependency(manager, i, j->returnType);
-                        for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::const_iterator
-                                 k(j->parameters.begin());
-                             k != j->parameters.end(); ++k)
-                        {
-                            insertTypeDependency(manager, i, k->type);
+                    for (auto & j: ent2->getDirectMethods()) {
+                        insertTypeDependency(manager, i, j.returnType);
+                        for (auto & k: j.parameters) {
+                            insertTypeDependency(manager, i, k.type);
                         }
-                        insertEntityDependencies(manager, i, j->exceptions);
+                        insertEntityDependencies(manager, i, j.exceptions);
                     }
                     break;
                 }
@@ -348,17 +323,11 @@ void scanMap(
                             static_cast<unoidl::SingleInterfaceBasedServiceEntity *>(
                                 ent.get()));
                     insertEntityDependency(manager, i, ent2->getBase());
-                    for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>::const_iterator
-                             j(ent2->getConstructors().begin());
-                         j != ent2->getConstructors().end(); ++j)
-                    {
-                        for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter>::const_iterator
-                                 k(j->parameters.begin());
-                             k != j->parameters.end(); ++k)
-                        {
-                            insertTypeDependency(manager, i, k->type);
+                    for (auto & j: ent2->getConstructors()) {
+                        for (auto & k: j.parameters) {
+                            insertTypeDependency(manager, i, k.type);
                         }
-                        insertEntityDependencies(manager, i, j->exceptions);
+                        insertEntityDependencies(manager, i, j.exceptions);
                     }
                     break;
                 }
@@ -375,11 +344,8 @@ void scanMap(
                         manager, i, ent2->getDirectMandatoryBaseInterfaces());
                     insertEntityDependencies(
                         manager, i, ent2->getDirectOptionalBaseInterfaces());
-                    for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::const_iterator
-                             j(ent2->getDirectProperties().begin());
-                         j != ent2->getDirectProperties().end(); ++j)
-                    {
-                        insertTypeDependency(manager, i, j->type);
+                    for (auto & j: ent2->getDirectProperties()) {
+                        insertTypeDependency(manager, i, j.type);
                     }
                     break;
                 }
@@ -408,10 +374,8 @@ void propagateRelevant(std::map<OUString, Entity> & entities, Entity & entity) {
     if (!entity.relevant) {
         entity.relevant = true;
         if (entity.sorted != Entity::Sorted::YES) {
-            for (std::set<OUString>::iterator i(entity.dependencies.begin());
-                 i != entity.dependencies.end(); ++i)
-            {
-                std::map<OUString, Entity>::iterator j(entities.find(*i));
+            for (auto & i: entity.dependencies) {
+                std::map<OUString, Entity>::iterator j(entities.find(i));
                 if (j != entities.end()) {
                     propagateRelevant(entities, j->second);
                 }
@@ -428,11 +392,8 @@ void visit(
     switch (iterator->second.sorted) {
     case Entity::Sorted::NO:
         iterator->second.sorted = Entity::Sorted::ACTIVE;
-        for (std::set<OUString>::iterator i(
-                 iterator->second.dependencies.begin());
-             i != iterator->second.dependencies.end(); ++i)
-        {
-            std::map<OUString, Entity>::iterator j(entities.find(*i));
+        for (auto & i: iterator->second.dependencies) {
+            std::map<OUString, Entity>::iterator j(entities.find(i));
             if (j != entities.end()) {
                 if (iterator->second.relevant) {
                     propagateRelevant(entities, j->second);
@@ -456,9 +417,7 @@ void visit(
 
 std::vector<OUString> sort(std::map<OUString, Entity> & entities) {
     std::vector<OUString> res;
-    for (std::map<OUString, Entity>::iterator i(entities.begin());
-         i != entities.end(); ++i)
-    {
+    for (auto i(entities.begin()); i != entities.end(); ++i) {
         visit(entities, i, res);
     }
     return res;
@@ -474,7 +433,8 @@ void indent(std::vector<OUString> const & modules, unsigned int extra = 0) {
 }
 
 void closeModules(
-    std::vector<OUString> & modules, std::vector<OUString>::size_type n) {
+    std::vector<OUString> & modules, std::vector<OUString>::size_type n)
+{
     for (std::vector<OUString>::size_type i = 0; i != n; ++i) {
         assert(!modules.empty());
         modules.pop_back();
@@ -521,11 +481,9 @@ void writeName(OUString const & name) {
 void writeAnnotations(std::vector<OUString> const & annotations) {
     if (!annotations.empty()) {
         std::cout << "/**";
-        for (std::vector<OUString>::const_iterator i(annotations.begin());
-             i != annotations.end(); ++i)
-        {
-            //TODO: i->indexOf("*/") == -1
-            std::cout << " @" << *i;
+        for (auto & i: annotations) {
+            //TODO: i.indexOf("*/") == -1
+            std::cout << " @" << i;
         }
         std::cout << " */ ";
     }
@@ -561,9 +519,7 @@ void writeType(OUString const & type) {
     }
     if (!args.empty()) {
         std::cout << "< ";
-        for (std::vector<OUString>::iterator i(args.begin()); i != args.end();
-             ++i)
-        {
+        for (auto i(args.begin()); i != args.end(); ++i) {
             if (i != args.begin()) {
                 std::cout << ", ";
             }
@@ -579,9 +535,7 @@ void writeType(OUString const & type) {
 void writeExceptionSpecification(std::vector<OUString> const & exceptions) {
     if (!exceptions.empty()) {
         std::cout << " raises (";
-        for (std::vector<OUString>::const_iterator i(exceptions.begin());
-             i != exceptions.end(); ++i)
-        {
+        for (auto i(exceptions.begin()); i != exceptions.end(); ++i) {
             if (i != exceptions.begin()) {
                 std::cout << ", ";
             }
@@ -599,18 +553,15 @@ void writeEntity(
     if (i != entities.end() && i->second.relevant) {
         assert(!i->second.written);
         i->second.written = true;
-        for (std::set<OUString>::iterator j(
-                 i->second.interfaceDependencies.begin());
-             j != i->second.interfaceDependencies.end(); ++j)
-        {
-            std::map<OUString, Entity>::iterator k(entities.find(*j));
+        for (auto & j: i->second.interfaceDependencies) {
+            std::map<OUString, Entity>::iterator k(entities.find(j));
             if (k != entities.end() && !k->second.written) {
-                OUString id(openModulesFor(modules, *j));
+                OUString id(openModulesFor(modules, j));
                 if (k->second.entity->getSort()
                     != unoidl::Entity::SORT_INTERFACE_TYPE)
                 {
                     std::cerr
-                        << "Entity " << *j << " should be an interface type"
+                        << "Entity " << j << " should be an interface type"
                         << std::endl;
                     std::exit(EXIT_FAILURE);
                 }
@@ -633,8 +584,7 @@ void writeEntity(
                     static_cast<unoidl::EnumTypeEntity *>(ent.get()));
                 writeAnnotationsPublished(ent);
                 std::cout << "enum " << id << " {\n";
-                for (std::vector<unoidl::EnumTypeEntity::Member>::const_iterator
-                         j(ent2->getMembers().begin());
+                for (auto j(ent2->getMembers().begin());
                      j != ent2->getMembers().end(); ++j)
                 {
                     indent(modules, 1);
@@ -660,14 +610,11 @@ void writeEntity(
                     writeName(ent2->getDirectBase());
                 }
                 std::cout << " {\n";
-                for (std::vector<unoidl::PlainStructTypeEntity::Member>::const_iterator
-                         j(ent2->getDirectMembers().begin());
-                     j != ent2->getDirectMembers().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectMembers()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
-                    writeType(j->type);
-                    std::cout << ' ' << j->name << ";\n";
+                    writeAnnotations(j.annotations);
+                    writeType(j.type);
+                    std::cout << ' ' << j.name << ";\n";
                 }
                 indent(modules);
                 std::cout << "};\n";
@@ -681,8 +628,7 @@ void writeEntity(
                             ent.get()));
                 writeAnnotationsPublished(ent);
                 std::cout << "struct " << id << '<';
-                for (std::vector<OUString>::const_iterator j(
-                         ent2->getTypeParameters().begin());
+                for (auto j(ent2->getTypeParameters().begin());
                      j != ent2->getTypeParameters().end(); ++j)
                 {
                     if (j != ent2->getTypeParameters().begin()) {
@@ -691,18 +637,15 @@ void writeEntity(
                     std::cout << *j;
                 }
                 std::cout << ">  {\n";
-                for (std::vector<unoidl::PolymorphicStructTypeTemplateEntity::Member>::const_iterator
-                         j(ent2->getMembers().begin());
-                     j != ent2->getMembers().end(); ++j)
-                {
+                for (auto & j: ent2->getMembers()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
-                    if (j->parameterized) {
-                        std::cout << j->type;
+                    writeAnnotations(j.annotations);
+                    if (j.parameterized) {
+                        std::cout << j.type;
                     } else {
-                        writeType(j->type);
+                        writeType(j.type);
                     }
-                    std::cout << ' ' << j->name << ";\n";
+                    std::cout << ' ' << j.name << ";\n";
                 }
                 indent(modules);
                 std::cout << "};\n";
@@ -719,14 +662,11 @@ void writeEntity(
                     writeName(ent2->getDirectBase());
                 }
                 std::cout << " {\n";
-                for (std::vector<unoidl::ExceptionTypeEntity::Member>::const_iterator
-                         j(ent2->getDirectMembers().begin());
-                     j != ent2->getDirectMembers().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectMembers()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
-                    writeType(j->type);
-                    std::cout << ' ' << j->name << ";\n";
+                    writeAnnotations(j.annotations);
+                    writeType(j.type);
+                    std::cout << ' ' << j.name << ";\n";
                 }
                 indent(modules);
                 std::cout << "};\n";
@@ -739,74 +679,60 @@ void writeEntity(
                         ent.get()));
                 writeAnnotationsPublished(ent);
                 std::cout << "interface " << id << " {\n";
-                for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
-                         ent2->getDirectMandatoryBases().begin());
-                     j != ent2->getDirectMandatoryBases().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectMandatoryBases()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "interface ";
-                    writeName(j->name);
+                    writeName(j.name);
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
-                         ent2->getDirectOptionalBases().begin());
-                     j != ent2->getDirectOptionalBases().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectOptionalBases()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "[optional] interface ";
-                    writeName(j->name);
+                    writeName(j.name);
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::InterfaceTypeEntity::Attribute>::const_iterator
-                         j(ent2->getDirectAttributes().begin());
-                     j != ent2->getDirectAttributes().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectAttributes()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "[attribute";
-                    if (j->bound) {
+                    if (j.bound) {
                         std::cout << ", bound";
                     }
-                    if (j->readOnly) {
+                    if (j.readOnly) {
                         std::cout << ", readonly";
                     }
                     std::cout << "] ";
-                    writeType(j->type);
-                    std::cout << ' ' << j->name;
-                    if (!(j->getExceptions.empty() && j->setExceptions.empty()))
-                    {
+                    writeType(j.type);
+                    std::cout << ' ' << j.name;
+                    if (!(j.getExceptions.empty() && j.setExceptions.empty())) {
                         std::cout << " {\n";
-                        if (!j->getExceptions.empty()) {
+                        if (!j.getExceptions.empty()) {
                             indent(modules, 2);
                             std::cout << "get";
-                            writeExceptionSpecification(j->getExceptions);
+                            writeExceptionSpecification(j.getExceptions);
                             std::cout << ";\n";
                         }
-                        if (!j->setExceptions.empty()) {
+                        if (!j.setExceptions.empty()) {
                             indent(modules, 2);
                             std::cout << "set";
-                            writeExceptionSpecification(j->setExceptions);
+                            writeExceptionSpecification(j.setExceptions);
                             std::cout << ";\n";
                         }
                         std::cout << " }";
                     }
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::InterfaceTypeEntity::Method>::const_iterator
-                         j(ent2->getDirectMethods().begin());
-                     j != ent2->getDirectMethods().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectMethods()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
-                    writeType(j->returnType);
-                    std::cout << ' ' << j->name << '(';
-                    for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::const_iterator
-                             k(j->parameters.begin());
-                         k != j->parameters.end(); ++k)
+                    writeAnnotations(j.annotations);
+                    writeType(j.returnType);
+                    std::cout << ' ' << j.name << '(';
+                    for (auto k(j.parameters.begin()); k != j.parameters.end();
+                         ++k)
                     {
-                        if (k != j->parameters.begin()) {
+                        if (k != j.parameters.begin()) {
                             std::cout << ", ";
                         }
                         switch (k->direction) {
@@ -824,7 +750,7 @@ void writeEntity(
                         std::cout << ' ' << k->name;
                     }
                     std::cout << ')';
-                    writeExceptionSpecification(j->exceptions);
+                    writeExceptionSpecification(j.exceptions);
                     std::cout << ";\n";
                 }
                 indent(modules);
@@ -847,14 +773,11 @@ void writeEntity(
                     static_cast<unoidl::ConstantGroupEntity *>(ent.get()));
                 writeAnnotationsPublished(ent);
                 std::cout << "constants " << id << " {\n";
-                for (std::vector<unoidl::ConstantGroupEntity::Member>::const_iterator
-                         j(ent2->getMembers().begin());
-                     j != ent2->getMembers().end(); ++j)
-                {
+                for (auto & j: ent2->getMembers()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "const ";
-                    switch (j->value.type) {
+                    switch (j.value.type) {
                     case unoidl::ConstantValue::TYPE_BOOLEAN:
                         std::cout << "boolean";
                         break;
@@ -886,37 +809,37 @@ void writeEntity(
                         std::cout << "double";
                         break;
                     }
-                    std::cout << ' ' << j->name << " = ";
-                    switch (j->value.type) {
+                    std::cout << ' ' << j.name << " = ";
+                    switch (j.value.type) {
                     case unoidl::ConstantValue::TYPE_BOOLEAN:
-                        std::cout << (j->value.booleanValue ? "TRUE" : "FALSE");
+                        std::cout << (j.value.booleanValue ? "TRUE" : "FALSE");
                         break;
                     case unoidl::ConstantValue::TYPE_BYTE:
-                        std::cout << int(j->value.byteValue);
+                        std::cout << int(j.value.byteValue);
                         break;
                     case unoidl::ConstantValue::TYPE_SHORT:
-                        std::cout << j->value.shortValue;
+                        std::cout << j.value.shortValue;
                         break;
                     case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
-                        std::cout << j->value.unsignedShortValue;
+                        std::cout << j.value.unsignedShortValue;
                         break;
                     case unoidl::ConstantValue::TYPE_LONG:
-                        std::cout << j->value.longValue;
+                        std::cout << j.value.longValue;
                         break;
                     case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
-                        std::cout << j->value.unsignedLongValue;
+                        std::cout << j.value.unsignedLongValue;
                         break;
                     case unoidl::ConstantValue::TYPE_HYPER:
-                        std::cout << j->value.hyperValue;
+                        std::cout << j.value.hyperValue;
                         break;
                     case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
-                        std::cout << j->value.unsignedHyperValue;
+                        std::cout << j.value.unsignedHyperValue;
                         break;
                     case unoidl::ConstantValue::TYPE_FLOAT:
-                        std::cout << j->value.floatValue;
+                        std::cout << j.value.floatValue;
                         break;
                     case unoidl::ConstantValue::TYPE_DOUBLE:
-                        std::cout << j->value.doubleValue;
+                        std::cout << j.value.doubleValue;
                         break;
                     }
                     std::cout << ";\n";
@@ -937,18 +860,14 @@ void writeEntity(
                     || !ent2->getConstructors().front().defaultConstructor)
                 {
                     std::cout << " {\n";
-                    for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>::const_iterator
-                             j(ent2->getConstructors().begin());
-                         j != ent2->getConstructors().end(); ++j)
-                    {
+                    for (auto & j: ent2->getConstructors()) {
                         indent(modules, 1);
-                        writeAnnotations(j->annotations);
-                        std::cout << j->name << '(';
-                        for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter>::const_iterator
-                                 k(j->parameters.begin());
-                             k != j->parameters.end(); ++k)
+                        writeAnnotations(j.annotations);
+                        std::cout << j.name << '(';
+                        for (auto k(j.parameters.begin());
+                             k != j.parameters.end(); ++k)
                         {
-                            if (k != j->parameters.begin()) {
+                            if (k != j.parameters.begin()) {
                                 std::cout << ", ";
                             }
                             std::cout << "[in] ";
@@ -959,7 +878,7 @@ void writeEntity(
                             std::cout << ' ' << k->name;
                         }
                         std::cout << ')';
-                        writeExceptionSpecification(j->exceptions);
+                        writeExceptionSpecification(j.exceptions);
                         std::cout << ";\n";
                     }
                     indent(modules);
@@ -975,110 +894,95 @@ void writeEntity(
                         ent.get()));
                 writeAnnotationsPublished(ent);
                 std::cout << "service " << id << " {\n";
-                for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
-                         ent2->getDirectMandatoryBaseServices().begin());
-                     j != ent2->getDirectMandatoryBaseServices().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectMandatoryBaseServices()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "service ";
-                    writeName(j->name);
+                    writeName(j.name);
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
-                         ent2->getDirectOptionalBaseServices().begin());
-                     j != ent2->getDirectOptionalBaseServices().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectOptionalBaseServices()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "[optional] service ";
-                    writeName(j->name);
+                    writeName(j.name);
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
-                         ent2->getDirectMandatoryBaseInterfaces().begin());
-                     j != ent2->getDirectMandatoryBaseInterfaces().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectMandatoryBaseInterfaces()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "interface ";
-                    writeName(j->name);
+                    writeName(j.name);
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::AnnotatedReference>::const_iterator j(
-                         ent2->getDirectOptionalBaseInterfaces().begin());
-                     j != ent2->getDirectOptionalBaseInterfaces().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectOptionalBaseInterfaces()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "[optional] interface ";
-                    writeName(j->name);
+                    writeName(j.name);
                     std::cout << ";\n";
                 }
-                for (std::vector<unoidl::AccumulationBasedServiceEntity::Property>::const_iterator
-                         j(ent2->getDirectProperties().begin());
-                     j != ent2->getDirectProperties().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectProperties()) {
                     indent(modules, 1);
-                    writeAnnotations(j->annotations);
+                    writeAnnotations(j.annotations);
                     std::cout << "[property";
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_BOUND)
                         != 0)
                     {
                         std::cout << ", bound";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_CONSTRAINED)
                         != 0)
                     {
                         std::cout << ", constrained";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_AMBIGUOUS)
                         != 0)
                     {
                         std::cout << ", maybeambiguous";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_DEFAULT)
                         != 0)
                     {
                         std::cout << ", maybedefault";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_VOID)
                         != 0)
                     {
                         std::cout << ", maybevoid";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_OPTIONAL)
                         != 0)
                     {
                         std::cout << ", optional";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_READ_ONLY)
                         != 0)
                     {
                         std::cout << ", readonly";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_REMOVABLE)
                         != 0)
                     {
                         std::cout << ", removable";
                     }
-                    if ((j->attributes
+                    if ((j.attributes
                          & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_TRANSIENT)
                         != 0)
                     {
                         std::cout << ", transient";
                     }
                     std::cout << "] ";
-                    writeType(j->type);
-                    std::cout << ' ' << j->name << ";\n";
+                    writeType(j.type);
+                    std::cout << ' ' << j.name << ";\n";
                 }
                 indent(modules);
                 std::cout << "};\n";
@@ -1140,10 +1044,8 @@ SAL_IMPLEMENT_MAIN() {
         scanMap(mgr, prov->createRootCursor(), published, "", ents);
         std::vector<OUString> sorted(sort(ents));
         std::vector<OUString> mods;
-        for (std::vector<OUString>::iterator i(sorted.begin());
-             i != sorted.end(); ++i)
-        {
-            writeEntity(ents, mods, *i);
+        for (auto & i: sorted) {
+            writeEntity(ents, mods, i);
         }
         closeModules(mods, mods.size());
         return EXIT_SUCCESS;

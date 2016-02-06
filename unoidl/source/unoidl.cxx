@@ -49,11 +49,8 @@ private:
 
 std::vector< OUString > AggregatingModule::getMemberNames() const {
     std::set< OUString > names;
-    for (std::vector< rtl::Reference< Provider > >::const_iterator i(
-             providers_.begin());
-         i != providers_.end(); ++i)
-    {
-        rtl::Reference< Entity > ent((*i)->findEntity(name_));
+    for (auto & i: providers_) {
+        rtl::Reference< Entity > ent(i->findEntity(name_));
         if (ent.is() && ent->getSort() == Entity::SORT_MODULE) {
             std::vector< OUString > ns(
                 static_cast< ModuleEntity * >(ent.get())->getMemberNames());
@@ -179,11 +176,8 @@ rtl::Reference< Provider > Manager::addProvider(OUString const & uri) {
 rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
     //TODO: caching? (here or in cppuhelper::TypeManager?)
     osl::MutexGuard g(mutex_);
-    for (std::vector< rtl::Reference< Provider > >::const_iterator i(
-             providers_.begin());
-         i != providers_.end(); ++i)
-    {
-        rtl::Reference< Entity > ent((*i)->findEntity(name));
+    for (auto & i: providers_) {
+        rtl::Reference< Entity > ent(i->findEntity(name));
         if (ent.is()) {
             return ent;
         }

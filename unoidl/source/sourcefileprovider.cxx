@@ -63,11 +63,8 @@ private:
 
 std::vector<rtl::OUString> Module::getMemberNames() const {
     std::vector<rtl::OUString> names;
-    for (std::map< OUString, rtl::Reference<Entity> >::const_iterator i(
-             map.begin());
-         i != map.end(); ++i)
-    {
-        names.push_back(i->first);
+    for (auto & i: map) {
+        names.push_back(i.first);
     }
     return names;
 }
@@ -81,18 +78,15 @@ SourceFileProvider::SourceFileProvider(
     if (!parse(uri, &data)) {
         throw NoSuchFileException(uri);
     }
-    for (std::map<OUString, SourceProviderEntity>::iterator i(
-             data.entities.begin());
-         i != data.entities.end(); ++i)
-    {
-        if (i->second.kind == SourceProviderEntity::KIND_LOCAL) {
-            assert(i->second.entity.is());
-            assert(i->second.entity->getSort() != Entity::SORT_MODULE);
+    for (auto & i: data.entities) {
+        if (i.second.kind == SourceProviderEntity::KIND_LOCAL) {
+            assert(i.second.entity.is());
+            assert(i.second.entity->getSort() != Entity::SORT_MODULE);
             std::map< OUString, rtl::Reference<Entity> > * map = &rootMap_;
             for (sal_Int32 j = 0;;) {
-                OUString id(i->first.getToken(0, '.', j));
+                OUString id(i.first.getToken(0, '.', j));
                 if (j == -1) {
-                    map->insert(std::make_pair(id, i->second.entity));
+                    map->insert(std::make_pair(id, i.second.entity));
                     break;
                 }
                 std::map< OUString, rtl::Reference<Entity> >::const_iterator k(

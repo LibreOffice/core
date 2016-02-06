@@ -271,10 +271,8 @@ void writeAnnotations(
     if (annotate) {
         write32(file, annotations.size());
             // overflow from std::vector::size_type -> sal_uInt64 is unrealistic
-        for (std::vector< OUString >::const_iterator i(annotations.begin());
-             i != annotations.end(); ++i)
-        {
-            writeIdxString(file, toUtf8(*i));
+        for (auto & i: annotations) {
+            writeIdxString(file, toUtf8(i));
         }
     }
 }
@@ -449,35 +447,29 @@ void mapCursor(
 sal_uInt64 writeMap(
     osl::File & file, std::map< OUString, Item > & map, std::size_t * rootSize)
 {
-    for (std::map< OUString, Item >::iterator i(map.begin()); i != map.end();
-         ++i)
-    {
-        switch (i->second.entity->getSort()) {
+    for (auto & i: map) {
+        switch (i.second.entity->getSort()) {
         case unoidl::Entity::SORT_MODULE:
-            i->second.dataOffset = writeMap(file, i->second.module, nullptr);
+            i.second.dataOffset = writeMap(file, i.second.module, nullptr);
             break;
         case unoidl::Entity::SORT_ENUM_TYPE:
             {
                 rtl::Reference< unoidl::EnumTypeEntity > ent2(
                     static_cast< unoidl::EnumTypeEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                for (std::vector< unoidl::EnumTypeEntity::Member >::
-                         const_iterator j(ent2->getMembers().begin());
+                for (auto j(ent2->getMembers().begin());
                      !ann && j != ent2->getMembers().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getMembers().size());
-                for (std::vector< unoidl::EnumTypeEntity::Member >::
-                         const_iterator j(ent2->getMembers().begin());
-                     j != ent2->getMembers().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    write32(file, static_cast< sal_uInt32 >(j->value));
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getMembers()) {
+                    writeIdxName(file, j.name);
+                    write32(file, static_cast< sal_uInt32 >(j.value));
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -486,28 +478,24 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
                     static_cast< unoidl::PlainStructTypeEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                for (std::vector< unoidl::PlainStructTypeEntity::Member >::
-                         const_iterator j(ent2->getDirectMembers().begin());
+                for (auto j(ent2->getDirectMembers().begin());
                      !ann && j != ent2->getDirectMembers().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(
                     file, ent2.get(), ann, !ent2->getDirectBase().isEmpty());
                 if (!ent2->getDirectBase().isEmpty()) {
                     writeIdxName(file, ent2->getDirectBase());
                 }
                 write32(file, ent2->getDirectMembers().size());
-                for (std::vector< unoidl::PlainStructTypeEntity::Member >::
-                         const_iterator j(ent2->getDirectMembers().begin());
-                     j != ent2->getDirectMembers().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeIdxName(file, j->type);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectMembers()) {
+                    writeIdxName(file, j.name);
+                    writeIdxName(file, j.type);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -518,40 +506,29 @@ sal_uInt64 writeMap(
                     ent2(
                         static_cast<
                         unoidl::PolymorphicStructTypeTemplateEntity * >(
-                            i->second.entity.get()));
+                            i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                for (std::vector<
-                         unoidl::PolymorphicStructTypeTemplateEntity::Member >::
-                         const_iterator j(
-                             ent2->getMembers().begin());
+                for (auto j(ent2->getMembers().begin());
                      !ann && j != ent2->getMembers().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getTypeParameters().size());
-                for (std::vector< OUString >::const_iterator j(
-                         ent2->getTypeParameters().begin());
-                     j != ent2->getTypeParameters().end(); ++j)
-                {
-                    writeIdxName(file, *j);
+                for (auto & j: ent2->getTypeParameters()) {
+                    writeIdxName(file, j);
                 }
                 write32(file, ent2->getMembers().size());
-                for (std::vector<
-                         unoidl::PolymorphicStructTypeTemplateEntity::Member >::
-                         const_iterator j(
-                             ent2->getMembers().begin());
-                     j != ent2->getMembers().end(); ++j)
-                {
+                for (auto & j: ent2->getMembers()) {
                     sal_uInt64 f = 0;
-                    if (j->parameterized) {
+                    if (j.parameterized) {
                         f |= 0x01;
                     }
                     write8(file, f);
-                    writeIdxName(file, j->name);
-                    writeIdxName(file, j->type);
-                    writeAnnotations(file, ann, j->annotations);
+                    writeIdxName(file, j.name);
+                    writeIdxName(file, j.type);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -560,28 +537,24 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
                     static_cast< unoidl::ExceptionTypeEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                for (std::vector< unoidl::ExceptionTypeEntity::Member >::
-                         const_iterator j(ent2->getDirectMembers().begin());
+                for (auto j(ent2->getDirectMembers().begin());
                      !ann && j != ent2->getDirectMembers().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(
                     file, ent2.get(), ann, !ent2->getDirectBase().isEmpty());
                 if (!ent2->getDirectBase().isEmpty()) {
                     writeIdxName(file, ent2->getDirectBase());
                 }
                 write32(file, ent2->getDirectMembers().size());
-                for (std::vector< unoidl::ExceptionTypeEntity::Member >::
-                         const_iterator j(ent2->getDirectMembers().begin());
-                     j != ent2->getDirectMembers().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeIdxName(file, j->type);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectMembers()) {
+                    writeIdxName(file, j.name);
+                    writeIdxName(file, j.type);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -590,108 +563,79 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                     static_cast< unoidl::InterfaceTypeEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectMandatoryBases().begin());
+                for (auto j(ent2->getDirectMandatoryBases().begin());
                      !ann && j != ent2->getDirectMandatoryBases().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectOptionalBases().begin());
+                for (auto j(ent2->getDirectOptionalBases().begin());
                      !ann && j != ent2->getDirectOptionalBases().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::
-                         const_iterator j(ent2->getDirectAttributes().begin());
+                for (auto j(ent2->getDirectAttributes().begin());
                      !ann && j != ent2->getDirectAttributes().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector< unoidl::InterfaceTypeEntity::Method >::
-                         const_iterator j(ent2->getDirectMethods().begin());
+                for (auto j(ent2->getDirectMethods().begin());
                      !ann && j != ent2->getDirectMethods().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getDirectMandatoryBases().size());
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectMandatoryBases().begin());
-                     j != ent2->getDirectMandatoryBases().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectMandatoryBases()) {
+                    writeIdxName(file, j.name);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectOptionalBases().size());
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectOptionalBases().begin());
-                     j != ent2->getDirectOptionalBases().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectOptionalBases()) {
+                    writeIdxName(file, j.name);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectAttributes().size());
-                for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::
-                         const_iterator j(ent2->getDirectAttributes().begin());
-                     j != ent2->getDirectAttributes().end(); ++j)
-                {
+                for (auto & j: ent2->getDirectAttributes()) {
                     sal_uInt64 f = 0;
-                    if (j->bound) {
+                    if (j.bound) {
                         f |= 0x01;
                     }
-                    if (j->readOnly) {
+                    if (j.readOnly) {
                         f |= 0x02;
                     }
                     write8(file, f);
-                    writeIdxName(file, j->name);
-                    writeIdxName(file, j->type);
-                    write32(file, j->getExceptions.size());
-                    for (std::vector< OUString >::const_iterator k(
-                             j->getExceptions.begin());
-                         k != j->getExceptions.end(); ++k)
-                    {
-                        writeIdxName(file, *k);
+                    writeIdxName(file, j.name);
+                    writeIdxName(file, j.type);
+                    write32(file, j.getExceptions.size());
+                    for (auto & k: j.getExceptions) {
+                        writeIdxName(file, k);
                     }
-                    if (!j->readOnly) {
-                        write32(file, j->setExceptions.size());
-                        for (std::vector< OUString >::const_iterator k(
-                                 j->setExceptions.begin());
-                             k != j->setExceptions.end(); ++k)
-                        {
-                            writeIdxName(file, *k);
+                    if (!j.readOnly) {
+                        write32(file, j.setExceptions.size());
+                        for (auto & k: j.setExceptions) {
+                            writeIdxName(file, k);
                         }
                     }
-                    writeAnnotations(file, ann, j->annotations);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectMethods().size());
-                for (std::vector< unoidl::InterfaceTypeEntity::Method >::
-                         const_iterator j(ent2->getDirectMethods().begin());
-                     j != ent2->getDirectMethods().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeIdxName(file, j->returnType);
-                    write32(file, j->parameters.size());
-                    for (std::vector<
-                             unoidl::InterfaceTypeEntity::Method::Parameter >::
-                             const_iterator k(j->parameters.begin());
-                         k != j->parameters.end(); ++k)
-                    {
-                        write8(file, k->direction);
-                        writeIdxName(file, k->name);
-                        writeIdxName(file, k->type);
+                for (auto & j: ent2->getDirectMethods()) {
+                    writeIdxName(file, j.name);
+                    writeIdxName(file, j.returnType);
+                    write32(file, j.parameters.size());
+                    for (auto & k: j.parameters) {
+                        write8(file, k.direction);
+                        writeIdxName(file, k.name);
+                        writeIdxName(file, k.type);
                     }
-                    write32(file, j->exceptions.size());
-                    for (std::vector< OUString >::const_iterator k(
-                             j->exceptions.begin());
-                         k != j->exceptions.end(); ++k)
-                    {
-                        writeIdxName(file, *k);
+                    write32(file, j.exceptions.size());
+                    for (auto & k: j.exceptions) {
+                        writeIdxName(file, k);
                     }
-                    writeAnnotations(file, ann, j->annotations);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -700,9 +644,9 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::TypedefEntity > ent2(
                     static_cast< unoidl::TypedefEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 writeIdxName(file, ent2->getType());
                 writeAnnotations(file, ann, ent2->getAnnotations());
@@ -712,102 +656,91 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::ConstantGroupEntity > ent2(
                     static_cast< unoidl::ConstantGroupEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 std::map< OUString, ConstItem > cmap;
-                for (std::vector< unoidl::ConstantGroupEntity::Member >::
-                         const_iterator j(ent2->getMembers().begin());
-                     j != ent2->getMembers().end(); ++j)
-                {
+                for (auto & j: ent2->getMembers()) {
                     if (!cmap.insert(
                             std::make_pair(
-                                j->name, ConstItem(j->value, j->annotations))).
+                                j.name, ConstItem(j.value, j.annotations))).
                         second)
                     {
                         std::cout
                             << "Duplicate constant group member name \""
-                            << j->name << '"' << std::endl;
+                            << j.name << '"' << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
                 }
-                for (std::map< OUString, ConstItem >::iterator j(cmap.begin());
-                     j != cmap.end(); ++j)
-                {
-                    j->second.dataOffset = getOffset(file);
-                    sal_uInt64 v = j->second.constant.type;
-                    if (!j->second.annotations.empty()) {
+                for (auto & j: cmap) {
+                    j.second.dataOffset = getOffset(file);
+                    sal_uInt64 v = j.second.constant.type;
+                    if (!j.second.annotations.empty()) {
                         v |= 0x80;
                     }
                     write8(file, v);
-                    switch (j->second.constant.type) {
+                    switch (j.second.constant.type) {
                     case unoidl::ConstantValue::TYPE_BOOLEAN:
-                        write8(file, j->second.constant.booleanValue ? 1 : 0);
+                        write8(file, j.second.constant.booleanValue ? 1 : 0);
                         break;
                     case unoidl::ConstantValue::TYPE_BYTE:
                         write8(
                             file,
                             static_cast< sal_uInt8 >(
-                                j->second.constant.byteValue));
+                                j.second.constant.byteValue));
                         break;
                     case unoidl::ConstantValue::TYPE_SHORT:
                         write16(
                             file,
                             static_cast< sal_uInt16 >(
-                                j->second.constant.shortValue));
+                                j.second.constant.shortValue));
                         break;
                     case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
-                        write16(file, j->second.constant.unsignedShortValue);
+                        write16(file, j.second.constant.unsignedShortValue);
                         break;
                     case unoidl::ConstantValue::TYPE_LONG:
                         write32(
                             file,
                             static_cast< sal_uInt32 >(
-                                j->second.constant.longValue));
+                                j.second.constant.longValue));
                         break;
                     case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
-                        write32(file, j->second.constant.unsignedLongValue);
+                        write32(file, j.second.constant.unsignedLongValue);
                         break;
                     case unoidl::ConstantValue::TYPE_HYPER:
                         write64(
                             file,
                             static_cast< sal_uInt64 >(
-                                j->second.constant.hyperValue));
+                                j.second.constant.hyperValue));
                         break;
                     case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
-                        write64(file, j->second.constant.unsignedHyperValue);
+                        write64(file, j.second.constant.unsignedHyperValue);
                         break;
                     case unoidl::ConstantValue::TYPE_FLOAT:
                         writeIso60599Binary32(
-                            file, j->second.constant.floatValue);
+                            file, j.second.constant.floatValue);
                         break;
                     case unoidl::ConstantValue::TYPE_DOUBLE:
                         writeIso60599Binary64(
-                            file, j->second.constant.doubleValue);
+                            file, j.second.constant.doubleValue);
                         break;
                     default:
                         for (;;) { std::abort(); } // this cannot happen
                     }
                     writeAnnotations(
-                        file, !j->second.annotations.empty(),
-                        j->second.annotations);
+                        file, !j.second.annotations.empty(),
+                        j.second.annotations);
                 }
-                for (std::map< OUString, ConstItem >::iterator j(
-                         cmap.begin());
-                     j != cmap.end(); ++j)
-                {
-                    j->second.nameOffset = writeNulName(file, j->first);
+                for (auto & j: cmap) {
+                    j.second.nameOffset = writeNulName(file, j.first);
                 }
                 bool ann = !ent2->getAnnotations().empty();
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, cmap.size());
                     // overflow from std::map::size_type -> sal_uInt64 is
                     // unrealistic
-                for (std::map< OUString, ConstItem >::iterator j(
-                         cmap.begin());
-                     j != cmap.end(); ++j)
-                {
-                    write32(file, j->second.nameOffset);
-                    write32(file, j->second.dataOffset);
+                for (auto & j: cmap) {
+                    write32(file, j.second.nameOffset);
+                    write32(file, j.second.dataOffset);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -818,61 +751,45 @@ sal_uInt64 writeMap(
                     ent2(
                         static_cast<
                             unoidl::SingleInterfaceBasedServiceEntity * >(
-                                i->second.entity.get()));
+                                i.second.entity.get()));
                 bool dfltCtor = ent2->getConstructors().size() == 1
                     && ent2->getConstructors()[0].defaultConstructor;
                 bool ann = !ent2->getAnnotations().empty();
                 if (!dfltCtor) {
-                    for (std::vector<
-                             unoidl::SingleInterfaceBasedServiceEntity::
-                             Constructor >::const_iterator j(
-                                 ent2->getConstructors().begin());
+                    for (auto j(ent2->getConstructors().begin());
                          !ann && j != ent2->getConstructors().end(); ++j)
                     {
                         ann = !j->annotations.empty();
                     }
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann, dfltCtor);
                 writeIdxName(file, ent2->getBase());
                 if (!dfltCtor) {
                     write32(file, ent2->getConstructors().size());
-                    for (std::vector<
-                             unoidl::SingleInterfaceBasedServiceEntity::
-                             Constructor >::const_iterator j(
-                                 ent2->getConstructors().begin());
-                         j != ent2->getConstructors().end(); ++j)
-                    {
-                        if (j->defaultConstructor) {
+                    for (auto & j: ent2->getConstructors()) {
+                        if (j.defaultConstructor) {
                             std::cout
                                 << "Unexpected default constructor \""
-                                << j->name << '"' << std::endl;
+                                << j.name << '"' << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
-                        writeIdxName(file, j->name);
-                        write32(file, j->parameters.size());
-                        for (std::vector<
-                                 unoidl::SingleInterfaceBasedServiceEntity::
-                                 Constructor::Parameter >::const_iterator k(
-                                     j->parameters.begin());
-                             k != j->parameters.end(); ++k)
-                        {
+                        writeIdxName(file, j.name);
+                        write32(file, j.parameters.size());
+                        for (auto & k: j.parameters) {
                             sal_uInt64 f = 0;
-                            if (k->rest) {
+                            if (k.rest) {
                                 f |= 0x04;
                             }
                             write8(file, f);
-                            writeIdxName(file, k->name);
-                            writeIdxName(file, k->type);
+                            writeIdxName(file, k.name);
+                            writeIdxName(file, k.type);
                         }
-                        write32(file, j->exceptions.size());
-                        for (std::vector< OUString >::const_iterator k(
-                                 j->exceptions.begin());
-                             k != j->exceptions.end(); ++k)
-                        {
-                            writeIdxName(file, *k);
+                        write32(file, j.exceptions.size());
+                        for (auto & k: j.exceptions) {
+                            writeIdxName(file, k);
                         }
-                        writeAnnotations(file, ann, j->annotations);
+                        writeAnnotations(file, ann, j.annotations);
                     }
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
@@ -882,90 +799,66 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
                     static_cast< unoidl::AccumulationBasedServiceEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectMandatoryBaseServices().begin());
+                for (auto j(ent2->getDirectMandatoryBaseServices().begin());
                      !ann && j != ent2->getDirectMandatoryBaseServices().end();
                      ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectOptionalBaseServices().begin());
+                for (auto j(ent2->getDirectOptionalBaseServices().begin());
                      !ann && j != ent2->getDirectOptionalBaseServices().end();
                      ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectMandatoryBaseInterfaces().begin());
+                for (auto j(ent2->getDirectMandatoryBaseInterfaces().begin());
                      (!ann
                       && j != ent2->getDirectMandatoryBaseInterfaces().end());
                      ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectOptionalBaseInterfaces().begin());
+                for (auto j(ent2->getDirectOptionalBaseInterfaces().begin());
                      !ann && j != ent2->getDirectOptionalBaseInterfaces().end();
                      ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                for (std::vector<
-                         unoidl::AccumulationBasedServiceEntity::Property >::
-                         const_iterator j(
-                             ent2->getDirectProperties().begin());
+                for (auto j(ent2->getDirectProperties().begin());
                      !ann && j != ent2->getDirectProperties().end(); ++j)
                 {
                     ann = !j->annotations.empty();
                 }
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getDirectMandatoryBaseServices().size());
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectMandatoryBaseServices().begin());
-                     j != ent2->getDirectMandatoryBaseServices().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectMandatoryBaseServices()) {
+                    writeIdxName(file, j.name);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectOptionalBaseServices().size());
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectOptionalBaseServices().begin());
-                     j != ent2->getDirectOptionalBaseServices().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectOptionalBaseServices()) {
+                    writeIdxName(file, j.name);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectMandatoryBaseInterfaces().size());
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectMandatoryBaseInterfaces().begin());
-                     j != ent2->getDirectMandatoryBaseInterfaces().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectMandatoryBaseInterfaces()) {
+                    writeIdxName(file, j.name);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectOptionalBaseInterfaces().size());
-                for (std::vector< unoidl::AnnotatedReference >::const_iterator
-                         j(ent2->getDirectOptionalBaseInterfaces().begin());
-                     j != ent2->getDirectOptionalBaseInterfaces().end(); ++j)
-                {
-                    writeIdxName(file, j->name);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectOptionalBaseInterfaces()) {
+                    writeIdxName(file, j.name);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 write32(file, ent2->getDirectProperties().size());
-                for (std::vector<
-                         unoidl::AccumulationBasedServiceEntity::Property >::
-                         const_iterator j(
-                             ent2->getDirectProperties().begin());
-                     j != ent2->getDirectProperties().end(); ++j)
-                {
-                    write16(file, static_cast< sal_uInt16 >(j->attributes));
-                    writeIdxName(file, j->name);
-                    writeIdxName(file, j->type);
-                    writeAnnotations(file, ann, j->annotations);
+                for (auto & j: ent2->getDirectProperties()) {
+                    write16(file, static_cast< sal_uInt16 >(j.attributes));
+                    writeIdxName(file, j.name);
+                    writeIdxName(file, j.type);
+                    writeAnnotations(file, ann, j.annotations);
                 }
                 writeAnnotations(file, ann, ent2->getAnnotations());
                 break;
@@ -974,9 +867,9 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::InterfaceBasedSingletonEntity > ent2(
                     static_cast< unoidl::InterfaceBasedSingletonEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 writeIdxName(file, ent2->getBase());
                 writeAnnotations(file, ann, ent2->getAnnotations());
@@ -986,9 +879,9 @@ sal_uInt64 writeMap(
             {
                 rtl::Reference< unoidl::ServiceBasedSingletonEntity > ent2(
                     static_cast< unoidl::ServiceBasedSingletonEntity * >(
-                        i->second.entity.get()));
+                        i.second.entity.get()));
                 bool ann = !ent2->getAnnotations().empty();
-                i->second.dataOffset = getOffset(file);
+                i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 writeIdxName(file, ent2->getBase());
                 writeAnnotations(file, ann, ent2->getAnnotations());
@@ -996,10 +889,8 @@ sal_uInt64 writeMap(
             }
         }
     }
-    for (std::map< OUString, Item >::iterator i(map.begin()); i != map.end();
-         ++i)
-    {
-        i->second.nameOffset = writeNulName(file, i->first);
+    for (auto & i: map) {
+        i.second.nameOffset = writeNulName(file, i.first);
     }
     sal_uInt64 off = getOffset(file);
     if (rootSize == nullptr) {
@@ -1010,11 +901,9 @@ sal_uInt64 writeMap(
         *rootSize = map.size();
             // overflow from std::map::size_type -> std::size_t is unrealistic
     }
-    for (std::map< OUString, Item >::iterator i(map.begin()); i != map.end();
-         ++i)
-    {
-        write32(file, i->second.nameOffset);
-        write32(file, i->second.dataOffset);
+    for (auto & i: map) {
+        write32(file, i.second.nameOffset);
+        write32(file, i.second.dataOffset);
     }
     return off;
 }
