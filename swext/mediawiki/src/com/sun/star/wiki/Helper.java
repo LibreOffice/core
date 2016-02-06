@@ -191,7 +191,7 @@ public class Helper
             }
         }
 
-        return m_bShowInBrowser.booleanValue();
+        return m_bShowInBrowser != null ? m_bShowInBrowser.booleanValue() : false;
     }
 
     synchronized protected static void SetShowInBrowserByDefault( XComponentContext xContext, boolean bValue )
