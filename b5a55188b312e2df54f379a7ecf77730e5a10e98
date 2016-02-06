@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_01abb88a",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-06T02:09:47Z",
+      "side": 1,
+      "message": "I see no need here for a pointer type.\n\nActually thinking about it I think that it might make much more sense to use a std::map\u003cSCCOL, ScMarkArray\u003e otherwise at least use a std::unique_ptr.",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_61c55c5a",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-06T02:09:47Z",
+      "side": 1,
+      "message": "We either need to delete operator\u003d or implement it.\n\nMaybe even the move versions.",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_e1af8c92",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-06T02:09:47Z",
+      "side": 1,
+      "message": "Is there any reason that we can\u0027t implement real iterators? I\u0027m not a big fan of our *Iter classes and the implementation of Next().\n\nPossibly split that as an easy hack for someone to explore. Most likely it is not a good idea to change that in this patch.",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_21923458",
+        "filename": "sc/source/core/data/markmulti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-06T02:09:47Z",
+      "side": 1,
+      "message": "This looks like a potential memory leak.\n\nIf we really want to return a new instance here then at least let us return by value and implement move semantics in ScMarkArray. Or return a std::unique_ptr.",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
