@@ -1105,11 +1105,13 @@ void checkIds(
                          ->getDirectProperties().size())
                       : 0);
                 assert(n <= ent2B->getDirectProperties().size());
-                for (auto & i: ent2B->getDirectProperties()) {
-                    if (!valid(i.name)) {
+                for (auto i(ent2B->getDirectProperties().begin() +n);
+                     i != ent2B->getDirectProperties().end(); ++i)
+                {
+                    if (!valid(i->name)) {
                         std::cerr
                             << "accumulation-based service " << name
-                            << " direct property " << i.name
+                            << " direct property " << i->name
                             << " uses an invalid identifier" << std::endl;
                         std::exit(EXIT_FAILURE);
                     }
