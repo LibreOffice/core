@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_a1baa4be",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-02-06T07:07:37Z",
+      "side": 1,
+      "message": "Well I did not think about std::map, let me give it a go.\nOne caveat that comes to mind is that every lookup costs us logarithmic in map size, are we willing to allow that especially when iterating over large number of columns ? How about having a next pointer in ScMarkArray and a method ( ScMarkArray* ScMarkArray::GetNextInstance() const ) to improve upon that so that we only need to look up only once per a contiguous column range ? But not sure how hard it is to get that done correctly.",
+      "parentUuid": "3aaa91ec_01abb88a",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_61c55c5a",
         "filename": "sc/inc/markmulti.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-06T02:09:47Z",
       "side": 1,
       "message": "We either need to delete operator\u003d or implement it.\n\nMaybe even the move versions.",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c1b530d1",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-02-06T07:07:37Z",
+      "side": 1,
+      "message": "I had implemented the copy version of operator\u003d, but not the move version. Or are you saying there is some problem with current operator\u003d implementation ? \n\nI will have to read upon the move semantics as it is quite new to me.",
+      "parentUuid": "3aaa91ec_61c55c5a",
       "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_e1b4acd2",
+        "filename": "sc/inc/markmulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-02-06T07:07:37Z",
+      "side": 1,
+      "message": "Yes should able to do that. Will create an easy hack soon.",
+      "parentUuid": "3aaa91ec_e1af8c92",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_21923458",
         "filename": "sc/source/core/data/markmulti.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-02-06T02:09:47Z",
       "side": 1,
       "message": "This looks like a potential memory leak.\n\nIf we really want to return a new instance here then at least let us return by value and implement move semantics in ScMarkArray. Or return a std::unique_ptr.",
+      "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_41cae050",
+        "filename": "sc/source/core/data/markmulti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-02-06T07:07:37Z",
+      "side": 1,
+      "message": "Yes, will do in the next patch.",
+      "parentUuid": "3aaa91ec_21923458",
       "revId": "b5a55188b312e2df54f379a7ecf77730e5a10e98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
