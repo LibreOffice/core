@@ -106,18 +106,20 @@ AttributeList::AttributeList()
     m_pImpl = new AttributeList_Impl;
 }
 
-
-
 AttributeList::~AttributeList()
 {
     delete m_pImpl;
 }
 
-void AttributeList::AddAttribute(   const OUString &sName ,
-                                        const OUString &sType ,
-                                        const OUString &sValue )
+void AttributeList::AddAttribute(const OUString &sName,
+        const OUString &sType, const OUString &sValue)
 {
-    m_pImpl->vecAttribute.push_back( TagAttribute_Impl( sName , sType , sValue ) );
+    m_pImpl->vecAttribute.push_back( TagAttribute_Impl(sName, sType, sValue) );
+}
+
+void AttributeList::Clear()
+{
+    m_pImpl->vecAttribute.clear();
 }
 
 } // namespace comphelper

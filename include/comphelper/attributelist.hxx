@@ -30,10 +30,8 @@ namespace comphelper
 
 struct AttributeList_Impl;
 
-class COMPHELPER_DLLPUBLIC AttributeList : public ::cppu::WeakImplHelper
-<
-    css::xml::sax::XAttributeList
->
+class COMPHELPER_DLLPUBLIC AttributeList :
+    public ::cppu::WeakImplHelper<css::xml::sax::XAttributeList>
 {
     AttributeList_Impl *m_pImpl;
 public:
@@ -41,7 +39,8 @@ public:
     virtual ~AttributeList();
 
     // methods that are not contained in any interface
-    void AddAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );
+    void AddAttribute(const OUString &sName , const OUString &sType , const OUString &sValue);
+    void Clear();
 
     // css::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength()

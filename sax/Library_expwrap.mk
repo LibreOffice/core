@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_externals,expwrap,\
 ))
 
 $(eval $(call gb_Library_use_libraries,expwrap,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
@@ -39,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,expwrap,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,expwrap,\
-	sax/source/expatwrap/attrlistimpl \
 	sax/source/expatwrap/sax_expat \
 	sax/source/expatwrap/saxwriter \
 	sax/source/expatwrap/xml2utf \
