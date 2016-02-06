@@ -456,11 +456,11 @@ public:
         if( !_pFileView || !_pImp || !_pImp->_pPlaces )
             return;
 
-        sal_uInt16 aFlags = GetGetFocusFlags();
+        GetFocusFlags aFlags = GetGetFocusFlags();
 
-        if( aFlags & GETFOCUS_FORWARD )
+        if( aFlags & GetFocusFlags::Forward )
             m_nCurrentFocus = FocusState::Places;
-        else if( aFlags & GETFOCUS_BACKWARD )
+        else if( aFlags & GetFocusFlags::Backward )
             m_nCurrentFocus = FocusState::FileView;
 
         if( m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus <= FocusState::Next )

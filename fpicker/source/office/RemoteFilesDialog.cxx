@@ -120,11 +120,11 @@ class FileViewContainer : public vcl::Window
         if( !m_pFileView || !m_pTreeView )
             return;
 
-        sal_uInt16 aFlags = GetGetFocusFlags();
+        GetFocusFlags aFlags = GetGetFocusFlags();
 
-        if( aFlags & GETFOCUS_FORWARD )
+        if( aFlags & GetFocusFlags::Forward )
             m_nCurrentFocus = FocusState::TreeView;
-        else if( aFlags & GETFOCUS_BACKWARD )
+        else if( aFlags & GetFocusFlags::Backward )
             m_nCurrentFocus = FocusState::FileView;
 
         if( m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
@@ -359,7 +359,7 @@ void RemoteFilesDialog::Resize()
         Size aSize = m_pContainer->GetSizePixel();
         m_pFileView->SetSizePixel( aSize );
     }
-    Invalidate(INVALIDATE_UPDATE);
+    Invalidate(InvalidateFlags::Update);
 }
 
 short RemoteFilesDialog::Execute()
@@ -562,7 +562,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
         EnableChildPointerOverwrite( true );
         SetPointer( PointerStyle::Wait );
-        Invalidate(INVALIDATE_UPDATE);
+        Invalidate(InvalidateFlags::Update);
 
         if( !sURL.isEmpty() )
         {
@@ -681,7 +681,7 @@ void RemoteFilesDialog::EnableControls()
     m_pPath->EnableFields( true );
     m_pAddService_btn->Enable( true );
 
-    Invalidate(INVALIDATE_UPDATE);
+    Invalidate(InvalidateFlags::Update);
 }
 
 void RemoteFilesDialog::DisableControls()

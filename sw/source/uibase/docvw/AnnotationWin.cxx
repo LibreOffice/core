@@ -69,7 +69,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     if (SupportsDoubleBuffering())
         // When double-buffering, allow parents to paint on our area. That's
         // necessary when parents paint the complete buffer.
-        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetParentClipMode(ParentClipMode::NoClip);
 }
 
 SwAnnotationWin::~SwAnnotationWin()

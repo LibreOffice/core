@@ -165,7 +165,7 @@ public:
 
             basebmp::Format nFormat;
 
-            nFormat = FORMAT_ONE_BIT_MSB_PAL;
+            nFormat = Format::OneBitMsbPal;
 //            nFormat = Format::OneBitMsbGrey; // FIXME - un-comment me to crash hard.
             xMask = createBitmapDevice( aSize, false /* bTopDown */,
                                         nFormat,
@@ -180,10 +180,10 @@ public:
             basegfx::tools::importFromSvgD( aPoly, "m 2 2 h4 v8 h-4z",
                                             false, NULL );
             xMask->fillPolyPolygon( aPoly, basebmp::Color( 0xff, 0xff, 0xff ),
-                                    DrawMode::DrawMode_PAINT );
+                                    DrawMode::Paint );
 
             xBitmap = createBitmapDevice( aSize, false,
-                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
+                                          Format::ThirtyTwoBitTcMaskBGRX,
                                           basebmp::getBitmapDeviceStrideForWidth(
                                                 FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX() ) );
             xBitmap->clear(Color(0x80808080));
@@ -191,7 +191,7 @@ public:
         { // mpOutput & mpBitmap
             const basegfx::B2ISize aSize(9, 9);
             xOutput = createBitmapDevice( aSize, false,
-                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
+                                          Format::ThirtyTwoBitTcMaskBGRX,
                                           basebmp::getBitmapDeviceStrideForWidth(
                                                 FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX()) );
             xOutput->clear(Color(0xffffffff));
@@ -203,7 +203,7 @@ public:
         xOutput->drawMaskedBitmap(
             xBitmap, xMask,
             aSourceRect, aDestAll,
-            DrawMode::DrawMode_PAINT );
+            DrawMode::Paint);
 
         CPPUNIT_ASSERT_MESSAGE( "output not cleared to white",
                                 xOutput->getPixel( basegfx::B2IPoint( 0, 0 ) ) == Color(0xffffff) );
