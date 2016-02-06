@@ -19,6 +19,8 @@
 
 
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/sequence.hxx>
+#include <vector>
 
 
 using namespace ::comphelper;
@@ -38,7 +40,7 @@ public:
     void add(PropertyMapEntry const * pMap) throw();
     void remove( const OUString& aName ) throw();
 
-    Sequence< Property > getProperties() throw();
+    std::vector< Property > getProperties() throw();
 
     const PropertyMap& getPropertyMap() const throw() { return maPropertyMap;}
 
@@ -47,7 +49,7 @@ public:
 
 private:
     PropertyMap maPropertyMap;
-    Sequence< Property > maProperties;
+    std::vector< Property > maProperties;
 };
 }
 
@@ -68,8 +70,7 @@ void PropertyMapImpl::add(PropertyMapEntry const * pMap) throw()
 
         maPropertyMap[pMap->maName] = pMap;
 
-        if( maProperties.getLength() )
-            maProperties.realloc( 0 );
+        maProperties.clear();
 
         pMap = &pMap[1];
     }
@@ -79,30 +80,29 @@ void PropertyMapImpl::remove( const OUString& aName ) throw()
 {
     maPropertyMap.erase( aName );
 
-    if( maProperties.getLength() )
-        maProperties.realloc( 0 );
+    maProperties.clear();
 }
 
-Sequence< Property > PropertyMapImpl::getProperties() throw()
+std::vector< Property > PropertyMapImpl::getProperties() throw()
 {
     // maybe we have to generate the properties after
     // a change in the property map or at first call
     // to getProperties
-    if( maProperties.getLength() != (sal_Int32)maPropertyMap.size() )
+    if( maProperties.size() != maPropertyMap.size() )
     {
-        maProperties = Sequence< Property >( maPropertyMap.size() );
-        Property* pProperties = maProperties.getArray();
+        maProperties.resize( maPropertyMap.size() );
+        auto propIter = maProperties.begin();
 
         for( const auto& rProperty : maPropertyMap )
         {
             PropertyMapEntry const * pEntry = rProperty.second;
 
-            pProperties->Name = pEntry->maName;
-            pProperties->Handle = pEntry->mnHandle;
-            pProperties->Type = pEntry->maType;
-            pProperties->Attributes = pEntry->mnAttributes;
+            propIter->Name = pEntry->maName;
+            propIter->Handle = pEntry->mnHandle;
+            propIter->Type = pEntry->maType;
+            propIter->Attributes = pEntry->mnAttributes;
 
-            ++pProperties;
+            ++propIter;
         }
     }
 
@@ -175,7 +175,7 @@ void PropertySetInfo::remove( const OUString& aName ) throw()
 
 Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties() throw(css::uno::RuntimeException, std::exception)
 {
-    return mpMap->getProperties();
+    return comphelper::containerToSequence(mpMap->getProperties());
 }
 
 Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
