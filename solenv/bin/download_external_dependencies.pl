@@ -471,20 +471,25 @@ sub Download ()
     }
 
     # Download the missing files.
+    my $all_downloaded = 1;
     for my $item (@Missing)
     {
         my ($name, $checksum, $urls) = @$item;
 
+        my $downloaded = 0;
         foreach my $url (@$urls)
         {
-            last if DownloadFile(
+            $downloaded = DownloadFile(
                 defined $checksum
                     ? $checksum->{'value'}."-".$name
                     : $name,
                 $url,
                 $checksum);
+            last if $downloaded
         }
+        $all_downloaded &&= $downloaded;
     }
+    die "some needed files could not be downloaded!" if !$all_downloaded;
 }
 
 

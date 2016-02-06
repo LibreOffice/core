@@ -40,6 +40,10 @@ chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 # fetch or update external tarballs
 if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
     "$PERL" "$SOLARENV/bin/download_external_dependencies.pl" $SRC_ROOT/external_deps.lst
+    if [ "$?" != "0" ]; then
+        echo "*** Error downloading external dependencies, please fix the previous problems and try again ***"
+        exit 1
+    fi
 fi
 
 # ------------------------------------------------------------------------------
