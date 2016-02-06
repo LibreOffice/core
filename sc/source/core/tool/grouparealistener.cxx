@@ -94,10 +94,7 @@ FormulaGroupAreaListener::FormulaGroupAreaListener( const ScRange& rRange, const
 FormulaGroupAreaListener::~FormulaGroupAreaListener()
 {
     SAL_INFO( "sc.core.grouparealistener",
-            "FormulaGroupAreaListener dtor this " << this <<
-            " range " << (maRange == BCA_LISTEN_ALWAYS ? "LISTEN-ALWAYS" : maRange.Format(SCA_VALID)) <<
-            " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen <<
-            ", col/tab " << mpColumn->GetCol() << "/" << mpColumn->GetTab());
+            "FormulaGroupAreaListener dtor this " << this);
 }
 
 ScRange FormulaGroupAreaListener::getListeningRange() const
