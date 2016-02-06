@@ -115,7 +115,7 @@ oslPipe __osl_createPipeImpl()
     pPipeImpl = (oslPipe)calloc(1, sizeof(struct oslPipeImpl));
     pPipeImpl->m_nRefCount =1;
     pPipeImpl->m_bClosed = sal_False;
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pPipeImpl->m_bIsInShutdown = sal_False;
     pPipeImpl->m_bIsAccepting = sal_False;
 #endif
@@ -321,7 +321,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
 void SAL_CALL osl_closePipe( oslPipe pPipe )
 {
     int nRet;
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     size_t     len;
     struct sockaddr_un addr;
     int fd;
@@ -341,10 +341,10 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     ConnFD = pPipe->m_Socket;
 
     /*
-      Thread does not return from accept on linux, so
+      Thread does not return from accept on some operating systems, so
       connect to the accepting pipe
      */
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     if ( pPipe->m_bIsAccepting )
     {
         pPipe->m_bIsInShutdown = sal_True;
@@ -356,7 +356,11 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 
         addr.sun_family = AF_UNIX;
         strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path));
+#if defined(FREEBSD)
+        len = SUN_LEN(&addr);
+#else
         len = sizeof(addr);
+#endif
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
 #if OSL_DEBUG_LEVEL > 1
@@ -367,7 +371,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 #endif /* OSL_DEBUG_LEVEL */
         close(fd);
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
 
     nRet = shutdown(ConnFD, 2);
@@ -408,13 +412,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pPipe->m_bIsAccepting = sal_True;
 #endif
 
     s = accept(pPipe->m_Socket, NULL, NULL);
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     pPipe->m_bIsAccepting = sal_False;
 #endif
 
@@ -424,13 +428,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         return NULL;
     }
 
-#if defined(LINUX)
+#if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     if ( pPipe->m_bIsInShutdown  )
     {
         close(s);
         return NULL;
     }
-#endif /* LINUX */
+#endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
     else
     {
         /* alloc memory */
