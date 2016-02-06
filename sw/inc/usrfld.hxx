@@ -34,6 +34,7 @@ class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
     OUString  aName;
     OUString  aContent;
     sal_uInt16  nType;
+    sal_uInt32  nFormat = 0;
 
 public:
     SwUserFieldType( SwDoc* pDocPtr, const OUString& );
@@ -55,6 +56,9 @@ public:
 
     inline sal_uInt16           GetType() const;
     inline void             SetType(sal_uInt16);
+
+    inline sal_uInt32 GetFormat() const                 { return nFormat; }
+    inline void SetFormat(sal_uInt32 nFormatVal)           { nFormat = nFormatVal; }
 
     bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( bool b )    { bDeleted = b; }

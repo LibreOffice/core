@@ -292,15 +292,15 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
 
                         if (pType->GetType() == UF_STRING)
                         {
-                            m_pValueED->SetText(pType->GetContent());
+                            m_pValueED->SetText(pType->GetContent(pType->GetFormat()));
                             m_pNumFormatLB->SelectEntryPos(0);
                         }
                         else
-                            m_pValueED->SetText(pType->GetContent());
+                            m_pValueED->SetText(pType->GetContent(pType->GetFormat()));
                     }
                 }
                 else
-                    m_pValueED->SetText(pType->GetContent());
+                    m_pValueED->SetText(pType->GetContent(pType->GetFormat()));
             }
             else
             {
@@ -1031,6 +1031,8 @@ IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
                         static_cast<SwUserFieldType*>(pType)->SetContent(m_pValueED->GetText(), nNumberFormat);
                         static_cast<SwUserFieldType*>(pType)->SetType(
                             nNumFormatPos == 0 ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR );
+                        static_cast<SwUserFieldType*>(pType)->SetFormat(
+                            nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat() );
                     }
                 }
                 else
@@ -1066,6 +1068,7 @@ IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
                     {
                         aType.SetType(nNumFormatPos == 0 ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
                         aType.SetContent( sValue, nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat() );
+                        aType.SetFormat( nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat() );
                         m_pSelectionLB->InsertEntry(sName);
                         m_pSelectionLB->SelectEntry(sName);
                         GetFieldMgr().InsertFieldType( aType ); // Userfld new

@@ -1146,8 +1146,12 @@ bool SwFieldMgr::InsertField(
                 pTyp = static_cast<SwUserFieldType*>( pCurShell->InsertFieldType(
                     SwUserFieldType(pCurShell->GetDoc(), rData.m_sPar1)) );
             }
-            if (pTyp->GetContent(nFormatId) != rData.m_sPar2)
+            OUString usrfldcontent(pTyp->GetContent(nFormatId));
+            if ( !usrfldcontent.equals(rData.m_sPar2))
+            {
+                pTyp->SetFormat((sal_uInt32)nFormatId);
                 pTyp->SetContent(rData.m_sPar2, nFormatId);
+            }
             pField = new SwUserField(pTyp, 0, nFormatId);
             if (pField->GetSubType() != nSubType)
                 pField->SetSubType(nSubType);

@@ -37,8 +37,8 @@ using namespace ::com::sun::star;
 
 // Userfields
 
-SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
-    : SwValueField(pTyp, nFormat),
+SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormatVal)
+    : SwValueField(pTyp, nFormatVal),
     nSubType(nSub)
 {
 }
@@ -163,12 +163,12 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
         EnableFormat(false);    // Do not use a Numberformatter
 }
 
-OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, sal_uInt16 nLng)
+OUString SwUserFieldType::Expand(sal_uInt32 nFormatVal, sal_uInt16 nSubType, sal_uInt16 nLng)
 {
     if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
         EnableFormat();
-        return ExpandValue(nValue, nFormat, nLng);
+        return ExpandValue(nValue, nFormatVal, nLng);
     }
 
     EnableFormat(false);    // Do not use a Numberformatter
@@ -183,6 +183,7 @@ SwFieldType* SwUserFieldType::Copy() const
     pTmp->bValidValue   = bValidValue;
     pTmp->nValue        = nValue;
     pTmp->bDeleted      = bDeleted;
+    pTmp->nFormat       = nFormat;
 
     return pTmp;
 }
@@ -229,38 +230,39 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     return nValue;
 }
 
-OUString SwUserFieldType::GetContent( sal_uInt32 nFormat )
+OUString SwUserFieldType::GetContent( sal_uInt32 nFormatVal )
 {
-    if (nFormat && nFormat != SAL_MAX_UINT32)
+    if (nFormatVal && nFormatVal != SAL_MAX_UINT32)
     {
         OUString sFormattedValue;
         Color* pCol = nullptr;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-        pFormatter->GetOutputString(GetValue(), nFormat, sFormattedValue, &pCol);
+        pFormatter->GetOutputString(GetValue(), nFormatVal, sFormattedValue, &pCol);
         return sFormattedValue;
     }
 
     return aContent;
 }
 
-void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
+void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormatVal )
 {
     if( aContent != rStr )
     {
         aContent = rStr;
 
-        if (nFormat && nFormat != SAL_MAX_UINT32)
+        if (nFormatVal && nFormatVal != SAL_MAX_UINT32)
         {
             double fValue;
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-            if (pFormatter->IsNumberFormat(rStr, nFormat, fValue))
+            if (pFormatter->IsNumberFormat(rStr, nFormatVal, fValue))
             {
                 SetValue(fValue);
-                aContent = DoubleToString(fValue, nFormat);
+                SetFormat(nFormatVal);
+                aContent = DoubleToString(fValue, nFormatVal);
             }
         }
 
