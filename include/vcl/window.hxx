@@ -27,7 +27,7 @@
 #include <vcl/pointr.hxx>
 #include <tools/wintypes.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
-#include <vcl/apptypes.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/keycodes.hxx>

@@ -34,7 +34,8 @@
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/apptypes.hxx>
+#include <vcl/inputtypes.hxx>
+#include <vcl/exceptiontypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/metric.hxx>
@@ -424,7 +425,7 @@ public:
 
      @remark This is not actually an exception. It merely takes an
         error code, then in most cases aborts. The list of exception
-        identifiers can be found at include/vcl/apptypes.hxx - each
+        identifiers can be found at include/vcl/inputtypes.hxx - each
         one starts with EXC_*
 
      @param nError      The error code identifier
@@ -575,7 +576,7 @@ public:
 
     /** Determine if there are any pending input events.
 
-     @param     nType   input identifier, defined in include/vcl/apptypes.hxx
+     @param     nType   input identifier, defined in include/vcl/inputtypes.hxx
                         The default is VCL_INPUT_ANY.
 
      @returns   true if there are pending events, false if not.

@@ -24,25 +24,25 @@
 
 #include <sal/types.h>
 
-#include <vcl/apptypes.hxx>
+#include <vcl/inputtypes.hxx>
 
-#include "headless/svpinst.hxx"
-#include "headless/svpframe.hxx"
-#include "headless/svpdummies.hxx"
-#include "headless/svpvd.hxx"
+#include <headless/svpinst.hxx>
+#include <headless/svpframe.hxx>
+#include <headless/svpdummies.hxx>
+#include <headless/svpvd.hxx>
 #ifdef IOS
-#include "quartz/salbmp.h"
-#include "quartz/salgdi.h"
-#include "quartz/salvd.h"
+#include <quartz/salbmp.h>
+#include <quartz/salgdi.h>
+#include <quartz/salvd.h>
 #endif
-#include "headless/svpbmp.hxx"
-#include "headless/svpgdi.hxx"
+#include <headless/svpbmp.hxx>
+#include <headless/svpgdi.hxx>
 
-#include <salframe.hxx>
-#include <svdata.hxx>
-#include <unx/gendata.hxx>
+#include "salframe.hxx"
+#include "svdata.hxx"
+#include "unx/gendata.hxx"
 // FIXME: remove when we re-work the svp mainloop
-#include <unx/salunxtime.h>
+#include "unx/salunxtime.h"
 
 bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 {

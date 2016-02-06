@@ -13,17 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-06 12:31:27 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./basctl/inc/pch/precompiled_basctl.hxx "/opt/lo/bin/make basctl.build" --find-conflicts
+ ./bin/update_pch_bisect ./basctl/inc/pch/precompiled_basctl.hxx "make basctl.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <climits>
-#include <config_features.h>
 #include <config_global.h>
 #include <config_typesizes.h>
 #include <config_vcl.h>
@@ -57,7 +56,6 @@
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
@@ -114,7 +112,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
@@ -146,6 +143,7 @@
 #include <vcl/image.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
@@ -164,6 +162,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -290,6 +289,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -368,8 +368,17 @@
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/editstat.hxx>
+#include <editeng/eedata.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/numdef.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/paragraphdata.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/svxfont.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -562,6 +571,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/configitem.hxx>
+#include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
 #include <unotools/readwritemutexguard.hxx>

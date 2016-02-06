@@ -13,16 +13,15 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-06 12:33:16 using:
  ./bin/update_pch cppcanvas cppcanvas --cutoff=11 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./cppcanvas/inc/pch/precompiled_cppcanvas.hxx "/opt/lo/bin/make cppcanvas.build" --find-conflicts
+ ./bin/update_pch_bisect ./cppcanvas/inc/pch/precompiled_cppcanvas.hxx "make cppcanvas.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
 #include <config_global.h>
 #include <config_typesizes.h>
 #include <config_vcl.h>
@@ -49,7 +48,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>
@@ -79,7 +77,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <sal/alloca.h>
 #include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
@@ -91,7 +88,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
@@ -110,6 +106,7 @@
 #include <vcl/hatch.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/lineinfo.hxx>

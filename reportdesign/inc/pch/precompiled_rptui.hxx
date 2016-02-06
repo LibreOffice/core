@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-07 21:31:36 using:
+ Generated on 2016-02-06 12:32:02 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rptui.hxx "/opt/lo/bin/make reportdesign.build" --find-conflicts
+ ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rptui.hxx "make reportdesign.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -54,12 +54,12 @@
 #include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
@@ -112,7 +112,6 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
@@ -143,6 +142,7 @@
 #include <vcl/image.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
@@ -367,6 +367,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/outliner.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>

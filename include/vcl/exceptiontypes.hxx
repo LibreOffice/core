@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_APPTYPES_HXX
-#define INCLUDED_VCL_APPTYPES_HXX
-
-#include <vcl/dllapi.h>
-#include <o3tl/typed_flags_set.hxx>
+#ifndef INCLUDED_VCL_EXCEPTIONTYPES_HXX
+#define INCLUDED_VCL_EXCEPTIONTYPES_HXX
 
 #define EXC_RSCNOTLOADED   ((sal_uInt16)0x0100)
 #define EXC_SYSTEM         ((sal_uInt16)0x0300)
@@ -29,22 +26,6 @@
 #define EXC_MAJORTYPE      ((sal_uInt16)0xFF00)
 #define EXC_MINORTYPE      ((sal_uInt16)0x00FF)
 
-enum class VclInputFlags {
-    NONE                  = 0x0000,
-    MOUSE                 = 0x0001,
-    KEYBOARD              = 0x0002,
-    PAINT                 = 0x0004,
-    TIMER                 = 0x0008,
-    OTHER                 = 0x0010,
-    APPEVENT              = 0x0020,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<VclInputFlags> : is_typed_flags<VclInputFlags, 0x003f> {};
-}
-
-#define VCL_INPUT_ANY                 (VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT | VclInputFlags::TIMER | VclInputFlags::OTHER | VclInputFlags::APPEVENT)
-
-#endif // INCLUDED_VCL_APPTYPES_HXX
+#endif // INCLUDED_VCL_EXCEPTIONTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

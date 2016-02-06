@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-07 21:31:36 using:
+ Generated on 2016-02-06 12:32:12 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rpt.hxx "/opt/lo/bin/make reportdesign.build" --find-conflicts
+ ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rpt.hxx "make reportdesign.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -57,7 +57,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
@@ -110,7 +109,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/apptypes.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
@@ -133,6 +131,7 @@
 #include <vcl/hatch.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/lineinfo.hxx>
@@ -338,6 +337,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/charclass.hxx>
+#include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>

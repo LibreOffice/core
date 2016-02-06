@@ -21,19 +21,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "osl/module.hxx"
+#include <osl/module.hxx>
 
-#include "unx/salunx.h"
-#include "unx/saldata.hxx"
-#include "unx/saldisp.hxx"
-#include "unx/geninst.h"
-#include "unx/genpspgraphics.h"
-#include "unx/salframe.h"
-#include "unx/genprn.h"
-#include "unx/sm.hxx"
+#include <unx/salunx.h>
+#include <unx/saldata.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
+#include <unx/salframe.h>
+#include <unx/genprn.h>
+#include <unx/sm.hxx>
 
-#include "vcl/apptypes.hxx"
-#include "vcl/helper.hxx"
+#include <vcl/inputtypes.hxx>
+#include <vcl/helper.hxx>
 
 #include "salwtype.hxx"
 #include <sal/macros.h>
