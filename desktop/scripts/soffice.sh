@@ -31,10 +31,6 @@ export LC_ALL
 SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
 
-# Uncomment the line below if you suspect that OpenGL is not
-# working on your system.
-# SAL_NOOPENGL=true; export SAL_NOOPENGL
-
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 
