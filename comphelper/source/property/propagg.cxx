@@ -19,6 +19,7 @@
 
 #include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -46,34 +47,32 @@ namespace comphelper
 
     namespace
     {
-        const Property* lcl_findPropertyByName( const Sequence< Property >& _rProps, const OUString& _rName )
+        const Property* lcl_findPropertyByName( const std::vector< Property >& _rProps, const OUString& _rName )
         {
-            sal_Int32 nLen = _rProps.getLength();
-            const Property* pProperties = _rProps.getConstArray();
             Property aNameProp(_rName, 0, Type(), 0);
-            const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
-            if ( pResult && ( pResult == pProperties + nLen || pResult->Name != _rName) )
-                pResult = nullptr;
+            auto pResult = ::std::lower_bound(_rProps.begin(), _rProps.end(), aNameProp, PropertyCompareByName());
+            if ( pResult == _rProps.end() || pResult->Name != _rName )
+                return nullptr;
 
-            return pResult;
+            return &*pResult;
         }
     }
 
 OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         const  Sequence< Property >& _rProperties, const  Sequence< Property >& _rAggProperties,
         IPropertyInfoService* _pInfoService, sal_Int32 _nFirstAggregateId )
-    :m_aProperties( _rProperties )
+    :m_aProperties( comphelper::sequenceToContainer<std::vector<css::beans::Property>>(_rProperties) )
 {
     sal_Int32 nDelegatorProps = _rProperties.getLength();
     sal_Int32 nAggregateProps = _rAggProperties.getLength();
 
     // make room for all properties
     sal_Int32 nMergedProps = nDelegatorProps + nAggregateProps;
-    m_aProperties.realloc( nMergedProps );
+    m_aProperties.resize( nMergedProps );
 
     const   Property* pAggregateProps   = _rAggProperties.getConstArray();
     const   Property* pDelegateProps    = _rProperties.getConstArray();
-            Property* pMergedProps = m_aProperties.getArray();
+    std::vector<css::beans::Property>::iterator pMergedProps = m_aProperties.begin();
 
     // if properties are present both at the delegatee and the aggregate, then the former are supposed to win.
     // So, we'll need an existence check.
@@ -115,7 +114,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
             nHandle = nAggregateHandle++;
         else
         {   // check if we alread have a property with the given handle
-            const  Property* pPropsTilNow = m_aProperties.getConstArray();
+            auto pPropsTilNow = m_aProperties.begin();
             for ( sal_Int32 nCheck = 0; nCheck < nMPLoop; ++nCheck, ++pPropsTilNow )
                 if ( pPropsTilNow->Handle == nHandle )
                 {   // conflicts -> use another one (which we don't check anymore, assuming _nFirstAggregateId was large enough)
@@ -131,13 +130,13 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         ++nMPLoop;
         ++pMergedProps;
     }
-    m_aProperties.realloc( nMergedProps );
-    pMergedProps = m_aProperties.getArray();    // reset, needed again below
+    m_aProperties.resize( nMergedProps );
+    pMergedProps = m_aProperties.begin();    // reset, needed again below
 
     // sort the properties by name
     ::std::sort( pMergedProps, pMergedProps+nMergedProps, PropertyCompareByName());
 
-    pMergedProps = m_aProperties.getArray();
+    pMergedProps = m_aProperties.begin();
 
     // sync the map positions
     for ( nMPLoop = 0; nMPLoop < nMergedProps; ++nMPLoop, ++pMergedProps )
@@ -201,7 +200,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
     bool bRet = i != m_aPropertyAccessors.end();
     if (bRet)
     {
-        const css::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
+        const css::beans::Property& rProperty = m_aProperties[(*i).second.nPos];
         if (_pPropName)
             *_pPropName = rProperty.Name;
         if (_pAttributes)
@@ -234,8 +233,8 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             *_pOriginalHandle = (*i).second.nOriginalHandle;
         if (_pPropName)
         {
-            OSL_ENSURE((*i).second.nPos < m_aProperties.getLength(),"Invalid index for sequence!");
-            const css::beans::Property& rProperty = m_aProperties.getConstArray()[(*i).second.nPos];
+            OSL_ENSURE((*i).second.nPos < (sal_Int32)m_aProperties.size(),"Invalid index for sequence!");
+            const css::beans::Property& rProperty = m_aProperties[(*i).second.nPos];
             *_pPropName = rProperty.Name;
         }
     }
@@ -246,7 +245,7 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
 
 css::uno::Sequence< css::beans::Property> OPropertyArrayAggregationHelper::getProperties()
 {
-    return m_aProperties;
+    return comphelper::containerToSequence(m_aProperties);
 }
 
 
@@ -258,89 +257,15 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     const OUString* pReqProps = _rPropNames.getConstArray();
     sal_Int32 nReqLen = _rPropNames.getLength();
 
-#if OSL_DEBUG_LEVEL > 0
-    // assure that the sequence is sorted
-    {
-        const OUString* pLookup = _rPropNames.getConstArray();
-        const OUString* pEnd = _rPropNames.getConstArray() + _rPropNames.getLength() - 1;
-        for (; pLookup < pEnd; ++pLookup)
-        {
-            const OUString* pCompare = pLookup + 1;
-            const OUString* pCompareEnd = pEnd + 1;
-            for (; pCompare < pCompareEnd; ++pCompare)
-            {
-                OSL_ENSURE(pLookup->compareTo(*pCompare) < 0, "OPropertyArrayAggregationHelper::fillHandles : property names are not sorted!");
-            }
-        }
-    }
-#endif
-
-    const css::beans::Property* pCur = m_aProperties.getConstArray();
-    const css::beans::Property* pEnd = m_aProperties.getConstArray() + m_aProperties.getLength();
-
+    Property aNameProp;
     for( sal_Int32 i = 0; i < nReqLen; ++i )
     {
-        // determine the logarithm
-        sal_uInt32 n = (sal_uInt32)(pEnd - pCur);
-        sal_Int32 nLog = 0;
-        while( n )
+        aNameProp.Name = pReqProps[i];
+        auto findIter = ::std::lower_bound(m_aProperties.begin(), m_aProperties.end(), aNameProp, PropertyCompareByName());
+        if ( findIter != m_aProperties.end() )
         {
-            nLog += 1;
-            n = n >> 1;
-        }
-
-        // (Number of properties yet to be found) * (Log2 of properties yet to be searched)
-        if( (nReqLen - i) * nLog >= pEnd - pCur )
-        {
-            // linear search is better
-            while( pCur < pEnd && pReqProps[i] > pCur->Name )
-            {
-                pCur++;
-            }
-            if( pCur < pEnd && pReqProps[i] == pCur->Name )
-            {
-                _pHandles[i] = pCur->Handle;
-                nHitCount++;
-            }
-            else
-                _pHandles[i] = -1;
-        }
-        else
-        {
-            // binary search is better
-            sal_Int32   nCompVal = 1;
-            const css::beans::Property*  pOldEnd = pEnd--;
-            const css::beans::Property*  pMid = pCur;
-
-            while( nCompVal != 0 && pCur <= pEnd )
-            {
-                pMid = (pEnd - pCur) / 2 + pCur;
-
-                nCompVal = pReqProps[i].compareTo( pMid->Name );
-
-                if( nCompVal > 0 )
-                    pCur = pMid + 1;
-                else
-                    pEnd = pMid - 1;
-            }
-
-            if( nCompVal == 0 )
-            {
-                _pHandles[i] = pMid->Handle;
-                nHitCount++;
-                pCur = pMid +1;
-            }
-            else if( nCompVal > 0 )
-            {
-                _pHandles[i] = -1;
-                pCur = pMid + 1;
-            }
-            else
-            {
-                _pHandles[i] = -1;
-                pCur = pMid;
-            }
-            pEnd = pOldEnd;
+            _pHandles[i] = findIter->Handle;
+            nHitCount++;
         }
     }
     return nHitCount;

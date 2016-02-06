@@ -25,6 +25,7 @@
 #include <comphelper/comphelperdllapi.h>
 
 #include <map>
+#include <vector>
 
 
 //= property helper classes
@@ -91,7 +92,7 @@ class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper: public ::cppu::IProp
     friend class OPropertySetAggregationHelper;
 protected:
 
-    css::uno::Sequence< css::beans::Property> m_aProperties;
+    std::vector<css::beans::Property>         m_aProperties;
     internal::PropertyAccessorMap             m_aPropertyAccessors;
 
 public:
