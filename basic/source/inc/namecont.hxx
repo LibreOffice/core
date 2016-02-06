@@ -72,8 +72,8 @@ class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
     typedef std::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
-    css::uno::Sequence< OUString > mNames;
-    css::uno::Sequence< css::uno::Any > mValues;
+    std::vector< OUString > mNames;
+    std::vector< css::uno::Any > mValues;
     sal_Int32 mnElementCount;
 
     css::uno::Type mType;
