@@ -348,15 +348,25 @@ public class Helper
         return sURL;
     }
 
+    private static void close(BufferedReader c) {
+        if (c == null) return;
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected static String EachLine( String sURL )
     {
         String sText = "";
+        BufferedReader aBufReader = null;
         try
         {
             URL aURL = new URL( sURL );
             File aFile = new File( aURL.getFile() );
             InputStreamReader aInputReader = new InputStreamReader( new FileInputStream( aFile ), "UTF-8" );
-            BufferedReader aBufReader = new BufferedReader( aInputReader );
+            aBufReader = new BufferedReader( aInputReader );
 
             StringBuffer aBuf = new StringBuffer();
             String sEachLine = aBufReader.readLine();
@@ -371,9 +381,11 @@ public class Helper
             sText = aBuf.toString();
 
             aBufReader.close();
-        } catch ( Exception e )
-        {
+        } catch ( Exception e ) {
             e.printStackTrace();
+        }
+        finally {
+            close(aBufReader);
         }
         return sText;
     }
