@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <osl/diagnose.h>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }

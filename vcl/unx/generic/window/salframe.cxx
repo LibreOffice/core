@@ -33,7 +33,7 @@
 #include "vcl/layout.hxx"
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/settings.hxx"
-#include "vcl/bmpacc.hxx"
+#include "vcl/bitmapaccess.hxx"
 #include "vcl/opengl/OpenGLContext.hxx"
 
 #include <prex.h>

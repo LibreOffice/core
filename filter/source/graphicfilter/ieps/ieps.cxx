@@ -30,7 +30,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/process.h>

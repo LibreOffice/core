@@ -107,7 +107,7 @@
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/checksum.hxx>

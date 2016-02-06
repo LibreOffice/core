@@ -63,7 +63,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfltrit.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/svdpntv.hxx>

@@ -26,7 +26,7 @@
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
 #include "vectdlg.hxx"
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 

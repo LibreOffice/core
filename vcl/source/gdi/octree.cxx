@@ -19,7 +19,7 @@
 
 #include <limits.h>
 
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <impoct.hxx>
 

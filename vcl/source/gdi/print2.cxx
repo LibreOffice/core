@@ -33,7 +33,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <print.h>
 

@@ -12,7 +12,7 @@
 #define INCLUDED_VCL_INC_BITMAPSYMMETRYCHECK_HXX
 
 #include <vcl/bitmap.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 class VCL_DLLPUBLIC BitmapSymmetryCheck
 {

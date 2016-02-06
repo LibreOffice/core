@@ -19,7 +19,7 @@
 
 #include <bmpfast.hxx>
 #include <tools/debug.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #define FAST_ARGB_BGRA
 

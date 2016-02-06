@@ -19,7 +19,7 @@
 
 
 #include <vcl/graphic.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 

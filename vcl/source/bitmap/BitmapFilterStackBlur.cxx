@@ -9,7 +9,7 @@
  */
 
 #include <vcl/BitmapFilterStackBlur.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 namespace
 {

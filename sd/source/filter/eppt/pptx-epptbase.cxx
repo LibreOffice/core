@@ -25,7 +25,7 @@
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphic.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/ustring.hxx>

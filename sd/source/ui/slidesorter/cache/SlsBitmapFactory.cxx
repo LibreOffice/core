@@ -28,7 +28,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/pngwrite.hxx>
 
 namespace sd { namespace slidesorter { namespace view {

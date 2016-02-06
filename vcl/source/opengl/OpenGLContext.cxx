@@ -17,7 +17,7 @@
 #include <vcl/sysdata.hxx>
 
 #include <vcl/pngwrite.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/graphic.hxx>
 
 #include <osl/thread.hxx>

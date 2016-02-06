@@ -31,7 +31,7 @@
 #include "vcl/metaact.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/jobset.hxx"
-#include "vcl/bmpacc.hxx"
+#include "vcl/bitmapaccess.hxx"
 #include "vcl/svapp.hxx"
 #include "toolkit/awt/vclxdevice.hxx"
 #include <vcl/FilterConfigItem.hxx>

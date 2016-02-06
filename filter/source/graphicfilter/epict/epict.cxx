@@ -23,7 +23,7 @@
 #include <vcl/fltcall.hxx>
 
 #include <math.h>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/graphic.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>

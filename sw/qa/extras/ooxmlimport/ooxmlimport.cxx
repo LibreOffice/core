@@ -67,7 +67,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <unotest/assertion_traits.hxx>
 #include <unotools/fltrcfg.hxx>

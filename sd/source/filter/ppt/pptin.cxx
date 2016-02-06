@@ -67,7 +67,7 @@
 #include <svx/svdogrp.hxx>
 #include "propread.hxx"
 #include <cusshow.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include "customshowlist.hxx"
 #include "sddll.hxx"
 

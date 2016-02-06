@@ -34,7 +34,7 @@
 
 #include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/jobdata.hxx>
 #include <vcl/printerinfomanager.hxx>
 #include <vcl/settings.hxx>

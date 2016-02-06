@@ -43,7 +43,7 @@
 #include <svtools/imgdef.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/diagnose_ex.h>

@@ -24,7 +24,7 @@
 #include <rtl/alloc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>

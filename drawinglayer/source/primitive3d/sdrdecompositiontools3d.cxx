@@ -27,7 +27,7 @@
 #include <vcl/vclenum.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>

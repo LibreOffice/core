@@ -21,7 +21,7 @@
 #include <vcl/graphic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>

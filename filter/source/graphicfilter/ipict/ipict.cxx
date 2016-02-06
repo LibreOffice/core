@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include <osl/thread.h>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/graphic.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>

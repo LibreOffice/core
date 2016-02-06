@@ -21,7 +21,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

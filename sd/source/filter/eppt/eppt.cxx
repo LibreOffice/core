@@ -22,7 +22,7 @@
 #include <tools/globname.hxx>
 #include <tools/poly.hxx>
 #include <vcl/graphic.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/gradient.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>

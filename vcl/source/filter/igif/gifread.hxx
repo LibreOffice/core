@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
 #include <vcl/graphic.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #ifdef _GIFPRIVATE
 

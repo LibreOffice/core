@@ -19,7 +19,7 @@
 
 
 #include <vcl/graphic.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
 #include <memory>

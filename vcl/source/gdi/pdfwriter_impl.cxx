@@ -51,7 +51,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/image.hxx>
 #include <vcl/lineinfo.hxx>

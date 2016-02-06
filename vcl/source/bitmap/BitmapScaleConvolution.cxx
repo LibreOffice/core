@@ -20,7 +20,7 @@
 #include "BitmapScaleConvolution.hxx"
 #include "ResampleKernel.hxx"
 
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

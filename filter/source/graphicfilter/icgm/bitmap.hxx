@@ -21,7 +21,7 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
 
 #include "cgm.hxx"
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 class CGM;
 

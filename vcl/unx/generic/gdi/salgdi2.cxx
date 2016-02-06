@@ -36,7 +36,7 @@
 
 #include "generic/printergfx.hxx"
 
-#include "vcl/bmpacc.hxx"
+#include "vcl/bitmapaccess.hxx"
 #include <outdata.hxx>
 
 void X11SalGraphics::CopyScreenArea( Display* pDisplay,

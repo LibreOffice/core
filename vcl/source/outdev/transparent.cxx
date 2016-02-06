@@ -24,7 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

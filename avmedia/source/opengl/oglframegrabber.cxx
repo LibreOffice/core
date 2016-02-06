@@ -13,7 +13,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphic.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 

@@ -22,7 +22,7 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/region.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <bmpfast.hxx>
 

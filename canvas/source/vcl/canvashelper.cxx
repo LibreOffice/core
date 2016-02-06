@@ -43,7 +43,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/poly.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
 

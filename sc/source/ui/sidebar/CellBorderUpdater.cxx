@@ -18,7 +18,7 @@
  */
 
 #include "CellBorderUpdater.hxx"
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

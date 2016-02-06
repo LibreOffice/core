@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_EGIF_GIFLZWC_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_EGIF_GIFLZWC_HXX
 
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 
 // - GIFLZWCompressor -

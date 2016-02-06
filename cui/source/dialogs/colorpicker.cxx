@@ -33,7 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>

@@ -64,7 +64,7 @@
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/pngread.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 using namespace ::com::sun::star;
 

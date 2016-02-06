@@ -34,7 +34,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>

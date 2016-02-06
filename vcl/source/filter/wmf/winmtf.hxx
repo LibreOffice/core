@@ -24,7 +24,7 @@
 #include <vcl/graphic.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/fltcall.hxx>
 

@@ -60,7 +60,7 @@
 #include <accmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/alpha.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>

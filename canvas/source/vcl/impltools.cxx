@@ -40,7 +40,7 @@
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/salbtype.hxx>

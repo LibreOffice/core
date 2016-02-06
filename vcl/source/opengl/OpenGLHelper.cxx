@@ -17,7 +17,7 @@
 #include <rtl/ustring.hxx>
 #include <config_folders.h>
 #include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <memory>
 #include <vcl/pngwrite.hxx>
 #include <vcl/graphic.hxx>

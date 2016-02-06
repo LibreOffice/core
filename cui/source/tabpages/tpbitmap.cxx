@@ -28,7 +28,7 @@
 #include <unotools/localfilehelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <svx/dialmgr.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
 

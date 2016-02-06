@@ -13,7 +13,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <vcl/bitmap.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -23,7 +23,7 @@
 #include "vcl/virdev.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/metaact.hxx"
-#include "vcl/bmpacc.hxx"
+#include "vcl/bitmapaccess.hxx"
 #include <vcl/graphic.hxx>
 
 #include "svdata.hxx"

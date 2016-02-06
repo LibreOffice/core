@@ -36,7 +36,7 @@
 #include "vcl/canvastools.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/outdev.hxx"
-#include "vcl/bmpacc.hxx"
+#include "vcl/bitmapaccess.hxx"
 #include "vcl/virdev.hxx"
 #include "vcl/bitmapex.hxx"
 

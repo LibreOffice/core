@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
 

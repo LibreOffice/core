@@ -21,7 +21,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 
 #include "canvasbitmap.hxx"
 

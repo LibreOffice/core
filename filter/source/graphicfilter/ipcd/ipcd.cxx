@@ -20,7 +20,7 @@
 
 #include "rtl/alloc.h"
 #include <vcl/graphic.hxx>
-#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fltcall.hxx>
 #include <svl/solar.hrc>
