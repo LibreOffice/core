@@ -101,6 +101,7 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
+#include <desktop/crashreport.hxx>
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -113,6 +114,10 @@
 
 #if ENABLE_TELEPATHY
 #include <tubes/manager.hxx>
+#endif
+
+#if HAVE_FEATURE_BREAKPAD
+#include <fstream>
 #endif
 
 #if defined MACOSX
@@ -1021,6 +1026,50 @@ bool Desktop::isUIOnSessionShutdownAllowed()
         ::get();
 }
 
+namespace {
+
+bool crashReportInfoExists()
+{
+#if HAVE_FEATURE_BREAKPAD
+    std::string path = CrashReporter::getIniFileName();
+    std::ifstream aFile(path);
+    while (!aFile.eof())
+    {
+        std::string line;
+        std::getline(aFile, line);
+        int sep = line.find('=');
+        if (sep >= 0)
+        {
+            std::string key = line.substr(0, sep);
+            std::string value = line.substr(sep + 1);
+            if (key == "DumpFile")
+                return true;
+        }
+    }
+#endif
+    return false;
+}
+
+#if HAVE_FEATURE_BREAKPAD
+void handleCrashReport()
+{
+    static const char SERVICENAME_CRASHREPORT[] = "com.sun.star.comp.svx.CrashReportUI";
+
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
+    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
+        xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_CRASHREPORT, xContext),
+        css::uno::UNO_QUERY_THROW);
+
+    Reference< css::util::XURLTransformer > xURLParser =
+        css::util::URLTransformer::create(::comphelper::getProcessComponentContext());
+
+    css::util::URL aURL;
+    css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+    bool bRet = false;
+    aRet >>= bRet;
+}
+#endif
 
 /** @short  check if recovery must be started or not.
 
@@ -1042,7 +1091,7 @@ void impl_checkRecoveryState(bool& bCrashed           ,
                              bool& bRecoveryDataExists,
                              bool& bSessionDataExists )
 {
-    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
+    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get() || crashReportInfoExists();
     bool elements = officecfg::Office::Recovery::RecoveryList::get()->
         hasElements();
     bool session
@@ -1089,6 +1138,8 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     return !bEmergencySave || bRet;
 }
 
+}
+
 /*
  * Save all open documents so they will be reopened
  * the next time the application is started
@@ -1096,7 +1147,6 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
  * returns sal_True if at least one document could be saved...
  *
  */
-
 bool Desktop::SaveTasks()
 {
     return impl_callRecoveryUI(
@@ -2227,6 +2277,11 @@ void Desktop::OpenClients()
     // need some time, where the user wont see any results and wait for finishing the office startup ...
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
+#if HAVE_FEATURE_BREAKPAD
+    if (crashReportInfoExists())
+        handleCrashReport();
+#endif
+
     if ( ! bAllowRecoveryAndSessionManagement )
     {
         try
@@ -2301,6 +2356,9 @@ void Desktop::OpenClients()
             }
         }
     }
+#if HAVE_FEATURE_BREAKPAD
+    CrashReporter::writeCommonInfo();
+#endif
 
     OfficeIPCThread::EnableRequests();
 
