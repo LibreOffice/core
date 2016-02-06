@@ -124,6 +124,7 @@ public class TextDocument
         {
             // TODO: it seems the whole project does not really have an error handling. Other methods
             // seem to generally silence errors, so we can't do anything else here...
+            e.printStackTrace();
         }
 
         if (bShowStatusIndicator)
