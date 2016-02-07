@@ -42,7 +42,6 @@
 
 using com::sun::star::sdbc::XResultSetMetaData;
 
-using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 
@@ -66,17 +65,17 @@ Any SequenceResultSet::getValue( sal_Int32 columnIndex )
 SequenceResultSet::SequenceResultSet(
     const ::rtl::Reference< RefCountedMutex > & mutex,
     const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
-    const Sequence< OUString > &colNames,
-    const Sequence< Sequence< Any > > &data,
+    const std::vector< OUString > &colNames,
+    const std::vector< std::vector< Any > > &data,
     const Reference< com::sun::star::script::XTypeConverter > & tc,
     const ColumnMetaDataVector *pVec) :
-    BaseResultSet( mutex, owner, data.getLength(), colNames.getLength(),tc ),
+    BaseResultSet( mutex, owner, data.size(), colNames.size(), tc ),
     m_data(data ),
     m_columnNames( colNames )
 {
     if( pVec )
     {
-        m_meta = new SequenceResultSetMetaData( *pVec, m_columnNames.getLength() );
+        m_meta = new SequenceResultSetMetaData( *pVec, m_columnNames.size() );
     }
 }
 

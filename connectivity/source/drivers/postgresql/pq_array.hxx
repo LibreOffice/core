@@ -40,13 +40,14 @@
 #include <com/sun/star/sdbc/XArray.hpp>
 
 #include "pq_connection.hxx"
+#include <vector>
 
 namespace pq_sdbc_driver
 {
 
 class Array : public cppu::WeakImplHelper< com::sun::star::sdbc::XArray >
 {
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_data;
+    std::vector< com::sun::star::uno::Any > m_data;
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > m_owner;
     com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > m_tc;
     rtl::Reference< RefCountedMutex > m_refMutex;
@@ -54,7 +55,7 @@ class Array : public cppu::WeakImplHelper< com::sun::star::sdbc::XArray >
 public:
     Array(
         const rtl::Reference< RefCountedMutex > & mutex,
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & data,
+        const std::vector< com::sun::star::uno::Any > & data,
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & owner,
         const com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > &tc) :
         m_data( data ),

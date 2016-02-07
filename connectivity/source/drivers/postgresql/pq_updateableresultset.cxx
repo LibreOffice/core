@@ -90,24 +90,24 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     PGresult *result,
     const OUString &schema,
     const OUString &table,
-    const com::sun::star::uno::Sequence< OUString > &primaryKey )
+    const std::vector< OUString > &primaryKey )
 {
     ConnectionSettings *pSettings = *ppSettings;
     sal_Int32 columnCount = PQnfields( result );
     sal_Int32 rowCount = PQntuples( result );
-    Sequence< OUString > columnNames( columnCount );
+    std::vector< OUString > columnNames( columnCount );
     for( int i = 0 ; i < columnCount ; i ++ )
     {
         char * name = PQfname( result, i );
         columnNames[i] = OUString( name, strlen(name), pSettings->encoding );
     }
-    Sequence< Sequence< Any > > data( rowCount );
+    std::vector< std::vector< Any > > data( rowCount );
 
     // copy all the data into unicode strings (also binaries, as we yet
     // don't know, what a binary is and what not!)
     for( int row = 0 ; row < rowCount ; row ++ )
     {
-        Sequence< Any > aRow( columnCount );
+        std::vector< Any > aRow( columnCount );
         for( int col = 0 ; col < columnCount ; col ++ )
         {
             if( ! PQgetisnull( result, row, col ) )
@@ -122,7 +122,7 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     }
 
     UpdateableResultSet *pRS =  new UpdateableResultSet(
-        mutex, owner, columnNames, data, ppSettings, schema, table , primaryKey );
+        mutex, owner, columnNames, data, ppSettings, schema, table, primaryKey );
 
     Reference <XCloseable > ret = pRS; // give it an refcount
 
@@ -176,11 +176,11 @@ com::sun::star::uno::Sequence< sal_Int8> UpdateableResultSet::getImplementationI
 OUString UpdateableResultSet::buildWhereClause()
 {
     OUString ret;
-    if( m_primaryKey.getLength() )
+    if( m_primaryKey.size() )
     {
         OUStringBuffer buf( 128 );
         buf.append( " WHERE " );
-        for( int i = 0 ; i < m_primaryKey.getLength() ; i ++ )
+        for( size_t i = 0 ; i < m_primaryKey.size() ; i ++ )
         {
             if( i > 0 )
                 buf.append( " AND " );
@@ -251,8 +251,8 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException, s
 
     // reflect the changes !
     m_rowCount ++;
-    m_data.realloc( m_rowCount );
-    m_data[m_rowCount-1] = Sequence< Any > ( m_fieldCount );
+    m_data.resize( m_rowCount );
+    m_data[m_rowCount-1] = std::vector< Any > ( m_fieldCount );
     Reference< XGeneratedResultSet > result( stmt, UNO_QUERY );
     if( result.is() )
     {
@@ -375,7 +375,7 @@ void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException, s
         m_data[i-1] = m_data[i];
     }
     m_rowCount --;
-    m_data.realloc( m_rowCount );
+    m_data.resize( m_rowCount );
  }
 
 void UpdateableResultSet::cancelRowUpdates(  ) throw (SQLException, RuntimeException, std::exception)

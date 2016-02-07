@@ -54,9 +54,9 @@ namespace pq_sdbc_driver
 class SequenceResultSet : public BaseResultSet
 {
 protected:
-    ::com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > m_data;
+    std::vector< std::vector< ::com::sun::star::uno::Any > > m_data;
 
-    ::com::sun::star::uno::Sequence< OUString > m_columnNames;
+    std::vector< OUString > m_columnNames;
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > m_meta;
 
 protected:
@@ -73,8 +73,8 @@ public:
     SequenceResultSet(
         const ::rtl::Reference< RefCountedMutex > & mutex,
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
-        const com::sun::star::uno::Sequence< OUString > &colNames,
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
+        const std::vector< OUString > &colNames,
+        const std::vector< std::vector< com::sun::star::uno::Any > > &data,
         const com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > &tc,
         const ColumnMetaDataVector *pVec = nullptr);
     virtual ~SequenceResultSet();

@@ -137,7 +137,7 @@ void Indexes::refresh()
 
         Reference< XRow > row( rs, UNO_QUERY );
         String2IntMap map;
-        m_values = Sequence< com::sun::star::uno::Any > ();
+        m_values.clear();
         sal_Int32 index = 0;
         while( rs->next() )
         {
@@ -167,9 +167,9 @@ void Indexes::refresh()
             pIndex->setPropertyValue_NoBroadcast_public(
                 st.NAME, makeAny( currentIndexName ) );
 
-            Sequence< sal_Int32 > seq = parseIntArray( row->getString( C_COLUMNS ) );
-            Sequence< OUString > columnNames(seq.getLength());
-            for( int columns = 0 ; columns < seq.getLength() ; columns ++ )
+            std::vector< sal_Int32 > seq = parseIntArray( row->getString( C_COLUMNS ) );
+            Sequence< OUString > columnNames(seq.size());
+            for( size_t columns = 0 ; columns < seq.size() ; columns ++ )
             {
                 columnNames[columns] = column2NameMap[ seq[columns] ];
             }
@@ -178,11 +178,9 @@ void Indexes::refresh()
                 st.PRIVATE_COLUMN_INDEXES, makeAny( columnNames ));
 
             {
-                const int currentIndex = index++;
-                assert(currentIndex  == m_values.getLength());
-                m_values.realloc( index );
-                m_values[currentIndex] = makeAny( prop );
-                map[ currentIndexName ] = currentIndex;
+                m_values.push_back( makeAny( prop ) );
+                map[ currentIndexName ] = index;
+                ++index;
             }
         }
         m_name2index.swap( map );
@@ -256,11 +254,11 @@ void Indexes::dropByIndex( sal_Int32 index )
 
 
     osl::MutexGuard guard( m_refMutex->mutex );
-    if( index < 0 ||  index >= m_values.getLength() )
+    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         OUStringBuffer buf( 128 );
         buf.append( "Indexes: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32) (m_values.getLength() -1) );
+        buf.append( (sal_Int32) (m_values.size() -1) );
         buf.append( ", got " );
         buf.append( index );
         buf.append( ")" );

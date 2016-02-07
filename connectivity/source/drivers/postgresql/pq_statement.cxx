@@ -317,14 +317,14 @@ static void raiseSQLException(
 
 // returns the elements of the primary key of the given table
 // static Sequence< Reference< com::sun::star::beans::XPropertySet > > lookupKeys(
-static Sequence< OUString > lookupKeys(
+static std::vector< OUString > lookupKeys(
     const Reference< com::sun::star::container::XNameAccess > &tables,
     const OUString & table,
     OUString *pSchema,
     OUString *pTable,
     ConnectionSettings *pSettings)
 {
-    Sequence< OUString  > ret;
+    std::vector< OUString  > ret;
     Reference< XKeysSupplier > keySupplier;
     Statics & st = getStatics();
 
@@ -406,7 +406,7 @@ static Sequence< OUString > lookupKeys(
                     Reference< XIndexAccess > ( columns->getColumns(), UNO_QUERY );
 
                 int length = indexAccess->getCount();
-                ret.realloc( length );
+                ret.resize( length );
 //                 printf( "primary key for Table %s is ",
 //                         OUStringToOString( table, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 for( int i = 0 ; i < length ; i ++ )
@@ -420,7 +420,7 @@ static Sequence< OUString > lookupKeys(
 //                 printf( "\n" );
             }
         }
-        if( ! ret.getLength() )
+        if( ! ret.size() )
         {
             if( isLog( pSettings, LogLevel::INFO ) )
             {
@@ -496,7 +496,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         // belonging to the primary key are in the result set, allow updateable result sets
         // otherwise, don't
         OUString table, schema;
-        Sequence< OUString > sourceTableKeys;
+        std::vector< OUString > sourceTableKeys;
         OStringVector vec;
         tokenizeSQL( cmd, vec );
         OUString sourceTable =
@@ -519,7 +519,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
 
                 // check, whether the columns are in the result set (required !)
                 int i;
-                for( i = 0 ; i < sourceTableKeys.getLength() ;  i ++ )
+                for( i = 0 ; i < (int)sourceTableKeys.size() ;  i ++ )
                 {
                     if( -1 == PQfnumber(
                             result,
@@ -530,7 +530,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     }
                 }
 
-                if( sourceTableKeys.getLength() && i == sourceTableKeys.getLength() )
+                if( sourceTableKeys.size() && i == (int)sourceTableKeys.size() )
                 {
                     *(data->pLastResultset) =
                         UpdateableResultSet::createFromPGResultSet(
@@ -546,7 +546,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     buf.append( "." );
                     aReason = buf.makeStringAndClear();
                 }
-                else if( sourceTableKeys.getLength() )
+                else if( sourceTableKeys.size() )
                 {
                     OStringBuffer buf( 128 );
                     buf.append( "can't support updateable resultset for table " );
