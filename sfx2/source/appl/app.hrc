@@ -111,7 +111,7 @@
 #define RID_SVXSTR_GRAFIKLINK                   (RID_SFX_APP_START + 196)
 #define RID_SVXSTR_EDITGRFLINK                  (RID_SFX_APP_START + 197)
 
-// strings for error messsages of OpenGraphics dialog
+// strings for error messages of OpenGraphics dialog
 #define RID_SVXSTR_GRFILTER_OPENERROR           (RID_SFX_APP_START + 198)
 #define RID_SVXSTR_GRFILTER_IOERROR             (RID_SFX_APP_START + 199)
 #define RID_SVXSTR_GRFILTER_FORMATERROR         (RID_SFX_APP_START + 200)
