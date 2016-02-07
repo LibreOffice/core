@@ -160,7 +160,6 @@ class SbiExpression {
 protected:
     OUString      aArgName;
     SbiParser*    pParser;
-    SbiExpression* pNext;            // link at parameter lists
     SbiExprNode*   pExpr;            // expression tree
     SbiExprType   eCurExpr;         // type of expression
     SbiExprMode   m_eMode;          // expression context
@@ -218,8 +217,7 @@ public:                             // numeric constant
 };
 
 class SbiExprList final {            // class for parameters and dims
-    SbiExpression* pFirst;
-    short nExpr;
+    std::vector<SbiExpression*> aData;
     short nDim;
     bool  bError;
     bool  bBracket;
@@ -230,7 +228,7 @@ public:
     static SbiExprList* ParseDimList( SbiParser* );
     bool  IsBracket()               { return bBracket;        }
     bool  IsValid()                 { return !bError; }
-    short GetSize()                 { return nExpr;           }
+    short GetSize()                 { return aData.size();    }
     short GetDims()                 { return nDim;            }
     SbiExpression* Get( short );
     void  Gen( SbiCodeGen& rGen);                    // code generation
