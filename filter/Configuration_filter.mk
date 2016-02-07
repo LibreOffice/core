@@ -324,6 +324,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_WordPerfect_Document \
 	writer_MS_Works_Document \
 	writer_MS_Write \
+	writer_DosWord \
 	writer_ClarisWorks \
 	writer_Mac_Word \
 	writer_Mac_Works \
@@ -367,6 +368,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	WordPerfect \
 	MS_Works \
 	MS_Write \
+	DosWord \
 	ClarisWorks \
 	Mac_Word \
 	Mac_Works \
