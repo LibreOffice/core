@@ -28,13 +28,13 @@ $(eval $(call gb_Module_add_l10n_targets,sd,\
 ifneq ($(OS),DRAGONFLY)
 $(eval $(call gb_Module_add_check_targets,sd,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
+		CppunitTest_sd_svg_export_tests \
 		CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
     CppunitTest_sd_export_tests \
     CppunitTest_sd_filters_test \
     CppunitTest_sd_html_export_tests \
     CppunitTest_sd_tiledrendering \
-    CppunitTest_sd_svg_export_tests \
 ))
 endif
 
