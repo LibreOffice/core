@@ -201,7 +201,7 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
         SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " to " << bState);
 
         if (bState)
-            pSalMenu->Activate();
+            pSalMenu->Activate (action_name);
         else
             pSalMenu->Deactivate (action_name);
     }

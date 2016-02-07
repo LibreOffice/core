@@ -385,10 +385,6 @@ throw ( RuntimeException, std::exception )
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
     SolarMutexGuard aSolarGuard;
-    if ( m_bHasMenuBar )
-    {
-        vcl::MenuInvalidator::Invalidated();
-    }
     {
         if ( m_bDisposed )
             return;
@@ -487,6 +483,8 @@ throw ( RuntimeException, std::exception )
                 pMenuItemHandler->xMenuItemDispatch.clear();
             }
         }
+        if ( m_bHasMenuBar && !m_bActive )
+            m_pVCLMenu->UpdateNativeMenu();
     }
 }
 
@@ -893,9 +891,8 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                                 if ( !bPopupMenu )
                                 {
                                     xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                                    xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                                    if ( m_bHasMenuBar )
-                                        xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                                    if ( !m_bHasMenuBar )
+                                        xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                 }
                             }
                             else if ( !bPopupMenu )
