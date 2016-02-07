@@ -42,33 +42,40 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
     std::string fileEncoding("");
     try
     {
-        if ((kind == libwps::WPS_TEXT) && (creator == libwps::WPS_MSWORKS) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
+        if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
         {
-            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(
-                "Import MsWorks files(libwps)", "CP850");
-            if (pDlg->Execute() == RET_OK)
-            {
-                if (!pDlg->GetEncoding().isEmpty())
-                    fileEncoding=pDlg->GetEncoding().toUtf8().getStr();
-            }
-            // we can fail because we are in headless mode, the user has cancelled conversion, ...
-            else if (pDlg->hasUserCalledCancel())
-                return false;
-        }
-        else if ((kind == libwps::WPS_TEXT) && (creator == libwps::WPS_RESERVED_0) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
-        {
-            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(
-                "Import MsWrite files(libwps)", "CP1252");
-            if (pDlg->Execute() == RET_OK)
-            {
-                if (!pDlg->GetEncoding().isEmpty())
-                    fileEncoding=pDlg->GetEncoding().toUtf8().getStr();
-            }
-            // we can fail because we are in headless mode, the user has cancelled conversion, ...
-            else if (pDlg->hasUserCalledCancel())
-                return false;
-        }
+            OUString title, encoding;
 
+            switch (creator)
+            {
+            case libwps::WPS_MSWORKS:
+                title = "Import MsWorks files(libwps)";
+                encoding = "CP850";
+                break;
+            case libwps::WPS_RESERVED_0: // MS Write
+                title = "Import MsWrite files(libwps)";
+                encoding = "CP1251";
+                break;
+            case libwps::WPS_RESERVED_1: // DosWord
+                title = "Import DosWord files(libwps)";
+                encoding = "CP850";
+                break;
+            default:
+                title = "Import files(libwps)";
+                encoding = "CP850";
+                break;
+            }
+
+            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(title, encoding);
+            if (pDlg->Execute() == RET_OK)
+            {
+                if (!pDlg->GetEncoding().isEmpty())
+                    fileEncoding=pDlg->GetEncoding().toUtf8().getStr();
+            }
+            // we can fail because we are in headless mode, the user has cancelled conversion, ...
+            else if (pDlg->hasUserCalledCancel())
+                return false;
+        }
     }
     catch (css::uno::Exception &e)
     {
@@ -90,11 +97,15 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
         {
             rTypeName = "writer_MS_Works_Document";
         }
-        else
+        else if (creator == libwps::WPS_RESERVED_0)
         {
-            // NOTE: this handles MS Word for DOS too ATM
             rTypeName = "writer_MS_Write";
         }
+        else
+        {
+            rTypeName = "writer_DosWord";
+        }
+
         return true;
     }
 
