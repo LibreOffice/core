@@ -386,7 +386,7 @@ short RemoteFilesDialog::Execute()
 
 void RemoteFilesDialog::Show()
 {
-    SvtFileDialog_Base::Show(true, 0);
+    SvtFileDialog_Base::Show();
 
     if( m_nWidth > 0 && m_nHeight > 0 )
     {

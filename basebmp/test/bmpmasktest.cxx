@@ -185,7 +185,7 @@ public:
             xBitmap = createBitmapDevice( aSize, false,
                                           Format::ThirtyTwoBitTcMaskBGRX,
                                           basebmp::getBitmapDeviceStrideForWidth(
-                                                FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX() ) );
+                                                Format::ThirtyTwoBitTcMaskBGRX, aSize.getX() ) );
             xBitmap->clear(Color(0x80808080));
         }
         { // mpOutput & mpBitmap
@@ -193,7 +193,7 @@ public:
             xOutput = createBitmapDevice( aSize, false,
                                           Format::ThirtyTwoBitTcMaskBGRX,
                                           basebmp::getBitmapDeviceStrideForWidth(
-                                                FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX()) );
+                                                Format::ThirtyTwoBitTcMaskBGRX, aSize.getX()) );
             xOutput->clear(Color(0xffffffff));
         }
 
