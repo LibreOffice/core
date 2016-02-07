@@ -22,6 +22,8 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 
@@ -180,6 +182,27 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 }
 
                 rWriter.attribute("text", pTextSimplePortionPrimitive2D->getText());
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
+            {
+                const MaskPrimitive2D* pMaskPrimitive2D = dynamic_cast<const MaskPrimitive2D*>(pBasePrimitive);
+                rWriter.startElement("mask");
+
+                decomposeAndWrite(pMaskPrimitive2D->getChildren(), rWriter);
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
+            {
+                const UnifiedTransparencePrimitive2D* pUnifiedTransparencePrimitive2D = dynamic_cast<const UnifiedTransparencePrimitive2D*>(pBasePrimitive);
+                rWriter.startElement("unifiedtransparence");
+
+                rWriter.attribute("transparence", pUnifiedTransparencePrimitive2D->getTransparence());
+
                 rWriter.endElement();
             }
             break;
