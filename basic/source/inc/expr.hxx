@@ -160,7 +160,7 @@ class SbiExpression {
 protected:
     OUString      aArgName;
     SbiParser*    pParser;
-    SbiExprNode*   pExpr;            // expression tree
+    std::unique_ptr<SbiExprNode>   pExpr; // expression tree
     SbiExprType   eCurExpr;         // type of expression
     SbiExprMode   m_eMode;          // expression context
     bool          bBased;           // true: easy DIM-part (+BASE)
@@ -199,7 +199,7 @@ public:
     void ConvertToIntConstIfPossible() { pExpr->ConvertToIntConstIfPossible();     }
     const OUString& GetString()     { return pExpr->GetString();  }
     SbiSymDef* GetRealVar()         { return pExpr->GetRealVar(); }
-    SbiExprNode* GetExprNode()      { return pExpr; }
+    SbiExprNode* GetExprNode()      { return pExpr.get();         }
     SbxDataType GetType()           { return pExpr->GetType();    }
     void Gen( RecursiveMode eRecMode = UNDEFINED );
 };
@@ -217,7 +217,7 @@ public:                             // numeric constant
 };
 
 class SbiExprList final {            // class for parameters and dims
-    std::vector<SbiExpression*> aData;
+    std::vector<std::unique_ptr<SbiExpression>> aData;
     short nDim;
     bool  bError;
     bool  bBracket;
@@ -230,9 +230,9 @@ public:
     bool  IsValid()                 { return !bError; }
     short GetSize()                 { return aData.size();    }
     short GetDims()                 { return nDim;            }
-    SbiExpression* Get( short );
+    SbiExpression* Get( size_t );
     void  Gen( SbiCodeGen& rGen);                    // code generation
-    void addExpression( SbiExpression* pExpr );
+    void addExpression( std::unique_ptr<SbiExpression>&& pExpr  );
 };
 
 #endif
