@@ -221,17 +221,15 @@ struct Statics
     OUString IS_ASCENDING;
     ReflectionImplementations refl;
 
-    com::sun::star::uno::Sequence< OUString > tablesRowNames;
-    com::sun::star::uno::Sequence< OUString > columnRowNames;
-    com::sun::star::uno::Sequence< OUString > primaryKeyNames;
-    com::sun::star::uno::Sequence< OUString > tablePrivilegesNames;
-    com::sun::star::uno::Sequence< OUString > schemaNames;
-    com::sun::star::uno::Sequence< OUString > tableTypeNames;
-    com::sun::star::uno::Sequence< OUString > typeinfoColumnNames;
-    com::sun::star::uno::Sequence< OUString > indexinfoColumnNames;
-    com::sun::star::uno::Sequence< OUString > importedKeysColumnNames;
-    com::sun::star::uno::Sequence< OUString > resultSetArrayColumnNames;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > tableTypeData;
+    std::vector< OUString > tablesRowNames;
+    std::vector< OUString > columnRowNames;
+    std::vector< OUString > primaryKeyNames;
+    std::vector< OUString > schemaNames;
+    std::vector< OUString > tableTypeNames;
+    std::vector< OUString > typeinfoColumnNames;
+    std::vector< OUString > indexinfoColumnNames;
+    std::vector< OUString > resultSetArrayColumnNames;
+    std::vector< std::vector< com::sun::star::uno::Any > > tableTypeData;
 
     ColumnMetaDataVector typeInfoMetaData;
     BaseTypeMap baseTypeMap;

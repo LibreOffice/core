@@ -38,6 +38,7 @@
 
 #include <com/sun/star/sdbc/XArray.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <comphelper/sequence.hxx>
 
 
 #include "pq_array.hxx"
@@ -69,7 +70,7 @@ sal_Int32 Array::getBaseType(  )
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return m_data;
+    return comphelper::containerToSequence(m_data);
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Array::getArrayAtIndex(
@@ -86,7 +87,7 @@ sal_Int32 Array::getBaseType(  )
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return getResultSetAtIndex( 0 , m_data.getLength() , typeMap );
+    return getResultSetAtIndex( 0 , m_data.size() , typeMap );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > Array::getResultSetAtIndex(
@@ -96,11 +97,11 @@ sal_Int32 Array::getBaseType(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
-    Sequence< Sequence< Any > > ret( count );
+    std::vector< std::vector< Any > > ret( count );
 
     for( int i = 0 ; i < count ; i ++ )
     {
-        Sequence< Any > row( 2 );
+        std::vector< Any > row( 2 );
         row[0] <<= (sal_Int32) ( i + index );
         row[1] = m_data[i+index-1];
         ret[i] = row;
@@ -113,11 +114,11 @@ sal_Int32 Array::getBaseType(  )
 
 void Array::checkRange( sal_Int32 index, sal_Int32 count )
 {
-    if( index >= 1 && index -1 + count <= m_data.getLength() )
+    if( index >= 1 && index -1 + count <= (sal_Int32)m_data.size() )
         return;
     OUStringBuffer buf;
     buf.append( "Array::getArrayAtIndex(): allowed range for index + count " );
-    buf.append( m_data.getLength() );
+    buf.append( (sal_Int32)m_data.size() );
     buf.append( ", got " );
     buf.append( index );
     buf.append( " + " );

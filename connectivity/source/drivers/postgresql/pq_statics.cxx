@@ -68,20 +68,6 @@ struct DefColumnMetaData
 
 struct BaseTypeDef { const char * typeName; sal_Int32 value; };
 
-static Sequence< OUString > createStringSequence( const char * names[] )
-{
-    int length = 0;
-    while (names[length])
-        ++length;
-
-    Sequence< OUString > seq( length );
-    for( int i = 0; i < length; i ++ )
-    {
-        seq[i] = OUString( names[i] , strlen( names[i] ), RTL_TEXTENCODING_ASCII_US );
-    }
-    return seq;
-}
-
 struct PropertyDef
 {
     PropertyDef( const OUString &str, const Type &t )
@@ -489,14 +475,14 @@ Statics & getStatics()
                 resultSet, sizeof(resultSet)/sizeof(PropertyDef), 0 );
 
             // databasemetadata
-            statics.tablesRowNames = Sequence< OUString > ( 5 );
+            statics.tablesRowNames = std::vector< OUString > ( 5 );
             statics.tablesRowNames[TABLE_INDEX_CATALOG] = "TABLE_CAT";
             statics.tablesRowNames[TABLE_INDEX_SCHEMA] = "TABLE_SCHEM";
             statics.tablesRowNames[TABLE_INDEX_NAME] = "TABLE_NAME";
             statics.tablesRowNames[TABLE_INDEX_TYPE] = "TABLE_TYPE";
             statics.tablesRowNames[TABLE_INDEX_REMARKS] = "REMARKS";
 
-            statics.primaryKeyNames = Sequence< OUString > ( 6 );
+            statics.primaryKeyNames = std::vector< OUString > ( 6 );
             statics.primaryKeyNames[0] = "TABLE_CAT";
             statics.primaryKeyNames[1] = "TABLE_SCHEM";
             statics.primaryKeyNames[2] = "TABLE_NAME";
@@ -518,86 +504,51 @@ Statics & getStatics()
             statics.INDEX = "Index";
             statics.INDEX_COLUMN = "IndexColumn";
 
-            statics.schemaNames = Sequence< OUString > ( 1 );
+            statics.schemaNames = std::vector< OUString > ( 1 );
             statics.schemaNames[0] = "TABLE_SCHEM";
 
-            statics.tableTypeData = Sequence< Sequence< Any > >( 2 );
+            statics.tableTypeData = std::vector< std::vector< Any > >( 2 );
 
-            statics.tableTypeData[0] = Sequence< Any > ( 1 );
+            statics.tableTypeData[0] = std::vector< Any > ( 1 );
             statics.tableTypeData[0][0] <<= statics.TABLE;
 
 //             statics.tableTypeData[2] = Sequence< Any > ( 1 );
 //             statics.tableTypeData[2][0] <<= statics.VIEW;
 
-            statics.tableTypeData[1] = Sequence< Any > ( 1 );
+            statics.tableTypeData[1] = std::vector< Any > ( 1 );
             statics.tableTypeData[1][0] <<= statics.SYSTEM_TABLE;
 
-            statics.tableTypeNames = Sequence< OUString > ( 1 );
+            statics.tableTypeNames = std::vector< OUString > ( 1 );
             statics.tableTypeNames[0] = "TABLE_TYPE";
 
-            static const char *tablePrivilegesNames[] =
-                {
-                    "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME", "GRANTOR", "GRANTEE", "PRIVILEGE",
-                    "IS_GRANTABLE" , nullptr
-                };
-            statics.tablePrivilegesNames =
-                createStringSequence( tablePrivilegesNames );
-
-            static const char * columnNames[] =
+            statics.columnRowNames =
             {
                 "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME", "COLUMN_NAME",
                 "DATA_TYPE", "TYPE_NAME", "COLUMN_SIZE", "BUFFER_LENGTH",
                 "DECIMAL_DIGITS", "NUM_PREC_RADIX", "NULLABLE", "REMARKS",
                 "COLUMN_DEF", "SQL_DATA_TYPE", "SQL_DATETIME_SUB", "CHAR_OCTET_LENGTH",
-                "ORDINAL_POSITION", "IS_NULLABLE", nullptr
+                "ORDINAL_POSITION", "IS_NULLABLE"
             };
-            statics.columnRowNames =
-                createStringSequence( columnNames );
 
-            static const char * typeinfoColumnNames[] =
+            statics.typeinfoColumnNames =
                 {
                     "TYPE_NAME", "DATA_TYPE", "PRECISION", "LITERAL_PREFIX",
                     "LITERAL_SUFFIX",  "CREATE_PARAMS", "NULLABLE", "CASE_SENSITIVE",
                     "SEARCHABLE", "UNSIGNED_ATTRIBUTE", "FIXED_PREC_SCALE",
                     "AUTO_INCREMENT", "LOCAL_TYPE_NAME", "MINIMUM_SCALE",
                     "MAXIMUM_SCALE", "SQL_DATA_TYPE", "SQL_DATETIME_SUB",
-                    "NUM_PREC_RADIX", nullptr
+                    "NUM_PREC_RADIX"
                 };
-            statics.typeinfoColumnNames = createStringSequence( typeinfoColumnNames );
 
-            static const char * indexinfoColumnNames[] =
+            statics.indexinfoColumnNames =
                 {
                     "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME",
                     "NON_UNIQUE", "INDEX_QUALIFIER", "INDEX_NAME",
                     "TYPE", "ORDINAL_POSITION", "COLUMN_NAME",
-                    "ASC_OR_DESC", "CARDINALITY", "PAGES", "FILTER_CONDITION",nullptr
+                    "ASC_OR_DESC", "CARDINALITY", "PAGES", "FILTER_CONDITION"
                 };
-            statics.indexinfoColumnNames = createStringSequence( indexinfoColumnNames );
 
-            static const char * importedKeysColumnNames[] =
-                {
-                    "PKTABLE_CAT" ,
-                    "PKTABLE_SCHEM",
-                    "PKTABLE_NAME" ,
-                    "PKCOLUMN_NAME",
-                    "FKTABLE_CAT" ,
-                    "FKTABLE_SCHEM",
-                    "FKTABLE_NAME" ,
-                    "FKCOLUMN_NAME",
-                    "KEY_SEQ" ,
-                    "UPDATE_RULE",
-                    "DELETE_RULE",
-                    "FK_NAME" ,
-                    "PK_NAME" ,
-                    "DEFERRABILITY" ,
-                    nullptr
-                };
-            statics.importedKeysColumnNames =
-                createStringSequence( importedKeysColumnNames );
-
-            static const char * resultSetArrayColumnNames[] = { "INDEX" , "VALUE", nullptr  };
-            statics.resultSetArrayColumnNames =
-                createStringSequence( resultSetArrayColumnNames );
+            statics.resultSetArrayColumnNames = { "INDEX" , "VALUE"  };
 
             // LEM TODO see if a refresh is needed; obtain automatically from pg_catalog.pg_type?
             BaseTypeDef baseTypeDefs[] =

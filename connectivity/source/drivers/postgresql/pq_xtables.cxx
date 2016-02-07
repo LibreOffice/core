@@ -107,7 +107,7 @@ void Tables::refresh()
 
         String2IntMap map;
 
-        m_values = Sequence< com::sun::star::uno::Any > ();
+        m_values.clear();
         sal_Int32 tableIndex = 0;
         while( rs->next() )
         {
@@ -141,13 +141,11 @@ void Tables::refresh()
                            com::sun::star::sdbcx::Privilege::DROP ) ) );
 
             {
-                const int currentTableIndex = tableIndex++;
-                assert(currentTableIndex  == m_values.getLength());
-                m_values.realloc( tableIndex );
-                m_values[currentTableIndex] = makeAny( prop );
+                m_values.push_back( makeAny( prop ) );
                 OUStringBuffer buf( name.getLength() + schema.getLength() + 1);
                 buf.append( schema + "." + name );
-                map[ buf.makeStringAndClear() ] = currentTableIndex;
+                map[ buf.makeStringAndClear() ] = tableIndex;
+                ++tableIndex;
             }
         }
         m_name2index.swap( map );
@@ -329,10 +327,10 @@ void Tables::dropByIndex( sal_Int32 index )
            ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
-    if( index < 0 ||  index >= m_values.getLength() )
+    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         OUStringBuffer buf( 128 );
-        buf.append( "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.getLength() -1) +
+        buf.append( "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1) +
                     ", got " + OUString::number( index ) + ")" );
         throw com::sun::star::lang::IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
     }

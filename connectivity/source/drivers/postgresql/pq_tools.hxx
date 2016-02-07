@@ -47,6 +47,8 @@
 #include <rtl/string.hxx>
 
 #include "pq_connection.hxx"
+#include <vector>
+
 namespace pq_sdbc_driver
 {
 bool isWhitespace( sal_Unicode c );
@@ -100,8 +102,8 @@ OString extractSingleTableFromSelect( const OStringVector &vec );
 
 void tokenizeSQL( const OString & sql, OStringVector &vec  );
 void splitSQL( const OString & sql, OStringVector &vec  );
-com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str );
-com::sun::star::uno::Sequence< com::sun::star::uno::Any > parseArray( const OUString & str )
+std::vector< sal_Int32 > parseIntArray( const OUString & str );
+std::vector< com::sun::star::uno::Any > parseArray( const OUString & str )
     throw( com::sun::star::sdbc::SQLException );
 
 OUString array2String( const com::sun::star::uno::Sequence< com::sun::star::uno::Any > &seq );
@@ -163,14 +165,6 @@ public:
     void commit();
     void executeUpdate( const OUString & sql );
 };
-
-template < typename T > com::sun::star::uno::Sequence<T> sequence_of_vector ( const std::vector<T> &vec )
-{
-    if ( vec.empty() )
-        return com::sun::star::uno::Sequence<T>();
-    else
-        return com::sun::star::uno::Sequence<T>( &vec[0], vec.size());
-}
 
 }
 

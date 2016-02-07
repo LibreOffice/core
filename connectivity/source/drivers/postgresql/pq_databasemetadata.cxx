@@ -1106,7 +1106,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 // LEM TODO: at least fake the columns, even if no row.
     MutexGuard guard( m_refMutex->mutex );
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > > (), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
@@ -1120,7 +1120,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 // LEM TODO: implement
 // LEM TODO: at least fake the columns, even if no row.
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTables(
@@ -1167,11 +1167,11 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 
     Reference< XResultSet > rs = statement->executeQuery();
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    SequenceAnyVector vec;
+    std::vector< std::vector<Any> > vec;
 
     while( rs->next() )
     {
-        Sequence< Any > row( 5 );
+        std::vector< Any > row( 5 );
 
         row[0] <<= m_pSettings->catalog;
         row[1] <<= xRow->getString( 1 );
@@ -1206,12 +1206,12 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         closeable->close();
 
     return new SequenceResultSet(
-        m_refMutex, *this, statics.tablesRowNames, sequence_of_vector(vec), m_pSettings->tc );
+        m_refMutex, *this, statics.tablesRowNames, vec, m_pSettings->tc );
 }
 
 struct SortInternalSchemasLastAndPublicFirst
 {
-    bool operator () ( const Sequence< Any >  & a, const Sequence< Any >  & b )
+    bool operator () ( const std::vector< Any >  & a, const std::vector< Any >  & b )
     {
         OUString valueA;
         OUString valueB;
@@ -1264,10 +1264,10 @@ struct SortInternalSchemasLastAndPublicFirst
     //           in particular, excluding temporary schemas, but maybe better through pg_is_other_temp_schema(oid) OR  == pg_my_temp_schema()
 
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    SequenceAnyVector vec;
+    std::vector< std::vector<Any> > vec;
     while( rs->next() )
     {
-        Sequence<Any> row(1);
+        std::vector<Any> row(1);
         row[0] <<= xRow->getString(1);
         vec.push_back( row );
     }
@@ -1279,7 +1279,7 @@ struct SortInternalSchemasLastAndPublicFirst
     if( closeable.is() )
         closeable->close();
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().schemaNames, sequence_of_vector(vec), m_pSettings->tc );
+        m_refMutex, *this, getStatics().schemaNames, vec, m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
@@ -1289,7 +1289,7 @@ struct SortInternalSchemasLastAndPublicFirst
     //           at least fake the columns, even if no content
     MutexGuard guard( m_refMutex->mutex );
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
@@ -1558,7 +1558,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     Reference< XResultSet > rs = statement->executeQuery();
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    SequenceAnyVector vec;
+    std::vector< std::vector<Any> > vec;
 
     Oid2DatabaseTypeDescriptionMap domainMap;
     Reference< XStatement > domainTypeStmt = m_origin->createStatement();
@@ -1583,7 +1583,7 @@ static void columnMetaData2DatabaseTypeDescription(
             else
                 ++colNum;
             sal_Int32 precision, scale, type;
-            Sequence< Any > row( 18 );
+            std::vector< Any > row( 18 );
             row[0] <<= m_pSettings->catalog;
             row[1] <<= sNewSchema;
             row[2] <<= sNewTable;
@@ -1630,7 +1630,7 @@ static void columnMetaData2DatabaseTypeDescription(
         closeable->close();
 
     return new SequenceResultSet(
-        m_refMutex, *this, statics.columnRowNames, sequence_of_vector(vec), m_pSettings->tc );
+        m_refMutex, *this, statics.columnRowNames, vec, m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
@@ -1701,7 +1701,7 @@ static void columnMetaData2DatabaseTypeDescription(
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
@@ -1712,7 +1712,7 @@ static void columnMetaData2DatabaseTypeDescription(
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
@@ -1756,11 +1756,11 @@ static void columnMetaData2DatabaseTypeDescription(
 
     Reference< XResultSet > rs = statement->executeQuery();
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    SequenceAnyVector vec;
+    std::vector< std::vector<Any> > vec;
 
     while( rs->next() )
     {
-        Sequence< Any > row( 6 );
+        std::vector< Any > row( 6 );
         row[0] <<= m_pSettings->catalog;
         row[1] <<= xRow->getString(1);
         row[2] <<= xRow->getString(2);
@@ -1795,15 +1795,15 @@ static void columnMetaData2DatabaseTypeDescription(
     }
 
 
-    SequenceAnyVector::iterator ii = vec.begin();
+    std::vector< std::vector<Any> >::iterator ii = vec.begin();
     OUString lastTableOid;
     sal_Int32 index = 0;
-    Sequence< Sequence< Any > > ret( vec.size() );
+    std::vector< std::vector< Any > > ret( vec.size() );
     int elements = 0;
     for( ; ii != vec.end() ; ++ ii )
     {
 
-        Sequence< Any > row = *ii;
+        std::vector< Any > row = *ii;
         OUString tableOid;
         OUString attnum;
 
@@ -1839,7 +1839,7 @@ static void columnMetaData2DatabaseTypeDescription(
         elements ++;
     }
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().primaryKeyNames, ret , m_pSettings->tc );
+        m_refMutex, *this, getStatics().primaryKeyNames, ret, m_pSettings->tc );
 }
 
 // Copied / adapted / simplified from JDBC driver
@@ -2130,7 +2130,7 @@ void DatabaseMetaData::init_getPrivs_stmt ()
 
 struct TypeInfoByDataTypeSorter
 {
-    bool operator () ( const Sequence< Any > & a, const Sequence< Any > & b )
+    bool operator () ( const std::vector< Any > & a, const std::vector< Any > & b )
     {
         OUString valueA;
         OUString valueB;
@@ -2193,7 +2193,7 @@ static sal_Int32 getMaxScale( sal_Int32 dataType )
 
 
 static void pgTypeInfo2ResultSet(
-     SequenceAnyVector &vec,
+     std::vector< std::vector<Any> > &vec,
      const Reference< XResultSet > &rs )
 {
     static const sal_Int32 TYPE_NAME = 0;  // string Type name
@@ -2233,7 +2233,7 @@ static void pgTypeInfo2ResultSet(
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     while( rs->next() )
     {
-        Sequence< Any > row(18);
+        std::vector< Any > row(18);
 
         sal_Int32 dataType =typeNameToDataType(xRow->getString(5),xRow->getString(2));
         sal_Int32 precision = xRow->getString(3).toInt32();
@@ -2303,7 +2303,7 @@ static void pgTypeInfo2ResultSet(
           "OR pg_type.typtype = 'p'"
             );
 
-    SequenceAnyVector vec;
+    std::vector< std::vector<Any> > vec;
     pgTypeInfo2ResultSet( vec, rs );
 
     // check for domain types
@@ -2323,25 +2323,11 @@ static void pgTypeInfo2ResultSet(
         m_refMutex,
         *this,
         getStatics().typeinfoColumnNames,
-        sequence_of_vector(vec),
+        vec,
         m_pSettings->tc,
         &( getStatics().typeInfoMetaData ));
 }
 
-
-static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value )
-{
-    sal_Int32 ret = -1;
-    for( int i = 0; i < seq.getLength(); i ++ )
-    {
-        if( seq[i] == value )
-        {
-            ret = i;
-            break;
-        }
-    }
-    return ret;
-}
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
     const ::com::sun::star::uno::Any& ,
@@ -2418,10 +2404,10 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     Reference< XResultSet > rs = stmt->executeQuery();
     Reference< XRow > xRow ( rs, UNO_QUERY_THROW );
 
-    SequenceAnyVector vec;
+    std::vector< std::vector<Any> > vec;
     while( rs->next() )
     {
-        Sequence< sal_Int32 > columns = parseIntArray( xRow->getString(C_COLUMNS) );
+        std::vector< sal_Int32 > columns = parseIntArray( xRow->getString(C_COLUMNS) );
         Reference< XPreparedStatement > columnsStmt = m_origin->prepareStatement(
                 "SELECT attnum, attname "
                 "FROM pg_attribute "
@@ -2446,10 +2432,10 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
         Reference< XRow > rowColumn( rsColumn, UNO_QUERY_THROW );
         while( rsColumn->next() )
         {
-            sal_Int32 pos = seqContains( columns, rowColumn->getInt( 1 ) );
-            if( pos >= 0 && ( ! isNonUnique || !  unique ) )
+            auto findIt = std::find( columns.begin(), columns.end(), rowColumn->getInt( 1 ) );
+            if( findIt != columns.end() && ( ! isNonUnique || !  unique ) )
             {
-                Sequence< Any > result( 13 );
+                std::vector< Any > result( 13 );
                 result[R_TABLE_SCHEM] = makeAny(currentSchema);
                 result[R_TABLE_NAME] = makeAny(currentTable);
                 result[R_INDEX_NAME] = makeAny(currentIndexName);
@@ -2457,7 +2443,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
                     Any( &isNonUnique, cppu::UnoType<bool>::get() );
                 result[R_TYPE] = makeAny( indexType );
                 result[R_COLUMN_NAME] = makeAny( rowColumn->getString(2) );
-                sal_Int32 nPos = ((sal_Int32)pos+1); // MSVC++ nonsense
+                sal_Int32 nPos = (sal_Int32)(findIt - columns.begin() +1); // MSVC++ nonsense
                 result[R_ORDINAL_POSITION] = makeAny( nPos );
                 vec.push_back( result );
             }
@@ -2465,7 +2451,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     }
     return new SequenceResultSet(
         m_refMutex, *this, getStatics().indexinfoColumnNames,
-        sequence_of_vector(vec),
+        vec,
         m_pSettings->tc );
 }
 
@@ -2542,7 +2528,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::s
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > DatabaseMetaData::getConnection()

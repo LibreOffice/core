@@ -98,7 +98,7 @@ void Users::refresh()
 
         String2IntMap map;
 
-        m_values = Sequence< com::sun::star::uno::Any > ( );
+        m_values.clear();
         sal_Int32 tableIndex = 0;
         while( rs->next() )
         {
@@ -111,11 +111,9 @@ void Users::refresh()
                 st.NAME , makeAny(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
 
             {
-                const int currentTableIndex = tableIndex++;
-                assert(currentTableIndex  == m_values.getLength());
-                m_values.realloc( tableIndex );
-                m_values[currentTableIndex] = makeAny( prop );
-                map[ name ] = currentTableIndex;
+                m_values.push_back( makeAny( prop ) );
+                map[ name ] = tableIndex;
+                ++tableIndex;
             }
         }
         m_name2index.swap( map );
@@ -173,11 +171,11 @@ void Users::dropByIndex( sal_Int32 index )
 {
 
     osl::MutexGuard guard( m_refMutex->mutex );
-    if( index < 0 ||  index >= m_values.getLength() )
+    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         OUStringBuffer buf( 128 );
         buf.append( "USERS: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32) (m_values.getLength() -1) );
+        buf.append( (sal_Int32) (m_values.size() -1) );
         buf.append( ", got " );
         buf.append( index );
         buf.append( ")" );
