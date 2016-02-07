@@ -434,9 +434,6 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SalFrameStyleFlags::SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
-#if defined(ENABLE_DBUS) && ENABLE_GIO
-    m_pLastSyncedDbusMenu = nullptr;
-#endif
     Init( pParent, nStyle );
 }
 
@@ -448,9 +445,6 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
-#if defined(ENABLE_DBUS) && ENABLE_GIO
-    m_pLastSyncedDbusMenu = nullptr;
-#endif
     Init( pSysData );
 }
 
@@ -487,17 +481,6 @@ static void ObjectDestroyedNotify( gpointer data )
         g_object_unref( data );
     }
 }
-
-#if defined(ENABLE_DBUS) && ENABLE_GIO
-void GtkSalFrame::EnsureDbusMenuSynced()
-{
-    GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(GetMenu());
-    if(m_pLastSyncedDbusMenu != pSalMenu) {
-        m_pLastSyncedDbusMenu = pSalMenu;
-        static_cast<GtkSalMenu*>(pSalMenu)->Activate();
-    }
-}
-#endif
 
 static void hud_activated( gboolean hud_active, gpointer user_data )
 {
@@ -715,7 +698,7 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     if ( pSalMenu != nullptr )
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
-        pGtkSalMenu->Display( true );
+        pGtkSalMenu->EnableUnity(true);
         pGtkSalMenu->UpdateFull();
     }
 }
@@ -736,7 +719,7 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
     if ( pSalMenu ) {
         GtkSalMenu* pGtkSalMenu = static_cast< GtkSalMenu* >( pSalMenu );
-        pGtkSalMenu->Display( false );
+        pGtkSalMenu->EnableUnity(false);
     }
 }
 #endif

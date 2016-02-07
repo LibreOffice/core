@@ -313,6 +313,8 @@ public:
     void RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
     bool HasValidEntries( bool bCheckPopups = true );
 
+    void UpdateNativeMenu();
+
     void SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString GetItemText( sal_uInt16 nItemId ) const;
 
@@ -404,15 +406,11 @@ public:
 
     void HighlightItem( sal_uInt16 nItemPos );
     void DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
+
+    bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    bool HandleMenuActivateEvent(Menu *pMenu) const;
+    bool HandleMenuDeActivateEvent(Menu *pMenu) const;
 };
-
-
-namespace vcl { namespace MenuInvalidator {
-
-VCL_DLLPUBLIC void AddMenuInvalidateListener(const Link<LinkParamNone*,void>&);
-VCL_DLLPUBLIC void Invalidated();
-
-}}
 
 class VCL_DLLPUBLIC MenuBar : public Menu
 {
@@ -463,10 +461,7 @@ public:
     void ShowButtons( bool bClose, bool bFloat, bool bHide );
 
     virtual void SelectItem(sal_uInt16 nId) override;
-    bool HandleMenuActivateEvent(Menu *pMenu) const;
-    bool HandleMenuDeActivateEvent(Menu *pMenu) const;
     bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
-    bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId);
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
@@ -520,6 +515,7 @@ private:
 
 protected:
     SAL_DLLPRIVATE sal_uInt16 ImplExecute( vcl::Window* pWindow, const Rectangle& rRect, FloatWinPopupFlags nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
+    SAL_DLLPRIVATE void ImplFlushPendingSelect();
     SAL_DLLPRIVATE long ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = nullptr ) const;
 

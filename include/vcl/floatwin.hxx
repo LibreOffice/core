@@ -131,9 +131,11 @@ public:
     SAL_DLLPRIVATE bool             ImplIsFloatPopupModeWindow( const vcl::Window* pWindow );
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
     SAL_DLLPRIVATE bool             ImplIsMouseDown() const  { return mbMouseDown; }
-    SAL_DLLPRIVATE static Point     ImplCalcPos( vcl::Window* pWindow,
+                   static Point     ImplCalcPos( vcl::Window* pWindow,
                                                  const Rectangle& rRect, FloatWinPopupFlags nFlags,
                                                  sal_uInt16& rArrangeIndex );
+                   static Point     ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
+                   static Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const Rectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }

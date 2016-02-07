@@ -135,6 +135,10 @@ bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, FloatWinPo
     return false;
 }
 
+void SalMenu::ShowCloseButton(bool)
+{
+}
+
 bool SalMenu::AddMenuBarButton( const SalMenuButtonItem& )
 {
     return false;

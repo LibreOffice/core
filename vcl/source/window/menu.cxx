@@ -2314,6 +2314,12 @@ sal_uLong Menu::DeactivateMenuBar(sal_uLong nFocusId)
     return nFocusId;
 }
 
+void Menu::UpdateNativeMenu()
+{
+    if ( ImplGetSalMenu() )
+        ImplGetSalMenu()->Update();
+}
+
 void Menu::MenuBarKeyInput(const KeyEvent&)
 {
 }
@@ -2673,14 +2679,13 @@ void MenuBar::SelectItem(sal_uInt16 nId)
 }
 
 // handler for native menu selection and command events
-
-bool MenuBar::HandleMenuActivateEvent( Menu *pMenu ) const
+bool Menu::HandleMenuActivateEvent( Menu *pMenu ) const
 {
     if( pMenu )
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = const_cast<MenuBar*>(this);
+        pMenu->pStartedFrom = const_cast<Menu*>(this);
         pMenu->bInCallback = true;
         pMenu->Activate();
 
@@ -2690,13 +2695,13 @@ bool MenuBar::HandleMenuActivateEvent( Menu *pMenu ) const
     return true;
 }
 
-bool MenuBar::HandleMenuDeActivateEvent( Menu *pMenu ) const
+bool Menu::HandleMenuDeActivateEvent( Menu *pMenu ) const
 {
     if( pMenu )
     {
         ImplMenuDelData aDelData( this );
 
-        pMenu->pStartedFrom = const_cast<MenuBar*>(this);
+        pMenu->pStartedFrom = const_cast<Menu*>(this);
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         if( !aDelData.isDeleted() )
@@ -2729,14 +2734,14 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
         return false;
 }
 
-bool MenuBar::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) const
+bool Menu::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) const
 {
     if( !pMenu )
-        pMenu = const_cast<MenuBar*>(this)->ImplFindMenu(nCommandEventId);
+        pMenu = const_cast<Menu*>(this)->ImplFindMenu(nCommandEventId);
     if( pMenu )
     {
         pMenu->nSelectedId = nCommandEventId;
-        pMenu->pStartedFrom = const_cast<MenuBar*>(this);
+        pMenu->pStartedFrom = const_cast<Menu*>(this);
         pMenu->ImplSelect();
         return true;
     }
@@ -2928,6 +2933,19 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Rectangle& rRect,
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, nullptr, false );
 }
 
+void PopupMenu::ImplFlushPendingSelect()
+{
+    // is there still Select?
+    Menu* pSelect = ImplFindSelectMenu();
+    if (pSelect)
+    {
+        // Select should be called prior to leaving execute in a popup menu!
+        Application::RemoveUserEvent( pSelect->nEventId );
+        pSelect->nEventId = nullptr;
+        pSelect->Select();
+    }
+}
+
 sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
 {
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
@@ -3092,6 +3110,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
         SalMenu* pMenu = ImplGetSalMenu();
         if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus ) )
         {
+            ImplFlushPendingSelect();
             pWin->StopExecute();
             pWin->doShutdown();
             pWindow->doLazyDelete();
@@ -3175,15 +3194,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
         pWindow->doLazyDelete();
         pWindow = nullptr;
 
-        // is there still Select?
-        Menu* pSelect = ImplFindSelectMenu();
-        if ( pSelect )
-        {
-            // Select should be called prior to leaving execute in a popup menu!
-            Application::RemoveUserEvent( pSelect->nEventId );
-            pSelect->nEventId = nullptr;
-            pSelect->Select();
-        }
+        ImplFlushPendingSelect();
     }
 
     return bRealExecute ? nSelectedId : 0;
@@ -3250,45 +3261,5 @@ ImplMenuDelData::~ImplMenuDelData()
     if( mpMenu )
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
-
-namespace vcl { namespace MenuInvalidator {
-
-struct MenuInvalidateListeners : public vcl::DeletionNotifier
-{
-    std::vector<Link<LinkParamNone*,void>>   m_aListeners;
-};
-
-static MenuInvalidateListeners* pMenuInvalidateListeners = nullptr;
-
-void AddMenuInvalidateListener(const Link<LinkParamNone*,void>& rLink)
-{
-    if(!pMenuInvalidateListeners)
-        pMenuInvalidateListeners = new MenuInvalidateListeners();
-    // ensure uniqueness
-    auto& rListeners = pMenuInvalidateListeners->m_aListeners;
-    if (std::find(rListeners.begin(), rListeners.end(), rLink) == rListeners.end())
-       rListeners.push_back( rLink );
-}
-
-void Invalidated()
-{
-    if(!pMenuInvalidateListeners)
-        return;
-
-    vcl::DeletionListener aDel( pMenuInvalidateListeners );
-
-    auto& rYieldListeners = pMenuInvalidateListeners->m_aListeners;
-    // Copy the list, because this can be destroyed when calling a Link...
-    std::vector<Link<LinkParamNone*,void>> aCopy( rYieldListeners );
-    for( Link<LinkParamNone*,void>& rLink : aCopy )
-    {
-        if (aDel.isDeleted()) break;
-        // check this hasn't been removed in some re-enterancy scenario fdo#47368
-        if( std::find(rYieldListeners.begin(), rYieldListeners.end(), rLink) != rYieldListeners.end() )
-            rLink.Call( nullptr );
-    }
-};
-
-} } // namespace vcl::MenuInvalidator
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -481,9 +481,6 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SalFrameStyleFlags::SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
-#if defined(ENABLE_DBUS) && ENABLE_GIO
-    m_pLastSyncedDbusMenu = nullptr;
-#endif
     Init( pParent, nStyle );
 }
 
@@ -497,9 +494,6 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
-#if defined(ENABLE_DBUS) && ENABLE_GIO
-    m_pLastSyncedDbusMenu = nullptr;
-#endif
     Init( pSysData );
 }
 
@@ -513,17 +507,6 @@ static void ObjectDestroyedNotify( gpointer data )
         g_object_unref( data );
     }
 }
-
-#if defined(ENABLE_DBUS) && ENABLE_GIO
-void GtkSalFrame::EnsureDbusMenuSynced()
-{
-    GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(GetMenu());
-    if(m_pLastSyncedDbusMenu != pSalMenu) {
-        m_pLastSyncedDbusMenu = pSalMenu;
-        static_cast<GtkSalMenu*>(pSalMenu)->Activate();
-    }
-}
-#endif
 
 static void hud_activated( gboolean hud_active, gpointer user_data )
 {
@@ -751,7 +734,7 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     if ( pSalMenu != nullptr )
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
-        pGtkSalMenu->Display( true );
+        pGtkSalMenu->EnableUnity(true);
         pGtkSalMenu->UpdateFull();
     }
 }
@@ -772,7 +755,7 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
     if ( pSalMenu ) {
         GtkSalMenu* pGtkSalMenu = static_cast< GtkSalMenu* >( pSalMenu );
-        pGtkSalMenu->Display( false );
+        pGtkSalMenu->EnableUnity(false);
     }
 }
 #endif
@@ -850,6 +833,8 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
     if( m_pEventBox )
         gtk_widget_destroy( GTK_WIDGET(m_pEventBox) );
+    if( m_pTopLevelGrid )
+        gtk_widget_destroy( GTK_WIDGET(m_pTopLevelGrid) );
     {
         SolarMutexGuard aGuard;
 #if defined ENABLE_GMENU_INTEGRATION
@@ -995,10 +980,15 @@ GtkWidget *GtkSalFrame::getMouseEventWidget() const
 
 void GtkSalFrame::InitCommon()
 {
+    m_pTopLevelGrid = GTK_GRID(gtk_grid_new());
+    gtk_container_add(GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pTopLevelGrid));
+
     m_pEventBox = GTK_EVENT_BOX(gtk_event_box_new());
     gtk_widget_add_events( GTK_WIDGET(m_pEventBox),
                            GDK_ALL_EVENTS_MASK );
-    gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pEventBox) );
+    gtk_widget_set_vexpand(GTK_WIDGET(m_pEventBox), true);
+    gtk_widget_set_hexpand(GTK_WIDGET(m_pEventBox), true);
+    gtk_grid_attach(m_pTopLevelGrid, GTK_WIDGET(m_pEventBox), 0, 0, 1, 1);
 
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
@@ -1101,7 +1091,7 @@ void GtkSalFrame::InitCommon()
                            );
 
     // show the widgets
-    gtk_widget_show_all( GTK_WIDGET(m_pEventBox) );
+    gtk_widget_show_all(GTK_WIDGET(m_pTopLevelGrid));
 
     // realize the window, we need an XWindow id
     gtk_widget_realize( m_pWindow );
@@ -3017,7 +3007,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     if( !aDel.isDeleted() && pThis->m_pIMHandler )
         pThis->m_pIMHandler->updateIMSpotLocation();
 
-    return true;
+    return false;
 }
 
 gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
@@ -3377,6 +3367,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     {
         pThis->m_pFixedContainer = nullptr;
         pThis->m_pEventBox = nullptr;
+        pThis->m_pTopLevelGrid = nullptr;
         pThis->m_pWindow = nullptr;
         pThis->InvalidateGraphics();
     }

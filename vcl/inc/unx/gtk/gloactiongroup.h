@@ -46,6 +46,9 @@ GType               g_lo_action_group_get_type              (void) G_GNUC_CONST;
 
 GLOActionGroup *    g_lo_action_group_new                   (gpointer           frame);
 
+void                g_lo_action_group_set_top_menu          (GLOActionGroup     *group,
+                                                             gpointer           top_menu);
+
 void                g_lo_action_group_insert                (GLOActionGroup     *group,
                                                              const gchar        *action_name,
                                                              gint                item_id,

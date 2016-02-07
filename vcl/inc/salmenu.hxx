@@ -78,8 +78,10 @@ public:
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) = 0;
     virtual void GetSystemMenuData( SystemMenuData* pData ) = 0;
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags);
+    virtual void ShowCloseButton(bool bShow);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
+    virtual void Update() {}
 
     // TODO: implement show/hide for the Win/Mac VCL native backends
     virtual void ShowItem( unsigned nPos, bool bShow ) { EnableItem( nPos, bShow ); }
