@@ -21,6 +21,7 @@
 #include "parser.hxx"
 #include <basic/sbx.hxx>
 #include "expr.hxx"
+#include <o3tl/make_unique.hxx>
 
 /***************************************************************************
 |*
@@ -36,7 +37,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     nParenLevel = 0;
     eCurExpr = t;
     m_eMode = eMode;
-    pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
+    pExpr.reset((t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean());
     if( t != SbSYMBOL )
     {
         pExpr->Optimize(pParser);
@@ -58,7 +59,7 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     nParenLevel = 0;
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
-    pExpr = new SbiExprNode( n, t );
+    pExpr = o3tl::make_unique<SbiExprNode>( n, t );
     pExpr->Optimize(pParser);
 }
 
@@ -69,13 +70,10 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPa
     nParenLevel = 0;
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
-    pExpr = new SbiExprNode( r, SbxVARIANT, pPar );
+    pExpr = o3tl::make_unique<SbiExprNode>( r, SbxVARIANT, pPar );
 }
 
-SbiExpression::~SbiExpression()
-{
-    delete pExpr;
-}
+SbiExpression::~SbiExpression() { }
 
 // reading in a complete identifier
 // an identifier has the following form:
@@ -860,8 +858,7 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
 
             if( bIsBool )
             {
-                delete pExpr;
-                pExpr = new SbiExprNode( (bBoolVal ? SbxTRUE : SbxFALSE), SbxINTEGER );
+                pExpr = o3tl::make_unique<SbiExprNode>( (bBoolVal ? SbxTRUE : SbxFALSE), SbxINTEGER );
                 eType = pExpr->GetType();
                 nVal = pExpr->nVal;
             }
@@ -924,22 +921,16 @@ SbiExprList::SbiExprList( )
     bBracket = false;
 }
 
-SbiExprList::~SbiExprList()
+SbiExprList::~SbiExprList() {}
+
+SbiExpression* SbiExprList::Get( size_t n )
 {
-    for (auto pExpr: aData)
-    {
-        delete pExpr;
-    }
+    return aData[n].get();
 }
 
-SbiExpression* SbiExprList::Get( short n )
+void SbiExprList::addExpression( std::unique_ptr<SbiExpression>&& pExpr )
 {
-    return aData[n];
-}
-
-void SbiExprList::addExpression( SbiExpression* pExpr )
-{
-    aData.push_back(pExpr);
+    aData.push_back(std::move(pExpr));
 }
 
 // the parameter list is completely parsed
@@ -988,11 +979,11 @@ SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneE
     // read in parameter table and lay down in correct order!
     while( !pExprList->bError )
     {
-        SbiExpression *pExpr;
+        std::unique_ptr<SbiExpression> pExpr;
         // missing argument
         if( eTok == COMMA )
         {
-            pExpr = new SbiExpression( pParser, 0, SbxEMPTY );
+            pExpr = o3tl::make_unique<SbiExpression>( pParser, 0, SbxEMPTY );
         }
         // named arguments: either .name= or name:=
         else
@@ -1007,7 +998,7 @@ SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneE
 
             if( bAssumeExprLParenMode )
             {
-                pExpr = new SbiExpression( pParser, SbSTDEXPR, EXPRMODE_LPAREN_PENDING );
+                pExpr = o3tl::make_unique<SbiExpression>( pParser, SbSTDEXPR, EXPRMODE_LPAREN_PENDING );
                 bAssumeExprLParenMode = false;
 
                 SbiExprMode eModeAfter = pExpr->m_eMode;
@@ -1027,13 +1018,12 @@ SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneE
                 else if( eModeAfter == EXPRMODE_EMPTY_PAREN )
                 {
                     pExprList->bBracket = true;
-                    delete pExpr;
                     return pExprList;
                 }
             }
             else
             {
-                pExpr = new SbiExpression( pParser );
+                pExpr = o3tl::make_unique<SbiExpression>( pParser );
             }
             if( bByVal && pExpr->IsLvalue() )
             {
@@ -1047,16 +1037,14 @@ SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneE
                     // VBA mode: name:=
                     // SbiExpression::Term() has made as string out of it
                     aName = pExpr->GetString();
-                    delete pExpr;
                     pParser->Next();
-                    pExpr = new SbiExpression( pParser );
+                    pExpr = o3tl::make_unique<SbiExpression>( pParser );
                 }
                 pExpr->GetName() = aName;
             }
         }
-        pExprList->addExpression(pExpr);
         pExprList->bError = pExprList->bError || !pExpr->IsValid();
-
+        pExprList->aData.push_back(std::move(pExpr));
         if( bAssumeArrayMode )
         {
             break;
@@ -1114,23 +1102,23 @@ SbiExprList* SbiExprList::ParseDimList( SbiParser* pParser )
         SbiToken eTok;
         for( ;; )
         {
-            SbiExpression* pExpr1 = new SbiExpression( pParser );
+            auto pExpr1 = o3tl::make_unique<SbiExpression>( pParser );
             eTok = pParser->Next();
             if( eTok == TO )
             {
-                SbiExpression* pExpr2 = new SbiExpression( pParser );
+                auto pExpr2 = o3tl::make_unique<SbiExpression>( pParser );
                 pExpr1->ConvertToIntConstIfPossible(), pExpr2->ConvertToIntConstIfPossible();
                 eTok = pParser->Next();
                 pExprList->bError = pExprList->bError || !pExpr1->IsValid() || !pExpr2->IsValid();
-                pExprList->addExpression(pExpr1);
-                pExprList->addExpression(pExpr2);
+                pExprList->aData.push_back(std::move(pExpr1));
+                pExprList->aData.push_back(std::move(pExpr2));
             }
             else
             {
                 pExpr1->SetBased();
                 pExpr1->ConvertToIntConstIfPossible();
                 pExprList->bError = pExprList->bError || !pExpr1->IsValid();
-                pExprList->addExpression(pExpr1);
+                pExprList->aData.push_back(std::move(pExpr1));
             }
             pExprList->nDim++;
             if( eTok == RPAREN ) break;
