@@ -1115,6 +1115,17 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
         aEvent.State >>= nColor;
         aBuffer.append(nColor);
     }
+    else if (aEvent.FeatureURL.Path == "Undo" ||
+             aEvent.FeatureURL.Path == "Redo")
+    {
+        aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
+    }
+    else if (aEvent.FeatureURL.Path == "InsertPage" ||
+             aEvent.FeatureURL.Path == "DeletePage" ||
+             aEvent.FeatureURL.Path == "DuplicatePage")
+    {
+        aBuffer.append(OUString::boolean(aEvent.IsEnabled));
+    }
     else
     {
         return;
