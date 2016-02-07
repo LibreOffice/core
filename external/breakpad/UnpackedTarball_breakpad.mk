@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,breakpad,$(BREAKPAD_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-use-correct-http-header.patch.1 \
+	external/breakpad/breakpad-wshadow.patch.1 \
+	external/breakpad/breakpad-wshadow2.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
