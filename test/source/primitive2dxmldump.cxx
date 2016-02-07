@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 
@@ -162,6 +163,21 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.endElement();
 
 
+                rWriter.endElement();
+            }
+            break;
+
+            case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
+            {
+                const TextSimplePortionPrimitive2D* pTextSimplePortionPrimitive2D = dynamic_cast<const TextSimplePortionPrimitive2D*>(pBasePrimitive);
+                rWriter.startElement("textsimpleportion");
+
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                if(pTextSimplePortionPrimitive2D->getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
+                {
+                    rWriter.attribute("height", aScale.getY());
+                }
                 rWriter.endElement();
             }
             break;
