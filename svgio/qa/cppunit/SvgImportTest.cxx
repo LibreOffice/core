@@ -43,6 +43,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testFontsizeKeywords();
     void testFontsizePercentage();
     void testTdf45771();
+    void testTdf85770();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testFontsizeKeywords);
     CPPUNIT_TEST(testFontsizePercentage);
     CPPUNIT_TEST(testTdf45771);
+    CPPUNIT_TEST(testTdf85770);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -203,6 +205,21 @@ void Test::testTdf45771()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "32");
+}
+
+void Test::testTdf85770()
+{
+    Primitive2DSequence aSequenceTdf85770 = parseSvg("/svgio/qa/cppunit/data/tdf85770.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf85770.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf85770));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Start Middle End");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "End");
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
