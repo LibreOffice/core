@@ -124,7 +124,7 @@ void KeyColumns::refresh()
 
         String2IntMap map;
 
-        m_values = Sequence< com::sun::star::uno::Any > ();
+        m_values.clear();
         sal_Int32 columnIndex = 0;
         while( rs->next() )
         {
@@ -151,11 +151,9 @@ void KeyColumns::refresh()
             }
 
             {
-                const int currentColumnIndex = columnIndex++;
-                assert(currentColumnIndex  == m_values.getLength());
-                m_values.realloc( columnIndex );
-                m_values[currentColumnIndex] = makeAny( prop );
-                map[ name ] = currentColumnIndex;
+                m_values.push_back( makeAny( prop ) );
+                map[ name ] = columnIndex;
+                ++columnIndex;
             }
         }
         m_name2index.swap( map );

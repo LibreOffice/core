@@ -566,9 +566,6 @@ void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUSt
     }
 }
 
-typedef std::vector< sal_Int32 > IntVector;
-
-
 OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
 {
     OUStringBuffer buf(128);
@@ -598,13 +595,8 @@ OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
     return buf.makeStringAndClear();
 }
 
-typedef
-std::vector
-<
-    com::sun::star::uno::Any
-> AnyVector;
 
-com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( SQLException )
+std::vector< Any > parseArray( const OUString & str ) throw( SQLException )
 {
     int len = str.getLength();
     bool doubleQuote = false;
@@ -612,7 +604,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
     int i = 0;
 
     OUStringBuffer current;
-    AnyVector elements;
+    std::vector<Any> elements;
     bool doubleQuotedValue = false;
     while( i < len )
     {
@@ -699,13 +691,13 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
         }
         i++;
     }
-    return sequence_of_vector(elements);
+    return elements;
 }
 
-com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str )
+std::vector< sal_Int32 > parseIntArray( const OUString & str )
 {
     sal_Int32 start = 0;
-    IntVector vec;
+    std::vector<sal_Int32> vec;
 //     printf( ">%s<\n" , OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
     for( sal_Int32 i = str.indexOf( ' ' ) ; i != -1 ; i = str.indexOf( ' ', start) )
     {
@@ -715,7 +707,7 @@ com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str )
     }
     vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
 //     printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
-    return sequence_of_vector(vec);
+    return vec;
 }
 
 void fillAttnum2attnameMap(

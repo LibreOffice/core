@@ -311,7 +311,7 @@ void Columns::refresh()
 
         String2IntMap map;
 
-        m_values = Sequence< com::sun::star::uno::Any > ();
+        m_values.clear();
         int columnIndex = 0;
         while( rs->next() )
         {
@@ -331,11 +331,9 @@ void Columns::refresh()
 //                     name ) );
 
             {
-                const int currentColumnIndex = columnIndex++;
-                assert(currentColumnIndex  == m_values.getLength());
-                m_values.realloc( columnIndex );
-                m_values[currentColumnIndex] = makeAny( prop );
-                map[ name ] = currentColumnIndex;
+                m_values.push_back( makeAny( prop ) );
+                map[ name ] = columnIndex;
+                ++columnIndex;
             }
         }
         m_name2index.swap( map );
@@ -514,11 +512,11 @@ void Columns::dropByIndex( sal_Int32 index )
            ::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
-    if( index < 0 ||  index >= m_values.getLength() )
+    if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         OUStringBuffer buf( 128 );
         buf.append( "COLUMNS: Index out of range (allowed 0 to " );
-        buf.append((sal_Int32)(m_values.getLength() -1) );
+        buf.append((sal_Int32)(m_values.size() -1) );
         buf.append( ", got " );
         buf.append( index );
         buf.append( ")" );

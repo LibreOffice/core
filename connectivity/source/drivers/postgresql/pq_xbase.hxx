@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include "pq_xcontainer.hxx"
+#include <vector>
 
 namespace pq_sdbc_driver
 {
@@ -64,7 +65,7 @@ protected:
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_conn;
     ConnectionSettings *m_pSettings;
     cppu::IPropertyArrayHelper & m_propsDesc;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_values;
+    std::vector< com::sun::star::uno::Any > m_values;
 public:
     ReflectionBase(
         const OUString &implName,

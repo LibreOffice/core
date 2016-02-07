@@ -68,7 +68,7 @@ class UpdateableResultSet :
     ConnectionSettings **m_ppSettings;
     OUString m_schema;
     OUString m_table;
-    com::sun::star::uno::Sequence< OUString > m_primaryKey;
+    std::vector< OUString > m_primaryKey;
     UpdateableFieldVector m_updateableField;
     bool  m_insertRow;
 
@@ -76,12 +76,12 @@ protected:
     UpdateableResultSet(
         const ::rtl::Reference< RefCountedMutex > & mutex,
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
-        const com::sun::star::uno::Sequence< OUString > &colNames,
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
+        const std::vector< OUString > &colNames,
+        const std::vector< std::vector< com::sun::star::uno::Any > > &data,
         ConnectionSettings **ppSettings,
         const OUString &schema,
         const OUString &table,
-        const com::sun::star::uno::Sequence< OUString > &primaryKey)
+        const std::vector< OUString > &primaryKey)
         : SequenceResultSet( mutex, owner, colNames, data, (*ppSettings)->tc ),
           m_ppSettings( ppSettings ),
           m_schema( schema ),
@@ -121,7 +121,7 @@ public:
         PGresult *result,
         const OUString &schema,
         const OUString &table,
-        const com::sun::star::uno::Sequence< OUString > &primaryKey );
+        const std::vector< OUString > &primaryKey );
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() override { SequenceResultSet::acquire(); }

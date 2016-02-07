@@ -131,7 +131,8 @@ void IndexColumns::refresh()
 
         DisposeGuard disposeIt( rs );
         Reference< XRow > xRow( rs , UNO_QUERY );
-        m_values = Sequence< Any >( m_columns.getLength() );
+        m_values.clear();
+        m_values.resize( m_columns.getLength() );
 
         while( rs->next() )
         {
