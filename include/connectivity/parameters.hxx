@@ -121,8 +121,8 @@ namespace dbtools
 
         ParameterInformation                m_aParameterInformation;
 
-        css::uno::Sequence< OUString >      m_aMasterFields;
-        css::uno::Sequence< OUString >      m_aDetailFields;
+        std::vector< OUString >             m_aMasterFields;
+        std::vector< OUString >             m_aDetailFields;
 
         OUString                            m_sIdentifierQuoteString;
         OUString                            m_sSpecialCharacters;
