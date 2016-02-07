@@ -310,6 +310,8 @@ public:
     void RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
     bool HasValidEntries( bool bCheckPopups = true );
 
+    void UpdateNativeMenu();
+
     void SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString GetItemText( sal_uInt16 nItemId ) const;
 
@@ -403,13 +405,6 @@ public:
     void DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 };
 
-
-namespace vcl { namespace MenuInvalidator {
-
-VCL_DLLPUBLIC void AddMenuInvalidateListener(const Link<LinkParamNone*,void>&);
-VCL_DLLPUBLIC void Invalidated();
-
-}}
 
 class VCL_DLLPUBLIC MenuBar : public Menu
 {

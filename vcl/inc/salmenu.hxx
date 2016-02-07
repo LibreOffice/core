@@ -77,6 +77,7 @@ public:
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
+    virtual void Update() {}
 
     // TODO: implement show/hide for the Win/Mac VCL native backends
     virtual void ShowItem( unsigned nPos, bool bShow ) { EnableItem( nPos, bShow ); }

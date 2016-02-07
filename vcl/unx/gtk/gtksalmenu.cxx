@@ -372,54 +372,9 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     pItem->mpSubMenu = pGtkSubMenu;
 }
 
-static bool bInvalidMenus = false;
-static gboolean RefreshMenusUnity(gpointer)
-{
-    SolarMutexGuard g;
-#if GTK_CHECK_VERSION(3,0,0)
-    GetGtkSalData()->GetGtkDisplay()->RefreshMenusUnity();
-#else
-    SalDisplay* pSalDisplay = vcl_sal::getSalDisplay(GetGenericData());
-    std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();
-    std::list< SalFrame* >::const_iterator pEndSalFrame = pSalDisplay->getFrames().end();
-    for(; pSalFrame != pEndSalFrame; ++pSalFrame) {
-        const GtkSalFrame* pGtkSalFrame = static_cast< const GtkSalFrame* >( *pSalFrame );
-        GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(pGtkSalFrame);
-        GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(pFrameNonConst->GetMenu());
-        if(pSalMenu) {
-            pSalMenu->Activate();
-            pSalMenu->UpdateFull();
-        }
-    }
-#endif
-    bInvalidMenus = false;
-    return FALSE;
-}
-
-static void RefreshMenusUnity(void*, LinkParamNone*)
-{
-    if(!bInvalidMenus) {
-        g_timeout_add(10, &RefreshMenusUnity, nullptr);
-        bInvalidMenus = true;
-    }
-}
-
-static Link<LinkParamNone*,void>* getRefreshLinkInstance()
-{
-    static Link<LinkParamNone*,void>* pLink = nullptr;
-    if(!pLink) {
-        pLink = new Link<LinkParamNone*,void>(nullptr, &RefreshMenusUnity);
-    }
-    return pLink;
-}
-
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     SolarMutexGuard aGuard;
-    {
-        vcl::MenuInvalidator::AddMenuInvalidateListener(*getRefreshLinkInstance());
-    }
-
     assert(mbMenuBar);
     SAL_INFO("vcl.unity", "GtkSalMenu set to frame");
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
@@ -674,6 +629,7 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
 {
     pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
+    pMenuBar->HandleMenuDeActivateEvent(mpVCLMenu);
     for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
@@ -685,11 +641,23 @@ void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
     }
 }
 
-void GtkSalMenu::Activate()
+void GtkSalMenu::Activate( const gchar* aMenuCommand )
 {
     if ( !mbMenuBar )
         return;
-    ActivateAllSubmenus(static_cast<MenuBar*>(mpVCLMenu));
+
+    if ( !aMenuCommand ) {
+        ActivateAllSubmenus( static_cast< MenuBar* >( mpVCLMenu ) );
+        return;
+    }
+
+    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aMenuCommand), TRUE );
+
+    if ( pSalSubMenu != nullptr ) {
+        MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
+        pMenuBar->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
+        pSalSubMenu->Update();
+    }
 }
 
 void GtkSalMenu::Deactivate( const gchar* aMenuCommand )

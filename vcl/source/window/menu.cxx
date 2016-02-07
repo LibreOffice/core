@@ -2309,6 +2309,12 @@ bool Menu::HasValidEntries( bool bCheckPopups )
     return bValidEntries;
 }
 
+void Menu::UpdateNativeMenu()
+{
+    if ( ImplGetSalMenu() )
+        ImplGetSalMenu()->Update();
+}
+
 void Menu::MenuBarKeyInput(const KeyEvent&)
 {
 }
@@ -3220,45 +3226,5 @@ ImplMenuDelData::~ImplMenuDelData()
     if( mpMenu )
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
-
-namespace vcl { namespace MenuInvalidator {
-
-struct MenuInvalidateListeners : public vcl::DeletionNotifier
-{
-    std::vector<Link<LinkParamNone*,void>>   m_aListeners;
-};
-
-static MenuInvalidateListeners* pMenuInvalidateListeners = nullptr;
-
-void AddMenuInvalidateListener(const Link<LinkParamNone*,void>& rLink)
-{
-    if(!pMenuInvalidateListeners)
-        pMenuInvalidateListeners = new MenuInvalidateListeners();
-    // ensure uniqueness
-    auto& rListeners = pMenuInvalidateListeners->m_aListeners;
-    if (std::find(rListeners.begin(), rListeners.end(), rLink) == rListeners.end())
-       rListeners.push_back( rLink );
-}
-
-void Invalidated()
-{
-    if(!pMenuInvalidateListeners)
-        return;
-
-    vcl::DeletionListener aDel( pMenuInvalidateListeners );
-
-    auto& rYieldListeners = pMenuInvalidateListeners->m_aListeners;
-    // Copy the list, because this can be destroyed when calling a Link...
-    std::vector<Link<LinkParamNone*,void>> aCopy( rYieldListeners );
-    for( Link<LinkParamNone*,void>& rLink : aCopy )
-    {
-        if (aDel.isDeleted()) break;
-        // check this hasn't been removed in some re-enterancy scenario fdo#47368
-        if( std::find(rYieldListeners.begin(), rYieldListeners.end(), rLink) != rYieldListeners.end() )
-            rLink.Call( nullptr );
-    }
-};
-
-} } // namespace vcl::MenuInvalidator
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,11 +94,11 @@ public:
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
-    void                        Activate();
+    void                        Activate( const gchar* aMenuCommand = nullptr );
     void                        Deactivate( const gchar* aMenuCommand );
     void                        Display( bool bVisible );
     bool                        PrepUpdate();
-    void                        Update();           // Update this menu only.
+    virtual void                Update() override;  // Update this menu only.
     void                        UpdateFull();       // Update full menu hierarchy from this menu.
 };
 
