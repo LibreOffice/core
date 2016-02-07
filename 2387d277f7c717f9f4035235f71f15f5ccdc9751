@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_21d874ef",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T00:52:37Z",
+      "side": 0,
+      "message": "to fix the case and still behave as said in the comment this should be:\nif(aMergedArea.count() \u0026\u0026 (bStrokeUsed || (!bStrokeUsed \u0026\u0026 (pFillGradient || pFillPattern) )))",
+      "range": {
+        "startLine": 310,
+        "startChar": 16,
+        "endLine": 310,
+        "endChar": 89
+      },
+      "revId": "2387d277f7c717f9f4035235f71f15f5ccdc9751",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

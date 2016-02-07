@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_41db00ee",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T00:52:37Z",
+      "side": 1,
+      "message": "according to this comment, if bStrokeUsed is true we can\u0027t simply add the single color fill",
+      "range": {
+        "startLine": 311,
+        "startChar": 28,
+        "endLine": 314,
+        "endChar": 28
+      },
+      "revId": "e8dea4b0d7d09dbf65872f4b1b4dff67c5d8423c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
