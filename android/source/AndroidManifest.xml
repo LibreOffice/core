@@ -51,7 +51,7 @@
                 <data android:mimeType="application/vnd.oasis.opendocument.text-template"/>
                 <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-template"/>
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics-template"/>
-                <!-- Seems at least Anroid 5.0 does not recognize this as the mime type of .otp files. -->
+                <!-- Seems at least Android 5.0 does not recognize this as the mime type of .otp files. -->
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-template"/>
 
                 <!-- MS -->

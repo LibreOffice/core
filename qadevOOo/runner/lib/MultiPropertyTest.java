@@ -49,7 +49,7 @@ import com.sun.star.uno.Type;
  *
  * <p>The testProperty() is called, when the MultiMethodTest's testing method
  * is not found in the subclass. So, by defining such methods for properties
- * the standard testing behavioutr can be changed.
+ * the standard testing behaviour can be changed.
  *
  * <p>The testing behaviour also can be changed by overriding compare(),
  * getNewVAlue() or toString(Object) methods, or by extending PropertyTester

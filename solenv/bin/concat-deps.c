@@ -127,7 +127,7 @@ unsigned int   result;
 }
 
 /* ===============================================
- * memory pool for fast fix-size allocation (non-tread-safe)
+ * memory pool for fast fix-size allocation (non-thread-safe)
  * ===============================================
  */
 struct pool

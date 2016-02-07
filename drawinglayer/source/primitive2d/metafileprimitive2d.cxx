@@ -3090,7 +3090,7 @@ namespace
                     {
                         // XGRAD_SEQ_BEGIN, XGRAD_SEQ_END should be supported since the
                         // pure recorded paint of the gradients uses the XOR paint functionality
-                        // ('trick'). This is (and will be) problematic with AntAliasing, so it's
+                        // ('trick'). This is (and will be) problematic with AntiAliasing, so it's
                         // better to use this info
                         const MetaGradientExAction* pMetaGradientExAction = nullptr;
                         bool bDone(false);

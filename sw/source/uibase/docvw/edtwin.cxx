@@ -1926,7 +1926,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 rSh.IsSttPara() && rSh.IsEndPara() )
                             eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
 
-                        //RETURN for new paragraph with AutoFormating
+                        //RETURN for new paragraph with AutoFormatting
                         else if( pACfg && pACfg->IsAutoFormatByInput() &&
                                 !(nSelectionType & (nsSelectionType::SEL_GRF |
                                     nsSelectionType::SEL_OLE | nsSelectionType::SEL_FRM |
