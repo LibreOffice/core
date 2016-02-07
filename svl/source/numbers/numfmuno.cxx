@@ -379,8 +379,7 @@ sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormatter" };
-    return aRet;
+    return { "com.sun.star.util.NumberFormatter" };
 }
 
 SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex& _rMutex )
@@ -668,8 +667,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceNa
 uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormats" };
-    return aRet;
+    return { "com.sun.star.util.NumberFormats" };
 }
 
 SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex )
@@ -923,8 +921,7 @@ sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceNam
 uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormatProperties" };
-    return aRet;
+    return { "com.sun.star.util.NumberFormatProperties" };
 }
 
 SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex )
@@ -1077,8 +1074,7 @@ sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& Se
 uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet { "com.sun.star.util.NumberFormatSettings" };
-    return aRet;
+    return { "com.sun.star.util.NumberFormatSettings" };
 }
 
 
