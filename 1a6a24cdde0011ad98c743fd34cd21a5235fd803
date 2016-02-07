@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_735fef0e",
+        "filename": "connectivity/source/drivers/postgresql/pq_sequenceresultset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "obsolte?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 36
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d37343b3",
+        "filename": "connectivity/source/drivers/postgresql/pq_sequenceresultset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "included by \"pq_statics.hxx\"",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b3783791",
+        "filename": "connectivity/source/drivers/postgresql/pq_xbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "included by \"pq_xcontainer.hxx\"",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 17
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_73b6cf3e",
+        "filename": "connectivity/source/drivers/postgresql/pq_xcolumns.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "obsolete?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 36
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f372bfac",
+        "filename": "connectivity/source/drivers/postgresql/pq_xcontainer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "included by \"pq_statics.hxx\"",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 17
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_13a5cb03",
+        "filename": "connectivity/source/drivers/postgresql/pq_xkeys.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "obsolete?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 36
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b39f97b3",
+        "filename": "connectivity/source/drivers/postgresql/pq_xusers.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "obsolete?",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 36
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d39a23c5",
+        "filename": "connectivity/source/drivers/postgresql/pq_xviews.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-07T17:54:12Z",
+      "side": 1,
+      "message": "obsolete?",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 36
+      },
+      "revId": "1a6a24cdde0011ad98c743fd34cd21a5235fd803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
