@@ -205,13 +205,13 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
 
 void SbiExprList::Gen(SbiCodeGen& rGen)
 {
-    if( pFirst )
+    if( !aData.empty() )
     {
         rGen.Gen( _ARGC );
         // Type adjustment at DECLARE
         sal_uInt16 nCount = 1;
 
-        for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
+        for( auto& pExpr: aData )
         {
             pExpr->Gen();
             if( !pExpr->GetName().isEmpty() )
@@ -249,6 +249,7 @@ void SbiExprList::Gen(SbiCodeGen& rGen)
             {
                 rGen.Gen( _ARGV );
             }
+            nCount++;
         }
     }
 }
