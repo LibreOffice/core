@@ -515,8 +515,6 @@ void CustomAnimationPane::updateControls()
     mpFTSpeed->Enable( mxView.is() );
     mpCBSpeed->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
-    mpPBMoveUp->Enable( mxView.is() );
-    mpPBMoveDown->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
 
@@ -542,7 +540,7 @@ void CustomAnimationPane::updateControls()
 
     mpPBAddEffect->Enable( maViewSelection.hasValue() );
     mpPBRemoveEffect->Enable(nSelectionCount);
-    if(maViewSelection.hasValue() && (nSelectionCount == 1))
+    if(nSelectionCount > 0)
     {
         mpFTAnimation->Enable();
         mpLBAnimation->Enable();
@@ -555,8 +553,8 @@ void CustomAnimationPane::updateControls()
         mpLBAnimation->Clear();
     }
 
-    mpLBCategory->Enable(maViewSelection.hasValue() && (nSelectionCount == 1));
-    mpFTCategory->Enable(maViewSelection.hasValue() && (nSelectionCount == 1));
+    mpLBCategory->Enable(nSelectionCount > 0);
+    mpFTCategory->Enable(nSelectionCount > 0);
 
     mpFTStart->Enable(nSelectionCount > 0);
     mpLBStart->Enable(nSelectionCount > 0);
@@ -774,8 +772,8 @@ void CustomAnimationPane::updateControls()
         }
     }
 
-    mpPBMoveUp->Enable(bEnableUp);
-    mpPBMoveDown->Enable(bEnableDown);
+    mpPBMoveUp->Enable(mxView.is() &&  bEnableUp);
+    mpPBMoveDown->Enable(mxView.is() && bEnableDown);
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() );
@@ -918,7 +916,7 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
         onRemove();
         break;
     case CM_CREATE:
-        if( maViewSelection.hasValue() ) onChange();
+        if( maViewSelection.hasValue() ) onAdd();
         break;
     }
 
@@ -1770,6 +1768,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
 
 void CustomAnimationPane::animationChange()
 {
+
     if( maListSelection.size() == 1 )
     {
         CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
@@ -1795,7 +1794,7 @@ void CustomAnimationPane::animationChange()
 
 }
 
-void CustomAnimationPane::onChange()
+void CustomAnimationPane::onAdd()
 {
     bool bHasText = true;
 
@@ -1853,16 +1852,12 @@ void CustomAnimationPane::onChange()
     }
     else
     {
-        OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
+        OSL_FAIL("sd::CustomAnimationPane::onAdd(), unknown view selection!" );
         return;
     }
 
     CustomAnimationPresetPtr pDescriptor;
-    mpFTCategory->Enable();
-    mpLBCategory->Enable();
-    mpFTAnimation->Enable();
-    mpLBAnimation->Enable();
-    mpLBCategory->SelectEntryPos(1);
+    mpLBCategory->SelectEntryPos(2);
     fillAnimationLB();
     void* pEntryData = mpLBAnimation->GetSelectEntryData();
     if( pEntryData )
@@ -1920,8 +1915,6 @@ void CustomAnimationPane::onChange()
     }
 
     mrBase.GetDocShell()->SetModified();
-
-    updateControls();
 
     SlideShow::Stop( mrBase );
 }
@@ -2125,39 +2118,7 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 {
-    CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
-    const double fDuration = (*pPreset)->getDuration();
-    sal_uInt32 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if( fDuration == 5.0 )
-        nPos = 0;
-    else if( fDuration == 3.0 )
-        nPos = 1;
-    else if( fDuration == 2.0 )
-        nPos = 2;
-    else if( fDuration == 1.0 )
-        nPos = 3;
-    else if( fDuration == 0.5 )
-        nPos = 4;
-    mpCBSpeed->SelectEntryPos( nPos );
-    bool bHasSpeed = (*pPreset)->getDuration() > 0.001;
-    mpCBSpeed->Enable( bHasSpeed );
-    mpFTSpeed->Enable( bHasSpeed );
-    MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-    // get selected effect
-    EffectSequence::iterator aIter( maListSelection.begin() );
-    const EffectSequence::iterator aEnd( maListSelection.end() );
-    while( aIter != aEnd )
-    {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
-
-        EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-        if( !pEffectSequence )
-            pEffectSequence = mpMainSequence.get();
-
-        pEffectSequence->replace( pEffect, *pPreset, fDuration );
-    }
-    onPreview(true);
+    animationChange();
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
@@ -2236,10 +2197,7 @@ IMPL_LINK_TYPED( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox,
 void CustomAnimationPane::implControlHdl(Control* pControl )
 {
     if( pControl == mpPBAddEffect )
-    {
-        onChange();
-        onPreview(true);
-    }
+        onAdd();
     else if( pControl == mpPBRemoveEffect )
         onRemove();
     else if( pControl == mpLBStart )
@@ -2260,7 +2218,6 @@ void CustomAnimationPane::implControlHdl(Control* pControl )
         pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() );
     }
 
-    updateControls();
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, lateInitCallback, Timer *, void)

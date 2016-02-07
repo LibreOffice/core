@@ -70,7 +70,7 @@ public:
     // callbacks
     void onSelectionChanged();
     void onChangeCurrentPage();
-    void onChange();
+    void onAdd();
     void animationChange();
     void onRemove();
     void onChangeStart();
