@@ -88,12 +88,12 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUSt
         if ( m_xSetMetaData.is() )
         {
             const sal_Int32 nCount = m_xSetMetaData->getColumnCount();
-            m_aNullable.realloc(nCount);
-            m_aSignedFlags.realloc(nCount);
-            m_aColumnTypes.realloc(nCount);
-            sal_Bool* pNullableIter = m_aNullable.getArray();
-            sal_Bool* pSignedIter = m_aSignedFlags.getArray();
-            sal_Int32* pColumnIter = m_aColumnTypes.getArray();
+            m_aNullable.resize(nCount);
+            m_aSignedFlags.resize(nCount);
+            m_aColumnTypes.resize(nCount);
+            auto pNullableIter = m_aNullable.begin();
+            auto pSignedIter = m_aSignedFlags.begin();
+            auto pColumnIter = m_aColumnTypes.begin();
             for (sal_Int32 i=1; i <= nCount; ++i,++pSignedIter,++pColumnIter,++pNullableIter)
             {
                 *pNullableIter = m_xSetMetaData->isNullable(i) != ColumnValue::NO_NULLS;

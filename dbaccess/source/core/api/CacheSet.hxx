@@ -44,9 +44,9 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xSetMetaData;
         css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
 
-        css::uno::Sequence<sal_Bool>            m_aNullable;
-        css::uno::Sequence<sal_Bool>            m_aSignedFlags;
-        css::uno::Sequence<sal_Int32>           m_aColumnTypes;
+        std::vector<bool>                       m_aNullable;
+        std::vector<bool>                       m_aSignedFlags;
+        std::vector<sal_Int32>                  m_aColumnTypes;
         OUString                                m_aComposedTableName;
         sal_Int32                               m_nMaxRows;
         bool                                    m_bInserted;
