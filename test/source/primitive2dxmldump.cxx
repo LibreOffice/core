@@ -178,6 +178,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 {
                     rWriter.attribute("height", aScale.getY());
                 }
+
+                rWriter.attribute("text", pTextSimplePortionPrimitive2D->getText());
                 rWriter.endElement();
             }
             break;
