@@ -9083,14 +9083,14 @@ dnl ==================================================================
 dnl Breakpad
 dnl ==================================================================
 AC_MSG_CHECKING([whether to enable breakpad])
-if test -z "$enable_breakpad" -o "$enable_breakpad" != no; then
+if test "$enable_breakpad" != yes; then
+    AC_MSG_RESULT([no])
+else
     AC_MSG_RESULT([yes])
     ENABLE_BREAKPAD="TRUE"
     AC_DEFINE(ENABLE_BREAKPAD)
     AC_DEFINE(HAVE_FEATURE_BREAKPAD, 1)
     BUILD_TYPE="$BUILD_TYPE BREAKPAD"
-else
-    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_BREAKPAD)
 
