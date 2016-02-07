@@ -441,6 +441,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, true));
 
             rReq.Done();
+            m_eLastSearchCommand = m_pSrchItem->GetCommand();
         }
         break;
         case FID_SEARCH_SEARCHSET:
@@ -531,6 +532,17 @@ bool SwView::SearchAndWrap(bool bApi)
         // Start- / EndAction perhaps because existing selections of 'search all'
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Push();
+
+    // After a search all action we place the cursor at the beginning of
+    // the document so that the single search selects the first matching
+    // occurrence in the document instead of the second.
+    if( m_eLastSearchCommand == SvxSearchCmd::FIND_ALL )
+    {
+        if( DOCPOS_START == aOpts.eEnd )
+            m_pWrtShell->EndDoc();
+        else
+            m_pWrtShell->SttDoc();
+    }
 
     // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
     // selection closest to the end being searched to as to exclude the selected

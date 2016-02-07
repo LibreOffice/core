@@ -79,6 +79,7 @@ class GraphicFilter;
 class SwPostItMgr;
 enum class SotExchangeDest;
 class SwCursorShell;
+enum class SvxSearchCmd;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -225,6 +226,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // save the border distance status from SwView::StateTabWin to re-use it in SwView::ExecTabWin()
     sal_uInt16          m_nLeftBorderDistance;
     sal_uInt16          m_nRightBorderDistance;
+
+    SvxSearchCmd        m_eLastSearchCommand;
 
     bool m_bWheelScrollInProgress;
 
