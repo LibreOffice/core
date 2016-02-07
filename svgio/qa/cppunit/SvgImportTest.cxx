@@ -44,6 +44,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testFontsizePercentage();
     void testTdf45771();
     void testTdf85770();
+    void testTdf79163();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testFontsizePercentage);
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf85770);
+    CPPUNIT_TEST(testTdf79163);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -221,6 +223,20 @@ void Test::testTdf85770()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start ");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "End");
 }
+
+void Test::testTdf79163()
+{
+    Primitive2DSequence aSequenceTdf79163 = parseSvg("/svgio/qa/cppunit/data/tdf79163.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf79163.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf79163));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/unifiedtransparence", "transparence", "0");
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
