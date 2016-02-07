@@ -704,7 +704,12 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Strikeout"),
         OUString(".uno:StyleApply"),
         OUString(".uno:Underline"),
-        OUString(".uno:ModifiedStatus")
+        OUString(".uno:ModifiedStatus"),
+        OUString(".uno:Undo"),
+        OUString(".uno:Redo"),
+        OUString(".uno:InsertPage"),
+        OUString(".uno:DeletePage"),
+        OUString(".uno:DuplicatePage")
     };
 
     util::URL aCommandURL;
