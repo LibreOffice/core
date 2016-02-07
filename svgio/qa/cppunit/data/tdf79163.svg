@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <rect x="50" y="50" height="110" width="110"
+          style="fill: #ccccff" opacity="0.5"
+            >
+    </rect>
+</svg>
