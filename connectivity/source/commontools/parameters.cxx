@@ -102,8 +102,8 @@ namespace dbtools
         m_nInnerCount        = 0;
         ParameterInformation aEmptyInfo;
         m_aParameterInformation.swap( aEmptyInfo );
-        m_aMasterFields.realloc( 0 );
-        m_aDetailFields.realloc( 0 );
+        m_aMasterFields.clear();
+        m_aDetailFields.clear();
         m_sIdentifierQuoteString.clear();
         m_sSpecialCharacters.clear();
         m_xConnectionMetadata.clear();
@@ -242,7 +242,7 @@ namespace dbtools
     void ParameterManager::classifyLinks( const Reference< XNameAccess >& _rxParentColumns,
         const Reference< XNameAccess >& _rxColumns, ::std::vector< OUString >& _out_rAdditionalFilterComponents )
     {
-        OSL_PRECOND( m_aMasterFields.getLength() == m_aDetailFields.getLength(),
+        OSL_PRECOND( m_aMasterFields.size() == m_aDetailFields.size(),
             "ParameterManager::classifyLinks: master and detail fields should have the same length!" );
         OSL_ENSURE( _rxColumns.is(), "ParameterManager::classifyLinks: invalid columns!" );
 
@@ -257,10 +257,10 @@ namespace dbtools
         bool bNeedExchangeLinks = false;
 
         // classify the links
-        const OUString* pMasterFields = m_aMasterFields.getConstArray();
-        const OUString* pDetailFields = m_aDetailFields.getConstArray();
-        const OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
-        for ( ; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
+        auto pMasterFields = m_aMasterFields.begin();
+        auto pDetailFields = m_aDetailFields.begin();
+        auto pDetailFieldsEnd = m_aDetailFields.end();
+        for ( ; pDetailFields != pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
         {
             if ( pMasterFields->isEmpty() || pDetailFields->isEmpty() )
                 continue;
@@ -328,8 +328,8 @@ namespace dbtools
 
         if ( bNeedExchangeLinks )
         {
-            m_aMasterFields = Sequence< OUString >( aStrippedMasterFields.data(), aStrippedMasterFields.size() );
-            m_aDetailFields = Sequence< OUString >( aStrippedDetailFields.data(), aStrippedDetailFields.size() );
+            m_aMasterFields.swap(aStrippedMasterFields);
+            m_aDetailFields.swap(aStrippedDetailFields);
         }
     }
 
@@ -345,22 +345,25 @@ namespace dbtools
         {
             // the links as determined by the  properties
             Reference< XPropertySet > xProp = m_xComponent;
-            OSL_ENSURE(xProp.is(),"Some already released my component!");
+            OSL_ENSURE(xProp.is(),"Someone already released my component!");
             if ( xProp.is() )
             {
-                xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MASTERFIELDS) ) >>= m_aMasterFields;
-                xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DETAILFIELDS) ) >>= m_aDetailFields;
+                Sequence<OUString> aTmp;
+                if (xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MASTERFIELDS) ) >>= aTmp)
+                     comphelper::sequenceToContainer(m_aMasterFields, aTmp);
+                if (xProp->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DETAILFIELDS) ) >>= aTmp)
+                    comphelper::sequenceToContainer(m_aDetailFields, aTmp);
             }
 
             {
                 // normalize to equal length
-                sal_Int32 nMasterLength = m_aMasterFields.getLength();
-                sal_Int32 nDetailLength = m_aDetailFields.getLength();
+                sal_Int32 nMasterLength = m_aMasterFields.size();
+                sal_Int32 nDetailLength = m_aDetailFields.size();
 
                 if ( nMasterLength > nDetailLength )
-                    m_aMasterFields.realloc( nDetailLength );
+                    m_aMasterFields.resize( nDetailLength );
                 else if ( nDetailLength > nMasterLength )
-                    m_aDetailFields.realloc( nMasterLength );
+                    m_aDetailFields.resize( nMasterLength );
             }
 
             Reference< XNameAccess > xColumns;
@@ -547,10 +550,10 @@ namespace dbtools
         try
         {
             // the master and detail field( name)s of the
-            const OUString* pMasterFields = m_aMasterFields.getConstArray();
-            const OUString* pDetailFields = m_aDetailFields.getConstArray();
+            auto pMasterFields = m_aMasterFields.begin();
+            auto pDetailFields = m_aDetailFields.begin();
 
-            sal_Int32 nMasterLen = m_aMasterFields.getLength();
+            sal_Int32 nMasterLen = m_aMasterFields.size();
 
             // loop through all master fields. For each of them, get the respective column from the
             // parent , and forward its current value as parameter value to the (inner) row set
@@ -720,7 +723,7 @@ namespace dbtools
 
         // fill the parameters from the master-detail relationship
         Reference< XNameAccess > xParentColumns;
-        if ( getParentColumns( xParentColumns, false ) && xParentColumns->hasElements() && m_aMasterFields.getLength() )
+        if ( getParentColumns( xParentColumns, false ) && xParentColumns->hasElements() && m_aMasterFields.size() )
             fillLinkedParameters( xParentColumns );
 
         // let the user (via the interaction handler) fill all remaining parameters
@@ -871,15 +874,15 @@ namespace dbtools
                 return;
 
             // loop through all links pairs
-            const OUString* pMasterFields = m_aMasterFields.getConstArray();
-            const OUString* pDetailFields = m_aDetailFields.getConstArray();
+            auto pMasterFields = m_aMasterFields.begin();
+            auto pDetailFields = m_aDetailFields.begin();
 
             Reference< XPropertySet > xMasterField;
             Reference< XPropertySet > xDetailField;
 
             // now really ....
-            const OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
-            for ( ; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
+            auto pDetailFieldsEnd = m_aDetailFields.end();
+            for ( ; pDetailFields != pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
             {
                 if ( !xParentColumns->hasByName( *pMasterFields ) )
                 {
