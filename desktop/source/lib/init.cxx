@@ -664,7 +664,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 
         uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-        xStorable->storeToURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeAsURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
 
         return true;
     }
