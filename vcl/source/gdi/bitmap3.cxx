@@ -244,6 +244,23 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
 
 bool Bitmap::Convert( BmpConversion eConversion )
 {
+    // try to convert in backend
+    if (mpImpBmp)
+    {
+        ImpBitmap* pImpBmp = new ImpBitmap;
+
+        if (pImpBmp->ImplCreate(*mpImpBmp) && pImpBmp->ImplConvert(eConversion))
+        {
+            ImplSetImpBitmap(pImpBmp);
+            SAL_INFO( "vcl.opengl", "Ref count: " << mpImpBmp->ImplGetRefCount() );
+            return true;
+        }
+        else
+        {
+            delete pImpBmp;
+        }
+    }
+
     const sal_uInt16 nBitCount = GetBitCount ();
     bool bRet = false;
 

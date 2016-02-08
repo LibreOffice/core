@@ -115,4 +115,14 @@ bool ImpBitmap::ImplReplace( const Color& rSearchColor, const Color& rReplaceCol
     return mpSalBitmap->Replace( rSearchColor, rReplaceColor, nTol );
 }
 
+bool ImpBitmap::ImplConvert( BmpConversion eConversion )
+{
+    // avoid large chunk of obsolete and hopefully rarely used conversions.
+    if (eConversion != BMP_CONVERSION_8BIT_GREYS)
+        return false;
+
+    // frequently used conversion for creating alpha masks
+    return mpSalBitmap->ConvertToGreyscale();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

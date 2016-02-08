@@ -902,4 +902,40 @@ bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceC
     return true;
 }
 
+// Convert texture to greyscale and adjust bitmap metadata
+bool OpenGLSalBitmap::ConvertToGreyscale()
+{
+    VCL_GL_INFO("::ConvertToGreyscale");
+
+    // avoid re-converting to 8bits.
+    if ( mnBits == 8 && maPalette == Bitmap::GetGreyPalette(256) )
+        return false;
+
+    OpenGLZone aZone;
+    rtl::Reference<OpenGLContext> xContext = OpenGLContext::getVCLContext();
+
+    OpenGLFramebuffer* pFramebuffer;
+    OpenGLProgram* pProgram;
+
+    GetTexture();
+    pProgram = xContext->UseProgram("textureVertexShader", "greyscaleFragmentShader");
+
+    if (!pProgram)
+        return false;
+
+    OpenGLTexture aNewTex(mnWidth, mnHeight);
+    pFramebuffer = xContext->AcquireFramebuffer(aNewTex);
+    pProgram->SetTexture("sampler", maTexture);
+    pProgram->DrawTexture(maTexture);
+    pProgram->Clean();
+
+    OpenGLContext::ReleaseFramebuffer( pFramebuffer );
+    maTexture = aNewTex;
+    mnBits = 8;
+    maPalette = Bitmap::GetGreyPalette(256);
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
