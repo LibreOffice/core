@@ -1024,13 +1024,17 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
                 xDocumentHandler->endElement(TAG_DIGESTMETHOD);
             }
             xDocumentHandler->startElement(TAG_DIGESTVALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-            xDocumentHandler->endElement(TAG_DIGESTVALUE);
             xDocumentHandler->characters(rReference.ouDigestValue);
+            xDocumentHandler->endElement(TAG_DIGESTVALUE);
             xDocumentHandler->endElement(TAG_REFERENCE);
         }
     }
 
     xDocumentHandler->endElement(TAG_SIGNEDINFO);
+
+    xDocumentHandler->startElement(TAG_SIGNATUREVALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rInformation.ouSignatureValue);
+    xDocumentHandler->endElement(TAG_SIGNATUREVALUE);
 }
 
 SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
