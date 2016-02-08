@@ -1026,16 +1026,16 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
     xDocumentHandler->startElement(TAG_SIGNEDINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
 
     {
-        std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_C14N);
-        xDocumentHandler->startElement(TAG_CANONICALIZATIONMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+        xDocumentHandler->startElement(TAG_CANONICALIZATIONMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
         xDocumentHandler->endElement(TAG_CANONICALIZATIONMETHOD);
     }
 
     {
-        std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_RSASHA256);
-        xDocumentHandler->startElement(TAG_SIGNATUREMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+        xDocumentHandler->startElement(TAG_SIGNATUREMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
         xDocumentHandler->endElement(TAG_SIGNATUREMETHOD);
     }
 
@@ -1045,28 +1045,28 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
         if (rReference.nType == SignatureReferenceType::SAMEDOCUMENT)
         {
             {
-                std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
                 if (rReference.ouURI != "#idSignedProperties")
                     pAttributeList->AddAttribute("Type", "http://www.w3.org/2000/09/xmldsig#Object");
                 else
                     pAttributeList->AddAttribute("Type", "http://uri.etsi.org/01903#SignedProperties");
                 pAttributeList->AddAttribute(ATTR_URI, rReference.ouURI);
-                xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+                xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
             }
             if (rReference.ouURI == "#idSignedProperties")
             {
                 xDocumentHandler->startElement(TAG_TRANSFORMS, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-                std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
                 pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_C14N);
-                xDocumentHandler->startElement(TAG_TRANSFORM, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+                xDocumentHandler->startElement(TAG_TRANSFORM, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
                 xDocumentHandler->endElement(TAG_TRANSFORM);
                 xDocumentHandler->endElement(TAG_TRANSFORMS);
             }
 
             {
-                std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
                 pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_XMLDSIGSHA256);
-                xDocumentHandler->startElement(TAG_DIGESTMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+                xDocumentHandler->startElement(TAG_DIGESTMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
                 xDocumentHandler->endElement(TAG_DIGESTMETHOD);
             }
             xDocumentHandler->startElement(TAG_DIGESTVALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
