@@ -65,6 +65,7 @@ class SvMetaSlot : public SvMetaAttribute
                             SvIdlDataBase & rBase, SvStream & rOutStm );
 
     void            SetEnumValue(SvMetaEnumValue *p) { pEnumValue = p; }
+    OString         GetMangleName() const;
 protected:
     void    SetToggle( bool bSet ) { aToggle = bSet; }
     void    SetAutoUpdate( bool bSet ) { aAutoUpdate = bSet; }
@@ -98,7 +99,6 @@ public:
 
     virtual bool        IsVariable() const override;
     virtual bool        IsMethod() const override;
-    virtual OString     GetMangleName( bool bVariable ) const override;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;

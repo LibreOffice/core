@@ -93,14 +93,11 @@ bool SvMetaSlot::IsMethod() const
     return b;
 }
 
-OString SvMetaSlot::GetMangleName( bool bVariable ) const
+OString SvMetaSlot::GetMangleName() const
 {
-    if( !bVariable )
-    {
-        SvMetaAttribute * pMeth = GetMethod();
-        if( pMeth )
-            return pMeth->GetName();
-    }
+    SvMetaAttribute * pMeth = GetMethod();
+    if( pMeth )
+        return pMeth->GetName();
     return GetName();
 }
 
@@ -871,7 +868,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
     {
         rOutStm.WriteCharPtr( ",\"" );
-        rOutStm.WriteCharPtr( GetMangleName( false ).getStr() );
+        rOutStm.WriteCharPtr( GetMangleName().getStr() );
         rOutStm.WriteCharPtr( "\"" );
     }
 

@@ -63,11 +63,6 @@ bool SvMetaAttribute::IsVariable() const
     return pType->GetType() != MetaTypeType::Method;
 }
 
-OString SvMetaAttribute::GetMangleName( bool ) const
-{
-    return GetName();
-}
-
 bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
                             SvTokenStream & rInStm )
 {

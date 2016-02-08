@@ -48,7 +48,6 @@ public:
 
     virtual bool        IsMethod() const;
     virtual bool        IsVariable() const;
-    virtual OString     GetMangleName( bool bVariable ) const;
 
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) override;
