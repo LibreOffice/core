@@ -16,11 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module
-StarWriter
+module StarWriter
 [
-SlotIdFile( "swslots.hrc" )
-ModulePrefix( "Sw" )
+    SlotIdFile( "swslots.hrc" )
 ]
 {
     include "sfxitems.sdi"

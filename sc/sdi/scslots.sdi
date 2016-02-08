@@ -16,11 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-module
-StarCalc
+module StarCalc
 [
-SlotIdFile( "scslots.hrc" )
-ModulePrefix( "Sc" )
+    SlotIdFile( "scslots.hrc" )
 ]
 {
     struct ScProtection

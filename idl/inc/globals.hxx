@@ -70,7 +70,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_ReadOnlyDoc;
     SvStringHashEntryRef MM_struct;
     SvStringHashEntryRef MM_SlotType;
-    SvStringHashEntryRef MM_ModulePrefix;
     SvStringHashEntryRef MM_DisableFlags;
 
     SvGlobalHashNames();
@@ -137,7 +136,6 @@ HASH_INLINE(ImageReflection)
 HASH_INLINE(ReadOnlyDoc)
 HASH_INLINE(struct)
 HASH_INLINE(SlotType)
-HASH_INLINE(ModulePrefix)
 HASH_INLINE(DisableFlags)
 
 

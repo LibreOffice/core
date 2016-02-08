@@ -97,7 +97,6 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(ReadOnlyDoc)
     A_ENTRY(struct)
     A_ENTRY(SlotType)
-    A_ENTRY(ModulePrefix)
     A_ENTRY(DisableFlags)
 {}
 
