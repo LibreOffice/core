@@ -28,7 +28,6 @@
 namespace avmedia { namespace quicktime {
 
 
-// - FrameGrabber -
 
 
 class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,

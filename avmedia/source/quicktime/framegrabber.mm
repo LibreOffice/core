@@ -35,7 +35,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9
 namespace avmedia { namespace quicktime {
 
 
-// - FrameGrabber -
 
 
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :

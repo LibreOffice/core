@@ -42,7 +42,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::document;
 
 
-// - SVGDialog functions -
 
 
 OUString SVGDialog_getImplementationName ()
@@ -67,7 +66,6 @@ Reference< XInterface > SAL_CALL SVGDialog_createInstance( const Reference< XMul
 }
 
 
-// - SVGDialog -
 
 
 SVGDialog::SVGDialog( const Reference< XComponentContext > &rxContext ) :

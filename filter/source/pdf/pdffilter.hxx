@@ -49,7 +49,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 
 
-// - PDFFilter -
 
 
 class PDFFilter : public cppu::WeakImplHelper < XFilter,

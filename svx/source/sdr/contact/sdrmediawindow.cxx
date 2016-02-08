@@ -27,7 +27,6 @@
 namespace sdr { namespace contact {
 
 
-// - SdrMediaWindow -
 
 
 SdrMediaWindow::SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact ) :

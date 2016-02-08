@@ -28,7 +28,6 @@
 class DataChangedEvent;
 
 
-// - ScrollableWindow-Type -
 
 
 enum class ScrollableWindowFlags
@@ -44,7 +43,6 @@ namespace o3tl
 }
 
 
-// - ScrollableWindow -
 
 
 class SVT_DLLPUBLIC ScrollableWindow: public vcl::Window

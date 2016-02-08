@@ -38,7 +38,6 @@
 
 
 
-// - INFORMATIONDIALOG -
 
 
 using namespace ::com::sun::star;

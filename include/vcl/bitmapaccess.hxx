@@ -25,11 +25,9 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 
-// - Access functions -
 typedef BitmapColor (*FncGetPixel)(ConstScanline pScanline, long nX, const ColorMask& rMask);
 typedef void (*FncSetPixel)(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
 
-// - BitmapInfoAccess -
 class VCL_DLLPUBLIC BitmapInfoAccess
 {
     friend class BitmapReadAccess;
@@ -86,7 +84,6 @@ protected:
     BitmapInfoAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
 };
 
-// - BitmapReadAccess -
 class VCL_DLLPUBLIC BitmapReadAccess : public BitmapInfoAccess
 {
     friend class BitmapWriteAccess;
@@ -181,7 +178,6 @@ protected:
     BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
 };
 
-// - BitmapWriteAccess -
 class VCL_DLLPUBLIC BitmapWriteAccess : public BitmapReadAccess
 {
 public:
@@ -233,7 +229,6 @@ private:
     }
 };
 
-// - Inlines -
 inline bool BitmapInfoAccess::operator!() const
 {
     return mpBuffer == nullptr;

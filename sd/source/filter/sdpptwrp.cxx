@@ -32,7 +32,6 @@
 #include "DrawDocShell.hxx"
 #include <tools/urlobj.hxx>
 
-// - Namespaces -
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -61,7 +60,6 @@ extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
 
 #endif
 
-// - SdPPTFilter -
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),

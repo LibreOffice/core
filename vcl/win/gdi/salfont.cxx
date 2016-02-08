@@ -56,7 +56,6 @@ using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;
 
-// - Inlines -
 
 inline FIXED FixedFromDouble( double d )
 {

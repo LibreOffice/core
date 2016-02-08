@@ -40,7 +40,6 @@ namespace tools {
 class Gradient;
 
 
-// - GDIMetaFile-Types -
 
 
 #define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
@@ -54,7 +53,6 @@ enum MtfConversion
 };
 
 
-// - Color conversion routines -
 
 
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );

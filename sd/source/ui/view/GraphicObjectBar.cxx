@@ -52,7 +52,6 @@ using namespace sd;
 
 namespace sd {
 
-// - GraphicObjectBar -
 
 SFX_IMPL_INTERFACE(GraphicObjectBar, SfxShell)
 

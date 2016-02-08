@@ -275,7 +275,6 @@ void MissingPluginInstallerThread::execute() {
 
 }
 
-// - Player -
 
 
 Player::Player() :

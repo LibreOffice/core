@@ -26,7 +26,6 @@
 #include <svx/svxdllapi.h>
 
 
-// - TbxImageItem -
 
 
 class SVX_DLLPUBLIC TbxImageItem : public SfxUInt16Item
@@ -39,7 +38,6 @@ public:
 };
 
 
-// - SvxGrafToolBoxControl -
 
 
 class SvxGrafToolBoxControl : public SfxToolBoxControl
@@ -53,7 +51,6 @@ public:
 };
 
 
-// - SvxGrafRedToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafRedToolBoxControl : public SvxGrafToolBoxControl
@@ -64,7 +61,6 @@ public:
 };
 
 
-// - SvxGrafGreenToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl : public SvxGrafToolBoxControl
@@ -75,7 +71,6 @@ public:
 };
 
 
-// - SvxGrafBlueToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl : public SvxGrafToolBoxControl
@@ -86,7 +81,6 @@ public:
 };
 
 
-// - SvxGrafLuminanceToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl : public SvxGrafToolBoxControl
@@ -97,7 +91,6 @@ public:
 };
 
 
-// - SvxGrafContrastToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl : public SvxGrafToolBoxControl
@@ -108,7 +101,6 @@ public:
 };
 
 
-// - SvxGrafGammaToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl : public SvxGrafToolBoxControl
@@ -119,7 +111,6 @@ public:
 };
 
 
-// - SvxGrafTransparenceToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl : public SvxGrafToolBoxControl
@@ -130,7 +121,6 @@ public:
 };
 
 
-// - SvxGrafModeToolBoxControl -
 
 
 class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public SfxListener
@@ -145,7 +135,6 @@ public:
 };
 
 
-// - SvxGrafAttrHelper -
 
 
 class SdrView;

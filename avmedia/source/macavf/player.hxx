@@ -29,9 +29,6 @@
 namespace avmedia { namespace macavf {
 
 /*
-// ----------
-// - Player -
-// ----------
 */
 
 class Player

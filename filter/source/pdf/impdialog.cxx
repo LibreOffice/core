@@ -49,7 +49,6 @@ PDFFilterResId::PDFFilterResId( sal_uInt32 nId ) : ResId( nId, getPDFFilterResMg
 }
 
 
-// - ImpPDFDialog -
 
 
 using namespace ::com::sun::star;

@@ -31,7 +31,6 @@ namespace utl {
   struct FontNameAttr;
 }
 
-// - SubsFontName -
 
 enum class SubsFontFlags
 {
@@ -49,7 +48,6 @@ UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlag
 
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 
-// - ConvertChar -
 
 class UNOTOOLS_DLLPUBLIC ConvertChar
 {

@@ -75,7 +75,6 @@ enum ItemType {
     ITEM_FONT, ITEM_FONTHEIGHT, ITEM_FONTWIDTH, ITEM_FIELD
 };
 
-// - ImpItemListRow -
 
 class ImpItemListRow
 {
@@ -161,7 +160,6 @@ bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
         && nMax==rEntry.nMax);
 }
 
-// - ImpItemEdit -
 
 class ImpItemEdit: public Edit
 {
@@ -1071,7 +1069,6 @@ void _SdrItemBrowserWindow::GetFocus()
     aBrowse->GrabFocus();
 }
 
-// - SdrItemBrowser -
 
 SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     _SdrItemBrowserWindow(ImpGetViewWin(rView)),

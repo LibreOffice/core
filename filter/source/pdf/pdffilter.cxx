@@ -26,7 +26,6 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <memory>
 
-// - PDFFilter -
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )
 {

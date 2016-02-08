@@ -31,7 +31,6 @@
 #include <com/sun/star/view/XControlAccess.hpp>
 
 
-// - UnoDialog -
 
 
 using namespace ::com::sun::star::awt;

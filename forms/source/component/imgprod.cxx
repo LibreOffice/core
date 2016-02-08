@@ -32,7 +32,6 @@
 #include "svtools/imageresourceaccess.hxx"
 #include <comphelper/processfactory.hxx>
 
-// - ImgProdLockBytes -
 
 
 class ImgProdLockBytes : public SvLockBytes
@@ -169,7 +168,6 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
     }
 }
 
-// - ImageProducer -
 ImageProducer::ImageProducer()
     : mpStm(nullptr)
     , mnTransIndex(0)

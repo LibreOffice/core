@@ -26,7 +26,6 @@
 #include <vcl/window.hxx>
 
 
-// - TabPage -
 
 
 class VCL_DLLPUBLIC TabPage

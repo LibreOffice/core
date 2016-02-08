@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 namespace avmedia
 {
 
-// - MediaItem -
 SfxPoolItem* MediaItem::CreateDefault() { return new MediaItem; }
 
 struct MediaItem::Impl

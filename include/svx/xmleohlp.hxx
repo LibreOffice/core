@@ -30,7 +30,6 @@
 #include <svx/svxdllapi.h>
 
 
-// - SvXMLEmbeddedObjectHelper -
 
 
 enum SvXMLEmbeddedObjectHelperMode
@@ -40,7 +39,6 @@ enum SvXMLEmbeddedObjectHelperMode
 };
 
 
-// - SvXMLEmbeddedObjectHelper -
 
 
 namespace comphelper {

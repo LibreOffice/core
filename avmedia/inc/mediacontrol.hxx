@@ -37,7 +37,6 @@ namespace avmedia
 {
 
 
-// - MediaControlStyle -
 
 
 enum MediaControlStyle
@@ -47,7 +46,6 @@ enum MediaControlStyle
 };
 
 
-// - MediaControl -
 
 
 class MediaItem;

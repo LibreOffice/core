@@ -3971,7 +3971,6 @@ sal_Int8 SvxBrushItem::getGraphicTransparency() const
     return pImpl->nGraphicTransparency;
 }
 
-// -----------------------------------------------------------------------
 //UUUU
 void SvxBrushItem::setGraphicTransparency(sal_Int8 nNew)
 {
@@ -3982,7 +3981,6 @@ void SvxBrushItem::setGraphicTransparency(sal_Int8 nNew)
     }
 }
 
-// -----------------------------------------------------------------------
 
 
 const Graphic* SvxBrushItem::GetGraphic(OUString const & referer) const

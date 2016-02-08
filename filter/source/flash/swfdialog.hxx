@@ -26,7 +26,6 @@
 #include <svtools/genericunodialog.hxx>
 
 
-// - SWFDialog -
 
 
 namespace vcl { class Window; }

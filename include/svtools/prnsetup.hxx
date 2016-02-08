@@ -34,7 +34,6 @@ class Printer;
 class QueueInfo;
 
 
-// - PrinterSetupDialog -
 
 
 class SVT_DLLPUBLIC PrinterSetupDialog : public ModalDialog
@@ -74,7 +73,6 @@ public:
 };
 
 
-// - Helper functions for print dialog -
 
 
 #define IMPL_PRINTDLG_STATUS_UPDATE     15000

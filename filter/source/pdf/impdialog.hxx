@@ -40,7 +40,6 @@
 #include "com/sun/star/beans/NamedValue.hpp"
 
 
-// - ImpPDFDialog -
 
 
 class ImpPDFTabGeneralPage;

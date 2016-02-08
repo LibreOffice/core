@@ -29,7 +29,6 @@
 class SvtPrintOptions_Impl;
 
 
-// - SvtBasePrintOptions -
 
 
 class PrinterOptions;
@@ -82,7 +81,6 @@ public:
 };
 
 
-// - SvtPrinterOptions -
 
 
 class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
@@ -99,7 +97,6 @@ public:
 };
 
 
-// - SvtPrintFileOptions -
 
 
 class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions

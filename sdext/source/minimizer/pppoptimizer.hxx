@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XController.hpp>
 
 
-// - PPPOptimizer -
 
 
 class PPPOptimizer : public cppu::WeakImplHelper<

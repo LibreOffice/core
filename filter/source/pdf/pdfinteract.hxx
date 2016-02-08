@@ -30,7 +30,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-// - PDFFilter -
 
 
 class PDFInteractionHandler : public cppu::WeakImplHelper < task::XInteractionHandler2,

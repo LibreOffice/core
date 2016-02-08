@@ -31,7 +31,6 @@
 static const sal_Int32 nFontEM = 2048;
 
 
-// - SVGFontExport -
 
 
 SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects ) :

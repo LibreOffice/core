@@ -23,7 +23,6 @@
 #include <vcl/bitmapaccess.hxx>
 
 
-// - GIFLZWCompressor -
 
 
 class   GIFImageDataOutputStream;

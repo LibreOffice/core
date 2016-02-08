@@ -31,7 +31,6 @@
 #include <tools/fontenum.hxx>
 
 
-// - SVGFontExport -
 
 
 

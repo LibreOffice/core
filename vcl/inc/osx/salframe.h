@@ -45,7 +45,6 @@ class AquaBlinker;
 
 typedef struct SalFrame::SalPointerState SalPointerState;
 
-// - AquaSalFrame -
 
 class AquaSalFrame : public SalFrame
 {

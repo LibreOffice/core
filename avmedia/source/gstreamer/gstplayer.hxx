@@ -32,7 +32,6 @@ typedef struct _GstVideoOverlay GstVideoOverlay;
 namespace avmedia { namespace gstreamer {
 
 
-// - Player -
 
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,

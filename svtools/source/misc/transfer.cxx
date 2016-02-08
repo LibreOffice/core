@@ -63,7 +63,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <memory>
 
-// - Namespaces -
 
 
 using namespace ::com::sun::star::uno;
@@ -75,7 +74,6 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 
-// - TransferableObjectDescriptor -
 
 
 #define TOD_SIG1 0x01234567
@@ -232,7 +230,6 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 }
 
 
-// - TransferableHelper::TerminateListener -
 
 
 TransferableHelper::TerminateListener::TerminateListener( TransferableHelper& rTransferableHelper ) :
@@ -266,7 +263,6 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 }
 
 
-// - TransferableHelper -
 
 
 TransferableHelper::TransferableHelper() :
@@ -1103,7 +1099,6 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 }
 
 
-// - TransferableClipboardNotifier -
 
 
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper< XClipboardListener >
@@ -1189,7 +1184,6 @@ void TransferableClipboardNotifier::dispose()
 }
 
 
-// - TransferableDataHelper_Impl -
 
 
 struct TransferableDataHelper_Impl
@@ -1204,7 +1198,6 @@ struct TransferableDataHelper_Impl
 };
 
 
-// - TransferableDataHelper -
 
 
 TransferableDataHelper::TransferableDataHelper() :

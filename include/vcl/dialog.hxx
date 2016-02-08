@@ -25,7 +25,6 @@
 #include <vcl/syswin.hxx>
 #include <vcl/vclptr.hxx>
 
-// - Dialog -
 
 struct DialogImpl;
 class VclBox;
@@ -123,7 +122,6 @@ public:
     void            GrabFocusToFirstControl();
 };
 
-// - ModelessDialog -
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
                     ModelessDialog (const ModelessDialog &) = delete;
@@ -133,7 +131,6 @@ public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
 };
 
-// - ModalDialog -
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:

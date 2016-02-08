@@ -27,7 +27,6 @@
 #include <vcl/font.hxx>
 
 
-// - CommandExtTextInputData -
 
 
 #define EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
@@ -70,7 +69,6 @@ public:
 };
 
 
-// - CommandInputContextData -
 
 
 class VCL_DLLPUBLIC CommandInputContextData
@@ -94,7 +92,6 @@ inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
 }
 
 
-// - CommandWheelData -
 
 
 enum class CommandWheelMode
@@ -171,7 +168,6 @@ inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDel
 }
 
 
-// - CommandScrollData -
 
 
 class VCL_DLLPUBLIC CommandScrollData
@@ -201,7 +197,6 @@ inline CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
 }
 
 
-// - CommandModKeyData -
 
 
 class VCL_DLLPUBLIC CommandModKeyData
@@ -230,7 +225,6 @@ inline CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
 }
 
 
-// - CommandDialogData -
 
 
 enum class ShowDialogId
@@ -292,7 +286,6 @@ public:
     bool GetPassThroughToOS() const { return m_bPassThroughToOS; }
 };
 
-// - CommandSelectionChangeData -
 class VCL_DLLPUBLIC CommandSelectionChangeData
 {
 private:
@@ -354,7 +347,6 @@ public:
 };
 
 
-// - CommandEvent -
 enum class CommandEventId
 {
     NONE                    = 0,

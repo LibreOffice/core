@@ -22,7 +22,6 @@
 #include "giflzwc.hxx"
 
 
-// - GIFImageDataOutputStream -
 
 
 class GIFImageDataOutputStream
@@ -109,7 +108,6 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 }
 
 
-// - GIFLZWCTreeNode -
 
 
 struct GIFLZWCTreeNode
@@ -122,7 +120,6 @@ struct GIFLZWCTreeNode
 };
 
 
-// - GIFLZWCompressor -
 
 
 GIFLZWCompressor::GIFLZWCompressor()

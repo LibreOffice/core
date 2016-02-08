@@ -26,7 +26,6 @@
 #include <scanner.hxx>
 
 
-// - BitmapTransporter -
 
 
 class BitmapTransporter: public cppu::WeakImplHelper<css::awt::XBitmap>
@@ -50,7 +49,6 @@ public:
 };
 
 
-// - Sane -
 
 
 class Sane

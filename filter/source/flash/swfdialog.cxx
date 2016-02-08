@@ -39,7 +39,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::document;
 
 
-// - PDFDialog functions -
 
 
 #define SERVICE_NAME "com.sun.star.Impress.FlashExportDialog"
@@ -72,7 +71,6 @@ Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMul
 #undef SERVICE_NAME
 
 
-// - SWFDialog -
 
 
 SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :

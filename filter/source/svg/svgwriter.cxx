@@ -3641,7 +3641,6 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 }
 
 
-// - SVGWriter -
 
 
 SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentContext >& rxCtx )

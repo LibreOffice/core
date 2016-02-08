@@ -26,7 +26,6 @@
 #include <vcl/vclenum.hxx>
 
 
-// - Impl_Hatch -
 
 
 class SvStream;
@@ -47,7 +46,6 @@ struct ImplHatch
 };
 
 
-// - Hatch -
 
 
 class VCL_DLLPUBLIC Hatch

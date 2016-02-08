@@ -30,7 +30,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9
 namespace avmedia { namespace quicktime {
 
 
-// - Player -
 
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :

@@ -1791,7 +1791,6 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
     }
 }
 
-// - OutlineViewModelChangeGuard -
 
 OutlineViewModelChangeGuard::OutlineViewModelChangeGuard( OutlineView& rView )
 : mrView( rView )
@@ -1804,7 +1803,6 @@ OutlineViewModelChangeGuard::~OutlineViewModelChangeGuard()
     mrView.EndModelChange();
 }
 
-// - OutlineViewPageChangesGuard -
 
 OutlineViewPageChangesGuard::OutlineViewPageChangesGuard( OutlineView* pView )
 : mpView( pView )

@@ -37,9 +37,7 @@
 
 #include "GetMetadataForFile.h"
 
-// -----------------------------------------------------------------------------
 //    constants
-// -----------------------------------------------------------------------------
 
 
 #define PLUGIN_ID "A3FCC88D-B9A6-4364-8B93-92123C8A2D18"
@@ -52,9 +50,7 @@
 //
 
 
-// -----------------------------------------------------------------------------
 //    typedefs
-// -----------------------------------------------------------------------------
 
 // The layout for an instance of MetaDataImporterPlugIn
 typedef struct __MetadataImporterPluginType
@@ -64,9 +60,7 @@ typedef struct __MetadataImporterPluginType
     UInt32                    refCount;
 } MetadataImporterPluginType;
 
-// -----------------------------------------------------------------------------
 //    prototypes
-// -----------------------------------------------------------------------------
 //    Forward declaration for the IUnknown implementation.
 //
 
@@ -75,9 +69,7 @@ void                      DeallocMetadataImporterPluginType(MetadataImporterPlug
 HRESULT                   MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv);
 ULONG                     MetadataImporterPluginAddRef(void *thisInstance);
 ULONG                     MetadataImporterPluginRelease(void *thisInstance);
-// -----------------------------------------------------------------------------
 //    testInterfaceFtbl    definition
-// -----------------------------------------------------------------------------
 //    The TestInterface function table.
 //
 
@@ -90,9 +82,7 @@ static MDImporterInterfaceStruct testInterfaceFtbl = {
 };
 
 
-// -----------------------------------------------------------------------------
 //    AllocMetadataImporterPluginType
-// -----------------------------------------------------------------------------
 //    Utility function that allocates a new instance.
 //      You can do some initial setup for the importer here if you wish
 //      like allocating globals etc...
@@ -116,9 +106,7 @@ MetadataImporterPluginType *AllocMetadataImporterPluginType(CFUUIDRef inFactoryI
     return theNewInstance;
 }
 
-// -----------------------------------------------------------------------------
 //    DeallocSpotlightTesterMDImporterPluginType
-// -----------------------------------------------------------------------------
 //    Utility function that deallocates the instance when
 //    the refCount goes to zero.
 //      In the current implementation importer interfaces are never deallocated
@@ -136,9 +124,7 @@ void DeallocMetadataImporterPluginType(MetadataImporterPluginType *thisInstance)
     }
 }
 
-// -----------------------------------------------------------------------------
 //    MetadataImporterQueryInterface
-// -----------------------------------------------------------------------------
 //    Implementation of the IUnknown QueryInterface function.
 //
 HRESULT MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv)
@@ -172,9 +158,7 @@ HRESULT MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv
     }
 }
 
-// -----------------------------------------------------------------------------
 //    MetadataImporterPluginAddRef
-// -----------------------------------------------------------------------------
 //    Implementation of reference counting for this type. Whenever an interface
 //    is requested, bump the refCount for the instance. NOTE: returning the
 //    refcount is a convention but is not required so don't rely on it.
@@ -185,9 +169,7 @@ ULONG MetadataImporterPluginAddRef(void *thisInstance)
     return ((MetadataImporterPluginType*) thisInstance)->refCount;
 }
 
-// -----------------------------------------------------------------------------
 // SampleCMPluginRelease
-// -----------------------------------------------------------------------------
 //    When an interface is released, decrement the refCount.
 //    If the refCount goes to zero, deallocate the instance.
 //
@@ -202,9 +184,7 @@ ULONG MetadataImporterPluginRelease(void *thisInstance)
     }
 }
 
-// -----------------------------------------------------------------------------
 //    SpotlightTesterMDImporterPluginFactory
-// -----------------------------------------------------------------------------
 //    Implementation of the factory function for this type.
 //
 __attribute__ ((visibility("default")))

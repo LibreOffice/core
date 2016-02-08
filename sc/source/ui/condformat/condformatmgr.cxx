@@ -146,7 +146,6 @@ ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
     return pList;
 }
 
-// ---------------------------------------------------------------
 // Get the current conditional format selected.
 //
 ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()

@@ -31,7 +31,6 @@
 #include <osl/time.h>
 
 
-// - OPTIMIZERDIALOG -
 
 
 using namespace ::com::sun::star::io;

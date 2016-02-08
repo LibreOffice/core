@@ -31,7 +31,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 
-// - PDFDialog functions -
 
 
 #define SERVICE_NAME "com.sun.star.document.PDFDialog"
@@ -64,7 +63,6 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
 #undef SERVICE_NAME
 
 
-// - PDFDialog -
 
 
 PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )

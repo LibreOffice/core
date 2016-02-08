@@ -121,7 +121,6 @@ void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::tas
         m_xInter->handle( xRequest );
 }
 
-// - SdPPTFilter -
 
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell, true )

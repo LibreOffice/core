@@ -85,7 +85,6 @@ bool isWindowsVistaOrHigher()
 }
 
 
-// - Player -
 
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :

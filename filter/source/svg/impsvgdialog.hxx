@@ -38,7 +38,6 @@
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 
-// - ImpSVGDialog -
 
 
 class ResMgr;

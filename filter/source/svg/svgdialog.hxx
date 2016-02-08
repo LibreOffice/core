@@ -28,7 +28,6 @@
 #include <memory>
 
 
-// - SVGDialog -
 
 
 class ResMgr;

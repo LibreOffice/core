@@ -29,7 +29,6 @@ struct ImplStatusItem;
 typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
 
 
-// - Progress-Ausgabe -
 
 void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
                                 long nOffset, long nPrgsWidth, long nPrgsHeight,
@@ -37,13 +36,11 @@ void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRende
                                 const Rectangle& rFramePosSize);
 
 
-// - StatusBarItemBits -
 
 
 typedef sal_uInt16 StatusBarItemBits;
 
 
-// - Bits fuer StatusBarItems -
 
 
 #define SIB_LEFT                    ((StatusBarItemBits)0x0001)
@@ -56,7 +53,6 @@ typedef sal_uInt16 StatusBarItemBits;
 #define SIB_USERDRAW                ((StatusBarItemBits)0x0080)
 
 
-// - StatusBar-Types -
 
 
 #define STATUSBAR_APPEND            ((sal_uInt16)0xFFFF)
@@ -64,7 +60,6 @@ typedef sal_uInt16 StatusBarItemBits;
 #define STATUSBAR_OFFSET            ((long)5)
 
 
-// - StatusBar -
 
 
 class VCL_DLLPUBLIC StatusBar : public vcl::Window

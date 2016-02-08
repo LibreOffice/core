@@ -35,13 +35,11 @@
 #include "drawdoc.hxx"
 #include "sdfilter.hxx"
 
-// - Namespaces -
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-// - SdFilter -
 
 SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress )
 :   mxModel( rDocShell.GetModel() )

@@ -132,7 +132,6 @@ calls or by ending a selection.
 *************************************************************************/
 
 
-// - Calendar types -
 
 
 #define WB_QUICKHELPSHOWSDATEINFO   ((WinBits)0x00004000)
@@ -151,7 +150,6 @@ calls or by ending a selection.
 #define DIB_BOLD                    ((sal_uInt16)0x0001)
 
 
-// - Calendar -
 
 
 typedef std::set<sal_uInt32> IntDateSet;
@@ -343,7 +341,6 @@ method in CalendarField and create an own calendar there ourselves.
 *************************************************************************/
 
 
-// - CalendarField -
 
 
 class SVT_DLLPUBLIC CalendarField : public DateField

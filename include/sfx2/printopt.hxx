@@ -32,7 +32,6 @@
 #include <sfx2/tabdlg.hxx>
 
 
-// - SfxCommonPrintOptionsTabPage -
 
 
 class SvtBasePrintOptions;

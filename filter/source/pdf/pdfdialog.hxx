@@ -26,7 +26,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-// - PDFDialog -
 
 
 namespace vcl { class Window; }

@@ -43,7 +43,6 @@
 #define ColorMap                    320
 
 
-// - TIFFWriter -
 
 
 struct TIFFLZWCTreeNode

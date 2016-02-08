@@ -31,7 +31,6 @@ inline sal_Int32 implMap( vcl::Window& /*rWnd*/, sal_Int32 nVal )
 }
 
 
-// - ImpSVGDialog -
 
 
 ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :

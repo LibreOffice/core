@@ -28,7 +28,6 @@ namespace avmedia { namespace quicktime {
 
 /*
 
-// - Player -
 
 */
 

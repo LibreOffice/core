@@ -59,7 +59,6 @@
 
 using namespace ::com::sun::star;
 
-// - SgaTheme -
 
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
