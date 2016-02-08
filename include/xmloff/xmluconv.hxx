@@ -143,7 +143,7 @@ public:
                                          ::xmloff::token::XML_TOKEN_INVALID );
 
     /** convert double number to string (using ::rtl::math) and DO
-		convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */
+        convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */
     void convertDouble(OUStringBuffer& rBuffer,
         double fNumber, bool bWriteUnits) const;
 

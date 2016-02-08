@@ -81,7 +81,6 @@ inline KeyEvent::KeyEvent( sal_Unicode nChar, const vcl::KeyCode& rKeyCode,
 }
 
 
-// - MouseEvent-Types -
 
 
 enum class MouseEventModifiers
@@ -112,7 +111,6 @@ namespace o3tl
 #define MOUSE_RIGHT             ((sal_uInt16)0x0004)
 
 
-// - MouseEvent -
 
 
 class VCL_DLLPUBLIC MouseEvent
@@ -244,7 +242,6 @@ public:
 };
 
 
-// - HelpEvent -
 
 enum class HelpEventMode
 {
@@ -341,7 +338,6 @@ inline UserDrawEvent::UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pR
 }
 
 
-// - TrackingEvent -
 
 
 class VCL_DLLPUBLIC TrackingEvent
@@ -378,7 +374,6 @@ inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
 }
 
 
-// - NotifyEvent -
 
 enum class MouseNotifyEvent
 {
@@ -445,7 +440,6 @@ inline const CommandEvent* NotifyEvent::GetCommandEvent() const
 }
 
 
-// - DataChangedEvent -
 
 
 enum class DataChangedEventType {

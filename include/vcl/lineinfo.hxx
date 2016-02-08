@@ -27,7 +27,6 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 
 
-// - ImplLineInfo -
 
 
 class SvStream;
@@ -57,7 +56,6 @@ struct ImplLineInfo
 };
 
 
-// - LineInfo -
 
 
 class VCL_DLLPUBLIC LineInfo

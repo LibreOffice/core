@@ -36,7 +36,7 @@ public:
 
 private:
 
-    DiagramDataPtr	mpDataPtr;
+    DiagramDataPtr  mpDataPtr;
 };
 
 class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler2
@@ -50,7 +50,7 @@ public:
 
 private:
 
-    DiagramLayoutPtr	mpDataPtr;
+    DiagramLayoutPtr    mpDataPtr;
 };
 
 class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler2

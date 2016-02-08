@@ -45,11 +45,9 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <memory>
 
-// - Namespaces -
 
 using namespace ::com::sun::star;
 
-// - GalleryThemeEntry -
 
 static bool FileExists( const INetURLObject &rURL, const rtl::OUString &rExt )
 {
@@ -144,7 +142,6 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, bool bResetThemeName )
     bThemeNameFromResource = ( nId && bResetThemeName );
 }
 
-// - GalleryThemeCacheEntry -
 
 class GalleryThemeCacheEntry
 {
@@ -163,7 +160,6 @@ public:
     GalleryTheme*                           GetTheme() const { return mpTheme; }
 };
 
-// - Gallery -
 
 Gallery::Gallery( const OUString& rMultiPath )
 :       bMultiPath          ( false )

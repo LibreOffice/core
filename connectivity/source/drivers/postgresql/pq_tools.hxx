@@ -139,7 +139,7 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
 sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype );
 
 // copied from connectivity/source/dbtools, can't use the function directly
-bool implSetObject(	const com::sun::star::uno::Reference< com::sun::star::sdbc::XParameters >& _rxParameters,
+bool implSetObject( const com::sun::star::uno::Reference< com::sun::star::sdbc::XParameters >& _rxParameters,
                     const sal_Int32 _nColumnIndex, const com::sun::star::uno::Any& _rValue);
 
 class DisposeGuard

@@ -92,12 +92,12 @@ class SwCompareConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    sal_uInt16      eCmpMode;		//Compare/CompareDocuments;
+    sal_uInt16      eCmpMode;       //Compare/CompareDocuments;
     bool            bUseRsid;       //Compare/Settings/Use RSID
     /// Compare/Settings/Store RSID
     bool            m_bStoreRsid;
     bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
-    sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
+    sal_uInt16      nPieceLen;      //Compare/Settings/Ignore pieces of length
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 

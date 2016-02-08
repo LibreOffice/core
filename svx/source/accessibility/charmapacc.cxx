@@ -40,7 +40,6 @@ namespace svx
     using namespace ::com::sun::star::accessibility;
 
 
-// - SvxShowCharSetVirtualAcc -
 
 SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
 ,mpParent( pParent )
@@ -225,7 +224,6 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 }
 
 
-// - SvxShowCharSetItem -
 
 
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
@@ -272,7 +270,6 @@ void SvxShowCharSetItem::ClearAccessible()
 
 
 
-// - SvxShowCharSetAcc -
 
 
 SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(new VCLExternalSolarLock())
@@ -603,7 +600,6 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex
 
 
 
-// - SvxShowCharSetItemAcc -
 
 
 SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())

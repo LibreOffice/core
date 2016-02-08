@@ -1848,7 +1848,7 @@ void Complex::Sin() throw( uno::RuntimeException, lang::IllegalArgumentException
 
 void Complex::Cos() throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-	if( !::rtl::math::isValidArcArg( r ) )
+    if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
 
     if( i )
@@ -2009,13 +2009,13 @@ void Complex::Sinh() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 
     if( i )
     {
-        double	r_;
+        double  r_;
         r_ = sinh( r ) * cos( i );
-		i = cosh( r ) * sin( i );
-		r = r_;
-	}
-	else
-		r = sinh( r );
+        i = cosh( r ) * sin( i );
+        r = r_;
+    }
+    else
+        r = sinh( r );
 }
 
 
@@ -2026,13 +2026,13 @@ void Complex::Cosh() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 
     if( i )
     {
-        double	r_;
+        double  r_;
         r_ = cosh( r ) * cos( i );
-		i = sinh( r ) * sin( i );
-		r = r_;
-	}
-	else
-		r = cosh( r );
+        i = sinh( r ) * sin( i );
+        r = r_;
+    }
+    else
+        r = cosh( r );
 }
 
 

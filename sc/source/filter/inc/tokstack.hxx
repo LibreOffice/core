@@ -174,14 +174,14 @@ private:
 #if 0
         bool                        GrowError();
 #endif
-		bool						GrowTripel( sal_uInt16 nByMin = 1 );
+        bool                        GrowTripel( sal_uInt16 nByMin = 1 );
         bool                        GrowId();
         bool                        GrowElement();
         bool                        GrowExt();
         bool                        GrowNlf();
         bool                        GrowMatrix();
-		bool						GetElement( const sal_uInt16 nId );
-		bool						GetElementRek( const sal_uInt16 nId );
+        bool                        GetElement( const sal_uInt16 nId );
+        bool                        GetElementRek( const sal_uInt16 nId );
 public:
     TokenPool( svl::SharedStringPool& rSPool );
                                     ~TokenPool();
@@ -291,7 +291,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
         "-TokenPool::operator <<: TokenId in DefToken-Range!" );
 
     if( nP_IdAkt >= nP_Id )
-		if (!GrowId())
+        if (!GrowId())
             return *this;
 
     pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rId ) - 1;
@@ -306,7 +306,7 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
         "-TokenPool::operator<<: enum too large!" );
 
     if( nP_IdAkt >= nP_Id )
-		if (!GrowId())
+        if (!GrowId())
             return *this;
 
     pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) eId ) + nScTokenOff;
@@ -318,7 +318,7 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
 {
     if( nP_IdAkt >= nP_Id )
-		if (!GrowId())
+        if (!GrowId())
             return *this;
 
     pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rStack.Get() ) - 1;

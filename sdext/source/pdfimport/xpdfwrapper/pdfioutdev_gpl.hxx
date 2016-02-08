@@ -192,7 +192,7 @@ namespace pdfi
         virtual void endPage() override;
 
         //----- link borders
-	#if POPPLER_CHECK_VERSION(0, 19, 0)
+    #if POPPLER_CHECK_VERSION(0, 19, 0)
         virtual void processLink(AnnotLink *link) override;
     #elif POPPLER_CHECK_VERSION(0, 17, 0)
         virtual void processLink(AnnotLink *link, Catalog *catalog) override;

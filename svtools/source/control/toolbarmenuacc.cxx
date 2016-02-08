@@ -40,7 +40,6 @@ using namespace ::com::sun::star::accessibility;
 namespace svtools {
 
 
-// - ToolbarMenuAcc -
 
 
 ToolbarMenuAcc::ToolbarMenuAcc( ToolbarMenu_Impl& rParent )
@@ -568,7 +567,6 @@ void ToolbarMenuAcc::ThrowIfDisposed() throw (DisposedException)
 }
 
 
-// - ToolbarMenuEntryAcc -
 
 
 ToolbarMenuEntryAcc::ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent )

@@ -24,7 +24,6 @@
 
 namespace tools { class PolyPolygon; }
 
-// - Vectorizer -
 namespace ImplVectorizer
 {
     bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,

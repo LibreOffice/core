@@ -60,7 +60,6 @@ using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::xml::sax;
 
 
-// - ORptFilter -
 
 class ORptFilter : public SvXMLImport
 {

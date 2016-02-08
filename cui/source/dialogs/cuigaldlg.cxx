@@ -51,11 +51,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
-
-
-// - Namespaces -
-
-
 using namespace ::ucbhelper;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
@@ -63,9 +58,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
-
-
-// - SearchThread -
 
 
 SearchThread::SearchThread( SearchProgress* pProgess,
@@ -79,11 +71,9 @@ SearchThread::SearchThread( SearchProgress* pProgess,
 }
 
 
-
 SearchThread::~SearchThread()
 {
 }
-
 
 
 void SearchThread::execute()
@@ -112,7 +102,6 @@ void SearchThread::execute()
 
     Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ), nullptr, true );
 }
-
 
 
 void SearchThread::ImplSearch( const INetURLObject& rStartURL,
@@ -200,9 +189,6 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 }
 
 
-// - SearchProgress -
-
-
 SearchProgress::SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL )
     : ModalDialog(pParent, "GallerySearchProgress", "cui/ui/gallerysearchprogress.ui")
     , parent_(pParent)
@@ -215,10 +201,12 @@ SearchProgress::SearchProgress( vcl::Window* pParent, const INetURLObject& rStar
     m_pBtnCancel->SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
 }
 
+
 SearchProgress::~SearchProgress()
 {
     disposeOnce();
 }
+
 
 void SearchProgress::dispose()
 {
@@ -237,12 +225,10 @@ void SearchProgress::Terminate()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SearchProgress, ClickCancelBtn, Button*, void)
 {
     Terminate();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SearchProgress, CleanUpHdl, void*, void)
@@ -256,7 +242,6 @@ IMPL_LINK_NOARG_TYPED(SearchProgress, CleanUpHdl, void*, void)
 }
 
 
-
 short SearchProgress::Execute()
 {
     OSL_FAIL( "SearchProgress cannot be executed via Dialog::Execute!\n"
@@ -264,7 +249,6 @@ short SearchProgress::Execute()
                "Use Dialog::StartExecuteModal to execute the dialog!" );
     return RET_CANCEL;
 }
-
 
 
 void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
@@ -275,9 +259,6 @@ void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl 
     maSearchThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
-
-
-// - TakeThread -
 
 
 TakeThread::TakeThread(
@@ -293,11 +274,9 @@ TakeThread::TakeThread(
 }
 
 
-
 TakeThread::~TakeThread()
 {
 }
-
 
 
 void TakeThread::execute()
@@ -340,7 +319,7 @@ void TakeThread::execute()
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), nullptr, true );
 }
 
-// - TakeProgress -
+
 TakeProgress::TakeProgress(vcl::Window* pWindow)
     : ModalDialog(pWindow, "GalleryApplyProgress",
         "cui/ui/galleryapplyprogress.ui")
@@ -352,10 +331,12 @@ TakeProgress::TakeProgress(vcl::Window* pWindow)
     m_pBtnCancel->SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
 }
 
+
 TakeProgress::~TakeProgress()
 {
     disposeOnce();
 }
+
 
 void TakeProgress::dispose()
 {
@@ -365,16 +346,19 @@ void TakeProgress::dispose()
     ModalDialog::dispose();
 }
 
+
 void TakeProgress::Terminate()
 {
     if (maTakeThread.is())
         maTakeThread->terminate();
 }
 
+
 IMPL_LINK_NOARG_TYPED(TakeProgress, ClickCancelBtn, Button*, void)
 {
     Terminate();
 }
+
 
 IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
 {
@@ -428,7 +412,6 @@ IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
 }
 
 
-
 short TakeProgress::Execute()
 {
     OSL_FAIL( "TakeProgress cannot be executed via Dialog::Execute!\n"
@@ -436,7 +419,6 @@ short TakeProgress::Execute()
                "Use Dialog::StartExecuteModal to execute the dialog!" );
     return RET_CANCEL;
 }
-
 
 
 void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
@@ -449,7 +431,6 @@ void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 }
 
 
-// - ActualizeProgress -
 ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     : ModalDialog(pWindow, "GalleryUpdateProgress",
         "cui/ui/galleryupdateprogress.ui")
@@ -461,10 +442,12 @@ ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     m_pBtnCancel->SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
 }
 
+
 ActualizeProgress::~ActualizeProgress()
 {
     disposeOnce();
 }
+
 
 void ActualizeProgress::dispose()
 {
@@ -472,6 +455,7 @@ void ActualizeProgress::dispose()
     m_pBtnCancel.clear();
     ModalDialog::dispose();
 }
+
 
 short ActualizeProgress::Execute()
 {
@@ -488,13 +472,11 @@ short ActualizeProgress::Execute()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(ActualizeProgress, ClickCancelBtn, Button*, void)
 {
     pTheme->AbortActualize();
     EndDialog( RET_OK );
 }
-
 
 
 IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
@@ -510,7 +492,6 @@ IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
 }
 
 
-
 IMPL_LINK_TYPED( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
 {
     for( long i = 0; i < 128; i++ )
@@ -522,6 +503,7 @@ IMPL_LINK_TYPED( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, vo
     m_pFtActualizeFile->Flush();
 }
 
+
 TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
     : ModalDialog(pParent, "GalleryTitleDialog", "cui/ui/gallerytitledialog.ui")
 {
@@ -530,19 +512,18 @@ TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
     m_pEdit->GrabFocus();
 }
 
+
 TitleDialog::~TitleDialog()
 {
     disposeOnce();
 }
+
 
 void TitleDialog::dispose()
 {
     m_pEdit.clear();
     ModalDialog::dispose();
 }
-
-
-// - GalleryIdDialog -
 
 
 GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
@@ -562,10 +543,12 @@ GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
     m_pBtnOk->SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
 }
 
+
 GalleryIdDialog::~GalleryIdDialog()
 {
     disposeOnce();
 }
+
 
 void GalleryIdDialog::dispose()
 {
@@ -573,6 +556,7 @@ void GalleryIdDialog::dispose()
     m_pLbResName.clear();
     ModalDialog::dispose();
 }
+
 
 IMPL_LINK_NOARG_TYPED(GalleryIdDialog, ClickOkHdl, Button*, void)
 {
@@ -604,10 +588,6 @@ IMPL_LINK_NOARG_TYPED(GalleryIdDialog, ClickOkHdl, Button*, void)
 }
 
 
-
-// - GalleryThemeProperties -
-
-
 GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     ExchangeData* _pData, SfxItemSet* pItemSet)
     : SfxTabDialog( pParent, "GalleryThemeDialog",
@@ -632,6 +612,7 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     SetText( aText );
 }
 
+
 void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nGeneralPageId)
@@ -640,7 +621,7 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<TPGalleryThemeProperties&>( rPage ).SetXChgData( pData );
 }
 
-// - TPGalleryThemeGeneral -
+
 TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "GalleryGeneralPage",
         "cui/ui/gallerygeneralpage.ui", &rSet)
@@ -654,10 +635,12 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItem
     get(m_pFtMSShowChangeDate, "modified");
 }
 
+
 TPGalleryThemeGeneral::~TPGalleryThemeGeneral()
 {
     disposeOnce();
 }
+
 
 void TPGalleryThemeGeneral::dispose()
 {
@@ -669,6 +652,7 @@ void TPGalleryThemeGeneral::dispose()
     m_pFtMSShowChangeDate.clear();
     SfxTabPage::dispose();
 }
+
 
 void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 {
@@ -727,7 +711,6 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 }
 
 
-
 bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     pData->aEditedTitle = m_pEdtMSName->GetText();
@@ -735,13 +718,12 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 }
 
 
-
 VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return VclPtr<TPGalleryThemeGeneral>::Create( pParent, *rSet );
 }
 
-// - TPGalleryThemeProperties -
+
 TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
     , pData(nullptr)
@@ -768,6 +750,7 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
 }
 
+
 void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 {
     pData = _pData;
@@ -793,7 +776,6 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 }
 
 
-
 void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult )
 {
     if ( RET_OK == _nDlgResult )
@@ -807,11 +789,11 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
 }
 
 
-
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
     disposeOnce();
 }
+
 
 void TPGalleryThemeProperties::dispose()
 {
@@ -833,10 +815,12 @@ void TPGalleryThemeProperties::dispose()
     SfxTabPage::dispose();
 }
 
+
 VclPtr<SfxTabPage> TPGalleryThemeProperties::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return VclPtr<TPGalleryThemeProperties>::Create( pParent, *rSet );
 }
+
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {
@@ -854,7 +838,6 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
     }
     return sRet;
 }
-
 
 
 void TPGalleryThemeProperties::FillFilterList()
@@ -996,7 +979,6 @@ void TPGalleryThemeProperties::FillFilterList()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
 {
     OUString aText( m_pCbbFileType->GetText() );
@@ -1009,7 +991,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, vo
             SearchFiles();
     }
 }
-
 
 
 void TPGalleryThemeProperties::SearchFiles()
@@ -1025,7 +1006,6 @@ void TPGalleryThemeProperties::SearchFiles()
 
     pProgress->StartExecuteModal( LINK( this, TPGalleryThemeProperties, EndSearchProgressHdl ) );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
@@ -1066,7 +1046,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
 }
 
 
-
 void TPGalleryThemeProperties::TakeFiles()
 {
     if( m_pLbxFound->GetSelectEntryCount() || ( bTakeAll && bEntriesFound ) )
@@ -1079,7 +1058,6 @@ void TPGalleryThemeProperties::TakeFiles()
                       will be disposed in TakeProgress::CleanupHdl */ );
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickPreviewHdl, Button*, void)
@@ -1099,7 +1077,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickPreviewHdl, Button*, void)
             DoPreview();
     }
 }
-
 
 
 void TPGalleryThemeProperties::DoPreview()
@@ -1130,7 +1107,6 @@ void TPGalleryThemeProperties::DoPreview()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
 {
     if( bInputAllowed )
@@ -1155,7 +1131,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
 {
     if( bInputAllowed )
@@ -1165,7 +1140,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
         TakeFiles();
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
@@ -1198,7 +1172,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
 {
     if( bInputAllowed )
@@ -1211,13 +1184,11 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
 {
     aPreviewTimer.Stop();
     DoPreview();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
@@ -1237,7 +1208,6 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, v
       bEntriesFound = false;
   }
 }
-
 
 
 IMPL_LINK_TYPED( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )

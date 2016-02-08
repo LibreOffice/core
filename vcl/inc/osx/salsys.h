@@ -24,7 +24,6 @@
 
 #include <list>
 
-// - SalSystemData -
 
 class VCL_DLLPUBLIC AquaSalSystem : public SalSystem
 {

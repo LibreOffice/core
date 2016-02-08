@@ -25,11 +25,10 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 
-// - Access functions -
 typedef BitmapColor (*FncGetPixel)(ConstScanline pScanline, long nX, const ColorMask& rMask);
 typedef void (*FncSetPixel)(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
 
-// - BitmapInfoAccess -
+
 class VCL_DLLPUBLIC BitmapInfoAccess
 {
     friend class BitmapReadAccess;
@@ -86,7 +85,7 @@ protected:
     BitmapInfoAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
 };
 
-// - BitmapReadAccess -
+
 class VCL_DLLPUBLIC BitmapReadAccess : public BitmapInfoAccess
 {
     friend class BitmapWriteAccess;
@@ -181,7 +180,7 @@ protected:
     BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
 };
 
-// - BitmapWriteAccess -
+
 class VCL_DLLPUBLIC BitmapWriteAccess : public BitmapReadAccess
 {
 public:
@@ -233,21 +232,24 @@ private:
     }
 };
 
-// - Inlines -
+
 inline bool BitmapInfoAccess::operator!() const
 {
     return mpBuffer == nullptr;
 }
+
 
 inline long BitmapInfoAccess::Width() const
 {
     return mpBuffer ? mpBuffer->mnWidth : 0L;
 }
 
+
 inline long BitmapInfoAccess::Height() const
 {
     return mpBuffer ? mpBuffer->mnHeight : 0L;
 }
+
 
 inline bool BitmapInfoAccess::IsTopDown() const
 {
@@ -256,10 +258,12 @@ inline bool BitmapInfoAccess::IsTopDown() const
     return mpBuffer && (BMP_SCANLINE_ADJUSTMENT(mpBuffer->mnFormat) == BMP_FORMAT_TOP_DOWN);
 }
 
+
 inline bool BitmapInfoAccess::IsBottomUp() const
 {
     return !IsTopDown();
 }
+
 
 inline sal_uLong BitmapInfoAccess::GetScanlineFormat() const
 {
@@ -268,6 +272,7 @@ inline sal_uLong BitmapInfoAccess::GetScanlineFormat() const
     return mpBuffer ? BMP_SCANLINE_FORMAT(mpBuffer->mnFormat) : 0UL;
 }
 
+
 inline sal_uLong BitmapInfoAccess::GetScanlineSize() const
 {
     assert(mpBuffer && "Access is not valid!");
@@ -275,12 +280,14 @@ inline sal_uLong BitmapInfoAccess::GetScanlineSize() const
     return mpBuffer ? mpBuffer->mnScanlineSize : 0UL;
 }
 
+
 inline sal_uInt16  BitmapInfoAccess::GetBitCount() const
 {
     assert(mpBuffer && "Access is not valid!");
 
     return mpBuffer ? mpBuffer->mnBitCount : 0;
 }
+
 
 inline BitmapColor BitmapInfoAccess::GetBestMatchingColor(const BitmapColor& rBitmapColor)
 {
@@ -290,12 +297,14 @@ inline BitmapColor BitmapInfoAccess::GetBestMatchingColor(const BitmapColor& rBi
         return rBitmapColor;
 }
 
+
 inline bool BitmapInfoAccess::HasPalette() const
 {
     assert(mpBuffer && "Access is not valid!");
 
     return mpBuffer && !!mpBuffer->maPalette;
 }
+
 
 inline const BitmapPalette& BitmapInfoAccess::GetPalette() const
 {
@@ -304,12 +313,14 @@ inline const BitmapPalette& BitmapInfoAccess::GetPalette() const
     return mpBuffer->maPalette;
 }
 
+
 inline sal_uInt16 BitmapInfoAccess::GetPaletteEntryCount() const
 {
     assert(HasPalette() && "Bitmap has no palette!");
 
     return HasPalette() ? mpBuffer->maPalette.GetEntryCount() : 0;
 }
+
 
 inline const BitmapColor& BitmapInfoAccess::GetPaletteColor( sal_uInt16 nColor ) const
 {
@@ -319,11 +330,11 @@ inline const BitmapColor& BitmapInfoAccess::GetPaletteColor( sal_uInt16 nColor )
     return mpBuffer->maPalette[nColor];
 }
 
+
 inline const BitmapColor& BitmapInfoAccess::GetBestPaletteColor(const BitmapColor& rBitmapColor) const
 {
     return GetPaletteColor(GetBestPaletteIndex(rBitmapColor));
 }
-
 
 
 inline ColorMask& BitmapInfoAccess::GetColorMask() const
@@ -333,12 +344,14 @@ inline ColorMask& BitmapInfoAccess::GetColorMask() const
     return mpBuffer->maColorMask;
 }
 
+
 inline Scanline BitmapReadAccess::GetBuffer() const
 {
     assert(mpBuffer && "Access is not valid!");
 
     return mpBuffer ? mpBuffer->mpBits : nullptr;
 }
+
 
 inline Scanline BitmapReadAccess::GetScanline(long nY) const
 {
@@ -347,6 +360,7 @@ inline Scanline BitmapReadAccess::GetScanline(long nY) const
 
     return mpScanBuf[nY];
 }
+
 
 inline BitmapColor BitmapReadAccess::GetPixel(long nY, long nX) const
 {
@@ -357,10 +371,12 @@ inline BitmapColor BitmapReadAccess::GetPixel(long nY, long nX) const
     return mFncGetPixel(mpScanBuf[nY], nX, maColorMask );
 }
 
+
 inline sal_uInt8 BitmapReadAccess::GetPixelIndex(long nY, long nX) const
 {
     return GetPixel(nY, nX).GetBlueOrIndex();
 }
+
 
 inline BitmapColor BitmapReadAccess::GetPixelFromData(const sal_uInt8* pData, long nX) const
 {
@@ -369,12 +385,14 @@ inline BitmapColor BitmapReadAccess::GetPixelFromData(const sal_uInt8* pData, lo
     return mFncGetPixel( pData, nX, maColorMask );
 }
 
+
 inline void BitmapReadAccess::SetPixelOnData(sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor)
 {
     assert(pData && "Access is not valid!");
 
     mFncSetPixel(pData, nX, rBitmapColor, maColorMask);
 }
+
 
 inline BitmapColor BitmapReadAccess::GetColor(long nY, long nX) const
 {
@@ -384,10 +402,12 @@ inline BitmapColor BitmapReadAccess::GetColor(long nY, long nX) const
         return GetPixel(nY, nX);
 }
 
+
 inline sal_uInt8 BitmapReadAccess::GetLuminance(long nY, long nX) const
 {
     return GetColor(nY, nX).GetLuminance();
 }
+
 
 inline void BitmapWriteAccess::SetPalette(const BitmapPalette& rPalette)
 {
@@ -396,12 +416,14 @@ inline void BitmapWriteAccess::SetPalette(const BitmapPalette& rPalette)
     mpBuffer->maPalette = rPalette;
 }
 
+
 inline void BitmapWriteAccess::SetPaletteEntryCount(sal_uInt16 nCount)
 {
     assert(mpBuffer && "Access is not valid!");
 
     mpBuffer->maPalette.SetEntryCount(nCount);
 }
+
 
 inline void BitmapWriteAccess::SetPaletteColor(sal_uInt16 nColor, const BitmapColor& rBitmapColor)
 {
@@ -411,6 +433,7 @@ inline void BitmapWriteAccess::SetPaletteColor(sal_uInt16 nColor, const BitmapCo
     mpBuffer->maPalette[nColor] = rBitmapColor;
 }
 
+
 inline void BitmapWriteAccess::SetPixel(long nY, long nX, const BitmapColor& rBitmapColor)
 {
     assert(mpBuffer && "Access is not valid!");
@@ -419,6 +442,7 @@ inline void BitmapWriteAccess::SetPixel(long nY, long nX, const BitmapColor& rBi
 
     mFncSetPixel(mpScanBuf[nY], nX, rBitmapColor, maColorMask);
 }
+
 
 inline void BitmapWriteAccess::SetPixelIndex(long nY, long nX, sal_uInt8 cIndex)
 {

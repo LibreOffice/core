@@ -48,9 +48,9 @@ public:
   virtual ~BootstrapFixtureBase();
 
   css::uno::Reference<css::uno::XComponentContext>
-	          getComponentContext() { return m_xContext; }
+              getComponentContext() { return m_xContext; }
   css::uno::Reference<css::lang::XMultiServiceFactory>
-	          getMultiServiceFactory() { return m_xSFactory; }
+              getMultiServiceFactory() { return m_xSFactory; }
 
   OUString getSrcRootURL()       { return m_aSrcRootURL; }
   OUString getSrcRootPath()      { return m_aSrcRootPath; }

@@ -329,7 +329,7 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& /* rEvent */ )
     throw (RuntimeException, std::exception)
 {
-	// FIXME: nothing to do
+    // FIXME: nothing to do
 }
 
 //===== lang::XEventListener ==================================================

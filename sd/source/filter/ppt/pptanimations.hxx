@@ -114,7 +114,7 @@ namespace ppt
 #define DFF_ANIM_GROUP_ID                   19
 #define DFF_ANIM_NODE_TYPE                  20
 #define DFF_ANIM_VOLUME                     22
-#define DFF_ANIM_PROPERTY_ID_COUNT			(DFF_ANIM_VOLUME + 1)
+#define DFF_ANIM_PROPERTY_ID_COUNT          (DFF_ANIM_VOLUME + 1)
 
 // property types
 #define DFF_ANIM_PROP_TYPE_BYTE             0

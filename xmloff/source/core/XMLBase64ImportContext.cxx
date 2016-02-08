@@ -64,8 +64,8 @@ void XMLBase64ImportContext::Characters( const OUString& rChars )
             sChars = sTrimmedChars;
         }
         Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
-		sal_Int32 const nCharsDecoded =
-				::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
+        sal_Int32 const nCharsDecoded =
+                ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
         xOut->writeBytes( aBuffer );
         if( nCharsDecoded != sChars.getLength() )
             sBase64CharsLeft = sChars.copy( nCharsDecoded );

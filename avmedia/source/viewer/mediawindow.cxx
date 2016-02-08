@@ -39,16 +39,11 @@ using namespace ::com::sun::star;
 
 namespace avmedia {
 
-
-// - MediaWindow -
-
-
 MediaWindow::MediaWindow( vcl::Window* parent, bool bInternalMediaControl ) :
     mpImpl( VclPtr<priv::MediaWindowImpl>::Create( parent, this, bInternalMediaControl ) )
 {
     mpImpl->Show();
 }
-
 
 
 MediaWindow::~MediaWindow()
@@ -57,12 +52,10 @@ MediaWindow::~MediaWindow()
 }
 
 
-
 void MediaWindow::setURL( const OUString& rURL, const OUString& rReferer )
 {
     mpImpl->setURL( rURL, OUString(), rReferer );
 }
-
 
 
 const OUString& MediaWindow::getURL() const
@@ -71,68 +64,56 @@ const OUString& MediaWindow::getURL() const
 }
 
 
-
 bool MediaWindow::isValid() const
 {
     return mpImpl->isValid();
 }
 
 
-
-void MediaWindow::MouseMove( const MouseEvent& /* rMEvt */ )
+void MediaWindow::MouseMove( const MouseEvent& )
 {
 }
 
 
-
-void MediaWindow::MouseButtonDown( const MouseEvent& /* rMEvt */ )
+void MediaWindow::MouseButtonDown( const MouseEvent& )
 {
 }
 
 
-
-void MediaWindow::MouseButtonUp( const MouseEvent& /* rMEvt */ )
+void MediaWindow::MouseButtonUp( const MouseEvent& )
 {
 }
 
 
-
-void MediaWindow::KeyInput( const KeyEvent& /* rKEvt */ )
+void MediaWindow::KeyInput( const KeyEvent& )
 {
 }
 
 
+void MediaWindow::KeyUp( const KeyEvent& )
+{
+}
 
-void MediaWindow::KeyUp( const KeyEvent& /* rKEvt */ )
+void MediaWindow::Command( const CommandEvent& )
 {
 }
 
 
-
-void MediaWindow::Command( const CommandEvent& /* rCEvt */ )
-{
-}
-
-
-
-sal_Int8 MediaWindow::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
+sal_Int8 MediaWindow::AcceptDrop( const AcceptDropEvent& )
 {
     return 0;
 }
 
 
-
-sal_Int8 MediaWindow::ExecuteDrop( const ExecuteDropEvent& /* rEvt */ )
+sal_Int8 MediaWindow::ExecuteDrop( const ExecuteDropEvent& )
 {
     return 0;
 }
 
 
-
-void MediaWindow::StartDrag( sal_Int8 /* nAction */, const Point& /* rPosPixel */ )
+void MediaWindow::StartDrag( sal_Int8, const Point& )
 {
 }
-
 
 
 Size MediaWindow::getPreferredSize() const
@@ -141,12 +122,10 @@ Size MediaWindow::getPreferredSize() const
 }
 
 
-
 void MediaWindow::setPosSize( const Rectangle& rNewRect )
 {
     mpImpl->setPosSize( rNewRect );
 }
-
 
 
 void MediaWindow::setPointer( const Pointer& rPointer )
@@ -155,12 +134,10 @@ void MediaWindow::setPointer( const Pointer& rPointer )
 }
 
 
-
 bool MediaWindow::start()
 {
     return mpImpl->start();
 }
-
 
 
 void MediaWindow::updateMediaItem( MediaItem& rItem ) const
@@ -169,12 +146,10 @@ void MediaWindow::updateMediaItem( MediaItem& rItem ) const
 }
 
 
-
 void MediaWindow::executeMediaItem( const MediaItem& rItem )
 {
     mpImpl->executeMediaItem( rItem );
 }
-
 
 
 void MediaWindow::show()
@@ -183,19 +158,16 @@ void MediaWindow::show()
 }
 
 
-
 void MediaWindow::hide()
 {
     mpImpl->Hide();
 }
 
 
-
 vcl::Window* MediaWindow::getWindow() const
 {
     return mpImpl.get();
 }
-
 
 
 void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
@@ -236,8 +208,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 }
 
 
-
-bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
+bool MediaWindow::executeMediaURLDialog(vcl::Window*,
         OUString& rURL, bool *const o_pbLink)
 {
     ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
@@ -325,7 +296,6 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
 }
 
 
-
 void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
 {
     ScopedVclPtrInstance< MessageDialog > aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
@@ -333,7 +303,6 @@ void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
     aErrBox->Execute();
     aErrBox.disposeAndClear();
 }
-
 
 
 bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep, Size* pPreferredSizePixel )
@@ -391,12 +360,10 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 }
 
 
-
 uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
 {
     return priv::MediaWindowImpl::createPlayer( rURL, rReferer, pMimeType );
 }
-
 
 
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
@@ -447,17 +414,18 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
     return xRet;
 }
 
+
 BitmapEx MediaWindow::getAudioLogo()
 {
     return BitmapEx(AVMEDIA_RESID(AVMEDIA_BMP_AUDIOLOGO));
 }
+
 
 BitmapEx MediaWindow::getEmptyLogo()
 {
     return BitmapEx(AVMEDIA_RESID(AVMEDIA_BMP_EMPTYLOGO));
 }
 
-
-} // namespace avemdia
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -417,14 +417,14 @@ void ScDocShell::ReloadTabLinks()
         ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
         if (ScTableLink* pTabLink = dynamic_cast<ScTableLink*>(pBase))
         {
-//			pTabLink->SetAddUndo(sal_False);		//! Undo's zusammenfassen
+//          pTabLink->SetAddUndo(sal_False);        //! Undo's zusammenfassen
 
-			// Painting only after Update() makes no sense:
-			// ScTableLink::Refresh() will post a Paint only is bDoPaint is true
+            // Painting only after Update() makes no sense:
+            // ScTableLink::Refresh() will post a Paint only is bDoPaint is true
             // pTabLink->SetPaint(false);          //  Paint nur einmal am Ende
             pTabLink->Update();
             //pTabLink->SetPaint(true);
-//			pTabLink->SetAddUndo(sal_True);
+//          pTabLink->SetAddUndo(sal_True);
             bAny = true;
         }
     }

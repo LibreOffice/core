@@ -16,23 +16,23 @@
 #include <vector>
 
 class L10N_DLLPUBLIC HelpSearch{
-	private:
+    private:
                 OString d_indexDir;
 
-	public:
+    public:
 
-	/**
-	 * @param indexDir The directory where the index files are stored.
-	 */
+    /**
+     * @param indexDir The directory where the index files are stored.
+     */
         HelpSearch(OUString const &indexDir);
 
-	/**
-	 * Query the index for a certain query string.
-	 * @param queryStr The query.
-	 * @param captionOnly Set to true to search in the caption, not the content.
-	 * @param rDocuments Vector to write the paths of the found documents.
-	 * @param rScores Vector to write the scores to.
-	 */
+    /**
+     * Query the index for a certain query string.
+     * @param queryStr The query.
+     * @param captionOnly Set to true to search in the caption, not the content.
+     * @param rDocuments Vector to write the paths of the found documents.
+     * @param rScores Vector to write the scores to.
+     */
         void query(OUString const &queryStr, bool captionOnly,
             std::vector<OUString> &rDocuments, std::vector<float> &rScores);
 };

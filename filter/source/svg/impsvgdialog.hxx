@@ -20,15 +20,15 @@
 #ifndef INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX
 #define INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX
 
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <svtools/stdctrl.hxx>
+
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #define SVG_EXPORTFILTER_CONFIGPATH         "Office.Common/Filter/SVG/Export/"
 #define SVG_PROP_TINYPROFILE                "TinyMode"
@@ -38,11 +38,9 @@
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 
-// - ImpSVGDialog -
-
-
 class ResMgr;
 namespace vcl { class Window; }
+
 
 class ImpSVGDialog : public ModalDialog
 {

@@ -21,7 +21,6 @@
 #include "optimizerdialog.hxx"
 
 
-// - OptimizerDialog -
 
 #include "pppoptimizer.hxx"
 #include "graphiccollector.hxx"

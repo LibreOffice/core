@@ -49,19 +49,18 @@ using namespace ::com::sun::star;
 namespace avmedia { namespace win {
 
 
-// - FrameGrabber -
-
-
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
     ::CoInitialize( NULL );
 }
 
+
 FrameGrabber::~FrameGrabber()
 {
     ::CoUninitialize();
 }
+
 
 IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
 {
@@ -85,6 +84,7 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
     return pDet;
 }
 
+
 bool FrameGrabber::create( const OUString& rURL )
 {
     // just check if a MediaDet interface can be created with the given URL
@@ -101,6 +101,7 @@ bool FrameGrabber::create( const OUString& rURL )
 
     return !maURL.isEmpty();
 }
+
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
     throw (uno::RuntimeException)
@@ -198,17 +199,20 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     return xRet;
 }
 
+
 OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
+
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
+
 
 uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

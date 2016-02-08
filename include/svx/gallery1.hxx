@@ -28,11 +28,8 @@
 #include <cstdio>
 #include <vector>
 
-
-// - GalleryThemeEntry -
-
-
 class SvStream;
+
 
 class GalleryThemeEntry
 {
@@ -86,13 +83,10 @@ public:
 
 typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
-
-// - Gallery -
-
-
 class SfxListener;
 class GalleryTheme;
 class GalleryThemeCacheEntry;
+
 
 class SVX_DLLPUBLIC Gallery : public SfxBroadcaster
 {

@@ -116,9 +116,6 @@ enum Paper
 #define NUM_PAPER_ENTRIES   (PAPER_SCREEN_16_10 - PAPER_A0 + 1)
 
 
-// - Paper -
-
-
 class I18NUTIL_DLLPUBLIC PaperInfo
 {
     Paper m_eType;

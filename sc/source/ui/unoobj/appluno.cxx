@@ -556,8 +556,8 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
     if (!rDesc.maDefArgNames.empty() && !rDesc.maDefArgDescs.empty() && rDesc.pDefArgFlags )
     {
         sal_uInt16 nCount = rDesc.nArgCount;
-		if (nCount >= PAIRED_VAR_ARGS)
-		    nCount -= PAIRED_VAR_ARGS - 2;
+        if (nCount >= PAIRED_VAR_ARGS)
+            nCount -= PAIRED_VAR_ARGS - 2;
         else if (nCount >= VAR_ARGS)
             nCount -= VAR_ARGS - 1;
         sal_uInt16 nSeqCount = rDesc.GetSuppressedArgCount();

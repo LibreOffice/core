@@ -22,13 +22,13 @@ class DocumentSettingsSerializer {
 public:
   // Import objects and update properties (eliding URLs)
   virtual css::uno::Sequence<css::beans::PropertyValue>
-	filterStreamsFromStorage(
+    filterStreamsFromStorage(
         OUString const & referer,
         const css::uno::Reference< css::embed::XStorage > &xStorage,
         const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
   // Export objects and update properties with relative URLs into this storage
   virtual css::uno::Sequence<css::beans::PropertyValue>
-	filterStreamsToStorage(
+    filterStreamsToStorage(
         const css::uno::Reference< css::embed::XStorage > &xStorage,
         const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
 

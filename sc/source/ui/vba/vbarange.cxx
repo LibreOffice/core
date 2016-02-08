@@ -384,18 +384,18 @@ ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
 ScDocShell*
 getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::RuntimeException )
 {
-	ScCellRangesBase* pUno = ScCellRangesBase::getImplementation( xIf );
-	if ( !pUno )
+    ScCellRangesBase* pUno = ScCellRangesBase::getImplementation( xIf );
+    if ( !pUno )
             throw uno::RuntimeException("Failed to access underlying uno range object"  );
-	return pUno->GetDocShell();
+    return pUno->GetDocShell();
 }
 
 ScDocShell*
 getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
-	// need the ScCellRangesBase to get docshell
+    // need the ScCellRangesBase to get docshell
     uno::Reference< uno::XInterface > xIf( xRange );
-	return getDocShellFromIf(xIf );
+    return getDocShellFromIf(xIf );
 }
 
 ScDocShell*
@@ -408,22 +408,22 @@ getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& 
 
 uno::Reference< frame::XModel > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::RuntimeException )
 {
-	ScDocShell* pDocShell = getDocShellFromIf(xIf );
-	return pDocShell->GetModel();
+    ScDocShell* pDocShell = getDocShellFromIf(xIf );
+    return pDocShell->GetModel();
 }
 
 uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
     // the XInterface for getImplementation can be any derived interface, no need for queryInterface
     uno::Reference< uno::XInterface > xIf( xRange );
-	return getModelFromXIf( xIf );
+    return getModelFromXIf( xIf );
 }
 
 ScDocument&
 getDocumentFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
-	ScDocShell* pDocShell = getDocShellFromRange( xRange );
-	if ( !pDocShell )
+    ScDocShell* pDocShell = getDocShellFromRange( xRange );
+    if ( !pDocShell )
             throw uno::RuntimeException("Failed to access underlying docshell from uno range object" );
     ScDocument& rDoc = pDocShell->GetDocument();
     return rDoc;
@@ -1625,10 +1625,10 @@ ScVbaRange::ClearContents() throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 ScVbaRange::ClearFormats() throw (uno::RuntimeException, std::exception)
 {
-	// FIXME: need to check if we need to combine FORMATTED
+    // FIXME: need to check if we need to combine FORMATTED
     using namespace ::com::sun::star::sheet::CellFlags;
-	sal_Int32 nFlags = HARDATTR | FORMATTED | EDITATTR;
-	ClearContents( nFlags, false );
+    sal_Int32 nFlags = HARDATTR | FORMATTED | EDITATTR;
+    ClearContents( nFlags, false );
 }
 
 void
@@ -4433,7 +4433,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
         // set autofilter
         xDBRangeProps->setPropertyValue( "AutoFilter", uno::Any(sal_True) );
-		// set header (autofilter always need column headers)
+        // set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
         bool bHasColHeader = false;
         ScDocument* pDoc = pShell ? &pShell->GetDocument() : nullptr;

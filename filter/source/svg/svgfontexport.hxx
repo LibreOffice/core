@@ -31,10 +31,6 @@
 #include <tools/fontenum.hxx>
 
 
-// - SVGFontExport -
-
-
-
 class ObjectRepresentation;
 class SVGExport;
 namespace vcl { class Font; }
@@ -43,12 +39,12 @@ class OutputDevice;
 
 class SVGFontExport
 {
-    typedef ::std::vector< ObjectRepresentation >                               ObjectVector;
+    typedef ::std::vector< ObjectRepresentation >                 ObjectVector;
     typedef ::std::set< OUString, ::std::greater< OUString > >    GlyphSet;
-    typedef ::std::map< FontItalic, GlyphSet >                                  FontItalicMap;
-    typedef ::std::map< FontWeight, FontItalicMap >                             FontWeightMap;
-    typedef ::std::map< OUString, FontWeightMap >                        FontNameMap;
-    typedef FontNameMap                                                         GlyphTree;
+    typedef ::std::map< FontItalic, GlyphSet >                    FontItalicMap;
+    typedef ::std::map< FontWeight, FontItalicMap >               FontWeightMap;
+    typedef ::std::map< OUString, FontWeightMap >                 FontNameMap;
+    typedef FontNameMap                                           GlyphTree;
 
 private:
 
@@ -71,6 +67,6 @@ public:
     OUString            GetMappedFontName( const OUString& rFontName ) const;
 };
 
-#endif
+#endif // INCLUDED_FILTER_SOURCE_SVG_SVGFONTEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

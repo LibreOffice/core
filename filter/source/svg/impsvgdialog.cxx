@@ -19,19 +19,17 @@
 
 
 #include "impsvgdialog.hxx"
+
 #include <cstdio>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
+
 inline sal_Int32 implMap( vcl::Window& /*rWnd*/, sal_Int32 nVal )
 {
-    //return( rWnd.LogicToLogic( Size( nVal, nVal ) ).Height(), MAP_APPFONT, MAP_APPFONT );
     return( nVal << 1 );
 }
-
-
-// - ImpSVGDialog -
 
 
 ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
@@ -91,11 +89,11 @@ ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
 }
 
 
-
 ImpSVGDialog::~ImpSVGDialog()
 {
     disposeOnce();
 }
+
 
 void ImpSVGDialog::dispose()
 {
@@ -111,7 +109,6 @@ void ImpSVGDialog::dispose()
 }
 
 
-
 Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 {
     maConfigItem.WriteBool( SVG_PROP_TINYPROFILE, maCBTinyProfile->IsChecked() );
@@ -120,7 +117,6 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 
     return( maConfigItem.GetFilterData() );
 }
-
 
 
 IMPL_LINK_TYPED( ImpSVGDialog, OnToggleCheckbox, CheckBox&, rBox, void )

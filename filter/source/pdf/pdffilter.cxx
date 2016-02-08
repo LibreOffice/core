@@ -26,15 +26,17 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <memory>
 
-// - PDFFilter -
+
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )
 {
 }
 
+
 PDFFilter::~PDFFilter()
 {
 }
+
 
 bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
@@ -59,7 +61,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     }
 
     /* we don't get FilterData if we are exporting directly
-     to pdf, but we have to use the last user settings (especially for the CompressMode) */
+       to pdf, but we have to use the last user settings (especially for the CompressMode) */
     if ( !aFilterData.getLength() )
     {
         FilterConfigItem aCfgItem( "Office.Common/Filter/PDF/Export/" );
@@ -87,12 +89,12 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadInt32( "PageLayout", 0 );
         aCfgItem.ReadBool(  "FirstPageOnLeft", false );
         aCfgItem.ReadBool(  "IsAddStream", false );
-//
-// the encryption is not available when exporting directly, since the encryption is off by default and the selection
-// (encrypt or not) is not persistent; it's available through macro though,
-// provided the correct property values are set, see help
-//
-// now, the relative link stuff
+
+        // the encryption is not available when exporting directly, since the encryption is off by default and the selection
+        // (encrypt or not) is not persistent; it's available through macro though,
+        // provided the correct property values are set, see help
+
+        // now, the relative link stuff
         aCfgItem.ReadBool( "ExportLinksRelativeFsys", false );
         aCfgItem.ReadInt32("PDFViewSelection", 0 );
         aCfgItem.ReadBool( "ConvertOOoTargetToPDFTarget", false );
@@ -103,6 +105,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadInt32( "OpenBookmarkLevels", -1 );
         aFilterData = aCfgItem.GetFilterData();
     }
+
     if( mxSrcDoc.is() && xOStm.is() )
     {
         PDFExport       aExport( mxSrcDoc, xStatusIndicator, xIH, mxContext );
@@ -131,7 +134,10 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
 class FocusWindowWaitCursor
 {
+private:
+
     VclPtr<vcl::Window>         m_pFocusWindow;
+
 public:
     FocusWindowWaitCursor() :
         m_pFocusWindow( Application::GetFocusWindow() )
@@ -142,6 +148,7 @@ public:
             m_pFocusWindow->EnterWait();
         }
     }
+
     ~FocusWindowWaitCursor()
     {
         if( m_pFocusWindow )
@@ -154,11 +161,13 @@ public:
     DECL_LINK_TYPED( DestroyedLink, VclWindowEvent&, void );
 };
 
+
 IMPL_LINK_TYPED( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 {
     if( rEvent.GetId() == VCLEVENT_OBJECT_DYING )
         m_pFocusWindow = nullptr;
 }
+
 
 sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException, std::exception)
@@ -171,11 +180,9 @@ sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescripto
 }
 
 
-
 void SAL_CALL PDFFilter::cancel( ) throw (RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
@@ -185,11 +192,11 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 }
 
 
-
 void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< css::uno::Any >& )
     throw (Exception, RuntimeException, std::exception)
 {
 }
+
 
 OUString PDFFilter_getImplementationName ()
     throw (RuntimeException)
@@ -197,17 +204,18 @@ OUString PDFFilter_getImplementationName ()
     return OUString ( "com.sun.star.comp.PDF.PDFFilter" );
 }
 
+
 Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence<OUString> aRet { "com.sun.star.document.PDFFilter" };
     return aRet;
 }
 
+
 Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new PDFFilter( comphelper::getComponentContext(rSMgr) ));
 }
-
 
 
 OUString SAL_CALL PDFFilter::getImplementationName()
@@ -217,13 +225,11 @@ OUString SAL_CALL PDFFilter::getImplementationName()
 }
 
 
-
 sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
-
 
 
 css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)

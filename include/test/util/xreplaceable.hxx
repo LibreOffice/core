@@ -22,8 +22,8 @@ public:
             maSearchString(rSearchString), maReplaceString(rReplaceString) {}
         virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
-	void testCreateReplaceDescriptor();
-	void testReplaceAll();
+    void testCreateReplaceDescriptor();
+    void testReplaceAll();
 
 protected:
     ~XReplaceable() {}

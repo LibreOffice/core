@@ -963,7 +963,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     case OBJ_TEXT:
     case OBJ_CAPTION:
     case OBJ_TABLE:
-	case OBJ_OLE2: // #i118485# Moved to shapes with text
+    case OBJ_OLE2: // #i118485# Moved to shapes with text
     default:
         {
             static css::uno::Sequence< css::uno::Type > aTypeSequence;

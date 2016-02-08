@@ -30,7 +30,7 @@ class Reader;
 }
 
 class L10N_DLLPUBLIC HelpIndexer {
-	private:
+    private:
                 OUString d_lang;
                 OUString d_module;
                 OUString d_captionDir;
@@ -39,48 +39,48 @@ class L10N_DLLPUBLIC HelpIndexer {
                 OUString d_error;
                 std::set<OUString> d_files;
 
-	public:
+    public:
 
-	/**
-	 * @param lang Help files language.
-	 * @param module The module of the helpfiles.
-	 * @param srcDir The help directory to index
-	 * @param outDir The directory to write the "module".idxl directory to
-	 */
+    /**
+     * @param lang Help files language.
+     * @param module The module of the helpfiles.
+     * @param srcDir The help directory to index
+     * @param outDir The directory to write the "module".idxl directory to
+     */
         HelpIndexer(OUString const &lang, OUString const &module,
             OUString const &srcDir, OUString const &outDir);
 
-	/**
-	 * Run the indexer.
-	 * @return true if index successfully generated.
-	 */
-	bool indexDocuments();
+    /**
+     * Run the indexer.
+     * @return true if index successfully generated.
+     */
+    bool indexDocuments();
 
-	/**
-	 * Get the error string (empty if no error occurred).
-	 */
+    /**
+     * Get the error string (empty if no error occurred).
+     */
         OUString const & getErrorMessage() { return d_error;}
 
-	private:
+    private:
 
-	/**
-	 * Scan the caption & contents directories for help files.
-	 */
-	bool scanForFiles();
+    /**
+     * Scan the caption & contents directories for help files.
+     */
+    bool scanForFiles();
 
-	/**
-	 * Scan for files in the given directory.
-	 */
+    /**
+     * Scan for files in the given directory.
+     */
         bool scanForFiles(OUString const &path);
 
-	/**
-	 * Fill the Document with information on the given help file.
-	 */
+    /**
+     * Fill the Document with information on the given help file.
+     */
         void helpDocument(OUString const & fileName, lucene::document::Document *doc);
 
-	/**
-	 * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
-	 */
+    /**
+     * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
+     */
         static lucene::util::Reader *helpFileReader(OUString const & path);
 };
 

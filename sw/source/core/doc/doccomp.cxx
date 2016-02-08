@@ -279,7 +279,7 @@ class WordArrayComparator : public ArrayComparator
 private:
     const SwTextNode *pTextNd1, *pTextNd2;
     int *pPos1, *pPos2;
-    int nCnt1, nCnt2;		// number of words
+    int nCnt1, nCnt2;       // number of words
 
     static void CalcPositions( int *pPos, const SwTextNode *pTextNd, int &nCnt );
 

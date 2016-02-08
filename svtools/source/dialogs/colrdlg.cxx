@@ -37,7 +37,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 
 
-// - ColorDialog -
 
 
 SvColorDialog::SvColorDialog( vcl::Window* pWindow )

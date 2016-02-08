@@ -56,7 +56,6 @@ using namespace css::report;
 using namespace css::io;
 using namespace css::xml::sax;
 
-// - ORptExport -
 
 #define PROGRESS_BAR_STEP 20
 

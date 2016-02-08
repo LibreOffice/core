@@ -42,7 +42,6 @@
 
 namespace sd {
 
-// - SdTabControl::SdPageObjsTransferable -
 
 TabControl::TabControlTransferable::~TabControlTransferable()
 {

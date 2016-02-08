@@ -25,7 +25,6 @@
 #include <salbmp.hxx>
 #include <memory>
 
-// - SalBitmap  -
 
 struct  BitmapBuffer;
 class   BitmapColor;

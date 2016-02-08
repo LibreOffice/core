@@ -1156,7 +1156,7 @@ OUString querySingleValue(
 
 
 // copied from connectivity/source/dbtools, can't use the function directly
-bool implSetObject(	const Reference< XParameters >& _rxParameters,
+bool implSetObject( const Reference< XParameters >& _rxParameters,
                         const sal_Int32 _nColumnIndex, const Any& _rValue)
 {
     bool bSuccessfullyReRouted = true;

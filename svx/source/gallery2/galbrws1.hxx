@@ -30,7 +30,6 @@
 
 class GalleryBrowser1;
 
-// - GalleryButton -
 
 class GalleryButton : public PushButton
 {
@@ -43,7 +42,6 @@ public:
                     GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits );
 };
 
-// - GalleryThemeListBox -
 
 class GalleryThemeListBox : public ListBox
 {
@@ -59,7 +57,6 @@ public:
                     GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits );
 };
 
-// - GalleryBrowser1 -
 
 class Gallery;
 class GalleryThemeEntry;

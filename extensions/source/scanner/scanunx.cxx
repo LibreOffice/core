@@ -34,12 +34,14 @@ BitmapTransporter::BitmapTransporter()
 #endif
 }
 
+
 BitmapTransporter::~BitmapTransporter()
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "~BitmapTransporter\n" );
 #endif
 }
+
 
 css::awt::Size BitmapTransporter::getSize() throw(std::exception)
 {
@@ -64,7 +66,6 @@ css::awt::Size BitmapTransporter::getSize() throw(std::exception)
 }
 
 
-
 Sequence< sal_Int8 > BitmapTransporter::getDIB() throw(std::exception)
 {
     osl::MutexGuard aGuard( m_aProtector );
@@ -83,9 +84,6 @@ Sequence< sal_Int8 > BitmapTransporter::getDIB() throw(std::exception)
 }
 
 
-// - SaneHolder -
-
-
 struct SaneHolder
 {
     Sane                m_aSane;
@@ -96,6 +94,7 @@ struct SaneHolder
 
     SaneHolder() : m_nError(ScanError_ScanErrorNone), m_bBusy(false) {}
 };
+
 
 namespace
 {
@@ -130,9 +129,6 @@ namespace
 }
 
 
-// - ScannerThread -
-
-
 class ScannerThread : public osl::Thread
 {
     std::shared_ptr<SaneHolder>               m_pHolder;
@@ -150,7 +146,6 @@ public:
 };
 
 
-
 ScannerThread::ScannerThread(
                              std::shared_ptr<SaneHolder> pHolder,
                              const Reference< css::lang::XEventListener >& listener,
@@ -162,12 +157,14 @@ ScannerThread::ScannerThread(
 #endif
 }
 
+
 ScannerThread::~ScannerThread()
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "~ScannerThread\n" );
 #endif
 }
+
 
 void ScannerThread::run()
 {
@@ -200,21 +197,18 @@ void ScannerThread::run()
 }
 
 
-// - ScannerManager -
-
-
 void ScannerManager::AcquireData()
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     theSanes::get().acquire();
 }
 
+
 void ScannerManager::ReleaseData()
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     theSanes::get().release();
 }
-
 
 
 css::awt::Size ScannerManager::getSize() throw(std::exception)
@@ -225,12 +219,10 @@ css::awt::Size ScannerManager::getSize() throw(std::exception)
 }
 
 
-
 Sequence< sal_Int8 > ScannerManager::getDIB() throw(std::exception)
 {
     return Sequence< sal_Int8 >();
 }
-
 
 
 Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw(std::exception)
@@ -255,7 +247,6 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw(std::exc
 
     return Sequence< ScannerContext >();
 }
-
 
 
 sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
@@ -300,7 +291,6 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
 }
 
 
-
 void ScannerManager::startScan( const ScannerContext& scanner_context,
                                 const Reference< css::lang::XEventListener >& listener ) throw( ScannerException, std::exception )
 {
@@ -331,7 +321,6 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 }
 
 
-
 ScanError ScannerManager::getError( const ScannerContext& scanner_context ) throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
@@ -348,7 +337,6 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 
     return pHolder->m_nError;
 }
-
 
 
 Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& scanner_context ) throw( ScannerException, std::exception )

@@ -33,10 +33,6 @@
 namespace avmedia
 {
 
-
-// - MediaPlayer -
-
-
 MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
@@ -45,17 +41,12 @@ MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _p
 };
 
 
-
 MediaPlayer::~MediaPlayer()
 {
 }
 
 
-
 SFX_IMPL_DOCKINGWINDOW_WITHID( MediaPlayer, SID_AVMEDIA_PLAYER )
-
-
-// - MediaFloater -
 
 
 MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* pParent ) :
@@ -71,11 +62,11 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::W
 }
 
 
-
 MediaFloater::~MediaFloater()
 {
     disposeOnce();
 }
+
 
 void MediaFloater::dispose()
 {
@@ -85,7 +76,6 @@ void MediaFloater::dispose()
 }
 
 
-
 void MediaFloater::Resize()
 {
     SfxDockingWindow::Resize();
@@ -93,7 +83,6 @@ void MediaFloater::Resize()
     if( mpMediaWindow )
         mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
 }
-
 
 
 void MediaFloater::ToggleFloatingMode()
@@ -124,7 +113,6 @@ void MediaFloater::ToggleFloatingMode()
 }
 
 
-
 void MediaFloater::setURL( const OUString& rURL, const OUString& rReferer, bool bPlayImmediately )
 {
     if( mpMediaWindow )
@@ -135,7 +123,6 @@ void MediaFloater::setURL( const OUString& rURL, const OUString& rReferer, bool 
             mpMediaWindow->start();
     }
 }
-
 
 
 void MediaFloater::dispatchCurrentURL()
@@ -153,6 +140,6 @@ void MediaFloater::dispatchCurrentURL()
     }
 }
 
-}
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

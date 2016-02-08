@@ -73,10 +73,6 @@ MacAVObserverObject* MacAVObserverHandler::getObserver()
 }
 
 
-// ----------------
-// - Player -
-// ----------------
-
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
 :   mxMgr( rxMgr )
 ,   mpPlayer( nullptr )
@@ -86,7 +82,6 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
 ,   mbLooping( false )
 {}
 
-// ------------------------------------------------------------------------------
 
 Player::~Player()
 {
@@ -103,7 +98,6 @@ Player::~Player()
     CFRelease( mpPlayer );
 }
 
-// ------------------------------------------------------------------------------
 
 bool Player::handleObservation( NSString* pKeyPath )
 {
@@ -117,7 +111,6 @@ bool Player::handleObservation( NSString* pKeyPath )
     return true;
 }
 
-// ------------------------------------------------------------------------------
 
 bool Player::create( const ::rtl::OUString& rURL )
 {
@@ -163,7 +156,6 @@ bool Player::create( const ::rtl::OUString& rURL )
     return true;
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::start()
     throw (uno::RuntimeException)
@@ -181,7 +173,6 @@ void SAL_CALL Player::start()
     // else // TODO: delay until it becomes ready
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::stop()
     throw (uno::RuntimeException)
@@ -194,7 +185,6 @@ void SAL_CALL Player::stop()
         [mpPlayer pause];
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL Player::isPlaying()
     throw (uno::RuntimeException)
@@ -205,7 +195,6 @@ sal_Bool SAL_CALL Player::isPlaying()
     return (fRate != 0.0);
 }
 
-// ------------------------------------------------------------------------------
 
 double SAL_CALL Player::getDuration()
     throw (uno::RuntimeException)
@@ -225,7 +214,6 @@ double SAL_CALL Player::getDuration()
     return duration;
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
@@ -235,7 +223,6 @@ void SAL_CALL Player::setMediaTime( double fTime )
         [mpPlayer seekToTime: CMTimeMakeWithSeconds(fTime,1000) ];
 }
 
-// ------------------------------------------------------------------------------
 
 double SAL_CALL Player::getMediaTime()
     throw (uno::RuntimeException)
@@ -252,7 +239,6 @@ double SAL_CALL Player::getMediaTime()
     return position;
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::setStopTime( double fTime )
     throw (uno::RuntimeException)
@@ -261,7 +247,6 @@ void SAL_CALL Player::setStopTime( double fTime )
     mfStopTime = fTime;
 }
 
-// ------------------------------------------------------------------------------
 
 double SAL_CALL Player::getStopTime()
     throw (uno::RuntimeException)
@@ -269,7 +254,6 @@ double SAL_CALL Player::getStopTime()
     return mfStopTime;
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
@@ -278,7 +262,6 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     mbLooping = bSet;
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL Player::isPlaybackLoop()
     throw (uno::RuntimeException)
@@ -288,7 +271,6 @@ sal_Bool SAL_CALL Player::isPlaybackLoop()
     return bRet;
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
     throw (uno::RuntimeException)
@@ -302,7 +284,6 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     [mpPlayer setMuted:mbMuted];
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL Player::isMute()
     throw (uno::RuntimeException)
@@ -311,7 +292,6 @@ sal_Bool SAL_CALL Player::isMute()
     return mbMuted;
 }
 
-// ------------------------------------------------------------------------------
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     throw (uno::RuntimeException)
@@ -326,7 +306,6 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
         [mpPlayer setVolume:mfUnmutedVolume];
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Int16 SAL_CALL Player::getVolumeDB()
     throw (uno::RuntimeException)
@@ -345,7 +324,6 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
     return (sal_Int16)nVolumeDB;
 }
 
-// ------------------------------------------------------------------------------
 
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     throw (uno::RuntimeException)
@@ -364,7 +342,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     return aSize;
 }
 
-// ------------------------------------------------------------------------------
 
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
     throw (uno::RuntimeException)
@@ -389,7 +366,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
 
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     throw (uno::RuntimeException)
@@ -405,7 +381,6 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL Player::getImplementationName(  )
     throw (uno::RuntimeException)
@@ -413,7 +388,6 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME ) );
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
@@ -421,7 +395,6 @@ sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_MACAVF_PLAYER_SERVICENAME ) );
 }
 
-// ------------------------------------------------------------------------------
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

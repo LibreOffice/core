@@ -42,14 +42,12 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::document;
 
 
-// - SVGDialog functions -
-
-
 OUString SVGDialog_getImplementationName ()
     throw (RuntimeException)
 {
     return OUString ( SVG_DIALOG_IMPLEMENTATION_NAME );
 }
+
 
 Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
     throw (RuntimeException)
@@ -59,15 +57,11 @@ Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
 }
 
 
-
 Reference< XInterface > SAL_CALL SVGDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr )
     throw( Exception )
 {
     return static_cast< cppu::OWeakObject* >( new SVGDialog( comphelper::getComponentContext(rSMgr) ) );
 }
-
-
-// - SVGDialog -
 
 
 SVGDialog::SVGDialog( const Reference< XComponentContext > &rxContext ) :
@@ -76,11 +70,9 @@ SVGDialog::SVGDialog( const Reference< XComponentContext > &rxContext ) :
 }
 
 
-
 SVGDialog::~SVGDialog()
 {
 }
-
 
 
 Any SAL_CALL SVGDialog::queryInterface( const Type& rType )
@@ -98,13 +90,11 @@ Any SAL_CALL SVGDialog::queryInterface( const Type& rType )
 }
 
 
-
 void SAL_CALL SVGDialog::acquire()
     throw ()
 {
     OWeakObject::acquire();
 }
-
 
 
 void SAL_CALL SVGDialog::release()
@@ -114,13 +104,11 @@ void SAL_CALL SVGDialog::release()
 }
 
 
-
 Sequence< sal_Int8 > SAL_CALL SVGDialog::getImplementationId()
     throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 
 OUString SAL_CALL SVGDialog::getImplementationName()
@@ -130,13 +118,11 @@ OUString SAL_CALL SVGDialog::getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL SVGDialog::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     return SVGDialog_getSupportedServiceNames();
 }
-
 
 
 VclPtr<Dialog> SVGDialog::createDialog( vcl::Window* pParent )
@@ -148,7 +134,6 @@ VclPtr<Dialog> SVGDialog::createDialog( vcl::Window* pParent )
 }
 
 
-
 void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
@@ -156,7 +141,6 @@ void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 
     destroyDialog();
 }
-
 
 
 Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
@@ -182,7 +166,6 @@ Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
 }
 
 
-
 Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
     throw ( RuntimeException, std::exception )
 {
@@ -206,7 +189,6 @@ Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
 }
 
 
-
 void SAL_CALL SVGDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
     throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
@@ -221,7 +203,6 @@ void SAL_CALL SVGDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
         }
     }
 }
-
 
 
 void SAL_CALL SVGDialog::setSourceDocument( const Reference< XComponent >& xDoc )

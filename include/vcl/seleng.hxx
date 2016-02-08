@@ -37,7 +37,6 @@ class CommandEvent;
 enum SelectionMode { NO_SELECTION, SINGLE_SELECTION, RANGE_SELECTION, MULTIPLE_SELECTION };
 
 
-// - FunctionSet -
 
 
 class VCL_DLLPUBLIC FunctionSet
@@ -62,7 +61,6 @@ public:
 };
 
 
-// - SelectionEngine -
 
 enum class SelectionEngineFlags {
     DRG_ENAB     = 0x0001,

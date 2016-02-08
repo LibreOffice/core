@@ -38,6 +38,6 @@ ResMgr* GetResMgr()
     return pResMgr;
 }
 
-} // namespace avemdia
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

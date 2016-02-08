@@ -41,7 +41,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-// - InformationDialog -
 
 class InformationDialog : public UnoDialog, public ConfigurationAccess
 {

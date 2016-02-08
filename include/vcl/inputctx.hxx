@@ -26,7 +26,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 
-// - InputContext-Flags -
 
 
 enum class InputContextFlags
@@ -43,7 +42,6 @@ namespace o3tl
 }
 
 
-// - InputContext -
 
 
 class VCL_DLLPUBLIC InputContext

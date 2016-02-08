@@ -209,7 +209,6 @@ public:
 };
 
 
-// - DockingWindow -
 
 
 class VCL_DLLPUBLIC DockingWindow

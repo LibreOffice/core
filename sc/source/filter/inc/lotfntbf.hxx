@@ -74,13 +74,13 @@ private:
 
     static void             MakeFont( ENTRY* pEntry );
 public:
-	const static sal_uInt16	nSize = 8;
+    const static sal_uInt16 nSize = 8;
     void                    Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet );
     void                    SetName( const sal_uInt16 nIndex, const OUString& rName );
     void                    SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight );
     void                    SetType( const sal_uInt16 nIndex, const sal_uInt16 nType );
 private:
-	ENTRY					pData[ nSize ];
+    ENTRY                   pData[ nSize ];
 };
 
 #endif

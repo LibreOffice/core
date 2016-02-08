@@ -31,8 +31,6 @@ namespace utl {
   struct FontNameAttr;
 }
 
-// - SubsFontName -
-
 enum class SubsFontFlags
 {
     ONLYONE    = 0x01,
@@ -40,6 +38,7 @@ enum class SubsFontFlags
     PS         = 0x04,
     HTML       = 0x08,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<SubsFontFlags> : is_typed_flags<SubsFontFlags, 0x0f> {};
@@ -49,7 +48,6 @@ UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlag
 
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 
-// - ConvertChar -
 
 class UNOTOOLS_DLLPUBLIC ConvertChar
 {
@@ -62,7 +60,7 @@ public:
     static const ConvertChar* GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName );
 };
 
-// Default-Font
+
 enum class DefaultFontType
 {
     SANS_UNICODE        = 1,
@@ -91,7 +89,6 @@ enum class DefaultFontType
 };
 
 UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
-
 UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( const OUString& rName );
 
 /** Strip any "script font suffix" from the font name
@@ -113,6 +110,6 @@ UNOTOOLS_DLLPUBLIC OUString StripScriptFromName(const OUString& rName);
 // FIXME It's quite possible that code using this should instead check for RTL_TEXTENCODING_SYMBOL.
 UNOTOOLS_DLLPUBLIC bool IsStarSymbol(const OUString &rFontName);
 
-#endif
+#endif // INCLUDED_UNOTOOLS_FONTDEFS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

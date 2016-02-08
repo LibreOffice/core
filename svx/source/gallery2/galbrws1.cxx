@@ -40,11 +40,9 @@
 #include <svx/svxdlg.hxx>
 #include <memory>
 
-// - Namespaces -
 
 using namespace ::com::sun::star;
 
-// - GalleryButton -
 
 GalleryButton::GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits ) :
     PushButton( pParent, nWinBits )
@@ -57,7 +55,6 @@ void GalleryButton::KeyInput( const KeyEvent& rKEvt )
         PushButton::KeyInput( rKEvt );
 }
 
-// - GalleryThemeListBox -
 
 GalleryThemeListBox::GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits ) :
     ListBox( pParent, nWinBits )
@@ -102,7 +99,6 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
     return( bDone || ListBox::PreNotify( rNEvt ) );
 }
 
-// - GalleryBrowser1 -
 
 GalleryBrowser1::GalleryBrowser1(
     vcl::Window* pParent,

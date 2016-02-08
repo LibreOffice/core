@@ -30,7 +30,6 @@
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
 
-// - PhysicalFontCollection -
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager

@@ -412,7 +412,6 @@ IMPL_LINK_NOARG_TYPED( ScCondFormatList, ScrollHdl, ScrollBar*, void )
     DoScroll(mpScrollBar->GetDelta());
 }
 
-// -------------------------------------------------------------------
 // Conditional Format Dialog
 //
 ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
@@ -583,7 +582,6 @@ void ScCondFormatDlg::InvalidateRefData()
     mpLastEdit = nullptr;
 }
 
-// -------------------------------------------------------------
 // Close the Conditional Format Dialog
 //
 bool ScCondFormatDlg::Close()
@@ -591,7 +589,6 @@ bool ScCondFormatDlg::Close()
     return DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
 }
 
-// ------------------------------------------------------------------------
 // Occurs when the Conditional Format Dialog the OK button is pressed.
 //
 void ScCondFormatDlg::OkPressed()
@@ -615,7 +612,6 @@ void ScCondFormatDlg::OkPressed()
     Close();
 }
 
-// ------------------------------------------------------------------------
 // Occurs when the Conditional Format Dialog is cancelled.
 //
 void ScCondFormatDlg::CancelPressed()
@@ -630,7 +626,6 @@ void ScCondFormatDlg::CancelPressed()
     Close();
 }
 
-// ------------------------------------------------------------------------------
 // Parse xml string parameters used to initialize the Conditional Format Dialog
 // when it is created.
 //
@@ -706,7 +701,6 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
     return bRetVal;
 }
 
-// ---------------------------------------------------------------------------------------
 // Generate xml string parameters used to initialize the Conditional Format Dialog
 // when it is created.
 //
@@ -787,7 +781,6 @@ IMPL_LINK_TYPED( ScCondFormatDlg, RangeGetFocusHdl, Control&, rControl, void )
     mpLastEdit = static_cast<formula::RefEdit*>(&rControl);
 }
 
-// ------------------------------------------------------
 // Conditional Format Dialog button click event handler.
 //
 IMPL_LINK_TYPED( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn, void)

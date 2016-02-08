@@ -23,11 +23,9 @@
 #include <vcl/bitmapaccess.hxx>
 
 
-// - GIFLZWCompressor -
-
-
 class   GIFImageDataOutputStream;
 struct  GIFLZWCTreeNode;
+
 
 class GIFLZWCompressor
 {

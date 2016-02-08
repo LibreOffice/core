@@ -32,8 +32,6 @@
 #include "svtools/imageresourceaccess.hxx"
 #include <comphelper/processfactory.hxx>
 
-// - ImgProdLockBytes -
-
 
 class ImgProdLockBytes : public SvLockBytes
 {
@@ -54,12 +52,10 @@ public:
 };
 
 
-
 ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
         SvLockBytes( pStm, bOwner )
 {
 }
-
 
 
 ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStmRef ) :
@@ -88,10 +84,10 @@ ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream >
 }
 
 
-
 ImgProdLockBytes::~ImgProdLockBytes()
 {
 }
+
 
 ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
         void* pBuffer, sal_Size nCount, sal_Size * pRead) const
@@ -123,6 +119,7 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
     }
 }
 
+
 ErrCode ImgProdLockBytes::WriteAt(sal_uInt64 const nPos,
         const void* pBuffer, sal_Size nCount, sal_Size * pWritten)
 {
@@ -136,12 +133,10 @@ ErrCode ImgProdLockBytes::WriteAt(sal_uInt64 const nPos,
 }
 
 
-
 ErrCode ImgProdLockBytes::Flush() const
 {
     return ERRCODE_NONE;
 }
-
 
 
 ErrCode ImgProdLockBytes::SetSize(sal_uInt64 const nSize)
@@ -156,7 +151,6 @@ ErrCode ImgProdLockBytes::SetSize(sal_uInt64 const nSize)
 }
 
 
-
 ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFlag ) const
 {
     if( GetStream() )
@@ -169,7 +163,7 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
     }
 }
 
-// - ImageProducer -
+
 ImageProducer::ImageProducer()
     : mpStm(nullptr)
     , mnTransIndex(0)
@@ -187,7 +181,8 @@ ImageProducer::~ImageProducer()
     mpStm = nullptr;
 }
 
-// css::uno::XInterface
+
+// XInterface
 css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -195,7 +190,6 @@ css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType ) thro
                                         (static_cast< css::awt::XImageProducer* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
-
 
 
 void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
@@ -208,7 +202,6 @@ void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageCons
 }
 
 
-
 void ImageProducer::removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) throw(css::uno::RuntimeException, std::exception)
 {
     ConsumerList_t::reverse_iterator riter = std::find(maConsList.rbegin(),maConsList.rend(),rxConsumer);
@@ -216,7 +209,6 @@ void ImageProducer::removeConsumer( const css::uno::Reference< css::awt::XImageC
     if (riter != maConsList.rend())
         maConsList.erase(riter.base()-1);
 }
-
 
 
 void ImageProducer::SetImage( const OUString& rPath )
@@ -240,7 +232,6 @@ void ImageProducer::SetImage( const OUString& rPath )
 }
 
 
-
 void ImageProducer::SetImage( SvStream& rStm )
 {
     maURL.clear();
@@ -250,7 +241,6 @@ void ImageProducer::SetImage( SvStream& rStm )
     delete mpStm;
     mpStm = new SvStream( new ImgProdLockBytes( &rStm, false ) );
 }
-
 
 
 void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > & rInputStmRef )
@@ -267,13 +257,11 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > & rIn
 }
 
 
-
 void ImageProducer::NewDataAvailable()
 {
     if( ( GRAPHIC_NONE == mpGraphic->GetType() ) || mpGraphic->GetContext() )
         startProduction();
 }
-
 
 
 void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exception)
@@ -320,7 +308,6 @@ void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exc
 }
 
 
-
 bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
     if (!mpStm)
@@ -340,7 +327,6 @@ bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 }
 
 
-
 void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 {
     ImplInitConsumer( rGraphic );
@@ -358,7 +344,6 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
             (*iter)->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
     }
 }
-
 
 
 void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
@@ -429,7 +414,6 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
         mbConsInit = true;
     }
 }
-
 
 
 void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
@@ -538,6 +522,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     }
 }
 
+
 void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     if ( aArguments.getLength() == 1 )
@@ -550,6 +535,7 @@ void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArgu
         }
     }
 }
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_form_ImageProducer_get_implementation(css::uno::XComponentContext*,

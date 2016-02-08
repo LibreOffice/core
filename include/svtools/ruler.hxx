@@ -456,13 +456,11 @@ Tips for the use of the ruler:
 
 *************************************************************************/
 
-// - WinBits -
 
 #define WB_EXTRAFIELD     ((WinBits)0x00004000)
 #define WB_RIGHT_ALIGNED  ((WinBits)0x00008000)
 #define WB_STDRULER       WB_HORZ
 
-// - Ruler-Type -
 
 enum RulerType { RULER_TYPE_DONTKNOW, RULER_TYPE_OUTSIDE,
                  RULER_TYPE_MARGIN1, RULER_TYPE_MARGIN2,
@@ -483,11 +481,9 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 #define RULER_MOUSE_BORDERWIDTH 5
 #define RULER_MOUSE_MARGINWIDTH 3
 
-// - RulerMargin -
 
 #define RULER_MARGIN_SIZEABLE   ((sal_uInt16)0x0001)
 
-// - RulerBorder -
 
 #define RULER_BORDER_SIZEABLE   ((sal_uInt16)0x0001)
 #define RULER_BORDER_MOVEABLE   ((sal_uInt16)0x0002)
@@ -505,7 +501,6 @@ struct RulerBorder
     long        nMaxPos;
 };
 
-// - RulerIndent -
 
 #define RULER_INDENT_TOP        ((sal_uInt16)0x0000)
 #define RULER_INDENT_BOTTOM     ((sal_uInt16)0x0001)
@@ -518,7 +513,6 @@ struct RulerIndent
     sal_uInt16  nStyle;
 };
 
-// - RulerTab -
 
 #define RULER_TAB_LEFT          ((sal_uInt16)0x0000)
 #define RULER_TAB_RIGHT         ((sal_uInt16)0x0001)
@@ -535,14 +529,12 @@ struct RulerTab
 };
 
 
-
-// - RulerLine -
-
 struct RulerLine
 {
     long    nPos;
     sal_uInt16  nStyle;
 };
+
 
 struct RulerSelection
 {
@@ -565,6 +557,7 @@ struct RulerSelection
     {}
 };
 
+
 struct RulerUnitData
 {
     MapUnit         eMapUnit;           // MAP_UNIT for calculation
@@ -575,6 +568,7 @@ struct RulerUnitData
     double          nTick4;             // Tick whole unit
     sal_Char        aUnitStr[8];        // Unit string
 };
+
 
 // Data for drawing ruler tabstops
 struct RulerTabData
@@ -597,7 +591,6 @@ struct RulerTabData
     sal_uInt16  textoff;
 };
 
-// - Ruler -
 
 class ImplRulerData;
 

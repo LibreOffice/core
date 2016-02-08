@@ -26,10 +26,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/font.hxx>
 
-
-// - CommandExtTextInputData -
-
-
 #define EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
 #define EXTTEXTINPUT_ATTR_UNDERLINE             ((sal_uInt16)0x0200)
 #define EXTTEXTINPUT_ATTR_BOLDUNDERLINE         ((sal_uInt16)0x0400)
@@ -41,6 +37,7 @@
 
 #define EXTTEXTINPUT_CURSOR_INVISIBLE           ((sal_uInt16)0x0001)
 #define EXTTEXTINPUT_CURSOR_OVERWRITE           ((sal_uInt16)0x0002)
+
 
 class VCL_DLLPUBLIC CommandExtTextInputData
 {
@@ -70,9 +67,6 @@ public:
 };
 
 
-// - CommandInputContextData -
-
-
 class VCL_DLLPUBLIC CommandInputContextData
 {
 private:
@@ -83,18 +77,17 @@ public:
                     CommandInputContextData( LanguageType eLang );
 };
 
+
 inline CommandInputContextData::CommandInputContextData()
 {
     meLanguage = LANGUAGE_DONTKNOW;
 }
 
+
 inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
 {
     meLanguage = eLang;
 }
-
-
-// - CommandWheelData -
 
 
 enum class CommandWheelMode
@@ -105,6 +98,7 @@ enum class CommandWheelMode
     ZOOM_SCALE        = 3,
     DATAZOOM          = 4
 };
+
 
 // Magic value used in mnLines field in CommandWheelData
 #define COMMAND_WHEEL_PAGESCROLL        ((sal_uLong)0xFFFFFFFF)
@@ -145,6 +139,7 @@ public:
                         { return ((mnCode & KEY_MOD2) != 0); }
 };
 
+
 inline CommandWheelData::CommandWheelData()
 {
     mnDelta         = 0;
@@ -155,6 +150,7 @@ inline CommandWheelData::CommandWheelData()
     mbHorz          = false;
     mbDeltaIsPixel  = false;
 }
+
 
 inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                            sal_uLong nScrollLines,
@@ -171,9 +167,6 @@ inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDel
 }
 
 
-// - CommandScrollData -
-
-
 class VCL_DLLPUBLIC CommandScrollData
 {
 private:
@@ -188,20 +181,19 @@ public:
     long            GetDeltaY() const { return mnDeltaY; }
 };
 
+
 inline CommandScrollData::CommandScrollData()
 {
     mnDeltaX    = 0;
     mnDeltaY    = 0;
 }
 
+
 inline CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
 {
     mnDeltaX    = nDeltaX;
     mnDeltaY    = nDeltaY;
 }
-
-
-// - CommandModKeyData -
 
 
 class VCL_DLLPUBLIC CommandModKeyData
@@ -219,10 +211,12 @@ public:
     bool            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) != 0; }
 };
 
+
 inline CommandModKeyData::CommandModKeyData()
 {
     mnCode = 0L;
 }
+
 
 inline CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
 {
@@ -230,14 +224,12 @@ inline CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
 }
 
 
-// - CommandDialogData -
-
-
 enum class ShowDialogId
 {
     Preferences       = 1,
     About             = 2,
 };
+
 
 class VCL_DLLPUBLIC CommandDialogData
 {
@@ -249,6 +241,7 @@ public:
 
     ShowDialogId GetDialogId() const { return m_nDialogId; }
 };
+
 
 // Media Commands
 enum class MediaCommand
@@ -277,6 +270,7 @@ enum class MediaCommand
     PreviousTrackHold     = 22,// Button Left holding pressed.
 };
 
+
 class VCL_DLLPUBLIC CommandMediaData
 {
     MediaCommand m_nMediaId;
@@ -292,7 +286,7 @@ public:
     bool GetPassThroughToOS() const { return m_bPassThroughToOS; }
 };
 
-// - CommandSelectionChangeData -
+
 class VCL_DLLPUBLIC CommandSelectionChangeData
 {
 private:
@@ -307,10 +301,12 @@ public:
     sal_uLong          GetEnd() const { return mnEnd; }
 };
 
+
 inline CommandSelectionChangeData::CommandSelectionChangeData()
 {
     mnStart = mnEnd = 0;
 }
+
 
 inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
                                    sal_uLong nEnd )
@@ -318,6 +314,7 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
     mnStart = nStart;
     mnEnd = nEnd;
 }
+
 
 class VCL_DLLPUBLIC CommandSwipeData
 {
@@ -333,6 +330,7 @@ public:
     }
     double getVelocityX() const { return mnVelocityX; }
 };
+
 
 class VCL_DLLPUBLIC CommandLongPressData
 {
@@ -354,7 +352,6 @@ public:
 };
 
 
-// - CommandEvent -
 enum class CommandEventId
 {
     NONE                    = 0,
@@ -380,6 +377,7 @@ enum class CommandEventId
     Swipe                   = 21,
     LongPress               = 22,
 };
+
 
 class VCL_DLLPUBLIC CommandEvent
 {
@@ -410,12 +408,14 @@ public:
     const CommandLongPressData*         GetLongPressData() const;
 };
 
+
 inline CommandEvent::CommandEvent()
 {
     mpData          = nullptr;
     mnCommand       = CommandEventId::NONE;
     mbMouseEvent    = false;
 }
+
 
 inline CommandEvent::CommandEvent( const Point& rMousePos,
                                    CommandEventId nCmd, bool bMEvt, const void* pCmdData ) :
@@ -426,6 +426,7 @@ inline CommandEvent::CommandEvent( const Point& rMousePos,
     mbMouseEvent    = bMEvt;
 }
 
+
 inline const CommandExtTextInputData* CommandEvent::GetExtTextInputData() const
 {
     if ( mnCommand == CommandEventId::ExtTextInput )
@@ -433,6 +434,7 @@ inline const CommandExtTextInputData* CommandEvent::GetExtTextInputData() const
     else
         return nullptr;
 }
+
 
 inline const CommandWheelData* CommandEvent::GetWheelData() const
 {
@@ -442,6 +444,7 @@ inline const CommandWheelData* CommandEvent::GetWheelData() const
         return nullptr;
 }
 
+
 inline const CommandScrollData* CommandEvent::GetAutoScrollData() const
 {
     if ( mnCommand == CommandEventId::AutoScroll )
@@ -449,6 +452,7 @@ inline const CommandScrollData* CommandEvent::GetAutoScrollData() const
     else
         return nullptr;
 }
+
 
 inline const CommandModKeyData* CommandEvent::GetModKeyData() const
 {
@@ -458,6 +462,7 @@ inline const CommandModKeyData* CommandEvent::GetModKeyData() const
         return nullptr;
 }
 
+
 inline const CommandDialogData* CommandEvent::GetDialogData() const
 {
     if( mnCommand == CommandEventId::ShowDialog )
@@ -465,6 +470,7 @@ inline const CommandDialogData* CommandEvent::GetDialogData() const
     else
         return nullptr;
 }
+
 
 inline CommandMediaData* CommandEvent::GetMediaData() const
 {
@@ -474,6 +480,7 @@ inline CommandMediaData* CommandEvent::GetMediaData() const
         return nullptr;
 }
 
+
 inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const
 {
     if( mnCommand == CommandEventId::SelectionChange )
@@ -482,6 +489,7 @@ inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() 
     return nullptr;
 }
 
+
 inline const CommandSwipeData* CommandEvent::GetSwipeData() const
 {
     if( mnCommand == CommandEventId::Swipe )
@@ -489,6 +497,7 @@ inline const CommandSwipeData* CommandEvent::GetSwipeData() const
     else
         return nullptr;
 }
+
 
 inline const CommandLongPressData* CommandEvent::GetLongPressData() const
 {
