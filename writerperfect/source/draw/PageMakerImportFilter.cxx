@@ -47,7 +47,7 @@ throw (RuntimeException)
     return OUString("org.libreoffice.comp.Draw.PageMakerImportFilter");
 }
 
-Sequence< OUString > SAL_CALL PageMakerImportFilter_getSupportedServiceNames()
+Sequence< OUString > PageMakerImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence< OUString > aRet(2);
@@ -55,12 +55,6 @@ throw (RuntimeException)
     pArray[0] = "com.sun.star.document.ImportFilter";
     pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-Reference< XInterface > SAL_CALL PageMakerImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
-{
-    return static_cast<cppu::OWeakObject *>(new PageMakerImportFilter(rContext));
 }
 
 // XServiceInfo
@@ -78,6 +72,15 @@ Sequence< OUString > SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return PageMakerImportFilter_getSupportedServiceNames();
+}
+
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+org_libreoffice_comp_Draw_PageMakerImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
+{
+    return cppu::acquire(new PageMakerImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

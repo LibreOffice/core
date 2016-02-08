@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/PageMakerImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \
-	writerperfect/source/draw/wpftdraw_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -16,8 +16,6 @@
 
 #include "MSPUBImportFilter.hxx"
 
-#include <iostream>
-
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
@@ -47,7 +45,7 @@ throw (RuntimeException)
     return OUString("com.sun.star.comp.Draw.MSPUBImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MSPUBImportFilter_getSupportedServiceNames()
+Sequence< OUString > MSPUBImportFilter_getSupportedServiceNames()
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -55,12 +53,6 @@ throw (RuntimeException)
     pArray[0] =  "com.sun.star.document.ImportFilter";
     pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-Reference< XInterface > SAL_CALL MSPUBImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
-{
-    return static_cast<cppu::OWeakObject *>(new MSPUBImportFilter(rContext));
 }
 
 // XServiceInfo
@@ -78,6 +70,15 @@ Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
     return MSPUBImportFilter_getSupportedServiceNames();
+}
+
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+com_sun_star_comp_Draw_MSPUBImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
+{
+    return cppu::acquire(new MSPUBImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

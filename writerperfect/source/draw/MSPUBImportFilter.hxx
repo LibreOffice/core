@@ -36,16 +36,6 @@ private:
     virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &) override;
 };
 
-OUString MSPUBImportFilter_getImplementationName()
-throw (css::uno::RuntimeException);
-
-css::uno::Sequence< OUString > SAL_CALL MSPUBImportFilter_getSupportedServiceNames()
-throw (css::uno::RuntimeException);
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL MSPUBImportFilter_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
-throw (css::uno::Exception);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

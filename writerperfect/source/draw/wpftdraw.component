@@ -9,35 +9,43 @@
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="wpftdraw" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.CDRImportFilter">
+  <implementation name="com.sun.star.comp.Draw.CDRImportFilter"
+      constructor="com_sun_star_comp_Draw_CDRImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.CMXImportFilter">
+  <implementation name="com.sun.star.comp.Draw.CMXImportFilter"
+      constructor="com_sun_star_comp_Draw_CMXImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.FreehandImportFilter">
+  <implementation name="com.sun.star.comp.Draw.FreehandImportFilter"
+      constructor="com_sun_star_comp_Draw_FreehandImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.MSPUBImportFilter">
+  <implementation name="com.sun.star.comp.Draw.MSPUBImportFilter"
+      constructor="com_sun_star_comp_Draw_MSPUBImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.MWAWDrawImportFilter">
+  <implementation name="com.sun.star.comp.Draw.MWAWDrawImportFilter"
+      constructor="com_sun_star_comp_Draw_MWAWDrawImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.VisioImportFilter">
+  <implementation name="com.sun.star.comp.Draw.VisioImportFilter"
+      constructor="com_sun_star_comp_Draw_VisioImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.WPGImportFilter">
+  <implementation name="com.sun.star.comp.Draw.WPGImportFilter"
+     constructor="com_sun_star_comp_Draw_WPGImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="org.libreoffice.comp.Draw.PageMakerImportFilter">
+  <implementation name="org.libreoffice.comp.Draw.PageMakerImportFilter"
+      constructor="org_libreoffice_comp_Draw_PageMakerImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>

@@ -40,16 +40,6 @@ private:
     virtual void doRegisterHandlers(OdgGenerator &rGenerator) override;
 };
 
-OUString MWAWDrawImportFilter_getImplementationName()
-throw (css::uno::RuntimeException);
-
-css::uno::Sequence< OUString > SAL_CALL MWAWDrawImportFilter_getSupportedServiceNames()
-throw (css::uno::RuntimeException);
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL MWAWDrawImportFilter_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
-throw (css::uno::Exception);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
