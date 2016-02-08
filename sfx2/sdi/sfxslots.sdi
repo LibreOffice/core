@@ -19,7 +19,6 @@
 module
 StarApplicationFrame
 [
-HelpText( "StarDivision Application Framework" ),
 SlotIdFile( "sfx2/sfx.hrc" )
 ]
 {

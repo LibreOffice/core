@@ -18,7 +18,6 @@
 module
 SvxItems
 [
-HelpText( "Svx-Items" )
 SlotIdFile( "svxslots.hrc" )
 ]
 {

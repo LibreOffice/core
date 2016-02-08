@@ -19,7 +19,6 @@
 module
 StarWriter
 [
-HelpText( "StarWriter Application" )
 SlotIdFile( "swslots.hrc" )
 ModulePrefix( "Sw" )
 ]

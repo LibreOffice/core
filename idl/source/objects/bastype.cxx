@@ -138,9 +138,4 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     return false;
 }
 
-void SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
-{
-    SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

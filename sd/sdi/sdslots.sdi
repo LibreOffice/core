@@ -19,7 +19,6 @@
 module
 StarDraw
 [
-HelpText( "StarDraw Application" )
 SlotIdFile( "sdslots.hrc" )
 ModulePrefix( "Sd" )
 ]

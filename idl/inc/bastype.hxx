@@ -86,14 +86,6 @@ public:
 };
 
 
-class SvHelpText : public SvString
-{
-public:
-                SvHelpText() {}
-    void        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-};
-
-
 #endif // INCLUDED_IDL_INC_BASTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

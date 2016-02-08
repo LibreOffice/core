@@ -30,7 +30,6 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_module;
     SvStringHashEntryRef MM_interface;
     SvStringHashEntryRef MM_String;
-    SvStringHashEntryRef MM_HelpText;
     SvStringHashEntryRef MM_void;
     SvStringHashEntryRef MM_shell;
     SvStringHashEntryRef MM_Toggle;
@@ -99,7 +98,6 @@ inline SvStringHashEntry * SvHash_##Name()                   \
 
 HASH_INLINE(module)
 HASH_INLINE(interface)
-HASH_INLINE(HelpText)
 HASH_INLINE(shell)
 HASH_INLINE(Toggle)
 HASH_INLINE(AutoUpdate)

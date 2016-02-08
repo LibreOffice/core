@@ -19,7 +19,6 @@
 module
 BasicIDE
 [
-HelpText( "BasicIDE" )
 SlotIdFile( "basslots.hrc" )
 ]
 {

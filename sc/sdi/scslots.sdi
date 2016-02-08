@@ -19,7 +19,6 @@
 module
 StarCalc
 [
-HelpText( "StarDivision StarCalc" ),
 SlotIdFile( "scslots.hrc" )
 ModulePrefix( "Sc" )
 ]

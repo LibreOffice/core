@@ -223,7 +223,6 @@ interface DataPilotTables
 interface DataPilotTable
 {
     SbxObject DataPilotFields SID_PIVOT_FIELDS
-    [ HelpText = "" ; ]
 }
 
 interface DataPilotFields
@@ -233,11 +232,8 @@ interface DataPilotFields
 interface DataPilotField
 {
     String FieldName SID_PFIELD_NAME
-    [ HelpText = "" ; ]
     UINT16 Orientation SID_PFIELD_ORIENTATION
-    [ HelpText = "" ; ]
     UINT16 Function SID_PFIELD_FUNCTION
-    [ HelpText = "" ; ]
 }
 
 
@@ -248,7 +244,6 @@ shell ScTabViewShell
     import Tables "ActiveDocument.Tables";
     import BaseSelection;
     import TableEditView;
-//  import SearchSettings;
 
 
     SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; ]

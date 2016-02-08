@@ -87,10 +87,9 @@ bool SvMetaObject::ReadNameSvIdl( SvTokenStream & rInStm )
     return false;
 }
 
-void SvMetaObject::ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm )
+void SvMetaObject::ReadAttributesSvIdl( SvIdlDataBase & ,
+                                      SvTokenStream & )
 {
-    aHelpText.ReadSvIdl( rBase, rInStm );
 }
 
 void SvMetaObject::DoReadContextSvIdl( SvIdlDataBase & rBase,
