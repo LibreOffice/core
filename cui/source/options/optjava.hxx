@@ -43,6 +43,7 @@ typedef void* JavaInfo;
 #endif
 
 class   SvxJavaParameterDlg;
+class   SvxJavaParameterEditDlg;
 class   SvxJavaClassPathDlg;
 class   SvxJavaListBox;
 
@@ -129,6 +130,8 @@ private:
 
     VclPtr<PushButton>             m_pEditBtn;
 
+    VclPtr<SvxJavaParameterEditDlg>    m_pParamEditDlg;
+
     DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
     DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
@@ -151,6 +154,9 @@ private:
     inline void             EnableAssignButton()
                                 { m_pAssignBtn->Enable(); }
 
+    inline void             DisableAssignButton()
+                                { m_pAssignBtn->Disable(); }
+
     inline void             DisableRemoveButton()
                                 { m_pRemoveBtn->Disable(); }
 
@@ -167,6 +173,26 @@ public:
 
     css::uno::Sequence< OUString > GetParameters() const;
     void SetParameters( css::uno::Sequence< OUString >& rParams );
+    void DisableButtons();
+    void EditParameter();
+};
+
+// class SvxJavaParameterEditDlg ---------------------------------------------
+
+class SvxJavaParameterEditDlg : public ModalDialog
+{
+private:
+    VclPtr<Edit>                   m_pParameterEditField;
+
+public:
+    explicit SvxJavaParameterEditDlg( vcl::Window* pParent );
+    virtual ~SvxJavaParameterEditDlg();
+    virtual void dispose() override;
+
+    virtual short           Execute() override;
+
+    OUString GetParameter() const;
+    void SetParameter( OUString rParams );
 };
 
 // class SvxJavaClassPathDlg ---------------------------------------------

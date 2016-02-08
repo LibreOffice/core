@@ -237,6 +237,8 @@ public:
     virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
     virtual OUString    GetText() const override;
 
+    void                SetCursorAtLast();
+
     void                SetPlaceholderText( const OUString& rStr );
     OUString            GetPlaceholderText() const;
 
