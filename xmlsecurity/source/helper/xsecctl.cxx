@@ -978,6 +978,21 @@ void XSecController::exportSignature(
 void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& /*rInformation*/)
 {
     xDocumentHandler->startElement(TAG_SIGNEDINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+
+    {
+        std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_C14N);
+        xDocumentHandler->startElement(TAG_CANONICALIZATIONMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+        xDocumentHandler->endElement(TAG_CANONICALIZATIONMETHOD);
+    }
+
+    {
+        std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_RSASHA256);
+        xDocumentHandler->startElement(TAG_SIGNATUREMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+        xDocumentHandler->endElement(TAG_SIGNATUREMETHOD);
+    }
+
     xDocumentHandler->endElement(TAG_SIGNEDINFO);
 }
 
