@@ -57,7 +57,6 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
 $(eval $(call gb_Library_add_exception_objects,wpftimpress,\
 	writerperfect/source/impress/KeynoteImportFilter \
 	writerperfect/source/impress/MWAWPresentationImportFilter \
-	writerperfect/source/impress/wpftimpress_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

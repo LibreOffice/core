@@ -8,12 +8,14 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="wpftimpress" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="org.libreoffice.comp.Impress.KeynoteImportFilter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.libreoffice.comp.Impress.KeynoteImportFilter"
+      constructor="org_libreoffice_comp_Impress_KeynoteImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Impress.MWAWPresentationImportFilter">
+  <implementation name="com.sun.star.comp.Impress.MWAWPresentationImportFilter"
+      constructor="com_sun_star_comp_Impress_MWAWPresentationImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>

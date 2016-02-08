@@ -41,19 +41,6 @@ private:
     virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &) override;
 };
 
-OUString KeynoteImportFilter_getImplementationName()
-throw (css::uno::RuntimeException);
-
-bool SAL_CALL KeynoteImportFilter_supportsService(const OUString &ServiceName)
-throw (css::uno::RuntimeException);
-
-css::uno::Sequence< OUString > SAL_CALL KeynoteImportFilter_getSupportedServiceNames()
-throw (css::uno::RuntimeException);
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL KeynoteImportFilter_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
-throw (css::uno::Exception);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

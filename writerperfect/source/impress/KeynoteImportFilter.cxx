@@ -238,33 +238,11 @@ throw(css::uno::RuntimeException, std::exception)
     return sTypeName;
 }
 
-OUString KeynoteImportFilter_getImplementationName()
-throw (RuntimeException)
-{
-    return OUString("org.libreoffice.comp.Impress.KeynoteImportFilter");
-}
-
-Sequence< OUString > SAL_CALL KeynoteImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
-{
-    Sequence < OUString > aRet(2);
-    OUString *pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
-    return aRet;
-}
-
-Reference< XInterface > SAL_CALL KeynoteImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
-{
-    return static_cast<cppu::OWeakObject *>(new KeynoteImportFilter(rContext));
-}
-
 // XServiceInfo
 OUString SAL_CALL KeynoteImportFilter::getImplementationName()
 throw (RuntimeException, std::exception)
 {
-    return KeynoteImportFilter_getImplementationName();
+    return OUString("org.libreoffice.comp.Impress.KeynoteImportFilter");
 }
 
 sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString &rServiceName)
@@ -276,7 +254,20 @@ throw (RuntimeException, std::exception)
 Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
-    return KeynoteImportFilter_getSupportedServiceNames();
+    Sequence < OUString > aRet(2);
+    OUString *pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.document.ImportFilter";
+    pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
+    return aRet;
+}
+
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+org_libreoffice_comp_Impress_KeynoteImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
+{
+    return cppu::acquire(new KeynoteImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
