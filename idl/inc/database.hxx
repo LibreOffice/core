@@ -42,14 +42,15 @@ public:
                 : nLine(nL), nColumn(nC) {}
 
     const OString&  GetText() const { return aText; }
-    void SetText( const OString& rT ) { aText = rT; }
+    void            SetText( const OString& rT ) { aText = rT; }
     bool            IsError() const { return nLine != 0; }
     SvIdlError &    operator = ( const SvIdlError & rRef )
-    { aText   = rRef.aText;
-      nLine   = rRef.nLine;
-      nColumn = rRef.nColumn;
-      return *this;
-    }
+                    {
+                        aText   = rRef.aText;
+                        nLine   = rRef.nLine;
+                        nColumn = rRef.nColumn;
+                        return *this;
+                    }
 };
 
 class SvIdlDataBase
@@ -68,7 +69,7 @@ class SvIdlDataBase
     SvRefMemberList<SvMetaType *>      aTmpTypeList; // not persistent
 
 protected:
-    ::std::set< OUString > m_DepFiles;
+    ::std::set< OUString >      m_DepFiles;
     SvMetaObjectMemberStack     aContextStack;
     OUString                    aPath;
     SvIdlError                  aError;

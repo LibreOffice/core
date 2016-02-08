@@ -102,11 +102,11 @@ inline SvToken::SvToken()
 class SvTokenStream
 {
     sal_uLong       nLine, nColumn;
-    int         nBufPos;
-    int         c;          // next character
+    int             nBufPos;
+    int             c;          // next character
     sal_uInt16      nTabSize;   // length of tabulator
-    OString    aStrTrue;
-    OString    aStrFalse;
+    OString         aStrTrue;
+    OString         aStrFalse;
     sal_uLong       nMaxPos;
 
     SvFileStream *  pInStream;
@@ -115,9 +115,9 @@ class SvTokenStream
     std::vector<std::unique_ptr<SvToken> > aTokList;
     std::vector<std::unique_ptr<SvToken> >::iterator pCurToken;
 
-    OString aBufStr;
+    OString         aBufStr;
 
-    void        InitCtor();
+    void            InitCtor();
 
     int             GetNextChar();
     int             GetFastNextChar()

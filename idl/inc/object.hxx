@@ -78,15 +78,15 @@ class SvMetaClass : public SvMetaType
                                     const OString& rPrefix, SvIdlDataBase& rBase );
 
 protected:
-    virtual void    ReadContextSvIdl( SvIdlDataBase &,
+    virtual void            ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm ) override;
 public:
             SvMetaClass();
 
-    void                FillClasses( SvMetaClassList & rList );
+    void                    FillClasses( SvMetaClassList & rList );
 
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-    virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) override;
+    virtual bool            ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    virtual void            WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) override;
 };
 
 #endif // INCLUDED_IDL_INC_OBJECT_HXX

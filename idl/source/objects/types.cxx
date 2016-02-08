@@ -150,8 +150,7 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
 }
 
 #define CTOR                            \
-    : pAttrList( nullptr )              \
-    , nType( MetaTypeType::Base )       \
+    : nType( MetaTypeType::Base )       \
     , bIsItem( false )                  \
     , bIsShell( false )                 \
 
@@ -166,23 +165,15 @@ SvMetaType::SvMetaType( const OString& rName )
     SetName( rName );
 }
 
-SvMetaType::~SvMetaType() {
-    delete pAttrList;
-}
-
-SvRefMemberList<SvMetaAttribute *>& SvMetaType::GetAttrList() const
-{
-    if( !pAttrList )
-        const_cast<SvMetaType *>(this)->pAttrList = new SvRefMemberList<SvMetaAttribute *>();
-    return *pAttrList;
-}
+SvMetaType::~SvMetaType()
+{}
 
 void SvMetaType::SetType( MetaTypeType nT )
 {
     nType = nT;
     if( nType == MetaTypeType::Class )
     {
-        OStringBuffer aTmp(C_PREF);
+        OStringBuffer aTmp("C_");
         aTmp.append("Object *");
     }
 }
@@ -287,7 +278,7 @@ sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
         // write the single attributes
         for( sal_uLong n = 0; n < nAttrCount; n++ )
         {
-            nC += (*pAttrList)[n]->MakeSfx( rAttrArray );
+            nC += aAttrList[n]->MakeSfx( rAttrArray );
             if( n +1 < nAttrCount )
                 rAttrArray.append(", ");
         }

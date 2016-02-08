@@ -27,32 +27,32 @@ class SvMetaSlot : public SvMetaAttribute
 {
     tools::SvRef<SvMetaType>      aSlotType;
     tools::SvRef<SvMetaSlot>      aMethod;
-    SvIdentifier    aGroupId;
-    SvIdentifier    aExecMethod;
-    SvIdentifier    aStateMethod;
-    SvBOOL          aPseudoSlots;
+    SvIdentifier     aGroupId;
+    SvIdentifier     aExecMethod;
+    SvIdentifier     aStateMethod;
+    SvBOOL           aPseudoSlots;
 
-    SvBOOL          aToggle;
-    SvBOOL          aAutoUpdate;
+    SvBOOL           aToggle;
+    SvBOOL           aAutoUpdate;
 
-    SvBOOL          aAsynchron;
+    SvBOOL           aAsynchron;
 
-    SvBOOL          aRecordPerItem;// exclusive
-    SvBOOL          aRecordPerSet;
-    SvBOOL          aNoRecord;
-    SvBOOL          aRecordAbsolute;
+    SvBOOL           aRecordPerItem;// exclusive
+    SvBOOL           aRecordPerSet;
+    SvBOOL           aNoRecord;
+    SvBOOL           aRecordAbsolute;
 
-    SvBOOL          aMenuConfig;
-    SvBOOL          aToolBoxConfig;
-    SvBOOL          aAccelConfig;
-    SvBOOL          aFastCall;
-    SvBOOL          aContainer;
-    SvBOOL          aImageRotation;
-    SvBOOL          aImageReflection;
-    SvIdentifier    aPseudoPrefix;
-    SvString        aDisableFlags;
-    SvMetaSlot*     pLinkedSlot;
-    SvMetaSlot*     pNextSlot;
+    SvBOOL           aMenuConfig;
+    SvBOOL           aToolBoxConfig;
+    SvBOOL           aAccelConfig;
+    SvBOOL           aFastCall;
+    SvBOOL           aContainer;
+    SvBOOL           aImageRotation;
+    SvBOOL           aImageReflection;
+    SvIdentifier     aPseudoPrefix;
+    SvString         aDisableFlags;
+    SvMetaSlot*      pLinkedSlot;
+    SvMetaSlot*      pNextSlot;
     sal_uLong        nListPos;
     SvMetaEnumValue* pEnumValue;
     SvBOOL           aReadOnlyDoc;
@@ -64,23 +64,11 @@ class SvMetaSlot : public SvMetaAttribute
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm );
 
-    void            SetEnumValue(SvMetaEnumValue *p)
-                    { pEnumValue = p; }
+    void            SetEnumValue(SvMetaEnumValue *p) { pEnumValue = p; }
 protected:
-    void    SetToggle( bool bSet )
-            {
-                aToggle = bSet;
-            }
-    void    SetAutoUpdate( bool bSet )
-            {
-                aAutoUpdate = bSet;
-            }
-
-    void    SetAsynchron( bool bSet )
-            {
-                aAsynchron = bSet;
-            }
-
+    void    SetToggle( bool bSet ) { aToggle = bSet; }
+    void    SetAutoUpdate( bool bSet ) { aAutoUpdate = bSet; }
+    void    SetAsynchron( bool bSet ) { aAsynchron = bSet; }
     void    SetRecordPerItem( bool bSet )
             {
                 aRecordPerItem = bSet;
@@ -99,8 +87,7 @@ protected:
                 if( bSet )
                     aRecordPerItem = aRecordPerSet = false;
             }
-    void    SetRecordAbsolute( bool bSet )
-            { aRecordAbsolute = bSet; }
+    void    SetRecordAbsolute( bool bSet ) { aRecordAbsolute = bSet; }
 
 public:
             SvMetaObject *  MakeClone() const;

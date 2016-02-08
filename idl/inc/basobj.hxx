@@ -27,12 +27,7 @@
 #include <vector>
 
 class SvTokenStream;
-class SvMetaObject;
 class SvIdlDataBase;
-
-typedef SvMetaObject * (*CreateMetaObjectType)();
-
-#define C_PREF  "C_"
 
 template<typename T>
 class SvRefMemberList : private std::vector<T>

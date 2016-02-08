@@ -35,7 +35,7 @@ public:
     OUString    aTargetFile;
     OUString    aExportFile;
     OUString    m_DepFile;
-    sal_uInt32      nVerbosity;
+    sal_uInt32  nVerbosity;
 
                 SvCommand( int argc, char ** argv );
                 ~SvCommand();

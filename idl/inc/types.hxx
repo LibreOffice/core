@@ -27,8 +27,6 @@
 struct SvSlotElement;
 typedef std::vector< SvSlotElement* > SvSlotElementList;
 
-class SvMetaSlot;
-
 class SvMetaType;
 
 class SvMetaAttribute : public SvMetaReference
@@ -45,7 +43,7 @@ public:
 
     void                SetSlotId( const SvIdentifier & rId )
                         { aSlotId = rId; }
-    const SvIdentifier & GetSlotId() const;
+    const SvIdentifier& GetSlotId() const;
     SvMetaType *        GetType() const;
 
     virtual bool        IsMethod() const;
@@ -64,29 +62,27 @@ enum MetaTypeType { Method, Struct, Base, Enum, Class };
 
 class SvMetaType : public SvMetaReference
 {
-    SvRefMemberList<SvMetaAttribute *>* pAttrList;
-    MetaTypeType                nType;
-    bool                        bIsItem;
-    bool                        bIsShell;
+    SvRefMemberList<SvMetaAttribute *>  aAttrList;
+    MetaTypeType                        nType;
+    bool                                bIsItem;
+    bool                                bIsShell;
 
-    void    WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
-                        SvStream & rOutStm );
+    void                WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
+                                      SvStream & rOutStm );
 protected:
-    bool        ReadNamesSvIdl( SvTokenStream & rInStm );
-    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    bool                ReadNamesSvIdl( SvTokenStream & rInStm );
+    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
-    bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    bool                ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
             SvMetaType();
             SvMetaType( const OString& rTypeName );
 
     virtual ~SvMetaType();
 
-    SvRefMemberList<SvMetaAttribute *>& GetAttrList() const;
-    sal_uLong           GetAttrCount() const
-                        {
-                            return pAttrList ? pAttrList->size() : 0L;
-                        }
+    SvRefMemberList<SvMetaAttribute *>&
+                        GetAttrList() { return aAttrList; }
+    sal_uLong           GetAttrCount() const { return aAttrList.size(); }
 
     void                SetType( MetaTypeType nT );
     MetaTypeType        GetType() const { return nType; }
@@ -100,7 +96,7 @@ public:
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     bool                ReadMethodArgs( SvIdlDataBase & rBase,
-                                             SvTokenStream & rInStm );
+                                        SvTokenStream & rInStm );
 };
 
 class SvMetaTypeString : public SvMetaType
@@ -120,7 +116,7 @@ public:
 class SvMetaTypeEnum : public SvMetaType
 {
     SvRefMemberList<SvMetaEnumValue *> aEnumValueList;
-    OString aPrefix;
+    OString                            aPrefix;
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 public:
