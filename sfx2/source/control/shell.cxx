@@ -272,7 +272,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
             if ( pSlot )
             {
                 // At Enum-Slots invalidate the Master-Slot
-                if ( SFX_KIND_ENUM == pSlot->GetKind() )
+                if ( SfxSlotKind::Enum == pSlot->GetKind() )
                     pSlot = pSlot->GetLinkedSlot();
 
                 // Invalidate the Slot itself and possible also all Slave-Slots

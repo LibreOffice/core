@@ -26,19 +26,19 @@
 SfxSlotKind SfxSlot::GetKind() const
 {
     if( !nMasterSlotId && !nValue)
-        return (SfxSlotKind) SFX_KIND_STANDARD;
+        return SfxSlotKind::Standard;
     if ( nMasterSlotId && fnExec==nullptr && fnState==nullptr )
     {
         if ( *pType->pType == typeid(SfxBoolItem) )
-            return (SfxSlotKind) SFX_KIND_ENUM;
+            return SfxSlotKind::Enum;
         else
         {
             OSL_FAIL( "invalid slot kind detected" );
-            return SFX_KIND_ENUM;
+            return SfxSlotKind::Enum;
         }
     }
     else
-        return (SfxSlotKind) SFX_KIND_ATTR;
+        return SfxSlotKind::Attribute;
 }
 
 

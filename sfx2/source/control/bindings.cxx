@@ -1181,7 +1181,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 {
     SfxItemPool &rPool = pShell->GetPool();
 
-    if ( SFX_KIND_ENUM == pSlot->GetKind() )
+    if ( SfxSlotKind::Enum == pSlot->GetKind() )
     {
         // for Enum-Slots, the Master has to be executed with the value
         // of the enums
@@ -1191,7 +1191,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId), pSlot->GetValue() ) );
         pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
     }
-    else if ( SFX_KIND_ATTR == pSlot->GetKind() )
+    else if ( SfxSlotKind::Attribute == pSlot->GetKind() )
     {
         // Which value has to be mapped for Attribute slots
         const sal_uInt16 nSlotId = pSlot->GetSlotId();
@@ -1339,7 +1339,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     // get the status method, which is served by the pCache
     SfxStateFunc pFnc = nullptr;
     const SfxInterface *pInterface = pShell->GetInterface();
-    if ( SFX_KIND_ENUM == pMsgSvr->GetSlot()->GetKind() )
+    if ( SfxSlotKind::Enum == pMsgSvr->GetSlot()->GetKind() )
     {
         pRealSlot = pInterface->GetRealSlot(pMsgSvr->GetSlot());
         pCache = GetStateCache( pRealSlot->GetSlotId() );
@@ -1451,7 +1451,7 @@ void SfxBindings::UpdateControllers_Impl
     SfxItemState                eState  // state of item
 )
 {
-    DBG_ASSERT( !rFound.pSlot || SFX_KIND_ENUM != rFound.pSlot->GetKind(),
+    DBG_ASSERT( !rFound.pSlot || SfxSlotKind::Enum != rFound.pSlot->GetKind(),
                 "direct update of enum slot isn't allowed" );
 
     SfxStateCache* pCache = rFound.pCache;
@@ -1498,7 +1498,7 @@ void SfxBindings::UpdateControllers_Impl
         for ( const SfxSlot *pSlave = pFirstSlave; pSlave; pSlave = pSlave->GetNextSlot() )
         {
             DBG_ASSERT(pSlave, "Wrong SlaveSlot binding!");
-            DBG_ASSERT(SFX_KIND_ENUM == pSlave->GetKind(),"non enum slaves aren't allowed");
+            DBG_ASSERT(SfxSlotKind::Enum == pSlave->GetKind(),"non enum slaves aren't allowed");
             DBG_ASSERT(pSlave->GetMasterSlotId() == pSlot->GetSlotId(),"Wrong MasterSlot!");
 
             // Binding exist for function ?

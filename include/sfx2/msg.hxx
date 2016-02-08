@@ -85,11 +85,11 @@ class SfxRequest;
 
 
 
-enum SfxSlotKind
+enum class SfxSlotKind
 {
-    SFX_KIND_STANDARD,
-    SFX_KIND_ENUM,
-    SFX_KIND_ATTR
+    Standard,
+    Enum,
+    Attribute
 };
 
 
@@ -193,16 +193,12 @@ SFX_DECL_TYPE(22); // for SvxSearchItem
                  0, 0, DisableFlags, UnoName \
                }
 
-//class SfxPoolItem;
-
 struct SfxFormalArgument
 {
     const SfxType*  pType;    // Type of the parameter (SfxPoolItem subclass)
     const char*     pName;    // Name of the sParameters
     sal_uInt16      nSlotId;  // Slot-Id for identification of the Parameters
 
-//    const TypeId&           Type() const
-//                            { return pType->aTypeId; }
     SfxPoolItem*            CreateItem() const
                             { return pType->createSfxPoolItemFunc(); }
 };

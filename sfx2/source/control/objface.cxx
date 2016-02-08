@@ -153,7 +153,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             // every master refers to his first slave (ENUM),
             // all slaves refer to their master.
             // Slaves refer in a circle to the other slaves with the same master
-            if ( pIter->GetKind() == SFX_KIND_ENUM )
+            if ( pIter->GetKind() == SfxSlotKind::Enum )
             {
                 pIter->pLinkedSlot = GetSlot( pIter->nMasterSlotId );
                 assert( pIter->pLinkedSlot );
@@ -203,7 +203,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
                 SAL_WARN( "sfx.control", "Wrong order" );
 
-            if ( pIter->GetKind() == SFX_KIND_ENUM )
+            if ( pIter->GetKind() == SfxSlotKind::Enum )
             {
                 const SfxSlot *pMasterSlot = GetSlot(pIter->nMasterSlotId);
                 const SfxSlot *pFirstSlave = pMasterSlot->pLinkedSlot;
@@ -240,7 +240,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             {
                 if ( pIter->pLinkedSlot )
                 {
-                    if ( pIter->pLinkedSlot->GetKind() != SFX_KIND_ENUM )
+                    if ( pIter->pLinkedSlot->GetKind() != SfxSlotKind::Enum )
                     {
                         OStringBuffer aStr("Slave is no enum: ");
                         aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
