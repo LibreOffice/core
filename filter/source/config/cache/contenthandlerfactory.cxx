@@ -154,8 +154,7 @@ OUString ContentHandlerFactory::impl_getImplementationName()
 
 css::uno::Sequence< OUString > ContentHandlerFactory::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.frame.ContentHandlerFactory" };
-    return lServiceNames;
+    return { "com.sun.star.frame.ContentHandlerFactory" };
 }
 
 

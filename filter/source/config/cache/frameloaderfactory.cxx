@@ -151,8 +151,7 @@ OUString FrameLoaderFactory::impl_getImplementationName()
 
 css::uno::Sequence< OUString > FrameLoaderFactory::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.frame.FrameLoaderFactory" };
-    return lServiceNames;
+    return { "com.sun.star.frame.FrameLoaderFactory" };
 }
 
 

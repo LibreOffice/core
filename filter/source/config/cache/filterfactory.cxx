@@ -580,8 +580,7 @@ OUString FilterFactory::impl_getImplementationName()
 
 css::uno::Sequence< OUString > FilterFactory::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.document.FilterFactory" };
-    return lServiceNames;
+    return { "com.sun.star.document.FilterFactory" };
 }
 
 
