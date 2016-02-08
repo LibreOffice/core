@@ -311,7 +311,10 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
         }
     }
     else
+    {
         aParameterList = m_pParamDlg->GetParameters();
+        m_pParamDlg->DisableButtons();   //disable add, edit and remove button when dialog is reopened
+    }
 
     if ( m_pParamDlg->Execute() == RET_OK )
     {
@@ -844,17 +847,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, EditHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
-
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-    {
-        OUString eVal = m_pAssignedList->GetSelectEntry();
-        m_pAssignedList->RemoveEntry( nPos );
-        m_pParameterEdit->SetText( eVal );
-    }
-    DisableRemoveButton();
-    DisableEditButton();
-    EnableAssignButton();
+    EditParameter();
 }
 
 
@@ -867,9 +860,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
 {
-    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        m_pParameterEdit->SetText( m_pAssignedList->GetEntry( nPos ) );
+    EditParameter();
 }
 
 
@@ -886,10 +877,58 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
                 nPos = ( nCount - 1 );
             m_pAssignedList->SelectEntryPos( nPos );
         }
+        else
+        {
+            DisableEditButton();
+        }
     }
     EnableRemoveButton();
 }
 
+void SvxJavaParameterDlg::EditParameter()
+{
+    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
+    m_pParameterEdit->SetText( OUString() );
+    OUString editedClassPath;
+
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        if ( !m_pParamEditDlg )
+        {
+            m_pParamEditDlg = VclPtr<SvxJavaParameterEditDlg>::Create( this );
+            editedClassPath = m_pAssignedList->GetSelectEntry();
+            m_pParamEditDlg->SetParameter( editedClassPath );
+        }
+        else{
+            editedClassPath = m_pAssignedList->GetSelectEntry();
+            m_pParamEditDlg->SetParameter( editedClassPath );
+        }
+    }
+    else
+    {
+        if(m_pParamEditDlg)
+        {
+            editedClassPath = m_pParamEditDlg->GetParameter();
+        }
+    }
+
+    if ( m_pParamEditDlg->Execute() == RET_OK )
+    {
+        if (!( editedClassPath == m_pParamEditDlg->GetParameter() ) )
+        {
+            editedClassPath = m_pParamEditDlg->GetParameter();
+            if( !editedClassPath.isEmpty() ){
+                m_pAssignedList->RemoveEntry( nPos );
+                m_pAssignedList->InsertEntry( editedClassPath, nPos );
+                m_pAssignedList->SelectEntryPos( nPos );
+            }
+        }
+    }
+    else
+    {
+        m_pParamEditDlg->SetParameter( editedClassPath );
+    }
+}
 
 short SvxJavaParameterDlg::Execute()
 {
@@ -905,10 +944,17 @@ Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
     Sequence< OUString > aParamList( nCount );
     OUString* pArray = aParamList.getArray();
      for ( sal_Int32 i = 0; i < nCount; ++i )
-         pArray[i] = m_pAssignedList->GetEntry(i);
+         pArray[i] = OUString( m_pAssignedList->GetEntry(i) );
     return aParamList;
 }
 
+
+void SvxJavaParameterDlg::DisableButtons()
+{
+    DisableAssignButton();
+    DisableEditButton();
+    DisableRemoveButton();
+}
 
 void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 {
@@ -920,6 +966,49 @@ void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
         OUString sParam = OUString( *pArray++ );
         m_pAssignedList->InsertEntry( sParam );
     }
+    DisableEditButton();
+    DisableRemoveButton();
+}
+
+// class SvxJavaParameterEditDlg ---------------------------------------------
+
+SvxJavaParameterEditDlg::SvxJavaParameterEditDlg( vcl::Window* pParent ) :
+
+    ModalDialog( pParent, "JavaStartParametersEdit",
+                 "cui/ui/javastartparameterseditdialog.ui" )
+{
+    get( m_pParameterEditField, "parametereditfield");
+}
+
+SvxJavaParameterEditDlg::~SvxJavaParameterEditDlg()
+{
+    disposeOnce();
+}
+
+void SvxJavaParameterEditDlg::dispose()
+{
+    m_pParameterEditField.clear();
+    ModalDialog::dispose();
+}
+
+
+short SvxJavaParameterEditDlg::Execute()
+{
+    m_pParameterEditField->GrabFocus();
+    return ModalDialog::Execute();
+}
+
+OUString SvxJavaParameterEditDlg::GetParameter() const
+{
+    OUString sParamEdit = comphelper::string::strip(m_pParameterEditField->GetText(), ' ');
+    return sParamEdit;
+}
+
+
+void SvxJavaParameterEditDlg::SetParameter( OUString strParams )
+{
+        m_pParameterEditField->SetText( strParams );
+        m_pParameterEditField->SetCursorAtLast();
 }
 
 // class SvxJavaClassPathDlg ---------------------------------------------

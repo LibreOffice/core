@@ -2699,6 +2699,12 @@ OUString Edit::GetText() const
         return maText.toString();
 }
 
+void Edit::SetCursorAtLast(){
+    OUString str = GetText();
+    sal_Int32 len = str.getLength();
+    ImplSetCursorPos( len, false );
+}
+
 void Edit::SetPlaceholderText( const OUString& rStr )
 {
     if ( mpSubEdit )
