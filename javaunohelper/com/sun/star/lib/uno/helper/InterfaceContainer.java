@@ -121,6 +121,11 @@ public class InterfaceContainer implements Cloneable
         this.elementData = new Object[initialCapacity];
     }
 
+    private InterfaceContainer(Object[] data) {
+        elementData = data;
+        size = elementData == null ? 0 : elementData.length;
+    }
+
     /**
      * Trims the capacity of this <tt>ArrayList</tt> instance to be the
      * list's current size.  An application can use this operation to minimize
@@ -448,16 +453,14 @@ public class InterfaceContainer implements Cloneable
     @Override
     synchronized public Object clone()
     {
-        Object ret= null;
-        if (elementData != null)
-        {
-            InterfaceContainer cont= new InterfaceContainer();
-            cont.elementData = new Object[size];
-            cont.size= size;
-            System.arraycopy(elementData, 0, cont.elementData, 0, size);
-            ret= cont;
+        Object[] data;
+        if (elementData == null) {
+            data = null;
+        } else {
+            data = new Object[size];
+            System.arraycopy(elementData, 0, data, 0, size);
         }
-        return ret;
+        return new InterfaceContainer(data);
     }
     synchronized public ListIterator listIterator()
     {
