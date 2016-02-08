@@ -9,7 +9,7 @@ namespace sd {
 class CategoryListBox : public ListBox
 {
 public:
-    CategoryListBox( vcl::Window* pParent );
+    explicit CategoryListBox( vcl::Window* pParent );
     virtual ~CategoryListBox();
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

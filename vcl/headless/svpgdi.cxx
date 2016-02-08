@@ -103,7 +103,7 @@ namespace
     class SourceHelper
     {
     public:
-        SourceHelper(const SalBitmap& rSourceBitmap)
+        explicit SourceHelper(const SalBitmap& rSourceBitmap)
         {
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
 
@@ -142,7 +142,7 @@ namespace
     class MaskHelper
     {
     public:
-        MaskHelper(const SalBitmap& rAlphaBitmap)
+        explicit MaskHelper(const SalBitmap& rAlphaBitmap)
         {
             const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
             const BitmapBuffer* pMaskBuf = rMask.GetBuffer();

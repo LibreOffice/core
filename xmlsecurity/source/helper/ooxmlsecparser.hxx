@@ -45,7 +45,7 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     bool m_bReferenceUnresolved;
 
 public:
-    OOXMLSecParser(XSecController* pXSecController);
+    explicit OOXMLSecParser(XSecController* pXSecController);
     virtual ~OOXMLSecParser();
 
     // XDocumentHandler

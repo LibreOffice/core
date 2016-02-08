@@ -173,7 +173,7 @@ namespace {
 
 struct test_name_compare
 {
-    test_name_compare(const std::string& rName):
+    explicit test_name_compare(const std::string& rName):
         maName(rName)
     {
     }

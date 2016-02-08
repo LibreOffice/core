@@ -1974,7 +1974,7 @@ public:
     unsigned short m_nRows;
     unsigned short m_nColumns;
 
-    Impl(SwFrameFormat *const pFrameFormat)
+    explicit Impl(SwFrameFormat *const pFrameFormat)
         : SwClient(pFrameFormat)
         , m_Listeners(m_Mutex)
         , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE))
