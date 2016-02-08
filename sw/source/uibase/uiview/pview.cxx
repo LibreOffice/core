@@ -22,7 +22,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 

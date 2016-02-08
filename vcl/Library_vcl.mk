@@ -154,7 +154,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/globalization \
     vcl/source/window/btndlg \
     vcl/source/window/builder \
-    vcl/source/window/cmdevt \
+    vcl/source/window/commandevent \
     vcl/source/window/cursor \
     vcl/source/window/debugevent \
     vcl/source/window/decoview \

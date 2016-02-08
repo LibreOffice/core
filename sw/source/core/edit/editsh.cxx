@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

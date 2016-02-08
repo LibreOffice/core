@@ -32,7 +32,7 @@
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <txtfrm.hxx>
 #include <vcl/svapp.hxx>

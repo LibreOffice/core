@@ -716,7 +716,7 @@
 		BE82C4C718CE6DBE0050EB79 /* brdwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brdwin.cxx; path = ../../../vcl/source/window/brdwin.cxx; sourceTree = "<group>"; };
 		BE82C4C818CE6DBE0050EB79 /* btndlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = btndlg.cxx; path = ../../../vcl/source/window/btndlg.cxx; sourceTree = "<group>"; };
 		BE82C4C918CE6DBE0050EB79 /* builder.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = builder.cxx; path = ../../../vcl/source/window/builder.cxx; sourceTree = "<group>"; };
-		BE82C4CA18CE6DBE0050EB79 /* cmdevt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cmdevt.cxx; path = ../../../vcl/source/window/cmdevt.cxx; sourceTree = "<group>"; };
+		BE82C4CA18CE6DBE0050EB79 /* commandevent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = commandevent.cxx; path = ../../../vcl/source/window/commandevent.cxx; sourceTree = "<group>"; };
 		BE82C4CB18CE6DBE0050EB79 /* cursor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cursor.cxx; path = ../../../vcl/source/window/cursor.cxx; sourceTree = "<group>"; };
 		BE82C4CC18CE6DBE0050EB79 /* decoview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = decoview.cxx; path = ../../../vcl/source/window/decoview.cxx; sourceTree = "<group>"; };
 		BE82C4CD18CE6DBE0050EB79 /* dialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dialog.cxx; path = ../../../vcl/source/window/dialog.cxx; sourceTree = "<group>"; };
@@ -1958,7 +1958,7 @@
 				BE82C4C718CE6DBE0050EB79 /* brdwin.cxx */,
 				BE82C4C818CE6DBE0050EB79 /* btndlg.cxx */,
 				BE82C4C918CE6DBE0050EB79 /* builder.cxx */,
-				BE82C4CA18CE6DBE0050EB79 /* cmdevt.cxx */,
+				BE82C4CA18CE6DBE0050EB79 /* commandevent.cxx */,
 				BE82C4CB18CE6DBE0050EB79 /* cursor.cxx */,
 				BE82C4CC18CE6DBE0050EB79 /* decoview.cxx */,
 				BE82C4CD18CE6DBE0050EB79 /* dialog.cxx */,

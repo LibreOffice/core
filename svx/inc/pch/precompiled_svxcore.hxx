@@ -108,7 +108,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>

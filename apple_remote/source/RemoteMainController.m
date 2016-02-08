@@ -113,7 +113,7 @@
 #ifdef DEBUG
         switch(buttonIdentifier)
         {
-            case kRemoteButtonPlus:         buttonName = @"Volume up";              break;  // MEDIA_COMMAND_VOLUME_UP  ( see vcl/inc/vcl/cmdevt.hxx )
+            case kRemoteButtonPlus:         buttonName = @"Volume up";              break;  // MEDIA_COMMAND_VOLUME_UP  ( see include/vcl/commandevent.hxx )
             case kRemoteButtonMinus:        buttonName = @"Volume down";            break;  // MEDIA_COMMAND_VOLUME_DOWN
             case kRemoteButtonMenu:         buttonName = @"Menu";                   break;  // MEDIA_COMMAND_MENU
             case kRemoteButtonPlay:         buttonName = @"Play";                   break;  // MEDIA_COMMAND_PLAY

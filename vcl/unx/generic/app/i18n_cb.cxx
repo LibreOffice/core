@@ -28,13 +28,13 @@
 #include <X11/Xlib.h>
 #include <postx.h>
 
-#include "vcl/cmdevt.hxx"
-#include "unx/salunx.h"
-#include "unx/XIM.h"
-#include "unx/i18n_cb.hxx"
-#include "unx/i18n_status.hxx"
-#include "unx/i18n_ic.hxx"
-#include "unx/i18n_im.hxx"
+#include <vcl/commandevent.hxx>
+#include <unx/salunx.h>
+#include <unx/XIM.h>
+#include <unx/i18n_cb.hxx>
+#include <unx/i18n_status.hxx>
+#include <unx/i18n_ic.hxx>
+#include <unx/i18n_im.hxx>
 #include "salframe.hxx"
 
 // i. preedit start callback
