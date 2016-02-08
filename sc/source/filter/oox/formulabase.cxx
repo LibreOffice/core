@@ -1599,6 +1599,11 @@ OUString FormulaProcessorBase::generateAddress2dString( const CellAddress& rAddr
     return generateAddress2dString( BinAddress( rAddress ), bAbsolute );
 }
 
+OUString FormulaProcessorBase::generateAddress2dString( const ScAddress& rAddress, bool bAbsolute )
+{
+    return generateAddress2dString( BinAddress( rAddress ), bAbsolute );
+}
+
 OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddress, bool bAbsolute )
 {
     OUStringBuffer aBuffer;

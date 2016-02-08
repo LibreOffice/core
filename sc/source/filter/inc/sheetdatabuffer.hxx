@@ -37,8 +37,7 @@ namespace xls {
 /** Stores basic data about cell values and formatting. */
 struct CellModel
 {
-    css::table::CellAddress
-                        maCellAddr;         /// The address of the current cell.
+    ScAddress           maCellAddr;         /// The address of the current cell.
     sal_Int32           mnCellType;         /// Data type of the cell value.
     sal_Int32           mnXfId;             /// XF (cell formatting) identifier.
     bool                mbShowPhonetic;     /// True = show phonetic text.
@@ -60,6 +59,7 @@ struct CellFormulaModel
     bool                isValidArrayRef( const css::table::CellAddress& rCellAddr );
     /** Returns true, if the passed cell address is valid for a shared formula. */
     bool                isValidSharedRef( const css::table::CellAddress& rCellAddr );
+    bool                isValidSharedRef( const ScAddress& rCellAddr );
 };
 
 /** Stores data about table operations. */
@@ -145,6 +145,11 @@ public:
     void                setStandardNumFmt(
                             const css::table::CellAddress& rCellAddr,
                             sal_Int16 nStdNumFmt );
+
+    void                setStandardNumFmt(
+                            const ScAddress& rCellAddr,
+                            sal_Int16 nStdNumFmt );
+
     /** Processes the cell formatting data of the passed cell.
         @param nNumFmtId  If set, overrides number format of the cell XF. */
     void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
@@ -157,6 +162,9 @@ public:
                             const css::table::CellAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
 
+    void                setCellFormula(
+                            const ScAddress& rCellAddr,
+                            const ApiTokenSequence& rTokens );
 private:
     struct XfIdRowRange;
 
@@ -223,7 +231,9 @@ private:
 
         explicit            MergedRange( const css::table::CellRangeAddress& rRange );
         explicit            MergedRange( const css::table::CellAddress& rAddress, sal_Int32 nHorAlign );
+        explicit            MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign );
         bool                tryExpand( const css::table::CellAddress& rAddress, sal_Int32 nHorAlign );
+        bool                tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign );
     };
     typedef ::std::list< MergedRange > MergedRangeList;
 

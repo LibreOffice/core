@@ -658,6 +658,10 @@ public:
                             const css::table::CellAddress& rAddress,
                             bool bAbsolute );
 
+    static OUString generateAddress2dString(
+                            const ScAddress& rAddress,
+                            bool bAbsolute );
+
     /** Generates a cell address string in A1 notation from the passed binary
         cell address.
 

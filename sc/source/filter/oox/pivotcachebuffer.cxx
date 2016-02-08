@@ -953,7 +953,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 void PivotCacheField::writeSourceHeaderCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
     CellModel aModel;
-    aModel.maCellAddr = CellAddress( rSheetHelper.getSheetIndex(), nCol, nRow );
+    aModel.maCellAddr = ScAddress( SCCOL( nCol ), SCROW( nRow ), SCTAB( rSheetHelper.getSheetIndex() ) );
     rSheetHelper.getSheetData().setStringCell( aModel, maFieldModel.maName );
 }
 
@@ -1001,7 +1001,7 @@ void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
     if( rItem.getType() != XML_m )
     {
         CellModel aModel;
-        aModel.maCellAddr = CellAddress( rSheetHelper.getSheetIndex(), nCol, nRow );
+        aModel.maCellAddr = ScAddress( SCCOL( nCol ), SCROW( nRow ), SCTAB( rSheetHelper.getSheetIndex() ) );
         SheetDataBuffer& rSheetData = rSheetHelper.getSheetData();
         switch( rItem.getType() )
         {
