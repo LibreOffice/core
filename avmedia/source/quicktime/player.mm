@@ -29,16 +29,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9
 
 namespace avmedia { namespace quicktime {
 
-
-// - Player -
-
-
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr ),
     mpMovie( nil ),
-    /* GST
-    mbFakeVideo (false ),
-    */
     mnUnmutedVolume( 0 ),
     mnStopTime( DBL_MAX ),  //max double
     mbMuted( false ),
@@ -49,7 +42,6 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mbInitialized = true;
     [pool release];
 }
-
 
 
 Player::~Player()
@@ -67,7 +59,6 @@ QTMovie* Player::getMovie()
     OSL_ASSERT( mpMovie );
     return mpMovie;
 }
-
 
 
 bool Player::create( const ::rtl::OUString& rURL )
@@ -109,7 +100,6 @@ bool Player::create( const ::rtl::OUString& rURL )
 }
 
 
-
 void SAL_CALL Player::start(  )
     throw (uno::RuntimeException)
 {
@@ -122,7 +112,6 @@ void SAL_CALL Player::start(  )
 }
 
 
-
 void SAL_CALL Player::stop(  )
     throw (uno::RuntimeException)
 {
@@ -132,7 +121,6 @@ void SAL_CALL Player::stop(  )
         [mpMovie stop];
     }
 }
-
 
 
 sal_Bool SAL_CALL Player::isPlaying()
@@ -152,7 +140,6 @@ sal_Bool SAL_CALL Player::isPlaying()
 }
 
 
-
 double SAL_CALL Player::getDuration(  )
     throw (uno::RuntimeException)
 {
@@ -169,7 +156,6 @@ double SAL_CALL Player::getDuration(  )
 }
 
 
-
 void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
 {
@@ -180,7 +166,6 @@ void SAL_CALL Player::setMediaTime( double fTime )
         [mpMovie setCurrentTime: QTMakeTimeWithTimeInterval(fTime)];
     }
 }
-
 
 
 double SAL_CALL Player::getMediaTime(  )
@@ -219,7 +204,6 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 }
 
 
-
 sal_Bool SAL_CALL Player::isPlaybackLoop(  )
     throw (uno::RuntimeException)
 {
@@ -230,7 +214,6 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
 
     return bRet;
 }
-
 
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
@@ -251,7 +234,6 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 }
 
 
-
 sal_Bool SAL_CALL Player::isMute(  )
     throw (uno::RuntimeException)
 {
@@ -259,7 +241,6 @@ sal_Bool SAL_CALL Player::isMute(  )
 
     return mbMuted;
 }
-
 
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
@@ -288,7 +269,6 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 }
 
 
-
 sal_Int16 SAL_CALL Player::getVolumeDB(  )
     throw (uno::RuntimeException)
 {
@@ -313,7 +293,6 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 }
 
 
-
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     throw (uno::RuntimeException)
 {
@@ -321,7 +300,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     awt::Size aSize( nsSize.width, nsSize.height );
     return aSize;
 }
-
 
 
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
@@ -348,7 +326,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 }
 
 
-
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
     throw (css::uno::RuntimeException)
 {
@@ -371,7 +348,6 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 }
 
 
-
 ::rtl::OUString SAL_CALL Player::getImplementationName(  )
     throw (uno::RuntimeException)
 {
@@ -379,13 +355,11 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 }
 
 
-
 sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_PLAYER_SERVICENAME );
 }
-
 
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )

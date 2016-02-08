@@ -97,7 +97,6 @@ void TimerTest::testWatchdog()
 }
 #endif
 
-// --------------------------------------------------------------------
 
 class IdleBool : public Idle
 {
@@ -146,7 +145,6 @@ void TimerTest::testIdleMainloop()
 #endif
 }
 
-// --------------------------------------------------------------------
 
 class TimerBool : public Timer
 {
@@ -181,7 +179,6 @@ void TimerTest::testDurations()
     }
 }
 
-// --------------------------------------------------------------------
 
 class AutoTimerCount : public AutoTimer
 {
@@ -302,7 +299,6 @@ void TimerTest::testMultiAutoTimers()
 }
 #endif // TEST_TIMERPRECISION
 
-// --------------------------------------------------------------------
 
 class YieldTimer : public Timer
 {
@@ -329,7 +325,6 @@ void TimerTest::testRecursiveTimer()
         Application::Yield();
 }
 
-// --------------------------------------------------------------------
 
 class SlowCallbackTimer : public Timer
 {

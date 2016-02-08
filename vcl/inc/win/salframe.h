@@ -26,7 +26,6 @@
 
 class WinSalGraphics;
 
-// - WinSalFrame -
 
 class WinSalFrame : public SalFrame
 {

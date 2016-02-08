@@ -27,12 +27,8 @@
 #include <unotools/options.hxx>
 
 class SvtPrintOptions_Impl;
-
-
-// - SvtBasePrintOptions -
-
-
 class PrinterOptions;
+
 
 class SVT_DLLPUBLIC SvtBasePrintOptions: public utl::detail::Options
 {
@@ -82,9 +78,6 @@ public:
 };
 
 
-// - SvtPrinterOptions -
-
-
 class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
 {
 private:
@@ -97,9 +90,6 @@ public:
     SvtPrinterOptions();
     virtual ~SvtPrinterOptions();
 };
-
-
-// - SvtPrintFileOptions -
 
 
 class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions

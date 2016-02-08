@@ -26,22 +26,16 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace macavf {
 
-// ----------------
-// - Manager -
-// ----------------
-
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
     OSL_TRACE( "Constructing avmedia::macavf::Manager" );
 }
 
-// ------------------------------------------------------------------------------
 
 Manager::~Manager()
 {}
 
-// ------------------------------------------------------------------------------
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
     throw (uno::RuntimeException)
@@ -58,7 +52,6 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL Manager::getImplementationName(  )
     throw (uno::RuntimeException)
@@ -66,7 +59,6 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME ) );
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
@@ -74,7 +66,6 @@ sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_MACAVF_MANAGER_SERVICENAME ) );
 }
 
-// ------------------------------------------------------------------------------
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

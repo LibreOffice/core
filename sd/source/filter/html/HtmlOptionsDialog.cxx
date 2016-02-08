@@ -99,7 +99,6 @@ public:
 
 };
 
-// - SdHtmlOptionsDialog -
 SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
     meDocType   ( DOCUMENT_TYPE_DRAW )
 {

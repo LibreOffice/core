@@ -35,9 +35,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9
 namespace avmedia { namespace quicktime {
 
 
-// - FrameGrabber -
-
-
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
 {
@@ -47,7 +44,6 @@ FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& 
     mbInitialized = true;
     [pool release];
 }
-
 
 
 FrameGrabber::~FrameGrabber()
@@ -61,7 +57,6 @@ FrameGrabber::~FrameGrabber()
         }
     }
 }
-
 
 
 bool FrameGrabber::create( const ::rtl::OUString& rURL )
@@ -87,7 +82,6 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
 }
 
 
-
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
     throw (uno::RuntimeException)
 {
@@ -108,7 +102,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 }
 
 
-
 ::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
@@ -116,13 +109,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 }
 
 
-
 sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_FRAMEGRABBER_SERVICENAME );
 }
-
 
 
 uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )

@@ -30,12 +30,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-
-// - PDFDialog functions -
-
-
 #define SERVICE_NAME "com.sun.star.document.PDFDialog"
-
 
 
 OUString PDFDialog_getImplementationName ()
@@ -44,13 +39,13 @@ OUString PDFDialog_getImplementationName ()
     return OUString ( "com.sun.star.comp.PDF.PDFDialog" );
 }
 
+
 Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
     throw (RuntimeException)
 {
     Sequence<OUString> aRet { SERVICE_NAME };
     return aRet;
 }
-
 
 
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
@@ -64,7 +59,6 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
 #undef SERVICE_NAME
 
 
-// - PDFDialog -
 
 
 PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )

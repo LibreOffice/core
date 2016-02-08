@@ -21,14 +21,11 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-// - ScannerManager -
-
 
 Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )
 {
     return *( new ScannerManager() );
 }
-
 
 
 ScannerManager::ScannerManager() :
@@ -38,16 +35,17 @@ ScannerManager::ScannerManager() :
 }
 
 
-
 ScannerManager::~ScannerManager()
 {
     ReleaseData();
 }
 
+
 Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw(std::exception)
 {
     return Sequence< sal_Int8 >();
 }
+
 
 OUString ScannerManager::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
@@ -55,11 +53,13 @@ OUString ScannerManager::getImplementationName()
     return getImplementationName_Static();
 }
 
+
 sal_Bool ScannerManager::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
+
 
 css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
@@ -67,11 +67,11 @@ css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
+
 OUString ScannerManager::getImplementationName_Static() throw()
 {
     return OUString( "com.sun.star.scanner.ScannerManager" );
 }
-
 
 
 Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
@@ -79,6 +79,7 @@ Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
     Sequence< OUString > aSNS { "com.sun.star.scanner.ScannerManager" };
     return aSNS;
 }
+
 
 sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     throw( ScannerException, std::exception )

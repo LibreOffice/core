@@ -49,7 +49,6 @@ using namespace ::com::sun::star;
 namespace unogallery {
 
 
-// - GalleryItem -
 
 
 GalleryItem::GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject ) :
@@ -414,7 +413,6 @@ void GalleryItem::implSetInvalid()
 }
 
 
-// - GalleryDrawingModel -
 
 
 GalleryDrawingModel::GalleryDrawingModel( SdrModel* pDoc )

@@ -22,7 +22,6 @@
 #include <svtools/grfmgr.hxx>
 
 
-// - GraphicAttr -
 
 
 GraphicAttr::GraphicAttr() :

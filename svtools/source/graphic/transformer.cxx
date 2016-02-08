@@ -39,7 +39,6 @@ using namespace com::sun::star;
 namespace unographic {
 
 
-// - GraphicTransformer -
 
 
 GraphicTransformer::GraphicTransformer()

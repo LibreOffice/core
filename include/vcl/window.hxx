@@ -121,7 +121,6 @@ namespace o3tl
 }
 
 
-// - WindowTypes -
 
 
 // Type fuer GetWindow()
@@ -430,7 +429,6 @@ enum class GetDlgWindowType
 };
 
 
-// - Window -
 
 
 #ifdef DBG_UTIL

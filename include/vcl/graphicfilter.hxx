@@ -129,7 +129,6 @@ enum class GraphicFileFormat
     XXX = 0xffff
 };
 
-// - GraphicDescriptor -
 
 
 class VCL_DLLPUBLIC GraphicDescriptor

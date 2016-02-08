@@ -4822,7 +4822,6 @@ void Test::testFuncINDIRECT()
     m_pDoc->DeleteTab(0);
 }
 
-// --------------------------------------------------------------------------
 // Test case for tdf#83365 - Access across spreadsheet returns Err:504
 //
 void Test::testFuncINDIRECT2()

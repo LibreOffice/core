@@ -26,16 +26,9 @@
 #include <cppuhelper/implbase.hxx>
 
 
-// - PDFDialog -
-
-
 namespace vcl { class Window; }
 
-typedef ::cppu::ImplInheritanceHelper  <
-                                             ::svt::OGenericUnoDialog,
-                                             XPropertyAccess,
-                                             XExporter
-                                        >    PDFDialog_Base;
+typedef ::cppu::ImplInheritanceHelper < ::svt::OGenericUnoDialog, XPropertyAccess, XExporter >  PDFDialog_Base;
 
 class PDFDialog : public PDFDialog_Base,
                   public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
@@ -60,17 +53,17 @@ protected:
     using OPropertySetHelper::getPropertyValues;
     virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException, std::exception) override;
     using OPropertySetHelper::setPropertyValues;
-    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps )
+        throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception) override;
 
-       // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+    // XExporter
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw (IllegalArgumentException, RuntimeException, std::exception) override;
 
 public:
 
     explicit    PDFDialog( const Reference< XComponentContext >& rxContext );
     virtual     ~PDFDialog();
 };
-
 
 
 OUString PDFDialog_getImplementationName () throw (RuntimeException);

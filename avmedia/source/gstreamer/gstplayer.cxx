@@ -83,6 +83,7 @@ private:
     void execute() override;
 };
 
+
 class MissingPluginInstaller {
     friend class MissingPluginInstallerThread;
 
@@ -113,11 +114,13 @@ private:
     bool inCleanUp_;
 };
 
+
 MissingPluginInstaller::~MissingPluginInstaller() {
     osl::MutexGuard g(mutex_);
     SAL_WARN_IF(currentThread_.is(), "avmedia.gstreamer", "unjoined thread");
     inCleanUp_ = true;
 }
+
 
 void MissingPluginInstaller::report(
     rtl::Reference<Player> const & source, GstMessage * message)
@@ -169,6 +172,7 @@ void MissingPluginInstaller::report(
         LINK(this, MissingPluginInstaller, launchUi), launch.get());
 }
 
+
 void eraseSource(std::set<rtl::Reference<Player>> & set, Player const * source)
 {
     auto i = std::find_if(
@@ -180,6 +184,7 @@ void eraseSource(std::set<rtl::Reference<Player>> & set, Player const * source)
         set.erase(i);
     }
 }
+
 
 void MissingPluginInstaller::detach(Player const * source) {
     rtl::Reference<MissingPluginInstallerThread> join;
@@ -217,6 +222,7 @@ void MissingPluginInstaller::detach(Player const * source) {
     }
 }
 
+
 void MissingPluginInstaller::processQueue() {
     assert(!queued_.empty());
     assert(currentDetails_.empty());
@@ -227,6 +233,7 @@ void MissingPluginInstaller::processQueue() {
     }
     queued_.clear();
 }
+
 
 IMPL_STATIC_LINK_TYPED(MissingPluginInstaller, launchUi, void *, p, void)
 {
@@ -243,9 +250,11 @@ IMPL_STATIC_LINK_TYPED(MissingPluginInstaller, launchUi, void *, p, void)
     ref->launch();
 }
 
+
 struct TheMissingPluginInstaller:
     public rtl::Static<MissingPluginInstaller, TheMissingPluginInstaller>
 {};
+
 
 void MissingPluginInstallerThread::execute() {
     MissingPluginInstaller & inst = TheMissingPluginInstaller::get();
@@ -273,9 +282,7 @@ void MissingPluginInstallerThread::execute() {
     }
 }
 
-}
-
-// - Player -
+} // end anonymous namespace
 
 
 Player::Player() :
@@ -315,13 +322,13 @@ Player::Player() :
 }
 
 
-
 Player::~Player()
 {
     SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " Player::~Player" );
     if( mbInitialized )
         disposing();
 }
+
 
 void SAL_CALL Player::disposing()
 {
@@ -357,6 +364,7 @@ void SAL_CALL Player::disposing()
     }
 }
 
+
 static gboolean pipeline_bus_callback( GstBus *, GstMessage *message, gpointer data )
 {
     Player* pPlayer = static_cast<Player*>(data);
@@ -366,12 +374,14 @@ static gboolean pipeline_bus_callback( GstBus *, GstMessage *message, gpointer d
     return TRUE;
 }
 
+
 static GstBusSyncReply pipeline_bus_sync_handler( GstBus *, GstMessage * message, gpointer data )
 {
     Player* pPlayer = static_cast<Player*>(data);
 
     return pPlayer->processSyncMessage( message );
 }
+
 
 void Player::processMessage( GstMessage *message )
 {
@@ -401,6 +411,7 @@ void Player::processMessage( GstMessage *message )
     }
 }
 
+
 static gboolean wrap_element_query_position (GstElement *element, GstFormat format, gint64 *cur)
 {
 #ifdef AVMEDIA_GST_0_10
@@ -411,6 +422,7 @@ static gboolean wrap_element_query_position (GstElement *element, GstFormat form
 #endif
 }
 
+
 static gboolean wrap_element_query_duration (GstElement *element, GstFormat format, gint64 *duration)
 {
 #ifdef AVMEDIA_GST_0_10
@@ -420,6 +432,7 @@ static gboolean wrap_element_query_duration (GstElement *element, GstFormat form
     return gst_element_query_duration( element, format, duration );
 #endif
 }
+
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
@@ -543,7 +556,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 g_object_unref( pad );
             }
         }
-#endif
+#endif // AVMEDIA_GST_0_10
     } else if (gst_is_missing_plugin_message(message)) {
         TheMissingPluginInstaller::get().report(this, message);
         if( mnWidth == 0 ) {
@@ -559,6 +572,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
     return GST_BUS_PASS;
 }
+
 
 void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
 {
@@ -599,6 +613,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
         g_object_unref( pBus );
 }
 
+
 bool Player::create( const OUString& rURL )
 {
     bool    bRet = false;
@@ -627,7 +642,6 @@ bool Player::create( const OUString& rURL )
 }
 
 
-
 void SAL_CALL Player::start()
     throw (uno::RuntimeException, std::exception)
 {
@@ -642,7 +656,6 @@ void SAL_CALL Player::start()
 }
 
 
-
 void SAL_CALL Player::stop()
     throw (uno::RuntimeException, std::exception)
 {
@@ -655,7 +668,6 @@ void SAL_CALL Player::stop()
     mbPlayPending = false;
     SAL_INFO( "avmedia.gstreamer", AVVERSION "stop " << mpPlaybin );
 }
-
 
 
 sal_Bool SAL_CALL Player::isPlaying()
@@ -677,7 +689,6 @@ sal_Bool SAL_CALL Player::isPlaying()
 }
 
 
-
 double SAL_CALL Player::getDuration()
     throw (uno::RuntimeException, std::exception)
 {
@@ -692,7 +703,6 @@ double SAL_CALL Player::getDuration()
 
     return duration;
 }
-
 
 
 void SAL_CALL Player::setMediaTime( double fTime )
@@ -716,7 +726,6 @@ void SAL_CALL Player::setMediaTime( double fTime )
 }
 
 
-
 double SAL_CALL Player::getMediaTime()
     throw (uno::RuntimeException, std::exception)
 {
@@ -734,6 +743,7 @@ double SAL_CALL Player::getMediaTime()
     return position;
 }
 
+
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
@@ -743,7 +753,6 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 }
 
 
-
 sal_Bool SAL_CALL Player::isPlaybackLoop()
     throw (uno::RuntimeException, std::exception)
 {
@@ -751,7 +760,6 @@ sal_Bool SAL_CALL Player::isPlaybackLoop()
     // TODO check how to do with GST
     return mbLooping;
 }
-
 
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
@@ -777,7 +785,6 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 }
 
 
-
 sal_Bool SAL_CALL Player::isMute()
     throw (uno::RuntimeException, std::exception)
 {
@@ -785,7 +792,6 @@ sal_Bool SAL_CALL Player::isMute()
 
     return mbMuted;
 }
-
 
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
@@ -805,7 +811,6 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 }
 
 
-
 sal_Int16 SAL_CALL Player::getVolumeDB()
     throw (uno::RuntimeException, std::exception)
 {
@@ -823,7 +828,6 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
 
     return nVolumeDB;
 }
-
 
 
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
@@ -852,7 +856,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
 
     return aSize;
 }
-
 
 
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
@@ -896,7 +899,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 }
 
 
-
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     throw (uno::RuntimeException, std::exception)
 {
@@ -912,7 +914,6 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 }
 
 
-
 OUString SAL_CALL Player::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
@@ -920,13 +921,11 @@ OUString SAL_CALL Player::getImplementationName()
 }
 
 
-
 sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
-
 
 
 uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()

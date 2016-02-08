@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 
-// - PDFExport -
 
 
 class ImpOptimizer : public OptimizationStats

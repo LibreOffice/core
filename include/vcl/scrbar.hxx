@@ -27,14 +27,12 @@
 class AutoTimer;
 
 
-// - ScrollBar-Types -
 
 
 enum ScrollType { SCROLL_DONTKNOW, SCROLL_LINEUP, SCROLL_LINEDOWN,
                   SCROLL_PAGEUP, SCROLL_PAGEDOWN, SCROLL_DRAG, SCROLL_SET };
 
 
-// - ScrollBar -
 
 struct ImplScrollBarData;
 
@@ -141,7 +139,6 @@ public:
 };
 
 
-// - ScrollBarBox -
 
 
 class VCL_DLLPUBLIC ScrollBarBox : public vcl::Window

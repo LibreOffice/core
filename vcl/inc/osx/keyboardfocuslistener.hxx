@@ -25,7 +25,6 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-// - KeyboardFocusListener -
 
 class KeyboardFocusListener : public salhelper::SimpleReferenceObject
 {

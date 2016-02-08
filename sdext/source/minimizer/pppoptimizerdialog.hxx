@@ -35,7 +35,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-// - PPPOptimizerDialog -
 
 
 class OptimizerDialog;

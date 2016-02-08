@@ -113,7 +113,6 @@ private:
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 };
 
-// - SystemFontList -
 // TODO: move into cross-platform headers
 
 class SystemFontList
@@ -136,7 +135,6 @@ private:
     CTFontContainer maFontContainer;
 };
 
-// - AquaSalGraphics -
 
 class AquaSalGraphics : public SalGraphics
 {

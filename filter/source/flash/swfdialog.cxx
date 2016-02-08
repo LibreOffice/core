@@ -38,12 +38,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::document;
 
-
-// - PDFDialog functions -
-
-
 #define SERVICE_NAME "com.sun.star.Impress.FlashExportDialog"
-
 
 
 OUString SWFDialog_getImplementationName ()
@@ -51,6 +46,7 @@ OUString SWFDialog_getImplementationName ()
 {
     return OUString ( SERVICE_NAME );
 }
+
 
 Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
     throw (RuntimeException)
@@ -60,20 +56,13 @@ Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
 }
 
 
-
 Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SWFDialog( comphelper::getComponentContext(rSMgr) ));
 }
 
-
-
 #undef SERVICE_NAME
-
-
-// - SWFDialog -
-
 
 SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :
     OGenericUnoDialog( rxContext )
@@ -81,11 +70,9 @@ SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :
 }
 
 
-
 SWFDialog::~SWFDialog()
 {
 }
-
 
 
 Any SAL_CALL SWFDialog::queryInterface( const Type& rType )
@@ -102,13 +89,11 @@ Any SAL_CALL SWFDialog::queryInterface( const Type& rType )
 }
 
 
-
 void SAL_CALL SWFDialog::acquire()
     throw ()
 {
     OWeakObject::acquire();
 }
-
 
 
 void SAL_CALL SWFDialog::release()
@@ -118,13 +103,11 @@ void SAL_CALL SWFDialog::release()
 }
 
 
-
 Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId()
     throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 
 OUString SAL_CALL SWFDialog::getImplementationName()
@@ -134,13 +117,11 @@ OUString SAL_CALL SWFDialog::getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     return SWFDialog_getSupportedServiceNames();
 }
-
 
 
 VclPtr<Dialog> SWFDialog::createDialog( vcl::Window* pParent )
@@ -176,7 +157,6 @@ VclPtr<Dialog> SWFDialog::createDialog( vcl::Window* pParent )
 }
 
 
-
 void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
@@ -184,7 +164,6 @@ void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 
     destroyDialog();
 }
-
 
 
 Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
@@ -209,7 +188,6 @@ Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
 }
 
 
-
 Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
     throw ( RuntimeException, std::exception )
 {
@@ -231,7 +209,6 @@ Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
 }
 
 
-
 void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
     throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
@@ -246,7 +223,6 @@ void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
         }
     }
 }
-
 
 
 void SAL_CALL SWFDialog::setSourceDocument( const Reference< XComponent >& xDoc )

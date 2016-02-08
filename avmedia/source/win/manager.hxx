@@ -25,9 +25,6 @@
 #include "com/sun/star/media/XManager.hpp"
 
 
-// - Manager -
-
-
 namespace avmedia { namespace win {
 
 class Manager : public ::cppu::WeakImplHelper< css::media::XManager,

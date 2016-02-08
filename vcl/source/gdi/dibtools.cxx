@@ -31,7 +31,6 @@
 #include <vcl/outdev.hxx>
 #include <memory>
 
-// - Defines -
 
 #define DIBCOREHEADERSIZE       ( 12UL )
 #define DIBINFOHEADERSIZE       ( sizeof(DIBInfoHeader) )

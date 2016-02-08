@@ -30,7 +30,6 @@ class Rectangle;
 namespace vcl { class Window; }
 
 
-// - Help-Types -
 
 enum class QuickHelpFlags
 {
@@ -59,7 +58,6 @@ namespace o3tl
 
 #define OOO_HELP_INDEX          ".help:index"
 
-// - Help -
 
 class VCL_DLLPUBLIC Help
 {

@@ -22,16 +22,12 @@
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 
-
 #include <vcl/unohelp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 
 static const sal_Int32 nFontEM = 2048;
-
-
-// - SVGFontExport -
 
 
 SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects ) :
@@ -42,11 +38,9 @@ SVGFontExport::SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRep
 }
 
 
-
 SVGFontExport::~SVGFontExport()
 {
 }
-
 
 
 SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont )
@@ -75,11 +69,10 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
 }
 
 
-
 void SVGFontExport::implCollectGlyphs()
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
-    ObjectVector::const_iterator    aIter( maObjects.begin() );
+    ObjectVector::const_iterator aIter( maObjects.begin() );
 
     pVDev->EnableOutput( false );
 
@@ -176,7 +169,6 @@ void SVGFontExport::implCollectGlyphs()
 }
 
 
-
 void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 {
     if( mrExport.IsEmbedFonts() )
@@ -258,7 +250,6 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 }
 
 
-
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr )
 {
     tools::PolyPolygon         aPolyPoly;
@@ -291,7 +282,6 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr
         }
     }
 }
-
 
 
 void SVGFontExport::EmbedFonts()
@@ -329,7 +319,6 @@ void SVGFontExport::EmbedFonts()
         ++aGlyphTreeIter;
     }
 }
-
 
 
 OUString SVGFontExport::GetMappedFontName( const OUString& rFontName ) const

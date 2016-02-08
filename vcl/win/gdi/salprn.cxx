@@ -156,7 +156,6 @@ static PrintQueueFlags ImplWinQueueStatusToSal( DWORD nWinStatus )
     return nStatus;
 }
 
-// - WinSalInstance -
 
 void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
@@ -1070,7 +1069,6 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetu
     return TRUE;
 }
 
-// - WinSalInstance -
 
 SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup* pSetupData )
@@ -1109,7 +1107,6 @@ void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
     delete pPrinter;
 }
 
-// - WinSalInfoPrinter -
 
 WinSalInfoPrinter::WinSalInfoPrinter() :
     mpGraphics( NULL ),
@@ -1302,7 +1299,6 @@ void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     rPageHeight = GetDeviceCaps( hDC, PHYSICALHEIGHT );
 }
 
-// - WinSalInstance -
 
 SalPrinter* WinSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
@@ -1379,7 +1375,6 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, bool
     return pNewDevMode;
 }
 
-// - WinSalPrinter -
 
 WinSalPrinter::WinSalPrinter() :
     mpGraphics( NULL ),

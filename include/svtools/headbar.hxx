@@ -175,17 +175,9 @@ class ImplHeadItem;
 
 typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 
-
-// - WinBits -
-
-
 #define WB_BOTTOMBORDER         ((WinBits)0x0400)
 #define WB_BUTTONSTYLE          ((WinBits)0x0800)
 #define WB_STDHEADERBAR         (WB_BUTTONSTYLE | WB_BOTTOMBORDER)
-
-
-// - HeaderBarItemBits -
-
 
 enum class HeaderBarItemBits
 {
@@ -207,14 +199,11 @@ enum class HeaderBarItemBits
     USERDRAW            = 0x4000,
     STDSTYLE            = LEFT | LEFTIMAGE | VCENTER | CLICKABLE,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<HeaderBarItemBits> : is_typed_flags<HeaderBarItemBits, 0x7fff> {};
 }
-
-
-// - HeaderBar-Types -
-
 
 #define HEADERBAR_APPEND            ((sal_uInt16)0xFFFF)
 #define HEADERBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
@@ -222,11 +211,8 @@ namespace o3tl
 
 #define HEADERBAR_TEXTOFF           2
 
-
-// - HeaderBar -
-
-
 class VCLXHeaderBar;
+
 
 class SVT_DLLPUBLIC HeaderBar : public vcl::Window
 {

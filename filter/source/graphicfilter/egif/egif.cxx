@@ -28,17 +28,15 @@
 #include "giflzwc.hxx"
 #include <memory>
 
-// - GIFWriter -
-
 
 class GIFWriter
 {
     Bitmap              aAccBmp;
     SvStream& m_rGIF;
     BitmapReadAccess*   m_pAcc;
-    sal_uLong               nMinPercent;
-    sal_uLong               nMaxPercent;
-    sal_uLong               nLastPercent;
+    sal_uLong           nMinPercent;
+    sal_uLong           nMaxPercent;
+    sal_uLong           nLastPercent;
     long                nActX;
     long                nActY;
     sal_Int32           nInterlaced;
@@ -73,6 +71,7 @@ public:
     bool WriteGIF( const Graphic& rGraphic, FilterConfigItem* pConfigItem );
 };
 
+
 GIFWriter::GIFWriter(SvStream &rStream)
     : m_rGIF(rStream)
     , m_pAcc(nullptr)
@@ -86,7 +85,6 @@ GIFWriter::GIFWriter(SvStream &rStream)
     , bTransparent(false)
 {
 }
-
 
 
 bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
@@ -177,7 +175,6 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
 }
 
 
-
 void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
                                bool bExtended, long nTimer, Disposal eDisposal )
 {
@@ -207,7 +204,6 @@ void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
 }
 
 
-
 void GIFWriter::WriteAnimation( const Animation& rAnimation )
 {
     const sal_uInt16    nCount = rAnimation.Count();
@@ -232,7 +228,6 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
 }
 
 
-
 void GIFWriter::MayCallback( sal_uLong nPercent )
 {
     if ( xStatusIndicator.is() )
@@ -245,7 +240,6 @@ void GIFWriter::MayCallback( sal_uLong nPercent )
         }
     }
 }
-
 
 
 bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
@@ -281,13 +275,11 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 }
 
 
-
 void GIFWriter::DestroyAccess()
 {
     Bitmap::ReleaseAccess( m_pAcc );
     m_pAcc = nullptr;
 }
-
 
 
 void GIFWriter::WriteSignature( bool bGIF89a )
@@ -300,7 +292,6 @@ void GIFWriter::WriteSignature( bool bGIF89a )
             bStatus = false;
     }
 }
-
 
 
 void GIFWriter::WriteGlobalHeader( const Size& rSize )
@@ -330,7 +321,6 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
             bStatus = false;
     }
 }
-
 
 
 void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
@@ -365,7 +355,6 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 }
 
 
-
 void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
 {
     // writer PrefSize in 100th-mm as ApplicationExtension
@@ -382,7 +371,6 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
         m_rGIF.WriteUChar( 0x00 );
     }
 }
-
 
 
 void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
@@ -416,7 +404,6 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
 }
 
 
-
 void GIFWriter::WriteLocalHeader()
 {
     if( bStatus )
@@ -448,7 +435,6 @@ void GIFWriter::WriteLocalHeader()
 }
 
 
-
 void GIFWriter::WritePalette()
 {
     if( bStatus && m_pAcc->HasPalette() )
@@ -473,7 +459,6 @@ void GIFWriter::WritePalette()
             bStatus = false;
     }
 }
-
 
 
 void GIFWriter::WriteAccess()
@@ -548,7 +533,6 @@ void GIFWriter::WriteAccess()
 }
 
 
-
 void GIFWriter::WriteTerminator()
 {
     if( bStatus )
@@ -567,8 +551,5 @@ egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfi
     GIFWriter aWriter(rStream);
     return aWriter.WriteGIF(rGraphic, pConfigItem);
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

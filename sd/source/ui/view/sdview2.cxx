@@ -71,7 +71,6 @@ namespace sd {
 
 using namespace ::com::sun::star;
 
-// - SdNavigatorDropEvent -
 
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {

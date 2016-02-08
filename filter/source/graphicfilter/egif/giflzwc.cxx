@@ -22,9 +22,6 @@
 #include "giflzwc.hxx"
 
 
-// - GIFImageDataOutputStream -
-
-
 class GIFImageDataOutputStream
 {
 private:
@@ -47,7 +44,6 @@ public:
 };
 
 
-
 inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
 {
     while (nBitsBufSize>=8)
@@ -62,7 +58,6 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
 }
 
 
-
 inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
 {
     if( nBitsBufSize+nCodeLen>32 )
@@ -71,7 +66,6 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
     nBitsBuf |= (sal_uLong) nCode << nBitsBufSize;
     nBitsBufSize = nBitsBufSize + nCodeLen;
 }
-
 
 
 GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize ) :
@@ -85,8 +79,6 @@ GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 n
 }
 
 
-
-
 GIFImageDataOutputStream::~GIFImageDataOutputStream()
 {
     WriteBits(0,7);
@@ -95,7 +87,6 @@ GIFImageDataOutputStream::~GIFImageDataOutputStream()
     rStream.WriteUChar( 0 );
     delete[] pBlockBuf;
 }
-
 
 
 void GIFImageDataOutputStream::FlushBlockBuf()
@@ -109,20 +100,14 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 }
 
 
-// - GIFLZWCTreeNode -
-
-
 struct GIFLZWCTreeNode
 {
 
     GIFLZWCTreeNode*    pBrother;       // next node which has the same father
     GIFLZWCTreeNode*    pFirstChild;    // first
-    sal_uInt16              nCode;          // the code for the string of pixel values which comes about
-    sal_uInt16              nValue;         // the pixel value
+    sal_uInt16          nCode;          // the code for the string of pixel values which comes about
+    sal_uInt16          nValue;         // the pixel value
 };
-
-
-// - GIFLZWCompressor -
 
 
 GIFLZWCompressor::GIFLZWCompressor()
@@ -132,12 +117,10 @@ GIFLZWCompressor::GIFLZWCompressor()
 }
 
 
-
 GIFLZWCompressor::~GIFLZWCompressor()
 {
     if (pIDOS!=nullptr) EndCompression();
 }
-
 
 
 void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
@@ -171,14 +154,13 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 }
 
 
-
 void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
 {
     if( pIDOS )
     {
-        GIFLZWCTreeNode*    p;
-        sal_uInt16              i;
-        sal_uInt8               nV;
+        GIFLZWCTreeNode* p;
+        sal_uInt16 i;
+        sal_uInt8 nV;
 
         if( !pPrefix && nSize )
         {
@@ -229,7 +211,6 @@ void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
         }
     }
 }
-
 
 
 void GIFLZWCompressor::EndCompression()

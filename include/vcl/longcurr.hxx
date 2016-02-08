@@ -27,7 +27,6 @@
 class LocaleDataWrapper;
 
 
-// - LongCurrencyFormatter -
 
 
 class VCL_DLLPUBLIC LongCurrencyFormatter : public FormatterBase
@@ -73,7 +72,6 @@ public:
 };
 
 
-// - LongCurrencyField -
 
 
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
@@ -106,7 +104,6 @@ public:
 };
 
 
-// - LongCurrencyBox -
 
 
 class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormatter
