@@ -41,6 +41,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
+#include <comphelper/sequence.hxx>
+
 #include "pq_tools.hxx"
 #include "pq_array.hxx"
 #include "pq_statement.hxx"
@@ -138,8 +140,8 @@ BaseResultSet::BaseResultSet(
     sal_Int32 rowCount,
     sal_Int32 colCount,
     const Reference< com::sun::star::script::XTypeConverter > & tc )
-    : OComponentHelper( refMutex->mutex )
-    , OPropertySetHelper( OComponentHelper::rBHelper )
+    : BaseResultSet_BASE( refMutex->mutex )
+    , OPropertySetHelper( BaseResultSet_BASE::rBHelper )
     , m_owner( owner )
     , m_tc( tc )
     , m_refMutex( refMutex )
@@ -159,22 +161,10 @@ BaseResultSet::~BaseResultSet()
     POSTGRE_TRACE( "dtor BaseResultSet" );
 }
 
-Any BaseResultSet::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any BaseResultSet::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
-    Any ret;
-
-    ret = OComponentHelper::queryInterface( reqType );
-    if( ! ret.hasValue() )
-        ret = ::cppu::queryInterface( reqType,
-                                    static_cast< XResultSet * > ( this  ),
-                                    static_cast< XResultSetMetaDataSupplier * > ( this ),
-                                    static_cast< XRow * > ( this ),
-                                    static_cast< XColumnLocate * > ( this ),
-                                    static_cast< XCloseable * > ( this ),
-                                    static_cast< XPropertySet * > ( this ),
-                                    static_cast< XMultiPropertySet * > ( this ),
-                                    static_cast< XFastPropertySet * > ( this ) );
-    return ret;
+    Any aRet = BaseResultSet_BASE::queryInterface(rType);
+    return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
 // void BaseResultSet::close(  ) throw (SQLException, RuntimeException)
@@ -195,26 +185,20 @@ Any BaseResultSet::queryInterface( const Type & reqType ) throw (RuntimeExceptio
 
 Sequence<Type > BaseResultSet::getTypes() throw( RuntimeException, std::exception )
 {
-    static cppu::OTypeCollection *pCollection;
+    static Sequence< Type > *pCollection;
     if( ! pCollection )
     {
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
         if( !pCollection )
         {
-            static cppu::OTypeCollection collection(
-                cppu::UnoType<XResultSet>::get(),
-                cppu::UnoType<XResultSetMetaDataSupplier>::get(),
-                cppu::UnoType<XRow>::get(),
-                cppu::UnoType<XColumnLocate>::get(),
-                cppu::UnoType<XCloseable>::get(),
-                cppu::UnoType<XPropertySet>::get(),
-                cppu::UnoType<XFastPropertySet>::get(),
-                cppu::UnoType<XMultiPropertySet>::get(),
-                OComponentHelper::getTypes());
+            static Sequence< Type > collection(
+                ::comphelper::concatSequences(
+                    OPropertySetHelper::getTypes(),
+                    BaseResultSet_BASE::getTypes()));
             pCollection = &collection;
         }
     }
-    return pCollection->getTypes();
+    return *pCollection;
 }
 
 Sequence< sal_Int8> BaseResultSet::getImplementationId() throw( RuntimeException, std::exception )
