@@ -36,7 +36,6 @@ class SvMetaAttribute : public SvMetaReference
     tools::SvRef<SvMetaType> aType;
     SvIdentifier             aSlotId;
     SvBOOL                   aExport;
-    SvBOOL                   aReadOnlyDoc;
 
 protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -50,7 +49,6 @@ public:
     const SvIdentifier & GetSlotId() const;
     bool                GetExport() const;
     bool                GetHidden() const;
-    bool                GetReadOnlyDoc() const;
     SvMetaType *        GetType() const;
 
     virtual bool        IsMethod() const;

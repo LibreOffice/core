@@ -40,6 +40,7 @@ SvMetaSlot::SvMetaSlot()
     , pNextSlot(nullptr)
     , nListPos(0)
     , pEnumValue(nullptr)
+    , aReadOnlyDoc ( true, false )
 {
 }
 
@@ -51,7 +52,14 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     , pNextSlot(nullptr)
     , nListPos(0)
     , pEnumValue(nullptr)
+    , aReadOnlyDoc ( true, false )
 {
+}
+
+bool SvMetaSlot::GetReadOnlyDoc() const
+{
+    if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
+    return static_cast<SvMetaSlot *>(GetRef())->GetReadOnlyDoc();
 }
 
 bool SvMetaSlot::IsVariable() const
@@ -220,6 +228,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
     bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
     bOk |= aDisableFlags.ReadSvIdl( SvHash_DisableFlags(), rInStm );
+    bOk |= aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
 
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
         SetToggle( aToggle ), bOk = true;

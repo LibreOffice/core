@@ -31,14 +31,12 @@
 
 SvMetaAttribute::SvMetaAttribute()
     : aExport( true, false )
-    , aReadOnlyDoc ( true, false )
 {
 }
 
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
     , aExport( true, false )
-    , aReadOnlyDoc ( true, false)
 {
 }
 
@@ -69,12 +67,6 @@ bool SvMetaAttribute::GetHidden() const
         return false;
     else
         return static_cast<SvMetaAttribute *>(GetRef())->GetHidden();
-}
-
-bool SvMetaAttribute::GetReadOnlyDoc() const
-{
-    if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
-    return static_cast<SvMetaSlot *>(GetRef())->GetReadOnlyDoc();
 }
 
 bool SvMetaAttribute::IsMethod() const
@@ -152,7 +144,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
     aExport.ReadSvIdl( SvHash_Export(), rInStm );
-    aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
 }
 
 sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
