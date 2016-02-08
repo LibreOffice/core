@@ -26,7 +26,7 @@
 class SvMetaSlot : public SvMetaAttribute
 {
     tools::SvRef<SvMetaType>      aSlotType;
-    tools::SvRef<SvMetaAttribute> aMethod;
+    tools::SvRef<SvMetaSlot>      aMethod;
     SvIdentifier    aGroupId;
     SvIdentifier    aExecMethod;
     SvIdentifier    aStateMethod;
