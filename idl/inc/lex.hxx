@@ -29,7 +29,7 @@
 enum class SVTOKENTYPE { Empty,      Comment,
                          Integer,    String,
                          Bool,       Identifier,
-                         Char,       RttiBase,
+                         Char,
                          EndOfFile,  HashId };
 
 class SvToken
@@ -47,7 +47,7 @@ friend class SvTokenStream;
     };
 public:
             SvToken();
-            SvToken( const SvToken & rObj );
+            SvToken( const SvToken & rObj ) = delete;
 
     SvToken & operator = ( const SvToken & rObj );
 

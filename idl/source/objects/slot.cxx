@@ -283,21 +283,14 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
             SvToken * pTok = rInStm.GetToken_Next();
             if( pTok->Is( SvHash_SlotType() ) )
             {
-                bool bBraket = rInStm.Read( '(' );
-                if( bBraket || rInStm.Read( '=' ) )
+                if( rInStm.Read( '=' ) )
                 {
                     aSlotType = rBase.ReadKnownType( rInStm );
                     if( aSlotType.Is() )
                     {
                         if( aSlotType->IsItem() )
                         {
-                            if( bBraket )
-                            {
-                                if( rInStm.Read( ')' ) )
-                                    return;
-                            }
-                            else
-                                return;
+                            return;
                         }
                         rBase.SetError( "the SlotType is not a item", rInStm.GetToken() );
                         rBase.WriteError( rInStm );

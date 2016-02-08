@@ -50,24 +50,12 @@ OString SvToken::GetTokenAsString() const
         case SVTOKENTYPE::Char:
             aStr = OString(cChar);
             break;
-        case SVTOKENTYPE::RttiBase:
-            aStr = "RTTIBASE";
-            break;
         case SVTOKENTYPE::EndOfFile:
         case SVTOKENTYPE::HashId:
             break;
     }
 
     return aStr;
-}
-
-SvToken::SvToken( const SvToken & rObj )
-{
-    nLine = rObj.nLine;
-    nColumn = rObj.nColumn;
-    nType = rObj.nType;
-    aString = rObj.aString;
-    nLong = rObj.nLong;
 }
 
 SvToken & SvToken::operator = ( const SvToken & rObj )
@@ -291,20 +279,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
             if( c == '"' )
             {
                 c = GetFastNextChar();
-                if( c == '"' )
-                {
-                    aStr.append('"');
-                    aStr.append('"');
-                }
-                else
-                    bDone = true;
-            }
-            else if( c == '\\' )
-            {
-                aStr.append('\\');
-                c = GetFastNextChar();
-                if( c )
-                    aStr.append(static_cast<char>(c));
+                bDone = true;
             }
             else
                 aStr.append(static_cast<char>(c));
