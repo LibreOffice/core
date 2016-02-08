@@ -279,9 +279,7 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
             rBase.WriteError( rInStm );
         }
     }
-    if( bOk )
-        SetModule( rBase );
-    else
+    if( !bOk )
         rInStm.Seek( nTokPos );
     return bOk;
 }
@@ -292,7 +290,7 @@ bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
     if( ReadHeaderSvIdl( rBase, rInStm ) )
     {
         rBase.Write(OString('.'));
-        return SvMetaExtern::ReadSvIdl( rBase, rInStm );
+        return SvMetaReference::ReadSvIdl( rBase, rInStm );
     }
     return false;
 }

@@ -67,7 +67,7 @@ public:
 
 enum MetaTypeType { Method, Struct, Base, Enum, Class };
 
-class SvMetaType : public SvMetaExtern
+class SvMetaType : public SvMetaReference
 {
     SvIdentifier                aBasicPostfix;
     SvRefMemberList<SvMetaAttribute *>* pAttrList;

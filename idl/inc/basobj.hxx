@@ -158,19 +158,6 @@ public:
                         { aRef = pRef; }
 };
 
-class SvMetaModule;
-class SvMetaExtern : public SvMetaReference
-{
-    SvMetaModule *          pModule;    // included in which module
-
-public:
-                        SvMetaExtern();
-
-    void                SetModule( SvIdlDataBase & rBase );
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-};
-
-
 #endif // INCLUDED_IDL_INC_BASOBJ_HXX
 
 

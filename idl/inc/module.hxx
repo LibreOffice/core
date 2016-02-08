@@ -23,7 +23,7 @@
 #include <slot.hxx>
 #include <object.hxx>
 
-class SvMetaModule : public SvMetaExtern
+class SvMetaModule : public SvMetaReference
 {
     SvRefMemberList<SvMetaClass *>      aClassList;
     SvRefMemberList<SvMetaType *>       aTypeList;

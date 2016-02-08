@@ -150,20 +150,4 @@ SvMetaReference::SvMetaReference()
 }
 
 
-SvMetaExtern::SvMetaExtern()
-    : pModule( nullptr )
-{
-}
-
-void SvMetaExtern::SetModule( SvIdlDataBase & rBase )
-{
-    pModule = static_cast<SvMetaModule *>(rBase.GetStack().Get( checkSvMetaObject<SvMetaModule> ));
-}
-
-bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
-{
-    SetModule( rBase );
-    return SvMetaReference::ReadSvIdl( rBase, rInStm );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

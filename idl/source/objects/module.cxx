@@ -36,7 +36,7 @@ SvMetaModule::SvMetaModule( bool bImp )
 void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
-    SvMetaExtern::ReadAttributesSvIdl( rBase, rInStm );
+    SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
 
     if( aSlotIdFile.ReadSvIdl( SvHash_SlotIdFile(), rInStm ) )
     {
@@ -195,7 +195,6 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( ReadNameSvIdl( rInStm ) )
         {
             // set pointer to itself
-            SetModule( rBase );
             bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
         rBase.GetStack().Pop(); // remove from stack
