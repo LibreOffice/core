@@ -171,8 +171,8 @@ void SheetDataContext::onEndElement()
                     mbHasFormula = false;
             break;
             case XML_array:
-                if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
-                    setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
+                if( mbValidRange && maFmlaData.isValidArrayRef( CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() ) ) )
+                    setCellArrayFormula( maFmlaData.maFormulaRef, CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() ), maFormulaStr );
                 // set cell formatting, but do not set result as cell value
                 mrSheetData.setBlankCell( maCellData );
             break;
@@ -320,12 +320,12 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
     if (!p)
     {
         ++mnCol;
-        maCellData.maCellAddr = CellAddress( mnSheet, mnCol, mnRow );
+        maCellData.maCellAddr = ScAddress( mnCol, mnRow, mnSheet );
     }
     else
     {
         bValid = mrAddressConv.convertToCellAddress(maCellData.maCellAddr, p, mnSheet, true);
-        mnCol = maCellData.maCellAddr.Column;
+        mnCol = maCellData.maCellAddr.Col();
     }
 
     if( bValid )
@@ -340,7 +340,8 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
         mbHasFormula = false;
 
         // update used area of the sheet
-        extendUsedArea( maCellData.maCellAddr );
+        CellAddress addrTemp = CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() );
+        extendUsedArea( addrTemp );
     }
     return bValid;
 }
@@ -424,7 +425,7 @@ bool SheetDataContext::readCellHeader( SequenceInputStream& rStrm, CellType eCel
 
     // update used area of the sheet
     if( bValidAddr )
-        extendUsedArea( maCellData.maCellAddr );
+        extendUsedArea( CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() ) );
     return bValidAddr;
 }
 
@@ -538,7 +539,7 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
 
 void SheetDataContext::importArray( SequenceInputStream& rStrm )
 {
-    if( readFormulaRef( rStrm ) && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
+    if( readFormulaRef( rStrm ) && maFmlaData.isValidArrayRef( CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() ) ) )
     {
         rStrm.skip( 1 );
         ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_ARRAY, rStrm );
@@ -566,10 +567,10 @@ void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
 
 void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
 {
-    if( readFormulaRef( rStrm ) && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
+    if( readFormulaRef( rStrm ) && maFmlaData.isValidSharedRef( CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() ) ) )
     {
         ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_SHAREDFORMULA, rStrm );
-        mrSheetData.createSharedFormula( maCellData.maCellAddr, aTokens );
+        mrSheetData.createSharedFormula( CellAddress ( maCellData.maCellAddr.Tab(), maCellData.maCellAddr.Col(), maCellData.maCellAddr.Row() ), aTokens );
     }
 }
 

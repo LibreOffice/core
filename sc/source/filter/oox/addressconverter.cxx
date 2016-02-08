@@ -68,11 +68,12 @@ const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
 } // namespace
 
-CellAddress ApiCellRangeList::getBaseAddress() const
+
+ScAddress ApiCellRangeList::getBaseAddress() const
 {
     if( mvAddresses.empty() )
-        return CellAddress();
-    return CellAddress( mvAddresses.front().Sheet, mvAddresses.front().StartColumn, mvAddresses.front().StartRow );
+        return ScAddress(0, 0, 0);
+    return ScAddress( SCCOL( mvAddresses.front().StartColumn ), SCROW( mvAddresses.front().StartRow ), SCTAB( mvAddresses.front().Sheet ) );
 }
 
 css::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const
@@ -340,6 +341,14 @@ bool AddressConverter::checkCellAddress( const CellAddress& rAddress, bool bTrac
         checkRow( rAddress.Row, bTrackOverflow );
 }
 
+bool AddressConverter::checkCellAddress( const ScAddress& rAddress, bool bTrackOverflow )
+{
+    return
+        checkTab( rAddress.Tab(), bTrackOverflow ) &&
+        checkCol( rAddress.Col(), bTrackOverflow ) &&
+        checkRow( rAddress.Row(), bTrackOverflow );
+}
+
 bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet )
 {
@@ -354,6 +363,32 @@ bool AddressConverter::convertToCellAddressUnchecked(
     return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr);
 }
 
+bool AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,
+        const OUString& rString, sal_Int16 nSheet )
+{
+    orAddress.SetTab(nSheet);
+    sal_Int32 nCol = 0;
+    sal_Int32 nRow = 0;
+    bool bRes = parseOoxAddress2d( nCol, nRow, rString );
+    orAddress.SetRow(nRow);
+    orAddress.SetCol(nCol);
+
+    return bRes;
+}
+
+bool AddressConverter::convertToCellAddressUnchecked(
+        ScAddress& orAddress, const char* pStr, sal_Int16 nSheet )
+{
+    orAddress.SetTab(nSheet);
+    sal_Int32 nCol = 0;
+    sal_Int32 nRow = 0;
+    bool bRes = parseOoxAddress2d(nCol, nRow, pStr);
+    orAddress.SetRow(nRow);
+    orAddress.SetCol(nCol);
+
+    return bRes;
+}
+
 bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
 {
@@ -364,6 +399,24 @@ bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
 
 bool AddressConverter::convertToCellAddress(
     css::table::CellAddress& rAddress,
+    const char* pStr, sal_Int16 nSheet, bool bTrackOverflow )
+{
+    if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))
+        return false;
+
+    return checkCellAddress(rAddress, bTrackOverflow);
+}
+
+bool AddressConverter::convertToCellAddress( ScAddress& orAddress,
+        const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
+{
+    return
+        convertToCellAddressUnchecked( orAddress, rString, nSheet ) &&
+        checkCellAddress( orAddress, bTrackOverflow );
+}
+
+bool AddressConverter::convertToCellAddress(
+    ScAddress& rAddress,
     const char* pStr, sal_Int16 nSheet, bool bTrackOverflow )
 {
     if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))
@@ -393,7 +446,22 @@ void AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
     orAddress.Row    = rBinAddress.mnRow;
 }
 
+void AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,
+        const BinAddress& rBinAddress, sal_Int16 nSheet )
+{
+    orAddress.SetTab(nSheet);
+    orAddress.SetCol(rBinAddress.mnCol);
+    orAddress.SetRow(rBinAddress.mnRow);
+}
+
 bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
+        const BinAddress& rBinAddress, sal_Int16 nSheet, bool bTrackOverflow )
+{
+    convertToCellAddressUnchecked( orAddress, rBinAddress, nSheet );
+    return checkCellAddress( orAddress, bTrackOverflow );
+}
+
+bool AddressConverter::convertToCellAddress( ScAddress& orAddress,
         const BinAddress& rBinAddress, sal_Int16 nSheet, bool bTrackOverflow )
 {
     convertToCellAddressUnchecked( orAddress, rBinAddress, nSheet );
