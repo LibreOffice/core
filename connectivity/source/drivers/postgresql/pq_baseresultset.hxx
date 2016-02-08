@@ -59,13 +59,14 @@ static const sal_Int32 BASERESULTSET_RESULT_SET_TYPE = 6;
 
 #define BASERESULTSET_SIZE 7
 
-class BaseResultSet : public cppu::OComponentHelper,
-                      public cppu::OPropertySetHelper,
-                      public com::sun::star::sdbc::XCloseable,
-                      public com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                      public com::sun::star::sdbc::XResultSet,
-                      public com::sun::star::sdbc::XRow,
-                      public com::sun::star::sdbc::XColumnLocate
+typedef ::cppu::WeakComponentImplHelper<    ::com::sun::star::sdbc::XCloseable,
+                                            ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                            ::com::sun::star::sdbc::XResultSet,
+                                            ::com::sun::star::sdbc::XRow,
+                                            ::com::sun::star::sdbc::XColumnLocate
+                                            > BaseResultSet_BASE;
+class BaseResultSet : public BaseResultSet_BASE,
+                      public cppu::OPropertySetHelper
 {
 protected:
     com::sun::star::uno::Any m_props[BASERESULTSET_SIZE];
@@ -100,8 +101,8 @@ protected:
     virtual ~BaseResultSet();
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() override { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() override { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() override { BaseResultSet_BASE::acquire(); }
+    virtual void SAL_CALL release() throw() override { BaseResultSet_BASE::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
