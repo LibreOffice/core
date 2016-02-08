@@ -50,19 +50,6 @@ const SvIdentifier & SvMetaAttribute::GetSlotId() const
     return static_cast<SvMetaAttribute *>(GetRef())->GetSlotId();
 }
 
-bool SvMetaAttribute::IsMethod() const
-{
-    SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" );
-    return pType->GetType() == MetaTypeType::Method;
-}
-
-bool SvMetaAttribute::IsVariable() const
-{
-    SvMetaType * pType = GetType();
-    return pType->GetType() != MetaTypeType::Method;
-}
-
 bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
                             SvTokenStream & rInStm )
 {

@@ -83,12 +83,13 @@ bool SvMetaSlot::GetHidden() const
 
 bool SvMetaSlot::IsVariable() const
 {
-    return SvMetaAttribute::IsVariable();
+    SvMetaType * pType = GetType();
+    return pType->GetType() != MetaTypeType::Method;
 }
 
 bool SvMetaSlot::IsMethod() const
 {
-    bool b = SvMetaAttribute::IsMethod();
+    bool b = GetType()->GetType() == MetaTypeType::Method;
     b |= nullptr != GetMethod();
     return b;
 }
