@@ -975,7 +975,7 @@ void XSecController::exportSignature(
     xDocumentHandler->endElement( tag_Signature );
 }
 
-void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& /*rInformation*/)
+void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
 {
     xDocumentHandler->startElement(TAG_SIGNEDINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
 
@@ -991,6 +991,30 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
         pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_RSASHA256);
         xDocumentHandler->startElement(TAG_SIGNATUREMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
         xDocumentHandler->endElement(TAG_SIGNATUREMETHOD);
+    }
+
+    const SignatureReferenceInformations& rReferences = rInformation.vSignatureReferenceInfors;
+    for (const SignatureReferenceInformation& rReference : rReferences)
+    {
+        if (rReference.nType == SignatureReferenceType::SAMEDOCUMENT)
+        {
+            {
+                std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                pAttributeList->AddAttribute("Type", "http://www.w3.org/2000/09/xmldsig#Object");
+                pAttributeList->AddAttribute(ATTR_URI, rReference.ouURI);
+                xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+            }
+            {
+                std::unique_ptr<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_XMLDSIGSHA256);
+                xDocumentHandler->startElement(TAG_DIGESTMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.release()));
+                xDocumentHandler->endElement(TAG_DIGESTMETHOD);
+            }
+            xDocumentHandler->startElement(TAG_DIGESTVALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+            xDocumentHandler->endElement(TAG_DIGESTVALUE);
+            xDocumentHandler->characters(rReference.ouDigestValue);
+            xDocumentHandler->endElement(TAG_REFERENCE);
+        }
     }
 
     xDocumentHandler->endElement(TAG_SIGNEDINFO);
