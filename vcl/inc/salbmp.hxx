@@ -71,6 +71,10 @@ public:
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
 
+    virtual bool            ConvertToGreyscale()
+    {
+        return false;
+    }
 
     bool GetChecksum(ChecksumType& rChecksum) const
     {
