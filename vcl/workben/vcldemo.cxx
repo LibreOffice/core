@@ -1215,6 +1215,19 @@ public:
                     aBelow.Move(0,aResult.GetSizePixel().Height());
                     rDev.DrawBitmapEx(aBelow, aResult);
 
+                    // mini convert test.
+                    aBelow.Move(aResult.GetSizePixel().Width()+4,0);
+                    rDev.DrawBitmapEx(aBelow, aResult);
+
+                    Bitmap aGrey = aSrc.GetBitmap();
+                    aGrey.Convert(BMP_CONVERSION_8BIT_GREYS);
+                    rDev.DrawBitmap(aBelow, aGrey);
+
+                    aBelow.Move(aGrey.GetSizePixel().Width(),0);
+                    BitmapEx aGreyMask(aSrc.GetBitmap(),
+                                       AlphaMask(aSrc.GetMask()));
+                    rDev.DrawBitmapEx(aBelow, aGreyMask);
+
                     aLocation.Move(aSrc.GetSizePixel().Width()*6,0);
                     if (aLocation.X() > r.Right())
                         aLocation = Point(0,aLocation.Y()+aSrc.GetSizePixel().Height()*3+4);
