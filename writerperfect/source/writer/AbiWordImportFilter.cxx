@@ -55,8 +55,6 @@ throw (RuntimeException)
     pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
-#undef SERVICE_NAME2
-#undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL AbiWordImportFilter_createInstance(const Reference< XComponentContext > &rContext)
 throw(Exception)
