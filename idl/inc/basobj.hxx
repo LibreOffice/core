@@ -80,7 +80,7 @@ public:
 class SvMetaObject : public SvRttiBase
 {
 protected:
-    SvString      aName;
+    OString      aName;
 
     bool         ReadNameSvIdl( SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -95,7 +95,7 @@ public:
     static void         WriteStars( SvStream & );
 
     void                      SetName( const OString& rName );
-    virtual const SvString &  GetName() const { return aName; }
+    virtual const OString &  GetName() const { return aName; }
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -130,10 +130,10 @@ protected:
 public:
             SvMetaReference();
 
-    const SvString &    GetName() const override
+    const OString &     GetName() const override
                         {
                             return ( !aRef.Is()
-                                    || !SvMetaObject::GetName().getString().isEmpty() )
+                                    || !SvMetaObject::GetName().isEmpty() )
                                 ? SvMetaObject::GetName()
                                 : aRef->GetName();
                         }

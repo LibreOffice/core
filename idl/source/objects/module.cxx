@@ -38,13 +38,13 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
 
-    if( aSlotIdFile.ReadSvIdl( SvHash_SlotIdFile(), rInStm ) )
+    if( ReadStringSvIdl( SvHash_SlotIdFile(), rInStm, aSlotIdFile ) )
     {
         sal_uInt32 nTokPos = rInStm.Tell();
-        if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile.getString(), RTL_TEXTENCODING_ASCII_US)) )
+        if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile, RTL_TEXTENCODING_ASCII_US)) )
         {
             OStringBuffer aStr("cannot read file: ");
-            aStr.append(aSlotIdFile.getString());
+            aStr.append(aSlotIdFile);
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
 

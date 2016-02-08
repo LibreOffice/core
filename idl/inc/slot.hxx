@@ -50,7 +50,7 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL           aImageRotation;
     SvBOOL           aImageReflection;
     SvIdentifier     aPseudoPrefix;
-    SvString         aDisableFlags;
+    OString          aDisableFlags;
     SvMetaSlot*      pLinkedSlot;
     SvMetaSlot*      pNextSlot;
     sal_uLong        nListPos;

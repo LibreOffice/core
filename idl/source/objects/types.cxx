@@ -65,7 +65,7 @@ bool SvMetaAttribute::IsVariable() const
 
 OString SvMetaAttribute::GetMangleName( bool ) const
 {
-    return GetName().getString();
+    return GetName();
 }
 
 bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
@@ -139,7 +139,7 @@ sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
         rAttrArray.append('{');
         rAttrArray.append(GetSlotId().getString());
         rAttrArray.append(",\"");
-        rAttrArray.append(GetName().getString());
+        rAttrArray.append(GetName());
         rAttrArray.append("\"}");
         return 1;
     }
@@ -350,9 +350,9 @@ void SvMetaType::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     if( IsItem() )
     {
         if( GetBaseType()->GetType() == MetaTypeType::Struct )
-            GetBaseType()->WriteSfxItem( GetName().getString(), rBase, rOutStm );
+            GetBaseType()->WriteSfxItem( GetName(), rBase, rOutStm );
         else
-            WriteSfxItem( GetName().getString(), rBase, rOutStm );
+            WriteSfxItem( GetName(), rBase, rOutStm );
     }
 }
 
@@ -420,11 +420,11 @@ void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
         if( aEnumValueList.empty() )
         {
            // the first
-           aPrefix = aEnumVal->GetName().getString();
+           aPrefix = aEnumVal->GetName();
         }
         else
         {
-            aPrefix = getCommonSubPrefix(aPrefix, aEnumVal->GetName().getString());
+            aPrefix = getCommonSubPrefix(aPrefix, aEnumVal->GetName());
         }
         aEnumValueList.push_back( aEnumVal );
     }

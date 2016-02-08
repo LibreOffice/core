@@ -147,18 +147,18 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
     for( sal_uLong n = 0; n < aAttrList.size(); n++ )
     {
         SvMetaAttribute * pS = aAttrList[n];
-        if( pS->GetName().getString() == rAttr.GetName().getString() )
+        if( pS->GetName() == rAttr.GetName() )
         {
             // values have to match
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
                 OSL_FAIL( "Same Name in MetaClass : " );
-                OSL_FAIL( pS->GetName().getString().getStr() );
+                OSL_FAIL( pS->GetName().getStr() );
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 
                 OStringBuffer aStr("Attribute's ");
-                aStr.append(pS->GetName().getString());
+                aStr.append(pS->GetName());
                 aStr.append(" with different id's");
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
@@ -177,9 +177,9 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 
                 OStringBuffer aStr("Attribute ");
-                aStr.append(pS->GetName().getString());
+                aStr.append(pS->GetName());
                 aStr.append(" and Attribute ");
-                aStr.append(rAttr.GetName().getString());
+                aStr.append(rAttr.GetName());
                 aStr.append(" with equal id's");
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
@@ -328,10 +328,10 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
     // define class
-    rOutStm.WriteCharPtr( "#ifdef " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#ifdef " ).WriteCharPtr( GetName().getStr() ) << endl;
     rOutStm.WriteCharPtr( "#undef ShellClass" ) << endl;
-    rOutStm.WriteCharPtr( "#undef " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
-    rOutStm.WriteCharPtr( "#define ShellClass " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#undef " ).WriteCharPtr( GetName().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#define ShellClass " ).WriteCharPtr( GetName().getStr() ) << endl;
 
     // no slotmaps get written for interfaces
     if( !IsShell() )
@@ -340,7 +340,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // write parameter array
-    rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteCharPtr(GetName().getString().getStr()).WriteCharPtr("Args_Impl[] =") << endl;
+    rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteCharPtr(GetName().getStr()).WriteCharPtr("Args_Impl[] =") << endl;
     rOutStm.WriteChar('{') << endl;
 
     std::vector<sal_uLong> aSuperList;
@@ -370,7 +370,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm.WriteCharPtr( "};" ) << endl << endl;
 
     ByteStringList aStringList;
-    WriteSlotStubs( GetName().getString(), aSlotList, aStringList, rOutStm );
+    WriteSlotStubs( GetName(), aSlotList, aStringList, rOutStm );
     for ( size_t i = 0, n = aStringList.size(); i < n; ++i )
         delete aStringList[ i ];
     aStringList.clear();
@@ -378,18 +378,18 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm.WriteCharPtr("static SfxSlot a").WriteCharPtr(GetName().getString().getStr()).WriteCharPtr("Slots_Impl[] =") << endl;
+    rOutStm.WriteCharPtr("static SfxSlot a").WriteCharPtr(GetName().getStr()).WriteCharPtr("Slots_Impl[] =") << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes
-    WriteSlots( GetName().getString(), 0, aSlotList, rBase, rOutStm );
+    WriteSlots( GetName(), 0, aSlotList, rBase, rOutStm );
     if( nSlotCount )
         Back2Delemitter( rOutStm );
     else
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteCharPtr( GetName().getString().getStr() )
+        rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteCharPtr( GetName().getStr() )
                .WriteCharPtr( ", 0, 0, " )
                .WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE," )
                .WriteCharPtr( "SFX_STUB_PTR_STATE_NONE," )

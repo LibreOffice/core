@@ -68,7 +68,7 @@ SvMetaObject::SvMetaObject()
 
 void SvMetaObject::SetName( const OString& rName )
 {
-    aName.setString(rName);
+    aName = rName;
 }
 
 bool SvMetaObject::ReadNameSvIdl( SvTokenStream & rInStm )

@@ -267,7 +267,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
 SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 {
     for( SvRefMemberList<SvMetaType *>::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
-        if( rName.equals((*it)->GetName().getString()) )
+        if( rName.equals((*it)->GetName()) )
             return *it;
     return nullptr;
 }
@@ -294,7 +294,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         SvMetaType * pType = nullptr;
         while( it != rList.end() )
         {
-            if( (*it)->GetName().getString().equals(aName) )
+            if( (*it)->GetName().equals(aName) )
             {
                 pType = *it;
                 break;
@@ -378,7 +378,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
         for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
             SvMetaClass * pClass = aClassList[n];
-            if( pClass->GetName().getString().equals(pTok->GetString()) )
+            if( pClass->GetName().equals(pTok->GetString()) )
                 return pClass;
         }
 

@@ -99,9 +99,9 @@ OString SvMetaSlot::GetMangleName( bool bVariable ) const
     {
         SvMetaAttribute * pMeth = GetMethod();
         if( pMeth )
-            return pMeth->GetName().getString();
+            return pMeth->GetName();
     }
-    return GetName().getString();
+    return GetName();
 }
 
 /*************************************************************************
@@ -128,7 +128,7 @@ const OString& SvMetaSlot::GetGroupId() const
 }
 const OString& SvMetaSlot::GetDisableFlags() const
 {
-    if( !aDisableFlags.getString().isEmpty() || !GetRef() ) return aDisableFlags.getString();
+    if( !aDisableFlags.isEmpty() || !GetRef() ) return aDisableFlags;
     return static_cast<SvMetaSlot *>(GetRef())->GetDisableFlags();
 }
 const OString& SvMetaSlot::GetExecMethod() const
@@ -246,7 +246,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aGroupId.ReadSvIdl( SvHash_GroupId(), rInStm );
     bOk |= aExecMethod.ReadSvIdl( SvHash_ExecMethod(), rInStm );
     bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
-    bOk |= aDisableFlags.ReadSvIdl( SvHash_DisableFlags(), rInStm );
+    bOk |= ReadStringSvIdl( SvHash_DisableFlags(), rInStm, aDisableFlags );
     bOk |= aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
     bOk |= aExport.ReadSvIdl( SvHash_Export(), rInStm );
 
@@ -366,13 +366,13 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( pKnownSlot )
         {
             SetRef( pKnownSlot );
-            SetName( pKnownSlot->GetName().getString() );
+            SetName( pKnownSlot->GetName() );
             bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
         else
         {
             OStringBuffer aStr( "attribute " );
-            aStr.append(pAttr->GetName().getString());
+            aStr.append(pAttr->GetName());
             aStr.append(" is method or variable but not a slot");
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -393,19 +393,19 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
                 SetRef( pKnownSlot );
 
                   // names may differ, because explicitly given
-                if ( pKnownSlot->GetName().getString() != GetName().getString() )
+                if ( pKnownSlot->GetName() != GetName() )
                 {
                     OSL_FAIL("Illegal definition!");
                     rInStm.Seek( nTokPos );
                     return false;
                 }
 
-                  SetName( pKnownSlot->GetName().getString() );
+                  SetName( pKnownSlot->GetName() );
             }
             else
             {
                 OStringBuffer aStr("attribute ");
-                aStr.append(pAttr2->GetName().getString());
+                aStr.append(pAttr2->GetName());
                 aStr.append(" is method or variable but not a slot");
                 rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
                 rBase.WriteError( rInStm );
@@ -499,7 +499,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
         {
             // create SlotId
             SvMetaEnumValue *enumValue = pEnum->GetObject(n);
-            OString aValName = enumValue->GetName().getString();
+            OString aValName = enumValue->GetName();
             OStringBuffer aBuf;
             if( !GetPseudoPrefix().isEmpty() )
                 aBuf.append(GetPseudoPrefix());
@@ -687,7 +687,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         else
             rOutStm.WriteChar( '0' );
         rOutStm.WriteChar( ',' );
-        rOutStm.WriteCharPtr( pEnumValue->GetName().getString().getStr() );
+        rOutStm.WriteCharPtr( pEnumValue->GetName().getStr() );
     }
     else
     {
@@ -822,7 +822,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         }
         if( pT )
         {
-            rOutStm.WriteCharPtr( pT->GetName().getString().getStr() );
+            rOutStm.WriteCharPtr( pT->GetName().getStr() );
             if( !SvIdlDataBase::FindType( pT, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pT );
         }
@@ -904,9 +904,9 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             WriteTab( rOutStm, 1 );
             rOutStm.WriteCharPtr("{ (const SfxType*) &a")
                 // item type
-               .WriteCharPtr(pPType->GetName().getString().getStr()).WriteCharPtr("_Impl, ")
+               .WriteCharPtr(pPType->GetName().getStr()).WriteCharPtr("_Impl, ")
                 // parameter name
-               .WriteCharPtr("\"").WriteCharPtr(pPar->GetName().getString().getStr()).WriteCharPtr("\", ")
+               .WriteCharPtr("\"").WriteCharPtr(pPar->GetName().getStr()).WriteCharPtr("\", ")
                 // slot id
                .WriteCharPtr(pPar->GetSlotId().getString().getStr()).WriteCharPtr(" },") << endl;
             if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )

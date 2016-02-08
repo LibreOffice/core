@@ -111,7 +111,7 @@ void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     rInStm.Seek( nTokPos );
 }
 
-bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+bool ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString& aRetString )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
@@ -125,7 +125,7 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
             pTok = &rInStm.GetToken();
             if( pTok->IsString() )
             {
-                setString(pTok->GetString());
+                aRetString = pTok->GetString();
                 rInStm.GetToken_Next();
             }
             if( bOk && bBraket )

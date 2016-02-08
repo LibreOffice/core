@@ -68,22 +68,7 @@ public:
 };
 
 
-class SvString
-{
-private:
-    OString m_aStr;
-public:
-    SvString() {}
-    void setString(const OString& rStr)
-    {
-        m_aStr = rStr;
-    }
-    const OString& getString() const
-    {
-        return m_aStr;
-    }
-    bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-};
+bool        ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString& aString );
 
 
 #endif // INCLUDED_IDL_INC_BASTYPE_HXX

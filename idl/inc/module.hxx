@@ -27,7 +27,7 @@ class SvMetaModule : public SvMetaReference
 {
     SvRefMemberList<SvMetaClass *>      aClassList;
 // browser
-    SvString                aSlotIdFile;
+    OString                 aSlotIdFile;
 
     bool                    bImported   : 1,
                             bIsModified : 1;
