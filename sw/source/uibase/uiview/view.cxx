@@ -707,6 +707,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_nLastPasteDestination( static_cast<SotExchangeDest>(0xFFFF) ),
     m_nLeftBorderDistance( 0 ),
     m_nRightBorderDistance( 0 ),
+    m_eLastSearchCommand( static_cast<SvxSearchCmd>(0xFFFF) ),
     m_bWheelScrollInProgress(false),
     m_bInMailMerge(false),
     m_bInDtor(false),
