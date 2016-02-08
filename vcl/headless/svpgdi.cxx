@@ -173,8 +173,6 @@ namespace
                 const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
                 pAlphaBits = new unsigned char[nImageSize];
                 memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
-                pAlphaBits = new unsigned char[nImageSize];
-                memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
 
                 // TODO: make upper layers use standard alpha
                 unsigned char* pDst = pAlphaBits;
