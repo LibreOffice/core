@@ -183,19 +183,16 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
     , nType( MetaTypeType::Base )       \
     , bIsItem( false )                  \
     , bIsShell( false )                 \
-    , cParserChar( 'h' )
 
 SvMetaType::SvMetaType()
     CTOR
 {
 }
 
-SvMetaType::SvMetaType( const OString& rName,
-                        char cPc )
+SvMetaType::SvMetaType( const OString& rName )
     CTOR
 {
     SetName( rName );
-    cParserChar = cPc;
 }
 
 SvMetaType::~SvMetaType() {
@@ -415,7 +412,7 @@ bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
 }
 
 SvMetaTypeString::SvMetaTypeString()
-    : SvMetaType( "String", 's' )
+    : SvMetaType( "String" )
 {
 }
 
@@ -488,7 +485,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 }
 
 SvMetaTypevoid::SvMetaTypevoid()
-    : SvMetaType( "void", 'v' )
+    : SvMetaType( "void" )
 {
 }
 

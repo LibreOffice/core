@@ -73,7 +73,6 @@ class SvMetaType : public SvMetaReference
     MetaTypeType                nType;
     bool                        bIsItem;
     bool                        bIsShell;
-    char                        cParserChar;
 
     void    WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
                         SvStream & rOutStm );
@@ -84,8 +83,7 @@ protected:
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
             SvMetaType();
-            SvMetaType( const OString& rTypeName,
-                        char cParserChar );
+            SvMetaType( const OString& rTypeName );
 
     virtual ~SvMetaType();
 

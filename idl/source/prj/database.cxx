@@ -45,9 +45,8 @@ SvIdlDataBase::~SvIdlDataBase()
     delete pIdTable;
 }
 
-#define ADD_TYPE( Name, ParserChar )            \
-    aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName(),   \
-                     ParserChar ) );
+#define ADD_TYPE( Name )            \
+    aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName() ) );
 
 SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
 {
@@ -57,15 +56,15 @@ SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
         aTypeList.push_back( new SvMetaTypevoid() );
 
         // MI: IDispatch::Invoke can not unsigned
-        ADD_TYPE( UINT16,    'h' );
-        ADD_TYPE( INT16,     'h' );
-        ADD_TYPE( UINT32,    'l' );
-        ADD_TYPE( INT32,     'l' );
-        ADD_TYPE( BOOL,      'b' );
-        ADD_TYPE( BYTE,      'c' );
-        ADD_TYPE( float,     'f' );
-        ADD_TYPE( double,    'F' );
-        ADD_TYPE( SbxObject, 'o' );
+        ADD_TYPE( UINT16 );
+        ADD_TYPE( INT16 );
+        ADD_TYPE( UINT32 );
+        ADD_TYPE( INT32 );
+        ADD_TYPE( BOOL );
+        ADD_TYPE( BYTE );
+        ADD_TYPE( float );
+        ADD_TYPE( double );
+        ADD_TYPE( SbxObject );
 
         // Attention! When adding types all binary data bases get incompatible
 
