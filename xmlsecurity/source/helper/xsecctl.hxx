@@ -506,6 +506,8 @@ public:
 
     /// Writes XML elements inside a single OOXML signature's <Signature> element.
     bool WriteOOXMLSignature(const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
+    /// Exports an OOXML signature, called by WriteOOXMLSignature().
+    static void exportOOXMLSignature(const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
 };
 
 #endif

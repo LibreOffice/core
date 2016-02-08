@@ -975,6 +975,12 @@ void XSecController::exportSignature(
     xDocumentHandler->endElement( tag_Signature );
 }
 
+void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& /*rInformation*/)
+{
+    xDocumentHandler->startElement(TAG_SIGNEDINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement(TAG_SIGNEDINFO);
+}
+
 SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
 {
     SignatureInformation aInf( 0 );

@@ -357,9 +357,58 @@ bool XSecController::WriteSignature(
     return rc;
 }
 
-bool XSecController::WriteOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& /*xDocumentHandler*/)
+bool XSecController::WriteOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler)
 {
     bool bRet = false;
+
+    SAL_WARN_IF(!xDocumentHandler.is(), "xmlsecurity.helper", "empty xDocumentHandler reference");
+
+    // Chain the SAXEventKeeper to the SAX chain.
+    chainOn(/*bRetrievingLastEvent=*/true);
+
+    if (m_nStatusOfSecurityComponents == INITIALIZED)
+    {
+        m_bIsSAXEventKeeperSticky = true;
+        m_xSAXEventKeeper->setNextHandler(xDocumentHandler);
+
+        try
+        {
+            // Export the signature template.
+            cssu::Reference<xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper, uno::UNO_QUERY);
+
+            for (size_t i = 0; i < m_vInternalSignatureInformations.size(); ++i)
+            {
+                InternalSignatureInformation& rInformation = m_vInternalSignatureInformations[i];
+
+                // Prepare the signature creator.
+                rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation);
+
+                exportOOXMLSignature(xSEKHandler, rInformation.signatureInfor);
+            }
+
+            m_bIsSAXEventKeeperSticky = false;
+            chainOff();
+
+            bRet = true;
+        }
+        catch (const xml::sax::SAXException&)
+        {
+            m_pErrorMessage = ERROR_SAXEXCEPTIONDURINGCREATION;
+        }
+        catch(const io::IOException&)
+        {
+            m_pErrorMessage = ERROR_IOEXCEPTIONDURINGCREATION;
+        }
+        catch(const uno::Exception&)
+        {
+            m_pErrorMessage = ERROR_EXCEPTIONDURINGCREATION;
+        }
+
+        m_xSAXEventKeeper->setNextHandler(nullptr);
+        m_bIsSAXEventKeeperSticky = false;
+    }
+    else
+        m_pErrorMessage = ERROR_CANNOTCREATEXMLSECURITYCOMPONENT;
 
     return bRet;
 }
