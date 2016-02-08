@@ -109,7 +109,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
 bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uLong nTokPos = rInStm.Tell();
-    if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) && GetType() == MetaTypeType::Class )
+    if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) && GetMetaTypeType() == MetaTypeType::Class )
     {
         bool bOk = true;
         if( rInStm.Read( ':' ) )

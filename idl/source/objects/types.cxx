@@ -114,7 +114,7 @@ sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
     DBG_ASSERT( pType, "no type for attribute" );
     SvMetaType * pBaseType = pType->GetBaseType();
     DBG_ASSERT( pBaseType, "no base type for attribute" );
-    if( pBaseType->GetType() == MetaTypeType::Struct )
+    if( pBaseType->GetMetaTypeType() == MetaTypeType::Struct )
         return pBaseType->MakeSfx( rAttrArray );
     else
     {
@@ -162,14 +162,14 @@ void SvMetaType::SetType( MetaTypeType nT )
 
 SvMetaType * SvMetaType::GetBaseType() const
 {
-    if( GetRef() && GetType() == MetaTypeType::Base )
+    if( GetRef() && GetMetaTypeType() == MetaTypeType::Base )
         return static_cast<SvMetaType *>(GetRef())->GetBaseType();
     return const_cast<SvMetaType *>(this);
 }
 
 SvMetaType * SvMetaType::GetReturnType() const
 {
-    DBG_ASSERT( GetType() == MetaTypeType::Method, "no method" );
+    DBG_ASSERT( GetMetaTypeType() == MetaTypeType::Method, "no method" );
     DBG_ASSERT( GetRef(), "no return type" );
     return static_cast<SvMetaType *>(GetRef());
 }
@@ -254,7 +254,7 @@ sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 {
     sal_uLong nC = 0;
 
-    if( GetBaseType()->GetType() == MetaTypeType::Struct )
+    if( GetBaseType()->GetMetaTypeType() == MetaTypeType::Struct )
     {
         sal_uLong nAttrCount = GetAttrCount();
         // write the single attributes
@@ -331,7 +331,7 @@ void SvMetaType::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     if( IsItem() )
     {
-        if( GetBaseType()->GetType() == MetaTypeType::Struct )
+        if( GetBaseType()->GetMetaTypeType() == MetaTypeType::Struct )
             GetBaseType()->WriteSfxItem( GetName(), rBase, rOutStm );
         else
             WriteSfxItem( GetName(), rBase, rOutStm );
@@ -419,7 +419,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 {
     sal_uInt32  nTokPos = rInStm.Tell();
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm )
-      && GetType() == MetaTypeType::Enum )
+      && GetMetaTypeType() == MetaTypeType::Enum )
     {
         if( SvMetaObject::ReadSvIdl( rBase, rInStm ) )
              return true;

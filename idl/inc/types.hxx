@@ -80,7 +80,7 @@ public:
     sal_uLong           GetAttrCount() const { return aAttrList.size(); }
 
     void                SetType( MetaTypeType nT );
-    MetaTypeType        GetType() const { return nType; }
+    MetaTypeType        GetMetaTypeType() const { return nType; }
     SvMetaType *        GetBaseType() const;
     SvMetaType *        GetReturnType() const;
     bool                IsItem() const { return bIsItem; }
