@@ -125,8 +125,8 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
     gint icon_size = std::max(w, h);
 
     GtkBorder padding, border;
-    gtk_style_context_get_padding(mpSpinStyle, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_border(mpSpinStyle, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_padding(mpSpinStyle, gtk_style_context_get_state(mpSpinStyle), &padding);
+    gtk_style_context_get_border(mpSpinStyle, gtk_style_context_get_state(mpSpinStyle), &border);
 
     gint buttonWidth = icon_size + padding.left + padding.right +
         border.left + border.right;
@@ -579,8 +579,8 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gtk_style_context_set_state(context, stateFlags);
     gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
-    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_border(context, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_padding(context, gtk_style_context_get_state(context), &padding);
+    gtk_style_context_get_border(context, gtk_style_context_get_state(context), &border);
 
     gtk_render_background(context, cr,
                           buttonRect.Left(), buttonRect.Top(),
@@ -670,14 +670,12 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     (void)nType;
     (void)nPart;
     Rectangle    aButtonRect;
-    gint        nArrowWidth;
-    gint        nButtonWidth;
-    GtkBorder   padding;
 
-    gtk_style_context_get_padding( mpButtonStyle, GTK_STATE_FLAG_NORMAL, &padding);
+    GtkBorder padding;
+    gtk_style_context_get_padding( mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
 
-    nArrowWidth = ARROW_SIZE;
-    nButtonWidth = nArrowWidth + padding.left + padding.right;
+    gint nArrowWidth = ARROW_SIZE;
+    gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == PART_BUTTON_DOWN )
     {
         Point aPos = Point(aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth, aAreaRect.Top());
@@ -1198,7 +1196,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         if (nProgressWidth)
         {
             GtkBorder padding;
-            gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
+            gtk_style_context_get_padding(context, gtk_style_context_get_state(context), &padding);
 
             gtk_style_context_remove_class(context, GTK_STYLE_CLASS_TROUGH);
             gtk_style_context_add_class(context, GTK_STYLE_CLASS_PROGRESSBAR);
@@ -1236,13 +1234,11 @@ Rectangle GetWidgetSize(const Rectangle& rControlRegion, GtkWidget* widget)
 
 Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentWidth, long nContentHeight, const Rectangle& rControlRegion)
 {
-    gtk_style_context_save(pStyle);
-
     GtkBorder border;
-    gtk_style_context_get_border(pStyle, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_border(pStyle, gtk_style_context_get_state(pStyle), &border);
 
     GtkBorder padding;
-    gtk_style_context_get_padding(pStyle, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_padding(pStyle, gtk_style_context_get_state(pStyle), &padding);
 
     gint nWidgetHeight = nContentHeight + padding.top + padding.bottom + border.top + border.bottom;
     nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
@@ -1251,8 +1247,6 @@ Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContent
     nWidgetWidth = std::max<gint>(nWidgetWidth, rControlRegion.GetWidth());
 
     Rectangle aEditRect(rControlRegion.TopLeft(), Size(nWidgetWidth, nWidgetHeight));
-
-    gtk_style_context_restore(pStyle);
 
     return aEditRect;
 }
@@ -1276,10 +1270,10 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                      nullptr );
 
         GtkBorder border;
-        gtk_style_context_get_border(mpCheckButtonStyle, GTK_STATE_FLAG_NORMAL, &border);
+        gtk_style_context_get_border(mpCheckButtonStyle, gtk_style_context_get_state(mpCheckButtonStyle), &border);
 
         GtkBorder padding;
-        gtk_style_context_get_padding(mpCheckButtonStyle, GTK_STATE_FLAG_NORMAL, &padding);
+        gtk_style_context_get_padding(mpCheckButtonStyle, gtk_style_context_get_state(mpCheckButtonStyle), &padding);
 
 
         indicator_size += 2*indicator_spacing + border.left + padding.left + border.right + padding.right;
@@ -1407,11 +1401,12 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             gtk_style_context_save(mpFrameInStyle);
             gtk_style_context_add_class(mpFrameInStyle, GTK_STYLE_CLASS_FRAME);
 
+
             GtkBorder padding;
-            gtk_style_context_get_padding(mpFrameInStyle, GTK_STATE_FLAG_NORMAL, &padding);
+            gtk_style_context_get_padding(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &padding);
 
             GtkBorder border;
-            gtk_style_context_get_border(mpFrameInStyle, GTK_STATE_FLAG_NORMAL, &border);
+            gtk_style_context_get_border(mpFrameInStyle, gtk_style_context_get_state(mpFrameInStyle), &border);
 
             int x1 = aEditRect.Left();
             int y1 = aEditRect.Top();
@@ -1425,6 +1420,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                              y2 - (padding.bottom + border.bottom));
 
             gtk_style_context_restore(mpFrameInStyle);
+
             return true;
         }
         else
@@ -1462,7 +1458,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // text colors
     GdkRGBA text_color;
-    gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_NORMAL, &text_color);
+    gtk_style_context_set_state(pStyle, GTK_STATE_FLAG_NORMAL);
+    gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
     ::Color aTextColor = getColor( text_color );
     aStyleSet.SetDialogTextColor( aTextColor );
     aStyleSet.SetButtonTextColor( aTextColor );
@@ -1473,15 +1470,9 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWindowTextColor( aTextColor );
     aStyleSet.SetFieldTextColor( aTextColor );
 
-    // mouse over text colors
-    gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_PRELIGHT, &text_color);
-    aTextColor = getColor( text_color );
-    aStyleSet.SetButtonRolloverTextColor( aTextColor );
-    aStyleSet.SetFieldRolloverTextColor( aTextColor );
-
     // background colors
     GdkRGBA background_color;
-    gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_NORMAL, &background_color);
+    gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
 
     ::Color aBackColor = getColor( background_color );
     aStyleSet.Set3DColors( aBackColor );
@@ -1490,167 +1481,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetCheckedColorSpecialCase( );
 
-    // tooltip colors
-    {
-        GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
-        GtkWidgetPath *pCPath = gtk_widget_path_new();
-        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_WINDOW);
-        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_TOOLTIP);
-        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
-#if GTK_CHECK_VERSION(3,16,0)
-        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
-#endif
-        pCStyle = gtk_style_context_new();
-        gtk_style_context_set_path(pCStyle, pCPath);
-        gtk_widget_path_free(pCPath);
-
-        GdkRGBA tooltip_bg_color, tooltip_fg_color;
-        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_NORMAL, &tooltip_fg_color);
-        gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &tooltip_bg_color);
-        g_object_unref( pCStyle );
-
-        aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
-        aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
-    }
-
-    {
-        // construct style context for text view
-        GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
-        GtkWidgetPath *pCPath = gtk_widget_path_new();
-        gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
-        gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
-        gtk_style_context_set_path( pCStyle, pCPath );
-        gtk_widget_path_free( pCPath );
-
-        // highlighting colors
-        gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-        ::Color aHighlightColor = getColor( text_color );
-        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_SELECTED, &text_color);
-        ::Color aHighlightTextColor = getColor( text_color );
-        aStyleSet.SetHighlightColor( aHighlightColor );
-        aStyleSet.SetHighlightTextColor( aHighlightTextColor );
-
-        // field background color
-        GdkRGBA field_background_color;
-        gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
-        g_object_unref( pCStyle );
-
-        ::Color aBackFieldColor = getColor( field_background_color );
-        aStyleSet.SetFieldColor( aBackFieldColor );
-        // This baby is the default page/paper color
-        aStyleSet.SetWindowColor( aBackFieldColor );
-    }
-
-    // menu disabled entries handling
-    aStyleSet.SetSkipDisabledInMenus( true );
-    aStyleSet.SetAcceleratorsInContextMenus( false );
-
-    // menu colors
-    gtk_style_context_get_background_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &background_color );
-    aBackColor = getColor( background_color );
-    aStyleSet.SetMenuColor( aBackColor );
-
-    // menu bar
-    gtk_style_context_get_background_color( mpMenuBarStyle, GTK_STATE_FLAG_NORMAL, &background_color );
-    aBackColor = getColor( background_color );
-    aStyleSet.SetMenuBarColor( aBackColor );
-    aStyleSet.SetMenuBarRolloverColor( aBackColor );
-
-    gtk_style_context_get_color( mpMenuBarItemStyle, GTK_STATE_FLAG_NORMAL, &text_color );
-    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
-    aStyleSet.SetMenuBarTextColor( aTextColor );
-    aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
-
-    gtk_style_context_get_color( mpMenuBarItemStyle, GTK_STATE_FLAG_PRELIGHT, &text_color );
-    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
-    aStyleSet.SetMenuBarHighlightTextColor( aTextColor );
-
-    // menu items
-    gtk_style_context_get_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &color );
-    aTextColor = getColor( color );
-    aStyleSet.SetMenuTextColor( aTextColor );
-
-    // Awful hack for menu separators in the Sonar and similar themes.
-    // If the menu color is not too dark, and the menu text color is lighter,
-    // make the "light" color lighter than the menu color and the "shadow"
-    // color darker than it.
-    if ( aStyleSet.GetMenuColor().GetLuminance() >= 32 &&
-     aStyleSet.GetMenuColor().GetLuminance() <= aStyleSet.GetMenuTextColor().GetLuminance() )
-    {
-        ::Color temp = aStyleSet.GetMenuColor();
-        temp.IncreaseLuminance( 8 );
-        aStyleSet.SetLightColor( temp );
-        temp = aStyleSet.GetMenuColor();
-        temp.DecreaseLuminance( 16 );
-        aStyleSet.SetShadowColor( temp );
-    }
-
-    gtk_style_context_get_background_color( mpCheckMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &background_color );
-    ::Color aHighlightColor = getColor( background_color );
-    aStyleSet.SetMenuHighlightColor( aHighlightColor );
-
-    gtk_style_context_get_color( mpCheckMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &color );
-    ::Color aHighlightTextColor = getColor( color );
-    aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
-
-    // hyperlink colors
-    GdkColor *link_color = nullptr;
-    gtk_style_context_get_style(pStyle,
-                                 "link-color", &link_color,
-                                 nullptr);
-    if (link_color) {
-        aStyleSet.SetLinkColor(getColorFromColor(*link_color));
-        gdk_color_free(link_color);
-    }
-
-    link_color = nullptr;
-    gtk_style_context_get_style(pStyle,
-                                "visited-link-color", &link_color,
-                                nullptr);
-    if (link_color) {
-        aStyleSet.SetVisitedLinkColor(getColorFromColor(*link_color));
-        gdk_color_free(link_color);
-    }
-
-    {
-        GtkStyleContext *pCStyle = gtk_style_context_new();
-        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
-        GtkWidgetPath *pCPath = gtk_widget_path_new();
-        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_NOTEBOOK);
-        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_NOTEBOOK);
-        gtk_widget_path_iter_add_region(pCPath, pos, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
-        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
-#if GTK_CHECK_VERSION(3,16,0)
-        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
-#endif
-        pCStyle = gtk_style_context_new();
-        gtk_style_context_set_path(pCStyle, pCPath);
-        gtk_widget_path_free(pCPath);
-
-        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_NORMAL, &text_color);
-        aTextColor = getColor( text_color );
-        aStyleSet.SetTabTextColor(aTextColor);
-
-        // mouse over text colors
-        gtk_style_context_add_class(pCStyle, "prelight-page");
-        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_PRELIGHT, &text_color);
-        gtk_style_context_remove_class(pCStyle, "prelight-page");
-        aTextColor = getColor( text_color );
-        aStyleSet.SetTabRolloverTextColor(aTextColor);
-
-        gtk_style_context_add_class(pCStyle, "active-page");
-        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_ACTIVE, &text_color);
-        gtk_style_context_remove_class(pCStyle, "active-page");
-        aTextColor = getColor( text_color );
-        aStyleSet.SetTabHighlightTextColor(aTextColor);
-
-        g_object_unref( pCStyle );
-    }
-
     // UI font
-    const PangoFontDescription* font = gtk_style_context_get_font(pStyle, GTK_STATE_FLAG_NORMAL);
+    const PangoFontDescription* font = gtk_style_context_get_font(pStyle, gtk_style_context_get_state(pStyle));
     OString    aFamily        = pango_font_description_get_family( font );
     int nPangoHeight    = pango_font_description_get_size( font );
     PangoStyle    eStyle    = pango_font_description_get_style( font );
@@ -1741,6 +1573,184 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetTabFont( aFont );  //pull from notebook style + GTK_STYLE_REGION_TAB ?
     aStyleSet.SetTitleFont( aFont );
     aStyleSet.SetFloatTitleFont( aFont );
+
+    // mouse over text colors
+    gtk_style_context_set_state(pStyle, GTK_STATE_FLAG_PRELIGHT);
+    gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
+    aTextColor = getColor( text_color );
+    aStyleSet.SetButtonRolloverTextColor( aTextColor );
+    aStyleSet.SetFieldRolloverTextColor( aTextColor );
+
+    // tooltip colors
+    {
+        GtkStyleContext *pCStyle = gtk_style_context_new();
+        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        GtkWidgetPath *pCPath = gtk_widget_path_new();
+        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_WINDOW);
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_TOOLTIP);
+        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
+#if GTK_CHECK_VERSION(3,16,0)
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
+#endif
+        pCStyle = gtk_style_context_new();
+        gtk_style_context_set_path(pCStyle, pCPath);
+        gtk_widget_path_free(pCPath);
+
+        GdkRGBA tooltip_bg_color, tooltip_fg_color;
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_fg_color);
+        gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_bg_color);
+        g_object_unref( pCStyle );
+
+        aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
+        aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
+    }
+
+    {
+        // construct style context for text view
+        GtkStyleContext *pCStyle = gtk_style_context_new();
+        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        GtkWidgetPath *pCPath = gtk_widget_path_new();
+        gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
+        gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
+        gtk_style_context_set_path( pCStyle, pCPath );
+        gtk_widget_path_free( pCPath );
+
+        // highlighting colors
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_SELECTED);
+        gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        ::Color aHighlightColor = getColor( text_color );
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        ::Color aHighlightTextColor = getColor( text_color );
+        aStyleSet.SetHighlightColor( aHighlightColor );
+        aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+
+        // field background color
+        GdkRGBA field_background_color;
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
+        gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &field_background_color);
+        g_object_unref( pCStyle );
+
+        ::Color aBackFieldColor = getColor( field_background_color );
+        aStyleSet.SetFieldColor( aBackFieldColor );
+        // This baby is the default page/paper color
+        aStyleSet.SetWindowColor( aBackFieldColor );
+    }
+
+    // menu disabled entries handling
+    aStyleSet.SetSkipDisabledInMenus( true );
+    aStyleSet.SetAcceleratorsInContextMenus( false );
+
+    // menu colors
+    gtk_style_context_set_state(mpMenuStyle, GTK_STATE_FLAG_NORMAL);
+    gtk_style_context_get_background_color( mpMenuStyle, gtk_style_context_get_state(mpMenuStyle), &background_color );
+    aBackColor = getColor( background_color );
+    aStyleSet.SetMenuColor( aBackColor );
+
+    // menu items
+    gtk_style_context_get_color( mpMenuStyle, gtk_style_context_get_state(mpMenuStyle), &color );
+    aTextColor = getColor( color );
+    aStyleSet.SetMenuTextColor( aTextColor );
+
+    // menu bar
+    gtk_style_context_set_state(mpMenuBarStyle, gtk_style_context_get_state(mpMenuStyle));
+    gtk_style_context_get_background_color( mpMenuBarStyle, gtk_style_context_get_state(mpMenuStyle), &background_color );
+    aBackColor = getColor( background_color );
+    aStyleSet.SetMenuBarColor( aBackColor );
+    aStyleSet.SetMenuBarRolloverColor( aBackColor );
+
+    gtk_style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_NORMAL);
+    gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
+    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
+    aStyleSet.SetMenuBarTextColor( aTextColor );
+    aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
+
+    gtk_style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_PRELIGHT);
+    gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
+    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
+    aStyleSet.SetMenuBarHighlightTextColor( aTextColor );
+
+    // Awful hack for menu separators in the Sonar and similar themes.
+    // If the menu color is not too dark, and the menu text color is lighter,
+    // make the "light" color lighter than the menu color and the "shadow"
+    // color darker than it.
+    if ( aStyleSet.GetMenuColor().GetLuminance() >= 32 &&
+     aStyleSet.GetMenuColor().GetLuminance() <= aStyleSet.GetMenuTextColor().GetLuminance() )
+    {
+        ::Color temp = aStyleSet.GetMenuColor();
+        temp.IncreaseLuminance( 8 );
+        aStyleSet.SetLightColor( temp );
+        temp = aStyleSet.GetMenuColor();
+        temp.DecreaseLuminance( 16 );
+        aStyleSet.SetShadowColor( temp );
+    }
+
+    gtk_style_context_set_state(mpCheckMenuItemStyle, GTK_STATE_FLAG_PRELIGHT);
+    gtk_style_context_get_background_color( mpCheckMenuItemStyle, gtk_style_context_get_state(mpCheckMenuItemStyle), &background_color );
+    ::Color aHighlightColor = getColor( background_color );
+    aStyleSet.SetMenuHighlightColor( aHighlightColor );
+
+    gtk_style_context_get_color( mpCheckMenuItemStyle, gtk_style_context_get_state(mpCheckMenuItemStyle), &color );
+    ::Color aHighlightTextColor = getColor( color );
+    aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
+
+    // hyperlink colors
+    GdkColor *link_color = nullptr;
+    gtk_style_context_get_style(pStyle,
+                                 "link-color", &link_color,
+                                 nullptr);
+    if (link_color) {
+        aStyleSet.SetLinkColor(getColorFromColor(*link_color));
+        gdk_color_free(link_color);
+    }
+
+    link_color = nullptr;
+    gtk_style_context_get_style(pStyle,
+                                "visited-link-color", &link_color,
+                                nullptr);
+    if (link_color) {
+        aStyleSet.SetVisitedLinkColor(getColorFromColor(*link_color));
+        gdk_color_free(link_color);
+    }
+
+    {
+        GtkStyleContext *pCStyle = gtk_style_context_new();
+        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        GtkWidgetPath *pCPath = gtk_widget_path_new();
+        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_NOTEBOOK);
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_NOTEBOOK);
+        gtk_widget_path_iter_add_region(pCPath, pos, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
+        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
+#if GTK_CHECK_VERSION(3,16,0)
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
+#endif
+        pCStyle = gtk_style_context_new();
+        gtk_style_context_set_path(pCStyle, pCPath);
+        gtk_widget_path_free(pCPath);
+
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        aTextColor = getColor( text_color );
+        aStyleSet.SetTabTextColor(aTextColor);
+
+        // mouse over text colors
+        gtk_style_context_add_class(pCStyle, "prelight-page");
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_PRELIGHT);
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        gtk_style_context_remove_class(pCStyle, "prelight-page");
+        aTextColor = getColor( text_color );
+        aStyleSet.SetTabRolloverTextColor(aTextColor);
+
+        gtk_style_context_add_class(pCStyle, "active-page");
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_ACTIVE);
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
+        gtk_style_context_remove_class(pCStyle, "active-page");
+        aTextColor = getColor( text_color );
+        aStyleSet.SetTabHighlightTextColor(aTextColor);
+
+        g_object_unref( pCStyle );
+    }
+
     // get cursor blink time
     gboolean blink = false;
 
