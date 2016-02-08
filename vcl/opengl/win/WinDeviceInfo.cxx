@@ -411,7 +411,6 @@ DriverInfo::~DriverInfo()
 
 WinOpenGLDeviceInfo::WinOpenGLDeviceInfo():
     mbHasDualGPU(false),
-    mbHasDriverVersionMismatch(false),
     mbRDP(false)
 {
     GetData();
@@ -839,38 +838,6 @@ void WinOpenGLDeviceInfo::GetData()
             }
 
             SetupDiDestroyDeviceInfoList(devinfo);
-        }
-    }
-
-    mbHasDriverVersionMismatch = false;
-    if (maAdapterVendorID == GetDeviceVendor(wgl::VendorIntel))
-    {
-        // we've had big crashes (moz#590373 and moz#595364) apparently correlated
-        // with bad Intel driver installations where the DriverVersion reported
-        // by the registry was not the version of the DLL.
-        OUString aDLLFileName("igd10umd32.dll");
-        OUString aDLLFileName2("igd10iumd32.dll");
-        OUString aDLLVersion, aDLLVersion2;
-        GetDLLVersion(aDLLFileName.getStr(), aDLLVersion);
-        GetDLLVersion(aDLLFileName2.getStr(), aDLLVersion2);
-
-        uint64_t dllNumericVersion = 0, dllNumericVersion2 = 0,
-                 driverNumericVersion = 0, knownSafeMismatchVersion = 0;
-        wgl::ParseDriverVersion(aDLLVersion, dllNumericVersion);
-        wgl::ParseDriverVersion(aDLLVersion2, dllNumericVersion2);
-        wgl::ParseDriverVersion(maDriverVersion, driverNumericVersion);
-        wgl::ParseDriverVersion("9.17.10.0", knownSafeMismatchVersion);
-
-        // If there's a driver version mismatch, consider this harmful only when
-        // the driver version is less than knownSafeMismatchVersion.  See the
-        // above comment about crashes with old mismatches. If the GetDllVersion
-        // call fails, then they return 0, so that will be considered a mismatch.
-        if (dllNumericVersion != driverNumericVersion &&
-                dllNumericVersion2 != driverNumericVersion &&
-                (driverNumericVersion < knownSafeMismatchVersion ||
-                 std::max(dllNumericVersion, dllNumericVersion2) < knownSafeMismatchVersion))
-        {
-            mbHasDriverVersionMismatch = true;
         }
     }
 }
