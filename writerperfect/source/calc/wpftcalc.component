@@ -8,16 +8,19 @@
  *
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="wpftcalc" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Calc.MSWorksCalcImportFilter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Calc.MSWorksCalcImportFilter" 
+      constructor="com_sun_star_comp_Calc_MSWorksCalcImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.MWAWCalcImportFilter">
+  <implementation name="com.sun.star.comp.Calc.MWAWCalcImportFilter"
+      constructor="com_sun_star_comp_Calc_MWAWCalcImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="org.libreoffice.comp.Calc.NumbersImportFilter">
+  <implementation name="org.libreoffice.comp.Calc.NumbersImportFilter"
+      constructor="org_libreoffice_comp_Calc_NumbersImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>

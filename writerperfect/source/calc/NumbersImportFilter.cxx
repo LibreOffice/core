@@ -49,14 +49,21 @@ void NumbersImportFilter::doRegisterHandlers(OdsGenerator &)
 {
 }
 
-OUString NumbersImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL NumbersImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Calc.NumbersImportFilter");
 }
 
-Sequence< OUString > SAL_CALL NumbersImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL NumbersImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL NumbersImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
@@ -65,27 +72,13 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL NumbersImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+org_libreoffice_comp_Calc_NumbersImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
 {
-    return static_cast<cppu::OWeakObject *>(new NumbersImportFilter(rContext));
-}
-
-// XServiceInfo
-OUString SAL_CALL NumbersImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return NumbersImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL NumbersImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL NumbersImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return NumbersImportFilter_getSupportedServiceNames();
+    return cppu::acquire(new NumbersImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

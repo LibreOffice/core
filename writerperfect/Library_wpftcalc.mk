@@ -61,7 +61,6 @@ $(eval $(call gb_Library_add_exception_objects,wpftcalc,\
 	writerperfect/source/calc/MSWorksCalcImportFilter \
 	writerperfect/source/calc/MWAWCalcImportFilter \
 	writerperfect/source/calc/NumbersImportFilter \
-	writerperfect/source/calc/wpftcalc_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

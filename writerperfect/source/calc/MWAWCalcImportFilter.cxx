@@ -101,14 +101,21 @@ void MWAWCalcImportFilter::doRegisterHandlers(OdsGenerator &rGenerator)
     rGenerator.registerEmbeddedObjectHandler("image/mwaw-ods", &handleEmbeddedMWAWSpreadsheetObject);
 }
 
-OUString MWAWCalcImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL MWAWCalcImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Calc.MWAWCalcImportFilter");
 }
 
-Sequence< OUString > SAL_CALL MWAWCalcImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL MWAWCalcImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL MWAWCalcImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
@@ -117,27 +124,13 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL MWAWCalcImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+com_sun_star_comp_Calc_MWAWCalcImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
 {
-    return static_cast<cppu::OWeakObject *>(new MWAWCalcImportFilter(rContext));
-}
-
-// XServiceInfo
-OUString SAL_CALL MWAWCalcImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return MWAWCalcImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL MWAWCalcImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL MWAWCalcImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return MWAWCalcImportFilter_getSupportedServiceNames();
+    return cppu::acquire(new MWAWCalcImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,16 +40,6 @@ private:
     virtual void doRegisterHandlers(OdsGenerator &rGenerator) override;
 };
 
-OUString MWAWCalcImportFilter_getImplementationName()
-throw (css::uno::RuntimeException);
-
-css::uno::Sequence< OUString > SAL_CALL MWAWCalcImportFilter_getSupportedServiceNames()
-throw (css::uno::RuntimeException);
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL MWAWCalcImportFilter_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
-throw (css::uno::Exception);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
