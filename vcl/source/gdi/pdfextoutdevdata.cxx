@@ -305,6 +305,7 @@ struct PageSyncData
     void PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct );
     bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData );
 };
+
 void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct )
 {
     GDIMetaFile* pMtf = rOutDev.GetConnectMetaFile();
@@ -403,13 +404,14 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                     }
                     else if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
                     {
-                        if ( rOutDevData.GetIsLosslessCompression() && !rOutDevData.GetIsReduceImageResolution() )
+                        Graphic& rGraphic = mGraphics.front();
+                        if ( rGraphic.IsLink() &&
+                             rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG &&
+                             mParaRects.size() >= 2 )
                         {
-                            Graphic& rGraphic = mGraphics.front();
-                            if ( rGraphic.IsLink() && rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG )
-                            {
-                                mbGroupIgnoreGDIMtfActions = true;
-                            }
+                            mbGroupIgnoreGDIMtfActions =
+                                rOutDevData.HasAdequateCompression(
+                                        rGraphic, mParaRects[0], mParaRects[1]);
                         }
                         break;
                     }
@@ -504,6 +506,8 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbExportNDests          ( false ),
     mnFormsFormat           ( 0 ),
     mnPage                  ( -1 ),
+    mnCompressionQuality    ( 90 ),
+    mnMaxImageResolution    ( 300 ),
     mpPageSyncData          ( nullptr ),
     mpGlobalSyncData        ( new GlobalSyncData() )
 {
@@ -527,6 +531,14 @@ void PDFExtOutDevData::SetCurrentPageNumber( const sal_Int32 nPage )
 void PDFExtOutDevData::SetIsLosslessCompression( const bool bUseLosslessCompression )
 {
     mbUseLosslessCompression = bUseLosslessCompression;
+}
+void PDFExtOutDevData::SetCompressionQuality( const sal_Int32 nQuality )
+{
+    mnCompressionQuality = nQuality;
+}
+void PDFExtOutDevData::SetMaxImageResolution( const sal_Int32 nMaxImageResolution )
+{
+    mnMaxImageResolution = nMaxImageResolution;
 }
 void PDFExtOutDevData::SetIsReduceImageResolution( const bool bReduceImageResolution )
 {
@@ -748,7 +760,7 @@ void PDFExtOutDevData::BeginGroup()
 }
 
 void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
-                                 sal_uInt8              nTransparency,
+                                 sal_uInt8          nTransparency,
                                  const Rectangle&   rOutputRect,
                                  const Rectangle&   rVisibleOutputRect )
 {
@@ -757,6 +769,49 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
     mpPageSyncData->mParaInts.push_back( nTransparency );
     mpPageSyncData->mParaRects.push_back( rOutputRect );
     mpPageSyncData->mParaRects.push_back( rVisibleOutputRect );
+}
+
+// Avoids expensive de-compression and re-compression of large images.
+bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
+                                               const Rectangle & /* rOutputRect */,
+                                               const Rectangle & /* rVisibleOutputRect */ ) const
+{
+    bool bReduceResolution = false;
+
+    assert( rGraphic.IsLink() && rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG );
+
+    // small items better off as PNG anyway
+    if ( rGraphic.GetSizePixel().Width() < 32 &&
+         rGraphic.GetSizePixel().Height() < 32 )
+        return false;
+
+    // FIXME: ideally we'd also pre-empt the DPI related scaling too.
+
+    Size aSize = rGraphic.GetSizePixel();
+    sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
+                               rGraphic.GetLink().GetDataSize();
+
+    if ( GetIsLosslessCompression() )
+        return !bReduceResolution && !GetIsReduceImageResolution();
+    else
+    {
+        static const struct {
+            sal_Int32 mnQuality;
+            sal_Int32 mnRatio;
+        } aRatios[] = { // minium tolerable compression ratios
+            { 100, 400 }, { 95, 700 }, { 90, 1000 }, { 85, 1200 },
+            { 80, 1500 }, { 75, 1700 }
+        };
+        sal_Int32 nTargetRatio = 10000;
+        for ( size_t i = 0 ; i < SAL_N_ELEMENTS( aRatios ); ++i )
+        {
+            if ( mnCompressionQuality > aRatios[i].mnQuality )
+                break;
+            nTargetRatio = aRatios[i].mnRatio;
+        }
+
+        return nCurrentRatio > nTargetRatio;
+    }
 }
 
 }

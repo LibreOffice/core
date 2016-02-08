@@ -86,6 +86,8 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     bool                        mbExportNDests; //i56629
     sal_Int32                   mnFormsFormat;
     sal_Int32                   mnPage;
+    sal_Int32                   mnCompressionQuality;
+    sal_Int32                   mnMaxImageResolution;
     css::lang::Locale           maDocLocale;
 
     PageSyncData*               mpPageSyncData;
@@ -102,8 +104,6 @@ public:
     void ResetSyncData();
 
     void PlayGlobalActions( PDFWriter& rWriter );
-
-
 
     bool    GetIsExportNotes() const { return mbExportNotes;}
     void        SetIsExportNotes( const bool bExportNotes );
@@ -135,10 +135,16 @@ public:
     sal_Int32   GetCurrentPageNumber() const { return mnPage;}
     void        SetCurrentPageNumber( const sal_Int32 nPage );
 
-    bool    GetIsLosslessCompression() const { return mbUseLosslessCompression;}
+    bool        GetIsLosslessCompression() const { return mbUseLosslessCompression;}
     void        SetIsLosslessCompression( const bool bLosslessCompression );
 
-    bool    GetIsReduceImageResolution() const { return mbReduceImageResolution;}
+    sal_Int32   GetCompressionQuality() const { return mnCompressionQuality; }
+    void        SetCompressionQuality( const sal_Int32 nQuality );
+
+    sal_Int32   GetMaxImageResolution() const { return mnMaxImageResolution; }
+    void        SetMaxImageResolution( const sal_Int32 nQuality );
+
+    bool        GetIsReduceImageResolution() const { return mbReduceImageResolution;}
     void        SetIsReduceImageResolution( const bool bReduceImageResolution );
 
     const css::lang::Locale& GetDocumentLocale() const { return maDocLocale;}
@@ -176,9 +182,15 @@ public:
         rOutputRect, e.g. for cropped graphics.
      */
     void        EndGroup( const Graphic&    rGraphic,
-                          sal_uInt8             nTransparency,
+                          sal_uInt8         nTransparency,
                           const Rectangle&  rOutputRect,
                           const Rectangle&  rVisibleOutputRect );
+
+    /// Detect if stream is compressed enough to avoid de-compress / scale & re-compress
+    bool        HasAdequateCompression( const Graphic &rGraphic,
+                                        const Rectangle &rOutputRect,
+                                        const Rectangle &rVisibleOutputRect ) const;
+
 //--->i56629
     /** Create a new named destination to be used in a link to this document from another PDF document
  (see PDF spec 1.4, 8.2.1)
