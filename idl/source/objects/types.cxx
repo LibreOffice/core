@@ -134,7 +134,6 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
 #define CTOR                            \
     : nType( MetaTypeType::Base )       \
     , bIsItem( false )                  \
-    , bIsShell( false )                 \
 
 SvMetaType::SvMetaType()
     CTOR
@@ -153,11 +152,6 @@ SvMetaType::~SvMetaType()
 void SvMetaType::SetType( MetaTypeType nT )
 {
     nType = nT;
-    if( nType == MetaTypeType::Class )
-    {
-        OStringBuffer aTmp("C_");
-        aTmp.append("Object *");
-    }
 }
 
 SvMetaType * SvMetaType::GetBaseType() const
@@ -181,14 +175,15 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
-    if( pTok->Is( SvHash_interface() )
-      || pTok->Is( SvHash_shell() ) )
+    if( pTok->Is( SvHash_interface() ) )
     {
-        if( pTok->Is( SvHash_shell() ) )
-            bIsShell = true;
-        SetType( MetaTypeType::Class );
+        SetType( MetaTypeType::Interface );
         bOk = ReadNamesSvIdl( rInStm );
-
+    }
+    else if( pTok->Is( SvHash_shell() ) )
+    {
+        SetType( MetaTypeType::Shell );
+        bOk = ReadNamesSvIdl( rInStm );
     }
     else if( pTok->Is( SvHash_struct() ) )
     {

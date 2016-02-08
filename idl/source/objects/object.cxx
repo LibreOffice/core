@@ -109,7 +109,8 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
 bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uLong nTokPos = rInStm.Tell();
-    if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) && GetMetaTypeType() == MetaTypeType::Class )
+    if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) &&
+        (GetMetaTypeType() == MetaTypeType::Interface || GetMetaTypeType() == MetaTypeType::Shell) )
     {
         bool bOk = true;
         if( rInStm.Read( ':' ) )
@@ -261,7 +262,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     // written any more.
     // It is prohibited that Shell and SuperShell directly import the same
     //class.
-    if( IsShell() && aSuperClass.Is() )
+    if( GetMetaTypeType() == MetaTypeType::Shell && aSuperClass.Is() )
         aSuperClass->FillClasses( rClassList );
 
     // Write all attributes of the imported classes, as long as they have
@@ -281,7 +282,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     }
 
     // only write superclass if no shell and not in the list
-    if( !IsShell() && aSuperClass.Is() )
+    if( GetMetaTypeType() != MetaTypeType::Shell && aSuperClass.Is() )
     {
         aSuperClass->InsertSlots( rList, rSuperList, rClassList, rPrefix, rBase );
     }
@@ -334,7 +335,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm.WriteCharPtr( "#define ShellClass " ).WriteCharPtr( GetName().getStr() ) << endl;
 
     // no slotmaps get written for interfaces
-    if( !IsShell() )
+    if( GetMetaTypeType() != MetaTypeType::Shell )
     {
         rOutStm.WriteCharPtr( "#endif" ) << endl << endl;
         return;

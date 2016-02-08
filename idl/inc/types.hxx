@@ -53,14 +53,13 @@ public:
                                 SvIdlDataBase& );
 };
 
-enum MetaTypeType { Method, Struct, Base, Enum, Class };
+enum MetaTypeType { Method, Struct, Base, Enum, Interface, Shell };
 
 class SvMetaType : public SvMetaReference
 {
     SvRefMemberList<SvMetaAttribute *>  aAttrList;
     MetaTypeType                        nType;
     bool                                bIsItem;
-    bool                                bIsShell;
 
     void                WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
                                       SvStream & rOutStm );
@@ -84,7 +83,6 @@ public:
     SvMetaType *        GetBaseType() const;
     SvMetaType *        GetReturnType() const;
     bool                IsItem() const { return bIsItem; }
-    bool                IsShell() const { return bIsShell; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
