@@ -255,6 +255,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bMakeSelectionVisible : 1, // transport the bookmark selection
                     m_bAnnotationMode; ///< The real cursor position is inside an annotation.
 
+    /// LibreOfficeKit has to force the page size for PgUp/PgDown
+    /// functionality based on the user's view, instead of using the m_aVisArea.
+    SwTwips         m_nLOKPageUpDownOffset;
+
     // methods for searching
     // set search context
     SAL_DLLPRIVATE bool              SearchAndWrap(bool bApi = false);
@@ -552,6 +556,12 @@ public:
     void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
 
     OUString    GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
+
+    /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
+    void ForcePageUpDownOffset(SwTwips nTwips)
+    {
+        m_nLOKPageUpDownOffset = nTwips;
+    }
 
     // hand over Shell
                  SfxShell       *GetCurShell()  { return m_pShell; }
