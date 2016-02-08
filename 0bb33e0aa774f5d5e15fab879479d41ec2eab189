@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_3651d563",
+        "filename": "sc/source/filter/inc/formulabase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace error.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_964ec9bf",
+        "filename": "sc/source/filter/inc/formulaparser.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_764b5db1",
+        "filename": "sc/source/filter/inc/formulaparser.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d6c69115",
+        "filename": "sc/source/filter/inc/formulaparser.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b6cb051e",
+        "filename": "sc/source/filter/oox/condformatbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace error.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_16d139ce",
+        "filename": "sc/source/filter/oox/condformatbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Please don\u0027t leave old code as comments. Just remove it. If anyone is ever interested in the old code we can look into git.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_36d8b5ef",
+        "filename": "sc/source/filter/oox/formulaparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_76e23da1",
+        "filename": "sc/source/filter/oox/formulaparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d6edf18f",
+        "filename": "sc/source/filter/oox/formulaparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-08T23:02:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "0bb33e0aa774f5d5e15fab879479d41ec2eab189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
