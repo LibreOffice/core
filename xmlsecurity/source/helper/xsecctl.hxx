@@ -503,6 +503,9 @@ public:
      */
     virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
+
+    /// Writes XML elements inside a single OOXML signature's <Signature> element.
+    bool WriteOOXMLSignature(const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
 };
 
 #endif

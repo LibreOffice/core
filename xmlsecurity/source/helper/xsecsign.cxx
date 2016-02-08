@@ -32,6 +32,7 @@
 
 #include <stdio.h>
 
+using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
@@ -354,6 +355,13 @@ bool XSecController::WriteSignature(
     }
 
     return rc;
+}
+
+bool XSecController::WriteOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& /*xDocumentHandler*/)
+{
+    bool bRet = false;
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
