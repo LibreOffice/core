@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 module
-"BD25A480-30AB-101C-A17D-000024021828"
-"C049C7E0-30AB-101C-A17D-000024021828"
 SvxItems
 [
 HelpText( "Svx-Items" )

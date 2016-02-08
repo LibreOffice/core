@@ -32,8 +32,6 @@ class SvMetaModule : public SvMetaReference
 
     bool                    bImported   : 1,
                             bIsModified : 1;
-    SvGlobalName            aBeginName;
-    SvGlobalName            aEndName;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;

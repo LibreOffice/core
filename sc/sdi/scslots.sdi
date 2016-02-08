@@ -17,8 +17,6 @@
  */
 
 module
-"ADC7D7A1-2341-101C-A55A-04021C007002"
-"82528B40-234D-101C-A55A-04021C007002"
 StarCalc
 [
 HelpText( "StarDivision StarCalc" ),

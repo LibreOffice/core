@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 module
-"2DADF501-1F00-101C-A2E4-00001B4C5CE7"
-"33A1C840-1F00-101C-A2E4-00001B4C5CE7"
 StarDraw
 [
 HelpText( "StarDraw Application" )

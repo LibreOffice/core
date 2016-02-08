@@ -17,8 +17,6 @@
  */
 
 module
-"312C4240-35E7-101C-B12A-04021C007002"
-"58216740-35E7-101C-B12A-04021C007002"
 StarMath
 [
     HelpText ( "StarMath Application" )

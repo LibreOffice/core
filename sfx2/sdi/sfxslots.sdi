@@ -17,8 +17,6 @@
  */
 
 module
-"384E40E0-1F22-101C-9961-04021C007002"
-"5A30E000-1F22-101C-9961-04021C007002"
 StarApplicationFrame
 [
 HelpText( "StarDivision Application Framework" ),

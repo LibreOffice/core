@@ -17,8 +17,6 @@
  */
 
 module
-"9F76B581-23DD-101C-80B6-000024021835"
-"A1810F00-23DE-101C-80B6-000024021835"
 StarWriter
 [
 HelpText( "StarWriter Application" )

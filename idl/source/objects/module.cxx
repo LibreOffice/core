@@ -168,19 +168,6 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok  = rInStm.GetToken_Next();
     bool bOk = pTok->Is( SvHash_module() );
-    if( bOk )
-    {
-        pTok = rInStm.GetToken_Next();
-        if( pTok->IsString() )
-             bOk = aBeginName.MakeId(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
-    }
-    rInStm.ReadDelemiter();
-    if( bOk )
-    {
-        pTok = rInStm.GetToken_Next();
-        if( pTok->IsString() )
-             bOk = aEndName.MakeId(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
-    }
     rInStm.ReadDelemiter();
     if( bOk )
     {
