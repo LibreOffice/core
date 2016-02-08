@@ -225,6 +225,7 @@ public:
 
     /** Returns the XCell interface for the passed cell address. */
     Reference< XCell >  getCell( const CellAddress& rAddress ) const;
+    Reference< XCell >  getCell( const ScAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
     Reference< XCellRange > getCellRange( const CellRangeAddress& rRange ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
@@ -473,6 +474,19 @@ Reference< XCell > WorksheetGlobals::getCell( const CellAddress& rAddress ) cons
     if( mxSheet.is() ) try
     {
         xCell = mxSheet->getCellByPosition( rAddress.Column, rAddress.Row );
+    }
+    catch( Exception& )
+    {
+    }
+    return xCell;
+}
+
+Reference< XCell > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
+{
+    Reference< XCell > xCell;
+    if( mxSheet.is() ) try
+    {
+        xCell = mxSheet->getCellByPosition( rAddress.Col(), rAddress.Row() );
     }
     catch( Exception& )
     {
@@ -1429,6 +1443,11 @@ Reference< XCell > WorksheetHelper::getCell( const CellAddress& rAddress ) const
     return mrSheetGlob.getCell( rAddress );
 }
 
+Reference< XCell > WorksheetHelper::getCell( const ScAddress& rAddress ) const
+{
+    return mrSheetGlob.getCell( rAddress );
+}
+
 Reference< XCellRange > WorksheetHelper::getCellRange( const CellRangeAddress& rRange ) const
 {
     return mrSheetGlob.getCellRange( rRange );
@@ -1576,8 +1595,19 @@ void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue )
     getDocImport().setNumericCell(aAddress, fValue);
 }
 
+void WorksheetHelper::putValue( const ScAddress& rAddress, double fValue )
+{
+    getDocImport().setNumericCell(rAddress, fValue);
+}
+
 void WorksheetHelper::setCellFormulaValue(
     const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
+{
+    getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
+}
+
+void WorksheetHelper::setCellFormulaValue(
+    const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
 {
     getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
 }
@@ -1590,6 +1620,12 @@ void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rT
         getDocImport().setStringCell(aAddress, rText);
 }
 
+void WorksheetHelper::putString( const ScAddress& rAddress, const OUString& rText )
+{
+    if ( !rText.isEmpty() )
+        getDocImport().setStringCell(rAddress, rText);
+}
+
 void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
 {
     ScEditEngineDefaulter& rEE = getEditEngine();
@@ -1600,6 +1636,14 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
     getDocImport().setEditCell(aAddress, rString.convert(rEE, pFirstPortionFont));
 }
 
+void WorksheetHelper::putRichString( const ScAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
+{
+    ScEditEngineDefaulter& rEE = getEditEngine();
+
+    // The cell will own the text object instance returned from convert().
+    getDocImport().setEditCell(rAddress, rString.convert(rEE, pFirstPortionFont));
+}
+
 void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens )
 {
     ScDocumentImport& rDoc = getDocImport();
@@ -1608,6 +1652,14 @@ void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTo
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
     ScTokenConversion::ConvertToTokenArray(rDoc.getDoc(), aTokenArray, rTokens);
     rDoc.setFormulaCell(aCellPos, new ScTokenArray(aTokenArray));
+}
+
+void WorksheetHelper::putFormulaTokens( const ScAddress& rAddress, const ApiTokenSequence& rTokens )
+{
+    ScDocumentImport& rDoc = getDocImport();
+    ScTokenArray aTokenArray;
+    ScTokenConversion::ConvertToTokenArray(rDoc.getDoc(), aTokenArray, rTokens);
+    rDoc.setFormulaCell(rAddress, new ScTokenArray(aTokenArray));
 }
 
 void WorksheetHelper::initializeWorksheetImport()
@@ -1630,8 +1682,20 @@ void WorksheetHelper::setCellFormula( const css::table::CellAddress& rTokenAddre
     getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
 }
 
+void WorksheetHelper::setCellFormula( const ScAddress& rTokenAddress, const OUString& rTokenStr )
+{
+    getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
+}
+
 void WorksheetHelper::setCellFormula(
     const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
+    const OUString& rCellValue, sal_Int32 nValueType )
+{
+    getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
+}
+
+void WorksheetHelper::setCellFormula(
+    const ScAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType )
 {
     getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
@@ -1644,6 +1708,12 @@ void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& r
 
 void WorksheetHelper::createSharedFormulaMapEntry(
     const table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
+{
+    getFormulaBuffer().createSharedFormulaMapEntry(rAddress, nSharedId, rTokens);
+}
+
+void WorksheetHelper::createSharedFormulaMapEntry(
+    const ScAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
 {
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, nSharedId, rTokens);
 }

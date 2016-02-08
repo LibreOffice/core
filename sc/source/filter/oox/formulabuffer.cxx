@@ -344,10 +344,20 @@ FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
     const OUString& rTokenStr, sal_Int32 nSharedId ) :
     maAddress(rAddr), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
 
+FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
+    const ScAddress& rAddr,
+    const OUString& rTokenStr, sal_Int32 nSharedId ) :
+    maAddress( CellAddress( rAddr.Tab(), rAddr.Col(), rAddr.Row() ) ), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
+
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType ) :
     maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
+
+FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
+    const ScAddress& rAddr, sal_Int32 nSharedId,
+    const OUString& rCellValue, sal_Int32 nValueType ) :
+    maAddress( CellAddress( rAddr.Tab(), rAddr.Col(), rAddr.Row() ) ), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
 
 FormulaBuffer::SheetItem::SheetItem() :
     mpCellFormulas(nullptr),
@@ -466,10 +476,26 @@ void FormulaBuffer::createSharedFormulaMapEntry(
     rSharedFormulas.push_back( aEntry );
 }
 
+void FormulaBuffer::createSharedFormulaMapEntry(
+    const ScAddress& rAddress,
+    sal_Int32 nSharedId, const OUString& rTokens )
+{
+    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maSharedFormulas.size() );
+    std::vector<SharedFormulaEntry>& rSharedFormulas = maSharedFormulas[ rAddress.Tab() ];
+    SharedFormulaEntry aEntry(rAddress, rTokens, nSharedId);
+    rSharedFormulas.push_back( aEntry );
+}
+
 void FormulaBuffer::setCellFormula( const css::table::CellAddress& rAddress, const OUString& rTokenStr )
 {
     assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maCellFormulas.size() );
     maCellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
+}
+
+void FormulaBuffer::setCellFormula( const ScAddress& rAddress, const OUString& rTokenStr )
+{
+    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maCellFormulas.size() );
+    maCellFormulas[ rAddress.Tab() ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
 }
 
 void FormulaBuffer::setCellFormula(
@@ -477,6 +503,14 @@ void FormulaBuffer::setCellFormula(
 {
     assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maSharedFormulaIds.size() );
     maSharedFormulaIds[rAddress.Sheet].push_back(
+        SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
+}
+
+void FormulaBuffer::setCellFormula(
+    const ScAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType )
+{
+    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maSharedFormulaIds.size() );
+    maSharedFormulaIds[rAddress.Tab()].push_back(
         SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
 }
 
@@ -497,6 +531,17 @@ void FormulaBuffer::setCellFormulaValue(
     aVal.maValueStr = rValueStr;
     aVal.mnCellType = nCellType;
     maCellFormulaValues[rAddress.Sheet].push_back(aVal);
+}
+
+void FormulaBuffer::setCellFormulaValue(
+        const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
+{
+    assert( rAddress.Tab() >= 0 && (size_t)rAddress.Tab() < maCellFormulaValues.size() );
+    FormulaValue aVal;
+    aVal.maCellAddress = CellAddress( rAddress.Tab(), rAddress.Col(), rAddress.Row() );
+    aVal.maValueStr = rValueStr;
+    aVal.mnCellType = nCellType;
+    maCellFormulaValues[rAddress.Tab()].push_back(aVal);
 }
 
 }}
