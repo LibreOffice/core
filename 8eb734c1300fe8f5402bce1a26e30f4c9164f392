@@ -1,0 +1,1058 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_3679d530",
+        "filename": "avmedia/source/macavf/player.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Needs to be removed.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_9676c93c",
+        "filename": "avmedia/source/quicktime/manager.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_76735d4e",
+        "filename": "avmedia/source/quicktime/player.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Needs removing",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d68e9126",
+        "filename": "avmedia/source/quicktime/player.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b693054f",
+        "filename": "avmedia/source/quicktime/window.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1699396f",
+        "filename": "avmedia/source/viewer/mediaevent_impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f69d8d5a",
+        "filename": "avmedia/source/viewer/mediawindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_56a3c19e",
+        "filename": "avmedia/source/win/framegrabber.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_36a0b590",
+        "filename": "avmedia/source/win/framegrabber.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_96ad298b",
+        "filename": "avmedia/source/win/manager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_76aa3d72",
+        "filename": "avmedia/source/win/manager.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d6b5f1d0",
+        "filename": "avmedia/source/win/player.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b6bae5be",
+        "filename": "avmedia/source/win/player.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_16b019dd",
+        "filename": "avmedia/source/win/window.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f6b46dd2",
+        "filename": "bridges/source/cpp_uno/gcc3_ios_arm/rtti.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Oops!",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_56caa150",
+        "filename": "bridges/source/cpp_uno/gcc3_ios_arm/rtti.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Oops!",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_36c71547",
+        "filename": "connectivity/source/parse/sqlflex.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Add in new line",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_96c40941",
+        "filename": "connectivity/source/parse/sqlflex.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Add in newline",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_76c19d2e",
+        "filename": "connectivity/source/parse/sqlflex.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Add in newline",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d6dcd11a",
+        "filename": "cui/source/dialogs/cuigaldlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b6e145d3",
+        "filename": "dbaccess/source/filter/xml/xmlExport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Add in newline",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_16e779e5",
+        "filename": "extensions/source/macosx/spotlight/main.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Remove",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f6ebcdae",
+        "filename": "extensions/source/macosx/spotlight/main.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Remove",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_56d101fb",
+        "filename": "extensions/source/macosx/spotlight/main.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Remove",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_36cef55a",
+        "filename": "extensions/source/macosx/spotlight/main.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Remove",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_96db691b",
+        "filename": "extensions/source/macosx/spotlight/main.m",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Remove above two comments",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_76d87d1e",
+        "filename": "extensions/source/scanner/sane.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d6033175",
+        "filename": "extensions/source/scanner/sane.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b6082593",
+        "filename": "extensions/source/scanner/scanner.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_16fe596b",
+        "filename": "extensions/source/scanner/scanunx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f602ad6e",
+        "filename": "extensions/source/scanner/scanunx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_56f8e17c",
+        "filename": "extensions/source/scanner/scanunx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_36f55583",
+        "filename": "filter/source/flash/impswfdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_96f24999",
+        "filename": "filter/source/flash/impswfdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_76efddb0",
+        "filename": "filter/source/flash/swfdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d62a11e7",
+        "filename": "filter/source/flash/swfdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b62f85f5",
+        "filename": "filter/source/flash/swfdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1635b945",
+        "filename": "filter/source/graphicfilter/egif/egif.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f6390d43",
+        "filename": "filter/source/graphicfilter/egif/giflzwc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_563f4125",
+        "filename": "filter/source/graphicfilter/egif/giflzwc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_363c352f",
+        "filename": "filter/source/graphicfilter/egif/giflzwc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_9649a9d3",
+        "filename": "filter/source/graphicfilter/egif/giflzwc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_7646bdc0",
+        "filename": "filter/source/graphicfilter/etiff/etiff.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d61171b1",
+        "filename": "filter/source/pdf/impdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b61665a5",
+        "filename": "filter/source/pdf/impdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_160c9993",
+        "filename": "filter/source/pdf/pdfdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f610edaa",
+        "filename": "filter/source/pdf/pdfdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_56262117",
+        "filename": "filter/source/pdf/pdfdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_36239507",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_962089f9",
+        "filename": "filter/source/pdf/pdfexport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_761d1dbd",
+        "filename": "filter/source/pdf/pdffilter.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d67851fb",
+        "filename": "filter/source/pdf/pdfinteract.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b67dc5e9",
+        "filename": "filter/source/svg/impsvgdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1683f9cd",
+        "filename": "filter/source/svg/impsvgdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_f6874dd5",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Actually, this comment might be useful",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_566d8131",
+        "filename": "filter/source/svg/svgdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_366a751b",
+        "filename": "filter/source/svg/svgdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_9677e901",
+        "filename": "filter/source/svg/svgdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_7674fdfc",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d65fb173",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b664a549",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_165ad983",
+        "filename": "filter/source/svg/svgfontexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-08T22:46:54Z",
+      "side": 1,
+      "message": "Empty space needs removing.",
+      "revId": "8eb734c1300fe8f5402bce1a26e30f4c9164f392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
