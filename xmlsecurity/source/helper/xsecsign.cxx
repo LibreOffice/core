@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultBroadcaster.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <rtl/uuid.h>
 
 #include <stdio.h>
@@ -58,7 +59,7 @@ OUString XSecController::createId()
 }
 
 cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
-    InternalSignatureInformation& internalSignatureInfor )
+    InternalSignatureInformation& internalSignatureInfor, sal_Int32 nStorageFormat )
 {
     sal_Int32 nSecurityId = internalSignatureInfor.signatureInfor.nSecurityId;
     SignatureReferenceInformations& vReferenceInfors = internalSignatureInfor.signatureInfor.vSignatureReferenceInfors;
@@ -164,16 +165,28 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference<cssxc::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, cssu::UNO_QUERY);
     keyCollector->setKeyId(0);
 
-    internalSignatureInfor.signatureInfor.ouSignatureId = createId();
-    internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-    internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
-    size++;
-
-    if (!internalSignatureInfor.signatureInfor.ouDescription.isEmpty())
+    if (nStorageFormat != embed::StorageFormats::OFOPXML)
     {
-        // Only mention the hash of the description in the signature if it's non-empty.
-        internalSignatureInfor.signatureInfor.ouDescriptionPropertyId = createId();
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
+        internalSignatureInfor.signatureInfor.ouSignatureId = createId();
+        internalSignatureInfor.signatureInfor.ouPropertyId = createId();
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+        size++;
+
+        if (!internalSignatureInfor.signatureInfor.ouDescription.isEmpty())
+        {
+            // Only mention the hash of the description in the signature if it's non-empty.
+            internalSignatureInfor.signatureInfor.ouDescriptionPropertyId = createId();
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, internalSignatureInfor.signatureInfor.ouDescriptionPropertyId, -1);
+            size++;
+        }
+    }
+    else
+    {
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "#idPackageObject", -1);
+        size++;
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "#idOfficeObject", -1);
+        size++;
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "#idSignedProperties", -1);
         size++;
     }
 
@@ -381,7 +394,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<xml::sax::XDocumen
                 InternalSignatureInformation& rInformation = m_vInternalSignatureInformations[i];
 
                 // Prepare the signature creator.
-                rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation);
+                rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation, embed::StorageFormats::OFOPXML);
 
                 exportOOXMLSignature(xSEKHandler, rInformation.signatureInfor);
             }

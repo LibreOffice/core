@@ -356,7 +356,7 @@ private:
     static OUString createId();
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
-        InternalSignatureInformation& signatureInfo );
+        InternalSignatureInformation& signatureInfo, sal_Int32 nStorageFormat = 0 );
 
     /*
      * For signature verification
