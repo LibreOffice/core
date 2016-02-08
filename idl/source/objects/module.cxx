@@ -75,8 +75,6 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( aEnum->ReadSvIdl( rBase, rInStm ) )
         {
-            // declared in module
-            aTypeList.push_back( aEnum );
             // announce globally
             rBase.GetTypeList().push_back( aEnum );
         }
@@ -88,8 +86,6 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( xItem->ReadSvIdl( rBase, rInStm ) )
         {
-            // declared in module
-            aTypeList.push_back( xItem );
             // announce globally
             rBase.GetTypeList().push_back( xItem );
         }
@@ -158,8 +154,6 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         {
             if( xSlot->Test( rBase, rInStm ) )
             {
-                // declared in module
-                aAttrList.push_back( xSlot );
                 // announce globally
                 rBase.AppendAttr( xSlot );
             }

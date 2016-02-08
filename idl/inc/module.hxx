@@ -26,8 +26,6 @@
 class SvMetaModule : public SvMetaReference
 {
     SvRefMemberList<SvMetaClass *>      aClassList;
-    SvRefMemberList<SvMetaType *>       aTypeList;
-    SvRefMemberList<SvMetaAttribute *>  aAttrList;
 // browser
     SvString                aSlotIdFile;
     SvString                aModulePrefix;
