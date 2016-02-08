@@ -240,43 +240,28 @@ throw (Exception, RuntimeException, std::exception)
         }
     }
 }
-OUString WordPerfectImportFilter_getImplementationName()
-throw (RuntimeException)
+
+// XServiceInfo
+OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.WordPerfectImportFilter");
 }
 
-Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
     pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
-{
-    return static_cast<cppu::OWeakObject *>(new WordPerfectImportFilter(rContext));
-}
-
-// XServiceInfo
-OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return WordPerfectImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return WordPerfectImportFilter_getSupportedServiceNames();
 }
 
 
@@ -352,12 +337,11 @@ throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
     }
 }
 
-
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilterDialog::getImplementationName()
 throw (RuntimeException, std::exception)
 {
-    return WordPerfectImportFilterDialog_getImplementationName();
+    return OUString("com.sun.star.comp.Writer.WordPerfectImportFilterDialog");
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService(const OUString &rServiceName)
@@ -369,26 +353,17 @@ throw (RuntimeException, std::exception)
 Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
-    return WordPerfectImportFilterDialog_getSupportedServiceNames();
-}
-
-OUString WordPerfectImportFilterDialog_getImplementationName()
-throw (RuntimeException)
-{
-    return OUString("com.sun.star.comp.Writer.WordPerfectImportFilterDialog");
-}
-
-Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames()
-throw (RuntimeException)
-{
     Sequence < OUString > aRet { "com.sun.star.ui.dialogs.FilterOptionsDialog" };
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance(const Reference< XComponentContext > &)
-throw(Exception)
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+com_sun_star_comp_Writer_WordPerfectImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
 {
-    return static_cast<cppu::OWeakObject *>(new WordPerfectImportFilterDialog);
+    return cppu::acquire(new WordPerfectImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

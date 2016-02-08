@@ -45,14 +45,21 @@ bool PagesImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
     return false;
 }
 
-OUString PagesImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL PagesImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Writer.PagesImportFilter");
 }
 
-Sequence< OUString > SAL_CALL PagesImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL PagesImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
@@ -61,27 +68,13 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL PagesImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+org_libreoffice_comp_Writer_PagesImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
 {
-    return static_cast<cppu::OWeakObject *>(new PagesImportFilter(rContext));
-}
-
-// XServiceInfo
-OUString SAL_CALL PagesImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return PagesImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL PagesImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return PagesImportFilter_getSupportedServiceNames();
+    return cppu::acquire(new PagesImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

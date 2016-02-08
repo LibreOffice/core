@@ -40,14 +40,21 @@ bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
     return false;
 }
 
-OUString AbiWordImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL AbiWordImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.AbiWordImportFilter");
 }
 
-Sequence< OUString > SAL_CALL AbiWordImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
@@ -56,27 +63,13 @@ throw (RuntimeException)
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL AbiWordImportFilter_createInstance(const Reference< XComponentContext > &rContext)
-throw(Exception)
+extern "C"
+SAL_DLLPUBLIC_EXPORT css::uno::XInterface *SAL_CALL
+com_sun_star_comp_Writer_AbiWordImportFilter_get_implementation(
+    css::uno::XComponentContext *const context,
+    const css::uno::Sequence<css::uno::Any> &)
 {
-    return static_cast<cppu::OWeakObject *>(new AbiWordImportFilter(rContext));
-}
-
-// XServiceInfo
-OUString SAL_CALL AbiWordImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return AbiWordImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return AbiWordImportFilter_getSupportedServiceNames();
+    return cppu::acquire(new AbiWordImportFilter(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -130,19 +130,6 @@ public:
 
 };
 
-OUString WordPerfectImportFilterDialog_getImplementationName()
-throw (css::uno::RuntimeException);
-
-bool SAL_CALL WordPerfectImportFilterDialog_supportsService(const OUString &ServiceName)
-throw (css::uno::RuntimeException);
-
-css::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames()
-throw (css::uno::RuntimeException);
-
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL WordPerfectImportFilterDialog_createInstance(const css::uno::Reference< css::uno::XComponentContext > &rContext)
-throw (css::uno::Exception);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
