@@ -426,9 +426,18 @@ public:
                             const CellAddress& rBaseAddress,
                             const OUString& rFormulaString );
 
+    virtual ApiTokenSequence importOoxFormulaSc(
+                            const ScAddress& rBaseAddress,
+                            const OUString& rFormulaString );
+
     /** Imports and converts a BIFF12 token array from the passed stream. */
     virtual ApiTokenSequence importBiff12Formula(
                             const CellAddress& rBaseAddress,
+                            FormulaType eType,
+                            SequenceInputStream& rStrm );
+
+    virtual ApiTokenSequence importBiff12FormulaSc(
+                            const ScAddress& rBaseAddress,
                             FormulaType eType,
                             SequenceInputStream& rStrm );
 
@@ -579,11 +588,24 @@ ApiTokenSequence FormulaParserImpl::importOoxFormula( const CellAddress&, const 
     return ApiTokenSequence();
 }
 
+ApiTokenSequence FormulaParserImpl::importOoxFormulaSc( const ScAddress&, const OUString& )
+{
+    OSL_FAIL( "FormulaParserImpl::importOoxFormula - not implemented" );
+    return ApiTokenSequence();
+}
+
 ApiTokenSequence FormulaParserImpl::importBiff12Formula( const CellAddress&, FormulaType, SequenceInputStream& )
 {
     SAL_WARN("sc", "FormulaParserImpl::importBiff12Formula - not implemented" );
     return ApiTokenSequence();
 }
+
+ApiTokenSequence FormulaParserImpl::importBiff12FormulaSc( const ScAddress&, FormulaType, SequenceInputStream& )
+{
+    SAL_WARN("sc", "FormulaParserImpl::importBiff12Formula - not implemented" );
+    return ApiTokenSequence();
+}
+
 
 OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const
 {
@@ -2522,6 +2544,16 @@ ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, 
 ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, FormulaType eType, SequenceInputStream& rStrm ) const
 {
     return mxImpl->importBiff12Formula( rBaseAddress, eType, rStrm );
+}
+
+ApiTokenSequence FormulaParser::importFormula( const ScAddress& rBaseAddress, const OUString& rFormulaString ) const
+{
+    return mxImpl->importOoxFormulaSc( rBaseAddress, rFormulaString );
+}
+
+ApiTokenSequence FormulaParser::importFormula( const ScAddress& rBaseAddress, FormulaType eType, SequenceInputStream& rStrm ) const
+{
+    return mxImpl->importBiff12FormulaSc( rBaseAddress, eType, rStrm );
 }
 
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )

@@ -95,6 +95,14 @@ bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
         (maFormulaRef.StartRow <= rCellAddr.Row) && (rCellAddr.Row <= maFormulaRef.EndRow);
 }
 
+bool CellFormulaModel::isValidSharedRef( const ScAddress& rCellAddr )
+{
+    return
+        (maFormulaRef.Sheet == rCellAddr.Tab() ) &&
+        (maFormulaRef.StartColumn <= rCellAddr.Col() ) && (rCellAddr.Col() <= maFormulaRef.EndColumn) &&
+        (maFormulaRef.StartRow <= rCellAddr.Row() ) && (rCellAddr.Row() <= maFormulaRef.EndRow);
+}
+
 DataTableModel::DataTableModel() :
     mb2dTable( false ),
     mbRowTable( false ),
@@ -256,7 +264,7 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
             aTokens = resolveSharedFormula( aTokenInfo.First );
             if( !aTokens.hasElements() )
             {
-                maSharedFmlaAddr = rModel.maCellAddr;
+                maSharedFmlaAddr = ( CellAddress( rModel.maCellAddr.Tab(), rModel.maCellAddr.Col(), rModel.maCellAddr.Row() ) );    //should change this later
                 maSharedBaseAddr = aTokenInfo.First;
                 mbPendingSharedFmla = true;
             }
@@ -315,6 +323,21 @@ void SheetDataBuffer::setMergedRange( const CellRangeAddress& rRange )
 }
 
 void SheetDataBuffer::setStandardNumFmt( const CellAddress& rCellAddr, sal_Int16 nStdNumFmt )
+{
+    try
+    {
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY_THROW );
+        Reference< XNumberFormatTypes > xNumFmtTypes( xNumFmtsSupp->getNumberFormats(), UNO_QUERY_THROW );
+        sal_Int32 nIndex = xNumFmtTypes->getStandardFormat( nStdNumFmt, Locale() );
+        PropertySet aPropSet( getCell( rCellAddr ) );
+        aPropSet.setProperty( PROP_NumberFormat, nIndex );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void SheetDataBuffer::setStandardNumFmt( const ScAddress& rCellAddr, sal_Int16 nStdNumFmt )
 {
     try
     {
@@ -544,10 +567,27 @@ SheetDataBuffer::MergedRange::MergedRange( const CellAddress& rAddress, sal_Int3
 {
 }
 
+SheetDataBuffer::MergedRange::MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign ) :
+    maRange( rAddress.Tab(), rAddress.Col(), rAddress.Row(), rAddress.Col(), rAddress.Row() ),
+    mnHorAlign( nHorAlign )
+{
+}
+
 bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_Int32 nHorAlign )
 {
     if( (mnHorAlign == nHorAlign) && (maRange.StartRow == rAddress.Row) &&
         (maRange.EndRow == rAddress.Row) && (maRange.EndColumn + 1 == rAddress.Column) )
+    {
+        ++maRange.EndColumn;
+        return true;
+    }
+    return false;
+}
+
+bool SheetDataBuffer::MergedRange::tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign )
+{
+    if( (mnHorAlign == nHorAlign) && (maRange.StartRow == rAddress.Row() ) &&
+        (maRange.EndRow == rAddress.Row() ) && (maRange.EndColumn + 1 == rAddress.Col() ) )
     {
         ++maRange.EndColumn;
         return true;
@@ -562,6 +602,15 @@ void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTok
         putFormulaTokens( rCellAddr, rTokens );
     }
 }
+
+void SheetDataBuffer::setCellFormula( const ScAddress& rCellAddr, const ApiTokenSequence& rTokens )
+{
+    if( rTokens.hasElements() )
+    {
+        putFormulaTokens( rCellAddr, rTokens );
+    }
+}
+
 
 ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const CellAddress& rAddr ) const
 {
@@ -664,18 +713,18 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
          * It is sufficient to check if the row range size is one
          */
         if(     aIt                 != aItEnd &&
-                aIt->Sheet          == rModel.maCellAddr.Sheet &&
+                aIt->Sheet          == rModel.maCellAddr.Tab() &&
                 aIt->StartRow       == aIt->EndRow &&
-                aIt->StartRow       == rModel.maCellAddr.Row &&
-                (aIt->EndColumn+1)  == rModel.maCellAddr.Column )
+                aIt->StartRow       == rModel.maCellAddr.Row() &&
+                (aIt->EndColumn+1)  == rModel.maCellAddr.Col() )
         {
             aIt->EndColumn++;       // Expand Column
         }
         else
         {
             maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, nNumFmtId ) ].push_back(
-                              CellRangeAddress( rModel.maCellAddr.Sheet, rModel.maCellAddr.Column, rModel.maCellAddr.Row,
-                              rModel.maCellAddr.Column, rModel.maCellAddr.Row ) );
+                              CellRangeAddress( rModel.maCellAddr.Tab(), rModel.maCellAddr.Col(), rModel.maCellAddr.Row(),
+                              rModel.maCellAddr.Col(), rModel.maCellAddr.Row() ) );
         }
 
         aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();

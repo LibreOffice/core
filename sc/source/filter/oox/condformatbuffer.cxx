@@ -489,7 +489,7 @@ void CondFormatRule::importCfRule( const AttributeList& rAttribs )
 
 void CondFormatRule::appendFormula( const OUString& rFormula )
 {
-    CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+    ScAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
     ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, rFormula );
     maModel.maFormulas.push_back( aTokens );
 }
@@ -520,7 +520,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     SAL_WARN_IF( !( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8) ), "sc.filter", "CondFormatRule::importCfRule - formula size mismatch" );
     if( rStrm.getRemaining() >= 8 )
     {
-        CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+        ScAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
         ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
         maModel.maFormulas.push_back( aTokens );
 
@@ -862,9 +862,7 @@ void CondFormatRule::finalizeImport()
         eOperator = SC_COND_DIRECT;
     }
 
-    CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
-    ScAddress aPos;
-    ScUnoConversion::FillScAddress( aPos, aBaseAddr );
+    ScAddress aPos = mrCondFormat.getRanges().getBaseAddress();
 
     if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
     {
@@ -1078,7 +1076,7 @@ void CondFormat::finalizeImport()
         return;
     ScDocument& rDoc = getScDocument();
     maRules.forEachMem( &CondFormatRule::finalizeImport );
-    SCTAB nTab = maModel.maRanges.getBaseAddress().Sheet;
+    SCTAB nTab = maModel.maRanges.getBaseAddress().Tab();
     sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
     ScRangeList aList;

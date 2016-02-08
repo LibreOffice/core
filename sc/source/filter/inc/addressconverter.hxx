@@ -72,8 +72,7 @@ public:
     { mvAddresses.push_back( rAddress ); }
 
     /** Returns the base address of this range list (top-left cell of first range). */
-    css::table::CellAddress
-                        getBaseAddress() const;
+    ScAddress getBaseAddress() const;
 
     /** Converts to a sequence. */
     css::uno::Sequence< css::table::CellRangeAddress >
@@ -92,6 +91,7 @@ struct BinAddress
     inline explicit     BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
     inline explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
     inline explicit     BinAddress( const css::table::CellAddress& rAddr ) : mnCol( rAddr.Column ), mnRow( rAddr.Row ) {}
+    inline explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
@@ -288,6 +288,17 @@ public:
                             const css::table::CellAddress& rAddress,
                             bool bTrackOverflow );
 
+    /** Checks the passed cell address if it fits into the spreadsheet limits.
+
+        @param rAddress  The cell address to be checked.
+        @param bTrackOverflow  true = Update the internal overflow flags, if
+            the address is outside of the supported sheet limits.
+        @return  true = Passed address is valid (no index overflow).
+     */
+    bool                checkCellAddress(
+                            const ScAddress& rAddress,
+                            bool bTrackOverflow );
+
     /** Converts the passed string to a single cell address, without checking
         any sheet limits.
 
@@ -301,8 +312,24 @@ public:
                             const OUString& rString,
                             sal_Int16 nSheet );
 
+    /** Converts the passed string to a single cell address, without checking
+        any sheet limits.
+
+        @param orAddress  (out-parameter) Returns the converted cell address.
+        @param rString  Cell address string in A1 notation.
+        @param nSheet  Sheet index to be inserted into orAddress.
+        @return  true = Cell address could be parsed from the passed string.
+     */
+    static bool        convertToCellAddressUnchecked(
+                            ScAddress& orAddress,
+                            const OUString& rString,
+                            sal_Int16 nSheet );
+
     static bool convertToCellAddressUnchecked(
         css::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet );
+
+    static bool convertToCellAddressUnchecked(
+        ScAddress& orAddress, const char* pStr, sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a single cell address.
 
@@ -319,8 +346,27 @@ public:
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 
+    /** Tries to convert the passed string to a single cell address.
+
+        @param orAddress  (out-parameter) Returns the converted cell address.
+        @param rString  Cell address string in A1 notation.
+        @param nSheet  Sheet index to be inserted into orAddress (will be checked).
+        @param bTrackOverflow  true = Update the internal overflow flags, if
+            the address is outside of the supported sheet limits.
+        @return  true = Converted address is valid (no index overflow).
+     */
+    bool                convertToCellAddress(
+                            ScAddress& orAddress,
+                            const OUString& rString,
+                            sal_Int16 nSheet,
+                            bool bTrackOverflow );
+
     bool convertToCellAddress(
         css::table::CellAddress& rAddress,
+        const char* pStr, sal_Int16 nSheet, bool bTrackOverflow );
+
+    bool convertToCellAddress(
+        ScAddress& rAddress,
         const char* pStr, sal_Int16 nSheet, bool bTrackOverflow );
 
     /** Returns a valid cell address by moving it into allowed dimensions.
@@ -348,6 +394,18 @@ public:
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet );
 
+    /** Converts the passed address to a single cell address, without checking
+        any sheet limits.
+
+        @param orAddress  (out-parameter) Returns the converted cell address.
+        @param rBinAddress  Binary cell address struct.
+        @param nSheet  Sheet index to be inserted into orAddress.
+     */
+    static void        convertToCellAddressUnchecked(
+                            ScAddress& orAddress,
+                            const BinAddress& rBinAddress,
+                            sal_Int16 nSheet );
+
     /** Tries to convert the passed address to a single cell address.
 
         @param orAddress  (out-parameter) Returns the converted cell address.
@@ -359,6 +417,21 @@ public:
      */
     bool                convertToCellAddress(
                             css::table::CellAddress& orAddress,
+                            const BinAddress& rBinAddress,
+                            sal_Int16 nSheet,
+                            bool bTrackOverflow );
+
+    /** Tries to convert the passed address to a single cell address.
+
+        @param orAddress  (out-parameter) Returns the converted cell address.
+        @param rBinAddress  Binary cell address struct.
+        @param nSheet  Sheet index to be inserted into orAddress (will be checked).
+        @param bTrackOverflow  true = Update the internal overflow flags, if
+            the address is outside of the supported sheet limits.
+        @return  true = Converted address is valid (no index overflow).
+     */
+    bool                convertToCellAddress(
+                            ScAddress& orAddress,
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
