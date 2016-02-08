@@ -27,12 +27,9 @@
 
 namespace avmedia { namespace gstreamer {
 
-
-// - FrameGrabber -
-
-
 typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                 css::lang::XServiceInfo > FrameGrabber_BASE;
+
 
 class FrameGrabber : public FrameGrabber_BASE, private boost::noncopyable
 {

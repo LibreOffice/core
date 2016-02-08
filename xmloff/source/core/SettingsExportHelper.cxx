@@ -210,7 +210,7 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const OUString
     m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
     m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUStringBuffer sBuffer;
-	::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
+    ::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( false );
 }
@@ -222,7 +222,7 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const OUString& 
     m_rContext.AddAttribute( XML_TYPE, XML_INT );
     m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUStringBuffer sBuffer;
-	::sax::Converter::convertNumber(sBuffer, nValue);
+    ::sax::Converter::convertNumber(sBuffer, nValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( false );
 }
@@ -245,7 +245,7 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const OUString& 
     m_rContext.AddAttribute( XML_TYPE, XML_DOUBLE );
     m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUStringBuffer sBuffer;
-	::sax::Converter::convertDouble(sBuffer, fValue);
+    ::sax::Converter::convertDouble(sBuffer, fValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( false );
 }
@@ -352,7 +352,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
     if(nLength)
     {
         OUStringBuffer sBuffer;
-		::sax::Converter::encodeBase64(sBuffer, aProps);
+        ::sax::Converter::encodeBase64(sBuffer, aProps);
         m_rContext.Characters( sBuffer.makeStringAndClear() );
     }
     m_rContext.EndElement( false );

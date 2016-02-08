@@ -27,10 +27,6 @@
 
 class DataChangedEvent;
 
-
-// - ScrollableWindow-Type -
-
-
 enum class ScrollableWindowFlags
 {
     THUMBDRAGGING = 1,
@@ -38,13 +34,11 @@ enum class ScrollableWindowFlags
     HCENTER       = 4,
     DEFAULT       = THUMBDRAGGING | VCENTER | HCENTER,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<ScrollableWindowFlags> : is_typed_flags<ScrollableWindowFlags, 0x07> {};
 }
-
-
-// - ScrollableWindow -
 
 
 class SVT_DLLPUBLIC ScrollableWindow: public vcl::Window
@@ -55,9 +49,9 @@ private:
     long            nLinePixH;          // size of a line/column (pixel)
     long            nColumnPixW;
 
-    VclPtr<ScrollBar>    aVScroll;           // the scrollbars
+    VclPtr<ScrollBar>    aVScroll;      // the scrollbars
     VclPtr<ScrollBar>    aHScroll;
-    VclPtr<ScrollBarBox> aCornerWin;         // window in the bottom right corner
+    VclPtr<ScrollBarBox> aCornerWin;    // window in the bottom right corner
     bool            bScrolling:1,       // user controlled scrolling
                     bHandleDragging:1,  // scroll window while dragging
                     bHCenter:1,

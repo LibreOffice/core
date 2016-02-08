@@ -24,10 +24,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-
-// - ImpPDFDialog -
-
-
 ImpSWFDialog::ImpSWFDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent, "ImpSWFDialog", "filter/ui/impswfdialog.ui" ),
 
@@ -57,11 +53,11 @@ ImpSWFDialog::ImpSWFDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
 }
 
 
-
 ImpSWFDialog::~ImpSWFDialog()
 {
     disposeOnce();
 }
+
 
 void ImpSWFDialog::dispose()
 {
@@ -95,7 +91,8 @@ Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
     return aRet;
 }
 
-// AS: This is called whenever the user toggles one of the checkboxes
+
+/// This is called whenever the user toggles one of the checkboxes
 IMPL_LINK_TYPED( ImpSWFDialog, OnToggleCheckbox, CheckBox&, rBox, void )
 {
     if (&rBox == mpCheckExportAll)

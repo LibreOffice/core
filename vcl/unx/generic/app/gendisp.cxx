@@ -74,9 +74,9 @@ bool SalGenericDisplay::DispatchInternalEvent()
         osl::MutexGuard g( m_aEventGuard );
         if( !m_aUserEvents.empty() )
         {
-            pFrame	= m_aUserEvents.front().m_pFrame;
-            pData	= m_aUserEvents.front().m_pData;
-            nEvent	= m_aUserEvents.front().m_nEvent;
+            pFrame  = m_aUserEvents.front().m_pFrame;
+            pData   = m_aUserEvents.front().m_pData;
+            nEvent  = m_aUserEvents.front().m_nEvent;
 
             m_aUserEvents.pop_front();
         }

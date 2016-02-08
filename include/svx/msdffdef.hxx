@@ -98,58 +98,61 @@ enum DFF_TextHeader {
 // 1" = 12700*72 = 914400 EMU
 // 1" = 25.4mm
 // 1mm = 36000 EMU
+
+
+//      Record Name                     FBT-Value Instance                  Contents                                                          Wrd Exl Ppt Ver
 // Transform
 #define DFF_Prop_Rotation                      4  //  Fixed Point 16.16 degrees
 // Protection
 #define DFF_Prop_LockAgainstGrouping         127  //  sal_Bool              Do not group this shape
 // Text
-#define DFF_Prop_lTxid                       128  //  LONG              id for the text, value determined by the host
-#define DFF_Prop_dxTextLeft                  129  //  LONG              margins relative to shape's inscribed text rectangle (in EMUs)
+#define DFF_Prop_lTxid                       128  //  LONG                  id for the text, value determined by the host
+#define DFF_Prop_dxTextLeft                  129  //  LONG                  margins relative to shape's inscribed text rectangle (in EMUs)
 #define DFF_Prop_dyTextTop                   130  //  LONG
 #define DFF_Prop_dxTextRight                 131  //  LONG
 #define DFF_Prop_dyTextBottom                132  //  LONG
-#define DFF_Prop_WrapText                    133  //  MSO_WRAPMODE       Wrap text at shape margins
-#define DFF_Prop_anchorText                  135  //  MSO_ANCHOR         How to anchor the text
-#define DFF_Prop_txflTextFlow                136  //  MSO_TXFL           Text flow
-#define DFF_Prop_cdirFont                    137  //  MSO_CDIR           Font rotation
-#define DFF_Prop_hspNext                     138  //  MSO_HSP            ID of the next shape (used by Word for linked textboxes)
+#define DFF_Prop_WrapText                    133  //  MSO_WRAPMODE          Wrap text at shape margins
+#define DFF_Prop_anchorText                  135  //  MSO_ANCHOR            How to anchor the text
+#define DFF_Prop_txflTextFlow                136  //  MSO_TXFL              Text flow
+#define DFF_Prop_cdirFont                    137  //  MSO_CDIR              Font rotation
+#define DFF_Prop_hspNext                     138  //  MSO_HSP               ID of the next shape (used by Word for linked textboxes)
 #define DFF_Prop_AutoTextMargin              188  //  sal_Bool              use host's margin calculations
 #define DFF_Prop_RotateText                  189  //  sal_Bool              Rotate text with shape
 #define DFF_Prop_FitTextToShape              191  //  sal_Bool              Size text to fit shape size
 // GeoText
-#define DFF_Prop_gtextUNICODE                192  //  WCHAR*            UNICODE text string
-#define DFF_Prop_gtextAlign                  194  //  MSO_GEOTEXTALIGN   alignment on curve
-#define DFF_Prop_gtextSize                   195  //  LONG              default point size
-#define DFF_Prop_gtextSpacing                196  //  LONG              fixed point 16.16
-#define DFF_Prop_gtextFont                   197  //  WCHAR*            font family name
+#define DFF_Prop_gtextUNICODE                192  //  WCHAR*                UNICODE text string
+#define DFF_Prop_gtextAlign                  194  //  MSO_GEOTEXTALIGN      alignment on curve
+#define DFF_Prop_gtextSize                   195  //  LONG                  default point size
+#define DFF_Prop_gtextSpacing                196  //  LONG                  fixed point 16.16
+#define DFF_Prop_gtextFont                   197  //  WCHAR*                font family name
 #define DFF_Prop_gtextFStretch               245  //  sal_Bool   400        Stretch to fit shape
 #define DFF_Prop_gtextFBold                  250  //  sal_Bool    20        Bold font
 #define DFF_Prop_gtextFItalic                251  //  sal_Bool    10        Italic font
 #define DFF_Prop_gtextFStrikethrough         255  //  sal_Bool     1        Strike through font
 // Blip
-#define DFF_Prop_cropFromTop                 256  //  LONG              16.16 fraction times total image width or height, as appropriate.
+#define DFF_Prop_cropFromTop                 256  //  LONG                  16.16 fraction times total image width or height, as appropriate.
 #define DFF_Prop_cropFromBottom              257  //  LONG
 #define DFF_Prop_cropFromLeft                258  //  LONG
 #define DFF_Prop_cropFromRight               259  //  LONG
-#define DFF_Prop_pib                         260  //  IMsoBlip*         Blip to display
-#define DFF_Prop_pibName                     261  //  WCHAR*            Blip file name
-#define DFF_Prop_pibFlags                    262  //  MSO_BLIPFLAGS      Blip flags
-#define DFF_Prop_pictureTransparent          263  //  LONG              transparent color (none if ~0UL)
-#define DFF_Prop_pictureContrast             264  //  LONG              contrast setting
-#define DFF_Prop_pictureBrightness           265  //  LONG              brightness setting
-#define DFF_Prop_pictureGamma                266  //  LONG              16.16 gamma
-#define DFF_Prop_pictureId                   267  //  LONG              Host-defined ID for OLE objects (usually a pointer)
+#define DFF_Prop_pib                         260  //  IMsoBlip*             Blip to display
+#define DFF_Prop_pibName                     261  //  WCHAR*                Blip file name
+#define DFF_Prop_pibFlags                    262  //  MSO_BLIPFLAGS         Blip flags
+#define DFF_Prop_pictureTransparent          263  //  LONG                  transparent color (none if ~0UL)
+#define DFF_Prop_pictureContrast             264  //  LONG                  contrast setting
+#define DFF_Prop_pictureBrightness           265  //  LONG                  brightness setting
+#define DFF_Prop_pictureGamma                266  //  LONG                  16.16 gamma
+#define DFF_Prop_pictureId                   267  //  LONG                  Host-defined ID for OLE objects (usually a pointer)
 #define DFF_Prop_pictureActive               319  //  sal_Bool              Server is active (OLE objects only)
 // Geometry
-#define DFF_Prop_geoLeft                     320  //  LONG              Defines the G (geometry) coordinate space.
+#define DFF_Prop_geoLeft                     320  //  LONG                  Defines the G (geometry) coordinate space.
 #define DFF_Prop_geoTop                      321  //  LONG
 #define DFF_Prop_geoRight                    322  //  LONG
 #define DFF_Prop_geoBottom                   323  //  LONG
-#define DFF_Prop_pVertices                   325  //  IMsoArray         An array of points, in G units.
+#define DFF_Prop_pVertices                   325  //  IMsoArray             An array of points, in G units.
 #define DFF_Prop_pSegmentInfo                326  //  IMsoArray
-#define DFF_Prop_adjustValue                 327  //  LONG              Adjustment values corresponding to the positions of the
-#define DFF_Prop_adjust2Value                328  //  LONG              adjust handles of the shape. The number of values used
-#define DFF_Prop_adjust3Value                329  //  LONG              and their allowable ranges vary from shape type to shape type.
+#define DFF_Prop_adjustValue                 327  //  LONG                  Adjustment values corresponding to the positions of the
+#define DFF_Prop_adjust2Value                328  //  LONG                  adjust handles of the shape. The number of values used
+#define DFF_Prop_adjust3Value                329  //  LONG                  and their allowable ranges vary from shape type to shape type.
 #define DFF_Prop_adjust4Value                330  //  LONG
 #define DFF_Prop_adjust5Value                331  //  LONG
 #define DFF_Prop_adjust6Value                332  //  LONG
@@ -163,112 +166,112 @@ enum DFF_TextHeader {
 #define DFF_Prop_Handles                     341  //  H*
 #define DFF_Prop_pFormulas                   342  //  LONG
 #define DFF_Prop_textRectangles              343  //  LONG
-#define DFF_Prop_connectorType               344  //  LONG              ->0=none, 1=segments, 2=custom, 3=rect
+#define DFF_Prop_connectorType               344  //  LONG                  ->0=none, 1=segments, 2=custom, 3=rect
 #define DFF_Prop_f3DOK                       379  //  sal_Bool              3D may be set
 #define DFF_Prop_fGtextOK                    381  //  sal_Bool              Text effect (FontWork) supported
 #define DFF_Prop_fFillShadeShapeOK           382  //  BOOL
 #define DFF_Prop_fFillOK                     383  //  sal_Bool              OK to fill the shape through the UI or VBA?
 // FillStyle
-#define DFF_Prop_fillType                    384  //  MSO_FILLTYPE       Type of fill
-#define DFF_Prop_fillColor                   385  //  MSO_CLR            Foreground color
-#define DFF_Prop_fillOpacity                 386  //  LONG              Fixed 16.16
-#define DFF_Prop_fillBackColor               387  //  MSO_CLR            Background color
-#define DFF_Prop_fillBackOpacity             388  //  LONG              Shades only
-#define DFF_Prop_fillBlip                    390  //  IMsoBlip*         Pattern/texture
-#define DFF_Prop_fillWidth                   393  //  LONG              How big (A units) to make a metafile texture.
+#define DFF_Prop_fillType                    384  //  MSO_FILLTYPE          Type of fill
+#define DFF_Prop_fillColor                   385  //  MSO_CLR               Foreground color
+#define DFF_Prop_fillOpacity                 386  //  LONG                  Fixed 16.16
+#define DFF_Prop_fillBackColor               387  //  MSO_CLR               Background color
+#define DFF_Prop_fillBackOpacity             388  //  LONG                  Shades only
+#define DFF_Prop_fillBlip                    390  //  IMsoBlip*             Pattern/texture
+#define DFF_Prop_fillWidth                   393  //  LONG                  How big (A units) to make a metafile texture.
 #define DFF_Prop_fillHeight                  394  //  LONG
-#define DFF_Prop_fillAngle                   395  //  LONG              Fade angle - degrees in 16.16
-#define DFF_Prop_fillFocus                   396  //  LONG              Linear shaded fill focus percent
-#define DFF_Prop_fillToRight                 399  //  LONG              Fraction 16.16
-#define DFF_Prop_fillToBottom                400  //  LONG              Fraction 16.16
-#define DFF_Prop_fillShadeColors             407  //  IMsoArray         a preset array of colors
+#define DFF_Prop_fillAngle                   395  //  LONG                  Fade angle - degrees in 16.16
+#define DFF_Prop_fillFocus                   396  //  LONG                  Linear shaded fill focus percent
+#define DFF_Prop_fillToRight                 399  //  LONG                  Fraction 16.16
+#define DFF_Prop_fillToBottom                400  //  LONG                  Fraction 16.16
+#define DFF_Prop_fillShadeColors             407  //  IMsoArray             a preset array of colors
 #define DFF_Prop_fFilled                     443  //  sal_Bool              Is shape filled?
 #define DFF_Prop_fNoFillHitTest              447  //  sal_Bool              Hit test a shape as though filled
 // LineStyle
-#define DFF_Prop_lineColor                   448  //  MSO_CLR            Color of line
-#define DFF_Prop_lineOpacity                 449  //  LONG              Not implemented
-#define DFF_Prop_lineBackColor               450  //  MSO_CLR            Background color
-#define DFF_Prop_lineWidth                   459  //  LONG              A units; 1pt == 12700 EMUs
-#define DFF_Prop_lineStyle                   461  //  MSO_LINESTYLE      Draw parallel lines?
-#define DFF_Prop_lineDashing                 462  //  MSO_LINEDASHING    Can be overridden by:
-#define DFF_Prop_lineDashStyle               463  //  IMsoArray         As Win32 ExtCreatePen
-#define DFF_Prop_lineStartArrowhead          464  //  MSO_LINEEND        Arrow at start
-#define DFF_Prop_lineEndArrowhead            465  //  MSO_LINEEND        Arrow at end
-#define DFF_Prop_lineStartArrowWidth         466  //  MSO_LINEENDWIDTH   Arrow at start
-#define DFF_Prop_lineStartArrowLength        467  //  MSO_LINEENDLENGTH  Arrow at end
-#define DFF_Prop_lineEndArrowWidth           468  //  MSO_LINEENDWIDTH   Arrow at start
-#define DFF_Prop_lineEndArrowLength          469  //  MSO_LINEENDLENGTH  Arrow at end
-#define DFF_Prop_lineJoinStyle               470  //  MSO_LINEJOIN       How to join lines
-#define DFF_Prop_lineEndCapStyle             471  //  MSO_LINECAP        How to end lines
+#define DFF_Prop_lineColor                   448  //  MSO_CLR               Color of line
+#define DFF_Prop_lineOpacity                 449  //  LONG                  Not implemented
+#define DFF_Prop_lineBackColor               450  //  MSO_CLR               Background color
+#define DFF_Prop_lineWidth                   459  //  LONG                  A units; 1pt == 12700 EMUs
+#define DFF_Prop_lineStyle                   461  //  MSO_LINESTYLE         Draw parallel lines?
+#define DFF_Prop_lineDashing                 462  //  MSO_LINEDASHING       Can be overridden by:
+#define DFF_Prop_lineDashStyle               463  //  IMsoArray             As Win32 ExtCreatePen
+#define DFF_Prop_lineStartArrowhead          464  //  MSO_LINEEND           Arrow at start
+#define DFF_Prop_lineEndArrowhead            465  //  MSO_LINEEND           Arrow at end
+#define DFF_Prop_lineStartArrowWidth         466  //  MSO_LINEENDWIDTH      Arrow at start
+#define DFF_Prop_lineStartArrowLength        467  //  MSO_LINEENDLENGTH     Arrow at end
+#define DFF_Prop_lineEndArrowWidth           468  //  MSO_LINEENDWIDTH      Arrow at start
+#define DFF_Prop_lineEndArrowLength          469  //  MSO_LINEENDLENGTH     Arrow at end
+#define DFF_Prop_lineJoinStyle               470  //  MSO_LINEJOIN          How to join lines
+#define DFF_Prop_lineEndCapStyle             471  //  MSO_LINECAP           How to end lines
 #define DFF_Prop_fLine                       508  //  sal_Bool              Any line?
 #define DFF_Prop_fNoLineDrawDash             511  //  sal_Bool              Draw a dashed line if no line
 // ShadowStyle
-#define DFF_Prop_shadowType                  512  //  MSO_SHADOWTYPE     Type of effect
-#define DFF_Prop_shadowColor                 513  //  MSO_CLR            Foreground color
-#define DFF_Prop_shadowOpacity               516  //  LONG              Fixed 16.16
-#define DFF_Prop_shadowOffsetX               517  //  LONG              Offset shadow
-#define DFF_Prop_shadowOffsetY               518  //  LONG              Offset shadow
+#define DFF_Prop_shadowType                  512  //  MSO_SHADOWTYPE        Type of effect
+#define DFF_Prop_shadowColor                 513  //  MSO_CLR               Foreground color
+#define DFF_Prop_shadowOpacity               516  //  LONG                  Fixed 16.16
+#define DFF_Prop_shadowOffsetX               517  //  LONG                  Offset shadow
+#define DFF_Prop_shadowOffsetY               518  //  LONG                  Offset shadow
 #define DFF_Prop_fshadowObscured             575  //  sal_Bool              Excel5-style shadow
 // PerspectiveStyle
 #define DFF_Prop_fPerspective                639  //  sal_Bool              On/off
 // 3D Object
-#define DFF_Prop_c3DSpecularAmt              640  //  LONG         Fixed-point 16.16
-#define DFF_Prop_c3DDiffuseAmt               641  //  LONG         Fixed-point 16.16
-#define DFF_Prop_c3DShininess                642  //  LONG         Default gives OK results
-#define DFF_Prop_c3DExtrudeForward           644  //  LONG         Distance of extrusion in EMUs
+#define DFF_Prop_c3DSpecularAmt              640  //  LONG                  Fixed-point 16.16
+#define DFF_Prop_c3DDiffuseAmt               641  //  LONG                  Fixed-point 16.16
+#define DFF_Prop_c3DShininess                642  //  LONG                  Default gives OK results
+#define DFF_Prop_c3DExtrudeForward           644  //  LONG                  Distance of extrusion in EMUs
 #define DFF_Prop_c3DExtrudeBackward          645  //  LONG
-#define DFF_Prop_c3DExtrusionColor           647  //  MSO_CLR       Basic color of extruded part of shape; the lighting model used will determine the exact shades used when rendering.
+#define DFF_Prop_c3DExtrusionColor           647  //  MSO_CLR               Basic color of extruded part of shape; the lighting model used will determine the exact shades used when rendering.
 #define DFF_Prop_fc3DLightFace               703  //  BOOL
 // 3D Style
-#define DFF_Prop_c3DYRotationAngle           704  //  LONG            degrees (16.16) about y axis
-#define DFF_Prop_c3DXRotationAngle           705  //  LONG            degrees (16.16) about x axis
-#define DFF_Prop_c3DRotationCenterX          710  //  LONG            rotation center x (16.16 or g-units)
-#define DFF_Prop_c3DRotationCenterY          711  //  LONG            rotation center y (16.16 or g-units)
-#define DFF_Prop_c3DRotationCenterZ          712  //  LONG            rotation center z (absolute (emus))
-#define DFF_Prop_c3DRenderMode               713  //  MSO_3DRENDERMODE Full,wireframe, or bcube
-#define DFF_Prop_c3DTolerance                714  //  LONG            pixels (16.16)
-#define DFF_Prop_c3DXViewpoint               715  //  LONG            X view point (emus)
-#define DFF_Prop_c3DYViewpoint               716  //  LONG            Y view point (emus)
-#define DFF_Prop_c3DZViewpoint               717  //  LONG            Z view distance (emus)
+#define DFF_Prop_c3DYRotationAngle           704  //  LONG                  degrees (16.16) about y axis
+#define DFF_Prop_c3DXRotationAngle           705  //  LONG                  degrees (16.16) about x axis
+#define DFF_Prop_c3DRotationCenterX          710  //  LONG                  rotation center x (16.16 or g-units)
+#define DFF_Prop_c3DRotationCenterY          711  //  LONG                  rotation center y (16.16 or g-units)
+#define DFF_Prop_c3DRotationCenterZ          712  //  LONG                  rotation center z (absolute (emus))
+#define DFF_Prop_c3DRenderMode               713  //  MSO_3DRENDERMODE      Full,wireframe, or bcube
+#define DFF_Prop_c3DTolerance                714  //  LONG                  pixels (16.16)
+#define DFF_Prop_c3DXViewpoint               715  //  LONG                  X view point (emus)
+#define DFF_Prop_c3DYViewpoint               716  //  LONG                  Y view point (emus)
+#define DFF_Prop_c3DZViewpoint               717  //  LONG                  Z view distance (emus)
 #define DFF_Prop_c3DOriginX                  718  //  LONG
 #define DFF_Prop_c3DOriginY                  719  //  LONG
-#define DFF_Prop_c3DSkewAngle                720  //  LONG            degree (16.16) skew angle
-#define DFF_Prop_c3DSkewAmount               721  //  LONG            Percentage skew amount
-#define DFF_Prop_c3DAmbientIntensity         722  //  LONG            Fixed point intensity
-#define DFF_Prop_c3DKeyX                     723  //  LONG            Key light source direc-
-#define DFF_Prop_c3DKeyY                     724  //  LONG            tion; only their relative
-#define DFF_Prop_c3DKeyZ                     725  //  LONG            magnitudes matter
-#define DFF_Prop_c3DKeyIntensity             726  //  LONG            Fixed point intensity
-#define DFF_Prop_c3DFillX                    727  //  LONG            Fill light source direc-
-#define DFF_Prop_c3DFillY                    728  //  LONG            tion; only their relative
-#define DFF_Prop_c3DFillZ                    729  //  LONG            magnitudes matter
-#define DFF_Prop_c3DFillIntensity            730  //  LONG            Fixed point intensity
-#define DFF_Prop_fc3DFillHarsh               767  //  sal_Bool            Is fill lighting harsh?
+#define DFF_Prop_c3DSkewAngle                720  //  LONG                  degree (16.16) skew angle
+#define DFF_Prop_c3DSkewAmount               721  //  LONG                  Percentage skew amount
+#define DFF_Prop_c3DAmbientIntensity         722  //  LONG                  Fixed point intensity
+#define DFF_Prop_c3DKeyX                     723  //  LONG                  Key light source direc-
+#define DFF_Prop_c3DKeyY                     724  //  LONG                  tion; only their relative
+#define DFF_Prop_c3DKeyZ                     725  //  LONG                  magnitudes matter
+#define DFF_Prop_c3DKeyIntensity             726  //  LONG                  Fixed point intensity
+#define DFF_Prop_c3DFillX                    727  //  LONG                  Fill light source direc-
+#define DFF_Prop_c3DFillY                    728  //  LONG                  tion; only their relative
+#define DFF_Prop_c3DFillZ                    729  //  LONG                  magnitudes matter
+#define DFF_Prop_c3DFillIntensity            730  //  LONG                  Fixed point intensity
+#define DFF_Prop_fc3DFillHarsh               767  //  sal_Bool              Is fill lighting harsh?
 // Shape
-#define DFF_Prop_hspMaster                   769  //  MSO_HSP          master shape
-#define DFF_Prop_cxstyle                     771  //  MSO_CXSTYLE      Type of connector
-#define DFF_Prop_fBackground                 831  //  sal_Bool            If sal_True, this is the background shape.
+#define DFF_Prop_hspMaster                   769  //  MSO_HSP               master shape
+#define DFF_Prop_cxstyle                     771  //  MSO_CXSTYLE           Type of connector
+#define DFF_Prop_fBackground                 831  //  sal_Bool              If sal_True, this is the background shape.
 
 // Callout
-#define DFF_Prop_fCalloutLengthSpecified     895  //  sal_Bool            if true, we look at dxyCalloutLengthSpecified
+#define DFF_Prop_fCalloutLengthSpecified     895  //  sal_Bool              if true, we look at dxyCalloutLengthSpecified
 
 // GroupShape
-#define DFF_Prop_wzName                      896  //  WCHAR*          Shape Name (present only if explicitly set)
-#define DFF_Prop_wzDescription               897  //  WCHAR*          alternate text
-#define DFF_Prop_pihlShape                   898  //  IHlink*         The hyperlink in the shape.
-#define DFF_Prop_pWrapPolygonVertices        899  //  IMsoArray       The polygon that text will be wrapped around (Word)
-#define DFF_Prop_dxWrapDistLeft              900  //  LONG            Left wrapping distance from text (Word)
-#define DFF_Prop_dyWrapDistTop               901  //  LONG            Top wrapping distance from text (Word)
-#define DFF_Prop_dxWrapDistRight             902  //  LONG            Right wrapping distance from text (Word)
-#define DFF_Prop_dyWrapDistBottom            903  //  LONG            Bottom wrapping distance from text (Word)
+#define DFF_Prop_wzName                      896  //  WCHAR*                Shape Name (present only if explicitly set)
+#define DFF_Prop_wzDescription               897  //  WCHAR*                alternate text
+#define DFF_Prop_pihlShape                   898  //  IHlink*               The hyperlink in the shape.
+#define DFF_Prop_pWrapPolygonVertices        899  //  IMsoArray             The polygon that text will be wrapped around (Word)
+#define DFF_Prop_dxWrapDistLeft              900  //  LONG                  Left wrapping distance from text (Word)
+#define DFF_Prop_dyWrapDistTop               901  //  LONG                  Top wrapping distance from text (Word)
+#define DFF_Prop_dxWrapDistRight             902  //  LONG                  Right wrapping distance from text (Word)
+#define DFF_Prop_dyWrapDistBottom            903  //  LONG                  Bottom wrapping distance from text (Word)
 #define DFF_Prop_tableProperties             927  //  LONG
 #define DFF_Prop_tableRowProperties          928  //  LONG*
-#define DFF_Prop_fHidden                     958  //  sal_Bool            Do not display
-#define DFF_Prop_fPrint                      959  //  sal_Bool            Print this shape
+#define DFF_Prop_fHidden                     958  //  sal_Bool              Do not display
+#define DFF_Prop_fPrint                      959  //  sal_Bool              Print this shape
 // entsprechende BitFlags
 
 // properties of the second property set
-#define DFF_Prop_metroBlob					937 // XML ZipPackage*
+#define DFF_Prop_metroBlob                   937  // XML ZipPackage*
 
 // linchpin: the shape type
 enum MSO_SPT: sal_Int32 {

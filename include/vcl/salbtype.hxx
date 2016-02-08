@@ -29,13 +29,11 @@
 #include <vcl/dllapi.h>
 
 
-// - Memory -
 
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;
 
 
-// - Bitmap formats -
 
 #define BMP_FORMAT_BOTTOM_UP                        0x00000000UL
 #define BMP_FORMAT_TOP_DOWN                         0x80000000UL
@@ -86,7 +84,6 @@ d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & maR.mnOr ) >> maR.mnO
     ( (sal_uInt32) (d_rCol).GetBlue() << d_BS ) ) & d_BM ) | \
     d_ALPHA )
 
-// - BitmapColor -
 
 class Color;
 
@@ -139,7 +136,6 @@ public:
     inline sal_uInt16   GetColorError( const BitmapColor& rBitmapColor ) const;
 };
 
-// - BitmapPalette -
 class Palette;
 
 class VCL_DLLPUBLIC BitmapPalette
@@ -223,7 +219,6 @@ struct VCL_DLLPUBLIC ColorMaskElement
     }
 };
 
-// - ColorMask -
 class VCL_DLLPUBLIC ColorMask
 {
     ColorMaskElement        maR;
@@ -264,7 +259,6 @@ public:
     inline void         SetColorFor32Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const;
 };
 
-// - BitmapBuffer -
 struct VCL_DLLPUBLIC BitmapBuffer
 {
     sal_uLong       mnFormat;
@@ -277,7 +271,6 @@ struct VCL_DLLPUBLIC BitmapBuffer
     sal_uInt8*      mpBits;
 };
 
-// - Access modes -
 typedef enum
 {
     BITMAP_INFO_ACCESS,
@@ -286,7 +279,6 @@ typedef enum
 }
 BitmapAccessMode;
 
-// - StretchAndConvert -
 VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
     sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );

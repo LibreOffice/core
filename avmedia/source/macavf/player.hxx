@@ -28,12 +28,6 @@
 
 namespace avmedia { namespace macavf {
 
-/*
-// ----------
-// - Player -
-// ----------
-*/
-
 class Player
 :   public MacAVObserverHandler
 ,   public ::cppu::WeakImplHelper< css::media::XPlayer,

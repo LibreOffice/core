@@ -26,7 +26,6 @@
 class AquaSalFrame;
 class AquaSalObject;
 
-// - SalObjectData -
 
 struct SalObjectData
 {

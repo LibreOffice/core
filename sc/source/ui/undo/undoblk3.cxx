@@ -1419,7 +1419,7 @@ void ScUndoRefreshLink::Undo()
         }
 
     pDocShell->PostPaintGridAll();
-	pDocShell->PostPaintExtras();
+    pDocShell->PostPaintExtras();
 
     EndUndo();
 }
@@ -1450,7 +1450,7 @@ void ScUndoRefreshLink::Redo()
         }
 
     pDocShell->PostPaintGridAll();
-	pDocShell->PostPaintExtras();
+    pDocShell->PostPaintExtras();
 
     EndUndo();
 }

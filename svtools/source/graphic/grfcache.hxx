@@ -25,7 +25,6 @@
 #include <list>
 
 
-// - GraphicManagerCache -
 
 
 class GraphicAttr;

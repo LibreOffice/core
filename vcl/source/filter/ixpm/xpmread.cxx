@@ -633,7 +633,6 @@ bool XPMReader::ImplGetString()
     return mbStatus;
 }
 
-// - ImportXPM -
 
 VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {

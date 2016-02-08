@@ -384,7 +384,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
 
     for(int i = 0; it != columnlist.end() ; ++it, i++){
         if( i == num )
-	  break;
+            break;
     }
 
     if( it != columnlist.end() )
@@ -411,8 +411,8 @@ HyperText *HWPFile::GetHyperText()
     std::list<HyperText*>::iterator it = hyperlist.begin();
 
     for( int i = 0; it != hyperlist.end(); ++it, i++ ){
-	if( i == currenthyper )
-	  break;
+        if( i == currenthyper )
+          break;
     }
 
     currenthyper++;
@@ -468,8 +468,8 @@ ParaShape *HWPFile::getParaShape(int index)
     std::list<ParaShape*>::iterator it = pslist.begin();
 
     for( int i = 0; it != pslist.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+    if( i == index )
+      break;
     }
 
     return it != pslist.end() ? *it : nullptr;
@@ -481,8 +481,8 @@ CharShape *HWPFile::getCharShape(int index)
     std::list<CharShape*>::iterator it = cslist.begin();
 
     for( int i = 0; it != cslist.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+        if( i == index )
+          break;
     }
 
     return it != cslist.end() ? *it : nullptr;
@@ -494,8 +494,8 @@ FBoxStyle *HWPFile::getFBoxStyle(int index)
     std::list<FBoxStyle*>::iterator it = fbslist.begin();
 
     for( int i = 0; it != fbslist.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+        if( i == index )
+          break;
     }
 
     return it != fbslist.end() ? *it : nullptr;
@@ -506,8 +506,8 @@ DateCode *HWPFile::getDateCode(int index)
     std::list<DateCode*>::iterator it = datecodes.begin();
 
     for( int i = 0; it != datecodes.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+        if( i == index )
+          break;
     }
 
     return it != datecodes.end() ? *it : nullptr;
@@ -518,8 +518,8 @@ HeaderFooter *HWPFile::getHeaderFooter(int index)
     std::list<HeaderFooter*>::iterator it = headerfooters.begin();
 
     for( int i = 0; it != headerfooters.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+        if( i == index )
+          break;
     }
 
     return it != headerfooters.end() ? *it : nullptr;
@@ -530,8 +530,8 @@ ShowPageNum *HWPFile::getPageNumber(int index)
     std::list<ShowPageNum*>::iterator it = pagenumbers.begin();
 
     for( int i = 0; it != pagenumbers.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+        if( i == index )
+          break;
     }
 
     return it != pagenumbers.end() ? *it : nullptr;
@@ -543,8 +543,8 @@ Table *HWPFile::getTable(int index)
     std::list<Table*>::iterator it = tables.begin();
 
     for( int i = 0; it != tables.end(); ++it, i++ ){
-	if( i == index )
-	  break;
+        if( i == index )
+          break;
     }
 
     return it != tables.end() ? *it : nullptr;
@@ -555,22 +555,24 @@ void HWPFile::AddParaShape(ParaShape * pshape)
     int nscount = 0;
     for(int j = 0 ; j < MAXTABS-1 ; j++)
     {
-          if( j > 0 && pshape->tabs[j].position == 0 )
-                break;
-          if( pshape->tabs[0].position == 0 ){
-                if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
-                     (pshape->tabs[j].position != 1000 *j) )
-                          nscount = j;
-          }
-          else{
-                if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
-                     (pshape->tabs[j].position != 1000 * (j + 1)) )
-                          nscount = j;
+        if( j > 0 && pshape->tabs[j].position == 0 )
+          break;
+        if( pshape->tabs[0].position == 0 ){
+            if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
+                 (pshape->tabs[j].position != 1000 *j) )
+                      nscount = j;
+        }
+        else {
+            if( pshape->tabs[j].type || pshape->tabs[j].dot_continue ||
+                (pshape->tabs[j].position != 1000 * (j + 1)) )
+                    nscount = j;
           }
     }
     if( nscount )
         pshape->tabs[MAXTABS-1].type = sal::static_int_cast<char>(nscount);
-     int value = compareParaShape(pshape);
+
+    int value = compareParaShape(pshape);
+
     if( value == 0 || nscount )
     {
         pshape->index = ++pcount;

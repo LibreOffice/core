@@ -316,7 +316,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         // Only process an oleObject or control if outside a mc:AlternateContent
         // element OR if within a mc:Fallback. I suppose ideally we
         // should process the stuff within 'mc:Choice'
-	case XLS_TOKEN( controls ):
+    case XLS_TOKEN( controls ):
         case XLS_TOKEN( oleObjects ):
             if ( getCurrentElement() == XLS_TOKEN( controls ) )
             {

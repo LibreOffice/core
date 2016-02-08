@@ -20,7 +20,7 @@
 SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame,
                             const OUString& rType )
 {
-    SaveResult		eSaveResult;
+    SaveResult      eSaveResult;
     SendMailResult  eResult = SEND_MAIL_ERROR;
     OUString   aFileName;
 

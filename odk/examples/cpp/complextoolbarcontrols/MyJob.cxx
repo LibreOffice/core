@@ -53,7 +53,7 @@ Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
 OUString MyJob_getImplementationName ()
     throw (RuntimeException)
 {
-	return OUString( "com.sun.star.comp.Office.MyJob" );
+    return OUString( "com.sun.star.comp.Office.MyJob" );
 }
 
 #define SERVICE_NAME "com.sun.star.task.Job"

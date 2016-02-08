@@ -51,7 +51,7 @@ bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
             nRead = rIn->readBytes( aInBuff, INPUT_BUFFER_SIZE );
             if( nRead > 0 )
             {
-				::sax::Converter::encodeBase64( aOutBuff, aInBuff );
+                ::sax::Converter::encodeBase64( aOutBuff, aInBuff );
                 GetExport().Characters( aOutBuff.makeStringAndClear() );
                 if( nRead == INPUT_BUFFER_SIZE )
                     GetExport().IgnorableWhitespace();

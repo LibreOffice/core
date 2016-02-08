@@ -69,21 +69,16 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::svg;
 using namespace ::com::sun::star::xml::sax;
 
-
-
 #define SVG_DTD_STRING          "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
 
 #define SVGWRITER_WRITE_FILL        0x00000001
 #define SVGWRITER_WRITE_TEXT        0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
 
-
-// - SVGAttributeWriter -
-
-
 class SVGActionWriter;
 class SVGExport;
 class SVGFontExport;
+
 
 class SVGAttributeWriter
 {
@@ -143,14 +138,10 @@ struct SVGShapeDescriptor
 };
 
 
-
 class SVGAttributeWriter;
 class SVGExport;
 class GDIMetaFile;
 
-
-
-// - BulletListItemInfo -
 
 struct BulletListItemInfo
 {
@@ -160,9 +151,6 @@ struct BulletListItemInfo
     sal_Unicode cBulletChar;
 };
 
-
-
-// - SVGTextWriter -
 
 class SVGTextWriter
 {
@@ -270,9 +258,6 @@ class SVGTextWriter
 };
 
 
-// - SVGActionWriter -
-
-
 class SVGActionWriter
 {
 private:
@@ -366,6 +351,7 @@ public:
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 };
 
+
 class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >
 {
 private:
@@ -383,6 +369,6 @@ public:
         const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception ) override;
 };
 
-#endif
+#endif // INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

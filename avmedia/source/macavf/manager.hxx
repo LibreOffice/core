@@ -25,9 +25,6 @@
 
 #include "com/sun/star/media/XManager.hdl"
 
-// -----------
-// - Manager -
-// -----------
 
 namespace avmedia { namespace macavf {
 

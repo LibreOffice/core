@@ -122,7 +122,7 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
         return 0;
 
     Reference < XController > xCtrl = mxFrame->getController();
-	if ( xCtrl.is() && aURL.Protocol == "vnd.demo.complextoolbarcontrols.demoaddon:" )
+    if ( xCtrl.is() && aURL.Protocol == "vnd.demo.complextoolbarcontrols.demoaddon:" )
     {
         Reference < XTextViewCursorSupplier > xCursor( xCtrl, UNO_QUERY );
         Reference < XSpreadsheetView > xView( xCtrl, UNO_QUERY );
@@ -130,12 +130,12 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
             // without an appropriate corresponding document the handler doesn't function
             return xRet;
 
-		if ( aURL.Path == "ImageButtonCmd" ||
-			 aURL.Path == "ComboboxCmd" ||
-			 aURL.Path == "ToggleDropdownButtonCmd" ||
-			 aURL.Path == "DropdownButtonCmd" ||
-			 aURL.Path == "SpinfieldCmd" ||
-			 aURL.Path == "EditfieldCmd" ||
+        if ( aURL.Path == "ImageButtonCmd" ||
+             aURL.Path == "ComboboxCmd" ||
+             aURL.Path == "ToggleDropdownButtonCmd" ||
+             aURL.Path == "DropdownButtonCmd" ||
+             aURL.Path == "SpinfieldCmd" ||
+             aURL.Path == "EditfieldCmd" ||
              aURL.Path == "DropdownboxCmd" )
         {
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
@@ -217,7 +217,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
 
     if ( aURL.Protocol == "vnd.demo.complextoolbarcontrols.demoaddon:" )
     {
-		if ( aURL.Path == "ImageButtonCmd" )
+        if ( aURL.Path == "ImageButtonCmd" )
         {
             // open the LibreOffice web page
             ::rtl::OUString sURL("http://www.libreoffice.org");

@@ -25,20 +25,23 @@
 #include "com/sun/star/task/PDFExportException.hpp"
 #include <cppuhelper/supportsservice.hxx>
 
-// - PDFInteractionHandler -
+
 PDFInteractionHandler::PDFInteractionHandler()
 {
 }
 
+
 PDFInteractionHandler::~PDFInteractionHandler()
 {
 }
+
 
 void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteractionRequest >& i_xRequest )
     throw (RuntimeException, std::exception)
 {
     handleInteractionRequest( i_xRequest );
 }
+
 
 sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
     throw (RuntimeException, std::exception)
@@ -60,11 +63,13 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
     return bHandled;
 }
 
+
 OUString PDFInteractionHandler_getImplementationName ()
     throw (RuntimeException)
 {
     return OUString ( "com.sun.star.comp.PDF.PDFExportInteractionHandler" );
 }
+
 
 Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  ) throw (RuntimeException)
 {
@@ -72,10 +77,12 @@ Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
     return aRet;
 }
 
+
 Reference< XInterface > SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & ) throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new PDFInteractionHandler);
 }
+
 
 OUString SAL_CALL PDFInteractionHandler::getImplementationName()
     throw (RuntimeException, std::exception)
@@ -83,11 +90,13 @@ OUString SAL_CALL PDFInteractionHandler::getImplementationName()
     return PDFInteractionHandler_getImplementationName();
 }
 
+
 sal_Bool SAL_CALL PDFInteractionHandler::supportsService( const OUString& rServiceName )
     throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
+
 
 css::uno::Sequence< OUString > SAL_CALL PDFInteractionHandler::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {

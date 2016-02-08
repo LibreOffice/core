@@ -1302,9 +1302,9 @@ const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
-            "Mode",							// 0
-            "UseRSID",						// 1
-            "IgnorePieces",				// 2
+            "Mode",                         // 0
+            "UseRSID",                      // 1
+            "IgnorePieces",             // 2
             "IgnoreLength", // 3
             "StoreRSID" // 4
         };

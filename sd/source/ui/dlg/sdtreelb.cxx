@@ -81,7 +81,6 @@ bool SdPageObjsTLB::IsInDrag()
 
 SotClipboardFormatId SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = static_cast<SotClipboardFormatId>(SAL_MAX_UINT32);
 
-// - SdPageObjsTLB::SdPageObjsTransferable -
 
 SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     SdPageObjsTLB& rParent,

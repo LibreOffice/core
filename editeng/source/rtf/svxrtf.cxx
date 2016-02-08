@@ -180,13 +180,13 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_TAB:           cCh = '\t'; goto INSINGLECHAR;
     case RTF_SUBENTRYINDEX: cCh = ':';  goto INSINGLECHAR;
 
-    case RTF_EMDASH:		cCh = 0x2014;	goto INSINGLECHAR;
-    case RTF_ENDASH:		cCh = 0x2013;	goto INSINGLECHAR;
-    case RTF_BULLET:		cCh = 0x2022;	goto INSINGLECHAR;
-    case RTF_LQUOTE:		cCh = 0x2018;	goto INSINGLECHAR;
-    case RTF_RQUOTE:		cCh = 0x2019;	goto INSINGLECHAR;
-    case RTF_LDBLQUOTE:		cCh = 0x201C;	goto INSINGLECHAR;
-    case RTF_RDBLQUOTE:		cCh = 0x201D;	goto INSINGLECHAR;
+    case RTF_EMDASH:        cCh = 0x2014;   goto INSINGLECHAR;
+    case RTF_ENDASH:        cCh = 0x2013;   goto INSINGLECHAR;
+    case RTF_BULLET:        cCh = 0x2022;   goto INSINGLECHAR;
+    case RTF_LQUOTE:        cCh = 0x2018;   goto INSINGLECHAR;
+    case RTF_RQUOTE:        cCh = 0x2019;   goto INSINGLECHAR;
+    case RTF_LDBLQUOTE:     cCh = 0x201C;   goto INSINGLECHAR;
+    case RTF_RDBLQUOTE:     cCh = 0x201D;   goto INSINGLECHAR;
 INSINGLECHAR:
         aToken = OUString(cCh);
         // no Break, aToken is set as Text

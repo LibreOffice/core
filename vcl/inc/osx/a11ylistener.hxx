@@ -28,7 +28,6 @@
 #include <set>
 #include <com/sun/star/awt/Rectangle.hpp>
 
-// - AquaA11yEventListener -
 
 class AquaA11yEventListener :
     public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >

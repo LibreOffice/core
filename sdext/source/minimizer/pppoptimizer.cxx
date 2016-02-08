@@ -29,7 +29,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
 
-// - PPPOptimizer -
 
 
 PPPOptimizer::PPPOptimizer(

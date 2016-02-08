@@ -131,15 +131,11 @@ calls or by ending a selection.
 
 *************************************************************************/
 
-
-// - Calendar types -
-
-
 #define WB_QUICKHELPSHOWSDATEINFO   ((WinBits)0x00004000)
 #define WB_BOLDTEXT                 ((WinBits)0x00008000)
 #define WB_FRAMEINFO                ((WinBits)0x00010000)
 #define WB_WEEKNUMBER               ((WinBits)0x00020000)
-// Needs to in agreement with the WinBits in the TabBar or
+// Needs to be in agreement with the WinBits in the TabBar or
 // we move it to \vcl\inc\wintypes.hxx
 #ifndef WB_RANGESELECT
 #define WB_RANGESELECT              ((WinBits)0x00200000)
@@ -149,10 +145,6 @@ calls or by ending a selection.
 #endif
 
 #define DIB_BOLD                    ((sal_uInt16)0x0001)
-
-
-// - Calendar -
-
 
 typedef std::set<sal_uInt32> IntDateSet;
 
@@ -231,7 +223,7 @@ private:
     SVT_DLLPRIVATE void         ImplGetWeekFont( vcl::Font& rFont ) const;
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rPos, Date& rDate ) const;
+    SVT_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
     SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev = true, bool bDrawNext = true);
     SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
@@ -241,7 +233,7 @@ private:
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     SVT_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );
     SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
-                                     bool bMove, bool bExpand, bool bExtended );
+                                                 bool bMove, bool bExpand, bool bExtended );
     SVT_DLLPRIVATE void         ImplUpdate( bool bCalcNew = false );
     using Window::ImplScroll;
     SVT_DLLPRIVATE void         ImplScroll( bool bPrev );
@@ -341,9 +333,6 @@ If a derived Calendar should be used, we can override the CreateCalendar()
 method in CalendarField and create an own calendar there ourselves.
 
 *************************************************************************/
-
-
-// - CalendarField -
 
 
 class SVT_DLLPUBLIC CalendarField : public DateField

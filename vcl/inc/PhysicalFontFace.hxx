@@ -40,7 +40,6 @@ public:
     const OUString*     mpTargetStyleName;
 };
 
-// - PhysicalFontFace -
 
 // TODO: no more direct access to members
 // TODO: add reference counting

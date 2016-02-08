@@ -53,7 +53,6 @@ namespace vcl {
     class IconThemeInfo;
 }
 
-// - MouseSettings -
 
 enum class MouseSettingsOptions
 {
@@ -177,7 +176,6 @@ struct FrameStyle
 
 
 
-// - StyleSettings -
 
 
 enum class StyleSettingsOptions
@@ -626,7 +624,6 @@ public:
 };
 
 
-// - MiscSettings -
 
 
 class VCL_DLLPUBLIC MiscSettings
@@ -654,7 +651,6 @@ public:
 };
 
 
-// - HelpSettings -
 
 class VCL_DLLPUBLIC HelpSettings
 {
@@ -675,7 +671,6 @@ public:
 };
 
 
-// - AllSettings -
 
 enum class AllSettingsFlags {
     NONE     = 0x0000,

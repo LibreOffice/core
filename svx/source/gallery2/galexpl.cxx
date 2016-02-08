@@ -31,7 +31,6 @@ namespace
     class theLockListener : public rtl::Static< SfxListener, theLockListener > {};
 }
 
-// - GalleryExplorer -
 
 bool GalleryExplorer::FillThemeList( std::vector<OUString>& rThemeList )
 {

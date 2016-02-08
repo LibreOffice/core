@@ -81,7 +81,7 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 
 css::uno::Any SAL_CALL SvxOle2Shape::queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-	return SvxShapeText::queryAggregation( rType );
+    return SvxShapeText::queryAggregation( rType );
 }
 
 //XPropertySet
@@ -670,7 +670,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
 
 void SAL_CALL SvxPluginShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& rValues ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
-	SvxShape::setPropertyValues( aPropertyNames, rValues );
+    SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
@@ -743,7 +743,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
 
 void SAL_CALL SvxFrameShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& rValues ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
-	SvxShape::setPropertyValues( aPropertyNames, rValues );
+    SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 

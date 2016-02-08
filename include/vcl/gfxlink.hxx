@@ -29,7 +29,6 @@
 class SvStream;
 
 
-// - ImpBuffer -
 
 
 struct ImpBuffer
@@ -49,7 +48,6 @@ struct ImpBuffer
 };
 
 
-// - ImpSwap -
 
 
 struct ImpSwap
@@ -69,7 +67,6 @@ struct ImpSwap
 };
 
 
-// - ImpGfxLink -
 
 
 struct ImpGfxLink
@@ -90,7 +87,6 @@ struct ImpGfxLink
 //#endif // __PRIVATE
 
 
-// - GfxLinkType -
 
 
 enum GfxLinkType
@@ -115,7 +111,6 @@ enum GfxLinkType
 #define GFX_LINK_LAST_NATIVE_ID     GFX_LINK_TYPE_NATIVE_BMP
 
 
-// - GfxLink -
 
 
 struct ImpBuffer;

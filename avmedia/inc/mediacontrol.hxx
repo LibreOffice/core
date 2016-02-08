@@ -37,17 +37,11 @@ namespace avmedia
 {
 
 
-// - MediaControlStyle -
-
-
 enum MediaControlStyle
 {
     MEDIACONTROLSTYLE_SINGLELINE = 0,
     MEDIACONTROLSTYLE_MULTILINE = 1
 };
-
-
-// - MediaControl -
 
 
 class MediaItem;
@@ -103,6 +97,6 @@ private:
 
 }
 
-#endif
+#endif // INCLUDED_AVMEDIA_INC_MEDIACONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

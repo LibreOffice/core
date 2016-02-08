@@ -24,10 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 #include "com/sun/star/media/XManager.hpp"
 
-
-// - Manager -
-
-
 namespace avmedia { namespace gstreamer {
 
 class Manager : public ::cppu::WeakImplHelper< css::media::XManager,

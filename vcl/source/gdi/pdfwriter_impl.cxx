@@ -2270,7 +2270,6 @@ LogicalFontInstance* PdfBuiltinFontFace::CreateFontInstance( FontSelectPattern& 
     return pEntry;
 }
 
-// - PDFWriterImpl -
 
 sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
 {

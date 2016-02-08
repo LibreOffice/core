@@ -32,11 +32,9 @@
 #include <vcl/FilterConfigItem.hxx>
 
 
-// - ImpSWFDialog -
-
-
 class ResMgr;
 namespace vcl { class Window; }
+
 
 class ImpSWFDialog : public ModalDialog
 {

@@ -277,7 +277,7 @@ sal_Int32 compileFile(const OString * pathname)
         } while( nIndex != -1 );
     }
 
-	if ( pOptions->isValid("-I") )
+    if ( pOptions->isValid("-I") )
     {
         OString token, incOpt = pOptions->getOption("-I");
         sal_Int32 nIndex = 0;
@@ -291,7 +291,7 @@ sal_Int32 compileFile(const OString * pathname)
 
     lCppArgs.push_back(OUString("-o"));
 
-	cppArgs.append(preprocFile);
+    cppArgs.append(preprocFile);
     lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
 
     cppArgs.append(tmpFile);
@@ -325,12 +325,12 @@ sal_Int32 compileFile(const OString * pathname)
     ::std::vector< OUString >::iterator iter = lCppArgs.begin();
     ::std::vector< OUString >::iterator end = lCppArgs.end();
     int i = 0;
-	while ( iter != end ) {
+    while ( iter != end ) {
         pCmdArgs[i++] = (*iter).pData;
         ++iter;
     }
 
-	procError = osl_executeProcess( cpp.pData, pCmdArgs, nCmdArgs, osl_Process_WAIT,
+    procError = osl_executeProcess( cpp.pData, pCmdArgs, nCmdArgs, osl_Process_WAIT,
                                     nullptr, startDir.pData, nullptr, 0, &hProcess );
 
     oslProcessInfo hInfo;

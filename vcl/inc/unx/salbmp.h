@@ -34,7 +34,6 @@ class   SalGraphics;
 class   ImplSalDDB;
 class   ImplSalBitmapCache;
 
-// - SalBitmap -
 
 class VCLPLUG_GEN_PUBLIC X11SalBitmap : public SalBitmap
 {
@@ -148,7 +147,6 @@ public:
     virtual bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) override;
 };
 
-// - ImplSalDDB -
 
 class ImplSalDDB
 {
@@ -214,7 +212,6 @@ public:
                     ) const;
 };
 
-// - ImplSalBitmapCache -
 
 struct ImplBmpObj;
 

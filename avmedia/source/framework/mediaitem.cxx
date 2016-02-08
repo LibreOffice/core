@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 namespace avmedia
 {
 
-// - MediaItem -
 SfxPoolItem* MediaItem::CreateDefault() { return new MediaItem; }
 
 struct MediaItem::Impl
@@ -89,11 +88,13 @@ struct MediaItem::Impl
     }
 };
 
+
 MediaItem::MediaItem( sal_uInt16 i_nWhich, AVMediaSetMask nMaskSet )
     : SfxPoolItem( i_nWhich )
     , m_pImpl( new Impl(nMaskSet) )
 {
 }
+
 
 MediaItem::MediaItem( const MediaItem& rItem )
     : SfxPoolItem( rItem )
@@ -101,9 +102,11 @@ MediaItem::MediaItem( const MediaItem& rItem )
 {
 }
 
+
 MediaItem::~MediaItem()
 {
 }
+
 
 bool MediaItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -122,10 +125,12 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_eZoom == rOther.m_pImpl->m_eZoom;
 }
 
+
 SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
 {
     return new MediaItem( *this );
 }
+
 
 bool MediaItem::GetPresentation( SfxItemPresentation,
                                                   SfxMapUnit,
@@ -136,6 +141,7 @@ bool MediaItem::GetPresentation( SfxItemPresentation,
     rText.clear();
     return false;
 }
+
 
 bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
@@ -156,6 +162,7 @@ bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 
     return true;
 }
+
 
 bool MediaItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
@@ -184,6 +191,7 @@ bool MediaItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 
     return bRet;
 }
+
 
 void MediaItem::merge( const MediaItem& rMediaItem )
 {
@@ -217,10 +225,12 @@ void MediaItem::merge( const MediaItem& rMediaItem )
         setZoom( rMediaItem.getZoom() );
 }
 
+
 AVMediaSetMask MediaItem::getMaskSet() const
 {
     return m_pImpl->m_nMaskSet;
 }
+
 
 void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OUString& rReferer )
 {
@@ -230,20 +240,24 @@ void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OU
     m_pImpl->m_Referer = rReferer;
 }
 
+
 const OUString& MediaItem::getURL() const
 {
     return m_pImpl->m_URL;
 }
+
 
 const OUString& MediaItem::getTempURL() const
 {
     return m_pImpl->m_TempFileURL;
 }
 
+
 const OUString& MediaItem::getReferer() const
 {
     return m_pImpl->m_Referer;
 }
+
 
 void MediaItem::setMimeType( const OUString& rMimeType )
 {
@@ -251,10 +265,12 @@ void MediaItem::setMimeType( const OUString& rMimeType )
     m_pImpl->m_sMimeType = rMimeType;
 }
 
+
 OUString MediaItem::getMimeType() const
 {
     return !m_pImpl->m_sMimeType.isEmpty() ? m_pImpl->m_sMimeType : AVMEDIA_MIMETYPE_COMMON;
 }
+
 
 void MediaItem::setState( MediaState eState )
 {
@@ -262,10 +278,12 @@ void MediaItem::setState( MediaState eState )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::STATE;
 }
 
+
 MediaState MediaItem::getState() const
 {
     return m_pImpl->m_eState;
 }
+
 
 void MediaItem::setDuration( double fDuration )
 {
@@ -273,10 +291,12 @@ void MediaItem::setDuration( double fDuration )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::DURATION;
 }
 
+
 double MediaItem::getDuration() const
 {
     return m_pImpl->m_fDuration;
 }
+
 
 void MediaItem::setTime( double fTime )
 {
@@ -284,10 +304,12 @@ void MediaItem::setTime( double fTime )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::TIME;
 }
 
+
 double MediaItem::getTime() const
 {
     return m_pImpl->m_fTime;
 }
+
 
 void MediaItem::setLoop( bool bLoop )
 {
@@ -295,10 +317,12 @@ void MediaItem::setLoop( bool bLoop )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::LOOP;
 }
 
+
 bool MediaItem::isLoop() const
 {
     return m_pImpl->m_bLoop;
 }
+
 
 void MediaItem::setMute( bool bMute )
 {
@@ -306,10 +330,12 @@ void MediaItem::setMute( bool bMute )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::MUTE;
 }
 
+
 bool MediaItem::isMute() const
 {
     return m_pImpl->m_bMute;
 }
+
 
 void MediaItem::setVolumeDB( sal_Int16 nDB )
 {
@@ -317,10 +343,12 @@ void MediaItem::setVolumeDB( sal_Int16 nDB )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::VOLUMEDB;
 }
 
+
 sal_Int16 MediaItem::getVolumeDB() const
 {
     return m_pImpl->m_nVolumeDB;
 }
+
 
 void MediaItem::setZoom( css::media::ZoomLevel eZoom )
 {
@@ -328,10 +356,12 @@ void MediaItem::setZoom( css::media::ZoomLevel eZoom )
     m_pImpl->m_nMaskSet |= AVMediaSetMask::ZOOM;
 }
 
+
 css::media::ZoomLevel MediaItem::getZoom() const
 {
     return m_pImpl->m_eZoom;
 }
+
 
 OUString GetFilename(OUString const& rSourceURL)
 {
@@ -356,6 +386,7 @@ OUString GetFilename(OUString const& rSourceURL)
     }
     return filename;
 }
+
 
 uno::Reference<io::XStream>
 CreateStream(uno::Reference<embed::XStorage> const& xStorage,
@@ -398,6 +429,7 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
     }
     return xStream;
 }
+
 
 bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         OUString const& rSourceURL, OUString & o_rEmbeddedURL)
@@ -451,6 +483,8 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
     }
     return false;
 }
-}
+
+
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,11 +26,9 @@
 #include <svtools/genericunodialog.hxx>
 
 
-// - SWFDialog -
-
-
 namespace vcl { class Window; }
 class ResMgr;
+
 
 class SWFDialog : public ::svt::OGenericUnoDialog,
                   public ::comphelper::OPropertyArrayUsageHelper< SWFDialog >,
@@ -76,7 +74,6 @@ public:
 };
 
 
-
-#endif // SWFDialog_HXX
+#endif // INCLUDED_FILTER_SOURCE_FLASH_SWFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

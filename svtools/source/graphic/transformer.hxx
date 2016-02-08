@@ -27,7 +27,6 @@
 namespace unographic {
 
 
-// - GraphicTransformer -
 
 
 typedef ::cppu::WeakAggImplHelper1<

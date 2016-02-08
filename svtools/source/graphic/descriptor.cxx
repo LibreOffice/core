@@ -49,7 +49,6 @@ using namespace ::com::sun::star;
 namespace unographic {
 
 
-// - GraphicDescriptor -
 
 
 GraphicDescriptor::GraphicDescriptor() :

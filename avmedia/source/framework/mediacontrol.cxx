@@ -57,10 +57,6 @@
 namespace avmedia
 {
 
-
-// - MediaControl -
-
-
 MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
     maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
@@ -192,11 +188,11 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 }
 
 
-
 MediaControl::~MediaControl()
 {
     disposeOnce();
 }
+
 
 void MediaControl::dispose()
 {
@@ -212,12 +208,10 @@ void MediaControl::dispose()
 }
 
 
-
 const Size& MediaControl::getMinSizePixel() const
 {
     return maMinSize;
 }
-
 
 
 void MediaControl::Resize()
@@ -277,7 +271,6 @@ void MediaControl::Resize()
 }
 
 
-
 void MediaControl::setState( const MediaItem& rItem )
 {
     if( !mbLocked )
@@ -290,7 +283,6 @@ void MediaControl::setState( const MediaItem& rItem )
         implUpdateTimeField( maItem.getTime() );
     }
 }
-
 
 
 void MediaControl::implUpdateToolboxes()
@@ -367,7 +359,6 @@ void MediaControl::implUpdateToolboxes()
 }
 
 
-
 void MediaControl::implUpdateTimeSlider()
 {
     if( maItem.getURL().isEmpty() || !IsEnabled() )
@@ -394,7 +385,6 @@ void MediaControl::implUpdateTimeSlider()
 }
 
 
-
 void MediaControl::implUpdateVolumeSlider()
 {
     if( maItem.getURL().isEmpty() || !IsEnabled() )
@@ -409,7 +399,6 @@ void MediaControl::implUpdateVolumeSlider()
                                                 static_cast< sal_Int32 >( 0 ) ) );
     }
 }
-
 
 
 void MediaControl::implUpdateTimeField( double fCurTime )
@@ -431,12 +420,10 @@ void MediaControl::implUpdateTimeField( double fCurTime )
 }
 
 
-
 Image MediaControl::implGetImage( sal_Int32 nImageId ) const
 {
     return maImageList.GetImage( static_cast< sal_uInt16 >( nImageId ) );
 }
-
 
 
 IMPL_LINK_TYPED( MediaControl, implTimeHdl, Slider*, p, void )
@@ -445,7 +432,6 @@ IMPL_LINK_TYPED( MediaControl, implTimeHdl, Slider*, p, void )
     maIdle.Stop();
     implUpdateTimeField( p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
 }
-
 
 
 IMPL_LINK_TYPED( MediaControl, implTimeEndHdl, Slider*, p, void )
@@ -460,7 +446,6 @@ IMPL_LINK_TYPED( MediaControl, implTimeEndHdl, Slider*, p, void )
 }
 
 
-
 IMPL_LINK_TYPED( MediaControl, implVolumeHdl, Slider*, p, void )
 {
     MediaItem aExecItem;
@@ -469,7 +454,6 @@ IMPL_LINK_TYPED( MediaControl, implVolumeHdl, Slider*, p, void )
     execute( aExecItem );
     update();
 }
-
 
 
 IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
@@ -559,7 +543,6 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 }
 
 
-
 IMPL_LINK_TYPED( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 {
     MediaItem aExecItem;
@@ -582,12 +565,11 @@ IMPL_LINK_TYPED( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(MediaControl, implTimeoutHdl, Idle *, void)
 {
     update();
 }
 
-}
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

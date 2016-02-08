@@ -29,7 +29,6 @@
 #include <vector>
 
 
-// - Conversation -
 
 
 struct Conversation
@@ -41,7 +40,6 @@ struct Conversation
 typedef ::std::vector< Conversation* > ConvList;
 
 
-// - DdeInternal -
 
 
 class DdeInternal
@@ -59,7 +57,6 @@ public:
 };
 
 
-// - DdeString -
 
 
 class DdeString
@@ -81,7 +78,6 @@ public:
 };
 
 
-// - DdeDataImp -
 
 
 struct DdeDataImp

@@ -205,7 +205,7 @@ struct XMLEffectHint
     sal_Int16       mnStartScale;
 
     AnimationSpeed  meSpeed;
-	sal_Int32		maDimColor;
+    sal_Int32       maDimColor;
     OUString        maSoundURL;
     bool        mbPlayFull;
     sal_Int32       mnPresId;

@@ -28,6 +28,7 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
+
 GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
     const WinBits nStyle)
     : Control(pParent, nStyle)
@@ -36,6 +37,7 @@ GraphicPreviewWindow::GraphicPreviewWindow(vcl::Window* pParent,
     , mfScaleY(0.0)
 {
 }
+
 
 VCL_BUILDER_DECL_FACTORY(GraphicPreviewWindow)
 {
@@ -48,10 +50,12 @@ VCL_BUILDER_DECL_FACTORY(GraphicPreviewWindow)
     rRet = VclPtr<GraphicPreviewWindow>::Create(pParent, nWinBits);
 }
 
+
 Size GraphicPreviewWindow::GetOptimalSize() const
 {
     return LogicToPixel(Size(81, 73), MAP_APPFONT);
 }
+
 
 void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
@@ -75,11 +79,13 @@ void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Recta
     }
 }
 
+
 void GraphicPreviewWindow::SetPreview(const Graphic& rGraphic)
 {
     maPreview = rGraphic;
     Invalidate();
 }
+
 
 void GraphicPreviewWindow::ScaleImageToFit()
 {
@@ -126,6 +132,7 @@ void GraphicPreviewWindow::ScaleImageToFit()
     maModifyHdl.Call(nullptr);
 }
 
+
 void GraphicPreviewWindow::Resize()
 {
     Control::Resize();
@@ -149,10 +156,12 @@ GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
     mpPreview->init(&rGraphic, maModifyHdl);
 }
 
+
 GraphicFilterDialog::~GraphicFilterDialog()
 {
     disposeOnce();
 }
+
 
 void GraphicFilterDialog::dispose()
 {
@@ -169,7 +178,6 @@ IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer *, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
 {
     if (bIsBitmap)
@@ -178,9 +186,6 @@ IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
         maTimer.Start();
     }
 }
-
-
-// - FilterMosaic -
 
 
 GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& rGraphic,
@@ -206,20 +211,24 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
     mpMtrWidth->GrabFocus();
 }
 
+
 IMPL_LINK_NOARG_TYPED(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
+
 
 IMPL_LINK_NOARG_TYPED(GraphicFilterMosaic, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
+
 GraphicFilterMosaic::~GraphicFilterMosaic()
 {
     disposeOnce();
 }
+
 
 void GraphicFilterMosaic::dispose()
 {
@@ -228,6 +237,7 @@ void GraphicFilterMosaic::dispose()
     mpCbxEdges.clear();
     GraphicFilterDialog::dispose();
 }
+
 
 Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
@@ -266,9 +276,6 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterSmooth -
-
-
 GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius)
     : GraphicFilterDialog(pParent, "SmoothDialog",
         "cui/ui/smoothdialog.ui", rGraphic)
@@ -280,15 +287,18 @@ GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& r
     mpMtrRadius->GrabFocus();
 }
 
+
 IMPL_LINK_NOARG_TYPED(GraphicFilterSmooth, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
+
 GraphicFilterSmooth::~GraphicFilterSmooth()
 {
     disposeOnce();
 }
+
 
 void GraphicFilterSmooth::dispose()
 {
@@ -297,7 +307,7 @@ void GraphicFilterSmooth::dispose()
 }
 
 
-Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double /*fScaleX*/, double /*fScaleY*/ )
+Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
     BmpFilterParam  aParam( GetRadius() );
@@ -325,9 +335,6 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 }
 
 
-// - GraphicFilterSolarize -
-
-
 GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
                                               sal_uInt8 cGreyThreshold, bool bInvert )
     : GraphicFilterDialog(pParent, "SolarizeDialog",
@@ -343,19 +350,24 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
     mpCbxInvert->SetToggleHdl( LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl) );
 }
 
+
 IMPL_LINK_NOARG_TYPED(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
+
+
 IMPL_LINK_NOARG_TYPED(GraphicFilterSolarize, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
+
 GraphicFilterSolarize::~GraphicFilterSolarize()
 {
     disposeOnce();
 }
+
 
 void GraphicFilterSolarize::dispose()
 {
@@ -365,8 +377,7 @@ void GraphicFilterSolarize::dispose()
 }
 
 
-Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
-                                                   double /*fScaleX*/, double /*fScaleY*/ )
+Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
     BmpFilterParam  aParam( GetGreyThreshold() );
@@ -399,10 +410,6 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
     return aRet;
 }
 
-
-// - GraphicFilterSepia -
-
-
 GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                                         sal_uInt16 nSepiaPercent )
     : GraphicFilterDialog(pParent, "AgingDialog",
@@ -431,8 +438,7 @@ void GraphicFilterSepia::dispose()
 }
 
 
-Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
-                                                double /*fScaleX*/, double /*fScaleY*/ )
+Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
     BmpFilterParam  aParam( GetSepiaPercent() );
@@ -456,9 +462,6 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterPoster -
-
-
 GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nPosterCount)
     : GraphicFilterDialog(pParent, "PosterDialog",
@@ -472,15 +475,18 @@ GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rG
     mpNumPoster->SetModifyHdl( LINK(this, GraphicFilterPoster, EditModifyHdl) );
 }
 
+
 IMPL_LINK_NOARG_TYPED(GraphicFilterPoster, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
+
 GraphicFilterPoster::~GraphicFilterPoster()
 {
     disposeOnce();
 }
+
 
 void GraphicFilterPoster::dispose()
 {
@@ -489,8 +495,7 @@ void GraphicFilterPoster::dispose()
 }
 
 
-Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
-                                                 double /*fScaleX*/, double /*fScaleY*/ )
+Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
     const sal_uInt16    nPosterCount = GetPosterColorCount();
@@ -514,9 +519,6 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterEmboss -
-
-
 void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     const RECT_POINT eOldRP = GetActualRP();
@@ -527,12 +529,15 @@ void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
         maModifyHdl.Call( nullptr );
 }
 
+
 Size EmbossControl::GetOptimalSize() const
 {
     return LogicToPixel(Size(77, 60), MAP_APPFONT);
 }
 
+
 VCL_BUILDER_FACTORY(EmbossControl)
+
 
 GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
     const Graphic& rGraphic, RECT_POINT eLightSource)
@@ -545,10 +550,12 @@ GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
     mpCtlLight->GrabFocus();
 }
 
+
 GraphicFilterEmboss::~GraphicFilterEmboss()
 {
     disposeOnce();
 }
+
 
 void GraphicFilterEmboss::dispose()
 {
@@ -557,8 +564,7 @@ void GraphicFilterEmboss::dispose()
 }
 
 
-Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
-                                                 double /*fScaleX*/, double /*fScaleY*/ )
+Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic aRet;
     sal_uInt16  nAzim, nElev;

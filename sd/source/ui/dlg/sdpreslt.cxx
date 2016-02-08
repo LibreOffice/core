@@ -221,7 +221,7 @@ IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
 
         sal_uInt16 aPos = 0;
         for (std::vector<OUString>::iterator it = maLayoutNames.begin();
-	          it != maLayoutNames.end() && !bExists; ++it, ++aPos)
+              it != maLayoutNames.end() && !bExists; ++it, ++aPos)
         {
             if( aCompareStr == *it )
             {

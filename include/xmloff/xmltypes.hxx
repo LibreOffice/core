@@ -152,7 +152,7 @@
 #define XML_TYPE_NEG_PERCENT8       0x00002022          // (100-x)%
 #define XML_TYPE_NEG_PERCENT16      0x00002023          // (100-x)
 #define XML_TYPE_DOUBLE_PERCENT     0x00002024          //  50% (source is a double from 0.0 to 1.0)
-#define XML_TYPE_HEX				0x00002025			// 00544F1B
+#define XML_TYPE_HEX                0x00002025          // 00544F1B
 
 // special basic types
 #define XML_TYPE_RECTANGLE_LEFT     0x00000100          // the Left member of a awt::Rectangle as a measure

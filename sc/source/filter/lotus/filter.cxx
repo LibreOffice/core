@@ -140,7 +140,7 @@ WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
             aStream.ReadUInt16( nVersNr );
             if( aStream.IsEof() ) return eWK_Error;
             if( nVersNr == 0x0004 && nRecLen == 26 )
-			{	// 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)
+            {   // 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)
                 sal_Char aDummy[22];
                 aStream.Read( aDummy, 22 );
                 return aStream.IsEof() ? eWK_Error : eWK3;

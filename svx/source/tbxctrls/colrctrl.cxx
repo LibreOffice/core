@@ -42,7 +42,6 @@
 
 using namespace com::sun::star;
 
-// - SvxColorValueSetData -
 
 class SvxColorValueSetData : public TransferableHelper
 {

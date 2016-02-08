@@ -47,7 +47,6 @@ struct DDInfo;
 struct Impl_IMEInfos;
 
 
-// - Edit-Types -
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
@@ -70,7 +69,6 @@ enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOM
 
 class Timer;
 
-// - Edit -
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
 {
 private:

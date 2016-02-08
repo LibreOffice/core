@@ -147,7 +147,6 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
     ImplDrawBrdWinSymbol( pDev, aTempRect, eSymbol );
 }
 
-// - ImplBorderWindowView -
 
 ImplBorderWindowView::~ImplBorderWindowView()
 {
@@ -412,7 +411,6 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
     return nTitleWidth;
 }
 
-// - ImplNoBorderWindowView -
 
 ImplNoBorderWindowView::ImplNoBorderWindowView( ImplBorderWindow* )
 {
@@ -440,7 +438,6 @@ void ImplNoBorderWindowView::DrawWindow(vcl::RenderContext&, sal_uInt16, const P
 {
 }
 
-// - ImplSmallBorderWindowView -
 ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow )
     : mpBorderWindow(pBorderWindow)
     , mpOutDev(nullptr)
@@ -790,7 +787,6 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
     }
 }
 
-// - ImplStdBorderWindowView -
 
 ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow )
 {

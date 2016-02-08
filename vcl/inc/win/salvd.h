@@ -24,7 +24,6 @@
 
 class WinSalGraphics;
 
-// - SalVirDevData -
 
 class WinSalVirtualDevice : public SalVirtualDevice
 {

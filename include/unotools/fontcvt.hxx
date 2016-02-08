@@ -25,7 +25,6 @@
 #include <tools/solar.h>
 #include <o3tl/typed_flags_set.hxx>
 
-// - FontToSubsFont -
 
 enum class FontToSubsFontFlags
 {
@@ -44,26 +43,26 @@ UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( F
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC OUString                    GetFontToSubsFontName( FontToSubsFontConverter hConverter );
 
-// - StarSymbolToMSMultiFont -
 
 class UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont
 {
 public:
-    //Returns the name of the best windows symbol font which this char can be
-    //mapped to. Sets rChar to the correct position for that font. If no
-    //match found, then no name is returned, and rChar is unchanged. If you
-    //want to convert a string, you don't want to use this.
+    // Returns the name of the best windows symbol font which this char can be
+    // mapped to. Sets rChar to the correct position for that font. If no
+    // match found, then no name is returned, and rChar is unchanged. If you
+    // want to convert a string, you don't want to use this.
     virtual OUString ConvertChar(sal_Unicode &rChar) = 0;
 
     virtual ~StarSymbolToMSMultiFont() {}
 };
 
-//with bPerfect set the converter will only try and convert symbols which have
-//perfect mappings to the windows symbols fonts. With it not set, it will
-//allow somewhat more dubious transformations that are nevertheless
-//recognizably similar. Even in this mode there will be characters that fail.
-//The users of this might want to make a distinction between failed characters
-//which were inside and those outside the unicode private area.
+
+// with bPerfect set the converter will only try and convert symbols which have
+// perfect mappings to the windows symbols fonts. With it not set, it will
+// allow somewhat more dubious transformations that are nevertheless
+// recognizably similar. Even in this mode there will be characters that fail.
+// The users of this might want to make a distinction between failed characters
+// which were inside and those outside the unicode private area.
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);
 
 #endif // INCLUDED_UNOTOOLS_FONTCVT_HXX

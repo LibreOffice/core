@@ -525,7 +525,7 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
                 sChars = sTrimmedChars;
             }
             uno::Sequence<sal_Int8> aBuffer((sChars.getLength() / 4) * 3 );
-			sal_Int32 const nCharsDecoded =
+            sal_Int32 const nCharsDecoded =
                 ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
             sal_uInt32 nStartPos(maDecoded.getLength());
             sal_uInt32 nCount(aBuffer.getLength());
@@ -556,19 +556,19 @@ void XMLConfigItemContext::EndElement()
         else if (IsXMLToken(msType, XML_BYTE))
         {
             sal_Int32 nValue(0);
-			::sax::Converter::convertNumber(nValue, msValue);
+            ::sax::Converter::convertNumber(nValue, msValue);
             mrAny <<= static_cast<sal_Int8>(nValue);
         }
         else if (IsXMLToken(msType, XML_SHORT))
         {
             sal_Int32 nValue(0);
-			::sax::Converter::convertNumber(nValue, msValue);
+            ::sax::Converter::convertNumber(nValue, msValue);
             mrAny <<= static_cast<sal_Int16>(nValue);
         }
         else if (IsXMLToken(msType, XML_INT))
         {
             sal_Int32 nValue(0);
-			::sax::Converter::convertNumber(nValue, msValue);
+            ::sax::Converter::convertNumber(nValue, msValue);
             mrAny <<= nValue;
         }
         else if (IsXMLToken(msType, XML_LONG))
@@ -579,7 +579,7 @@ void XMLConfigItemContext::EndElement()
         else if (IsXMLToken(msType, XML_DOUBLE))
         {
             double fValue(0.0);
-			::sax::Converter::convertDouble(fValue, msValue);
+            ::sax::Converter::convertDouble(fValue, msValue);
             mrAny <<= fValue;
         }
         else if (IsXMLToken(msType, XML_STRING))

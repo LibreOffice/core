@@ -34,7 +34,6 @@
 #include <svtools/transfer.hxx>
 
 
-// - Namespaces -
 
 
 using namespace ::com::sun::star::uno;
@@ -45,7 +44,6 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 
-// - DragSourceHelper::DragGestureListener -
 
 
 DragSourceHelper::DragGestureListener::DragGestureListener( DragSourceHelper& rDragSourceHelper ) :
@@ -76,7 +74,6 @@ void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( cons
 }
 
 
-// - DragSourceHelper -
 
 
 DragSourceHelper::DragSourceHelper( vcl::Window* pWindow ) :
@@ -104,7 +101,6 @@ void DragSourceHelper::StartDrag( sal_Int8, const Point& )
 }
 
 
-// - DropTargetHelper::DropTargetListener -
 
 
 DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDropTargetHelper ) :
@@ -249,7 +245,6 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const Dro
 }
 
 
-// - DropTargetHelper -
 
 
 DropTargetHelper::DropTargetHelper( vcl::Window* pWindow ) :

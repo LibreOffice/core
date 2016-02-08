@@ -29,7 +29,6 @@ class SvStream;
 class OutputDevice;
 
 
-// - MapMode -
 
 
 class VCL_DLLPUBLIC MapMode
