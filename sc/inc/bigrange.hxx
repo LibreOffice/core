@@ -69,6 +69,8 @@ public:
                     { nCol = r.Col(); nRow = r.Row(); nTab = r.Tab(); return *this; }
     bool            operator==( const ScBigAddress& r ) const
                     { return nCol == r.nCol && nRow == r.nRow && nTab == r.nTab; }
+    bool            operator!=( const ScBigAddress& r ) const
+                    { return !operator==( r ); }
 };
 
 inline void ScBigAddress::PutInOrder( ScBigAddress& r )

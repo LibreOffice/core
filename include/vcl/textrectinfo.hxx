@@ -41,6 +41,8 @@ public:
                             { return ((mnMaxWidth   == rInfo.mnMaxWidth)    &&
                                       (mnLineCount  == rInfo.mnLineCount)   &&
                                       (mbEllipsis   == rInfo.mbEllipsis)); }
+    bool                operator !=( const TextRectInfo& rInfo ) const
+                            { return !(TextRectInfo::operator==( rInfo )); }
 };
 
 inline TextRectInfo::TextRectInfo()
