@@ -26,7 +26,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <numeric>
 
-// - ImplLineInfo -
 
 ImplLineInfo::ImplLineInfo() :
     mnRefCount  ( 1 ),
@@ -69,7 +68,6 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
         && meLineCap == rB.meLineCap);
 }
 
-// - LineInfo -
 
 LineInfo::LineInfo( LineStyle eStyle, long nWidth )
 {

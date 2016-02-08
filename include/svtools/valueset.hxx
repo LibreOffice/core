@@ -179,7 +179,6 @@ to be set (before Show) with SetStyle().
 
 typedef std::vector<ValueSetItem*> ValueItemList;
 
-// - ValueSet types -
 #define WB_RADIOSEL             ((WinBits)0x00008000)
 #define WB_ITEMBORDER           ((WinBits)0x00010000)
 #define WB_DOUBLEBORDER         ((WinBits)0x00020000)

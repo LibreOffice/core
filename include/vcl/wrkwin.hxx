@@ -29,7 +29,6 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 struct SystemParentData;
 
 
-// - WorkWindow - Types -
 
 
 // Presentation Flags
@@ -47,7 +46,6 @@ namespace o3tl
 }
 
 
-// - WorkWindow -
 
 
 class VCL_DLLPUBLIC WorkWindow : public SystemWindow

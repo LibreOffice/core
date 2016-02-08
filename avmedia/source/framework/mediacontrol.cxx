@@ -58,7 +58,6 @@ namespace avmedia
 {
 
 
-// - MediaControl -
 
 
 MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :

@@ -103,7 +103,6 @@ protected:
 };
 
 
-// - PushButton-Types -
 
 
 enum class PushButtonDropdownStyle
@@ -114,7 +113,6 @@ enum class PushButtonDropdownStyle
 };
 
 
-// - PushButton -
 
 
 class VCL_DLLPUBLIC PushButton : public Button
@@ -257,7 +255,6 @@ public:
 
 
 
-// - HelpButton -
 
 
 class VCL_DLLPUBLIC HelpButton : public PushButton
@@ -277,7 +274,6 @@ public:
 };
 
 
-// - RadioButton -
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
@@ -404,7 +400,6 @@ public:
 };
 
 
-// - CheckBox -
 
 
 class VCL_DLLPUBLIC CheckBox : public Button
@@ -506,7 +501,6 @@ inline bool CheckBox::IsChecked() const
 }
 
 
-// - Control-Layer fuer alten Code -
 
 
 class VCL_DLLPUBLIC ImageButton : public PushButton

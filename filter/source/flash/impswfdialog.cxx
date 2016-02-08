@@ -25,7 +25,6 @@ using namespace com::sun::star::beans;
 
 
 
-// - ImpPDFDialog -
 
 
 ImpSWFDialog::ImpSWFDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :

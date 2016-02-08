@@ -176,7 +176,6 @@ class ImplHeadItem;
 typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 
 
-// - WinBits -
 
 
 #define WB_BOTTOMBORDER         ((WinBits)0x0400)
@@ -184,7 +183,6 @@ typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 #define WB_STDHEADERBAR         (WB_BUTTONSTYLE | WB_BOTTOMBORDER)
 
 
-// - HeaderBarItemBits -
 
 
 enum class HeaderBarItemBits
@@ -213,7 +211,6 @@ namespace o3tl
 }
 
 
-// - HeaderBar-Types -
 
 
 #define HEADERBAR_APPEND            ((sal_uInt16)0xFFFF)
@@ -223,7 +220,6 @@ namespace o3tl
 #define HEADERBAR_TEXTOFF           2
 
 
-// - HeaderBar -
 
 
 class VCLXHeaderBar;

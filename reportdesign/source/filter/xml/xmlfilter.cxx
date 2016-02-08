@@ -351,7 +351,6 @@ Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) t
 }
 
 
-// - ORptFilter -
 
 ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, SvXMLImportFlags nImportFlags )
     :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)

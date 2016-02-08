@@ -26,7 +26,6 @@
 
 #include <boost/shared_array.hpp>
 
-// - AquaSalInfoPrinter -
 
 class AquaSalGraphics;
 
@@ -113,7 +112,6 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     AquaSalInfoPrinter& operator=(const AquaSalInfoPrinter&) = delete;
 };
 
-// - AquaSalPrinter -
 
 class AquaSalPrinter : public SalPrinter
 {

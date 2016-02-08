@@ -27,7 +27,6 @@ using namespace ::com::sun::star;
 namespace avmedia { namespace macavf {
 
 // ----------------
-// - Manager -
 // ----------------
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :

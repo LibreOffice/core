@@ -42,7 +42,6 @@ template< class T > T getSafeValue( const Any& rAny )
     return value;
 }
 
-// - SdOptionsItem -
 
 SdOptionsItem::SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree ) :
     ConfigItem  ( rSubTree ),
@@ -78,7 +77,6 @@ void SdOptionsItem::SetModified()
     ConfigItem::SetModified();
 }
 
-// - SdOptionsGeneric -
 SdOptionsGeneric::SdOptionsGeneric(sal_uInt16 nConfigId, const OUString& rSubTree)
     : maSubTree(rSubTree)
     , mpCfgItem( nullptr)

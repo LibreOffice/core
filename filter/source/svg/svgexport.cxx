@@ -318,7 +318,6 @@ bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextFiel
 
 
 
-// - SVGExport -
 
 
 SVGExport::SVGExport(
@@ -386,7 +385,6 @@ SVGExport::~SVGExport()
 }
 
 
-// - ObjectRepresentation -
 
 
 ObjectRepresentation::ObjectRepresentation() :
@@ -534,7 +532,6 @@ bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
 
 
 
-// - SVGFilter -
 
 
 bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )

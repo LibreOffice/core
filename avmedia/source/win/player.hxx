@@ -47,7 +47,6 @@ struct IDirectDrawSurface;
 namespace avmedia { namespace win {
 
 
-// - Player -
 
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,

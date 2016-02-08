@@ -49,7 +49,6 @@ typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
 
 
-// - DdeData -
 
 
 class SVL_DLLPUBLIC DdeData
@@ -83,7 +82,6 @@ public:
 };
 
 
-// - DdeTransaction -
 
 
 class SVL_DLLPUBLIC DdeTransaction
@@ -133,7 +131,6 @@ private:
 };
 
 
-// - DdeLink -
 
 
 class SVL_DLLPUBLIC DdeLink : public DdeTransaction
@@ -150,7 +147,6 @@ public:
 };
 
 
-// - DdeWarmLink -
 
 
 class SVL_DLLPUBLIC DdeWarmLink : public DdeLink
@@ -160,7 +156,6 @@ public:
 };
 
 
-// - DdeHotLink -
 
 
 class SVL_DLLPUBLIC DdeHotLink : public DdeLink
@@ -170,7 +165,6 @@ public:
 };
 
 
-// - DdeRequest -
 
 
 class SVL_DLLPUBLIC DdeRequest : public DdeTransaction
@@ -180,7 +174,6 @@ public:
 };
 
 
-// - DdePoke -
 
 
 class SVL_DLLPUBLIC DdePoke : public DdeTransaction
@@ -193,7 +186,6 @@ public:
 };
 
 
-// - DdeExecute -
 
 
 class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
@@ -203,7 +195,6 @@ public:
 };
 
 
-// - DdeConnection -
 
 
 class SVL_DLLPUBLIC DdeConnection
@@ -235,7 +226,6 @@ private:
 };
 
 
-// - DdeItem -
 
 
 class SVL_DLLPUBLIC DdeItem
@@ -264,7 +254,6 @@ public:
 };
 
 
-// - DdeItem -
 
 
 class SVL_DLLPUBLIC DdeGetPutItem : public DdeItem
@@ -280,7 +269,6 @@ public:
 };
 
 
-// - DdeTopic -
 
 
 class SVL_DLLPUBLIC DdeTopic
@@ -330,7 +318,6 @@ private:
 };
 
 
-// - DdeService -
 
 
 class SVL_DLLPUBLIC DdeService
@@ -385,7 +372,6 @@ private:
 };
 
 
-// - DdeTransaction -
 
 
 inline long DdeTransaction::GetError()

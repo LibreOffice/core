@@ -34,7 +34,6 @@ namespace avmedia
 {
 
 
-// - MediaToolboxControl -
 
 
 class MediaToolBoxControl_Impl : public MediaControl
@@ -75,7 +74,6 @@ void MediaToolBoxControl_Impl::execute( const MediaItem& rItem )
 }
 
 
-// - MediaToolBoxControl -
 
 
 SFX_IMPL_TOOLBOX_CONTROL( ::avmedia::MediaToolBoxControl, ::avmedia::MediaItem );

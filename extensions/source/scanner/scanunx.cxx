@@ -83,7 +83,6 @@ Sequence< sal_Int8 > BitmapTransporter::getDIB() throw(std::exception)
 }
 
 
-// - SaneHolder -
 
 
 struct SaneHolder
@@ -130,7 +129,6 @@ namespace
 }
 
 
-// - ScannerThread -
 
 
 class ScannerThread : public osl::Thread
@@ -200,7 +198,6 @@ void ScannerThread::run()
 }
 
 
-// - ScannerManager -
 
 
 void ScannerManager::AcquireData()

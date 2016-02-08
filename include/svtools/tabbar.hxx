@@ -262,7 +262,6 @@ been carried out.
 
 class Button;
 
-// - WinBits -
 
 
 #define WB_RANGESELECT      ((WinBits)0x00200000)
@@ -274,13 +273,11 @@ class Button;
 #define WB_STDTABBAR        WB_BORDER
 
 
-// - TabBarPageBits -
 
 
 typedef sal_uInt16 TabBarPageBits;
 
 
-// - Bits for TabBarPages -
 
 
 #define TPB_SPECIAL         ((TabBarPageBits)0x0001)
@@ -295,7 +292,6 @@ enum TabBarAllowRenamingReturnCode {
 };
 
 
-// - TabBar -
 
 class MouseEvent;
 class TrackingEvent;

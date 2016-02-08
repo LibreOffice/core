@@ -35,7 +35,6 @@
 class SotStorage;
 class SotStorageStream;
 
-// - SgaObjKind -
 
 
 struct GalleryObject
@@ -59,7 +58,6 @@ class SgaObject;
 class FmFormModel;
 class ListBox;
 
-// - GalleryTheme -
 
 
 class Gallery;

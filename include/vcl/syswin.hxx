@@ -32,7 +32,6 @@ class NotebookBarWindow;
 class TaskPaneList;
 class VclContainer;
 
-// - Icon-Types -
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
 #define ICON_SPREADSHEET_DOCUMENT       4
@@ -44,7 +43,6 @@ class VclContainer;
 #define ICON_MACROLIBRARY               1
 
 
-// - WindowStateData -
 
 
 #define WINDOWSTATE_MASK_X                  ((sal_uInt32)0x00000001)
@@ -121,7 +119,6 @@ public:
 };
 
 
-// - SystemWindow-Types -
 
 
 enum class MenuBarMode
@@ -136,7 +133,6 @@ enum class TitleButton
     Menu           = 4,
 };
 
-// - SystemWindow -
 class VCL_DLLPUBLIC SystemWindow
     : public vcl::Window
     , public VclBuilderContainer

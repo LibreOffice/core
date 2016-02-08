@@ -53,7 +53,6 @@
 
 
 
-// - Namespaces -
 
 
 using namespace ::ucbhelper;
@@ -65,7 +64,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
 
-// - SearchThread -
 
 
 SearchThread::SearchThread( SearchProgress* pProgess,
@@ -200,7 +198,6 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 }
 
 
-// - SearchProgress -
 
 
 SearchProgress::SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL )
@@ -277,7 +274,6 @@ void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl 
 }
 
 
-// - TakeThread -
 
 
 TakeThread::TakeThread(
@@ -340,7 +336,6 @@ void TakeThread::execute()
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ), nullptr, true );
 }
 
-// - TakeProgress -
 TakeProgress::TakeProgress(vcl::Window* pWindow)
     : ModalDialog(pWindow, "GalleryApplyProgress",
         "cui/ui/galleryapplyprogress.ui")
@@ -449,7 +444,6 @@ void TakeProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 }
 
 
-// - ActualizeProgress -
 ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     : ModalDialog(pWindow, "GalleryUpdateProgress",
         "cui/ui/galleryupdateprogress.ui")
@@ -542,7 +536,6 @@ void TitleDialog::dispose()
 }
 
 
-// - GalleryIdDialog -
 
 
 GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
@@ -605,7 +598,6 @@ IMPL_LINK_NOARG_TYPED(GalleryIdDialog, ClickOkHdl, Button*, void)
 
 
 
-// - GalleryThemeProperties -
 
 
 GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
@@ -640,7 +632,6 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<TPGalleryThemeProperties&>( rPage ).SetXChgData( pData );
 }
 
-// - TPGalleryThemeGeneral -
 TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "GalleryGeneralPage",
         "cui/ui/gallerygeneralpage.ui", &rSet)
@@ -741,7 +732,6 @@ VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const Sf
     return VclPtr<TPGalleryThemeGeneral>::Create( pParent, *rSet );
 }
 
-// - TPGalleryThemeProperties -
 TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
     , pData(nullptr)

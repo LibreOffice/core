@@ -30,7 +30,6 @@ namespace avmedia { namespace macavf {
 
 /*
 // ----------
-// - Player -
 // ----------
 */
 

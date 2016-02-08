@@ -26,7 +26,6 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace quicktime {
 
-// - Manager -
 
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :

@@ -30,7 +30,6 @@
 class UserDrawEvent;
 
 
-// - FixedText -
 
 
 class VCL_DLLPUBLIC FixedText : public Control
@@ -92,7 +91,6 @@ public:
 };
 
 
-// - FixedLine -
 
 
 class VCL_DLLPUBLIC FixedLine : public Control
@@ -126,7 +124,6 @@ public:
     virtual Size    GetOptimalSize() const override;
 };
 
-// - FixedBitmap -
 class VCL_DLLPUBLIC FixedBitmap : public Control
 {
 private:
@@ -155,7 +152,6 @@ public:
 };
 
 
-// - FixedImage -
 
 
 class VCL_DLLPUBLIC FixedImage : public Control

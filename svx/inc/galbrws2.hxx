@@ -35,7 +35,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 
-// - GalleryBrowserMode -
 
 
 enum GalleryBrowserMode
@@ -47,7 +46,6 @@ enum GalleryBrowserMode
 };
 
 
-// - GalleryTravel -
 
 
 enum GalleryBrowserTravel
@@ -60,7 +58,6 @@ enum GalleryBrowserTravel
 };
 
 
-// - GalleryItemTextFlags -
 
 
 #define GALLERY_ITEM_THEMENAME  0x00000001
@@ -68,7 +65,6 @@ enum GalleryBrowserTravel
 #define GALLERY_ITEM_PATH       0x00000004
 
 
-// - GalleryToolBox -
 
 
 class GalleryToolBox : public ToolBox
@@ -83,7 +79,6 @@ public:
 };
 
 
-// - GalleryBrowser2 -
 
 
 class Gallery;

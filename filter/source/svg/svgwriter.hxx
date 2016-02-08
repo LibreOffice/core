@@ -78,7 +78,6 @@ using namespace ::com::sun::star::xml::sax;
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
 
 
-// - SVGAttributeWriter -
 
 
 class SVGActionWriter;
@@ -150,7 +149,6 @@ class GDIMetaFile;
 
 
 
-// - BulletListItemInfo -
 
 struct BulletListItemInfo
 {
@@ -162,7 +160,6 @@ struct BulletListItemInfo
 
 
 
-// - SVGTextWriter -
 
 class SVGTextWriter
 {
@@ -270,7 +267,6 @@ class SVGTextWriter
 };
 
 
-// - SVGActionWriter -
 
 
 class SVGActionWriter

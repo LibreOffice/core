@@ -25,7 +25,6 @@
 #include "com/sun/star/task/PDFExportException.hpp"
 #include <cppuhelper/supportsservice.hxx>
 
-// - PDFInteractionHandler -
 PDFInteractionHandler::PDFInteractionHandler()
 {
 }

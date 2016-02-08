@@ -21,7 +21,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-// - ScannerManager -
 
 
 Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )

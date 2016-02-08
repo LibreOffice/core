@@ -29,7 +29,6 @@ using namespace ::com::sun::star;
 namespace avmedia { namespace macavf {
 
 // ---------------
-// - Window -
 // ---------------
 
 Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Player& i_rPlayer, NSView* i_pParentView )

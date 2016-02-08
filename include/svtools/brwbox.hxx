@@ -51,7 +51,6 @@ namespace utl {
 }
 
 
-// - BrowseBox-Types -
 
 
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
@@ -125,7 +124,6 @@ namespace o3tl
 #define BROWSER_MOVECOLUMNRIGHT         757
 
 
-// - BrowseEvent -
 
 
 class BrowseEvent
@@ -151,7 +149,6 @@ public:
 };
 
 
-// - BrowserMouseEvent -
 
 
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
@@ -165,7 +162,6 @@ public:
 };
 
 
-// - BrowserAcceptDropEvent -
 
 
 class BrowserAcceptDropEvent : public AcceptDropEvent, public BrowseEvent
@@ -176,7 +172,6 @@ public:
 };
 
 
-// - BrowserExecuteDropEvent -
 
 
 class BrowserExecuteDropEvent : public ExecuteDropEvent, public BrowseEvent
@@ -187,7 +182,6 @@ public:
 };
 
 
-// - BrowseBox -
 
 
 // TODO

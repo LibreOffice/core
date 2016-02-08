@@ -32,7 +32,6 @@ class Size;
 namespace vcl { class PDFWriter; }
 
 
-// - PDFExport -
 
 
 class PDFExport

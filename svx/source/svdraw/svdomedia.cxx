@@ -47,7 +47,6 @@
 using namespace ::com::sun::star;
 
 
-// - SdrMediaObj -
 
 // Note: the temp file is read only, until it is deleted!
 // It may be shared between multiple documents in case of copy/paste,

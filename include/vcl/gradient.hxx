@@ -28,7 +28,6 @@
 #include <o3tl/cow_wrapper.hxx>
 
 
-// - Impl_Gradient -
 
 
 class Rectangle;
@@ -60,7 +59,6 @@ public:
 };
 
 
-// - Gradient -
 
 
 class VCL_DLLPUBLIC Gradient

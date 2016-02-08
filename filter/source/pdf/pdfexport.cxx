@@ -85,7 +85,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::graphic;
 
 
-// - PDFExport -
 
 
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,

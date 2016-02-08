@@ -180,7 +180,6 @@ IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
 }
 
 
-// - FilterMosaic -
 
 
 GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& rGraphic,
@@ -266,7 +265,6 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterSmooth -
 
 
 GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius)
@@ -325,7 +323,6 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
 }
 
 
-// - GraphicFilterSolarize -
 
 
 GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
@@ -400,7 +397,6 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterSepia -
 
 
 GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
@@ -456,7 +452,6 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterPoster -
 
 
 GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rGraphic,
@@ -514,7 +509,6 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 
-// - GraphicFilterEmboss -
 
 
 void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )

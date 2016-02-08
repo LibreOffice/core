@@ -27,7 +27,6 @@
 #include "com/sun/star/media/XPlayerWindow.hdl"
 
 // ---------------
-// - MyMediaView -
 // ---------------
 
 @interface MyMediaView : NSView
@@ -40,7 +39,6 @@
 namespace avmedia { namespace macavf {
 
 // ---------------
-// - Window -
 // ---------------
 
 class Player;

@@ -40,7 +40,6 @@ using namespace ::com::sun::star;
 namespace avmedia {
 
 
-// - MediaWindow -
 
 
 MediaWindow::MediaWindow( vcl::Window* parent, bool bInternalMediaControl ) :

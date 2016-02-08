@@ -74,7 +74,6 @@ MacAVObserverObject* MacAVObserverHandler::getObserver()
 
 
 // ----------------
-// - Player -
 // ----------------
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )

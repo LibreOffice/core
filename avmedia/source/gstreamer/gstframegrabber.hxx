@@ -28,7 +28,6 @@
 namespace avmedia { namespace gstreamer {
 
 
-// - FrameGrabber -
 
 
 typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,

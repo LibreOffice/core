@@ -28,7 +28,6 @@
 #include "giflzwc.hxx"
 #include <memory>
 
-// - GIFWriter -
 
 
 class GIFWriter

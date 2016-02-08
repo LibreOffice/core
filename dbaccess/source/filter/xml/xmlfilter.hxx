@@ -53,7 +53,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
-// - ODBFilter -
 class ODBFilter : public SvXMLImport
 {
 public:

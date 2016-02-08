@@ -78,7 +78,6 @@
 #include <svx/xbtmpit.hxx>
 #include <memory>
 
-// - Namespaces -
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

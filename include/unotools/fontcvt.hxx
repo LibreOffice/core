@@ -25,7 +25,6 @@
 #include <tools/solar.h>
 #include <o3tl/typed_flags_set.hxx>
 
-// - FontToSubsFont -
 
 enum class FontToSubsFontFlags
 {
@@ -44,7 +43,6 @@ UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( F
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC OUString                    GetFontToSubsFontName( FontToSubsFontConverter hConverter );
 
-// - StarSymbolToMSMultiFont -
 
 class UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont
 {

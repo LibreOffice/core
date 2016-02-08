@@ -34,7 +34,6 @@ namespace avmedia
 {
 
 
-// - MediaPlayer -
 
 
 MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
@@ -55,7 +54,6 @@ MediaPlayer::~MediaPlayer()
 SFX_IMPL_DOCKINGWINDOW_WITHID( MediaPlayer, SID_AVMEDIA_PLAYER )
 
 
-// - MediaFloater -
 
 
 MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* pParent ) :

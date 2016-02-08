@@ -27,7 +27,6 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
 
-// - MediaEventListenersImpl -
 
 
 MediaEventListenersImpl::MediaEventListenersImpl( vcl::Window& rEventWindow ) :
