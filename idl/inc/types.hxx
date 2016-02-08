@@ -35,7 +35,6 @@ class SvMetaAttribute : public SvMetaReference
 {
     tools::SvRef<SvMetaType> aType;
     SvIdentifier             aSlotId;
-    SvBOOL                   aExport;
 
 protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -47,8 +46,6 @@ public:
     void                SetSlotId( const SvIdentifier & rId )
                         { aSlotId = rId; }
     const SvIdentifier & GetSlotId() const;
-    bool                GetExport() const;
-    bool                GetHidden() const;
     SvMetaType *        GetType() const;
 
     virtual bool        IsMethod() const;

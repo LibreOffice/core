@@ -30,13 +30,11 @@
 #include <database.hxx>
 
 SvMetaAttribute::SvMetaAttribute()
-    : aExport( true, false )
 {
 }
 
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
-    , aExport( true, false )
 {
 }
 
@@ -50,23 +48,6 @@ const SvIdentifier & SvMetaAttribute::GetSlotId() const
 {
     if( aSlotId.IsSet() || !GetRef() ) return aSlotId;
     return static_cast<SvMetaAttribute *>(GetRef())->GetSlotId();
-}
-
-bool SvMetaAttribute::GetExport() const
-{
-    if( aExport.IsSet() || !GetRef() ) return aExport;
-    return static_cast<SvMetaAttribute *>(GetRef())->GetExport();
-}
-
-bool SvMetaAttribute::GetHidden() const
-{
-    // when export is set, but hidden is not the default is used
-    if ( aExport.IsSet() )
-        return !aExport;
-    else if( !GetRef() )
-        return false;
-    else
-        return static_cast<SvMetaAttribute *>(GetRef())->GetHidden();
 }
 
 bool SvMetaAttribute::IsMethod() const
@@ -143,7 +124,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm )
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
-    aExport.ReadSvIdl( SvHash_Export(), rInStm );
 }
 
 sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )

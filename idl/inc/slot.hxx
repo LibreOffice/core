@@ -55,7 +55,8 @@ class SvMetaSlot : public SvMetaAttribute
     SvMetaSlot*     pNextSlot;
     sal_uLong        nListPos;
     SvMetaEnumValue* pEnumValue;
-    SvBOOL                   aReadOnlyDoc;
+    SvBOOL           aReadOnlyDoc;
+    SvBOOL           aExport;
 
     void            WriteSlot( const OString& rShellName,
                             sal_uInt16 nCount, const OString& rSlotId,
@@ -138,6 +139,8 @@ public:
     bool                GetImageRotation() const;
     bool                GetImageReflection() const;
     bool                GetReadOnlyDoc() const;
+    bool                GetExport() const;
+    bool                GetHidden() const;
 
     sal_uLong           GetListPos() const
                         { return nListPos; }

@@ -41,6 +41,7 @@ SvMetaSlot::SvMetaSlot()
     , nListPos(0)
     , pEnumValue(nullptr)
     , aReadOnlyDoc ( true, false )
+    , aExport( true, false )
 {
 }
 
@@ -53,6 +54,7 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     , nListPos(0)
     , pEnumValue(nullptr)
     , aReadOnlyDoc ( true, false )
+    , aExport( true, false )
 {
 }
 
@@ -60,6 +62,23 @@ bool SvMetaSlot::GetReadOnlyDoc() const
 {
     if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
     return static_cast<SvMetaSlot *>(GetRef())->GetReadOnlyDoc();
+}
+
+bool SvMetaSlot::GetExport() const
+{
+    if( aExport.IsSet() || !GetRef() ) return aExport;
+    return static_cast<SvMetaSlot *>(GetRef())->GetExport();
+}
+
+bool SvMetaSlot::GetHidden() const
+{
+    // when export is set, but hidden is not the default is used
+    if ( aExport.IsSet() )
+        return !aExport;
+    else if( !GetRef() )
+        return false;
+    else
+        return static_cast<SvMetaSlot *>(GetRef())->GetHidden();
 }
 
 bool SvMetaSlot::IsVariable() const
@@ -229,6 +248,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
     bOk |= aDisableFlags.ReadSvIdl( SvHash_DisableFlags(), rInStm );
     bOk |= aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
+    bOk |= aExport.ReadSvIdl( SvHash_Export(), rInStm );
 
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
         SetToggle( aToggle ), bOk = true;

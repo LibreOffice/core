@@ -123,18 +123,6 @@ interface BaseSelection
 
 interface TableEditView
 {
-    SbxObject SearchSettings
-    [
-    ]
-
-    SbxObject Table
-    [
-    ]
-    SbxObject Range
-    [
-        Export = FALSE ;
-    ]
-
     FID_TOGGLEINPUTLINE     [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DEFINE_PRINTAREA    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_ADD_PRINTAREA       [ ExecMethod = Execute; StateMethod = GetState; ]
