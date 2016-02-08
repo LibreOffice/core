@@ -191,13 +191,11 @@ SvMetaType::SvMetaType()
 }
 
 SvMetaType::SvMetaType( const OString& rName,
-                        char cPc,
-                        const OString& rBasicPostfix )
+                        char cPc )
     CTOR
 {
     SetName( rName );
     cParserChar = cPc;
-    aBasicPostfix.setString(rBasicPostfix);
 }
 
 SvMetaType::~SvMetaType() {
@@ -417,7 +415,7 @@ bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
 }
 
 SvMetaTypeString::SvMetaTypeString()
-    : SvMetaType( "String", 's', "$" )
+    : SvMetaType( "String", 's' )
 {
 }
 
@@ -490,7 +488,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
 }
 
 SvMetaTypevoid::SvMetaTypevoid()
-    : SvMetaType( "void", 'v', "" )
+    : SvMetaType( "void", 'v' )
 {
 }
 

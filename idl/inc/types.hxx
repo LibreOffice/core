@@ -69,7 +69,6 @@ enum MetaTypeType { Method, Struct, Base, Enum, Class };
 
 class SvMetaType : public SvMetaReference
 {
-    SvIdentifier                aBasicPostfix;
     SvRefMemberList<SvMetaAttribute *>* pAttrList;
     MetaTypeType                nType;
     bool                        bIsItem;
@@ -86,8 +85,7 @@ protected:
 public:
             SvMetaType();
             SvMetaType( const OString& rTypeName,
-                        char cParserChar,
-                        const OString& rBasicPostfix );
+                        char cParserChar );
 
     virtual ~SvMetaType();
 
