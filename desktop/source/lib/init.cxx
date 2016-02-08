@@ -663,15 +663,8 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 
-        // add interaction handler too
-        rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "saveas", gImpl, pDocument));
-        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
-
-        aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteraction;
-
         uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-        xStorable->storeAsURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeToURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
 
         return true;
     }
