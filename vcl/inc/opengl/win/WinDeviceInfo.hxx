@@ -143,7 +143,6 @@ private:
     uint32_t mnWindowsVersion;
 
     bool mbHasDualGPU;
-    bool mbHasDriverVersionMismatch;
     bool mbRDP;
 
     void GetData();
