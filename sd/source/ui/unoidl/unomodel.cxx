@@ -2386,8 +2386,6 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         // tiled rendering works only when we are in the 'Normal' view, switch to that
         mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
-    mpDoc->setTiledRendering(true);
-
     if (DrawViewShell* pViewShell = GetViewShell())
     {
         DrawView* pDrawView = pViewShell->GetDrawView();

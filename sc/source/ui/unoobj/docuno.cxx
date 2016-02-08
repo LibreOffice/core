@@ -952,7 +952,6 @@ Pointer ScModelObj::getPointer()
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
-    pDocShell->GetDocument().GetDrawLayer()->setTiledRendering(true);
 
     // show us the text exactly
     ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());

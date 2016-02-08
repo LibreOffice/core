@@ -3235,8 +3235,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 {
     SolarMutexGuard aGuard;
 
-    // Call setTiledRendering() first, so that when we change the view layout,
-    // we already don't center the pages.
     SwDoc* pDoc = pDocShell->GetDoc();
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 

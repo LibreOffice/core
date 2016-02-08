@@ -125,7 +125,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pDrawOutliner=nullptr;
     pHitTestOutliner=nullptr;
     pRefOutDev=nullptr;
-    mbTiledRendering = false;
     mpLibreOfficeKitCallback = nullptr;
     mpLibreOfficeKitData = nullptr;
     mbTiledSearching = false;
@@ -815,11 +814,6 @@ void SdrModel::SetRefDevice(OutputDevice* pDev)
     ImpSetOutlinerDefaults( pDrawOutliner );
     ImpSetOutlinerDefaults( pHitTestOutliner );
     RefDeviceChanged();
-}
-
-void SdrModel::setTiledRendering(bool bTiledRendering)
-{
-    mbTiledRendering = bTiledRendering;
 }
 
 void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
