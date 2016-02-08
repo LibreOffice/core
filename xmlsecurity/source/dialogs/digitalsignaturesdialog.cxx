@@ -530,6 +530,9 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 xTransact->commit();
                 uno::Reference<io::XOutputStream> xOutputStream(aStreamHelper.xSignatureStream, uno::UNO_QUERY);
                 xOutputStream->closeOutput();
+
+                uno::Reference<io::XTempFile> xTempFile(aStreamHelper.xSignatureStream, uno::UNO_QUERY);
+                SAL_INFO("xmlsecurity.dialogs", "AddButtonHdl: temporary storage is at " << xTempFile->getUri());
             }
 
             maSignatureHelper.EndMission();
