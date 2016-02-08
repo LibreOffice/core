@@ -174,8 +174,6 @@ protected:
     SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
     sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
-    /// Set if we are doing tiled rendering.
-    bool mbTiledRendering;
     LibreOfficeKitCallback mpLibreOfficeKitCallback;
     void* mpLibreOfficeKitData;
     /// Set if we are in the middle of a tiled search.
@@ -337,8 +335,6 @@ public:
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
     OutputDevice*        GetRefDevice() const                   { return pRefOutDev.get(); }
-    /// Set if we are doing tiled rendering.
-    void                 setTiledRendering(bool bTiledRendering);
     /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
     void                 registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Gets the LOK callback registered by registerLibreOfficeKitCallback().
