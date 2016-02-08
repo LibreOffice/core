@@ -66,6 +66,7 @@ static void lcl_UnzipKmz(const OUString& rSourceURL, const OUString& rOutputFold
     }
 }
 
+
 bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
 {
     o_rOutput.clear();
@@ -133,7 +134,8 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     o_rOutput = sOutput + "/" + GetFilename(sOutput) + ".json";
     return true;
 }
-#endif
+#endif // HAVE_FEATURE_COLLADA
+
 
 static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed::XStorage> xSubStorage, ::ucbhelper::Content& rContent)
 {
@@ -237,6 +239,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
     }
 }
 
+
 bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         const OUString& rSourceURL, OUString& o_rEmbeddedURL)
 {
@@ -311,11 +314,12 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
     return false;
 }
 
+
 bool IsModel(const OUString& rMimeType)
 {
     return rMimeType == AVMEDIA_MIMETYPE_JSON;
 }
 
-} // namespace avemdia
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

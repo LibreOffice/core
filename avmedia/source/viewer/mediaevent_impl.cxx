@@ -27,20 +27,15 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {
 
-// - MediaEventListenersImpl -
-
-
 MediaEventListenersImpl::MediaEventListenersImpl( vcl::Window& rEventWindow ) :
     mpNotifyWindow( &rEventWindow )
 {
 }
 
 
-
 MediaEventListenersImpl::~MediaEventListenersImpl()
 {
 }
-
 
 
 void MediaEventListenersImpl::cleanUp()
@@ -50,12 +45,10 @@ void MediaEventListenersImpl::cleanUp()
 }
 
 
-
-void SAL_CALL MediaEventListenersImpl::disposing( const css::lang::EventObject& /* Source */ )
+void SAL_CALL MediaEventListenersImpl::disposing( const css::lang::EventObject& )
     throw (css::uno::RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
@@ -77,7 +70,6 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
 }
 
 
-
 void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e )
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -94,7 +86,6 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e 
         Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLKeyEvt );
     }
 }
-
 
 
 void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent& e )
@@ -116,7 +107,6 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent&
     }
 }
 
-// ----------------------------------------------gvd-----------------------
 
 void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent& e )
     throw (css::uno::RuntimeException, std::exception)
@@ -138,8 +128,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent
 }
 
 
-
-void SAL_CALL MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent& /* e */ )
+void SAL_CALL MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent& )
     throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
@@ -151,8 +140,7 @@ void SAL_CALL MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent&
 }
 
 
-
-void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& /* e */ )
+void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& )
     throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
@@ -162,7 +150,6 @@ void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& 
     {
     }
 }
-
 
 
 void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent& e )
@@ -179,7 +166,6 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent&
 }
 
 
-
 void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e )
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -194,20 +180,19 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e
 }
 
 
-
-void SAL_CALL MediaEventListenersImpl::focusGained( const css::awt::FocusEvent& /* e */ )
+void SAL_CALL MediaEventListenersImpl::focusGained( const css::awt::FocusEvent& )
     throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 
-
-void SAL_CALL MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& /* e */ )
+void SAL_CALL MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& )
     throw (css::uno::RuntimeException, std::exception)
 {
 }
+
 
 } // namespace priv
-} // namespace avemdia
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

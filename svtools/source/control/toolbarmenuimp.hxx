@@ -56,7 +56,6 @@ const int BORDER_X = 0;
 const int BORDER_Y = 0;
 
 
-// - ToolbarMenuEntry -
 
 
 class ToolbarMenuEntry
@@ -100,7 +99,6 @@ public:
 };
 
 
-// - ToolbarMenuAcc -
 
 
 typedef ::cppu::WeakComponentImplHelper<
@@ -188,7 +186,6 @@ private:
 };
 
 
-// - ToolbarMenuEntryAcc -
 
 
 typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible,

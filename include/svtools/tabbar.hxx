@@ -262,9 +262,6 @@ been carried out.
 
 class Button;
 
-// - WinBits -
-
-
 #define WB_RANGESELECT      ((WinBits)0x00200000)
 #define WB_MULTISELECT      ((WinBits)0x00400000)
 #define WB_TOPBORDER        ((WinBits)0x04000000)
@@ -273,18 +270,9 @@ class Button;
 #define WB_INSERTTAB        ((WinBits)0x40000000)
 #define WB_STDTABBAR        WB_BORDER
 
-
-// - TabBarPageBits -
-
-
 typedef sal_uInt16 TabBarPageBits;
 
-
-// - Bits for TabBarPages -
-
-
 #define TPB_SPECIAL         ((TabBarPageBits)0x0001)
-
 
 // - TabBar-Types - used in TabBar::AllowRenaming
 
@@ -293,9 +281,6 @@ enum TabBarAllowRenamingReturnCode {
    TABBAR_RENAMING_YES,
    TABBAR_RENAMING_CANCEL
 };
-
-
-// - TabBar -
 
 class MouseEvent;
 class TrackingEvent;
@@ -307,6 +292,7 @@ class TabBarEdit;
 struct ImplTabBarItem;
 struct TabBar_Impl;
 typedef std::vector<ImplTabBarItem*> ImplTabBarList;
+
 
 class SVT_DLLPUBLIC TabBar : public vcl::Window
 {

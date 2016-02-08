@@ -44,8 +44,9 @@
 
 #include <memory>
 
-namespace dbaxml
-{
+
+namespace dbaxml {
+
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -56,8 +57,9 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
-// - ODBExport -
+
 #define PROGRESS_BAR_STEP 20
+
 
 class ODBExport : public SvXMLExport
 {

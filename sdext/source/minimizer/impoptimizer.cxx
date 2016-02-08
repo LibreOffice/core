@@ -477,7 +477,6 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 }
 
 
-// - ImpOptimizer -
 
 
 ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel ) :

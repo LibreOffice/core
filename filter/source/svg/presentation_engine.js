@@ -1136,7 +1136,6 @@ DebugPrinter.prototype.print = function( sMessage, nTime )
 };
 
 
-// - Debug Printers -
 var aGenericDebugPrinter = new DebugPrinter();
 aGenericDebugPrinter.on();
 var DBGLOG = bind2( DebugPrinter.prototype.print, aGenericDebugPrinter );

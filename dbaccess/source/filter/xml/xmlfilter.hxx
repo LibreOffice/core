@@ -41,8 +41,10 @@
 #include <map>
 #include <memory>
 
+
 namespace dbaxml
 {
+
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -53,7 +55,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
-// - ODBFilter -
+
 class ODBFilter : public SvXMLImport
 {
 public:
@@ -155,7 +157,7 @@ public:
     inline void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }
 };
 
-} // dbaxml
+} // namespace dbaxml
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

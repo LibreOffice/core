@@ -46,13 +46,10 @@ namespace svt {
     class BrowseBoxImpl;
     class IAccessibleFactory;
 }
+
 namespace utl {
     class AccessibleStateSetHelper;
 }
-
-
-// - BrowseBox-Types -
-
 
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
 #define BROWSER_ENDOFSELECTION      (static_cast<long>(SFX_ENDOFSELECTION))
@@ -125,9 +122,6 @@ namespace o3tl
 #define BROWSER_MOVECOLUMNRIGHT         757
 
 
-// - BrowseEvent -
-
-
 class BrowseEvent
 {
     VclPtr<vcl::Window>     pWin;
@@ -151,9 +145,6 @@ public:
 };
 
 
-// - BrowserMouseEvent -
-
-
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 {
 public:
@@ -165,9 +156,6 @@ public:
 };
 
 
-// - BrowserAcceptDropEvent -
-
-
 class BrowserAcceptDropEvent : public AcceptDropEvent, public BrowseEvent
 {
 public:
@@ -176,18 +164,12 @@ public:
 };
 
 
-// - BrowserExecuteDropEvent -
-
-
 class BrowserExecuteDropEvent : public ExecuteDropEvent, public BrowseEvent
 {
 public:
     BrowserExecuteDropEvent();
     BrowserExecuteDropEvent( BrowserDataWin* pWin, const ExecuteDropEvent& rEvt );
 };
-
-
-// - BrowseBox -
 
 
 // TODO
@@ -271,8 +253,7 @@ private:
     }               uRow;
     MultiSelection* pColSel;        // selected column-ids
 
-    //fdo#83943, detect if making the cursor position
-    //visible is impossible to achieve
+    // fdo#83943, detect if making the cursor position visible is impossible to achieve
     struct CursorMoveAttempt
     {
         long m_nCol;
@@ -670,7 +651,6 @@ public:
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     bool isAccessibleAlive( ) const;
 
-    // ACCESSIBILITY ==========================================================
 public:
     /** Creates and returns the accessible object of the whole BrowseBox. */
     virtual css::uno::Reference<
@@ -710,8 +690,6 @@ public:
         css::accessibility::XAccessible >
     CreateAccessibleControl( sal_Int32 nIndex ) override;
 
-    // Conversions ------------------------------------------------------------
-
     /** Converts a point relative to the data window origin to a cell address.
         @param rnRow  Out-parameter that takes the row index.
         @param rnColumnId  Out-parameter that takes the column ID.
@@ -740,8 +718,6 @@ public:
         @param rPoint  The position in pixels relative to the BrowseBox.
         @return <TRUE/>, if the point could be converted to a valid index. */
     virtual bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint ) override;
-
-    // Object data and state --------------------------------------------------
 
     /** return the name of the specified object.
         @param  eObjType
@@ -825,6 +801,6 @@ inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
     return *static_cast<DataFlavorExVector*>(implGetDataFlavors());
 }
 
-#endif
+#endif // INCLUDED_SVTOOLS_BRWBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

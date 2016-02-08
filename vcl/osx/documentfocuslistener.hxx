@@ -28,7 +28,6 @@
 
 #include <set>
 
-// - DocumentFocusListener -
 
 class DocumentFocusListener :
     public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >

@@ -10,9 +10,7 @@
 #include <windows.h>
 #include "nsAutoRef.h"
 
-// ----------------------------------------------------------------------------
 // Critical Section helper class
-// ----------------------------------------------------------------------------
 
 class AutoCriticalSection
 {

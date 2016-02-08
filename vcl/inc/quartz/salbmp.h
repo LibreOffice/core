@@ -32,7 +32,6 @@
 
 #include <boost/shared_array.hpp>
 
-// - SalBitmap  -
 
 struct  BitmapBuffer;
 class   BitmapPalette;

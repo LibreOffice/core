@@ -80,7 +80,6 @@ namespace sd {
 
 bool DrawViewShell::mbPipette = false;
 
-// - ScannerEventListener -
 
 class ScannerEventListener : public ::cppu::WeakImplHelper< lang::XEventListener >
 {

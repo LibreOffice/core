@@ -28,7 +28,6 @@
 class ToolBox;
 
 
-// - FloatingWindow-Types -
 
 
 enum class FloatWinPopupFlags
@@ -87,7 +86,6 @@ enum HitTest
     HITTEST_RECT
 };
 
-// - FloatingWindow -
 
 class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 {

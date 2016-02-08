@@ -26,10 +26,6 @@
 
 namespace vcl { class Window; }
 
-
-// - ColorDialog -
-
-
 namespace svtools
 {
     // SELECT is the default

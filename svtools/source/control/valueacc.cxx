@@ -32,7 +32,6 @@
 using namespace ::com::sun::star;
 
 
-// - ValueSetItem -
 
 
 ValueSetItem::ValueSetItem( ValueSet& rParent )
@@ -66,7 +65,6 @@ uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool b
 }
 
 
-// - ValueSetAcc -
 
 
 ValueSetAcc::ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled ) :
@@ -760,7 +758,6 @@ bool ValueSetAcc::HasNoneField() const
     return ((mpParent->GetStyle() & WB_NONEFIELD) != 0);
 }
 
-// - ValueItemAcc -
 ValueItemAcc::ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled ) :
     mpParent( pParent ),
     mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )

@@ -2466,7 +2466,6 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
-// - MenuBar -
 MenuBarWindow* MenuBar::getMenuBarWindow()
 {
     // so far just a dynamic_cast, hopefully to be turned into something saner

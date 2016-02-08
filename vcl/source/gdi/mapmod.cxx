@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 
 
-// - ImplMapMode -
 
 struct MapMode::ImplMapMode
 {

@@ -787,18 +787,15 @@ IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const s
     OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");
     return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::KEY_NONE;
 }
-// -------------------------------------------------------------------------
 sal_Int32	OSQLScanner::GetGERRule()		{ return PREDICATE_GER; }
 sal_Int32	OSQLScanner::GetENGRule()		{ return PREDICATE_ENG; }
 sal_Int32	OSQLScanner::GetSQLRule()		{ return SQL; }
 sal_Int32	OSQLScanner::GetDATERule()	{ return DATE; }
 sal_Int32	OSQLScanner::GetSTRINGRule()	{ return STRING; }
-// -------------------------------------------------------------------------
 void OSQLScanner::setScanner(bool _bNull)
 {
 	xxx_pGLOBAL_SQLSCAN = _bNull ? NULL : this;
 }
-// -------------------------------------------------------------------------
 sal_Int32 OSQLScanner::SQLlex()
 {
 	return SQLyylex();

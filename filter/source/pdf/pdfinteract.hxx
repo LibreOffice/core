@@ -20,17 +20,15 @@
 #ifndef INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 #define INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 
-#include "com/sun/star/lang/XServiceInfo.hpp"
 #include <cppuhelper/implbase.hxx>
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/task/XInteractionHandler2.hpp"
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
-
-// - PDFFilter -
 
 
 class PDFInteractionHandler : public cppu::WeakImplHelper < task::XInteractionHandler2,
@@ -47,6 +45,7 @@ protected:
 
     // XIniteractionHandler2
     virtual sal_Bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) throw(RuntimeException, std::exception) override;
+
 public:
 
                 PDFInteractionHandler();
@@ -54,20 +53,16 @@ public:
 };
 
 
-
 OUString PDFInteractionHandler_getImplementationName ()
     throw ( RuntimeException );
-
 
 
 bool SAL_CALL PDFInteractionHandler_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
 
-
 Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
     throw ( RuntimeException );
-
 
 
 Reference< XInterface >

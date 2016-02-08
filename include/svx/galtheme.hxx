@@ -35,8 +35,6 @@
 class SotStorage;
 class SotStorageStream;
 
-// - SgaObjKind -
-
 
 struct GalleryObject
 {
@@ -52,6 +50,7 @@ struct GalleryObject
     OUString        maPath;
 };
 
+
 typedef ::std::vector< GalleryObject* > GalleryObjectList;
 
 class GalleryThemeEntry;
@@ -59,16 +58,15 @@ class SgaObject;
 class FmFormModel;
 class ListBox;
 
-// - GalleryTheme -
-
-
 class Gallery;
 class GalleryProgress;
+
 namespace unogallery
 {
     class GalleryTheme;
     class GalleryItem;
 }
+
 
 class SVX_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 {
@@ -82,7 +80,7 @@ private:
     GalleryObjectList           aObjectList;
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
-    tools::SvRef<SotStorage>               aSvDrawStorageRef;
+    tools::SvRef<SotStorage>    aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
     sal_uIntPtr                 mnThemeLockCount;
@@ -219,6 +217,6 @@ public:
 SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme );
 SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme );
 
-#endif
+#endif // INCLUDED_SVX_GALTHEME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

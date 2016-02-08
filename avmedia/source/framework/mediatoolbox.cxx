@@ -33,10 +33,6 @@ using namespace ::com::sun::star;
 namespace avmedia
 {
 
-
-// - MediaToolboxControl -
-
-
 class MediaToolBoxControl_Impl : public MediaControl
 {
 public:
@@ -52,7 +48,6 @@ private:
 };
 
 
-
 MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl ) :
     MediaControl( &rParent, MEDIACONTROLSTYLE_SINGLELINE ),
     mpToolBoxControl( &rControl )
@@ -61,12 +56,10 @@ MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( vcl::Window& rParent, MediaT
 }
 
 
-
 void MediaToolBoxControl_Impl::update()
 {
     mpToolBoxControl->implUpdateMediaControl();
 }
-
 
 
 void MediaToolBoxControl_Impl::execute( const MediaItem& rItem )
@@ -75,11 +68,7 @@ void MediaToolBoxControl_Impl::execute( const MediaItem& rItem )
 }
 
 
-// - MediaToolBoxControl -
-
-
 SFX_IMPL_TOOLBOX_CONTROL( ::avmedia::MediaToolBoxControl, ::avmedia::MediaItem );
-
 
 
 MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
@@ -89,15 +78,12 @@ MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, To
 }
 
 
-
 MediaToolBoxControl::~MediaToolBoxControl()
 {
 }
 
 
-
-void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
-
+void MediaToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     MediaToolBoxControl_Impl* pCtrl = static_cast< MediaToolBoxControl_Impl* >( GetToolBox().GetItemWindow( GetId() ) );
 
@@ -123,19 +109,16 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
 }
 
 
-
 VclPtr<vcl::Window> MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return ( pParent ? VclPtr<MediaToolBoxControl_Impl>::Create( *pParent, *this ) : nullptr );
 }
 
 
-
 void MediaToolBoxControl::implUpdateMediaControl()
 {
     updateStatus( ".uno:AVMediaToolBox" );
 }
-
 
 
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
@@ -152,6 +135,6 @@ void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
     Dispatch( ".uno:AVMediaToolBox" , aArgs );
 }
 
-}
+} // namespace avmedia
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

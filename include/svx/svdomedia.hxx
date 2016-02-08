@@ -29,9 +29,6 @@ class Graphic;
 namespace sdr { namespace contact { class ViewContactOfSdrMediaObj; } }
 
 
-// - SdrMediaObj -
-
-
 class SVX_DLLPUBLIC SdrMediaObj : public SdrRectObj
 {
     friend class sdr::contact::ViewContactOfSdrMediaObj;

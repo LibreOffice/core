@@ -90,7 +90,6 @@ class GraphicCollector
 };
 
 
-// - GRAPHICCOLLECTOR -
 
 
 

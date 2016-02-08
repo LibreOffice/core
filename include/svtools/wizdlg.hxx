@@ -182,15 +182,8 @@ IMPL_LINK_TYPED( MyWizardDlg, ImplNextHdl, PushButton*, pBtn, void )
 
 *************************************************************************/
 
-
-// - WizardDialog-Types -
-
-
 #define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
 #define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
-
-
-// - WizardDialog -
 
 
 class SVT_DLLPUBLIC WizardDialog : public ModalDialog

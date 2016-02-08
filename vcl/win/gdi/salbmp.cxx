@@ -43,7 +43,6 @@
 #include <gdiplus.h>
 #include "postwin.h"
 
-// - Inlines -
 
 inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
 {
@@ -184,7 +183,6 @@ public:
 
 static GdiPlusBuffer aGdiPlusBuffer;
 
-// - WinSalBitmap -
 
 WinSalBitmap::WinSalBitmap()
 :   maSize(),

@@ -22,7 +22,6 @@
 #define INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
 
 
-// - IMapOwnData -
 
 
 class IMapOwnData

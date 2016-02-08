@@ -29,11 +29,6 @@
 #include <vector>
 
 
-// - ImageProducer -
-
-
-
-
 class SvStream;
 class Graphic;
 
@@ -58,7 +53,7 @@ private:
     bool            mbConsInit;
     Link<Graphic*,void> maDoneHdl;
 
-    bool             ImplImportGraphic( Graphic& rGraphic );
+    bool            ImplImportGraphic( Graphic& rGraphic );
     void            ImplUpdateData( const Graphic& rGraphic );
     void            ImplInitConsumer( const Graphic& rGraphic );
     void            ImplUpdateConsumer( const Graphic& rGraphic );
@@ -76,9 +71,9 @@ public:
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
-    void                           SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                           SAL_CALL release() throw() override  { OWeakObject::release(); }
+    css::uno::Any   SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    void            SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
+    void            SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // MT: ???
     void            setImage( css::uno::Reference< css::io::XInputStream > & rStmRef );

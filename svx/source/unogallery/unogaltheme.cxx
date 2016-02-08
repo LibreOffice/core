@@ -39,7 +39,6 @@ using namespace ::com::sun::star;
 namespace unogallery {
 
 
-// - GalleryTheme -
 
 
 GalleryTheme::GalleryTheme( const OUString& rThemeName )

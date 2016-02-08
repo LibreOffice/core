@@ -30,7 +30,6 @@
 #include <memory>
 
 
-// - SvxGraphicFilter -
 
 
 sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )

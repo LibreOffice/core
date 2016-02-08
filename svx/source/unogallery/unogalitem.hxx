@@ -34,7 +34,6 @@ namespace unogallery { class GalleryTheme; }
 namespace unogallery {
 
 
-// - GalleryItem -
 
 
 class GalleryItem : public ::cppu::OWeakAggObject,
@@ -100,7 +99,6 @@ private:
 };
 
 
-// - GalleryDrawingModel -
 
 
 class GalleryDrawingModel : public SvxUnoDrawingModel

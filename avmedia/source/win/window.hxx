@@ -34,11 +34,8 @@ struct IVideoWindow;
 
 namespace avmedia { namespace win {
 
-
-// - Window -
-
-
 class Player;
+
 
 class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
                                               css::lang::XServiceInfo >

@@ -26,7 +26,6 @@
 #include <vcl/dllapi.h>
 
 
-// - ImplMnemonicTypes -
 
 
 // Mnemonic Chars, which we want support
@@ -52,7 +51,6 @@
 #define MNEMONIC_INDEX_NOTFOUND     ((sal_uInt16)0xFFFF)
 
 
-// - MnemonicGenerator -
 
 
 class VCL_DLLPUBLIC MnemonicGenerator

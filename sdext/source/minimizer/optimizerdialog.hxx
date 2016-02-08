@@ -55,7 +55,6 @@
 #define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
 
 
-// - OPTIMIZERDIALOG -
 
 class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {

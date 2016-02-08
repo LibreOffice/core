@@ -29,15 +29,10 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace macavf {
 
-// ----------------
-// - FrameGrabber -
-// ----------------
-
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& /*rxMgr*/ )
 :   mpImageGen( nullptr )
 {}
 
-// ------------------------------------------------------------------------------
 
 FrameGrabber::~FrameGrabber()
 {
@@ -45,7 +40,6 @@ FrameGrabber::~FrameGrabber()
         CFRelease( mpImageGen );
 }
 
-// ------------------------------------------------------------------------------
 
 bool FrameGrabber::create( const ::rtl::OUString& rURL )
 {
@@ -64,7 +58,6 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
     return create( pMovie );
 }
 
-// ------------------------------------------------------------------------------
 
 bool FrameGrabber::create( AVAsset* pMovie )
 {
@@ -79,7 +72,6 @@ bool FrameGrabber::create( AVAsset* pMovie )
     return true;
 }
 
-// ------------------------------------------------------------------------------
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
     throw (uno::RuntimeException)
@@ -112,7 +104,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
@@ -120,7 +111,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MACAVF_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
 }
 
-// ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
@@ -128,7 +118,6 @@ sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceN
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME ) );
 }
 
-// ------------------------------------------------------------------------------
 
 uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

@@ -51,7 +51,6 @@
 
 #include <memory>
 
-// - SalBitmap -
 
 SalBitmap* X11SalInstance::CreateSalBitmap()
 {
@@ -887,7 +886,6 @@ bool X11SalBitmap::Replace( const Color& /*rSearchColor*/, const Color& /*rRepla
     return false;
 }
 
-// - ImplSalDDB -
 
 ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
                         SalX11Screen nXScreen, const SalTwoRect& rTwoRect )
@@ -1041,7 +1039,6 @@ void ImplSalDDB::ImplDraw(
     }
 }
 
-// - ImplSalBitmapCache -
 
 struct ImplBmpObj
 {

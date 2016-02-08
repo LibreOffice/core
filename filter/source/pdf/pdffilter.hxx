@@ -49,18 +49,12 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 
 
-// - PDFFilter -
-
-
-class PDFFilter : public cppu::WeakImplHelper < XFilter,
-                                                 XExporter,
-                                                 XInitialization,
-                                                 XServiceInfo >
+class PDFFilter : public cppu::WeakImplHelper < XFilter, XExporter, XInitialization, XServiceInfo >
 {
 private:
 
-    Reference< XComponentContext >      mxContext;
-    Reference< XComponent >             mxSrcDoc;
+    Reference< XComponentContext >  mxContext;
+    Reference< XComponent >         mxSrcDoc;
 
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
 
@@ -88,20 +82,16 @@ public:
 };
 
 
-
 OUString PDFFilter_getImplementationName ()
     throw ( RuntimeException );
-
 
 
 bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
 
-
 Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
     throw ( RuntimeException );
-
 
 
 Reference< XInterface >
