@@ -44,6 +44,7 @@ class SwFieldRefPage : public SwFieldPage
     VclPtr<FixedText>      m_pNameFT;
     VclPtr<Edit>           m_pNameED;
     VclPtr<Edit>           m_pValueED;
+    VclPtr<Edit>           m_pFilterED;
     OUString    sBookmarkText;
     OUString    sFootnoteText;
     OUString    sEndnoteText;
@@ -64,9 +65,15 @@ class SwFieldRefPage : public SwFieldPage
     DECL_LINK_TYPED(SubTypeListBoxHdl, ListBox&, void);
     DECL_LINK_TYPED(SubTypeTreeListBoxHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
+
     void SubTypeHdl();
 
     void                UpdateSubType();
+    void                UpdateFilterSubType(OUString rParams);
+
+    bool                MatchSubstring( OUString str1, OUString str2 );
+
     sal_Int32               FillFormatLB(sal_uInt16 nTypeId);
 
     // #i83479#
