@@ -54,6 +54,8 @@ public:
     virtual TextAttrib*     Clone() const = 0;
 
     virtual bool            operator==( const TextAttrib& rAttr ) const = 0;
+    bool                    operator!=( const TextAttrib& rAttr ) const
+                                { return !(*this == rAttr ); }
 };
 
 
