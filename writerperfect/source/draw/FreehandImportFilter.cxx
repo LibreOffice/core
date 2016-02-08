@@ -39,37 +39,27 @@ bool FreehandImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
     return false;
 }
 
-OUString FreehandImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL FreehandImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.FreehandImportFilter");
 }
 
-Sequence< OUString > FreehandImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL FreehandImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL FreehandImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
     pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-// XServiceInfo
-OUString SAL_CALL FreehandImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return FreehandImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL FreehandImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL FreehandImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return FreehandImportFilter_getSupportedServiceNames();
 }
 
 extern "C"

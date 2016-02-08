@@ -41,37 +41,27 @@ bool PageMakerImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, 
     return false;
 }
 
-OUString PageMakerImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL PageMakerImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Draw.PageMakerImportFilter");
 }
 
-Sequence< OUString > PageMakerImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] = "com.sun.star.document.ImportFilter";
     pArray[1] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-// XServiceInfo
-OUString SAL_CALL PageMakerImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return PageMakerImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL PageMakerImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL PageMakerImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return PageMakerImportFilter_getSupportedServiceNames();
 }
 
 extern "C"

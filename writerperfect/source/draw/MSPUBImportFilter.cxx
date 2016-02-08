@@ -39,37 +39,27 @@ bool MSPUBImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
     return false;
 }
 
-OUString MSPUBImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL MSPUBImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.MSPUBImportFilter");
 }
 
-Sequence< OUString > MSPUBImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
     pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-// XServiceInfo
-OUString SAL_CALL MSPUBImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return MSPUBImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return MSPUBImportFilter_getSupportedServiceNames();
 }
 
 extern "C"

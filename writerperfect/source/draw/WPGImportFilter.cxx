@@ -46,37 +46,27 @@ bool WPGImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStri
     return false;
 }
 
-OUString WPGImportFilter_getImplementationName()
-throw (RuntimeException)
+// XServiceInfo
+OUString SAL_CALL WPGImportFilter::getImplementationName()
+throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.WPGImportFilter");
 }
 
-Sequence< OUString > WPGImportFilter_getSupportedServiceNames()
-throw (RuntimeException)
+sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString &rServiceName)
+throw (RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames()
+throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
     pArray[1] =  "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
-}
-
-// XServiceInfo
-OUString SAL_CALL WPGImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
-{
-    return WPGImportFilter_getImplementationName();
-}
-sal_Bool SAL_CALL WPGImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
-{
-    return WPGImportFilter_getSupportedServiceNames();
 }
 
 extern "C"
