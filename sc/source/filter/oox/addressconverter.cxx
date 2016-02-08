@@ -68,11 +68,12 @@ const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
 } // namespace
 
-CellAddress ApiCellRangeList::getBaseAddress() const
+
+ScAddress ApiCellRangeList::getBaseAddress() const
 {
     if( mvAddresses.empty() )
-        return CellAddress();
-    return CellAddress( mvAddresses.front().Sheet, mvAddresses.front().StartColumn, mvAddresses.front().StartRow );
+        return ScAddress();
+    return ScAddress( mvAddresses.front().Sheet, mvAddresses.front().StartColumn, mvAddresses.front().StartRow );
 }
 
 css::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const

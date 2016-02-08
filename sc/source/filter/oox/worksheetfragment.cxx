@@ -179,7 +179,7 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 
     // condition formula(s)
     FormulaParser& rParser = getFormulaParser();
-    CellAddress aBaseAddr = aModel.maRanges.getBaseAddress();
+    ScAddress aBaseAddr = aModel.maRanges.getBaseAddress();
     aModel.maTokens1 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
     aModel.maTokens2 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
     // process string list of a list validation (convert to list of string tokens)

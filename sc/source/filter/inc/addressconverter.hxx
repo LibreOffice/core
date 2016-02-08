@@ -72,8 +72,7 @@ public:
     { mvAddresses.push_back( rAddress ); }
 
     /** Returns the base address of this range list (top-left cell of first range). */
-    css::table::CellAddress
-                        getBaseAddress() const;
+    ScAddress getBaseAddress() const;
 
     /** Converts to a sequence. */
     css::uno::Sequence< css::table::CellRangeAddress >
@@ -92,6 +91,7 @@ struct BinAddress
     inline explicit     BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
     inline explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
     inline explicit     BinAddress( const css::table::CellAddress& rAddr ) : mnCol( rAddr.Column ), mnRow( rAddr.Row ) {}
+    inline explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );

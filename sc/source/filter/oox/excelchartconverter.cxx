@@ -80,7 +80,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     {
         // parse the formula string, create a token sequence
         FormulaParser& rParser = getFormulaParser();
-        CellAddress aBaseAddr( getCurrentSheetIndex(), 0, 0 );
+        ScAddress aBaseAddr( 0, 0, getCurrentSheetIndex() );
         ApiTokenSequence aTokens = rParser.importFormula( aBaseAddr, rDataSeq.maFormula );
 
         try
