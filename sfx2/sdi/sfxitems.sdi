@@ -25,15 +25,12 @@
     item String     SfxStringItem;
     item BYTE       SfxByteItem;
     item INT16      SfxEnumItem;
-    item INT16      SfxAllEnumItem;
-    item INT16      TbxImageItem;
 
     item String     SbxItem;                //! Dummy
     item String     SfxObjectItem;          //! Dummy
     item String     SfxTemplateItem;        //! Dummy
     item String     SfxMacroInfoItem;       //! Dummy
     item String     SfxImageItem;           //! Dummy
-    item String     SfxFrameItem;           //! Dummy
     item String     SfxObjectShellItem      //! Dummy
     item String     SfxUsrAnyItem           //! Dummy
     item String     SfxUnoFrameItem         //! Dummy

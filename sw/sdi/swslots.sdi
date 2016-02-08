@@ -32,8 +32,6 @@ ModulePrefix( "Sw" )
     include "xoitems.sdi"
     include "svx.sdi"
 
-    item String TbxDummyItem;
-
     include "switems.sdi"
     include "swriter.sdi"
 

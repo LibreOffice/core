@@ -31,8 +31,6 @@ ModulePrefix( "Sd" )
         include "xoitems.sdi"
         include "svx.sdi"
 
-        item UINT16 TbxImageItem;
-
         enum FadeEffect
         {
             FADE_EFFECT_NONE ,

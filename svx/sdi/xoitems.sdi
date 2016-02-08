@@ -115,9 +115,6 @@ struct XLineEnd
 };
 item XLineEnd XLineEndItem;
 
-item INT32  XLineEndWidthItem;
-item BOOL   XLineEndCenterItem;
-
 struct XLineStart
 {
     String  Name        MID_NAME;
@@ -125,16 +122,12 @@ struct XLineStart
 };
 item XLineStart XLineStartItem;
 
-item INT32  XLineStartWidthItem;
-item BOOL   XLineStartCenterItem;
-
 enum SvxLineStyle
 {
     SVX_LINESTYLE_NONE,
     SVX_LINESTYLE_SOLID,
     SVX_LINESTYLE_DASH
 };
-
 item SvxLineStyle XLineStyleItem;
 
 enum SvxLineJoint
