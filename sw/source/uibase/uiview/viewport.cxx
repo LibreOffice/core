@@ -542,6 +542,11 @@ bool SwView::GetPageScrollUpOffset( SwTwips &rOff ) const
         rOff = rOff - m_aVisArea.Top();
     else if( GetWrtShell().GetCharRect().Top() < (m_aVisArea.Top() + nYScrl))
         rOff += nYScrl;
+
+    // in the LOK case, force the value set by the API
+    if (comphelper::LibreOfficeKit::isActive() && m_nLOKPageUpDownOffset > 0)
+        rOff = -m_nLOKPageUpDownOffset;
+
     return true;
 }
 
@@ -558,6 +563,11 @@ bool SwView::GetPageScrollDownOffset( SwTwips &rOff ) const
     else if( GetWrtShell().GetCharRect().Bottom() >
                                             ( m_aVisArea.Bottom() - nYScrl ))
         rOff -= nYScrl;
+
+    // in the LOK case, force the value set by the API
+    if (comphelper::LibreOfficeKit::isActive() && m_nLOKPageUpDownOffset > 0)
+        rOff = m_nLOKPageUpDownOffset;
+
     return rOff > 0;
 }
 

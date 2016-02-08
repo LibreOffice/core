@@ -3225,7 +3225,8 @@ void SwXTextDocument::setClientVisibleArea(const Rectangle& rRectangle)
     if (!pView)
         return;
 
-    pView->SetVisArea(rRectangle);
+    // set the PgUp/PgDown offset
+    pView->ForcePageUpDownOffset(2 * rRectangle.GetHeight() / 3);
 }
 
 Pointer SwXTextDocument::getPointer()

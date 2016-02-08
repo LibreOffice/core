@@ -722,7 +722,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bInDtor(false),
     m_bOldShellWasPagePreview(false),
     m_bIsPreviewDoubleClick(false),
-    m_bAnnotationMode(false)
+    m_bAnnotationMode(false),
+    m_nLOKPageUpDownOffset(0)
 {
     // According to discussion with MBA and further
     // investigations, no old SfxViewShell will be set as parameter <pOldSh>,
