@@ -23,7 +23,7 @@
 #include <vector>
 
 #include <sal/main.h>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/implimagetree.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

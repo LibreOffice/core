@@ -24,7 +24,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

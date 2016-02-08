@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 
 CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
     const sal_uInt16* pTextAttr, sal_Int32 nCursorPos, sal_uInt16 nCursorFlags,

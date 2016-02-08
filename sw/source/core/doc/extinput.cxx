@@ -25,7 +25,7 @@
 #include <editeng/scripttypeitem.hxx>
 
 #include <vcl/keycodes.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <hintids.hxx>
 #include <extinput.hxx>

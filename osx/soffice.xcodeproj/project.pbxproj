@@ -30,7 +30,7 @@
 		BE2DACFD182FAB5200A4D2F7 /* brdwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brdwin.cxx; path = ../vcl/source/window/brdwin.cxx; sourceTree = "<group>"; };
 		BE2DACFE182FAB5200A4D2F7 /* btndlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = btndlg.cxx; path = ../vcl/source/window/btndlg.cxx; sourceTree = "<group>"; };
 		BE2DACFF182FAB5200A4D2F7 /* builder.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = builder.cxx; path = ../vcl/source/window/builder.cxx; sourceTree = "<group>"; };
-		BE2DAD00182FAB5200A4D2F7 /* cmdevt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cmdevt.cxx; path = ../vcl/source/window/cmdevt.cxx; sourceTree = "<group>"; };
+		BE2DAD00182FAB5200A4D2F7 /* commandevent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = commandevent.cxx; path = ../vcl/source/window/commandevent.cxx; sourceTree = "<group>"; };
 		BE2DAD01182FAB5200A4D2F7 /* cursor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cursor.cxx; path = ../vcl/source/window/cursor.cxx; sourceTree = "<group>"; };
 		BE2DAD02182FAB5200A4D2F7 /* decoview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = decoview.cxx; path = ../vcl/source/window/decoview.cxx; sourceTree = "<group>"; };
 		BE2DAD03182FAB5200A4D2F7 /* dialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dialog.cxx; path = ../vcl/source/window/dialog.cxx; sourceTree = "<group>"; };
@@ -215,7 +215,7 @@
 				BE2DACFD182FAB5200A4D2F7 /* brdwin.cxx */,
 				BE2DACFE182FAB5200A4D2F7 /* btndlg.cxx */,
 				BE2DACFF182FAB5200A4D2F7 /* builder.cxx */,
-				BE2DAD00182FAB5200A4D2F7 /* cmdevt.cxx */,
+				BE2DAD00182FAB5200A4D2F7 /* commandevent.cxx */,
 				BE2DAD01182FAB5200A4D2F7 /* cursor.cxx */,
 				BE2DAD02182FAB5200A4D2F7 /* decoview.cxx */,
 				BE2DAD03182FAB5200A4D2F7 /* dialog.cxx */,

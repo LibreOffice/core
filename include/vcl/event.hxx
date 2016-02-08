@@ -24,7 +24,7 @@
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>

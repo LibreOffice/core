@@ -107,7 +107,7 @@
 #include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/cmdevt.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/ctrl.hxx>
