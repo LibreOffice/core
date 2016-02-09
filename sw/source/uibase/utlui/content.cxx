@@ -2450,6 +2450,9 @@ IMPL_LINK_NOARG_TYPED(SwContentTree, TimerUpdate, Timer *, void)
     if (IsDisposed())
         return;
 
+    // Keep updating the cursor whenever timer invokes SwContentTree::HasContentChanged
+    m_pActiveShell->SwCursorShell::UpdateCursorPos();
+
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
