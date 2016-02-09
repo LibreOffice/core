@@ -169,6 +169,7 @@ bool OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteri
     m_nPrimitiveTransformLocation = glGetUniformLocation( m_nProgramObject, "u_primitiveTransformMatrix" );
     m_nSceneTransformLocation = glGetUniformLocation( m_nProgramObject, "u_sceneTransformMatrix" );
     m_nOperationsTransformLocation = glGetUniformLocation( m_nProgramObject, "u_operationsTransformMatrix" );
+    m_nTimeLocation = glGetUniformLocation( m_nProgramObject, "time" );
 
     glGenVertexArrays(1, &m_nVertexArrayObject);
     glBindVertexArray(m_nVertexArrayObject);
@@ -250,9 +251,7 @@ void OGLTransitionImpl::displaySlides_( double nTime, sal_Int32 glLeavingSlideTe
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
-    GLint location = glGetUniformLocation( m_nProgramObject, "time" );
-    if( location != -1 )
-        glUniform1f( location, nTime );
+    glUniform1f( m_nTimeLocation, nTime );
 
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_2D, glEnteringSlideTex );
@@ -1547,8 +1546,6 @@ class VortexTransition : public PermTextureTransition
 public:
     VortexTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, int nNX, int nNY)
         : PermTextureTransition(rScene, rSettings)
-        , mnTileInfoLocation(0)
-        , mnTileInfoBuffer(0)
         , maNumTiles(nNX,nNY)
     {
         mvTileInfo.resize(6*maNumTiles.x*maNumTiles.y);
@@ -1563,8 +1560,9 @@ private:
 
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 
-    GLint mnTileInfoLocation;
-    GLuint mnTileInfoBuffer;
+    GLint mnSlideLocation = -1;
+    GLint mnTileInfoLocation = -1;
+    GLuint mnTileInfoBuffer = 0u;
 
     glm::ivec2 maNumTiles;
 
@@ -1593,6 +1591,9 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
 {
     CHECK_GL_ERROR();
     PermTextureTransition::prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
+    CHECK_GL_ERROR();
+
+    mnSlideLocation = glGetUniformLocation(m_nProgramObject, "slide");
     CHECK_GL_ERROR();
 
     mnTileInfoLocation = glGetAttribLocation(m_nProgramObject, "tileInfo");
@@ -1640,18 +1641,11 @@ void VortexTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex
 {
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+    glUniform1f( m_nTimeLocation, nTime );
 
-    GLint location = glGetUniformLocation( m_nProgramObject, "time" );
-    if( location != -1 )
-        glUniform1f( location, nTime );
-
-    location = glGetUniformLocation( m_nProgramObject, "slide" );
-
-    if( location != -1 )
-        glUniform1f( location, 0.0 );
+    glUniform1f( mnSlideLocation, 0.0 );
     displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
-    if( location != -1 )
-        glUniform1f( location, 1.0 );
+    glUniform1f( mnSlideLocation, 1.0 );
     displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
     CHECK_GL_ERROR();
 }
@@ -1910,9 +1904,8 @@ private:
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 
-    GLint maHexagonSizeLocation = 0;
-    GLint maTimeLocation = 0;
-    GLint maSelectedTextureLocation = 0;
+    GLint maHexagonSizeLocation = -1;
+    GLint maSelectedTextureLocation = -1;
 };
 
 GLuint HoneycombTransition::makeShader() const
@@ -1927,7 +1920,6 @@ void HoneycombTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_In
 
     CHECK_GL_ERROR();
     maHexagonSizeLocation = glGetUniformLocation(m_nProgramObject, "hexagonSize");
-    maTimeLocation = glGetUniformLocation( m_nProgramObject, "time" );
     maSelectedTextureLocation = glGetUniformLocation( m_nProgramObject, "selectedTexture" );
     CHECK_GL_ERROR();
 
@@ -1942,7 +1934,7 @@ void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlide
 {
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-    glUniform1f( maTimeLocation, nTime );
+    glUniform1f( m_nTimeLocation, nTime );
 
     // The back (entering) slide needs to be drawn before the front (leaving) one in order for blending to work.
 

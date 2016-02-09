@@ -240,6 +240,10 @@ protected:
     /** VBO in which to put primitive data
      */
     GLuint m_nVertexBufferObject = 0u;
+
+    /** Location of the "time" uniform
+     */
+    GLint m_nTimeLocation = -1;
 };
 
 
