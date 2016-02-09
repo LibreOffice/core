@@ -598,7 +598,6 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
 {
     OUString FragShader("areaHashCRC64TFragmentShader");
 
-    OpenGLZone aZone;
     rtl::Reference< OpenGLContext > xContext = OpenGLContext::getVCLContext();
 
     static vcl::DeleteOnDeinit<OpenGLTexture> gCRCTableTexture(
@@ -632,7 +631,6 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     OpenGLContext::ReleaseFramebuffer(pFramebuffer);
 
     CHECK_GL_ERROR();
-
 
     // Second Pass
 
@@ -677,25 +675,19 @@ void OpenGLSalBitmap::updateChecksum() const
     if (mbChecksumValid)
         return;
 
-    OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
-
-    if (!mbDirtyTexture)
-    {
-        pThis->CreateTexture();
-    }
-
-    OpenGLTexture& rInputTexture = pThis->maTexture;
-    int nWidth = rInputTexture.GetWidth();
-    int nHeight = rInputTexture.GetHeight();
-
-    if( (nWidth * nHeight) < (1024*768) || nWidth < 128 || nHeight < 128 )
+    if( (mnWidth * mnHeight) < (1024*768) || mnWidth < 128 || mnHeight < 128 )
     {
         SalBitmap::updateChecksum();
+        return;
     }
-    else
-    {
-        pThis->mbChecksumValid = calcChecksumGL(rInputTexture, pThis->mnChecksum);
-    }
+
+    OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
+
+    OpenGLVCLContextZone aContextZone;
+    OpenGLTexture& rInputTexture = GetTexture();
+    pThis->mbChecksumValid = calcChecksumGL(rInputTexture, pThis->mnChecksum);
+    if (!pThis->mbChecksumValid)
+        SalBitmap::updateChecksum();
 }
 
 rtl::Reference<OpenGLContext> OpenGLSalBitmap::GetBitmapContext()
