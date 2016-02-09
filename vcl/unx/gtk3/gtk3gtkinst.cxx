@@ -206,6 +206,10 @@ public:
         css::uno::Any aRet;
         GtkSelectionData* data = gtk_clipboard_wait_for_contents(clipboard,
                                                                  it->second);
+        if (!data)
+        {
+            return css::uno::Any();
+        }
         gint length;
         const guchar *rawdata = gtk_selection_data_get_data_with_length(data,
                                                                         &length);
