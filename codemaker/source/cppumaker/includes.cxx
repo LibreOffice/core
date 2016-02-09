@@ -100,10 +100,9 @@ void Includes::add(OString const & entityName) {
         m_includeAny = true;
         break;
     case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-        for (std::vector< OString >::iterator i(args.begin()); i != args.end();
-             ++i)
+        for (const OString& arg : args)
         {
-            add(*i);
+            add(arg);
         }
         // fall through
     case codemaker::UnoType::SORT_SEQUENCE_TYPE:
@@ -137,10 +136,9 @@ void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
 void Includes::dump(FileStream & out, OUString const * companionHdl) {
     OSL_ASSERT(companionHdl == nullptr || m_hpp);
     if (!m_includeReference) {
-        for (Dependencies::Map::iterator i(m_map.begin()); i != m_map.end();
-             ++i)
+        for (const std::pair<OUString, codemaker::cppumaker::Dependencies::Kind>& pair : m_map)
         {
-            if (isInterfaceType(u2b(i->first))) {
+            if (isInterfaceType(u2b(pair.first))) {
                 m_includeReference = true;
                 break;
             }
@@ -161,25 +159,25 @@ void Includes::dump(FileStream & out, OUString const * companionHdl) {
         dumpInclude(out, u2b(*companionHdl), false);
     }
     bool first = true;
-    for (Dependencies::Map::iterator i(m_map.begin()); i != m_map.end(); ++i)
+    for (const std::pair<OUString, codemaker::cppumaker::Dependencies::Kind>& pair : m_map)
     {
         dumpEmptyLineBeforeFirst(out, &first);
-        if (m_hpp || i->second == Dependencies::KIND_BASE
-            || !isInterfaceType(u2b(i->first)))
+        if (m_hpp || pair.second == Dependencies::KIND_BASE
+            || !isInterfaceType(u2b(pair.first)))
         {
-            dumpInclude(out, u2b(i->first), m_hpp);
+            dumpInclude(out, u2b(pair.first), m_hpp);
         } else {
-            bool ns = dumpNamespaceOpen(out, i->first, false);
+            bool ns = dumpNamespaceOpen(out, pair.first, false);
             if (ns) {
                 out << " ";
             }
             out << "class ";
-            dumpTypeIdentifier(out, i->first);
+            dumpTypeIdentifier(out, pair.first);
             out << ";";
             if (ns) {
                 out << " ";
             }
-            dumpNamespaceClose(out, i->first, false);
+            dumpNamespaceClose(out, pair.first, false);
             out << "\n";
         }
     }

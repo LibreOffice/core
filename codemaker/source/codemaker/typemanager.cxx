@@ -44,11 +44,9 @@ bool TypeManager::foundAtPrimaryProvider(OUString const & name) const {
     if (name.isEmpty()) {
         return !primaryProviders_.empty();
     }
-    for (std::vector< rtl::Reference< unoidl::Provider > >::const_iterator i(
-             primaryProviders_.begin());
-         i != primaryProviders_.end(); ++i)
+    for (const rtl::Reference< unoidl::Provider >& xProvider : primaryProviders_)
     {
-        if ((*i)->findEntity(name).is()) {
+        if (xProvider->findEntity(name).is()) {
             return true;
         }
     }
@@ -239,10 +237,9 @@ codemaker::UnoType::Sort TypeManager::decompose(
             }
             if (arguments != nullptr) {
                 arguments->clear();
-                for (std::vector< OString >::iterator i(args.begin());
-                     i != args.end(); ++i)
+                for (const OString& rArg : args)
                 {
-                    arguments->push_back(b2u(*i));
+                    arguments->push_back(b2u(rArg));
                 }
             }
             if (entity != nullptr) {

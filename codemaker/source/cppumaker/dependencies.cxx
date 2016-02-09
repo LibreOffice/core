@@ -61,11 +61,9 @@ Dependencies::Dependencies(
             if (!ent2->getDirectBase().isEmpty()) {
                 insert(ent2->getDirectBase());
             }
-            for (std::vector< unoidl::PlainStructTypeEntity::Member >::
-                     const_iterator i(ent2->getDirectMembers().begin());
-                 i != ent2->getDirectMembers().end(); ++i)
+            for (const unoidl::PlainStructTypeEntity::Member& member : ent2->getDirectMembers())
             {
-                insert(i->type);
+                insert(member.type);
             }
             break;
         }
@@ -74,12 +72,10 @@ Dependencies::Dependencies(
             rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
                 static_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
                     ent.get()));
-            for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::
-                     Member >::const_iterator i(ent2->getMembers().begin());
-                 i != ent2->getMembers().end(); ++i)
+            for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member : ent2->getMembers())
             {
-                if (!i->parameterized) {
-                    insert(i->type);
+                if (!member.parameterized) {
+                    insert(member.type);
                 }
             }
             break;
@@ -91,11 +87,9 @@ Dependencies::Dependencies(
             if (!ent2->getDirectBase().isEmpty()) {
                 insert(ent2->getDirectBase());
             }
-            for (std::vector< unoidl::ExceptionTypeEntity::Member >::
-                     const_iterator i(ent2->getDirectMembers().begin());
-                 i != ent2->getDirectMembers().end(); ++i)
+            for (const unoidl::ExceptionTypeEntity::Member& member : ent2->getDirectMembers())
             {
-                insert(i->type);
+                insert(member.type);
             }
             break;
         }
@@ -103,52 +97,37 @@ Dependencies::Dependencies(
         {
             rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                 static_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
-            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
-                     ent2->getDirectMandatoryBases().begin());
-                 i != ent2->getDirectMandatoryBases().end(); ++i)
+            for (const unoidl::AnnotatedReference& ar : ent2->getDirectMandatoryBases())
             {
-                insert(i->name, true);
+                insert(ar.name, true);
             }
             if (!(ent2->getDirectAttributes().empty()
                   && ent2->getDirectMethods().empty()))
             {
                 insert("com.sun.star.uno.RuntimeException");
             }
-            for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::
-                     const_iterator i(ent2->getDirectAttributes().begin());
-                 i != ent2->getDirectAttributes().end(); ++i)
+            for (const unoidl::InterfaceTypeEntity::Attribute& attr : ent2->getDirectAttributes())
             {
-                insert(i->type);
-                for (std::vector< OUString >::const_iterator j(
-                         i->getExceptions.begin());
-                     j != i->getExceptions.end(); ++j)
+                insert(attr.type);
+                for (const OUString& ex : attr.getExceptions)
                 {
-                    insert(*j);
+                    insert(ex);
                 }
-                for (std::vector< OUString >::const_iterator j(
-                         i->setExceptions.begin());
-                     j != i->setExceptions.end(); ++j)
+                for (const OUString& ex : attr.setExceptions)
                 {
-                    insert(*j);
+                    insert(ex);
                 }
             }
-            for (std::vector< unoidl::InterfaceTypeEntity::Method >::
-                     const_iterator i(ent2->getDirectMethods().begin());
-                 i != ent2->getDirectMethods().end(); ++i)
+            for (const unoidl::InterfaceTypeEntity::Method& method : ent2->getDirectMethods())
             {
-                insert(i->returnType);
-                for (std::vector<
-                         unoidl::InterfaceTypeEntity::Method::Parameter >::
-                         const_iterator j(i->parameters.begin());
-                     j != i->parameters.end(); ++j)
+                insert(method.returnType);
+                for (const unoidl::InterfaceTypeEntity::Method::Parameter& param : method.parameters)
                 {
-                    insert(j->type);
+                    insert(param.type);
                 }
-                for (std::vector< OUString >::const_iterator j(
-                         i->exceptions.begin());
-                     j != i->exceptions.end(); ++j)
+                for (const OUString& ex : method.exceptions)
                 {
-                    insert(*j);
+                    insert(ex);
                 }
             }
             break;
@@ -160,11 +139,9 @@ Dependencies::Dependencies(
         {
             rtl::Reference< unoidl::ConstantGroupEntity > ent2(
                 static_cast< unoidl::ConstantGroupEntity * >(ent.get()));
-            for (std::vector< unoidl::ConstantGroupEntity::Member >::
-                     const_iterator i(ent2->getMembers().begin());
-                 i != ent2->getMembers().end(); ++i)
+            for (const unoidl::ConstantGroupEntity::Member& member : ent2->getMembers())
             {
-                switch (i->value.type) {
+                switch (member.value.type) {
                 case unoidl::ConstantValue::TYPE_BOOLEAN:
                     m_booleanDependency = true;
                     break;
@@ -207,27 +184,19 @@ Dependencies::Dependencies(
             if (!ent2->getConstructors().empty()) {
                 insert(ent2->getBase());
             }
-            for (std::vector<
-                     unoidl::SingleInterfaceBasedServiceEntity::Constructor >::
-                     const_iterator i(ent2->getConstructors().begin());
-                 i != ent2->getConstructors().end(); ++i)
+            for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons : ent2->getConstructors())
             {
-                for (std::vector<
-                         unoidl::SingleInterfaceBasedServiceEntity::
-                         Constructor::Parameter >::const_iterator j(
-                             i->parameters.begin());
-                     j != i->parameters.end(); ++j)
+                for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter& param
+                         : cons.parameters)
                 {
-                    insert(j->type);
-                    if (j->rest) {
+                    insert(param.type);
+                    if (param.rest) {
                         m_sequenceDependency = true;
                     }
                 }
-                for (std::vector< OUString >::const_iterator j(
-                         i->exceptions.begin());
-                     j != i->exceptions.end(); ++j)
+                for (const OUString& ex : cons.exceptions)
                 {
-                    insert(*j);
+                    insert(ex);
                 }
             }
             break;
@@ -298,10 +267,9 @@ void Dependencies::insert(OUString const & name, bool base) {
         m_anyDependency = true;
         break;
     case UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-        for (std::vector< OString >::iterator i(args.begin()); i != args.end();
-             ++i)
+        for (const OString& arg : args)
         {
-            insert(b2u(*i));
+            insert(b2u(arg));
         }
         // fall through
     case UnoType::SORT_SEQUENCE_TYPE:

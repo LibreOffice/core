@@ -246,21 +246,17 @@ void ClassFile::Code::instrLookupswitch(
     appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1)); //FIXME: overflow
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(size));
-    for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
-             blocks.begin());
-         i != blocks.end(); ++i)
+    for (const std::pair< sal_Int32, Code * >& pair : blocks)
     {
-        appendU4(m_code, static_cast< sal_uInt32 >(i->first));
+        appendU4(m_code, static_cast< sal_uInt32 >(pair.first));
         appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
             //FIXME: overflow
-        pos2 += i->second->m_code.size(); //FIXME: overflow
+        pos2 += pair.second->m_code.size(); //FIXME: overflow
     }
     appendStream(m_code, defaultBlock->m_code);
-    for (std::list< std::pair< sal_Int32, Code * > >::const_iterator i(
-             blocks.begin());
-         i != blocks.end(); ++i)
+    for (const std::pair< sal_Int32, Code * >& pair : blocks)
     {
-        appendStream(m_code, i->second->m_code);
+        appendStream(m_code, pair.second->m_code);
     }
 }
 
@@ -335,23 +331,21 @@ void ClassFile::Code::instrTableswitch(
     pos2 += defaultBlock->m_code.size(); //FIXME: overflow
     appendU4(m_code, static_cast< sal_uInt32 >(low));
     appendU4(m_code, static_cast< sal_uInt32 >(low + (size - 1)));
-    for (std::list< Code * >::const_iterator i(blocks.begin());
-         i != blocks.end(); ++i)
+    for (Code *pCode : blocks)
     {
-        if (*i == nullptr) {
+        if (pCode == nullptr) {
             appendU4(m_code, defaultOffset);
         } else {
             appendU4(m_code, static_cast< sal_uInt32 >(pos2 - pos1));
                 //FIXME: overflow
-            pos2 += (*i)->m_code.size(); //FIXME: overflow
+            pos2 += pCode->m_code.size(); //FIXME: overflow
         }
     }
     appendStream(m_code, defaultBlock->m_code);
-    for (std::list< Code * >::const_iterator i(blocks.begin());
-         i != blocks.end(); ++i)
+    for (Code *pCode : blocks)
     {
-        if (*i != nullptr) {
-            appendStream(m_code, (*i)->m_code);
+        if (pCode != nullptr) {
+            appendStream(m_code, pCode->m_code);
         }
     }
 }
@@ -640,10 +634,9 @@ void ClassFile::addMethod(
             m_methods,
             static_cast< sal_uInt32 >(2 + 2 * static_cast< sal_uInt32 >(excs)));
         appendU2(m_methods, static_cast< sal_uInt16 >(excs));
-        for (std::vector< OString >::const_iterator i(exceptions.begin());
-             i != exceptions.end(); ++i)
+        for (const OString& ex : exceptions)
         {
-            appendU2(m_methods, addClassInfo(*i));
+            appendU2(m_methods, addClassInfo(ex));
         }
     }
     appendSignatureAttribute(m_methods, signature);

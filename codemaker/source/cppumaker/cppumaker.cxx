@@ -44,17 +44,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         }
 
         rtl::Reference< TypeManager > typeMgr(new TypeManager);
-        for (std::vector< OString >::const_iterator i(
-                 options.getExtraInputFiles().begin());
-             i != options.getExtraInputFiles().end(); ++i)
+        for (const OString& f :options.getExtraInputFiles())
         {
-            typeMgr->loadProvider(convertToFileUrl(*i), false);
+            typeMgr->loadProvider(convertToFileUrl(f), false);
         }
-        for (std::vector< OString >::const_iterator i(
-                 options.getInputFiles().begin());
-             i != options.getInputFiles().end(); ++i)
+        for (const OString& f : options.getInputFiles())
         {
-            typeMgr->loadProvider(convertToFileUrl(*i), true);
+            typeMgr->loadProvider(convertToFileUrl(f), true);
         }
         codemaker::GeneratedTypeSet generated;
         if (options.isValid("-T")) {

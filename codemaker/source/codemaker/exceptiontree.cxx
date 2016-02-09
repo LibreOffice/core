@@ -41,8 +41,8 @@ ExceptionTreeNode * ExceptionTreeNode::add(rtl::OString const & theName) {
 }
 
 void ExceptionTreeNode::clearChildren() {
-    for (Children::iterator i(children.begin()); i != children.end(); ++i) {
-        delete *i;
+    for (ExceptionTreeNode* child : children) {
+        delete child;
     }
     children.clear();
 }
