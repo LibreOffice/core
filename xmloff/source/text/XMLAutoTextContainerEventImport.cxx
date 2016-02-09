@@ -38,8 +38,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
 
-
-
 XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

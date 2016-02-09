@@ -38,7 +38,6 @@ namespace framework
 {
 
 
-
     //= IMutexGuard
 
     class SAL_NO_VTABLE IMutexGuard

@@ -396,7 +396,6 @@ namespace pcr
             }
 
 
-
             // font wordline mode
             eState = _rSet.GetItemState(CFID_WORDLINEMODE);
 
@@ -407,7 +406,6 @@ namespace pcr
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, css::uno::makeAny(rWordLineModeItem.GetValue()));
             }
-
 
 
             // text color

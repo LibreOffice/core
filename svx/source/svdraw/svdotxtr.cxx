@@ -284,7 +284,6 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-
 SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 {
     SdrObject* pRetval = nullptr;
@@ -405,7 +404,6 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
     return pRetval;
 }
-
 
 
 SdrObject* SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const

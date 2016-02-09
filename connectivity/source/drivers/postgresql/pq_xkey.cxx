@@ -162,7 +162,6 @@ Any Key::queryInterface( const Type & reqType ) throw (RuntimeException, std::ex
 }
 
 
-
 KeyDescriptor::KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMutex,
           const Reference< com::sun::star::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings )

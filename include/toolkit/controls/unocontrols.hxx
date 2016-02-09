@@ -1095,7 +1095,6 @@ public:
 };
 
 
-
 //  class UnoControlDateFieldModel
 
 class UnoControlDateFieldModel : public UnoControlModel
@@ -1556,7 +1555,6 @@ public:
 };
 
 
-
 //  class UnoControlFixedLineModel
 
 class UnoControlFixedLineModel : public UnoControlModel
@@ -1603,7 +1601,6 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLS_HXX

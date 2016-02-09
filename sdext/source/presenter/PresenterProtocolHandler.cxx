@@ -353,7 +353,6 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
 }
 
 
-
 void PresenterProtocolHandler::ThrowIfDisposed() const
     throw (css::lang::DisposedException)
 {

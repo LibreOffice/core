@@ -64,9 +64,7 @@ namespace
 {
 
 
-
 // struct TransferCommandContext.
-
 
 
 struct TransferCommandContext
@@ -88,9 +86,7 @@ struct TransferCommandContext
 };
 
 
-
 // class InteractionHandlerProxy.
-
 
 
 class InteractionHandlerProxy :
@@ -162,9 +158,7 @@ void SAL_CALL InteractionHandlerProxy::handle(
 }
 
 
-
 // class ActiveDataSink.
-
 
 
 class ActiveDataSink : public cppu::WeakImplHelper< io::XActiveDataSink >
@@ -198,9 +192,7 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
 }
 
 
-
 // class CommandProcessorInfo.
-
 
 
 class CommandProcessorInfo :
@@ -323,9 +315,6 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 
     return sal_False;
 }
-
-
-
 
 
 OUString createDesiredName(
@@ -526,7 +515,6 @@ uno::Reference< ucb::XContent > createNew(
     // (1) Obtain creatable types from target.
 
 
-
     // First, try it using "CreatabeleContentsInfo" property and
     // "createNewContent" command -> the "new" way.
 
@@ -622,9 +610,7 @@ uno::Reference< ucb::XContent > createNew(
     }
 
 
-
     // (2) Try to find a matching target type for the source object.
-
 
 
     uno::Reference< ucb::XContent > xNew;
@@ -694,7 +680,6 @@ uno::Reference< ucb::XContent > createNew(
 
 
             // (3) Create a new, empty object of matched type.
-
 
 
             if ( !xCreator.is() )
@@ -909,9 +894,7 @@ uno::Reference< io::XInputStream > getInputStream(
     uno::Reference< io::XInputStream > xInputStream;
 
 
-
     // (1) Try to get data as XInputStream via XActiveDataSink.
-
 
 
     try
@@ -946,7 +929,6 @@ uno::Reference< io::XInputStream > getInputStream(
 
 
         // (2) Try to get data via XOutputStream.
-
 
 
         try
@@ -1238,10 +1220,8 @@ void globalTransfer_(
     bool bSourceIsLink = !xSourceProps->getString( 3 ).isEmpty();
 
 
-
     // (1) Try to find a matching target type for the source object and
     //     create a new, empty object of that type.
-
 
 
     uno::Reference< ucb::XContent > xNew = createNew( rContext,
@@ -1267,9 +1247,7 @@ void globalTransfer_(
     }
 
 
-
     // (2) Transfer property values from source to new object.
-
 
 
     uno::Reference< ucb::XCommandProcessor > xCommandProcessorN(
@@ -1317,9 +1295,7 @@ void globalTransfer_(
     transferProperties( rContext, xCommandProcessorS, xCommandProcessorN );
 
 
-
     // (3) Try to obtain a data stream from source.
-
 
 
     uno::Reference< io::XInputStream > xInputStream;
@@ -1329,9 +1305,7 @@ void globalTransfer_(
         xInputStream = getInputStream( rContext, xCommandProcessorS );
 
 
-
     // (4) Try to obtain a resultset (children) from source.
-
 
 
     uno::Reference< sdbc::XResultSet > xResultSet;
@@ -1341,9 +1315,7 @@ void globalTransfer_(
         xResultSet = getResultSet( rContext, xCommandProcessorS );
 
 
-
     // (5) Insert (store) new content.
-
 
 
     ucb::InsertCommandArgument2 aArg;
@@ -1538,9 +1510,7 @@ void globalTransfer_(
     while ( bRetry );
 
 
-
     // (6) Process children of source.
-
 
 
     if ( xResultSet.is() )
@@ -1668,9 +1638,7 @@ void globalTransfer_(
 } /* namescpace */
 
 
-
 // UniversalContentBroker implementation ( XCommandProcessor commands ).
-
 
 
 uno::Reference< ucb::XCommandInfo >
@@ -1698,9 +1666,7 @@ void UniversalContentBroker::globalTransfer(
     }
 
 
-
     // (1) Try to transfer the content using 'transfer' command.
-
 
 
     uno::Reference< ucb::XContent > xTarget;
@@ -1885,9 +1851,7 @@ void UniversalContentBroker::globalTransfer(
     }
 
 
-
     // (2) Try to transfer the content "manually".
-
 
 
     uno::Reference< ucb::XContent > xSource;
@@ -1995,9 +1959,7 @@ void UniversalContentBroker::globalTransfer(
     globalTransfer_( aTransferCtx, xSource, xTarget, xRow );
 
 
-
     // (3) Delete source, if operation is MOVE.
-
 
 
     if ( rArg.Operation == ucb::TransferCommandOperation_MOVE )

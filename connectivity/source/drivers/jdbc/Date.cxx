@@ -39,6 +39,4 @@ jclass java_util_Date::getMyClass() const
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

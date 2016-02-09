@@ -25,7 +25,6 @@ namespace dbtools
 {
 
 
-
     /** standard SQLStates to be used with an SQLException
 
         Extend this list whenever you need a new state ...

@@ -80,7 +80,6 @@ namespace dlgprov
     };
 
 
-
     // class DialogAllListenerImpl
 
 
@@ -114,7 +113,6 @@ namespace dlgprov
     };
 
 
-
     // class DialogScriptListenerImpl
 
 
@@ -141,7 +139,6 @@ namespace dlgprov
         virtual css::uno::Any SAL_CALL approveFiring( const css::script::ScriptEvent& aScriptEvent )
             throw (css::reflection::InvocationTargetException, css::uno::RuntimeException, std::exception) override;
     };
-
 
 
 }   // namespace dlgprov

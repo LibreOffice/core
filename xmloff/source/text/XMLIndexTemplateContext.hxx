@@ -110,7 +110,6 @@ public:
     const OUString sLevelFormat;
 
 
-
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,

@@ -22,7 +22,6 @@
 #include <svx/sphere3d.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

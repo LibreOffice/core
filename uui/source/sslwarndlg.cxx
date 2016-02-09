@@ -37,7 +37,6 @@ void SSLWarnDialog::ViewCert()
 }
 
 
-
 SSLWarnDialog::SSLWarnDialog(vcl::Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
     const css::uno::Reference< css::uno::XComponentContext >& xContext)

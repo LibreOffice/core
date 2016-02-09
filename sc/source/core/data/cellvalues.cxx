@@ -53,7 +53,6 @@ void CellValues::transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen )
 }
 
 
-
 void CellValues::copyTo( ScColumn& rCol, SCROW nRow ) const
 {
     copyCellsTo(rCol, nRow);

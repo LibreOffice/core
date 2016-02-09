@@ -598,7 +598,6 @@ IMPL_LINK_TYPED( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 }
 
 
-
 IMPL_LINK_TYPED( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
@@ -658,7 +657,6 @@ IMPL_LINK_TYPED( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
 
     ArgumentModified();
 }
-
 
 
 } // formula

@@ -2157,7 +2157,6 @@ IMPL_LINK_TYPED( OfaQuoteTabPage, StdQuoteHdl, Button*, pBtn, void )
 }
 
 
-
 OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {
     if (!cChar)

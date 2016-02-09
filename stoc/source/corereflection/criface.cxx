@@ -324,11 +324,6 @@ void IdlAttributeFieldImpl::checkException(
 }
 
 
-
-
-
-
-
 class IdlInterfaceMethodImpl
     : public IdlMemberImpl
     , public XIdlMethod
@@ -761,12 +756,6 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         "illegal destination object given!",
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
-
-
-
-
-
-
 
 
 InterfaceIdlClassImpl::~InterfaceIdlClassImpl()

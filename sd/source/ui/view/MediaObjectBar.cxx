@@ -49,7 +49,6 @@ using namespace sd;
 namespace sd {
 
 
-
 SFX_IMPL_INTERFACE(MediaObjectBar, SfxShell)
 
 void MediaObjectBar::InitInterface_Impl()

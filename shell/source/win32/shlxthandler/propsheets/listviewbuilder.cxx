@@ -32,7 +32,6 @@
 #include "internal/resource.h"
 
 
-
 list_view_builder_ptr create_list_view_builder(
     HWND hwnd_lv, const std::wstring& col1, const std::wstring& col2)
 {
@@ -41,7 +40,6 @@ list_view_builder_ptr create_list_view_builder(
     else
         return list_view_builder_ptr(new list_view_builder(hwnd_lv, col1, col2));
 }
-
 
 
 list_view_builder::list_view_builder(
@@ -56,11 +54,9 @@ list_view_builder::list_view_builder(
 }
 
 
-
 list_view_builder::~list_view_builder()
 {
 }
-
 
 
 void list_view_builder::build(statistic_group_list_t& gl)
@@ -82,7 +78,6 @@ void list_view_builder::build(statistic_group_list_t& gl)
             insert_item(item_iter->title_, item_iter->value_, item_iter->editable_);
     }
 }
-
 
 
 void list_view_builder::setup_list_view()
@@ -114,12 +109,10 @@ void list_view_builder::setup_list_view()
 }
 
 
-
 void list_view_builder::insert_group(const std::wstring& /*title*/)
 {
     insert_item(L"", L"", false);
 }
-
 
 
 void list_view_builder::insert_item(const std::wstring& title, const std::wstring& value, bool is_editable)
@@ -154,12 +147,10 @@ void list_view_builder::insert_item(const std::wstring& title, const std::wstrin
 }
 
 
-
 HWND list_view_builder::get_list_view() const
 {
     return hwnd_list_view_;
 }
-
 
 
 winxp_list_view_builder::winxp_list_view_builder(
@@ -173,14 +164,12 @@ winxp_list_view_builder::winxp_list_view_builder(
 }
 
 
-
 void winxp_list_view_builder::setup_list_view()
 {
     list_view_builder::setup_list_view();
 
     ListView_EnableGroupView(get_list_view(), TRUE);
 }
-
 
 
 void winxp_list_view_builder::insert_group(const std::wstring& name)
@@ -199,7 +188,6 @@ void winxp_list_view_builder::insert_group(const std::wstring& name)
 
     ListView_InsertGroup(get_list_view(), row_count_++, &lvg);
 }
-
 
 
 void winxp_list_view_builder::insert_item(

@@ -32,7 +32,6 @@
 namespace oox { namespace ppt {
 
 
-
 class PowerPointImport : public oox::core::XmlFilterBase
 {
 public:

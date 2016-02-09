@@ -311,8 +311,6 @@ void SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const
 }
 
 
-
-
 void SvxChartColorTableItem::ReplaceColorByIndex( size_t _nIndex, const XColorEntry & _rEntry )
 {
     m_aColorTable.replace( _nIndex, _rEntry );

@@ -75,7 +75,6 @@ protected:
 };
 
 
-
 // Timer class
 
 
@@ -230,8 +229,6 @@ TTimeValue Timer::getRemainingTime() const
 
     return TTimeValue(secs, nsecs);
 }
-
-
 
 
 // Timer manager
@@ -457,8 +454,6 @@ void TimerManager::run()
     }
 
 }
-
-
 
 
 // Timer manager cleanup

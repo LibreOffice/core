@@ -25,8 +25,6 @@
 namespace vcl { class Window; }
 
 
-
-
 class VCL_DLLPUBLIC Sound
 {
 public:

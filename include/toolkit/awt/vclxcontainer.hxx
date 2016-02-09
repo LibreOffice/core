@@ -30,7 +30,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 
 
-
 //  class VCLXContainer
 
 
@@ -67,8 +66,6 @@ public:
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
-
-
 
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXCONTAINER_HXX

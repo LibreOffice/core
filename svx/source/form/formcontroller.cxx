@@ -2380,7 +2380,6 @@ void FormController::stopListening()
 }
 
 
-
 Reference< XControl >  FormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,bool _bRemove,bool _bOverWrite) const
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );

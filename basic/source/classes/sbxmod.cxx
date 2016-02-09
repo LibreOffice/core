@@ -640,7 +640,6 @@ SbIfaceMapperMethod::~SbIfaceMapperMethod()
 }
 
 
-
 // From the code generator: remove invalid entries
 
 void SbModule::EndDefinitions( bool bNewState )
@@ -1966,8 +1965,6 @@ bool SbJScriptModule::StoreData( SvStream& rStrm ) const
     rStrm.WriteUniOrByteString( aTmp, osl_getThreadTextEncoding() );
     return true;
 }
-
-
 
 
 SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )

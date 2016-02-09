@@ -68,7 +68,6 @@
 #define ERRCTX_SO_DOVERB        1
 
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

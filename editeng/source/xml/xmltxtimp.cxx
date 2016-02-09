@@ -52,8 +52,6 @@ using namespace cppu;
 using namespace xmloff::token;
 
 
-
-
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
@@ -67,7 +65,6 @@ public:
 private:
     const uno::Reference< XText > mxText;
 };
-
 
 
 SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, const uno::Reference< XText >& xText )
@@ -104,7 +101,6 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPre
 }
 
 
-
 class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
@@ -117,7 +113,6 @@ public:
 private:
     const uno::Reference< XText > mxText;
 };
-
 
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(

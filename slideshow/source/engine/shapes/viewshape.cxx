@@ -712,8 +712,6 @@ namespace slideshow
         }
 
 
-
-
         ViewShape::ViewShape( const ViewLayerSharedPtr& rViewLayer ) :
             mpViewLayer( rViewLayer ),
             maRenderers(),

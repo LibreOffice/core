@@ -63,7 +63,6 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-
 bool SdrTextObj::hasSpecialDrag() const
 {
     return true;

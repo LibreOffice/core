@@ -37,8 +37,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 
 
-
-
 SvColorDialog::SvColorDialog( vcl::Window* pWindow )
 : mpParent( pWindow )
 , meMode( svtools::ColorPickerMode_SELECT )
@@ -55,15 +53,10 @@ void SvColorDialog::SetColor( const Color& rColor )
 }
 
 
-
-
-
-
 void SvColorDialog::SetMode( sal_Int16 eMode )
 {
     meMode = eMode;
 }
-
 
 
 short SvColorDialog::Execute()

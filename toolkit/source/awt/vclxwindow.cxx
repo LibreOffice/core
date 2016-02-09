@@ -315,8 +315,6 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 }
 
 
-
-
 // Uses an out-parameter instead of return value, due to the object reference
 
 void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window* pWindow )
@@ -912,8 +910,6 @@ VCLXWindow* VCLXWindow::GetImplementation( const css::uno::Reference< css::uno::
     css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
     return xUT.is() ? reinterpret_cast<VCLXWindow*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( VCLXWindow::GetUnoTunnelId() ))) : nullptr;
 }
-
-
 
 
 // css::lang::Component

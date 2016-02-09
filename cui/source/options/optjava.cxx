@@ -199,7 +199,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 }
 
 
-
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
     disposeOnce();
@@ -235,14 +234,12 @@ void SvxJavaOptionsPage::dispose()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
 {
     bool bEnable = m_pJavaEnableCB->IsChecked();
     m_pJavaBox->Enable(bEnable);
     bEnable ? m_pJavaList->EnableTable() : m_pJavaList->DisableTable();
 }
-
 
 
 IMPL_LINK_TYPED( SvxJavaOptionsPage, CheckHdl_Impl, SvTreeListBox*, pList, void )
@@ -252,7 +249,6 @@ IMPL_LINK_TYPED( SvxJavaOptionsPage, CheckHdl_Impl, SvTreeListBox*, pList, void 
     if ( pEntry )
         m_pJavaList->HandleEntryChecked( pEntry );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
@@ -267,7 +263,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
         sInfo += *pLocation;
     m_pJavaPathText->SetText(sInfo);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
@@ -292,7 +287,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
         SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception: " << e.Message);
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
@@ -344,7 +338,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
@@ -390,12 +383,10 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ResetHdl_Impl, Idle *, void)
 {
     LoadJREs();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
@@ -415,7 +406,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
 }
 
 
-
 IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if ( RET_OK == pEvt->DialogResult )
@@ -425,7 +415,6 @@ IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, 
         AddFolder( xFolderPicker->getDirectory() );
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
@@ -440,7 +429,6 @@ IMPL_LINK_NOARG_TYPED( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
 
     m_pExpertConfigDlg.disposeAndClear();
 }
-
 
 
 void SvxJavaOptionsPage::ClearJavaInfo()
@@ -465,7 +453,6 @@ void SvxJavaOptionsPage::ClearJavaInfo()
 }
 
 
-
 void SvxJavaOptionsPage::ClearJavaList()
 {
     SvTreeListEntry* pEntry = m_pJavaList->First();
@@ -477,7 +464,6 @@ void SvxJavaOptionsPage::ClearJavaList()
     }
     m_pJavaList->Clear();
 }
-
 
 
 void SvxJavaOptionsPage::LoadJREs()
@@ -527,7 +513,6 @@ void SvxJavaOptionsPage::LoadJREs()
 }
 
 
-
 void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 {
 #if HAVE_FEATURE_JAVA
@@ -550,7 +535,6 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 }
 
 
-
 void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
     m_pJavaList->Select( _pEntry );
@@ -570,7 +554,6 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
     else
         m_pJavaList->SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
 }
-
 
 
 void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
@@ -648,12 +631,10 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 }
 
 
-
 VclPtr<SfxTabPage> SvxJavaOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SvxJavaOptionsPage>::Create( pParent, *rAttrSet );
 }
-
 
 
 bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
@@ -761,7 +742,6 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 }
 
 
-
 void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     ClearJavaInfo();
@@ -788,7 +768,6 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 
     m_aResetIdle.Start();
 }
-
 
 
 void SvxJavaOptionsPage::FillUserData()
@@ -847,7 +826,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, ModifyHdl_Impl, Edit&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
 {
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
@@ -887,14 +865,12 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         m_pParameterEdit->SetText( m_pAssignedList->GetEntry( nPos ) );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
@@ -923,7 +899,6 @@ short SvxJavaParameterDlg::Execute()
 }
 
 
-
 Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
 {
     sal_Int32 nCount = m_pAssignedList->GetEntryCount();
@@ -933,7 +908,6 @@ Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
          pArray[i] = m_pAssignedList->GetEntry(i);
     return aParamList;
 }
-
 
 
 void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
@@ -968,7 +942,6 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(vcl::Window* pParent)
     // set initial focus to path list
     m_pPathList->GrabFocus();
 }
-
 
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
@@ -1027,7 +1000,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -1063,7 +1035,6 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pPathList->GetSelectEntryPos();
@@ -1083,12 +1054,10 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, SelectHdl_Impl, ListBox&, void)
 {
     EnableRemoveButton();
 }
-
 
 
 bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
@@ -1110,7 +1079,6 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 }
 
 
-
 OUString SvxJavaClassPathDlg::GetClassPath() const
 {
     OUString sPath;
@@ -1127,7 +1095,6 @@ OUString SvxJavaClassPathDlg::GetClassPath() const
     }
     return sPath;
 }
-
 
 
 void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )

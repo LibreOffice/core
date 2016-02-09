@@ -505,8 +505,6 @@ void SAL_CALL OShape::setCustomShapeGeometry( const uno::Sequence< beans::Proper
 }
 
 
-
-
 }// namespace reportdesign
 
 

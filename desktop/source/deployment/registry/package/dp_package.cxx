@@ -158,7 +158,6 @@ class BackendImpl : public ImplBaseT
         virtual void SAL_CALL disposing() override;
 
 
-
     public:
         PackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -470,7 +469,6 @@ void BackendImpl::revokeEntryFromDb(OUString const & url)
     if (m_backendDb.get())
         m_backendDb->revokeEntry(url);
 }
-
 
 
 BackendImpl::PackageImpl::PackageImpl(

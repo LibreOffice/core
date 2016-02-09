@@ -28,7 +28,6 @@
 #define CACHED_DRS_FACTORY_NAME "com.sun.star.ucb.CachedDynamicResultSetFactory"
 
 
-
 class CachedDynamicResultSet
                 : public DynamicResultSetWrapper
                 , public css::lang::XTypeProvider
@@ -84,7 +83,6 @@ public:
     impl_disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException ) override;
 };
-
 
 
 class CachedDynamicResultSetFactory

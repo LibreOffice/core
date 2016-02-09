@@ -267,8 +267,6 @@ void MacroChooser::EnableButton( Button& rButton, bool bEnable )
 }
 
 
-
-
 SbMethod* MacroChooser::GetMacro()
 {
     SbMethod* pMethod = nullptr;
@@ -284,7 +282,6 @@ SbMethod* MacroChooser::GetMacro()
     }
     return pMethod;
 }
-
 
 
 void MacroChooser::DeleteMacro()
@@ -467,7 +464,6 @@ void MacroChooser::CheckButtons()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(MacroChooser, MacroDoubleClickHdl, SvTreeListBox*, bool)
 {
     StoreMacroDescription();
@@ -549,7 +545,6 @@ IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( MacroChooser, EditModifyHdl, Edit&, void )
 {
     // select the module in which the macro is put at Neu (new),
@@ -605,7 +600,6 @@ IMPL_LINK_NOARG_TYPED( MacroChooser, EditModifyHdl, Edit&, void )
 
     CheckButtons();
 }
-
 
 
 IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
@@ -788,7 +782,6 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
         m_pBasicBox->UpdateEntries();
     }
 }
-
 
 
 void MacroChooser::UpdateFields()

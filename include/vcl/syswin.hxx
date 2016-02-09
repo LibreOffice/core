@@ -43,8 +43,6 @@ class VclContainer;
 #define ICON_MACROLIBRARY               1
 
 
-
-
 #define WINDOWSTATE_MASK_X                  ((sal_uInt32)0x00000001)
 #define WINDOWSTATE_MASK_Y                  ((sal_uInt32)0x00000002)
 #define WINDOWSTATE_MASK_WIDTH              ((sal_uInt32)0x00000004)
@@ -117,8 +115,6 @@ public:
     void         SetMaximizedHeight( unsigned int nRHeight ) { mnMaximizedHeight = nRHeight; }
     unsigned int GetMaximizedHeight() const { return mnMaximizedHeight; }
 };
-
-
 
 
 enum class MenuBarMode

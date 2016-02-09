@@ -44,7 +44,6 @@
 #define PERS_PROPSET_SERVICE_NAME   "com.sun.star.ucb.PersistentPropertySet"
 
 
-
 struct UcbStore_Impl;
 
 class UcbStore : public cppu::WeakImplHelper <
@@ -88,7 +87,6 @@ public:
     const css::uno::Sequence< css::uno::Any >&
     getInitArgs() const;
 };
-
 
 
 struct PropertySetRegistry_Impl;
@@ -167,7 +165,6 @@ public:
     css::uno::Reference< css::uno::XInterface >
     getConfigWriteAccess( const OUString& rPath );
 };
-
 
 
 struct PersistentPropertySet_Impl;

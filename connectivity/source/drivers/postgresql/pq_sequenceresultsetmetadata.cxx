@@ -127,7 +127,6 @@ OUString SequenceResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQL
 }
 
 
-
 sal_Int32 SequenceResultSetMetaData::getPrecision( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {

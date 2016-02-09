@@ -570,7 +570,6 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 }
 
 
-
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
@@ -643,7 +642,6 @@ bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 }
 
 
-
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -714,7 +712,6 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
         return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
-
 
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
@@ -929,7 +926,6 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 
     throw IllegalArgumentException();
 }
-
 
 
 bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)

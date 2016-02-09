@@ -55,7 +55,6 @@
 #include "txtflde.hxx"
 
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;

@@ -168,7 +168,6 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 }
 
 
-
 VersionInfo::VersionInfo(): arVersions(nullptr)
 {
 }
@@ -1055,7 +1054,6 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
     }
     return ret;
 }
-
 
 
 JavaInfo * MergedSettings::createJavaInfo() const

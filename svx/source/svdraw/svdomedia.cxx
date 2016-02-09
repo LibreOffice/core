@@ -47,7 +47,6 @@
 using namespace ::com::sun::star;
 
 
-
 // Note: the temp file is read only, until it is deleted!
 // It may be shared between multiple documents in case of copy/paste,
 // hence the shared_ptr.
@@ -75,8 +74,6 @@ struct SdrMediaObj::Impl
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
     OUString m_LastFailedPkgURL;
 };
-
-
 
 
 SdrMediaObj::SdrMediaObj()

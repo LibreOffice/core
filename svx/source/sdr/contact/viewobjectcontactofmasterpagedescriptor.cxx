@@ -31,7 +31,6 @@
 #include <comphelper/sequence.hxx>
 
 
-
 namespace sdr
 {
     namespace contact

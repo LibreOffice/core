@@ -37,7 +37,6 @@ using namespace webdav_ucp;
 using namespace com::sun::star;
 
 
-
 struct UCBDeadPropertyValueParseContext
 {
     OUString * pType;

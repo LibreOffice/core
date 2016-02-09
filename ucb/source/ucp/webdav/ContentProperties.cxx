@@ -65,11 +65,7 @@ Important: HTTP headers will not be mapped to DAV properties; only to UCB
 */
 
 
-
-
 // ContentProperties Implementation.
-
-
 
 
 // static member!
@@ -535,11 +531,7 @@ void ContentProperties::addProperty( const OUString & rName,
 }
 
 
-
-
 // CachableContentProperties Implementation.
-
-
 
 
 namespace

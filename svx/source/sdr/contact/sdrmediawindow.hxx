@@ -25,8 +25,6 @@
 namespace sdr { namespace contact {
 
 
-
-
 class ViewObjectContactOfSdrMediaObj;
 
 class SdrMediaWindow : public ::avmedia::MediaWindow

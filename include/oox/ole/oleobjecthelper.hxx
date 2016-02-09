@@ -36,7 +36,6 @@ namespace oox {
 namespace ole {
 
 
-
 /** Contains generic information about an OLE object. */
 struct OOX_DLLPUBLIC OleObjectInfo
 {
@@ -49,7 +48,6 @@ struct OOX_DLLPUBLIC OleObjectInfo
 
     explicit            OleObjectInfo();
 };
-
 
 
 /** Helper for OLE object handling. */

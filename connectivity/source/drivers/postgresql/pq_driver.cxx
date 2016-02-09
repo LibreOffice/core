@@ -169,8 +169,6 @@ Reference< XInterface > DriverCreateInstance( const Reference < XComponentContex
 }
 
 
-
-
 class OOneInstanceComponentFactory :
     public MutexHolder,
     public cppu::WeakComponentImplHelper< XSingleComponentFactory, XServiceInfo >

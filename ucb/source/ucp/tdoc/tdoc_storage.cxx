@@ -35,12 +35,7 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-
-
-
 // StorageElementFactory Implementation.
-
-
 
 
 StorageElementFactory::StorageElementFactory(
@@ -358,9 +353,7 @@ void StorageElementFactory::releaseElement( Storage * pElement )
 }
 
 
-
 // Non-UNO interface
-
 
 
 uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(

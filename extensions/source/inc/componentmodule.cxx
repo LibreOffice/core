@@ -269,7 +269,6 @@ namespace COMPMOD_NAMESPACE
     }
 
 
-
 }   // namespace COMPMOD_NAMESPACE
 
 

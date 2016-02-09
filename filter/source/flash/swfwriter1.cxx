@@ -50,7 +50,6 @@ static MapMode aTWIPSMode( MAP_TWIP );
 static MapMode a100thmmMode( MAP_100TH_MM );
 
 
-
 Point Writer::map( const Point& rPoint ) const
 {
     const MapMode& aSourceMapMode = mpVDev->GetMapMode();
@@ -66,7 +65,6 @@ Point Writer::map( const Point& rPoint ) const
 }
 
 
-
 Size Writer::map( const Size& rSize ) const
 {
     const MapMode& aSourceMapMode = mpVDev->GetMapMode();
@@ -80,7 +78,6 @@ Size Writer::map( const Size& rSize ) const
 
     return retSize;
 }
-
 
 
 void Writer::map( tools::PolyPolygon& rPolyPolygon ) const
@@ -103,7 +100,6 @@ void Writer::map( tools::PolyPolygon& rPolyPolygon ) const
 }
 
 
-
 sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
 {
     MapMode aSourceMapMode( mpVDev->GetMapMode() );
@@ -112,7 +108,6 @@ sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
     sal_Int32 nTwips = mpVDev->LogicToLogic( Point( n100thMM, n100thMM ),  &aSourceMapMode, &aTWIPSMode ).X();
     return nTwips;
 }
-
 
 
 void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, bool bFilled )
@@ -169,7 +164,6 @@ void Writer::Impl_addPolygon( BitStream& rBits, const tools::Polygon& rPoly, boo
 }
 
 
-
 /** Exports a style change record with a move to (x,y) and depending on bFilled a line style 1 or fill style 1
 */
 void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, bool bFilled )
@@ -190,7 +184,6 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
 
     rBits.writeUB( 1, 1 );          // set FillStyle1 or LineStyle to 1
 }
-
 
 
 /** Exports a straight edge record
@@ -226,7 +219,6 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
 }
 
 
-
 /** Exports a curved edge record
 */
 void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, sal_Int16 control_dy, sal_Int16 anchor_dx, sal_Int16 anchor_dy )
@@ -249,14 +241,12 @@ void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, s
 }
 
 
-
 /** Exports a end shape record
 */
 void Writer::Impl_addEndShapeRecord( BitStream& rBits )
 {
     rBits.writeUB( 0, 6 );
 }
-
 
 
 void Writer::Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled )
@@ -266,13 +256,11 @@ void Writer::Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled )
 }
 
 
-
 void Writer::Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
 {
     tools::PolyPolygon aPolyPoly( rPoly );
     Impl_writePolyPolygon( aPolyPoly, bFilled, rFillColor, rLineColor );
 }
-
 
 
 void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, sal_uInt8 nTransparence /* = 0 */ )
@@ -285,7 +273,6 @@ void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bF
         aFillColor.SetTransparency( nTransparence );
     Impl_writePolyPolygon(rPolyPoly, bFilled, aFillColor, aLineColor );
 }
-
 
 
 void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bFilled, const Color& rFillColor, const Color& rLineColor )
@@ -322,7 +309,6 @@ void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bF
 }
 
 
-
 /** A gradient is a transition from one color to another, rendered inside a given polypolygon */
 void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
@@ -357,12 +343,10 @@ void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gr
 }
 
 
-
 void Writer::setClipping( const tools::PolyPolygon* pClipPolyPolygon )
 {
     mpClipPolyPolygon = pClipPolyPolygon;
 }
-
 
 
 // AS: Just comparing fonts straight up is too literal.  There are some
@@ -378,7 +362,6 @@ bool compare_fonts_for_me(const vcl::Font& rFont1, const vcl::Font& rFont2)
             rFont1.IsShadow() == rFont2.IsShadow() &&
             rFont1.GetRelief() == rFont2.GetRelief();
 }
-
 
 
 FlashFont& Writer::Impl_getFont( const vcl::Font& rFont )
@@ -399,7 +382,6 @@ FlashFont& Writer::Impl_getFont( const vcl::Font& rFont )
     maFonts.push_back( pFont );
     return *pFont;
 }
-
 
 
 void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth )
@@ -876,7 +858,6 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 }
 
 
-
 void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& /* rSrcPt */, const Size& /* rSrcSz */, const Rectangle& rClipRect, bool bNeedToMapClipRect )
 {
     if( !!rBmpEx )
@@ -987,7 +968,6 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 
     endTag();
 }
-
 
 
 void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
@@ -1126,7 +1106,6 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 }
 
 
-
 void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor )
 {
     Color aOldColor( mpVDev->GetLineColor() );
@@ -1139,7 +1118,6 @@ void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* 
 
     mpVDev->SetLineColor( aOldColor );
 }
-
 
 
 void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
@@ -1155,7 +1133,6 @@ void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
         Impl_writePolyPolygon( aPoly, true );
     }
 }
-
 
 
 void Writer::Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY )
@@ -1206,7 +1183,6 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
     maShapeIds.push_back( nShapeId );
     return true;
 }
-
 
 
 /** Writes the filling defined by SvtGraphicFill and returns true or it returns
@@ -1285,7 +1261,6 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 }
 
 
-
 /* CL: The idea was to export page fields as text fields that get theire
    string from a variable set with actionscript by each page. This didn't
    work out since the formatting is always wrong when text follows the
@@ -1334,7 +1309,6 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 #endif
 
 
-
 void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
     if(rLinePolygon.count())
@@ -1372,7 +1346,6 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
         }
     }
 }
-
 
 
 void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
@@ -1842,9 +1815,6 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 }
 
 
-
-
-
 void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,
                                    const double P2x, const double P2y )
 {
@@ -1854,7 +1824,6 @@ void Writer::Impl_addStraightLine( BitStream& rBits, Point& rLastPoint,
     rLastPoint = aPoint;
 
 }
-
 
 
 void Writer::Impl_addQuadBezier( BitStream& rBits, Point& rLastPoint,
@@ -1870,7 +1839,6 @@ void Writer::Impl_addQuadBezier( BitStream& rBits, Point& rLastPoint,
                                 _Int16(aAnchorPoint.X() - aControlPoint.X()),_Int16(aAnchorPoint.Y() - aControlPoint.Y()) );
     rLastPoint = aAnchorPoint;
 }
-
 
 
 /* Approximate given cubic bezier curve by quadratic bezier segments */

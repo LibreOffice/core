@@ -138,5 +138,4 @@ bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

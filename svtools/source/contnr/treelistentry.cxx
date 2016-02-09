@@ -103,7 +103,6 @@ sal_uLong SvTreeListEntry::GetChildListPos() const
 }
 
 
-
 void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
 {
     nListPos &= 0x80000000;

@@ -32,7 +32,6 @@ namespace pcr
 {
 
 
-
     //= NumberFormatSampleField
 
     class NumberFormatSampleField : public FormattedField

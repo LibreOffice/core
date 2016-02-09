@@ -31,7 +31,6 @@ namespace basic
 {
 
 
-
     //= BasicManagerRepository
 
     /** specifies a callback for instances which are interested in BasicManagers

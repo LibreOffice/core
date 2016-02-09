@@ -30,7 +30,6 @@ namespace pcr
 {
 
 
-
     //= ServiceDescriptor
 
     struct ServiceDescriptor

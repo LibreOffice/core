@@ -26,7 +26,6 @@ namespace pcr
 {
 
 
-
     //= IPropertyControlObserver
 
     /** non-UNO version of the XPropertyControlObserver

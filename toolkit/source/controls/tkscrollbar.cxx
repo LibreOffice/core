@@ -100,7 +100,6 @@ namespace toolkit
     }
 
 
-
     //= UnoControlScrollBarModel
 
     UnoScrollBarControl::UnoScrollBarControl()

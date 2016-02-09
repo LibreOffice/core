@@ -24,7 +24,6 @@
 #include <svl/cenumitm.hxx>
 
 
-
 class SVL_DLLPUBLIC SfxEnumItem
     : public SfxEnumItemInterface
 {
@@ -57,7 +56,6 @@ public:
     virtual void SetEnumValue(sal_uInt16 nTheValue) override;
 
 };
-
 
 
 class SVL_DLLPUBLIC SfxBoolItem

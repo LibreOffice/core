@@ -108,9 +108,6 @@ private:
     }
 
 
-
-
-
     // Shape
     virtual uno::Reference< drawing::XShape > getXShape() const
     {

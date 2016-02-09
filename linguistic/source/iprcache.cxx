@@ -187,7 +187,6 @@ void SAL_CALL FlushListener::propertyChange(
 }
 
 
-
 SpellCache::SpellCache()
 {
     pFlushLstnr = new FlushListener( *this );

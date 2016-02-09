@@ -40,8 +40,6 @@ namespace xmloff { namespace token {
     }
 
 
-
-
 #if OSL_DEBUG_LEVEL > 0
     #define TOKEN( s, e ) { sizeof(s)-1, s, nullptr, e }
 #else

@@ -41,8 +41,6 @@
 #include <list>
 
 
-
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -109,7 +107,6 @@ OPumpTest::~OPumpTest()
 {
 
 }
-
 
 
 void OPumpTest::testInvariant( const OUString& TestName, const Reference < XInterface >& TestObject )
@@ -187,7 +184,6 @@ sal_Int32 OPumpTest::test(
     }
     return hTestHandle;
 }
-
 
 
 sal_Bool OPumpTest::testPassed()        throw  (RuntimeException)
@@ -315,7 +311,6 @@ private:
         return rOut;
     }
 };
-
 
 
 void OPumpTest::testClose( const Reference< XInterface > &r )

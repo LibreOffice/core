@@ -606,8 +606,6 @@ namespace cppcanvas
             }
 
 
-
-
             class TextAction : public Action, private ::boost::noncopyable
             {
             public:
@@ -757,8 +755,6 @@ namespace cppcanvas
                 // _subsettable_ text
                 return 1;
             }
-
-
 
 
             class EffectTextAction :
@@ -1000,8 +996,6 @@ namespace cppcanvas
             }
 
 
-
-
             class TextArrayAction : public Action, private ::boost::noncopyable
             {
             public:
@@ -1176,8 +1170,6 @@ namespace cppcanvas
 
                 return rOrigContext.Length;
             }
-
-
 
 
             class EffectTextArrayAction :
@@ -1514,8 +1506,6 @@ namespace cppcanvas
 
                 return rOrigContext.Length;
             }
-
-
 
 
             class OutlineAction :
@@ -1899,10 +1889,7 @@ namespace cppcanvas
             }
 
 
-
-
             // Action factory methods
-
 
 
             /** Create an outline action
@@ -2044,8 +2031,6 @@ namespace cppcanvas
             }
 
         } // namespace
-
-
 
 
         ActionSharedPtr TextActionFactory::createTextAction( const ::Point&                 rStartPoint,

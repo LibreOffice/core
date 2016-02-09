@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
 namespace vcl { class Window; }
 
 
-
 namespace abp
 {
 
@@ -169,7 +168,6 @@ namespace abp
 
         /// return the intern data source object
         css::uno::Reference< css::beans::XPropertySet > getDataSource() const;
-
 
 
         /** set a new data source.

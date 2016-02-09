@@ -136,10 +136,6 @@ private:
 };
 
 
-
-
-
-
 // Implementation of an EventAttacher-subclass 'AllListeners', which
 // only passes individual events of the general AllListeners.
 class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
@@ -176,7 +172,6 @@ AttacherAllListener_Impl::AttacherAllListener_Impl
     , aScriptCode( rScriptCode_ )
 {
 }
-
 
 
 // Methods of XAllListener
@@ -397,7 +392,6 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
     }
     return mxCoreReflection;
 }
-
 
 
 ::std::deque<AttacherIndex_Impl>::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )

@@ -288,10 +288,6 @@ Submission* Submission::getSubmission(
 }
 
 
-
-
-
-
 void Submission::liveCheck()
     throw( RuntimeException )
 {
@@ -308,7 +304,6 @@ Model* Submission::getModelImpl() const
         pModel = Model::getModel( mxModel );
     return pModel;
 }
-
 
 
 // Property-Set implementation
@@ -398,7 +393,6 @@ void SAL_CALL Submission::setName( const OUString& sID )
 {
     setID( sID );
 }
-
 
 
 sal_Int64 SAL_CALL Submission::getSomething(

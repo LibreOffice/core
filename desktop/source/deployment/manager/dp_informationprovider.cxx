@@ -85,13 +85,11 @@ private:
 };
 
 
-
 PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
     mxContext( xContext ),
     mxUpdateInformation( deployment::UpdateInformationProvider::create( xContext ) )
 {
 }
-
 
 
 PackageInformationProvider::~PackageInformationProvider()
@@ -132,7 +130,6 @@ OUString PackageInformationProvider::getPackageLocation(
 
     return aLocationURL;
 }
-
 
 
 OUString SAL_CALL
@@ -322,8 +319,6 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
     }
     return retList;
 }
-
-
 
 
 namespace sdecl = comphelper::service_decl;

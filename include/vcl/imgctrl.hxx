@@ -26,8 +26,6 @@
 #include <vcl/bitmapex.hxx>
 
 
-
-
 class VCL_DLLPUBLIC ImageControl : public FixedImage
 {
 private:

@@ -128,7 +128,6 @@ bool UnusedFieldsRemove::VisitFieldDecl( const FieldDecl* fieldDecl )
 }
 
 
-
 loplugin::Plugin::Registration< UnusedFieldsRemove > X("unusedfieldsremove", false);
 
 }

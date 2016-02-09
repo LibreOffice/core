@@ -23,7 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-
 // forward declarations
 
 
@@ -62,13 +61,11 @@ public:
     virtual ~DomBuilderContext();
 
 
-
     // access to the DOM tree
 
 
     /** access the DOM tree */
     css::uno::Reference<css::xml::dom::XDocument> getTree();
-
 
 
     // implement SvXMLImportContext methods:

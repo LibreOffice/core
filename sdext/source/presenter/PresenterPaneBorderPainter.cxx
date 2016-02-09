@@ -292,7 +292,6 @@ awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
 }
 
 
-
 bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanvas>& rxCanvas)
 {
     bool bModified (false);

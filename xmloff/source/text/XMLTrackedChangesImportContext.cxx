@@ -34,8 +34,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using namespace ::xmloff::token;
 
 
-
-
 XMLTrackedChangesImportContext::XMLTrackedChangesImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,

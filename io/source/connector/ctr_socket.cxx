@@ -223,7 +223,6 @@ namespace stoc_connector {
     }
 
 
-
     // XConnectionBroadcaster
     void SAL_CALL SocketConnection::addStreamListener(const Reference<XStreamListener> & aListener) throw(RuntimeException, std::exception)
     {

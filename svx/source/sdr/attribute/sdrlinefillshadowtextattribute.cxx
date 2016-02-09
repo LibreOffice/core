@@ -21,7 +21,6 @@
 #include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

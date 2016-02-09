@@ -434,7 +434,6 @@ shell::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 }
 
 
-
 void SAL_CALL
 shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 {
@@ -449,7 +448,6 @@ shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
     if( it->second.notifier->empty() )
         m_aContent.erase( it );
 }
-
 
 
 /*********************************************************************************/
@@ -505,8 +503,6 @@ shell::associate( const OUString& aUnqPath,
 }
 
 
-
-
 void SAL_CALL
 shell::deassociate( const OUString& aUnqPath,
             const OUString& PropertyName )
@@ -554,8 +550,6 @@ shell::deassociate( const OUString& aUnqPath,
 }
 
 
-
-
 /*********************************************************************************/
 /*                                                                               */
 /*                     page-Implementation                                       */
@@ -564,7 +558,6 @@ shell::deassociate( const OUString& aUnqPath,
 
 //  Given an xOutputStream, this method writes the content of the file belonging to
 //  URL aUnqPath into the XOutputStream
-
 
 
 void SAL_CALL shell::page( sal_Int32 CommandId,
@@ -655,7 +648,6 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 //  Given a file URL aUnqPath, this methods returns a XInputStream which reads from the open file.
 
 
-
 uno::Reference< io::XInputStream > SAL_CALL
 shell::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
@@ -679,8 +671,6 @@ shell::open( sal_Int32 CommandId,
 }
 
 
-
-
 /*********************************************************************************/
 /*                                                                               */
 /*                     open for read/write access-Implementation                 */
@@ -689,7 +679,6 @@ shell::open( sal_Int32 CommandId,
 
 //  Given a file URL aUnqPath, this methods returns a XStream which can be used
 //  to read and write from/to the file.
-
 
 
 uno::Reference< io::XStream > SAL_CALL
@@ -714,7 +703,6 @@ shell::open_rw( sal_Int32 CommandId,
 }
 
 
-
 /*********************************************************************************/
 /*                                                                               */
 /*                       ls-Implementation                                       */
@@ -723,7 +711,6 @@ shell::open_rw( sal_Int32 CommandId,
 
 //  This method returns the result set containing the children of the directory belonging
 //  to file URL aUnqPath
-
 
 
 uno::Reference< XDynamicResultSet > SAL_CALL
@@ -751,8 +738,6 @@ shell::ls( sal_Int32 CommandId,
 }
 
 
-
-
 /*********************************************************************************/
 /*                                                                               */
 /*                          info_c implementation                                */
@@ -766,8 +751,6 @@ shell::info_c()
     XCommandInfo_impl* p = new XCommandInfo_impl( this );
     return uno::Reference< XCommandInfo >( p );
 }
-
-
 
 
 /*********************************************************************************/
@@ -786,8 +769,6 @@ shell::info_p( const OUString& aUnqPath )
 }
 
 
-
-
 /*********************************************************************************/
 /*                                                                               */
 /*                     setv-Implementation                                       */
@@ -795,7 +776,6 @@ shell::info_p( const OUString& aUnqPath )
 /*********************************************************************************/
 
 //  Sets the values of the properties belonging to fileURL aUnqPath
-
 
 
 uno::Sequence< uno::Any > SAL_CALL
@@ -1030,7 +1010,6 @@ shell::setv( const OUString& aUnqPath,
 
 //  Reads the values of the properties belonging to fileURL aUnqPath;
 //  Returns an XRow object containing the values in the requested order.
-
 
 
 uno::Reference< sdbc::XRow > SAL_CALL
@@ -1274,7 +1253,6 @@ shell::move( sal_Int32 CommandId,
 }
 
 
-
 /********************************************************************************/
 /*                                                                              */
 /*                         copy-implementation                                  */
@@ -1470,7 +1448,6 @@ shell::copy(
 }
 
 
-
 /********************************************************************************/
 /*                                                                              */
 /*                         remove-implementation                                */
@@ -1479,7 +1456,6 @@ shell::copy(
 
 //  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
 //  Return: success of operation
-
 
 
 bool SAL_CALL
@@ -1888,7 +1864,6 @@ shell::write( sal_Int32 CommandId,
 }
 
 
-
 /*********************************************************************************/
 /*                                                                               */
 /*                 insertDefaultProperties-Implementation                        */
@@ -1924,8 +1899,6 @@ void SAL_CALL shell::insertDefaultProperties( const OUString& aUnqPath )
 }
 
 
-
-
 /******************************************************************************/
 /*                                                                            */
 /*                          mapping of file urls                              */
@@ -1955,7 +1928,6 @@ bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
 }
 
 
-
 bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 {
     bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
@@ -1964,7 +1936,6 @@ bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 
     return err;
 }
-
 
 
 // Helper function for public copy
@@ -2034,7 +2005,6 @@ shell::copy_recursive( const OUString& srcUnqPath,
 
     return err;
 }
-
 
 
 // Helper function for mkfil,mkdir and write
@@ -2123,13 +2093,9 @@ bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 }
 
 
-
-
-
 //  Given a sequence of properties seq, this method determines the mask
 //  used to instantiate a osl::FileStatus, so that a call to
 //  osl::DirectoryItem::getFileStatus fills the required fields.
-
 
 
 void SAL_CALL
@@ -2163,7 +2129,6 @@ shell::getMaskFromProperties(
             n_Mask |= osl_FileStatus_Mask_ModifyTime;
     }
 }
-
 
 
 /*********************************************************************************/
@@ -2222,8 +2187,6 @@ shell::load( const ContentMap::iterator& it, bool create )
         }
     }
 }
-
-
 
 
 /*********************************************************************************/
@@ -2534,10 +2497,6 @@ shell::getv(
 }
 
 
-
-
-
-
 // EventListener
 
 
@@ -2565,7 +2524,6 @@ shell::getContentEventListeners( const OUString& aName )
     }
     return p;
 }
-
 
 
 std::list< ContentEventNotifier* >* SAL_CALL
@@ -2637,8 +2595,6 @@ shell::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners,
 }
 
 
-
-
 std::list< PropertySetInfoChangeNotifier* >* SAL_CALL
 shell::getPropertySetListeners( const OUString& aName )
 {
@@ -2693,7 +2649,6 @@ shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* liste
     }
     delete listeners;
 }
-
 
 
 std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
@@ -2799,7 +2754,6 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
 }
 
 
-
 void SAL_CALL
 shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* >* listeners_vec )
 {
@@ -2818,7 +2772,6 @@ shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* 
     }
     delete listeners_vec;
 }
-
 
 
 std::list< PropertyChangeNotifier* >* SAL_CALL
@@ -2859,8 +2812,6 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
     }
     delete listeners;
 }
-
-
 
 
 /********************************************************************************/
@@ -2919,8 +2870,6 @@ shell::erasePersistentSet( const OUString& aUnqPath,
             m_xFileRegistry->removePropertySet( old_Name );
     }
 }
-
-
 
 
 /********************************************************************************/

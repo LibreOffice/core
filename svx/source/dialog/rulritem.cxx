@@ -149,7 +149,6 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy) :
 {}
 
 
-
 void SvxLongLRSpaceItem::SetLeft(long lArgLeft)
 {
     mlLeft = lArgLeft;
@@ -274,7 +273,6 @@ SvxLongULSpaceItem::SvxLongULSpaceItem() :
     mlLeft      (0),
     mlRight     (0)
 {}
-
 
 
 void SvxLongULSpaceItem::SetUpper(long lArgLeft)
@@ -782,10 +780,6 @@ bool SvxObjectItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
     return bRet;
 }
-
-
-
-
 
 
 void SvxObjectItem::SetStartX(long lValue)

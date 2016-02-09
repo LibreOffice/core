@@ -34,10 +34,8 @@
 class SbMethod;
 
 
-
 namespace basprov
 {
-
 
 
     //  class BasicMethodNodeImpl

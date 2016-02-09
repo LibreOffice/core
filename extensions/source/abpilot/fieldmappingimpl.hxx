@@ -43,10 +43,8 @@ namespace abp
 {
 
 
-
     namespace fieldmapping
     {
-
 
 
         /** invokes the field mapping dialog
@@ -88,10 +86,8 @@ namespace abp
     }   // namespace fieldmapping
 
 
-
     namespace addressconfig
     {
-
 
 
         /** writes the data source / table name given into the configuration, to where the template documents
@@ -111,7 +107,6 @@ namespace abp
 
 
     }   // namespace addressconfig
-
 
 
 }   // namespace abp

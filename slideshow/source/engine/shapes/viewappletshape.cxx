@@ -98,7 +98,6 @@ namespace slideshow
         }
 
 
-
         ViewAppletShape::~ViewAppletShape()
         {
             try
@@ -115,12 +114,10 @@ namespace slideshow
         }
 
 
-
         ViewLayerSharedPtr ViewAppletShape::getViewLayer() const
         {
             return mpViewLayer;
         }
-
 
 
         void ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
@@ -207,7 +204,6 @@ namespace slideshow
         }
 
 
-
         void ViewAppletShape::endApplet()
         {
             uno::Reference<util::XCloseable> xCloseable(
@@ -220,7 +216,6 @@ namespace slideshow
                 mxFrame.clear();
             }
         }
-
 
 
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const

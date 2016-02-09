@@ -61,9 +61,6 @@ namespace // private
     };
 
 
-
-
-
     inline
     sal_Int32 SubDiv( sal_Int32 nNumber, sal_Int32 nMinuend, sal_Int32 nDenominator )
     {
@@ -81,17 +78,11 @@ namespace // private
     }
 
 
-
-
-
     inline
     sal_uInt32 _getWidthRect( const RECT& aRect )
     {
         return ( aRect.right - aRect.left );
     }
-
-
-
 
 
     inline
@@ -183,7 +174,6 @@ namespace // private
 } // end namespace
 
 
-
 // to ensure only one instance (singleton)
 
 
@@ -217,9 +207,6 @@ CFilePreview* CFilePreview::createInstance(
 
     return s_FilePreviewInst;
 }
-
-
-
 
 
 CFilePreview::CFilePreview(
@@ -271,9 +258,6 @@ CFilePreview::CFilePreview(
     if (!IsWindow(m_hwnd))
         throw CPreviewException( );
 }
-
-
-
 
 
 CFilePreview::~CFilePreview( )
@@ -366,9 +350,6 @@ sal_Bool SAL_CALL CFilePreview::getPos( POINT& ulCorner ) const
 }
 
 
-
-
-
 void SAL_CALL CFilePreview::enable( sal_Bool bEnable )
 {
     m_bEnabled = bEnable;
@@ -426,9 +407,6 @@ sal_Bool SAL_CALL CFilePreview::update( const OUString& aFileName )
 }
 
 
-
-
-
 void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
 {
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );
@@ -477,9 +455,6 @@ void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
     {
     }
 }
-
-
-
 
 
 sal_Bool CFilePreview::loadFile( const OUString& aFileName )
@@ -550,9 +525,6 @@ CLEANUP_AND_EXIT:
 }
 
 
-
-
-
 LRESULT CALLBACK CFilePreview::WndProc(
     HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -589,7 +561,6 @@ LRESULT CALLBACK CFilePreview::WndProc(
 
     return lResult;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

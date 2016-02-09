@@ -91,7 +91,6 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
 };
 
 
-
 const sal_uInt16 AlignmentTabPage::s_pRanges[] =
 {
     SID_ATTR_ALIGN_HOR_JUSTIFY,SID_ATTR_ALIGN_VER_JUSTIFY,
@@ -105,7 +104,6 @@ const sal_uInt16 AlignmentTabPage::s_pRanges[] =
     SID_ATTR_ALIGN_SHRINKTOFIT,SID_ATTR_ALIGN_SHRINKTOFIT,
     0
 };
-
 
 
 namespace {
@@ -147,7 +145,6 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
 }
 
 }//namespace
-
 
 
 AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
@@ -439,7 +436,6 @@ IMPL_LINK_NOARG_TYPED(AlignmentTabPage, UpdateEnableHdl, ListBox&, void)
 {
     UpdateEnableControls();
 }
-
 
 
 }

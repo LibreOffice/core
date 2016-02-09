@@ -29,7 +29,6 @@ namespace dump {
 namespace pptx {
 
 
-
 class RootStorageObject : public StorageObjectBase
 {
 public:
@@ -42,7 +41,6 @@ protected:
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
 };
-
 
 
 class Dumper : public DumperBase
@@ -58,7 +56,6 @@ public:
 protected:
     virtual void        implDump() override;
 };
-
 
 
 } // namespace pptx

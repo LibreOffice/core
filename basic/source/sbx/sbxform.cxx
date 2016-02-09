@@ -82,8 +82,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 //          be generated. That's a StarBasic 'extension'.
 
 
-
-
 double get_number_of_digits( double dNumber )
 //double floor_log10_fabs( double dNumber )
 {

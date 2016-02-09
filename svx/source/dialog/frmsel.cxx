@@ -1247,7 +1247,6 @@ Size FrameSelector::GetOptimalSize() const
 }
 
 
-
 template< typename Cont, typename Iter, typename Pred >
 FrameBorderIterBase< Cont, Iter, Pred >::FrameBorderIterBase( container_type& rCont ) :
     maIt( rCont.begin() ),
@@ -1262,7 +1261,6 @@ FrameBorderIterBase< Cont, Iter, Pred >& FrameBorderIterBase< Cont, Iter, Pred >
     do { ++maIt; } while( Is() && !maPred( *maIt ) );
     return *this;
 }
-
 
 
 }

@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star
 namespace xforms { class EvaluationContext; }
 
 
-
 namespace xforms
 {
 

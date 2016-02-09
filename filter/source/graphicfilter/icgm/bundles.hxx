@@ -26,7 +26,6 @@
 #include <vector>
 
 
-
 class Bundle
 {
 
@@ -51,7 +50,6 @@ public:
 };
 
 
-
 class LineBundle : public Bundle
 {
 public:
@@ -67,7 +65,6 @@ public:
     virtual Bundle* Clone() override { return new LineBundle( *this ); }
     LineBundle& operator=( LineBundle& rLineBundle );
 };
-
 
 
 class MarkerBundle : public Bundle
@@ -88,7 +85,6 @@ public:
 };
 
 
-
 class EdgeBundle : public Bundle
 {
 public:
@@ -103,7 +99,6 @@ public:
     virtual Bundle*     Clone() override { return new EdgeBundle( *this ); }
     EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
 };
-
 
 
 class TextBundle : public Bundle
@@ -128,7 +123,6 @@ public:
 };
 
 
-
 class FillBundle : public Bundle
 {
 public:
@@ -145,8 +139,6 @@ public:
     virtual Bundle*     Clone() override { return new FillBundle( *this ); }
     FillBundle& operator=( FillBundle& rFillBundle );
 };
-
-
 
 
 class FontEntry

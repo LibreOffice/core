@@ -55,7 +55,6 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
 }
 
 
-
 SvEmbedTransferHelper::~SvEmbedTransferHelper()
 {
     if ( m_pGraphic )
@@ -78,7 +77,6 @@ void SvEmbedTransferHelper::AddSupportedFormats()
     AddFormat( SotClipboardFormatId::GDIMETAFILE );
     AddFormat( SotClipboardFormatId::BITMAP );
 }
-
 
 
 bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
@@ -194,7 +192,6 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
 
     return bRet;
 }
-
 
 
 void SvEmbedTransferHelper::ObjectReleased()

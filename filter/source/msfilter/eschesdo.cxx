@@ -143,7 +143,6 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 }
 
 
-
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \
     nShapeType = nType;                                         \

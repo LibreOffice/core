@@ -196,7 +196,6 @@ public:
     void ExportMasterDocHeadingDummies();
 
 
-
 protected:
 
     inline SvXMLExport& GetExport() { return rExport; }

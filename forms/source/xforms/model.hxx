@@ -150,7 +150,6 @@ public:
 #endif
 
 
-
     // MIP (model item property) management
 
 
@@ -185,11 +184,8 @@ public:
     bool isValid() const;
 
 
-
-
     // XModel
     //    implement the xforms::XModel implementation
-
 
 
     virtual OUString SAL_CALL getID()
@@ -233,7 +229,6 @@ public:
 
     virtual css::uno::Reference<css::xml::dom::XDocument> SAL_CALL getDefaultInstance()
         throw( css::uno::RuntimeException, std::exception ) override;
-
 
 
     // XModel: binding management
@@ -398,7 +393,6 @@ public:
         const XNode_t& xNode,
         const OUString& sValue )
         throw( css::uno::RuntimeException, std::exception ) override;
-
 
 
     // XUpdatable

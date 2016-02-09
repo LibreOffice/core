@@ -57,7 +57,6 @@ using namespace sdr::contact;
 //   Defines
 
 
-
 //   Helper class SdrControlEventListenerImpl
 
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -333,7 +332,6 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         SetRectsDirty();
     }
 }
-
 
 
 bool SdrUnoObj::hasSpecialDrag() const

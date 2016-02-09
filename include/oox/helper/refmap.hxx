@@ -30,7 +30,6 @@
 namespace oox {
 
 
-
 /** Template for a map of ref-counted objects with additional accessor functions.
 
     An instance of the class RefMap< Type > stores elements of the type
@@ -138,7 +137,6 @@ private:
         return (aIt == this->end()) ? 0 : &aIt->second;
     }
 };
-
 
 
 } // namespace oox

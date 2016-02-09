@@ -28,10 +28,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 
-
 namespace accessibility
 {
-
 
 
 using namespace ::com::sun::star::uno;
@@ -391,7 +389,6 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 // = AccessibleGridControlAccess
 
 
-
 AccessibleGridControlAccess::AccessibleGridControlAccess(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::svt::table::IAccessibleTable& rTable )
     : m_xParent( rxParent )
@@ -440,7 +437,6 @@ bool AccessibleGridControlAccess::isContextAlive() const
 {
     return  ( nullptr != m_pContext ) && m_pContext->isAlive();
 }
-
 
 
 }   // namespace accessibility

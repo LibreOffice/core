@@ -29,7 +29,6 @@ class ControlModelBase;
 class EmbeddedControl;
 
 
-
 /** Context handler for ActiveX form control model properties. */
 class AxControlPropertyContext : public ::oox::core::ContextHandler2
 {
@@ -47,7 +46,6 @@ private:
 };
 
 
-
 /** Fragment handler for an embedded ActiveX form control fragment. */
 class AxControlFragment : public ::oox::core::FragmentHandler2
 {
@@ -63,7 +61,6 @@ public:
 private:
     EmbeddedControl&    mrControl;
 };
-
 
 
 } // namespace ole

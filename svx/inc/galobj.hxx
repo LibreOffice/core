@@ -27,7 +27,6 @@
 #define S_THUMB 80
 
 
-
 enum GalSoundType
 {
     SOUND_STANDARD = 0,

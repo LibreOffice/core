@@ -36,7 +36,6 @@ namespace vba {
 using namespace ::com::sun::star;
 
 
-
 namespace {
 
 /** Create an instance of a module manager.
@@ -90,7 +89,6 @@ void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, bool bL
 }
 
 
-
 /** Enables or disables the container windows of all controllers of the
     specified document model.
  */
@@ -121,7 +119,6 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
 }
 
 
-
 typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, bool );
 
 /** Implementation iterating over all documents that have the same type as the
@@ -144,7 +141,6 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
 }
 
 
-
 struct CurrDirPool
 {
     ::osl::Mutex maMutex;
@@ -156,19 +152,16 @@ struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool 
 } // namespace
 
 
-
 void lockControllersOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, bool bLockControllers )
 {
     lclIterateDocuments( &lclLockControllers, rxModel, bLockControllers );
 }
 
 
-
 void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, bool bEnableWindows )
 {
     lclIterateDocuments( &lclEnableContainerWindows, rxModel, bEnableWindows );
 }
-
 
 
 void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, const OUString& rPath )
@@ -189,7 +182,6 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
         }
     }
 }
-
 
 
 } // namespace vba

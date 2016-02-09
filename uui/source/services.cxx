@@ -32,7 +32,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 
-
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Char const * pImplName,
                         void * pServiceManager,
                         void *)
@@ -73,7 +72,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
         xFactory =
             uui::PasswordContainerInteractionHandler::createServiceFactory( xSMgr );
     }
-
 
 
     if ( xFactory.is() )

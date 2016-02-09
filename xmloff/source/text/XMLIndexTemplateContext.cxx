@@ -60,7 +60,6 @@ const sal_Char sAPI_TokenBibliographyDataField[] =
                                             "TokenBibliographyDataField";
 
 
-
 XMLIndexTemplateContext::XMLIndexTemplateContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,
@@ -220,7 +219,6 @@ void XMLIndexTemplateContext::EndElement()
 }
 
 
-
 /// template token types; used for aTokenTypeMap parameter
 enum TemplateTokenType
 {
@@ -329,10 +327,7 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 }
 
 
-
-
 // maps for the XMLIndexTemplateContext constructor
-
 
 
 // table of content and user defined index:

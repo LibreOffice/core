@@ -147,7 +147,6 @@ OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 } // namespace
 
 
-
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper< css::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
@@ -201,7 +200,6 @@ void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _r
         // GCC crashes when already in the destructor, so first query the Flag
         mpDoc->DoClose();
 }
-
 
 
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
@@ -273,11 +271,9 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 }
 
 
-
 SfxObjectShell_Impl::~SfxObjectShell_Impl()
 {
 }
-
 
 
 SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
@@ -381,19 +377,16 @@ SfxObjectShell::~SfxObjectShell()
 }
 
 
-
 void SfxObjectShell::Stamp_SetPrintCancelState(bool bState)
 {
     pImp->bIsPrintJobCancelable = bState;
 }
 
 
-
 bool SfxObjectShell::Stamp_GetPrintCancelState() const
 {
     return pImp->bIsPrintJobCancelable;
 }
-
 
 
 // closes the Object and all its views
@@ -525,7 +518,6 @@ SfxObjectShell* SfxObjectShell::GetNext
 }
 
 
-
 SfxObjectShell* SfxObjectShell::Current()
 {
     SfxViewFrame *pFrame = SfxViewFrame::Current();
@@ -533,12 +525,10 @@ SfxObjectShell* SfxObjectShell::Current()
 }
 
 
-
 bool SfxObjectShell::IsInPrepareClose() const
 {
     return pImp->bInPrepareClose;
 }
-
 
 
 struct BoolEnv_Impl
@@ -857,19 +847,16 @@ void SfxObjectShell::InitBasicManager_Impl()
 }
 
 
-
 bool SfxObjectShell::DoClose()
 {
     return Close();
 }
 
 
-
 SfxObjectShell* SfxObjectShell::GetObjectShell()
 {
     return this;
 }
-
 
 
 uno::Sequence< OUString > SfxObjectShell::GetEventNames()
@@ -890,7 +877,6 @@ uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 }
 
 
-
 css::uno::Reference< css::frame::XModel > SfxObjectShell::GetModel() const
 {
     return GetBaseModel();
@@ -905,7 +891,6 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
         pImp->pBaseModel->addCloseListener( new SfxModelListener_Impl(this) );
     }
 }
-
 
 
 css::uno::Reference< css::frame::XModel > SfxObjectShell::GetBaseModel() const

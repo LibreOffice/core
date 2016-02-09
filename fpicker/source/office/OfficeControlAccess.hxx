@@ -30,7 +30,6 @@ namespace svt
 {
 
 
-
     namespace InternalFilePickerElementIds
     {
         static const sal_Int16 PUSHBUTTON_HELP = (sal_Int16)0x1000;

@@ -73,7 +73,6 @@ namespace comphelper
     }
 
 
-
     /** get a css::awt::FontDescriptor that is fully initialized with
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)

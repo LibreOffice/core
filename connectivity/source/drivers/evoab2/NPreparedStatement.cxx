@@ -204,7 +204,6 @@ void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, 
 }
 
 
-
 void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setFloat", *this );
@@ -288,7 +287,6 @@ void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, c
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBytes", *this );
 }
-
 
 
 void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException, std::exception)

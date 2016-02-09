@@ -39,8 +39,6 @@ using namespace ::com::sun::star;
 namespace unogallery {
 
 
-
-
 GalleryTheme::GalleryTheme( const OUString& rThemeName )
 {
     mpGallery = ::Gallery::GetGalleryInstance();
@@ -49,7 +47,6 @@ GalleryTheme::GalleryTheme( const OUString& rThemeName )
     if( mpGallery )
         StartListening( *mpGallery );
 }
-
 
 
 GalleryTheme::~GalleryTheme()
@@ -70,13 +67,11 @@ GalleryTheme::~GalleryTheme()
 }
 
 
-
 OUString GalleryTheme::getImplementationName_Static()
     throw()
 {
     return OUString( "com.sun.star.comp.gallery.GalleryTheme" );
 }
-
 
 
 uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
@@ -126,13 +121,11 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
 }
 
 
-
 uno::Type SAL_CALL GalleryTheme::getElementType()
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<gallery::XGalleryItem>::get();
 }
-
 
 
 sal_Bool SAL_CALL GalleryTheme::hasElements()
@@ -144,7 +137,6 @@ sal_Bool SAL_CALL GalleryTheme::hasElements()
 }
 
 
-
 sal_Int32 SAL_CALL GalleryTheme::getCount()
     throw (uno::RuntimeException, std::exception)
 {
@@ -152,7 +144,6 @@ sal_Int32 SAL_CALL GalleryTheme::getCount()
 
     return( mpTheme ? mpTheme->GetObjectCount() : 0 );
 }
-
 
 
 uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
@@ -180,7 +171,6 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 }
 
 
-
 OUString SAL_CALL GalleryTheme::getName(  )
     throw (uno::RuntimeException, std::exception)
 {
@@ -194,7 +184,6 @@ OUString SAL_CALL GalleryTheme::getName(  )
 }
 
 
-
 void SAL_CALL GalleryTheme::update(  )
     throw (uno::RuntimeException, std::exception)
 {
@@ -206,7 +195,6 @@ void SAL_CALL GalleryTheme::update(  )
         mpTheme->Actualize( aDummyLink );
     }
 }
-
 
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertURLByIndex(
@@ -241,7 +229,6 @@ void SAL_CALL GalleryTheme::update(  )
 }
 
 
-
 ::sal_Int32 SAL_CALL GalleryTheme::insertGraphicByIndex(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nIndex )
     throw (lang::WrappedTargetException, uno::RuntimeException, std::exception)
@@ -267,7 +254,6 @@ void SAL_CALL GalleryTheme::update(  )
 
     return nRet;
 }
-
 
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertDrawingByIndex(
@@ -325,7 +311,6 @@ void SAL_CALL GalleryTheme::update(  )
 }
 
 
-
 void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
@@ -339,7 +324,6 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
             mpTheme->RemoveObject( nIndex );
     }
 }
-
 
 
 void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -378,7 +362,6 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 
-
 void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 {
     const SolarMutexGuard aGuard;
@@ -396,10 +379,6 @@ void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 }
 
 
-
-
-
-
 void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
@@ -407,7 +386,6 @@ void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 //  DBG_ASSERT( maItemList.find( &rItem ) == maItemList.end(), "Item already registered" );
     maItemList.push_back( &rItem );
 }
-
 
 
 void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )

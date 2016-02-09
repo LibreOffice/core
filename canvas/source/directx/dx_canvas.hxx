@@ -102,7 +102,6 @@ namespace dxcanvas
     typedef ::rtl::Reference< Canvas > CanvasRef;
 
 
-
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,

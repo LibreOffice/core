@@ -41,9 +41,7 @@ namespace package_ucp
 {
 
 
-
 // class Package.
-
 
 
 class Package : public cppu::OWeakObject,
@@ -144,16 +142,13 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
@@ -161,17 +156,13 @@ XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      "com.sun.star.ucb.PackageContentProvider" );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 
-
 // XContentProvider methods.
-
 
 
 // virtual
@@ -210,9 +201,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 }
 
 
-
 // Other methods.
-
 
 
 uno::Reference< container::XHierarchicalNameAccess >

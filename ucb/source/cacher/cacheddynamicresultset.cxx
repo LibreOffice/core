@@ -136,9 +136,7 @@ void SAL_CALL CachedDynamicResultSet
 }
 
 
-
 // class CachedDynamicResultSetFactory
-
 
 
 CachedDynamicResultSetFactory::CachedDynamicResultSetFactory(

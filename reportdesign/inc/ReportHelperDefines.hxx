@@ -182,7 +182,6 @@
     virtual void SAL_CALL setCharLocaleComplex( const css::lang::Locale& _charlocalecomplex ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
 
 
-
 #endif // INCLUDED_REPORTDESIGN_INC_REPORTHELPERDEFINES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

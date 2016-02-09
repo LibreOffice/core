@@ -122,7 +122,6 @@ public:
         getPropertySetMapper() const;
 
 
-
     /** implementation helper for FillPropertySet: fill an XPropertySet.
      * Exceptions will be asserted. */
     static bool _FillPropertySet(

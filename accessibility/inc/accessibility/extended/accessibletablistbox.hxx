@@ -28,7 +28,6 @@
 class SvHeaderTabListBox;
 
 
-
 namespace accessibility {
 
 class AccessibleBrowseBoxTable;
@@ -97,9 +96,7 @@ protected:
 };
 
 
-
 } // namespace accessibility
-
 
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETABLISTBOX_HXX

@@ -139,7 +139,6 @@ SfxPoolItem* SfxInt32Item::CreateDefault()
 };
 
 
-
 //  class SfxUInt32Item
 
 

@@ -59,7 +59,6 @@ public:
 };
 
 
-
 class VCL_DLLPUBLIC TextAttribFontColor : public TextAttrib
 {
 private:

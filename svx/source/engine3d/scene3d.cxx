@@ -48,7 +48,6 @@
 #include <svx/svdmodel.hxx>
 
 
-
 class ImpRemap3DDepth
 {
     sal_uInt32                  mnOrdNum;
@@ -179,8 +178,6 @@ sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfE3dScene(*this);
 }
-
-
 
 
 E3dScene::E3dScene()

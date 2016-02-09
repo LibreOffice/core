@@ -69,7 +69,6 @@ struct SvXMLAttributeList_Impl
 };
 
 
-
 sal_Int16 SAL_CALL SvXMLAttributeList::getLength() throw( css::uno::RuntimeException, std::exception )
 {
     return sal::static_int_cast< sal_Int16 >(m_pImpl->vecAttribute.size());
@@ -143,7 +142,6 @@ SvXMLAttributeList::SvXMLAttributeList()
       sType( GetXMLToken(XML_CDATA) )
 {
 }
-
 
 
 SvXMLAttributeList::~SvXMLAttributeList()

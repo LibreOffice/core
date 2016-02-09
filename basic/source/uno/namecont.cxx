@@ -359,7 +359,6 @@ void ModifiableHelper::setModified( bool _bModified )
 }
 
 
-
 VBAScriptListenerContainer::VBAScriptListenerContainer( ::osl::Mutex& rMutex ) :
     VBAScriptListenerContainer_BASE( rMutex )
 {

@@ -537,7 +537,6 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 }
 
 
-
 bool TIFFReader::ReadMap()
 {
     if ( nCompression == 1 || nCompression == 32771 )
@@ -785,7 +784,6 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
     }
     return nRes;
 }
-
 
 
 bool TIFFReader::ConvertScanline(sal_Int32 nY)
@@ -1092,7 +1090,6 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
 }
 
 
-
 void TIFFReader::MakePalCol()
 {
     if ( nDstBitsPerPixel <= 8 )
@@ -1143,7 +1140,6 @@ void TIFFReader::MakePalCol()
 }
 
 
-
 void TIFFReader::ReadHeader()
 {
     sal_uInt8 nbyte1(0), nbyte2(0);
@@ -1171,7 +1167,6 @@ bool TIFFReader::HasAlphaChannel() const
              nPhotometricInterpretation == 2
            );
 }
-
 
 
 bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )

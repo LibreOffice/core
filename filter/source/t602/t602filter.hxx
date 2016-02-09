@@ -65,7 +65,6 @@ css::uno::Reference < css::uno::XInterface > SAL_CALL
     throw ( css::uno::Exception );
 
 
-
 // class T602ImportFilter
 
 

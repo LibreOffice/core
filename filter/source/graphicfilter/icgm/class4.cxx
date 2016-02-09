@@ -41,7 +41,6 @@ double CGM::ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint )
 }
 
 
-
 void CGM::ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle )
 {
     double nTemp;
@@ -49,7 +48,6 @@ void CGM::ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle )
     rStartAngle = rEndAngle;
     rEndAngle = nTemp;
 }
-
 
 
 void CGM::ImplGetVector( double* pVector )

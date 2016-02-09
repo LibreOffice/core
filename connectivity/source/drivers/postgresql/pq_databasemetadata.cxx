@@ -1447,7 +1447,6 @@ static void columnMetaData2DatabaseTypeDescription(
 }
 
 
-
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     const ::com::sun::star::uno::Any& catalog,
     const OUString& schemaPattern,

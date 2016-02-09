@@ -58,7 +58,6 @@ namespace abp
     {
 
 
-
         bool invokeDialog( const Reference< XComponentContext >& _rxORB, class vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings )
         {
@@ -279,10 +278,8 @@ namespace abp
     }   // namespace fieldmapping
 
 
-
     namespace addressconfig
     {
-
 
 
         void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
@@ -320,7 +317,6 @@ namespace abp
 
 
     }   // namespace addressconfig
-
 
 
 }   // namespace abp

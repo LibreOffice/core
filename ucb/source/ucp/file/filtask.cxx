@@ -33,18 +33,15 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
 
-
 TaskManager::TaskManager()
     : m_nCommandId( 0 )
 {
 }
 
 
-
 TaskManager::~TaskManager()
 {
 }
-
 
 
 void SAL_CALL
@@ -61,7 +58,6 @@ TaskManager::startTask(
     }
     m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );
 }
-
 
 
 void SAL_CALL
@@ -92,7 +88,6 @@ TaskManager::endTask( sal_Int32 CommandId,
             pContent,
             isHandled);
 }
-
 
 
 void SAL_CALL
@@ -133,7 +128,6 @@ void SAL_CALL TaskManager::retrieveError( sal_Int32 CommandId,
 }
 
 
-
 void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
                                          sal_Int32 ErrorCode,
                                          sal_Int32 MinorCode )
@@ -145,14 +139,12 @@ void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
 }
 
 
-
 sal_Int32 SAL_CALL
 TaskManager::getCommandId()
 {
     osl::MutexGuard aGuard( m_aMutex );
     return ++m_nCommandId;
 }
-
 
 
 void SAL_CALL TaskManager::handleTask(

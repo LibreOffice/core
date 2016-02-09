@@ -147,7 +147,6 @@ static OUString lcl_getXSDType( SvXMLExport& rExport,
                          const Reference<XPropertySet>& xType );
 
 
-
 // the model
 
 
@@ -247,7 +246,6 @@ void exportXFormsInstance( SvXMLExport& rExport,
         exportDom( rExport, xDoc );
     }
 }
-
 
 
 // the binding
@@ -363,7 +361,6 @@ void exportXFormsBinding( SvXMLExport& rExport,
 }
 
 
-
 // the submission
 
 
@@ -394,8 +391,6 @@ void exportXFormsSubmission( SvXMLExport& rExport,
     SvXMLElementExport aElement( rExport, XML_NAMESPACE_XFORMS, XML_SUBMISSION,
                                  true, true );
 }
-
-
 
 
 // export data types as XSD schema
@@ -594,8 +589,6 @@ void exportXFormsSchemas( SvXMLExport& rExport,
 }
 
 
-
-
 // helper functions
 
 
@@ -618,8 +611,6 @@ static void lcl_export( const Reference<XPropertySet>& rPropertySet,
                 sValue );
     }
 }
-
-
 
 
 // any conversion functions

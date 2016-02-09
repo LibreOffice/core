@@ -153,8 +153,6 @@ protected:
 };
 
 
-
-
 /**
  * SvEventDescriptor: Implement the XNameReplace that is delivered by
  * the XEventsSupplier::getEvents() method. The SvEventDescriptor has

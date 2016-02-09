@@ -24,7 +24,6 @@
 #include <memory>
 
 
-
 GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
     rStm( rIOStm )
 {

@@ -22,9 +22,7 @@
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

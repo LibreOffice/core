@@ -26,7 +26,6 @@ namespace svt { namespace table
 {
 
 
-
     //= TableRowGeometry
 
 

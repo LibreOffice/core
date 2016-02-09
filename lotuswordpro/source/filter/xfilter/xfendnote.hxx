@@ -87,7 +87,6 @@ inline XFEndNote::XFEndNote()
 }
 
 
-
 inline void XFEndNote::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

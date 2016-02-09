@@ -218,5 +218,4 @@ com_sun_star_comp_Draw_SlideRenderer_get_implementation(css::uno::XComponentCont
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

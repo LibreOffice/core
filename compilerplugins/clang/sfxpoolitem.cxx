@@ -139,7 +139,6 @@ bool SfxPoolItem::VisitCXXRecordDecl(const CXXRecordDecl* decl)
 }
 
 
-
 loplugin::Plugin::Registration< SfxPoolItem > X("sfxpoolitem");
 
 }

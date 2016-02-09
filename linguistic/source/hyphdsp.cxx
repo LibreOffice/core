@@ -47,7 +47,6 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-
 HyphenatorDispatcher::HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr ) :
     rMgr    (rLngSvcMgr)
 {

@@ -1080,7 +1080,6 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
 }
 
 
-
 // Helper function for StepREDIMP
 static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
     const Type& aElemType, short nMaxDimIndex, short nActualDim,
@@ -1797,7 +1796,6 @@ OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
 }
 
 
-
 // Debugging help method SbxDataType -> String
 OUString Dbg_SbxDataType2String( SbxDataType eType )
 {
@@ -2454,8 +2452,6 @@ void SbUnoObject::doIntrospection()
     // get ExactName from access
     mxExactName.set( mxUnoAccess, UNO_QUERY );
 }
-
-
 
 
 // Start of a list of all SbUnoMethod-Instances
@@ -3743,7 +3739,6 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-
 static SbUnoServiceCtor* pFirstCtor = nullptr;
 
 void clearUnoServiceCtors()
@@ -3857,8 +3852,6 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-
-
 // Implementation of an EventAttacher-drawn AllListener, which
 // solely transmits several events to an general AllListener
 class BasicAllListener_Impl : public WeakImplHelper< XAllListener >
@@ -3881,7 +3874,6 @@ public:
 };
 
 
-
 BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
     : aPrefixName( aPrefixName_ )
 {
@@ -3891,7 +3883,6 @@ BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
 BasicAllListener_Impl::~BasicAllListener_Impl()
 {
 }
-
 
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
@@ -3967,8 +3958,6 @@ void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeExcep
 }
 
 
-
-
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener (also in project eventattacher!)
 
@@ -4016,7 +4005,6 @@ Reference< XInterface > createAllListenerAdapter
     }
     return xAdapter;
 }
-
 
 
 // InvocationToAllListenerMapper
@@ -4289,7 +4277,6 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 }
 
 
-
 class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
 {
     ::osl::Mutex        m_aMutex;
@@ -4374,7 +4361,6 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     pMeth->SetParameters( nullptr );
 
     // TODO: OutParameter?
-
 
 
 }

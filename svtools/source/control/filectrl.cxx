@@ -33,7 +33,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
 
 
-
 FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
     maEdit( VclPtr<Edit>::Create(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
@@ -52,7 +51,6 @@ FileControl::FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode 
 
     SetStyle( ImplInitStyle( GetStyle() ) );
 }
-
 
 
 WinBits FileControl::ImplInitStyle( WinBits nStyle )
@@ -83,7 +81,6 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
 }
 
 
-
 FileControl::~FileControl()
 {
     disposeOnce();
@@ -104,12 +101,10 @@ void FileControl::SetText( const OUString& rStr )
 }
 
 
-
 OUString FileControl::GetText() const
 {
     return maEdit->GetText();
 }
-
 
 
 void FileControl::StateChanged( StateChangedType nType )
@@ -151,7 +146,6 @@ void FileControl::StateChanged( StateChangedType nType )
 }
 
 
-
 void FileControl::Resize()
 {
     static long ButtonBorder = 10;
@@ -183,7 +177,6 @@ void FileControl::Resize()
 
     mnInternalFlags &= ~FileControlMode_Internal::INRESIZE; //InResize = sal_False
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(FileControl, ButtonHdl, Button*, void)

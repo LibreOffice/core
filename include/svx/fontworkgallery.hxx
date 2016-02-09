@@ -44,7 +44,6 @@ class SdrModel;
 class SfxBindings;
 
 
-
 namespace svx
 {
 

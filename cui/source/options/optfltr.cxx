@@ -37,7 +37,6 @@ enum MSFltrPg2_CheckBoxEntries {
 };
 
 
-
 OfaMSFilterTabPage::OfaMSFilterTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, "OptFltrPage", "cui/ui/optfltrpage.ui", &rSet )
 {

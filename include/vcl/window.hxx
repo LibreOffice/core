@@ -121,8 +121,6 @@ namespace o3tl
 }
 
 
-
-
 // Type fuer GetWindow()
 enum class GetWindowType
 {
@@ -427,8 +425,6 @@ enum class GetDlgWindowType
 {
     Prev, Next, First
 };
-
-
 
 
 #ifdef DBG_UTIL

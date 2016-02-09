@@ -419,7 +419,6 @@ void throw_one(
 }
 
 
-
 void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
 {
     Reference< XInterface > xImpl( (lang::XTypeProvider *)new TestImpl() );

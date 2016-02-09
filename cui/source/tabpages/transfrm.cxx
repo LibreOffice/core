@@ -117,7 +117,6 @@ SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxIte
 }
 
 
-
 void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
     if (nId==nPosSize)
@@ -162,7 +161,6 @@ void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             rSvxSlnt.Construct();
         }
 }
-
 
 
 void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidation&,void>& rLink)
@@ -285,7 +283,6 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 }
 
 
-
 void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 {
     const double fUIScale(double(pView->GetModel()->GetUIScale()));
@@ -325,18 +322,15 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 }
 
 
-
 VclPtr<SfxTabPage> SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet)
 {
     return VclPtr<SvxAngleTabPage>::Create(pWindow, *rSet);
 }
 
 
-
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
 {
 }
-
 
 
 SfxTabPage::sfxpg SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -348,7 +342,6 @@ SfxTabPage::sfxpg SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 void SvxAngleTabPage::PointChanged(vcl::Window* pWindow, RECT_POINT eRP)
@@ -485,7 +478,6 @@ void SvxSlantTabPage::Construct()
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
 }
-
 
 
 bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
@@ -711,7 +703,6 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-
 SfxTabPage::sfxpg SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -721,7 +712,6 @@ SfxTabPage::sfxpg SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 void SvxSlantTabPage::PointChanged( vcl::Window* , RECT_POINT  )
@@ -917,7 +907,6 @@ void SvxPositionSizeTabPage::Construct()
 }
 
 
-
 bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
     bool bModified(false);
@@ -1041,7 +1030,6 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 }
 
 
-
 void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 {
     const SfxPoolItem* pItem;
@@ -1148,12 +1136,10 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 }
 
 
-
 VclPtr<SfxTabPage> SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SvxPositionSizeTabPage>::Create( pWindow, *rOutAttrs );
 }
-
 
 
 void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -1170,7 +1156,6 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
         SetMinMaxPosition();
     }
 }
-
 
 
 SfxTabPage::sfxpg SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1193,14 +1178,12 @@ SfxTabPage::sfxpg SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangePosProtectHdl, Button*, void)
 {
     // #106572# Remember user's last choice
     m_pTsbSizeProtect->SetState( m_pTsbPosProtect->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : mnProtectSizeState );
     UpdateControlStates();
 }
-
 
 
 void SvxPositionSizeTabPage::UpdateControlStates()
@@ -1236,7 +1219,6 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeSizeProtectHdl, Button*, void)
 {
     if( m_pTsbSizeProtect->IsEnabled() )
@@ -1254,7 +1236,6 @@ IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeSizeProtectHdl, Button*, voi
 
     UpdateControlStates();
 }
-
 
 
 void SvxPositionSizeTabPage::SetMinMaxPosition()
@@ -1427,7 +1408,6 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
 }
 
 
-
 void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange)
 {
     switch (m_pCtlPos->GetActualRP())
@@ -1482,7 +1462,6 @@ void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const 
         }
     }
 }
-
 
 
 void SvxPositionSizeTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRP )
@@ -1556,19 +1535,16 @@ void SvxPositionSizeTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRP 
 }
 
 
-
 void SvxPositionSizeTabPage::DisableResize()
 {
     mbSizeDisabled = true;
 }
 
 
-
 void SvxPositionSizeTabPage::DisableProtect()
 {
     mbProtectDisabled = true;
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
@@ -1593,7 +1569,6 @@ IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
@@ -1616,12 +1591,10 @@ IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickSizeProtectHdl, Button*, void)
 {
     UpdateControlStates();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickAutoHdl, Button*, void)
@@ -1632,7 +1605,6 @@ IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickAutoHdl, Button*, void)
         mfOldHeight = std::max( (double)GetCoreValue( *m_pMtrHeight, mePoolUnit ), 1.0 );
     }
 }
-
 
 
 void SvxPositionSizeTabPage::FillUserData()

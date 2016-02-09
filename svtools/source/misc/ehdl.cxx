@@ -141,7 +141,6 @@ static sal_uInt16 aWndFunc(
 }
 
 
-
 SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
 
     lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( nullptr )
@@ -155,12 +154,10 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
 }
 
 
-
 SfxErrorHandler::~SfxErrorHandler()
 {
     delete pFreeMgr;
 }
-
 
 
 bool SfxErrorHandler::CreateString(
@@ -207,7 +204,6 @@ bool SfxErrorHandler::CreateString(
 }
 
 
-
 class ResString: public OUString
 
 /*  [Description]
@@ -226,7 +222,6 @@ class ResString: public OUString
 };
 
 
-
 ResString::ResString(ResId & rId):
     OUString(rId.SetAutoRelease(false).toString()),
     nFlags(0)
@@ -238,7 +233,6 @@ ResString::ResString(ResId & rId):
     rId.SetAutoRelease(true);
     pResMgr->PopContext();
 }
-
 
 
 struct ErrorResource_Impl : private Resource
@@ -286,7 +280,6 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 }
 
 
-
 bool SfxErrorHandler::GetMessageString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
@@ -313,7 +306,6 @@ bool SfxErrorHandler::GetMessageString(
 
     return bRet;
 }
-
 
 
 bool SfxErrorHandler::GetErrorString(
@@ -363,7 +355,6 @@ bool SfxErrorHandler::GetErrorString(
 }
 
 
-
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, vcl::Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP)
@@ -371,7 +362,6 @@ SfxErrorContext::SfxErrorContext(
     if( nResId==USHRT_MAX )
         nResId=RID_ERRCTX;
 }
-
 
 
 SfxErrorContext::SfxErrorContext(
@@ -383,7 +373,6 @@ SfxErrorContext::SfxErrorContext(
     if( nResId==USHRT_MAX )
         nResId=RID_ERRCTX;
 }
-
 
 
 bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)

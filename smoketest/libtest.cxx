@@ -17,7 +17,6 @@
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
 
-
 #ifdef _WIN32
 //#include <Windows.h>   // come from LibreOfficeKitInit.h
     long getTimeMS()

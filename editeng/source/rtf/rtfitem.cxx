@@ -200,7 +200,6 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
 }
 
 
-
 void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 {
     DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );

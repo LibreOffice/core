@@ -42,7 +42,6 @@ using namespace ::comphelper;
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 
 
-
 using namespace connectivity::ado;
 
 
@@ -128,7 +127,6 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
-
 
 
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
@@ -389,7 +387,6 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 }
 
 
-
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -473,7 +470,6 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 }
 
 
-
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -482,7 +478,6 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 
     return makeAny(m_aLastWarning);
 }
-
 
 
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)

@@ -253,7 +253,6 @@ ScVbaCommandBarControls::getServiceNames()
 }
 
 
-
 class VbaDummyIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
@@ -269,7 +268,6 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override
         { return false; }
 };
-
 
 
 VbaDummyCommandBarControls::VbaDummyCommandBarControls(

@@ -102,7 +102,6 @@ void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 
-
 void SfxModalDialog::SetDialogData_Impl()
 {
     // save settings (position and user data)
@@ -121,7 +120,6 @@ void SfxModalDialog::SetDialogData_Impl()
     if ( !aExtraData.isEmpty() )
         aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aExtraData ) );
 }
-
 
 
 void SfxModalDialog::GetDialogData_Impl()
@@ -186,7 +184,6 @@ void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
     if (!pOutputSet)
         pOutputSet = new SfxAllItemSet( rPool );
 }
-
 
 
 void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
@@ -375,7 +372,6 @@ void SfxModelessDialog::dispose()
 }
 
 
-
 bool SfxModelessDialog::Close()
 
 /*  [Description]
@@ -396,7 +392,6 @@ bool SfxModelessDialog::Close()
 }
 
 
-
 void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 
 /*  [Description]
@@ -413,7 +408,6 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
     if ( IsRollUp() )
         rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
 }
-
 
 
 bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
@@ -511,7 +505,6 @@ bool SfxFloatingWindow::Close()
 }
 
 
-
 SfxFloatingWindow::~SfxFloatingWindow()
 {
     disposeOnce();
@@ -603,7 +596,6 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
 }
 
 
-
 void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 /*  [Description]
@@ -677,7 +669,6 @@ IMPL_LINK_NOARG_TYPED(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
         EndDialog();
     return;
 }
-
 
 
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rSet,

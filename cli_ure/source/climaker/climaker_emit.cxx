@@ -269,8 +269,6 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName)
 }
 
 
-
-
 Assembly ^ TypeEmitter::type_resolve(
     ::System::Object ^, ::System::ResolveEventArgs ^ args )
 {
@@ -753,7 +751,6 @@ Assembly ^ TypeEmitter::type_resolve(
     }
     return ret_type;
 }
-
 
 
 ::System::Type ^ TypeEmitter::get_type(
@@ -2047,7 +2044,6 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     }
     return type_builder->CreateType();
 }
-
 
 
 ::System::Type ^ TypeEmitter::get_type(

@@ -34,7 +34,6 @@
 #include "reflcnst.hxx"
 
 
-
 namespace {
 
 inline OString toByteString(rtl_uString const * str) {

@@ -28,7 +28,6 @@ namespace drawingml {
 class Color;
 
 
-
 /** Context handler for the different color value elements (a:scrgbClr,
     a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
 class ColorValueContext : public ::oox::core::ContextHandler2
@@ -50,7 +49,6 @@ private:
 };
 
 
-
 /** Context handler for elements that *contain* a color value element
     (a:scrgbClr, a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
 class ColorContext : public ::oox::core::ContextHandler2
@@ -66,7 +64,6 @@ public:
 private:
     Color&              mrColor;
 };
-
 
 
 } // namespace drawingml

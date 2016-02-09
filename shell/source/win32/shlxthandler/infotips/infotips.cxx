@@ -39,14 +39,12 @@
 const std::wstring WSPACE = std::wstring(SPACE);
 
 
-
 CInfoTip::CInfoTip(long RefCnt) :
     m_RefCnt(RefCnt)
 {
     ZeroMemory(m_szFileName, sizeof(m_szFileName));
     InterlockedIncrement(&g_DllRefCnt);
 }
-
 
 
 CInfoTip::~CInfoTip()
@@ -83,12 +81,10 @@ HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *
 }
 
 
-
 ULONG STDMETHODCALLTYPE CInfoTip::AddRef()
 {
     return InterlockedIncrement(&m_RefCnt);
 }
-
 
 
 ULONG STDMETHODCALLTYPE CInfoTip::Release()
@@ -301,7 +297,6 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
 }
 
 
-
 HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
 {
     return E_NOTIMPL;
@@ -346,12 +341,10 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 }
 
 
-
 HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty()
 {
     return E_NOTIMPL;
 }
-
 
 
 HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fRemember*/)
@@ -360,12 +353,10 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fReme
 }
 
 
-
 HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR /*pszFileName*/)
 {
     return E_NOTIMPL;
 }
-
 
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetCurFile(LPOLESTR __RPC_FAR * /*ppszFileName*/)

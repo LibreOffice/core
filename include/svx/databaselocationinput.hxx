@@ -33,7 +33,6 @@ namespace svx
 {
 
 
-
     //= DatabaseLocationInputController
 
     class DatabaseLocationInputController_Impl;

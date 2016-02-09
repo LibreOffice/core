@@ -421,7 +421,6 @@ void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
 }
 
 
-
 void PresenterNotesView::Layout()
 {
     if ( ! mxParentWindow.is())

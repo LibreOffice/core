@@ -502,7 +502,6 @@ void AssignmentPersistentData::ImplCommit()
     // = AddressBookSourceDialog
 
 
-
     AddressBookSourceDialog::AddressBookSourceDialog(vcl::Window* _pParent,
             const Reference< XComponentContext >& _rxORB )
         : ModalDialog(_pParent, "AddressTemplateDialog", "svt/ui/addresstemplatedialog.ui")

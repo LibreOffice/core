@@ -181,7 +181,6 @@ void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
 //  impl. declarations
 
 
-
 struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 {
     // counter for SfxBaseModel instances created.
@@ -308,7 +307,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
 // static member initialization.
 sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
-
 
 
 // Listener that forwards notifications from the PrintHelper to the "real" listeners
@@ -713,7 +711,6 @@ void SAL_CALL SfxBaseModel::addDialog( const OUString& LibraryName, const OUStri
 }
 
 
-
 //  XChild
 
 
@@ -842,7 +839,6 @@ SfxBaseModel::getDocumentProperties()
 
     return m_pData->m_xDocumentProperties;
 }
-
 
 
 //  lang::XEventListener
@@ -2186,7 +2182,6 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 // XTransferable
 
 
-
 Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavors()
         throw (RuntimeException, std::exception)
 {
@@ -2254,7 +2249,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 // XTransferable
 
 
-
 sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
         throw (RuntimeException, std::exception)
 {
@@ -2309,7 +2303,6 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
 
     return sal_False;
 }
-
 
 
 //  XEventsSupplier
@@ -3411,7 +3404,6 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
 
 
 //  XScriptProviderSupplier
-
 
 
 Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getScriptProvider()

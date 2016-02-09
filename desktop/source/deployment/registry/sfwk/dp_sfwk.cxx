@@ -179,7 +179,6 @@ BackendImpl::BackendImpl(
 }
 
 
-
 // XPackageRegistry
 
 Sequence< Reference<deployment::XPackageTypeInfo> >

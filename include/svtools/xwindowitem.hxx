@@ -30,7 +30,6 @@
 namespace vcl { class Window; }
 
 
-
 class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
 {
     css::uno::Reference< css::awt::XWindow >      m_xWin;
@@ -47,7 +46,6 @@ public:
 
     vcl::Window *        GetWindowPtr() const    { return VCLUnoHelper::GetWindow( m_xWin ); }
 };
-
 
 
 #endif

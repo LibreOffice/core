@@ -521,7 +521,6 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 }
 
 
-
 GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) const
 {
     GDIMetaFile aMtf;
@@ -583,7 +582,6 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 }
 
 
-
 Graphic SdrExchangeView::GetAllMarkedGraphic() const
 {
     Graphic aRet;
@@ -598,7 +596,6 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 
     return aRet;
 }
-
 
 
 Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj )
@@ -668,7 +665,6 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 }
 
 
-
 ::std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
 {
     SortMarkedObjects();
@@ -706,7 +702,6 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 }
 
 
-
 void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 {
     ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
@@ -720,7 +715,6 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
         aPainter.ProcessDisplay(aDisplayInfo);
     }
 }
-
 
 
 SdrModel* SdrExchangeView::GetMarkedObjModel() const
@@ -775,7 +769,6 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 }
 
 
-
 bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 {
     OSL_FAIL( "SdrExchangeView::Cut: Not supported any more." );
@@ -783,13 +776,11 @@ bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 }
 
 
-
 bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 {
     OSL_FAIL( "SdrExchangeView::Yank: Not supported any more." );
     return false;
 }
-
 
 
 bool SdrExchangeView::Paste(vcl::Window* /*pWin*/, sal_uIntPtr /*nFormat*/)

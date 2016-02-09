@@ -206,7 +206,6 @@ VclPtr<SfxTabPage> SvxGridTabPage::Create( vcl::Window* pParent, const SfxItemSe
 }
 
 
-
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( bAttrModified )
@@ -233,7 +232,6 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 }
 
 
-
 void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pAttr = nullptr;
@@ -258,7 +256,6 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
     ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
     bAttrModified = false;
 }
-
 
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -332,7 +329,6 @@ IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
     else
         pMtrFldAngle->Disable();
 }
-
 
 
 IMPL_LINK_TYPED( SvxGridTabPage, ChangeDivisionHdl_Impl, Edit&, rField, void )

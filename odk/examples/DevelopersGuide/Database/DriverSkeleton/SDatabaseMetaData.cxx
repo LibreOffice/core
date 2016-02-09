@@ -884,6 +884,4 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog,
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

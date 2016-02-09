@@ -37,7 +37,6 @@ class GDIMetaFile;
 class Graphic;
 
 
-
 namespace slideshow
 {
     namespace internal

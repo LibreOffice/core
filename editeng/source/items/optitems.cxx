@@ -42,14 +42,12 @@ SfxSpellCheckItem::SfxSpellCheckItem
 }
 
 
-
 SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
 
     SfxPoolItem( rItem ),
     xSpellCheck( rItem.GetXSpellChecker() )
 {
 }
-
 
 
 bool SfxSpellCheckItem::GetPresentation
@@ -65,12 +63,10 @@ bool SfxSpellCheckItem::GetPresentation
 }
 
 
-
 SfxPoolItem* SfxSpellCheckItem::Clone( SfxItemPool* ) const
 {
     return new SfxSpellCheckItem( *this );
 }
-
 
 
 bool SfxSpellCheckItem::operator==( const SfxPoolItem& rItem ) const
@@ -89,7 +85,6 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
 }
 
 
-
 SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
 
     SfxPoolItem ( rItem ),
@@ -98,7 +93,6 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
     nMinTrail   ( rItem.GetMinTrail() )
 {
 }
-
 
 
 bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
@@ -110,12 +104,10 @@ bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-
 SfxPoolItem* SfxHyphenRegionItem::Clone( SfxItemPool* ) const
 {
     return new SfxHyphenRegionItem( *this );
 }
-
 
 
 bool SfxHyphenRegionItem::GetPresentation
@@ -135,7 +127,6 @@ bool SfxHyphenRegionItem::GetPresentation
 }
 
 
-
 SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
 {
     sal_uInt8 _nMinLead, _nMinTrail;
@@ -145,7 +136,6 @@ SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
     pAttr->GetMinTrail() = _nMinTrail;
     return pAttr;
 }
-
 
 
 SvStream& SfxHyphenRegionItem::Store( SvStream& rStrm, sal_uInt16 ) const

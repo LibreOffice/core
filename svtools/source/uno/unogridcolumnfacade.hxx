@@ -36,7 +36,6 @@ namespace svt { namespace table
 {
 
 
-
     //= UnoGridColumnFacade
 
     class ColumnChangeMultiplexer;

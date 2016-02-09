@@ -30,7 +30,6 @@ namespace cppu
 //#### copy construction ###########################################################################
 
 
-
 inline uno_Sequence * allocSeq(
     sal_Int32 nElementSize, sal_Int32 nElements )
 {

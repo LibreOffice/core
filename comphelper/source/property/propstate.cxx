@@ -41,7 +41,6 @@ namespace comphelper
     // OPropertyStateHelper
 
 
-
     css::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType) throw( css::uno::RuntimeException, std::exception)
     {
         css::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);

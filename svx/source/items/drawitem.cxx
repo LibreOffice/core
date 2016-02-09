@@ -111,7 +111,6 @@ SvxGradientListItem::SvxGradientListItem( const SvxGradientListItem& rItem ) :
 }
 
 
-
 bool SvxGradientListItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
@@ -157,7 +156,6 @@ SvxHatchListItem::SvxHatchListItem( const SvxHatchListItem& rItem ) :
     pHatchList( rItem.pHatchList )
 {
 }
-
 
 
 bool SvxHatchListItem::GetPresentation

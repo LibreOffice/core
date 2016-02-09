@@ -28,11 +28,9 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct DataSequenceModel;
 
 typedef ContextBase< DataSequenceModel > DataSequenceContextBase;
-
 
 
 /** Handler for a double sequence context (c:numLit, c:numRef elements).
@@ -55,7 +53,6 @@ private:
 };
 
 
-
 /** Handler for a string sequence context (c:multiLvlStrRef, c:strLit,
     c:strRef elements).
  */
@@ -73,7 +70,6 @@ private:
 };
 
 
-
 struct DataSourceModel;
 
 /** Handler for a data source context (c:bubbleSize, c:cat, c:minus, c:plus,
@@ -87,7 +83,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

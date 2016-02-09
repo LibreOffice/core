@@ -91,7 +91,6 @@ namespace abp
     struct PackageAccessControl { };
 
 
-
     static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext )
     {
         Reference<XDatabaseContext> xContext = DatabaseContext::create(_rxContext);

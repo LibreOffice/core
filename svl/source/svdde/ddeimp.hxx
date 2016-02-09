@@ -29,8 +29,6 @@
 #include <vector>
 
 
-
-
 struct Conversation
 {
     HCONV       hConv;
@@ -38,8 +36,6 @@ struct Conversation
 };
 
 typedef ::std::vector< Conversation* > ConvList;
-
-
 
 
 class DdeInternal
@@ -55,8 +51,6 @@ public:
     static DdeTopic*        FindTopic( DdeService&, HSZ );
     static DdeItem*         FindItem( DdeTopic&, HSZ );
 };
-
-
 
 
 class DdeString
@@ -76,8 +70,6 @@ public:
                 operator HSZ();
     OUString toOUString() const { return m_aString; }
 };
-
-
 
 
 struct DdeDataImp

@@ -135,5 +135,4 @@ void OKeyColumnsHelper::impl_refresh() throw(::com::sun::star::uno::RuntimeExcep
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

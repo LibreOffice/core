@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 
 
-
 // Implementierung des Resource-Konstruktors
 
 SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
@@ -72,7 +71,6 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 }
 
 
-
 // Destructor; releases the internal data
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
@@ -81,7 +79,6 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
         delete aFilterList[ i ];
     aFilterList.clear();
 }
-
 
 
 // Implementation of the resource constructor
@@ -104,7 +101,6 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
 }
 
 
-
 // Destructor; releases the internal data
 
 SfxStyleFamilies::~SfxStyleFamilies()
@@ -113,8 +109,6 @@ SfxStyleFamilies::~SfxStyleFamilies()
         delete aEntryList[ i ];
     aEntryList.clear();
 }
-
-
 
 
 void SfxStyleFamilies::updateImages( const ResId& _rId )

@@ -31,7 +31,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-
 enum FilterType
 {
     FILTER_IMPORT,
@@ -68,7 +67,6 @@ protected:
         throw (css::uno::RuntimeException, std::exception);
 
 
-
 public:
 
     explicit XmlFilterAdaptor( const css::uno::Reference< css::uno::XComponentContext > & rxContext)
@@ -80,7 +78,6 @@ public:
     virtual ~XmlFilterAdaptor() {}
 
 
-
     // XFilter
 
     virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
@@ -90,12 +87,10 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 
-
     // XExporter
 
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-
 
 
     // XImporter
@@ -105,13 +100,11 @@ public:
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-
 
 
     // XServiceInfo
@@ -131,20 +124,16 @@ public:
 };
 
 
-
 OUString XmlFilterAdaptor_getImplementationName()
     throw ( css::uno::RuntimeException );
-
 
 
 bool SAL_CALL XmlFilterAdaptor_supportsService( const OUString& ServiceName )
     throw ( css::uno::RuntimeException );
 
 
-
 css::uno::Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
-
 
 
 css::uno::Reference< css::uno::XInterface >
@@ -152,7 +141,6 @@ css::uno::Reference< css::uno::XInterface >
 SAL_CALL XmlFilterAdaptor_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
 
     throw ( css::uno::Exception );
-
 
 
 #endif

@@ -28,8 +28,6 @@
 #include <sal/macros.h>
 
 
-
-
 STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =

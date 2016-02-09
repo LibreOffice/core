@@ -111,7 +111,6 @@ SwListImpl::~SwListImpl()
 }
 
 
-
 void SwListImpl::InsertListItem( SwNodeNum& rNodeNum,
                                  const int nLevel )
 {

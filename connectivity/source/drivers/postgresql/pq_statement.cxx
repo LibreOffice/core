@@ -986,7 +986,6 @@ sal_Bool Statement::getMoreResults(  )
 }
 
 
-
 void Statement::disposing()
 {
     close();

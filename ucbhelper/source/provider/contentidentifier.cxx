@@ -38,11 +38,7 @@ namespace ucbhelper
 {
 
 
-
-
 // struct ContentIdentifier_Impl.
-
-
 
 
 struct ContentIdentifier_Impl
@@ -54,9 +50,7 @@ struct ContentIdentifier_Impl
 };
 
 
-
 // ContentIdentifier_Impl Implementation.
-
 
 
 ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
@@ -75,9 +69,7 @@ ContentIdentifier_Impl::ContentIdentifier_Impl(const OUString& rURL )
 }
 
 
-
 // ContentIdentifier Implementation.
-
 
 
 ContentIdentifier::ContentIdentifier( const OUString& rURL )
@@ -92,10 +84,7 @@ ContentIdentifier::~ContentIdentifier()
 }
 
 
-
 // XInterface methods.
-
-
 
 
 // virtual
@@ -125,9 +114,7 @@ ContentIdentifier::queryInterface( const Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -160,9 +147,7 @@ ContentIdentifier::getTypes()
 }
 
 
-
 // XContentIdentifier methods.
-
 
 
 // virtual

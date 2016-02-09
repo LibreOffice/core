@@ -50,9 +50,6 @@ private:
 };
 
 
-
-
-
 class CValueCommandResult : public CControlCommandResult
 {
 public:
@@ -70,9 +67,6 @@ public:
 private:
     css::uno::Any m_aValue;
 };
-
-
-
 
 
 class CLabelCommandResult : public CControlCommandResult

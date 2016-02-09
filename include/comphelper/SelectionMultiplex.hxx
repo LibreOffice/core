@@ -29,7 +29,6 @@
 //= selection helper classes
 
 
-
 namespace comphelper
 {
 

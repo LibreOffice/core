@@ -200,7 +200,6 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 
-
 LicenseDialogImpl::LicenseDialogImpl(
     vcl::Window * pParent,
     const OUString & sExtensionName,
@@ -289,10 +288,6 @@ IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, EndReachedHdl, LicenseView&, void)
     m_pArrow2->Show();
     m_bLicenseRead = true;
 }
-
-
-
-
 
 
 LicenseDialog::LicenseDialog( Sequence<Any> const& args,

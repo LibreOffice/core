@@ -60,7 +60,6 @@
 using namespace ::com::sun::star;
 
 
-
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     : m_bDestDirRelative(false)
     , pParent(pGallery)

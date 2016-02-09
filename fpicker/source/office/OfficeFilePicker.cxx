@@ -53,7 +53,6 @@ using namespace     ::com::sun::star::awt;
 using namespace     ::utl;
 
 
-
 struct FilterEntry
 {
 protected:
@@ -85,8 +84,6 @@ public:
     const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
-
-
 
 
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
@@ -227,7 +224,6 @@ IMPL_LINK_TYPED( SvtFilePicker, DialogClosedHdl, Dialog&, rDlg, void )
 
 
 // SvtFilePicker
-
 
 
 WinBits SvtFilePicker::getWinBits( WinBits& rExtraBits )
@@ -489,7 +485,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( SvtRemoteFilePicker, SvtFilePicker, OCommonPic
 // XExecutableDialog functions
 
 
-
 void SAL_CALL SvtFilePicker::setTitle( const OUString& _rTitle ) throw (RuntimeException, std::exception)
 {
     OCommonPicker::setTitle( _rTitle );
@@ -503,7 +498,6 @@ sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException, std::exce
 
 
 // XAsynchronousExecutableDialog functions
-
 
 
 void SAL_CALL SvtFilePicker::setDialogTitle( const OUString& _rTitle ) throw (RuntimeException, std::exception)
@@ -659,7 +653,6 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
 }
 
 
-
 Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAction )
     throw( RuntimeException, std::exception )
 {
@@ -693,7 +686,6 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
 
     return aAny;
 }
-
 
 
 void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValue )
@@ -1022,7 +1014,6 @@ OUString SAL_CALL SvtFilePicker::getCurrentFilter()
 }
 
 
-
 // XInitialization functions
 
 
@@ -1100,7 +1091,6 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
         OSL_VERIFY( _rValue >>= m_aBlackList );
         return true;
     }
-
 
 
     return OCommonPicker::implHandleInitializationArgument( _rName, _rValue );

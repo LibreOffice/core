@@ -18,7 +18,6 @@
  */
 
 
-
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVPROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVPROVIDER_HXX
 
@@ -29,7 +28,6 @@
 #include "PropertyMap.hxx"
 
 namespace http_dav_ucp {
-
 
 
 // UNO service name for the provider. This name will be used by the UCB to
@@ -59,7 +57,6 @@ namespace http_dav_ucp {
 
 #define WEBDAV_CONTENT_TYPE    HTTP_CONTENT_TYPE
 #define WEBDAV_COLLECTION_TYPE "application/" WEBDAV_URL_SCHEME "-collection"
-
 
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper

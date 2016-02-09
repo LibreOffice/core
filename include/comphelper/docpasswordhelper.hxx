@@ -38,7 +38,6 @@ enum DocPasswordVerifierResult
 };
 
 
-
 /** Base class for a password verifier used by the DocPasswordHelper class
     below.
 
@@ -90,7 +89,6 @@ public:
 };
 
 
-
 /** Helper that asks for a document password and checks its validity.
  */
 class COMPHELPER_DLLPUBLIC DocPasswordHelper
@@ -114,7 +112,6 @@ public:
         GenerateNewModifyPasswordInfo( const OUString& aPassword );
 
 
-
     /** This helper function allows to check whether
         the "Password to modify" provided by user is the correct one.
 
@@ -134,8 +131,6 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
 
-
-
     /** This helper function generates the hash code based on the algorithm
         specified by MS for "Password to modify" feature of Word.
 
@@ -148,7 +143,6 @@ public:
 
     static sal_uInt32 GetWordHashAsUINT32(
                 const OUString& aString );
-
 
 
     /** This helper function generates the hash code based on the algorithm
@@ -171,7 +165,6 @@ public:
                 rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
 
 
-
     /** This helper function generates the hash code based on the algorithm
         specified by MS for "Password to modify" and passwords related to
         table protection.
@@ -192,14 +185,12 @@ public:
                 rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
 
 
-
     /** This helper function generates a random sequence of bytes of
         requested length.
       */
 
     static css::uno::Sequence< sal_Int8 > GenerateRandomByteSequence(
                 sal_Int32 nLength );
-
 
 
     /** This helper function generates a byte sequence representing the
@@ -209,7 +200,6 @@ public:
     static css::uno::Sequence< sal_Int8 > GenerateStd97Key(
                 const OUString& aPassword,
                 const css::uno::Sequence< sal_Int8 >& aDocId );
-
 
 
     /** This helper function generates a byte sequence representing the
@@ -227,7 +217,6 @@ public:
     static css::uno::Sequence< sal_Int8 > GenerateStd97Key(
                 const sal_uInt16 pPassData[16],
                 const sal_uInt8 pDocId[16] );
-
 
 
     /** This helper function tries to request and verify a password to load a
@@ -296,7 +285,6 @@ public:
 private:
                         ~DocPasswordHelper();
 };
-
 
 
 } // namespace comphelper

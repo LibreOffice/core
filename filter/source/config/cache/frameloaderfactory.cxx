@@ -42,11 +42,9 @@ FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::uno::XCom
 }
 
 
-
 FrameLoaderFactory::~FrameLoaderFactory()
 {
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
@@ -55,7 +53,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 {
     return createInstanceWithArguments(sLoader, css::uno::Sequence< css::uno::Any >());
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
@@ -132,7 +129,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 }
 
 
-
 css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -141,19 +137,16 @@ css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceN
 }
 
 
-
 OUString FrameLoaderFactory::impl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.filter.config.FrameLoaderFactory" );
 }
 
 
-
 css::uno::Sequence< OUString > FrameLoaderFactory::impl_getSupportedServiceNames()
 {
     return { "com.sun.star.frame.FrameLoaderFactory" };
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)

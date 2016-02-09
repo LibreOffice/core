@@ -179,7 +179,6 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 }
 
 
-
 void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
     bool bMoveSingle, bool bMoveFirst)
 {

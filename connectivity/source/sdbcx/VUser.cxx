@@ -184,5 +184,4 @@ void SAL_CALL OUser::release() throw()
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

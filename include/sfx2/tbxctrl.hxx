@@ -60,8 +60,6 @@ struct SfxTbxCtrlFactory
 };
 
 
-
-
 /* Floating windows that can be torn from tool boxes should be derived from
    this class. Since it is also derived from SfxControllerItem, its instances
    will also receive the StateChanged calls.
@@ -129,7 +127,6 @@ public:
                                 m_aDeleteLink = rLink;
                             }
 };
-
 
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
@@ -240,8 +237,6 @@ public:
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( \
                     Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
-
-
 
 
 class SfxDragButton_Impl : public FixedImage

@@ -490,7 +490,6 @@ void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData
 }
 
 
-
 Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

@@ -91,7 +91,6 @@ namespace svx
     }
 
 
-
     class NamespaceIteratorImpl
     {
     private:
@@ -114,7 +113,6 @@ namespace svx
 }
 
 using namespace ::svx;
-
 
 
 NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool )
@@ -181,7 +179,6 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 
     return false;
 }
-
 
 
 NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool )

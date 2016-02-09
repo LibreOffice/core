@@ -41,7 +41,6 @@ namespace com {
 namespace uui {
 
 
-
 /** Passwordcontainer UNO service (com.sun.star.task.PasswordContainer) helper.
  */
 class PasswordContainerHelper
@@ -49,7 +48,6 @@ class PasswordContainerHelper
 public:
     explicit PasswordContainerHelper(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
-
 
 
     /** This member function tries to handle an authentication interaction
@@ -121,11 +119,9 @@ public:
                     bool bPersist );
 
 
-
 private:
     css::uno::Reference< css::task::XPasswordContainer2 > m_xPasswordContainer;
 };
-
 
 
 class PasswordContainerInteractionHandler :

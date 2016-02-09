@@ -36,8 +36,6 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-
-
 ModelEventListener::ModelEventListener(bool bIndexes, bool bControls)
     : m_bIndexes(bIndexes),
     m_bControls(bControls)

@@ -33,7 +33,6 @@
 #include <rtl/ustring.hxx>
 
 
-
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
@@ -143,7 +142,6 @@ static const SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 
     XML_TOKEN_MAP_END
 };
-
 
 
 XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(

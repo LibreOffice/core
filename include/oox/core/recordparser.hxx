@@ -34,14 +34,12 @@ namespace prv { class Locator; }
 namespace prv { class ContextStack; }
 
 
-
 struct RecordInputSource
 {
     BinaryInputStreamRef mxInStream;
     OUString     maPublicId;
     OUString     maSystemId;
 };
-
 
 
 class RecordParser
@@ -77,7 +75,6 @@ private:
     RecordInfoMap       maStartMap;
     RecordInfoMap       maEndMap;
 };
-
 
 
 } // namespace core

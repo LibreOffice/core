@@ -143,7 +143,6 @@ sal_Int32 SAL_CALL SkeletonDriver::getMinorVersion(  ) throw(RuntimeException)
 }
 
 
-
 namespace connectivity
 {
     namespace skeleton

@@ -1578,7 +1578,6 @@ bool filter_info_impl::operator==( const filter_info_impl& r ) const
 }
 
 
-
 Sequence< OUString > filter_info_impl::getFilterUserData() const
 {
     Sequence< OUString > aUserData(8);

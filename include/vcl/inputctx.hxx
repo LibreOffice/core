@@ -26,8 +26,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 
-
-
 enum class InputContextFlags
 {
     NONE         = 0x0000,
@@ -40,8 +38,6 @@ namespace o3tl
 {
     template<> struct typed_flags<InputContextFlags> : is_typed_flags<InputContextFlags, 0x000f> {};
 }
-
-
 
 
 class VCL_DLLPUBLIC InputContext

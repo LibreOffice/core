@@ -92,7 +92,6 @@ public: // XDataInputStream
     virtual OUString SAL_CALL readUTF() throw (IOException, RuntimeException, std::exception) override;
 
 
-
 public: // XActiveDataSink
     virtual void SAL_CALL setInputStream(const Reference< XInputStream > & aStream)
         throw (RuntimeException, std::exception) override;
@@ -205,8 +204,6 @@ void ODataInputStream::closeInput()
          throw NotConnectedException( );
      }
 }
-
-
 
 
 //== XDataInputStream ===========================================
@@ -384,7 +381,6 @@ OUString ODataInputStream::readUTF() throw (IOException, RuntimeException, std::
 }
 
 
-
 // XActiveDataSource
 void ODataInputStream::setInputStream(const Reference< XInputStream > & aStream)
     throw (RuntimeException, std::exception)
@@ -404,7 +400,6 @@ Reference< XInputStream > ODataInputStream::getInputStream() throw (RuntimeExcep
 {
     return m_input;
 }
-
 
 
 // XDataSink
@@ -489,8 +484,6 @@ Sequence<OUString> ODataInputStream_getSupportedServiceNames()
     Sequence<OUString> aRet { "com.sun.star.io.DataInputStream" };
     return aRet;
 }
-
-
 
 
 class ODataOutputStream :
@@ -796,8 +789,6 @@ Reference< XOutputStream > ODataOutputStream::getOutputStream()
 }
 
 
-
-
 // XDataSink
 void ODataOutputStream::setSuccessor( const Reference < XConnectable > &r )
     throw (RuntimeException, std::exception)
@@ -837,7 +828,6 @@ Reference < XConnectable > ODataOutputStream::getPredecessor()  throw (RuntimeEx
 {
     return m_pred;
 }
-
 
 
 // XServiceInfo
@@ -1056,7 +1046,6 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 }
 
 
-
 void OObjectOutputStream::connectToMarkable()
 {
     if( ! m_bValidMarkable ) {
@@ -1131,8 +1120,6 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
     }
     return m_rMarkable->offsetToMark( nMark );
 }
-
-
 
 
 Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance(

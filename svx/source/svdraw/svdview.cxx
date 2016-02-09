@@ -51,7 +51,6 @@
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 
 
-
 SdrViewEvent::SdrViewEvent()
 :     pHdl(nullptr),
       pObj(nullptr),
@@ -150,7 +149,6 @@ SdrDropMarkerOverlay::~SdrDropMarkerOverlay()
     // That destructor calls clear() at the list which removes all objects from the
     // OverlayManager and deletes them.
 }
-
 
 
 SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)

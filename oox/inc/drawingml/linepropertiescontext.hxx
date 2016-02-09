@@ -25,7 +25,6 @@
 namespace oox { namespace drawingml {
 
 
-
 struct LineProperties;
 
 class LinePropertiesContext : public ::oox::core::ContextHandler2

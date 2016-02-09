@@ -30,7 +30,6 @@ namespace svt
 {
 
 
-
     //= CellValueConversion
 
     struct CellValueConversion_Data;

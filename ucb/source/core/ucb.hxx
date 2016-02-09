@@ -45,7 +45,6 @@
 #define UCB_SERVICE_NAME "com.sun.star.ucb.UniversalContentBroker"
 
 
-
 namespace comphelper { class OInterfaceContainerHelper2; }
 
 namespace com { namespace sun { namespace star { namespace ucb {

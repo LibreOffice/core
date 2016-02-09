@@ -452,7 +452,6 @@ bool PBMReader::ImplReadBody()
             break;
 
 
-
         // PPM
         case 2 :
 

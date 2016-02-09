@@ -315,7 +315,6 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
 }
 
 
-
 DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 {
     OUString sDsn(comphelper::string::stripEnd(_rDsn, '*'));

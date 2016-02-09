@@ -37,7 +37,6 @@ using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_CHART_PROPERTIES;
 
 
-
 void XMLChartStyleContext::SetAttribute(
     sal_uInt16 nPrefixKey,
     const OUString& rLocalName,

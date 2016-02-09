@@ -22,7 +22,6 @@
 SfxPoolItem* SfxMacroInfoItem::CreateDefault() { DBG_ASSERT(false, "No SfxMacroInfItem factory available"); return nullptr; }
 
 
-
 SfxMacroInfoItem::SfxMacroInfoItem(
     sal_uInt16 nWhichId,        // Slot-ID
     const BasicManager* pMgr,
@@ -40,7 +39,6 @@ SfxMacroInfoItem::SfxMacroInfoItem(
 }
 
 
-
 // copy constructor
 
 SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
@@ -52,7 +50,6 @@ SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
     aCommentText(rCopy.aCommentText)
 {
 }
-
 
 
 // op ==
@@ -69,12 +66,10 @@ bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
 }
 
 
-
 SfxPoolItem *SfxMacroInfoItem::Clone( SfxItemPool *) const
 {
     return new SfxMacroInfoItem(*this);
 }
-
 
 
 OUString SfxMacroInfoItem::GetQualifiedName() const

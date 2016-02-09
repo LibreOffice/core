@@ -64,7 +64,6 @@ using namespace ::com::sun::star::lang;
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
 
 
-
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
 {
     ::osl::Mutex    maMutex;

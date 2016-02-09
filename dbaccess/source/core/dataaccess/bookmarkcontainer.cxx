@@ -53,7 +53,6 @@ OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
 }
 
 
-
 void SAL_CALL OBookmarkContainer::acquire(  ) throw()
 {
     m_rParent.acquire();

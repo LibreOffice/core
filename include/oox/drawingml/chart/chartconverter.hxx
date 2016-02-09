@@ -42,7 +42,6 @@ struct ChartSpaceModel;
 struct DataSequenceModel;
 
 
-
 class OOX_DLLPUBLIC ChartConverter
 {
 public:
@@ -92,7 +91,6 @@ private:
                         ChartConverter( const ChartConverter& ) = delete;
     ChartConverter&     operator=( const ChartConverter& ) = delete;
 };
-
 
 
 } // namespace chart

@@ -224,9 +224,6 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 }
 
 
-
-
-
 sal_Bool CMtaFolderPicker::browseForFolder( )
 {
     sal_Bool bRet = sal_False;
@@ -308,16 +305,10 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
 }
 
 
-
-
-
 void SAL_CALL CMtaFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 {
     m_displayDir = aDirectory;
 }
-
-
-
 
 
 OUString SAL_CALL CMtaFolderPicker::getDisplayDirectory( )
@@ -326,16 +317,10 @@ OUString SAL_CALL CMtaFolderPicker::getDisplayDirectory( )
 }
 
 
-
-
-
 OUString SAL_CALL CMtaFolderPicker::getDirectory( )
 {
     return m_SelectedDir;
 }
-
-
-
 
 
 void SAL_CALL CMtaFolderPicker::setDescription( const OUString& aDescription )
@@ -344,16 +329,10 @@ void SAL_CALL CMtaFolderPicker::setDescription( const OUString& aDescription )
 }
 
 
-
-
-
 void SAL_CALL CMtaFolderPicker::setTitle( const OUString& aTitle )
 {
     m_dialogTitle = aTitle;
 }
-
-
-
 
 
 OUString SAL_CALL CMtaFolderPicker::getTitle( )
@@ -378,9 +357,6 @@ void SAL_CALL CMtaFolderPicker::cancel( )
             (LPARAM)GetDlgItem( m_hwnd, IDCANCEL ) );
     }
 }
-
-
-
 
 
 sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
@@ -408,9 +384,6 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
 }
 
 
-
-
-
 void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
 {
     sal::systools::COMReference<IMalloc> pIMalloc;
@@ -421,9 +394,6 @@ void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
         lpItemIdList = NULL;
     }
 }
-
-
-
 
 
 LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& aDirectory )
@@ -452,9 +422,6 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& a
 }
 
 
-
-
-
 OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemIdList )
 {
     OUString path;
@@ -470,9 +437,6 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
 }
 
 
-
-
-
 void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
 {
     OSL_ASSERT( IsWindow( m_hwnd ) );
@@ -483,9 +447,6 @@ void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
         static_cast< WPARAM >( 0 ),
         static_cast< LPARAM >( bEnable ) );
 }
-
-
-
 
 
 void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
@@ -500,9 +461,6 @@ void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
 }
 
 
-
-
-
 void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
 {
     OSL_ASSERT( IsWindow( m_hwnd ) );
@@ -513,9 +471,6 @@ void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
         static_cast< WPARAM >( 0 ),
         reinterpret_cast< LPARAM >( aStatusText.getStr( ) ) );
 }
-
-
-
 
 
 void SAL_CALL CMtaFolderPicker::onInitialized( )
@@ -535,17 +490,11 @@ void SAL_CALL CMtaFolderPicker::onInitialized( )
 }
 
 
-
-
-
 sal_uInt32 CMtaFolderPicker::onValidateFailed()
 {
     // to be overwritten by subclasses
     return 1;
 }
-
-
-
 
 
 int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
@@ -656,9 +605,6 @@ LRESULT CALLBACK CMtaFolderPicker::StaWndProc( HWND hWnd, UINT uMsg, WPARAM wPar
 }
 
 
-
-
-
 sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
 {
     bool bIsWnd = false;
@@ -685,9 +631,6 @@ sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
 
     return bIsWnd;
 }
-
-
-
 
 
 unsigned int CMtaFolderPicker::run( )
@@ -731,9 +674,6 @@ unsigned int CMtaFolderPicker::run( )
 }
 
 
-
-
-
 unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 {
     osl_setThreadName("fpicker CMtaFolderPicker::run()");
@@ -752,9 +692,6 @@ unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 
     return result;
 }
-
-
-
 
 
 ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
@@ -792,9 +729,6 @@ ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
 
     return s_ClassAtom;
 }
-
-
-
 
 
 void SAL_CALL CMtaFolderPicker::UnregisterStaRequestWindowClass( )

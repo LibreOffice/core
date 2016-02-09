@@ -28,7 +28,6 @@ namespace svt
 {
 
 
-
     //= FileURLBox
 
     class SVT_DLLPUBLIC FileURLBox : public SvtURLBox

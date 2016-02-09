@@ -837,7 +837,6 @@ bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
 
 
-
 ImplFont::ImplFont() :
     mnRefCount( 1 ),
     meWeight( WEIGHT_DONTKNOW ),

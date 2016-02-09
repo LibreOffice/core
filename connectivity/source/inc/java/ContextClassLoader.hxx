@@ -76,7 +76,6 @@ namespace connectivity { namespace jdbc
     };
 
 
-
 } } // namespace connectivity::jdbc
 
 

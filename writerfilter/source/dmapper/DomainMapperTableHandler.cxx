@@ -79,7 +79,6 @@ void DomainMapperTableHandler::startTable(unsigned int /*nDepth*/,
 }
 
 
-
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr& rStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
     PropertyMapPtr pRet;

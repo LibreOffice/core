@@ -65,12 +65,10 @@ VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 }
 
 
-
 void VCLXAccessibleHeaderBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
-
 
 
 void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -86,7 +84,6 @@ void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
 }
-
 
 
 Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() throw (RuntimeException, std::exception)

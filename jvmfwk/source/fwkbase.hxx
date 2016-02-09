@@ -71,7 +71,6 @@ OUString getClasspathUrls();
 } //end namespace
 
 
-
 enum JFW_MODE
 {
     JFW_MODE_APPLICATION,

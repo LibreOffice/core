@@ -34,8 +34,6 @@ namespace cppu
 //#### assignment ##################################################################################
 
 
-
-
 inline void _assignInterface(
     void ** ppDest, void * pSource,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )

@@ -180,18 +180,15 @@ const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilt
 }
 
 
-
 SfxFilterContainer::SfxFilterContainer( const OUString& rName )
    : pImpl( new SfxFilterContainer_Impl( rName ) )
 {
 }
 
 
-
 SfxFilterContainer::~SfxFilterContainer()
 {
 }
-
 
 
 const OUString SfxFilterContainer::GetName() const
@@ -251,8 +248,6 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rNam
 
     return pFilter;
 }
-
-
 
 
 // Impl-Data is shared between all FilterMatchers of the same factory
@@ -377,7 +372,6 @@ const SfxFilter* SfxFilterMatcher::GetAnyFilter( SfxFilterFlags nMust, SfxFilter
 }
 
 
-
 sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxMedium& rMedium,
     const SfxFilter**ppFilter,
@@ -408,12 +402,10 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 }
 
 
-
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont );
 }
-
 
 
 sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, const SfxFilter** ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont, bool /*bDefUI*/ ) const
@@ -850,7 +842,6 @@ IMPL_LINK_TYPED( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 }
 
 
-
 SfxFilterMatcherIter::SfxFilterMatcherIter(
     const SfxFilterMatcher& rMatcher,
     SfxFilterFlags nOrMaskP, SfxFilterFlags nAndMaskP )
@@ -861,7 +852,6 @@ SfxFilterMatcherIter::SfxFilterMatcherIter(
         nOrMask = SfxFilterFlags::NONE;
     m_rMatch.InitForIterating();
 }
-
 
 
 const SfxFilter* SfxFilterMatcherIter::Find_Impl()
@@ -884,7 +874,6 @@ const SfxFilter* SfxFilterMatcherIter::First()
     nCurrent = 0;
     return Find_Impl();
 }
-
 
 
 const SfxFilter* SfxFilterMatcherIter::Next()

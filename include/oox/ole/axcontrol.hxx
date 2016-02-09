@@ -46,14 +46,12 @@ namespace oox {
 namespace ole {
 
 
-
 #define COMCTL_GUID_SCROLLBAR_60   "{FE38753A-44A3-11D1-B5B7-0000C09000C4}"
 #define COMCTL_GUID_PROGRESSBAR_50 "{0713E8D2-850A-101B-AFC0-4210102A8DA7}"
 #define COMCTL_GUID_PROGRESSBAR_60 "{35053A22-8589-11D1-B16A-00C0F0283628}"
 
 const sal_uInt16 COMCTL_VERSION_50          = 5;
 const sal_uInt16 COMCTL_VERSION_60          = 6;
-
 
 
 #define AX_GUID_COMMANDBUTTON "{D7053240-CE69-11CD-a777-00dd01143c57}"
@@ -142,7 +140,6 @@ const sal_Int32 AX_SCROLLBAR_HORIZONTAL     = 0x01;
 const sal_Int32 AX_SCROLLBAR_VERTICAL       = 0x02;
 
 
-
 /** Enumerates all UNO API control types supported by these filters. */
 enum ApiControlType
 {
@@ -167,7 +164,6 @@ enum ApiControlType
 };
 
 
-
 /** Specifies how a form control supports transparent background. */
 enum ApiTransparencyMode
 {
@@ -183,7 +179,6 @@ enum ApiDefaultStateMode
     API_DEFAULTSTATE_SHORT,             ///< Control does not support tri-state, state is given as short.
     API_DEFAULTSTATE_TRISTATE           ///< Control supports tri-state, state is given as short.
 };
-
 
 
 /** A base class with useful helper functions for something that is able to
@@ -345,7 +340,6 @@ private:
 };
 
 
-
 /** Base class for all models of form controls. */
 class OOX_DLLPUBLIC ControlModelBase
 {
@@ -392,7 +386,6 @@ protected:
 typedef std::shared_ptr< ControlModelBase > ControlModelRef;
 
 
-
 /** Base class for all models of ComCtl form controls. */
 class ComCtlModelBase : public ControlModelBase
 {
@@ -434,7 +427,6 @@ private:
 };
 
 
-
 /** Model for a ComCtl scroll bar. */
 class ComCtlScrollBarModel : public ComCtlModelBase
 {
@@ -457,7 +449,6 @@ private:
 };
 
 
-
 /** Model for a ComCtl progress bar. */
 class ComCtlProgressBarModel : public ComCtlModelBase
 {
@@ -478,7 +469,6 @@ private:
 };
 
 
-
 /** Base class for all models of Form 2.0 form controls. */
 class OOX_DLLPUBLIC AxControlModelBase : public ControlModelBase
 {
@@ -487,7 +477,6 @@ public:
 
     virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) override;
 };
-
 
 
 /** Base class for Forms 2.0 controls supporting text formatting. */
@@ -511,7 +500,6 @@ public: // direct access needed for legacy VML drawing controls
 private:
     bool                mbSupportsAlign;    ///< True = UNO model supports Align property.
 };
-
 
 
 /** Model for a Forms 2.0 command button. */
@@ -542,7 +530,6 @@ public: // direct access needed for legacy VML drawing controls
 };
 
 
-
 /** Model for a Forms 2.0 label. */
 class OOX_DLLPUBLIC AxLabelModel : public AxFontDataModel
 {
@@ -568,7 +555,6 @@ public: // direct access needed for legacy VML drawing controls
     sal_Int32           mnSpecialEffect;    ///< 3D border effect.
     sal_Int32           mnVerticalAlign;    ///< Vertical alignment (legacy VML drawing controls only).
 };
-
 
 
 /** Model for a Forms 2.0 image. */
@@ -617,7 +603,6 @@ public:
 };
 
 
-
 /** Base class for a Forms 2.0 morph data control. */
 class OOX_DLLPUBLIC AxMorphDataModelBase : public AxFontDataModel
 {
@@ -654,7 +639,6 @@ public: // direct access needed for legacy VML drawing controls
 };
 
 
-
 /** Model for a Forms 2.0 toggle button. */
 class OOX_DLLPUBLIC AxToggleButtonModel : public AxMorphDataModelBase
 {
@@ -668,7 +652,6 @@ public:
 };
 
 
-
 /** Model for a Forms 2.0 check box. */
 class OOX_DLLPUBLIC AxCheckBoxModel : public AxMorphDataModelBase
 {
@@ -680,7 +663,6 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) override;
     virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) override;
 };
-
 
 
 /** Model for a Forms 2.0 option button. */
@@ -699,7 +681,6 @@ public:
 };
 
 
-
 /** Model for a Forms 2.0 text box. */
 class OOX_DLLPUBLIC AxTextBoxModel : public AxMorphDataModelBase
 {
@@ -711,7 +692,6 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) override;
     virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) override;
 };
-
 
 
 /** Model for a numeric field (legacy drawing controls only). */
@@ -727,7 +707,6 @@ public:
 };
 
 
-
 /** Model for a Forms 2.0 list box. */
 class OOX_DLLPUBLIC AxListBoxModel : public AxMorphDataModelBase
 {
@@ -741,7 +720,6 @@ public:
 };
 
 
-
 /** Model for a Forms 2.0 combo box. */
 class OOX_DLLPUBLIC AxComboBoxModel : public AxMorphDataModelBase
 {
@@ -753,7 +731,6 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) override;
     virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) override;
 };
-
 
 
 /** Model for a Forms 2.0 spin button. */
@@ -784,7 +761,6 @@ public: // direct access needed for legacy VML drawing controls
 };
 
 
-
 /** Model for a Forms 2.0 scroll bar. */
 class OOX_DLLPUBLIC AxScrollBarModel : public AxControlModelBase
 {
@@ -813,7 +789,6 @@ public: // direct access needed for legacy VML drawing controls
     sal_Int32           mnLargeChange;      ///< Increment step size (thumb).
     sal_Int32           mnDelay;            ///< Repeat delay in milliseconds.
 };
-
 
 
 typedef ::std::vector< OUString > AxClassTable;
@@ -856,8 +831,6 @@ public: // direct access needed for legacy VML drawing controls
 };
 
 
-
-
 /** Model for a Forms 2.0 frame control. */
 class OOX_DLLPUBLIC AxFrameModel : public AxContainerModelBase
 {
@@ -889,8 +862,6 @@ public:
     sal_uInt32          mnActiveTab;
     sal_uInt32          mnTabStyle;
 };
-
-
 
 
 /** Model for a Forms 2.0 user form. */
@@ -966,7 +937,6 @@ private:
 };
 
 
-
 template< typename ModelType >
 inline ModelType& EmbeddedControl::createModel()
 {
@@ -984,7 +954,6 @@ inline ModelType& EmbeddedControl::createModel( const ParamType& rParam )
     xModel->setFormComponentMode();
     return *xModel;
 }
-
 
 
 /** A wrapper for a control form embedded directly in a draw page. */
@@ -1017,7 +986,6 @@ private:
     css::uno::Reference< css::form::XFormsSupplier >       mxFormsSupp;
     css::uno::Reference< css::container::XIndexContainer > mxFormIC;
 };
-
 
 
 } // namespace ole

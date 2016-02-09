@@ -233,7 +233,6 @@ void SAL_CALL FilePickerListener::dialogSizeChanged( )
 //  main
 
 
-
 int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 {
     printf("Starting test of FPS-Service\n");

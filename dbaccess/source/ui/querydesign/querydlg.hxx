@@ -86,5 +86,4 @@ namespace dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDLG_HXX
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

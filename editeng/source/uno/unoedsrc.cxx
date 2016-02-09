@@ -29,11 +29,9 @@ void SvxEditSource::addRange( SvxUnoTextRangeBase* )
 }
 
 
-
 void SvxEditSource::removeRange( SvxUnoTextRangeBase* )
 {
 }
-
 
 
 const SvxUnoTextRangeBaseList& SvxEditSource::getRanges() const
@@ -43,17 +41,14 @@ const SvxUnoTextRangeBaseList& SvxEditSource::getRanges() const
 }
 
 
-
 SvxTextForwarder::~SvxTextForwarder()
 {
 }
 
 
-
 SvxViewForwarder::~SvxViewForwarder()
 {
 }
-
 
 
 SvxEditSource::~SvxEditSource()

@@ -346,7 +346,6 @@ void implUpdateVisibility
 }
 
 
-
 //  class DialogStepChangedListener
 
 typedef ::cppu::WeakImplHelper< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
@@ -698,7 +697,6 @@ void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& 
             impl_removeControl( id, _rxControl, nullptr );
     }
 }
-
 
 
 // awt::XUnoControlContainer

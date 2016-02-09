@@ -38,7 +38,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_HREF;
 
 
-
 XMLAutoMarkFileContext::XMLAutoMarkFileContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,

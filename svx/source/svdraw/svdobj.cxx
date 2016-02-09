@@ -141,8 +141,6 @@
 using namespace ::com::sun::star;
 
 
-
-
 SdrObjUserCall::~SdrObjUserCall()
 {
 }
@@ -157,7 +155,6 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
     pPageView(nullptr),
     nTol(0),
     bDown(false) {}
-
 
 
 SdrObjUserData::SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer) :
@@ -288,13 +285,10 @@ void SdrObject::ActionChanged() const
 }
 
 
-
 void SdrObject::SetBoundRectDirty()
 {
     aOutRect = Rectangle();
 }
-
-
 
 
 SdrObject::SdrObject() :
@@ -831,14 +825,10 @@ sal_uInt32 SdrObject::GetNavigationPosition()
 }
 
 
-
-
 void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 {
     mnNavigationPosition = nNewPosition;
 }
-
-
 
 
 // To make clearer that this method may trigger RecalcBoundRect and thus may be
@@ -1286,7 +1276,6 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
     aTmpRect.Justify();
     return aTmpRect;
 }
-
 
 
 bool SdrObject::hasSpecialDrag() const
@@ -1870,7 +1859,6 @@ bool SdrObject::IsMacroHit(const SdrObjMacroHitRec& rRec) const
 }
 
 
-
 SdrObjGeoData* SdrObject::NewGeoData() const
 {
     return new SdrObjGeoData;
@@ -2362,7 +2350,6 @@ SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
 }
 
 
-
 void extractLineContourFromPrimitive2DSequence(
     const drawinglayer::primitive2d::Primitive2DContainer& rxSequence,
     basegfx::B2DPolygonVector& rExtractedHairlines,
@@ -2387,7 +2374,6 @@ void extractLineContourFromPrimitive2DSequence(
         rExtractedLineFills = aExtractor.getExtractedLineFills();
     }
 }
-
 
 
 SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash)
@@ -2554,19 +2540,10 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 }
 
 
-
-
-
-
 void SdrObject::SetMarkProtect(bool bProt)
 {
     bMarkProt = bProt;
 }
-
-
-
-
-
 
 
 void SdrObject::SetEmptyPresObj(bool bEpt)
@@ -2579,8 +2556,6 @@ void SdrObject::SetNotVisibleAsMaster(bool bFlg)
 {
     bNotVisibleAsMaster=bFlg;
 }
-
-
 
 
 // convert this path object to contour object, even when it is a group
@@ -2623,7 +2598,6 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
 }
 
 
-
 SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 {
     SdrObject* pRet = DoConvertToPolyObj(bBezier, true);
@@ -2645,12 +2619,10 @@ SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 }
 
 
-
 SdrObject* SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return nullptr;
 }
-
 
 
 void SdrObject::SetInserted(bool bIns)
@@ -2718,7 +2690,6 @@ void SdrObject::SetVisible(bool bVisible)
         }
     }
 }
-
 
 
 sal_uInt16 SdrObject::GetUserDataCount() const
@@ -2964,7 +2935,6 @@ void SdrObject::notifyShapePropertyChange( const svx::ShapeProperty _eProperty )
     if ( pSvxShape )
         return pSvxShape->getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty );
 }
-
 
 
 // transformation interface for StarOfficeAPI. This implements support for

@@ -44,12 +44,10 @@ namespace dlgprov
 {
 
 
-
     // mutex
 
 
     ::osl::Mutex& getMutex();
-
 
 
     // class DialogProviderImpl
@@ -154,7 +152,6 @@ namespace dlgprov
 }   // namespace dlgprov
 
 
-
 // component helper namespace
 namespace comp_DialogModelProvider {
 
@@ -163,8 +160,6 @@ OUString SAL_CALL _getImplementationName();
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 
 } // namespace comp_DialogModelProvider
-
-
 
 
 #endif // INCLUDED_SCRIPTING_SOURCE_DLGPROV_DLGPROV_HXX

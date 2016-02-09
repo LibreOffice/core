@@ -101,7 +101,6 @@ namespace sdr
 } // end of namespace sdr
 
 
-
 #endif // INCLUDED_SVX_SDR_CONTACT_DISPLAYINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

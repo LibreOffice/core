@@ -71,7 +71,6 @@ namespace // private
 } // end private namespace
 
 
-
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {

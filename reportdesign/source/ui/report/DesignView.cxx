@@ -303,8 +303,6 @@ OUString ODesignView::GetInsertObjString() const
 }
 
 
-
-
 void ODesignView::Cut()
 {
     Copy();
@@ -312,12 +310,10 @@ void ODesignView::Cut()
 }
 
 
-
 void ODesignView::Copy()
 {
     m_aScrollWindow->Copy();
 }
-
 
 
 void ODesignView::Paste()

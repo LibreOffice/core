@@ -28,7 +28,6 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 
-
 VbaNewFont::VbaNewFont(
         const uno::Reference< beans::XPropertySet >& rxModelProps ) throw (uno::RuntimeException) :
     mxProps( rxModelProps, uno::UNO_SET_THROW )

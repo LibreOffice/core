@@ -31,7 +31,6 @@
 #include "celltypes.hxx"
 
 
-
 namespace sdr { namespace table {
 
 class SdrTableObj;

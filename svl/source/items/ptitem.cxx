@@ -39,7 +39,6 @@ SfxPointItem::SfxPointItem()
 }
 
 
-
 SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
@@ -47,13 +46,11 @@ SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
 }
 
 
-
 SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
 }
-
 
 
 bool SfxPointItem::GetPresentation
@@ -70,7 +67,6 @@ bool SfxPointItem::GetPresentation
 }
 
 
-
 bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -78,12 +74,10 @@ bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-
 SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
 {
     return new SfxPointItem( *this );
 }
-
 
 
 SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
@@ -94,13 +88,11 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
 }
 
 
-
 SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     WritePair( rStream, aVal );
     return rStream;
 }
-
 
 
 bool SfxPointItem::QueryValue( uno::Any& rVal,
@@ -124,7 +116,6 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
 
     return true;
 }
-
 
 
 bool SfxPointItem::PutValue( const uno::Any& rVal,
@@ -164,7 +155,6 @@ bool SfxPointItem::PutValue( const uno::Any& rVal,
 
     return bRet;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

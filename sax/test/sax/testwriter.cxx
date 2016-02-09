@@ -136,7 +136,6 @@ private:
 };
 
 
-
 /*----------------------------------------
 *
 *   Attributlist implementation
@@ -195,7 +194,6 @@ struct AttributeListImpl_impl
     }
     vector<struct TagAttribute> vecAttribute;
 };
-
 
 
 sal_Int16 AttributeListImpl::getLength() throw  (RuntimeException)
@@ -265,12 +263,10 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw  (Runtim
 }
 
 
-
 AttributeListImpl::AttributeListImpl()
 {
     m_pImpl = new AttributeListImpl_impl;
 }
-
 
 
 AttributeListImpl::~AttributeListImpl()
@@ -291,15 +287,6 @@ void AttributeListImpl::clear()
     m_pImpl->vecAttribute.clear();
 
 }
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -329,7 +316,6 @@ Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw  ()
     Sequence<OUString> aRet { OSaxWriterTest_getImplementationName( ) };
     return aRet;
 }
-
 
 
 void OSaxWriterTest::testInvariant( const OUString& TestName,
@@ -406,7 +392,6 @@ sal_Int32 OSaxWriterTest::test(
 }
 
 
-
 sal_Bool OSaxWriterTest::testPassed()                   throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
@@ -450,7 +435,6 @@ void OSaxWriterTest::writeParagraph(
     r->allowLineBreak();
     r->characters( s.copy( nStart , n - nStart ) );
 }
-
 
 
 void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r )

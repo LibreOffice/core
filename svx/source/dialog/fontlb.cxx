@@ -77,8 +77,6 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 }
 
 
-
-
 SvxFontListBox::SvxFontListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , maStdFont(GetFont())
@@ -147,7 +145,6 @@ void SvxFontListBox::InitEntry(
         SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg,
                                   eButtonKind );
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

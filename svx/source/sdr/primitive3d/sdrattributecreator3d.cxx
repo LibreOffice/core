@@ -29,7 +29,6 @@
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

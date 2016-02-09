@@ -30,7 +30,6 @@
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

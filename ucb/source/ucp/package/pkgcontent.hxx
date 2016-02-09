@@ -58,7 +58,6 @@ namespace package_ucp
 {
 
 
-
 struct ContentProperties
 {
     OUString     aTitle;                // Title
@@ -82,7 +81,6 @@ struct ContentProperties
     css::uno::Sequence< css::ucb::ContentInfo >
     getCreatableContentsInfo( PackageUri const & rUri ) const;
 };
-
 
 
 class ContentProvider;

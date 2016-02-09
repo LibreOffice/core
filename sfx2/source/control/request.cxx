@@ -42,7 +42,6 @@
 #include <rtl/strbuf.hxx>
 
 
-
 using namespace ::com::sun::star;
 
 struct SfxRequest_Impl: public SfxListener
@@ -94,15 +93,12 @@ struct SfxRequest_Impl: public SfxListener
 };
 
 
-
-
 void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         pAnti->Cancel();
 }
-
 
 
 void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
@@ -118,8 +114,6 @@ void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
 }
 
 
-
-
 SfxRequest::~SfxRequest()
 {
     // Leave out Done() marked requests with 'rem'
@@ -132,7 +126,6 @@ SfxRequest::~SfxRequest()
         DeleteItemOnIdle(pImp->pRetVal);
     delete pImp;
 }
-
 
 
 SfxRequest::SfxRequest
@@ -162,7 +155,6 @@ SfxRequest::SfxRequest
     else
         pImp->SetPool( rOrig.pImp->pPool );
 }
-
 
 
 SfxRequest::SfxRequest
@@ -210,8 +202,6 @@ SfxRequest::SfxRequest
 }
 
 
-
-
 SfxRequest::SfxRequest
 (
     sal_uInt16        nSlotId,  // executed <Slot-Id>
@@ -256,7 +246,6 @@ SfxRequest::SfxRequest
 }
 
 
-
 SfxRequest::SfxRequest
 (
     sal_uInt16                  nSlotId,
@@ -286,12 +275,10 @@ SfxCallMode SfxRequest::GetCallMode() const
 }
 
 
-
 bool SfxRequest::IsSynchronCall() const
 {
     return SfxCallMode::SYNCHRON == ( SfxCallMode::SYNCHRON & pImp->nCallMode );
 }
-
 
 
 void SfxRequest::SetSynchronCall( bool bSynchron )
@@ -312,8 +299,6 @@ const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
 {
     return pImp->pInternalArgs;
 }
-
-
 
 
 void SfxRequest_Impl::Record
@@ -372,7 +357,6 @@ void SfxRequest_Impl::Record
 }
 
 
-
 void SfxRequest::Record_Impl
 (
     SfxShell&       rSh,    // the <SfxShell>, which has executed the Request
@@ -397,7 +381,6 @@ void SfxRequest::Record_Impl
 }
 
 
-
 void SfxRequest::SetArgs( const SfxAllItemSet& rArgs )
 {
     delete pArgs;
@@ -406,14 +389,12 @@ void SfxRequest::SetArgs( const SfxAllItemSet& rArgs )
 }
 
 
-
 void SfxRequest::AppendItem(const SfxPoolItem &rItem)
 {
     if(!pArgs)
         pArgs = new SfxAllItemSet(*pImp->pPool);
     pArgs->Put(rItem, rItem.Which());
 }
-
 
 
 void SfxRequest::RemoveItem( sal_uInt16 nID )
@@ -435,12 +416,10 @@ void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 }
 
 
-
 const SfxPoolItem* SfxRequest::GetReturnValue() const
 {
     return pImp->pRetVal;
 }
-
 
 
 void SfxRequest::Done
@@ -503,8 +482,6 @@ void SfxRequest::Done
 }
 
 
-
-
 void SfxRequest::Done( bool bRelease )
 //  [<SfxRequest::Done(SfxItemSet&)>]
 {
@@ -514,7 +491,6 @@ void SfxRequest::Done( bool bRelease )
 }
 
 
-
 void SfxRequest::ForgetAllArgs()
 {
     DELETEZ( pArgs );
@@ -522,12 +498,10 @@ void SfxRequest::ForgetAllArgs()
 }
 
 
-
 bool SfxRequest::IsCancelled() const
 {
     return pImp->bCancelled;
 }
-
 
 
 void SfxRequest::Cancel()
@@ -543,8 +517,6 @@ void SfxRequest::Cancel()
     pImp->SetPool( nullptr );
     DELETEZ( pArgs );
 }
-
-
 
 
 void SfxRequest::Ignore()
@@ -565,7 +537,6 @@ void SfxRequest::Ignore()
     // Mark as actually executed
     pImp->bIgnored = true;
 }
-
 
 
 void SfxRequest::Done_Impl
@@ -682,7 +653,6 @@ void SfxRequest::Done_Impl
 }
 
 
-
 bool SfxRequest::IsDone() const
 
 /*  [Description]
@@ -703,7 +673,6 @@ bool SfxRequest::IsDone() const
 {
     return pImp->bDone;
 }
-
 
 
 css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
@@ -742,8 +711,6 @@ bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 }
 
 
-
-
 bool SfxRequest::IsAPI() const
 
 /*  [Description]
@@ -767,7 +734,6 @@ sal_uInt16 SfxRequest::GetModifier() const
 {
     return pImp->nModifier;
 }
-
 
 
 void SfxRequest::AllowRecording( bool bSet )

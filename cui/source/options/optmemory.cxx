@@ -110,7 +110,6 @@ SfxTabPage::sfxpg OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", &rSet)
 {
@@ -210,7 +209,6 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
 
     return bModified;
 }
-
 
 
 void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )

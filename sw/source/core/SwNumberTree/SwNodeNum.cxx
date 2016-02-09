@@ -44,7 +44,6 @@ SwNodeNum::~SwNodeNum()
 }
 
 
-
 void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 {
     OSL_ENSURE( GetNumRule() && GetTextNode(),

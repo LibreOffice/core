@@ -52,7 +52,6 @@ namespace writerfilter {
 namespace dmapper{
 
 
-
 PropertyMap::PropertyMap() :
     m_cFootnoteSymbol( 0 ),
     m_nFootnoteFontId( -1 )
@@ -494,7 +493,6 @@ OUString lcl_FindUnusedPageStyleName(const uno::Sequence< OUString >& rPageStyle
 }
 
 
-
 uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         const uno::Reference< container::XNameContainer >& xPageStyles,
         const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
@@ -701,7 +699,6 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
 }
 
 
-
 uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
                             uno::Reference< beans::XPropertySet > const& xColumnContainer, DomainMapper_Impl& rDM_Impl )
 {
@@ -769,7 +766,6 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
     }
     return xColumns;
 }
-
 
 
 bool SectionPropertyMap::HasHeader(bool bFirstPage) const

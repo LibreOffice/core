@@ -31,7 +31,6 @@ namespace toolkit
 {
 
 
-
     // = UnoControlFormattedFieldModel
 
     class UnoControlFormattedFieldModel : public UnoControlModel

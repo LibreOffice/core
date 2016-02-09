@@ -55,12 +55,10 @@ using com::sun::star::presentation::XPresentationPage;
 using com::sun::star::task::XStatusIndicator;
 
 
-
 PlaceWareExporter::PlaceWareExporter(const Reference< XComponentContext > & rxContext)
 :   mxContext( rxContext )
 {
 }
-
 
 
 PlaceWareExporter::~PlaceWareExporter()
@@ -398,7 +396,6 @@ bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOut
 
     return bRet;
 }
-
 
 
 PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )

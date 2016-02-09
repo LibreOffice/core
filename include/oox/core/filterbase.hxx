@@ -111,7 +111,6 @@ public:
     virtual bool        exportDocument() = 0;
 
 
-
     /** Returns the component context passed in the filter constructor (always existing). */
     const css::uno::Reference< css::uno::XComponentContext >&
                         getComponentContext() const;

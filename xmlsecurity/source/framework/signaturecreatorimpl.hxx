@@ -120,5 +120,4 @@ SAL_CALL SignatureCreatorImpl_createInstance(
 #endif
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

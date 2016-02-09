@@ -81,7 +81,6 @@ SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
 }
 
 
-
 FrameDirListBoxWrapper::FrameDirListBoxWrapper( FrameDirListBox& rListBox ) :
     SingleControlWrapperType( rListBox )
 {
@@ -107,7 +106,6 @@ void FrameDirListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
 {
     GetControl().SelectEntryValue( eValue );
 }
-
 
 
 }

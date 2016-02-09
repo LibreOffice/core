@@ -344,8 +344,6 @@ namespace pcr
     }
 
 
-
-
     void OPropertyEditor::SetHelpText( const OUString& _rHelpText )
     {
         sal_uInt16 nCount = m_aTabControl->GetPageCount();
@@ -530,7 +528,6 @@ namespace pcr
 
 
 } // namespace pcr
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

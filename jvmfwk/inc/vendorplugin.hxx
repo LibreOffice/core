@@ -59,7 +59,6 @@ typedef enum
 } javaPluginError;
 
 
-
 /** obtains information about installations of Java Runtime Environments (JREs).
 
     <p>The function gathers information about available JREs which have the same
@@ -169,7 +168,6 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString * *arExcludeList,
     sal_Int32  nSizeExcludeList,
     JavaInfo ** ppInfo);
-
 
 
 /** obtains information for a JRE referenced by the JAVA_HOME environment variable.
@@ -297,7 +295,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     sal_Int32 nSizeOptions,
     JavaVM ** ppVM,
     JNIEnv ** ppEnv);
-
 
 
 /** checks if the installation of the jre still exists.

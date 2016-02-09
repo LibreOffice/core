@@ -28,7 +28,6 @@ namespace svt
 {
 
 
-
     //= OStringTransferable
 
     class SVT_DLLPUBLIC OStringTransferable : public TransferableHelper

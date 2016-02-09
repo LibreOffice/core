@@ -28,7 +28,6 @@ namespace oox {
 namespace dump {
 
 
-
 class DffStreamObject : public SequenceRecordObjectBase
 {
 public:
@@ -57,7 +56,6 @@ private:
     sal_uInt16          mnInstVer;
     sal_Int32           mnRealSize;
 };
-
 
 
 } // namespace dump

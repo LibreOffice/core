@@ -26,7 +26,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

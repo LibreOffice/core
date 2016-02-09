@@ -29,7 +29,6 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 
-
 namespace sdr
 {
     namespace contact

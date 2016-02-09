@@ -33,7 +33,6 @@ namespace ucbhelper
 struct ContentIdentifier_Impl;
 
 
-
 /**
   * This class implements a simple identifier object for UCB contents.
   * It mainly stores and returns the URL as it was passed to the constructor -

@@ -45,8 +45,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-
-
 XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate,

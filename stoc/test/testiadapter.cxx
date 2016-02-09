@@ -49,8 +49,6 @@ using namespace css::reflection;
 using namespace css::registry;
 
 
-
-
 sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rData2 )
 {
     OSL_ENSURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
@@ -664,8 +662,6 @@ sal_Bool XLB_Invocation::hasProperty( const OUString & rName )
             rName == "Struct" ||
             rName == "RuntimeException" );
 }
-
-
 
 
 void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,

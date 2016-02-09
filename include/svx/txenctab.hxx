@@ -25,7 +25,6 @@
 #include <tools/resary.hxx>
 
 
-
 //  class SvxTextEncodingTable
 
 

@@ -60,16 +60,11 @@ public:
 };
 
 
-
     OXReportControllerObserverImpl::OXReportControllerObserverImpl()
             :m_nLocks(0)
             ,m_bReadOnly(false)
     {
     }
-
-
-
-
 
 
     OXReportControllerObserver::OXReportControllerObserver(const OReportController& _rController)
@@ -246,7 +241,6 @@ void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< u
 }
 
 
-
 void OXReportControllerObserver::switchListening( const uno::Reference< container::XIndexAccess >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "OXReportControllerObserver::switchListening: invalid container!" );
@@ -406,7 +400,6 @@ void SAL_CALL OXReportControllerObserver::elementRemoved(const container::Contai
 
 
 } // namespace rptui
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

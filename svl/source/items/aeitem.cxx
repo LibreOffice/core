@@ -190,7 +190,6 @@ bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
 }
 
 
-
 void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
 {
     sal_uInt16 nPos = GetPosByValue(nValue);

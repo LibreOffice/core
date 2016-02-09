@@ -470,7 +470,6 @@ IMPL_LINK_NOARG_TYPED( SpellDialog, InitHdl, void*, void)
 };
 
 
-
 IMPL_LINK_TYPED( SpellDialog, ExtClickHdl, Button *, pBtn, void )
 {
     if (m_pOptionsPB == pBtn)
@@ -568,7 +567,6 @@ OUString SpellDialog::getReplacementString() const
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SpellDialog, DoubleClickChangeHdl, ListBox&, void)
 {
     ChangeHdl(nullptr);
@@ -592,7 +590,6 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeHdl, Button*, void)
     if(!m_pChangePB->IsEnabled())
         m_pIgnorePB->GrabFocus();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeAllHdl, Button*, void)
@@ -755,7 +752,6 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, IgnoreHdl, Button*, void)
 }
 
 
-
 bool SpellDialog::Close()
 {
     // We have to call ToggleChildWindow directly; calling SfxDispatcher's
@@ -773,7 +769,6 @@ void SpellDialog::SetSelectedLang_Impl( LanguageType nLang )
 {
     m_pLanguageLB->SelectLanguage( nLang );
 }
-
 
 
 LanguageType SpellDialog::GetSelectedLang_Impl() const

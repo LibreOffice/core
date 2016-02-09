@@ -351,7 +351,6 @@ public:
 };
 
 
-
 class SvxUnoTextBase;
 class EDITENG_DLLPUBLIC SvxUnoTextRange : public SvxUnoTextRangeBase,
                         public css::lang::XTypeProvider,
@@ -483,7 +482,6 @@ public:
 };
 
 
-
 class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
 {
 private:
@@ -578,7 +576,6 @@ public:
 };
 
 
-
 class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
 {
 private:
@@ -597,7 +594,6 @@ public:
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 class EDITENG_DLLPUBLIC SvxUnoTextCursor : public SvxUnoTextRangeBase,

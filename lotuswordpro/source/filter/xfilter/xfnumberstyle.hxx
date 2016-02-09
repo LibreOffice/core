@@ -160,6 +160,5 @@ inline void XFNumberStyle::SetSurfix(const OUString& surfix)
 }
 
 
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

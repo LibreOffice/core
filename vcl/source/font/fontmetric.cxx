@@ -177,7 +177,6 @@ void FontMetric::SetBuiltInFontFlag( bool bIsBuiltInFont )
 }
 
 
-
 ImplFontMetric::ImplFontMetric()
 :   mnAscent( 0 ),
     mnDescent( 0 ),

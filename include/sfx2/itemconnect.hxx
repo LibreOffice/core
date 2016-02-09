@@ -213,7 +213,6 @@ private:
 };
 
 
-
 /** Base class template for single item <-> single control connection objects.
 
     This template uses functions provided by the SingleItemWrapper and the
@@ -290,10 +289,8 @@ private:
 };
 
 
-
 /** Connection between an SfxBoolItem and a VCL CheckBox. */
 typedef ItemControlConnection< BoolItemWrapper, CheckBoxWrapper > CheckBoxConnection;
-
 
 
 /** Connection between an item and the VCL NumericField. */
@@ -311,10 +308,6 @@ public:
     explicit            NumericConnection( sal_uInt16 nSlot, NumericField& rField,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
-
-
-
-
 
 
 /** Connection between an item and the VCL MetricField.
@@ -338,7 +331,6 @@ public:
     explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
                             FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
-
 
 
 /** Connection between an item and a VCL ListBox.
@@ -366,10 +358,6 @@ public:
 };
 
 
-
-
-
-
 /** Connection between an item and an SVTOOLS ValueSet.
 
     Optionally a map can be passed that maps value set identifiers to item
@@ -393,9 +381,6 @@ public:
     explicit            ValueSetConnection( sal_uInt16 nSlot, ValueSet& rValueSet,
                             const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
-
-
-
 
 
 // Array of connections
@@ -430,10 +415,7 @@ private:
 };
 
 
-
-
 //               ***  Implementation of template functions  ***
-
 
 
 // Base connection classes
@@ -519,14 +501,12 @@ NumericConnection< ItemWrpT >::NumericConnection(
 }
 
 
-
 template< typename ItemWrpT >
 MetricConnection< ItemWrpT >::MetricConnection(
         sal_uInt16 nSlot, MetricField& rField, FieldUnit eItemUnit, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, new MetricFieldWrapperType( rField, eItemUnit ), nFlags )
 {
 }
-
 
 
 template< typename ItemWrpT >
@@ -537,14 +517,12 @@ ListBoxConnection< ItemWrpT >::ListBoxConnection(
 }
 
 
-
 template< typename ItemWrpT >
 ValueSetConnection< ItemWrpT >::ValueSetConnection(
         sal_uInt16 nSlot, ValueSet& rValueSet, const MapEntryType* pMap, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, new ValueSetWrapperType( rValueSet, pMap ), nFlags )
 {
 }
-
 
 
 } // namespace sfx

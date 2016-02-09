@@ -31,7 +31,6 @@
 #endif
 
 
-
 namespace drawinglayer
 {
     namespace tools

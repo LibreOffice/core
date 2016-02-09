@@ -402,13 +402,11 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
 }
 
 
-
 void SvxPageWindow::SetBorder(const SvxBoxItem& rNew)
 {
     delete pBorder;
     pBorder = new SvxBoxItem(rNew);
 }
-
 
 
 void SvxPageWindow::SetHdBorder(const SvxBoxItem& rNew)

@@ -77,11 +77,7 @@ using namespace package_ucp;
 #define ENCRYPTIONKEY_MODIFIED  sal_uInt32( 0x08 )
 
 
-
-
 // ContentProperties Implementation.
-
-
 
 
 ContentProperties::ContentProperties( const OUString& rContentType )
@@ -97,7 +93,6 @@ ContentProperties::ContentProperties( const OUString& rContentType )
     OSL_ENSURE( bIsFolder || rContentType == PACKAGE_STREAM_CONTENT_TYPE || rContentType == PACKAGE_ZIP_STREAM_CONTENT_TYPE,
                 "ContentProperties::ContentProperties - Unknown type!" );
 }
-
 
 
 uno::Sequence< ucb::ContentInfo >
@@ -138,11 +133,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 }
 
 
-
-
 // Content Implementation.
-
-
 
 
 // static ( "virtual" ctor )
@@ -279,9 +270,7 @@ Content::~Content()
 }
 
 
-
 // XInterface methods.
-
 
 
 // virtual
@@ -314,9 +303,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
@@ -398,9 +385,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -425,9 +410,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 }
 
 
-
 // XContent methods.
-
 
 
 // virtual
@@ -438,9 +421,7 @@ OUString SAL_CALL Content::getContentType()
 }
 
 
-
 // XCommandProcessor methods.
-
 
 
 // virtual
@@ -695,9 +676,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 }
 
 
-
 // XContentCreator methods.
-
 
 
 // virtual
@@ -749,9 +728,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 }
 
 
-
 // Non-interface methods.
-
 
 
 // virtual

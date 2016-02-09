@@ -27,7 +27,6 @@ namespace comphelper
 {
 
 
-
 // = class MutexRelease -
 
 

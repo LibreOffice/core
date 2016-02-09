@@ -899,7 +899,6 @@ SvxUnoPropertyMapProvider& getSvxMapProvider()
 }
 
 
-
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
@@ -914,7 +913,6 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
         delete aSetArr[i];
 }
-
 
 
 const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
@@ -1272,7 +1270,6 @@ static const sal_uInt16 SvxUnoColorNameResId[] =
 };
 
 
-
 bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString ) throw (std::exception)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
@@ -1366,7 +1363,6 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
     // just use previous name, if nothing else was found.
     return rApiName;
 }
-
 
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()

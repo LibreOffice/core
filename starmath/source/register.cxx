@@ -94,5 +94,4 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
 } // extern "C"
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

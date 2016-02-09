@@ -689,7 +689,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 }
 
 
-
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
     const sal_uInt16 *pRanges = rSet.GetRanges();

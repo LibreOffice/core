@@ -62,7 +62,6 @@ using namespace ::osl;
 using namespace ::utl;
 
 
-
 OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
  : OSubComponent(m_aMutex,_xConnection)
 {

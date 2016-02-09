@@ -44,13 +44,10 @@ sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
 }
 
 
-
 sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dLatheProperties(*this);
 }
-
-
 
 
 // Constructor from 3D polygon, scale is the conversion factor for the coordinates

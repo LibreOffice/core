@@ -692,7 +692,6 @@ bool ORowSetCache::next(  )
 }
 
 
-
 bool ORowSetCache::isFirst(  )
 {
     return m_nPosition == 1; // ask resultset for

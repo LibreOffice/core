@@ -219,7 +219,6 @@ namespace svxform
     }
 
 
-
     void NavigatorTreeModel::SetModified( bool bMod )
     {
         if( !m_pFormShell ) return;
@@ -963,7 +962,6 @@ namespace svxform
 
 
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

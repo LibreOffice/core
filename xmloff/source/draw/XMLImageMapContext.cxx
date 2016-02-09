@@ -94,7 +94,6 @@ static SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 };
 
 
-
 class XMLImageMapObjectContext : public SvXMLImportContext
 {
 
@@ -151,7 +150,6 @@ protected:
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet);
 };
-
 
 
 XMLImageMapObjectContext::XMLImageMapObjectContext(
@@ -300,7 +298,6 @@ void XMLImageMapObjectContext::Prepare(
 }
 
 
-
 class XMLImageMapRectangleContext : public XMLImageMapObjectContext
 {
     awt::Rectangle aRectangle;
@@ -328,8 +325,6 @@ protected:
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
-
-
 
 
 XMLImageMapRectangleContext::XMLImageMapRectangleContext(
@@ -434,8 +429,6 @@ protected:
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
-
-
 
 
 XMLImageMapPolygonContext::XMLImageMapPolygonContext(
@@ -601,15 +594,6 @@ void XMLImageMapCircleContext::Prepare(
     // common properties handled by super class
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
-
-
-
-
-
-
-
-
-
 
 
 XMLImageMapContext::XMLImageMapContext(

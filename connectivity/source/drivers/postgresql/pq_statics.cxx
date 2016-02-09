@@ -317,7 +317,6 @@ Statics & getStatics()
                 keyDescDef, sizeof(keyDescDef)/sizeof(PropertyDef), 0 );
 
 
-
             // KeyColumn props set
             statics.refl.keycolumn.implName = "org.openoffice.comp.pq.sdbcx.KeyColumn";
             statics.refl.keycolumn.serviceNames = Sequence< OUString > ( 1 );
@@ -721,7 +720,6 @@ Statics & getStatics()
     }
     return *p;
 }
-
 
 
 }

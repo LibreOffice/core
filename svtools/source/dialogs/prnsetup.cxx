@@ -24,7 +24,6 @@
 #include <vcl/print.hxx>
 
 
-
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
                             ListBox* pBox, PushButton* pPropBtn )
 {
@@ -44,13 +43,11 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 }
 
 
-
 void ImplFreePrnDlgListBox( ListBox* pBox, bool bClear )
 {
     if ( bClear )
         pBox->Clear();
 }
-
 
 
 Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
@@ -92,7 +89,6 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
 }
 
 
-
 Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinterIn )
 {
     VclPtr<Printer> pTempPrinter( pTempPrinterIn );
@@ -112,7 +108,6 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinterIn )
 }
 
 
-
 void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 {
     if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
@@ -124,7 +119,6 @@ void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 }
 
 
-
 static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddStr)
 {
     OUString aStr(rStr);
@@ -134,12 +128,10 @@ static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddSt
 }
 
 
-
 static OUString ImplPrnDlgAddResString(const OUString& rStr, sal_uInt16 nResId)
 {
     return ImplPrnDlgAddString(rStr, SVT_RESSTR(nResId));
 }
-
 
 
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
@@ -217,7 +209,6 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 }
 
 
-
 PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "PrinterSetupDialog",
         "svt/ui/printersetupdialog.ui")
@@ -242,7 +233,6 @@ PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
     m_pBtnProperties->SetClickHdl( LINK( this, PrinterSetupDialog, ImplPropertiesHdl ) );
     m_pLbName->SetSelectHdl( LINK( this, PrinterSetupDialog, ImplChangePrinterHdl ) );
 }
-
 
 
 PrinterSetupDialog::~PrinterSetupDialog()
@@ -292,14 +282,12 @@ void PrinterSetupDialog::ImplSetInfo()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplStatusHdl, Timer *, void)
 {
     QueueInfo aInfo;
     ImplPrnDlgUpdateQueueInfo(m_pLbName, aInfo);
     m_pFiStatus->SetText( ImplPrnDlgGetStatusText( aInfo ) );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
@@ -310,14 +298,12 @@ IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplChangePrinterHdl, ListBox&, void)
 {
     mpTempPrinter = ImplPrnDlgListBoxSelect(m_pLbName, m_pBtnProperties,
                                              mpPrinter, mpTempPrinter );
     ImplSetInfo();
 }
-
 
 
 bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
@@ -327,7 +313,6 @@ bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
 
     return ModalDialog::Notify( rNEvt );
 }
-
 
 
 void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
@@ -346,7 +331,6 @@ void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
 
     ModalDialog::DataChanged( rDCEvt );
 }
-
 
 
 short PrinterSetupDialog::Execute()

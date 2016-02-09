@@ -21,7 +21,6 @@
 #include <main.hxx>
 
 
-
 void CGM::ImplDoClass1()
 {
     long    nInteger, nI0, nI1;

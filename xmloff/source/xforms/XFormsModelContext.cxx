@@ -47,8 +47,6 @@ using namespace com::sun::star::uno;
 using namespace xmloff::token;
 
 
-
-
 static const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, ID ),
@@ -77,8 +75,6 @@ XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
 XFormsModelContext::~XFormsModelContext()
 {
 }
-
-
 
 
 void XFormsModelContext::HandleAttribute(

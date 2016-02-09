@@ -22,13 +22,7 @@
 #include <osl/diagnose.h>
 
 
-
-
-
 using osl::Mutex;
-
-
-
 
 
 namespace /* private */
@@ -63,9 +57,6 @@ ATOM CHelpPopupWindow::s_ClassAtom = 0;
 sal_Int32 CHelpPopupWindow::s_RegisterWndClassCount = 0;
 
 
-
-
-
 CHelpPopupWindow::CHelpPopupWindow(
     HINSTANCE hInstance,
     HWND hwndParent ) :
@@ -89,9 +80,6 @@ CHelpPopupWindow::CHelpPopupWindow(
 }
 
 
-
-
-
 CHelpPopupWindow::~CHelpPopupWindow( )
 {
     // remember: we don't have to destroy the
@@ -106,16 +94,10 @@ CHelpPopupWindow::~CHelpPopupWindow( )
 }
 
 
-
-
-
 void SAL_CALL CHelpPopupWindow::setText( const OUString& aHelpText )
 {
     m_HelpText = aHelpText;
 }
-
-
-
 
 
 void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
@@ -152,9 +134,6 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     UpdateWindow( m_hwnd );
     ShowWindow( m_hwnd, SW_SHOW );
 }
-
-
-
 
 
 HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
@@ -216,9 +195,6 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 }
 
 
-
-
-
 void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* cy_new )
 {
     OSL_ASSERT( cx_new && cy_new );
@@ -239,9 +215,6 @@ void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* 
     *cx_new = rect.right;
     *cy_new = rect.bottom;
 }
-
-
-
 
 
 void SAL_CALL CHelpPopupWindow::adjustWindowPos(
@@ -288,9 +261,6 @@ void SAL_CALL CHelpPopupWindow::adjustWindowPos(
 
     ReleaseDC( m_hwnd, hdc );
 }
-
-
-
 
 
 void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
@@ -410,16 +380,10 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 }
 
 
-
-
-
 void SAL_CALL CHelpPopupWindow::onNcDestroy()
 {
     m_hwnd = NULL;
 }
-
-
-
 
 
 void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
@@ -447,9 +411,6 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
 
     ReleaseDC( m_hwnd, hdc );
 }
-
-
-
 
 
 LRESULT CALLBACK CHelpPopupWindow::WndProc(
@@ -523,9 +484,6 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
 }
 
 
-
-
-
 ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
 {
     osl::MutexGuard aGuard( s_Mutex );
@@ -561,9 +519,6 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
 
     return s_ClassAtom;
 }
-
-
-
 
 
 void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )

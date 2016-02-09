@@ -649,7 +649,6 @@ XMLTransformerActionInit aTextPropertyOOoElemActionTable[] =
 };
 
 
-
 XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_FO, XML_LINE_HEIGHT, XML_ATACTION_INCH2IN,

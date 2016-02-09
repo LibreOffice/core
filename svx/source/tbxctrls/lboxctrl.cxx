@@ -216,7 +216,6 @@ IMPL_LINK_NOARG_TYPED(SvxListBoxControl, SelectHdl, ListBox&, void)
 }
 
 
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 
 SvxUndoRedoControl::SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )

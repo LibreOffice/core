@@ -68,7 +68,6 @@ void BaseWindow::dispose()
 }
 
 
-
 void BaseWindow::Init()
 {
     if ( pShellVScrollBar )
@@ -79,10 +78,8 @@ void BaseWindow::Init()
 }
 
 
-
 void BaseWindow::DoInit()
 { }
-
 
 
 void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
@@ -91,7 +88,6 @@ void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
     pShellVScrollBar = pVScroll;
 //  Init(); // does not make sense, leads to flickering and errors...
 }
-
 
 
 IMPL_LINK_TYPED( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
@@ -154,7 +150,6 @@ bool BaseWindow::AllowUndo()
 {
     return true;
 }
-
 
 
 void BaseWindow::UpdateData()
@@ -254,9 +249,7 @@ bool BaseWindow::HasActiveEditor () const
 }
 
 
-
 // DockingWindow
-
 
 
 // style bits for DockingWindow
@@ -422,9 +415,7 @@ void DockingWindow::DockThis ()
 }
 
 
-
 // ExtendedEdit
-
 
 
 ExtendedEdit::ExtendedEdit( vcl::Window* pParent, IDEResId nRes ) :
@@ -454,7 +445,6 @@ IMPL_LINK_TYPED( ExtendedEdit, EditAccHdl, Accelerator&, rAcc, void )
 }
 
 //  TabBar
-
 
 
 TabBar::TabBar( vcl::Window* pParent ) :
@@ -714,7 +704,6 @@ sal_uLong CalcLineCount( SvStream& rStream )
 
 
 // LibInfos
-
 
 
 LibInfos::LibInfos ()

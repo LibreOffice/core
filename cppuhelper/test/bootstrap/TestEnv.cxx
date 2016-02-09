@@ -24,7 +24,6 @@
 #include <cppu/helper/purpenv/Mapping.hxx>
 
 
-
 #define LOG_LIFECYCLE_TestEnv
 #ifdef LOG_LIFECYCLE_TestEnv
 #  include <iostream>

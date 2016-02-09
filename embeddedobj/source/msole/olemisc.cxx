@@ -40,7 +40,6 @@
 using namespace ::com::sun::star;
 
 
-
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       const uno::Sequence< sal_Int8 >& aClassID,
                                       const OUString& aClassName )
@@ -444,7 +443,6 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
         m_pInterfaceContainer->removeInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                 xListener );
 }
-
 
 
 void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )

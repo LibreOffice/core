@@ -69,7 +69,6 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame,
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxLineBox, DelayHdl_Impl, Timer *, void)
 {
     if ( GetEntryCount() == 0 )
@@ -78,7 +77,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineBox, DelayHdl_Impl, Timer *, void)
         FillControl();
     }
 }
-
 
 
 void SvxLineBox::Select()
@@ -145,7 +143,6 @@ void SvxLineBox::Select()
 }
 
 
-
 bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
     MouseNotifyEvent nType = rNEvt.GetType();
@@ -176,7 +173,6 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-
 bool SvxLineBox::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = LineLB::Notify( rNEvt );
@@ -201,7 +197,6 @@ bool SvxLineBox::Notify( NotifyEvent& rNEvt )
     }
     return bHandled;
 }
-
 
 
 void SvxLineBox::ReleaseFocus_Impl()
@@ -271,7 +266,6 @@ SvxMetricField::SvxMetricField(
 }
 
 
-
 void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
     if ( pItem )
@@ -282,7 +276,6 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
     else
         SetText( "" );
 }
-
 
 
 void SvxMetricField::Modify()
@@ -300,7 +293,6 @@ void SvxMetricField::Modify()
                                  ".uno:LineWidth",
                                  aArgs );
 }
-
 
 
 void SvxMetricField::ReleaseFocus_Impl()
@@ -347,7 +339,6 @@ bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 
     return MetricField::PreNotify( rNEvt );
 }
-
 
 
 bool SvxMetricField::Notify( NotifyEvent& rNEvt )
@@ -438,7 +429,6 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-
 bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = FillTypeLB::Notify( rNEvt );
@@ -470,7 +460,6 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
     }
     return bHandled;
 }
-
 
 
 void SvxFillTypeBox::ReleaseFocus_Impl()
@@ -508,7 +497,6 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-
 bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = FillAttrLB::Notify( rNEvt );
@@ -539,12 +527,10 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 }
 
 
-
 void SvxFillAttrBox::Select()
 {
     FillAttrLB::Select();
 }
-
 
 
 void SvxFillAttrBox::ReleaseFocus_Impl()

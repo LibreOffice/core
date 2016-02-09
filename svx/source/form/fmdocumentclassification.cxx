@@ -74,7 +74,6 @@ namespace svxform
     using namespace ::com::sun::star::sdbc;
 
 
-
     namespace
     {
 

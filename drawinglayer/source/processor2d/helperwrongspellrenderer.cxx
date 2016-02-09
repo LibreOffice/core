@@ -24,9 +24,7 @@
 #include <basegfx/color/bcolormodifier.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

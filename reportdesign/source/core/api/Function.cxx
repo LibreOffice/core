@@ -201,7 +201,6 @@ void SAL_CALL OFunction::setParent( const uno::Reference< uno::XInterface >& Par
 }
 
 
-
 } // namespace reportdesign
 
 

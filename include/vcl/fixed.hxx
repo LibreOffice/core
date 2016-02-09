@@ -30,8 +30,6 @@
 class UserDrawEvent;
 
 
-
-
 class VCL_DLLPUBLIC FixedText : public Control
 {
 private:
@@ -91,8 +89,6 @@ public:
 };
 
 
-
-
 class VCL_DLLPUBLIC FixedLine : public Control
 {
 private:
@@ -150,8 +146,6 @@ public:
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
 };
-
-
 
 
 class VCL_DLLPUBLIC FixedImage : public Control

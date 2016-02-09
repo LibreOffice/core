@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 
-
 class DynamicResultSetWrapperListener;
 class DynamicResultSetWrapper
                 : public cppu::OWeakObject
@@ -163,7 +162,6 @@ public:
     impl_notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 };
-
 
 
 class DynamicResultSetWrapperListener

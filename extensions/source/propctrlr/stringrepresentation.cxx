@@ -614,7 +614,6 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 } // pcr
 
 
-
 // component helper namespace
 namespace comp_StringRepresentation {
 

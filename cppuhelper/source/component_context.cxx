@@ -819,7 +819,6 @@ ComponentContext::ComponentContext(
 }
 
 
-
 extern "C" { static void s_createComponentContext_v(va_list * pParam)
 {
     ContextEntry_Init const  * pEntries     = va_arg(*pParam, ContextEntry_Init const *);

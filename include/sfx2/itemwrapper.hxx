@@ -28,7 +28,6 @@
 #include <svl/itemset.hxx>
 
 
-
 namespace sfx {
 
 
@@ -118,7 +117,6 @@ private:
 };
 
 
-
 /** An item wrapper usable for most types of items.
 
     The item type must support the following functions:
@@ -145,11 +143,9 @@ public:
 };
 
 
-
 typedef ValueItemWrapper< SfxBoolItem,   sal_Bool >          BoolItemWrapper;
 typedef ValueItemWrapper< SfxUInt16Item, sal_uInt16 >        UInt16ItemWrapper;
 typedef ValueItemWrapper< SfxInt32Item,  sal_Int32 >         Int32ItemWrapper;
-
 
 
 /** An item wrapper that uses the item itself as value. */
@@ -169,11 +165,7 @@ public:
 };
 
 
-
-
-
 //               ***  Implementation of template functions  ***
-
 
 
 // Item wrappers
@@ -190,7 +182,6 @@ const ItemT& SingleItemWrapper< ItemT, ValueT >::GetDefaultItem( const SfxItemSe
 {
     return static_cast< const ItemT& >( ItemWrapperHelper::GetDefaultItem( rItemSet, mnSlot ) );
 }
-
 
 
 } // namespace sfx

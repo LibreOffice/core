@@ -55,7 +55,6 @@ private:
 };
 
 
-
 template< typename Val >
 struct Entry
 {

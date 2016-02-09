@@ -73,7 +73,6 @@ public:
 };
 
 
-
 // class SvxLineEndWindow
 
 class SvxLineEndWindow : public SfxPopupWindow
@@ -141,7 +140,6 @@ public:
                                               const SfxPoolItem* pState ) override;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
-
 
 
 #endif

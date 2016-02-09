@@ -27,7 +27,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct ChartSpaceModel;
 
 /** Handler for a chart fragment (c:chartSpace root element).
@@ -43,7 +42,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

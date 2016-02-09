@@ -393,5 +393,4 @@ bool CompareProperties( const css::uno::Any& r1, const css::uno::Any& r2 )
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

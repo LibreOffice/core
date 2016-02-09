@@ -441,7 +441,6 @@ namespace dbaccess
     };
 
 
-
     //  ORowSetClone
 
     class ORowSetClone : public comphelper::OBaseMutex

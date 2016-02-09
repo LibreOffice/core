@@ -28,8 +28,6 @@
 struct ImplMoreButtonData;
 
 
-
-
 class VCL_DLLPUBLIC MoreButton : public PushButton
 {
 private:

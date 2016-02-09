@@ -120,7 +120,6 @@ namespace svt { namespace table
     }
 
 
-
     void TableControl::StateChanged( StateChangedType i_nStateChange )
     {
         Control::StateChanged( i_nStateChange );

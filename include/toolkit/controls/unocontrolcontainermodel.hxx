@@ -26,7 +26,6 @@
 #include <toolkit/helper/servicenames.hxx>
 
 
-
 //  class css::awt::UnoControlContainerModel
 
 class UnoControlContainerModel : public UnoControlModel
@@ -54,7 +53,6 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX

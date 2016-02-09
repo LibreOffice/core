@@ -46,8 +46,6 @@ using namespace com::sun::star::uno;
 using namespace xmloff::token;
 
 
-
-
 static const struct SvXMLTokenMapEntry aAttributeMap[] =
 {
     TOKEN_MAP_ENTRY( NONE, ID ),

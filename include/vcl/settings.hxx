@@ -175,9 +175,6 @@ struct FrameStyle
 };
 
 
-
-
-
 enum class StyleSettingsOptions
 {
     NONE           = 0x0000,
@@ -624,8 +621,6 @@ public:
 };
 
 
-
-
 class VCL_DLLPUBLIC MiscSettings
 {
     void                            CopyData();
@@ -651,7 +646,6 @@ public:
 };
 
 
-
 class VCL_DLLPUBLIC HelpSettings
 {
     void                            CopyData();
@@ -669,7 +663,6 @@ public:
     bool                            operator ==( const HelpSettings& rSet ) const;
     bool                            operator !=( const HelpSettings& rSet ) const;
 };
-
 
 
 enum class AllSettingsFlags {

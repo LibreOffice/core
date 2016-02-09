@@ -33,7 +33,6 @@ namespace com { namespace sun { namespace star {
 class XMLChangedRegionImportContext;
 
 
-
 /**
  * Import <text:deletion> and <text:insertion> elements contained in a
  * <text:changed-region> element.

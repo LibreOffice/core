@@ -28,7 +28,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 /** Relative shape position in a chart object. */
 struct AnchorPosModel
 {
@@ -40,14 +39,12 @@ struct AnchorPosModel
 };
 
 
-
 /** Absolute shape size in a chart object (in EMUs). */
 struct AnchorSizeModel : public EmuSize
 {
                  AnchorSizeModel() : EmuSize( -1, -1 ) {}
     bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
-
 
 
 /** Contains the position of a shape in the chart object. Supports different
@@ -76,7 +73,6 @@ private:
 typedef std::shared_ptr< ShapeAnchor > ShapeAnchorRef;
 
 
-
 /** Handler for a chart drawing fragment (c:userShapes root element).
  */
 class ChartDrawingFragment : public ::oox::core::FragmentHandler2
@@ -103,7 +99,6 @@ private:
     EmuRectangle        maChartRectEmu;         /// Position and size of the chart object for embedded shapes (in EMUs).
     bool                mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
 };
-
 
 
 } // namespace chart

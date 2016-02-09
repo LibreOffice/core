@@ -28,7 +28,6 @@
 class SvHeaderTabListBox;
 
 
-
 namespace accessibility {
 
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
@@ -102,9 +101,7 @@ public:
 };
 
 
-
 } // namespace accessibility
-
 
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETABLISTBOXTABLE_HXX

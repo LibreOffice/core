@@ -1819,7 +1819,6 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
         }
 
 
-
         ++nPos; // the row values start at 1
         const ORowSetValue &thisColVal = rRow.get()[nPos]->get();
         const bool thisColIsBound = thisColVal.isBound();

@@ -30,7 +30,6 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-
 MeasureHandler::MeasureHandler() :
 LoggedProperties("MeasureHandler"),
 m_nMeasureValue( 0 ),

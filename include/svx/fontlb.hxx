@@ -26,7 +26,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 /** A list box string item which stores its text and font. */
 class SAL_WARN_UNUSED SvLBoxFontString : public SvLBoxString
 {
@@ -54,8 +53,6 @@ public:
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 };
-
-
 
 
 /** A list box supporting formatted string entries. */

@@ -110,7 +110,6 @@ public:
 };
 
 
-
 //  class VCLXFileControl
 
 class VCLXFileControl : public css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
@@ -215,8 +214,6 @@ protected:
 };
 
 
-
-
 //  class SVTXRoadmap
 
 
@@ -281,8 +278,6 @@ protected:
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
-
-
 
 
 //  class SVTXNumericField

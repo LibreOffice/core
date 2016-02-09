@@ -238,7 +238,6 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
 }
 
 
-
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException, std::exception)
 {
     setParameter(parameterIndex,x);
@@ -338,7 +337,6 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 {
     setParameter(parameterIndex,x);
 }
-
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
@@ -557,7 +555,6 @@ void OPreparedStatement::parseParamterElem(const OUString& _sColumnName, OSQLPar
     // Save number of parameter in the variable:
     SetAssignValue(_sColumnName, OUString(), true, nParameter);
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -224,7 +224,6 @@ SfxTabPage::sfxpg SfxTabPage::DeactivatePage( SfxItemSet* )
 }
 
 
-
 void SfxTabPage::FillUserData()
 
 /*  [Description]
@@ -238,12 +237,10 @@ void SfxTabPage::FillUserData()
 }
 
 
-
 bool SfxTabPage::IsReadOnly() const
 {
     return false;
 }
-
 
 
 const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep )
@@ -264,7 +261,6 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
         pItem = &pPool->GetDefaultItem( nWh );
     return pItem;
 }
-
 
 
 const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
@@ -310,7 +306,6 @@ SfxTabDialog* SfxTabPage::GetTabDialog() const
 }
 
 
-
 SfxTabDialog::SfxTabDialog
 
 /*  [Description]
@@ -336,7 +331,6 @@ SfxTabDialog::SfxTabDialog
 {
     Init_Impl(bEditFmt);
 }
-
 
 
 SfxTabDialog::~SfxTabDialog()
@@ -517,7 +511,6 @@ short SfxTabDialog::Execute()
 }
 
 
-
 void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 {
     if ( !m_pTabCtrl->GetPageCount() )
@@ -525,7 +518,6 @@ void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
     Start_Impl();
     TabDialog::StartExecuteModal( rEndDialogHdl );
 }
-
 
 
 void SfxTabDialog::Start( bool bShow )
@@ -541,14 +533,12 @@ void SfxTabDialog::Start( bool bShow )
 }
 
 
-
 void SfxTabDialog::SetApplyHandler(const Link<Button*, void>& _rHdl)
 {
     DBG_ASSERT( m_pApplyBtn, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
     if ( m_pApplyBtn )
         m_pApplyBtn->SetClickHdl( _rHdl );
 }
-
 
 
 void SfxTabDialog::Start_Impl()
@@ -631,7 +621,6 @@ sal_uInt16 SfxTabDialog::AddTabPage
 }
 
 
-
 void SfxTabDialog::AddTabPage
 
 /*  [Description]
@@ -709,7 +698,6 @@ void SfxTabDialog::RemoveTabPage(const OString &rName)
 }
 
 
-
 void SfxTabDialog::PageCreated
 
 /*  [Description]
@@ -727,7 +715,6 @@ void SfxTabDialog::PageCreated
 }
 
 
-
 SfxItemSet* SfxTabDialog::GetInputSetImpl()
 
 /*  [Description]
@@ -739,7 +726,6 @@ SfxItemSet* SfxTabDialog::GetInputSetImpl()
 {
     return pSet;
 }
-
 
 
 SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
@@ -766,7 +752,6 @@ void SfxTabDialog::SavePosAndId()
     // to-do replace with name of page when all pages are converted to .ui
     aDlgOpt.SetPageID( m_pTabCtrl->GetCurPageId() );
 }
-
 
 
 short SfxTabDialog::Ok()
@@ -841,7 +826,6 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, CancelHdl, Button*, void)
 }
 
 
-
 SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 
 /*  [Description]
@@ -856,7 +840,6 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 }
 
 
-
 void SfxTabDialog::RefreshInputSet()
 
 /*  [Description]
@@ -869,7 +852,6 @@ void SfxTabDialog::RefreshInputSet()
 {
     SAL_INFO ( "sfx.dialog", "RefreshInputSet not implemented" );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SfxTabDialog, OkHdl, Button*, void)
@@ -915,7 +897,6 @@ bool SfxTabDialog::Apply()
 }
 
 
-
 bool SfxTabDialog::PrepareLeaveCurrentPage()
 {
     sal_uInt16 const nId = m_pTabCtrl->GetCurPageId();
@@ -950,8 +931,6 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
 }
 
 
-
-
 IMPL_LINK_NOARG_TYPED(SfxTabDialog, UserHdl, Button*, void)
 
 /*  [Description]
@@ -974,7 +953,6 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, UserHdl, Button*, void)
         EndDialog( nRet );
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
@@ -1000,7 +978,6 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
     else
         pDataObject->pTabPage->Reset( pSet );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
@@ -1077,7 +1054,6 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
         pDataObject->pTabPage->pImpl->mbStandard = true;
     }
 }
-
 
 
 IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
@@ -1183,7 +1159,6 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 }
 
 
-
 IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 
 /*  [Description]
@@ -1269,7 +1244,6 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 }
 
 
-
 void SfxTabDialog::ShowPage( sal_uInt16 nId )
 
 /*  [Description]
@@ -1281,7 +1255,6 @@ void SfxTabDialog::ShowPage( sal_uInt16 nId )
     m_pTabCtrl->SetCurPageId( nId );
     ActivatePageHdl( m_pTabCtrl );
 }
-
 
 
 const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
@@ -1349,7 +1322,6 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     pRanges[aUS.size()] = 0;
     return pRanges;
 }
-
 
 
 void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )

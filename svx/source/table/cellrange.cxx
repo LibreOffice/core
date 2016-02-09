@@ -21,12 +21,10 @@
 #include "cellrange.hxx"
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
-
 
 
 namespace sdr { namespace table {
@@ -39,7 +37,6 @@ CellRange::CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 n
 , mnBottom(nBottom)
 {
 }
-
 
 
 CellRange::~CellRange()
@@ -85,7 +82,6 @@ Reference< XCell > SAL_CALL CellRange::getCellByPosition( sal_Int32 nColumn, sal
 }
 
 
-
 Reference< XCellRange > SAL_CALL CellRange::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if( (nLeft >= 0 ) && (nTop >= 0) && (nRight >= nLeft) && (nBottom >= nTop)  )
@@ -106,12 +102,10 @@ Reference< XCellRange > SAL_CALL CellRange::getCellRangeByPosition( sal_Int32 nL
 }
 
 
-
 Reference< XCellRange > SAL_CALL CellRange::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException, std::exception)
 {
     return Reference< XCellRange >();
 }
-
 
 
 } }

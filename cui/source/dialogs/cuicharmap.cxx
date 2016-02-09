@@ -131,20 +131,16 @@ void SvxCharacterMap::SetChar( sal_UCS4 c )
 }
 
 
-
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
     return m_pShowSet->GetSelectCharacter();
 }
 
 
-
 OUString SvxCharacterMap::GetCharacters() const
 {
     return m_pShowText->GetText();
 }
-
-
 
 
 void SvxCharacterMap::DisableFontSelection()
@@ -269,7 +265,6 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 }
 
 
-
 void SvxShowText::SetFont( const vcl::Font& rFont )
 {
     long nWinHeight = GetOutputSizePixel().Height();
@@ -300,13 +295,11 @@ void SvxShowText::Resize()
 }
 
 
-
 void SvxShowText::SetText( const OUString& rText )
 {
     Control::SetText( rText );
     Invalidate();
 }
-
 
 
 // class SvxCharacterMap =================================================
@@ -381,7 +374,6 @@ void SvxCharacterMap::init()
 }
 
 
-
 void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 {
     // first get the underlying info in order to get font names
@@ -398,7 +390,6 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     // for compatibility reasons
     ModalDialog::SetFont( aFont );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, OKHdl, Button*, void)
@@ -426,7 +417,6 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
         bFirst = false;
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
@@ -481,7 +471,6 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
@@ -495,7 +484,6 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
 {
     if (bOne)
@@ -505,7 +493,6 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void
     }
     EndDialog( RET_OK );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
@@ -537,7 +524,6 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
     }
     m_pOKBtn->Enable();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)

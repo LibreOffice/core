@@ -437,7 +437,6 @@ namespace osl
     }
 
 
-
     inline sal_Int32 StreamSocket::recv(void* pBuffer,
                                         sal_uInt32 BytesToRead,
                                         oslSocketMsgFlag Flag)

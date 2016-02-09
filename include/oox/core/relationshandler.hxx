@@ -26,7 +26,6 @@ namespace oox {
 namespace core {
 
 
-
 class RelationsFragment : public FragmentHandler
 {
 public:
@@ -43,7 +42,6 @@ public:
 private:
     RelationsRef        mxRelations;
 };
-
 
 
 } // namespace core

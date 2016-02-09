@@ -51,7 +51,6 @@ SbPropertyValues::SbPropertyValues()
 }
 
 
-
 SbPropertyValues::~SbPropertyValues()
 {
     m_xInfo.clear();
@@ -78,7 +77,6 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo() throw( Runt
 }
 
 
-
 size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 {
     SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
@@ -92,7 +90,6 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
     }
     return it - m_aPropVals.begin();
 }
-
 
 
 void SbPropertyValues::setPropertyValue(
@@ -110,7 +107,6 @@ void SbPropertyValues::setPropertyValue(
 }
 
 
-
 Any SbPropertyValues::getPropertyValue(
                     const OUString& aPropertyName)
                     throw(css::beans::UnknownPropertyException,
@@ -122,7 +118,6 @@ Any SbPropertyValues::getPropertyValue(
 }
 
 
-
 void SbPropertyValues::addPropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
@@ -130,7 +125,6 @@ void SbPropertyValues::addPropertyChangeListener(
 {
     (void)aPropertyName;
 }
-
 
 
 void SbPropertyValues::removePropertyChangeListener(
@@ -142,7 +136,6 @@ void SbPropertyValues::removePropertyChangeListener(
 }
 
 
-
 void SbPropertyValues::addVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
@@ -150,7 +143,6 @@ void SbPropertyValues::addVetoableChangeListener(
 {
     (void)aPropertyName;
 }
-
 
 
 void SbPropertyValues::removeVetoableChangeListener(
@@ -162,12 +154,10 @@ void SbPropertyValues::removeVetoableChangeListener(
 }
 
 
-
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (css::uno::RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(m_aPropVals);
 }
-
 
 
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )

@@ -1342,7 +1342,6 @@ sal_uInt8 ORowSetValue::getUInt8()    const
 }
 
 
-
 sal_Int16 ORowSetValue::getInt16()  const
 {
     sal_Int16 nRet = 0;

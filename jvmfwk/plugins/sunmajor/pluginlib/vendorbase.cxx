@@ -49,7 +49,6 @@ MalformedVersionException::operator =(
 }
 
 
-
 VendorBase::VendorBase(): m_bAccessibility(false)
 {
 }

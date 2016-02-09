@@ -1126,7 +1126,6 @@ void PresenterTextCaret::HideCaret()
 }
 
 
-
 void PresenterTextCaret::SetPosition (
     const sal_Int32 nParagraphIndex,
     const sal_Int32 nCharacterIndex)

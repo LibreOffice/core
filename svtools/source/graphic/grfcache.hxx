@@ -25,8 +25,6 @@
 #include <list>
 
 
-
-
 class GraphicAttr;
 class GraphicCacheEntry;
 class GraphicDisplayCacheEntry;

@@ -35,7 +35,6 @@ namespace sfx2
 {
 
 
-
     //= IMacroDocumentAccess
 
     /** provides access to several settings of a document, which are needed by ->DocumentMacroMode

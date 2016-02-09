@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-
 SfxPoolItem* SvxGalleryItem::CreateDefault() { return new SvxGalleryItem; }
 
 SvxGalleryItem::SvxGalleryItem()

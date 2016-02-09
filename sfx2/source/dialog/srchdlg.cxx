@@ -30,7 +30,6 @@
 using namespace ::com::sun::star::uno;
 
 
-
 namespace sfx2 {
 
 #define MAX_SAVE_COUNT      (sal_uInt16)10
@@ -177,9 +176,7 @@ void SearchDialog::Move()
 }
 
 
-
 } // namespace sfx2
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,6 @@ namespace comphelper
 {
 
 
-
     //= OCommonAccessibleComponent
 
     /** base class encapsulating common functionality for the helper classes implementing

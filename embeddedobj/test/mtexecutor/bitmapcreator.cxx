@@ -49,7 +49,6 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::impl_staticCreateSe
 }
 
 
-
 uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
         throw ( uno::Exception,
                 uno::RuntimeException)

@@ -26,7 +26,6 @@
 // class FmInterfaceItem
 
 
-
 bool FmInterfaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -52,8 +51,6 @@ SfxPoolItem* FmInterfaceItem::Create( SvStream& /*rStrm*/, sal_uInt16 ) const
     OSL_FAIL( "FmInterfaceItem::Create: not implemented!" );
     return new FmInterfaceItem( *this );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

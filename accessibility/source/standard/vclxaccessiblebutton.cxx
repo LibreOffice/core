@@ -39,7 +39,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 // VCLXAccessibleButton
 
 
@@ -49,11 +48,9 @@ VCLXAccessibleButton::VCLXAccessibleButton( VCLXWindow* pVCLWindow )
 }
 
 
-
 VCLXAccessibleButton::~VCLXAccessibleButton()
 {
 }
-
 
 
 void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -78,7 +75,6 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
             VCLXAccessibleTextComponent::ProcessWindowEvent( rVclWindowEvent );
    }
 }
-
 
 
 void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -128,7 +124,6 @@ OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException, 
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleButton" );
 }
-
 
 
 Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -187,7 +182,6 @@ sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeExcept
 }
 
 
-
 sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -203,7 +197,6 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
 }
 
 
-
 OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -213,7 +206,6 @@ OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex
 
     return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
 }
-
 
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -271,7 +263,6 @@ Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException, std::exce
 }
 
 
-
 sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -297,7 +288,6 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
 }
 
 
-
 Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -309,7 +299,6 @@ Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException, std::exce
 }
 
 
-
 Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -319,7 +308,6 @@ Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException, std::exce
 
     return aValue;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

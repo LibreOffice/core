@@ -45,13 +45,9 @@ SelectionChangeHandler::SelectionChangeHandler (
 }
 
 
-
-
 SelectionChangeHandler::~SelectionChangeHandler()
 {
 }
-
-
 
 
 void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&)
@@ -70,14 +66,10 @@ void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&
 }
 
 
-
-
 void SAL_CALL SelectionChangeHandler::disposing (const lang::EventObject&)
     throw (uno::RuntimeException, std::exception)
 {
 }
-
-
 
 
 void SAL_CALL SelectionChangeHandler::disposing()
@@ -86,8 +78,6 @@ void SAL_CALL SelectionChangeHandler::disposing()
     if (mbIsConnected)
         Disconnect();
 }
-
-
 
 
 void SelectionChangeHandler::Connect()
@@ -99,8 +89,6 @@ void SelectionChangeHandler::Connect()
         xSupplier->addSelectionChangeListener(this);
     }
 }
-
-
 
 
 void SelectionChangeHandler::Disconnect()

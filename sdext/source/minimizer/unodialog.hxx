@@ -50,10 +50,6 @@
 #include <com/sun/star/awt/Size.hpp>
 
 
-
-
-
-
 class UnoDialog
 {
 public:

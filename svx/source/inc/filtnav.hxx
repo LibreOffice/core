@@ -190,7 +190,6 @@ protected:
 };
 
 
-
 class OFilterItemExchange : public OLocalExchange
 {
     ::std::vector<FmFilterItem*>    m_aDraggedEntries;

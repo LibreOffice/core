@@ -58,7 +58,6 @@ struct SvParser_Impl
 };
 
 
-
 // Construktor
 SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     : rInput( rIn )

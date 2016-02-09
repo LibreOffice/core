@@ -303,7 +303,6 @@ private:
 };
 
 
-
 #endif // INCLUDED_SVX_SOURCE_INC_FMVWIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct DataLabelModel;
 
 /** Handler for a chart data point label context (c:dLbl element).
@@ -41,7 +40,6 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
 };
-
 
 
 struct DataLabelsModel;
@@ -59,7 +57,6 @@ public:
 };
 
 
-
 struct PictureOptionsModel;
 
 /** Handler for fill bitmap settings (c:pictureOptions element).
@@ -72,7 +69,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 struct ErrorBarModel;
@@ -89,7 +85,6 @@ public:
 };
 
 
-
 struct TrendlineLabelModel;
 
 /** Handler for a series trendline label context (c:trendlineLbl element).
@@ -102,7 +97,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 struct TrendlineModel;
@@ -120,7 +114,6 @@ public:
 };
 
 
-
 struct DataPointModel;
 
 /** Handler for a chart data point context (c:dPt element).
@@ -133,7 +126,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 struct SeriesModel;
@@ -150,7 +142,6 @@ public:
 };
 
 
-
 /** Handler for a data series context for area chart types (c:ser element).
  */
 class AreaSeriesContext : public SeriesContextBase
@@ -161,7 +152,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for a data series context for bar chart types (c:ser element).
@@ -176,7 +166,6 @@ public:
 };
 
 
-
 /** Handler for a data series context for bubble chart types (c:ser element).
  */
 class BubbleSeriesContext : public SeriesContextBase
@@ -187,7 +176,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for a data series context for line and stock chart types (c:ser
@@ -203,7 +191,6 @@ public:
 };
 
 
-
 /** Handler for a data series context for pie and doughnut chart types (c:ser
     element).
  */
@@ -215,7 +202,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for a data series context for radar chart types (c:ser element).
@@ -230,7 +216,6 @@ public:
 };
 
 
-
 /** Handler for a data series context for scatter chart types (c:ser element).
  */
 class ScatterSeriesContext : public SeriesContextBase
@@ -243,7 +228,6 @@ public:
 };
 
 
-
 /** Handler for a data series context for scatter chart types (c:ser element).
  */
 class SurfaceSeriesContext : public SeriesContextBase
@@ -254,7 +238,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

@@ -26,7 +26,6 @@
 #include "tablemodel.hxx"
 
 
-
 namespace sdr { namespace table {
 
 class TableRows : public ::cppu::WeakAggImplHelper1< css::table::XTableRows >

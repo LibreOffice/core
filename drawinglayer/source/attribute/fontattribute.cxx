@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

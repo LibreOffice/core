@@ -37,7 +37,6 @@ public:
 };
 
 
-
 //  Simple wrapper around expat, the xml parser library
 //  created by James Clark
 

@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-
 // class OAccessibleMenuComponent
 
 
@@ -53,18 +52,15 @@ OAccessibleMenuComponent::OAccessibleMenuComponent( Menu* pMenu )
 }
 
 
-
 OAccessibleMenuComponent::~OAccessibleMenuComponent()
 {
 }
-
 
 
 bool OAccessibleMenuComponent::IsEnabled()
 {
     return true;
 }
-
 
 
 bool OAccessibleMenuComponent::IsVisible()
@@ -76,7 +72,6 @@ bool OAccessibleMenuComponent::IsVisible()
 
     return bVisible;
 }
-
 
 
 void OAccessibleMenuComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -162,7 +157,6 @@ sal_Int32 OAccessibleMenuComponent::getAccessibleChildCount() throw (RuntimeExce
 }
 
 
-
 Reference< XAccessible > OAccessibleMenuComponent::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -172,7 +166,6 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleChild( sal_Int32
 
     return GetChild( i );
 }
-
 
 
 Reference< XAccessible > OAccessibleMenuComponent::getAccessibleParent(  ) throw (RuntimeException, std::exception)
@@ -196,14 +189,12 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleParent(  ) throw
 }
 
 
-
 sal_Int16 OAccessibleMenuComponent::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::UNKNOWN;
 }
-
 
 
 OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeException, std::exception)
@@ -222,14 +213,12 @@ OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeExc
 }
 
 
-
 OUString OAccessibleMenuComponent::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return OUString();
 }
-
 
 
 Reference< XAccessibleRelationSet > OAccessibleMenuComponent::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
@@ -240,7 +229,6 @@ Reference< XAccessibleRelationSet > OAccessibleMenuComponent::getAccessibleRelat
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-
 
 
 Locale OAccessibleMenuComponent::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
@@ -260,7 +248,6 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleAtPoint( const a
 
     return GetChildAt( rPoint );
 }
-
 
 
 awt::Point OAccessibleMenuComponent::getLocationOnScreen(  ) throw (RuntimeException, std::exception)
@@ -283,7 +270,6 @@ awt::Point OAccessibleMenuComponent::getLocationOnScreen(  ) throw (RuntimeExcep
 }
 
 
-
 void OAccessibleMenuComponent::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -297,7 +283,6 @@ void OAccessibleMenuComponent::grabFocus(  ) throw (RuntimeException, std::excep
 }
 
 
-
 sal_Int32 OAccessibleMenuComponent::getForeground(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -307,7 +292,6 @@ sal_Int32 OAccessibleMenuComponent::getForeground(  ) throw (RuntimeException, s
 
     return nColor;
 }
-
 
 
 sal_Int32 OAccessibleMenuComponent::getBackground(  ) throw (RuntimeException, std::exception)
@@ -347,14 +331,12 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  ) throw (RuntimeExce
 }
 
 
-
 OUString OAccessibleMenuComponent::getTitledBorderText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return OUString();
 }
-
 
 
 OUString OAccessibleMenuComponent::getToolTipText(  ) throw (RuntimeException, std::exception)
@@ -379,7 +361,6 @@ void OAccessibleMenuComponent::selectAccessibleChild( sal_Int32 nChildIndex ) th
 }
 
 
-
 sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -391,7 +372,6 @@ sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int32 nChildIn
 }
 
 
-
 void OAccessibleMenuComponent::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -400,12 +380,10 @@ void OAccessibleMenuComponent::clearAccessibleSelection(  ) throw (RuntimeExcept
 }
 
 
-
 void OAccessibleMenuComponent::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
 {
     // This method makes no sense in a menu, and so does nothing.
 }
-
 
 
 sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
@@ -422,7 +400,6 @@ sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  ) throw (R
 
     return nRet;
 }
-
 
 
 Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -447,7 +424,6 @@ Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( s
 }
 
 
-
 void OAccessibleMenuComponent::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -457,7 +433,6 @@ void OAccessibleMenuComponent::deselectAccessibleChild( sal_Int32 nChildIndex ) 
 
     DeSelectAll();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

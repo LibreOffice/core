@@ -92,7 +92,6 @@
 #define SO3_SWGLOB_CLASSID SO3_SWGLOB_CLASSID_60
 
 
-
 /*
  * StarCalc
  */

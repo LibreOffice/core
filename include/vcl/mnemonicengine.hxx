@@ -35,7 +35,6 @@ namespace vcl
 {
 
 
-
     //= IMnemonicEntryList
 
     /// callback for a MnemonicEngine

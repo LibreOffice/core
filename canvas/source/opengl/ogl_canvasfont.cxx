@@ -16,7 +16,6 @@
 #include "ogl_textlayout.hxx"
 
 
-
 using namespace ::com::sun::star;
 
 namespace oglcanvas

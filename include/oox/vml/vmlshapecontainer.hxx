@@ -37,13 +37,11 @@ class ShapeType;
 class ShapeBase;
 
 
-
 struct ShapeParentAnchor
 {
     css::awt::Rectangle maShapeRect;
     css::awt::Rectangle maCoordSys;
 };
-
 
 
 /** Container that holds a list of shapes and shape templates. */
@@ -118,7 +116,6 @@ private:
 };
 
 
-
 template< typename ShapeT >
 ShapeT& ShapeContainer::createShape()
 {
@@ -132,7 +129,6 @@ const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
 {
     return maShapes.findIf( rFunctor ).get();
 }
-
 
 
 } // namespace vml

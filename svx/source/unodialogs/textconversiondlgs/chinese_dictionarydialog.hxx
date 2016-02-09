@@ -36,7 +36,6 @@ namespace textconversiondlgs
 {
 
 
-
 struct DictionaryEntry
 {
     DictionaryEntry( const OUString& rTerm, const OUString& rMapping

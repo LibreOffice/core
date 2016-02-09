@@ -39,7 +39,6 @@ SfxTemplateItem::SfxTemplateItem
 }
 
 
-
 // copy constuctor
 SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 
@@ -50,7 +49,6 @@ SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 }
 
 
-
 // op ==
 
 bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
@@ -58,7 +56,6 @@ bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
     return ( SfxFlagItem::operator==( rCmp ) &&
              aStyle == static_cast<const SfxTemplateItem&>(rCmp).aStyle );
 }
-
 
 
 SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
@@ -92,7 +89,6 @@ bool SfxTemplateItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId
 
     return false;
 }
-
 
 
 sal_uInt8 SfxTemplateItem::GetFlagCount() const

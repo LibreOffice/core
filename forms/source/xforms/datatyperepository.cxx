@@ -161,7 +161,6 @@ namespace xforms
     }
 
 
-
     Reference< XEnumeration > SAL_CALL ODataTypeRepository::createEnumeration(  ) throw (RuntimeException, std::exception)
     {
         return new ::comphelper::OEnumerationByName( this );

@@ -398,7 +398,6 @@ void FmFieldWin::Resize()
     Size aOutputSize( GetOutputSizePixel() );
 
 
-
     // adapt size of css::form::ListBox
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
     Size aLBSize( aOutputSize );

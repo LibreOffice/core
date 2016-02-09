@@ -268,7 +268,6 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
 }
 
 
-
 SdrHdl::SdrHdl():
     pObj(nullptr),
     pPV(nullptr),
@@ -1308,7 +1307,6 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
 }
 
 
-
 SdrHdlLine::~SdrHdlLine() {}
 
 void SdrHdlLine::CreateB2dIAObject()
@@ -1362,7 +1360,6 @@ Pointer SdrHdlLine::GetPointer() const
 {
     return Pointer(PointerStyle::RefHand);
 }
-
 
 
 SdrHdlBezWgt::~SdrHdlBezWgt() {}
@@ -1421,7 +1418,6 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 }
 
 
-
 E3dVolumeMarker::E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly)
 {
     aWireframePoly = rWireframePoly;
@@ -1465,7 +1461,6 @@ void E3dVolumeMarker::CreateB2dIAObject()
         }
     }
 }
-
 
 
 ImpEdgeHdl::~ImpEdgeHdl()
@@ -1592,7 +1587,6 @@ bool ImpEdgeHdl::IsHorzDrag() const
 }
 
 
-
 ImpMeasureHdl::~ImpMeasureHdl()
 {
 }
@@ -1668,7 +1662,6 @@ Pointer ImpMeasureHdl::GetPointer() const
 }
 
 
-
 ImpTextframeHdl::ImpTextframeHdl(const Rectangle& rRect) :
     SdrHdl(rRect.TopLeft(),HDL_MOVE),
     maRect(rRect)
@@ -1727,7 +1720,6 @@ void ImpTextframeHdl::CreateB2dIAObject()
         }
     }
 }
-
 
 
 static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
@@ -1872,7 +1864,6 @@ extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 
         return 1;
     }
 }
-
 
 
 void SdrHdlList::TravelFocusHdl(bool bForward)
@@ -2049,7 +2040,6 @@ void SdrHdlList::ResetFocusHdl()
         pHdl->Touch();
     }
 }
-
 
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
@@ -2247,12 +2237,10 @@ SdrCropHdl::SdrCropHdl(
 }
 
 
-
 BitmapEx SdrCropHdl::GetHandlesBitmap()
 {
     return BitmapEx(ResId(SIP_SA_CROP_MARKERS, *ImpGetResMgr()));
 }
-
 
 
 BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
@@ -2294,7 +2282,6 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
     aRetval.Crop(aSourceRect);
     return aRetval;
 }
-
 
 
 void SdrCropHdl::CreateB2dIAObject()

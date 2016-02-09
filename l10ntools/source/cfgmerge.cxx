@@ -396,7 +396,6 @@ void CfgExport::WorkOnText(
 }
 
 
-
 // class CfgMerge
 
 

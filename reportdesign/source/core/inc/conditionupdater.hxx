@@ -32,7 +32,6 @@ namespace rptui
 {
 
 
-
     //= ConditionUpdater
 
     class ConditionUpdater : public ::boost::noncopyable

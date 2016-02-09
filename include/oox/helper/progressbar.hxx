@@ -57,8 +57,6 @@ public:
 };
 
 
-
-
 class ISegmentProgressBar;
 typedef std::shared_ptr< ISegmentProgressBar > ISegmentProgressBarRef;
 
@@ -76,8 +74,6 @@ public:
     /** Adds a new segment with the specified length. */
     virtual ISegmentProgressBarRef createSegment( double fLength ) = 0;
 };
-
-
 
 
 /** A simple progress bar.
@@ -103,7 +99,6 @@ private:
 };
 
 
-
 /** A progress bar containing several independent segments.
  */
 class OOX_DLLPUBLIC SegmentProgressBar : public ISegmentProgressBar
@@ -127,7 +122,6 @@ private:
     ProgressBar         maProgress;
     double              mfFreeStart;
 };
-
 
 
 } // namespace oox

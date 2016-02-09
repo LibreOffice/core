@@ -2365,8 +2365,6 @@ sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rI
 }
 
 
-
-
 SvxDummyTextSource::~SvxDummyTextSource()
 {
 };

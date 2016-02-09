@@ -401,12 +401,10 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
 }
 
 
-
 SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
 {
     *this = r;
 }
-
 
 
 SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
@@ -424,7 +422,6 @@ SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
     m_pColorGapFn = r.m_pColorGapFn;
     return *this;
 }
-
 
 
 void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
@@ -534,7 +531,6 @@ sal_uInt16 SvxBorderLine::GetDistance() const
 {
     return (sal_uInt16)Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv );
 }
-
 
 
 bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const

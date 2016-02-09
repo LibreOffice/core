@@ -31,7 +31,6 @@ namespace dbtools
 {
 
 
-
     //= OAutoConnectionDisposer
 
     typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener,

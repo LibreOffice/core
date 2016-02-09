@@ -136,5 +136,4 @@ OUString SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) co
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

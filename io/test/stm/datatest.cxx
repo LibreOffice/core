@@ -95,8 +95,6 @@ protected:
 };
 
 
-
-
 void ODataStreamTest::testInvariant(
     const OUString& TestName,
     const Reference < XInterface >& TestObject )
@@ -220,7 +218,6 @@ sal_Int32 ODataStreamTest::test(
 }
 
 
-
 sal_Bool ODataStreamTest::testPassed()                                      throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
@@ -321,7 +318,6 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     }
 
 }
-
 
 
 /**
@@ -438,7 +434,6 @@ public:
     Reference< XPersistObject > m_ref;
     OUString m_sServiceName;
 };
-
 
 
 Reference <XPropertySetInfo > MyPersistObject::getPropertySetInfo()
@@ -564,8 +559,6 @@ void MyPersistObject::removeVetoableChangeListener(
 {
 
 }
-
-
 
 
 OUString MyPersistObject::getServiceName() throw (RuntimeException)
@@ -887,7 +880,6 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
     ERROR_ASSERT( rIn.is() , "no objectInputStream" );
 
 
-
     // tests, if saving an object with an unknown service name allows
     // reading the data behind the object !
     {
@@ -1033,9 +1025,6 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             markableOut->jumpToMark( nMark );
             markableOut->deleteMark( nMark );
             markableOut->jumpToFurthest();
-
-
-
 
 
             ERROR_ASSERT( 0 != rIn->available() , "no data arrived at input" );

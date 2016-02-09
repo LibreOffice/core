@@ -1023,7 +1023,6 @@ inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
 }
 
 
-
 inline void INetMIMEEncodedWordOutputSink::write(const sal_Unicode * pBegin,
                                                  const sal_Unicode * pEnd)
 {

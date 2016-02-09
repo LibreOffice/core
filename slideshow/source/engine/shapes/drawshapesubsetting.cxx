@@ -42,9 +42,7 @@ namespace slideshow
     {
 
 
-
         // Private methods
-
 
 
         void DrawShapeSubsetting::ensureInitializedNodeTree() const
@@ -218,9 +216,7 @@ namespace slideshow
         }
 
 
-
         // Public methods
-
 
 
         DrawShapeSubsetting::DrawShapeSubsetting() :

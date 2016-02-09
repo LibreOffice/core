@@ -315,7 +315,6 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
 }
 
 
-
 void PresenterPaneBase::CreateWindows (
     const Reference<awt::XWindow>& rxParentWindow,
     const bool bIsWindowVisibleOnCreation)

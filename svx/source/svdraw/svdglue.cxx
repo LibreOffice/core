@@ -276,7 +276,6 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
 }
 
 
-
 void SdrGluePointList::Clear()
 {
     sal_uInt16 nCount=GetCount();

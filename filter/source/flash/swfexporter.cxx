@@ -60,14 +60,12 @@ using com::sun::star::frame::XModel;
 using com::sun::star::lang::XServiceInfo;
 
 
-
 PageInfo::PageInfo()
         : mnBackgroundID( 0 )
         , mnObjectsID( 0)
         , mnForegroundID( 0)
 {
 }
-
 
 
 PageInfo::~PageInfo()
@@ -112,7 +110,6 @@ FlashExporter::FlashExporter(
 }
 
 
-
 FlashExporter::~FlashExporter()
 {
     Flush();
@@ -125,7 +122,6 @@ void FlashExporter::Flush()
 
     maPagesMap.clear();
 }
-
 
 
 const sal_uInt16 cBackgroundDepth = 2;
@@ -398,7 +394,6 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
 }
 
 
-
 sal_Int32 nPlaceDepth;
 // AS: A Slide can have a private background or use its masterpage's background.
 //  We use the checksums on the metafiles to tell if backgrounds are the same and
@@ -502,7 +497,6 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
 }
 
 
-
 /** export's the definition of the shapes inside this drawing page and adds the
     shape infos to the current PageInfo */
 void FlashExporter::exportDrawPageContents( const Reference< XDrawPage >& xPage, bool bStream, bool bMaster )
@@ -510,7 +504,6 @@ void FlashExporter::exportDrawPageContents( const Reference< XDrawPage >& xPage,
     Reference< XShapes > xShapes( xPage, UNO_QUERY );
     exportShapes(xShapes, bStream, bMaster);
 }
-
 
 
 /** export's the definition of the shapes inside this XShapes container and adds the
@@ -543,7 +536,6 @@ void FlashExporter::exportShapes( const Reference< XShapes >& xShapes, bool bStr
             mpWriter->showFrame();
     }
 }
-
 
 
 /** export this shape definition and adds it's info to the current PageInfo */
@@ -651,7 +643,6 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
         OSL_ASSERT(false);
     }
 }
-
 
 
 bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground /* = false */, bool bExportAsJPEG /* = false */)

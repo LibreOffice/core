@@ -473,5 +473,4 @@ com_sun_star_comp_Draw_PresenterHelper_get_implementation(css::uno::XComponentCo
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

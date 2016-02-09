@@ -59,7 +59,6 @@
 class FmFormShell;
 
 
-
 namespace svxform
 {
 
@@ -304,7 +303,6 @@ namespace svxform
         inline OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
         inline XFormsUIHelper1_ref  GetXFormsHelper() const { return m_xUIHelper; }
     };
-
 
 
     typedef std::vector< VclPtr<XFormsPage> >   PageList;

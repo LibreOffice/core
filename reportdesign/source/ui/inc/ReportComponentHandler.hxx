@@ -87,7 +87,6 @@ namespace rptui
         void operator =(ReportComponentHandler &) = delete;
 
 
-
         // override WeakComponentImplHelperBase::disposing()
         // This function is called upon disposing the component,
         // if your component needs special work when it becomes

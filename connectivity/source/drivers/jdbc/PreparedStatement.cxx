@@ -201,7 +201,6 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
 }
 
 
-
 void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_TIME_PARAMETER, parameterIndex, x );
@@ -691,8 +690,6 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
             object = _pEnv->NewGlobalRef( out );
     } //t.pEnv
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,7 +41,6 @@
 #include "../loader.hxx"
 
 
-
 static int GenericMain()
 {
     TCHAR               szTargetFileName[MAX_PATH];
@@ -143,7 +142,6 @@ static int GenericMain()
 }
 
 
-
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 #else
@@ -152,7 +150,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 {
     return GenericMain();
 }
-
 
 
 #ifdef __MINGW32__

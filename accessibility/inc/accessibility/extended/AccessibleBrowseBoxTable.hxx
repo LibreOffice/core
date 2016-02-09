@@ -144,9 +144,7 @@ protected:
 };
 
 
-
 } // namespace accessibility
-
 
 
 #endif

@@ -199,7 +199,6 @@ public:
 };
 
 
-
 // XServiceInfo
 
 OUString ServiceImpl::getImplementationName()
@@ -221,19 +220,12 @@ Sequence< OUString > ServiceImpl::getSupportedServiceNames()
 }
 
 
-
-
 static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference< XInterface >( (XPerformanceTest *)new ServiceImpl( xSMgr ) );
 }
 
 }
-
-
-
-
-
 
 
 extern "C"

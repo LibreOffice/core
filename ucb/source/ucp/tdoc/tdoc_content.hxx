@@ -85,7 +85,6 @@ private:
 };
 
 
-
 class Content : public ::ucbhelper::ContentImplHelper,
                 public css::ucb::XContentCreator
 {

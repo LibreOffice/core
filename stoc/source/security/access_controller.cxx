@@ -67,7 +67,6 @@ static OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 const char s_acRestriction[] = "access-control.restriction";
 
 
-
 /** ac context intersects permissions of two ac contexts
 */
 class acc_Intersection
@@ -257,7 +256,6 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
         return Any();
     }
 }
-
 
 
 static inline Reference< security::XAccessControlContext > getDynamicRestriction(
@@ -521,7 +519,6 @@ static void dumpPermissions(
     OSL_TRACE( "> permission dump done" );
 }
 #endif
-
 
 
 inline void AccessController::clearPostPoned()

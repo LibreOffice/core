@@ -88,7 +88,6 @@ namespace
 {
 
 
-
 // EXPRESSION NODES
 
 
@@ -761,9 +760,7 @@ public:
 };
 
 
-
 // FUNCTION PARSER
-
 
 
 typedef const sal_Char* StringIteratorT;
@@ -1156,7 +1153,6 @@ const ParserContextSharedPtr& getParserContext()
 }
 
 namespace EnhancedCustomShape  {
-
 
 
 ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )

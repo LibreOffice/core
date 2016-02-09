@@ -1361,7 +1361,6 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 }
 
 
-
 void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
         beans::PropertyValues aMediaProperties( 1 );

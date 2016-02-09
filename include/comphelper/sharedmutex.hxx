@@ -28,7 +28,6 @@ namespace comphelper
 {
 
 
-
     //= SharedMutex
 
     class COMPHELPER_DLLPUBLIC SharedMutex

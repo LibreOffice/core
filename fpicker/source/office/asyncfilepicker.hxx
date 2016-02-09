@@ -34,8 +34,6 @@ namespace svt
 {
 
 
-
-
     //= AsyncPickerAction
 
     class AsyncPickerAction : public salhelper::SimpleReferenceObject

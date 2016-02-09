@@ -104,10 +104,8 @@ const sal_uInt8 TAG_FRAMELABEL      = 43;
 const sal_uInt8 TAG_HEADER          = 0xff;
 
 
-
 /** converts a double to a 16.16 flash fixed value */
 sal_uInt32 getFixed( double fValue );
-
 
 
 typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
@@ -120,7 +118,6 @@ struct ltuint16
     return s1 < s2;
   }
 };
-
 
 
 /** container class to create bit structures */
@@ -143,7 +140,6 @@ private:
     sal_uInt8 mnBitPos;
     sal_uInt8 mnCurrentByte;
 };
-
 
 
 /** this class collects all used glyphs for a given fonts and maps
@@ -172,7 +168,6 @@ private:
 };
 
 typedef std::vector<FlashFont*> FontMap;
-
 
 
 /** this class helps creating flash tags */
@@ -205,7 +200,6 @@ private:
 };
 
 
-
 /** this class helps to define flash sprites */
 class Sprite
 {
@@ -221,7 +215,6 @@ private:
     sal_uInt16  mnId;
     sal_uInt32  mnFrames;
 };
-
 
 
 /** this class stores a flash fill style for shapes */
@@ -251,7 +244,6 @@ private:
     Gradient        maGradient;
     Rectangle       maBoundRect;
 };
-
 
 
 /** this class creates a flash movie from vcl geometry */
@@ -422,7 +414,6 @@ private:
     sal_uInt8 mnGlobalTransparency;
     sal_Int32 mnJPEGCompressMode;
 };
-
 
 
 }

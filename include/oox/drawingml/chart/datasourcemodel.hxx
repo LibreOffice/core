@@ -28,7 +28,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct DataSequenceModel
 {
     typedef ::std::map< sal_Int32, css::uno::Any > AnyMap;
@@ -43,7 +42,6 @@ struct DataSequenceModel
 };
 
 
-
 struct DataSourceModel
 {
     typedef ModelRef< DataSequenceModel > DataSequenceRef;
@@ -53,7 +51,6 @@ struct DataSourceModel
     explicit            DataSourceModel();
                         ~DataSourceModel();
 };
-
 
 
 } // namespace chart

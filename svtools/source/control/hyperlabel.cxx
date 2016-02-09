@@ -24,7 +24,6 @@
 #include <vcl/tabpage.hxx>
 
 
-
 namespace svt
 {
     class HyperLabelImpl
@@ -193,7 +192,6 @@ namespace svt
     {
         SetText(_rText);
     }
-
 
 
     void HyperLabel::DataChanged( const DataChangedEvent& rDCEvt )

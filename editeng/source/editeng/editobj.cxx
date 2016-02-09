@@ -60,8 +60,6 @@ using std::endl;
 using namespace com::sun::star;
 
 
-
-
 XEditAttribute* MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     // Create thw new attribute in the pool
@@ -660,7 +658,6 @@ void EditTextObjectImpl::DestroyAttrib( XEditAttribute* pAttr )
     pPool->Remove( *pAttr->GetItem() );
     delete pAttr;
 }
-
 
 
 ContentInfo* EditTextObjectImpl::CreateAndInsertContent()

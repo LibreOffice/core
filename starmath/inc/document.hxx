@@ -68,7 +68,6 @@ class SmDocShell;
 class EditEngine;
 
 
-
 class SmPrinterAccess
 {
     VclPtr<Printer> pPrinter;
@@ -81,10 +80,7 @@ public:
 };
 
 
-
-
 void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool);
-
 
 
 class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
@@ -106,7 +102,6 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     bool                bIsFormulaArranged;
     std::unique_ptr<SmCursor> pCursor;
     std::set< OUString >    aUsedSymbols;   // to export used symbols only when saving
-
 
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

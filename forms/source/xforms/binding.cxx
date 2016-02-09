@@ -99,8 +99,6 @@ using com::sun::star::xml::dom::events::XEventTarget;
 using com::sun::star::xsd::XDataType;
 
 
-
-
 #define EXCEPT(msg) OUString(msg),static_cast<XValueBinding*>(this)
 
 #define HANDLE_BindingID 0
@@ -295,7 +293,6 @@ OUString Binding::explainInvalid()
 }
 
 
-
 EvaluationContext Binding::getEvaluationContext() const
 {
     OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
@@ -327,9 +324,6 @@ Binding* SAL_CALL Binding::getBinding( const Reference<XPropertySet>& xPropertyS
         ? reinterpret_cast<Binding*>( xTunnel->getSomething(getUnoTunnelID()))
         : nullptr;
 }
-
-
-
 
 
 void Binding::setBindingID( const OUString& sBindingID )
@@ -1009,9 +1003,6 @@ void Binding::_checkBindingID()
 }
 
 
-
-
-
 // XValueBinding
 
 
@@ -1078,7 +1069,6 @@ void Binding::setValue( const css::uno::Any& aValue )
     else
         throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
 }
-
 
 
 // XListEntry Source
@@ -1175,7 +1165,6 @@ void Binding::removeListEntryListener( const css::uno::Reference<css::form::bind
 }
 
 
-
 // XValidator
 
 
@@ -1224,8 +1213,6 @@ void Binding::removeValidityConstraintListener(
 }
 
 
-
-
 // xml::dom::event::XEventListener
 
 
@@ -1256,7 +1243,6 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
     // our value was maybe modified
     valueModified();
 }
-
 
 
 // lang::XUnoTunnel
@@ -1351,8 +1337,6 @@ void Binding::removeModifyListener(
     if( aIter != maModifyListeners.end() )
         maModifyListeners.erase( aIter );
 }
-
-
 
 
 OUString Binding::getName()

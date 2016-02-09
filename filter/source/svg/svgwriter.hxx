@@ -126,7 +126,6 @@ struct SVGShapeDescriptor
     css::drawing::LineCap       maLineCap;
 
 
-
     SVGShapeDescriptor() :
         maShapeFillColor( Color( COL_TRANSPARENT ) ),
         maShapeLineColor( Color( COL_TRANSPARENT ) ),

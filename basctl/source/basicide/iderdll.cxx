@@ -148,7 +148,6 @@ ExtraData* Dll::GetExtraData ()
 // basctl::ExtraData
 
 
-
 ExtraData::ExtraData () :
     pSearchItem(new SvxSearchItem(SID_SEARCH_ITEM)),
     bChoosingMacro(false),

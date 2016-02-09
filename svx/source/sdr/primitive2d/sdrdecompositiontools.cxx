@@ -46,10 +46,8 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
 
-
 class TransparencePrimitive2D;
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

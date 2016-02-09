@@ -63,7 +63,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
 
-
 class DocBasicItem : public ::cppu::WeakImplHelper< util::XCloseListener >
 {
 public:
@@ -93,7 +92,6 @@ private:
     bool            mbDocClosed;
     bool            mbDisposed;
 };
-
 
 
 DocBasicItem::DocBasicItem( StarBASIC& rDocBasic ) :
@@ -172,7 +170,6 @@ void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ ) thr
 }
 
 
-
 namespace {
 
 typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
@@ -227,7 +224,6 @@ StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
 }
 
 } // namespace
-
 
 
 SbxObject* StarBASIC::getVBAGlobals( )
@@ -485,7 +481,6 @@ SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 }
 
 
-
 // SbFormFactory, show user forms by: dim as new <user form name>
 
 class SbFormFactory : public SbxFactory
@@ -527,7 +522,6 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
     }
     return nullptr;
 }
-
 
 
 // SbTypeFactory
@@ -625,7 +619,6 @@ SbxObject* createUserTypeImpl( const OUString& rClassName )
     SbxObject* pRetObj = GetSbData()->pTypeFac->CreateObject( rClassName );
     return pRetObj;
 }
-
 
 
 SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )

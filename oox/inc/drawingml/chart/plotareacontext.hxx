@@ -27,7 +27,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct View3DModel;
 
 /** Handler for a chart plot area context (c:plotArea element).
@@ -40,7 +39,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 struct WallFloorModel;
@@ -58,7 +56,6 @@ public:
 };
 
 
-
 struct DataTableModel;
 
 /** Handler for a data table context (c:dTable element).
@@ -73,7 +70,6 @@ public:
 };
 
 
-
 struct PlotAreaModel;
 
 /** Handler for a chart plot area context (c:plotArea element).
@@ -86,7 +82,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

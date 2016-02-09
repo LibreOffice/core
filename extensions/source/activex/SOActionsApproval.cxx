@@ -26,8 +26,6 @@
 #include <sal/macros.h>
 
 
-
-
 STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =

@@ -204,9 +204,6 @@ void DocumentDrawModelManager::ReleaseDrawModel()
 }
 
 
-
-
-
 const SwDrawModel* DocumentDrawModelManager::GetDrawModel() const
 {
     return mpDrawModel;

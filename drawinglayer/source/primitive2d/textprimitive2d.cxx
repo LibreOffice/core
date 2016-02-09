@@ -26,9 +26,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace
@@ -81,7 +79,6 @@ namespace
         return aFontScale;
     }
 } // end of anonymous namespace
-
 
 
 namespace drawinglayer

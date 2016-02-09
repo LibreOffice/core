@@ -1590,7 +1590,6 @@ static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int3
  }
 
 
-
 void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );

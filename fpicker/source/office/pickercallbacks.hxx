@@ -30,7 +30,6 @@ namespace svt
 {
 
 
-
     class IFilePickerController
     {
     public:

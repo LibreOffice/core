@@ -138,7 +138,6 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, 
 }
 
 
-
 OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
@@ -317,7 +316,6 @@ Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeExcept
 
     return makeAny(m_aLastWarning);
 }
-
 
 
 void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)

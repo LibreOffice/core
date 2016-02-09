@@ -32,12 +32,7 @@ using namespace http_dav_ucp;
 using namespace com::sun::star;
 
 
-
-
 // DAVAuthListener_Impl Implementation.
-
-
-
 
 
 // virtual
@@ -122,12 +117,7 @@ int DAVAuthListener_Impl::authenticate(
 }
 
 
-
-
 // DAVResourceAccess Implementation.
-
-
-
 
 
 DAVResourceAccess::DAVResourceAccess(

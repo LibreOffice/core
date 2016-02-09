@@ -34,8 +34,6 @@ typedef ::cppu::WeakImplHelper< css::beans::XPropertySet,
                                 css::beans::XPropertyAccess > SbPropertyValuesHelper;
 
 
-
-
 class SbPropertyValues:     public SbPropertyValuesHelper
 {
     SbPropertyValueArr_Impl m_aPropVals;

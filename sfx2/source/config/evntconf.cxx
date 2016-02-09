@@ -48,7 +48,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-
 using namespace com::sun::star;
 
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
@@ -131,9 +130,6 @@ void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName
 {
     aEventsList.push_back( new SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName ) );
 }
-
-
-
 
 
 uno::Any CreateEventData_Impl( const SvxMacro *pMacro )

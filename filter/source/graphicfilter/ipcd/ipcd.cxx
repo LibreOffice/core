@@ -168,7 +168,6 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 }
 
 
-
 void PCDReader::CheckPCDImagePacFile()
 {
     char Buf[ 8 ];
@@ -181,7 +180,6 @@ void PCDReader::CheckPCDImagePacFile()
 }
 
 
-
 void PCDReader::ReadOrientation()
 {
     if ( !bStatus )
@@ -190,7 +188,6 @@ void PCDReader::ReadOrientation()
     m_rPCD.ReadUChar( nOrientation );
     nOrientation &= 0x03;
 }
-
 
 
 void PCDReader::ReadImage()

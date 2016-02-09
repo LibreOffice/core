@@ -42,14 +42,10 @@ sdr::contact::ViewContact* E3dSphereObj::CreateObjectSpecificViewContact()
 }
 
 
-
 sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dSphereProperties(*this);
 }
-
-
-
 
 
 // Build Sphere from polygon facets in latitude and longitude

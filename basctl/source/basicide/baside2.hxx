@@ -220,7 +220,6 @@ public:
 };
 
 
-
 class WatchWindow : public DockingWindow
 {
 private:

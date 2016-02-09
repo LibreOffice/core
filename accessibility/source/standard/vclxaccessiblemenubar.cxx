@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-
 // class VCLXAccessibleMenuBar
 
 
@@ -52,13 +51,11 @@ VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )
 }
 
 
-
 VCLXAccessibleMenuBar::~VCLXAccessibleMenuBar()
 {
     if ( m_pWindow )
         m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
 }
-
 
 
 bool VCLXAccessibleMenuBar::IsFocused()
@@ -72,7 +69,6 @@ bool VCLXAccessibleMenuBar::IsFocused()
 }
 
 
-
 IMPL_LINK_TYPED( VCLXAccessibleMenuBar, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     OSL_ENSURE( rEvent.GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
@@ -81,7 +77,6 @@ IMPL_LINK_TYPED( VCLXAccessibleMenuBar, WindowEventListener, VclWindowEvent&, rE
         ProcessWindowEvent( rEvent );
     }
 }
-
 
 
 void VCLXAccessibleMenuBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -135,7 +130,6 @@ OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException,
 }
 
 
-
 Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleMenuBar" };
@@ -177,7 +171,6 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeEx
 }
 
 
-
 sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -195,7 +188,6 @@ sal_Int32 VCLXAccessibleMenuBar::getBackground(  ) throw (RuntimeException, std:
 
     return Application::GetSettings().GetStyleSettings().GetMenuBarColor().GetColor();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

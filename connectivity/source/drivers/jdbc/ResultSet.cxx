@@ -355,13 +355,11 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 }
 
 
-
 OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getString",mID,columnIndex);
 }
-
 
 
 ::com::sun::star::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
@@ -372,7 +370,6 @@ OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(S
     // WARNING: the caller becomes the owner of the returned pointer
     return out ? static_cast <com::sun::star::util::Time> (java_sql_Time( t.pEnv, out )) : ::com::sun::star::util::Time();
 }
-
 
 
 ::com::sun::star::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
@@ -604,7 +601,6 @@ void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateLong", "(IJ)V", mID, columnIndex, x);
 }
-
 
 
 void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -996,8 +992,6 @@ void SAL_CALL java_sql_ResultSet::release() throw()
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

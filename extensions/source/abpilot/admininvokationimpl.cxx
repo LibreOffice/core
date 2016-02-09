@@ -30,7 +30,6 @@
 #include <vcl/waitobj.hxx>
 
 
-
 namespace abp
 {
 

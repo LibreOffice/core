@@ -152,7 +152,6 @@ namespace slideshow
         }
 
 
-
         // HSLColor
 
 
@@ -192,9 +191,6 @@ namespace slideshow
                                     maHSLTriple.mnSaturation ) )
         {
         }
-
-
-
 
 
         bool operator==( const HSLColor& rLHS, const HSLColor& rRHS )
@@ -265,9 +261,7 @@ namespace slideshow
         }
 
 
-
         // RGBColor
-
 
 
         RGBColor::RGBTriple::RGBTriple() :
@@ -307,8 +301,6 @@ namespace slideshow
                                   truncateRangeStd( rColor.getLuminance() ) ) )
         {
         }
-
-
 
 
         ::cppcanvas::Color::IntSRGBA RGBColor::getIntegerColor() const

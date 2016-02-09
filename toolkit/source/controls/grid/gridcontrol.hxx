@@ -80,7 +80,6 @@ public:
 };
 
 
-
 // = UnoGridControl
 
 typedef ::cppu::ImplInheritanceHelper  <   UnoControlBase

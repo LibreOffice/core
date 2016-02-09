@@ -299,7 +299,6 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*c
 }
 
 
-
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRow", *this );
@@ -369,13 +368,10 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 }
 
 
-
-
 ::com::sun::star::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
-
 
 
 ::com::sun::star::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -1213,7 +1209,6 @@ OLEVariant ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex ) throw(SQ
     aField.get_Value(m_aValue);
     return m_aValue;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

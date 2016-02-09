@@ -42,7 +42,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 //  class AccessibleTabBar
 
 
@@ -147,7 +146,6 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleChildCount() throw (RuntimeE
 }
 
 
-
 Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -157,7 +155,6 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleChild( sal_In
 
     return Reference< XAccessible >();
 }
-
 
 
 Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleParent() throw (RuntimeException, std::exception)
@@ -174,13 +171,11 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleParent() thro
 }
 
 
-
 sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleIndexInParent() throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     return m_nIndexInParent - 1;
 }
-
 
 
 sal_Int16 VCLXAccessibleHeaderBarItem::getAccessibleRole() throw (RuntimeException, std::exception)
@@ -191,14 +186,12 @@ sal_Int16 VCLXAccessibleHeaderBarItem::getAccessibleRole() throw (RuntimeExcepti
 }
 
 
-
 OUString VCLXAccessibleHeaderBarItem::getAccessibleDescription() throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     OUString sDescription;
     return sDescription;
 }
-
 
 
 OUString VCLXAccessibleHeaderBarItem::getAccessibleName() throw (RuntimeException, std::exception)
@@ -212,7 +205,6 @@ OUString VCLXAccessibleHeaderBarItem::getAccessibleName() throw (RuntimeExceptio
 }
 
 
-
 Reference< XAccessibleRelationSet > VCLXAccessibleHeaderBarItem::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -221,7 +213,6 @@ Reference< XAccessibleRelationSet > VCLXAccessibleHeaderBarItem::getAccessibleRe
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-
 
 
 Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
@@ -244,7 +235,6 @@ Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleState
 }
 
 
-
 css::lang::Locale VCLXAccessibleHeaderBarItem::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -264,7 +254,6 @@ Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleAtPoint( cons
 }
 
 
-
 sal_Int32 VCLXAccessibleHeaderBarItem::getForeground() throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -272,7 +261,6 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getForeground() throw (RuntimeException, 
     sal_Int32 nColor = 0;
     return nColor;
 }
-
 
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getBackground() throw (RuntimeException, std::exception)
@@ -296,7 +284,6 @@ Reference< awt::XFont > VCLXAccessibleHeaderBarItem::getFont() throw (RuntimeExc
 }
 
 
-
 OUString VCLXAccessibleHeaderBarItem::getTitledBorderText() throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -304,7 +291,6 @@ OUString VCLXAccessibleHeaderBarItem::getTitledBorderText() throw (RuntimeExcept
     OUString sText;
     return sText;
 }
-
 
 
 OUString VCLXAccessibleHeaderBarItem::getToolTipText() throw (RuntimeException, std::exception)

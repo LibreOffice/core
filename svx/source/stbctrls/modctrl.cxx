@@ -81,7 +81,6 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
 }
 
 
-
 void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
@@ -107,7 +106,6 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 }
 
 
-
 IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
 {
     if (pTimer == nullptr)
@@ -118,7 +116,6 @@ IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
 
     _repaint();
 }
-
 
 
 void SvxModifyControl::_repaint()
@@ -167,7 +164,6 @@ void SvxModifyControl::Click()
     Sequence<PropertyValue> aArgs;
     execute(".uno:Save", aArgs);
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

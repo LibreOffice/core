@@ -305,7 +305,6 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
 }
 
 
-
 static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                     sal_Int32 nStartCol, sal_Int32 nStartRow, bool bHasHeaders,
                     const ::Date& rNullDate,
@@ -418,7 +417,6 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 
 //  rValue.setTypeKind(nType);
 }
-
 
 
 static OUString lcl_GetColumnStr( sal_Int32 nColumn )

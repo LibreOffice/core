@@ -359,7 +359,6 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, co
 }
 
 
-
 // DllUnregisterServer - Removes entries from the system registry
 HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
 {
@@ -479,7 +478,6 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 }
 
 
-
 // DllRegisterServerDoc - Adds entries to the system registry
 
 #define SUPPORTED_MSEXT_NUM 7
@@ -580,7 +578,6 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 
     return hr;
 }
-
 
 
 // DllUnregisterServerDoc - Removes entries from the system registry

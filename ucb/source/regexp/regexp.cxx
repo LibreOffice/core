@@ -31,9 +31,7 @@ using namespace com::sun::star;
 using namespace ucb_impl;
 
 
-
 //  Regexp
-
 
 
 inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,

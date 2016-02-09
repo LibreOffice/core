@@ -34,7 +34,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-
 namespace vcl { class Region; }
 class SdrObjList;
 class SdrObject;
@@ -58,7 +57,6 @@ namespace sdr
 // typedefs for a list of SdrPageWindow
 class SdrPageWindow;
 typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
-
 
 
 class SVX_DLLPUBLIC SdrPageView
@@ -266,7 +264,6 @@ public:
     void SetApplicationDocumentColor(Color aDocumentColor);
     Color GetApplicationDocumentColor() const { return maDocumentColor;}
 };
-
 
 
 #endif // INCLUDED_SVX_SVDPAGV_HXX

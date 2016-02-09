@@ -109,7 +109,6 @@ OXMLReport::~OXMLReport()
 }
 
 
-
 void OXMLReport::impl_initRuntimeDefaults() const
 {
     OSL_PRECOND( m_xComponent.is(), "OXMLReport::impl_initRuntimeDefaults: no component!" );
@@ -125,7 +124,6 @@ void OXMLReport::impl_initRuntimeDefaults() const
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-
 
 
 SvXMLImportContext* OXMLReport::CreateChildContext(

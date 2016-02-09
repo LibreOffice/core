@@ -4825,7 +4825,6 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-
 void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
 {
     if ( pEntry != nullptr )

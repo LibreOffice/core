@@ -135,12 +135,6 @@ inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
 }
 
 
-
-
-
-
-
-
 inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy )
 {
     cppu_unoInterfaceProxy * pThis =
@@ -257,12 +251,6 @@ inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
 }
 
 
-
-
-
-
-
-
 inline void SAL_CALL cppu_Mapping_acquire( uno_Mapping * pMapping )
 {
     static_cast< cppu_Mapping * >( pMapping )->pBridge->acquire();
@@ -373,10 +361,6 @@ inline void SAL_CALL cppu_ext_getMapping(
         *ppMapping = pMapping;
     }
 }
-
-
-
-
 
 
 // environment init stuff

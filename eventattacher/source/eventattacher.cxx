@@ -49,7 +49,6 @@ using namespace cppu;
 using namespace osl;
 
 
-
 #define SERVICENAME "com.sun.star.script.EventAttacher"
 #define IMPLNAME    "com.sun.star.comp.EventAttacher"
 
@@ -103,7 +102,6 @@ Reference< XInterface > createAllListenerAdapter
     }
     return xAdapter;
 }
-
 
 
 // InvocationToAllListenerMapper
@@ -280,7 +278,6 @@ private:
 };
 
 
-
 EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxContext )
     : m_xContext( rxContext )
 {
@@ -412,7 +409,6 @@ Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterS
 }
 
 
-
 //*** Private helper methods ***
 Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 {
@@ -423,8 +419,6 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     }
     return m_xConverter;
 }
-
-
 
 
 // Implementation of an EventAttacher-related AllListeners, which brings
@@ -550,7 +544,6 @@ void FilterAllListenerImpl::disposing(const EventObject& )
 {
     // TODO: ???
 }
-
 
 
 Reference< XEventListener > EventAttacherImpl::attachListener
@@ -910,7 +903,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL evtatt_component_getFactory(
     return pRet;
 }
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

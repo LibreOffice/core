@@ -29,10 +29,8 @@
 class BasicManager;
 
 
-
 namespace basprov
 {
-
 
 
     //  class BasicLibraryNodeImpl

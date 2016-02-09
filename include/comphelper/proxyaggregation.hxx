@@ -76,7 +76,6 @@ namespace comphelper
 {
 
 
-
     //= OProxyAggregation
 
     /** helper class for aggregating a proxy for a foreign object
@@ -214,7 +213,6 @@ namespace comphelper
 
 
 }   // namespace comphelper
-
 
 
 #endif // INCLUDED_COMPHELPER_PROXYAGGREGATION_HXX

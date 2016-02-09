@@ -52,7 +52,6 @@ struct SfxStbCtrlFactory
 };
 
 
-
 class CommandEvent;
 class MouseEvent;
 class UserDrawEvent;
@@ -118,7 +117,6 @@ public:
     static void RegisterStatusBarControl(SfxModule*, const SfxStbCtrlFactory&);
 
 };
-
 
 
 #define SFX_DECL_STATUSBAR_CONTROL() \

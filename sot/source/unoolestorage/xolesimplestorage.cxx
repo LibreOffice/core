@@ -270,7 +270,6 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
 //  XNameContainer
 
 
-
 void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::Any& aElement )
         throw ( lang::IllegalArgumentException,
                 container::ElementExistException,
@@ -576,7 +575,6 @@ sal_Bool SAL_CALL OLESimpleStorage::hasElements()
 //  XComponent
 
 
-
 void SAL_CALL OLESimpleStorage::dispose()
         throw ( uno::RuntimeException, std::exception )
 {
@@ -632,7 +630,6 @@ void SAL_CALL OLESimpleStorage::removeEventListener(
 
 
 //  XTransactedObject
-
 
 
 void SAL_CALL OLESimpleStorage::commit()

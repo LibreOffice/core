@@ -26,7 +26,6 @@
 #include <comphelper/types.hxx>
 
 
-
 using namespace connectivity;
 using namespace connectivity::hsqldb;
 using namespace ::com::sun::star::uno;
@@ -148,7 +147,6 @@ Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException, std::e
     }
     return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

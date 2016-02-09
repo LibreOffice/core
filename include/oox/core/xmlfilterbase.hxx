@@ -97,7 +97,6 @@ public:
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
 
-
     OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart );
 
     /** Imports a fragment using the passed fragment handler, which contains

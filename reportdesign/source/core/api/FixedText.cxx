@@ -180,7 +180,6 @@ void SAL_CALL OFixedText::setDataField( const OUString& /*_datafield*/ ) throw (
 }
 
 
-
 sal_Bool SAL_CALL OFixedText::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -321,7 +320,6 @@ OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException, std
         return m_aProps.aComponent.m_xShape->getShapeType();
     return OUString("com.sun.star.drawing.ControlShape");
 }
-
 
 
 } // namespace reportdesign

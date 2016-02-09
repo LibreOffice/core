@@ -316,5 +316,4 @@ void SAL_CALL OFSInputStreamContainer::removeEventListener( const uno::Reference
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

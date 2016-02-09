@@ -82,8 +82,6 @@ using namespace xforms;
 #endif
 
 
-
-
 // The Model
 
 
@@ -95,7 +93,6 @@ void Model::ensureAtLeastOneInstance()
         newInstance( OUString(), OUString(), true );
     }
 }
-
 
 
 /** Model default constructor; create empty model */
@@ -215,7 +212,6 @@ void Model::dbg_assertInvariant() const
 #endif
 
 
-
 // MIP management
 void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
 {
@@ -270,7 +266,6 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
 }
 
 
-
 void Model::rebind()
 {
     OSL_ENSURE( mpBindings != nullptr, "bindings?" );
@@ -284,7 +279,6 @@ void Model::rebind()
         pBind->update();
     }
 }
-
 
 
 void Model::deferNotifications( bool bDefer )
@@ -424,8 +418,6 @@ bool Model::isValid() const
 }
 
 
-
-
 // implement xforms::XModel
 
 
@@ -554,8 +546,6 @@ css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance
 }
 
 
-
-
 // bindings management
 
 
@@ -588,8 +578,6 @@ css::uno::Reference<css::container::XSet> Model::getBindings()
     DBG_INVARIANT();
     return mxBindings;
 }
-
-
 
 
 // submission management

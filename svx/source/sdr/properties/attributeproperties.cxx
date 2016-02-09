@@ -43,7 +43,6 @@
 #include <svl/smplhint.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

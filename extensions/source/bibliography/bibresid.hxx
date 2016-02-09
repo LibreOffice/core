@@ -23,7 +23,6 @@
 #include <tools/resid.hxx>
 
 
-
 class BibResId : public ResId
 {
  public:

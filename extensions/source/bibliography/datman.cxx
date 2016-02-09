@@ -235,7 +235,6 @@ class MappingDialog_Impl : public ModalDialog
     bool        bModified;
 
 
-
     DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK_TYPED(ListBoxSelectHdl, ListBox&, void);
 

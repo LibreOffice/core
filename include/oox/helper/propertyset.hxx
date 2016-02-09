@@ -30,7 +30,6 @@ namespace oox {
 class PropertyMap;
 
 
-
 /** A wrapper for a UNO property set.
 
     This class provides functions to silently get and set properties (without
@@ -136,7 +135,6 @@ private:
     css::uno::Reference< css::beans::XPropertySetInfo >
                         mxPropSetInfo;      ///< Property information.
 };
-
 
 
 } // namespace oox

@@ -79,7 +79,6 @@ struct SvxNumSettings_Impl
 typedef std::vector<std::unique_ptr<SvxNumSettings_Impl> > SvxNumSettingsArr_Impl;
 
 
-
 class SvxSingleNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -114,8 +113,6 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
-
-
 
 
 class SvxBulletPickTabPage : public SfxTabPage
@@ -198,7 +195,6 @@ public:
                                 sBulletCharFormatName = rBulName;}
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
-
 
 
 class SvxBitmapPickTabPage : public SfxTabPage

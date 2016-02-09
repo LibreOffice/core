@@ -993,7 +993,6 @@ namespace pcr
         }
 
 
-
         LineDescriptor aDescriptor;
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
         aDescriptor.DisplayName = sDisplayName;
@@ -1002,7 +1001,6 @@ namespace pcr
         sal_Int16 nControlType = PropertyControlType::TextField;
         bool bReadOnly = false;
         aDescriptor.Control.clear();
-
 
 
         bool bNeedDefaultStringIfVoidAllowed = false;

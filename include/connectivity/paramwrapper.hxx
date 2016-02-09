@@ -44,7 +44,6 @@ namespace param
 {
 
 
-
     //= ParameterWrapper
 
     /** wraps a parameter column as got from an SQLQueryComposer, so that it has an additional

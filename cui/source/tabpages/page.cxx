@@ -89,7 +89,6 @@ const sal_uInt16 aArr[] =
 };
 
 
-
 sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 {
     for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
@@ -99,14 +98,12 @@ sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 }
 
 
-
 sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
         return 0;
     return aArr[nPos];
 }
-
 
 
 Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBox )
@@ -118,7 +115,6 @@ Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBo
     aSz.Width() += rShadow.CalcShadowSpace( SvxShadowItemSide::RIGHT ) + rBox.CalcLineSpace( SvxBoxItemLine::RIGHT );
     return aSz;
 }
-
 
 
 long ConvertLong_Impl( const long nIn, SfxMapUnit eUnit )
@@ -138,7 +134,6 @@ bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
     else
         return false;
 }
-
 
 
 #define MARGIN_LEFT     ( (MarginPosition)0x0001 )
@@ -362,7 +357,6 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 }
 
 
-
 SvxPageDescPage::~SvxPageDescPage()
 {
     disposeOnce();
@@ -408,7 +402,6 @@ void SvxPageDescPage::dispose()
 }
 
 
-
 void SvxPageDescPage::Init_Impl()
 {
         // adjust the handler
@@ -440,7 +433,6 @@ void SvxPageDescPage::Init_Impl()
     m_pVertBox->SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
 
 }
-
 
 
 void SvxPageDescPage::Reset( const SfxItemSet* rSet )
@@ -693,14 +685,12 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 }
 
 
-
 void SvxPageDescPage::FillUserData()
 {
     if ( SVX_PAGE_MODE_PRESENTATION == eMode )
         SetUserData( m_pAdaptBox->IsChecked() ? OUString("1") : OUString("0") ) ;
 
 }
-
 
 
 bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
@@ -926,7 +916,6 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
 {
     // switch inside outside
@@ -948,7 +937,6 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
     }
     UpdateExample_Impl( true );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
@@ -983,7 +971,6 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
     m_pPaperTrayBox->SelectEntry( aOldName );
     m_pPaperTrayBox->SetUpdateMode( true );
 }
-
 
 
 IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
@@ -1056,7 +1043,6 @@ IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
@@ -1078,7 +1064,6 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
     }
     UpdateExample_Impl( true );
 }
-
 
 
 IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
@@ -1106,7 +1091,6 @@ IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
         UpdateExample_Impl( true );
     }
 }
-
 
 
 void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
@@ -1176,7 +1160,6 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPageDescPage, BorderModify_Impl, Edit&, void)
 {
     if ( !bBorderModified )
@@ -1204,7 +1187,6 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
         m_pBspWin->ResetBackground();
     m_pBspWin->Invalidate();
 }
-
 
 
 void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
@@ -1464,7 +1446,6 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 }
 
 
-
 void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 {
     InitHeadFoot_Impl( rSet );
@@ -1472,7 +1453,6 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
     ResetBackground_Impl( rSet );
     RangeHdl_Impl( *m_pPaperWidthEdit );
 }
-
 
 
 SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1526,7 +1506,6 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPageDescPage, RangeHdl_Impl, Control&, void)
@@ -1596,7 +1575,6 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, RangeHdl_Impl, Control&, void)
 }
 
 
-
 void SvxPageDescPage::CalcMargin_Impl()
 {
     // current values for page margins
@@ -1639,7 +1617,6 @@ void SvxPageDescPage::CalcMargin_Impl()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPageDescPage, CenterHdl_Impl, Button*, void)
 {
     m_pBspWin->SetHorz( m_pHorzBox->IsChecked() );
@@ -1662,7 +1639,6 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 }
 
 
-
 IMPL_LINK_TYPED( SvxPageDescPage, RegisterModify, Button*, pBox, void )
 {
     bool bEnable = false;
@@ -1675,7 +1651,6 @@ IMPL_LINK_TYPED( SvxPageDescPage, RegisterModify, Button*, pBox, void )
     m_pRegisterFT->Enable( bEnable );
     m_pRegisterLB->Enable( bEnable );
 }
-
 
 
 void SvxPageDescPage::DisableVerticalPageDir()

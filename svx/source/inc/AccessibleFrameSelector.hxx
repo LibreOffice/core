@@ -46,7 +46,6 @@ class FrameSelector;
 namespace a11y {
 
 
-
 class AccFrameSelector :
     public ::cppu::WeakImplHelper<
                 css::accessibility::XAccessible,
@@ -124,7 +123,6 @@ private:
 
     ::comphelper::AccessibleEventNotifier::TClientId    mnClientId;
 };
-
 
 
 }

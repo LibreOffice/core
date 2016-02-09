@@ -374,7 +374,6 @@ void SdrMarkView::UndirtyMrkPnt() const
 }
 
 
-
 bool SdrMarkView::HasMarkableGluePoints() const
 {
     bool bRet=false;

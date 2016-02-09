@@ -25,9 +25,6 @@
 #include <osl/diagnose.h>
 
 
-
-
-
 CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, HWND aParentHandle)
 {
     OSL_PRECOND(IsWindow(aControlHandle),"Invalid control handle");
@@ -65,9 +62,6 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
 
     return new CDummyCustomControl(aControlHandle,aParentHandle);
 }
-
-
-
 
 
 CCustomControl* CCustomControlFactory::CreateCustomControlContainer()

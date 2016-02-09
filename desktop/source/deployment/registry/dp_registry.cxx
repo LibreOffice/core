@@ -170,7 +170,6 @@ OUString normalizeMediaType( OUString const & mediaType )
 }
 
 
-
 void PackageRegistryImpl::packageRemoved(
     OUString const & url, OUString const & mediaType)
     throw (css::deployment::DeploymentException,

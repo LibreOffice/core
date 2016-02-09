@@ -47,7 +47,6 @@ namespace dbtools
 {
 
 
-
 //= Special exception if cancel is pressed in DBA UI
 
 enum OOoBaseErrorCode

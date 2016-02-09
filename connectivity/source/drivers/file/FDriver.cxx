@@ -229,7 +229,4 @@ OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xCo
 }
 
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

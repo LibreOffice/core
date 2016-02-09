@@ -108,7 +108,6 @@ namespace dbtools
                                      const css::lang::Locale& _rLocale);
 
 
-
     /** creates a connection which can be used for the rowset given
 
         The function tries to obtain a connection for the row set with the following
@@ -552,7 +551,6 @@ namespace dbtools
     bool implUpdateObject(  const css::uno::Reference< css::sdbc::XRowUpdate >& _rxUpdatedObject,
                                 const sal_Int32 _nColumnIndex,
                                 const css::uno::Any& _rValue);
-
 
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement

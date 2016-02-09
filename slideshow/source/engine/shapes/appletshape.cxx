@@ -123,7 +123,6 @@ namespace slideshow
         }
 
 
-
         void AppletShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
             const ::basegfx::B2DRectangle& rBounds = getBounds();
@@ -136,7 +135,6 @@ namespace slideshow
         }
 
 
-
         void AppletShape::implViewsChanged()
         {
             // resize all ViewShapes
@@ -144,7 +142,6 @@ namespace slideshow
             for( const auto& pViewAppletShape : maViewAppletShapes )
                 pViewAppletShape->resize( rBounds );
         }
-
 
 
         void AppletShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
@@ -173,7 +170,6 @@ namespace slideshow
                 // the remaining content
             }
         }
-
 
 
         bool AppletShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
@@ -206,12 +202,10 @@ namespace slideshow
         }
 
 
-
         void AppletShape::clearAllViewLayers()
         {
             maViewAppletShapes.clear();
         }
-
 
 
         bool AppletShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
@@ -233,7 +227,6 @@ namespace slideshow
         }
 
 
-
         bool AppletShape::implStartIntrinsicAnimation()
         {
             const ::basegfx::B2DRectangle& rBounds = getBounds();
@@ -244,7 +237,6 @@ namespace slideshow
 
             return true;
         }
-
 
 
         bool AppletShape::implEndIntrinsicAnimation()
@@ -258,7 +250,6 @@ namespace slideshow
         }
 
 
-
         void AppletShape::implPauseIntrinsicAnimation()
         {
             // TODO(F1): any way of temporarily disabling/deactivating
@@ -266,12 +257,10 @@ namespace slideshow
         }
 
 
-
         bool AppletShape::implIsIntrinsicAnimationPlaying() const
         {
             return mbIsPlaying;
         }
-
 
 
         void AppletShape::implSetIntrinsicAnimationTime(double)

@@ -28,7 +28,6 @@
 namespace oox { namespace drawingml {
 
 
-
 // CT_CustomGeometry2D
 class CustomShapeGeometryContext : public ::oox::core::ContextHandler2
 {

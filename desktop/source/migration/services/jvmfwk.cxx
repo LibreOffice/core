@@ -77,7 +77,6 @@ CJavaInfo::~CJavaInfo()
 }
 
 
-
 class JavaMigration : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
     css::lang::XInitialization,
@@ -188,8 +187,6 @@ public:
         throw(
             css::configuration::backend::MalformedDataException,
             css::lang::WrappedTargetException, std::exception ) override;
-
-
 
 
     virtual ~JavaMigration();

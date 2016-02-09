@@ -48,7 +48,6 @@ namespace xmlsearch {
         }; // end class QueryHit
 
 
-
         class QueryHitData
         {
         public:

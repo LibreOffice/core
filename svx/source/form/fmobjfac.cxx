@@ -235,5 +235,4 @@ IMPL_STATIC_LINK_TYPED(
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

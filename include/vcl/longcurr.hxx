@@ -27,8 +27,6 @@
 class LocaleDataWrapper;
 
 
-
-
 class VCL_DLLPUBLIC LongCurrencyFormatter : public FormatterBase
 {
 private:
@@ -72,8 +70,6 @@ public:
 };
 
 
-
-
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
 {
     friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const BigInt&);
@@ -102,8 +98,6 @@ public:
     void            SetSpinSize(const BigInt& rNewSize) { mnSpinSize = rNewSize; }
     BigInt          GetSpinSize() const { return mnSpinSize; }
 };
-
-
 
 
 class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormatter

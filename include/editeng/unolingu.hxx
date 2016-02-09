@@ -38,7 +38,6 @@ namespace vcl { class Window; }
 namespace linguistic { enum class DictionaryError; }
 
 
-
 class EDITENG_DLLPUBLIC LinguMgr
 {
     friend class LinguMgrExitLstnr;
@@ -84,7 +83,6 @@ public:
 };
 
 
-
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XHyphenatedWord;
 }}}}
@@ -112,8 +110,6 @@ EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
         const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord );
 
 
-
-
 class EDITENG_DLLPUBLIC SvxDicListChgClamp
 {
 private:
@@ -128,7 +124,6 @@ public:
         css::linguistic2::XSearchableDictionaryList >  &rxDicList );
     ~SvxDicListChgClamp();
 };
-
 
 
 //TODO: remove those functions or make them inline
@@ -159,7 +154,6 @@ EDITENG_DLLPUBLIC short SvxDicError( vcl::Window *pParent, linguistic::Dictionar
 
 
 #endif
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

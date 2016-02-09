@@ -27,8 +27,6 @@
 namespace sdr { namespace contact {
 
 
-
-
 SdrMediaWindow::SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMediaObj& rViewObjContact ) :
     ::avmedia::MediaWindow( pParent, false ),
     mrViewObjectContactOfSdrMediaObj( rViewObjContact )
@@ -36,11 +34,9 @@ SdrMediaWindow::SdrMediaWindow( vcl::Window* pParent, ViewObjectContactOfSdrMedi
 }
 
 
-
 SdrMediaWindow::~SdrMediaWindow()
 {
 }
-
 
 
 void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
@@ -58,7 +54,6 @@ void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-
 void SdrMediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     vcl::Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
@@ -71,7 +66,6 @@ void SdrMediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
         pWindow->MouseButtonDown( aTransformedEvent );
     }
 }
-
 
 
 void SdrMediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -88,7 +82,6 @@ void SdrMediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-
 void SdrMediaWindow::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
@@ -98,7 +91,6 @@ void SdrMediaWindow::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-
 void SdrMediaWindow::KeyUp( const KeyEvent& rKEvt )
 {
     vcl::Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
@@ -106,7 +98,6 @@ void SdrMediaWindow::KeyUp( const KeyEvent& rKEvt )
     if( pWindow )
         pWindow->KeyUp( rKEvt );
 }
-
 
 
 void SdrMediaWindow::Command( const CommandEvent& rCEvt )
@@ -121,7 +112,6 @@ void SdrMediaWindow::Command( const CommandEvent& rCEvt )
         pWindow->Command( aTransformedEvent );
     }
 }
-
 
 
 sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
@@ -143,7 +133,6 @@ sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 }
 
 
-
 sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     vcl::Window*     pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
@@ -161,7 +150,6 @@ sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     return nRet;
 }
-
 
 
 void SdrMediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )

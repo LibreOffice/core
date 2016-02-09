@@ -127,7 +127,6 @@ bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
 bool decodeOutput(const OString& s, OUString* out);
 
 
-
 namespace
 {
 
@@ -204,8 +203,6 @@ rtl::Bootstrap * getBootstrap()
         OUString, InitBootstrapData >::create(
             InitBootstrap(), ::osl::GetGlobalMutex(), InitBootstrapData());
 }
-
-
 
 
 class FileHandleGuard: private boost::noncopyable
@@ -675,7 +672,6 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
     }
     return true;
 }
-
 
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome)
@@ -1239,7 +1235,6 @@ void addJavaInfosDirScan(
     for(int d = 0; d < cCollectDirs; d++)
         arCollectDirs[d] = OUString(g_arCollectDirs[d], strlen(g_arCollectDirs[d]),
                                RTL_TEXTENCODING_UTF8);
-
 
 
     for( int ii = 0; ii < cSearchPaths; ii ++)

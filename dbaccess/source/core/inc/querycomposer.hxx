@@ -34,7 +34,6 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 
-
 namespace dbaccess
 {
     typedef ::cppu::ImplHelper5<    css::sdb::XSQLQueryComposer,

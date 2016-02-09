@@ -135,7 +135,6 @@ SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 }
 
 
-
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 :   mrView(rNewView),
     // col_auto color lets the view takes the default SvxColorConfig entry
@@ -263,7 +262,6 @@ void SdrPageView::InvalidateAllWin()
         GetView().InvalidateAllWin(aRect);
     }
 }
-
 
 
 void SdrPageView::PrePaint()
@@ -414,7 +412,6 @@ void SdrPageView::SetDesignMode( bool _bDesignMode ) const
         rPageViewWindow.SetDesignMode( _bDesignMode );
     }
 }
-
 
 
 void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
@@ -957,7 +954,6 @@ void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
 {
     maDocumentColor = aDocumentColor;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

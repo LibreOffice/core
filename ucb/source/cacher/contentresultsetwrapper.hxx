@@ -36,7 +36,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 
 
-
 class ContentResultSetWrapperListener;
 class ContentResultSetWrapper
                 : public cppu::OWeakObject
@@ -487,7 +486,6 @@ public:
         throw( css::sdbc::SQLException,
                css::uno::RuntimeException, std::exception ) override;
 };
-
 
 
 class ContentResultSetWrapperListener

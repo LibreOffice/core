@@ -425,8 +425,6 @@ bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 }
 
 
-
-
 LngSvcMgr::LngSvcMgr()
     : utl::ConfigItem("Office.Linguistic")
     , aEvtListeners(GetLinguMutex())
@@ -1866,7 +1864,6 @@ static uno::Sequence< OUString > GetLangSvc( const uno::Any &rVal )
 
     return aRes;
 }
-
 
 
 uno::Sequence< OUString > SAL_CALL

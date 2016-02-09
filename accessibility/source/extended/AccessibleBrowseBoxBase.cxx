@@ -27,7 +27,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 
 
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -36,8 +35,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 using namespace ::svt;
-
-
 
 
 namespace accessibility {
@@ -575,9 +572,7 @@ BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 }
 
 
-
 } // namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 class SfxBindings;
 class FontSizeMenu;
 

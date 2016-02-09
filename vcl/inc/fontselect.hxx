@@ -65,7 +65,6 @@ public:
 };
 
 
-
 class FontSelectPattern : public FontSelectPatternAttributes
 {
 public:

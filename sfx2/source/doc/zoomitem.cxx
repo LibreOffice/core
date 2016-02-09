@@ -27,14 +27,12 @@
 #include <sfx2/sfx.hrc>
 
 
-
 SfxPoolItem* SvxZoomItem::CreateDefault() { return new SvxZoomItem; }
 
 #define ZOOM_PARAM_VALUE    "Value"
 #define ZOOM_PARAM_VALUESET "ValueSet"
 #define ZOOM_PARAM_TYPE     "Type"
 #define ZOOM_PARAMS         3
-
 
 
 SvxZoomItem::SvxZoomItem
@@ -50,7 +48,6 @@ SvxZoomItem::SvxZoomItem
 }
 
 
-
 SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
 :   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
     nValueSet( rOrig.GetValueSet() ),
@@ -59,18 +56,15 @@ SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
 }
 
 
-
 SvxZoomItem::~SvxZoomItem()
 {
 }
-
 
 
 SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomItem( *this );
 }
-
 
 
 SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
@@ -85,7 +79,6 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
 }
 
 
-
 SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm.WriteUInt16( GetValue() )
@@ -93,7 +86,6 @@ SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) con
          .WriteSChar( static_cast<int>(eType) );
     return rStrm;
 }
-
 
 
 bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const

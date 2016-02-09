@@ -31,7 +31,6 @@ namespace rptui
 {
 
 
-
     //= ReportFormula
 
     class REPORTDESIGN_DLLPUBLIC ReportFormula

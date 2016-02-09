@@ -89,14 +89,12 @@ public:
 };
 
 
-
 AccessibleTableShapeImpl::AccessibleTableShapeImpl( AccessibleShapeTreeInfo& rShapeTreeInfo )
 : mrShapeTreeInfo( rShapeTreeInfo )
 , mRowCount(0)
 , mColCount(0)
 {
 }
-
 
 
 void AccessibleTableShapeImpl::init( const Reference< XAccessible>& xAccessible, const Reference< XTable >& xTable )
@@ -117,7 +115,6 @@ void AccessibleTableShapeImpl::init( const Reference< XAccessible>& xAccessible,
         mColCount = mxTable->getColumnCount();
     }
 }
-
 
 
 void AccessibleTableShapeImpl::dispose()
@@ -200,7 +197,6 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild(sal_Int32 
         return xChild;
     }
 }
-
 
 
 void AccessibleTableShapeImpl::getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (IndexOutOfBoundsException )
@@ -332,11 +328,9 @@ AccessibleTableShape::AccessibleTableShape( const AccessibleShapeInfo& rShapeInf
 }
 
 
-
 AccessibleTableShape::~AccessibleTableShape()
 {
 }
-
 
 
 void AccessibleTableShape::Init()
@@ -355,7 +349,6 @@ void AccessibleTableShape::Init()
 
     AccessibleTableShape_Base::Init();
 }
-
 
 
 SvxTableController* AccessibleTableShape::getTableController()
@@ -385,12 +378,10 @@ Any SAL_CALL AccessibleTableShape::queryInterface( const Type& aType ) throw (Ru
 }
 
 
-
 void SAL_CALL AccessibleTableShape::acquire(  ) throw ()
 {
     AccessibleTableShape_Base::acquire();
 }
-
 
 
 void SAL_CALL AccessibleTableShape::release(  ) throw ()
@@ -414,12 +405,10 @@ OUString SAL_CALL AccessibleTableShape::getImplementationName() throw (RuntimeEx
 }
 
 
-
 OUString AccessibleTableShape::CreateAccessibleBaseName() throw (RuntimeException)
 {
     return OUString("TableShape");
 }
-
 
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleChildCount( ) throw(RuntimeException, std::exception)
@@ -444,12 +433,10 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleTableShape::getAccessible
 }
 
 
-
 sal_Int16 SAL_CALL AccessibleTableShape::getAccessibleRole() throw (RuntimeException, std::exception)
 {
     return AccessibleRole::TABLE;
 }
-
 
 
 void SAL_CALL AccessibleTableShape::disposing()
@@ -471,13 +458,11 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowCount() throw (RuntimeE
 }
 
 
-
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnCount(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? mxImpl->mxTable->getColumnCount() : 0;
 }
-
 
 
 OUString SAL_CALL AccessibleTableShape::getAccessibleRowDescription( sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -487,14 +472,12 @@ OUString SAL_CALL AccessibleTableShape::getAccessibleRowDescription( sal_Int32 n
 }
 
 
-
 OUString SAL_CALL AccessibleTableShape::getAccessibleColumnDescription( sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, 0 );
     return OUString();
 }
-
 
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -511,7 +494,6 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRo
 }
 
 
-
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -524,7 +506,6 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 
     }
     return 1;
 }
-
 
 
 Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHeaders(  ) throw (RuntimeException, std::exception)
@@ -543,7 +524,6 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHea
 }
 
 
-
 Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumnHeaders(  ) throw (RuntimeException, std::exception)
 {
     Reference< XAccessibleTable > xRet;
@@ -558,7 +538,6 @@ Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumn
     }
     return xRet;
 }
-
 
 
 Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleRows(  ) throw (RuntimeException, std::exception)
@@ -597,7 +576,6 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleRows( 
 }
 
 
-
 Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleColumns(  ) throw (RuntimeException, std::exception)
 {
     sal_Int32 nColumn = getAccessibleColumnCount();
@@ -634,7 +612,6 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleColumn
 }
 
 
-
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -646,7 +623,6 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow 
     }
     return sal_False;
 }
-
 
 
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -662,7 +638,6 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nC
 }
 
 
-
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -676,7 +651,6 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal
 }
 
 
-
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCaption(  ) throw (RuntimeException, std::exception)
 {
     Reference< XAccessible > xRet;
@@ -684,13 +658,11 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCaption(  )
 }
 
 
-
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleSummary(  ) throw (RuntimeException, std::exception)
 {
     Reference< XAccessible > xRet;
     return xRet;
 }
-
 
 
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -711,14 +683,12 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sa
 }
 
 
-
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
     return  mxImpl->mxTable.is() ? (nRow * mxImpl->mxTable->getColumnCount() + nColumn) : 0;
 }
-
 
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRow( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -728,7 +698,6 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRow( sal_Int32 nChildIndex
     mxImpl->getColumnAndRow( nChildIndex, nColumn, nRow );
     return nRow;
 }
-
 
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumn( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -768,7 +737,6 @@ void SAL_CALL AccessibleTableShape::selectAccessibleChild( sal_Int32 nChildIndex
 }
 
 
-
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw ( IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
@@ -777,7 +745,6 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int32 nCh
 
     return isAccessibleSelected(aPos.mnRow, aPos.mnCol);
 }
-
 
 
 void SAL_CALL AccessibleTableShape::clearAccessibleSelection() throw ( RuntimeException, std::exception )
@@ -801,7 +768,6 @@ void SAL_CALL AccessibleTableShape::selectAllAccessibleChildren() throw ( Runtim
 }
 
 
-
 sal_Int32 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount() throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
@@ -819,7 +785,6 @@ sal_Int32 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount() throw
 
     return 0;
 }
-
 
 
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw ( IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -841,7 +806,6 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChi
 
     return getAccessibleChild( nChildIndex );
 }
-
 
 
 void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int32 nChildIndex )  throw ( IndexOutOfBoundsException, RuntimeException, std::exception )

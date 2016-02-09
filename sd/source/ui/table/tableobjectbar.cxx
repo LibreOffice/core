@@ -73,7 +73,6 @@ void RegisterInterfaces(SfxModule* pMod)
 }
 
 
-
 SFX_IMPL_INTERFACE(TableObjectBar, SfxShell)
 
 void TableObjectBar::InitInterface_Impl()

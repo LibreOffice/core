@@ -28,7 +28,6 @@
 #include <vcl/graph.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

@@ -624,7 +624,6 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 }
 
 
-
 int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
 {

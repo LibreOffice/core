@@ -109,7 +109,6 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
 }
 
 
-
 void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {

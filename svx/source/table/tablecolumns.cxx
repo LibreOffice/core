@@ -24,12 +24,10 @@
 #include "tablecolumn.hxx"
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
-
 
 
 namespace sdr { namespace table {
@@ -40,19 +38,16 @@ TableColumns::TableColumns( const TableModelRef& xTableModel )
 }
 
 
-
 TableColumns::~TableColumns()
 {
     dispose();
 }
 
 
-
 void TableColumns::dispose()
 {
     mxTableModel.clear();
 }
-
 
 
 void TableColumns::throwIfDisposed() const throw (css::uno::RuntimeException)
@@ -72,7 +67,6 @@ void SAL_CALL TableColumns::insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) 
 }
 
 
-
 void SAL_CALL TableColumns::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (RuntimeException, std::exception)
 {
     throwIfDisposed();
@@ -88,7 +82,6 @@ sal_Int32 SAL_CALL TableColumns::getCount() throw (RuntimeException, std::except
     throwIfDisposed();
     return mxTableModel->getColumnCount();
 }
-
 
 
 Any SAL_CALL TableColumns::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
@@ -113,14 +106,12 @@ Type SAL_CALL TableColumns::getElementType() throw (RuntimeException, std::excep
 }
 
 
-
 sal_Bool SAL_CALL TableColumns::hasElements() throw (RuntimeException, std::exception)
 {
     throwIfDisposed();
 
     return mxTableModel->getColumnCount() != 0;
 }
-
 
 
 } }

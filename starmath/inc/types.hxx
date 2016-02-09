@@ -24,9 +24,7 @@
 #define FONTNAME_MATH   "OpenSymbol"
 
 
-
 enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
-
 
 
 inline bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }

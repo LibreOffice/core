@@ -39,7 +39,6 @@
 using namespace ::com::sun::star;
 
 
-
 SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText /* = false */ ) :
     rOutliner( rOutl ),
     bOutlinerText( bOutlText ),
@@ -577,8 +576,6 @@ void  SvxOutlinerForwarder::CopyText(const SvxTextForwarder& rSource)
 }
 
 
-
-
 sal_Int32 SvxTextForwarder::GetNumberingStartValue( sal_Int32 )
 {
     return -1;
@@ -596,7 +593,6 @@ bool SvxTextForwarder::IsParaIsNumberingRestart( sal_Int32  )
 void SvxTextForwarder::SetParaIsNumberingRestart( sal_Int32, bool )
 {
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

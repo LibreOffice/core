@@ -398,7 +398,6 @@ SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 }
 
 
-
 SvtCTLOptions::~SvtCTLOptions()
 {
     // Global access, must be guarded (multithreading)

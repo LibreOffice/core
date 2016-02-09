@@ -29,7 +29,6 @@ namespace frm
 {
 
 
-
     //= WindowStateGuard
 
     class WindowStateGuard_Impl;

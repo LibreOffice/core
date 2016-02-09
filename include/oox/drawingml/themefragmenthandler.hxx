@@ -29,7 +29,6 @@ namespace drawingml {
 class Theme;
 
 
-
 class OOX_DLLPUBLIC ThemeFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
@@ -44,7 +43,6 @@ public:
 private:
     Theme&              mrTheme;
 };
-
 
 
 } // namespace drawingml

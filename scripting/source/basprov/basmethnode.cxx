@@ -49,10 +49,8 @@ using namespace ::sf_misc;
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
 
 
-
 namespace basprov
 {
-
 
 
     // BasicMethodNodeImpl
@@ -96,7 +94,6 @@ namespace basprov
     }
 
 
-
     BasicMethodNodeImpl::~BasicMethodNodeImpl()
     {
     }
@@ -129,7 +126,6 @@ namespace basprov
     }
 
 
-
     Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
@@ -138,14 +134,12 @@ namespace basprov
     }
 
 
-
     sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
         return sal_False;
     }
-
 
 
     sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException, std::exception)
@@ -193,7 +187,6 @@ namespace basprov
     {
         return Reference< XIntrospectionAccess >();
     }
-
 
 
     Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams,
@@ -284,7 +277,6 @@ namespace basprov
     }
 
 
-
     void BasicMethodNodeImpl::setValue( const OUString& aPropertyName, const Any& aValue )
         throw (UnknownPropertyException, script::CannotConvertException,
                reflection::InvocationTargetException, RuntimeException, std::exception)
@@ -297,7 +289,6 @@ namespace basprov
     }
 
 
-
     Any BasicMethodNodeImpl::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         (void)aPropertyName;
@@ -305,7 +296,6 @@ namespace basprov
         throw UnknownPropertyException(
             "BasicMethodNodeImpl::getValue: property name is unknown!" );
     }
-
 
 
     sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName ) throw (RuntimeException, std::exception)
@@ -318,15 +308,12 @@ namespace basprov
     }
 
 
-
     sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& aName ) throw (RuntimeException, std::exception)
     {
         (void)aName;
 
         return sal_False;
     }
-
-
 
 
 }   // namespace basprov

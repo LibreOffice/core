@@ -30,7 +30,6 @@
 #include <editeng/eeitem.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

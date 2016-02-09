@@ -42,7 +42,6 @@ namespace oox {
 namespace ole {
 
 
-
 class OOX_DLLPUBLIC VbaFilterConfig
 {
 public:
@@ -62,7 +61,6 @@ private:
     css::uno::Reference< css::uno::XInterface >
                         mxConfigAccess;
 };
-
 
 
 /** Base class for objects that attach a macro to a specific action.
@@ -103,7 +101,6 @@ private:
 };
 
 typedef std::shared_ptr< VbaMacroAttacherBase > VbaMacroAttacherRef;
-
 
 
 class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
@@ -202,7 +199,6 @@ private:
     VbaModuleMap        maModules;
     VbaModuleMap        maModulesByStrm;
 };
-
 
 
 } // namespace ole

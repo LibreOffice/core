@@ -45,7 +45,6 @@
 #include <comphelper/processfactory.hxx>
 
 
-
 /*  [Description]
 
     Function used to create a text representation of
@@ -88,7 +87,6 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 }
 
 
-
 SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 
 class FunctionPopup_Impl : public PopupMenu
@@ -105,7 +103,6 @@ private:
 };
 
 
-
 FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
     PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
     nSelected( 0 )
@@ -113,7 +110,6 @@ FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
     if (nCheck)
         CheckItem( nCheck );
 }
-
 
 
 void FunctionPopup_Impl::Select()
@@ -188,7 +184,6 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
 }
 
 
-
 /*  [Description]
 
     Dtor():
@@ -200,7 +195,6 @@ SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 {
     delete pImp;
 }
-
 
 
 /*  [Description]
@@ -302,7 +296,6 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 }
 
 
-
 /*  [Description]
 
     execute popup menu, when the status enables this
@@ -340,7 +333,6 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
     else
         SfxStatusBarControl::Command( rCEvt );
 }
-
 
 
 /*  [Description]

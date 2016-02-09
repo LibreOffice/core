@@ -55,7 +55,6 @@ namespace svt { namespace table
 #define ROW_INVALID             ((::svt::table::RowPos)-2)
 
 
-
 } } // namespace svt::table
 
 

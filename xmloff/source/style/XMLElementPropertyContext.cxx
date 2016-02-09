@@ -20,7 +20,6 @@
 #include "XMLElementPropertyContext.hxx"
 
 
-
 XMLElementPropertyContext::XMLElementPropertyContext (
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                                 const OUString& rLName,

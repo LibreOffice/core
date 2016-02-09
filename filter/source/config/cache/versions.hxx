@@ -21,7 +21,6 @@
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_VERSIONS_HXX
 
 
-
 #define _FILTER_CONFIG_MIGRATION_Q_     // useful for migration time, to support some old functionality temp. :-)
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_VERSIONS_HXX

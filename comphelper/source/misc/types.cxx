@@ -31,7 +31,6 @@
 #include <memory.h>
 
 
-
 namespace comphelper
 {
 

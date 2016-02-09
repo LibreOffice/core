@@ -112,7 +112,6 @@ using stoc_javavm::JavaVirtualMachine;
 namespace {
 
 
-
 class NoJavaIniException: public css::uno::Exception
 {
 };
@@ -403,7 +402,6 @@ void getDefaultLocaleFromConfig(
 
     xConfRegistry_simple->close();
 }
-
 
 
 void getJavaPropsFromSafetySettings(

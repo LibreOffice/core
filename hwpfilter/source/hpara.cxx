@@ -200,16 +200,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 }
 
 
-
-
 CharShape *HWPPara::GetCharShape(int pos)
 {
     if (contain_cshape == 0)
         return &cshape;
     return cshapep + pos;
 }
-
-
 
 
 HBox *HWPPara::readHBox(HWPFile & hwpf)

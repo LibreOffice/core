@@ -73,7 +73,6 @@ protected:
 }}
 
 
-
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDROLE2OBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

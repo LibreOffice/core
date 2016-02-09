@@ -34,7 +34,6 @@
 class ValueSet;
 
 
-
 namespace svx
 {
 class ExtrusionDirectionWindow : public svtools::ToolbarMenu
@@ -63,7 +62,6 @@ private:
     void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );
 
 };
-
 
 
 class ExtrusionDirectionControl : public svt::PopupWindowController
@@ -132,7 +130,6 @@ public:
 };
 
 
-
 class ExtrusionLightingWindow : public svtools::ToolbarMenu
 {
 private:
@@ -168,7 +165,6 @@ public:
 };
 
 
-
 class ExtrusionLightingControl : public svt::PopupWindowController
 {
 public:
@@ -186,7 +182,6 @@ public:
 
     using svt::PopupWindowController::createPopupWindow;
 };
-
 
 
 class ExtrusionSurfaceWindow : public svtools::ToolbarMenu
@@ -210,7 +205,6 @@ public:
 };
 
 
-
 class ExtrusionSurfaceControl : public svt::PopupWindowController
 {
 public:
@@ -228,7 +222,6 @@ public:
 
     using svt::PopupWindowController::createPopupWindow;
 };
-
 
 
 }

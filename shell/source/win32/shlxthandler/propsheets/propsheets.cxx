@@ -53,14 +53,12 @@
 ----------------------------------------------*/
 
 
-
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
 {
     OutputDebugStringFormat("CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedIncrement(&g_DllRefCnt);
 }
-
 
 
 CPropertySheet::~CPropertySheet()
@@ -98,13 +96,11 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 }
 
 
-
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef()
 {
     OutputDebugStringFormat("CPropertySheet::AddRef [%d]", m_RefCnt );
     return InterlockedIncrement(&m_RefCnt);
 }
-
 
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release()
@@ -248,13 +244,11 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 }
 
 
-
 HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     UINT /*uPageID*/, LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
 {
     return E_NOTIMPL;
 }
-
 
 
 UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
@@ -274,8 +268,6 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
 }
 
 
-
-
 BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
     switch (uiMsg)
@@ -291,7 +283,6 @@ BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
 
     return FALSE;
 }
-
 
 
 BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)

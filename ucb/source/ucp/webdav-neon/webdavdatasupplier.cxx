@@ -53,9 +53,7 @@ namespace webdav_ucp
 {
 
 
-
 // struct ResultListEntry.
-
 
 
 struct ResultListEntry
@@ -72,17 +70,13 @@ struct ResultListEntry
 };
 
 
-
 // ResultList.
-
 
 
 typedef std::vector<std::unique_ptr<ResultListEntry>> ResultList;
 
 
-
 // struct DataSupplier_Impl.
-
 
 
 struct DataSupplier_Impl
@@ -106,11 +100,7 @@ struct DataSupplier_Impl
 }
 
 
-
-
 // DataSupplier Implementation.
-
-
 
 
 DataSupplier::DataSupplier(

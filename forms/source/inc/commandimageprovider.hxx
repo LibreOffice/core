@@ -32,7 +32,6 @@ namespace frm
 {
 
 
-
     //= ICommandImageProvider
 
     typedef ::std::vector< Image >                 CommandImages;

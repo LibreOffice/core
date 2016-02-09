@@ -25,8 +25,6 @@
 #include <vcl/ctrl.hxx>
 
 
-
-
 class VCL_DLLPUBLIC GroupBox : public Control
 {
 private:

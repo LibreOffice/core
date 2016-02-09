@@ -25,7 +25,6 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

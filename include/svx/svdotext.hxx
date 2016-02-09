@@ -559,8 +559,6 @@ public:
     void onChainingEvent();
 
 
-
-
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
@@ -635,7 +633,6 @@ public:
 
     friend class ::SdrTextObjTest;
 };
-
 
 
 #endif // INCLUDED_SVX_SVDOTEXT_HXX

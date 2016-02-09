@@ -44,11 +44,9 @@ BaseContainer::BaseContainer()
 }
 
 
-
 BaseContainer::~BaseContainer()
 {
 }
-
 
 
 void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext              ,
@@ -65,7 +63,6 @@ void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext 
     m_xRefreshBroadcaster = css::document::FilterConfigRefresh::create(rxContext);
     // <- SAFE
 }
-
 
 
 void BaseContainer::impl_loadOnDemand()
@@ -104,7 +101,6 @@ void BaseContainer::impl_loadOnDemand()
 }
 
 
-
 void BaseContainer::impl_initFlushMode()
     throw (css::uno::RuntimeException)
 {
@@ -119,7 +115,6 @@ void BaseContainer::impl_initFlushMode()
 }
 
 
-
 FilterCache* BaseContainer::impl_getWorkingCache() const
 {
     // SAFE ->
@@ -132,13 +127,11 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
 }
 
 
-
 OUString SAL_CALL BaseContainer::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
     return m_sImplementationName;
 }
-
 
 
 sal_Bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
@@ -152,7 +145,6 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames(
 {
     return m_lServiceNames;
 }
-
 
 
 void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
@@ -195,7 +187,6 @@ void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
 }
 
 
-
 void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
     throw (css::container::NoSuchElementException,
            css::lang::WrappedTargetException     ,
@@ -215,7 +206,6 @@ void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
     aLock.clear();
     // <- SAFE ----------------------------------
 }
-
 
 
 void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
@@ -258,7 +248,6 @@ void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
 }
 
 
-
 css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     throw (css::container::NoSuchElementException,
            css::lang::WrappedTargetException     ,
@@ -299,7 +288,6 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
 }
 
 
-
 css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -326,7 +314,6 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
 
     return lNames;
 }
-
 
 
 sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
@@ -356,7 +343,6 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
 }
 
 
-
 css::uno::Type SAL_CALL BaseContainer::getElementType()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -364,7 +350,6 @@ css::uno::Type SAL_CALL BaseContainer::getElementType()
     // is fix! no internal call or member needed ...
     return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
 }
-
 
 
 sal_Bool SAL_CALL BaseContainer::hasElements()
@@ -394,7 +379,6 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 }
 
 
-
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -403,7 +387,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< OUString >());
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
-
 
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
@@ -451,7 +434,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSubSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
-
 
 
 void SAL_CALL BaseContainer::flush()
@@ -530,7 +512,6 @@ void SAL_CALL BaseContainer::flush()
 }
 
 
-
 void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -538,7 +519,6 @@ void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::ut
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.addInterface(cppu::UnoType<css::util::XFlushListener>::get(), xListener);
 }
-
 
 
 void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)

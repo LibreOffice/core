@@ -173,5 +173,4 @@ com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implement
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

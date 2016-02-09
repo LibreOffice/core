@@ -26,8 +26,6 @@
 #include <svx/svdpool.hxx>
 
 
-
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace sdr::table;
@@ -47,7 +45,6 @@ SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
 SvxTableShape::~SvxTableShape() throw()
 {
 }
-
 
 
 bool SvxTableShape::setPropertyValueImpl(

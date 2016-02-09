@@ -30,7 +30,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 
-
 // VCLXAccessibleFixedText
 
 
@@ -40,11 +39,9 @@ VCLXAccessibleFixedText::VCLXAccessibleFixedText( VCLXWindow* pVCLWindow )
 }
 
 
-
 VCLXAccessibleFixedText::~VCLXAccessibleFixedText()
 {
 }
-
 
 
 void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -54,7 +51,6 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHel
     if ( GetWindow() && GetWindow()->GetStyle() & WB_WORDBREAK )
         rStateSet.AddState( AccessibleStateType::MULTI_LINE );
 }
-
 
 
 void VCLXAccessibleFixedText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
@@ -73,13 +69,11 @@ OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeExceptio
 }
 
 
-
 Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleFixedText" };
     return aNames;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

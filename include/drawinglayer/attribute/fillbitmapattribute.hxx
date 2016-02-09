@@ -38,7 +38,6 @@ namespace drawinglayer { namespace attribute {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace attribute
@@ -76,7 +75,6 @@ namespace drawinglayer
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX

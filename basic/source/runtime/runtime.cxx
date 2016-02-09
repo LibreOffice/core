@@ -1273,8 +1273,6 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 }
 
 
-
-
 //  DLL-calls
 
 void SbiRuntime::DllCall
@@ -3654,7 +3652,6 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
     }
     return pElem;
 }
-
 
 
 void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )

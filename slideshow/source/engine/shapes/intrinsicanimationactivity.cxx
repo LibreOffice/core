@@ -95,7 +95,6 @@ namespace slideshow
         };
 
 
-
         class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
                                            private boost::noncopyable
         {
@@ -111,7 +110,6 @@ namespace slideshow
 
             IntrinsicAnimationActivity& mrActivity;
         };
-
 
 
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
@@ -255,7 +253,6 @@ namespace slideshow
             return maContext.mrActivitiesQueue.addActivity(
                 shared_from_this() );
         }
-
 
 
         ActivitySharedPtr createIntrinsicAnimationActivity(

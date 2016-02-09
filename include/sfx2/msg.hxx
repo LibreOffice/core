@@ -84,14 +84,12 @@ class SfxRequest;
 #define SFX_STUB_PTR_STATE_NONE &SfxShell::EmptyStateStub
 
 
-
 enum class SfxSlotKind
 {
     Standard,
     Enum,
     Attribute
 };
-
 
 
 struct SfxTypeAttrib
@@ -204,7 +202,6 @@ struct SfxFormalArgument
 };
 
 
-
 class SfxSlot
 {
 public:
@@ -255,7 +252,6 @@ public:
     const SfxSlot*  GetLinkedSlot() const { return pLinkedSlot; }
     const SfxSlot*  GetNextSlot() const { return pNextSlot; }
 };
-
 
 
 // returns the id of the function

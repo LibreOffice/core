@@ -385,9 +385,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71302, "fdo71302.docx")
 }
 
 
-
-
-
 DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

@@ -24,10 +24,8 @@
 #include <rtl/ustring.hxx>
 
 
-
 namespace svt
 {
-
 
 
 /** This abstract class provides methods to implement an extension list box.
@@ -52,7 +50,6 @@ public:
 
 
 } // namespace svt
-
 
 
 #endif // INCLUDED_SVTOOLS_EXTENSIONLISTBOX_HXX

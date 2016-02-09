@@ -28,8 +28,6 @@
 #include <com/sun/star/frame/XController.hpp>
 
 
-
-
 class PPPOptimizer : public cppu::WeakImplHelper<
                                     css::frame::XDispatchProvider,
                                     css::frame::XDispatch >

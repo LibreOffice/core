@@ -124,7 +124,6 @@ static bool isStylesFile (OUString const & i_rPath)
 }
 
 
-
 // XML ID handling ---------------------------------------------------
 
 /** handles registration of XMetadatable.
@@ -342,7 +341,6 @@ private:
 };
 
 
-
 // XmlIdRegistry
 
 ::sfx2::IXmlIdRegistry * createXmlIdRegistry(const bool i_DocIsClipboard)
@@ -477,7 +475,6 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
 };
 
 
-
 static void
 rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
     OUString const & i_rStream, Metadatable const& i_rObject)
@@ -493,7 +490,6 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
         }
     }
 }
-
 
 
 const XmlIdList_t *
@@ -793,7 +789,6 @@ void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
 }
 
 
-
 void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     Metadatable & i_rCopy, const bool i_bCopyPrecedesSource)
 {
@@ -892,7 +887,6 @@ XmlIdRegistryDocument::JoinMetadatables(
 }
 
 
-
 // Clipboard XML ID Registry (_Impl)
 
 struct RMapEntry
@@ -952,7 +946,6 @@ struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
 };
 
 
-
 static void
 rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
     ClipboardXmlIdMap_t::iterator const& i_rIter,
@@ -972,7 +965,6 @@ rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
         }
     }
 }
-
 
 
 Metadatable* const*
@@ -1219,7 +1211,6 @@ void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
 }
 
 
-
 std::shared_ptr<MetadatableClipboard>
 XmlIdRegistryClipboard::CreateClipboard(const bool i_isInContent)
 {
@@ -1276,7 +1267,6 @@ XmlIdRegistryClipboard::SourceLink(Metadatable const& i_rObject)
     m_pImpl->LookupXmlId(i_rObject, path, idref, pLink);
     return pLink;
 }
-
 
 
 // Metadatable mixin
@@ -1558,7 +1548,6 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 }
 
 
-
 // XMetadatable mixin
 
 // css::rdf::XNode:
@@ -1648,8 +1637,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 } // namespace sfx2
-
-
 
 
 #if OSL_DEBUG_LEVEL > 1

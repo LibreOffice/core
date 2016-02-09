@@ -39,7 +39,6 @@ class E3dCompoundObject;
 class E3dScene;
 
 
-
 /** support for getting a ViewInformation3D for a given CompoudObject3D
     with correct ObjectTransformation filled out
 
@@ -94,7 +93,6 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
 bool checkHitSingle3DObject(
     const basegfx::B2DPoint& rPoint,
     const E3dCompoundObject& rCandidate);
-
 
 
 #endif // INCLUDED_SVX_HELPERHITTEST3D_HXX

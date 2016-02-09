@@ -31,12 +31,10 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
 
-
 SfxPoolItem* SvxHorJustifyItem::CreateDefault() { return new  SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0) ;}
 SfxPoolItem* SvxVerJustifyItem::CreateDefault() { return new  SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) ;}
 
 using namespace ::com::sun::star;
-
 
 
 SvxHorJustifyItem::SvxHorJustifyItem( const sal_uInt16 nId ) :

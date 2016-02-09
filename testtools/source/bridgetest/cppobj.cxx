@@ -491,7 +491,6 @@ Any Test_Impl::transportAny( const Any & value ) throw ( css::uno::RuntimeExcept
 }
 
 
-
 namespace {
 
 void wait(sal_Int32 microSeconds) {
@@ -1167,8 +1166,6 @@ Sequence< OUString > Test_Impl::getSupportedServiceNames()
 {
     return bridge_object::getSupportedServiceNames();
 }
-
-
 
 
 static Reference< XInterface > SAL_CALL Test_Impl_create(

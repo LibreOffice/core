@@ -40,7 +40,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
 
-
 class SpellChecker :
     public cppu::WeakImplHelper
     <
@@ -151,7 +150,6 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 {
     return OUString( "com.sun.star.lingu.examples.SpellChecker" );
 }
-
 
 
 #endif

@@ -53,8 +53,6 @@ public:
 };
 
 
-
-
 #endif // INCLUDED_TOOLKIT_AWT_VCLXSYSTEMDEPENDENTWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

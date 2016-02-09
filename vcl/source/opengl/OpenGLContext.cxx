@@ -1089,7 +1089,6 @@ void OpenGLContext::setWinSize(const Size& rSize)
 }
 
 
-
 #if defined( WNT )
 
 bool OpenGLContext::initWindow()

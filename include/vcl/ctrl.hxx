@@ -31,8 +31,6 @@ namespace vcl { struct ImplControlData; struct ControlLayoutData; }
 class StyleSettings;
 
 
-
-
 class VCL_DLLPUBLIC Control : public vcl::Window
 {
 protected:

@@ -27,7 +27,6 @@
 #include <accessibility/extended/AccessibleGridControlTableCell.hxx>
 
 
-
 namespace accessibility {
 
 
@@ -203,9 +202,7 @@ protected:
 };
 
 
-
 } // namespace accessibility
-
 
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLTABLE_HXX

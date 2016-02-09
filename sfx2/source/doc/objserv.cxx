@@ -237,7 +237,6 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
 }
 
 
-
 void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
 {
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
@@ -247,7 +246,6 @@ void SfxObjectShell::PrintExec_Impl(SfxRequest &rReq)
         pFrame->GetViewShell()->ExecuteSlot(rReq);
     }
 }
-
 
 
 void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
@@ -898,7 +896,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 }
 
 
-
 void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
@@ -1115,7 +1112,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 }
 
 
-
 void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
 {
     switch ( rReq.GetSlot() )
@@ -1155,7 +1151,6 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
         }
     }
 }
-
 
 
 void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
@@ -1234,7 +1229,6 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 }
 
 
-
 void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
 {
     switch ( rReq.GetSlot() )
@@ -1269,7 +1263,6 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
         }
     }
 }
-
 
 
 void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)

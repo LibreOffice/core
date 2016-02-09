@@ -344,7 +344,6 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(SfxTemplateFlags nSet)
 }
 
 
-
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, sal_uInt16 nFl)
     : aNone(SfxResId(STR_NONE).toString())

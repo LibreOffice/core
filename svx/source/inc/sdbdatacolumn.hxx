@@ -30,7 +30,6 @@ namespace svxform
 {
 
 
-
     //= DataColumn - a class wrapping an object implementing a sdb::DataColumn service
 
     class DataColumn

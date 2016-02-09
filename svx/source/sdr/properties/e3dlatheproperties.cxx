@@ -22,7 +22,6 @@
 #include <svx/lathe3d.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

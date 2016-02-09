@@ -38,7 +38,6 @@ namespace toolkit
 {
 
 
-
     //= WindowStyleSettings
 
     struct WindowStyleSettings_Data;

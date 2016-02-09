@@ -26,7 +26,6 @@
 class SvXMLNamespaceMap;
 
 
-
 class SvXMLAttrContainerData;
 
 class EDITENG_DLLPUBLIC SvXMLAttrContainerItem: public SfxPoolItem

@@ -31,7 +31,6 @@ namespace svt
 {
 
 
-
     //= SmartContent
 
     /** a "smart content" which basically wraps an UCB content, but caches some information

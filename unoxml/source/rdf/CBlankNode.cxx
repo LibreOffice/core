@@ -113,7 +113,6 @@ OUString SAL_CALL CBlankNode::getStringValue() throw (css::uno::RuntimeException
 } // closing anonymous implementation namespace
 
 
-
 // component helper namespace
 namespace comp_CBlankNode {
 

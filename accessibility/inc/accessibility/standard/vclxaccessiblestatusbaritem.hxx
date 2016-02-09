@@ -34,7 +34,6 @@ class AccessibleStateSetHelper;
 }
 
 
-
 //  class VCLXAccessibleStatusBarItem
 
 

@@ -32,16 +32,11 @@
 using namespace hierarchy_ucp;
 
 
-
 #define DEFAULT_DATA_SOURCE_SERVICE \
                     "com.sun.star.ucb.DefaultHierarchyDataSource"
 
 
-
-
 // HierarchyUri Implementation.
-
-
 
 
 void HierarchyUri::init() const

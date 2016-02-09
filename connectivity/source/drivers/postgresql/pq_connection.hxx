@@ -78,8 +78,6 @@ public:
 struct ConnectionSettings;
 
 
-
-
 // Logging API
 
 namespace LogLevel
@@ -153,7 +151,6 @@ typedef std::unordered_map<
     ::std::equal_to< ::rtl::ByteSequence >
 > WeakHashMap;
 typedef ::std::vector< OString > OStringVector;
-
 
 
 typedef std::unordered_map

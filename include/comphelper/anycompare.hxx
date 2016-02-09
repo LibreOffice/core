@@ -35,7 +35,6 @@ namespace comphelper
 {
 
 
-
     //= IKeyPredicateLess
 
     class SAL_NO_VTABLE IKeyPredicateLess

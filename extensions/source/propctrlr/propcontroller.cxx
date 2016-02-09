@@ -1141,7 +1141,6 @@ namespace pcr
             _rDescriptor.assignFrom( handler->second->describePropertyLine( _rProperty.Name, this ) );
 
 
-
             _rDescriptor.xPropertyHandler = handler->second;
             _rDescriptor.sName = _rProperty.Name;
             _rDescriptor.aValue = _rDescriptor.xPropertyHandler->getPropertyValue( _rProperty.Name );
@@ -1745,7 +1744,6 @@ namespace pcr
 
 
 } // namespace pcr
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

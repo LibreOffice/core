@@ -90,7 +90,6 @@ private:
 };
 
 
-
 class OPipeTest : public WeakImplHelper < XSimpleTest >
 {
 public:
@@ -129,7 +128,6 @@ private:
 };
 
 
-
 OPipeTest::OPipeTest( const Reference< XMultiServiceFactory > &rFactory )
 {
 
@@ -139,7 +137,6 @@ OPipeTest::~OPipeTest()
 {
 
 }
-
 
 
 void OPipeTest::testInvariant( const OUString& TestName, const Reference < XInterface >& TestObject )
@@ -203,7 +200,6 @@ sal_Int32 OPipeTest::test(
     }
     return hTestHandle;
 }
-
 
 
 sal_Bool OPipeTest::testPassed()        throw  (RuntimeException)
@@ -356,7 +352,6 @@ void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
 }
 
 
-
 void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 {
 
@@ -394,7 +389,6 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 }
 
 
-
 /**
 * for external binding
 *
@@ -406,7 +400,6 @@ Reference < XInterface > SAL_CALL OPipeTest_CreateInstance( const Reference< XMu
     Reference< XInterface > x ( (static_cast< OWeakObject *  >(p)) );
     return x;
 }
-
 
 
 Sequence<OUString> OPipeTest_getSupportedServiceNames() throw()

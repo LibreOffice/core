@@ -37,8 +37,6 @@ class CommandEvent;
 enum SelectionMode { NO_SELECTION, SINGLE_SELECTION, RANGE_SELECTION, MULTIPLE_SELECTION };
 
 
-
-
 class VCL_DLLPUBLIC FunctionSet
 {
 public:
@@ -59,7 +57,6 @@ public:
     // delete anchor & deselect all
     virtual void        DeselectAll() = 0;
 };
-
 
 
 enum class SelectionEngineFlags {

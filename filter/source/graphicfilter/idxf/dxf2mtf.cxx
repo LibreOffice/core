@@ -888,5 +888,4 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

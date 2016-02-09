@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
 {
     bool                    mbBookMode;
@@ -47,7 +46,6 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override; // leer
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;   // leer
 };
-
 
 
 #endif

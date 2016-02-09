@@ -18,8 +18,6 @@
  */
 
 
-
-
 // Global header
 
 
@@ -31,9 +29,7 @@
 #include <svx/svdpool.hxx>
 
 
-
 // Project-local header
-
 
 
 #include "AccessibleEmptyEditSource.hxx"
@@ -215,7 +211,6 @@ namespace accessibility
     }
 
 
-
     // Implementing AccessibleEmptyEditSource
 
 
@@ -336,7 +331,6 @@ namespace accessibility
     }
 
 } // end of namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

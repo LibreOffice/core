@@ -224,8 +224,6 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
 }
 
 
-
-
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
 bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
@@ -2294,7 +2292,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     }
 
 
-
     // 0
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
     ImpInsertFormat( aFormatSeq[nIdx],
@@ -2334,7 +2331,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_PERCENT_DEC2 );
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + ZF_STANDARD_PERCENT+1 /* NF_PERCENT_DEC2 */ );
-
 
 
     // Currency. NO default standard option! Default is determined of locale
@@ -2393,7 +2389,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + ZF_STANDARD_CURRENCY+5 /* NF_CURRENCY_1000DEC2_DASHED */ );
     aFormatSeq[nIdx].Default = bDefault;
-
 
 
     // Date
@@ -2506,7 +2501,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                      CLOffset + ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYYYMMDD /* NF_DATE_DIN_YYYYMMDD */ );
 
 
-
     // Time
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::TIME );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
@@ -2547,7 +2541,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                      CLOffset + ZF_STANDARD_TIME+6 /* NF_TIME_HH_MMSS00 */ );
 
 
-
     // DateTime
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE_TIME );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
@@ -2563,7 +2556,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                      CLOffset + ZF_STANDARD_DATETIME+1 /* NF_DATETIME_SYS_DDMMYYYY_HHMMSS */ );
 
 
-
     // Scientific number
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
@@ -2577,7 +2569,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E00 );
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + ZF_STANDARD_SCIENTIFIC+1 /* NF_SCIENTIFIC_000E00 */ );
-
 
 
     // Fraction number (no default option)
@@ -2604,7 +2595,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     aSingleFormatCode.Code = "# ?\?/100";
     ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_FRACTION+3 /* NF_FRACTION_4 */ );
-
 
 
     // Week of year

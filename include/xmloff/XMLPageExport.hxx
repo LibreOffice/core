@@ -42,13 +42,11 @@ class XMLPropertySetMapper;
 class SvXMLExportPropertyMapper;
 
 
-
 struct XMLPageExportNameEntry
 {
     OUString         sPageMasterName;
     OUString         sStyleName;
 };
-
 
 
 class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject

@@ -30,7 +30,6 @@ class Rectangle;
 namespace vcl { class Window; }
 
 
-
 enum class QuickHelpFlags
 {
     NONE              = 0x0000,

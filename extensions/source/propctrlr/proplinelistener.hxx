@@ -27,7 +27,6 @@ namespace pcr
 {
 
 
-
     class IPropertyLineListener
     {
     public:

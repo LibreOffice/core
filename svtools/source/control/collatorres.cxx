@@ -23,9 +23,7 @@
 #include <svtools/collatorres.hxx>
 
 
-
 //  wrapper for locale specific translations data of collator algorithm
-
 
 
 class CollatorResourceData
@@ -55,9 +53,7 @@ class CollatorResourceData
 };
 
 
-
 //  implementation of the collator-algorithm-name translation
-
 
 
 #define COLLATOR_RESOURCE_COUNT (STR_SVT_COLLATE_END - STR_SVT_COLLATE_START + 1)

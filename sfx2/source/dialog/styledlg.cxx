@@ -69,7 +69,6 @@ SfxStyleDialog::SfxStyleDialog
 }
 
 
-
 SfxStyleDialog::~SfxStyleDialog()
 {
     disposeOnce();
@@ -89,7 +88,6 @@ void SfxStyleDialog::dispose()
 }
 
 
-
 void SfxStyleDialog::RefreshInputSet()
 
 /*  [Description]
@@ -103,7 +101,6 @@ void SfxStyleDialog::RefreshInputSet()
 }
 
 
-
 short SfxStyleDialog::Ok()
 
 /*  [Description]
@@ -115,7 +112,6 @@ short SfxStyleDialog::Ok()
     SfxTabDialog::Ok();
     return RET_OK;
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( SfxStyleDialog, CancelHdl, Button *, void )

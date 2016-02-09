@@ -34,7 +34,6 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 
 
-
 namespace com { namespace sun { namespace star { namespace ucb {
     class XPropertySetRegistry;
     class XPersistentPropertySet;
@@ -43,7 +42,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace ucbhelper_impl { struct ContentProviderImplHelper_Impl; }
 
 namespace ucbhelper {
-
 
 
 class ContentImplHelper;
