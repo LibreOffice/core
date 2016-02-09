@@ -30,6 +30,7 @@
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <unotools/datetime.hxx>
 
 namespace cssu = com::sun::star::uno;
@@ -1043,6 +1044,23 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
     xDocumentHandler->endElement(TAG_X509CERTIFICATE);
     xDocumentHandler->endElement(TAG_X509DATA);
     xDocumentHandler->endElement(TAG_KEYINFO);
+
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ID, "idPackageObject");
+        xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    xDocumentHandler->endElement(TAG_OBJECT);
+
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ID, "idOfficeObject");
+        xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    xDocumentHandler->endElement(TAG_OBJECT);
+
+    xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement(TAG_OBJECT);
 }
 
 SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
