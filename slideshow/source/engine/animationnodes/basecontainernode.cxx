@@ -180,9 +180,9 @@ void BaseContainerNode::showState() const
             boost::dynamic_pointer_cast<BaseNode>(maChildren[i]);
         SAL_INFO("slideshow.verbose",
                  "Node connection: n" <<
-                 reinterpret_cast<const char*>(this)+debugGetCurrentOffset() <<
+                 debugGetNodeName(this) <<
                  " -> n" <<
-                 reinterpret_cast<const char*>(pNode.get())+debugGetCurrentOffset() );
+                 debugGetNodeName(pNode.get()));
         pNode->showState();
     }
 
