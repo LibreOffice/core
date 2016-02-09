@@ -38,6 +38,8 @@ service Wizard : XWizard
     /** creates a wizard with a single execution path
         @param PageIds
             the IDs of the pages which constitute the execution path. IDs must be in ascending order.
+        @param Controller
+            the wizard controller.
     */
     createSinglePathWizard(
         [in] sequence< short > PageIds,
@@ -50,6 +52,8 @@ service Wizard : XWizard
 
         @param PageIds
             the IDs of the pages which constitute the execution paths. IDs in each path must be in ascending order.
+        @param Controller
+            the wizard controller.
     */
     createMultiplePathsWizard(
         [in] sequence< sequence< short > > PageIds,

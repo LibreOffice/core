@@ -121,6 +121,8 @@ published interface XLocale: com::sun::star::uno::XInterface
                     language code for display of field to user. If the localized
                     name is not found, returns the ISO codes.
 
+                @param locale the locale.
+
                 @param inLocale
                     specifies the desired user language.
      */
@@ -138,6 +140,8 @@ published interface XLocale: com::sun::star::uno::XInterface
                     country code for display of field to user. If the localized
                     name is not found, returns the ISO codes.
 
+                @param locale the locale.
+
                 @param inLocale
                     specifies the desired user country.
      */
@@ -154,6 +158,8 @@ published interface XLocale: com::sun::star::uno::XInterface
                     variant code for display of field to user. If the localized
                     name is not found, returns the ISO codes.
 
+                @param locale the locale.
+
                 @param inLocale
                     specifies the desired user variant.
      */
@@ -164,12 +170,16 @@ published interface XLocale: com::sun::star::uno::XInterface
                     a string to display the entire locale to user. If the localized
                     name is not found, uses the ISO codes. The default locale is used
                     for the presentation language.
+
+            @param locale the locale.
      */
     string getDisplayName_Default( [in] com::sun::star::lang::Locale locale );
 
     /** @returns
                     a string to display the entire locale to user. If the localized
                     name is not found, uses the ISO codes.
+
+                @param locale the locale.
 
                 @param inLocale
                     specifies the desired user locale.

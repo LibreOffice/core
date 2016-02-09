@@ -37,7 +37,7 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
 {
     /** start proofreading and automatically process the whole text
 
-        @param  xDoc
+        @param  xDocument
                 the text document.
 
         @param  xIteratorProvider
@@ -52,13 +52,25 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
 
     /** start proofreading from a given position
 
-        @param  xDoc
+        @param  xDocument
                 the document.
 
-        @param  xStartPara
+        @param  xFlatParagraph
                 the single flat paragraph to be checked.
 
-        @param  nErrorPosInPara
+        @param  aText
+                the text of the paragraph to be checked.
+
+        @param  aLocale
+                currently unused parameter.
+
+        @param  nStartOfSentencePosition
+                the start position of the current sentence.
+
+        @param  nSuggestedBehindEndOfSentencePosition
+                currently unused parameter.
+
+        @param  nErrorPositionInParagraph
                 the given index.
 
         @throws IllegalArgumentException
@@ -80,7 +92,7 @@ interface XProofreadingIterator: com::sun::star::uno::XInterface
 
     /** checks if the given document is currently being checked
 
-        @param  xDoc
+        @param  xDocument
                 the document.
 
         @returns

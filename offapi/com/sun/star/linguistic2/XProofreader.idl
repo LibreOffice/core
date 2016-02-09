@@ -45,23 +45,37 @@ interface XProofreader: com::sun::star::linguistic2::XSupportedLocales
 
     /** start checking
 
-        @param  nDocId
+        @param  aDocumentIdentifier
                 the Document ID.
 
-        @param  rFlatParaText
+        @param  aText
                 the flat text to be checked.
-
-        @param  xFlatPara
-                the flat paragraph to be checked.
 
         @param  aLocale
                 Language used in the text.
 
-        @param  nStartOfSentencePos
+        @param  nStartOfSentencePosition
                 Start Index of the text.
 
-        @param  nSuggestedSentenceEndPos
+        @param  nSuggestedBehindEndOfSentencePosition
                 Probable end position of the text.
+
+        @param  aProperties
+                additional properties of the text.
+
+                Currently the following properties may be supported:
+                <table>
+                    <tr>
+                        <td>FieldPositions</td>
+                        <td>sequence&lt;long&gt;</td>
+                        <td>indexes of fields in aText</td>
+                    </tr>
+                    <tr>
+                        <td>FootnotePositions</td>
+                        <td>sequence&lt;long&gt;</td>
+                        <td>indexes of footnotes in aText</td>
+                    </tr>
+                </table>
 
         @throws IllegalArgumentException
                 when any argument is wrong.
