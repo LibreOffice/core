@@ -65,7 +65,7 @@ class SvIdlDataBase
     SvRefMemberList<SvMetaType *>      aTypeList;
     SvRefMemberList<SvMetaClass *>     aClassList;
     SvRefMemberList<SvMetaModule *>    aModuleList;
-    SvRefMemberList<SvMetaAttribute *> aAttrList;
+    SvRefMemberList<SvMetaSlot *>      aSlotList;
     SvRefMemberList<SvMetaType *>      aTmpTypeList; // not persistent
     SvRefMemberList<SvMetaObject *>    aContextStack;
 
@@ -84,10 +84,10 @@ public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
 
-    SvRefMemberList<SvMetaAttribute *>&  GetAttrList() { return aAttrList; }
-    SvRefMemberList<SvMetaType *>&       GetTypeList();
-    SvRefMemberList<SvMetaClass *>&      GetClassList()  { return aClassList; }
-    SvRefMemberList<SvMetaModule *>&     GetModuleList() { return aModuleList; }
+    SvRefMemberList<SvMetaSlot *>&     GetSlotList() { return aSlotList; }
+    SvRefMemberList<SvMetaType *>&     GetTypeList();
+    SvRefMemberList<SvMetaClass *>&    GetClassList()  { return aClassList; }
+    SvRefMemberList<SvMetaModule *>&   GetModuleList() { return aModuleList; }
 
     // list of used types while writing
     SvRefMemberList<SvMetaType *>    aUsedTypes;
@@ -96,7 +96,7 @@ public:
     void                    StartNewFile( const OUString& rName );
     void                    SetExportFile( const OUString& rName )
                             { aExportFile = rName; }
-    void                    AppendAttr( SvMetaAttribute *pSlot );
+    void                    AppendSlot( SvMetaSlot *pSlot );
     const SvIdlError &      GetError() const { return aError; }
     void                    SetError( const SvIdlError & r )
                             { aError = r; }

@@ -332,11 +332,11 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
             sal_uLong n;
             if( FindId( pTok->GetString(), &n ) )
             {
-                for( sal_uLong i = 0; i < aAttrList.size(); i++ )
+                for( sal_uLong i = 0; i < aSlotList.size(); i++ )
                 {
-                    SvMetaAttribute * pAttr = aAttrList[i];
-                    if( pAttr->GetSlotId().getString().equals(pTok->GetString()) )
-                        return pAttr;
+                    SvMetaSlot * pSlot = aSlotList[i];
+                    if( pSlot->GetSlotId().getString().equals(pTok->GetString()) )
+                        return pSlot;
                 }
             }
 
@@ -358,11 +358,11 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
     sal_uLong n;
     if( FindId( rId.getString(), &n ) )
     {
-        for( sal_uLong i = 0; i < aAttrList.size(); i++ )
+        for( sal_uLong i = 0; i < aSlotList.size(); i++ )
         {
-            SvMetaAttribute * pAttr = aAttrList[i];
-            if( pAttr->GetSlotId().getString() == rId.getString() )
-                return pAttr;
+            SvMetaSlot * pSlot = aSlotList[i];
+            if( pSlot->GetSlotId().getString() == rId.getString() )
+                return pSlot;
         }
     }
 
@@ -572,9 +572,9 @@ void SvIdlDataBase::StartNewFile( const OUString& rName )
     assert ( !bExport );
 }
 
-void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
+void SvIdlDataBase::AppendSlot( SvMetaSlot *pSlot )
 {
-    aAttrList.push_back( pAttr );
+    aSlotList.push_back( pSlot );
     assert ( !bExport );
 }
 

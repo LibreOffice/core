@@ -154,7 +154,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             if( xSlot->Test( rBase, rInStm ) )
             {
                 // announce globally
-                rBase.AppendAttr( xSlot );
+                rBase.AppendSlot( xSlot );
             }
         }
     }

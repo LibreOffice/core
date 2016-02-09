@@ -502,9 +502,9 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
             OString aSId = aBuf.makeStringAndClear();
 
             xEnumSlot = nullptr;
-            for( m=0; m<rBase.GetAttrList().size(); m++ )
+            for( m=0; m<rBase.GetSlotList().size(); m++ )
             {
-                SvMetaAttribute * pAttr = rBase.GetAttrList()[m];
+                SvMetaSlot * pAttr = rBase.GetSlotList()[m];
                 if (aSId.equals(pAttr->GetSlotId().getString()))
                 {
                     SvMetaSlot& rSlot = dynamic_cast<SvMetaSlot&>(*pAttr);
@@ -513,7 +513,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                 }
             }
 
-            if ( m == rBase.GetAttrList().size() )
+            if ( m == rBase.GetSlotList().size() )
             {
                 OSL_FAIL("Invalid EnumSlot!");
                 xEnumSlot = Clone();
