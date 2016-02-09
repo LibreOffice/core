@@ -348,29 +348,32 @@ struct AnnotatingVisitor
             }
             case XML_STOP:
             {
-                const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                maGradientStopVector.push_back(GradientStop());
-                maGradientVector.back().maStops.push_back(maGradientStopVector.size()-1);
-
-                // first parse 'color' as 'stop-color' might depend on it
-                // if 'stop-color''s value is "currentColor" and parsed previously
-                uno::Reference<xml::dom::XNode> xNodeColor(xAttributes->getNamedItem("color"));
-                if(xNodeColor.is())
-                    parseGradientStop( maGradientStopVector.back(),
-                        maGradientStopVector.size()-1,
-                        XML_STOP_COLOR,
-                        xNodeColor->getNodeValue() );
-
-                //now, parse the rest of attributes
-                for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                if (!maGradientVector.empty())
                 {
-                    const sal_Int32 nTokenId(
-                        getTokenId(xAttributes->item(i)->getNodeName()));
-                    if ( nTokenId != XML_COLOR )
+                    const sal_Int32 nNumAttrs( xAttributes->getLength() );
+                    maGradientStopVector.push_back(GradientStop());
+                    maGradientVector.back().maStops.push_back(maGradientStopVector.size()-1);
+
+                    // first parse 'color' as 'stop-color' might depend on it
+                    // if 'stop-color''s value is "currentColor" and parsed previously
+                    uno::Reference<xml::dom::XNode> xNodeColor(xAttributes->getNamedItem("color"));
+                    if(xNodeColor.is())
                         parseGradientStop( maGradientStopVector.back(),
-                                           maGradientStopVector.size()-1,
-                                           nTokenId,
-                                           xAttributes->item(i)->getNodeValue() );
+                            maGradientStopVector.size()-1,
+                            XML_STOP_COLOR,
+                            xNodeColor->getNodeValue() );
+
+                    //now, parse the rest of attributes
+                    for( sal_Int32 i=0; i<nNumAttrs; ++i )
+                    {
+                        const sal_Int32 nTokenId(
+                            getTokenId(xAttributes->item(i)->getNodeName()));
+                        if ( nTokenId != XML_COLOR )
+                            parseGradientStop( maGradientStopVector.back(),
+                                               maGradientStopVector.size()-1,
+                                               nTokenId,
+                                               xAttributes->item(i)->getNodeValue() );
+                    }
                 }
                 break;
             }
