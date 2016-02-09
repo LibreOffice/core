@@ -934,6 +934,10 @@ bool OpenGLSalBitmap::ConvertToGreyscale()
     mnBits = 8;
     maPalette = Bitmap::GetGreyPalette(256);
 
+    // AllocateUserData will handle the rest.
+    mpUserBuffer.reset();
+    mbDirtyTexture = false;
+
     CHECK_GL_ERROR();
     return true;
 }
