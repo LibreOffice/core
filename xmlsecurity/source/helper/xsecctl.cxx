@@ -19,6 +19,8 @@
 
 
 #include "xsecctl.hxx"
+#include <algorithm>
+#include <initializer_list>
 #include <tools/debug.hxx>
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
@@ -976,6 +978,21 @@ void XSecController::exportSignature(
     xDocumentHandler->endElement( tag_Signature );
 }
 
+/// Should we intentionally not sign this stream?
+static bool lcl_isOOXMLBlacklist(const OUString& rStreamName)
+{
+#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
+    static
+#endif
+    const std::initializer_list<OUStringLiteral> vBlacklist =
+    {
+        OUStringLiteral("%5BContent_Types%5D.xml"),
+        OUStringLiteral("docProps/app.xml"),
+        OUStringLiteral("docProps/core.xml")
+    };
+    return std::find(vBlacklist.begin(), vBlacklist.end(), rStreamName) != vBlacklist.end();
+}
+
 void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
 {
     xDocumentHandler->startElement(TAG_SIGNEDINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
@@ -1050,6 +1067,32 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
         pAttributeList->AddAttribute(ATTR_ID, "idPackageObject");
         xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     }
+    xDocumentHandler->startElement(TAG_MANIFEST, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    for (const SignatureReferenceInformation& rReference : rReferences)
+    {
+        if (rReference.nType != SignatureReferenceType::SAMEDOCUMENT)
+        {
+            if (lcl_isOOXMLBlacklist(rReference.ouURI))
+                continue;
+
+            {
+                rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                pAttributeList->AddAttribute(ATTR_URI, rReference.ouURI);
+                xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+            }
+            {
+                rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_XMLDSIGSHA256);
+                xDocumentHandler->startElement(TAG_DIGESTMETHOD, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+                xDocumentHandler->endElement(TAG_DIGESTMETHOD);
+            }
+            xDocumentHandler->startElement(TAG_DIGESTVALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+            xDocumentHandler->characters(rReference.ouDigestValue);
+            xDocumentHandler->endElement(TAG_DIGESTVALUE);
+            xDocumentHandler->endElement(TAG_REFERENCE);
+        }
+    }
+    xDocumentHandler->endElement(TAG_MANIFEST);
     xDocumentHandler->endElement(TAG_OBJECT);
 
     {
