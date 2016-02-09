@@ -540,11 +540,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get() + //officecfg/registry/data/org/openoffice/Office/Common.xcu => https://hub.libreoffice.org/send-feedback/
-                "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-                "&LOlocale=" + utl::ConfigManager::getUILocale() +
-                "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
+            OUString lang = Application::GetSettings().GetUILanguageTag().getLanguage();
+            OUString sURL("https://libreoffice.cib.de/support_%1.html");
+            sURL = sURL.replaceFirst("%1", lang);
             sfx2::openUriExternally(sURL, false);
             break;
         }
