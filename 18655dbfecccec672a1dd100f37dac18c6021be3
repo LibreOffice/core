@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_49c4c691",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-09T08:02:33Z",
+      "side": 1,
+      "message": "Are you sure this is the right one of all the various kinds of headlessness to check?",
+      "range": {
+        "startLine": 1287,
+        "startChar": 21,
+        "endLine": 1287,
+        "endChar": 42
+      },
+      "revId": "18655dbfecccec672a1dd100f37dac18c6021be3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
