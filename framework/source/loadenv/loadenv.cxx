@@ -1724,11 +1724,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // and apply it on the window.
         // Do nothing, if no configuration entry exists!
         OUString sWindowState;
-
-        // Don't look for persistent window attributes in headless mode
-        if( !Application::IsHeadlessModeEnabled() )
-            comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES) >>= sWindowState;
-
+        ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES) >>= sWindowState;
         if (!sWindowState.isEmpty())
         {
             // SOLAR SAFE ->

@@ -77,10 +77,6 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // We don't want to do this stuff when in headless mode
-    if( Application::IsHeadlessModeEnabled() )
-        return;
-
     css::uno::Reference< css::uno::XComponentContext >     xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame;
     bool                                               bRestoreWindowState;
