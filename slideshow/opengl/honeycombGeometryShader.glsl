@@ -12,7 +12,9 @@
 layout(triangles) in;
 layout(triangle_strip, max_vertices=27) out;
 
-in mat4 modelViewProjectionMatrix[];
+in mat4 projectionMatrix[];
+in mat4 modelViewMatrix[];
+in mat4 shadowMatrix[];
 
 uniform float hexagonSize;
 uniform sampler2D permTexture;
@@ -21,6 +23,7 @@ out vec2 texturePosition;
 out float fuzz;
 out vec2 v_center;
 out vec3 normal;
+out vec4 shadowCoordinate;
 
 const float expandFactor = 0.0318;
 
@@ -29,10 +32,35 @@ float snoise(vec2 p)
     return texture2D(permTexture, p).r;
 }
 
+mat4 identityMatrix(void)
+{
+    return mat4(1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0);
+}
+
+mat4 scaleMatrix(vec3 axis)
+{
+    mat4 matrix = identityMatrix();
+    matrix[0][0] = axis.x;
+    matrix[1][1] = axis.y;
+    matrix[2][2] = axis.z;
+    return matrix;
+}
+
+mat4 translationMatrix(vec3 axis)
+{
+    mat4 matrix = identityMatrix();
+    matrix[3] = vec4(axis, 1.0);
+    return matrix;
+}
+
 void emitHexagonVertex(vec3 center, vec2 translation)
 {
     vec4 pos = vec4(center + hexagonSize * expandFactor * vec3(translation, 0.0), 1.0);
-    gl_Position = modelViewProjectionMatrix[0] * pos;
+    gl_Position = projectionMatrix[0] * modelViewMatrix[0] * pos;
+    shadowCoordinate = translationMatrix(vec3(0.5, 0.5, 0.5)) * scaleMatrix(vec3(0.5, 0.5, 0.5)) * shadowMatrix[0] * modelViewMatrix[0] * pos;
     texturePosition = vec2((pos.x + 1), (1 - pos.y)) / 2;
     EmitVertex();
 }

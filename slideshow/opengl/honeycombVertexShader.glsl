@@ -21,8 +21,13 @@ uniform mat4 u_operationsTransformMatrix;
 
 uniform float time;
 uniform float selectedTexture;
+uniform float shadow;
+uniform mat4 orthoProjectionMatrix;
+uniform mat4 orthoViewMatrix;
 
-out mat4 modelViewProjectionMatrix;
+out mat4 projectionMatrix;
+out mat4 modelViewMatrix;
+out mat4 shadowMatrix;
 
 mat4 translationMatrix(vec3 axis)
 {
@@ -55,7 +60,7 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 void main( void )
 {
-    mat4 modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
+    mat4 nmodelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
     mat4 transformMatrix;
 
     // TODO: use the aspect ratio of the slide instead.
@@ -76,7 +81,16 @@ void main( void )
             * rotationMatrix(vec3(0.0, 0.0, 1.0), pow(0.8 * (time - 1.0), 2.0) * M_PI)
             * invertSlideScaleMatrix;
     }
-    modelViewProjectionMatrix = u_projectionMatrix * modelViewMatrix * transformMatrix;
+
+    if (shadow < 0.5) {
+        projectionMatrix = u_projectionMatrix;
+        shadowMatrix = orthoProjectionMatrix * orthoViewMatrix;
+    } else {
+        projectionMatrix = orthoProjectionMatrix * orthoViewMatrix;
+        shadowMatrix = mat4(0.0);
+    }
+
+    modelViewMatrix = nmodelViewMatrix * transformMatrix;
     gl_Position = vec4(a_position, 1.0);
 }
 

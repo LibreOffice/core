@@ -2011,16 +2011,41 @@ public:
     HoneycombTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
         : PermTextureTransition(rScene, rSettings)
     {
+        mnDepthTextures[0] = 0;
+        mnDepthTextures[1] = 0;
     }
 
 private:
+    virtual void finishTransition() override;
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 
     GLint maHexagonSizeLocation = -1;
     GLint maSelectedTextureLocation = -1;
+    GLint mnShadowLocation = -1;
+    GLuint mnFramebuffer = 0u;
+    std::array<GLuint, 2> mnDepthTextures;
 };
+
+void HoneycombTransition::finishTransition()
+{
+    PermTextureTransition::finishTransition();
+
+    CHECK_GL_ERROR();
+    glActiveTexture( GL_TEXTURE2 );
+    glBindTexture( GL_TEXTURE_2D, 0 );
+    glActiveTexture( GL_TEXTURE3 );
+    glBindTexture( GL_TEXTURE_2D, 0 );
+    glActiveTexture( GL_TEXTURE0 );
+    CHECK_GL_ERROR();
+    glDeleteTextures(2, mnDepthTextures.data());
+    mnDepthTextures = {0u, 0u};
+    CHECK_GL_ERROR();
+    glDeleteFramebuffers(1, &mnFramebuffer);
+    mnFramebuffer = 0u;
+    CHECK_GL_ERROR();
+}
 
 GLuint HoneycombTransition::makeShader() const
 {
@@ -2035,38 +2060,116 @@ void HoneycombTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_In
     CHECK_GL_ERROR();
     maHexagonSizeLocation = glGetUniformLocation(m_nProgramObject, "hexagonSize");
     maSelectedTextureLocation = glGetUniformLocation( m_nProgramObject, "selectedTexture" );
+    mnShadowLocation = glGetUniformLocation(m_nProgramObject, "shadow");
+    GLint nOrthoProjectionMatrix = glGetUniformLocation(m_nProgramObject, "orthoProjectionMatrix");
+    GLint nOrthoViewMatrix = glGetUniformLocation(m_nProgramObject, "orthoViewMatrix");
+    GLint location = glGetUniformLocation(m_nProgramObject, "colorShadowTexture");
+    glUniform1i(location, 2);
+    location = glGetUniformLocation(m_nProgramObject, "depthShadowTexture");
+    glUniform1i(location, 3);
     CHECK_GL_ERROR();
 
     // We want to see the entering slide behind the leaving one.
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CHECK_GL_ERROR();
+
+    double EyePos(10.0);
+    double RealF(1.0);
+    double RealN(-1.0);
+    double RealL(-4.0);
+    double RealR(4.0);
+    double RealB(-4.0);
+    double RealT(4.0);
+    double ClipN(EyePos+5.0*RealN);
+    double ClipF(EyePos+15.0*RealF);
+    double ClipL(RealL*8.0);
+    double ClipR(RealR*8.0);
+    double ClipB(RealB*8.0);
+    double ClipT(RealT*8.0);
+
+    glm::mat4 projection = glm::ortho<float>(ClipL, ClipR, ClipB, ClipT, ClipN, ClipF);
+    //This scaling is to take the plane with BottomLeftCorner(-1,-1,0) and TopRightCorner(1,1,0) and map it to the screen after the perspective division.
+    glm::vec3 scale(1.0 / (((RealR * 2.0 * ClipN) / (EyePos * (ClipR - ClipL))) - ((ClipR + ClipL) / (ClipR - ClipL))),
+                    1.0 / (((RealT * 2.0 * ClipN) / (EyePos * (ClipT - ClipB))) - ((ClipT + ClipB) / (ClipT - ClipB))),
+                    1.0);
+    projection = glm::scale(projection, scale);
+    glUniformMatrix4fv(nOrthoProjectionMatrix, 1, false, glm::value_ptr(projection));
+
+    glm::mat4 view = lookAt(glm::vec3(0, 0, EyePos), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    glUniformMatrix4fv(nOrthoViewMatrix, 1, false, glm::value_ptr(view));
+
+    // Generate the framebuffer and textures for the shadows.
+    glGenTextures(2, mnDepthTextures.data());
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, mnDepthTextures[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2048, 2048, 0, GL_RGBA, GL_FLOAT, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, mnDepthTextures[1]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 2048, 2048, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glActiveTexture(GL_TEXTURE0);
+    glGenFramebuffers(1, &mnFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, mnFramebuffer);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mnDepthTextures[0], 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, mnDepthTextures[1], 0);
+
+    // Always check that our framebuffer is ok
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        SAL_WARN("slideshow.opengl", "Wrong framebuffer!");
+        return;
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
                                               double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
-    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-    glUniform1f( m_nTimeLocation, nTime );
-
-    // The back (entering) slide needs to be drawn before the front (leaving) one in order for blending to work.
+    applyOverallOperations(nTime, SlideWidthScale, SlideHeightScale);
+    glUniform1f(m_nTimeLocation, nTime);
+    glUniform1f(mnShadowLocation, 1.0);
+    CHECK_GL_ERROR();
 
     const float borderSize = 0.15f;
 
-    CHECK_GL_ERROR();
-    glUniform1f(maSelectedTextureLocation, 0.0);
-    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
-    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
-    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
-    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
-    CHECK_GL_ERROR();
-
+    std::array<GLint, 4> viewport;
+    glGetIntegerv(GL_VIEWPORT, viewport.data());
+    glViewport(0, 0, 2048, 2048);
+    glBindFramebuffer(GL_FRAMEBUFFER, mnFramebuffer);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUniform1f(mnShadowLocation, 1.0);
     glUniform1f(maSelectedTextureLocation, 1.0);
     glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
-    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
     glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
-    displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
+
+    // The back (entering) slide needs to be drawn before the front (leaving) one in order for blending to work.
+    glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUniform1f(mnShadowLocation, 0.0);
+    glUniform1f(maSelectedTextureLocation, 0.0);
+    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    displaySlide(nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale);
+    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    displaySlide(nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale);
+    glUniform1f(maSelectedTextureLocation, 1.0);
+    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
+    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
+    CHECK_GL_ERROR();
 }
 
 std::shared_ptr<OGLTransitionImpl>
