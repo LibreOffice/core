@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/window.hxx>
@@ -77,6 +78,10 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
+    // We don't want to do this stuff when being used through LibreOfficeKit
+    if( comphelper::LibreOfficeKit::isActive() )
+        return;
+
     css::uno::Reference< css::uno::XComponentContext >     xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame;
     bool                                               bRestoreWindowState;
