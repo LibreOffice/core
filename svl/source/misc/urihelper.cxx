@@ -763,7 +763,10 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
     std::unique_ptr<icu::IDNA> idna(
         icu::IDNA::createUTS46Instance(
             (UIDNA_USE_STD3_RULES | UIDNA_CHECK_BIDI | UIDNA_CHECK_CONTEXTJ
-             | UIDNA_CHECK_CONTEXTO),
+#if U_ICU_VERSION_MAJOR_NUM >= 49
+             | UIDNA_CHECK_CONTEXTO
+#endif
+             ),
             e));
     if (U_FAILURE(e)) {
         SAL_WARN("vcl.gdi", "icu::IDNA::createUTS46Instance " << e);
