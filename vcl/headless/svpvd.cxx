@@ -66,6 +66,11 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != aDevSize.getX() ||
                        cairo_image_surface_get_height(m_pSurface) != aDevSize.getY() )
     {
+        if (m_pSurface)
+        {
+            cairo_surface_destroy(m_pSurface);
+        }
+
         if (m_eFormat == DeviceFormat::BITMASK)
         {
             m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_A1,
