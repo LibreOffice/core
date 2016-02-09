@@ -70,7 +70,7 @@ public:
     // callbacks
     void onSelectionChanged();
     void onChangeCurrentPage();
-    void onChange();
+    void onAdd();
     void animationChange();
     void onRemove();
     void onChangeStart();
@@ -116,7 +116,7 @@ private:
     static css::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const css::uno::Any& rValue );
     void UpdateLook();
-    void fillAnimationLB();
+    sal_uInt32 fillAnimationLB();
 
     DECL_LINK_TYPED( implControlListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
