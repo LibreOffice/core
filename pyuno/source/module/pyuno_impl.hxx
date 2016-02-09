@@ -26,7 +26,7 @@
 
 #include <Python.h>
 
-#if PY_VERSION_HEX < 0x02070000
+#if PY_VERSION_HEX < 0x03020000
 typedef long Py_hash_t;
 #endif
 
