@@ -80,7 +80,6 @@ public:
 
     bool          operator < ( const SvGlobalName & rObj ) const;
     SvGlobalName& operator += ( sal_uInt32 );
-    SvGlobalName& operator ++ () { return operator += ( 1 ); }
 
     bool          operator == ( const SvGlobalName & rObj ) const;
     bool          operator != ( const SvGlobalName & rObj ) const

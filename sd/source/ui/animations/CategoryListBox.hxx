@@ -16,8 +16,6 @@ public:
 
     sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
 
-    void                SetDoubleClickLink( const Link<CategoryListBox&,void>& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
-
     DECL_LINK_TYPED(implDoubleClickHdl, ListBox&, void);
 
 private:

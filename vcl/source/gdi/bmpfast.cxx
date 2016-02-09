@@ -50,7 +50,6 @@ public:
 
     void    SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const;
     void    SetAlpha( PIXBYTE a ) const;
-    void    operator++(int);
 };
 
 // template specializations for truecolor pixel formats

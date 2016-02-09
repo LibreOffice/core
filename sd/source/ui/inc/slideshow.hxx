@@ -165,10 +165,6 @@ public:
     OutputDevice* getShowWindow();                      // a.k.a. FuSlideShow::GetShowWindow()
     int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
     sal_Int32 getCurrentPageNumber();                   // a.k.a. FuSlideShow::GetCurrentPage()
-    sal_Int32 getFirstPageNumber();
-    sal_Int32 getLastPageNumber();
-    bool isEndless();
-    bool isDrawingPossible();
 
     // events
     void resize( const Size &rSize );
@@ -177,8 +173,6 @@ public:
     void paint( const Rectangle& rRect );
 
     bool keyInput(const KeyEvent& rKEvt);
-
-    void receiveRequest(SfxRequest& rReq);
 
     bool dependsOn( ViewShellBase* pViewShellBase );
 

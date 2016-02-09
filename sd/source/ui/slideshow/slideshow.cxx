@@ -1020,26 +1020,6 @@ void SlideShow::pause( bool bPause )
     }
 }
 
-sal_Int32 SlideShow::getFirstPageNumber()
-{
-    return mxController.is() ? mxController->getFirstSlideNumber() : 0;
-}
-
-sal_Int32 SlideShow::getLastPageNumber()
-{
-    return mxController.is() ? mxController->getLastSlideNumber() : 0;
-}
-
-bool SlideShow::isEndless()
-{
-    return mxController.is() && mxController->isEndless();
-}
-
-bool SlideShow::isDrawingPossible()
-{
-    return mxController.is() && mxController->getUsePen();
-}
-
 bool SlideShow::swipe(const CommandSwipeData& rSwipeData)
 {
     return mxController.is() && mxController->swipe(rSwipeData);

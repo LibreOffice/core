@@ -260,10 +260,10 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list = sorted(tmp1set, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
-#for t in tmp1list:
-#    print t[1]
-#    print "    ", t[0]
-#sys.exit(0)
+with open("unused.methods", "wt") as f:
+    for t in tmp1list:
+        f.write(t[1] + "\n")
+        f.write("    " + t[0] + "\n")
 
 # -------------------------------------------
 # Do the "unused return types" part
@@ -304,9 +304,10 @@ for d in definitionSet:
 # sort results by name and line number
 tmp2list = sorted(tmp2set, key=lambda v: natural_sort_key(v[1]))
     
-#for t in tmp2list:
-#    print t[1]
-#    print "    ", t[0]
+with open("unused.returns", "wt") as f:
+    for t in tmp2list:
+        f.write(t[1])
+        f.write("    " +  t[0] + "\n")
 
 
 # -------------------------------------------
@@ -328,11 +329,10 @@ for d in publicDefinitionSet:
 # sort results by name and line number
 tmp3list = sorted(tmp3set, key=lambda v: natural_sort_key(v[1]))
     
-for t in tmp3list:
-    print t[1]
-    print "    ", t[0]
+with open("unused.public", "wt") as f:
+    for t in tmp3list:
+        f.write(t[1] + "\n")
+        f.write("    " + t[0] + "\n")
 
-# add an empty line at the end to make it easier for the unusedmethodsremove plugin to mmap() the output file 
-print
         
 
