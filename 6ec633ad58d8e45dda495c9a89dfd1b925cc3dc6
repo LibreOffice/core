@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a9a56ab6",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-09T10:46:30Z",
+      "side": 1,
+      "message": "You can make a bool variable outta this, as it\u0027s used repeatedly",
+      "revId": "6ec633ad58d8e45dda495c9a89dfd1b925cc3dc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_09abde8a",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-09T10:46:30Z",
+      "side": 1,
+      "message": "Please don\u0027t hard-code selected entry like this, it\u0027s going to break next time someone thinks it\u0027s a good idea to rearrange UI items again\n\nMaybe change the order of items in mpLBCategory in such a way that Entrance is on 1st position. That way, nothing must be explicitly done for that item to be selected onAdd().\n\nAnd while at it, move Motion path perhaps to the last position, it\u0027s not so frequently used",
+      "revId": "6ec633ad58d8e45dda495c9a89dfd1b925cc3dc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
