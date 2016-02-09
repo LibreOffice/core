@@ -49,8 +49,6 @@ using namespace ::com::sun::star;
 namespace unogallery {
 
 
-
-
 GalleryItem::GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject ) :
     ::comphelper::PropertySetHelper( createPropertySetInfo() ),
     mpTheme( &rTheme ),
@@ -58,7 +56,6 @@ GalleryItem::GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObjec
 {
     mpTheme->implRegisterGalleryItem( *this );
 }
-
 
 
 GalleryItem::~GalleryItem()
@@ -69,12 +66,10 @@ GalleryItem::~GalleryItem()
 }
 
 
-
 bool GalleryItem::isValid() const
 {
     return( mpTheme != nullptr );
 }
-
 
 
 uno::Any SAL_CALL GalleryItem::queryAggregation( const uno::Type & rType )
@@ -101,13 +96,11 @@ uno::Any SAL_CALL GalleryItem::queryAggregation( const uno::Type & rType )
 }
 
 
-
 uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
-
 
 
 void SAL_CALL GalleryItem::acquire()
@@ -117,7 +110,6 @@ void SAL_CALL GalleryItem::acquire()
 }
 
 
-
 void SAL_CALL GalleryItem::release()
     throw()
 {
@@ -125,13 +117,11 @@ void SAL_CALL GalleryItem::release()
 }
 
 
-
 OUString GalleryItem::getImplementationName_Static()
     throw()
 {
     return OUString( "com.sun.star.comp.gallery.GalleryItem" );
 }
-
 
 
 uno::Sequence< OUString > GalleryItem::getSupportedServiceNames_Static()
@@ -182,7 +172,6 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
 }
 
 
-
 sal_Int8 SAL_CALL GalleryItem::getType()
     throw (uno::RuntimeException, std::exception)
 {
@@ -210,7 +199,6 @@ sal_Int8 SAL_CALL GalleryItem::getType()
 
     return nRet;
 }
-
 
 
 ::comphelper::PropertySetInfo* GalleryItem::createPropertySetInfo()
@@ -399,10 +387,6 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 }
 
 
-
-
-
-
 void GalleryItem::implSetInvalid()
 {
     if( mpTheme )
@@ -413,8 +397,6 @@ void GalleryItem::implSetInvalid()
 }
 
 
-
-
 GalleryDrawingModel::GalleryDrawingModel( SdrModel* pDoc )
     throw() :
     SvxUnoDrawingModel( pDoc )
@@ -422,13 +404,11 @@ GalleryDrawingModel::GalleryDrawingModel( SdrModel* pDoc )
 }
 
 
-
 GalleryDrawingModel::~GalleryDrawingModel()
     throw()
 {
     delete GetDoc();
 }
-
 
 
 UNO3_GETIMPLEMENTATION_IMPL( GalleryDrawingModel );

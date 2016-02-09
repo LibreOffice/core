@@ -24,7 +24,6 @@
 #include <basegfx/range/b2ibox.hxx>
 
 
-
 namespace basegfx
 {
     namespace tools

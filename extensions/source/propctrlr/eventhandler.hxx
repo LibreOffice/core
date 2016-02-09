@@ -37,7 +37,6 @@ namespace pcr
 {
 
 
-
     //= EventDescription
 
     typedef sal_Int32   EventId;

@@ -26,7 +26,6 @@
 class BrowseBox;
 
 
-
 class SVT_DLLPUBLIC BrowserHeader: public HeaderBar
 {
     VclPtr<BrowseBox>   _pBrowseBox;

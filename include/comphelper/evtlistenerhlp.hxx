@@ -30,7 +30,6 @@ namespace comphelper
 {
 
 
-
     //= OCommandsListener
     // is helper class to avoid a cycle in refcount between the XEventListener
     // and the member XComponent

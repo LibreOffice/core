@@ -35,13 +35,11 @@ namespace comphelper
 }
 
 
-
 //  SvNumberFormatterServiceObj must be registered as service somewhere
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL
     SvNumberFormatterServiceObj_NewInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
-
 
 
 //  SvNumberFormatsSupplierObj: aggregate to document,

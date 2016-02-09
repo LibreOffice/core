@@ -404,8 +404,6 @@ void SAL_CALL OCommonEmbeddedObject::release()
 }
 
 
-
-
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
         throw ( uno::RuntimeException, std::exception )
 {

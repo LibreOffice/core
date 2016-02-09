@@ -33,7 +33,6 @@
 #define CACHED_CONTENT_RESULTSET_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetFactory"
 
 
-
 namespace com { namespace sun { namespace star { namespace script {
     class XTypeConverter;
 } } } }
@@ -126,7 +125,6 @@ class CachedContentResultSet
     CCRS_PropertySetInfo*   m_pMyPropSetInfo;
 
 
-
     css::uno::Reference< css::ucb::XContentIdentifierMapping >
                             m_xContentIdentifierMapping;// can be used for remote optimized ContentAccess
 
@@ -157,7 +155,6 @@ private:
 
     //helping XPropertySet methods.
     virtual void SAL_CALL impl_initPropertySetInfo() override;
-
 
 
     bool SAL_CALL
@@ -463,7 +460,6 @@ private:
     template<typename T> T rowOriginGet(
         T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex);
 };
-
 
 
 class CachedContentResultSetFactory

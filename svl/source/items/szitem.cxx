@@ -28,12 +28,9 @@
 #include <svl/memberid.hrc>
 
 
-
-
 SfxSizeItem::SfxSizeItem()
 {
 }
-
 
 
 SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
@@ -43,13 +40,11 @@ SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
 }
 
 
-
 SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
 }
-
 
 
 bool SfxSizeItem::GetPresentation
@@ -66,13 +61,11 @@ bool SfxSizeItem::GetPresentation
 }
 
 
-
 bool SfxSizeItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return static_cast<const SfxSizeItem&>(rItem).aVal == aVal;
 }
-
 
 
 SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
@@ -81,14 +74,12 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 }
 
 
-
 SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
     Size aStr;
     ReadPair( rStream, aStr );
     return new SfxSizeItem(Which(), aStr);
 }
-
 
 
 SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
@@ -169,7 +160,6 @@ bool SfxSizeItem::PutValue( const css::uno::Any& rVal,
 
     return bRet;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

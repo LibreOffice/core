@@ -52,7 +52,6 @@ using namespace css::container;
 using namespace css::beans::PropertyAttribute;
 
 
-
 #define DEFAULT_INDEX_ACCESS_COUNT  10
 #define DEFAULT_NAME_ACCESS_COUNT   5
 
@@ -659,7 +658,6 @@ void ImplIntroTest::removePropertiesChangeListener
 }
 
 
-
 struct DefItem
 {
     char const * pName;
@@ -837,7 +835,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     };
 
     OString aErrorStr;
-
 
 
     // create test object

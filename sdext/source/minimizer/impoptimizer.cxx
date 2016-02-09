@@ -477,8 +477,6 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 }
 
 
-
-
 ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel ) :
     mxContext                   ( rxContext ),
     mxModel                     ( rxModel ),
@@ -497,11 +495,9 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, con
 }
 
 
-
 ImpOptimizer::~ImpOptimizer()
 {
 }
-
 
 
 void ImpOptimizer::DispatchStatus()
@@ -514,7 +510,6 @@ void ImpOptimizer::DispatchStatus()
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }
 }
-
 
 
 bool ImpOptimizer::Optimize()
@@ -588,7 +583,6 @@ static void DispatchURL( Reference< XComponentContext > xContext, const OUString
     {
     }
 }
-
 
 
 void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )

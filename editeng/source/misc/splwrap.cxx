@@ -164,7 +164,6 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
 }
 
 
-
 SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
         Reference< XHyphenator >  &xHyphenator,
         const bool bStart, const bool bOther ) :
@@ -182,7 +181,6 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
     bAllRight   ( true )
 {
 }
-
 
 
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
@@ -236,13 +234,9 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
 }
 
 
-
-
 void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
 { // Here, the necessary preparations be made for SpellContinue in the
 } // given area.
-
-
 
 
 bool SvxSpellWrapper::HasOtherCnt()
@@ -251,14 +245,10 @@ bool SvxSpellWrapper::HasOtherCnt()
 }
 
 
-
-
 bool SvxSpellWrapper::SpellMore()
 {
     return false; // Should additional documents be examined?
 }
-
-
 
 
 void SvxSpellWrapper::SpellEnd()
@@ -409,7 +399,6 @@ bool SvxSpellWrapper::SpellNext( )
 }
 
 
-
 Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 {
     Reference< XDictionary >  xDic;
@@ -451,7 +440,6 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 
     return xDic;
 }
-
 
 
 bool SvxSpellWrapper::FindSpellError()
@@ -510,7 +498,6 @@ bool SvxSpellWrapper::FindSpellError()
     WAIT_OFF();
     return GetLast().is();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

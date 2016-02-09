@@ -191,7 +191,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 }
 
 
-
 // Package
 BackendImpl * BackendImpl::ExecutablePackageImpl::getMyBackend() const
 {
@@ -307,7 +306,6 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
     }
     return bSuccess;
 }
-
 
 
 } // anon namespace

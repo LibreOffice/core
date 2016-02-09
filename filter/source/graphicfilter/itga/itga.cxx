@@ -130,7 +130,6 @@ TGAReader::~TGAReader()
 }
 
 
-
 bool TGAReader::ReadTGA(Graphic & rGraphic)
 {
     if ( m_rTGA.GetError() )
@@ -168,7 +167,6 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
     }
     return mbStatus;
 }
-
 
 
 bool TGAReader::ImplReadHeader()
@@ -269,7 +267,6 @@ bool TGAReader::ImplReadHeader()
 
     return mbStatus;
 }
-
 
 
 bool TGAReader::ImplReadBody()
@@ -704,7 +701,6 @@ bool TGAReader::ImplReadBody()
     }
     return mbStatus;
 }
-
 
 
 bool TGAReader::ImplReadPalette()

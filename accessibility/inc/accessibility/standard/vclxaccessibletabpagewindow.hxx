@@ -28,7 +28,6 @@ class TabControl;
 class TabPage;
 
 
-
 //  class VCLXAccessibleTabPageWindow
 
 

@@ -322,7 +322,6 @@ public:
 };
 
 
-
 class SmShowSymbol : public Control
 {
     Link<SmShowSymbol&,void> aDblClickHdlLink;
@@ -343,7 +342,6 @@ public:
     void    SetSymbol(const SmSym *pSymbol);
     void    SetDblClickHdl(const Link<SmShowSymbol&,void> &rLink) { aDblClickHdlLink = rLink; }
 };
-
 
 
 class SmSymDefineDialog;
@@ -390,7 +388,6 @@ public:
 };
 
 
-
 class SmShowChar : public Control
 {
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
@@ -405,7 +402,6 @@ public:
     void    SetSymbol( const SmSym *pSym );
     void    SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont );
 };
-
 
 
 class SmSymDefineDialog : public ModalDialog
@@ -505,7 +501,6 @@ public:
     bool        SelectStyle(const OUString &rStyleName) { return SelectStyle(rStyleName, true); };
     void        SelectChar(sal_Unicode cChar);
 };
-
 
 
 #endif

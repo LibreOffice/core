@@ -178,7 +178,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

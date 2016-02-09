@@ -28,8 +28,6 @@
 #include <o3tl/cow_wrapper.hxx>
 
 
-
-
 class Rectangle;
 class Point;
 class SvStream;
@@ -57,8 +55,6 @@ public:
 
     bool operator==( const Impl_Gradient& rImpl_Gradient ) const;
 };
-
-
 
 
 class VCL_DLLPUBLIC Gradient

@@ -74,7 +74,6 @@ void SAL_CALL OInterceptor::dispose()
 }
 
 
-
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
     ,m_aInterceptedURL(7)
@@ -347,7 +346,6 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
 
     return aRet;
 }
-
 
 
 //XDispatchProviderInterceptor

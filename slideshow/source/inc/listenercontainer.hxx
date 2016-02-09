@@ -419,7 +419,6 @@ private:
 };
 
 
-
 /** ListenerContainer variant that serialized access
 
     This ListenerContainer is safe to use in a multi-threaded
@@ -434,7 +433,6 @@ class ThreadSafeListenerContainer : public ListenerContainerBase<ListenerT,
                                                                  ContainerT>
 {
 };
-
 
 
 /** ListenerContainer variant that does not serialize access

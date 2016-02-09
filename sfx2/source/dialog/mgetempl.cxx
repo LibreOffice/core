@@ -248,7 +248,6 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
 }
 
 
-
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 {
     disposeOnce();
@@ -277,7 +276,6 @@ void SfxManageStyleSheetPage::dispose()
 }
 
 
-
 void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
                                                const OUString& rNew )
 
@@ -303,7 +301,6 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
             pBox->SelectEntry( rNew );
     }
 }
-
 
 
 void SfxManageStyleSheetPage::SetDescriptionText_Impl()
@@ -488,7 +485,6 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 }
 
 
-
 void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 
 /*  [Description]
@@ -557,13 +553,11 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 }
 
 
-
 VclPtr<SfxTabPage> SfxManageStyleSheetPage::Create( vcl::Window* pParent,
                                                     const SfxItemSet *rAttrSet )
 {
     return VclPtr<SfxManageStyleSheetPage>::Create( pParent, *rAttrSet );
 }
-
 
 
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
@@ -594,7 +588,6 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
         m_pAutoCB->Check( static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() );
     m_pAutoCB->SaveValue();
 }
-
 
 
 SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )

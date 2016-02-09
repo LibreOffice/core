@@ -25,9 +25,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

@@ -350,8 +350,6 @@ void Bridge::terminate(bool final) {
 }
 
 
-
-
 BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
     css::uno::Any in(cppAny);
     BinaryAny out;

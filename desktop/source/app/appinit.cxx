@@ -66,7 +66,6 @@ namespace desktop
 {
 
 
-
 static void configureUcb()
 {
     // For backwards compatibility, in case some code still uses plain

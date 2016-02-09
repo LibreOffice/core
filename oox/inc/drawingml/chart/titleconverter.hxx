@@ -36,7 +36,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct TextModel;
 
 class TextConverter : public ConverterBase< TextModel >
@@ -64,7 +63,6 @@ private:
 };
 
 
-
 struct TitleModel;
 
 class TitleConverter : public ConverterBase< TitleModel >
@@ -81,7 +79,6 @@ public:
 };
 
 
-
 struct LegendModel;
 
 class LegendConverter : public ConverterBase< LegendModel >
@@ -94,7 +91,6 @@ public:
     void                convertFromModel(
                             const css::uno::Reference< css::chart2::XDiagram >& rxDiagram );
 };
-
 
 
 } // namespace chart

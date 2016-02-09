@@ -766,7 +766,6 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
 }
 
 
-
 DocumentMetadataAccess::DocumentMetadataAccess(
         uno::Reference< uno::XComponentContext > const & i_xContext,
         const IXmlIdRegistrySupplier & i_rRegistrySupplier)

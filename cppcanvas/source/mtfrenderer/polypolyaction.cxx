@@ -229,8 +229,6 @@ namespace cppcanvas
             }
 
 
-
-
             class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
@@ -342,7 +340,6 @@ namespace cppcanvas
                 // line segments, when subsets are requested.
                 return 1;
             }
-
 
 
             class StrokedPolyPolyAction : public CachedPrimitiveBase

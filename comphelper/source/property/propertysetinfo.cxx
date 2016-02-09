@@ -128,7 +128,6 @@ bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
 }
 
 
-
 PropertySetInfo::PropertySetInfo() throw()
 {
     mpMap = new PropertyMapImpl();

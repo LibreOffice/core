@@ -48,9 +48,7 @@ namespace ucbhelper_impl
 {
 
 
-
 // PropertyValue.
-
 
 
 const sal_uInt32 NO_VALUE_SET               = 0x00000000;
@@ -127,9 +125,7 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
 } // namespace ucbhelper
 
 
-
 // Welcome to the macro hell...
-
 
 
 #define GETVALUE_IMPL_TYPE( _type_, _type_name_, _member_name_, _cppu_type_ ) \
@@ -236,12 +232,7 @@ class PropertyValues : public std::vector< ucbhelper_impl::PropertyValue > {};
 namespace ucbhelper {
 
 
-
-
 // PropertyValueSet Implementation.
-
-
-
 
 
 PropertyValueSet::PropertyValueSet(
@@ -260,7 +251,6 @@ PropertyValueSet::~PropertyValueSet()
 {
     delete m_pValues;
 }
-
 
 
 // XInterface methods.
@@ -290,16 +280,13 @@ css::uno::Any SAL_CALL PropertyValueSet::queryInterface( const css::uno::Type & 
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_3( PropertyValueSet,
                       XTypeProvider,
                          XRow,
                       XColumnLocate );
 
 
-
 // XRow methods.
-
 
 
 // virtual
@@ -593,9 +580,7 @@ Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
 }
 
 
-
 // XColumnLocate methods.
-
 
 
 // virtual
@@ -617,9 +602,7 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
 }
 
 
-
 // Non-interface methods.
-
 
 
 const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()

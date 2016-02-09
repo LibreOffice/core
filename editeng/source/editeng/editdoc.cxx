@@ -71,8 +71,6 @@
 using namespace ::com::sun::star;
 
 
-
-
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType )
 {
     sal_uInt16 nId = nItemId;
@@ -1004,7 +1002,6 @@ EditLine::~EditLine()
 }
 
 
-
 EditLine* EditLine::Clone() const
 {
     EditLine* pL = new EditLine;
@@ -1167,7 +1164,6 @@ void EditLineList::Insert(sal_Int32 nPos, EditLine* p)
 EditPaM::EditPaM() : pNode(nullptr), nIndex(0) {}
 EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
 EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
-
 
 
 void EditPaM::SetNode(ContentNode* p)
@@ -2883,7 +2879,6 @@ bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
     }
     return false;
 }
-
 
 
 namespace {

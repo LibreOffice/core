@@ -49,13 +49,11 @@ namespace svt
 {
 
 
-
 #define     UNODIALOG_PROPERTY_ID_TITLE     1
 #define     UNODIALOG_PROPERTY_ID_PARENT    2
 
 #define     UNODIALOG_PROPERTY_TITLE        "Title"
 #define     UNODIALOG_PROPERTY_PARENT       "ParentWindow"
-
 
 
     typedef ::cppu::WeakImplHelper3 <   css::ui::dialogs::XExecutableDialog

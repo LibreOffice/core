@@ -107,8 +107,6 @@ bool AccessibleContextBase::SetState (sal_Int16 aState)
 }
 
 
-
-
 bool AccessibleContextBase::ResetState (sal_Int16 aState)
 {
     ::osl::ClearableMutexGuard aGuard (maMutex);
@@ -133,8 +131,6 @@ bool AccessibleContextBase::ResetState (sal_Int16 aState)
 }
 
 
-
-
 bool AccessibleContextBase::GetState (sal_Int16 aState)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -146,8 +142,6 @@ bool AccessibleContextBase::GetState (sal_Int16 aState)
         // If there is no state set then return false as a default value.
         return false;
 }
-
-
 
 
 void AccessibleContextBase::SetRelationSet (
@@ -176,8 +170,6 @@ void AccessibleContextBase::SetRelationSet (
 }
 
 
-
-
 // XAccessible
 
 uno::Reference< XAccessibleContext> SAL_CALL
@@ -187,8 +179,6 @@ uno::Reference< XAccessibleContext> SAL_CALL
     ThrowIfDisposed ();
     return this;
 }
-
-
 
 
 // XAccessibleContext
@@ -202,8 +192,6 @@ sal_Int32 SAL_CALL
     ThrowIfDisposed ();
     return 0;
 }
-
-
 
 
 /** Forward the request to the shape.  Return the requested shape or throw
@@ -220,8 +208,6 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
 
-
-
 uno::Reference<XAccessible> SAL_CALL
        AccessibleContextBase::getAccessibleParent()
     throw (css::uno::RuntimeException, std::exception)
@@ -229,8 +215,6 @@ uno::Reference<XAccessible> SAL_CALL
     ThrowIfDisposed ();
     return mxParent;
 }
-
-
 
 
 sal_Int32 SAL_CALL
@@ -267,8 +251,6 @@ sal_Int32 SAL_CALL
 }
 
 
-
-
 sal_Int16 SAL_CALL
     AccessibleContextBase::getAccessibleRole()
     throw (css::uno::RuntimeException, std::exception)
@@ -276,8 +258,6 @@ sal_Int16 SAL_CALL
     ThrowIfDisposed ();
     return maRole;
 }
-
-
 
 
 OUString SAL_CALL
@@ -288,8 +268,6 @@ OUString SAL_CALL
 
     return msDescription;
 }
-
-
 
 
 OUString SAL_CALL
@@ -308,8 +286,6 @@ OUString SAL_CALL
 
     return msName;
 }
-
-
 
 
 /** Return a copy of the relation set.
@@ -331,8 +307,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     else
         return uno::Reference<XAccessibleRelationSet>(nullptr);
 }
-
-
 
 
 /** Return a copy of the state set.
@@ -379,8 +353,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 }
 
 
-
-
 lang::Locale SAL_CALL
        AccessibleContextBase::getLocale()
     throw (IllegalAccessibleComponentStateException,
@@ -400,8 +372,6 @@ lang::Locale SAL_CALL
     //  cluelessness.
     throw IllegalAccessibleComponentStateException ();
 }
-
-
 
 
 // XAccessibleEventListener
@@ -425,8 +395,6 @@ void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
         }
     }
 }
-
-
 
 
 void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
@@ -476,8 +444,6 @@ uno::Sequence< OUString > SAL_CALL
 }
 
 
-
-
 // XTypeProvider
 
 uno::Sequence< css::uno::Type>
@@ -515,8 +481,6 @@ void SAL_CALL AccessibleContextBase::disposing()
 }
 
 
-
-
 void AccessibleContextBase::SetAccessibleDescription (
     const OUString& rDescription,
     StringOrigin eDescriptionOrigin)
@@ -538,8 +502,6 @@ void AccessibleContextBase::SetAccessibleDescription (
             aOldValue);
     }
 }
-
-
 
 
 void AccessibleContextBase::SetAccessibleName (
@@ -565,8 +527,6 @@ void AccessibleContextBase::SetAccessibleName (
 }
 
 
-
-
 OUString AccessibleContextBase::CreateAccessibleDescription()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -574,15 +534,11 @@ OUString AccessibleContextBase::CreateAccessibleDescription()
 }
 
 
-
-
 OUString AccessibleContextBase::CreateAccessibleName()
     throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("Empty Name");
 }
-
-
 
 
 void AccessibleContextBase::CommitChange (
@@ -606,15 +562,11 @@ void AccessibleContextBase::CommitChange (
 }
 
 
-
-
 void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 {
     if (mnClientId)
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
 }
-
-
 
 
 void AccessibleContextBase::ThrowIfDisposed()
@@ -629,12 +581,10 @@ void AccessibleContextBase::ThrowIfDisposed()
 }
 
 
-
 bool AccessibleContextBase::IsDisposed()
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
-
 
 
 void AccessibleContextBase::SetAccessibleRole( sal_Int16 _nRole )

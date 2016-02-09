@@ -36,7 +36,6 @@ namespace comphelper
 {
 
 
-
     // = NamedValueCollection
 
     struct NamedValueCollection_Impl;

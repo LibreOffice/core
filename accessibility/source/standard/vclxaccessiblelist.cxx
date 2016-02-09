@@ -494,7 +494,6 @@ void VCLXAccessibleList::UpdateSelection (const OUString& sTextOfSelectedItem)
 }
 
 
-
 Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
 {
     Reference<XAccessible> xChild;
@@ -965,12 +964,10 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeExcept
 }
 
 
-
 bool VCLXAccessibleList::IsInDropDown()
 {
     return m_pListBoxHelper->IsInDropDown();
 }
-
 
 
 void VCLXAccessibleList::HandleDropOpen()

@@ -597,7 +597,6 @@ bool                    OFieldDescription::IsAutoIncrement()        const
 }
 
 
-
 bool                    OFieldDescription::IsNullable()             const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISNULLABLE) )

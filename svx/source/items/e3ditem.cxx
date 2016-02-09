@@ -25,7 +25,6 @@
 using namespace ::com::sun::star;
 
 
-
 SvxB3DVectorItem::SvxB3DVectorItem()
 {
 }
@@ -35,13 +34,11 @@ SvxB3DVectorItem::~SvxB3DVectorItem()
 }
 
 
-
 SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
     aVal( rVal )
 {
 }
-
 
 
 SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
@@ -51,7 +48,6 @@ SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
 }
 
 
-
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -59,12 +55,10 @@ bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 }
 
 
-
 SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
     return new SvxB3DVectorItem( *this );
 }
-
 
 
 SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
@@ -78,7 +72,6 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/
 }
 
 
-
 SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
 
@@ -90,7 +83,6 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
 
     return rStream;
 }
-
 
 
 bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -109,7 +101,6 @@ bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) con
 }
 
 
-
 bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
@@ -124,7 +115,6 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 
     return true;
 }
-
 
 
 sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const

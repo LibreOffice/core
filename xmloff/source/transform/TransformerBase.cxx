@@ -1421,7 +1421,6 @@ XMLTokenEnum XMLTransformerBase::GetToken( const OUString& rStr ) const
 }
 
 
-
 const XMLTransformerContext *XMLTransformerBase::GetCurrentContext() const
 {
     OSL_ENSURE( !m_pContexts.empty(), "empty stack" );

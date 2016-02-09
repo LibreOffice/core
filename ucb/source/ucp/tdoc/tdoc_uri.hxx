@@ -25,10 +25,8 @@
 namespace tdoc_ucp {
 
 
-
 #define TDOC_URL_SCHEME          "vnd.sun.star.tdoc"
 #define TDOC_URL_SCHEME_LENGTH   17
-
 
 
 class Uri

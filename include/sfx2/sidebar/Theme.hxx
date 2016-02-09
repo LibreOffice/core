@@ -270,7 +270,6 @@ private:
 };
 
 
-
 } } // end of namespace sfx2::sidebar
 
 #endif

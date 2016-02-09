@@ -95,7 +95,6 @@ namespace slideshow
         }
 
 
-
         ViewMediaShape::~ViewMediaShape()
         {
             try
@@ -112,12 +111,10 @@ namespace slideshow
         }
 
 
-
         ViewLayerSharedPtr ViewMediaShape::getViewLayer() const
         {
             return mpViewLayer;
         }
-
 
 
         void ViewMediaShape::startMedia()
@@ -128,7 +125,6 @@ namespace slideshow
             if (mxPlayer.is())
                 mxPlayer->start();
         }
-
 
 
         void ViewMediaShape::endMedia()
@@ -162,7 +158,6 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::pauseMedia()
         {
             if (mxPlayer.is())
@@ -170,13 +165,11 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::setMediaTime(double fTime)
         {
             if (mxPlayer.is())
                 mxPlayer->setMediaTime(fTime);
         }
-
 
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
@@ -296,7 +289,6 @@ namespace slideshow
         }
 
 
-
         bool ViewMediaShape::implInitialize( const ::basegfx::B2DRectangle& rBounds )
         {
             if( !mxPlayer.is() && mxShape.is() )
@@ -358,7 +350,6 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::implSetMediaProperties( const uno::Reference< beans::XPropertySet >& rxProps )
         {
             if( mxPlayer.is() )
@@ -398,7 +389,6 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType )
         {
 #if !HAVE_FEATURE_AVMEDIA
@@ -426,7 +416,6 @@ namespace slideshow
             }
 #endif
         }
-
 
 
         void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,

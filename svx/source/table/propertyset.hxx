@@ -58,7 +58,6 @@ private:
 };
 
 
-
 class FastPropertySet : public ::cppu::WeakAggImplHelper3<  css::beans::XPropertySet, css::beans::XMultiPropertySet, css::beans::XFastPropertySet >
 {
 public:

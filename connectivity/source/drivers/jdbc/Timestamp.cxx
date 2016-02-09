@@ -189,5 +189,4 @@ java_sql_Timestamp::operator ::com::sun::star::util::DateTime()
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

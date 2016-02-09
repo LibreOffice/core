@@ -21,7 +21,6 @@
 #include <basegfx/numeric/ftools.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace animation
@@ -35,7 +34,6 @@ namespace drawinglayer
         AnimationEntry::~AnimationEntry()
         {
         }
-
 
 
         AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
@@ -83,7 +81,6 @@ namespace drawinglayer
                 return 0.0;
             }
         }
-
 
 
         AnimationEntryLinear::AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop)
@@ -160,7 +157,6 @@ namespace drawinglayer
                 return 0.0;
             }
         }
-
 
 
         sal_uInt32 AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
@@ -269,7 +265,6 @@ namespace drawinglayer
 
             return fNewTime;
         }
-
 
 
         AnimationEntryLoop::AnimationEntryLoop(sal_uInt32 nRepeat)

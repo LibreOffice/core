@@ -163,7 +163,6 @@ public:
     virtual void SAL_CALL           appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 
-
     // these methods are here because they're ambiguous
 
     virtual void SAL_CALL           cancel() throw( css::uno::RuntimeException, std::exception ) override

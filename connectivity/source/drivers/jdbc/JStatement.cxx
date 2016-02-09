@@ -52,7 +52,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-
 //************ Class: java.sql.Statement
 
 
@@ -184,7 +183,6 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
         xRes = new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection, this );
     return xRes;
 }
-
 
 
 void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException, std::exception)
@@ -336,7 +334,6 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
 }
 
 
-
 sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -379,7 +376,6 @@ sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(::com::sun::
     static jmethodID mID(nullptr);
     return callBooleanMethod( "getMoreResults", mID );
 }
-
 
 
 Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
@@ -808,7 +804,6 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
 }
 
 
-
 IMPLEMENT_SERVICE_INFO(java_sql_Statement,"com.sun.star.sdbcx.JStatement","com.sun.star.sdbc.Statement");
 
 void SAL_CALL java_sql_Statement_Base::acquire() throw()
@@ -835,7 +830,6 @@ void SAL_CALL java_sql_Statement::release() throw()
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

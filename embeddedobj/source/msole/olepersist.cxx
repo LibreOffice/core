@@ -1711,7 +1711,6 @@ OUString SAL_CALL OleEmbeddedObject::getEntryName()
 }
 
 
-
 void SAL_CALL OleEmbeddedObject::storeOwn()
         throw ( embed::WrongStateException,
                 io::IOException,

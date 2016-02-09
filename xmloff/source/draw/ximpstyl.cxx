@@ -1457,7 +1457,6 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 }
 
 
-
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,

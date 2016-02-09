@@ -103,7 +103,6 @@ Sequence<Type> OTimeModel::_getTypes()
 }
 
 
-
 OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD,
         FRM_SUN_CONTROL_TIMEFIELD, true, true)

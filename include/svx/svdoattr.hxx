@@ -76,7 +76,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_SVX_SVDOATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

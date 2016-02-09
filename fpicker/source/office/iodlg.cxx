@@ -325,7 +325,6 @@ SvtFileDialog::SvtFileDialog
 }
 
 
-
 SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
     :SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
     ,_pCbReadOnly( nullptr )
@@ -1224,12 +1223,10 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
 }
 
 
-
 void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 {
     _pImp->_pEdFileName->EnableAutocompletion( _bEnable );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( SvtFileDialog, FilterSelectHdl_Impl, ListBox&, void )
@@ -1317,12 +1314,10 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameGetFocusHdl_Impl, Control&, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameModifiedHdl_Impl, Edit&, void )
 {
     FileNameGetFocusHdl_Impl( *_pImp->_pEdFileName );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( SvtFileDialog, URLBoxModifiedHdl_Impl, SvtURLBox*, void )
@@ -1330,7 +1325,6 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, URLBoxModifiedHdl_Impl, SvtURLBox*, void )
     OUString aPath = _pImp->_pEdCurrentPath->GetURL();
     OpenURL_Impl(aPath);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void )
@@ -1356,7 +1350,6 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void 
 }
 
 
-
 IMPL_LINK_NOARG_TYPED ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
 {
     // Maybe open the PlacesDialog would have been a better idea
@@ -1369,12 +1362,10 @@ IMPL_LINK_NOARG_TYPED ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED ( SvtFileDialog, RemovePlacePressed_Hdl, Button*, void )
 {
     _pImp->_pPlaces->RemoveSelectedPlace();
 }
-
 
 
 SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
@@ -1437,13 +1428,11 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 }
 
 
-
 void SvtFileDialog::ExecuteFilter()
 {
     _pImp->m_bNeedDelayedFilterExecute = false;
     executeAsync( AsyncPickerAction::eExecuteFilter, OUString(), getMostCurrentFilter( _pImp ) );
 }
-
 
 
 void SvtFileDialog::OpenMultiSelection_Impl()
@@ -1462,7 +1451,6 @@ void SvtFileDialog::OpenMultiSelection_Impl()
 
     EndDialog( RET_OK );
 }
-
 
 
 void SvtFileDialog::UpdateControls( const OUString& rURL )
@@ -1517,7 +1505,6 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 }
 
 
-
 IMPL_LINK_TYPED( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
@@ -1569,7 +1556,6 @@ IMPL_LINK_TYPED( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 {
     _pImp->_bDoubleClick = true;
@@ -1580,12 +1566,10 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvtFileDialog, EntrySelectHdl_Impl, ComboBox&, void)
 {
     FileSelect();
 }
-
 
 
 IMPL_LINK_TYPED( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
@@ -1609,7 +1593,6 @@ IMPL_LINK_TYPED( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvtFileDialog, AutoExtensionHdl_Impl, Button*, void)
 {
     if ( _pFileNotifier )
@@ -1619,7 +1602,6 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, AutoExtensionHdl_Impl, Button*, void)
     // update the extension of the current file if necessary
     lcl_autoUpdateFileExtension( this, _pImp->GetCurFilter()->GetExtension() );
 }
-
 
 
 IMPL_LINK_TYPED( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
@@ -1647,14 +1629,12 @@ IMPL_LINK_TYPED( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvtFileDialog, PlayButtonHdl_Impl, Button*, void)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
                                 PUSHBUTTON_PLAY );
 }
-
 
 
 bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
@@ -1687,7 +1667,6 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
     }
     return bRet || ModalDialog::Notify( rNEvt );
 }
-
 
 
 class SvtDefModalDialogParent_Impl
@@ -1916,7 +1895,6 @@ void SvtFileDialog::EnableControl( Control* _pControl, bool _bEnable )
 }
 
 
-
 short SvtFileDialog::PrepareExecute()
 {
     OUString aEnvValue;
@@ -2122,13 +2100,11 @@ void SvtFileDialog::executeAsync( ::svt::AsyncPickerAction::Action _eAction,
 }
 
 
-
 void SvtFileDialog::FileSelect()
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( FILE_SELECTION_CHANGED, 0 );
 }
-
 
 
 void SvtFileDialog::FilterSelect()
@@ -2137,7 +2113,6 @@ void SvtFileDialog::FilterSelect()
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
                                 LISTBOX_FILTER );
 }
-
 
 
 void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
@@ -2160,7 +2135,6 @@ void SvtFileDialog::SetBlackList( const css::uno::Sequence< OUString >& rBlackLi
 }
 
 
-
 const css::uno::Sequence< OUString >& SvtFileDialog::GetBlackList() const
 {
     return _pImp->GetBlackList();
@@ -2179,7 +2153,6 @@ const OUString& SvtFileDialog::GetStandardDir() const
 }
 
 
-
 void SvtFileDialog::PrevLevel_Impl()
 {
     _pFileView->EndInplaceEditing( false );
@@ -2187,7 +2160,6 @@ void SvtFileDialog::PrevLevel_Impl()
     OUString sDummy;
     executeAsync( AsyncPickerAction::ePrevLevel, sDummy, sDummy );
 }
-
 
 
 void SvtFileDialog::OpenURL_Impl( const OUString& _rURL )
@@ -2208,7 +2180,6 @@ SvtFileDialogFilter_Impl* SvtFileDialog::implAddFilter( const OUString& _rFilter
 
     return pNewFilter;
 }
-
 
 
 void SvtFileDialog::AddFilter( const OUString& _rFilter, const OUString& _rType )
@@ -2249,7 +2220,6 @@ void SvtFileDialog::SetCurFilter( const OUString& rFilter )
 }
 
 
-
 OUString SvtFileDialog::GetCurFilter() const
 {
     OUString aFilter;
@@ -2267,12 +2237,10 @@ OUString SvtFileDialog::getCurFilter( ) const
 }
 
 
-
 sal_uInt16 SvtFileDialog::GetFilterCount() const
 {
     return _pImp->m_aFilter.size();
 }
-
 
 
 const OUString& SvtFileDialog::GetFilterName( sal_uInt16 nPos ) const
@@ -2280,7 +2248,6 @@ const OUString& SvtFileDialog::GetFilterName( sal_uInt16 nPos ) const
     assert( nPos < GetFilterCount() && "invalid index" );
     return _pImp->m_aFilter[ nPos ]->GetName();
 }
-
 
 
 void SvtFileDialog::InitSize()
@@ -2301,7 +2268,6 @@ void SvtFileDialog::InitSize()
             _pFileView->SetConfigString( sCfgStr );
     }
 }
-
 
 
 std::vector<OUString> SvtFileDialog::GetPathList() const

@@ -33,7 +33,6 @@ namespace toolkit
 {
 
 
-
     //= AnimatedImagesPeer
 
     struct AnimatedImagesPeer_Data;

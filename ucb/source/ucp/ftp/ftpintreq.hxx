@@ -52,8 +52,6 @@ namespace ftp {
     };
 
 
-
-
     class XInteractionDisapproveImpl : public cppu::WeakImplHelper <
         css::task::XInteractionDisapprove >
     {
@@ -68,7 +66,6 @@ namespace ftp {
 
         bool          m_bSelected;
     };
-
 
 
     class XInteractionRequestImpl

@@ -38,7 +38,6 @@ namespace oox {
 struct PropertyNameVector;
 
 
-
 typedef ::std::map< sal_Int32, css::uno::Any > PropertyMapType;
 typedef ::std::map< OUString, css::uno::Any > PropertyNameMap;
 
@@ -116,7 +115,6 @@ private:
 protected:
     PropertyMapType maProperties;
 };
-
 
 
 } // namespace oox

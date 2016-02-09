@@ -38,7 +38,6 @@ namespace uno = ::com::sun::star::uno;
 namespace xml = ::com::sun::star::xml;
 
 
-
 SAL_IMPLEMENT_MAIN()
 {
     (void) argv;

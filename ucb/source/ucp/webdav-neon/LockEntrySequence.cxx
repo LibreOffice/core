@@ -35,7 +35,6 @@ using namespace webdav_ucp;
 using namespace com::sun::star;
 
 
-
 struct LockEntrySequenceParseContext
 {
     ucb::LockEntry * pEntry;

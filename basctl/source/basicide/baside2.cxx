@@ -393,7 +393,6 @@ void ModulWindow::BasicStepOut()
 }
 
 
-
 void ModulWindow::BasicStop()
 {
     StarBASIC::Stop();
@@ -693,7 +692,6 @@ void ModulWindow::BasicAddWatch()
             rLayout.BasicAddWatch(GetEditView()->GetSelected());
     }
 }
-
 
 
 void ModulWindow::EditMacro( const OUString& rMacroName )
@@ -1033,7 +1031,6 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
         break;
     }
 }
-
 
 
 void ModulWindow::GetState( SfxItemSet &rSet )

@@ -615,6 +615,4 @@ void SAL_CALL ODbaseIndex::release() throw()
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

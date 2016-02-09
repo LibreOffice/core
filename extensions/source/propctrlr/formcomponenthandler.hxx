@@ -42,7 +42,6 @@ namespace pcr
 {
 
 
-
     //= ComponentClassification
 
     enum ComponentClassification

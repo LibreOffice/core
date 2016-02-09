@@ -463,8 +463,6 @@ public:
 };
 
 
-
-
 class SvxFieldItem;
 struct MSFILTER_DLLPUBLIC PPTFieldEntry
 {
@@ -514,7 +512,6 @@ struct ProcessData
         rPersistEntry               ( rP ),
         pPage                       ( pP ) {};
 };
-
 
 
 class SdrTextObj;

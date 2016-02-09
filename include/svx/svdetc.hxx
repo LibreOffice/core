@@ -28,7 +28,6 @@
 #include <vcl/outdev.hxx>
 
 
-
 /**
  * Get ExchangeFormatID of the DrawingEngine.
  * The data can then be made available via
@@ -107,7 +106,6 @@ class SfxItemSet;
  * @returns false for XFILL_NONE and rCol remains unchanged
  */
 SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
-
 
 
 /**
@@ -251,7 +249,6 @@ namespace sdr
 class SdrObjEditView;
 
 SVX_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
-
 
 
 #endif // INCLUDED_SVX_SVDETC_HXX

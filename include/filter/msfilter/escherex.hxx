@@ -135,7 +135,6 @@ enum ESCHER_wMode
 };
 
 
-
 enum ESCHER_ShapePath
 {
     ESCHER_ShapeLines,          // A line of straight segments
@@ -605,7 +604,6 @@ struct EscherPropertyValueHelper
 };
 
 
-
 struct EscherPersistEntry
 {
     sal_uInt32  mnID;
@@ -614,7 +612,6 @@ struct EscherPersistEntry
     EscherPersistEntry( sal_uInt32 nId, sal_uInt32 nOffset ) { mnID = nId; mnOffset = nOffset; };
 
 };
-
 
 
 class EscherBlibEntry
@@ -656,7 +653,6 @@ public:
 
     bool            operator==( const EscherBlibEntry& ) const;
 };
-
 
 
 #define _E_GRAPH_PROV_USE_INSTANCES             1
@@ -734,7 +730,6 @@ public:
                     EscherSolverContainer(){};
                     ~EscherSolverContainer();
 };
-
 
 
 #define ESCHER_CREATEPOLYGON_LINE           1
@@ -948,7 +943,6 @@ public:
 };
 
 
-
 class MSFILTER_DLLPUBLIC EscherPersistTable
 {
 
@@ -965,7 +959,6 @@ public:
                 EscherPersistTable();
     virtual     ~EscherPersistTable();
 };
-
 
 
 class EscherEx;
@@ -1054,8 +1047,6 @@ public:
 
         bool DontWriteShape() const { return bDontWriteShape; }
 };
-
-
 
 
 /** Instance for global DFF data, shared through various instances of EscherEx. */

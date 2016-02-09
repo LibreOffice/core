@@ -30,7 +30,6 @@ namespace comphelper
 {
 
 
-
     //= AccessibleEventNotifier
 
     class COMPHELPER_DLLPUBLIC AccessibleEventNotifier

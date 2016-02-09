@@ -22,7 +22,6 @@
 #include <outact.hxx>
 
 
-
 void CGM::ImplDoClass3()
 {
     sal_uInt32  nUInteger;

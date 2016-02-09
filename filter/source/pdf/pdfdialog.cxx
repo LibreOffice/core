@@ -55,10 +55,7 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
 }
 
 
-
 #undef SERVICE_NAME
-
-
 
 
 PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )
@@ -67,11 +64,9 @@ PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )
 }
 
 
-
 PDFDialog::~PDFDialog()
 {
 }
-
 
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
@@ -81,7 +76,6 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 }
 
 
-
 OUString SAL_CALL PDFDialog::getImplementationName()
     throw (RuntimeException, std::exception)
 {
@@ -89,13 +83,11 @@ OUString SAL_CALL PDFDialog::getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     return PDFDialog_getSupportedServiceNames();
 }
-
 
 
 VclPtr<Dialog> PDFDialog::createDialog( vcl::Window* pParent )
@@ -106,14 +98,12 @@ VclPtr<Dialog> PDFDialog::createDialog( vcl::Window* pParent )
 }
 
 
-
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
         maFilterData = static_cast< ImpPDFTabDialog* >( m_pDialog.get() )->GetFilterData();
     destroyDialog();
 }
-
 
 
 Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
@@ -138,7 +128,6 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
 }
 
 
-
 Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
     throw ( RuntimeException, std::exception )
 {
@@ -160,7 +149,6 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 }
 
 
-
 void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
     throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
@@ -175,7 +163,6 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
         }
     }
 }
-
 
 
 void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )

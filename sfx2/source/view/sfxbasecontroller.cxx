@@ -1487,7 +1487,6 @@ IMPL_LINK_NOARG_TYPED ( SfxBaseController, CheckOutHandler, Button*, void )
 }
 
 
-
 Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 {
     SolarMutexGuard aGuard;

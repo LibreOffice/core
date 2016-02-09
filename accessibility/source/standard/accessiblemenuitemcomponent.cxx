@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-
 // class OAccessibleMenuItemComponent
 
 
@@ -65,11 +64,9 @@ OAccessibleMenuItemComponent::OAccessibleMenuItemComponent( Menu* pParent, sal_u
 }
 
 
-
 OAccessibleMenuItemComponent::~OAccessibleMenuItemComponent()
 {
 }
-
 
 
 bool OAccessibleMenuItemComponent::IsEnabled()
@@ -84,7 +81,6 @@ bool OAccessibleMenuItemComponent::IsEnabled()
 }
 
 
-
 bool OAccessibleMenuItemComponent::IsVisible()
 {
     bool bVisible = false;
@@ -94,7 +90,6 @@ bool OAccessibleMenuItemComponent::IsVisible()
 
     return bVisible;
 }
-
 
 
 void OAccessibleMenuItemComponent::Select()
@@ -114,13 +109,11 @@ void OAccessibleMenuItemComponent::Select()
 }
 
 
-
 void OAccessibleMenuItemComponent::DeSelect()
 {
     if ( m_pParent && IsSelected() )
         m_pParent->DeHighlight();
 }
-
 
 
 void OAccessibleMenuItemComponent::Click()
@@ -170,12 +163,10 @@ void OAccessibleMenuItemComponent::Click()
 }
 
 
-
 void OAccessibleMenuItemComponent::SetItemPos( sal_uInt16 nItemPos )
 {
     m_nItemPos = nItemPos;
 }
-
 
 
 void OAccessibleMenuItemComponent::SetAccessibleName( const OUString& sAccessibleName )
@@ -189,7 +180,6 @@ void OAccessibleMenuItemComponent::SetAccessibleName( const OUString& sAccessibl
         NotifyAccessibleEvent( AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
     }
 }
-
 
 
 OUString OAccessibleMenuItemComponent::GetAccessibleName()
@@ -212,7 +202,6 @@ OUString OAccessibleMenuItemComponent::GetAccessibleName()
 }
 
 
-
 void OAccessibleMenuItemComponent::SetItemText( const OUString& sItemText )
 {
     Any aOldValue, aNewValue;
@@ -224,7 +213,6 @@ void OAccessibleMenuItemComponent::SetItemText( const OUString& sItemText )
 }
 
 
-
 OUString OAccessibleMenuItemComponent::GetItemText()
 {
     OUString sText;
@@ -233,7 +221,6 @@ OUString OAccessibleMenuItemComponent::GetItemText()
 
     return sText;
 }
-
 
 
 void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -319,7 +306,6 @@ sal_Int32 OAccessibleMenuItemComponent::getAccessibleChildCount() throw (Runtime
 }
 
 
-
 Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -331,14 +317,12 @@ Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleChild( sal_I
 }
 
 
-
 Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return m_pParent->GetAccessible();
 }
-
 
 
 sal_Int32 OAccessibleMenuItemComponent::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
@@ -349,14 +333,12 @@ sal_Int32 OAccessibleMenuItemComponent::getAccessibleIndexInParent(  ) throw (Ru
 }
 
 
-
 sal_Int16 OAccessibleMenuItemComponent::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::UNKNOWN;
 }
-
 
 
 OUString OAccessibleMenuItemComponent::getAccessibleDescription( ) throw (RuntimeException, std::exception)
@@ -371,14 +353,12 @@ OUString OAccessibleMenuItemComponent::getAccessibleDescription( ) throw (Runtim
 }
 
 
-
 OUString OAccessibleMenuItemComponent::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return m_sAccessibleName;
 }
-
 
 
 Reference< XAccessibleRelationSet > OAccessibleMenuItemComponent::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
@@ -389,7 +369,6 @@ Reference< XAccessibleRelationSet > OAccessibleMenuItemComponent::getAccessibleR
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-
 
 
 Locale OAccessibleMenuItemComponent::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
@@ -411,12 +390,10 @@ Reference< XAccessible > OAccessibleMenuItemComponent::getAccessibleAtPoint( con
 }
 
 
-
 void OAccessibleMenuItemComponent::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     // no focus for items
 }
-
 
 
 sal_Int32 OAccessibleMenuItemComponent::getForeground(  ) throw (RuntimeException, std::exception)
@@ -434,7 +411,6 @@ sal_Int32 OAccessibleMenuItemComponent::getForeground(  ) throw (RuntimeExceptio
 
     return nColor;
 }
-
 
 
 sal_Int32 OAccessibleMenuItemComponent::getBackground(  ) throw (RuntimeException, std::exception)
@@ -474,14 +450,12 @@ Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  ) throw (Runtime
 }
 
 
-
 OUString OAccessibleMenuItemComponent::getTitledBorderText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return OUString();
 }
-
 
 
 OUString OAccessibleMenuItemComponent::getToolTipText(  ) throw (RuntimeException, std::exception)
@@ -494,7 +468,6 @@ OUString OAccessibleMenuItemComponent::getToolTipText(  ) throw (RuntimeExceptio
 
     return sRet;
 }
-
 
 
 bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()

@@ -100,5 +100,4 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException, std
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

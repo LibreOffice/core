@@ -252,5 +252,4 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

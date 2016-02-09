@@ -26,8 +26,6 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 
 
-
-
 using namespace ::com::sun::star;
 
 // #i28528#
@@ -87,7 +85,6 @@ Svx3DPerspectiveItem::Svx3DPerspectiveItem(sal_uInt16 nVal)
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal)
 {}
-
 
 
 Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)

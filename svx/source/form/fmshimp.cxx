@@ -3970,7 +3970,6 @@ bool FmXFormShell::HasControlFocus() const
 }
 
 
-
 SearchableControlIterator::SearchableControlIterator(Reference< XInterface> xStartingPoint)
     :IndexAccessIterator(xStartingPoint)
 {
@@ -4013,8 +4012,6 @@ bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>& /*x
 {
     return true;
 }
-
-
 
 
 SFX_IMPL_MENU_CONTROL(ControlConversionMenuController, SfxBoolItem);
@@ -4089,7 +4086,6 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
         OSL_FAIL("ControlConversionMenuController::StateChanged : unknown id !");
     }
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

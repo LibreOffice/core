@@ -34,7 +34,6 @@ namespace pcr
 {
 
 
-
     //= DefaultHelpProvider
 
     typedef ::cppu::WeakImplHelper <   css::inspection::XPropertyControlObserver

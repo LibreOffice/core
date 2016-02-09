@@ -79,7 +79,6 @@ css::uno::Sequence<OUString>  OFileControlModel::getSupportedServiceNames() thro
 }
 
 
-
 OFileControlModel::OFileControlModel(const Reference<XComponentContext>& _rxFactory)
                     :OControlModel(_rxFactory, VCL_CONTROLMODEL_FILECONTROL)
                     ,m_aResetListeners(m_aMutex)

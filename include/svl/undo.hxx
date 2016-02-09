@@ -34,7 +34,6 @@ public:
 };
 
 
-
 class SVL_DLLPUBLIC SfxUndoContext
 {
 public:
@@ -73,7 +72,6 @@ private:
     SfxUndoAction( const SfxUndoAction& ) = delete;
     SfxUndoAction& operator=( const SfxUndoAction& ) = delete;
 };
-
 
 
 /// is a mark on the Undo stack
@@ -119,7 +117,6 @@ struct SVL_DLLPUBLIC SfxUndoArray
 };
 
 
-
 /** do not make use of these implementation details, unless you
     really really have to! */
 class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
@@ -159,7 +156,6 @@ public:
 };
 
 
-
 /**  is a callback interface for notifications about state changes of an SfxUndoManager
 */
 class SAL_NO_VTABLE SfxUndoListener
@@ -179,7 +175,6 @@ public:
 protected:
     ~SfxUndoListener() {}
 };
-
 
 
 namespace svl
@@ -295,7 +290,6 @@ namespace svl
 }
 
 
-
 namespace svl { namespace undo { namespace impl
 {
     class UndoManagerGuard;
@@ -397,7 +391,6 @@ private:
 
     friend class ::svl::undo::impl::LockGuard;
 };
-
 
 
 class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction

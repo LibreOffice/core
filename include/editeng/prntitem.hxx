@@ -23,7 +23,6 @@
 #include <editeng/editengdllapi.h>
 
 
-
 // class SvxPrintItem ----------------------------------------------------
 
 
@@ -61,8 +60,6 @@ inline SvxPrintItem &SvxPrintItem::operator=( const SvxPrintItem &rCpy )
     SetValue( rCpy.GetValue() );
     return *this;
 }
-
-
 
 
 #endif

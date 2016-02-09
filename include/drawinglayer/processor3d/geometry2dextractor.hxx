@@ -29,7 +29,6 @@
 #include <basegfx/color/bcolormodifier.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace processor3d

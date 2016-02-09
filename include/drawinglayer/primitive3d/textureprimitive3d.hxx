@@ -29,7 +29,6 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -73,7 +72,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -115,7 +113,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -152,7 +149,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -193,7 +189,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -222,7 +217,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX

@@ -26,8 +26,6 @@
 #include <vcl/vclenum.hxx>
 
 
-
-
 class SvStream;
 
 struct ImplHatch
@@ -44,8 +42,6 @@ struct ImplHatch
     friend SvStream&    ReadImplHatch( SvStream& rIStm, ImplHatch& rImplHatch );
     friend SvStream&    WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch );
 };
-
-
 
 
 class VCL_DLLPUBLIC Hatch

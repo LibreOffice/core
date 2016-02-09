@@ -34,7 +34,6 @@
 class Rectangle;
 
 
-
 namespace editeng {
     class SvxBorderLine;
 }

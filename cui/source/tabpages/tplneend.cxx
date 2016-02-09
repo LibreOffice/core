@@ -129,7 +129,6 @@ void SvxLineEndDefTabPage::Resize()
 }
 
 
-
 void SvxLineEndDefTabPage::Construct()
 {
     m_pLbLineEnds->Fill( pLineEndList );
@@ -157,7 +156,6 @@ void SvxLineEndDefTabPage::Construct()
 }
 
 
-
 void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 {
     if( nDlgType == 0 ) // area dialog
@@ -181,7 +179,6 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 }
 
 
-
 SfxTabPage::sfxpg SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     CheckChanges_Impl();
@@ -191,7 +188,6 @@ SfxTabPage::sfxpg SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 void SvxLineEndDefTabPage::CheckChanges_Impl()
@@ -218,7 +214,6 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 }
 
 
-
 bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( nDlgType == 0 ) // line dialog
@@ -236,7 +231,6 @@ bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet* rSet )
     }
     return true;
 }
-
 
 
 void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
@@ -277,12 +271,10 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 }
 
 
-
 VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet )
 {
     return VclPtr<SvxLineEndDefTabPage>::Create( pWindow, *rSet );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, void)
@@ -310,12 +302,10 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, voi
 }
 
 
-
 void SvxLineEndDefTabPage::ChangePreviewHdl_Impl()
 {
     m_pCtlPreview->Invalidate();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
@@ -395,7 +385,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
         }
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
@@ -511,7 +500,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
@@ -544,7 +532,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
         m_pBtnSave->Disable();
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
@@ -626,7 +613,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
         m_pBtnSave->Disable();
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)

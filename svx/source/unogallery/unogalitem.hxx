@@ -34,8 +34,6 @@ namespace unogallery { class GalleryTheme; }
 namespace unogallery {
 
 
-
-
 class GalleryItem : public ::cppu::OWeakAggObject,
                     public css::lang::XServiceInfo,
                     public css::lang::XTypeProvider,
@@ -97,8 +95,6 @@ private:
                                 GalleryItem( const GalleryItem& ) = delete;
                                 GalleryItem& operator=( const GalleryItem& ) = delete;
 };
-
-
 
 
 class GalleryDrawingModel : public SvxUnoDrawingModel

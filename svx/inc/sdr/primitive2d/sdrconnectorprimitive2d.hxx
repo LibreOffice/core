@@ -28,7 +28,6 @@
 // predefines
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -60,7 +59,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRCONNECTORPRIMITIVE2D_HXX

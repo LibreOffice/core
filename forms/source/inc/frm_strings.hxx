@@ -29,7 +29,6 @@ namespace frm
 {
 
 
-
     //- properties
 
     #define PROPERTY_TABINDEX                 "TabIndex"
@@ -296,7 +295,6 @@ namespace frm
 
 
 }   // namespace frm
-
 
 
 #endif // INCLUDED_FORMS_SOURCE_INC_FRM_STRINGS_HXX

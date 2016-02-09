@@ -47,7 +47,6 @@ class SfxObjectShell;
  */
 
 
-
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
 public:

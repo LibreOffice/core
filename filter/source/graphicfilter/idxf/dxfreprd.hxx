@@ -24,7 +24,6 @@
 #include <dxftblrd.hxx>
 
 
-
 //--------------------Other stuff---------------------------------------------
 
 
@@ -64,7 +63,6 @@ private:
     sal_uInt8 * pBlue;
     void SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue);
 };
-
 
 
 //-----------------read and represent DXF file--------------------------------

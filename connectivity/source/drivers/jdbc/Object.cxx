@@ -41,7 +41,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-
 ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM2(const ::rtl::Reference< jvmaccess::VirtualMachine >& _rVM = ::rtl::Reference< jvmaccess::VirtualMachine >(),
                                                         bool _bSet = false)
 {

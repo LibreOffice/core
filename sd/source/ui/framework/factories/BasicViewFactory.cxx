@@ -540,5 +540,4 @@ com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(css::uno::X
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

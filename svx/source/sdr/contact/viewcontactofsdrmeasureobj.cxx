@@ -30,7 +30,6 @@
 #include <svx/sxmtpitm.hxx>
 
 
-
 namespace sdr
 {
     namespace contact

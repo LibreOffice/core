@@ -105,8 +105,6 @@ sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
 }
 
 
-
-
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 {
     nStartAngle=0;
@@ -466,7 +464,6 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-
 bool SdrCircObj::hasSpecialDrag() const
 {
     return true;
@@ -610,7 +607,6 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         }
     }
 }
-
 
 
 void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
@@ -1062,7 +1058,6 @@ void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     SdrRectObj::Notify(rBC,rHint);
     ImpSetAttrToCircInfo();
 }
-
 
 
 void SdrCircObj::ImpSetAttrToCircInfo()

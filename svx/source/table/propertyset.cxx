@@ -32,11 +32,9 @@ FastPropertySetInfo::FastPropertySetInfo( const PropertyVector& rProps )
 }
 
 
-
 FastPropertySetInfo::~FastPropertySetInfo()
 {
 }
-
 
 
 void FastPropertySetInfo::addProperties( const PropertyVector& rProps )
@@ -54,7 +52,6 @@ void FastPropertySetInfo::addProperties( const PropertyVector& rProps )
 }
 
 
-
 const Property& FastPropertySetInfo::getProperty( const OUString& aName ) throw (UnknownPropertyException )
 {
     PropertyMap::iterator aIter( maMap.find( aName ) );
@@ -62,7 +59,6 @@ const Property& FastPropertySetInfo::getProperty( const OUString& aName ) throw 
         throw UnknownPropertyException();
     return maProperties[(*aIter).second];
 }
-
 
 
 const Property* FastPropertySetInfo::hasProperty( const OUString& aName )
@@ -84,12 +80,10 @@ Sequence< Property > SAL_CALL FastPropertySetInfo::getProperties() throw (Runtim
 }
 
 
-
 Property SAL_CALL FastPropertySetInfo::getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     return getProperty( aName );
 }
-
 
 
 sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName ) throw (RuntimeException, std::exception)
@@ -101,7 +95,6 @@ FastPropertySet::FastPropertySet( const rtl::Reference< FastPropertySetInfo >& x
 : mxInfo( xInfo )
 {
 }
-
 
 
 FastPropertySet::~FastPropertySet()
@@ -118,12 +111,10 @@ Reference< XPropertySetInfo > SAL_CALL FastPropertySet::getPropertySetInfo(  ) t
 }
 
 
-
 void SAL_CALL FastPropertySet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     setFastPropertyValue( mxInfo->getProperty( aPropertyName ).Handle, aValue );
 }
-
 
 
 Any SAL_CALL FastPropertySet::getPropertyValue( const OUString& aPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -132,11 +123,9 @@ Any SAL_CALL FastPropertySet::getPropertyValue( const OUString& aPropertyName ) 
 }
 
 
-
 void SAL_CALL FastPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL FastPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -144,11 +133,9 @@ void SAL_CALL FastPropertySet::removePropertyChangeListener( const OUString&, co
 }
 
 
-
 void SAL_CALL FastPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL FastPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -182,7 +169,6 @@ void SAL_CALL FastPropertySet::setPropertyValues( const Sequence< OUString >& aP
 }
 
 
-
 Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException, std::exception)
 {
     sal_Int32 nCount = aPropertyNames.getLength();
@@ -206,17 +192,14 @@ Sequence< Any > SAL_CALL FastPropertySet::getPropertyValues( const Sequence< OUS
 }
 
 
-
 void SAL_CALL FastPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw (RuntimeException, std::exception)
 {
 }
 
 
-
 void SAL_CALL FastPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& ) throw (RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL FastPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw (RuntimeException, std::exception)

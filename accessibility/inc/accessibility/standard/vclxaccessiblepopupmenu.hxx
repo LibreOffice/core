@@ -23,7 +23,6 @@
 #include <accessibility/standard/accessiblemenucomponent.hxx>
 
 
-
 //  class VCLXAccessiblePopupMenu
 
 

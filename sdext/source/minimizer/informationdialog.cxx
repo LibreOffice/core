@@ -37,9 +37,6 @@
 #define PAGE_WIDTH      ( DIALOG_WIDTH - PAGE_POS_X ) - 6
 
 
-
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
@@ -51,9 +48,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
-
-
-
 
 
 OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
@@ -310,7 +304,6 @@ void InformationDialog::InitDialog()
 }
 
 
-
 InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
     UnoDialog( rxContext, rxFrame ),
     ConfigurationAccess( rxContext, nullptr ),
@@ -330,11 +323,9 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxCo
 }
 
 
-
 InformationDialog::~InformationDialog()
 {
 }
-
 
 
 void InformationDialog::execute()
@@ -352,7 +343,6 @@ void InformationDialog::execute()
         }
     }
 }
-
 
 
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )

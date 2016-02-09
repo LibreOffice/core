@@ -1086,5 +1086,4 @@ com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation(
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

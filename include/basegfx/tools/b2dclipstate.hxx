@@ -25,7 +25,6 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-
 namespace basegfx
 {
     class B2DRange;

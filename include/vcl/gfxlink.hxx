@@ -29,8 +29,6 @@
 class SvStream;
 
 
-
-
 struct ImpBuffer
 {
     sal_uLong       mnRefCount;
@@ -46,8 +44,6 @@ struct ImpBuffer
 
                 ~ImpBuffer() { delete[] mpBuffer; }
 };
-
-
 
 
 struct ImpSwap
@@ -67,8 +63,6 @@ struct ImpSwap
 };
 
 
-
-
 struct ImpGfxLink
 {
     MapMode         maPrefMapMode;
@@ -85,8 +79,6 @@ struct ImpGfxLink
 };
 
 //#endif // __PRIVATE
-
-
 
 
 enum GfxLinkType
@@ -109,8 +101,6 @@ enum GfxLinkType
 
 #define GFX_LINK_FIRST_NATIVE_ID    GFX_LINK_TYPE_NATIVE_GIF
 #define GFX_LINK_LAST_NATIVE_ID     GFX_LINK_TYPE_NATIVE_BMP
-
-
 
 
 struct ImpBuffer;

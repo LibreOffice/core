@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 namespace sdr
 {
     namespace properties

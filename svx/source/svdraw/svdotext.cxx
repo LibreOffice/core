@@ -81,8 +81,6 @@ sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
 }
 
 
-
-
 SdrTextObj::SdrTextObj()
 :   SdrAttrObj(),
     mpText(nullptr),
@@ -1397,7 +1395,6 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
 }
 
 
-
 OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
 {
     SdrText* pText = getActiveText();
@@ -1633,7 +1630,6 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         SetSnapRect(aObjectRect);
     }
 }
-
 
 
 // transformation interface for StarOfficeAPI. This implements support for
@@ -2208,7 +2204,6 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 }
 
 
-
 // The concept of the text object:
 // ~~~~~~~~~~~~~~~~~~~~~~~~
 // Attributes/Variations:
@@ -2270,7 +2265,6 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - ModelChanged (e. g. through a neighboring View or rulers) while editing
 // - FillColorChanged while editing
 // - and many more...
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

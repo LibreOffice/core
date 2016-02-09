@@ -119,8 +119,6 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-
-
 #endif // INCLUDED_BASEGFX_POLYGON_B3DPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

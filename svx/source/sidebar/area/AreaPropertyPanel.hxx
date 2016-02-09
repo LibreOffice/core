@@ -95,7 +95,6 @@ private:
 } } // end of namespace svx::sidebar
 
 
-
 #endif // INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

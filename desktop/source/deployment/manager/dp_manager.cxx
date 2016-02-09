@@ -1122,8 +1122,6 @@ PackageManagerImpl::getDeployedPackages(
 }
 
 
-
-
 //ToDo: the function must not call registerPackage, do this in
 //XExtensionManager.reinstallDeployedExtensions
 void PackageManagerImpl::reinstallDeployedPackages(
@@ -1558,7 +1556,6 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
         throw exc;
     }
 }
-
 
 
 PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()

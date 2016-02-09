@@ -20,7 +20,6 @@
 #define INCLUDED_SVX_IFACEIDS_HXX
 
 
-
 #include <sfx2/shell.hxx>
 
 #define SVX_INTERFACE_BASIDE_DOCSH      (SFX_INTERFACE_IDE_START+ 0)

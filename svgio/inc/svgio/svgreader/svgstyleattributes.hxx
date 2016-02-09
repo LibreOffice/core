@@ -35,7 +35,6 @@ namespace svgio { namespace svgreader {
 }}
 
 
-
 namespace svgio
 {
     namespace svgreader

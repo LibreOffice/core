@@ -182,7 +182,6 @@ struct SfxItemPool_Impl
 #define SFX_ITEMPOOL_REC_DEFAULTS       sal_uInt16(0x0050)
 
 
-
 /** Read in a Unicode string from a streamed byte string representation.
 
     @param rStream  Some (input) stream.  Its Stream/TargetCharSets must

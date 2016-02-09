@@ -32,7 +32,6 @@ namespace comphelper
 {
 
 
-
     //= OfficeResourceBundle
 
     class ResourceBundle_Impl;

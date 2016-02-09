@@ -239,5 +239,4 @@ com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation(
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,7 +40,6 @@ class MetaAction;
 // class SvxFieldItem ---------------------------------------------------
 
 
-
 class EDITENG_DLLPUBLIC SvxFieldData : public SvPersistBase
 {
 public:
@@ -307,7 +306,6 @@ enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT = 0, // File name with Extension
                    };
 
 
-
 class EDITENG_DLLPUBLIC SvxExtFileField : public SvxFieldData
 {
 private:
@@ -412,8 +410,6 @@ public:
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
-
-
 
 
 #endif

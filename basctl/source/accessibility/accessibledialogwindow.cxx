@@ -54,11 +54,9 @@ AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
 }
 
 
-
 AccessibleDialogWindow::ChildDescriptor::~ChildDescriptor()
 {
 }
-
 
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( const ChildDescriptor& rDesc )
@@ -66,7 +64,6 @@ AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( const ChildDescriptor&
     ,rxAccessible( rDesc.rxAccessible )
 {
 }
-
 
 
 AccessibleDialogWindow::ChildDescriptor& AccessibleDialogWindow::ChildDescriptor::operator=( const ChildDescriptor& rDesc )
@@ -78,7 +75,6 @@ AccessibleDialogWindow::ChildDescriptor& AccessibleDialogWindow::ChildDescriptor
 }
 
 
-
 bool AccessibleDialogWindow::ChildDescriptor::operator==( const ChildDescriptor& rDesc )
 {
     bool bRet = false;
@@ -87,7 +83,6 @@ bool AccessibleDialogWindow::ChildDescriptor::operator==( const ChildDescriptor&
 
     return bRet;
 }
-
 
 
 bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& rDesc ) const
@@ -136,7 +131,6 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
 }
 
 
-
 AccessibleDialogWindow::~AccessibleDialogWindow()
 {
     if ( m_pDialogWindow )
@@ -153,7 +147,6 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
 }
 
 
-
 void AccessibleDialogWindow::UpdateFocused()
 {
     for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
@@ -167,7 +160,6 @@ void AccessibleDialogWindow::UpdateFocused()
         }
     }
 }
-
 
 
 void AccessibleDialogWindow::UpdateSelected()
@@ -187,7 +179,6 @@ void AccessibleDialogWindow::UpdateSelected()
 }
 
 
-
 void AccessibleDialogWindow::UpdateBounds()
 {
     for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
@@ -201,7 +192,6 @@ void AccessibleDialogWindow::UpdateBounds()
         }
     }
 }
-
 
 
 bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
@@ -247,7 +237,6 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
 }
 
 
-
 void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
 {
     // check, if object is already in child list
@@ -274,7 +263,6 @@ void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
         }
     }
 }
-
 
 
 void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
@@ -306,7 +294,6 @@ void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
 }
 
 
-
 void AccessibleDialogWindow::UpdateChild( const ChildDescriptor& rDesc )
 {
     if ( IsChildVisible( rDesc ) )
@@ -322,7 +309,6 @@ void AccessibleDialogWindow::UpdateChild( const ChildDescriptor& rDesc )
 }
 
 
-
 void AccessibleDialogWindow::UpdateChildren()
 {
     if ( m_pDialogWindow )
@@ -335,13 +321,11 @@ void AccessibleDialogWindow::UpdateChildren()
 }
 
 
-
 void AccessibleDialogWindow::SortChildren()
 {
     // sort child list
     ::std::sort( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end() );
 }
-
 
 
 IMPL_LINK_TYPED( AccessibleDialogWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
@@ -350,7 +334,6 @@ IMPL_LINK_TYPED( AccessibleDialogWindow, WindowEventListener, VclWindowEvent&, r
     if (!rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || rEvent.GetId() == VCLEVENT_OBJECT_DYING)
         ProcessWindowEvent(rEvent);
 }
-
 
 
 void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -446,7 +429,6 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
         break;
     }
 }
-
 
 
 void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -624,7 +606,6 @@ sal_Int32 AccessibleDialogWindow::getAccessibleChildCount() throw (RuntimeExcept
 }
 
 
-
 Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -652,7 +633,6 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleChild( sal_Int32 i
 }
 
 
-
 Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -667,7 +647,6 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  ) throw (
 
     return xParent;
 }
-
 
 
 sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
@@ -696,14 +675,12 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
 }
 
 
-
 sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::PANEL;
 }
-
 
 
 OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
@@ -718,7 +695,6 @@ OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeExce
 }
 
 
-
 OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -731,7 +707,6 @@ OUString AccessibleDialogWindow::getAccessibleName(  ) throw (RuntimeException, 
 }
 
 
-
 Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -740,7 +715,6 @@ Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelatio
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-
 
 
 Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
@@ -761,7 +735,6 @@ Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet( 
 
     return xSet;
 }
-
 
 
 Locale AccessibleDialogWindow::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
@@ -803,7 +776,6 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
 }
 
 
-
 void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -811,7 +783,6 @@ void AccessibleDialogWindow::grabFocus(  ) throw (RuntimeException, std::excepti
     if ( m_pDialogWindow )
         m_pDialogWindow->GrabFocus();
 }
-
 
 
 sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException, std::exception)
@@ -836,7 +807,6 @@ sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException, std
 
     return nColor;
 }
-
 
 
 sal_Int32 AccessibleDialogWindow::getBackground(  ) throw (RuntimeException, std::exception)
@@ -884,14 +854,12 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeExcept
 }
 
 
-
 OUString AccessibleDialogWindow::getTitledBorderText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return OUString();
 }
-
 
 
 OUString AccessibleDialogWindow::getToolTipText(  ) throw (RuntimeException, std::exception)
@@ -928,7 +896,6 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
 }
 
 
-
 sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -943,7 +910,6 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
 }
 
 
-
 void AccessibleDialogWindow::clearAccessibleSelection()
     throw (RuntimeException, std::exception)
 {
@@ -954,7 +920,6 @@ void AccessibleDialogWindow::clearAccessibleSelection()
 }
 
 
-
 void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -962,7 +927,6 @@ void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeExcep
     if ( m_pDialogWindow )
         m_pDialogWindow->GetView().MarkAll();
 }
-
 
 
 sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
@@ -979,7 +943,6 @@ sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (Run
 
     return nRet;
 }
-
 
 
 Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -1004,7 +967,6 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
 }
 
 
-
 void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -1023,7 +985,6 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
         }
     }
 }
-
 
 
 } // namespace basctl

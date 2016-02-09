@@ -1152,7 +1152,6 @@ void Bridge::map_to_uno(
 }
 
 
-
 void Bridge::map_to_java(
     JNI_context const & jni,
     jvalue * java_data, void const * uno_data,

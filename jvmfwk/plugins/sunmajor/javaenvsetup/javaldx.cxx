@@ -153,5 +153,4 @@ static bool findAndSelect(JavaInfo ** ppInfo)
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

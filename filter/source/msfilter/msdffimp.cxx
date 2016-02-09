@@ -380,7 +380,6 @@ DffPropertyReader::~DffPropertyReader()
 }
 
 
-
 SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
     rIn.ReadUInt32( rRule.nRuleId )
@@ -781,7 +780,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
         }
     }
 }
-
 
 
 static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
@@ -6161,7 +6159,6 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 }
 
 
-
 /*****************************************************************************
 
     Access to a shape at runtime (via the Shape-Id)
@@ -6201,7 +6198,6 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
     }
     return false;
 }
-
 
 
 /*      access to a BLIP at runtime (if the Blip-Number is already known)

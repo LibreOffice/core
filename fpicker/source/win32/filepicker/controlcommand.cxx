@@ -32,15 +32,9 @@ CControlCommand::CControlCommand( sal_Int16 aControlId ) :
 }
 
 
-
-
-
 CControlCommand::~CControlCommand( )
 {
 }
-
-
-
 
 
 CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandRequest* pRequest )
@@ -68,16 +62,10 @@ CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandR
 }
 
 
-
-
-
 CControlCommand* SAL_CALL CControlCommand::getNextCommand( ) const
 {
     return m_NextCommand;
 }
-
-
-
 
 
 void SAL_CALL CControlCommand::setNextCommand( CControlCommand* nextCommand )
@@ -86,17 +74,10 @@ void SAL_CALL CControlCommand::setNextCommand( CControlCommand* nextCommand )
 }
 
 
-
-
-
 sal_Int16 SAL_CALL CControlCommand::getControlId( ) const
 {
     return m_aControlId;
 }
-
-
-
-
 
 
 CValueControlCommand::CValueControlCommand(
@@ -110,9 +91,6 @@ CValueControlCommand::CValueControlCommand(
 }
 
 
-
-
-
 void SAL_CALL CValueControlCommand::exec( CFilePickerState* aFilePickerState )
 {
     OSL_ENSURE( aFilePickerState, "empty reference" );
@@ -122,9 +100,6 @@ void SAL_CALL CValueControlCommand::exec( CFilePickerState* aFilePickerState )
         m_aControlAction,
         m_aValue );
 }
-
-
-
 
 
 CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCommandRequest* aRequest )
@@ -158,26 +133,16 @@ CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCom
 }
 
 
-
-
-
 sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
 {
     return m_aControlAction;
 }
 
 
-
-
-
 css::uno::Any SAL_CALL CValueControlCommand::getValue( ) const
 {
     return m_aValue;
 }
-
-
-
-
 
 
 CLabelControlCommand::CLabelControlCommand(
@@ -189,18 +154,12 @@ CLabelControlCommand::CLabelControlCommand(
 }
 
 
-
-
-
 void SAL_CALL CLabelControlCommand::exec( CFilePickerState* aFilePickerState )
 {
     OSL_ENSURE( aFilePickerState, "empty reference" );
 
     aFilePickerState->setLabel( getControlId( ), m_aLabel );
 }
-
-
-
 
 
 CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCommandRequest* aRequest )
@@ -235,16 +194,10 @@ CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCom
 }
 
 
-
-
-
 OUString SAL_CALL CLabelControlCommand::getLabel( ) const
 {
     return m_aLabel;
 }
-
-
-
 
 
 CEnableControlCommand::CEnableControlCommand(
@@ -254,9 +207,6 @@ CEnableControlCommand::CEnableControlCommand(
     m_bEnable( bEnable )
 {
 }
-
-
-
 
 
 void SAL_CALL CEnableControlCommand::exec( CFilePickerState* aFilePickerState )

@@ -354,7 +354,6 @@ static typelib_TypeClass cpp_mediate(
 }
 
 
-
 /**
  * is called on incoming vtable calls
  * (called by asm snippets)

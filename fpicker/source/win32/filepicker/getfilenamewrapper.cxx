@@ -109,9 +109,6 @@ namespace /* private */
     };
 
 
-
-
-
     struct GetFileNameParam
     {
         GetFileNameParam(bool bOpen, LPOPENFILENAME lpofn) :
@@ -126,9 +123,6 @@ namespace /* private */
         bool            m_bRet;
         int             m_ExtErr;
     };
-
-
-
 
 
     unsigned __stdcall ThreadProc(void* pParam)
@@ -200,17 +194,10 @@ namespace /* private */
 } // namespace private
 
 
-
-
-
-
 CGetFileNameWrapper::CGetFileNameWrapper() :
     m_ExtendedDialogError(0)
 {
 }
-
-
-
 
 
 bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
@@ -241,9 +228,6 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
 }
 
 
-
-
-
 bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
 {
     OSL_PRECOND(lpofn,"invalid parameter");
@@ -265,9 +249,6 @@ bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
 
     return bRet;
 }
-
-
-
 
 
 int CGetFileNameWrapper::commDlgExtendedError( )

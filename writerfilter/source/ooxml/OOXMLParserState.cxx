@@ -54,7 +54,6 @@ void OOXMLParserState::setLastParagraphInSection(bool bLastParagraphInSection)
 }
 
 
-
 void OOXMLParserState::setInSectionGroup(bool bInSectionGroup)
 {
     mbInSectionGroup = bInSectionGroup;

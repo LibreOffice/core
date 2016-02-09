@@ -1176,8 +1176,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 }
 
 
-
-
 // XInitialization
 void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
@@ -1549,7 +1547,6 @@ Reference<XInterface> IUnknownWrapper_Impl::createComWrapperInstance()
 }
 
 
-
 void IUnknownWrapper_Impl::getMethodInfo(const OUString& sName, TypeDescription& methodInfo)
 {
     TypeDescription desc= getInterfaceMemberDescOfCurrentCall(sName);
@@ -1639,7 +1636,6 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
 
     return m_eJScript == NoJScript ? sal_False : sal_True;
 }
-
 
 
 /** @internal

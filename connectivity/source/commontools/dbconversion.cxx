@@ -58,7 +58,6 @@ namespace dbtools
     using namespace ::com::sun::star::beans;
 
 
-
     css::util::Date DBTypeConversion::getStandardDate()
     {
         static css::util::Date STANDARD_DB_DATE(1,1,1900);
@@ -447,7 +446,6 @@ namespace dbtools
 
 
 }   // namespace dbtools
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

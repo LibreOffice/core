@@ -30,7 +30,6 @@
 #include <svx/scene3d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace processor3d

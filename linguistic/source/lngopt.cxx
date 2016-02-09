@@ -48,8 +48,6 @@ using namespace linguistic;
 using namespace com::sun::star::registry;
 
 
-
-
 // static member initialization
 SvtLinguOptions *   LinguOptions::pData = nullptr;
 oslInterlockedCount LinguOptions::nRefCount;
@@ -136,7 +134,6 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 
     return aRes;
 }
-
 
 
 //! map must be sorted by first entry in alphabetical increasing order.

@@ -36,7 +36,6 @@
 namespace webdav_ucp {
 
 
-
 struct equalPropertyName
 {
   bool operator()( const css::beans::Property & p1,

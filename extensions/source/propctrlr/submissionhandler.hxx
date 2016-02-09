@@ -36,7 +36,6 @@ namespace pcr
 {
 
 
-
     //= SubmissionHelper
 
     class SubmissionHelper : public EFormsHelper

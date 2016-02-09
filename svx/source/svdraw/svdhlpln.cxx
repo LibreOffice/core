@@ -26,7 +26,6 @@
 #include <vcl/lineinfo.hxx>
 
 
-
 Pointer SdrHelpLine::GetPointer() const
 {
     switch (eKind) {

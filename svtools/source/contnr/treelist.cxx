@@ -1391,7 +1391,6 @@ void SvListView::Impl::RemoveViewData( SvTreeListEntry* pParent )
 }
 
 
-
 void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Remove:No Entry");

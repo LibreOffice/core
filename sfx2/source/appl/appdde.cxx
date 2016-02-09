@@ -376,7 +376,6 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
 }
 
 
-
 /*  [Description]
 
     This method can be overridden by application developers, to receive

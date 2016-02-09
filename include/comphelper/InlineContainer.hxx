@@ -54,7 +54,6 @@ public:
 };
 
 
-
 /** Creates a vector which contains an arbitrary number of elements.
 
     usage:
@@ -75,7 +74,6 @@ public:
         return *this;
     }
 };
-
 
 
 /** Creates a set which contains an arbitrary number of elements.
@@ -99,7 +97,6 @@ public:
         return *this;
     }
 };
-
 
 
 /** usage:

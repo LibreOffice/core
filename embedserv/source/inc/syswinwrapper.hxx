@@ -60,7 +60,6 @@ namespace winwrap {
     };
 
 
-
     class Tracker {
     public:
         // Constructors
@@ -128,7 +127,6 @@ protected:
         BOOL TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo);
         void Construct();
     };
-
 
 
 //Width of the border

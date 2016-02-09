@@ -145,7 +145,6 @@ protected:
 };
 
 
-
 NestedKeyImpl::NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
                               Reference<XRegistryKey>& localKey,
                               Reference<XRegistryKey>& defaultKey )
@@ -1106,7 +1105,6 @@ OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
 }
 
 
-
 // DefaultRegistry Implementation
 
 
@@ -1177,8 +1175,6 @@ sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  ) throw (RuntimeException, s
     MutexGuard guard( m_mutex );
     return m_localReg.is() || m_defaultReg.is();
 }
-
-
 
 
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )

@@ -133,7 +133,6 @@ public:
 };
 
 
-
 class TableDescriptor
     : public ReflectionBase,
       public com::sun::star::sdbcx::XColumnsSupplier,

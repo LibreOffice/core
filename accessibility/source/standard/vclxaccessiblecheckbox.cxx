@@ -41,7 +41,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 // VCLXAccessibleCheckBox
 
 
@@ -53,11 +52,9 @@ VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
 }
 
 
-
 VCLXAccessibleCheckBox::~VCLXAccessibleCheckBox()
 {
 }
-
 
 
 bool VCLXAccessibleCheckBox::IsChecked()
@@ -72,7 +69,6 @@ bool VCLXAccessibleCheckBox::IsChecked()
 }
 
 
-
 bool VCLXAccessibleCheckBox::IsIndeterminate()
 {
     bool bIndeterminate = false;
@@ -83,7 +79,6 @@ bool VCLXAccessibleCheckBox::IsIndeterminate()
 
     return bIndeterminate;
 }
-
 
 
 void VCLXAccessibleCheckBox::SetChecked( bool bChecked )
@@ -101,7 +96,6 @@ void VCLXAccessibleCheckBox::SetChecked( bool bChecked )
 }
 
 
-
 void VCLXAccessibleCheckBox::SetIndeterminate( bool bIndeterminate )
 {
     if ( m_bIndeterminate != bIndeterminate )
@@ -115,7 +109,6 @@ void VCLXAccessibleCheckBox::SetIndeterminate( bool bIndeterminate )
         NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
-
 
 
 void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -132,7 +125,6 @@ void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindo
             VCLXAccessibleTextComponent::ProcessWindowEvent( rVclWindowEvent );
    }
 }
-
 
 
 void VCLXAccessibleCheckBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -170,7 +162,6 @@ OUString VCLXAccessibleCheckBox::getImplementationName() throw (RuntimeException
 }
 
 
-
 Sequence< OUString > VCLXAccessibleCheckBox::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleCheckBox" };
@@ -187,7 +178,6 @@ sal_Int32 VCLXAccessibleCheckBox::getAccessibleActionCount( ) throw (RuntimeExce
 
     return 1;
 }
-
 
 
 sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -221,7 +211,6 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (
 }
 
 
-
 OUString VCLXAccessibleCheckBox::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -234,7 +223,6 @@ OUString VCLXAccessibleCheckBox::getAccessibleActionDescription ( sal_Int32 nInd
     else
         return TK_RES_STRING( RID_STR_ACC_ACTION_CHECK );
 }
-
 
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleCheckBox::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -292,7 +280,6 @@ Any VCLXAccessibleCheckBox::getCurrentValue(  ) throw (RuntimeException, std::ex
 }
 
 
-
 sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -320,7 +307,6 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (Ru
 }
 
 
-
 Any VCLXAccessibleCheckBox::getMaximumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -337,7 +323,6 @@ Any VCLXAccessibleCheckBox::getMaximumValue(  ) throw (RuntimeException, std::ex
 }
 
 
-
 Any VCLXAccessibleCheckBox::getMinimumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -347,7 +332,6 @@ Any VCLXAccessibleCheckBox::getMinimumValue(  ) throw (RuntimeException, std::ex
 
     return aValue;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

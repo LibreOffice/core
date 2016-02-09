@@ -31,7 +31,6 @@ namespace dbtools
 {
 
 
-
     //= StatementComposer
 
     struct StatementComposer_Data;

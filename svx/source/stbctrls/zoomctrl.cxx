@@ -52,7 +52,6 @@ private:
 };
 
 
-
 ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet )
     : PopupMenu(ResId(RID_SVXMNU_ZOOM, DIALOG_MGR()))
     , nZoom(nZ)
@@ -73,7 +72,6 @@ ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet )
     if ( !(SvxZoomEnableFlags::PAGEWIDTH & nValueSet) )
             EnableItem( ZOOM_PAGE_WIDTH, false );
 }
-
 
 
 void ZoomPopup_Impl::Select()

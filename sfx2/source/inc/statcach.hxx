@@ -113,14 +113,12 @@ public:
 };
 
 
-
 // clears Cached-Item
 
 inline void SfxStateCache::ClearCache()
 {
     bItemDirty = true;
 }
-
 
 
 // registeres a item representing this function

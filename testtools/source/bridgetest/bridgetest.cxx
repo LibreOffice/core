@@ -327,7 +327,6 @@ public:
 };
 
 
-
 static bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
 {
     xLBT->startRecursiveCall( new ORecursiveCall , 50 );
@@ -1241,8 +1240,6 @@ Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
 {
     return bridge_test::getSupportedServiceNames();
 }
-
-
 
 
 static Reference< XInterface > SAL_CALL TestBridgeImpl_create(

@@ -28,10 +28,8 @@
 class SbModule;
 
 
-
 namespace basprov
 {
-
 
 
     //  class BasicModuleNodeImpl

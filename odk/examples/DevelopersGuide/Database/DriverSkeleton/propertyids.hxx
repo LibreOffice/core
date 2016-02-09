@@ -65,7 +65,6 @@ namespace skeleton
     };
 
 
-
         typedef const sal_Char* (*PVFN)();
 
         struct UStringDescription

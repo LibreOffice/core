@@ -88,7 +88,6 @@ void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
 }
 
 
-
 //  class StdTabControllerModel
 
 StdTabControllerModel::StdTabControllerModel()

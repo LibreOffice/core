@@ -44,9 +44,7 @@
 using namespace sdr;
 
 
-
 // DragView
-
 
 
 void SdrDragView::ImpClearVars()
@@ -198,7 +196,6 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
     }
     return false;
 }
-
 
 
 bool SdrDragView::TakeDragLimit(SdrDragMode /*eMode*/, Rectangle& /*rRect*/) const
@@ -829,7 +826,6 @@ void SdrDragView::HideDragObj()
         maDragStat.SetShown(false);
     }
 }
-
 
 
 void SdrDragView::SetNoDragXorPolys(bool bOn)

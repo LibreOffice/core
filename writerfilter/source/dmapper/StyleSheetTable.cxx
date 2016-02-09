@@ -53,7 +53,6 @@ namespace dmapper
 typedef ::std::map< OUString, OUString> StringPairMap_t;
 
 
-
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierI()
         ,sStyleIdentifierD()
@@ -262,7 +261,6 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
     }
     return pProps;
 }
-
 
 
 struct ListCharStylePropertyMap_t

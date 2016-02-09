@@ -405,7 +405,6 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 }
 
 
-
 Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
 {
     if (mxCustomShapeEngine.is())
@@ -1410,7 +1409,6 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
 }
 
 
-
 void SdrObjCustomShape::RecalcSnapRect()
 {
     SdrTextObj::RecalcSnapRect();
@@ -1728,7 +1726,6 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nAngle, double tn, boo
 }
 
 
-
 SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
     sal_Int32 nWdt = ImpGetLineWdt(); // #i25616#
@@ -1754,7 +1751,6 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
     aGP.SetPercent(false);
     return aGP;
 }
-
 
 
 // #i38892#
@@ -1879,7 +1875,6 @@ SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
 }
 
 
-
 sal_uInt32 SdrObjCustomShape::GetHdlCount() const
 {
     const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
@@ -1918,7 +1913,6 @@ SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
     }
     return pH;
 }
-
 
 
 bool SdrObjCustomShape::hasSpecialDrag() const
@@ -2142,7 +2136,6 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
 }
 
 
-
 void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
 {
     Rectangle aRect1;
@@ -2218,7 +2211,6 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*r
 {
     return GetLineGeometry( false );
 }
-
 
 
 // in context with the SdrObjCustomShape the SdrTextAutoGrowHeightItem == true -> Resize Shape to fit text,

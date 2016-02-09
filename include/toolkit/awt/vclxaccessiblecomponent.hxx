@@ -46,7 +46,6 @@ class AccessibleStateSetHelper;
 }
 
 
-
 //  class VCLXAccessibleComponent
 
 typedef ::cppu::ImplHelper1<

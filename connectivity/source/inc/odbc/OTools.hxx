@@ -227,7 +227,6 @@ namespace connectivity
         }
 
 
-
     }
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OTOOLS_HXX

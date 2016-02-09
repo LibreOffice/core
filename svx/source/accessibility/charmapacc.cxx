@@ -40,7 +40,6 @@ namespace svx
     using namespace ::com::sun::star::accessibility;
 
 
-
 SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
 ,mpParent( pParent )
 ,m_pTable(nullptr)
@@ -51,7 +50,6 @@ SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : 
     }
     osl_atomic_decrement(&m_refCount);
 }
-
 
 
 SvxShowCharSetVirtualAcc::~SvxShowCharSetVirtualAcc()
@@ -224,8 +222,6 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 }
 
 
-
-
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
     mrParent( rParent )
     ,mnId( _nPos )
@@ -245,7 +241,6 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
 }
 
 
-
 uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessible()
 {
     if( !m_xAcc.is() )
@@ -258,7 +253,6 @@ uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessi
 }
 
 
-
 void SvxShowCharSetItem::ClearAccessible()
 {
     if ( m_xAcc.is() )
@@ -267,9 +261,6 @@ void SvxShowCharSetItem::ClearAccessible()
         m_xAcc  = nullptr;
     }
 }
-
-
-
 
 
 SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(new VCLExternalSolarLock())
@@ -281,7 +272,6 @@ SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAc
     }
     osl_atomic_decrement(&m_refCount);
 }
-
 
 
 SvxShowCharSetAcc::~SvxShowCharSetAcc()
@@ -354,7 +344,6 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleChildCount()
 }
 
 
-
 uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleChild( sal_Int32 i )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
@@ -376,7 +365,6 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
 }
 
 
-
 uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleParent()
     throw (uno::RuntimeException, std::exception)
 {
@@ -386,13 +374,11 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
 }
 
 
-
 sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
     throw (uno::RuntimeException, std::exception)
 {
     return css::accessibility::AccessibleRole::TABLE;
 }
-
 
 
 OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
@@ -401,7 +387,6 @@ OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
     OExternalLockGuard aGuard( this );
     return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION );
 }
-
 
 
 OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
@@ -413,13 +398,11 @@ OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
 }
 
 
-
 uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCharSetAcc::getAccessibleRelationSet()
     throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< css::accessibility::XAccessibleRelationSet >();
 }
-
 
 
 uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetAcc::getAccessibleStateSet()
@@ -598,10 +581,6 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex
 }
 
 
-
-
-
-
 SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
 ,mpParent( pParent )
 {
@@ -612,7 +591,6 @@ SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OA
     }
     osl_atomic_decrement(&m_refCount);
 }
-
 
 
 SvxShowCharSetItemAcc::~SvxShowCharSetItemAcc()
@@ -632,7 +610,6 @@ void SvxShowCharSetItemAcc::ParentDestroyed()
 }
 
 
-
 sal_Int32 SAL_CALL SvxShowCharSetItemAcc::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
 {
@@ -640,13 +617,11 @@ sal_Int32 SAL_CALL SvxShowCharSetItemAcc::getAccessibleChildCount()
 }
 
 
-
 uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleChild( sal_Int32 /*i*/ )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
-
 
 
 uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleParent()
@@ -658,13 +633,11 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc
 }
 
 
-
 sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     throw (uno::RuntimeException, std::exception)
 {
     return css::accessibility::AccessibleRole::TABLE_CELL;
 }
-
 
 
 OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
@@ -694,7 +667,6 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
 }
 
 
-
 OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
     throw (uno::RuntimeException, std::exception)
 {
@@ -714,13 +686,11 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleName()
 }
 
 
-
 uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCharSetItemAcc::getAccessibleRelationSet()
     throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< css::accessibility::XAccessibleRelationSet >();
 }
-
 
 
 uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetItemAcc::getAccessibleStateSet()
@@ -759,12 +729,10 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
 }
 
 
-
 sal_Int32 SvxShowCharSetItemAcc::getAccessibleActionCount() throw (RuntimeException, std::exception)
 {
     return 1;
 }
-
 
 
 sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -780,7 +748,6 @@ sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex ) throw (I
 }
 
 
-
 OUString SvxShowCharSetItemAcc::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if( nIndex == 0 )
@@ -789,14 +756,12 @@ OUString SvxShowCharSetItemAcc::getAccessibleActionDescription ( sal_Int32 nInde
 }
 
 
-
 Reference< css::accessibility::XAccessibleKeyBinding > SvxShowCharSetItemAcc::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     if( nIndex == 0 )
         return Reference< css::accessibility::XAccessibleKeyBinding >();
     throw IndexOutOfBoundsException();
 }
-
 
 
 void SAL_CALL SvxShowCharSetItemAcc::grabFocus()
@@ -890,9 +855,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  ) throw (RuntimeException,
 }
 
 
-
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

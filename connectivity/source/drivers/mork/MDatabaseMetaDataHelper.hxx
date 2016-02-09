@@ -19,7 +19,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-
 namespace connectivity
 {
     namespace mork

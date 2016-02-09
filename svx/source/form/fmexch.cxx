@@ -28,7 +28,6 @@
 #include <tools/diagnose_ex.h>
 
 
-
 namespace svxform
 {
 

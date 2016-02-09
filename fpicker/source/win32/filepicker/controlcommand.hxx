@@ -25,9 +25,6 @@
 #include <rtl/ustring.hxx>
 
 
-
-
-
 class CFilePickerState;
 class CControlCommandRequest;
 class CControlCommandResult;
@@ -62,9 +59,6 @@ private:
 };
 
 
-
-
-
 class CValueControlCommand : public CControlCommand
 {
 public:
@@ -87,9 +81,6 @@ private:
 };
 
 
-
-
-
 class CLabelControlCommand : public CControlCommand
 {
 public:
@@ -106,9 +97,6 @@ public:
 private:
     OUString m_aLabel;
 };
-
-
-
 
 
 class CEnableControlCommand : public CControlCommand

@@ -393,8 +393,6 @@ Any ProxyRoot::queryAggregation( Type const & rType )
 }
 
 
-
-
 FactoryImpl::FactoryImpl()
 {
     OUString uno = UNO_LB_UNO;

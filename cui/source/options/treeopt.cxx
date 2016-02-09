@@ -2202,7 +2202,6 @@ void ExtensionsTabPage::dispose()
 }
 
 
-
 void ExtensionsTabPage::CreateDialogWithHandler()
 {
     try
@@ -2244,7 +2243,6 @@ void ExtensionsTabPage::CreateDialogWithHandler()
         SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << e.Message);
     }
 }
-
 
 
 bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
@@ -2299,13 +2297,11 @@ void ExtensionsTabPage::DeactivatePage()
 }
 
 
-
 void ExtensionsTabPage::ResetPage()
 {
     DispatchAction( "back" );
     ActivatePage();
 }
-
 
 
 void ExtensionsTabPage::SavePage()

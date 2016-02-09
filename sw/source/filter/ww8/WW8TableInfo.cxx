@@ -120,13 +120,6 @@ void WW8TableNodeInfoInner::setRect(const SwRect & rRect)
 }
 
 
-
-
-
-
-
-
-
 const SwNode * WW8TableNodeInfoInner::getNode() const
 {
     const SwNode * pResult = nullptr;
@@ -350,8 +343,6 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
 
     return pResult;
  }
-
-
 
 
 #ifdef DBG_UTIL
@@ -1470,8 +1461,6 @@ void WW8TableCellGridRow::setRowSpans(RowSpansPtr pRowSpans)
 {
     m_pRowSpans = pRowSpans;
 }
-
-
 
 
 CellInfo::CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo)

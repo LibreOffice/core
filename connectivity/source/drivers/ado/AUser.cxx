@@ -209,8 +209,4 @@ void SAL_CALL OAdoUser::changePassword( const OUString& objPassword, const OUStr
 }
 
 
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

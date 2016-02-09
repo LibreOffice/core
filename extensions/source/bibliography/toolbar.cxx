@@ -551,7 +551,6 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
 {
     // Check if toolbar button size have changed and we have to use system settings
@@ -570,7 +569,6 @@ void BibToolBar::RebuildToolbar()
     // We have to call parent asynchronously as SetSize works also asynchronously!
     Application::PostUserEvent( aLayoutManager );
 }
-
 
 
 void BibToolBar::ApplyImageList()

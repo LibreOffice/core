@@ -88,7 +88,6 @@ inline XFFootNote::XFFootNote()
 }
 
 
-
 inline void XFFootNote::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

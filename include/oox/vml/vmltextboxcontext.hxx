@@ -29,7 +29,6 @@ namespace oox {
 namespace vml {
 
 
-
 class TextPortionContext : public ::oox::core::ContextHandler2
 {
 public:
@@ -55,7 +54,6 @@ private:
 };
 
 
-
 class TextBoxContext : public ::oox::core::ContextHandler2
 {
 public:
@@ -74,7 +72,6 @@ private:
     TextBox&            mrTextBox;
     TextParagraphModel  maParagraph;
 };
-
 
 
 } // namespace vml

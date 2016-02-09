@@ -533,7 +533,6 @@ namespace XSLT
     }
 
 
-
     // Component management
 
 #define FILTER_SERVICE_NAME "com.sun.star.documentconversion.XSLTFilter"

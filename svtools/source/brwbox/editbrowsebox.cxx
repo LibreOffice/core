@@ -87,7 +87,6 @@ namespace svt
     }
 
 
-
     //= EditBrowseBox
 
 
@@ -1192,7 +1191,6 @@ namespace svt
     }
 
 
-
     bool EditBrowseBox::SaveModified()
     {
         return true;
@@ -1298,7 +1296,6 @@ namespace svt
     {
         Controller()->resume();
     }
-
 
 
     CellController::CellController(Control* pW)

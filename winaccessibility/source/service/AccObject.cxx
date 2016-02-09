@@ -191,7 +191,6 @@ AccObject::~AccObject()
 }
 
 
-
 /**
    * Insert a child element.
    * @param pChild Child element that should be inserted into child list.

@@ -75,5 +75,4 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

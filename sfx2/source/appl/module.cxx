@@ -175,7 +175,6 @@ void SfxModule::Construct_Impl()
 }
 
 
-
 SfxModule::~SfxModule()
 {
     if( !bDummy )
@@ -202,12 +201,10 @@ SfxModule::~SfxModule()
 }
 
 
-
 SfxSlotPool* SfxModule::GetSlotPool() const
 {
     return pImpl->pSlotPool;
 }
-
 
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
@@ -231,7 +228,6 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 }
 
 
-
 void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 {
     if (!pImpl->pTbxCtrlFac)
@@ -251,7 +247,6 @@ void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 
     pImpl->pTbxCtrlFac->push_back( rFact );
 }
-
 
 
 void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
@@ -275,7 +270,6 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 }
 
 
-
 void SfxModule::RegisterMenuControl( const SfxMenuCtrlFactory& rFact )
 {
     if (!pImpl->pMenuCtrlFac)
@@ -297,12 +291,10 @@ void SfxModule::RegisterMenuControl( const SfxMenuCtrlFactory& rFact )
 }
 
 
-
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
     return pImpl->pTbxCtrlFac;
 }
-
 
 
 SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
@@ -311,12 +303,10 @@ SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 }
 
 
-
 SfxMenuCtrlFactArr_Impl* SfxModule::GetMenuCtrlFactories_Impl() const
 {
     return pImpl->pMenuCtrlFac;
 }
-
 
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const

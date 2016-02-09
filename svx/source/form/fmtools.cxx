@@ -299,7 +299,6 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 }
 
 
-
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< css::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_xObject(_rxObject)
     ,m_pListener(_pListener)
@@ -345,7 +344,6 @@ void FmXDisposeMultiplexer::dispose()
         m_pListener = nullptr;
     }
 }
-
 
 
 sal_Int16 getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxObject)

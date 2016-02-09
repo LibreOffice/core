@@ -106,7 +106,6 @@ namespace accessibility
     }
 
 
-
     Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     {
         Rectangle aRect;
@@ -1124,7 +1123,6 @@ namespace accessibility
     }
 
 
-
     sal_Bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1156,7 +1154,6 @@ namespace accessibility
     }
 
 
-
     Any AccessibleListBoxEntry::getMaximumValue(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1177,7 +1174,6 @@ namespace accessibility
     }
 
 
-
     Any AccessibleListBoxEntry::getMinimumValue(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1196,7 +1192,6 @@ namespace accessibility
 
         return aValue;
     }
-
 
 
     SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)

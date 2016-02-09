@@ -34,7 +34,6 @@
 class SfxObjectShell;
 
 
-
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
     SfxObjectShell*     pObjShell;
@@ -57,7 +56,6 @@ public:
     SfxObjectShell*     GetObjShell() const
                         { return pObjShell; }
 };
-
 
 
 class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint

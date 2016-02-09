@@ -127,7 +127,6 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-
 void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled )
 {
     if( mpDirectionSet )
@@ -152,7 +151,6 @@ void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled 
 }
 
 
-
 void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bEnabled )
 {
     checkEntry( 0, (nProjection == 0) && bEnabled );
@@ -160,7 +158,6 @@ void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bE
     enableEntry( 0, bEnabled );
     enableEntry( 1, bEnabled );
 }
-
 
 
 void ExtrusionDirectionWindow::statusChanged(
@@ -194,7 +191,6 @@ void ExtrusionDirectionWindow::statusChanged(
         }
     }
 }
-
 
 
 IMPL_LINK_TYPED( ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, pControl, void )
@@ -244,7 +240,6 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 }
 
 
-
 VclPtr<vcl::Window> ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<ExtrusionDirectionWindow>::Create( *this, m_xFrame, pParent );
@@ -271,13 +266,11 @@ OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
-
 
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstance(
@@ -288,12 +281,10 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstan
 }
 
 
-
 OUString SAL_CALL ExtrusionDirectionControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDirectionControl_getImplementationName();
 }
-
 
 
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
@@ -379,7 +370,6 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
 }
 
 
-
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 {
     meUnit = eUnit;
@@ -391,7 +381,6 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
         setEntryText( i, aStr );
     }
 }
-
 
 
 void ExtrusionDepthWindow::statusChanged(
@@ -487,7 +476,6 @@ ExtrusionDepthController::ExtrusionDepthController(
 }
 
 
-
 VclPtr<vcl::Window> ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<ExtrusionDepthWindow>::Create( *this, m_xFrame, pParent );
@@ -514,13 +502,11 @@ OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
-
 
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
@@ -648,7 +634,6 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 }
 
 
-
 void ExtrusionLightingWindow::statusChanged(
     const css::frame::FeatureStateEvent& Event
 )   throw ( css::uno::RuntimeException )
@@ -682,7 +667,6 @@ void ExtrusionLightingWindow::statusChanged(
 }
 
 
-
 void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ToolbarMenu::DataChanged( rDCEvt );
@@ -695,7 +679,6 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
         setEntryImage( 2, maImgDim    );
     }
 }
-
 
 
 IMPL_LINK_TYPED( ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, pControl, void )
@@ -749,7 +732,6 @@ void ExtrusionLightingWindow::SelectHdl(void* pControl)
 }
 
 
-
 ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController( rxContext,
@@ -758,7 +740,6 @@ ExtrusionLightingControl::ExtrusionLightingControl(
     )
 {
 }
-
 
 
 VclPtr<vcl::Window> ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
@@ -787,13 +768,11 @@ OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
-
 
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstance(
@@ -804,12 +783,10 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstanc
 }
 
 
-
 OUString SAL_CALL ExtrusionLightingControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionLightingControl_getImplementationName();
 }
-
 
 
 Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
@@ -871,7 +848,6 @@ void ExtrusionSurfaceWindow::statusChanged(
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
@@ -891,7 +867,6 @@ IMPL_LINK_NOARG_TYPED(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
 }
 
 
-
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     const Reference< XComponentContext >& rxContext
 )
@@ -902,7 +877,6 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     )
 {
 }
-
 
 
 VclPtr<vcl::Window> ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
@@ -931,13 +905,11 @@ OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
-
 
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance(
@@ -948,12 +920,10 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance
 }
 
 
-
 OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionSurfaceControl_getImplementationName();
 }
-
 
 
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)

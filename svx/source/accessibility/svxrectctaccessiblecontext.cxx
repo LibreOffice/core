@@ -708,10 +708,6 @@ void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive() throw( lang::Dispos
 }
 
 
-
-
-
-
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     const Reference<XAccessible>&   rxParent,
     const vcl::Window&                       rParentWindow,
@@ -916,8 +912,6 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::addAccessibleEventListener( cons
 }
 
 
-
-
 void SAL_CALL SvxRectCtlChildAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException, std::exception )
 {
@@ -979,7 +973,6 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (R
 }
 
 
-
 sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( maMutex );
@@ -995,7 +988,6 @@ sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex
 }
 
 
-
 OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( maMutex );
@@ -1005,7 +997,6 @@ OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_
 
     return OUString("select");
 }
-
 
 
 Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)

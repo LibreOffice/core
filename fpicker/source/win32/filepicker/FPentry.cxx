@@ -47,9 +47,6 @@ using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
 
 
-
-
-
 static Reference< XInterface > SAL_CALL createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {

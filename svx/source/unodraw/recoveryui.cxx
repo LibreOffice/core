@@ -176,7 +176,6 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 }
 
 
-
 static OUString GetCrashConfigDir()
 {
 
@@ -196,7 +195,6 @@ static OUString GetCrashConfigDir()
 }
 
 
-
 #if defined(WNT)
 #define LCKFILE "crashdat.lck"
 #else
@@ -209,7 +207,6 @@ static OUString GetUnsentURL()
     OUString aURL = GetCrashConfigDir() + "/" LCKFILE;
     return aURL;
 }
-
 
 
 static bool delete_pending_crash()

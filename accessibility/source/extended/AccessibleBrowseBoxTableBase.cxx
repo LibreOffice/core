@@ -24,7 +24,6 @@
 #include <comphelper/servicehelper.hxx>
 
 
-
 using css::uno::Reference;
 using css::uno::Sequence;
 using css::uno::Any;
@@ -34,9 +33,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
 
-
 namespace accessibility {
-
 
 
 // Ctor/Dtor/disposing --------------------------------------------------------
@@ -328,9 +325,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 }
 
 
-
 } // namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

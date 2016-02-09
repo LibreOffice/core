@@ -98,12 +98,10 @@ using ::std::vector;
 using ::std::advance;
 
 
-
 #define TITLE                   "Title"
 #define TARGET_URL              "TargetURL"
 
 #define COMMAND_TRANSFER        "transfer"
-
 
 
 class RegionData_Impl;
@@ -147,7 +145,6 @@ public:
 using namespace ::DocTempl;
 
 
-
 class RegionData_Impl
 {
     const SfxDocTemplate_Impl*  mpParent;
@@ -188,7 +185,6 @@ public:
 };
 
 typedef vector< RegionData_Impl* > RegionList_Impl;
-
 
 
 class SfxDocTemplate_Impl : public SvRefBase
@@ -241,7 +237,6 @@ public:
 };
 
 
-
 class DocTemplLocker_Impl
 {
     SfxDocTemplate_Impl& m_aDocTempl;
@@ -259,7 +254,6 @@ public:
 };
 
 
-
 #ifndef SFX_DECL_DOCTEMPLATES_DEFINED
 #define SFX_DECL_DOCTEMPLATES_DEFINED
 typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
@@ -268,11 +262,9 @@ typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
 SfxDocTemplate_Impl *gpTemplateData = nullptr;
 
 
-
 static bool getTextProperty_Impl( Content& rContent,
                                       const OUString& rPropName,
                                       OUString& rPropValue );
-
 
 
 OUString SfxDocumentTemplates::GetFullRegionName
@@ -310,7 +302,6 @@ OUString SfxDocumentTemplates::GetFullRegionName
 }
 
 
-
 const OUString& SfxDocumentTemplates::GetRegionName
 (
     sal_uInt16 nIdx                 // vcl::Region Index
@@ -346,7 +337,6 @@ const OUString& SfxDocumentTemplates::GetRegionName
 }
 
 
-
 sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
 /*  [Description]
@@ -367,7 +357,6 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
     return (sal_uInt16) nCount;
 }
-
 
 
 sal_uInt16 SfxDocumentTemplates::GetCount
@@ -398,7 +387,6 @@ sal_uInt16 SfxDocumentTemplates::GetCount
 
     return (sal_uInt16) nCount;
 }
-
 
 
 const OUString& SfxDocumentTemplates::GetName
@@ -441,7 +429,6 @@ const OUString& SfxDocumentTemplates::GetName
 }
 
 
-
 OUString SfxDocumentTemplates::GetPath
 (
     sal_uInt16  nRegion,    //  vcl::Region Index, in which the entry lies
@@ -475,7 +462,6 @@ OUString SfxDocumentTemplates::GetPath
 }
 
 
-
 OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString& aGroupName,
                                                                          const OUString& aTitle )
 {
@@ -506,7 +492,6 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
 }
 
 
-
 /** Convert a resource string - a template name - to its localised pair if it exists.
     @param nSourceResIds
         Resource ID where the list of original en-US template names begin.
@@ -529,7 +514,6 @@ OUString SfxDocumentTemplates::ConvertResourceString (
     }
     return rString;
 }
-
 
 
 bool SfxDocumentTemplates::CopyOrMove
@@ -637,7 +621,6 @@ bool SfxDocumentTemplates::CopyOrMove
 }
 
 
-
 bool SfxDocumentTemplates::Move
 (
     sal_uInt16 nTargetRegion,       //  Target vcl::Region Index
@@ -665,7 +648,6 @@ bool SfxDocumentTemplates::Move
     return CopyOrMove( nTargetRegion, nTargetIdx,
                        nSourceRegion, nSourceIdx, true );
 }
-
 
 
 bool SfxDocumentTemplates::Copy
@@ -696,7 +678,6 @@ bool SfxDocumentTemplates::Copy
     return CopyOrMove( nTargetRegion, nTargetIdx,
                        nSourceRegion, nSourceIdx, false );
 }
-
 
 
 bool SfxDocumentTemplates::CopyTo
@@ -768,7 +749,6 @@ bool SfxDocumentTemplates::CopyTo
 
     return true;
 }
-
 
 
 bool SfxDocumentTemplates::CopyFrom
@@ -914,7 +894,6 @@ bool SfxDocumentTemplates::CopyFrom
 }
 
 
-
 bool SfxDocumentTemplates::Delete
 (
     sal_uInt16 nRegion,             //  vcl::Region Index
@@ -976,7 +955,6 @@ bool SfxDocumentTemplates::Delete
 
     return bRet;
 }
-
 
 
 bool SfxDocumentTemplates::InsertDir
@@ -1098,7 +1076,6 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
 }
 
 
-
 bool SfxDocumentTemplates::GetFull
 (
     const OUString &rRegion,      // vcl::Region Name
@@ -1152,7 +1129,6 @@ bool SfxDocumentTemplates::GetFull
 
     return ( pEntry != nullptr );
 }
-
 
 
 bool SfxDocumentTemplates::GetLogicNames
@@ -1222,7 +1198,6 @@ bool SfxDocumentTemplates::GetLogicNames
 }
 
 
-
 SfxDocumentTemplates::SfxDocumentTemplates()
 
 /*  [Description]
@@ -1235,7 +1210,6 @@ SfxDocumentTemplates::SfxDocumentTemplates()
 
     pImp = gpTemplateData;
 }
-
 
 
 SfxDocumentTemplates::~SfxDocumentTemplates()
@@ -1497,7 +1471,6 @@ int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 
     return nCompare;
 }
-
 
 
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
@@ -1797,7 +1770,6 @@ bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
 
     return true;
 }
-
 
 
 void SfxDocTemplate_Impl::Clear()

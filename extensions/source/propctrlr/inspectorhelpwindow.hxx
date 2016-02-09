@@ -27,7 +27,6 @@ namespace pcr
 {
 
 
-
     //= InspectorHelpWindow
 
     class InspectorHelpWindow : public vcl::Window

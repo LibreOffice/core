@@ -60,7 +60,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 
 
-
 #define IMPL_NAME L"oletest.OleTestImpl"  // oletest.OleTestImpl in applicat.rdb
 #define SERVICE_NAME L"oletest.OleTest"
 #define KEY1 L"/oletest.OleTestImpl/UNO/SERVICES"
@@ -559,7 +558,6 @@ Sequence< Sequence<Reference<XEventListener > > > SAL_CALL OComponent::methodXEv
 }
 
 
-
 Sequence< sal_Int8 > SAL_CALL OComponent::getAttrByte() throw( RuntimeException)
 {
     return m_seqByte;
@@ -708,7 +706,6 @@ void SAL_CALL OComponent::setAttrXInterface( const Sequence< Reference< XInterfa
 {
     m_seqxInterface= _attrxinterface;
 }
-
 
 
 ::sal_Int8 SAL_CALL OComponent::getAByte() throw (RuntimeException)
@@ -1219,7 +1216,6 @@ void SAL_CALL OComponent::setAttrAny2(const Any& AttrAny2_) throw( RuntimeExcept
 {
     m_any= AttrAny2_;
 }
-
 
 
 // XTestStruct =======================================================================================
@@ -1892,8 +1888,6 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         Reference<XSimple> simple=  xCallback->getsimple();
         simple->func(L"OleTest calls on XSimple");
         break;
-
-
 
 
     }

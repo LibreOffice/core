@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 // class SdrPercentItem
 // Integer percents of 0
 

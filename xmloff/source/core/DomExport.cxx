@@ -55,7 +55,6 @@ using std::vector;
 using namespace com::sun::star::xml::dom;
 
 
-
 class DomVisitor
 {
 public:
@@ -68,7 +67,6 @@ public:
 
 void visit( DomVisitor&, const Reference<XDocument>& );
 void visit( DomVisitor&, const Reference<XNode>& );
-
 
 
 void visitNode( DomVisitor& rVisitor, const Reference<XNode>& xNode )
@@ -124,7 +122,6 @@ void visit( DomVisitor& rVisitor, const Reference<XNode>& xNode )
     if( xNode->getNodeType() == NodeType_ELEMENT_NODE )
         rVisitor.endElement( Reference<XElement>( xNode, UNO_QUERY_THROW ) );
 }
-
 
 
 class DomExport: public DomVisitor

@@ -27,7 +27,6 @@
 #include <strings.h>
 
 
-
 int main(int argc, const char *argv[])
 {
     int ret = 0;

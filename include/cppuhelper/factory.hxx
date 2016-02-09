@@ -34,7 +34,6 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 
 
-
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"
 #define COMPONENT_GETENVEXT         "component_getImplementationEnvironmentExt"
 #define COMPONENT_WRITEINFO         "component_writeInfo"
@@ -113,7 +112,6 @@ typedef sal_Bool (SAL_CALL * component_writeInfoFunc)(
 */
 typedef void * (SAL_CALL * component_getFactoryFunc)(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-
 
 
 namespace cppu

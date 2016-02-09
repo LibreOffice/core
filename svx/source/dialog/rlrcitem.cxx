@@ -20,10 +20,6 @@
 #include <svl/rectitem.hxx>
 
 
-
-
-
-
 #include <svx/dialogs.hrc>
 
 #include <svx/ruler.hxx>
@@ -40,7 +36,6 @@ SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindin
   rRuler(rRul)
 {
 }
-
 
 
 void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,

@@ -28,14 +28,8 @@
 #include "SolarMutex.hxx"
 
 
-
-
-
 using namespace com::sun::star;
 using ::com::sun::star::ui::dialogs::XFilePickerListener;
-
-
-
 
 
 CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper) :
@@ -60,9 +54,6 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
 }
 
 
-
-
-
 CAsyncEventNotifier::~CAsyncEventNotifier()
 {
     OSL_ENSURE(0 == m_hThread,"Thread not stopped, destroying this instance leads to desaster");
@@ -70,9 +61,6 @@ CAsyncEventNotifier::~CAsyncEventNotifier()
     CloseHandle(m_hEvents[0]);
     CloseHandle(m_hEvents[1]);
 }
-
-
-
 
 
 void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                         aType    ,
@@ -88,9 +76,6 @@ void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                 
 }
 
 
-
-
-
 void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&                         aType    ,
                                                   const uno::Reference< uno::XInterface >& xListener)
 {
@@ -99,9 +84,6 @@ void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&              
 
     m_rBroadcastHelper.aLC.removeInterface( aType, xListener );
 }
-
-
-
 
 
 bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
@@ -131,9 +113,6 @@ bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
 
     return m_bRun;
 }
-
-
-
 
 
 void SAL_CALL CAsyncEventNotifier::shutdown()
@@ -171,25 +150,16 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
 }
 
 
-
-
-
 void CAsyncEventNotifier::suspend()
 {
     ResetEvent(m_ResumeNotifying);
 }
 
 
-
-
-
 void CAsyncEventNotifier::resume()
 {
     SetEvent(m_ResumeNotifying);
 }
-
-
-
 
 
 void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotification)
@@ -206,17 +176,11 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotifica
 }
 
 
-
-
-
 size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 {
     osl::MutexGuard aGuard(m_Mutex);
     return m_EventList.size();
 }
-
-
-
 
 
 void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
@@ -227,9 +191,6 @@ void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 }
 
 
-
-
-
 CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 {
     osl::MutexGuard aGuard(m_Mutex);
@@ -237,17 +198,11 @@ CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 }
 
 
-
-
-
 void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
 {
     osl::MutexGuard aGuard(m_Mutex);
     m_EventList.pop_front();
 }
-
-
-
 
 
 void SAL_CALL CAsyncEventNotifier::run()
@@ -291,9 +246,6 @@ void SAL_CALL CAsyncEventNotifier::run()
 
     } // while(m_bRun)
 }
-
-
-
 
 
 unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)

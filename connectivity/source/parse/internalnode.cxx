@@ -55,7 +55,6 @@ OSQLInternalNode::OSQLInternalNode(const OUString &_NewValue,
 }
 
 
-
 OSQLInternalNode::~OSQLInternalNode()
 {
     // remove the node from the garbage list

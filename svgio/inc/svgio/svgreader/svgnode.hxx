@@ -40,7 +40,6 @@ namespace svgio
 }
 
 
-
 namespace svgio
 {
     namespace svgreader

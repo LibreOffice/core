@@ -21,7 +21,6 @@
 #include <outact.hxx>
 
 
-
 void CGM::ImplDoClass0()
 {
     switch ( mnElementID )

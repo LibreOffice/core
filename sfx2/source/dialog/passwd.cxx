@@ -28,7 +28,6 @@
 #include "dialog.hrc"
 
 
-
 IMPL_LINK_TYPED( SfxPasswordDialog, EditModifyHdl, Edit&, rEdit, void )
 {
     ModifyHdl(&rEdit);
@@ -167,7 +166,6 @@ void SfxPasswordDialog::SetPasswdText( )
 }
 
 
-
 void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
@@ -179,7 +177,6 @@ void SfxPasswordDialog::ShowMinLengthText(bool bShow)
 {
     mpMinLengthFT->Show(bShow);
 }
-
 
 
 short SfxPasswordDialog::Execute()

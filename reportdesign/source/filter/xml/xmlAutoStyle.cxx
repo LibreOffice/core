@@ -80,7 +80,6 @@ OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
 }
 
 
-
 } // namespace rptxml
 
 

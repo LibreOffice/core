@@ -41,7 +41,6 @@ namespace basegfx {
 }
 
 
-
 namespace drawinglayer
 {
     namespace geometry
@@ -167,7 +166,6 @@ namespace drawinglayer
         };
     } // end of namespace geometry
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX

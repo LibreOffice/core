@@ -48,7 +48,6 @@ struct AccessibleEventObject;
 }}}}
 
 
-
 // classes and helper-classes used for accessibility in the graphic-window
 
 
@@ -144,7 +143,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 // classes and helper-classes used for accessibility in the command-window
@@ -298,8 +296,6 @@ public:
 };
 
 
-
-
 typedef
 cppu::WeakImplHelper
     <
@@ -370,7 +366,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 #endif

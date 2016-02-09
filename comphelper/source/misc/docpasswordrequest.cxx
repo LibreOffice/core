@@ -45,13 +45,11 @@ using ::com::sun::star::task::XInteractionRequest;
 namespace comphelper {
 
 
-
 class AbortContinuation : public ::cppu::WeakImplHelper< XInteractionAbort >
 {
 public:
     virtual void SAL_CALL select() throw( RuntimeException, std::exception ) override {}
 };
-
 
 
 class PasswordContinuation : public ::cppu::WeakImplHelper< XInteractionPassword2 >
@@ -78,7 +76,6 @@ private:
     bool            mbReadOnly;
     bool            mbSelected;
 };
-
 
 
 SimplePasswordRequest::SimplePasswordRequest( PasswordRequestMode eMode )
@@ -116,7 +113,6 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest
 {
     return maContinuations;
 }
-
 
 
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
@@ -181,7 +177,6 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::g
 {
     return maContinuations;
 }
-
 
 
 } // namespace comphelper

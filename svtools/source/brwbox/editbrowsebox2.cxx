@@ -204,5 +204,4 @@ sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumn
 } // namespace svt
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

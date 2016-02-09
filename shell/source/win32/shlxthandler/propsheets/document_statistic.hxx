@@ -26,8 +26,6 @@
 #include "internal/metainforeader.hxx"
 
 
-
-
 struct statistic_item
 {
     statistic_item();
@@ -47,18 +45,15 @@ struct statistic_item
 };
 
 
-
 typedef std::vector<statistic_item>                     statistic_item_list_t;
 typedef std::pair<std::wstring, statistic_item_list_t>  statistic_group_t;
 typedef std::vector<statistic_group_t>                  statistic_group_list_t;
-
 
 
 class document_statistic_reader;
 typedef std::unique_ptr<document_statistic_reader> document_statistic_reader_ptr;
 
 document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
-
 
 
 class document_statistic_reader
@@ -86,7 +81,6 @@ private:
 };
 
 
-
 class writer_document_statistic_reader : public document_statistic_reader
 {
 protected:
@@ -99,7 +93,6 @@ protected:
 };
 
 
-
 class calc_document_statistic_reader : public document_statistic_reader
 {
 protected:
@@ -110,7 +103,6 @@ protected:
     friend document_statistic_reader_ptr create_document_statistic_reader(
         const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
-
 
 
 class draw_impress_math_document_statistic_reader : public document_statistic_reader

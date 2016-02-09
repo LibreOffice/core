@@ -66,7 +66,6 @@ namespace io_acceptor
     };
 
 
-
     PipeConnection::PipeConnection( const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription )

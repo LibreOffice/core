@@ -93,5 +93,4 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDashTable_createInstance( SdrMo
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

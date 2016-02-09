@@ -48,7 +48,6 @@ typedef void ProbeFun(
     uno_Any                          ** ppException );
 
 
-
 PURPENV_DLLPUBLIC  void createMapping(uno_Mapping     ** ppMapping,
                    uno_Environment  * pFrom,
                    uno_Environment  * pTo,

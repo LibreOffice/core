@@ -169,7 +169,6 @@ void KeyColumns::refresh()
 }
 
 
-
 void KeyColumns::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& future )
     throw (::com::sun::star::sdbc::SQLException,

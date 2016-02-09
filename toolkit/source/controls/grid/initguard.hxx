@@ -29,7 +29,6 @@ namespace toolkit
 {
 
 
-
     //= InitGuard
 
     template < class IMPL >

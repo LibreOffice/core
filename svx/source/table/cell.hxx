@@ -33,7 +33,6 @@
 #include "svx/svdtext.hxx"
 
 
-
 class SfxItemSet;
 class OutlinerParaObject;
 class SdrObject;
@@ -43,9 +42,7 @@ namespace sdr { namespace properties {
 } }
 
 
-
 namespace sdr { namespace table {
-
 
 
 class SVX_DLLPUBLIC Cell :  public SdrText,
@@ -227,7 +224,6 @@ private:
 
     css::uno::Reference< css::table::XTable > mxTable;
 };
-
 
 
 } }

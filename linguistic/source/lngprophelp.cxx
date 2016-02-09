@@ -305,7 +305,6 @@ sal_Bool SAL_CALL
 }
 
 
-
 PropertyHelper_Thes::PropertyHelper_Thes(
         const Reference< XInterface > &rxSource,
         Reference< XLinguProperties > &rxPropSet ) :
@@ -328,7 +327,6 @@ void SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
     PropertyChgHelper::propertyChange_Impl( rEvt );
 }
-
 
 
 // list of properties from the property set to be used

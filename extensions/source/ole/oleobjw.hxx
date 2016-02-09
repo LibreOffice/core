@@ -50,7 +50,6 @@ namespace ole_adapter
 {
 
 
-
 typedef std::unordered_map<OUString, pair<DISPID, unsigned short>, OUStringHash> DispIdMap;
 
 typedef std::unordered_multimap<OUString, unsigned int, OUStringHash> TLBFuncIndexMap;

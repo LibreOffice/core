@@ -517,5 +517,4 @@ void SAL_CALL OFSStreamContainer::waitForCompletion()
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

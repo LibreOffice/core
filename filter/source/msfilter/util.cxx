@@ -439,7 +439,6 @@ sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 }
 
 
-
 // read parameters "1-3" or 1-3 with both values between 1 and nMax
 bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal_Int32 nMax)
 {

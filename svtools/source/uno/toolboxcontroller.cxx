@@ -675,7 +675,6 @@ void ToolboxController::updateStatus( const OUString& aCommandURL )
 }
 
 
-
 void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs, const OUString &sTarget )
 {
     try
@@ -697,7 +696,6 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
     {
     }
 }
-
 
 
 css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(css::uno::RuntimeException, std::exception)
@@ -760,7 +758,6 @@ throw( css::uno::Exception, std::exception)
             this->setSupportVisibleProperty( rValue );
     }
 }
-
 
 
 IMPL_STATIC_LINK_TYPED( ToolboxController, ExecuteHdl_Impl, void*, p, void )

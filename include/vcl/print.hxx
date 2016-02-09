@@ -50,7 +50,6 @@ namespace vcl {
 }
 
 
-
 enum PrinterSupport
 {
     SUPPORT_SET_ORIENTATION, SUPPORT_SET_PAPERBIN,
@@ -70,7 +69,6 @@ public:
                     PrinterPage( GDIMetaFile* pMtf ) : mpMtf( pMtf ) {}
                     ~PrinterPage() { delete mpMtf; }
 };
-
 
 
 class VCL_DLLPUBLIC QueueInfo
@@ -106,13 +104,11 @@ enum PrinterTransparencyMode
 };
 
 
-
 enum PrinterGradientMode
 {
     PRINTER_GRADIENT_STRIPES  = 0,
     PRINTER_GRADIENT_COLOR    = 1
 };
-
 
 
 enum PrinterBitmapMode
@@ -121,7 +117,6 @@ enum PrinterBitmapMode
     PRINTER_BITMAP_NORMAL     = 1,
     PRINTER_BITMAP_RESOLUTION = 2
 };
-
 
 
 class VCL_DLLPUBLIC PrinterOptions

@@ -36,8 +36,6 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 
 
-
-
 class CLibxml2XFormsExtension : public cppu::WeakImplHelper<
     css::xml::xpath::XXPathExtension, css::lang::XInitialization>
 {

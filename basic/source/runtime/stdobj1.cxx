@@ -56,9 +56,6 @@ SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
 }
 
 
-
-
-
 void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
@@ -110,7 +107,6 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
 }
 
 
-
 SbStdPicture::SbStdPicture() :
     SbxObject( OUString("Picture"))
 {
@@ -136,7 +132,6 @@ SbxVariable* SbStdPicture::Find( const OUString& rName, SbxClassType t )
     // entered already?
     return SbxObject::Find( rName, t );
 }
-
 
 
 void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -168,7 +163,6 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbxObject::Notify( rBC, rHint );
     }
 }
-
 
 
 void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, bool bWrite )
@@ -297,9 +291,6 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-
-
-
 void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
@@ -390,7 +381,6 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 }
 
 
-
 SbStdClipboard::SbStdClipboard() :
     SbxObject( OUString("Clipboard") )
 {
@@ -428,7 +418,6 @@ SbxVariable* SbStdClipboard::Find( const OUString& rName, SbxClassType t )
 {
     return SbxObject::Find( rName, t );
 }
-
 
 
 void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

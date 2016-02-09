@@ -32,9 +32,7 @@
 namespace ucbhelper {
 
 
-
 // class PropertySetInfo.
-
 
 
 class ContentImplHelper;
@@ -100,9 +98,7 @@ public:
 };
 
 
-
 // class CommandProcessorInfo.
-
 
 
 /**

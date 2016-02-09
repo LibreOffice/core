@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 
 
-
 /** A range of signed 32-bit integer values. */
 struct ValueRange
 {
@@ -55,9 +54,7 @@ struct ValueRange
 };
 
 
-
 typedef ::std::vector< ValueRange > ValueRangeVector;
-
 
 
 /** An ordered list of value ranges. The insertion operation will merge
@@ -77,7 +74,6 @@ public:
 private:
     ValueRangeVector    maRanges;
 };
-
 
 
 /** Template for a 2-dimensional array of objects.
@@ -134,7 +130,6 @@ private:
     container_type      maData;
     size_type           mnWidth;
 };
-
 
 
 /** Static helper functions for improved API container handling. */
@@ -267,7 +262,6 @@ public:
 };
 
 
-
 template< typename VectorType >
 /*static*/ const typename VectorType::value_type* ContainerHelper::getVectorElement( const VectorType& rVector, sal_Int32 nIndex )
 {
@@ -323,7 +317,6 @@ template< typename MatrixType >
     }
     return aSeq;
 }
-
 
 
 } // namespace oox

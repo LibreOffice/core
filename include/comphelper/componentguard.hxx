@@ -30,7 +30,6 @@ namespace comphelper
 {
 
 
-
     //= ComponentGuard
 
     class ComponentGuard

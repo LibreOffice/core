@@ -29,7 +29,6 @@ using namespace com::sun::star::uno;
 using namespace http_dav_ucp;
 
 
-
 // Constructor
 
 SerfInputStream::SerfInputStream()

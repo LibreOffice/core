@@ -43,7 +43,6 @@ const OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc 
 }
 
 
-
 rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding( const OUString& rStr ) const
 {
     sal_uInt32 nCount = Count();

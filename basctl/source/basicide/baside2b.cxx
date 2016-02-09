@@ -172,9 +172,7 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
 } // namespace
 
 
-
 // EditorWindow
-
 
 
 class EditorWindow::ChangesListener:
@@ -1648,7 +1646,6 @@ WatchWindow::WatchWindow (Layout* pParent) :
 }
 
 
-
 WatchWindow::~WatchWindow()
 {
     disposeOnce();
@@ -1849,9 +1846,7 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 }
 
 
-
 // StackWindow
-
 
 
 StackWindow::StackWindow (Layout* pParent) :
@@ -1874,7 +1869,6 @@ StackWindow::StackWindow (Layout* pParent) :
     // make stack window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
-
 
 
 StackWindow::~StackWindow()
@@ -2100,9 +2094,7 @@ EditorWindow::GetComponentInterface(bool bCreate)
 }
 
 
-
 // WatchTreeListBox
-
 
 
 WatchTreeListBox::WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits )

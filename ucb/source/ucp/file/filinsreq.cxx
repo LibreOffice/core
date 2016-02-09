@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 
-
 using namespace cppu;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

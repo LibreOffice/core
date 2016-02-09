@@ -26,9 +26,7 @@
 #include <rtl/instance.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer
@@ -391,7 +389,6 @@ namespace drawinglayer
         };
     } // end of anonymous namespace
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

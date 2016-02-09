@@ -130,7 +130,6 @@ enum class GraphicFileFormat
 };
 
 
-
 class VCL_DLLPUBLIC GraphicDescriptor
 {
     SvStream*           pFileStm;

@@ -40,9 +40,6 @@ namespace cmis
     }
 
 
-
-
-
     void URL::setObjectPath( const OUString& sPath )
     {
         m_sPath = sPath;

@@ -43,7 +43,6 @@
 #include "lngopt.hxx"
 
 
-
 class ThesaurusDispatcher :
     public cppu::WeakImplHelper< css::linguistic2::XThesaurus >,
     public LinguDispatcher
@@ -97,7 +96,6 @@ inline css::uno::Reference< css::linguistic2::XLinguProperties >
     return xPropSet.is() ?
         xPropSet : xPropSet = linguistic::GetLinguProperties();
 }
-
 
 
 #endif

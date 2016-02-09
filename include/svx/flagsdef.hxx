@@ -108,7 +108,6 @@ enum SvxModeType
 #define TABFILL_ALL         0x01F0
 
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

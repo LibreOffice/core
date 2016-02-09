@@ -61,7 +61,6 @@ namespace ucbhelper
 {
 
 
-
 /**
   * These are the possible values for the parameter eMode of method
   * ucbhelper::Content::createCursor.
@@ -84,7 +83,6 @@ enum InsertOperation
     InsertOperation_LINK,  // create a link to source
     InsertOperation_CHECKIN  // check-in source data
 };
-
 
 
 class Content_Impl;

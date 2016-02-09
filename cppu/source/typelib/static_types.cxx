@@ -90,7 +90,6 @@ static inline sal_Int32 newAlignedSize(
 }
 
 
-
 namespace
 {
     struct typelib_StaticInitMutex : public rtl::Static< Mutex, typelib_StaticInitMutex > {};

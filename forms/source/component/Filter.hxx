@@ -44,7 +44,6 @@ namespace frm
 {
 
 
-
     // OFilterControl
 
     typedef ::cppu::ImplHelper5 <   css::awt::XTextComponent

@@ -99,8 +99,6 @@ void SfxControllerItem::BindInternal_Impl( sal_uInt16 nNewId, SfxBindings *pBind
 }
 
 
-
-
 void SfxControllerItem::UnBind()
 
 /*  [Description]
@@ -124,7 +122,6 @@ void SfxControllerItem::UnBind()
 }
 
 
-
 void SfxControllerItem::ReBind()
 
 /*  [Description]
@@ -145,7 +142,6 @@ void SfxControllerItem::ReBind()
 
     pBindings->Register(*this);
 }
-
 
 
 void SfxControllerItem::ClearCache()
@@ -194,7 +190,6 @@ void SfxControllerItem::SetId( sal_uInt16 nItemId )
     DBG_ASSERT( !IsBound(), "changing id of bound binding" );
     nId = nItemId;
 }
-
 
 
 // creates a atomic item for a controller without registration.
@@ -262,7 +257,6 @@ void SfxControllerItem::StateChanged
 }
 
 
-
 void SfxStatusForwarder::StateChanged
 (
     sal_uInt16          nSID,    // <SID> of the triggering slot
@@ -275,7 +269,6 @@ void SfxStatusForwarder::StateChanged
 }
 
 
-
 SfxStatusForwarder::SfxStatusForwarder(
             sal_uInt16              nSlotId,
             SfxControllerItem&  rMaster ):
@@ -283,7 +276,6 @@ SfxStatusForwarder::SfxStatusForwarder(
     pMaster( &rMaster )
 {
 }
-
 
 
 SfxItemState SfxControllerItem::GetItemState
@@ -328,7 +320,6 @@ SfxItemState SfxControllerItem::GetItemState
                         ? SfxItemState::UNKNOWN
                         : SfxItemState::DEFAULT;
 }
-
 
 
 SfxMapUnit SfxControllerItem::GetCoreMetric() const

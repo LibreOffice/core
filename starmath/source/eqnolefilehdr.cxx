@@ -21,9 +21,6 @@
 #include <sot/storage.hxx>
 
 
-
-
-
 bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
 {
     sal_uInt8 nVer = 0;
@@ -51,7 +48,6 @@ bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     }
     return bSuccess;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

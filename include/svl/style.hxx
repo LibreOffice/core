@@ -297,7 +297,6 @@ public:
 };
 
 
-
 enum SfxStyleSheetHintId
 {
     CREATED       = 1,  // new
@@ -312,7 +311,6 @@ class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 public:
                          SfxStyleSheetPoolHint(SfxStyleSheetHintId ) {}
 };
-
 
 
 class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint

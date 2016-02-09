@@ -31,8 +31,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 
-
-
 class ImpOptimizer : public OptimizationStats
 {
 private:

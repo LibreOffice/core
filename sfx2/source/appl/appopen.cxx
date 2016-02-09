@@ -145,7 +145,6 @@ private:
 }
 
 
-
 ::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
@@ -175,9 +174,6 @@ private:
     }
     return eResult;
 }
-
-
-
 
 
 sal_uInt32 CheckPasswd_Impl
@@ -280,8 +276,6 @@ sal_uInt32 CheckPasswd_Impl
 
     return nRet;
 }
-
-
 
 
 sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, bool bCopy, SfxItemSet* pSet )
@@ -408,7 +402,6 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
 }
 
 
-
 void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
     const SfxStringItem* pFactoryItem = rReq.GetArg<SfxStringItem>(SID_NEWDOCDIRECT);
@@ -439,7 +432,6 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     if ( pItem )
         rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
 }
-
 
 
 void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
@@ -545,7 +537,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             rReq.SetReturnValue( *pRet );
     }
 }
-
 
 
 namespace {

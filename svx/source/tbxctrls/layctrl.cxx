@@ -95,12 +95,10 @@ const long TableWindow::TABLE_CELLS_HORIZ = 10;
 const long TableWindow::TABLE_CELLS_VERT = 15;
 
 
-
 IMPL_LINK_NOARG_TYPED(TableWindow, SelectHdl, Button*, void)
 {
     CloseAndShowTableDialog();
 }
-
 
 
 TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText,
@@ -149,7 +147,6 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 }
 
 
-
 TableWindow::~TableWindow()
 {
     disposeOnce();
@@ -172,7 +169,6 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
 
     Update( nNewCol, nNewLine );
 }
-
 
 
 void TableWindow::KeyInput( const KeyEvent& rKEvt )
@@ -248,13 +244,11 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-
 void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseButtonUp( rMEvt );
     EndPopupMode( FloatWinPopupEndFlags::CloseAll );
 }
-
 
 
 void TableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
@@ -331,7 +325,6 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 }
 
 
-
 void TableWindow::PopupModeEnd()
 {
     if ( !IsPopupModeCanceled() && nCol && nLine )
@@ -347,7 +340,6 @@ void TableWindow::PopupModeEnd()
 
     SfxPopupWindow::PopupModeEnd();
 }
-
 
 
 void TableWindow::Update( long nNewCol, long nNewLine )
@@ -367,7 +359,6 @@ void TableWindow::Update( long nNewCol, long nNewLine )
 }
 
 
-
 void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 {
     Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
@@ -383,7 +374,6 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
             xDispatch->dispatch( aTargetURL, rArgs );
     }
 }
-
 
 
 void TableWindow::CloseAndShowTableDialog()
@@ -425,7 +415,6 @@ public:
 };
 
 
-
 ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString& rText, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
     bInitialKeyInput(true),
@@ -459,7 +448,6 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUStri
     SetOutputSizePixel( Size( nMX*nWidth-1, aLogicSize.Height()+nTextHeight ) );
     StartCascading();
 }
-
 
 
 void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
@@ -602,7 +590,6 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-
 void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseButtonUp( rMEvt );
@@ -611,7 +598,6 @@ void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if ( IsInPopupMode() )
         EndPopupMode( FloatWinPopupEndFlags::CloseAll );
 }
-
 
 
 void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
@@ -674,7 +660,6 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 }
 
 
-
 void ColumnsWindow::PopupModeEnd()
 {
     if ( !IsPopupModeCanceled() && nCol )
@@ -703,11 +688,9 @@ SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 n
 }
 
 
-
 SvxTableToolBoxControl::~SvxTableToolBoxControl()
 {
 }
-
 
 
 VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
@@ -750,11 +733,9 @@ SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt
 }
 
 
-
 SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 {
 }
-
 
 
 VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()

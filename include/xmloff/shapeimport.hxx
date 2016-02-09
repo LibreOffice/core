@@ -46,7 +46,6 @@ class XMLPropertySetMapper;
 class SvXMLImportPropertyMapper;
 
 
-
 enum SdXMLGroupShapeElemTokenMap
 {
     XML_TOK_GROUP_GROUP,
@@ -199,7 +198,6 @@ public:
 };
 
 
-
 class SdXML3DSceneAttributesHelper
 {
 protected:
@@ -243,7 +241,6 @@ public:
 };
 
 
-
 class SvXMLShapeContext : public SvXMLImportContext
 {
 protected:
@@ -260,7 +257,6 @@ public:
 
     void setHyperlink( const OUString& rHyperlink );
 };
-
 
 
 class ShapeSortContext;

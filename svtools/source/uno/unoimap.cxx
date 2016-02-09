@@ -518,7 +518,6 @@ Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
 }
 
 
-
 class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUnoTunnel >
 {
 public:

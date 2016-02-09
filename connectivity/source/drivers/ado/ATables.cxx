@@ -99,5 +99,4 @@ void OTables::appendNew(const OUString& _rsNewTable)
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

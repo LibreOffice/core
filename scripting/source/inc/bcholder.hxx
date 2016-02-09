@@ -24,10 +24,8 @@
 #include <cppuhelper/interfacecontainer.h>
 
 
-
 namespace scripting_helper
 {
-
 
 
     //  class OMutexHolder

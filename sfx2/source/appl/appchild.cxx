@@ -35,8 +35,6 @@
 #include <sfx2/sfxsids.hrc>
 
 
-
-
 void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFactory *pFact )
 {
     if ( pMod )
@@ -124,7 +122,6 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
 
     OSL_FAIL( "No ChildWindow for this Context!" );
 }
-
 
 
 SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const

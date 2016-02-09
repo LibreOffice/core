@@ -68,7 +68,6 @@ SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
 }
 
 
-
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
     aSvxMacroTable.clear();
@@ -204,7 +203,6 @@ void SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
 }
 
 
-
 bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -214,7 +212,6 @@ bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 
     return rOwn == rOther;
 }
-
 
 
 SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
@@ -251,12 +248,10 @@ bool SvxMacroItem::GetPresentation
 }
 
 
-
 SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
 {
     return aMacroTable.Write( rStrm );
 }
-
 
 
 SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
@@ -267,12 +262,10 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 }
 
 
-
 void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     aMacroTable.Insert( nEvent, rMacro);
 }
-
 
 
 sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const

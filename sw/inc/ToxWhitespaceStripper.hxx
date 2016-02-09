@@ -49,5 +49,4 @@ private:
 } // end namespace sw
 
 
-
 #endif /* TOXWHITESPACESTRIPPER_HXX_ */

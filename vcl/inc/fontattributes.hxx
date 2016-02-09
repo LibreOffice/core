@@ -25,7 +25,6 @@
 #include <vcl/vclenum.hxx>
 
 
-
 /* The following class is extraordinarily similar to ImplFont. */
 
 class FontAttributes

@@ -192,8 +192,6 @@ void AccessibleShape::Init()
 }
 
 
-
-
 void AccessibleShape::UpdateStates()
 {
     ::utl::AccessibleStateSetHelper* pStateSet =
@@ -269,8 +267,6 @@ bool AccessibleShape::SetState (sal_Int16 aState)
 }
 
 
-
-
 bool AccessibleShape::ResetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;
@@ -288,8 +284,6 @@ bool AccessibleShape::ResetState (sal_Int16 aState)
 
     return bStateHasChanged;
 }
-
-
 
 
 bool AccessibleShape::GetState (sal_Int16 aState)
@@ -345,8 +339,6 @@ sal_Int32 SAL_CALL
 
     return nChildCount;
 }
-
-
 
 
 /** Forward the request to the shape.  Return the requested shape or throw
@@ -540,8 +532,6 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 
-
-
 awt::Rectangle SAL_CALL AccessibleShape::getBounds()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -655,8 +645,6 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
 }
 
 
-
-
 awt::Point SAL_CALL AccessibleShape::getLocation()
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -664,8 +652,6 @@ awt::Point SAL_CALL AccessibleShape::getLocation()
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Point (aBoundingBox.X, aBoundingBox.Y);
 }
-
-
 
 
 awt::Point SAL_CALL AccessibleShape::getLocationOnScreen()
@@ -691,8 +677,6 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen()
 }
 
 
-
-
 awt::Size SAL_CALL AccessibleShape::getSize()
     throw (uno::RuntimeException, std::exception)
 {
@@ -700,8 +684,6 @@ awt::Size SAL_CALL AccessibleShape::getSize()
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Size (aBoundingBox.Width, aBoundingBox.Height);
 }
-
-
 
 
 sal_Int32 SAL_CALL AccessibleShape::getForeground()
@@ -726,8 +708,6 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
     }
     return nColor;
 }
-
-
 
 
 sal_Int32 SAL_CALL AccessibleShape::getBackground()
@@ -787,8 +767,6 @@ void SAL_CALL AccessibleShape::addAccessibleEventListener (
 }
 
 
-
-
 void SAL_CALL AccessibleShape::removeAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException, std::exception)
@@ -820,16 +798,12 @@ css::uno::Any SAL_CALL
 }
 
 
-
-
 void SAL_CALL
     AccessibleShape::acquire()
     throw ()
 {
     AccessibleContextBase::acquire ();
 }
-
-
 
 
 void SAL_CALL
@@ -960,8 +934,6 @@ OUString SAL_CALL
 {
     return OUString("AccessibleShape");
 }
-
-
 
 
 uno::Sequence<OUString> SAL_CALL
@@ -1250,11 +1222,6 @@ OUString
 }
 
 
-
-
-
-
-
 // protected
 void AccessibleShape::disposing()
 {
@@ -1312,8 +1279,6 @@ sal_Int32 SAL_CALL
         nIndex = AccessibleContextBase::getAccessibleIndexInParent();
     return nIndex;
 }
-
-
 
 
 void AccessibleShape::UpdateNameAndDescription()

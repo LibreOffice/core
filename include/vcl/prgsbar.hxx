@@ -46,11 +46,7 @@
  ************************************************************************/
 
 
-
-
 #define WB_STDPROGRESSBAR       WB_BORDER
-
-
 
 
 class VCL_DLLPUBLIC ProgressBar : public vcl::Window

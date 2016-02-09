@@ -47,7 +47,6 @@ namespace tdoc_ucp {
     };
 
 
-
     struct StorageInfo
     {
         OUString aTitle;
@@ -64,7 +63,6 @@ namespace tdoc_ucp {
     };
 
 
-
     struct ltref
     {
         bool operator()(
@@ -75,7 +73,6 @@ namespace tdoc_ucp {
     };
 
     typedef std::map< OUString, StorageInfo, ltref > DocumentList;
-
 
 
     class OfficeDocumentsManager :

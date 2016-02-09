@@ -90,8 +90,6 @@ typedef WeakImplHelper< XIntrospectionAccess, XMaterialHolder, XExactName,
                         XIdlArray, XUnoTunnel > IntrospectionAccessHelper;
 
 
-
-
 // Special value for Method-Concept, to be able to mark "normal" functions
 #define  MethodConcept_NORMAL_IMPL        0x80000000
 
@@ -117,7 +115,6 @@ bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDer
 }
 
 
-
 // *** Classification of Properties (no enum, to be able to use Sequence) ***
 // Properties from a PropertySet-Interface
 #define MAP_PROPERTY_SET    0
@@ -131,8 +128,6 @@ bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDer
 
 // Increments by which the size of sequences get adjusted
 #define ARRAY_SIZE_STEP        20
-
-
 
 
 //*** IntrospectionAccessStatic_Impl ***
@@ -689,7 +684,6 @@ void IntrospectionAccessStatic_Impl::checkInterfaceArraySize( Sequence< Referenc
 }
 
 
-
 //*** ImplIntrospectionAccess ***
 
 
@@ -1100,7 +1094,6 @@ Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
     }
     return aRet;
 }
-
 
 
 //*** Implementation of ImplIntrospectionAdapter ***
@@ -1990,7 +1983,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     }
 
 
-
                     // 3. Methods
 
                     // Counter for found listeners
@@ -2379,8 +2371,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             rPropCount++;
                         }
                     }
-
-
 
 
                     // 4. Place methods in overall sequence

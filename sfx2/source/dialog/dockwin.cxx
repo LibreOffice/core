@@ -1774,7 +1774,6 @@ SplitWindowItemFlags SfxDockingWindow::GetWinBits_Impl() const
 }
 
 
-
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {
     pImp->aSplitSize = rSize;

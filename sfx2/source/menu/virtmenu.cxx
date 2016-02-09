@@ -108,7 +108,6 @@ void SfxMenuImageControl_Impl::Update()
 }
 
 
-
 static Image RetrieveAddOnImage( Reference< css::frame::XFrame >& rFrame,
                                  const OUString& aImageId,
                                  const OUString& aURL,
@@ -132,7 +131,6 @@ static Image RetrieveAddOnImage( Reference< css::frame::XFrame >& rFrame,
 }
 
 
-
 /*  This helper function checks whether a Slot-id in the current application
     status is visible or not. This relates to the application status to see
     if the OLE server application exist or not.
@@ -151,7 +149,6 @@ bool IsItemHidden_Impl( sal_uInt16 nItemId, bool bOleServer, bool bMac )
 }
 
 
-
 void SfxVirtualMenu::Construct_Impl()
 {
     pSVMenu->SetHighlightHdl( LINK(this, SfxVirtualMenu, Highlight) );
@@ -162,7 +159,6 @@ void SfxVirtualMenu::Construct_Impl()
     if ( !pResMgr && pParent )
         pResMgr = pParent->pResMgr;
 }
-
 
 
 SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
@@ -195,7 +191,6 @@ SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
 }
 
 
-
 // creates a virtual menu from a StarView MenuBar or PopupMenu
 
 SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, bool bWithHelp,
@@ -226,7 +221,6 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, bool bWithHelp,
     Construct_Impl();
     bHelpInitialized = false;
 }
-
 
 
 /*  The destructor of the class SfxVirtualMenu releases bounded items and
@@ -480,7 +474,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
 }
 
 
-
 // called on activation of the SV-Menu
 
 IMPL_STATIC_LINK_NOARG_TYPED(
@@ -555,7 +548,6 @@ IMPL_LINK_NOARG_TYPED(SfxVirtualMenu, SettingsChanged, LinkParamNone*, void)
 }
 
 
-
 void SfxVirtualMenu::UpdateImages( Menu* pMenu )
 {
     if ( !pMenu )
@@ -596,7 +588,6 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
 }
 
 
-
 void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
 {
     if ( !pMenu )
@@ -613,7 +604,6 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
             RemoveMenuImages( pPopup );
     }
 }
-
 
 
 bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
@@ -730,7 +720,6 @@ void SfxVirtualMenu::UnbindControllers()
 }
 
 
-
 void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 {
     // Create special popup menu that is filled with the 3rd party components popup menu items
@@ -767,7 +756,6 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     else
         delete pAddonMenu;
 }
-
 
 
 // called on activation of the SV-Menu
@@ -907,7 +895,6 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Activate, Menu *, pMenu, bool )
 }
 
 
-
 IMPL_LINK_TYPED( SfxVirtualMenu, Deactivate, Menu *, pMenu, bool )
 {
     SAL_INFO(
@@ -976,10 +963,7 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Select, Menu *, pMenu, bool )
 }
 
 
-
 // returns the associated StarView-menu
-
-
 
 
 // set the checkmark of the specified item
@@ -1013,8 +997,6 @@ void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 }
 
 
-
-
 void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
 {
 
@@ -1027,7 +1009,6 @@ void SfxVirtualMenu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu *pMenu )
             pSubMenu->SetPopupMenu( nItemId, pMenu );
     }
 }
-
 
 
 // Forces the initialization, which is otherwise only happens in Activate

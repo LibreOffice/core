@@ -91,9 +91,6 @@ Reference< XPropertySet > ColumnDescriptor::createDataDescriptor(  ) throw (Runt
 }
 
 
-
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

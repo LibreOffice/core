@@ -132,7 +132,6 @@ IMPL_LINK_NOARG_TYPED(Popup, PopupModeEndHandler, FloatingWindow*, void)
 }
 
 
-
 } } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,6 @@
 #include "main.hxx"
 
 
-
 CGMBitmap::CGMBitmap( CGM& rCGM ) :
     mpCGM                           ( &rCGM ),
     pCGMBitmapDescriptor            ( new CGMBitmapDescriptor )
@@ -30,12 +29,10 @@ CGMBitmap::CGMBitmap( CGM& rCGM ) :
 };
 
 
-
 CGMBitmap::~CGMBitmap()
 {
     delete pCGMBitmapDescriptor;
 }
-
 
 
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
@@ -217,7 +214,6 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 }
 
 
-
 void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
 {
     sal_uInt16 nColors = sal::static_int_cast< sal_uInt16 >(
@@ -228,7 +224,6 @@ void CGMBitmap::ImplSetCurrentPalette( CGMBitmapDescriptor& rDesc )
         rDesc.mpAcc->SetPaletteColor( i, BMCOL( mpCGM->pElement->aLatestColorTable[ i ] ) );
     }
 }
-
 
 
 bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
@@ -320,7 +315,6 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     }
     return rDesc.mbStatus;
 }
-
 
 
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest )

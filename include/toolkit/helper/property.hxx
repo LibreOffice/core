@@ -243,8 +243,6 @@ bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );
 bool                            CompareProperties( const css::uno::Any& r1, const css::uno::Any& r2 );
 
 
-
-
 #endif // INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX
 
 

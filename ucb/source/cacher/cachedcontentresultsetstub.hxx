@@ -31,7 +31,6 @@
 #define CACHED_CRS_STUB_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetStubFactory"
 
 
-
 class CachedContentResultSetStub
                 : public ContentResultSetWrapper
                 , public css::lang::XTypeProvider
@@ -88,7 +87,6 @@ public:
     CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
 
     virtual ~CachedContentResultSetStub();
-
 
 
     // XInterface
@@ -154,7 +152,6 @@ public:
         , sal_Int32 nRowCount, sal_Bool bDirection )
         throw( css::uno::RuntimeException, std::exception ) override;
 };
-
 
 
 class CachedContentResultSetStubFactory

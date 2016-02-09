@@ -79,7 +79,6 @@ static sal_uInt16 nTimeOut = 300;
 typedef std::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
 
-
 typedef std::vector<SfxStateCache*> SfxStateCacheArr_Impl;
 
 struct SfxFoundCache_Impl
@@ -256,7 +255,6 @@ SfxBindings::SfxBindings()
 }
 
 
-
 SfxBindings::~SfxBindings()
 
 /*  [Description]
@@ -289,7 +287,6 @@ SfxBindings::~SfxBindings()
     delete pImp->pCaches;
     delete pImp;
 }
-
 
 
 void SfxBindings::DeleteControllers_Impl()
@@ -354,7 +351,6 @@ void SfxBindings::DeleteControllers_Impl()
 }
 
 
-
 void SfxBindings::HidePopups( bool bHide )
 {
     // Hide SfxPopupWindows
@@ -387,7 +383,6 @@ void SfxBindings::HidePopupCtrls_Impl( bool bHide )
 
     pImp->ePopupAction = SfxPopupAction::DELETE;
 }
-
 
 
 void SfxBindings::Update_Impl
@@ -447,7 +442,6 @@ void SfxBindings::Update_Impl
 }
 
 
-
 void SfxBindings::InvalidateSlotsInMap_Impl()
 {
     InvalidateSlotMap::const_iterator pIter = pImp->m_aInvalidateSlots.begin();
@@ -460,12 +454,10 @@ void SfxBindings::InvalidateSlotsInMap_Impl()
 }
 
 
-
 void SfxBindings::AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId )
 {
     pImp->m_aInvalidateSlots[nId] = true;
 }
-
 
 
 void SfxBindings::Update
@@ -530,7 +522,6 @@ void SfxBindings::Update
 }
 
 
-
 void SfxBindings::Update()
 {
     DBG_ASSERT( pImp->pCaches != nullptr, "SfxBindings not initialized" );
@@ -552,7 +543,6 @@ void SfxBindings::Update()
         InvalidateSlotsInMap_Impl();
     }
 }
-
 
 
 void SfxBindings::SetState
@@ -598,7 +588,6 @@ void SfxBindings::SetState
 }
 
 
-
 void SfxBindings::SetState
 (
     const SfxPoolItem&  rItem   // Status value to be set
@@ -629,8 +618,6 @@ void SfxBindings::SetState
         }
     }
 }
-
-
 
 
 SfxStateCache* SfxBindings::GetAnyStateCache_Impl( sal_uInt16 nId )
@@ -674,7 +661,6 @@ SfxStateCache* SfxBindings::GetStateCache
 }
 
 
-
 void SfxBindings::InvalidateAll
 (
     bool  bWithMsg  /* true   Mark Slot Server as invalid
@@ -709,7 +695,6 @@ void SfxBindings::InvalidateAll
         pImp->aTimer.Start();
     }
 }
-
 
 
 void SfxBindings::Invalidate
@@ -761,7 +746,6 @@ void SfxBindings::Invalidate
         pImp->aTimer.Start();
     }
 }
-
 
 
 void SfxBindings::InvalidateShell
@@ -820,7 +804,6 @@ void SfxBindings::InvalidateShell
 }
 
 
-
 void SfxBindings::Invalidate
 (
     sal_uInt16 nId              // Status value to be set
@@ -853,7 +836,6 @@ void SfxBindings::Invalidate
         }
     }
 }
-
 
 
 void SfxBindings::Invalidate
@@ -892,13 +874,11 @@ void SfxBindings::Invalidate
 }
 
 
-
 bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
 {
     DBG_ASSERT( pImp->pCaches != nullptr, "SfxBindings not initialized" );
     return GetStateCache(nSlotId, &nStartSearchAt ) != nullptr;
 }
-
 
 
 sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
@@ -1010,7 +990,6 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, bool bInternal )
         rItem.ChangeItemLink(pOldItem);
     }
 }
-
 
 
 void SfxBindings::Release( SfxControllerItem& rItem )
@@ -1276,7 +1255,6 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 }
 
 
-
 void SfxBindings::UpdateSlotServer_Impl()
 {
     DBG_ASSERT( pImp->pCaches != nullptr, "SfxBindings not initialized" );
@@ -1306,7 +1284,6 @@ void SfxBindings::UpdateSlotServer_Impl()
 
     Broadcast( SfxSimpleHint(SFX_HINT_DOCCHANGED) );
 }
-
 
 
 SfxItemSet* SfxBindings::CreateSet_Impl
@@ -1440,7 +1417,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     pRanges.reset();
     return pSet;
 }
-
 
 
 void SfxBindings::UpdateControllers_Impl
@@ -1660,7 +1636,6 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
 }
 
 
-
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
     SAL_INFO(
@@ -1771,7 +1746,6 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
 }
 
 
-
 void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 {
     SfxDispatcher *pOldDispat = pDispatcher;
@@ -1837,7 +1811,6 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 }
 
 
-
 void SfxBindings::ClearCache_Impl( sal_uInt16 nSlotId )
 {
     SfxStateCache* pCache = GetStateCache(nSlotId);
@@ -1859,7 +1832,6 @@ void SfxBindings::StartUpdate_Impl( bool bComplete )
         // Update all slots in a row
         NextJob_Impl(nullptr);
 }
-
 
 
 SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolItem> &rpState )

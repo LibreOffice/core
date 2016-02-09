@@ -121,12 +121,10 @@ VclPtr<SfxTabPage> SvxHeaderPage::Create( vcl::Window* pParent, const SfxItemSet
 }
 
 
-
 VclPtr<SfxTabPage> SvxFooterPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxFooterPage>::Create( pParent, *rSet );
 }
-
 
 
 SvxHeaderPage::SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
@@ -135,7 +133,6 @@ SvxHeaderPage::SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
 
 {
 }
-
 
 
 SvxFooterPage::SvxFooterPage( vcl::Window* pParent, const SfxItemSet& rAttr ) :
@@ -200,7 +197,6 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
 }
 
 
-
 SvxHFPage::~SvxHFPage()
 {
     disposeOnce();
@@ -227,7 +223,6 @@ void SvxHFPage::dispose()
     m_pBackgroundBtn.clear();
     SfxTabPage::dispose();
 }
-
 
 
 bool SvxHFPage::FillItemSet( SfxItemSet* rSet )

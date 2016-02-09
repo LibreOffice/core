@@ -117,8 +117,6 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
 }
 
 
-
-
 static LPTSTR   *GetCommandArgs( int *pArgc )
 {
 #ifdef UNICODE
@@ -128,7 +126,6 @@ static LPTSTR   *GetCommandArgs( int *pArgc )
     return __argv;
 #endif
 }
-
 
 
 namespace {

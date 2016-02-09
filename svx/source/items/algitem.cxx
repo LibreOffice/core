@@ -57,7 +57,6 @@ SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, cons
 }
 
 
-
 bool SvxOrientationItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
@@ -68,7 +67,6 @@ bool SvxOrientationItem::GetPresentation
     rText = GetValueText( GetValue() );
     return true;
 }
-
 
 
 bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -109,7 +107,6 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-
 OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal )
 {
     DBG_ASSERT( nVal <= SVX_ORIENTATION_STACKED, "enum overflow!" );
@@ -117,12 +114,10 @@ OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal )
 }
 
 
-
 SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 {
     return new SvxOrientationItem( *this );
 }
-
 
 
 SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
@@ -133,12 +128,10 @@ SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 }
 
 
-
 sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
     return SVX_ORIENTATION_STACKED + 1; // letzter Enum-Wert + 1
 }
-
 
 
 bool SvxOrientationItem::IsStacked() const
@@ -184,7 +177,6 @@ SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :
 }
 
 
-
 SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
                               sal_Int16 nTop,
                               sal_Int16 nRight,
@@ -200,8 +192,6 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
 }
 
 
-
-
 SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
 
     SfxPoolItem( rItem.Which() )
@@ -211,7 +201,6 @@ SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
     nRightMargin = rItem.nRightMargin;
     nBottomMargin = rItem.nBottomMargin;
 }
-
 
 
 bool SvxMarginItem::GetPresentation
@@ -262,7 +251,6 @@ bool SvxMarginItem::GetPresentation
 }
 
 
-
 bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -274,12 +262,10 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-
 SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
 {
     return new SvxMarginItem(*this);
 }
-
 
 
 SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
@@ -296,7 +282,6 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
 }
 
 
-
 SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
     rStream.WriteInt16( nLeftMargin );
@@ -305,8 +290,6 @@ SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) 
     rStream.WriteInt16( nBottomMargin );
     return rStream;
 }
-
-
 
 
 bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -334,7 +317,6 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
     return true;
 }
-
 
 
 bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
@@ -367,12 +349,10 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-
 void SvxMarginItem::SetLeftMargin( sal_Int16 nLeft )
 {
     nLeftMargin = nLeft;
 }
-
 
 
 void SvxMarginItem::SetTopMargin( sal_Int16 nTop )
@@ -381,12 +361,10 @@ void SvxMarginItem::SetTopMargin( sal_Int16 nTop )
 }
 
 
-
 void SvxMarginItem::SetRightMargin( sal_Int16 nRight )
 {
     nRightMargin = nRight;
 }
-
 
 
 void SvxMarginItem::SetBottomMargin( sal_Int16 nBottom )

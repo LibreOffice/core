@@ -27,7 +27,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct UpDownBarsModel;
 
 /** Handler for an up/down bars context (c:upDownBars element).
@@ -42,10 +41,8 @@ public:
 };
 
 
-
 struct TypeGroupModel;
 typedef ContextBase< TypeGroupModel > TypeGroupContextBase;
-
 
 
 /** Handler for area type group contexts (c:area3DChart, c:areaChart elements).
@@ -60,7 +57,6 @@ public:
 };
 
 
-
 /** Handler for bar type group contexts (c:bar3DChart, c:barChart elements).
  */
 class BarTypeGroupContext : public TypeGroupContextBase
@@ -73,7 +69,6 @@ public:
 };
 
 
-
 /** Handler for bubble type group context (c:bubbleChart element).
  */
 class BubbleTypeGroupContext : public TypeGroupContextBase
@@ -84,7 +79,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for line type group contexts (c:line3DChart, c:lineChart,
@@ -100,7 +94,6 @@ public:
 };
 
 
-
 /** Handler for pie type group contexts (c:doughnutChart, c:ofPieChart,
     c:pie3DChart, c:pieChart elements).
  */
@@ -112,7 +105,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for radar type group context (c:radarChart element).
@@ -127,7 +119,6 @@ public:
 };
 
 
-
 /** Handler for scatter type group context (c:scatterChart element).
  */
 class ScatterTypeGroupContext : public TypeGroupContextBase
@@ -138,7 +129,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for surface type group contexts (c:surface3DChart, c:surfaceChart
@@ -152,7 +142,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

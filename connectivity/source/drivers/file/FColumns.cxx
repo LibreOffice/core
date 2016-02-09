@@ -81,8 +81,4 @@ void OColumns::impl_refresh() throw(RuntimeException)
 }
 
 
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

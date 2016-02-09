@@ -272,9 +272,6 @@ bool PasswordContainerHelper::addRecord(
 }
 
 
-
-
-
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
     const uno::Reference< uno::XComponentContext >& xContext )
 : m_aPwContainerHelper( xContext )
@@ -288,9 +285,7 @@ PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -338,9 +333,7 @@ PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
 }
 
 
-
 // XInteractionHandler2 methods.
-
 
 
 // virtual
@@ -407,9 +400,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 }
 
 
-
 // Service factory implementation.
-
 
 
 static uno::Reference< uno::XInterface > SAL_CALL

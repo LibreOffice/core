@@ -27,8 +27,6 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 
 
-
-
 class SvStream;
 namespace basegfx { class B2DPolyPolygon; }
 
@@ -54,8 +52,6 @@ struct ImplLineInfo
     friend SvStream&    ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo );
     friend SvStream&    WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
 };
-
-
 
 
 class VCL_DLLPUBLIC LineInfo

@@ -245,6 +245,4 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementNam
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

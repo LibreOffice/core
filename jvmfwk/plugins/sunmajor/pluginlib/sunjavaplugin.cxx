@@ -497,8 +497,6 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 }
 
 
-
-
 #if defined(WNT)
 
 // Load msvcr71.dll using an explicit full path from where it is

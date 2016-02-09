@@ -100,7 +100,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL jdbc_component_getFactory(
 }
 
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

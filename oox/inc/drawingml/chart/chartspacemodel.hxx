@@ -29,7 +29,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct ChartSpaceModel
 {
     typedef ModelRef< Shape >           ShapeRef;
@@ -61,7 +60,6 @@ struct ChartSpaceModel
     explicit            ChartSpaceModel(bool bMSO2007Doc);
                         ~ChartSpaceModel();
 };
-
 
 
 } // namespace chart

@@ -111,9 +111,6 @@ inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 }
 
 
-
-
-
 inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
 {
     nBase = nNewBase;

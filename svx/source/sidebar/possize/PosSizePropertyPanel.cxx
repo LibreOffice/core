@@ -51,7 +51,6 @@ const char USERITEM_NAME[]      = "FitItem";
 namespace svx { namespace sidebar {
 
 
-
 PosSizePropertyPanel::PosSizePropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -181,7 +180,6 @@ namespace
 } // end of anonymous namespace
 
 
-
 void PosSizePropertyPanel::Initialize()
 {
     //Position : Horizontal / Vertical
@@ -249,7 +247,6 @@ VclPtr<vcl::Window> PosSizePropertyPanel::Create (
                         pBindings,
                         rxSidebar);
 }
-
 
 
 void PosSizePropertyPanel::DataChanged(
@@ -330,7 +327,6 @@ void PosSizePropertyPanel::HandleContextChange(
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 {
     if( mpCbxScale->IsChecked() &&
@@ -351,7 +347,6 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
     }
     executeSize();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
@@ -376,19 +371,16 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
 {
     executePosX();
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
 {
     executePosY();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
@@ -403,7 +395,6 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
     SvtViewOptions aPageOpt(E_TABPAGE, "cui/ui/possizetabpage/PositionAndSize");
     aPageOpt.SetUserItem( USERITEM_NAME, css::uno::makeAny( ::rtl::OUString::number( int(mpCbxScale->IsChecked()) ) ) );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
@@ -451,7 +442,6 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 {
     sal_Int32 nTmp = mpDial->GetRotation();
@@ -465,7 +455,6 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
 }
-
 
 
 IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
@@ -485,7 +474,6 @@ IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
                 SID_FLIP_VERTICAL, SfxCallMode::RECORD, &aVertItem, 0L );
     }
 }
-
 
 
 void PosSizePropertyPanel::NotifyItemUpdate(
@@ -816,11 +804,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 }
 
 
-
-
-
-
-
 void PosSizePropertyPanel::executeSize()
 {
     if ( mpMtrWidth->IsValueModified() || mpMtrHeight->IsValueModified())
@@ -866,7 +849,6 @@ void PosSizePropertyPanel::executeSize()
 }
 
 
-
 void PosSizePropertyPanel::executePosX()
 {
     if ( mpMtrPosX->IsValueModified())
@@ -891,7 +873,6 @@ void PosSizePropertyPanel::executePosX()
 }
 
 
-
 void PosSizePropertyPanel::executePosY()
 {
     if ( mpMtrPosY->IsValueModified() )
@@ -912,7 +893,6 @@ void PosSizePropertyPanel::executePosY()
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aPosYItem, 0L );
     }
 }
-
 
 
 void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
@@ -953,7 +933,6 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
 }
 
 
-
 FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
     FieldUnit eUnit = FUNIT_NONE;
@@ -986,7 +965,6 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
 
     return eUnit;
 }
-
 
 
 void PosSizePropertyPanel::DisableControls()

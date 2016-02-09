@@ -46,12 +46,10 @@
 #include <svx/xmlsecctrl.hxx>
 
 
-
 SmResId::SmResId( sal_uInt16 nId )
     : ResId(nId, *SM_MOD()->GetResMgr())
 {
 }
-
 
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :

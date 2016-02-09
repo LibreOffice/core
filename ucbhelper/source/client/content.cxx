@@ -126,12 +126,7 @@ void EmptyInputStream::closeInput()
 }
 
 
-
-
-
 // class ContentEventListener_Impl.
-
-
 
 
 class ContentEventListener_Impl : public cppu::OWeakObject,
@@ -161,11 +156,7 @@ public:
 };
 
 
-
-
 // class Content_Impl.
-
-
 
 
 class Content_Impl : public salhelper::SimpleReferenceObject
@@ -306,11 +297,7 @@ static Reference< XContent > getContentNoThrow(
 }
 
 
-
-
 // Content Implementation.
-
-
 
 
 Content::Content()
@@ -1069,7 +1056,6 @@ bool Content::isFolder()
 }
 
 
-
 SAL_WNOUNREACHABLE_CODE_PUSH
 
 bool Content::isDocument()
@@ -1119,8 +1105,6 @@ void Content::unlock()
 
 
 // Content_Impl Implementation.
-
-
 
 
 Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
@@ -1337,13 +1321,7 @@ void Content_Impl::inserted()
 }
 
 
-
-
 // ContentEventListener_Impl Implementation.
-
-
-
-
 
 
 // XInterface methods.
@@ -1373,7 +1351,6 @@ css::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno
 // XContentEventListener methods.
 
 
-
 // virtual
 void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
     throw( RuntimeException, std::exception )
@@ -1397,9 +1374,7 @@ void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
 }
 
 
-
 // XEventListenr methods.
-
 
 
 // virtual

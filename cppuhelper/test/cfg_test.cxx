@@ -222,10 +222,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 
 
-
-
-
-
 SAL_IMPLEMENT_MAIN()
 {
     try

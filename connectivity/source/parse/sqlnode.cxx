@@ -749,7 +749,6 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
 }
 
 
-
 bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::com::sun::star::uno::Any &_rCatalog,
                                             OUString &_rSchema,
@@ -1297,7 +1296,6 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         return m_pParseTree;
     }
 }
-
 
 
 OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext)

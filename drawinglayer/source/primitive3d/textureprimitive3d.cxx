@@ -22,9 +22,7 @@
 #include <basegfx/color/bcolor.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer
@@ -56,7 +54,6 @@ namespace drawinglayer
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -119,7 +116,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -154,7 +150,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -186,7 +181,6 @@ namespace drawinglayer
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

@@ -111,7 +111,6 @@ private:
 };
 
 
-
 namespace
 {
     static ResMgr* pXSLTResMgr = nullptr;
@@ -133,11 +132,9 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const css::uno::Reference< X
 }
 
 
-
 XMLFilterDialogComponent::~XMLFilterDialogComponent()
 {
 }
-
 
 
 // XInterface
@@ -145,7 +142,6 @@ Any SAL_CALL XMLFilterDialogComponent::queryInterface( const Type& aType ) throw
 {
     return OComponentHelper::queryInterface( aType );
 }
-
 
 
 Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType ) throw (RuntimeException, std::exception)
@@ -174,19 +170,16 @@ Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType ) th
 }
 
 
-
 void SAL_CALL XMLFilterDialogComponent::acquire() throw ()
 {
     OComponentHelper::acquire();
 }
 
 
-
 void SAL_CALL XMLFilterDialogComponent::release() throw ()
 {
     OComponentHelper::release();
 }
-
 
 
 OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeException )
@@ -216,7 +209,6 @@ Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId() th
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 
 namespace
@@ -275,7 +267,6 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 }
 
 
-
 // XTerminateListener
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ ) throw (TerminationVetoException, RuntimeException, std::exception)
 {
@@ -295,7 +286,6 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* 
     else
         mpDialog->Close();
 }
-
 
 
 void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ ) throw (RuntimeException, std::exception)

@@ -25,7 +25,6 @@
 #include <memory>
 
 
-
 struct PasswordToOpenModifyDialog_Impl;
 
 class PasswordToOpenModifyDialog : public SfxModalDialog
@@ -47,7 +46,6 @@ public:
     OUString  GetPasswordToModify() const;
     bool    IsRecommendToOpenReadonly() const;
 };
-
 
 
 #endif

@@ -37,7 +37,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_IMPL_NAME     "com.sun.star.comp.system.SimpleCommandMail"
 
 
-
 namespace
 {
     Reference< XInterface > SAL_CALL createInstance( const Reference< XComponentContext >& xContext )

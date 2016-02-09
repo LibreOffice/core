@@ -63,9 +63,7 @@
 #include <svx/xlnwtit.hxx>
 
 
-
 // EditView
-
 
 
 void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, bool bCopy)
@@ -704,7 +702,6 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
 }
 
 
-
 void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
     // bReplaceAll has no effect here
@@ -1239,7 +1236,6 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
 }
 
 
-
 bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if(GetMarkedObjectCount())
@@ -1281,7 +1277,6 @@ bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHard
         return SdrMarkView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
     }
 }
-
 
 
 SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
@@ -1746,7 +1741,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     EndUndo();
 }
-
 
 
 bool SdrEditView::IsAlignPossible() const

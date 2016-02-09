@@ -493,7 +493,6 @@ Reference< XInterface > OleConverter_Impl2::createComWrapperInstance()
 }
 
 
-
 /*****************************************************************************
 
     class implementation OleClient_Impl
@@ -622,7 +621,6 @@ Reference< XInterface > OleClient_Impl::createComWrapperInstance( )
 }
 
 
-
 /*****************************************************************************
 
     class implementation OleServer_Impl
@@ -695,7 +693,6 @@ sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUI
 
     return pFac->registerClass();
 }
-
 
 
 } // end namespace

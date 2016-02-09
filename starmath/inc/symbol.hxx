@@ -37,8 +37,6 @@
 #define SYMBOL_NONE     0xFFFF
 
 
-
-
 inline const OUString GetUiSymbolName( const OUString &rExportSymbolName )
 {
     return SmLocalizedSymbolData::GetUiSymbolName( rExportSymbolName );
@@ -54,7 +52,6 @@ inline const OUString GetUiSymbolSetName( const OUString &rExportSymbolSetName )
 {
     return SmLocalizedSymbolData::GetUiSymbolSetName( rExportSymbolSetName );
 }
-
 
 
 class SmSym

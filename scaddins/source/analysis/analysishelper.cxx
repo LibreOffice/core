@@ -1377,7 +1377,6 @@ double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 }
 
 
-
 class AnalysisRscStrArrLoader : public Resource
 {
 private:
@@ -1561,7 +1560,6 @@ void SortedIndividualInt32List::InsertHolidayList(
 }
 
 
-
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< double > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1645,7 +1643,6 @@ bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException, la
 }
 
 
-
 bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fValue < 0.0 )
@@ -1654,14 +1651,12 @@ bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeExc
 }
 
 
-
 bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fValue < 0.0 )
         throw lang::IllegalArgumentException();
     return true;
 }
-
 
 
 Complex::Complex( const OUString& rStr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -2605,7 +2600,6 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 }
 
 
-
 ScaDate::ScaDate() :
     nOrigDay( 1 ),
     nDay( 1 ),
@@ -2800,7 +2794,6 @@ bool ScaDate::operator<( const ScaDate& rCmp ) const
         return !bLastDay && rCmp.bLastDay;
     return nOrigDay < rCmp.nOrigDay;
 }
-
 
 
 ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext )

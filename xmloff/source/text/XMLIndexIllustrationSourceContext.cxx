@@ -38,7 +38,6 @@ using ::xmloff::token::XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
 
-
 XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

@@ -29,8 +29,6 @@ class SvStream;
 class OutputDevice;
 
 
-
-
 class VCL_DLLPUBLIC MapMode
 {
     friend class        OutputDevice;

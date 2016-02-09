@@ -33,7 +33,6 @@ namespace sfx2
 {
 
 
-
     //= IModifiableDocument
 
     /** callback for the DocumentStorageModifyListener class

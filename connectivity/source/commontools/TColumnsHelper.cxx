@@ -214,6 +214,4 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/, const OUString& _sElementNa
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

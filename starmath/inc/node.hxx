@@ -88,9 +88,6 @@ enum SmNodeType
 };
 
 
-
-
-
 class SmNode : public SmRect
 {
     SmFace      maFace;
@@ -230,7 +227,6 @@ private:
 };
 
 
-
 /** A simple auxiliary iterator class for SmNode
  *
  * Example of iteration over children of pMyNode:
@@ -287,7 +283,6 @@ private:
     /** Move reverse */
     bool bIsReverse;
 };
-
 
 
 /** Abstract baseclass for all composite node
@@ -364,9 +359,6 @@ public:
 };
 
 
-
-
-
 class SmGraphicNode : public SmVisibleNode
 {
 protected:
@@ -378,8 +370,6 @@ public:
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
 };
-
-
 
 
 /** Draws a rectangle
@@ -405,8 +395,6 @@ public:
 };
 
 
-
-
 /** Polygon line node
  *
  * Used to draw the slash of the WIDESLASH command by SmBinDiagonalNode.
@@ -430,8 +418,6 @@ public:
 
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** Text node
@@ -497,8 +483,6 @@ public:
 };
 
 
-
-
 /** Special node for user defined characters
  *
  * Node used for pre- and user-defined characters from:
@@ -523,8 +507,6 @@ public:
 };
 
 
-
-
 /** Glyph node for custom operators
  *
  * This node is used with commands: oper, uoper and boper.
@@ -544,8 +526,6 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** Math symbol node
@@ -576,7 +556,6 @@ public:
 };
 
 
-
 /** Math Identifier
  *
  * This behaves essentially the same as SmMathSymbolNode and is only used to
@@ -589,7 +568,6 @@ public:
     SmMathIdentifierNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NMATHIDENT, rNodeToken) {}
 };
-
 
 
 /** Root symbol node
@@ -640,8 +618,6 @@ public:
 };
 
 
-
-
 /** Place node
  *
  * Used to create the <?> command, that denotes place where something can be
@@ -663,8 +639,6 @@ public:
 };
 
 
-
-
 /** Error node, for parsing errors
  *
  * This node is used for parsing errors and draws an questionmark turned upside
@@ -683,8 +657,6 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** Table node
@@ -712,8 +684,6 @@ public:
 
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** A line
@@ -748,8 +718,6 @@ public:
 };
 
 
-
-
 /** Expression node
  *
  * Used whenever you have an expression such as "A OVER {B + C}", here there is
@@ -769,8 +737,6 @@ public:
 };
 
 
-
-
 /** Unary horizontal node
  *
  * The same as SmBinHorNode except this is for unary operators.
@@ -787,8 +753,6 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** Root node
@@ -857,8 +821,6 @@ public:
 };
 
 
-
-
 /** Binary horizontal node
  *
  * This node is used for binary operators. In a formula such as "A + B".
@@ -891,8 +853,6 @@ public:
 };
 
 
-
-
 /** Binary horizontal node
  *
  * This node is used for creating the OVER command, consider the formula:
@@ -923,8 +883,6 @@ public:
 };
 
 
-
-
 /** Binary diagonal node
  *
  * Used for implementing the WIDESLASH command, example: "A WIDESLASH B".
@@ -951,9 +909,6 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
-
 
 
 /** Enum used to index sub-/supscripts in the 'aSubNodes' array
@@ -1036,8 +991,6 @@ public:
 };
 
 
-
-
 /** Node for brace construction
  *
  * Used for "lbrace [body] rbrace" and similar constructions.
@@ -1073,8 +1026,6 @@ public:
 };
 
 
-
-
 /** Body of an SmBraceNode
  *
  * This usually only has one child an SmExpressionNode, however, it can also
@@ -1102,8 +1053,6 @@ inline SmBracebodyNode::SmBracebodyNode(const SmToken &rNodeToken) :
 {
     nBodyHeight = 0;
 }
-
-
 
 
 /** Node for vertical brace construction
@@ -1142,9 +1091,6 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
 }
 
 
-
-
-
 /** Operation Node
  *
  * Used for commands like SUM, INT and similar.
@@ -1177,8 +1123,6 @@ public:
 };
 
 
-
-
 /** Node used for alignment
  *
  * This node has exactly one child at index 0.
@@ -1193,8 +1137,6 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** Attribute node
@@ -1225,8 +1167,6 @@ public:
 };
 
 
-
-
 /** Font node
  *
  * Used to change the font of its children.
@@ -1253,8 +1193,6 @@ public:
     void CreateTextFromNode(OUString &rText) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
 
 
 /** Matrix node
@@ -1287,8 +1225,6 @@ public:
 };
 
 
-
-
 /** Node for whitespace
  *
  * Used to implement the "~" command. This node is just a blank space.
@@ -1313,9 +1249,6 @@ public:
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
 };
-
-
-
 
 
 inline SmNode* SmRootNode::Argument()
@@ -1346,7 +1279,6 @@ inline const SmNode* SmRootNode::Body() const
 {
     return const_cast< SmRootNode* >( this )->Body();
 }
-
 
 
 inline SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol()

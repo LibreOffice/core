@@ -26,7 +26,6 @@
 #include <svx/sdgcpitm.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

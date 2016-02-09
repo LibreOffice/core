@@ -262,7 +262,6 @@ double GridWindow::findMinY()
 }
 
 
-
 double GridWindow::findMaxX()
 {
     if( ! m_pXValues )
@@ -275,7 +274,6 @@ double GridWindow::findMaxX()
 }
 
 
-
 double GridWindow::findMaxY()
 {
     if( ! m_pNewYValues )
@@ -286,7 +284,6 @@ double GridWindow::findMaxY()
             fMax = m_pNewYValues[ i ];
     return fMax;
 }
-
 
 
 void GridWindow::computeExtremes()
@@ -309,7 +306,6 @@ void GridWindow::computeExtremes()
         setBoundings( m_fMinX, m_fMinY, m_fMaxX, m_fMaxY );
     }
 }
-
 
 
 Point GridWindow::transform( double x, double y )
@@ -368,7 +364,6 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
 }
 
 
-
 void GridWindow::computeNew()
 {
     if(2L == m_aHandles.size())
@@ -412,7 +407,6 @@ void GridWindow::computeNew()
         }
     }
 }
-
 
 
 double GridWindow::interpolate(

@@ -128,7 +128,6 @@ OSingleFactoryHelper::~OSingleFactoryHelper()
 }
 
 
-
 Any OSingleFactoryHelper::queryInterface( const Type & rType )
     throw(css::uno::RuntimeException, std::exception)
 {

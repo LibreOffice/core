@@ -32,7 +32,6 @@ namespace comphelper
 {
 
 
-
     //= OListenerContainer
 
     /** abstract base class which manages a listener container, including

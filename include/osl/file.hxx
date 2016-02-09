@@ -41,7 +41,6 @@ namespace osl
 {
 
 
-
 /** Base class for all File System specific objects.
 
     @see Directory
@@ -322,7 +321,6 @@ public:
 };
 
 
-
 /** The VolumeDevice class.
 
     @see VolumeInfo
@@ -398,7 +396,6 @@ public:
 
     friend class VolumeInfo;
 };
-
 
 
 class Directory;
@@ -895,7 +892,6 @@ public:
 
     friend class DirectoryItem;
 };
-
 
 
 /** The file class object provides access to file contents and attributes.
@@ -1603,7 +1599,6 @@ public:
 
     friend class Directory;
 };
-
 
 
 /** Base class for observers of directory creation notifications.

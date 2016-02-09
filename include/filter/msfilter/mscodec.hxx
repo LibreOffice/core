@@ -30,7 +30,6 @@
 namespace msfilter {
 
 
-
 /** Encodes and decodes data from protected MSO 95- documents.
  */
 class MSFILTER_DLLPUBLIC MSCodec_Xor95
@@ -171,8 +170,6 @@ public:
     */
     virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) override;
 };
-
-
 
 
 /** Encodes and decodes data from protected MSO 97+ documents.
@@ -354,7 +351,6 @@ private:
     sal_uInt8           m_pDigestValue[ RTL_DIGEST_LENGTH_MD5 ];
     sal_uInt8           m_pDocId[16];
 };
-
 
 
 } // namespace msfilter

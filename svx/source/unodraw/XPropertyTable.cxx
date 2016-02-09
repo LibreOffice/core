@@ -242,7 +242,6 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
 }
 
 
-
 class SvxUnoXColorTable : public SvxUnoXPropertyTable
 {
 public:
@@ -302,7 +301,6 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
-
 
 
 class SvxUnoXLineEndTable : public SvxUnoXPropertyTable
@@ -375,7 +373,6 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceName
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
-
 
 
 class SvxUnoXDashTable : public SvxUnoXPropertyTable
@@ -458,7 +455,6 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames( 
 }
 
 
-
 class SvxUnoXHatchTable : public SvxUnoXPropertyTable
 {
 public:
@@ -532,7 +528,6 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
-
 
 
 class SvxUnoXGradientTable : public SvxUnoXPropertyTable
@@ -620,7 +615,6 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNam
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
-
 
 
 class SvxUnoXBitmapTable : public SvxUnoXPropertyTable

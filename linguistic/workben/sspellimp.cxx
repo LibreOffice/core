@@ -42,14 +42,12 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-
 sal_Bool operator == ( const Locale &rL1, const Locale &rL2 )
 {
     return  rL1.Language ==  rL2.Language   &&
             rL1.Country  ==  rL2.Country    &&
             rL1.Variant  ==  rL2.Variant;
 }
-
 
 
 SpellChecker::SpellChecker() :
@@ -475,7 +473,6 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
     }
     return pRet;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

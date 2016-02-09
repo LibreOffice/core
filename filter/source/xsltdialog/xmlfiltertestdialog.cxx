@@ -294,7 +294,6 @@ void XMLFilterTestDialog::initDialog()
     m_pFTExportXSLTFile->SetText( getFileNameFromURL( m_pFilterInfo->maExportXSLT ) );
 
 
-
     m_pImport->Enable(bImport);
     m_pFTImportTemplate->Enable(bImport && !m_pFilterInfo->maImportTemplate.isEmpty());
     m_pFTImportTemplateFile->Enable(bImport && !m_pFilterInfo->maImportTemplate.isEmpty());

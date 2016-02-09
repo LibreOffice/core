@@ -914,7 +914,6 @@ void SwFltAnchor::SetFrameFormat(SwFrameFormat * _pFrameFormat)
 }
 
 
-
 bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 {
     return pFrameFormat == static_cast<const SwFltAnchor&>(rItem).pFrameFormat;

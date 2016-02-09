@@ -56,7 +56,6 @@
 using namespace ::com::sun::star;
 
 
-
 typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
 
 struct SfxObjectFactory_Impl
@@ -76,12 +75,10 @@ struct SfxObjectFactory_Impl
 };
 
 
-
 SfxFilterContainer* SfxObjectFactory::GetFilterContainer( bool /*bForceLoad*/ ) const
 {
     return pImpl->pFilterContainer;
 }
-
 
 
 SfxObjectFactory::SfxObjectFactory
@@ -115,13 +112,11 @@ SfxObjectFactory::SfxObjectFactory
 }
 
 
-
 SfxObjectFactory::~SfxObjectFactory()
 {
     delete pImpl->pNameResId;
     delete pImpl->pFilterContainer;
 }
-
 
 
 void SfxObjectFactory::RegisterViewFactory
@@ -153,19 +148,16 @@ void SfxObjectFactory::RegisterViewFactory
 }
 
 
-
 sal_uInt16 SfxObjectFactory::GetViewFactoryCount() const
 {
     return pImpl->aViewFactoryArr.size();
 }
 
 
-
 SfxViewFactory& SfxObjectFactory::GetViewFactory(sal_uInt16 i) const
 {
     return *pImpl->aViewFactoryArr[i];
 }
-
 
 
 SfxModule* SfxObjectFactory::GetModule() const

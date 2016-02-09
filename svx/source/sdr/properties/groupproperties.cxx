@@ -27,7 +27,6 @@
 #include <svx/svdpage.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

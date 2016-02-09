@@ -1694,7 +1694,6 @@ bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes, bool bMa
 }
 
 
-
 bool SVGFilter::implExportShape( const Reference< XShape >& rxShape, bool bMaster )
 {
     Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
@@ -1935,7 +1934,6 @@ bool SVGFilter::implCreateObjects()
     }
     return true;
 }
-
 
 
 bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )

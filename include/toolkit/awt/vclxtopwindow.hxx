@@ -106,8 +106,6 @@ public:
 };
 
 
-
-
 #endif // INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

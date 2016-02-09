@@ -75,11 +75,7 @@ using namespace ucbhelper_impl;
 namespace ucbhelper {
 
 
-
-
 // ResultSetMetaData Implementation.
-
-
 
 
 ResultSetMetaData::ResultSetMetaData(
@@ -114,7 +110,6 @@ ResultSetMetaData::~ResultSetMetaData()
 }
 
 
-
 // XInterface methods.
 
 void SAL_CALL ResultSetMetaData::acquire()
@@ -142,15 +137,12 @@ css::uno::Any SAL_CALL ResultSetMetaData::queryInterface( const css::uno::Type &
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_2( ResultSetMetaData,
                       XTypeProvider,
                       XResultSetMetaData );
 
 
-
 // XResultSetMetaData methods.
-
 
 
 // virtual

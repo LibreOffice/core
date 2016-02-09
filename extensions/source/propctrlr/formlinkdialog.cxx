@@ -46,7 +46,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 
 
-
 namespace pcr
 {
 

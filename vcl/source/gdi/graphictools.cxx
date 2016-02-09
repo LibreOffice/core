@@ -78,10 +78,6 @@ void SvtGraphicStroke::getEndArrow( tools::PolyPolygon& rPath ) const
 }
 
 
-
-
-
-
 void SvtGraphicStroke::getDashArray( DashArray& rDashArray ) const
 {
     rDashArray = maDashArray;
@@ -219,15 +215,10 @@ void SvtGraphicFill::getPath( tools::PolyPolygon& rPath ) const
 }
 
 
-
-
-
 void SvtGraphicFill::getTransform( Transform& rTrans ) const
 {
     rTrans = maFillTransform;
 }
-
-
 
 
 void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const

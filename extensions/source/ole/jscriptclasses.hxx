@@ -25,7 +25,6 @@
 #include "comifaces.hxx"
 
 
-
 // Sequences are represented by prepending "[]", e.g. []char, [][]byte, [][][]object, etc.
 
 // To make a JScriptValue object to an out parameter, call

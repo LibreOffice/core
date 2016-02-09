@@ -29,16 +29,10 @@
 #include <string>
 
 
-
-
-
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::IllegalArgumentException;
-
-
-
 
 
 namespace /* private */
@@ -55,9 +49,6 @@ namespace /* private */
 osl::Mutex CDIBPreview::s_Mutex;
 ATOM CDIBPreview::s_ClassAtom = 0;
 sal_Int32 CDIBPreview::s_RegisterDibPreviewWndCount = 0;
-
-
-
 
 
 CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
@@ -93,9 +84,6 @@ CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
 }
 
 
-
-
-
 CDIBPreview::~CDIBPreview( )
 {
     // remember: we don't have to destroy the
@@ -105,9 +93,6 @@ CDIBPreview::~CDIBPreview( )
     //if ( m_bWndClassRegistered )
     UnregisterDibPreviewWindowClass();
 }
-
-
-
 
 
 sal_Int32 SAL_CALL CDIBPreview::getTargetColorDepth() throw (RuntimeException)
@@ -120,9 +105,6 @@ sal_Int32 SAL_CALL CDIBPreview::getTargetColorDepth() throw (RuntimeException)
 
     return clrRes;
 }
-
-
-
 
 
 sal_Int32 SAL_CALL CDIBPreview::getAvailableWidth() throw (RuntimeException)
@@ -139,9 +121,6 @@ sal_Int32 SAL_CALL CDIBPreview::getAvailableWidth() throw (RuntimeException)
 }
 
 
-
-
-
 sal_Int32 SAL_CALL CDIBPreview::getAvailableHeight() throw (RuntimeException)
 {
     RECT rect;
@@ -154,9 +133,6 @@ sal_Int32 SAL_CALL CDIBPreview::getAvailableHeight() throw (RuntimeException)
 
     return cy;
 }
-
-
-
 
 
 void SAL_CALL CDIBPreview::setImage(sal_Int16 aImageFormat, const Any& aImage)
@@ -179,9 +155,6 @@ void SAL_CALL CDIBPreview::setImage(sal_Int16 aImageFormat, const Any& aImage)
 }
 
 
-
-
-
 sal_Bool SAL_CALL CDIBPreview::setShowState(sal_Bool bShowState) throw (RuntimeException)
 {
     PreviewBase::setShowState(bShowState);
@@ -190,25 +163,16 @@ sal_Bool SAL_CALL CDIBPreview::setShowState(sal_Bool bShowState) throw (RuntimeE
 }
 
 
-
-
-
 sal_Bool SAL_CALL CDIBPreview::getShowState() throw (RuntimeException)
 {
     return (sal_Bool)IsWindowVisible(m_Hwnd);
 }
 
 
-
-
-
 HWND SAL_CALL CDIBPreview::getWindowHandle() const
 {
     return m_Hwnd;
 }
-
-
-
 
 
 void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
@@ -294,9 +258,6 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
 }
 
 
-
-
-
 LRESULT CALLBACK CDIBPreview::WndProc(
     HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -362,9 +323,6 @@ LRESULT CALLBACK CDIBPreview::WndProc(
 }
 
 
-
-
-
 ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
 {
     osl::MutexGuard aGuard( s_Mutex );
@@ -403,9 +361,6 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
 
     return s_ClassAtom;
 }
-
-
-
 
 
 void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass()

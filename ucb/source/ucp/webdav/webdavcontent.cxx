@@ -188,12 +188,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
 }
 
 
-
-
 // Content Implementation.
-
-
-
 
 
 // ctr for content on an existing webdav resource
@@ -266,9 +261,7 @@ Content::~Content()
 }
 
 
-
 // XInterface methods.
-
 
 
 // virtual
@@ -335,9 +328,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
@@ -433,9 +424,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -455,9 +444,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 }
 
 
-
 // XContent methods.
-
 
 
 // virtual
@@ -485,9 +472,7 @@ OUString SAL_CALL Content::getContentType()
 }
 
 
-
 // XCommandProcessor methods.
-
 
 
 // virtual
@@ -842,9 +827,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 }
 
 
-
 // XPropertyContainer methods.
-
 
 
 void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
@@ -1118,9 +1101,7 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
 }
 
 
-
 // XContentCreator methods.
-
 
 
 // virtual
@@ -1242,9 +1223,7 @@ OUString Content::getParentURL()
 }
 
 
-
 // Non-interface methods.
-
 
 
 // static

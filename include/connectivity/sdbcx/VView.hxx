@@ -41,7 +41,6 @@ namespace connectivity
                                         css::container::XNamed> OView_BASE;
 
 
-
         class OOO_DLLPUBLIC_DBTOOLS OView :
                         public ::comphelper::OMutexAndBroadcastHelper,
                         public OView_BASE,

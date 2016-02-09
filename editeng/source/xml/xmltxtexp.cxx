@@ -138,7 +138,6 @@ SvxTextForwarder* SvxEditEngineSource::GetTextForwarder()
 }
 
 
-
 void SvxEditEngineSource::UpdateData()
 {
 }
@@ -312,7 +311,6 @@ void SAL_CALL SvxSimpleUnoModel::removeEventListener( const css::uno::Reference<
 }
 
 
-
 class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
@@ -333,7 +331,6 @@ public:
 private:
     css::uno::Reference< css::text::XText > mxText;
 };
-
 
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(

@@ -68,7 +68,6 @@ Sequence<Type> ONumericModel::_getTypes()
 }
 
 
-
 ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
                 :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD, true, true )
                                     // use the old control name for compytibility reasons

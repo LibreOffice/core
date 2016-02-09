@@ -224,7 +224,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(
 }
 
 
-
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     return getNumColAttrib(column,SQL_DESC_UNSIGNED) == SQL_FALSE;

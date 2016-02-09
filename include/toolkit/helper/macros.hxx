@@ -70,7 +70,6 @@ css::uno::Sequence< css::uno::Type > ClassName::getTypes() throw(css::uno::Runti
             cppu::UnoType<css::lang::XTypeProvider>::get(),
 
 
-
 #define IMPL_XTYPEPROVIDER_END \
             ); \
             pCollection = &collection; \
@@ -78,7 +77,6 @@ css::uno::Sequence< css::uno::Type > ClassName::getTypes() throw(css::uno::Runti
     } \
     return (*pCollection).getTypes(); \
 }
-
 
 
 #define DECL_LISTENERMULTIPLEXER_START( ClassName, InterfaceName ) \
@@ -92,7 +90,6 @@ public: \
     void                        SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
 
-
 #define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
 class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public InterfaceName \
 { \
@@ -104,10 +101,8 @@ public: \
     void                        SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
 
-
 #define DECL_LISTENERMULTIPLEXER_END \
 };
-
 
 
 #define IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ClassName, InterfaceName ) \
@@ -127,7 +122,6 @@ css::uno::Any ClassName::queryInterface( const css::uno::Type & rType ) throw(cs
 void ClassName::disposing( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception) \
 { \
 }
-
 
 
 #if OSL_DEBUG_LEVEL > 0

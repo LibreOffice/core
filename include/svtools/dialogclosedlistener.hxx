@@ -30,7 +30,6 @@ namespace svt
 {
 
 
-
     //= ODialogClosedListener
 
     /**

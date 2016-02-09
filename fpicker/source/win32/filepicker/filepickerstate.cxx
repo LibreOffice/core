@@ -35,8 +35,6 @@
 #include "../misc/WinImplHelper.hxx"
 
 
-
-
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -45,9 +43,6 @@ using com::sun::star::uno::XInterface;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::ListboxControlActions;
-
-
-
 
 
 const sal_Int32 MAX_LABEL = 256;
@@ -62,25 +57,16 @@ CFilePickerState::~CFilePickerState( )
 }
 
 
-
-
-
 CNonExecuteFilePickerState::CNonExecuteFilePickerState( ) :
     m_FirstControlCommand( NULL )
 {
 }
 
 
-
-
-
 CNonExecuteFilePickerState::~CNonExecuteFilePickerState( )
 {
     reset( );
 }
-
-
-
 
 
 void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
@@ -90,9 +76,6 @@ void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_In
 
     addControlCommand( value_command );
 }
-
-
-
 
 
 Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
@@ -135,9 +118,6 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
 }
 
 
-
-
-
 void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
 {
     CEnableControlCommand* enable_command = new CEnableControlCommand(
@@ -147,9 +127,6 @@ void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, s
 }
 
 
-
-
-
 void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
 {
     CLabelControlCommand* label_command = new CLabelControlCommand(
@@ -157,9 +134,6 @@ void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const 
 
     addControlCommand( label_command );
 }
-
-
-
 
 
 OUString SAL_CALL CNonExecuteFilePickerState::getLabel( sal_Int16 aControlId )
@@ -201,8 +175,6 @@ OUString MatchFixBrokenPath(const OUString& path)
     }
     return path;
 }
-
-
 
 
 static OUString trimTrailingSpaces(const OUString& rString)
@@ -281,9 +253,6 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
 }
 
 
-
-
-
 OUString SAL_CALL CNonExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
 {
     OSL_PRECOND( aFileOpenDialog, "invalid parameter" );
@@ -300,9 +269,6 @@ OUString SAL_CALL CNonExecuteFilePickerState::getDisplayDirectory( CFileOpenDial
 }
 
 
-
-
-
 void SAL_CALL CNonExecuteFilePickerState::reset( )
 {
     CControlCommand* nextCommand;
@@ -317,9 +283,6 @@ void SAL_CALL CNonExecuteFilePickerState::reset( )
 
     m_FirstControlCommand = NULL;
 }
-
-
-
 
 
 CControlCommand* SAL_CALL CNonExecuteFilePickerState::getControlCommand( ) const
@@ -353,18 +316,10 @@ void SAL_CALL CNonExecuteFilePickerState::addControlCommand( CControlCommand* aC
 }
 
 
-
-
-
-
-
 CExecuteFilePickerState::CExecuteFilePickerState( HWND hwndDlg ) :
     m_hwndDlg( hwndDlg )
 {
 }
-
-
-
 
 
 void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
@@ -406,9 +361,6 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
 }
 
 
-
-
-
 Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
 {
     // we do not support SET_HELP_URL/GET_HELP_URL
@@ -445,9 +397,6 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
 }
 
 
-
-
-
 void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
@@ -456,9 +405,6 @@ void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_
 
     EnableWindow( hwndCtrl, bEnable );
 }
-
-
-
 
 
 void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
@@ -476,9 +422,6 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
     // has a terminating '\0'
     SetWindowText( hwndCtrl, reinterpret_cast<LPCTSTR>(aWinLabel.getStr( )) );
 }
-
-
-
 
 
 OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
@@ -501,9 +444,6 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
 
     return ctrlLabel;
 }
-
-
-
 
 
 Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog* aFileOpenDialog )
@@ -539,9 +479,6 @@ Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog
 }
 
 
-
-
-
 OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
 {
     SAL_WARN_IF( !aFileOpenDialog, "fpicker", "invalid parameter" );
@@ -558,9 +495,6 @@ OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog*
 }
 
 
-
-
-
 void SAL_CALL CExecuteFilePickerState::initFilePickerControls( CControlCommand* firstControlCommand )
 {
     CControlCommand* aControlCommand = firstControlCommand;
@@ -571,9 +505,6 @@ void SAL_CALL CExecuteFilePickerState::initFilePickerControls( CControlCommand* 
         aControlCommand = aControlCommand->getNextCommand( );
     }
 }
-
-
-
 
 
 void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFilePickerState* aNonExecFilePickerState )
@@ -631,16 +562,10 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
 }
 
 
-
-
-
 void SAL_CALL CExecuteFilePickerState::setHwnd( HWND hwndDlg )
 {
     m_hwndDlg = hwndDlg;
 }
-
-
-
 
 
 inline sal_Bool SAL_CALL CExecuteFilePickerState::IsListboxControl( HWND hwndControl ) const
@@ -665,9 +590,6 @@ inline sal_Int16 SAL_CALL CExecuteFilePickerState::ListboxIdToListboxLabelId( sa
 }
 
 
-
-
-
 inline HWND SAL_CALL CExecuteFilePickerState::GetListboxLabelItem( sal_Int16 aControlId ) const
 {
     sal_Int16 aLabelId = ListboxIdToListboxLabelId( aControlId );
@@ -677,9 +599,6 @@ inline HWND SAL_CALL CExecuteFilePickerState::GetListboxLabelItem( sal_Int16 aCo
 
     return hwndCtrl;
 }
-
-
-
 
 
 HWND SAL_CALL CExecuteFilePickerState::GetHwndDlgItem( sal_Int16 aControlId, sal_Bool bIncludeStdCtrls ) const

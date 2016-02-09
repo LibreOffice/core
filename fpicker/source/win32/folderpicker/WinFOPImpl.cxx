@@ -38,9 +38,6 @@ using namespace com::sun::star::ui::dialogs;
 using osl::FileBase;
 
 
-
-
-
 const OUString BACKSLASH( "\\" );
 
 
@@ -113,9 +110,6 @@ OUString CWinFolderPickerImpl::getDisplayDirectory( )
 }
 
 
-
-
-
 OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException )
 {
     OUString sysDir = CMtaFolderPicker::getDirectory( );
@@ -128,18 +122,12 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException 
 }
 
 
-
-
-
 sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
 {
     return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ?
         css::ui::dialogs::ExecutableDialogResults::OK :
         css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
-
-
-
 
 
 void CWinFolderPickerImpl::onSelChanged( const OUString& aNewPath )

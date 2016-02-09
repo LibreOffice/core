@@ -519,7 +519,6 @@ long SmNode::GetFormulaBaseline() const
 }
 
 
-
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     SmNode( rNode.GetType(), rNode.GetToken() )
 {
@@ -1020,7 +1019,6 @@ void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
     if (pBody->GetNumSubNodes() > 1)
         rText += "} ";
 }
-
 
 
 /**************************************************************************/

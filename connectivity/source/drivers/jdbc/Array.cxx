@@ -129,5 +129,4 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

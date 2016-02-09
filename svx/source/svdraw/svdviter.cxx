@@ -28,7 +28,6 @@
 #include <svx/sdrpaintwindow.hxx>
 
 
-
 void SdrViewIter::ImpInitVars()
 {
     mnListenerNum = 0L;
@@ -36,7 +35,6 @@ void SdrViewIter::ImpInitVars()
     mnOutDevNum = 0L;
     mpAktView = nullptr;
 }
-
 
 
 SdrViewIter::SdrViewIter(const SdrPage* pPage, bool bNoMasterPage)
@@ -47,7 +45,6 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage, bool bNoMasterPage)
     mbNoMasterPage = bNoMasterPage;
     ImpInitVars();
 }
-
 
 
 SdrViewIter::SdrViewIter(const SdrObject* pObject, bool bNoMasterPage)
@@ -65,7 +62,6 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject, bool bNoMasterPage)
 
     ImpInitVars();
 }
-
 
 
 bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
@@ -167,13 +163,11 @@ SdrView* SdrViewIter::ImpFindView()
 }
 
 
-
 SdrView* SdrViewIter::FirstView()
 {
     ImpInitVars();
     return ImpFindView();
 }
-
 
 
 SdrView* SdrViewIter::NextView()

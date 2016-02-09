@@ -27,9 +27,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

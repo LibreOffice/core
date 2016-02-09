@@ -30,7 +30,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
-
 sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 {
     return rRefObj.GetProperties();
@@ -42,8 +41,6 @@ sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfVirtObj(*this);
 }
-
-
 
 
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
@@ -58,7 +55,6 @@ SdrVirtObj::~SdrVirtObj()
 {
     rRefObj.DelReference(*this);
 }
-
 
 
 const SdrObject& SdrVirtObj::GetReferencedObj() const
@@ -84,7 +80,6 @@ void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
 {
     aAnchor=rAnchorPos;
 }
-
 
 
 void SdrVirtObj::SetModel(SdrModel* pNewModel)
@@ -189,7 +184,6 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 }
 
 
-
 sal_uInt32 SdrVirtObj::GetHdlCount() const
 {
     return rRefObj.GetHdlCount();
@@ -259,7 +253,6 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
 }
 
 
-
 bool SdrVirtObj::hasSpecialDrag() const
 {
     return rRefObj.hasSpecialDrag();
@@ -314,7 +307,6 @@ OUString SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 }
 
 
-
 bool SdrVirtObj::BegCreate(SdrDragStat& rStat)
 {
     return rRefObj.BegCreate(rStat);
@@ -347,7 +339,6 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 }
 
 
-
 void SdrVirtObj::NbcMove(const Size& rSiz)
 {
     MovePoint(aAnchor,rSiz);
@@ -377,7 +368,6 @@ void SdrVirtObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
     rRefObj.NbcShear(rRef-aAnchor,nAngle,tn,bVShear);
     SetRectsDirty();
 }
-
 
 
 void SdrVirtObj::Move(const Size& rSiz)
@@ -430,7 +420,6 @@ void SdrVirtObj::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 }
 
 
-
 void SdrVirtObj::RecalcSnapRect()
 {
     aSnapRect=rRefObj.GetSnapRect();
@@ -465,7 +454,6 @@ void SdrVirtObj::NbcSetSnapRect(const Rectangle& rRect)
 }
 
 
-
 const Rectangle& SdrVirtObj::GetLogicRect() const
 {
     const_cast<SdrVirtObj*>(this)->aSnapRect=rRefObj.GetLogicRect();  // An abuse of aSnapRect!
@@ -492,7 +480,6 @@ void SdrVirtObj::NbcSetLogicRect(const Rectangle& rRect)
 }
 
 
-
 long SdrVirtObj::GetRotateAngle() const
 {
     return rRefObj.GetRotateAngle();
@@ -502,7 +489,6 @@ long SdrVirtObj::GetShearAngle(bool bVertical) const
 {
     return rRefObj.GetShearAngle(bVertical);
 }
-
 
 
 sal_uInt32 SdrVirtObj::GetSnapPointCount() const
@@ -541,7 +527,6 @@ void SdrVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 }
 
 
-
 SdrObjGeoData* SdrVirtObj::NewGeoData() const
 {
     return rRefObj.NewGeoData();
@@ -559,7 +544,6 @@ void SdrVirtObj::RestGeoData(const SdrObjGeoData& rGeo)
 }
 
 
-
 SdrObjGeoData* SdrVirtObj::GetGeoData() const
 {
     return rRefObj.GetGeoData();
@@ -574,7 +558,6 @@ void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
 }
 
 
-
 void SdrVirtObj::NbcReformatText()
 {
     rRefObj.NbcReformatText();
@@ -584,7 +567,6 @@ void SdrVirtObj::ReformatText()
 {
     rRefObj.ReformatText();
 }
-
 
 
 bool SdrVirtObj::HasMacro() const

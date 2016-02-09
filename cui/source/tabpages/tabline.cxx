@@ -103,7 +103,6 @@ SvxLineTabDialog::SvxLineTabDialog
 }
 
 
-
 void SvxLineTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
@@ -171,7 +170,6 @@ void SvxLineTabDialog::SavePalettes()
 }
 
 
-
 short SvxLineTabDialog::Ok()
 {
     SavePalettes();
@@ -180,7 +178,6 @@ short SvxLineTabDialog::Ok()
     // We do this by default at the moment.
     return( SfxTabDialog::Ok() );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineTabDialog, CancelHdlImpl, Button*, void)

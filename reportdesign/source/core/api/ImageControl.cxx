@@ -334,7 +334,6 @@ void SAL_CALL OImageControl::setConditionalPrintExpression( const OUString& _con
 }
 
 
-
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL OImageControl::createClone(  ) throw (uno::RuntimeException, std::exception)
 {

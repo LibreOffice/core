@@ -36,7 +36,6 @@ namespace vista{
 // types, const etcpp.
 
 
-
 /** todo document me
  */
 class IVistaFilePickerInternalNotify

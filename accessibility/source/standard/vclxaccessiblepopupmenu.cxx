@@ -28,7 +28,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 
 
-
 // class VCLXAccessiblePopupMenu
 
 
@@ -38,11 +37,9 @@ VCLXAccessiblePopupMenu::VCLXAccessiblePopupMenu( Menu* pMenu )
 }
 
 
-
 VCLXAccessiblePopupMenu::~VCLXAccessiblePopupMenu()
 {
 }
-
 
 
 bool VCLXAccessiblePopupMenu::IsFocused()
@@ -58,7 +55,6 @@ OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeExceptio
 {
     return OUString( "com.sun.star.comp.toolkit.AccessiblePopupMenu" );
 }
-
 
 
 Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -79,7 +75,6 @@ sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  ) throw (Runtime
 }
 
 
-
 sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -97,7 +92,6 @@ sal_Int32 VCLXAccessiblePopupMenu::getBackground(  ) throw (RuntimeException, st
 
     return Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

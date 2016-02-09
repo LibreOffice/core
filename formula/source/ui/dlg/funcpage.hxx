@@ -54,7 +54,6 @@ public:
 };
 
 
-
 typedef const IFunctionDescription* TFunctionDesc;
 
 class FuncPage : public TabPage

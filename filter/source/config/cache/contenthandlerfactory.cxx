@@ -43,11 +43,9 @@ ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno
 }
 
 
-
 ContentHandlerFactory::~ContentHandlerFactory()
 {
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const OUString& sHandler)
@@ -56,7 +54,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 {
     return createInstanceWithArguments(sHandler, css::uno::Sequence< css::uno::Any >());
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
@@ -135,7 +132,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 }
 
 
-
 css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -144,19 +140,16 @@ css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServi
 }
 
 
-
 OUString ContentHandlerFactory::impl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.filter.config.ContentHandlerFactory" );
 }
 
 
-
 css::uno::Sequence< OUString > ContentHandlerFactory::impl_getSupportedServiceNames()
 {
     return { "com.sun.star.frame.ContentHandlerFactory" };
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)

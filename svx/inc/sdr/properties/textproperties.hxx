@@ -24,7 +24,6 @@
 #include <sdr/properties/attributeproperties.hxx>
 
 
-
 namespace sdr
 {
     namespace properties
@@ -84,7 +83,6 @@ namespace sdr
         };
     } // end of namespace properties
 } // end of namespace sdr
-
 
 
 #endif // INCLUDED_SVX_SDR_PROPERTIES_TEXTPROPERTIES_HXX

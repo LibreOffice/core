@@ -35,12 +35,7 @@
 using namespace package_ucp;
 
 
-
-
-
 // PackageUri Implementation.
-
-
 
 
 static void normalize( OUString& rURL )

@@ -50,7 +50,6 @@ IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, ButtonHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, EditModifyHdl, Edit&, void)
 {
     if ( !bEmpty )
@@ -64,7 +63,6 @@ IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, EditModifyHdl, Edit&, void)
     else if ( !m_pOKBtn->IsEnabled() )
         m_pOKBtn->Enable();
 }
-
 
 
 SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword)

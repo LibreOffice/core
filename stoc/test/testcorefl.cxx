@@ -59,7 +59,6 @@ using namespace css::reflection;
 using namespace css::container;
 
 
-
 class OInterfaceA : public WeakImplHelper< XInterfaceA >
 {
 public:

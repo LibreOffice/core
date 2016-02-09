@@ -39,11 +39,7 @@
 using namespace com::sun::star;
 
 
-
-
 // ResultSetImplHelper Implementation.
-
-
 
 
 namespace ucbhelper {
@@ -66,7 +62,6 @@ ResultSetImplHelper::~ResultSetImplHelper()
 {
     delete m_pDisposeEventListeners;
 }
-
 
 
 // XInterface methods.
@@ -97,16 +92,13 @@ css::uno::Any SAL_CALL ResultSetImplHelper::queryInterface( const css::uno::Type
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       css::ucb::XDynamicResultSet );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
@@ -115,9 +107,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
                                DYNAMICRESULTSET_SERVICE_NAME );
 
 
-
 // XComponent methods.
-
 
 
 // virtual
@@ -162,9 +152,7 @@ void SAL_CALL ResultSetImplHelper::removeEventListener(
 }
 
 
-
 // XDynamicResultSet methods.
-
 
 
 // virtual
@@ -274,9 +262,7 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
 }
 
 
-
 // Non-interface methods.
-
 
 
 void ResultSetImplHelper::init( bool bStatic )

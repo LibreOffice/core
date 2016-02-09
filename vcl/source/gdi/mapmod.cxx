@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 
 
-
 struct MapMode::ImplMapMode
 {
     sal_uLong       mnRefCount;

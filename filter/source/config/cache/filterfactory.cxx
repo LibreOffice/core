@@ -61,11 +61,9 @@ FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentCont
 }
 
 
-
 FilterFactory::~FilterFactory()
 {
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const OUString& sFilter)
@@ -74,7 +72,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 {
     return createInstanceWithArguments(sFilter, css::uno::Sequence< css::uno::Any >());
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
@@ -154,7 +151,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 }
 
 
-
 css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -180,7 +176,6 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
 
     return comphelper::containerToSequence(lUNOFilters);
 }
-
 
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const OUString& sQuery)
@@ -236,7 +231,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
-
 
 
 OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const
@@ -372,7 +366,6 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 }
 
 
-
 class stlcomp_removeIfMatchFlags
 {
     private:
@@ -412,7 +405,6 @@ class stlcomp_removeIfMatchFlags
             }
         }
 };
-
 
 
 OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lTokens) const
@@ -465,7 +457,6 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
 }
 
 
-
 OUStringList FilterFactory::impl_getListOfInstalledModules() const
 {
     // SAFE -> ----------------------
@@ -478,7 +469,6 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
     OUStringList lModules(comphelper::sequenceToContainer<OUStringList>(xModuleConfig->getElementNames()));
     return lModules;
 }
-
 
 
 OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sModule,
@@ -535,7 +525,6 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
 }
 
 
-
 OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& sModule) const
 {
     // SAFE -> ----------------------
@@ -570,19 +559,16 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& 
 }
 
 
-
 OUString FilterFactory::impl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.filter.config.FilterFactory" );
 }
 
 
-
 css::uno::Sequence< OUString > FilterFactory::impl_getSupportedServiceNames()
 {
     return { "com.sun.star.document.FilterFactory" };
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)

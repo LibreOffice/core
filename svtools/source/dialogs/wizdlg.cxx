@@ -23,12 +23,10 @@
 #include <svtools/wizdlg.hxx>
 
 
-
 #define WIZARDDIALOG_BUTTON_OFFSET_Y        6
 #define WIZARDDIALOG_BUTTON_DLGOFFSET_X     6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_X       6
 #define WIZARDDIALOG_VIEW_DLGOFFSET_Y       6
-
 
 
 struct ImplWizPageData
@@ -38,14 +36,12 @@ struct ImplWizPageData
 };
 
 
-
 struct ImplWizButtonData
 {
     ImplWizButtonData*  mpNext;
     VclPtr<Button>      mpButton;
     long                mnOffset;
 };
-
 
 
 void WizardDialog::ImplInitData()
@@ -72,12 +68,10 @@ void WizardDialog::SetLeftAlignedButtonCount( sal_Int16 _nCount )
 }
 
 
-
 void WizardDialog::SetEmptyViewMargin()
 {
     mbEmptyViewMargin = true;
 }
-
 
 
 void WizardDialog::ImplCalcSize( Size& rSize )
@@ -247,8 +241,6 @@ long WizardDialog::LogicalCoordinateToPixel(int iCoordinate){
 }
 
 
-
-
 void WizardDialog::ImplPosTabPage()
 {
     if ( !mpCurTabPage )
@@ -304,7 +296,6 @@ void WizardDialog::ImplPosTabPage()
 }
 
 
-
 void WizardDialog::ImplShowTabPage( TabPage* pTabPage )
 {
     if ( mpCurTabPage == pTabPage )
@@ -325,7 +316,6 @@ void WizardDialog::ImplShowTabPage( TabPage* pTabPage )
     if ( pOldTabPage )
         pOldTabPage->Hide();
 }
-
 
 
 TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
@@ -351,7 +341,6 @@ WizardDialog::WizardDialog( vcl::Window* pParent, WinBits nStyle ) :
 {
     ImplInitData();
 }
-
 
 
 WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
@@ -385,7 +374,6 @@ void WizardDialog::dispose()
 }
 
 
-
 void WizardDialog::Resize()
 {
     if ( IsReallyShown() && !IsInInitShow() )
@@ -396,7 +384,6 @@ void WizardDialog::Resize()
 
     Dialog::Resize();
 }
-
 
 
 void WizardDialog::StateChanged( StateChangedType nType )
@@ -434,7 +421,6 @@ void WizardDialog::StateChanged( StateChangedType nType )
 
     Dialog::StateChanged( nType );
 }
-
 
 
 bool WizardDialog::Notify( NotifyEvent& rNEvt )
@@ -482,12 +468,10 @@ bool WizardDialog::Notify( NotifyEvent& rNEvt )
 }
 
 
-
 void WizardDialog::ActivatePage()
 {
     maActivateHdl.Call( this );
 }
-
 
 
 bool WizardDialog::DeactivatePage()
@@ -496,12 +480,10 @@ bool WizardDialog::DeactivatePage()
 }
 
 
-
 bool WizardDialog::ShowNextPage()
 {
     return ShowPage( mnCurLevel+1 );
 }
-
 
 
 bool WizardDialog::ShowPrevPage()
@@ -510,7 +492,6 @@ bool WizardDialog::ShowPrevPage()
         return false;
     return ShowPage( mnCurLevel-1 );
 }
-
 
 
 bool WizardDialog::ShowPage( sal_uInt16 nLevel )
@@ -525,7 +506,6 @@ bool WizardDialog::ShowPage( sal_uInt16 nLevel )
     else
         return false;
 }
-
 
 
 bool WizardDialog::Finish( long nResult )
@@ -546,7 +526,6 @@ bool WizardDialog::Finish( long nResult )
 }
 
 
-
 void WizardDialog::AddPage( TabPage* pPage )
 {
     ImplWizPageData* pNewPageData = new ImplWizPageData;
@@ -563,7 +542,6 @@ void WizardDialog::AddPage( TabPage* pPage )
         pPageData->mpNext = pNewPageData;
     }
 }
-
 
 
 void WizardDialog::RemovePage( TabPage* pPage )
@@ -592,7 +570,6 @@ void WizardDialog::RemovePage( TabPage* pPage )
 }
 
 
-
 void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
 {
     sal_uInt16              nTempLevel = 0;
@@ -615,7 +592,6 @@ void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
 }
 
 
-
 TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
 {
     sal_uInt16 nTempLevel = 0;
@@ -630,7 +606,6 @@ TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
 
     return nullptr;
 }
-
 
 
 void WizardDialog::AddButton( Button* pButton, long nOffset )
@@ -650,7 +625,6 @@ void WizardDialog::AddButton( Button* pButton, long nOffset )
         pBtnData->mpNext = pNewBtnData;
     }
 }
-
 
 
 void WizardDialog::RemoveButton( Button* pButton )

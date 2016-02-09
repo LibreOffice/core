@@ -48,7 +48,6 @@ namespace accessibility
     using namespace ::svt::table;
 
 
-
     // = AccessibleGridControlCell
 
 

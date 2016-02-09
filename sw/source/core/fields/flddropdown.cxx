@@ -125,9 +125,6 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 }
 
 
-
-
-
 bool SwDropDownField::SetSelectedItem(const OUString & rItem)
 {
     vector<OUString>::const_iterator aIt =

@@ -25,7 +25,6 @@
 // class SvxPostItAuthorItem ---------------------------------------------
 
 
-
 /*
 The author shorthand symbol of a note
 */
@@ -54,7 +53,6 @@ public:
 
 
 // class SvxPostItDateItem -----------------------------------------------
-
 
 
 /*
@@ -87,7 +85,6 @@ public:
 // class SvxPostItTextItem -----------------------------------------------
 
 
-
 /*
 The text of a note
 */
@@ -114,7 +111,6 @@ public:
         return *this;
     }
 };
-
 
 
 #endif

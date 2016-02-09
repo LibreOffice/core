@@ -85,7 +85,6 @@ inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< 
 }
 
 
-
 class Invocation_Impl
     : public OWeakObject
     , public XInvocation2
@@ -199,7 +198,6 @@ public:
     virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception ) override;
 
 
-
 private:
     void setMaterial( const Any& rMaterial );
 
@@ -234,11 +232,6 @@ private:
 };
 
 
-
-
-
-
-
 Invocation_Impl::Invocation_Impl
 (
     const Any & rAdapted,
@@ -257,7 +250,6 @@ Invocation_Impl::~Invocation_Impl() {}
 
 
 //### INTERFACE IMPLEMENTATIONS ####################################################################
-
 
 
 Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
@@ -339,7 +331,6 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
 
     return OWeakObject::queryInterface( aType );
 }
-
 
 
 Any Invocation_Impl::getMaterial() throw(RuntimeException, std::exception)
@@ -732,7 +723,6 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
 }
 
 
-
 // Struct to optimize sorting
 struct MemberItem
 {
@@ -1081,8 +1071,6 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( Ru
 }
 
 
-
-
 class InvocationService
     : public WeakImplHelper< XSingleServiceFactory, XServiceInfo >
 {
@@ -1161,7 +1149,6 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
         return Reference<XInterface>();
     }
 }
-
 
 
 Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )

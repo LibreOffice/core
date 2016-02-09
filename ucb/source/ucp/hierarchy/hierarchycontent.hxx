@@ -44,7 +44,6 @@ namespace hierarchy_ucp
 {
 
 
-
 class HierarchyContentProperties
 {
 public:
@@ -90,7 +89,6 @@ private:
     HierarchyEntryData m_aData;
     OUString m_aContentType;
 };
-
 
 
 class HierarchyContentProvider;

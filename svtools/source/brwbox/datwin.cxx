@@ -179,7 +179,6 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
 }
 
 
-
 void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
     double n = (double)_nOriginalWidth;
@@ -188,7 +187,6 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 
     _nWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
-
 
 
 BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
@@ -320,7 +318,6 @@ void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
 }
 
 
-
 BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 {
     BrowseBox *pBox = GetParent();
@@ -435,7 +432,6 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 }
 
 
-
 bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
 {
     if ( ! (  GetParent()->IsInteractiveRowHeightEnabled()
@@ -451,7 +447,6 @@ bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
 }
 
 
-
 void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 {
     aLastMousePos = OutputToScreenPixel( rEvt.GetPosPixel() );
@@ -465,7 +460,6 @@ void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 
     GetParent()->MouseButtonDown( BrowserMouseEvent( this, rEvt ) );
 }
-
 
 
 void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
@@ -502,7 +496,6 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(BrowserDataWin, RepeatedMouseMove, Timer *, void)
 {
     GetParent()->MouseMove( BrowserMouseEvent( this, aRepeatEvt ) );
@@ -523,7 +516,6 @@ void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
         aMouseTimer.Stop();
     GetParent()->MouseButtonUp( BrowserMouseEvent( this, rEvt ) );
 }
-
 
 
 void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
@@ -548,7 +540,6 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
 
     StartTracking();
 }
-
 
 
 void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
@@ -595,7 +586,6 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
 }
 
 
-
 void BrowserDataWin::KeyInput( const KeyEvent& rEvt )
 {
     // pass to parent window
@@ -604,14 +594,12 @@ void BrowserDataWin::KeyInput( const KeyEvent& rEvt )
 }
 
 
-
 void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 {
     pEventWin = this;
     GetParent()->RequestHelp( rHEvt );
     pEventWin = GetParent();
 }
-
 
 
 BrowseEvent::BrowseEvent( vcl::Window* pWindow,
@@ -634,7 +622,6 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 }
 
 
-
 BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rEvt,
                           long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const Rectangle& rRect ):
@@ -644,7 +631,6 @@ BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rE
 }
 
 
-
 BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const AcceptDropEvent& rEvt )
     :AcceptDropEvent(rEvt)
     ,BrowseEvent( pWindow->CreateBrowseEvent( rEvt.maPosPixel ) )
@@ -652,15 +638,11 @@ BrowserAcceptDropEvent::BrowserAcceptDropEvent( BrowserDataWin *pWindow, const A
 }
 
 
-
 BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const ExecuteDropEvent& rEvt )
     :ExecuteDropEvent(rEvt)
     ,BrowseEvent( pWindow->CreateBrowseEvent( rEvt.maPosPixel ) )
 {
 }
-
-
-
 
 
 void BrowserDataWin::SetUpdateMode( bool bMode )
@@ -685,7 +667,6 @@ void BrowserDataWin::DoOutstandingInvalidations()
 }
 
 
-
 void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
@@ -698,7 +679,6 @@ void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
     else
         Window::Invalidate( nFlags );
 }
-
 
 
 void BrowserDataWin::Invalidate( const Rectangle& rRect, InvalidateFlags nFlags )
@@ -742,7 +722,6 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
 
     ScrollBar::Tracking( rTEvt );
 }
-
 
 
 void BrowserScrollBar::EndScroll()

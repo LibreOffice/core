@@ -255,7 +255,6 @@ bool SbiParser::TestSymbol( bool bKwdOk )
 }
 
 
-
 bool SbiParser::TestToken( SbiToken t )
 {
     if( Peek() == t )
@@ -268,7 +267,6 @@ bool SbiParser::TestToken( SbiToken t )
         return false;
     }
 }
-
 
 
 bool SbiParser::TestComma()
@@ -289,7 +287,6 @@ bool SbiParser::TestComma()
 }
 
 
-
 void SbiParser::TestEoln()
 {
     if( !IsEoln( Next() ) )
@@ -298,7 +295,6 @@ void SbiParser::TestEoln()
         while( !IsEoln( Next() ) ) {}
     }
 }
-
 
 
 void SbiParser::StmntBlock( SbiToken eEnd )

@@ -28,7 +28,6 @@
 #include <basegfx/color/bcolor.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -76,7 +75,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTLINEPRIMITIVE2D_HXX

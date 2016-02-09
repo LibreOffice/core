@@ -18,7 +18,6 @@
  */
 
 
-
 #define CPPUHELPER_TEST_COMPONENT_IMPL
 #include "TestComponent.hxx"
 

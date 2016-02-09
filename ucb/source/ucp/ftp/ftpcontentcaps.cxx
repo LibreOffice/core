@@ -110,9 +110,7 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
 // osl::MutexGuard aGuard( m_aMutex );
 
 
-
     // Supported commands
-
 
 
     #define COMMAND_COUNT 8

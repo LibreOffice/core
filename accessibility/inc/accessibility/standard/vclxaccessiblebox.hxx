@@ -59,7 +59,6 @@ public:
     DECLARE_XINTERFACE()
 
 
-
     // XAccessible
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL

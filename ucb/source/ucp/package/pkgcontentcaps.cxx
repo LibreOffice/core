@@ -63,9 +63,7 @@ using namespace com::sun::star;
 using namespace package_ucp;
 
 
-
 // Content implementation.
-
 
 
 #define MAKEPROPSEQUENCE( a ) \
@@ -75,10 +73,8 @@ using namespace package_ucp;
     uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
 
 
-
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            Content::getPropertyValues(...) must be adapted too!
-
 
 
 // virtual
@@ -94,7 +90,6 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 
             // Root Folder: Supported properties
-
 
 
             static const beans::Property aRootFolderPropertyInfoTable[] =
@@ -167,7 +162,6 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Folder: Supported properties
 
 
-
             static const beans::Property aFolderPropertyInfoTable[] =
             {
 
@@ -229,7 +223,6 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 
         // Stream: Supported properties
-
 
 
         static const beans::Property aStreamPropertyInfoTable[] =
@@ -324,7 +317,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Root Folder: Supported commands
 
 
-
             static const ucb::CommandInfo aRootFolderCommandInfoTable[] =
             {
 
@@ -385,7 +377,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
 
             // Folder: Supported commands
-
 
 
             static const ucb::CommandInfo aFolderCommandInfoTable[] =
@@ -459,7 +450,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
 
         // Stream: Supported commands
-
 
 
         static const ucb::CommandInfo aStreamCommandInfoTable[] =

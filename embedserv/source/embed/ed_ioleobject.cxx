@@ -244,7 +244,6 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
 }
 
 
-
 STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** /*ppEnumOleVerb*/ )
 {
     return OLE_S_USEREG;

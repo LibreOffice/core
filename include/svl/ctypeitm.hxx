@@ -23,7 +23,6 @@
 #include <svl/custritm.hxx>
 
 
-
 class CntContentTypeItem : public CntUnencodedStringItem
 {
 private:

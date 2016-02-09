@@ -167,7 +167,6 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 }
 
 
-
 //-- OWeakObject -------------------------------------------------------
 
 
@@ -312,7 +311,6 @@ namespace star
 /** */ //for docpp
 namespace uno
 {
-
 
 
 //-- OWeakRefListener -----------------------------------------------------

@@ -149,7 +149,6 @@ enum FieldIdEnum {
 };
 
 
-
 class XMLTextFieldExport
 {
     SvXMLExport& rExport;
@@ -501,10 +500,6 @@ private:
     XMLPropertyState* pCombinedCharactersPropertyState;
 
 };
-
-
-
-
 
 
 #endif

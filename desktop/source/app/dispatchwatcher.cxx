@@ -783,10 +783,4 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
 }
 
 
-
-
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

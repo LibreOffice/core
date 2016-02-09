@@ -31,12 +31,10 @@ using namespace accessibility;
 SimpleResMgr* TkResMgr::m_pImpl = nullptr;
 
 
-
 TkResMgr::EnsureDelete::~EnsureDelete()
 {
     delete TkResMgr::m_pImpl;
 }
-
 
 
 void TkResMgr::ensureImplExists()
@@ -54,7 +52,6 @@ void TkResMgr::ensureImplExists()
 }
 
 
-
 OUString TkResMgr::loadString( sal_uInt16 nResId )
 {
     OUString sReturn;
@@ -65,7 +62,6 @@ OUString TkResMgr::loadString( sal_uInt16 nResId )
 
     return sReturn;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

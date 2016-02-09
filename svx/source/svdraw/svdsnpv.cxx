@@ -208,7 +208,6 @@ SdrSnapView::~SdrSnapView()
 }
 
 
-
 bool SdrSnapView::IsAction() const
 {
     return IsSetPageOrg() || IsDragHelpLine() || SdrPaintView::IsAction();
@@ -258,7 +257,6 @@ void SdrSnapView::TakeActionRect(Rectangle& rRect) const
         SdrPaintView::TakeActionRect(rRect);
     }
 }
-
 
 
 Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
@@ -447,7 +445,6 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
 }
 
 
-
 void SdrSnapView::BegSetPageOrg(const Point& rPnt)
 {
     BrkAction();
@@ -495,7 +492,6 @@ void SdrSnapView::BrkSetPageOrg()
         mpPageOriginOverlay = nullptr;
     }
 }
-
 
 
 bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const

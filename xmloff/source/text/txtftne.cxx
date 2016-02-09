@@ -18,7 +18,6 @@
  */
 
 
-
 /** @#file
  *
  * This file implements XMLTextParagraphExport methods to export
@@ -282,7 +281,6 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     // suffix
     lcl_exportString( GetExport(), rFootnoteConfig, sSuffix,
                       XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, false, true);
-
 
 
     Any aAny;

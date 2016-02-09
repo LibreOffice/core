@@ -339,7 +339,6 @@ void ContentListBox_Impl::InitRoot()
 }
 
 
-
 void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
 {
     SvTreeListEntry* pEntry = FirstChild( pParent );
@@ -350,7 +349,6 @@ void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
         pEntry = NextSibling( pEntry );
     }
 }
-
 
 
 void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
@@ -398,7 +396,6 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
 }
 
 
-
 bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
@@ -411,7 +408,6 @@ bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 
     return bHandled || SvTreeListBox::Notify( rNEvt );
 }
-
 
 
 OUString ContentListBox_Impl::GetSelectEntry() const
@@ -513,7 +509,6 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 }
 
 
-
 bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
@@ -526,7 +521,6 @@ bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 
     return bHandled || ComboBox::Notify( rNEvt );
 }
-
 
 
 void IndexBox_Impl::SelectExecutableEntry()
@@ -583,7 +577,6 @@ void IndexTabPage_Impl::dispose()
 }
 
 
-
 namespace sfx2 {
 
     typedef std::unordered_map< OUString, int, OUStringHash > KeywordInfo;
@@ -607,7 +600,6 @@ namespace sfx2 {
     }                                                                                               \
     else                                                                                            \
         m_pIndexCB->SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
-
 
 
 void IndexTabPage_Impl::InitializeIndex()
@@ -726,7 +718,6 @@ void IndexTabPage_Impl::InitializeIndex()
 #undef UNIFY_AND_INSERT_TOKEN
 
 
-
 void IndexTabPage_Impl::ClearIndex()
 {
     const sal_Int32 nCount = m_pIndexCB->GetEntryCount();
@@ -796,7 +787,6 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 }
 
 
-
 OUString IndexTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
@@ -805,7 +795,6 @@ OUString IndexTabPage_Impl::GetSelectEntry() const
         aRet = pEntry->m_aURL;
     return aRet;
 }
-
 
 
 void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
@@ -819,7 +808,6 @@ void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
 }
 
 
-
 bool IndexTabPage_Impl::HasKeyword() const
 {
     bool bRet = false;
@@ -831,7 +819,6 @@ bool IndexTabPage_Impl::HasKeyword() const
 
     return bRet;
 }
-
 
 
 bool IndexTabPage_Impl::HasKeywordIgnoreCase()
@@ -855,7 +842,6 @@ bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 
     return bRet;
 }
-
 
 
 void IndexTabPage_Impl::OpenKeyword()
@@ -892,7 +878,6 @@ bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     return bHandled || ComboBox::PreNotify( rNEvt );
 }
-
 
 
 void SearchBox_Impl::Select()
@@ -1012,7 +997,6 @@ void SearchTabPage_Impl::dispose()
 }
 
 
-
 void SearchTabPage_Impl::ClearSearchResults()
 {
     const sal_Int32 nCount = m_pResultsLB->GetEntryCount();
@@ -1021,7 +1005,6 @@ void SearchTabPage_Impl::ClearSearchResults()
     m_pResultsLB->Clear();
     m_pResultsLB->Update();
 }
-
 
 
 void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
@@ -1037,7 +1020,6 @@ void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 
     m_pSearchED->InsertEntry( rSearchText, 0 );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ClickHdl, Button*, void)
@@ -1111,7 +1093,6 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
 }
 
 
-
 OUString SearchTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
@@ -1122,13 +1103,11 @@ OUString SearchTabPage_Impl::GetSelectEntry() const
 }
 
 
-
 void SearchTabPage_Impl::ClearPage()
 {
     ClearSearchResults();
     m_pSearchED->SetText( OUString() );
 }
-
 
 
 bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
@@ -1204,7 +1183,6 @@ void BookmarksBox_Impl::dispose()
 }
 
 
-
 void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 {
     switch ( nAction )
@@ -1253,7 +1231,6 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
         }
     }
 }
-
 
 
 bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
@@ -1363,7 +1340,6 @@ OUString BookmarksTabPage_Impl::GetSelectEntry() const
 }
 
 
-
 void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
     OUString aImageURL = IMAGE_URL;
@@ -1471,7 +1447,6 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
 }
 
 
-
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
     disposeOnce();
@@ -1500,7 +1475,6 @@ void SfxHelpIndexWindow_Impl::dispose()
 }
 
 
-
 void SfxHelpIndexWindow_Impl::Initialize()
 {
     OUStringBuffer aHelpURL(HELP_URL);
@@ -1522,7 +1496,6 @@ void SfxHelpIndexWindow_Impl::Initialize()
     if ( m_pActiveLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         SetActiveFactory();
 }
-
 
 
 void SfxHelpIndexWindow_Impl::SetActiveFactory()
@@ -1549,7 +1522,6 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
         }
     }
 }
-
 
 
 HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
@@ -1707,7 +1679,6 @@ bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
 }
 
 
-
 void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -1719,7 +1690,6 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
     }
 }
-
 
 
 void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<Control*,bool>& rLink )
@@ -1783,7 +1753,6 @@ void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUStri
 }
 
 
-
 bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
 {
     bool bValid = false;
@@ -1798,7 +1767,6 @@ bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
     }
     return bValid;
 }
-
 
 
 void SfxHelpIndexWindow_Impl::ClearSearchPage()
@@ -1954,7 +1922,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 }
 
 
-
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
     disposeOnce();
@@ -1975,7 +1942,6 @@ void SfxHelpTextWindow_Impl::dispose()
 }
 
 
-
 bool SfxHelpTextWindow_Impl::HasSelection() const
 {
     // is there any selection in the text and not only a cursor?
@@ -1990,7 +1956,6 @@ bool SfxHelpTextWindow_Impl::HasSelection() const
 
     return bRet;
 }
-
 
 
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
@@ -2034,7 +1999,6 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
     if ( aMiscOptions.GetToolboxStyle() != aToolBox->GetOutStyle() )
         aToolBox->SetOutStyle( aMiscOptions.GetToolboxStyle() );
 }
-
 
 
 void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
@@ -2130,7 +2094,6 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 }
 
 
-
 void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 {
     long nX = std::max( GetOutputSizePixel().Width() - aOnStartupCB->GetSizePixel().Width(), nMinPos );
@@ -2140,7 +2103,6 @@ void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 }
 
 
-
 Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
 {
     if ( !xBreakIterator.is() )
@@ -2148,7 +2110,6 @@ Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
     DBG_ASSERT( xBreakIterator.is(), "Could not create BreakIterator" );
     return xBreakIterator;
 }
-
 
 
 Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
@@ -2182,7 +2143,6 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
 }
 
 
-
 bool SfxHelpTextWindow_Impl::isHandledKey( const vcl::KeyCode& _rKeyCode )
 {
     bool bRet = false;
@@ -2202,7 +2162,6 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const vcl::KeyCode& _rKeyCode )
 
     return bRet;
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
@@ -2245,14 +2204,12 @@ IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, NotifyHdl, LinkParamNone*, void )
 {
     InitToolBoxImages();
     Resize();
     aToolBox->Invalidate();
 }
-
 
 
 IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog&, rDlg, void )
@@ -2340,12 +2297,10 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, void )
 {
     pSrchDlg.clear();
 }
-
 
 
 IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
@@ -2370,7 +2325,6 @@ IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
 }
 
 
-
 void SfxHelpTextWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
@@ -2379,7 +2333,6 @@ void SfxHelpTextWindow_Impl::Resize()
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
     SetOnStartupBoxPosition();
 }
-
 
 
 bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
@@ -2507,7 +2460,6 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-
 void SfxHelpTextWindow_Impl::GetFocus()
 {
     if ( !bIsInClose )
@@ -2529,7 +2481,6 @@ void SfxHelpTextWindow_Impl::GetFocus()
 }
 
 
-
 void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -2542,7 +2493,6 @@ void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         InitToolBoxImages();
     }
 }
-
 
 
 void SfxHelpTextWindow_Impl::ToggleIndex( bool bOn )
@@ -2561,14 +2511,12 @@ void SfxHelpTextWindow_Impl::ToggleIndex( bool bOn )
 }
 
 
-
 void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch )
 {
     aSearchText = rSearchText;
     bIsFullWordSearch = _bIsFullWordSearch;
     aSelectIdle.Start();
 }
-
 
 
 void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
@@ -2631,7 +2579,6 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 }
 
 
-
 void SfxHelpTextWindow_Impl::CloseFrame()
 {
     bIsInClose = true;
@@ -2645,7 +2592,6 @@ void SfxHelpTextWindow_Impl::CloseFrame()
     {
     }
 }
-
 
 
 void SfxHelpTextWindow_Impl::DoSearch()
@@ -2676,7 +2622,6 @@ void SfxHelpWindow_Impl::Resize()
     SplitWindow::Resize();
     InitSizes();
 }
-
 
 
 void SfxHelpWindow_Impl::Split()
@@ -2773,7 +2718,6 @@ void SfxHelpWindow_Impl::MakeLayout()
 }
 
 
-
 void SfxHelpWindow_Impl::InitSizes()
 {
     if ( xWindow.is() )
@@ -2793,7 +2737,6 @@ void SfxHelpWindow_Impl::InitSizes()
         }
     }
 }
-
 
 
 void SfxHelpWindow_Impl::LoadConfig()
@@ -2833,7 +2776,6 @@ void SfxHelpWindow_Impl::LoadConfig()
 }
 
 
-
 void SfxHelpWindow_Impl::SaveConfig()
 {
     SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
@@ -2866,7 +2808,6 @@ void SfxHelpWindow_Impl::SaveConfig()
 }
 
 
-
 void SfxHelpWindow_Impl::ShowStartPage()
 {
     OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
@@ -2877,7 +2818,6 @@ void SfxHelpWindow_Impl::ShowStartPage()
 }
 
 
-
 IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
 {
     if ( pToolBox )
@@ -2886,7 +2826,6 @@ IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
         DoAction( pToolBox->GetCurItemId() );
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
@@ -2930,7 +2869,6 @@ IMPL_LINK_NOARG_TYPED(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
 }
 
 
-
 IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin, void )
 {
     if ( sTitle.isEmpty() )
@@ -2948,12 +2886,10 @@ IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* 
 }
 
 
-
 IMPL_LINK_TYPED( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl&, rListener, void )
 {
     SetFactory( rListener.GetFactory() );
 }
-
 
 
 void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
@@ -3008,7 +2944,6 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
 }
 
 
-
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const css::uno::Reference < css::frame::XFrame2 >& rFrame,
     vcl::Window* pParent, WinBits ) :
@@ -3048,7 +2983,6 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pHelpListener->SetChangeHdl( LINK( this, SfxHelpWindow_Impl, ChangeHdl ) );
     LoadConfig();
 }
-
 
 
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
@@ -3101,14 +3035,12 @@ void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 }
 
 
-
 void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
 {
     INetURLObject aObj( rURL );
     if ( aObj.GetProtocol() == INetProtocol::VndSunStarHelp )
         SetFactory( aObj.GetHost() );
 }
-
 
 
 void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
@@ -3211,7 +3143,6 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
 }
 
 
-
 void SfxHelpWindow_Impl::CloseWindow()
 {
     try
@@ -3238,7 +3169,6 @@ void SfxHelpWindow_Impl::CloseWindow()
 }
 
 
-
 void SfxHelpWindow_Impl::UpdateToolbox()
 {
     pTextWin->GetToolBox().EnableItem( TBI_BACKWARD, pHelpInterceptor->HasHistoryPred() );
@@ -3246,12 +3176,10 @@ void SfxHelpWindow_Impl::UpdateToolbox()
 }
 
 
-
 bool SfxHelpWindow_Impl::HasHistoryPredecessor() const
 {
     return pHelpInterceptor->HasHistoryPred();
 }
-
 
 
 bool SfxHelpWindow_Impl::HasHistorySuccessor() const

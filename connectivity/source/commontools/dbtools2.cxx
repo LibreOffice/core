@@ -203,7 +203,6 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
 }
 
 
-
 OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
 {
     OUStringBuffer aSql("CREATE TABLE ");

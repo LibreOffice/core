@@ -68,8 +68,6 @@ namespace xml = com::sun::star::xml ;
 namespace sdbc = com::sun::star::sdbc ;
 
 
-
-
 namespace
 {
 
@@ -116,7 +114,6 @@ public:
 #endif
 
 
-
 class ActiveDataSink : public ::cppu::WeakImplHelper< io::XActiveDataSink >
 {
     uno::Reference< io::XInputStream > m_xStream;
@@ -129,7 +126,6 @@ public:
     virtual void SAL_CALL setInputStream( uno::Reference< io::XInputStream > const & rStream )
         throw (uno::RuntimeException, std::exception) override { m_xStream = rStream; };
 };
-
 
 
 class UpdateInformationProvider :
@@ -225,7 +221,6 @@ private:
 };
 
 
-
 class UpdateInformationEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
@@ -290,7 +285,6 @@ private:
     const sal_Int32 m_nNodes;
     sal_Int32 m_nCount;
 };
-
 
 
 class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
@@ -534,7 +528,6 @@ UpdateInformationProvider::load(const OUString& rURL)
 }
 
 
-
 // TODO: docu content node
 
 uno::Reference< xml::dom::XElement >
@@ -581,7 +574,6 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
 }
 
 
-
 uno::Reference< xml::dom::XNode >
 UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
                                         const OUString& rName)
@@ -594,7 +586,6 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
         return nullptr;
     }
 }
-
 
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -667,7 +658,6 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
 }
 
 
-
 uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
 UpdateInformationProvider::getUpdateInformation(
     uno::Sequence< OUString > const & repositories,
@@ -712,7 +702,6 @@ UpdateInformationProvider::getUpdateInformation(
 }
 
 
-
 void SAL_CALL
 UpdateInformationProvider::cancel() throw (uno::RuntimeException, std::exception)
 {
@@ -724,7 +713,6 @@ UpdateInformationProvider::cancel() throw (uno::RuntimeException, std::exception
 }
 
 
-
 void SAL_CALL
 UpdateInformationProvider::setInteractionHandler(
         uno::Reference< task::XInteractionHandler > const & handler )
@@ -733,7 +721,6 @@ UpdateInformationProvider::setInteractionHandler(
     osl::MutexGuard aGuard(m_aMutex);
     m_xInteractionHandler = handler;
 }
-
 
 
 uno::Reference< task::XInteractionHandler > SAL_CALL
@@ -776,7 +763,6 @@ UpdateInformationProvider::getServiceNames()
 };
 
 
-
 OUString
 UpdateInformationProvider::getImplName()
 {
@@ -784,13 +770,11 @@ UpdateInformationProvider::getImplName()
 }
 
 
-
 OUString SAL_CALL
 UpdateInformationProvider::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return getImplName();
 }
-
 
 
 uno::Sequence< OUString > SAL_CALL
@@ -808,13 +792,11 @@ UpdateInformationProvider::supportsService( OUString const & serviceName ) throw
 } // anonymous namespace
 
 
-
 static uno::Reference<uno::XInterface> SAL_CALL
 createInstance(uno::Reference<uno::XComponentContext> const & xContext)
 {
     return UpdateInformationProvider::createInstance(xContext);
 }
-
 
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
@@ -829,7 +811,6 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
     },
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 } ;
-
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updatefeed_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)

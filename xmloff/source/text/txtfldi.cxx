@@ -67,7 +67,6 @@
 #include <osl/diagnose.h>
 
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -77,7 +76,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
-
 
 
 // SO API string constants
@@ -191,7 +189,6 @@ const sal_Char sAPI_is_visible[]        = "IsVisible";
 const sal_Char sAPI_TextRange[]         = "TextRange";
 
 const sal_Char sAPI_true[] = "TRUE";
-
 
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
@@ -613,10 +610,7 @@ void XMLTextFieldImportContext::ForceUpdate(
 }
 
 
-
-
 // XMLSenderFieldImportContext
-
 
 
 XMLSenderFieldImportContext::XMLSenderFieldImportContext(
@@ -739,10 +733,7 @@ void XMLSenderFieldImportContext::PrepareField(
 }
 
 
-
-
 // XMLAuthorFieldImportContext
-
 
 
 XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
@@ -799,9 +790,7 @@ void XMLAuthorFieldImportContext::PrepareField(
 }
 
 
-
 // page continuation string
-
 
 
 static SvXMLEnumMapEntry const lcl_aSelectPageAttrMap[] =
@@ -864,10 +853,7 @@ void XMLPageContinuationImportContext::PrepareField(
 }
 
 
-
-
 // page number field
-
 
 
 XMLPageNumberImportContext::XMLPageNumberImportContext(
@@ -974,10 +960,7 @@ void XMLPageNumberImportContext::PrepareField(
 }
 
 
-
-
 // Placeholder
-
 
 
 XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
@@ -1061,9 +1044,7 @@ void XMLPlaceholderFieldImportContext::PrepareField(
 }
 
 
-
 // time field
-
 
 
 XMLTimeFieldImportContext::XMLTimeFieldImportContext(
@@ -1204,10 +1185,7 @@ void XMLTimeFieldImportContext::PrepareField(
 }
 
 
-
-
 // date field
-
 
 
 XMLDateFieldImportContext::XMLDateFieldImportContext(
@@ -1251,11 +1229,7 @@ void XMLDateFieldImportContext::ProcessAttribute(
 }
 
 
-
-
-
 // database field superclass
-
 
 
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
@@ -1395,10 +1369,7 @@ void XMLDatabaseFieldImportContext::PrepareField(
 }
 
 
-
-
 // database name field
-
 
 
 XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
@@ -1418,10 +1389,7 @@ void XMLDatabaseNameImportContext::ProcessAttribute(
 }
 
 
-
-
 // database next field
-
 
 
 XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
@@ -1484,10 +1452,7 @@ void XMLDatabaseNextImportContext::PrepareField(
 }
 
 
-
-
 // database select field
-
 
 
 XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
@@ -1535,10 +1500,7 @@ void XMLDatabaseSelectImportContext::PrepareField(
 }
 
 
-
-
 // database display row number field
-
 
 
 XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
@@ -1609,10 +1571,7 @@ void XMLDatabaseNumberImportContext::PrepareField(
 }
 
 
-
-
 // Simple doc info fields
-
 
 
 XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
@@ -1753,9 +1712,7 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
 }
 
 
-
 // revision field
-
 
 
 XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
@@ -1796,10 +1753,7 @@ void XMLRevisionDocInfoImportContext::PrepareField(
 }
 
 
-
-
 // DocInfo fields with date/time attributes
-
 
 
 XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
@@ -1905,9 +1859,7 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
 }
 
 
-
 // user defined docinfo fields
-
 
 
 XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
@@ -1991,9 +1943,7 @@ void XMLUserDocInfoImportContext::PrepareField(
 }
 
 
-
 // import hidden paragraph fields
-
 
 
 XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
@@ -2047,10 +1997,7 @@ void XMLHiddenParagraphImportContext::PrepareField(
 }
 
 
-
-
 // import conditional text (<text:conditional-text>)
-
 
 
 XMLConditionalTextImportContext::XMLConditionalTextImportContext(
@@ -2134,10 +2081,7 @@ void XMLConditionalTextImportContext::PrepareField(
 }
 
 
-
-
 // hidden text
-
 
 
 XMLHiddenTextImportContext::XMLHiddenTextImportContext(
@@ -2208,10 +2152,7 @@ void XMLHiddenTextImportContext::PrepareField(
 }
 
 
-
-
 // file name fields
-
 
 
 static const SvXMLEnumMapEntry aFilenameDisplayMap[] =
@@ -2298,7 +2239,6 @@ void XMLFileNameImportContext::PrepareField(
 }
 
 
-
 // template name field
 
 
@@ -2357,9 +2297,7 @@ void XMLTemplateNameImportContext::PrepareField(
 }
 
 
-
 // import chapter fields
-
 
 
 static const SvXMLEnumMapEntry aChapterDisplayMap[] =
@@ -2435,9 +2373,7 @@ void XMLChapterImportContext::PrepareField(
 }
 
 
-
 // counting fields
-
 
 
 XMLCountFieldImportContext::XMLCountFieldImportContext(
@@ -2534,10 +2470,7 @@ const sal_Char* XMLCountFieldImportContext::MapTokenToServiceName(
 }
 
 
-
-
 // page variable import
-
 
 
 XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
@@ -2594,10 +2527,7 @@ void XMLPageVarGetFieldImportContext::PrepareField(
 }
 
 
-
-
 // page variable set fields
-
 
 
 XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
@@ -2655,10 +2585,7 @@ void XMLPageVarSetFieldImportContext::PrepareField(
 }
 
 
-
-
 // macro fields
-
 
 
 XMLMacroFieldImportContext::XMLMacroFieldImportContext(
@@ -2794,10 +2721,7 @@ void XMLMacroFieldImportContext::PrepareField(
 }
 
 
-
-
 // reference field import
-
 
 
 XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
@@ -2933,8 +2857,6 @@ void XMLReferenceFieldImportContext::PrepareField(
 }
 
 
-
-
 // field declarations container
 
 
@@ -2985,10 +2907,7 @@ SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
 }
 
 
-
-
 // import dde field declaration
-
 
 
 XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
@@ -3125,10 +3044,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
 }
 
 
-
-
 // DDE field import
-
 
 
 XMLDdeFieldImportContext::XMLDdeFieldImportContext(
@@ -3209,9 +3125,7 @@ void XMLDdeFieldImportContext::PrepareField(
 }
 
 
-
 // sheet name fields
-
 
 
 XMLSheetNameImportContext::XMLSheetNameImportContext(
@@ -3266,7 +3180,6 @@ void XMLPageNameFieldImportContext::PrepareField(
 // URL fields (Calc, Impress, Draw)
 
 
-
 XMLUrlFieldImportContext::XMLUrlFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
@@ -3319,8 +3232,6 @@ void XMLUrlFieldImportContext::PrepareField(
     aAny <<= GetContent();
     xPropertySet->setPropertyValue(sPropertyRepresentation, aAny);
 }
-
-
 
 
 XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
@@ -3581,9 +3492,7 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
 }
 
 
-
 // Annotation Field
-
 
 
 XMLAnnotationImportContext::XMLAnnotationImportContext(
@@ -3807,10 +3716,7 @@ void XMLAnnotationImportContext::PrepareField(
 }
 
 
-
-
 // script field
-
 
 
 XMLScriptImportContext::XMLScriptImportContext(
@@ -3877,7 +3783,6 @@ void XMLScriptImportContext::PrepareField(
 // measure field
 
 
-
 XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
@@ -3921,11 +3826,7 @@ void XMLMeasureFieldImportContext::PrepareField(
 }
 
 
-
-
 // dropdown field
-
-
 
 
 XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(

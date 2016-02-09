@@ -38,7 +38,6 @@ using ::sfx2::sidebar::Theme;
 namespace svx { namespace sidebar {
 
 
-
 GraphicPropertyPanel::GraphicPropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -144,17 +143,12 @@ void GraphicPropertyPanel::Initialize()
 }
 
 
-
-
-
-
 IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyBrightnessHdl, Edit&, void )
 {
     const sal_Int16 nBright = mpMtrBrightness->GetValue();
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_LUMINANCE, SfxCallMode::RECORD, &aBrightItem, 0L);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyContrastHdl, Edit&, void )
@@ -165,14 +159,12 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyContrastHdl, Edit&, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyTransHdl, Edit&, void )
 {
     const sal_Int16 nTrans = mpMtrTrans->GetValue();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_TRANSPARENCE, SfxCallMode::RECORD, &aTransItem, 0L);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ClickColorModeHdl, ListBox&, void )
@@ -183,14 +175,12 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ClickColorModeHdl, ListBox&, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, RedHdl, Edit&, void )
 {
     const sal_Int16 nRed = mpMtrRed->GetValue();
     const SfxInt16Item aRedItem( SID_ATTR_GRAF_RED, nRed );
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_RED, SfxCallMode::RECORD, &aRedItem, 0L);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, GreenHdl, Edit&, void )
@@ -201,7 +191,6 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, GreenHdl, Edit&, void )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(GraphicPropertyPanel, BlueHdl, Edit&, void)
 {
     const sal_Int16 nBlue = mpMtrBlue->GetValue();
@@ -210,14 +199,12 @@ IMPL_LINK_NOARG_TYPED(GraphicPropertyPanel, BlueHdl, Edit&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(GraphicPropertyPanel, GammaHdl, Edit&, void)
 {
     const sal_Int32 nGamma = mpMtrGamma->GetValue();
     const SfxInt32Item nGammaItem( SID_ATTR_GRAF_GAMMA, nGamma );
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_GAMMA, SfxCallMode::RECORD, &nGammaItem, 0L);
 }
-
 
 
 VclPtr<vcl::Window> GraphicPropertyPanel::Create (
@@ -239,12 +226,10 @@ VclPtr<vcl::Window> GraphicPropertyPanel::Create (
 }
 
 
-
 void GraphicPropertyPanel::DataChanged(
     const DataChangedEvent& /*rEvent*/)
 {
 }
-
 
 
 void GraphicPropertyPanel::NotifyItemUpdate(
@@ -451,12 +436,6 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
     }
 }
-
-
-
-
-
-
 
 
 // namespace close

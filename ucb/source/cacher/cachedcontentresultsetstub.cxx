@@ -490,9 +490,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 }
 
 
-
 // class CachedContentResultSetStubFactory
-
 
 
 CachedContentResultSetStubFactory::CachedContentResultSetStubFactory(

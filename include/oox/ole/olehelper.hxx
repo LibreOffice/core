@@ -56,11 +56,8 @@ namespace oox {
 namespace ole {
 
 
-
-
 #define OLE_GUID_STDFONT "{0BE35203-8F91-11CE-9DE3-00AA004BB851}"
 #define OLE_GUID_STDPIC  "{0BE35204-8F91-11CE-9DE3-00AA004BB851}"
-
 
 
 const sal_uInt16 OLE_STDFONT_NORMAL     = 400;
@@ -89,7 +86,6 @@ struct StdFontInfo
 };
 
 
-
 /** Stores data about a StdHlink hyperlink. */
 struct StdHlinkInfo
 {
@@ -97,7 +93,6 @@ struct StdHlinkInfo
     OUString     maLocation;
     OUString     maDisplay;
 };
-
 
 
 /** Static helper functions for OLE import/export. */
@@ -168,8 +163,6 @@ public:
     static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, tools::SvRef<SotStorage> &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
     static bool WriteOCXExcelKludgeStream( const css::uno::Reference< css::frame::XModel >& rxModel, const css::uno::Reference< css::io::XOutputStream >& xOutStrm, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
 };
-
-
 
 
 } // namespace ole

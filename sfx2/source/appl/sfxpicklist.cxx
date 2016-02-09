@@ -37,7 +37,6 @@
 #include <cppuhelper/implbase.hxx>
 
 
-
 #include <sfx2/app.hxx>
 #include "sfxpicklist.hxx"
 #include <sfx2/sfxuno.hxx>
@@ -58,11 +57,9 @@
 #include <algorithm>
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-
 
 
 class StringLength : public ::cppu::WeakImplHelper< XStringWidth >

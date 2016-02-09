@@ -3107,7 +3107,6 @@ void ImpEditEngine::SetAddExtLeading( bool bExtLeading )
 };
 
 
-
 bool ImpEditEngine::ImplHasText() const
 {
     return ( ( GetEditDoc().Count() > 1 ) || GetEditDoc().GetObject(0)->Len() );

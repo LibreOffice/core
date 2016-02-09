@@ -29,7 +29,6 @@ class ToolBox;
 class SvxPopupWindowListBox;
 
 
-
 class SvxListBoxControl : public SfxToolBoxControl
 {
 protected:
@@ -50,7 +49,6 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 };
-
 
 
 class SVX_DLLPUBLIC SvxUndoRedoControl : public SvxListBoxControl

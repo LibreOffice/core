@@ -93,7 +93,6 @@ struct OOX_DLLPUBLIC ShapePropertyInfo
 };
 
 
-
 class OOX_DLLPUBLIC ShapePropertyMap : public PropertyMap
 {
 public:
@@ -141,7 +140,6 @@ private:
     ModelObjectHelper&  mrModelObjHelper;
     ShapePropertyInfo   maShapePropInfo;
 };
-
 
 
 } // namespace drawingml

@@ -42,7 +42,6 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-
 XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate,

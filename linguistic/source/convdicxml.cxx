@@ -288,7 +288,6 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 }
 
 
-
 bool ConvDicXMLExport::Export()
 {
     uno::Reference< document::XExporter > xExporter( this );

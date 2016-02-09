@@ -57,10 +57,8 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
         );
 
 
-
 // The required C-Api must be provided!
 // It contains of 3 special functions that have to be exported.
-
 
 
 void REGISTER_PROVIDER(
@@ -78,7 +76,6 @@ void REGISTER_PROVIDER(
     for (sal_uInt32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
-
 
 
 struct ProviderRequest

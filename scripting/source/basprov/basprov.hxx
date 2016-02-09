@@ -33,10 +33,8 @@
 class BasicManager;
 
 
-
 namespace basprov
 {
-
 
 
     //  class BasicProviderImpl

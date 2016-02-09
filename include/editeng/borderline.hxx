@@ -37,7 +37,6 @@
 #define DEF_LINE_WIDTH_5        10
 
 
-
 namespace editeng {
 
     // values from css::table::BorderLineStyle

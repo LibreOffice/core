@@ -115,7 +115,6 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
     }
 
 
-
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
     throw ( css::uno::RuntimeException, std::exception )
@@ -168,7 +167,6 @@ sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
 }
 
 } // namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

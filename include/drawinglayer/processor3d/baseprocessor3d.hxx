@@ -26,7 +26,6 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace processor3d
@@ -67,7 +66,6 @@ namespace drawinglayer
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer
-
 
 
 #endif //_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX

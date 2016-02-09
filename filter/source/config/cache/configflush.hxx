@@ -31,8 +31,6 @@ namespace filter{
     namespace config{
 
 
-
-
 /** @short      supports registration of XRefreshListener
                 on the global filter configuration.
 
@@ -64,7 +62,6 @@ class ConfigFlush : public BaseLock
         /** @short  standard ctor.
          */
         ConfigFlush();
-
 
 
         /** @short  standard dtor.

@@ -83,7 +83,6 @@ static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
 static const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -92,10 +91,7 @@ using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
 
-
-
 // XMLVarFieldImportContext: superclass for all variable related fields
-
 
 
 XMLVarFieldImportContext::XMLVarFieldImportContext(
@@ -283,12 +279,7 @@ void XMLVarFieldImportContext::PrepareField(
 }
 
 
-
-
-
-
 // variable set fields
-
 
 
 XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
@@ -372,10 +363,7 @@ bool XMLSetVarFieldImportContext::FindFieldMaster(
 }
 
 
-
-
 // sequence field
-
 
 
 XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
@@ -444,10 +432,7 @@ void XMLSequenceFieldImportContext::PrepareField(
 }
 
 
-
-
 // variable set field
-
 
 
 XMLVariableSetFieldImportContext::XMLVariableSetFieldImportContext(
@@ -479,10 +464,7 @@ void XMLVariableSetFieldImportContext::PrepareField(
 }
 
 
-
-
 // variable input field
-
 
 
 XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
@@ -520,10 +502,7 @@ void XMLVariableInputFieldImportContext::PrepareField(
 }
 
 
-
-
 // user field
-
 
 
 XMLUserFieldImportContext::XMLUserFieldImportContext(
@@ -541,10 +520,7 @@ XMLUserFieldImportContext::XMLUserFieldImportContext(
 }
 
 
-
-
 // user input field
-
 
 
 // bug: doesn't work (SO API lacking)
@@ -574,9 +550,7 @@ void XMLUserFieldInputImportContext::PrepareField(
 }
 
 
-
 // variable get field
-
 
 
 XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
@@ -606,10 +580,7 @@ void XMLVariableGetFieldImportContext::PrepareField(
 }
 
 
-
-
 // expression field
-
 
 
 XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
@@ -642,10 +613,7 @@ void XMLExpressionFieldImportContext::PrepareField(
 }
 
 
-
-
 // text input field
-
 
 
 XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
@@ -675,9 +643,7 @@ void XMLTextInputFieldImportContext::PrepareField(
 }
 
 
-
 // table formula field
-
 
 
 XMLTableFormulaImportContext::XMLTableFormulaImportContext(
@@ -740,18 +706,12 @@ void XMLTableFormulaImportContext::PrepareField(
 }
 
 
-
-
 // variable declarations
 
 // Should be adapted to XMLVarField-/XMLSetVarFieldImportContext scheme!
 
 
-
-
-
 // declaration containter import (<variable/user-field/sequence-decls>)
-
 
 
 XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
@@ -808,10 +768,7 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
 }
 
 
-
-
 // declaration import (<variable/user-field/sequence-decl> elements)
-
 
 
 XMLVariableDeclImportContext::XMLVariableDeclImportContext(
@@ -922,7 +879,6 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
         } // else: no field master found/constructed
     } // else: no sequence-decl
 }
-
 
 
 bool XMLVariableDeclImportContext::FindFieldMaster(
@@ -1060,10 +1016,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
 }
 
 
-
 // Database Display field import
-
-
 
 
 XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
@@ -1190,7 +1143,6 @@ void XMLDatabaseDisplayImportContext::EndElement()
     // write element content
     GetImportHelper().InsertString(GetContent());
 }
-
 
 
 // value import helper

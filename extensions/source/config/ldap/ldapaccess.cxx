@@ -251,7 +251,6 @@ void LdapConnection::initConnection()
     }
 
 
-
     OUStringBuffer filter( "(&(objectclass=" );
 
     filter.append( mLdapDefinition.mUserObjectClass ).append(")(") ;
@@ -296,7 +295,6 @@ void LdapConnection::initConnection()
 
     return userDn ;
 }
-
 
 
 } } } // extensions.config.ldap

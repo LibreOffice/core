@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_NUMFMT_HXX
 
 
-
 #include <rtl/ustring.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
@@ -34,11 +33,9 @@
 #include <vcl/window.hxx>
 
 
-
 class SvxNumberFormatShell;
 class SvxNumberInfoItem;
 class vector;
-
 
 
 class SvxNumberPreview : public vcl::Window
@@ -60,7 +57,6 @@ public:
 
     void            NotifyChange( const OUString& rPrevStr, const Color* pColor = nullptr );
 };
-
 
 
 class SvxNumberFormatTabPage : public SfxTabPage

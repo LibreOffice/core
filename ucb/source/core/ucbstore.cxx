@@ -52,7 +52,6 @@ using namespace comphelper;
 using namespace cppu;
 
 
-
 OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
     OUStringBuffer aBuffer;
@@ -133,9 +132,7 @@ public:
 };
 
 
-
 // UcbStore_Impl.
-
 
 
 struct UcbStore_Impl
@@ -146,13 +143,7 @@ struct UcbStore_Impl
 };
 
 
-
-
-
 // UcbStore Implementation.
-
-
-
 
 
 UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
@@ -173,17 +164,13 @@ XSERVICEINFO_IMPL_1_CTX( UcbStore,
                      STORE_SERVICE_NAME );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbStore );
 
 
-
 // XPropertySetRegistryFactory methods.
-
 
 
 // virtual
@@ -205,9 +192,7 @@ UcbStore::createPropertySetRegistry( const OUString& )
 }
 
 
-
 // XInitialization methods.
-
 
 
 // virtual
@@ -225,9 +210,7 @@ const Sequence< Any >& UcbStore::getInitArgs() const
 }
 
 
-
 // PropertySetRegistry_Impl.
-
 
 
 struct PropertySetRegistry_Impl
@@ -252,9 +235,6 @@ struct PropertySetRegistry_Impl
 // PropertySetRegistry Implementation.
 
 
-
-
-
 PropertySetRegistry::PropertySetRegistry(
                         const Reference< XComponentContext >& xContext,
                         const Sequence< Any > &rInitArgs )
@@ -270,9 +250,7 @@ PropertySetRegistry::~PropertySetRegistry()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
@@ -280,9 +258,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
                                 PROPSET_REG_SERVICE_NAME );
 
 
-
 // XPropertySetRegistry methods.
-
 
 
 // virtual
@@ -468,9 +444,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
 }
 
 
-
 // XElementAccess methods.
-
 
 
 // virtual
@@ -496,9 +470,7 @@ sal_Bool SAL_CALL PropertySetRegistry::hasElements()
 }
 
 
-
 // XNameAccess methods.
-
 
 
 // virtual
@@ -1123,13 +1095,7 @@ struct PersistentPropertySet_Impl
 };
 
 
-
-
-
 // PersistentPropertySet Implementation.
-
-
-
 
 
 PersistentPropertySet::PersistentPropertySet(
@@ -1152,15 +1118,12 @@ PersistentPropertySet::~PersistentPropertySet()
 // XServiceInfo methods.
 
 
-
 XSERVICEINFO_NOFACTORY_IMPL_1( PersistentPropertySet,
                                 OUString( "com.sun.star.comp.ucb.PersistentPropertySet" ),
                                 PERS_PROPSET_SERVICE_NAME );
 
 
-
 // XComponent methods.
-
 
 
 // virtual
@@ -1217,9 +1180,7 @@ void SAL_CALL PersistentPropertySet::removeEventListener(
 }
 
 
-
 // XPropertySet methods.
-
 
 
 // virtual
@@ -1442,9 +1403,7 @@ void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
 }
 
 
-
 // XPersistentPropertySet methods.
-
 
 
 // virtual
@@ -1463,9 +1422,7 @@ OUString SAL_CALL PersistentPropertySet::getKey()
 }
 
 
-
 // XNamed methods.
-
 
 
 // virtual
@@ -1486,9 +1443,7 @@ void SAL_CALL PersistentPropertySet::setName( const OUString& aName )
 }
 
 
-
 // XPropertyContainer methods.
-
 
 
 // virtual
@@ -1803,9 +1758,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 }
 
 
-
 // XPropertySetInfoChangeNotifier methods.
-
 
 
 // virtual
@@ -1831,9 +1784,7 @@ void SAL_CALL PersistentPropertySet::removePropertySetInfoChangeListener(
 }
 
 
-
 // XPropertyAccess methods.
-
 
 
 // virtual
@@ -2096,9 +2047,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
 }
 
 
-
 // Non-interface methods
-
 
 
 void PersistentPropertySet::notifyPropertyChangeEvent(
@@ -2182,11 +2131,7 @@ PropertySetRegistry& PersistentPropertySet::getPropertySetRegistry()
 }
 
 
-
-
 // PropertySetInfo_Impl Implementation.
-
-
 
 
 PropertySetInfo_Impl::PropertySetInfo_Impl(
@@ -2206,7 +2151,6 @@ PropertySetInfo_Impl::~PropertySetInfo_Impl()
 }
 
 // XPropertySetInfo methods.
-
 
 
 // virtual

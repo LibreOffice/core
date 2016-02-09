@@ -26,8 +26,6 @@
 #include <vcl/dllapi.h>
 
 
-
-
 // Mnemonic Chars, which we want support
 // Latin 0-9
 #define MNEMONIC_RANGE_1_START      0x30
@@ -49,8 +47,6 @@
 
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #define MNEMONIC_INDEX_NOTFOUND     ((sal_uInt16)0xFFFF)
-
-
 
 
 class VCL_DLLPUBLIC MnemonicGenerator

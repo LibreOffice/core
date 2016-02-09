@@ -26,8 +26,6 @@
 using namespace ::com::sun::star;
 
 
-
-
 XWindowItem::XWindowItem() :
     SfxPoolItem()
 {
@@ -59,9 +57,6 @@ bool XWindowItem::operator == ( const SfxPoolItem & rAttr ) const
     const XWindowItem * pItem = dynamic_cast< const XWindowItem * >(&rAttr);
     return pItem && m_xWin == pItem->m_xWin;
 }
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

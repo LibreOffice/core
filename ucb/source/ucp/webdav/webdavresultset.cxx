@@ -34,11 +34,7 @@ using namespace com::sun::star;
 using namespace http_dav_ucp;
 
 
-
-
 // DynamicResultSet Implementation.
-
-
 
 
 DynamicResultSet::DynamicResultSet(
@@ -53,9 +49,7 @@ DynamicResultSet::DynamicResultSet(
 }
 
 
-
 // Non-interface methods.
-
 
 
 void DynamicResultSet::initStatic()

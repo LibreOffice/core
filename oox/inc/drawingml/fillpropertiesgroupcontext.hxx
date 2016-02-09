@@ -27,7 +27,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 /** Context handler that imports the a:solidFill element. */
 class SolidFillContext : public ColorContext
 {
@@ -37,7 +36,6 @@ public:
                             const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps );
 };
-
 
 
 /** Context handler that imports the a:gradFill element. */
@@ -77,7 +75,6 @@ private:
 };
 
 
-
 /** Context handler that imports a14:imgProps, a14:imgLayer, a14:imgEffect containers
     and the a14:artistic* effect tags defined in the MS-ODRAWXML extension. */
 class ArtisticEffectContext : public ::oox::core::ContextHandler2
@@ -96,7 +93,6 @@ public:
 private:
     ArtisticEffectProperties& maEffect;
 };
-
 
 
 /** Context handler that imports the a:extLst element inside a:blip and its
@@ -119,7 +115,6 @@ private:
 };
 
 
-
 /** Context handler that imports the a:duotone element containing the colors
     of a bitmap duotone transformation. */
 class DuotoneContext : public ::oox::core::ContextHandler2
@@ -140,7 +135,6 @@ private:
     BlipFillProperties& mrBlipProps;
     int                 mnColorIndex;
 };
-
 
 
 /** Context handler that imports the a:clrChange element containing the colors

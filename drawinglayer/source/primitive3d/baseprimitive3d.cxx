@@ -23,9 +23,7 @@
 #include <comphelper/sequence.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer
@@ -69,7 +67,6 @@ namespace drawinglayer
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

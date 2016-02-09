@@ -479,7 +479,6 @@ static void deletePathIfPossible(const Reference < XRegistryKey >& xRootKey,
 }
 
 
-
 //  static deleteUserLink
 
 static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
@@ -1028,7 +1027,6 @@ static void insert_singletons(
 }
 
 
-
 //  static prepareRegistry
 
 static void prepareRegistry(
@@ -1328,7 +1326,6 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 }
 
 
-
 // XInitialization
 
 void ImplementationRegistration::initialize(
@@ -1416,8 +1413,6 @@ void ImplementationRegistration::initialize(
 
     doRegister(m_xSMgr, m_xCtx, rLoader , rReg, loaderServiceName , locationUrl, locationUrl);
 }
-
-
 
 
 // virtual function registerImplementationWithLocation of XImplementationRegistration2
@@ -1534,7 +1529,6 @@ void ImplementationRegistration::registerImplementation(
 {
     prepareRegister(implementationLoaderUrl, locationUrl, locationUrl, xReg);
 }
-
 
 
 // virtual function revokeImplementation of XImplementationRegistration
@@ -1772,7 +1766,6 @@ void ImplementationRegistration::doRegister(
         }
     }
 }
-
 
 
 Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRegistry(

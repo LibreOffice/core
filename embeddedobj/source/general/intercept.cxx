@@ -300,7 +300,6 @@ Interceptor::queryDispatches(
 }
 
 
-
 //XDispatchProviderInterceptor
 
 uno::Reference< frame::XDispatchProvider > SAL_CALL

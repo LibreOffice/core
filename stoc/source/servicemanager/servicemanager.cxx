@@ -466,7 +466,6 @@ private:
 };
 
 
-
 inline bool OServiceManager::is_disposed() const
 {
     // ought to be guarded by m_mutex:
@@ -483,9 +482,6 @@ inline void OServiceManager::check_undisposed() const
             static_cast<OWeakObject *>(const_cast<OServiceManager *>(this)) );
     }
 }
-
-
-
 
 
 typedef WeakComponentImplHelper<
@@ -657,9 +653,6 @@ OServiceManagerWrapper::OServiceManagerWrapper(
             "no service manager to wrap" );
     }
 }
-
-
-
 
 
 /**

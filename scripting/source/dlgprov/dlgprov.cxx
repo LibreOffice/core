@@ -168,7 +168,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     }
 
 
-
     static Sequence< OUString > getSupportedServiceNames_DialogProviderImpl()
     {
         Sequence< OUString > aNames(3);
@@ -177,7 +176,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
         aNames[2] = "com.sun.star.awt.ContainerWindowProvider";
         return aNames;
     }
-
 
 
     // mutex
@@ -199,7 +197,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     }
 
 
-
     // DialogProviderImpl
 
 
@@ -210,11 +207,9 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     }
 
 
-
     DialogProviderImpl::~DialogProviderImpl()
     {
     }
-
 
 
     Reference< resource::XStringResourceManager > getStringResourceFromDialogLibrary
@@ -451,7 +446,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     }
 
 
-
     Reference< XUnoControlDialog > DialogProviderImpl::createDialogControl
         ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
     {
@@ -494,7 +488,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
         return xDialogControl;
     }
-
 
 
     void DialogProviderImpl::attachControlEvents(
@@ -560,7 +553,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
         }
         return xIntrospectionAccess;
     }
-
 
 
     // XServiceInfo
@@ -762,7 +754,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     }
 
 
-
     // component operations
 
 
@@ -773,7 +764,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     }
 
 
-
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
         {create_DialogProviderImpl, getImplementationName_DialogProviderImpl,getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,nullptr, 0},
@@ -782,11 +772,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     };
 
 
-
-
 }   // namespace dlgprov
-
-
 
 
 // component exports

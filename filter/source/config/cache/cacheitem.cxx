@@ -39,7 +39,6 @@ CacheItem::CacheItem()
 }
 
 
-
 void CacheItem::update(const CacheItem& rUpdateItem)
 {
     for(const_iterator pItUpdate  = rUpdateItem.begin();
@@ -53,7 +52,6 @@ void CacheItem::update(const CacheItem& rUpdateItem)
             pItThis->second = pItUpdate->second; // change value of existing prop
     }
 }
-
 
 
 void CacheItem::validateUINames(const OUString& sActLocale)
@@ -89,7 +87,6 @@ void CacheItem::validateUINames(const OUString& sActLocale)
 }
 
 
-
 css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList()
 {
     sal_Int32 c = (sal_Int32)size();
@@ -116,7 +113,6 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 
     return lList;
 }
-
 
 
 bool isSubSet(const css::uno::Any& aSubSet,
@@ -326,7 +322,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
 }
 
 
-
 bool CacheItem::haveProps(const CacheItem& lProps) const
 {
     for (const_iterator pIt  = lProps.begin();
@@ -355,7 +350,6 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
     _FILTER_CONFIG_LOG_("CacheItem::haveProps() ... => return TRUE\n")
     return true;
 }
-
 
 
 bool CacheItem::dontHaveProps(const CacheItem& lProps) const

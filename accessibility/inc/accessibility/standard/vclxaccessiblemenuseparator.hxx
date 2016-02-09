@@ -23,7 +23,6 @@
 #include <accessibility/standard/accessiblemenuitemcomponent.hxx>
 
 
-
 //  class VCLXAccessibleMenuSeparator
 
 

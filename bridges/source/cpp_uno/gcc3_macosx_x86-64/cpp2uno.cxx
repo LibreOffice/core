@@ -457,7 +457,6 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 }
 
 
-
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,

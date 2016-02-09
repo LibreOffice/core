@@ -115,8 +115,6 @@ namespace svt
     }
 
 
-
-
     void OFilePickerInteractionHandler::resetUseState()
     {
         m_bUsed = false;

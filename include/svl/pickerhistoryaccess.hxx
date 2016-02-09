@@ -29,7 +29,6 @@ namespace svt
 {
 
 
-
     SVL_DLLPUBLIC void addFolderPicker(
         const css::uno::Reference< css::uno::XInterface >& _rxPicker );
 

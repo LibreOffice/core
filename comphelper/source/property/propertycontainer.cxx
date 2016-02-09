@@ -89,5 +89,4 @@ void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) 
 }   // namespace comphelper
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

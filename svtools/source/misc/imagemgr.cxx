@@ -194,7 +194,6 @@ static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
 };
 
 
-
 static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
 {
     INetURLObject aObj( rURL );

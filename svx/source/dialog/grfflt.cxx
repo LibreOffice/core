@@ -30,8 +30,6 @@
 #include <memory>
 
 
-
-
 sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
 {
     const Graphic&  rGraphic = rFilterObject.GetGraphic();
@@ -273,7 +271,6 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
 
     return nRet;
 }
-
 
 
 void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )

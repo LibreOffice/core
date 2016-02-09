@@ -102,8 +102,6 @@ static inline OUString makeStrings(
 }
 
 
-
-
 class SocketPermission : public Permission
 {
     static char const * s_actions [];
@@ -271,8 +269,6 @@ OUString SocketPermission::toString() const
 }
 
 
-
-
 class FilePermission : public Permission
 {
     static char const * s_actions [];
@@ -424,8 +420,6 @@ OUString FilePermission::toString() const
 }
 
 
-
-
 class RuntimePermission : public Permission
 {
     OUString m_name;
@@ -462,8 +456,6 @@ OUString RuntimePermission::toString() const
 }
 
 
-
-
 bool AllPermission::implies( Permission const & ) const
 {
     return true;
@@ -473,8 +465,6 @@ OUString AllPermission::toString() const
 {
     return OUString("com.sun.star.security.AllPermission");
 }
-
-
 
 
 PermissionCollection::PermissionCollection(

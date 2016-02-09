@@ -75,7 +75,6 @@ namespace frm
     };
 
 
-
     void DefaultCommandDescriptionProvider::impl_init_nothrow( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DefaultCommandDescriptionProvider::impl_init_nothrow: no document => no command descriptions!" );

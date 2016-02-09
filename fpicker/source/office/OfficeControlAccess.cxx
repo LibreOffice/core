@@ -59,7 +59,6 @@ namespace svt
         #define PROPERTY_FLAG_CHECKED               0x00000080
 
 
-
         struct ControlDescription
         {
             const sal_Char* pControlName;
@@ -120,7 +119,6 @@ namespace svt
                 return strcmp(_rDesc1.pControlName, _rDesc2.pControlName) < 0;
             }
         };
-
 
 
         struct ControlProperty

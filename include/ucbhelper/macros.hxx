@@ -31,12 +31,10 @@
 #include <ucbhelper/getcomponentcontext.hxx>
 
 
-
 #define CPPU_TYPE( T )      cppu::UnoType<T>::get()
 #define CPPU_TYPE_REF( T )  CPPU_TYPE( T )
 
 // XTypeProvider impl. internals
-
 
 
 #define XTYPEPROVIDER_COMMON_IMPL( Class )                                  \
@@ -69,9 +67,7 @@ Class::getTypes()                                                           \
 }
 
 
-
 // XTypeProvider impl.
-
 
 
 // 2 interfaces supported
@@ -163,7 +159,6 @@ GETTYPES_IMPL_END
 // XServiceInfo impl. internals
 
 
-
 #define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
 OUString SAL_CALL Class::getImplementationName()                       \
     throw( css::uno::RuntimeException, std::exception )          \
@@ -211,9 +206,7 @@ Class##_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFacto
 }
 
 
-
 // XServiceInfo impl.
-
 
 
 #define ONE_INSTANCE_SERVICE_FACTORY_IMPL( Class )                          \

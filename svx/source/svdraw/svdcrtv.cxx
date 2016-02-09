@@ -118,7 +118,6 @@ ImplConnectMarkerOverlay::~ImplConnectMarkerOverlay()
 }
 
 
-
 class ImpSdrCreateViewExtraData
 {
     // The OverlayObjects for XOR replacement
@@ -179,9 +178,7 @@ void ImpSdrCreateViewExtraData::HideOverlay()
 }
 
 
-
 // CreateView
-
 
 
 void SdrCreateView::ImpClearConnectMarker()
@@ -873,7 +870,6 @@ void SdrCreateView::HideCreateObj()
         maDragStat.SetShown(false);
     }
 }
-
 
 
 bool SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const

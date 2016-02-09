@@ -56,8 +56,6 @@ const int BORDER_X = 0;
 const int BORDER_Y = 0;
 
 
-
-
 class ToolbarMenuEntry
 {
 public:
@@ -97,8 +95,6 @@ public:
         return mbChecked || ( mnBits & ( MenuItemBits::RADIOCHECK | MenuItemBits::CHECKABLE | MenuItemBits::AUTOCHECK ) );
     }
 };
-
-
 
 
 typedef ::cppu::WeakComponentImplHelper<
@@ -186,8 +182,6 @@ private:
 };
 
 
-
-
 typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible,
                                                      css::accessibility::XAccessibleEventBroadcaster,
                                                      css::accessibility::XAccessibleContext,
@@ -240,7 +234,6 @@ private:
     */
     virtual void SAL_CALL disposing() override;
 };
-
 
 
 struct ToolbarMenu_Impl

@@ -61,8 +61,6 @@ SmToken::SmToken(SmTokenType eTokenType,
 }
 
 
-
-
 static const SmTokenTableEntry aTokenTable[] =
 {
     { "Im" , TIM, MS_IM, TGSTANDALONE, 5 },
@@ -311,8 +309,6 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 
     return pRes;
 }
-
-
 
 
 #if OSL_DEBUG_LEVEL > 1

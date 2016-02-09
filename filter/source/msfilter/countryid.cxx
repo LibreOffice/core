@@ -23,13 +23,11 @@
 #include <sal/macros.h>
 
 
-
 namespace msfilter {
 
 // Mapping table ==============================================================
 
 namespace {
-
 
 
 /** Table entry for Windows country ID <-> language type conversion.
@@ -56,7 +54,6 @@ struct CountryEntry
     LanguageType                meLanguage;     /// Corresponding language type.
     bool                        mbUseSubLang;   /// false = Primary only, true = Primary and sub language.
 };
-
 
 
 /** Table for Windows country ID <-> language type conversion.

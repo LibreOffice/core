@@ -160,8 +160,6 @@ namespace svt
     };
 
 
-
-
     TemplateContent::TemplateContent( const INetURLObject& _rURL )
         :m_aURL( _rURL )
     {
@@ -502,7 +500,6 @@ namespace svt
     {
         return OUString(".templdir.cache");
     }
-
 
 
     void TemplateFolderCacheImpl::normalize( TemplateFolderContent& _rState )

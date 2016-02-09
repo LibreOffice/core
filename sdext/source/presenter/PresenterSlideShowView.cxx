@@ -687,7 +687,6 @@ void PresenterSlideShowView::DeactivatePresenterView()
 }
 
 
-
 void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox)
 {
     if ( ! mxCanvas.is())

@@ -36,7 +36,6 @@
 #include <rtl/string.h>
 
 
-
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
@@ -70,8 +69,6 @@ int SAL_CALL _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
     CoUninitialize();
     return 0;
 }
-
-
 
 
 HRESULT doTest()
@@ -164,7 +161,6 @@ HRESULT doTest()
                 varj.Clear();
                 hr= SafeArrayGetElement( ari, &j, &varj);
             }
-
 
 
         }

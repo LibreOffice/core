@@ -58,8 +58,6 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 
 
-
-
 void SmGetLeftSelectionPart(const ESelection &rSel,
                             sal_Int32 &nPara, sal_uInt16 &nPos)
     // returns paragraph number and position of the selections left part
@@ -81,7 +79,6 @@ bool SmEditWindow::IsInlineEditEnabled()
     SmViewShell *pView = GetView();
     return pView && pView->IsInlineEditEnabled();
 }
-
 
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :

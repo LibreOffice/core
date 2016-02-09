@@ -59,7 +59,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-
 namespace xforms
 {
 
@@ -91,7 +90,6 @@ public:
     typedef std::vector<css::uno::Reference<css::util::XModifyListener> > ModifyListeners_t;
     typedef std::vector<css::uno::Reference<css::form::validation::XValidityConstraintListener> > XValidityConstraintListeners_t;
     typedef std::vector<css::uno::Reference<css::form::binding::XListEntryListener> > XListEntryListeners_t;
-
 
 
 private:
@@ -223,8 +221,6 @@ public:
     // - p3ptype (static; no default)
 
 
-
-
     /// get this binding's context node
     xforms::EvaluationContext getEvaluationContext() const;
 
@@ -344,8 +340,6 @@ public:
                css::uno::RuntimeException, std::exception ) override;
 
 
-
-
     // XListEntry Source
 
 
@@ -366,8 +360,6 @@ public:
     virtual void SAL_CALL removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>&)
         throw( css::lang::NullPointerException,
                css::uno::RuntimeException, std::exception ) override;
-
-
 
 
     // XValidator:
@@ -392,7 +384,6 @@ public:
                css::uno::RuntimeException, std::exception ) override;
 
 
-
     // XModifyBroadcaster & friends:
     //   inform listeners about changes in our values
 
@@ -408,9 +399,6 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override;
 
 
-
-
-
     // XNamed:
     //   get/set name
 
@@ -424,8 +412,6 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override;
 
 
-
-
     // xml::dom::event::XEventListener
     //   receive an event if our node changed
 
@@ -435,14 +421,11 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override;
 
 
-
-
     // XUnoTunnel
 
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& )
         throw( css::uno::RuntimeException, std::exception ) override;
-
 
 
     // XCloneable

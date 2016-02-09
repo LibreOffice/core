@@ -32,7 +32,6 @@ namespace pcr
 {
 
 
-
     //= IPropertyEnumRepresentation
 
     class SAL_NO_VTABLE IPropertyEnumRepresentation : public salhelper::SimpleReferenceObject

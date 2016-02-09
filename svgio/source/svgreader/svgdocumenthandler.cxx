@@ -129,7 +129,6 @@ namespace
 }
 
 
-
 namespace svgio
 {
     namespace svgreader

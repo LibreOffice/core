@@ -218,5 +218,4 @@ sal_Int32 ODbaseResultSet::getCurrentFilePos() const
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

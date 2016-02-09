@@ -51,10 +51,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
 
-
-
-
-
 /************
  * Sequence of bytes -> InputStream
  ************/
@@ -195,7 +191,6 @@ public: // Error handler
 public: // ExtendedDocumentHandler
 
 
-
     stack<LocaleNode *> currentNode ;
     LocaleNode * rootNode;
 
@@ -311,9 +306,6 @@ public:
     sal_Char theLocale[50];
     OFileWriter of;
 };
-
-
-
 
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)

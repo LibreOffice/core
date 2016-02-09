@@ -224,11 +224,9 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 SV_IMPL_PERSIST1( SvxFieldData, SvPersistBase );
 
 
-
 SvxFieldData::SvxFieldData()
 {
 }
-
 
 
 SvxFieldData::~SvxFieldData()
@@ -236,12 +234,10 @@ SvxFieldData::~SvxFieldData()
 }
 
 
-
 SvxFieldData* SvxFieldData::Clone() const
 {
     return new SvxFieldData;
 }
-
 
 
 bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
@@ -252,11 +248,9 @@ bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
 }
 
 
-
 void SvxFieldData::Load( SvPersistStream & /*rStm*/ )
 {
 }
-
 
 
 void SvxFieldData::Save( SvPersistStream & /*rStm*/ )
@@ -275,13 +269,11 @@ MetaAction* SvxFieldData::createEndComment()
 }
 
 
-
 SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
     pField = pFld;  // belongs directly to the item
 }
-
 
 
 SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
@@ -291,13 +283,11 @@ SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
 }
 
 
-
 SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
     SfxPoolItem ( rItem )
 {
     pField = rItem.GetField() ? rItem.GetField()->Clone() : nullptr;
 }
-
 
 
 SvxFieldItem::~SvxFieldItem()
@@ -306,12 +296,10 @@ SvxFieldItem::~SvxFieldItem()
 }
 
 
-
 SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
 {
     return new SvxFieldItem(*this);
 }
-
 
 
 SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
@@ -328,7 +316,6 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
     return new SvxFieldItem( pData, Which() );
 }
-
 
 
 SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
@@ -351,7 +338,6 @@ SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) co
 }
 
 
-
 bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
@@ -372,14 +358,12 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 SV_IMPL_PERSIST1( SvxDateField, SvxFieldData );
 
 
-
 SvxDateField::SvxDateField()
 {
     nFixDate = Date( Date::SYSTEM ).GetDate();
     eType = SVXDATETYPE_VAR;
     eFormat = SVXDATEFORMAT_STDSMALL;
 }
-
 
 
 SvxDateField::SvxDateField( const Date& rDate, SvxDateType eT, SvxDateFormat eF )
@@ -390,12 +374,10 @@ SvxDateField::SvxDateField( const Date& rDate, SvxDateType eT, SvxDateFormat eF 
 }
 
 
-
 SvxFieldData* SvxDateField::Clone() const
 {
     return new SvxDateField( *this );
 }
-
 
 
 bool SvxDateField::operator==( const SvxFieldData& rOther ) const
@@ -408,7 +390,6 @@ bool SvxDateField::operator==( const SvxFieldData& rOther ) const
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
 }
-
 
 
 void SvxDateField::Load( SvPersistStream & rStm )
@@ -424,14 +405,12 @@ void SvxDateField::Load( SvPersistStream & rStm )
 }
 
 
-
 void SvxDateField::Save( SvPersistStream & rStm )
 {
     rStm.WriteUInt32( nFixDate );
     rStm.WriteUInt16( eType );
     rStm.WriteUInt16( eFormat );
 }
-
 
 
 OUString SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
@@ -513,12 +492,10 @@ MetaAction* SvxDateField::createBeginComment() const
 SV_IMPL_PERSIST1( SvxURLField, SvxFieldData );
 
 
-
 SvxURLField::SvxURLField()
 {
     eFormat = SVXURLFORMAT_URL;
 }
-
 
 
 SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt )
@@ -528,12 +505,10 @@ SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLF
 }
 
 
-
 SvxFieldData* SvxURLField::Clone() const
 {
     return new SvxURLField( *this );
 }
-
 
 
 bool SvxURLField::operator==( const SvxFieldData& rOther ) const
@@ -547,7 +522,6 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
                 ( aRepresentation == rOtherFld.aRepresentation ) &&
                 ( aTargetFrame == rOtherFld.aTargetFrame ) );
 }
-
 
 
 static void write_unicode( SvPersistStream & rStm, const OUString& rString )
@@ -591,7 +565,6 @@ void SvxURLField::Load( SvPersistStream & rStm )
     aRepresentation = read_unicode( rStm );
     aTargetFrame = read_unicode( rStm );
 }
-
 
 
 void SvxURLField::Save( SvPersistStream & rStm )
@@ -788,14 +761,12 @@ void SvxTableField::Save( SvPersistStream & /*rStm*/ )
 SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
 
 
-
 SvxExtTimeField::SvxExtTimeField()
     : m_nFixTime( tools::Time(tools::Time::SYSTEM).GetTime() )
 {
     eType = SVXTIMETYPE_VAR;
     eFormat = SVXTIMEFORMAT_STANDARD;
 }
-
 
 
 SvxExtTimeField::SvxExtTimeField( const tools::Time& rTime, SvxTimeType eT, SvxTimeFormat eF )
@@ -806,12 +777,10 @@ SvxExtTimeField::SvxExtTimeField( const tools::Time& rTime, SvxTimeType eT, SvxT
 }
 
 
-
 SvxFieldData* SvxExtTimeField::Clone() const
 {
     return new SvxExtTimeField( *this );
 }
-
 
 
 bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
@@ -824,7 +793,6 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
 }
-
 
 
 void SvxExtTimeField::Load( SvPersistStream & rStm )
@@ -840,14 +808,12 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
 }
 
 
-
 void SvxExtTimeField::Save( SvPersistStream & rStm )
 {
     rStm.WriteInt64(m_nFixTime);
     rStm.WriteUInt16( eType );
     rStm.WriteUInt16( eFormat );
 }
-
 
 
 OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
@@ -933,13 +899,11 @@ MetaAction* SvxExtTimeField::createBeginComment() const
 SV_IMPL_PERSIST1( SvxExtFileField, SvxFieldData );
 
 
-
 SvxExtFileField::SvxExtFileField()
 {
     eType = SVXFILETYPE_VAR;
     eFormat = SVXFILEFORMAT_FULLPATH;
 }
-
 
 
 SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileFormat eF )
@@ -950,12 +914,10 @@ SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileF
 }
 
 
-
 SvxFieldData* SvxExtFileField::Clone() const
 {
     return new SvxExtFileField( *this );
 }
-
 
 
 bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
@@ -968,7 +930,6 @@ bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
 }
-
 
 
 void SvxExtFileField::Load( SvPersistStream & rStm )
@@ -986,7 +947,6 @@ void SvxExtFileField::Load( SvPersistStream & rStm )
 }
 
 
-
 void SvxExtFileField::Save( SvPersistStream & rStm )
 {
     // UNICODE: rStm << aFile;
@@ -995,7 +955,6 @@ void SvxExtFileField::Save( SvPersistStream & rStm )
     rStm.WriteUInt16( eType );
     rStm.WriteUInt16( eFormat );
 }
-
 
 
 OUString SvxExtFileField::GetFormatted() const
@@ -1080,13 +1039,11 @@ OUString SvxExtFileField::GetFormatted() const
 SV_IMPL_PERSIST1( SvxAuthorField, SvxFieldData );
 
 
-
 SvxAuthorField::SvxAuthorField()
 {
     eType = SVXAUTHORTYPE_VAR;
     eFormat = SVXAUTHORFORMAT_FULLNAME;
 }
-
 
 
 SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
@@ -1102,12 +1059,10 @@ SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
 }
 
 
-
 SvxFieldData* SvxAuthorField::Clone() const
 {
     return new SvxAuthorField( *this );
 }
-
 
 
 bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
@@ -1122,7 +1077,6 @@ bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
 }
-
 
 
 void SvxAuthorField::Load( SvPersistStream & rStm )
@@ -1141,7 +1095,6 @@ void SvxAuthorField::Load( SvPersistStream & rStm )
 }
 
 
-
 void SvxAuthorField::Save( SvPersistStream & rStm )
 {
     write_unicode( rStm, aName );
@@ -1151,7 +1104,6 @@ void SvxAuthorField::Save( SvPersistStream & rStm )
     rStm.WriteUInt16( eType );
     rStm.WriteUInt16( eFormat );
 }
-
 
 
 OUString SvxAuthorField::GetFormatted() const
@@ -1201,7 +1153,6 @@ SvClassManager& SvxFieldItem::GetClassManager()
 }
 
 
-
 SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
 
 SvxHeaderField::SvxHeaderField() {}
@@ -1225,7 +1176,6 @@ void SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
 }
 
 
-
 SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
 SvxFooterField::SvxFooterField() {}
 
@@ -1246,7 +1196,6 @@ void SvxFooterField::Load( SvPersistStream & /*rStm*/ )
 void SvxFooterField::Save( SvPersistStream & /*rStm*/ )
 {
 }
-
 
 
 SV_IMPL_PERSIST1( SvxDateTimeField, SvxFieldData );

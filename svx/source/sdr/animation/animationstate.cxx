@@ -27,7 +27,6 @@
 #include <comphelper/lok.hxx>
 
 
-
 namespace sdr
 {
     namespace animation

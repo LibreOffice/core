@@ -271,7 +271,6 @@ Sequence<Type> OEditModel::_getTypes()
 }
 
 
-
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, true, true )
     ,m_bMaxTextLenModified(false)

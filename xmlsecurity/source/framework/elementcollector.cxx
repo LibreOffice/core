@@ -81,7 +81,6 @@ ElementCollector::ElementCollector(
 }
 
 
-
 void ElementCollector::notifyListener()
 /****** ElementCollector/notifyListener ***************************************
  *

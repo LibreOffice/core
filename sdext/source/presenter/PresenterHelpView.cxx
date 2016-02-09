@@ -463,7 +463,6 @@ sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly()
 }
 
 
-
 void PresenterHelpView::ProvideCanvas()
 {
     if ( ! mxCanvas.is() && mxPane.is())

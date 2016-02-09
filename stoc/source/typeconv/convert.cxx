@@ -80,7 +80,6 @@ static inline double unsigned_int64_to_double( sal_uInt64 n )
 #endif
 
 
-
 static inline double round( double aVal )
 {
     bool bPos   = (aVal >= 0.0);

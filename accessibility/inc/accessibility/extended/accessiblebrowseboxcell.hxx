@@ -28,7 +28,6 @@ namespace accessibility
 {
 
 
-
     // = AccessibleBrowseBoxCell
 
     /** common accessibility-functionality for browse box elements which occupy a cell
@@ -71,7 +70,6 @@ namespace accessibility
 
 
 }   // namespace accessibility
-
 
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX

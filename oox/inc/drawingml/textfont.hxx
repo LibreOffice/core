@@ -29,7 +29,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 /** carries a CT_TextFont*/
 class TextFont
 {
@@ -65,7 +64,6 @@ private:
     sal_Int32           mnPitch;
     sal_Int32           mnCharset;
 };
-
 
 
 } // namespace drawingml

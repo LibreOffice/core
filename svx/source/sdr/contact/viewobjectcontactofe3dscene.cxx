@@ -30,9 +30,7 @@
 #include <basegfx/tools/canvastools.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace
@@ -52,7 +50,6 @@ namespace
         }
     }
 } // end of anonymous namespace
-
 
 
 namespace sdr

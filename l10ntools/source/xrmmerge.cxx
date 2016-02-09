@@ -146,7 +146,6 @@ int GetError()
 // class XRMResParser
 
 
-
 XRMResParser::XRMResParser()
     : bError( false ),
     bText( false )

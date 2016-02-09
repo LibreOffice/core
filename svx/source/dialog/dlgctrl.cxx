@@ -123,7 +123,6 @@ void SvxRectCtl::Resize()
 }
 
 
-
 void SvxRectCtl::Resize_Impl()
 {
     aSize = GetOutputSize();
@@ -367,7 +366,6 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 }
 
 
-
 void SvxRectCtl::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::ControlForeground )
@@ -377,7 +375,6 @@ void SvxRectCtl::StateChanged( StateChangedType nType )
 
     Window::StateChanged( nType );
 }
-
 
 
 void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1763,7 +1760,6 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
 }
 
 
-
 void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -1988,13 +1984,11 @@ void SvxXLinePreview::dispose()
 }
 
 
-
 void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
 {
     mpGraphic = p;
     maSymbolSize = s;
 }
-
 
 
 void SvxXLinePreview::ResizeSymbol(const Size& s)
@@ -2005,7 +1999,6 @@ void SvxXLinePreview::ResizeSymbol(const Size& s)
         Invalidate();
     }
 }
-
 
 
 void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
@@ -2021,7 +2014,6 @@ void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
     mpLineObjB->SetMergedItemSet(aTempSet);
     mpLineObjC->SetMergedItemSet(aTempSet);
 }
-
 
 
 void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)

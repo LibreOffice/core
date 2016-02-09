@@ -1742,6 +1742,4 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& cat
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

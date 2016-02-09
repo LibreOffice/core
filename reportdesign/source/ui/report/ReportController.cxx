@@ -4214,7 +4214,6 @@ OSectionWindow* OReportController::getSectionWindow(const css::uno::Reference< c
 }
 
 
-
 void OReportController::openZoomDialog()
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

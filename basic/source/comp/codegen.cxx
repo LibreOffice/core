@@ -484,7 +484,6 @@ public:
 };
 
 
-
 template < class T, class S >
 class BufferTransformer : public PCodeVisitor< T >
 {

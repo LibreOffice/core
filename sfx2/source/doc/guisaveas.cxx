@@ -515,7 +515,6 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 }
 
 
-
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
     uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::makeAny(GetDocServiceName()) } };
@@ -1251,7 +1250,6 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
 
     return aRecommendedName;
 }
-
 
 
 // class SfxStoringHelper

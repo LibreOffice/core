@@ -337,7 +337,6 @@ private:
 };
 
 
-
 inline  bool    DbCellControl::isValuePropertyLocked() const
 {
     return m_bAccessingValueProperty;

@@ -681,17 +681,13 @@ void SvtOptionsDrawinglayer_Impl::Notify( const css::uno::Sequence<OUString>& )
 //  public method
 
 
+//  public method
+
 
 //  public method
 
 
-
 //  public method
-
-
-
-//  public method
-
 
 
 //  public method
@@ -700,16 +696,10 @@ void SvtOptionsDrawinglayer_Impl::Notify( const css::uno::Sequence<OUString>& )
 // #i73602#
 
 
-
 // #i74769#, #i75172#
 
 
-
 // #i4219#
-
-
-
-
 
 
 // helper
@@ -738,11 +728,6 @@ bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 }
 
 // primitives
-
-
-
-
-
 
 
 void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( bool bState )

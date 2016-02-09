@@ -20,7 +20,6 @@
 #include <svx/sdrundomanager.hxx>
 
 
-
 SdrUndoManager::SdrUndoManager(sal_uInt16 nMaxUndoActionCount)
     : EditUndoManager(nMaxUndoActionCount)
     , maEndTextEditHdl()

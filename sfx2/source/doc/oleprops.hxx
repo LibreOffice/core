@@ -31,8 +31,6 @@
 #include <com/sun/star/util/Date.hpp>
 
 
-
-
 //namespace {
 
 
@@ -94,7 +92,6 @@ const sal_Int32 CLIPFMT_WIN             = -1;
 const sal_Int32 CLIPDATAFMT_DIB         = 8;
 
 
-
 /** Helper for classes that need text encoding settings.
 
     Classes derived from this class will include functions to store and use
@@ -131,7 +128,6 @@ private:
 };
 
 
-
 /** Helper for classes that need to load or save string values.
 
     Classes derived from this class contain functions to load and save string
@@ -163,7 +159,6 @@ private:
     void                ImplSaveString8( SvStream& rStrm, const OUString& rValue ) const;
     static void         ImplSaveString16( SvStream& rStrm, const OUString& rValue );
 };
-
 
 
 /** Base class for all classes related to OLE property sets.
@@ -207,7 +202,6 @@ private:
 };
 
 
-
 /** Base class for all OLE property objects. */
 class SfxOlePropertyBase : public SfxOleObjectBase
 {
@@ -241,7 +235,6 @@ private:
 };
 
 
-
 /** Property containing custom names for other properties in the property set. */
 class SfxOleDictionaryProperty : public SfxOlePropertyBase, public SfxOleStringHelper
 {
@@ -266,7 +259,6 @@ private:
     typedef ::std::map< sal_Int32, OUString > SfxOlePropNameMap;
     SfxOlePropNameMap   maPropNameMap;
 };
-
 
 
 /** A section in a property set. Contains properties with unique identifiers. */
@@ -356,7 +348,6 @@ private:
 typedef std::shared_ptr< SfxOleSection > SfxOleSectionRef;
 
 
-
 /** Enumerates different section types in OLE property sets. */
 enum SfxOleSectionType
 {
@@ -364,7 +355,6 @@ enum SfxOleSectionType
     SECTION_BUILTIN,        /// Properties built into MS Office.
     SECTION_CUSTOM          /// Custom properties.
 };
-
 
 
 /** Represents a complete property set, may consist of several property sections. */

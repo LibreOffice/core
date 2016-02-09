@@ -64,8 +64,6 @@ public:
 };
 
 
-
-
 // IMPLEMENTATION
 
 // (the implementation of template classes must be accessible to using

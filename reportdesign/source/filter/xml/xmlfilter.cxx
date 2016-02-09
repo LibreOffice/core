@@ -351,7 +351,6 @@ Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) t
 }
 
 
-
 ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, SvXMLImportFlags nImportFlags )
     :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)
 {
@@ -371,7 +370,6 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, S
     m_xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory, false);
     m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TextPropMap::TABLE_DEFAULTS, false );
 }
-
 
 
 ORptFilter::~ORptFilter() throw()

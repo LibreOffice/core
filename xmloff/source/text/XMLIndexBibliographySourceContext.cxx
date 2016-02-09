@@ -41,8 +41,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-
-
 XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

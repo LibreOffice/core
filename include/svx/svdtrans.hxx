@@ -324,7 +324,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_SVX_SVDTRANS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

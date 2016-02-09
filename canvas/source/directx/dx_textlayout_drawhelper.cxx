@@ -47,8 +47,6 @@
 using namespace ::com::sun::star;
 
 
-
-
 namespace dxcanvas
 {
     TextLayoutDrawHelper::TextLayoutDrawHelper(

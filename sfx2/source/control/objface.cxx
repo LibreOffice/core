@@ -275,7 +275,6 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
 }
 
 
-
 SfxInterface::~SfxInterface()
 {
     SfxModule *pMod = pImpData->pModule;
@@ -290,7 +289,6 @@ SfxInterface::~SfxInterface()
             SfxGetpApp()->GetAppSlotPool_Impl().ReleaseInterface(*this);
     }
 }
-
 
 
 // searches for the specified func
@@ -329,7 +327,6 @@ const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
 }
 
 
-
 const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 {
 
@@ -346,7 +343,6 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 
     return pSlot->pLinkedSlot;
 }
-
 
 
 const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
@@ -499,8 +495,6 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
 
     return pImpData->aChildWindows[nNo]->nFeature;
 }
-
-
 
 
 sal_uInt16 SfxInterface::GetChildWindowCount() const

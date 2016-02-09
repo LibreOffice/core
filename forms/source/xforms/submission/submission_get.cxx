@@ -41,7 +41,6 @@ using namespace ucbhelper;
 using namespace std;
 
 
-
 CSubmissionGet::CSubmissionGet(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {

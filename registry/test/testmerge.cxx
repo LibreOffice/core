@@ -187,7 +187,6 @@ void test_merge()
                 OUString("merge2.rdb")), "testMerge error 4");
 
 
-
     REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1), "testMerge error 5");
 
     REG_ENSURE(!key1.openKey("MergeKey1", mkey1), "testMerge error 6");
@@ -216,7 +215,6 @@ void test_merge()
     REG_ENSURE(!key1.closeKey(), "testMerge error 24");
 
 
-
     REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key2), "testMerge error 25");
 
     REG_ENSURE(!key2.openKey("MergeKey2", mkey2), "testMerge error 26");
@@ -243,7 +241,6 @@ void test_merge()
     REG_ENSURE(!mkey2.closeKey(), "testMerge error 43");
 
     REG_ENSURE(!key2.closeKey(), "testMerge error 44");
-
 
 
     REG_ENSURE(!rootKey.openKey("/stardiv/IchbineinMergeKey", key1u2), "testMerge error 40");
@@ -287,7 +284,6 @@ void test_merge()
     REG_ENSURE(!mkey1u2.closeKey(), "testMerge error 70");
 
     REG_ENSURE(!key1u2.closeKey(), "testMerge error 71");
-
 
 
     RegValueType    valueType;
@@ -394,7 +390,6 @@ void test_merge()
 
 
     REG_ENSURE(!key1.closeKey(), "testMerge error 24");
-
 
 
     REG_ENSURE(!rootKey.closeKey(), "testMerge error 10");

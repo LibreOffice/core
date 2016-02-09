@@ -30,7 +30,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 
-
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
@@ -79,7 +78,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cached1_component_getFactory(
     {
         xFactory = CachedDynamicResultSetStubFactory::createServiceFactory( xSMgr );
     }
-
 
 
     if ( xFactory.is() )

@@ -116,7 +116,6 @@ public:
     void getValues( const css::uno::Reference<css::beans::XPropertySet> & );
 
 
-
     /**
      * Get a value from the values array.
      *

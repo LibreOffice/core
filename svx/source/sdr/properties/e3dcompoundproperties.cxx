@@ -23,7 +23,6 @@
 #include <svx/scene3d.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

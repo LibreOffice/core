@@ -41,11 +41,7 @@ using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 
-
-
 // HierarchyContentProvider Implementation.
-
-
 
 
 HierarchyContentProvider::HierarchyContentProvider(
@@ -59,7 +55,6 @@ HierarchyContentProvider::HierarchyContentProvider(
 HierarchyContentProvider::~HierarchyContentProvider()
 {
 }
-
 
 
 // XInterface methods.
@@ -91,7 +86,6 @@ css::uno::Any SAL_CALL HierarchyContentProvider::queryInterface( const css::uno:
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
@@ -99,9 +93,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       lang::XInitialization );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
@@ -109,17 +101,13 @@ XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
                      "com.sun.star.ucb.HierarchyContentProvider" );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
 
 
-
 // XContentProvider methods.
-
 
 
 // virtual
@@ -154,9 +142,7 @@ HierarchyContentProvider::queryContent(
 }
 
 
-
 // XInitialization methods.
-
 
 
 // virtual
@@ -169,9 +155,7 @@ void SAL_CALL HierarchyContentProvider::initialize(
 }
 
 
-
 //  Non-interface methods.
-
 
 
 uno::Reference< lang::XMultiServiceFactory >

@@ -31,7 +31,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct ChartSpaceModel;
 
 class ChartSpaceConverter : public ConverterBase< ChartSpaceModel >
@@ -45,7 +44,6 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
                             const css::awt::Point& rChartPos );
 };
-
 
 
 } // namespace chart

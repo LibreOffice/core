@@ -35,8 +35,6 @@ class LocaleDataWrapper;
 class LanguageTag;
 
 
-
-
 class VCL_DLLPUBLIC FormatterBase
 {
 private:
@@ -89,9 +87,6 @@ public:
 };
 
 
-
-
-
 #define PATTERN_FORMAT_EMPTYLITERALS    ((sal_uInt16)0x0001)
 
 class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
@@ -126,8 +121,6 @@ public:
     void                    SetString( const OUString& rStr );
     OUString                GetString() const;
 };
-
-
 
 
 class VCL_DLLPUBLIC NumericFormatter : public FormatterBase
@@ -206,8 +199,6 @@ public:
 };
 
 
-
-
 class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
 {
 private:
@@ -262,9 +253,6 @@ public:
 };
 
 
-
-
-
 class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 {
 private:
@@ -285,9 +273,6 @@ public:
     virtual sal_Int64       GetValue() const override;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC DateFormatter : public FormatterBase
@@ -340,7 +325,6 @@ public:
     const Date&             GetMax() const { return maMax; }
 
 
-
     // MT: Remove these methods too, ExtDateFormat should be enough!
     //     What should happen if using DDMMYYYY, but ShowCentury=false?
 
@@ -378,9 +362,6 @@ public:
     void                    EnforceValidValue( bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
     inline bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
-
-
-
 
 
 class VCL_DLLPUBLIC TimeFormatter : public FormatterBase
@@ -457,9 +438,6 @@ public:
 };
 
 
-
-
-
 class VCL_DLLPUBLIC PatternField : public SpinField, public PatternFormatter
 {
 public:
@@ -470,9 +448,6 @@ public:
     virtual void            Modify() override;
     virtual void            dispose() override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC NumericField : public SpinField, public NumericFormatter
@@ -499,9 +474,6 @@ public:
     virtual bool            set_property(const OString &rKey, const OString &rValue) override;
     virtual void            dispose() override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC MetricField : public SpinField, public MetricFormatter
@@ -571,9 +543,6 @@ public:
 };
 
 
-
-
-
 class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
 {
 public:
@@ -591,9 +560,6 @@ public:
     virtual void            Last() override;
     virtual void            dispose() override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC DateField : public SpinField, public DateFormatter
@@ -625,8 +591,6 @@ public:
     Date                    GetLast() const                     { return maLast; }
     virtual void            dispose() override;
 };
-
-
 
 
 class VCL_DLLPUBLIC TimeField : public SpinField, public TimeFormatter
@@ -662,9 +626,6 @@ public:
 };
 
 
-
-
-
 class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
 {
 public:
@@ -678,9 +639,6 @@ public:
     virtual void            ReformatAll() override;
     virtual void            dispose() override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
@@ -701,9 +659,6 @@ public:
     void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
     virtual void            dispose() override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
@@ -736,9 +691,6 @@ public:
 };
 
 
-
-
-
 class VCL_DLLPUBLIC CurrencyBox : public ComboBox, public CurrencyFormatter
 {
 public:
@@ -757,8 +709,6 @@ public:
 };
 
 
-
-
 class VCL_DLLPUBLIC DateBox : public ComboBox, public DateFormatter
 {
 public:
@@ -773,9 +723,6 @@ public:
     virtual void            ReformatAll() override;
     virtual void            dispose() override;
 };
-
-
-
 
 
 class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter

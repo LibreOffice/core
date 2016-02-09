@@ -22,7 +22,6 @@
 #include <sal/macros.h>
 
 
-
 const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgodtottodm";
 const std::string CALC_FILE_EXTENSIONS     = "sxcstcodsots";
 const std::string DRAW_FILE_EXTENSIONS     = "sxdstdodgotg";

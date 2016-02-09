@@ -154,8 +154,6 @@ const vFieldInfo[] =
 } // namespace
 
 
-
-
 // Row
 
 struct SvxGeneralTabPage::Row
@@ -174,8 +172,6 @@ public:
         pLabel->Show();
     }
 };
-
-
 
 
 // Field
@@ -200,7 +196,6 @@ public:
         pEdit->Show();
     }
 };
-
 
 
 SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
@@ -283,7 +278,6 @@ void SvxGeneralTabPage::InitControls ()
 }
 
 
-
 void SvxGeneralTabPage::SetLinks ()
 {
     // link for updating the initials
@@ -292,7 +286,6 @@ void SvxGeneralTabPage::SetLinks ()
     for (unsigned i = rNameRow.nFirstField; i != rNameRow.nLastField - 1; ++i)
         vFields[i]->pEdit->SetModifyHdl(aLink);
 }
-
 
 
 VclPtr<SfxTabPage> SvxGeneralTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
@@ -340,7 +333,6 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 }
 
 
-
 // ModifyHdl_Impl()
 // This handler updates the initials (short name)
 // when one of the name fields was updated.
@@ -377,7 +369,6 @@ IMPL_LINK_TYPED( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
 }
 
 
-
 bool SvxGeneralTabPage::GetAddress_Impl()
 {
     // updating
@@ -394,7 +385,6 @@ bool SvxGeneralTabPage::GetAddress_Impl()
             return true;
     return false;
 }
-
 
 
 void SvxGeneralTabPage::SetAddress_Impl()
@@ -424,7 +414,6 @@ void SvxGeneralTabPage::SetAddress_Impl()
     for (unsigned i = 0; i != vFields.size(); ++i)
         vFields[i]->pEdit->SaveValue();
 }
-
 
 
 SvxGeneralTabPage::sfxpg SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )

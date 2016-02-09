@@ -52,9 +52,6 @@ public:
 };
 
 
-
-
-
 class CntItemPool: public SfxItemPool
 {
     static CntItemPool* _pThePool;
@@ -68,8 +65,6 @@ public:
     static CntItemPool* Acquire();
     static sal_uInt16       Release();
 };
-
-
 
 
 // static

@@ -33,11 +33,7 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-
-
 // DocumentContentFactory Implementation.
-
-
 
 
 DocumentContentFactory::DocumentContentFactory(
@@ -53,9 +49,7 @@ DocumentContentFactory::~DocumentContentFactory()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -99,9 +93,7 @@ DocumentContentFactory::getSupportedServiceNames_Static()
 }
 
 
-
 // XTransientDocumentsDocumentContentFactory methods.
-
 
 
 // virtual
@@ -131,9 +123,7 @@ DocumentContentFactory::createDocumentContent(
 }
 
 
-
 // Service factory implementation.
-
 
 
 static uno::Reference< uno::XInterface > SAL_CALL

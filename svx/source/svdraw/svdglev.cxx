@@ -30,7 +30,6 @@
 #include <svx/svdobj.hxx>
 
 
-
 SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
     SdrPolyEditView(pModel1,pOut)
 {
@@ -39,7 +38,6 @@ SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
 SdrGlueEditView::~SdrGlueEditView()
 {
 }
-
 
 
 void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
@@ -85,7 +83,6 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
 }
 
 
-
 static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*, const void*)
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
@@ -129,7 +126,6 @@ void SdrGlueEditView::SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, boo
 }
 
 
-
 static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*, const void*)
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
@@ -164,7 +160,6 @@ void SdrGlueEditView::SetMarkedGluePointsPercent(bool bOn)
     ImpDoMarkedGluePoints(ImpSetPercent,false,&bOn);
     EndUndo();
 }
-
 
 
 static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet, const void*)
@@ -266,7 +261,6 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
 }
 
 
-
 void SdrGlueEditView::ImpCopyMarkedGluePoints()
 {
     const bool bUndo = IsUndoEnabled();
@@ -316,7 +310,6 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
 }
 
 
-
 void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
 {
     const size_t nMarkCount=GetMarkedObjectCount();
@@ -352,7 +345,6 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
 }
 
 
-
 static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
 {
     rPt.X()+=static_cast<const Size*>(p1)->Width();
@@ -372,7 +364,6 @@ void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
 }
 
 
-
 static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
     ResizePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
@@ -389,7 +380,6 @@ void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& 
     EndUndo();
     AdjustMarkHdl();
 }
-
 
 
 static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)

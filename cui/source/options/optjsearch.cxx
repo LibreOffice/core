@@ -26,7 +26,6 @@
 using namespace com::sun::star::i18n;
 
 
-
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptJSearchPage", "cui/ui/optjsearchpage.ui", &rSet )
 {

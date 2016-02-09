@@ -102,7 +102,6 @@ const sal_uInt16 SC_HTTP_VERSION_NOT_SUPPORTED       = 505;
 const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
 
 
-
 class DAVException : public std::exception
 {
     public:

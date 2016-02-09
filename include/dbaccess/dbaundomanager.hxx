@@ -35,7 +35,6 @@ namespace dbaui
 {
 
 
-
     //= UndoManager
 
     struct UndoManager_Impl;

@@ -61,7 +61,6 @@ namespace dbtools
     using ::connectivity::OSQLParseNode;
 
 
-
     static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
     {
         OSL_ENSURE( !_rSeparator.isEmpty(), "::lcl_getSeparatorChar: invalid separator string!" );
@@ -443,7 +442,6 @@ namespace dbtools
     }
 
 }   // namespace dbtools
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

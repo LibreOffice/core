@@ -18,7 +18,6 @@
  */
 
 
-
 //  File:       ooofilt.cxx
 //  Contents:   Filter Implementation for OpenOffice.Org Document using
 //              Indexing Service
@@ -957,7 +956,6 @@ STDAPI DllRegisterServer()
 {
     return S_OK;
 }
-
 
 
 STDAPI DllUnregisterServer()

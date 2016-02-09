@@ -860,7 +860,6 @@ Color SvxStyleBox_Impl::TestColorsVisible(const Color &FontCol, const Color &Bac
 }
 
 
-
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
     bool bChanged = false;
@@ -2904,7 +2903,6 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
         rBox.SetQuickHelpText( GetId(), aDefaultText );
     rBox.EnableItem( GetId(), eState != SfxItemState::DISABLED );
 }
-
 
 
 static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )

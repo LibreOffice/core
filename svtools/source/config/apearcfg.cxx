@@ -224,5 +224,4 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

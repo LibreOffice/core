@@ -24,7 +24,6 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
 
-
 namespace sdr
 {
     namespace overlay

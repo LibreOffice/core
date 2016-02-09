@@ -96,7 +96,6 @@ using namespace ::cppu;
 #include "sfxslots.hxx"
 
 
-
 class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<
     datatransfer::clipboard::XClipboardListener >
 {
@@ -399,9 +398,6 @@ void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
         }
     }
 }
-
-
-
 
 
 void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
@@ -752,7 +748,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 }
 
 
-
 void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 {
 
@@ -825,7 +820,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 }
 
 
-
 void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
     const Fraction &rZoomY )
 {
@@ -851,13 +845,11 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 }
 
 
-
 void SfxViewShell::OutplaceActivated( bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
     if ( !bActive )
         GetFrame()->GetFrame().Appear();
 }
-
 
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
@@ -872,7 +864,6 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 }
 
 
-
 void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     if ( !pFrame->GetFrame().IsClosing_Impl() || SfxViewFrame::Current() != pFrame )
@@ -881,7 +872,6 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 
     pFrame->GetBindings().InvalidateAll(true);
 }
-
 
 
 SfxInPlaceClient* SfxViewShell::FindIPClient
@@ -907,12 +897,10 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
 }
 
 
-
 SfxInPlaceClient* SfxViewShell::GetIPClient() const
 {
     return GetUIActiveClient();
 }
-
 
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
@@ -949,7 +937,6 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 }
 
 
-
 void SfxViewShell::Activate( bool bMDI )
 {
     if ( bMDI )
@@ -963,11 +950,9 @@ void SfxViewShell::Activate( bool bMDI )
 }
 
 
-
 void SfxViewShell::Deactivate(bool /*bMDI*/)
 {
 }
-
 
 
 void SfxViewShell::AdjustPosSizePixel
@@ -978,7 +963,6 @@ void SfxViewShell::AdjustPosSizePixel
 
 {
 }
-
 
 
 void SfxViewShell::Move()
@@ -1000,7 +984,6 @@ void SfxViewShell::Move()
 
 {
 }
-
 
 
 void SfxViewShell::OuterResizePixel
@@ -1052,7 +1035,6 @@ void SfxViewShell::OuterResizePixel
 }
 
 
-
 void SfxViewShell::InnerResizePixel
 (
     const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
@@ -1102,7 +1084,6 @@ void SfxViewShell::InnerResizePixel
 }
 
 
-
 void SfxViewShell::InvalidateBorder()
 {
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
@@ -1113,7 +1094,6 @@ void SfxViewShell::InvalidateBorder()
         pImp->m_pController->BorderWidthsChanged_Impl();
     }
 }
-
 
 
 void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
@@ -1130,14 +1110,12 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
 }
 
 
-
 const SvBorder& SfxViewShell::GetBorderPixel() const
 {
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
     return GetViewFrame()->GetBorderPixelImpl();
 }
-
 
 
 void SfxViewShell::SetWindow
@@ -1181,7 +1159,6 @@ void SfxViewShell::SetWindow
 }
 
 
-
 SfxViewShell::SfxViewShell
 (
     SfxViewFrame*     pViewFrame,     /*  <SfxViewFrame>, which will be
@@ -1212,7 +1189,6 @@ SfxViewShell::SfxViewShell
     SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
     rViewArr.push_back(this);
 }
-
 
 
 SfxViewShell::~SfxViewShell()
@@ -1266,13 +1242,11 @@ bool SfxViewShell::PrepareClose
 }
 
 
-
 SfxViewShell* SfxViewShell::Current()
 {
     SfxViewFrame *pCurrent = SfxViewFrame::Current();
     return pCurrent ? pCurrent->GetViewShell() : nullptr;
 }
-
 
 
 SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
@@ -1292,7 +1266,6 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 }
 
 
-
 SdrView* SfxViewShell::GetDrawView() const
 
 /*  [Description]
@@ -1306,7 +1279,6 @@ SdrView* SfxViewShell::GetDrawView() const
 {
     return nullptr;
 }
-
 
 
 OUString SfxViewShell::GetSelectionText
@@ -1336,7 +1308,6 @@ OUString SfxViewShell::GetSelectionText
 {
     return OUString();
 }
-
 
 
 bool SfxViewShell::HasSelection( bool ) const
@@ -1419,11 +1390,9 @@ void SfxViewShell::PushSubShells_Impl( bool bPush )
 }
 
 
-
 void SfxViewShell::WriteUserData( OUString&, bool )
 {
 }
-
 
 
 void SfxViewShell::ReadUserData(const OUString&, bool )
@@ -1437,7 +1406,6 @@ void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyV
 void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >&, bool )
 {
 }
-
 
 
 // returns the first shell of spec. type viewing the specified doc.
@@ -1516,7 +1484,6 @@ SfxViewShell* SfxViewShell::GetNext
 
     return nullptr;
 }
-
 
 
 void SfxViewShell::Notify( SfxBroadcaster& rBC,
@@ -1613,7 +1580,6 @@ bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 }
 
 
-
 void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
 /*  [Description]
@@ -1624,7 +1590,6 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
 {
 }
-
 
 
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
@@ -1643,7 +1608,6 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 }
 
 
-
 void SfxViewShell::DisconnectAllClients()
 {
     SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
@@ -1656,11 +1620,9 @@ void SfxViewShell::DisconnectAllClients()
 }
 
 
-
 void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 {
 }
-
 
 
 void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
@@ -1736,12 +1698,10 @@ void SfxViewShell::DiscardClients_Impl()
 }
 
 
-
 SfxObjectShell* SfxViewShell::GetObjectShell()
 {
     return pFrame ? pFrame->GetObjectShell() : nullptr;
 }
-
 
 
 Reference< XModel > SfxViewShell::GetCurrentDocument() const
@@ -1756,7 +1716,6 @@ Reference< XModel > SfxViewShell::GetCurrentDocument() const
 }
 
 
-
 void SfxViewShell::SetCurrentDocument() const
 {
     uno::Reference< frame::XModel > xDocument( GetCurrentDocument() );
@@ -1765,12 +1724,10 @@ void SfxViewShell::SetCurrentDocument() const
 }
 
 
-
 const Size& SfxViewShell::GetMargin() const
 {
     return pImp->aMargin;
 }
-
 
 
 void SfxViewShell::SetMargin( const Size& rSize )

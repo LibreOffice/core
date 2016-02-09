@@ -39,7 +39,6 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
 
 
-
 OXMLImage::OXMLImage( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
@@ -110,7 +109,6 @@ OXMLImage::~OXMLImage()
 {
 
 }
-
 
 
 } // namespace rptxml

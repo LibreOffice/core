@@ -27,13 +27,11 @@
 #include <xmloff/xmlimp.hxx>
 
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
-
 
 
 XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,

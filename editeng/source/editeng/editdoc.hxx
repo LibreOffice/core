@@ -368,7 +368,6 @@ struct ExtraPortionInfo
 };
 
 
-
 // class TextPortion
 
 class TextPortion
@@ -549,7 +548,6 @@ public:
     EditLine&   operator = ( const EditLine& rLine );
     friend bool operator == ( const EditLine& r1,  const EditLine& r2  );
 };
-
 
 
 // class LineList

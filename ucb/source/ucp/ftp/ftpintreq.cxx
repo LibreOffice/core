@@ -47,8 +47,6 @@ void SAL_CALL XInteractionApproveImpl::select()
 }
 
 
-
-
 // XInteractionDisapproveImpl
 
 XInteractionDisapproveImpl::XInteractionDisapproveImpl()

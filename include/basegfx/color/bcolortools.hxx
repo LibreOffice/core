@@ -24,7 +24,6 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-
 namespace basegfx
 {
     class BColor;

@@ -27,7 +27,6 @@
 #include <sfx2/objsh.hxx>
 
 
-
 FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
     FieldUnit eUnit = FUNIT_INCH;

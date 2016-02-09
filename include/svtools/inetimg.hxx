@@ -26,7 +26,6 @@ class SvData;
 class SotDataObject;
 
 
-
 class INetImage
 {
     OUString        aImageURL;

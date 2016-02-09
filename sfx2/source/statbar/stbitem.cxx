@@ -52,7 +52,6 @@
 using namespace ::com::sun::star;
 
 
-
 sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons )
 {
     sal_uInt16 nVCLMouseButtons( 0 );
@@ -66,7 +65,6 @@ sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouse
 
     return nVCLMouseButtons;
 }
-
 
 
 svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
@@ -130,7 +128,6 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 }
 
 
-
 SfxStatusBarControl::SfxStatusBarControl
 (
     sal_uInt16      nSlotID,            /* Slot-Id which is connected to this
@@ -161,7 +158,6 @@ SfxStatusBarControl::SfxStatusBarControl
     pBar( &rBar )
 {
 }
-
 
 
 SfxStatusBarControl::~SfxStatusBarControl()
@@ -334,7 +330,6 @@ throw ( uno::RuntimeException, std::exception )
 }
 
 
-
 sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
 throw (uno::RuntimeException, std::exception)
@@ -349,7 +344,6 @@ throw (uno::RuntimeException, std::exception)
                               0 );
     return MouseMove( aMouseEvent );
 }
-
 
 
 sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
@@ -368,7 +362,6 @@ throw ( uno::RuntimeException, std::exception )
 }
 
 
-
 void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
@@ -382,7 +375,6 @@ throw (css::uno::RuntimeException, std::exception)
 
     Command( aCmdEvent );
 }
-
 
 
 void SAL_CALL SfxStatusBarControl::paint(
@@ -403,14 +395,12 @@ throw ( ::uno::RuntimeException, std::exception )
 }
 
 
-
 void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
 throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     Click();
 }
-
 
 
 void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
@@ -457,7 +447,6 @@ void SfxStatusBarControl::StateChanged
 }
 
 
-
 bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
 /*  [Description]
@@ -482,7 +471,6 @@ bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 {
     return false;
 }
-
 
 
 bool SfxStatusBarControl::MouseMove( const MouseEvent & )
@@ -537,7 +525,6 @@ bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 }
 
 
-
 void SfxStatusBarControl::Command( const CommandEvent& )
 
 /*  [Description]
@@ -552,7 +539,6 @@ void SfxStatusBarControl::Command( const CommandEvent& )
 }
 
 
-
 void SfxStatusBarControl::Click()
 
 /*  [Description]
@@ -565,7 +551,6 @@ void SfxStatusBarControl::Click()
     css::uno::Sequence< css::beans::PropertyValue > aArgs;
     execute( aArgs );
 }
-
 
 
 void SfxStatusBarControl::Paint
@@ -585,7 +570,6 @@ void SfxStatusBarControl::Paint
 
 {
 }
-
 
 
 SfxStatusBarControl* SfxStatusBarControl::CreateControl

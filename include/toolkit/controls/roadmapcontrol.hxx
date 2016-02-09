@@ -53,7 +53,6 @@ namespace toolkit
                                 >   UnoControlRoadmapModel_IBase;
 
 
-
     typedef UnoControlBase  UnoControlRoadmap_Base;
     typedef ::cppu::ImplHelper4 <   css::awt::XItemEventBroadcaster
                                 ,   css::container::XContainerListener
@@ -62,11 +61,8 @@ namespace toolkit
                                 >   UnoControlRoadmap_IBase;
 
 
-
-
     typedef ::cppu::ImplHelper2< css::container::XContainerListener,
                                  css::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
-
 
 
     // = UnoControlRoadmapModel
@@ -147,7 +143,6 @@ namespace toolkit
     };
 
 
-
     // = UnoRoadmapControl
 
     class UnoRoadmapControl : public UnoControlRoadmap_Base,
@@ -192,8 +187,6 @@ namespace toolkit
 
 
 } // toolkit
-
-
 
 
 #endif // _ INCLUDED_TOOLKIT_CONTROLS_ROADMAPCONTROL_HXX

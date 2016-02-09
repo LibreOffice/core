@@ -24,8 +24,6 @@
 #include <comphelper/servicehelper.hxx>
 
 
-
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -38,9 +36,7 @@ using namespace ::svt;
 using namespace ::svt::table;
 
 
-
 namespace accessibility {
-
 
 
 AccessibleGridControlHeader::AccessibleGridControlHeader(

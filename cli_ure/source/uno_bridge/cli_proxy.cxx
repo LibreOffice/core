@@ -844,7 +844,6 @@ uno_Interface* CliProxy::create(Bridge const * bridge,
 }
 
 
-
 void SAL_CALL CliProxy::uno_DispatchMethod(
         struct _uno_Interface *,
         const struct _typelib_TypeDescription *,
@@ -884,8 +883,6 @@ inline void CliProxy::release() const
     }
 }
 }
-
-
 
 
 extern "C"
@@ -1107,9 +1104,6 @@ void SAL_CALL cli_proxy_dispatch(
 #endif
     }
 }
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

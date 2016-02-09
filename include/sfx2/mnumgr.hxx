@@ -63,7 +63,6 @@ public:
 };
 
 
-
 class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:

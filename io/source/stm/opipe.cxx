@@ -122,7 +122,6 @@ private:
 };
 
 
-
 OPipeImpl::OPipeImpl()
 {
     m_nBytesToSkip  = 0;
@@ -382,8 +381,6 @@ Reference < XConnectable > OPipeImpl::getPredecessor() throw( RuntimeException, 
 {
     return m_pred;
 }
-
-
 
 
 // XServiceInfo

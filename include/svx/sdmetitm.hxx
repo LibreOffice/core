@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 // class SdrAngleItem
 // For all metrics. GetPresentation returns for example for
 // Value=2500 a "25mm".

@@ -44,7 +44,6 @@ struct MutexHolder
 };
 
 
-
 class ParentStorageHolder : public MutexHolder
 {
 public:
@@ -64,7 +63,6 @@ private:
     css::uno::Reference< css::embed::XStorage > m_xParentStorage;
     bool                                  m_bParentIsRootStorage;
 };
-
 
 
 typedef
@@ -288,7 +286,6 @@ private:
 };
 
 
-
 typedef
     cppu::WeakImplHelper<
         css::io::XOutputStream,
@@ -361,7 +358,6 @@ private:
     css::uno::Reference<
         css::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
-
 
 
 typedef cppu::WeakImplHelper< css::io::XStream,

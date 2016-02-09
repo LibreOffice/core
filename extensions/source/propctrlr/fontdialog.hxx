@@ -29,7 +29,6 @@ namespace pcr
 {
 
 
-
     //= ControlCharacterDialog
 
     class ControlCharacterDialog : public SfxTabDialog

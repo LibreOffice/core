@@ -18,10 +18,7 @@
  */
 
 
-
-
 // Global header
-
 
 
 #include <limits.h>
@@ -33,7 +30,6 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-
 
 
 // Project-local header
@@ -298,7 +294,6 @@ bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& rEnd
 
     return true;
 }
-
 
 
 SvxEditSourceAdapter::SvxEditSourceAdapter() : mbEditSourceValid( false )

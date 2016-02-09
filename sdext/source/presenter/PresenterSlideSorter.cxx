@@ -681,7 +681,6 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
 }
 
 
-
 void PresenterSlideSorter::UpdateLayout()
 {
     if ( ! mxWindow.is())

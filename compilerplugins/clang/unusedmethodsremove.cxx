@@ -142,7 +142,6 @@ bool UnusedMethodsRemove::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl 
 }
 
 
-
 loplugin::Plugin::Registration< UnusedMethodsRemove > X("unusedmethodsremove", false);
 
 }

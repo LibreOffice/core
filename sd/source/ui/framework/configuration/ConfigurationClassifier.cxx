@@ -163,7 +163,6 @@ void ConfigurationClassifier::CopyResources (
 }
 
 
-
 } } // end of namespace sd::framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

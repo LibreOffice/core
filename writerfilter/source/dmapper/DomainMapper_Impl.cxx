@@ -443,7 +443,6 @@ void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 }
 
 
-
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
     m_bDummyParaAddedForTableInSection = bIsAdded;
@@ -466,7 +465,6 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
 {
     m_bSdt = bSdt;
 }
-
 
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
@@ -560,7 +558,6 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
         pRet = m_aPropertyStacks[eId].top();
     return pRet;
 }
-
 
 
 uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
@@ -1321,7 +1318,6 @@ void DomainMapper_Impl::appendTextContent(
 }
 
 
-
 void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
     static const char sEmbeddedService[] = "com.sun.star.text.TextEmbeddedObject";
@@ -1714,7 +1710,6 @@ void DomainMapper_Impl::EndParaMarkerChange( )
     m_bIsParaMarkerChange = false;
     m_currentRedline.reset();
 }
-
 
 
 void DomainMapper_Impl::PushAnnotation()
@@ -4774,7 +4769,6 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
 }
 
 
-
 void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sal_Int32 ndxaLnn )
 {
     if( !m_bLineNumberingSet )
@@ -4822,7 +4816,6 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
 }
 
 
-
 _PageMar::_PageMar()
 {
     header = footer = ConversionHelper::convertTwipToMM100(sal_Int32(720));
@@ -4832,7 +4825,6 @@ _PageMar::_PageMar()
     right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
     gutter = 0;
 }
-
 
 
 void DomainMapper_Impl::RegisterFrameConversion(

@@ -87,7 +87,6 @@ namespace connectivity
             OKeySet::Vector::iterator               m_aFileSetIter;
 
 
-
             OSortIndex*                             m_pSortIndex;
             ::rtl::Reference<connectivity::OSQLColumns> m_xColumns; // this are the select columns
             ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;

@@ -449,7 +449,6 @@ ORegistry::~ORegistry()
 }
 
 
-
 //  initRegistry
 
 RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode, bool bCreate)
@@ -516,7 +515,6 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
 }
 
 
-
 //  closeRegistry
 
 RegError ORegistry::closeRegistry()
@@ -534,7 +532,6 @@ RegError ORegistry::closeRegistry()
         return RegError::REGISTRY_NOT_EXISTS;
     }
 }
-
 
 
 //  destroyRegistry
@@ -692,7 +689,6 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 }
 
 
-
 //  openKey
 
 RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
@@ -739,7 +735,6 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
     *phOpenKey = i->second;
     return RegError::NO_ERROR;
 }
-
 
 
 //  closeKey
@@ -898,7 +893,6 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 }
 
 
-
 //  loadKey
 
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
@@ -943,7 +937,6 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
     (void) pReg->releaseKey(pRootKey);
     return _ret;
 }
-
 
 
 //  loadAndSaveValue()
@@ -1071,7 +1064,6 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     rtl_freeMemory(pBuffer);
     return _ret;
 }
-
 
 
 //  checkblop()
@@ -1348,7 +1340,6 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
 }
 
 
-
 //  getRootKey()
 
 ORegKey* ORegistry::getRootKey()
@@ -1356,7 +1347,6 @@ ORegKey* ORegistry::getRootKey()
     m_openKeyTable[ROOT]->acquire();
     return m_openKeyTable[ROOT];
 }
-
 
 
 //  dumpRegistry()

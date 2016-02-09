@@ -90,8 +90,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
 }
 
 
-
-
 EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
     const SdrMarkList& rMarkList,
     const ViewType eViewType)
@@ -198,8 +196,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
 }
 
 
-
-
 EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt16 nObjectId)
 {
     switch (nObjectId)
@@ -243,8 +239,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt
             return EnumContext::Context_Unknown;
     }
 }
-
-
 
 
 EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
@@ -311,8 +305,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
 }
 
 
-
-
 sal_uInt32 SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMarkList)
 {
     const size_t nMarkCount (rMarkList.GetMarkCount());
@@ -336,8 +328,6 @@ sal_uInt32 SelectionAnalyzer::GetInventorTypeFromMark (const SdrMarkList& rMarkL
 
     return nFirstInv;
 }
-
-
 
 
 sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
@@ -393,8 +383,6 @@ sal_uInt16 SelectionAnalyzer::GetObjectTypeFromGroup (const SdrObject* pObj)
 }
 
 
-
-
 sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkList)
 {
     const size_t nMarkCount (rMarkList.GetMarkCount());
@@ -444,8 +432,6 @@ sal_uInt16  SelectionAnalyzer::GetObjectTypeFromMark (const SdrMarkList& rMarkLi
 }
 
 
-
-
 bool SelectionAnalyzer::IsShapeType (const sal_uInt16 nType)
 {
     switch (nType)
@@ -478,8 +464,6 @@ bool SelectionAnalyzer::IsShapeType (const sal_uInt16 nType)
 }
 
 
-
-
 bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
 {
     switch(nType)
@@ -494,7 +478,6 @@ bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
             return false;
     }
 }
-
 
 
 } } // end of namespace svx::sidebar

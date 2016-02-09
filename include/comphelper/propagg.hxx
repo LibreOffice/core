@@ -31,10 +31,8 @@
 //= property helper classes
 
 
-
 namespace comphelper
 {
-
 
 
 //= OPropertyAccessor

@@ -30,7 +30,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-
 //************ Class: java.sql.Driver
 
 

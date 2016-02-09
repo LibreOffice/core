@@ -28,8 +28,6 @@
 class ToolBox;
 
 
-
-
 enum class FloatWinPopupFlags
 {
     NONE                 = 0x000000,

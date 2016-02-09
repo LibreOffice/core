@@ -27,7 +27,6 @@
 #include "keyimpl.hxx"
 
 
-
 //  acquireKey
 
 void REGISTRY_CALLTYPE acquireKey(RegKeyHandle hKey)
@@ -39,7 +38,6 @@ void REGISTRY_CALLTYPE acquireKey(RegKeyHandle hKey)
         (void) pReg->acquireKey(pKey);
     }
 }
-
 
 
 //  releaseKey
@@ -55,7 +53,6 @@ void REGISTRY_CALLTYPE releaseKey(RegKeyHandle hKey)
 }
 
 
-
 //  isKeyReadOnly
 
 sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
@@ -63,7 +60,6 @@ sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     return pKey != nullptr && pKey->isReadOnly();
 }
-
 
 
 //  getKeyName
@@ -81,7 +77,6 @@ RegError REGISTRY_CALLTYPE getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName)
         return RegError::INVALID_KEY;
     }
 }
-
 
 
 //  createKey
@@ -671,7 +666,6 @@ RegError REGISTRY_CALLTYPE freeKeyNames(rtl_uString** pKeyNames,
 //  C API
 
 
-
 //  reg_openKey
 
 RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
@@ -694,7 +688,6 @@ RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey)
 
     return closeKey(hKey);
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

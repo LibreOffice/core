@@ -142,7 +142,6 @@ private:
 };
 
 
-
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const OUString& rFileName,
@@ -422,11 +421,9 @@ void SvxXMLXTableExportComponent::_ExportMasterStyles() {}
 void SvxXMLXTableExportComponent::_ExportContent() {}
 
 
-
 SvxXMLTableEntryExporter::~SvxXMLTableEntryExporter()
 {
 }
-
 
 
 SvxXMLColorEntryExporter::SvxXMLColorEntryExporter( SvXMLExport& rExport )
@@ -453,7 +450,6 @@ void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any&
 }
 
 
-
 SvxXMLLineEndEntryExporter::SvxXMLLineEndEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maMarkerStyle( rExport )
 {
@@ -467,7 +463,6 @@ void SvxXMLLineEndEntryExporter::exportEntry( const OUString& rStrName, const An
 {
     maMarkerStyle.exportXML( rStrName, rValue );
 }
-
 
 
 SvxXMLDashEntryExporter::SvxXMLDashEntryExporter( SvXMLExport& rExport )
@@ -485,7 +480,6 @@ void SvxXMLDashEntryExporter::exportEntry( const OUString& rStrName, const Any& 
 }
 
 
-
 SvxXMLHatchEntryExporter::SvxXMLHatchEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maHatchStyle( rExport )
 {
@@ -501,7 +495,6 @@ void SvxXMLHatchEntryExporter::exportEntry( const OUString& rStrName, const Any&
 }
 
 
-
 SvxXMLGradientEntryExporter::SvxXMLGradientEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maGradientStyle( rExport )
 {
@@ -515,7 +508,6 @@ void SvxXMLGradientEntryExporter::exportEntry( const OUString& rStrName, const A
 {
     maGradientStyle.exportXML( rStrName, rValue );
 }
-
 
 
 SvxXMLBitmapEntryExporter::SvxXMLBitmapEntryExporter( SvXMLExport& rExport )

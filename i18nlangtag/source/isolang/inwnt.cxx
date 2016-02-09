@@ -37,7 +37,6 @@ static LanguageType nImplSystemLanguage = LANGUAGE_DONTKNOW;
 static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 
 
-
 static LanguageType GetSVLang( LANGID nWinLangId )
 {
     // No Translation, we work with the original MS code without the SORT_ID.
@@ -45,7 +44,6 @@ static LanguageType GetSVLang( LANGID nWinLangId )
     // by us.
     return LanguageType( static_cast<sal_uInt16>(nWinLangId & 0xffff));
 }
-
 
 
 typedef LANGID (WINAPI *getLangFromEnv)();
@@ -81,14 +79,12 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
 }
 
 
-
 LanguageType MsLangId::getPlatformSystemLanguage()
 {
     getPlatformSystemLanguageImpl( nImplSystemLanguage,
             &GetUserDefaultLangID, &GetSystemDefaultLangID);
     return nImplSystemLanguage;
 }
-
 
 
 LanguageType MsLangId::getPlatformSystemUILanguage()

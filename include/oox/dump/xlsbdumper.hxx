@@ -36,7 +36,6 @@ namespace dump {
 namespace xlsb {
 
 
-
 class RecordObjectBase : public SequenceRecordObjectBase
 {
 protected:
@@ -55,7 +54,6 @@ private:
 };
 
 
-
 class RootStorageObject : public StorageObjectBase
 {
 public:
@@ -68,7 +66,6 @@ protected:
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
 };
-
 
 
 class Dumper : public DumperBase
@@ -84,7 +81,6 @@ public:
 protected:
     virtual void        implDump() override;
 };
-
 
 
 } // namespace xlsb

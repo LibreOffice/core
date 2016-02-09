@@ -29,13 +29,10 @@
 #include <cppuhelper/implbase.hxx>
 
 
-
 #define PROPERTIES_MANAGER_SERVICE_NAME "com.sun.star.ucb.PropertiesManager"
 
 
-
 // class UcbPropertiesManager.
-
 
 
 class UcbPropertiesManager : public cppu::WeakImplHelper <

@@ -240,7 +240,6 @@ public:
     sal_uInt16 GetSelectionLevel() const;
 
 
-
     // Object-MacroModus (e.g. rect as button or sth. like that):
 
     // Persistent. Default TRUE. SvDraw evaluates the flag e.g. at SdrView::GetPreferredPointer().

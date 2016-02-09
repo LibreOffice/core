@@ -20,8 +20,6 @@
 #include <svx/numinf.hxx>
 
 
-
-
 #define INIT(pNum,eVal,nDouble,rStr)    \
     SfxPoolItem     ( nId ),            \
                                         \
@@ -40,7 +38,6 @@ SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 }
 
 
-
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const sal_uInt16 nId ) :
 
@@ -48,7 +45,6 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 {
 }
-
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
@@ -60,7 +56,6 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 }
 
 
-
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const sal_uInt16 nId ) :
 
@@ -68,7 +63,6 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 {
 }
-
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
@@ -81,7 +75,6 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 }
 
 #undef INIT
-
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
@@ -106,12 +99,10 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 }
 
 
-
 SvxNumberInfoItem::~SvxNumberInfoItem()
 {
     delete [] pDelFormatArr;
 }
-
 
 
 bool SvxNumberInfoItem::GetPresentation
@@ -125,7 +116,6 @@ bool SvxNumberInfoItem::GetPresentation
     rText.clear();
     return false;
 }
-
 
 
 bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
@@ -161,7 +151,6 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-
 SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 {
     return new SvxNumberInfoItem( *this );
@@ -176,12 +165,10 @@ SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) cons
 }
 
 
-
 SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
-
 
 
 void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,

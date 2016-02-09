@@ -43,9 +43,7 @@ namespace package_ucp
 {
 
 
-
 // struct ResultListEntry.
-
 
 
 struct ResultListEntry
@@ -59,17 +57,13 @@ struct ResultListEntry
 };
 
 
-
 // ResultList.
-
 
 
 typedef std::vector< ResultListEntry* > ResultList;
 
 
-
 // struct DataSupplier_Impl.
-
 
 
 struct DataSupplier_Impl
@@ -108,11 +102,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
 }
 
 
-
-
 // DataSupplier Implementation.
-
-
 
 
 DataSupplier::DataSupplier(

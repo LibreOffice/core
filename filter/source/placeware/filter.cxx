@@ -40,7 +40,6 @@ using ::com::sun::star::task::XStatusIndicator;
 namespace pwp {
 
 
-
 class PlaceWareExportFilter : public cppu::WeakImplHelper
 <
     css::document::XFilter,
@@ -72,12 +71,10 @@ public:
 };
 
 
-
 PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XComponentContext > &rxContext)
 :   mxContext( rxContext )
 {
 }
-
 
 
 sal_Bool SAL_CALL PlaceWareExportFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
@@ -119,12 +116,10 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const css::uno::Sequence< css::
 }
 
 
-
 void SAL_CALL PlaceWareExportFilter::cancel(  )
     throw (RuntimeException, std::exception)
 {
 }
-
 
 
 // XExporter
@@ -133,7 +128,6 @@ void SAL_CALL PlaceWareExportFilter::setSourceDocument( const css::uno::Referenc
 {
     mxDoc = xDoc;
 }
-
 
 
 // XInitialization
@@ -179,7 +173,6 @@ css::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServi
 {
     return PlaceWareExportFilter_getSupportedServiceNames();
 }
-
 
 
 }

@@ -74,7 +74,6 @@ ResultSetBase::release(
 }
 
 
-
 uno::Any SAL_CALL
 ResultSetBase::queryInterface(
     const uno::Type& rType )
@@ -89,7 +88,6 @@ ResultSetBase::queryInterface(
                                           (static_cast< ucb::XContentAccess* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
-
 
 
 // XComponent
@@ -122,7 +120,6 @@ ResultSetBase::removeEventListener(
 }
 
 
-
 void SAL_CALL
 ResultSetBase::dispose()
     throw( uno::RuntimeException, std::exception )
@@ -145,7 +142,6 @@ ResultSetBase::dispose()
         m_pIsFinalListeners->disposeAndClear( aEvt );
     }
 }
-
 
 
 //  XResultSet
@@ -282,8 +278,6 @@ sal_Bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
 }
 
 
-
-
 sal_Bool SAL_CALL
 ResultSetBase::relative(
     sal_Int32 row )
@@ -302,7 +296,6 @@ ResultSetBase::relative(
 
     return 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size();
 }
-
 
 
 sal_Bool SAL_CALL
@@ -419,7 +412,6 @@ ResultSetBase::queryContent(
 }
 
 
-
 class XPropertySetInfoImpl
     : public cppu::OWeakObject,
       public beans::XPropertySetInfo
@@ -483,7 +475,6 @@ private:
 };
 
 
-
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 ResultSetBase::getPropertySetInfo()
@@ -503,7 +494,6 @@ ResultSetBase::getPropertySetInfo()
     //t
     return uno::Reference< beans::XPropertySetInfo > ( new XPropertySetInfoImpl( seq ) );
 }
-
 
 
 void SAL_CALL ResultSetBase::setPropertyValue(
@@ -623,7 +613,6 @@ void SAL_CALL ResultSetBase::removeVetoableChangeListener(
     (void)PropertyName;
     (void)aListener;
 }
-
 
 
 // XResultSetMetaDataSupplier

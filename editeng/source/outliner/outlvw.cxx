@@ -48,7 +48,6 @@
 using namespace ::com::sun::star;
 
 
-
 OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
 {
     pOwner                      = pOut;
@@ -671,7 +670,6 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 }
 
 
-
 void OutlinerView::Cut()
 {
     if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) ) {
@@ -1195,10 +1193,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich, bo
 }
 
 
-
-
 // ======================   Simple pass-through   =======================
-
 
 
 void OutlinerView::InsertText( const OUString& rNew, bool bSelect )

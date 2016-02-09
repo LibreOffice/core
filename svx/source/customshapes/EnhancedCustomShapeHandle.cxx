@@ -22,7 +22,6 @@
 #include "svx/unoapi.hxx"
 
 
-
 EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
     mnIndex     ( nIndex ),
     mxCustomShape ( xCustomShape )
@@ -30,18 +29,15 @@ EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::
 }
 
 
-
 EnhancedCustomShapeHandle::~EnhancedCustomShapeHandle()
 {
 }
-
 
 
 void SAL_CALL EnhancedCustomShapeHandle::acquire() throw()
 {
     OWeakObject::acquire();
 }
-
 
 
 void SAL_CALL EnhancedCustomShapeHandle::release() throw()

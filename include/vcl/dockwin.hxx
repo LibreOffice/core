@@ -209,8 +209,6 @@ public:
 };
 
 
-
-
 class VCL_DLLPUBLIC DockingWindow
     : public vcl::Window
     , public VclBuilderContainer
@@ -345,7 +343,6 @@ public:
     virtual Size GetOptimalSize() const override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
-
 
 
 inline void DockingWindow::RollDown()

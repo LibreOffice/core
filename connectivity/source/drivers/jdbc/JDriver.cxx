@@ -247,5 +247,4 @@ sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException, 
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,8 +29,6 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 struct SystemParentData;
 
 
-
-
 // Presentation Flags
 enum class PresentationFlags
 {
@@ -44,8 +42,6 @@ namespace o3tl
 {
     template<> struct typed_flags<PresentationFlags> : is_typed_flags<PresentationFlags, 0x0007> {};
 }
-
-
 
 
 class VCL_DLLPUBLIC WorkWindow : public SystemWindow

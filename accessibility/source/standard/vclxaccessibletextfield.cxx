@@ -35,8 +35,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 
-
-
 VCLXAccessibleTextField::VCLXAccessibleTextField (VCLXWindow* pVCLWindow, const Reference< XAccessible >& _xParent) :
 
     VCLXAccessibleTextComponent (pVCLWindow),
@@ -45,8 +43,6 @@ VCLXAccessibleTextField::VCLXAccessibleTextField (VCLXWindow* pVCLWindow, const 
 
 {
 }
-
-
 
 
 VCLXAccessibleTextField::~VCLXAccessibleTextField()
@@ -86,15 +82,11 @@ sal_Int32 SAL_CALL VCLXAccessibleTextField::getAccessibleChildCount()
 }
 
 
-
-
 Reference<XAccessible> SAL_CALL VCLXAccessibleTextField::getAccessibleChild (sal_Int32)
     throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     throw IndexOutOfBoundsException();
 }
-
-
 
 
 sal_Int16 SAL_CALL VCLXAccessibleTextField::getAccessibleRole()
@@ -114,7 +106,6 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 }
 
 
-
 // XServiceInfo
 
 OUString VCLXAccessibleTextField::getImplementationName()
@@ -122,8 +113,6 @@ OUString VCLXAccessibleTextField::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleTextField" );
 }
-
-
 
 
 Sequence< OUString > VCLXAccessibleTextField::getSupportedServiceNames()

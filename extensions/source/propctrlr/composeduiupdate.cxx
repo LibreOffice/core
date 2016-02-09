@@ -223,7 +223,6 @@ namespace pcr
     }
 
 
-
     void CachedInspectorUI::checkDisposed() const
     {
         if ( isDisposed() )

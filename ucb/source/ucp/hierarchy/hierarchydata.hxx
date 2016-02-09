@@ -39,7 +39,6 @@ namespace hierarchy_ucp
 {
 
 
-
 class HierarchyEntryData
 {
 public:
@@ -70,7 +69,6 @@ private:
     OUString m_aTargetURL; // Target URL ( links only )
     Type          m_aType;      // Type
 };
-
 
 
 class HierarchyContentProvider;

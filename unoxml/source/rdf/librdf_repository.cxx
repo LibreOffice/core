@@ -91,7 +91,6 @@ const char s_sparql [] = "sparql";
 const char s_nsOOo  [] = "http://openoffice.org/2004/office/rdfa/";
 
 
-
 //FIXME: this approach is not ideal. can we use blank nodes instead?
 bool isInternalContext(librdf_node *i_pNode) throw ()
 {
@@ -114,8 +113,6 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
     }
     return true;
 }
-
-
 
 
 // n.b.: librdf destructor functions dereference null pointers!
@@ -165,8 +162,6 @@ static void safe_librdf_free_uri(librdf_uri *const uri)
 {
     if (uri) { librdf_free_uri(uri); }
 }
-
-
 
 
 /** converts between librdf types and UNO API types.
@@ -261,8 +256,6 @@ private:
     uno::Reference< uno::XComponentContext > const m_xContext;
     librdf_Repository & m_rRep;
 };
-
-
 
 
 /** implements the repository service.
@@ -447,8 +440,6 @@ private:
 };
 
 
-
-
 /** result of operations that return a graph, i.e.,
     an XEnumeration of statements.
  */
@@ -560,8 +551,6 @@ throw (uno::RuntimeException, container::NoSuchElementException,
         throw container::NoSuchElementException();
     }
 }
-
-
 
 
 /** result of tuple queries ("SELECT").
@@ -686,8 +675,6 @@ librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException, std::e
     // const - no lock needed
     return m_BindingNames;
 }
-
-
 
 
 /** represents a named graph, and forwards all the work to repository.
@@ -843,8 +830,6 @@ throw (uno::RuntimeException,
     return m_pRep->getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
-
-
 
 
 std::shared_ptr<librdf_world> librdf_Repository::m_pWorld;
@@ -2428,7 +2413,6 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 }
 
 } // closing anonymous implementation namespace
-
 
 
 // component helper namespace

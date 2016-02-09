@@ -29,8 +29,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
 
-
-
 PPPOptimizer::PPPOptimizer(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
     css::uno::Reference< css::frame::XFrame > const & xFrame):
@@ -38,7 +36,6 @@ PPPOptimizer::PPPOptimizer(
     mxController( xFrame->getController() )
 {
 }
-
 
 
 PPPOptimizer::~PPPOptimizer()
@@ -60,7 +57,6 @@ Reference< css::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
     }
     return xRet;
 }
-
 
 
 Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizer::queryDispatches(

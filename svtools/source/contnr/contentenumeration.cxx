@@ -343,7 +343,6 @@ namespace svt
     }
 
 
-
     bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
     {
         OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );

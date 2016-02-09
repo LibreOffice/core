@@ -27,10 +27,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-
 namespace migration
 {
-
 
 
     #define sSourceUserBasic "/user/basic"
@@ -44,7 +42,6 @@ namespace migration
     {
         return OUString("com.sun.star.comp.desktop.migration.Basic");
     }
-
 
 
     Sequence< OUString > BasicMigration_getSupportedServiceNames()
@@ -62,11 +59,9 @@ namespace migration
     }
 
 
-
     BasicMigration::~BasicMigration()
     {
     }
-
 
 
     TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
@@ -105,7 +100,6 @@ namespace migration
     }
 
 
-
     void BasicMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
         ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
@@ -117,7 +111,6 @@ namespace migration
             ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
         }
     }
-
 
 
     void BasicMigration::copyFiles()
@@ -163,13 +156,11 @@ namespace migration
     }
 
 
-
     sal_Bool BasicMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
-
 
 
     Sequence< OUString > BasicMigration::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -226,8 +217,6 @@ namespace migration
     {
         return static_cast< lang::XTypeProvider * >( new BasicMigration() );
     }
-
-
 
 
 }   // namespace migration

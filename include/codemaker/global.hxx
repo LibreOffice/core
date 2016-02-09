@@ -83,7 +83,6 @@ private:
 };
 
 
-
 // Helper functions
 
 ::rtl::OString getTempDir(const ::rtl::OString& sFileName);

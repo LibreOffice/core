@@ -28,7 +28,6 @@
 #include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace processor3d

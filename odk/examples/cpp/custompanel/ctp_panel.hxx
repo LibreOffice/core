@@ -31,7 +31,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 
-
 namespace sd { namespace colortoolpanel
 {
 

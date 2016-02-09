@@ -386,6 +386,4 @@ private:
 #endif /* ! INCLUDED_STORE_STORE_HXX */
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

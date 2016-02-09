@@ -34,13 +34,11 @@ struct ErrDesc {
 };
 
 
-
 const ErrDesc allDesc[] = {
 
 #include "certerrors.h"
 
 };
-
 
 
 /* Returns a UTF-8 encoded constant error string for "errNum".

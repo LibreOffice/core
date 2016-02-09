@@ -26,8 +26,6 @@ namespace filter{
     namespace config{
 
 
-
-
 QueryTokenizer::QueryTokenizer(const OUString& sQuery)
     : m_bValid(true)
 {
@@ -63,12 +61,10 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
 }
 
 
-
 QueryTokenizer::~QueryTokenizer()
 {
     /*TODO*/
 }
-
 
 
 bool QueryTokenizer::valid() const

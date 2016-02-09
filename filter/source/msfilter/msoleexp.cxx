@@ -338,5 +338,4 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,6 @@ namespace svt { namespace table
 {
 
 
-
     //= TableControlAction
 
     enum TableControlAction

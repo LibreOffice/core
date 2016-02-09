@@ -23,9 +23,7 @@
 #include <svtools/indexentryres.hxx>
 
 
-
 //  wrapper for locale specific translations data of indexentry algorithm
-
 
 
 class IndexEntryResourceData
@@ -55,9 +53,7 @@ class IndexEntryResourceData
 };
 
 
-
 //  implementation of the indexentry-algorithm-name translation
-
 
 
 #define INDEXENTRY_RESOURCE_COUNT (STR_SVT_INDEXENTRY_END - STR_SVT_INDEXENTRY_START + 1)

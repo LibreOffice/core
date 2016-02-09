@@ -36,7 +36,6 @@ namespace formula
 enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FORMDLG_EDIT };
 
 
-
 class FormulaDlg_Impl;
 class IControlReferenceHandler;
 class IFunctionDescription;

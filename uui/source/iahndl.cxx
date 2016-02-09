@@ -780,7 +780,6 @@ UUIInteractionHelper::handleRequest_impl(
         }
 
 
-
         // Handle requests which do not have a plain string representation.
 
         if (!bObtainErrorStringOnly)

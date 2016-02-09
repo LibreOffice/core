@@ -147,7 +147,6 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
 }
 
 
-
 std::shared_ptr<PresenterSprite> PresenterSpritePane::GetSprite()
 {
     return mpSprite;

@@ -38,19 +38,12 @@ CFilePickerEventNotification::CFilePickerEventNotification(EventListenerMethod_t
 }
 
 
-
-
-
 void SAL_CALL CFilePickerEventNotification::notifyEventListener( Reference< XInterface > xListener )
 {
     Reference<XFilePickerListener> xFilePickerListener(xListener,UNO_QUERY);
     if (xFilePickerListener.is())
         (xFilePickerListener.get()->*m_EventListenerMethod)();
 }
-
-
-
-
 
 
 // A FilePicker event with parameter

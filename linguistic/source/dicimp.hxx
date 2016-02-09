@@ -167,7 +167,6 @@ public:
 };
 
 
-
 class DicEntry :
     public cppu::WeakImplHelper< css::linguistic2::XDictionaryEntry >
 {
@@ -196,7 +195,6 @@ public:
     virtual OUString SAL_CALL
         getReplacementText() throw(css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 #endif

@@ -317,8 +317,6 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 }
 
 
-
-
 // Set Status in all Controllers
 
 void SfxStateCache::SetState
@@ -338,7 +336,6 @@ void SfxStateCache::SetState
 {
     SetState_Impl( eState, pState, bMaybeDirty );
 }
-
 
 
 void SfxStateCache::SetVisibleState( bool bShow )
@@ -384,7 +381,6 @@ void SfxStateCache::SetVisibleState( bool bShow )
             delete pState;
     }
 }
-
 
 
 void SfxStateCache::SetState_Impl
@@ -447,7 +443,6 @@ void SfxStateCache::SetState_Impl
 }
 
 
-
 // Set old status again in all the controllers
 
 void SfxStateCache::SetCachedState( bool bAlways )
@@ -475,7 +470,6 @@ void SfxStateCache::SetCachedState( bool bAlways )
         bCtrlDirty = true;
     }
 }
-
 
 
 css::uno::Reference< css::frame::XDispatch >  SfxStateCache::GetDispatch() const

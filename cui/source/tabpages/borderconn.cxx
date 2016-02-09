@@ -264,8 +264,6 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
 }
 
 
-
-
 sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
 {
@@ -286,7 +284,6 @@ sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
 {
     return new ShadowConnection( rItemSet, rVsPos, rMfSize, rLbColor, nFlags );
 }
-
 
 
 }

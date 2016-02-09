@@ -658,7 +658,6 @@ BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
 }
 
 
-
 // Implementation of XBrowseNodeFactory
 
 
@@ -701,7 +700,6 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
 }
 
 // Helper methods
-
 
 
 // Namespace global methods for setting up BrowseNodeFactory service

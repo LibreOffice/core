@@ -71,7 +71,6 @@ private:
 };
 
 
-
 /* This class implements the non published UNO service com.sun.star.setup.UpdateCheckConfig,
  * which primary use is to be able to track changes done in the Tools -> Options page of this
  * component, as this is not supported by the OOo configuration for extendable groups.
@@ -200,8 +199,6 @@ private:
     const css::uno::Reference< css::container::XNameContainer > m_xIgnoredUpdates;
     const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
 };
-
-
 
 
 template <typename T>

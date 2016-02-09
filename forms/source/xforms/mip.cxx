@@ -100,8 +100,6 @@ void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = tru
 void MIP::resetTypeName()         { msTypeName.clear(); mbHasTypeName = false; }
 
 
-
-
 } // namespace xforms
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

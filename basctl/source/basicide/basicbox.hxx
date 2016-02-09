@@ -70,7 +70,6 @@ private:
 };
 
 
-
 class LibBox : public DocListenerBox
 {
 private:

@@ -139,7 +139,6 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 }
 
 
-
 void SfxPartDockWnd_Impl::Resize()
 
 /*  [Description]
@@ -150,7 +149,6 @@ void SfxPartDockWnd_Impl::Resize()
 {
     SfxDockingWindow::Resize();
 }
-
 
 
 bool SfxPartDockWnd_Impl::QueryClose()
@@ -170,7 +168,6 @@ bool SfxPartDockWnd_Impl::QueryClose()
 
     return bClose;
 }
-
 
 
 bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )

@@ -30,8 +30,6 @@
 namespace filter{ namespace config {
 
 
-
-
 /** @short      implements the service <type scope="com.sun.star.document">TypeDetection</type>.
  */
 class TypeDetection : public ::cppu::ImplInheritanceHelper< BaseContainer                 ,
@@ -54,7 +52,6 @@ public:
                 reference to the uno service manager, which created this service instance.
      */
     explicit TypeDetection(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-
 
 
     /** @short  standard dtor.
@@ -80,7 +77,6 @@ private:
     void impl_getAllFormatTypes(
         const css::util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor,
         FlatDetection& rFlatTypes);
-
 
 
     /** @short      make a combined flat/deep type detection
@@ -134,7 +130,6 @@ private:
                                                      OUString&               rLastChance   );
 
 
-
     /** @short      seek a might existing stream to position 0.
 
         @descr      This is an optinal action to be more robust
@@ -146,7 +141,6 @@ private:
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
     static void impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor);
-
 
 
     /** @short      make deep type detection for a specified
@@ -170,7 +164,6 @@ private:
                                                 utl::MediaDescriptor& rDescriptor   );
 
 
-
     /** @short      try to find an interaction handler and
                     ask him to select a possible filter for
                     this unknown format.
@@ -185,7 +178,6 @@ private:
                     a valid type name or an empty string if user canceled interaction.
      */
     OUString impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor);
-
 
 
     /** @short      check if an input stream is already part of the
@@ -225,7 +217,6 @@ private:
         throw (css::uno::Exception);
 
 
-
     /** @short      validate the specified type and its relationships
                     and set all needed information related to this type
                     in the specified descriptor.
@@ -246,7 +237,6 @@ private:
      */
     bool impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
                                                  const OUString&               sType      );
-
 
 
     /** @short      validate the specified filter and its relationships
@@ -270,7 +260,6 @@ private:
                                                    const OUString&               sFilter    );
 
 
-
     /** @short      remove anything related to a TYPE/FILTER entry from the
                     specified MediaDescriptor.
 
@@ -283,7 +272,6 @@ private:
                     stl interface!), which should be patched.
      */
     static void impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor);
-
 
 
     /** @short      search the best suitable filter for the given type
@@ -340,7 +328,6 @@ public:
 public:
 
 
-
     /** @short  return the uno implementation name of this class.
 
         @descr  Because this information is used at several places
@@ -352,7 +339,6 @@ public:
     static OUString impl_getImplementationName();
 
 
-
     /** @short  return the list of supported uno services of this class.
 
         @descr  Because this information is used at several places
@@ -362,7 +348,6 @@ public:
         @return The fix list of uno services supported by this class.
      */
     static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
-
 
 
     /** @short  return a new intsnace of this class.

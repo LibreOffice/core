@@ -31,7 +31,6 @@
 #define CTF_RPT_NUMBERFORMAT                    (XML_DB_CTF_START + 1)
 
 
-
 class SvXMLStylesContext;
 class SvXMLTokenMap;
 namespace rptxml

@@ -1071,11 +1071,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
 }
 
 
-
-
 //                          Functions for 1. Page
-
-
 
 
 // Handler for Listboxes
@@ -1109,7 +1105,6 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
     pParaWin->SetEdFocus(0);
     m_pBtnForward->Enable(false); //@New
 }
-
 
 
 //                          Functions for right Page

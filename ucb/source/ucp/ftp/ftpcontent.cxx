@@ -173,7 +173,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
 }
 
 
-
 // XServiceInfo methods.
 
 OUString SAL_CALL FTPContent::getImplementationName()
@@ -204,9 +203,6 @@ css::uno::Sequence< OUString > FTPContent::getSupportedServiceNames_Static()
     css::uno::Sequence<OUString> aSNS { "com.sun.star.ucb.FTPContent" };
     return aSNS;
 }
-
-
-
 
 
 // XContent methods.
@@ -674,8 +670,6 @@ FTPContent::createNewContent( const ContentInfo& Info )
 }
 
 
-
-
 Reference<XInterface > SAL_CALL
 FTPContent::getParent(  )
     throw (RuntimeException, std::exception)
@@ -693,7 +687,6 @@ FTPContent::setParent(const Reference<XInterface >& /*Parent*/ )
 {
     throw NoSupportException();
 }
-
 
 
 OUString FTPContent::getParentURL()
@@ -718,7 +711,6 @@ private:
 
     Reference<XInputStream> m_xInputStream;
 };
-
 
 
 sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
@@ -811,7 +803,6 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
 }
 
 
-
 Reference< XRow > FTPContent::getPropertyValues(
     const Sequence< Property >& seqProp,
     const Reference<XCommandEnvironment>& /*environment*/
@@ -861,7 +852,6 @@ Reference< XRow > FTPContent::getPropertyValues(
 
     return Reference<XRow>(xRow.get());
 }
-
 
 
 Sequence<Any> FTPContent::setPropertyValues(

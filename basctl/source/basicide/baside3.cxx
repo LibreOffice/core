@@ -1368,9 +1368,7 @@ ItemType DialogWindow::GetType () const
 }
 
 
-
 // DialogWindowLayout
-
 
 
 DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :

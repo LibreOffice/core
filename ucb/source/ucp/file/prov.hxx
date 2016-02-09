@@ -40,7 +40,6 @@
 // FileProvider
 
 
-
 namespace fileaccess {
 
     // Forward declaration

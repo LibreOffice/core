@@ -749,7 +749,6 @@ css::uno::Any VCLXImageControl::getProperty( const OUString& PropertyName ) thro
 //  class VCLXCheckBox
 
 
-
 void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1462,7 +1461,6 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             break;
     }
 }
-
 
 
 //  class VCLXListBox
@@ -2414,7 +2412,6 @@ throw(css::uno::RuntimeException, std::exception)
         }
     }
 }
-
 
 
 //  class VCLXTabPage
@@ -3741,7 +3738,6 @@ css::awt::Size SAL_CALL VCLXScrollBar::getMinimumSize() throw(css::uno::RuntimeE
 }
 
 
-
 //  class VCLXEdit
 
 
@@ -4720,7 +4716,6 @@ css::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName 
 }
 
 
-
 //  class VCLXDateField
 
 
@@ -5068,7 +5063,6 @@ sal_Bool VCLXDateField::isStrictFormat() throw(css::uno::RuntimeException, std::
 {
     return VCLXFormattedSpinField::isStrictFormat();
 }
-
 
 
 //  class VCLXTimeField
@@ -5971,7 +5965,6 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName ) throw
     }
     return aProp;
 }
-
 
 
 //  class VCLXCurrencyField

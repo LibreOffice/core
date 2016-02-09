@@ -160,7 +160,6 @@ namespace comphelper
         IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
 
 
-
     /** ask for an iface of an aggregated object
         usage:<br/>
             Reference<XFoo> xFoo;<br/>

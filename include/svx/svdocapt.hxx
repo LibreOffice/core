@@ -153,7 +153,6 @@ public:
 };
 
 
-
 #endif //_SVDOCAPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

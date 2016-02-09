@@ -82,9 +82,6 @@ namespace slideshow
             static ::boost::shared_ptr< Layer > createLayer();
 
 
-
-
-
             /** Predicate, whether this layer is the special
                 background layer
 
@@ -121,9 +118,6 @@ namespace slideshow
                 layer's views
              */
             void setShapeViews( ShapeSharedPtr const& rShape ) const;
-
-
-
 
 
             /** Change layer priority range.
