@@ -45,8 +45,6 @@ private:
     sal_uInt16                          mnBytesPerRow;
     int                                 mnWidth;
     int                                 mnHeight;
-    int                                 mnBufWidth;
-    int                                 mnBufHeight;
     std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
     virtual void updateChecksum() const override;

@@ -115,8 +115,6 @@ OpenGLSalBitmap::OpenGLSalBitmap()
 , mnBytesPerRow(0)
 , mnWidth(0)
 , mnHeight(0)
-, mnBufWidth(0)
-, mnBufHeight(0)
 {
 }
 
@@ -137,8 +135,6 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
 
     mnWidth = nWidth;
     mnHeight = nHeight;
-    mnBufWidth = 0;
-    mnBufHeight = 0;
 
     // TODO Check the framebuffer configuration
     mnBits = 32;
@@ -168,8 +164,8 @@ bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
         return false;
     maPalette = rBitmapPalette;
     mnBits = nBits;
-    mnWidth = mnBufWidth = rSize.Width();
-    mnHeight = mnBufHeight = rSize.Height();
+    mnWidth = rSize.Width();
+    mnHeight = rSize.Height();
     return false;
 }
 
@@ -203,8 +199,6 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
         mnBytesPerRow = rSourceBitmap.mnBytesPerRow;
         mnWidth = rSourceBitmap.mnWidth;
         mnHeight = rSourceBitmap.mnHeight;
-        mnBufWidth = rSourceBitmap.mnBufWidth;
-        mnBufHeight = rSourceBitmap.mnBufHeight;
         maPalette = rSourceBitmap.maPalette;
         // execute any pending operations on the source bitmap
         maTexture = rSourceBitmap.GetTexture();
@@ -474,7 +468,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
             VCL_GL_INFO( "::CreateTexture - convert from " << mnBits << " to 24 bits" );
 
             // convert to 24 bits RGB using palette
-            pData = new sal_uInt8[mnBufHeight * mnBufWidth * 3];
+            pData = new sal_uInt8[mnHeight * mnWidth * 3];
             bAllocated = true;
             determineTextureFormat(24, nFormat, nType);
 
@@ -483,12 +477,12 @@ GLuint OpenGLSalBitmap::CreateTexture()
             sal_uInt8* pSrcData = mpUserBuffer.get();
             sal_uInt8* pDstData = pData;
 
-            sal_uInt32 nY = mnBufHeight;
+            sal_uInt32 nY = mnHeight;
             while( nY-- )
             {
                 pSrcFormat->StartLine( pSrcData );
 
-                sal_uInt32 nX = mnBufWidth;
+                sal_uInt32 nX = mnWidth;
                 if (nFormat == GL_BGR)
                 {
                     while( nX-- )
@@ -517,7 +511,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
     OpenGLVCLContextZone aContextZone;
 
-    lclInstantiateTexture(maTexture, mnBufWidth, mnBufHeight, nFormat, nType, pData);
+    lclInstantiateTexture(maTexture, mnWidth, mnHeight, nFormat, nType, pData);
 
     VCL_GL_INFO("Created texture " << maTexture.Id() << " bits: " << mnBits);
 
@@ -566,8 +560,6 @@ bool OpenGLSalBitmap::ReadTexture()
         size_t nCanary = static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight;
         assert(!memcmp(pData + nCanary, CANARY, sizeof (CANARY)));
 #endif
-        mnBufWidth = mnWidth;
-        mnBufHeight = mnHeight;
         return true;
     }
     else if (mnBits == 1)
@@ -608,8 +600,6 @@ bool OpenGLSalBitmap::ReadTexture()
             nIndex++;
             pData[nIndex] = 0;
         }
-        mnBufWidth = mnWidth;
-        mnBufHeight = mnHeight;
         return true;
     }
 
