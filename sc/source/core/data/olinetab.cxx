@@ -769,6 +769,27 @@ void ScOutlineArray::RemoveAll()
     nDepth = 0;
 }
 
+void ScOutlineArray::finalizeImport(ScTable& rTable, bool bCol)
+{
+    ScSubOutlineIterator aIter( this );
+    ScOutlineEntry* pEntry;
+    while((pEntry=aIter.GetNext())!=nullptr)
+    {
+
+        if (!pEntry->IsHidden())
+            continue;
+
+        SCCOLROW nEntryStart = pEntry->GetStart();
+        SCCOLROW nEntryEnd   = pEntry->GetEnd();
+        SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, bCol);
+        bool bAllHidden = (nEntryEnd <= nEnd && nEnd <
+                ::std::numeric_limits<SCCOLROW>::max());
+
+        pEntry->SetHidden(bAllHidden);
+        SetVisibleBelow(aIter.LastLevel(), aIter.LastEntry(), !bAllHidden, !bAllHidden);
+    }
+}
+
 ScOutlineTable::ScOutlineTable()
 {
 }

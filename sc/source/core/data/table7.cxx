@@ -15,6 +15,7 @@
 #include <segmenttree.hxx>
 #include <sharedformula.hxx>
 #include <cellvalues.hxx>
+#include "olinetab.hxx"
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -236,6 +237,14 @@ void ScTable::SetNeedsListeningGroup( SCCOL nCol, SCROW nRow )
         return;
 
     aCol[nCol].SetNeedsListeningGroup(nRow);
+}
+
+void ScTable::finalizeOutlineImport()
+{
+    if (pOutlineTable && pRowFlags)
+    {
+        pOutlineTable->GetRowArray().finalizeImport(*this, false);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2164,6 +2164,8 @@ public:
 
     void SwapNonEmpty( sc::TableValues& rValues );
 
+    void finalizeOutlineImport();
+
 private:
 
     /**

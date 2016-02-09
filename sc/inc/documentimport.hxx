@@ -103,6 +103,8 @@ public:
      */
     void setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs );
 
+    void setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, bool bVisible);
+
     void finalize();
 
 private:

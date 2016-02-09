@@ -954,6 +954,8 @@ public:
     void SwapNonEmpty(
         sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
 
+    void finalizeOutlineImport();
+
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups( SCCOL nCol ) const;
 #endif

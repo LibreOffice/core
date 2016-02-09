@@ -26,6 +26,7 @@
 #include "docuno.hxx"
 #include "olinetab.hxx"
 #include "sheetdata.hxx"
+#include "documentimport.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -39,7 +40,6 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 
-#define SC_ISVISIBLE "IsVisible"
 #define SC_ISFILTERED "IsFiltered"
 
 using namespace com::sun::star;
@@ -200,7 +200,9 @@ void ScXMLTableRowContext::EndElement()
                         bFiltered = true;
                     }
                     if (!bVisible)
-                        xRowProperties->setPropertyValue(SC_ISVISIBLE, uno::makeAny(bVisible));
+                    {
+                        rXMLImport.GetDoc().setRowsVisible(nSheet, nFirstRow, nCurrentRow, false);
+                    }
                     if (bFiltered)
                         xRowProperties->setPropertyValue(SC_ISFILTERED, uno::makeAny(bFiltered));
                 }
