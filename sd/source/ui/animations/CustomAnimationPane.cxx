@@ -275,30 +275,6 @@ void CustomAnimationPane::dispose()
     PanelLayout::dispose();
 }
 
-PathKind CustomAnimationPane::getCreatePathKind() const
-{
-    PathKind eKind = PathKind::NONE;
-
-    if( mpLBAnimation->GetSelectEntryCount() == 1 )
-    {
-        const sal_Int32 nPos = mpLBAnimation->GetSelectEntryPos();
-        if( nPos == mnCurvePathPos )
-        {
-            eKind = PathKind::CURVE;
-        }
-        else if( nPos == mnPolygonPathPos )
-        {
-            eKind = PathKind::POLYGON;
-        }
-        else if( nPos == mnFreeformPathPos )
-        {
-            eKind = PathKind::FREEFORM;
-        }
-    }
-
-    return eKind;
-}
-
 void CustomAnimationPane::addUndo()
 {
     ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
@@ -1768,33 +1744,6 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     return false;
 }
 
-void CustomAnimationPane::animationChange()
-{
-    if( maListSelection.size() == 1 )
-    {
-        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
-        const double fDuration = (*pPreset)->getDuration();
-        CustomAnimationPresetPtr pDescriptor(*pPreset);
-        MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-        // get selected effect
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-        while( aIter != aEnd )
-        {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
-
-            EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-            if( !pEffectSequence )
-                pEffectSequence = mpMainSequence.get();
-
-            pEffectSequence->replace( pEffect, pDescriptor, fDuration );
-        }
-        onPreview(true);
-    }
-
-}
-
 void CustomAnimationPane::onChange()
 {
     bool bHasText = true;
@@ -1924,38 +1873,6 @@ void CustomAnimationPane::onChange()
     updateControls();
 
     SlideShow::Stop( mrBase );
-}
-
-void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTargets, double fDuration)
-{
-    sal_uInt16 nSID = 0;
-
-    switch( eKind )
-    {
-    case PathKind::CURVE:     nSID = SID_DRAW_BEZIER_NOFILL; break;
-    case PathKind::POLYGON:   nSID = SID_DRAW_POLYGON_NOFILL; break;
-    case PathKind::FREEFORM:  nSID = SID_DRAW_FREELINE_NOFILL; break;
-    default: break;
-    }
-
-    if( nSID )
-    {
-        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-
-        if( pViewShell )
-        {
-            DrawView* pView = pViewShell->GetDrawView();
-            if( pView )
-                pView->UnmarkAllObj();
-
-            std::vector< Any > aTargets( 1, Any( fDuration ) );
-            aTargets.insert( aTargets.end(), rTargets.begin(), rTargets.end() );
-            Sequence< Any > aTargetSequence( comphelper::containerToSequence( aTargets ) );
-            const SfxUnoAnyItem aItem( SID_ADD_MOTION_PATH, Any( aTargetSequence ) );
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute( nSID, SfxCallMode::ASYNCHRON, &aItem, 0 );
-        }
-    }
 }
 
 void CustomAnimationPane::onRemove()

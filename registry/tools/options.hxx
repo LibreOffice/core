@@ -45,7 +45,6 @@ public:
     bool initOptions (std::vector< std::string > & rArgs);
     bool badOption (char const * reason, char const * option) const;
 
-    std::string const & getProgramName() const { return m_program; }
     bool printUsage() const;
 
 protected:

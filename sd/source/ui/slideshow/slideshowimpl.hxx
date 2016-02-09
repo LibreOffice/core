@@ -283,9 +283,6 @@ private:
     DECL_LINK_TYPED( deactivateHdl, Timer *, void );
     DECL_LINK_TYPED( EventListenerHdl, VclSimpleEvent&, void );
 
-    // helper
-    void receiveRequest(SfxRequest& rReq);
-
     /** called only by the slideshow view when the first paint event occurs.
         This actually starts the slideshow. */
     void onFirstPaint();

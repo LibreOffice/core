@@ -127,9 +127,6 @@ public:
     virtual void    Resize() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
-    void    SetFocusId(const VclPtr<vcl::Window>& xId) { xSaveFocusId = xId; }
-    VclPtr<vcl::Window> GetFocusId() const { return xSaveFocusId; }
-
     void    SetMenu(MenuBar* pMenu);
     void    SetHeight(long nHeight);
     void    KillActivePopup();

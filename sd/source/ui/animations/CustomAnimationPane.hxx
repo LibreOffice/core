@@ -71,7 +71,6 @@ public:
     void onSelectionChanged();
     void onChangeCurrentPage();
     void onChange();
-    void animationChange();
     void onRemove();
     void onChangeStart();
     void onChangeStart( sal_Int16 nNodeType );
@@ -82,7 +81,6 @@ public:
     void preview( const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
     void remove( CustomAnimationEffectPtr& pEffect );
 
-    PathKind getCreatePathKind() const;
     // Control
     virtual void StateChanged( StateChangedType nStateChange ) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
@@ -110,8 +108,6 @@ private:
     void showOptions(const OString& sPage = OString());
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
-
-    void createPath( PathKind eKind, std::vector< css::uno::Any >& rTargets, double fDuration );
 
     STLPropertySet* createSelectionSet();
     void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
