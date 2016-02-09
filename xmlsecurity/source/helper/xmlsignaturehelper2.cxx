@@ -188,6 +188,11 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     // Ignore leading slash, don't attempt to open a storage with name "".
     if (aURI.startsWith("/"))
         aURI = aURI.copy(1);
+    // Ignore query part of the URI.
+    sal_Int32 nQueryPos = aURI.indexOf('?');
+    if (nQueryPos != -1)
+        aURI = aURI.copy(0, nQueryPos);
+
 
     sal_Int32 nSepPos = aURI.indexOf( '/' );
     if ( nSepPos == -1 )
@@ -207,11 +212,6 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     }
     else
     {
-        // Ignore query part of the URI.
-        sal_Int32 nQueryPos = aURI.indexOf('?');
-        if (nQueryPos != -1)
-            aURI = aURI.copy(0, nQueryPos);
-
         const OUString aStoreName = ::rtl::Uri::decode(
             aURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (aStoreName.isEmpty() && !aURI.isEmpty())
