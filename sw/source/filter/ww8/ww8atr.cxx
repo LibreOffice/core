@@ -1680,7 +1680,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             break;
         case ww::eCITATION:
             eFieldType = ww::eQUOTE;
-            assert(rFieldCmd.startsWith(FieldString(ww::eCITATION)));
+            assert(rFieldCmd.trim().startsWith("CITATION"));
             sFieldCmd = rFieldCmd.replaceFirst(FieldString(ww::eCITATION),
                                                FieldString(ww::eQUOTE));
             break;
