@@ -1,11 +1,19 @@
 --- jcphuff.c
 +++ jcphuff.c
-@@ -255,7 +255,7 @@
+@@ -14,6 +14,7 @@
+  * suspension.
+  */
+ 
++#include <stdint.h>
+ #define JPEG_INTERNALS
+ #include "jinclude.h"
+ #include "jpeglib.h"
+@@ -255,7 +256,7 @@
      if (c == 0xFF) {            /* need to stuff a zero byte? */
        emit_byte(entropy, 0);
      }
 -    put_buffer <<= 8;
-+    put_buffer = (unsigned) put_buffer << 8;
++    put_buffer = (uint_least32_t) put_buffer << 8;
      put_bits -= 8;
    }
  
