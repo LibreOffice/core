@@ -16,6 +16,7 @@ in vec3 a_normal;
 in vec2 a_texCoord;
 in float tileInfo;
 
+uniform mat4 u_projectionMatrix;
 uniform mat4 u_modelViewMatrix;
 uniform mat4 u_sceneTransformMatrix;
 uniform mat4 u_primitiveTransformMatrix;
@@ -25,10 +26,15 @@ uniform float time;
 uniform ivec2 numTiles;
 uniform sampler2D permTexture;
 uniform float slide;
+uniform float shadow;
+uniform mat4 orthoProjectionMatrix;
+uniform mat4 orthoViewMatrix;
 
 out vec2 g_texturePosition;
 out vec3 g_normal;
+out mat4 projectionMatrix;
 out mat4 modelViewMatrix;
+out mat4 shadowMatrix;
 out mat4 transform;
 out float nTime;
 out float startTime;
@@ -134,13 +140,14 @@ void main( void )
                   * rotationMatrix(vec3(0.0, 1.0, 0.0), clamp(rotation, -1.0, 1.0) * M_PI)
                   * translationMatrix(-translationVector)
                   * transform;
+    }
 
-        // Add a translation movement to the leaving slide so it doesn’t exactly mirror the entering one.
-        if (isLeavingSlide && nTime > 0.3)
-        {
-            float movement = smoothstep(0.0, 1.0, (nTime - 0.3) * 2.0);
-            transform = translationMatrix(vec3(-movement, 0.0, -0.5 * movement)) * transform;
-        }
+    if (shadow < 0.5) {
+        projectionMatrix = u_projectionMatrix;
+        shadowMatrix = orthoProjectionMatrix * orthoViewMatrix;
+    } else {
+        projectionMatrix = orthoProjectionMatrix * orthoViewMatrix;
+        shadowMatrix = mat4(0.0);
     }
 
     modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
