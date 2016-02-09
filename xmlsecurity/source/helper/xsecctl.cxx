@@ -1109,7 +1109,21 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
     xDocumentHandler->endElement(TAG_OBJECT);
 
     xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_XMLNS ":" NSTAG_XD, NS_XD);
+        pAttributeList->AddAttribute(ATTR_TARGET, "#idPackageSignature");
+        xDocumentHandler->startElement(NSTAG_XD ":" TAG_QUALIFYINGPROPERTIES, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ID, "idSignedProperties");
+        xDocumentHandler->startElement(NSTAG_XD ":" TAG_SIGNEDPROPERTIES, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    xDocumentHandler->endElement(NSTAG_XD ":" TAG_SIGNEDPROPERTIES);
+    xDocumentHandler->endElement(NSTAG_XD ":" TAG_QUALIFYINGPROPERTIES);
     xDocumentHandler->endElement(TAG_OBJECT);
+
     xDocumentHandler->endElement(TAG_SIGNATURE);
 }
 
