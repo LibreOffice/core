@@ -995,6 +995,12 @@ static bool lcl_isOOXMLBlacklist(const OUString& rStreamName)
 
 void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
 {
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_XMLNS, NS_XMLDSIG);
+        pAttributeList->AddAttribute(ATTR_ID, "idPackageSignature");
+        xDocumentHandler->startElement(TAG_SIGNATURE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
     xDocumentHandler->startElement(TAG_SIGNEDINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
 
     {
@@ -1104,6 +1110,7 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
 
     xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     xDocumentHandler->endElement(TAG_OBJECT);
+    xDocumentHandler->endElement(TAG_SIGNATURE);
 }
 
 SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
