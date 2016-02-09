@@ -13,8 +13,11 @@ in vec2 texturePosition;
 in float fuzz;
 in vec2 v_center;
 in vec3 normal;
+in vec4 shadowCoordinate;
 
 uniform sampler2D slideTexture;
+uniform sampler2D colorShadowTexture;
+uniform sampler2D depthShadowTexture;
 uniform float selectedTexture;
 uniform float time;
 uniform float hexagonSize;
@@ -70,8 +73,14 @@ void main()
             fragment.rgb *= actualTime;
         }
     }
+    float visibility = 1.0;
+    const float epsilon = 0.0001;
+    if (texture2D(depthShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
+        visibility *= 0.7 + 0.3 * (1.0 - texture2D(colorShadowTexture, shadowCoordinate.xy).a);
     vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
-    gl_FragColor = mix(black, fragment, light);
+    if (fragment.a < 0.001)
+        discard;
+    gl_FragColor = mix(black, fragment, visibility * light);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
