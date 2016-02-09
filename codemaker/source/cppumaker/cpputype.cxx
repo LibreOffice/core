@@ -166,7 +166,7 @@ public:
         FileStream & out, codemaker::cppumaker::Includes & includes)
     { dumpHFileContent(out, includes); }
 
-    virtual void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
+    virtual void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
 
     OUString dumpHeaderDefine(FileStream& o, OUString const & extension);
 
@@ -415,7 +415,7 @@ bool CppuType::dumpFile(
     try {
         if (hpp) {
             addGetCppuTypeIncludes(includes);
-            dumpHxxFile(out, includes);
+            dumpHppFile(out, includes);
         } else {
             dumpHFile(out, includes);
         }
@@ -1084,7 +1084,7 @@ public:
         OUString const & name, rtl::Reference< TypeManager > const & typeMgr);
 
     virtual void dumpDeclaration(FileStream& o) override;
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
+    void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     void        dumpAttributes(FileStream& o);
     void        dumpMethods(FileStream& o);
@@ -1155,7 +1155,7 @@ void InterfaceType::dumpDeclaration(FileStream & out) {
     out << "};\n\n";
 }
 
-void InterfaceType::dumpHxxFile(
+void InterfaceType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
@@ -1694,7 +1694,7 @@ private:
     virtual void dumpHFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
-    virtual void dumpHxxFile(
+    virtual void dumpHppFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
     virtual void dumpDeclaration(FileStream & out) override;
@@ -1722,7 +1722,7 @@ void ConstantGroup::dumpHFile(
     out << "\n#endif // "<< headerDefine << "\n";
 }
 
-void ConstantGroup::dumpHxxFile(
+void ConstantGroup::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes &)
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
@@ -1843,7 +1843,7 @@ private:
 
     virtual void dumpDeclaration(FileStream& o) override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
+    void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     virtual void dumpLightGetCppuType(FileStream & out) override;
 
@@ -1920,7 +1920,7 @@ void PlainStructType::dumpDeclaration(FileStream & out) {
     out << "};\n\n#ifdef SAL_W32\n#   pragma pack(pop)\n#endif\n\n";
 }
 
-void PlainStructType::dumpHxxFile(
+void PlainStructType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
@@ -2230,7 +2230,7 @@ public:
 private:
     virtual void dumpDeclaration(FileStream& o) override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
+    void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     virtual void dumpLightGetCppuType(FileStream & out) override;
 
@@ -2299,7 +2299,7 @@ void PolyStructType::dumpDeclaration(FileStream & out) {
     out << "};\n\n#ifdef SAL_W32\n#   pragma pack(pop)\n#endif\n\n";
 }
 
-void PolyStructType::dumpHxxFile(
+void PolyStructType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
@@ -2724,7 +2724,7 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual void dumpHxxFile(
+    virtual void dumpHppFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
     virtual void addComprehensiveGetCppuTypeIncludes(
@@ -2757,7 +2757,7 @@ void ExceptionType::addComprehensiveGetCppuTypeIncludes(
     includes.addRtlInstanceHxx(); // using rtl::StaticWithInit
 }
 
-void ExceptionType::dumpHxxFile(
+void ExceptionType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
@@ -3171,7 +3171,7 @@ private:
     virtual void addComprehensiveGetCppuTypeIncludes(
         codemaker::cppumaker::Includes & includes) const override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
+    void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     void        dumpNormalGetCppuType(FileStream& o) override;
     void        dumpComprehensiveGetCppuType(FileStream& o) override;
@@ -3205,7 +3205,7 @@ void EnumType::dumpDeclaration(FileStream& o)
     o << "};\n\n";
 }
 
-void EnumType::dumpHxxFile(
+void EnumType::dumpHppFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
@@ -3338,7 +3338,7 @@ private:
 
     void dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
-    void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
+    void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     rtl::Reference< unoidl::TypedefEntity > entity_;
 };
@@ -3373,7 +3373,7 @@ void Typedef::dumpDeclaration(FileStream& o)
     o << " " << id_ << ";\n\n";
 }
 
-void Typedef::dumpHxxFile(
+void Typedef::dumpHppFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
@@ -3433,7 +3433,7 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual void dumpHxxFile(
+    virtual void dumpHppFile(
         FileStream & o, codemaker::cppumaker::Includes & includes) override;
 
     void dumpCatchClauses(
@@ -3449,7 +3449,7 @@ static void failsToSupply(
       << service << "\" + \" of type \" + \"" << type << "\"";
 }
 
-void ServiceType::dumpHxxFile(
+void ServiceType::dumpHppFile(
     FileStream & o, codemaker::cppumaker::Includes & includes)
 {
     if (!entity_->getConstructors().empty()) {
@@ -3803,13 +3803,13 @@ public:
     { assert(entity.is()); }
 
 private:
-    virtual void dumpHxxFile(
+    virtual void dumpHppFile(
         FileStream & o, codemaker::cppumaker::Includes & includes) override;
 
     rtl::Reference< unoidl::InterfaceBasedSingletonEntity > entity_;
 };
 
-void SingletonType::dumpHxxFile(
+void SingletonType::dumpHppFile(
     FileStream & o, codemaker::cppumaker::Includes & includes)
 {
     OString cppName(
