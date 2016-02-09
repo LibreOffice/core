@@ -68,7 +68,6 @@ VCL_DLLPUBLIC sal_uInt64 SAL_CALL vcl_crc64 (
 )   SAL_THROW_EXTERN_C();
 
 
-
 VCL_DLLPUBLIC const sal_uInt64* vcl_get_crc64_table();
 
 

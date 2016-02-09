@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star {
 namespace sdr { namespace contact {
 
 
-
     //= ViewContactOfUnoControl
 
     class ViewContactOfUnoControl_Impl;

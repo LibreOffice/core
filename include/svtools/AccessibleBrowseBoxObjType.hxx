@@ -22,9 +22,7 @@
 #define INCLUDED_SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
 
 
-
 namespace svt {
-
 
 
 /** This enumeration contains a constant for each kind of accessible object of
@@ -42,9 +40,7 @@ enum AccessibleBrowseBoxObjType
 };
 
 
-
 } // namespace svt
-
 
 
 #endif

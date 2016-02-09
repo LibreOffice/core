@@ -346,7 +346,6 @@ namespace frm
     }
 
 
-
     void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException, std::exception)
     {
         m_aSubmissionVetoListeners.addInterface( listener );
@@ -447,7 +446,6 @@ namespace frm
             OClickableImageBaseModel_Base::getTypes()
         );
     }
-
 
 
     OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName,

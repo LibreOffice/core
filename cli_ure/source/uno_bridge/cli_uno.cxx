@@ -271,8 +271,6 @@ void Bridge::call_cli(
 }
 
 
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

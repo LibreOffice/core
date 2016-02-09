@@ -650,7 +650,6 @@ uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) 
 }
 
 
-
 uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     (void) columnIndex;
@@ -694,9 +693,6 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference<
 
     return Any();
 }
-
-
-
 
 
 void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException, std::exception)

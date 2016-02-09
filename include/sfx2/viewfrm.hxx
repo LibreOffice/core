@@ -282,7 +282,6 @@ private:
 };
 
 
-
 class SFX2_DLLPUBLIC SfxViewFrameItem: public SfxPoolItem
 {
     SfxViewFrame*           pFrame;

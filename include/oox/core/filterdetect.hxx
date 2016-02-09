@@ -40,7 +40,6 @@ namespace oox {
 namespace core {
 
 
-
 /** Document handler specifically designed for detecting OOXML file formats.
 
     It takes a reference to the filter string object via its constructor, and
@@ -148,7 +147,6 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
-
 
 
 } // namespace core

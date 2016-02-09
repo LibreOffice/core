@@ -90,7 +90,6 @@ namespace sdr
 } // end of namespace sdr
 
 
-
 namespace sdr
 {
     namespace properties

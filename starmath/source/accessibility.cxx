@@ -66,7 +66,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
 
-
 static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
 {
     // !! see VCLXAccessibleComponent::implGetBounds()
@@ -107,7 +106,6 @@ static awt::Point lcl_GetLocationOnScreen( vcl::Window *pWin )
     }
     return aPos;
 }
-
 
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
@@ -795,9 +793,6 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 }
 
 
-
-
-
 SmEditSource::SmEditSource( SmEditWindow * /*pWin*/, SmEditAccessible &rAcc ) :
     aViewFwd    (rAcc),
     aTextFwd    (rAcc, *this),
@@ -924,8 +919,6 @@ Point SmViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
 
     return Point();
 }
-
-
 
 
 SmTextForwarder::SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource) :
@@ -1459,7 +1452,6 @@ void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
 }
 
 
-
 SmEditViewForwarder::SmEditViewForwarder( SmEditAccessible& rAcc ) :
     rEditAcc( rAcc )
 {
@@ -1596,7 +1588,6 @@ bool SmEditViewForwarder::Paste()
     }
     return bRes;
 }
-
 
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
@@ -1923,7 +1914,6 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
         "css::accessibility::AccessibleContext"
     };
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

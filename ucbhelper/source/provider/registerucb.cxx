@@ -34,9 +34,7 @@ using namespace com::sun::star;
 namespace ucbhelper {
 
 
-
 //  registerAtUcb
-
 
 
 bool

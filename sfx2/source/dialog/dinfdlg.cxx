@@ -277,7 +277,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
 }
 
 
-
 SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     : SfxStringItem( rItem )
     , m_AutoloadDelay( rItem.getAutoloadDelay() )
@@ -438,7 +437,6 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
         SAL_WARN( "sfx.dialog", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
     }
 }
-
 
 
 void SfxDocumentInfoItem::SetDeleteUserData( bool bSet )
@@ -1232,7 +1230,6 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
     AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
     AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
-
 
 
 void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

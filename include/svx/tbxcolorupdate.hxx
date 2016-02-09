@@ -34,7 +34,6 @@ namespace svx
 {
 
 
-
     //= ToolboxButtonColorUpdater
 
     /** helper class to update a color in a toolbox button image

@@ -26,7 +26,6 @@
 #include <comphelper/types.hxx>
 
 
-
 using namespace connectivity;
 using namespace connectivity::mysql;
 using namespace connectivity::sdbcx;
@@ -141,7 +140,6 @@ Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException, st
     }
     return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

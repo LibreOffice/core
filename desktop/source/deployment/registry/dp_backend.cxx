@@ -302,7 +302,6 @@ void PackageRegistryBackend::deleteUnusedFolders(
 }
 
 
-
 Package::~Package()
 {
 }
@@ -454,7 +453,6 @@ sal_Bool Package::checkDependencies(
         throw deployment::ExtensionRemovedException();
     return true;
 }
-
 
 
 Sequence< Reference<deployment::XPackage> > Package::getBundle(

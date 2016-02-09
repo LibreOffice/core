@@ -30,7 +30,6 @@
 namespace oox {
 
 
-
 class TokenMap
 {
 public:
@@ -82,9 +81,7 @@ private:
 };
 
 
-
 struct StaticTokenMap : public ::rtl::Static< TokenMap, StaticTokenMap > {};
-
 
 
 } // namespace oox

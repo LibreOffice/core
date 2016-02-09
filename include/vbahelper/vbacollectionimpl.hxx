@@ -34,9 +34,7 @@
 #include <vector>
 
 
-
 typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumerationHelper_BASE;
-
 
 
 /** A wrapper that holds a com.sun.star.container.XIndexAccess and provides a
@@ -70,7 +68,6 @@ private:
     css::uno::Reference< css::container::XIndexAccess > mxIndexAccess;
     sal_Int32 mnIndex;
 };
-
 
 
 /** A wrapper that holds a com.sun.star.container.XEnumeration or a
@@ -116,7 +113,6 @@ protected:
 };
 
 
-
 // deprecated, use SimpleEnumerationBase instead!
 class VBAHELPER_DLLPUBLIC EnumerationHelperImpl : public EnumerationHelper_BASE
 {
@@ -132,7 +128,6 @@ public:
 
 // a wrapper class for a providing a XIndexAccess, XNameAccess, XEnumerationAccess impl based on providing a vector of interfaces
 // only requirement is the object needs to implement XName
-
 
 
 typedef ::cppu::WeakImplHelper< css::container::XNameAccess, css::container::XIndexAccess, css::container::XEnumerationAccess > XNamedCollectionHelper_BASE;

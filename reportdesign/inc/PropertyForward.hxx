@@ -28,7 +28,6 @@
 #include "RptDef.hxx"
 
 
-
 namespace rptui
 {
 

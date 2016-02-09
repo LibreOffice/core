@@ -51,8 +51,6 @@ VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCL
 }
 
 
-
-
 VCLXAccessibleDropDownComboBox::~VCLXAccessibleDropDownComboBox()
 {
 }
@@ -78,8 +76,6 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 }
 
 
-
-
 // XServiceInfo
 
 OUString VCLXAccessibleDropDownComboBox::getImplementationName()
@@ -87,8 +83,6 @@ OUString VCLXAccessibleDropDownComboBox::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleDropDownComboBox" );
 }
-
-
 
 
 Sequence< OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames()

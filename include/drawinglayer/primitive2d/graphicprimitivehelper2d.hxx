@@ -29,7 +29,6 @@
 class Graphic;
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -63,7 +62,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVEHELPER2D_HXX

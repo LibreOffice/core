@@ -1113,7 +1113,6 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 }
 
 
-
 void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool /*bGetsOwnership*/ )
         throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {

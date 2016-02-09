@@ -84,7 +84,6 @@ Mutex* getBridgeMutex();
 } // end namespace
 
 
-
 #endif // INCLUDED_EXTENSIONS_SOURCE_OLE_OLE2UNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

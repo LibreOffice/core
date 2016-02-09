@@ -32,7 +32,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 struct TextCharacterProperties
 {
     PropertyMap         maHyperlinkPropertyMap;
@@ -81,7 +80,6 @@ struct TextCharacterProperties
                             const ::oox::core::XmlFilterBase& rFilter,
                             bool bUseOptional = false ) const;
 };
-
 
 
 } // namespace drawingml

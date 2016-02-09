@@ -32,7 +32,6 @@ namespace basic
 {
 
 
-
 class SfxDialogLibraryContainer : public SfxLibraryContainer
 {
     // Methods to distinguish between different library types
@@ -92,7 +91,6 @@ public:
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
         throw (css::uno::RuntimeException, std::exception) override;
 };
-
 
 
 typedef ::cppu::ImplHelper1 <   css::resource::XStringResourceSupplier

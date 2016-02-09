@@ -63,7 +63,6 @@ class OComboBoxModel
     ::std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
 
-
 protected:
     virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
 

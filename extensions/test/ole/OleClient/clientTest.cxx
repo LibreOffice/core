@@ -189,7 +189,6 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     Sequence<Any> seqMix2Out(arArgs1, 3);
 
 
-
     //in args + out, optional, positional-----------------------------------------
     //first general test
     seqIndices.realloc(0);
@@ -872,7 +871,6 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
         return false;
 
 
-
     //  mixed parameter
 
     // mixed1
@@ -1104,11 +1102,6 @@ HRESULT doTest()
     }
 
 
-
-
-
-
-
 //  //  in multi Sequences
 
 //  // inMulDimArrayLong
@@ -1188,12 +1181,7 @@ HRESULT doTest()
     inv->invoke( OUString(L"inMulDimArrayByte2"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
 
 
-
-
-
-
     //  Tests with a MFC ActiveX control, ( pure dispinterface)
-
 
 
     //  in parameter MFC ActiveX
@@ -1286,7 +1274,6 @@ HRESULT doTest()
     MessageBox( NULL, buff, _T("clientTest"), MB_OK);
 
 
-
     //  Sequence parameter MFC ActiveX
 
     // Sequences are not directly supported.
@@ -1296,7 +1283,6 @@ HRESULT doTest()
     return hr;
 
 }
-
 
 
 //VARIANT_TRUE VT_UI1

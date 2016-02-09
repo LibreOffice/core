@@ -173,7 +173,6 @@ extern "C" { static void SAL_CALL s_MediatorMapping_free(uno_Mapping * pMapping)
 }}
 
 
-
 static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const & str2)
 {
     sal_Int32 nIndex1 = 0;

@@ -72,7 +72,6 @@ public:
 };
 
 
-
 class VCL_DLLPUBLIC QueueInfo
 {
     friend class Printer;
@@ -108,13 +107,11 @@ enum PrinterTransparencyMode
 };
 
 
-
 enum PrinterGradientMode
 {
     PRINTER_GRADIENT_STRIPES = 0,
     PRINTER_GRADIENT_COLOR = 1
 };
-
 
 
 enum PrinterBitmapMode
@@ -123,7 +120,6 @@ enum PrinterBitmapMode
     PRINTER_BITMAP_NORMAL = 1,
     PRINTER_BITMAP_RESOLUTION = 2
 };
-
 
 
 class VCL_DLLPUBLIC PrinterOptions

@@ -1066,8 +1066,6 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
 }
 
 
-
-
 sal_Bool SAL_CALL GrammarCheckingIterator::supportsService(
     const OUString & rServiceName )
 throw(uno::RuntimeException, std::exception)

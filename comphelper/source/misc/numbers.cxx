@@ -79,7 +79,6 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
 }
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;

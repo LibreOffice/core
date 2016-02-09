@@ -558,7 +558,6 @@ bool SvFileObject::IsDataComplete() const
 }
 
 
-
 void SvFileObject::CancelTransfers()
 {
     // unsubscribe from the cache if in the middle of loading

@@ -31,18 +31,15 @@ VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLWind
 }
 
 
-
 VCLXAccessibleFixedHyperlink::~VCLXAccessibleFixedHyperlink()
 {
 }
-
 
 
 void VCLXAccessibleFixedHyperlink::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 }
-
 
 
 void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
@@ -61,13 +58,11 @@ OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::Runti
 }
 
 
-
 uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aNames { "com.sun.star.awt.AccessibleFixedHyperlink" };
     return aNames;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

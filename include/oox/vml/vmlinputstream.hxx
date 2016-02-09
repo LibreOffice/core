@@ -33,7 +33,6 @@ namespace oox {
 namespace vml {
 
 
-
 /** An input stream class for VML streams, implementing the UNO interface
     com.sun.star.io.XInputStream needed by the Expat XML parsers.
 
@@ -85,7 +84,6 @@ private:
     OString             maBuffer;
     sal_Int32           mnBufferPos;
 };
-
 
 
 } // namespace vml

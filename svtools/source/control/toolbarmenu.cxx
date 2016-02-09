@@ -63,7 +63,6 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 }
 
 
-
 void ToolbarMenuEntry::init( int nEntryId, MenuItemBits nBits )
 {
     mnEntryId = nEntryId;
@@ -78,7 +77,6 @@ void ToolbarMenuEntry::init( int nEntryId, MenuItemBits nBits )
 }
 
 
-
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const OUString& rText, MenuItemBits nBits )
 : mrMenu( rMenu )
 {
@@ -87,7 +85,6 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const OUSt
     maText = rText;
     mbHasText = true;
 }
-
 
 
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const OUString& rText, MenuItemBits nBits )
@@ -103,7 +100,6 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Imag
 }
 
 
-
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, Control* pControl, MenuItemBits nBits )
 : mrMenu( rMenu )
 {
@@ -117,7 +113,6 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, Control* p
 }
 
 
-
 ToolbarMenuEntry::~ToolbarMenuEntry()
 {
     if( mxAccContext.is() )
@@ -129,7 +124,6 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
     }
     mpControl.disposeAndClear();
 }
-
 
 
 const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible( bool bCreate /* = false */ )
@@ -150,7 +144,6 @@ const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible( bool bCr
 }
 
 
-
 sal_Int32 ToolbarMenuEntry::getAccessibleChildCount() throw (RuntimeException)
 {
     if( mpControl )
@@ -163,7 +156,6 @@ sal_Int32 ToolbarMenuEntry::getAccessibleChildCount() throw (RuntimeException)
     }
     return 1;
 }
-
 
 
 Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -187,7 +179,6 @@ Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index )
 }
 
 
-
 ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const css::uno::Reference< css::frame::XFrame >& xFrame )
 : mrMenu( rMenu )
 , mxFrame( xFrame )
@@ -201,12 +192,10 @@ ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const css::uno::Referenc
 }
 
 
-
 ToolbarMenu_Impl::~ToolbarMenu_Impl()
 {
     setAccessible( nullptr );
 }
-
 
 
 void ToolbarMenu_Impl::setAccessible( ToolbarMenuAcc* pAccessible )
@@ -221,7 +210,6 @@ void ToolbarMenu_Impl::setAccessible( ToolbarMenuAcc* pAccessible )
 }
 
 
-
 void ToolbarMenu_Impl::fireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
 {
     if( mxAccessible.is() )
@@ -229,12 +217,10 @@ void ToolbarMenu_Impl::fireAccessibleEvent( short nEventId, const css::uno::Any&
 }
 
 
-
 bool ToolbarMenu_Impl::hasAccessibleListeners()
 {
     return( mxAccessible.is() && mxAccessible->HasAccessibleListeners() );
 }
-
 
 
 sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
@@ -261,7 +247,6 @@ sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
 }
 
 
-
 Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     const int nEntryCount = maEntryVector.size();
@@ -283,7 +268,6 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
 }
 
 
-
 Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     const int nEntryCount = maEntryVector.size();
@@ -298,7 +282,6 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl
 
     throw IndexOutOfBoundsException();
 }
-
 
 
 void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -329,7 +312,6 @@ void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (Ind
 
     throw IndexOutOfBoundsException();
 }
-
 
 
 bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -365,7 +347,6 @@ bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw 
 }
 
 
-
 void ToolbarMenu_Impl::clearAccessibleSelection()
 {
     if( mnHighlightedEntry != -1 )
@@ -374,8 +355,6 @@ void ToolbarMenu_Impl::clearAccessibleSelection()
         mnHighlightedEntry = -1;
     }
 }
-
-
 
 
 void ToolbarMenu_Impl::notifyHighlightedEntry()
@@ -414,7 +393,6 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
 }
 
 
-
 ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
 {
     if( (nEntry < 0) || (nEntry >= (int)maEntryVector.size() ) )
@@ -422,8 +400,6 @@ ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
 
     return maEntryVector[nEntry];
 }
-
-
 
 
 IMPL_LINK_NOARG_TYPED( ToolbarMenu, HighlightHdl, ValueSet*, void )
@@ -450,7 +426,6 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
     if ( pWindow )
         static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
-
 
 
 ToolbarMenu::~ToolbarMenu()
@@ -485,7 +460,6 @@ void ToolbarMenu::dispose()
 }
 
 
-
 int ToolbarMenu::getSelectedEntryId() const
 {
     ToolbarMenuEntry* pEntry = implGetEntry( mpImpl->mnSelectedEntry );
@@ -493,13 +467,11 @@ int ToolbarMenu::getSelectedEntryId() const
 }
 
 
-
 int ToolbarMenu::getHighlightedEntryId() const
 {
     ToolbarMenuEntry* pEntry = implGetEntry( mpImpl->mnHighlightedEntry );
     return pEntry ? pEntry->mnEntryId : -1;
 }
-
 
 
 void ToolbarMenu::checkEntry( int nEntryId, bool bChecked )
@@ -511,7 +483,6 @@ void ToolbarMenu::checkEntry( int nEntryId, bool bChecked )
         Invalidate();
     }
 }
-
 
 
 void ToolbarMenu::enableEntry( int nEntryId, bool bEnable )
@@ -532,7 +503,6 @@ void ToolbarMenu::enableEntry( int nEntryId, bool bEnable )
 }
 
 
-
 void ToolbarMenu::setEntryText( int nEntryId, const OUString& rStr )
 {
     ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
@@ -544,7 +514,6 @@ void ToolbarMenu::setEntryText( int nEntryId, const OUString& rStr )
             Invalidate();
     }
 }
-
 
 
 void ToolbarMenu::setEntryImage( int nEntryId, const Image& rImage )
@@ -560,7 +529,6 @@ void ToolbarMenu::setEntryImage( int nEntryId, const Image& rImage )
 }
 
 
-
 void ToolbarMenu::initWindow()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -574,7 +542,6 @@ void ToolbarMenu::initWindow()
 
     mpImpl->maSize = implCalcSize();
 }
-
 
 
 static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
@@ -742,12 +709,10 @@ Size ToolbarMenu::implCalcSize()
 }
 
 
-
 void ToolbarMenu::highlightFirstEntry()
 {
     implChangeHighlightEntry( 0 );
 }
-
 
 
 void ToolbarMenu::GetFocus()
@@ -759,7 +724,6 @@ void ToolbarMenu::GetFocus()
 }
 
 
-
 void ToolbarMenu::LoseFocus()
 {
     if( mpImpl && mpImpl->mnHighlightedEntry != -1 )
@@ -769,12 +733,10 @@ void ToolbarMenu::LoseFocus()
 }
 
 
-
 void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits )
 {
     appendEntry( new ToolbarMenuEntry( *this, nEntryId, rStr, nItemBits ) );
 }
-
 
 
 void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits )
@@ -783,12 +745,10 @@ void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& 
 }
 
 
-
 void ToolbarMenu::appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits )
 {
     appendEntry( new ToolbarMenuEntry( *this, nEntryId, pControl, nItemBits ) );
 }
-
 
 
 void ToolbarMenu::appendEntry( ToolbarMenuEntry* pEntry )
@@ -800,12 +760,10 @@ void ToolbarMenu::appendEntry( ToolbarMenuEntry* pEntry )
 }
 
 
-
 void ToolbarMenu::appendSeparator()
 {
     appendEntry( nullptr );
 }
-
 
 
 /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */
@@ -819,12 +777,10 @@ VclPtr<ValueSet> ToolbarMenu::createEmptyValueSetControl()
 }
 
 
-
 ToolbarMenuEntry* ToolbarMenu::implGetEntry( int nEntry ) const
 {
     return mpImpl->implGetEntry( nEntry );
 }
-
 
 
 ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
@@ -842,7 +798,6 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 
     return nullptr;
 }
-
 
 
 void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight)
@@ -940,7 +895,6 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
 }
 
 
-
 void ToolbarMenu::implSelectEntry( int nSelectedEntry )
 {
     mpImpl->mnSelectedEntry = nSelectedEntry;
@@ -954,7 +908,6 @@ void ToolbarMenu::implSelectEntry( int nSelectedEntry )
 }
 
 
-
 void ToolbarMenu::MouseButtonDown( const MouseEvent& rMEvt )
 {
     implHighlightAtPosition(rMEvt, true);
@@ -962,11 +915,9 @@ void ToolbarMenu::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-
 void ToolbarMenu::MouseButtonUp( const MouseEvent& )
 {
 }
-
 
 
 void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
@@ -976,7 +927,6 @@ void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
 
     implHighlightAtPosition(rMEvt, false);
 }
-
 
 
 void ToolbarMenu::implHighlightAtPosition(const MouseEvent& rMEvt, bool /*bMBDown*/)
@@ -1025,7 +975,6 @@ void ToolbarMenu::implHighlightAtPosition(const MouseEvent& rMEvt, bool /*bMBDow
 }
 
 
-
 void ToolbarMenu::implChangeHighlightEntry(int nEntry)
 {
     mpImpl->mnHighlightedEntry = nEntry;
@@ -1033,7 +982,6 @@ void ToolbarMenu::implChangeHighlightEntry(int nEntry)
 
     mpImpl->notifyHighlightedEntry();
 }
-
 
 
 static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLastColumn )
@@ -1063,7 +1011,6 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
 
     return false;
 }
-
 
 
 ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
@@ -1143,7 +1090,6 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
 }
 
 
-
 void ToolbarMenu_Impl::implHighlightControl( sal_uInt16 nCode, Control* pControl )
 {
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
@@ -1174,7 +1120,6 @@ void ToolbarMenu_Impl::implHighlightControl( sal_uInt16 nCode, Control* pControl
         notifyHighlightedEntry();
     }
 }
-
 
 
 void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
@@ -1469,12 +1414,10 @@ void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 }
 
 
-
 void ToolbarMenu::RequestHelp( const HelpEvent& rHEvt )
 {
     DockingWindow::RequestHelp( rHEvt );
 }
-
 
 
 void ToolbarMenu::StateChanged( StateChangedType nType )
@@ -1487,7 +1430,6 @@ void ToolbarMenu::StateChanged( StateChangedType nType )
         Invalidate();
     }
 }
-
 
 
 void ToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1505,7 +1447,6 @@ void ToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-
 void ToolbarMenu::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::Wheel )
@@ -1519,13 +1460,11 @@ void ToolbarMenu::Command( const CommandEvent& rCEvt )
 }
 
 
-
 Reference< css::accessibility::XAccessible > ToolbarMenu::CreateAccessible()
 {
     mpImpl->setAccessible( new ToolbarMenuAcc( *mpImpl ) );
     return Reference< XAccessible >( mpImpl->mxAccessible.get() );
 }
-
 
 
 // todo: move to new base class that will replace SfxPopupWindo
@@ -1536,11 +1475,9 @@ void ToolbarMenu::AddStatusListener( const OUString& rCommandURL )
 }
 
 
-
 void ToolbarMenu::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
-
 
 
 class ToolbarMenuStatusListener : public svt::FrameStatusListener
@@ -1556,7 +1493,6 @@ public:
 };
 
 
-
 ToolbarMenuStatusListener::ToolbarMenuStatusListener(
     const css::uno::Reference< css::frame::XFrame >& xFrame,
     ToolbarMenu& rToolbarMenu )
@@ -1566,13 +1502,11 @@ ToolbarMenuStatusListener::ToolbarMenuStatusListener(
 }
 
 
-
 void SAL_CALL ToolbarMenuStatusListener::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     mpMenu.clear();
     svt::FrameStatusListener::dispose();
 }
-
 
 
 void SAL_CALL ToolbarMenuStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception )
@@ -1582,13 +1516,11 @@ void SAL_CALL ToolbarMenuStatusListener::statusChanged( const css::frame::Featur
 }
 
 
-
 void ToolbarMenu::initStatusListener()
 {
     if( !mpImpl->mxStatusListener.is() )
         mpImpl->mxStatusListener.set( new ToolbarMenuStatusListener( mpImpl->mxFrame, *this ) );
 }
-
 
 
 bool ToolbarMenu::IsInPopupMode()
@@ -1597,12 +1529,10 @@ bool ToolbarMenu::IsInPopupMode()
 }
 
 
-
 void ToolbarMenu::EndPopupMode()
 {
     GetDockingManager()->EndPopupMode(this);
 }
-
 
 
 const Size& ToolbarMenu::getMenuSize() const
@@ -1611,12 +1541,10 @@ const Size& ToolbarMenu::getMenuSize() const
 }
 
 
-
 void ToolbarMenu::SetSelectHdl( const Link<ToolbarMenu*,void>& rLink )
 {
     mpImpl->maSelectHdl = rLink;
 }
-
 
 
 }

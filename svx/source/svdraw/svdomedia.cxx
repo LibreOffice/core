@@ -78,8 +78,6 @@ struct SdrMediaObj::Impl
 };
 
 
-
-
 SdrMediaObj::SdrMediaObj()
     : SdrRectObj()
     , m_xImpl( new Impl() )

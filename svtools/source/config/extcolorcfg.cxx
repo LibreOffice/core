@@ -550,9 +550,6 @@ IMPL_LINK_TYPED( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEv
 }
 
 
-
-
-
 ExtendedColorConfig::ExtendedColorConfig()
 {
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );

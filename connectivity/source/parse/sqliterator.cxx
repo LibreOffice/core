@@ -1017,7 +1017,6 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 }
 
 
-
 bool OSQLParseTreeIterator::traverseOrderByColumnNames(const OSQLParseNode* pSelectNode)
 {
     traverseByColumnNames( pSelectNode, true );

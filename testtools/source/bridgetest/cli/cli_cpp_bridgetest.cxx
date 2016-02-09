@@ -277,7 +277,6 @@ static bool testAny(Type* typ, Object*  value, XBridgeTest* xLBT )
 }
 
 
-
 static bool performAnyTest(XBridgeTest* xLBT,  TestDataElements* data)
 {
     bool bReturn = true;
@@ -329,8 +328,6 @@ static bool performSequenceOfCallTest(XBridgeTest* xLBT)
     }
      return xLBT->sequenceOfCallTestPassed();
 }
-
-
 
 
 static bool performRecursiveCallTest(XBridgeTest*  xLBT)
@@ -810,7 +807,6 @@ static bool raiseException(XBridgeTest* xLBT )
     {
         m_xContext = xContext;
     }
-
 
 
     int run( String* args[] )

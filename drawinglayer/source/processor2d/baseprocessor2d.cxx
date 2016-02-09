@@ -20,9 +20,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

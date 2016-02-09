@@ -29,7 +29,6 @@ namespace cppu
 //#### construction ################################################################################
 
 
-
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType );

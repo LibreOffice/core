@@ -82,7 +82,6 @@ FmNavInsertedHint::~FmNavInsertedHint()
 }
 
 
-
 // class FmNavInsertedHint
 
 FmNavModelReplacedHint::FmNavModelReplacedHint( FmEntryData* pAffectedEntryData )
@@ -599,9 +598,7 @@ namespace svxform
     }
 
 
-
     // class NavigatorFrameManager
-
 
 
     SFX_IMPL_DOCKINGWINDOW( NavigatorFrameManager, SID_FM_SHOW_FMEXPLORER )

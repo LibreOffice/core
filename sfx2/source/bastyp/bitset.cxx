@@ -253,7 +253,6 @@ BitSet& BitSet::operator|=( sal_uInt16 nBit )
 }
 
 
-
 // determines if the bit is set (may be the only one)
 
 bool BitSet::Contains( sal_uInt16 nBit ) const

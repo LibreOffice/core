@@ -44,7 +44,6 @@ namespace task = css::task ;
 namespace xml = css::xml ;
 
 
-
 static bool
 getBootstrapData(
     uno::Sequence< OUString > & rRepositoryList,
@@ -72,7 +71,6 @@ getBootstrapData(
 
     return true;
 }
-
 
 
 // Returns 'true' if successfully connected to the update server

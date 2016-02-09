@@ -28,7 +28,6 @@
 #include "ftpresultsetbase.hxx"
 
 
-
 namespace ftp {
 
     class ResultSetBase;
@@ -43,7 +42,6 @@ namespace ftp {
     };
 
 }
-
 
 
 #endif

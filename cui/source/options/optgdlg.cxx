@@ -1600,7 +1600,6 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     m_pWesternLanguageLB->Enable( bEnable );
 
 
-
     // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
 #if 0
     bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && m_pAsianSupportCB->IsChecked() );

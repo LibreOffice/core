@@ -47,7 +47,6 @@ namespace rptui
     using namespace ::com::sun::star;
 
 
-
     FormattedFieldBeautifier::FormattedFieldBeautifier(const OReportController& _aController)
         :m_rReportController(_aController)
         ,m_nTextColor(-1)

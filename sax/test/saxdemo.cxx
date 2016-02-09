@@ -304,7 +304,6 @@ struct AttributeListImpl_impl
 };
 
 
-
 sal_Int16 AttributeListImpl::getLength() throw  (RuntimeException)
 {
     return (sal_Int16) m_pImpl->vecAttribute.size();
@@ -368,12 +367,10 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw  (Runtim
 }
 
 
-
 AttributeListImpl::AttributeListImpl()
 {
     m_pImpl = new AttributeListImpl_impl;
 }
-
 
 
 AttributeListImpl::~AttributeListImpl()
@@ -393,7 +390,6 @@ void AttributeListImpl::clear()
 {
     m_pImpl->vecAttribute.clear();
 }
-
 
 
 // helper function for writing
@@ -423,7 +419,6 @@ void writeParagraphHelper(
     r->allowLineBreak();
     r->characters( s.copy( nStart , n - nStart ) );
 }
-
 
 
 // helper implementation for SAX-Writer
@@ -472,7 +467,6 @@ void OFileWriter::closeOutput()
     fclose( m_f );
     m_f = 0;
 }
-
 
 
 // Needed to switch on solaris threads
@@ -525,7 +519,6 @@ int main (int argc, char **argv)
     }
 
 
-
     // parser demo
     // read xml from a file and count elements
 
@@ -564,7 +557,6 @@ int main (int argc, char **argv)
     {
         printf( "couldn't create sax-parser component\n" );
     }
-
 
 
     // The SAX-Writer demo

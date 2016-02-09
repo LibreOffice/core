@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 namespace dp_gui {
 
 
-
 ::rtl::Reference< TheExtensionManager > TheExtensionManager::s_ExtMgr;
 
 

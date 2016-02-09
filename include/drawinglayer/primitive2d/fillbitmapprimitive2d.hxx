@@ -82,7 +82,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLBITMAPPRIMITIVE2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

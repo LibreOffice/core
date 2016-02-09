@@ -147,7 +147,6 @@ void OTextInputStream::implResizeBuffer()
 }
 
 
-
 // XTextInputStream
 
 OUString OTextInputStream::readLine(  )
@@ -412,7 +411,6 @@ void OTextInputStream::closeInput(  )
 {
     mxStream->closeInput();
 }
-
 
 
 // XActiveDataSink

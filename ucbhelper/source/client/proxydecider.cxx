@@ -74,7 +74,6 @@ public:
 typedef std::pair< WildCard, WildCard > NoProxyListEntry;
 
 
-
 class HostnameCache
 {
     typedef std::pair< OUString, OUString > HostListEntry;
@@ -156,11 +155,7 @@ private:
 };
 
 
-
-
 // WildCard Implementation.
-
-
 
 
 bool WildCard::Matches( const OUString& rString ) const
@@ -287,11 +282,7 @@ bool getConfigInt32Value(
 }
 
 
-
-
 // InternetProxyDecider_Impl Implementation.
-
-
 
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
@@ -527,7 +518,6 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         // Example:
         // list: staroffice-doc -> full: xyz.germany.sun.com
         // in:   staroffice-doc.germany.sun.com -> full: xyz.germany.sun.com
-
 
 
         if ( !shouldUseProxy( aFullyQualifiedHost, nPort, true ) )
@@ -777,11 +767,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
 } // namespace proxydecider_impl
 
 
-
-
 // InternetProxyDecider Implementation.
-
-
 
 
 InternetProxyDecider::InternetProxyDecider(

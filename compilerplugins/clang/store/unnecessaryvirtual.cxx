@@ -221,7 +221,6 @@ gotfunc:
 }
 
 
-
 loplugin::Plugin::Registration< UnnecessaryVirtual > X("unnecessaryvirtual", false);
 
 }

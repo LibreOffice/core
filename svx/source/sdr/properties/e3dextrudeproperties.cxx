@@ -22,7 +22,6 @@
 #include <svx/extrud3d.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

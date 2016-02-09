@@ -54,7 +54,6 @@ static SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 };
 
 
-
 class SvxXMLTabStopContext_Impl : public SvXMLImportContext
 {
 private:
@@ -257,8 +256,6 @@ void SvxXMLTabStopImportContext::EndElement( )
     XMLElementPropertyContext::EndElement();
 
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -281,6 +281,4 @@ void SAL_CALL OAdoColumn::release() throw()
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

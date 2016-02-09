@@ -25,9 +25,7 @@
 using namespace ::com::sun::star;
 
 
-
 #define IUL 6
-
 
 
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
@@ -87,7 +85,6 @@ void SAL_CALL Interceptor::dispose()
     m_xSlaveDispatchProvider = 0;
     m_xMasterDispatchProvider = 0;
 }
-
 
 
 Interceptor::Interceptor(
@@ -474,7 +471,6 @@ Interceptor::queryDispatches(
 
     return aRet;
 }
-
 
 
 //XDispatchProviderInterceptor

@@ -108,7 +108,6 @@ public:
 };
 
 
-
 /** Helper macro to implement the method 'getServiceImplName()' of the
     'ooo.vba.XHelperInterface' interface. Will return the class name as service
     implementation name.
@@ -118,7 +117,6 @@ OUString classname::getServiceImplName() \
 { \
     return OUString( #classname ); \
 }
-
 
 
 /** Helper macro to implement the method 'getServiceNames()' for a single
@@ -137,7 +135,6 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
 }
 
 
-
 /** Helper macro to declare the methods 'getServiceImplName()' and
     'getServiceNames()' of the 'ooo.vba.XHelperInterface' interface in a class
     declaration.
@@ -147,7 +144,6 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
     virtual css::uno::Sequence< OUString > getServiceNames() override;
 
 
-
 /** Helper macro to implement the methods 'getServiceImplName()' and
     'getServiceNames()' of the 'ooo.vba.XHelperInterface' interface. Will
     return the class name as service implementation name.
@@ -155,7 +151,6 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
 #define VBAHELPER_IMPL_XHELPERINTERFACE( classname, servicename ) \
 VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
 VBAHELPER_IMPL_GETSERVICENAMES( classname, servicename )
-
 
 
 #endif

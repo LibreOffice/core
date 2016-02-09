@@ -1917,7 +1917,6 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
                                FSEND );
 
 
-
         if( bHasLinespacing )
         {
             mpFS->startElementNS( XML_a, XML_lnSpc, FSEND );
@@ -2235,7 +2234,6 @@ void DrawingML::WriteCustomGeometry( Reference< XShape > rXShape )
     {
         return;
     }
-
 
 
     uno::Sequence< beans::PropertyValue > const * pGeometrySeq =

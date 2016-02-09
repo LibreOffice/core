@@ -54,9 +54,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 
-
-
-
 OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex )
 {
@@ -311,7 +308,6 @@ void InformationDialog::InitDialog()
 }
 
 
-
 InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
     UnoDialog( rxContext, rxFrame ),
     ConfigurationAccess( rxContext, nullptr ),
@@ -330,7 +326,6 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxCo
 
     InitDialog();
 }
-
 
 
 InformationDialog::~InformationDialog()
@@ -355,7 +350,6 @@ bool InformationDialog::execute()
     }
     return mbStatus;
 }
-
 
 
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )

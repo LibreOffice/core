@@ -77,7 +77,6 @@ public:
     OUString                GetCurrentURL() const { return m_aCurrentURL; }
 
 
-
     const css::uno::Any&     GetViewData()const {return m_aViewData;}
 
     bool                HasHistoryPred() const;     // is there a predecessor for the current in the history

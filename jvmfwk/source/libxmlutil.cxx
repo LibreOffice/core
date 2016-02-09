@@ -87,8 +87,6 @@ CXmlDocPtr & CXmlDocPtr::operator = (xmlDoc* pObj)
 }
 
 
-
-
 CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
     : _object(aChar)
 {
@@ -129,8 +127,6 @@ CXmlCharPtr::operator OUString()
     }
     return ret;
 }
-
-
 
 
 }

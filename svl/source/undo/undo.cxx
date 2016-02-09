@@ -35,7 +35,6 @@
 using ::com::sun::star::uno::Exception;
 
 
-
 SfxRepeatTarget::~SfxRepeatTarget()
 {
 }
@@ -78,7 +77,6 @@ OUString SfxUndoAction::GetComment() const
 {
     return OUString();
 }
-
 
 
 sal_uInt16 SfxUndoAction::GetId() const
@@ -126,7 +124,6 @@ void SfxUndoAction::Repeat(SfxRepeatTarget&)
     // These are only conceptually pure virtual
     assert(!"pure virtual function called: SfxUndoAction::Repeat()");
 }
-
 
 
 bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
@@ -1443,13 +1440,10 @@ void SfxLinkUndoAction::Redo()
 }
 
 
-
 bool SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
 {
     return pAction && pAction->CanRepeat(r);
 }
-
-
 
 
 void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
@@ -1459,14 +1453,12 @@ void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 }
 
 
-
 OUString SfxLinkUndoAction::GetComment() const
 {
     if ( pAction )
         return pAction->GetComment();
     return OUString();
 }
-
 
 
 OUString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const

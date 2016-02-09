@@ -94,7 +94,6 @@ public:
 };
 
 
-
 CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,

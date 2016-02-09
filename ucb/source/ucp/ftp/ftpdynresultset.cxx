@@ -30,11 +30,7 @@ using namespace com::sun::star::uno;
 using namespace ftp;
 
 
-
-
 // DynamicResultSet Implementation.
-
-
 
 
 DynamicResultSet::DynamicResultSet(
@@ -56,9 +52,7 @@ DynamicResultSet::~DynamicResultSet()
 }
 
 
-
 // Non-interface methods.
-
 
 
 void DynamicResultSet::initStatic()
@@ -73,8 +67,6 @@ void DynamicResultSet::initDynamic()
 
     m_xResultSet2 = m_xResultSet1;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

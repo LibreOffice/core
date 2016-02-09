@@ -232,5 +232,4 @@ bool LoadFunctions(oslModule pODBCso)
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

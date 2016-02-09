@@ -622,7 +622,6 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage()
 }
 
 
-
 void PresenterToolBar::CreateControls (
     const OUString& rsConfigurationPath)
 {

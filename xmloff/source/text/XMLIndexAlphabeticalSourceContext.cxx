@@ -38,8 +38,6 @@
 #include <rtl/ustring.hxx>
 
 
-
-
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -58,7 +56,6 @@ const sal_Char sAPI_UseDash[] = "UseDash";
 const sal_Char sAPI_UsePP[] = "UsePP";
 const sal_Char sAPI_SortAlgorithm[] = "SortAlgorithm";
 const sal_Char sAPI_Locale[] = "Locale";
-
 
 
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(

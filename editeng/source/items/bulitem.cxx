@@ -29,10 +29,6 @@
 #define BULITEM_VERSION     ((sal_uInt16)2)
 
 
-
-
-
-
 void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
 {
     sal_uInt16 nTemp;
@@ -57,7 +53,6 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
     rStream.WriteBool( rFont.IsShadow() );
     rStream.WriteBool( rFont.IsTransparent() );
 }
-
 
 
 vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
@@ -96,8 +91,6 @@ vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     rStream.ReadCharAsBool( bTemp ); aFont.SetTransparent( bTemp );
     return aFont;
 }
-
-
 
 
 SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
@@ -177,12 +170,10 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 }
 
 
-
 SvxBulletItem::~SvxBulletItem()
 {
     delete pGraphicObject;
 }
-
 
 
 SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
@@ -191,12 +182,10 @@ SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 }
 
 
-
 SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
 {
     return new SvxBulletItem( rStrm, Which() );
 }
-
 
 
 void SvxBulletItem::SetDefaultFont_Impl()
@@ -205,7 +194,6 @@ void SvxBulletItem::SetDefaultFont_Impl()
     aFont.SetAlign( ALIGN_BOTTOM);
     aFont.SetTransparent( true );
 }
-
 
 
 void SvxBulletItem::SetDefaults_Impl()
@@ -219,12 +207,10 @@ void SvxBulletItem::SetDefaults_Impl()
 }
 
 
-
 sal_uInt16 SvxBulletItem::GetVersion( sal_uInt16 /*nVersion*/ ) const
 {
     return BULITEM_VERSION;
 }
-
 
 
 void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
@@ -244,8 +230,6 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
     SetFollowText( rCopyFrom.GetFollowText() );
     SetFont( _aFont );
 }
-
-
 
 
 bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
@@ -281,7 +265,6 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
     return true;
 }
-
 
 
 SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
@@ -345,7 +328,6 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 }
 
 
-
 OUString SvxBulletItem::GetFullText() const
 {
     OUStringBuffer aStr(aPrevText);
@@ -353,7 +335,6 @@ OUString SvxBulletItem::GetFullText() const
     aStr.append(aFollowText);
     return aStr.makeStringAndClear();
 }
-
 
 
 bool SvxBulletItem::GetPresentation
@@ -369,7 +350,6 @@ bool SvxBulletItem::GetPresentation
 }
 
 
-
 const GraphicObject& SvxBulletItem::GetGraphicObject() const
 {
     if( pGraphicObject )
@@ -380,7 +360,6 @@ const GraphicObject& SvxBulletItem::GetGraphicObject() const
         return aDefaultObject;
     }
 }
-
 
 
 void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )

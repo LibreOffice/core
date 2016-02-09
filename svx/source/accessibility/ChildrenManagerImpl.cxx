@@ -71,15 +71,11 @@ ChildrenManagerImpl::ChildrenManagerImpl (
 }
 
 
-
-
 ChildrenManagerImpl::~ChildrenManagerImpl()
 {
     DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
         "~AccessibleDrawDocumentView: object has not been disposed");
 }
-
-
 
 
 void ChildrenManagerImpl::Init()
@@ -102,8 +98,6 @@ void ChildrenManagerImpl::Init()
         maShapeTreeInfo.GetModelBroadcaster()->addEventListener (
             static_cast<document::XEventListener*>(this));
 }
-
-
 
 
 long ChildrenManagerImpl::GetChildCount() const throw ()
@@ -142,8 +136,6 @@ uno::Reference<XAccessible>
 
     return GetChild (maVisibleChildren[nIndex],nIndex);
 }
-
-
 
 
 /** Return the requested accessible child object.  Create it if it is not
@@ -186,8 +178,6 @@ uno::Reference<XAccessible>
 }
 
 
-
-
 uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (const uno::Reference<drawing::XShape>& xShape)
     throw (uno::RuntimeException)
@@ -200,8 +190,6 @@ uno::Reference<XAccessible>
     }
     return uno::Reference<XAccessible> ();
 }
-
-
 
 
 /** Find all shapes among the specified shapes that lie fully or partially
@@ -349,8 +337,6 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 }
 
 
-
-
 void ChildrenManagerImpl::RemoveNonVisibleChildren (
     const ChildDescriptorListType& rNewChildList,
     ChildDescriptorListType& rOldChildList)
@@ -383,8 +369,6 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
 }
 
 
-
-
 void ChildrenManagerImpl::MergeAccessibilityInformation (
     ChildDescriptorListType& raNewChildList)
 {
@@ -409,8 +393,6 @@ void ChildrenManagerImpl::MergeAccessibilityInformation (
 }
 
 
-
-
 void ChildrenManagerImpl::SendVisibleAreaEvents (
     ChildDescriptorListType& raNewChildList)
 {
@@ -427,8 +409,6 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
                 maShapeTreeInfo.GetViewForwarder());
     }
 }
-
-
 
 
 void ChildrenManagerImpl::CreateAccessibilityObjects (
@@ -452,8 +432,6 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
         }
     }
 }
-
-
 
 
 void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
@@ -504,8 +482,6 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
 }
 
 
-
-
 void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape)
 {
     if (rxShape.is())
@@ -535,14 +511,10 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
 }
 
 
-
-
 void ChildrenManagerImpl::SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList)
 {
     mxShapeList = xShapeList;
 }
-
-
 
 
 void ChildrenManagerImpl::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
@@ -550,8 +522,6 @@ void ChildrenManagerImpl::AddAccessibleShape (css::uno::Reference<css::accessibi
     assert(shape.is());
     maAccessibleShapes.push_back (shape);
 }
-
-
 
 
 void ChildrenManagerImpl::ClearAccessibleShapeList()
@@ -596,8 +566,6 @@ void ChildrenManagerImpl::ClearAccessibleShapeList()
             *J = nullptr;
         }
 }
-
-
 
 
 /** If the broadcasters change at which this object is registered then
@@ -716,8 +684,6 @@ void  SAL_CALL
 }
 
 
-
-
 void ChildrenManagerImpl::impl_dispose()
 {
     Reference<frame::XController> xController(maShapeTreeInfo.GetController());
@@ -760,7 +726,6 @@ void ChildrenManagerImpl::impl_dispose()
     ClearAccessibleShapeList ();
     SetShapeList (nullptr);
 }
-
 
 
 void SAL_CALL ChildrenManagerImpl::disposing()
@@ -1044,14 +1009,10 @@ void ChildrenManagerImpl::UpdateSelection()
 }
 
 
-
-
 bool ChildrenManagerImpl::HasFocus()
 {
     return mpFocusedShape != nullptr;
 }
-
-
 
 
 void ChildrenManagerImpl::RemoveFocus()
@@ -1064,7 +1025,6 @@ void ChildrenManagerImpl::RemoveFocus()
 }
 
 
-
 void ChildrenManagerImpl::RegisterAsDisposeListener (
     const Reference<drawing::XShape>& xShape)
 {
@@ -1073,8 +1033,6 @@ void ChildrenManagerImpl::RegisterAsDisposeListener (
         xComponent->addEventListener (
             static_cast<document::XEventListener*>(this));
 }
-
-
 
 
 void ChildrenManagerImpl::UnregisterAsDisposeListener (
@@ -1096,8 +1054,6 @@ ChildDescriptor::ChildDescriptor (const Reference<drawing::XShape>& xShape)
 }
 
 
-
-
 ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShape)
     : mxShape (nullptr),
       mxAccessibleShape (rxAccessibleShape),
@@ -1110,13 +1066,9 @@ ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShap
 }
 
 
-
-
 ChildDescriptor::~ChildDescriptor()
 {
 }
-
-
 
 
 AccessibleShape* ChildDescriptor::GetAccessibleShape() const
@@ -1130,9 +1082,6 @@ void ChildDescriptor::setIndexAtAccessibleShape(sal_Int32 _nIndex)
     if ( pShape )
         pShape->setIndexInParent(_nIndex);
 }
-
-
-
 
 
 void ChildDescriptor::disposeAccessibleObject (AccessibleContextBase& rParent)

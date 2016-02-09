@@ -322,7 +322,4 @@ WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) thr
 }
 
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,9 +28,7 @@
 #include <basegfx/tools/canvastools.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer
@@ -74,7 +72,6 @@ namespace drawinglayer
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

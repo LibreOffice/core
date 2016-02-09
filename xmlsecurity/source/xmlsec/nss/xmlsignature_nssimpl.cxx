@@ -274,7 +274,6 @@ SAL_CALL XMLSignature_NssImpl::validate(
     }
 
 
-
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;

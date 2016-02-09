@@ -25,7 +25,6 @@
 #include <svx/svdoedge.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

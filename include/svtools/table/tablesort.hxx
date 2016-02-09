@@ -27,7 +27,6 @@ namespace svt { namespace table
 {
 
 
-
     //= ColumnSortDirection
 
     enum ColumnSortDirection

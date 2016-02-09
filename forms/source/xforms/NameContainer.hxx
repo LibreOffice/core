@@ -104,7 +104,6 @@ public:
     }
 
 
-
     // methods for XNameAccess (inherits XElementAccess)
 
 
@@ -135,7 +134,6 @@ public:
     }
 
 
-
     // methods for XNameReplace (inherits XNameAccess)
 
 
@@ -156,7 +154,6 @@ public:
         else
             throw css::lang::IllegalArgumentException();
     }
-
 
 
     // methods for XNameContainer (inherits XNameReplace)

@@ -785,7 +785,6 @@ bool SmDocShell::Load( SfxMedium& rMedium )
 }
 
 
-
 bool SmDocShell::Save()
 {
     //! apply latest changes if necessary

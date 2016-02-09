@@ -84,7 +84,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-
 static
 bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 {
@@ -176,7 +175,6 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 }
 
 
-
 void SfxObjectShell::UpdateDocInfoForSave()
 {
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
@@ -211,7 +209,6 @@ void SfxObjectShell::UpdateDocInfoForSave()
         }
     }
 }
-
 
 
 static void
@@ -285,7 +282,6 @@ void SfxObjectShell::UpdateTime_Impl(
 }
 
 
-
 VclPtr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog
 (
     vcl::Window*             pParent,
@@ -294,8 +290,6 @@ VclPtr<SfxDocumentInfoDialog> SfxObjectShell::CreateDocumentInfoDialog
 {
     return VclPtr<SfxDocumentInfoDialog>::Create(pParent, rSet);
 }
-
-
 
 
 std::set<Color> SfxObjectShell::GetDocColors()

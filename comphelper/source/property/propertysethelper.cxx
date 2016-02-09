@@ -55,7 +55,6 @@ PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) co
 }
 
 
-
 PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw()
 {
     mp = new PropertySetHelperImpl;

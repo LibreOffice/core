@@ -218,7 +218,6 @@ void DialControlBmp::DrawBackground()
 }
 
 
-
 DialControl::DialControl_Impl::DialControl_Impl ( vcl::Window& rParent ) :
     mxBmpEnabled(VclPtr<DialControlBmp>::Create(rParent)),
     mxBmpDisabled(VclPtr<DialControlBmp>::Create(rParent)),
@@ -257,7 +256,6 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
     mxBmpDisabled->DrawBackground( maWinSize, false );
     mxBmpBuffered->SetSize( maWinSize );
 }
-
 
 
 DialControl::DialControl( vcl::Window* pParent, WinBits nBits ) :
@@ -437,8 +435,6 @@ void DialControl::LinkedFieldModifyHdl()
 }
 
 
-
-
 void DialControl::SaveValue()
 {
     mpImpl->mnInitialAngle = mpImpl->mnAngle;
@@ -557,7 +553,6 @@ void DialControlWrapper::SetControlValue( sal_Int32 nValue )
 {
     GetControl().SetRotation( nValue );
 }
-
 
 
 }

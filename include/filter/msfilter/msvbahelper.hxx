@@ -31,7 +31,6 @@ namespace ooo {
 namespace vba {
 
 
-
 struct MSFILTER_DLLPUBLIC MacroResolvedInfo
 {
     SfxObjectShell*     mpDocContext;

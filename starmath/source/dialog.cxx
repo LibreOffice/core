@@ -1438,8 +1438,6 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 }
 
 
-
-
 void SmSymbolDialog::FillSymbolSets(bool bDeleteText)
     // populate the entries of possible SymbolsSets in the dialog with
     // current values of the SymbolSet manager but selects none of those

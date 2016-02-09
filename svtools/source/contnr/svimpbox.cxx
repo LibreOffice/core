@@ -537,7 +537,6 @@ void SvImpLBox::KeyDown( bool bPageDown, bool bNotifyScroll )
 }
 
 
-
 void SvImpLBox::InvalidateEntriesFrom( long nY ) const
 {
     if( !(nFlags & F_IN_PAINT ))
@@ -699,7 +698,6 @@ void SvImpLBox::ShowCursor( bool bShow )
         pView->SetClipRegion( aOldClip );
     }
 }
-
 
 
 void SvImpLBox::UpdateAll(
@@ -1378,8 +1376,6 @@ void SvImpLBox::FillView()
 }
 
 
-
-
 void SvImpLBox::ShowVerSBar()
 {
     bool bVerBar = ( pView->GetStyle() & WB_VSCROLL ) != 0;
@@ -1498,7 +1494,6 @@ void SvImpLBox::SetEntryHeight( short /* nHeight */ )
             pView->Invalidate();
     }
 }
-
 
 
 // ***********************************************************************
@@ -1825,7 +1820,6 @@ void SvImpLBox::EntryMoved( SvTreeListEntry* pEntry )
 }
 
 
-
 void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 {
     if( GetUpdateMode() )
@@ -1879,7 +1873,6 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
             pView->Update();
     }
 }
-
 
 
 // ********************************************************************
@@ -3416,7 +3409,6 @@ void SvImpLBox::CallEventListeners( sal_uLong nEvent, void* pData )
 }
 
 
-
 bool SvImpLBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
 {
     bool bRet = false;
@@ -3430,7 +3422,6 @@ bool SvImpLBox::SetCurrentTabPos( sal_uInt16 _nNewPos )
 
     return bRet;
 }
-
 
 
 bool SvImpLBox::IsSelectable( const SvTreeListEntry* pEntry )

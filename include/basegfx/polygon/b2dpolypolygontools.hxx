@@ -31,8 +31,6 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-
-
 namespace basegfx
 {
     // predefinitions

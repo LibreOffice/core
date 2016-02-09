@@ -396,7 +396,6 @@ bool SvxBorderTabPage::IsBorderLineStyleAllowed( sal_Int16 nStyle ) const
 }
 
 
-
 void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxTabPage::Reset( rSet );
@@ -617,7 +616,6 @@ SfxTabPage::sfxpg SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-
 bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
@@ -769,12 +767,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 }
 
 
-
 void SvxBorderTabPage::HideShadowControls()
 {
     m_pShadowFrame->Hide();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
@@ -847,7 +843,6 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 {
     bool bEnable = m_pWndShadows->GetSelectItemId() > 1;
@@ -856,7 +851,6 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
     m_pFtShadowColor->Enable(bEnable);
     m_pLbShadowColor->Enable(bEnable);
 }
-
 
 
 IMPL_LINK_TYPED( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
@@ -883,7 +877,6 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
 }
 
 
-
 IMPL_LINK_TYPED( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
 {
     if (&rLb == m_pLbLineStyle)
@@ -906,7 +899,6 @@ const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
 
 // number of shadow images to show
 const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
-
 
 
 sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
@@ -976,7 +968,6 @@ sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 }
 
 
-
 void SvxBorderTabPage::FillPresetVS()
 {
     ImageList& rImgList = aBorderImgLst;
@@ -997,7 +988,6 @@ void SvxBorderTabPage::FillPresetVS()
     m_pWndPresets->SetNoSelection();
     m_pWndPresets->Show();
 }
-
 
 
 void SvxBorderTabPage::FillShadowVS()
@@ -1027,7 +1017,6 @@ void SvxBorderTabPage::FillShadowVS()
     m_pWndShadows->SelectItem( 1 );
     m_pWndShadows->Show();
 }
-
 
 
 void SvxBorderTabPage::FillValueSets()
@@ -1174,7 +1163,6 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
                                m_pBottomMF->IsEnabled() || m_pLeftMF->IsEnabled() );
     }
 }
-
 
 
 IMPL_LINK_TYPED( SvxBorderTabPage, ModifyDistanceHdl_Impl, Edit&, rField, void)

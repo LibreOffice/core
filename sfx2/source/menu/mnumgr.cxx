@@ -84,14 +84,12 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
 }
 
 
-
 SfxMenuManager::~SfxMenuManager()
 {
     pBindings->ENTERREGISTRATIONS();
     delete pMenu;
     pBindings->LEAVEREGISTRATIONS();
 }
-
 
 
 void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
@@ -209,7 +207,6 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 }
 
 
-
 // executes the function for the selected item
 IMPL_LINK_TYPED( SfxMenuManager, Select, Menu *, pSelMenu, bool )
 {
@@ -248,7 +245,6 @@ SfxPopupMenuManager::~SfxPopupMenuManager()
 }
 
 
-
 void SfxPopupMenuManager::RemoveDisabledEntries()
 {
     if ( pSVMenu )
@@ -263,7 +259,6 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow
     delete pStaticThesSubMenu;  pStaticThesSubMenu = nullptr;
     return nVal;
 }
-
 
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )

@@ -103,7 +103,6 @@ SdrObjEditView::~SdrObjEditView()
 }
 
 
-
 bool SdrObjEditView::IsAction() const
 {
     return IsMacroObj() || SdrGlueEditView::IsAction();
@@ -1185,7 +1184,6 @@ SdrPageView* SdrObjEditView::GetTextEditPageView() const
 }
 
 
-
 OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window* pWin) const
 {
     if (pWin==nullptr) return nullptr;
@@ -1482,7 +1480,6 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
     }
     return SdrGlueEditView::Command(rCEvt,pWin);
 }
-
 
 
 bool SdrObjEditView::ImpIsTextEditAllSelected() const
@@ -1791,7 +1788,6 @@ bool SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
 
     return SdrGlueEditView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
 }
-
 
 
 void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWindow)

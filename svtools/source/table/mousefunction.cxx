@@ -29,7 +29,6 @@ namespace svt { namespace table
 {
 
 
-
     //= ColumnResize
 
 

@@ -33,7 +33,6 @@ namespace comphelper
 {
 
 
-
     //= string conversions, employed by the templatized log* members of
     //= EventLogger
 

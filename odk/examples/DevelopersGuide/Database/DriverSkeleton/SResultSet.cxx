@@ -267,7 +267,6 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
 }
 
 
-
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -314,7 +313,6 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 }
 
 
-
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -335,7 +333,6 @@ css::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLE
     css::util::Time nRet;
     return nRet;
 }
-
 
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -867,8 +864,6 @@ void SAL_CALL OResultSet::release() throw()
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

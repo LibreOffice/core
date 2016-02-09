@@ -89,7 +89,6 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
 }
 
 
-
 void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
@@ -103,7 +102,6 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
         GetStatusBar().SetQuickHelpText( GetId(), aPop.GetItemText( state_to_id( mnState ) ) );
     }
 }
-
 
 
 bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
@@ -133,7 +131,6 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 
     return true;
 }
-
 
 
 void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )

@@ -32,7 +32,6 @@ namespace svt
 {
 
 
-
     //= IWindowOperator
 
     /** an abstract interface for operating on a ->Window

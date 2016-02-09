@@ -54,7 +54,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 } } } }
 
 
-
 class LngSvcMgr :
     public cppu::WeakImplHelper
     <
@@ -188,7 +187,6 @@ inline OUString LngSvcMgr::getImplementationName_Static()
 {
     return OUString( "com.sun.star.lingu2.LngSvcMgr" );
 }
-
 
 
 #endif

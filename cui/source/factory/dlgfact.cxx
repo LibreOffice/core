@@ -174,7 +174,6 @@ IMPL_LINK_TYPED( VclAbstractDialog2_Impl, EndDialogHdl, Dialog&, rDlg, void )
 }
 
 
-
 void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
@@ -1589,7 +1588,6 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Wind
     }
     return nullptr;
 }
-
 
 
 SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( vcl::Window* pParent )

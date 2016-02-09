@@ -151,7 +151,6 @@ Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceName
 }
 
 
-
 typedef bool ( *PFunc_getSpecialCharsForEdit)( vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rOutString );
 
 

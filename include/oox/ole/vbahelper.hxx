@@ -50,7 +50,6 @@ const sal_uInt16 VBA_ID_PROJECTNAME             = 0x0004;
 const sal_uInt16 VBA_ID_PROJECTVERSION          = 0x0009;
 
 
-
 /** Static helper functions for the VBA filters. */
 namespace VbaHelper
 {
@@ -82,7 +81,6 @@ namespace VbaHelper
                             OUString& rValue,
                             const OUString& rKeyValue );
 }
-
 
 
 } // namespace ole

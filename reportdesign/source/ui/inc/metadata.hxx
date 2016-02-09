@@ -144,7 +144,6 @@ namespace rptui
     #define PROPERTY_ID_VERTICALALIGN                   42
 
 
-
 } // namespace rptui
 
 

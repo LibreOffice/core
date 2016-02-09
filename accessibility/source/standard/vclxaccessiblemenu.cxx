@@ -30,7 +30,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 // VCLXAccessibleMenu
 
 
@@ -40,11 +39,9 @@ VCLXAccessibleMenu::VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu
 }
 
 
-
 VCLXAccessibleMenu::~VCLXAccessibleMenu()
 {
 }
-
 
 
 bool VCLXAccessibleMenu::IsFocused()
@@ -56,7 +53,6 @@ bool VCLXAccessibleMenu::IsFocused()
 
     return bFocused;
 }
-
 
 
 bool VCLXAccessibleMenu::IsPopupMenuOpen()
@@ -95,7 +91,6 @@ OUString VCLXAccessibleMenu::getImplementationName() throw (RuntimeException, st
 }
 
 
-
 Sequence< OUString > VCLXAccessibleMenu::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleMenu" };
@@ -114,7 +109,6 @@ sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  ) throw (RuntimeExceptio
 }
 
 
-
 Reference< XAccessible > VCLXAccessibleMenu::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -124,7 +118,6 @@ Reference< XAccessible > VCLXAccessibleMenu::getAccessibleChild( sal_Int32 i ) t
 
     return GetChild( i );
 }
-
 
 
 sal_Int16 VCLXAccessibleMenu::getAccessibleRole(  ) throw (RuntimeException, std::exception)
@@ -160,7 +153,6 @@ void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex ) throw (I
 }
 
 
-
 sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -172,7 +164,6 @@ sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex ) 
 }
 
 
-
 void VCLXAccessibleMenu::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -181,12 +172,10 @@ void VCLXAccessibleMenu::clearAccessibleSelection(  ) throw (RuntimeException, s
 }
 
 
-
 void VCLXAccessibleMenu::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
 {
     // This method makes no sense in a menu, and so does nothing.
 }
-
 
 
 sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
@@ -203,7 +192,6 @@ sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  ) throw (Runtime
 
     return nRet;
 }
-
 
 
 Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -228,7 +216,6 @@ Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int
 }
 
 
-
 void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -238,7 +225,6 @@ void VCLXAccessibleMenu::deselectAccessibleChild( sal_Int32 nChildIndex ) throw 
 
     DeSelectAll();
 }
-
 
 
 OUString VCLXAccessibleMenu::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)

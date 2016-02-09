@@ -511,9 +511,7 @@ OUString getStandardSQLState( StandardSQLState _eState )
 }
 
 
-
 }   // namespace dbtools
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

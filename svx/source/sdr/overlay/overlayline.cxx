@@ -27,7 +27,6 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 
-
 namespace sdr
 {
     namespace overlay

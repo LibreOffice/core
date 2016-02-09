@@ -26,7 +26,6 @@
 #include <rtl/ustrbuf.hxx>
 
 
-
 OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl )
 {
     bool bNeg = false;
@@ -129,12 +128,10 @@ OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, co
 }
 
 
-
 OUString GetSvxString( sal_uInt16 nId )
 {
     return EE_RESSTR( nId );
 }
-
 
 
 OUString GetColorString( const Color& rCol )
@@ -169,7 +166,6 @@ OUString GetColorString( const Color& rCol )
     }
     return sStr;
 }
-
 
 
 sal_uInt16 GetMetricId( SfxMapUnit eUnit )

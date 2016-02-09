@@ -47,7 +47,6 @@
 #include <stack>
 
 
-
 /* Implementation of SmilFunctionParser class */
 
 namespace slideshow

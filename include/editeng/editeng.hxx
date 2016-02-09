@@ -111,7 +111,6 @@ class DeletedNodeInfo;
 class ParaPortionList;
 
 
-
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All );
 */

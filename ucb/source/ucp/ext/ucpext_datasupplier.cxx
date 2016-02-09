@@ -118,7 +118,6 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-
     //= DataSupplier
 
 

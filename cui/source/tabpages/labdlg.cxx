@@ -165,7 +165,6 @@ void SvxCaptionTabPage::Construct()
 }
 
 
-
 bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 {
     SfxItemPool*    pPool = _rOutAttrs->GetPool();
@@ -235,7 +234,6 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
     return true;
 }
-
 
 
 void SvxCaptionTabPage::Reset( const SfxItemSet*  )
@@ -355,13 +353,11 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 }
 
 
-
 VclPtr<SfxTabPage> SvxCaptionTabPage::Create( vcl::Window* pWindow,
                                               const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SvxCaptionTabPage>::Create( pWindow, *rOutAttrs );
 }
-
 
 
 void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
@@ -421,7 +417,6 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 }
 
 
-
 IMPL_LINK_TYPED( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox&, rListBox, void )
 {
     if (&rListBox == m_pLB_ANSATZ)
@@ -454,7 +449,6 @@ IMPL_LINK_TYPED( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
         }
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxCaptionTabPage, SelectCaptTypeHdl_Impl, ValueSet*, void)
@@ -493,7 +487,6 @@ void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
 }
 
 
-
 void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxTabPage::DataChanged( rDCEvt );
@@ -503,15 +496,12 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-
 void SvxCaptionTabPage::FillValueSet()
 {
     m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_1, m_aBmpCapTypes[0] );
     m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_2, m_aBmpCapTypes[1] );
     m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_3, m_aBmpCapTypes[2] );
 }
-
-
 
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pSdrView,

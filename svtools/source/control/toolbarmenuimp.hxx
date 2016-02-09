@@ -245,7 +245,6 @@ private:
 };
 
 
-
 struct ToolbarMenu_Impl
 {
     ToolbarMenu& mrMenu;

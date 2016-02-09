@@ -66,7 +66,6 @@ typedef ::cppu::WeakImplHelper<
     css::util::XChangesNotifier > NameContainer_BASE;
 
 
-
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
     typedef std::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
@@ -153,7 +152,6 @@ public:
 };
 
 
-
 class ModifiableHelper
 {
 private:
@@ -184,7 +182,6 @@ public:
 };
 
 
-
 typedef ::comphelper::OListenerContainerBase<
     css::script::vba::XVBAScriptListener,
     css::script::vba::VBAScriptEvent > VBAScriptListenerContainer_BASE;
@@ -200,7 +197,6 @@ private:
         const css::script::vba::VBAScriptEvent& rEvent )
         throw (css::uno::Exception) override;
 };
-
 
 
 class SfxLibrary;
@@ -532,7 +528,6 @@ public:
 };
 
 
-
 class LibraryContainerMethodGuard
 {
 public:
@@ -546,7 +541,6 @@ public:
         basic::SfxLibraryContainer::leaveMethod();
     }
 };
-
 
 
 class SfxLibrary
@@ -710,7 +704,6 @@ protected:
 };
 
 
-
 class ScriptSubPackageIterator
 {
     css::uno::Reference< css::deployment::XPackage > m_xMainPackage;
@@ -731,7 +724,6 @@ public:
 
     css::uno::Reference< css::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
 };
-
 
 
 class ScriptExtensionIterator
@@ -774,7 +766,6 @@ protected:
     ScriptSubPackageIterator* m_pScriptSubPackageIterator;
 
 }; // end class ScriptExtensionIterator
-
 
 
 }   // namespace basic

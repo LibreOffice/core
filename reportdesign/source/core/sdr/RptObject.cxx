@@ -576,8 +576,6 @@ void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rx
 }
 
 
-
-
 OUnoObject::OUnoObject(const OUString& _sComponentName
                        ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
@@ -703,7 +701,6 @@ void OUnoObject::NbcMove( const Size& rSize )
     else
         SdrUnoObj::NbcMove( rSize );
 }
-
 
 
 void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
@@ -989,7 +986,6 @@ void OOle2Obj::NbcMove( const Size& rSize )
     else
         SdrOle2Obj::NbcMove( rSize );
 }
-
 
 
 void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)

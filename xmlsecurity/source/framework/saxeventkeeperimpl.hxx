@@ -343,5 +343,4 @@ SAL_CALL SAXEventKeeperImpl_createInstance( const com::sun::star::uno::Reference
 #endif
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

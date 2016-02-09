@@ -80,7 +80,6 @@ inline OUString GetUsageText( const sal_uInt16 eU )
 }
 
 
-
 bool SvxPageItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -218,7 +217,6 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-
 SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt8 eType;
@@ -239,7 +237,6 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     pPage->SetPageUsage( nUse );
     return pPage;
 }
-
 
 
 SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
@@ -274,7 +271,6 @@ SfxPoolItem* SvxSetItem::Clone( SfxItemPool * ) const
 {
     return new SvxSetItem(*this);
 }
-
 
 
 bool SvxSetItem::GetPresentation

@@ -36,7 +36,6 @@ SfxRectangleItem::SfxRectangleItem()
 }
 
 
-
 SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
@@ -44,13 +43,11 @@ SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
 }
 
 
-
 SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
 }
-
 
 
 bool SfxRectangleItem::GetPresentation
@@ -70,7 +67,6 @@ bool SfxRectangleItem::GetPresentation
 }
 
 
-
 bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -78,12 +74,10 @@ bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-
 SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 {
     return new SfxRectangleItem( *this );
 }
-
 
 
 SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
@@ -94,13 +88,11 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 }
 
 
-
 SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     WriteRectangle( rStream, aVal );
     return rStream;
 }
-
 
 
 bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
@@ -160,7 +152,6 @@ bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
 
     return bRet;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

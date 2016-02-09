@@ -18,14 +18,12 @@
  */
 
 
-
 #ifndef INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
 #define INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
 
 #include <sal/types.h>
 #include <i18nlangtag/lang.h>
 #include <filter/msfilter/msfilterdllapi.h>
-
 
 
 namespace msfilter {
@@ -301,9 +299,7 @@ MSFILTER_DLLPUBLIC CountryId ConvertLanguageToCountry( LanguageType eLanguage );
 MSFILTER_DLLPUBLIC LanguageType ConvertCountryToLanguage( CountryId eCountry );
 
 
-
 }
-
 
 
 #endif

@@ -52,8 +52,6 @@ const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraph
 const sal_Char sAPI_UserIndexName[] = "UserIndexName";
 
 
-
-
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

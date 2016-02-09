@@ -33,7 +33,6 @@
 #include <rtl/ustring.hxx>
 
 
-
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
@@ -45,7 +44,6 @@ const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
 const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
 const sal_Char sAPI_Level[] = "Level";
 const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
-
 
 
 XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(

@@ -276,7 +276,6 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
 }
 
 
-
 void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
 {
     if( SfxItemState::DEFAULT <= rSet.GetItemState( SID_GRFFILTER ) )

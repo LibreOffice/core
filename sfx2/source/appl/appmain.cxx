@@ -43,7 +43,6 @@
 #include "workwin.hxx"
 
 
-
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 {
     if( !pAppData_Impl->pMatcher )

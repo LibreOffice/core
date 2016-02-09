@@ -33,11 +33,7 @@
 using namespace com::sun::star;
 
 
-
-
 // PropertySetInfo Implementation.
-
-
 
 
 namespace ucbhelper {
@@ -57,7 +53,6 @@ PropertySetInfo::~PropertySetInfo()
 {
     delete m_pProps;
 }
-
 
 
 // XInterface methods.
@@ -91,7 +86,6 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 
 
 // XPropertySetInfo methods.
-
 
 
 // virtual
@@ -182,9 +176,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 }
 
 
-
 // Non-Interface methods.
-
 
 
 void PropertySetInfo::reset()
@@ -218,11 +210,7 @@ bool PropertySetInfo::queryProperty(
 }
 
 
-
-
 // CommandProcessorInfo Implementation.
-
-
 
 
 CommandProcessorInfo::CommandProcessorInfo(
@@ -240,7 +228,6 @@ CommandProcessorInfo::~CommandProcessorInfo()
 {
     delete m_pCommands;
 }
-
 
 
 // XInterface methods.
@@ -271,15 +258,12 @@ css::uno::Any SAL_CALL CommandProcessorInfo::queryInterface( const css::uno::Typ
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
                          lang::XTypeProvider,
                          css::ucb::XCommandInfo );
 
 
-
 // XCommandInfo methods.
-
 
 
 // virtual
@@ -364,9 +348,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 }
 
 
-
 // Non-Interface methods.
-
 
 
 void CommandProcessorInfo::reset()
@@ -375,7 +357,6 @@ void CommandProcessorInfo::reset()
     delete m_pCommands;
     m_pCommands = nullptr;
 }
-
 
 
 bool CommandProcessorInfo::queryCommand(

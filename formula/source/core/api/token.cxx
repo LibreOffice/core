@@ -336,7 +336,6 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 // real implementations of virtual functions
 
 
-
 sal_uInt8   FormulaByteToken::GetByte() const           { return nByte; }
 void        FormulaByteToken::SetByte( sal_uInt8 n )    { nByte = n; }
 bool        FormulaByteToken::IsInForceArray() const    { return bIsInForceArray; }
@@ -1011,7 +1010,6 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 {
     return Add( new FormulaStringOpToken( ocStringXML, rStr ) );
 }
-
 
 
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
@@ -1712,7 +1710,6 @@ bool FormulaTokenIterator::IsEndOfPath() const
 {
     return GetNonEndOfPathToken( maStack.back().nPC + 1) == nullptr;
 }
-
 
 
 // real implementations of virtual functions

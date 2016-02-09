@@ -186,12 +186,10 @@ bool SfxFrameDescriptorItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-
 SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
 {
     return new SfxFrameDescriptorItem( *this );
 }
-
 
 
 bool SfxFrameDescriptorItem::GetPresentation

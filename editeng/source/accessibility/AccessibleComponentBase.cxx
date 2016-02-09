@@ -41,8 +41,6 @@ AccessibleComponentBase::AccessibleComponentBase()
 }
 
 
-
-
 AccessibleComponentBase::~AccessibleComponentBase()
 {
 }
@@ -61,8 +59,6 @@ sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
 }
 
 
-
-
 uno::Reference<XAccessible > SAL_CALL
     AccessibleComponentBase::getAccessibleAtPoint (
         const awt::Point& /*aPoint*/)
@@ -72,15 +68,11 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 
-
-
 awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds()
     throw (uno::RuntimeException, std::exception)
 {
     return awt::Rectangle();
 }
-
-
 
 
 awt::Point SAL_CALL AccessibleComponentBase::getLocation()
@@ -91,15 +83,11 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocation()
 }
 
 
-
-
 awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen()
     throw (css::uno::RuntimeException, std::exception)
 {
     return awt::Point();
 }
-
-
 
 
 css::awt::Size SAL_CALL AccessibleComponentBase::getSize()
@@ -108,8 +96,6 @@ css::awt::Size SAL_CALL AccessibleComponentBase::getSize()
     awt::Rectangle aBBox (getBounds());
     return awt::Size (aBBox.Width, aBBox.Height);
 }
-
-
 
 
 void SAL_CALL AccessibleComponentBase::addFocusListener (
@@ -121,16 +107,12 @@ void SAL_CALL AccessibleComponentBase::addFocusListener (
 }
 
 
-
-
 void SAL_CALL AccessibleComponentBase::removeFocusListener (const css::uno::Reference<
     css::awt::XFocusListener >& /*xListener*/ )
     throw (css::uno::RuntimeException)
 {
     // Ignored
 }
-
-
 
 
 void SAL_CALL AccessibleComponentBase::grabFocus()
@@ -148,8 +130,6 @@ void SAL_CALL AccessibleComponentBase::grabFocus()
 }
 
 
-
-
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
         throw (css::uno::RuntimeException, std::exception)
 {
@@ -157,15 +137,11 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
 }
 
 
-
-
 sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
     throw (css::uno::RuntimeException, std::exception)
 {
     return Color(COL_WHITE).GetColor();
 }
-
-
 
 
 // XAccessibleExtendedComponent
@@ -176,8 +152,6 @@ css::uno::Reference< css::awt::XFont > SAL_CALL
 {
     return uno::Reference<awt::XFont>();
 }
-
-
 
 
 OUString SAL_CALL AccessibleComponentBase::getTitledBorderText()

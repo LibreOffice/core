@@ -84,7 +84,6 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-
 namespace basegfx
 {
     /** convert color to gray
@@ -108,7 +107,6 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 } // end of namespace basegfx
-
 
 
 namespace basegfx
@@ -136,7 +134,6 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 } // end of namespace basegfx
-
 
 
 namespace basegfx
@@ -168,7 +165,6 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 } // end of namespace basegfx
-
 
 
 namespace basegfx
@@ -204,7 +200,6 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 } // end of namespace basegfx
-
 
 
 namespace basegfx
@@ -246,7 +241,6 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-
 namespace basegfx
 {
     /** convert color to black and white
@@ -279,7 +273,6 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 } // end of namespace basegfx
-
 
 
 namespace basegfx
@@ -316,7 +309,6 @@ namespace basegfx
         virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
     };
 } // end of namespace basegfx
-
 
 
 namespace basegfx
@@ -368,7 +360,6 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-
 namespace basegfx
 {
     /// typedef to allow working with shared instances of BColorModifier
@@ -414,7 +405,6 @@ namespace basegfx
         }
     };
 } // end of namespace basegfx
-
 
 
 #endif // INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX

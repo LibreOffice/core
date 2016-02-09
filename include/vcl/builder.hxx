@@ -433,7 +433,6 @@ inline T* VclBuilder::get(const OString& sID)
 }
 
 
-
 //helper baseclass to ease retro fitting dialogs/tabpages that load a resource
 //to load a .ui file instead
 //

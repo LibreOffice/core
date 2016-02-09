@@ -100,13 +100,11 @@ void SvxShowCharSet::GetFocus()
 }
 
 
-
 void SvxShowCharSet::LoseFocus()
 {
     Control::LoseFocus();
     SelectIndex( nSelectedIndex );
 }
-
 
 
 void SvxShowCharSet::StateChanged(StateChangedType nType)
@@ -123,7 +121,6 @@ void SvxShowCharSet::StateChanged(StateChangedType nType)
 }
 
 
-
 void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS)
@@ -137,7 +134,6 @@ void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged(rDCEvt);
     }
 }
-
 
 
 void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
@@ -161,7 +157,6 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-
 void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( bDrag && rMEvt.IsLeft() )
@@ -173,7 +168,6 @@ void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
         bDrag = false;
     }
 }
-
 
 
 void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
@@ -199,13 +193,11 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-
 void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 {
     if( !HandleScrollCommand( rCEvt, nullptr, aVscrollSB.get() ) )
         Control::Command( rCEvt );
 }
-
 
 
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)
@@ -214,12 +206,10 @@ sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)
 }
 
 
-
 sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos)
 {
     return _nPos % COLUMN_COUNT ;
 }
-
 
 
 int SvxShowCharSet::FirstInView() const
@@ -231,7 +221,6 @@ int SvxShowCharSet::FirstInView() const
 }
 
 
-
 int SvxShowCharSet::LastInView() const
 {
     sal_uIntPtr nIndex = FirstInView();
@@ -241,7 +230,6 @@ int SvxShowCharSet::LastInView() const
         nIndex = nCompare;
     return nIndex;
 }
-
 
 
 inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
@@ -258,7 +246,6 @@ int SvxShowCharSet::PixelToMapIndex( const Point& point) const
     int nBase = FirstInView();
     return (nBase + ((point.X() - m_nXGap)/nX) + ((point.Y() - m_nYGap)/nY) * COLUMN_COUNT);
 }
-
 
 
 void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
@@ -327,7 +314,6 @@ void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
         aPreSelectHdl.Call( this );
     }
 }
-
 
 
 void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
@@ -495,7 +481,6 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
 }
 
 
-
 void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -530,14 +515,12 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 }
 
 
-
 sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
     if( nSelectedIndex >= 0 )
         getSelectedChar() = mpFontCharMap->GetCharFromIndex( nSelectedIndex );
     return getSelectedChar();
 }
-
 
 
 void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
@@ -586,7 +569,6 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     mbRecalculateFont = false;
 }
-
 
 
 void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
@@ -662,14 +644,12 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
 }
 
 
-
 void SvxShowCharSet::OutputIndex( int nNewIndex )
 {
     SelectIndex( nNewIndex, true );
     aSelectHdl.Call( this );
 
 }
-
 
 
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, bool bFocus )
@@ -689,7 +669,6 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, bool bFocus )
         Invalidate();
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
@@ -715,7 +694,6 @@ IMPL_LINK_NOARG_TYPED(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
 
     Invalidate();
 }
-
 
 
 SvxShowCharSet::~SvxShowCharSet()
@@ -764,7 +742,6 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 
     return aFind->second.get();
 }
-
 
 
 sal_Int32 SvxShowCharSet::getMaxCharCount() const

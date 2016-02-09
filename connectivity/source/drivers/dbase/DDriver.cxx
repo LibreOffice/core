@@ -115,5 +115,4 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

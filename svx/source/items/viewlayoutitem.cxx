@@ -26,13 +26,11 @@
 #include <osl/diagnose.h>
 
 
-
 SfxPoolItem* SvxViewLayoutItem::CreateDefault() { return new SvxViewLayoutItem; }
 
 #define VIEWLAYOUT_PARAM_COLUMNS    "Columns"
 #define VIEWLAYOUT_PARAM_BOOKMODE   "BookMode"
 #define VIEWLAYOUT_PARAMS           2
-
 
 
 SvxViewLayoutItem::SvxViewLayoutItem
@@ -47,7 +45,6 @@ SvxViewLayoutItem::SvxViewLayoutItem
 }
 
 
-
 SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
 :   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
     mbBookMode( rOrig.IsBookMode() )
@@ -55,11 +52,9 @@ SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
 }
 
 
-
 SvxViewLayoutItem::~SvxViewLayoutItem()
 {
 }
-
 
 
 SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
@@ -68,19 +63,16 @@ SfxPoolItem* SvxViewLayoutItem::Clone( SfxItemPool * /*pPool*/ ) const
 }
 
 
-
 SfxPoolItem* SvxViewLayoutItem::Create( SvStream& /*rStrm*/, sal_uInt16 /*nVersion*/ ) const
 {
     return nullptr;
 }
 
 
-
 SvStream& SvxViewLayoutItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStrm;
 }
-
 
 
 bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const

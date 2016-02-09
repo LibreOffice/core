@@ -14,7 +14,6 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-
 namespace basegfx
 {
     /** This namespace provides functions for optimized geometric zooming

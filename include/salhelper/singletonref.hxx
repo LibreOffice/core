@@ -85,7 +85,6 @@ class SingletonRef
     public:
 
 
-
         /** @short  standard ctor.
 
                     The internal wrapped object is created only,
@@ -107,7 +106,6 @@ class SingletonRef
             OSL_ENSURE(m_nRef>0 && m_pInstance, "Race? Ref count of singleton >0, but instance is NULL!");
             // <- GLOBAL SAFE
         }
-
 
 
         /** @short  standard dtor.
@@ -134,7 +132,6 @@ class SingletonRef
         }
 
 
-
         /** @short  Allows rSingle->someBodyOp().
          */
         SingletonClass* operator->() const
@@ -144,7 +141,6 @@ class SingletonRef
             return m_pInstance;
             // <- GLOBAL SAFE
         }
-
 
 
         /** @short  Allows (*rSingle).someBodyOp().
@@ -161,7 +157,6 @@ class SingletonRef
     // helper
 
     private:
-
 
 
         /** @short  creates an own mutex for guarding static contents.

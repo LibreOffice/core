@@ -97,13 +97,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-
 struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
 };
-
 
 
 void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
@@ -337,7 +335,6 @@ void SdrModel::SetReadOnly(bool bYes)
 {
     bReadOnly=bYes;
 }
-
 
 
 void SdrModel::SetMaxUndoActionCount(sal_uIntPtr nCount)
@@ -1575,7 +1572,6 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 }
 
 
-
 void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                          sal_uInt16 nDestPos,
                          bool bUndo, bool bMoveNoCopy)
@@ -1875,7 +1871,6 @@ void SdrModel::setLock( bool bLock )
 }
 
 
-
 void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel )
 {
     assert(pNewModel != nullptr);
@@ -1930,7 +1925,6 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
         }
     }
 }
-
 
 
 void SdrModel::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
@@ -2116,7 +2110,6 @@ const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 }
 
 
-
 SdrHint::SdrHint(SdrHintKind eNewHint)
 :   mpPage(nullptr),
     mpObj(nullptr),
@@ -2146,8 +2139,6 @@ void SdrHint::SetKind(SdrHintKind eNewKind)
 {
     meHint = eNewKind;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

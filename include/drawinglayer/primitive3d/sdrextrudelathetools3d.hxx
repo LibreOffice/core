@@ -34,7 +34,6 @@ namespace drawinglayer { namespace geometry {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -121,7 +120,6 @@ namespace drawinglayer
 
     } // end of namespace overlay
 } // end of namespace drawinglayer
-
 
 
 #endif //_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX

@@ -221,7 +221,6 @@ namespace canvas
         bool updateClipState( const Sprite::Reference& rSprite );
 
 
-
         /// Owning sprite canvas
         SpriteSurface::Reference                            mpSpriteCanvas;
 

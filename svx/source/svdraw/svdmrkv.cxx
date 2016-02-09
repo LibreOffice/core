@@ -122,9 +122,7 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
 }
 
 
-
 // MarkView
-
 
 
 void SdrMarkView::ImpClearVars()
@@ -243,7 +241,6 @@ void SdrMarkView::ModelHasChanged()
 }
 
 
-
 bool SdrMarkView::IsAction() const
 {
     return SdrSnapView::IsAction() || IsMarkObj() || IsMarkPoints() || IsMarkGluePoints();
@@ -314,7 +311,6 @@ void SdrMarkView::TakeActionRect(Rectangle& rRect) const
 }
 
 
-
 void SdrMarkView::ClearPageView()
 {
     UnmarkAllObj();
@@ -343,7 +339,6 @@ void SdrMarkView::HideSdrPage()
         AdjustMarkHdl();
     }
 }
-
 
 
 bool SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
@@ -402,7 +397,6 @@ void SdrMarkView::BrkMarkObj()
         mpMarkObjOverlay = nullptr;
     }
 }
-
 
 
 bool SdrMarkView::BegMarkPoints(const Point& rPnt, bool bUnmark)
@@ -468,7 +462,6 @@ void SdrMarkView::BrkMarkPoints()
         mpMarkPointsOverlay = nullptr;
     }
 }
-
 
 
 bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, bool bUnmark)
@@ -1382,7 +1375,6 @@ void SdrMarkView::SetEditMode(SdrViewEditMode eMode)
 }
 
 
-
 bool SdrMarkView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 {
     if (pObj)
@@ -2085,7 +2077,6 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
 }
 
 
-
 void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal, ImpTakeDescriptionOptions nOpt) const
 {
     rStr = ImpGetResStr(nStrCacheID);
@@ -2142,7 +2133,6 @@ bool SdrMarkView::EnterMarkedGroup()
 }
 
 
-
 void SdrMarkView::MarkListHasChanged()
 {
     GetMarkedObjectListWriteAccess().SetNameDirty();
@@ -2163,7 +2153,6 @@ void SdrMarkView::MarkListHasChanged()
     }
     ImpSetGlueVisible4(bOneEdgeMarked);
 }
-
 
 
 void SdrMarkView::SetMoveOutside(bool bOn)

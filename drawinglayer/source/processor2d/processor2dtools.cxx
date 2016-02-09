@@ -21,9 +21,7 @@
 #include "vclmetafileprocessor2d.hxx"
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer
@@ -60,7 +58,6 @@ namespace drawinglayer
         }
     } // end of namespace processor2d
 } // end of namespace drawinglayer
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

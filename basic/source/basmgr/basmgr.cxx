@@ -168,7 +168,6 @@ public:
 };
 
 
-
 // BasMgrContainerListenerImpl
 
 
@@ -236,7 +235,6 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
 }
 
 
-
 // XEventListener
 
 
@@ -295,7 +293,6 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
 }
 
 
-
 void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::ContainerEvent& Event )
     throw( uno::RuntimeException, std::exception )
 {
@@ -320,7 +317,6 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
         pLib->SetModified( false );
     }
 }
-
 
 
 void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::ContainerEvent& Event )
@@ -364,8 +360,6 @@ BasicError::BasicError( const BasicError& rErr ) :
     nErrorId    = rErr.nErrorId;
     nReason     = rErr.nReason;
 }
-
-
 
 
 class BasicLibInfo
@@ -1695,7 +1689,6 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
 }
 
 
-
 class ModuleInfo_Impl : public ModuleInfoHelper
 {
     OUString maName;
@@ -1716,8 +1709,6 @@ public:
 };
 
 
-
-
 class DialogInfo_Impl : public WeakImplHelper< script::XStarBasicDialogInfo >
 {
     OUString maName;
@@ -1733,8 +1724,6 @@ public:
     virtual uno::Sequence< sal_Int8 > SAL_CALL getData() throw(uno::RuntimeException, std::exception) override
         { return mData; }
 };
-
-
 
 
 class LibraryInfo_Impl : public WeakImplHelper< script::XStarBasicLibraryInfo >
@@ -1778,7 +1767,6 @@ public:
     virtual OUString SAL_CALL getLinkTargetURL() throw(uno::RuntimeException, std::exception) override
         { return maLinkTargetURL; }
 };
-
 
 
 class ModuleContainer_Impl : public NameContainerHelper
@@ -1903,8 +1891,6 @@ void ModuleContainer_Impl::removeByName( const OUString& Name )
     }
     mpLib->Remove( pMod );
 }
-
-
 
 
 uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
@@ -2086,9 +2072,6 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
 }
 
 
-
-
-
 class LibraryContainer_Impl : public NameContainerHelper
 {
     BasicManager* mpMgr;
@@ -2231,7 +2214,6 @@ void LibraryContainer_Impl::removeByName( const OUString& Name )
     sal_uInt16 nLibId = mpMgr->GetLibId( Name );
     mpMgr->RemoveLib( nLibId );
 }
-
 
 
 typedef WeakImplHelper< script::XStarBasicAccess > StarBasicAccessHelper;

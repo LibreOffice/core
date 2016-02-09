@@ -27,7 +27,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -96,7 +95,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX

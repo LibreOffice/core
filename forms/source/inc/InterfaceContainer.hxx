@@ -57,8 +57,6 @@ namespace frm
 {
 
 
-
-
     struct ElementDescription
     {
     public:

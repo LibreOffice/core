@@ -101,7 +101,6 @@ namespace pq_sdbc_driver
 {
 
 
-
 // Helper class for statement lifetime management
 class ClosableReference : public cppu::WeakImplHelper< com::sun::star::uno::XReference >
 {
@@ -660,7 +659,6 @@ Reference< XNameAccess > Connection::getViews()
 }
 
 
-
 Reference< XNameAccess > Connection::getUsers()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -682,7 +680,6 @@ Reference< XInterface >  ConnectionCreateInstance(
     ::rtl::Reference< RefCountedMutex > ref = new RefCountedMutex();
     return * new Connection( ref, ctx );
 }
-
 
 
 bool isLog( ConnectionSettings *settings, int loglevel )
@@ -726,7 +723,6 @@ void log( ConnectionSettings *settings, sal_Int32 level, const char *str )
 
 
 }
-
 
 
 static const struct cppu::ImplementationEntry g_entries[] =

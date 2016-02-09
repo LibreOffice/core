@@ -58,7 +58,6 @@ Reference< XMultiServiceFactory >   g_xFactory;
 //  main
 
 
-
 // int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]  )
 // make Warning free, leave out typename
 int SAL_CALL main(int , char*, char* )

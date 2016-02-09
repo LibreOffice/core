@@ -1720,7 +1720,6 @@ void SwPostItField::SetName(const OUString& rName)
 }
 
 
-
 void SwPostItField::SetTextObject( OutlinerParaObject* pText )
 {
     delete mpText;

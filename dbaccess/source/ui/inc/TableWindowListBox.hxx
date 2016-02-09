@@ -74,7 +74,6 @@ namespace dbaui
         virtual void dragFinished( ) override;
 
 
-
     public:
         OTableWindowListBox(OTableWindow* pParent);
         virtual ~OTableWindowListBox();
@@ -96,7 +95,6 @@ namespace dbaui
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWLISTBOX_HXX
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

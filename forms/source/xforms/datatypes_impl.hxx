@@ -59,7 +59,6 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 }
 
 
-
 template< typename VALUE_TYPE >
 OValueLimitedType< VALUE_TYPE >::OValueLimitedType( const OUString& _rName, sal_Int16 _nTypeClass )
     :OValueLimitedType_Base( _rName, _nTypeClass )

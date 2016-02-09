@@ -45,7 +45,6 @@ namespace drawinglayer { namespace attribute {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -90,7 +89,6 @@ namespace drawinglayer
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 #endif //_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX

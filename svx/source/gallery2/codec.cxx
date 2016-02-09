@@ -25,7 +25,6 @@
 
 // - GalleryCodec -
 
-
 GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
     rStm( rIOStm )
 {

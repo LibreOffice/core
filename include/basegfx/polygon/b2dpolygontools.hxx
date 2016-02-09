@@ -32,7 +32,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 
-
 // Definitions for the cut flags used from the findCut methods
 enum class CutFlagValue
 {

@@ -21,7 +21,6 @@
 #include <main.hxx>
 
 
-
 void CGM::ImplDoClass2()
 {
     sal_uInt32  nUInteger;

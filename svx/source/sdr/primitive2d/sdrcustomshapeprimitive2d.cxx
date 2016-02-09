@@ -26,9 +26,7 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

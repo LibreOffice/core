@@ -119,7 +119,6 @@ SfxImageManager_Impl::SfxImageManager_Impl(SfxModule& rModule)
 }
 
 
-
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
     m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
@@ -128,7 +127,6 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
     for ( size_t i = 0; i < m_aToolBoxes.size(); i++ )
         delete m_aToolBoxes[i];
 }
-
 
 
 ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
@@ -143,7 +141,6 @@ ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
 }
 
 
-
 Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
 {
     ImageList* pImageList = GetImageList( bBig );
@@ -151,7 +148,6 @@ Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
         return pImageList->GetImage( nId );
     return Image();
 }
-
 
 
 void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
@@ -199,12 +195,10 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SfxImageManager_Impl, OptionsChanged_Impl, LinkParamNone*, void)
 {
     SetSymbolsSize_Impl( m_aOpt.GetCurrentSymbolsSize() );
 }
-
 
 
 IMPL_LINK_TYPED( SfxImageManager_Impl, SettingsChanged_Impl, VclSimpleEvent&, rEvent, void)
@@ -303,7 +297,6 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, SfxToolboxFlags nFlags )
     pInf->nFlags   = nFlags;
     pImp->m_aToolBoxes.push_back( pInf );
 }
-
 
 
 void SfxImageManager::ReleaseToolBox( ToolBox *pBox )

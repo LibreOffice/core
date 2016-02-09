@@ -30,7 +30,6 @@ class NumericField;
 namespace svx {
 
 
-
 class SAL_WARN_UNUSED DialControlBmp : public VirtualDevice
 {
 public:

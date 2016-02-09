@@ -43,7 +43,6 @@ namespace cppcanvas
         }
 
 
-
         ImplSpriteCanvas::ImplSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) :
             ImplCanvas( uno::Reference< rendering::XCanvas >(rCanvas,
                                                              uno::UNO_QUERY) ),

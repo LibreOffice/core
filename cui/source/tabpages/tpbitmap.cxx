@@ -152,7 +152,6 @@ void SvxBitmapTabPage::Construct()
 }
 
 
-
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 {
     sal_Int32 nPos;
@@ -230,7 +229,6 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 }
 
 
-
 SfxTabPage::sfxpg SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 {
     if ( CheckChanges_Impl() == -1L )
@@ -241,7 +239,6 @@ SfxTabPage::sfxpg SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 
     return LEAVE_PAGE;
 }
-
 
 
 bool SvxBitmapTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
@@ -270,7 +267,6 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 
     return true;
 }
-
 
 
 void SvxBitmapTabPage::Reset( const SfxItemSet*  )
@@ -307,13 +303,11 @@ void SvxBitmapTabPage::Reset( const SfxItemSet*  )
 }
 
 
-
 VclPtr<SfxTabPage> SvxBitmapTabPage::Create( vcl::Window* pWindow,
                                              const SfxItemSet* rSet )
 {
     return VclPtr<SvxBitmapTabPage>::Create( pWindow, *rSet );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangeBitmapHdl_Impl, ListBox&, void)
@@ -432,7 +426,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangeBitmapHdl_Impl, ListBox&, void)
 }
 
 
-
 long SvxBitmapTabPage::CheckChanges_Impl()
 {
     sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
@@ -476,7 +469,6 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         *m_pPos = nPos;
     return 0L;
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
@@ -586,8 +578,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
 /******************************************************************************/
 
 
-
-
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
@@ -669,7 +659,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
@@ -732,7 +721,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickModifyHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
@@ -763,7 +751,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl_Impl, Button*, void)
         m_pBtnSave->Disable();
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickLoadHdl_Impl, Button*, void)
@@ -867,7 +854,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickLoadHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -934,7 +920,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickSaveHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangePixelColorHdl_Impl, ListBox&, void)
 {
     m_pCtlPixel->SetPixelColor( m_pLbColor->GetSelectEntryColor() );
@@ -949,7 +934,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangePixelColorHdl_Impl, ListBox&, void
 
     m_bBmpChanged = true;
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl, ListBox&, void)
@@ -968,7 +952,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl, ListBox&, v
 }
 
 
-
 void SvxBitmapTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
 {
     if( pWindow == m_pCtlPixel )
@@ -983,8 +966,6 @@ void SvxBitmapTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
         m_bBmpChanged = true;
     }
 }
-
-
 
 
 vcl::Window* SvxBitmapTabPage::GetParentLabeledBy( const vcl::Window* pLabeled ) const

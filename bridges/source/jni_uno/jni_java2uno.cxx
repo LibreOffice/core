@@ -87,7 +87,6 @@ jobject Bridge::map_to_java(
 }
 
 
-
 void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 {
     if (typelib_TypeClass_EXCEPTION == uno_exc->pType->eTypeClass)

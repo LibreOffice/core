@@ -43,8 +43,6 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-
-
 //  The mutex to synchronize access to containers.
 static osl::Mutex& getContainerMutex()
 {
@@ -63,7 +61,6 @@ static osl::Mutex& getContainerMutex()
 }
 
 
-
 struct SortInfo
 {
     bool    mbUseOwnCompare;
@@ -76,7 +73,6 @@ struct SortInfo
 };
 
 
-
 struct SortListData
 {
     bool    mbModified;
@@ -87,9 +83,7 @@ struct SortListData
 };
 
 
-
 // class SRSPropertySetInfo.
-
 
 
 class SRSPropertySetInfo : public cppu::WeakImplHelper <
@@ -283,7 +277,6 @@ SortedResultSet::queryContent()
     osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XContentAccess >::query(mxOriginal)->queryContent();
 }
-
 
 
 // XResultSet methods.
@@ -805,7 +798,6 @@ Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
 }
 
 
-
 // XCloseable methods.
 
 
@@ -826,7 +818,6 @@ Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
     osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XResultSetMetaDataSupplier >::query(mxOriginal)->getMetaData();
 }
-
 
 
 // XPropertySet methods.
@@ -1338,8 +1329,6 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
 }
 
 
-
-
 // public methods
 
 
@@ -1798,7 +1787,6 @@ void SortedResultSet::ResortNew( EventList* pList )
 }
 
 
-
 // SortListData
 
 
@@ -1808,7 +1796,6 @@ SortListData::SortListData( sal_IntPtr nPos, bool bModified )
     mnCurPos = nPos;
     mnOldPos = nPos;
 };
-
 
 
 void SortedEntryList::Clear()
@@ -1886,8 +1873,6 @@ sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
 }
 
 
-
-
 void SimpleList::Remove( sal_uInt32 nPos )
 {
     if ( nPos < (sal_uInt32) maData.size() )
@@ -1941,9 +1926,7 @@ void SimpleList::Replace( void* pData, sal_uInt32 nPos )
 }
 
 
-
 // class SRSPropertySetInfo.
-
 
 
 SRSPropertySetInfo::SRSPropertySetInfo()

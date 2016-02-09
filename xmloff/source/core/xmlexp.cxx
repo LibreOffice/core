@@ -2533,7 +2533,6 @@ bool SvXMLExport::SetNullDateOnUnitConverter()
 }
 
 
-
 void SvXMLElementExport::StartElement(
     const sal_uInt16 nPrefixKey,
     const OUString& rLName,

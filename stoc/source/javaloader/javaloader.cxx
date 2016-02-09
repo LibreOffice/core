@@ -320,7 +320,6 @@ Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
 }
 
 
-
 // XImplementationLoader
 sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,

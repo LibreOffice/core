@@ -53,8 +53,6 @@ HWPStyle::~HWPStyle()
 }
 
 
-
-
 char *HWPStyle::GetName(int n) const
 {
     if (!(n >= 0 && n < nstyles))

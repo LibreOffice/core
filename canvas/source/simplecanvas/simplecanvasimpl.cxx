@@ -358,7 +358,6 @@ namespace
         }
 
 
-
         typedef o3tl::LazyUpdate<
             rendering::FontRequest,
             uno::Reference< rendering::XCanvasFont >,

@@ -80,7 +80,6 @@ void cancelCommandExecution( const uno::Any & rException,
 }
 
 
-
 void cancelCommandExecution( const ucb::IOErrorCode eError,
                              const uno::Sequence< uno::Any > & rArgs,
                              const uno::Reference<

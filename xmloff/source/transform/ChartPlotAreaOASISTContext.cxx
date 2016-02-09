@@ -184,7 +184,6 @@ void XMLAxisOASISContext::EndElement()
 }
 
 
-
 XMLChartPlotAreaOASISTContext::XMLChartPlotAreaOASISTContext(
     XMLTransformerBase & rTransformer, const OUString & rQName ) :
         XMLProcAttrTransformerContext( rTransformer, rQName, OASIS_SHAPE_ACTIONS )

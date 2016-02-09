@@ -102,8 +102,6 @@ public:
 };
 
 
-
-
 class PropertyHelper_Spell :
     public PropertyChgHelper
 {

@@ -34,11 +34,7 @@ using namespace com::sun::star;
 using namespace ucbhelper;
 
 
-
-
 // InteractionRequest Implementation.
-
-
 
 
 namespace ucbhelper
@@ -106,9 +102,7 @@ void InteractionRequest::setSelection(
 }
 
 
-
 // XInterface methods.
-
 
 
 // virtual
@@ -140,9 +134,7 @@ InteractionRequest::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -173,9 +165,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
 }
 
 
-
 // XInteractionRequest methods.
-
 
 
 // virtual
@@ -230,17 +220,10 @@ void InteractionContinuation::recordSelection()
 }
 
 
-
-
 // InteractionAbort Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -274,9 +257,7 @@ InteractionAbort::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -307,9 +288,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual
@@ -320,17 +299,10 @@ void SAL_CALL InteractionAbort::select()
 }
 
 
-
-
 // InteractionRetry Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -364,9 +336,7 @@ InteractionRetry::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -397,9 +367,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual
@@ -410,17 +378,10 @@ void SAL_CALL InteractionRetry::select()
 }
 
 
-
-
 // InteractionApprove Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -454,9 +415,7 @@ InteractionApprove::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -487,9 +446,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual
@@ -500,17 +457,10 @@ void SAL_CALL InteractionApprove::select()
 }
 
 
-
-
 // InteractionDisapprove Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -544,9 +494,7 @@ InteractionDisapprove::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -577,9 +525,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual
@@ -590,17 +536,10 @@ void SAL_CALL InteractionDisapprove::select()
 }
 
 
-
-
 // InteractionSupplyAuthentication Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -635,9 +574,7 @@ InteractionSupplyAuthentication::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -669,9 +606,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual
@@ -682,9 +617,7 @@ void SAL_CALL InteractionSupplyAuthentication::select()
 }
 
 
-
 // XInteractionSupplyAuthentication methods.
-
 
 
 // virtual
@@ -816,9 +749,7 @@ void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
 }
 
 
-
 // XInteractionSupplyAuthentication2 methods.
-
 
 
 // virtual
@@ -842,18 +773,10 @@ void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
 }
 
 
-
-
-
 // InteractionReplaceExistingData Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -887,9 +810,7 @@ InteractionReplaceExistingData::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -921,9 +842,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual

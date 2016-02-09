@@ -62,7 +62,6 @@ uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XRe
 }
 
 
-
 } // namespace reportdesign
 
 

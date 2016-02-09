@@ -69,14 +69,12 @@ RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 }
 
 
-
 //  openKey
 
 RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 {
     return m_pRegistry->openKey(this, keyName, phOpenKey);
 }
-
 
 
 //  openSubKeys
@@ -140,7 +138,6 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
 }
 
 
-
 //  getKeyNames
 
 RegError ORegKey::getKeyNames(const OUString& keyName,
@@ -200,7 +197,6 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 }
 
 
-
 //  closeKey
 
 RegError ORegKey::closeKey(RegKeyHandle hKey)
@@ -209,14 +205,12 @@ RegError ORegKey::closeKey(RegKeyHandle hKey)
 }
 
 
-
 //  deleteKey
 
 RegError ORegKey::deleteKey(const OUString& keyName)
 {
     return (m_pRegistry->deleteKey(this, keyName));
 }
-
 
 
 //  getValueType
@@ -283,7 +277,6 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
     rtl_freeMemory(pBuffer);
     return RegError::NO_ERROR;
 }
-
 
 
 //  setValue

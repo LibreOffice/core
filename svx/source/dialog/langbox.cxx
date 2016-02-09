@@ -758,8 +758,6 @@ IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
 }
 
 
-
-
 sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()
 {
     if (meEditedAndValid != EDITED_VALID)

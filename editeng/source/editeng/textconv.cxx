@@ -40,7 +40,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
 
 
-
 TextConvWrapper::TextConvWrapper( vcl::Window* pWindow,
         const Reference< XComponentContext >& rxContext,
         const lang::Locale& rSourceLocale,
@@ -563,7 +562,6 @@ bool TextConvWrapper::HasRubySupport() const
 {
     return false;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,6 @@ using namespace ::com::sun::star;
 namespace comphelper {
 
 
-
 static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
     uno::Sequence< sal_Int8 > aResult;
@@ -64,7 +63,6 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, 
 
     return aResult;
 }
-
 
 
 IDocPasswordVerifier::~IDocPasswordVerifier()
@@ -264,7 +262,6 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 }
 
 
-
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -346,8 +343,6 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
     return aResultKey;
 }
-
-
 
 
 /*static*/ css::uno::Sequence< css::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(

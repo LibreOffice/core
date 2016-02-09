@@ -72,7 +72,6 @@ struct SfxProgress_Impl
 };
 
 
-
 void SfxProgress_Impl::Enable_Impl( bool bEnable )
 {
     SfxObjectShell* pDoc = bAllDocs ? nullptr : static_cast<SfxObjectShell*>(xObjSh);
@@ -95,7 +94,6 @@ void SfxProgress_Impl::Enable_Impl( bool bEnable )
 }
 
 
-
 SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     : nMax(0)
     , nCreate(0)
@@ -110,7 +108,6 @@ SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     , pView(nullptr)
 {
 }
-
 
 
 SfxProgress::SfxProgress
@@ -169,7 +166,6 @@ SfxProgress::SfxProgress
 }
 
 
-
 SfxProgress::~SfxProgress()
 
 /*  [Description]
@@ -184,7 +180,6 @@ SfxProgress::~SfxProgress()
         pImp->xStatusInd->end();
     delete pImp;
 }
-
 
 
 void SfxProgress::Stop()
@@ -315,7 +310,6 @@ bool SfxProgress::SetState
 }
 
 
-
 void SfxProgress::Resume()
 
 /*  [Description]
@@ -361,7 +355,6 @@ void SfxProgress::Resume()
 }
 
 
-
 void SfxProgress::Suspend()
 
 /*  [Description]
@@ -403,7 +396,6 @@ void SfxProgress::Suspend()
 }
 
 
-
 void SfxProgress::UnLock()
 {
     if( pImp->pActiveProgress ) return;
@@ -414,7 +406,6 @@ void SfxProgress::UnLock()
     pImp->bLocked = false;
     pImp->Enable_Impl(true);
 }
-
 
 
 void SfxProgress::Reschedule()
@@ -437,7 +428,6 @@ void SfxProgress::Reschedule()
         --pAppData->nInReschedule;
     }
 }
-
 
 
 SfxProgress* SfxProgress::GetActiveProgress
@@ -488,12 +478,10 @@ SfxProgress* SfxProgress::GetActiveProgress
 }
 
 
-
 void SfxProgress::EnterLock()
 {
     SfxGetpApp()->Get_Impl()->nRescheduleLocks++;
 }
-
 
 
 void SfxProgress::LeaveLock()

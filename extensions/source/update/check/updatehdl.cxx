@@ -504,8 +504,6 @@ void SAL_CALL UpdateHandler::notifyTermination( const lang::EventObject& )
 }
 
 
-
-
 void UpdateHandler::updateState( UpdateState eState )
 {
     if ( meLastState == eState )
@@ -719,7 +717,6 @@ void UpdateHandler::loadStrings()
         msButtonIDs[ i ] = "BUTTON_" + OUString::number( i );
     }
 }
-
 
 
 void UpdateHandler::startThrobber( bool bStart )

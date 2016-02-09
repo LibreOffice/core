@@ -32,7 +32,6 @@ namespace drawinglayer { namespace attribute {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace attribute
@@ -69,7 +68,6 @@ namespace drawinglayer
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX

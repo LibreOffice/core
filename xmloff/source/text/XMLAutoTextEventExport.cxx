@@ -194,7 +194,6 @@ void XMLAutoTextEventExport::exportEvents()
 }
 
 
-
 // methods without content:
 
 void XMLAutoTextEventExport::_ExportMeta() {}
@@ -204,7 +203,6 @@ void XMLAutoTextEventExport::_ExportStyles( bool ) {}
 void XMLAutoTextEventExport::_ExportAutoStyles() {}
 void XMLAutoTextEventExport::_ExportMasterStyles() {}
 void XMLAutoTextEventExport::_ExportContent() {}
-
 
 
 // methods to support the component registration

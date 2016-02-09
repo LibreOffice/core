@@ -23,7 +23,6 @@
 #include <svx/obj3d.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

@@ -68,7 +68,6 @@ using namespace container;
 using namespace ::comphelper;
 
 
-
 namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
@@ -85,9 +84,6 @@ namespace
 
 
 // PropBrw
-
-
-
 
 
 PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pParent, ODesignView*  _pDesignView)
@@ -178,7 +174,6 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
     }
     ::rptui::notifySystemWindow(pParent,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 }
-
 
 
 PropBrw::~PropBrw()
@@ -282,7 +277,6 @@ bool PropBrw::Close()
 }
 
 
-
 uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const SdrMarkList& _rMarkList)
 {
     const size_t nMarkCount = _rMarkList.GetMarkCount();
@@ -329,7 +323,6 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     }
     SetText( GetHeadlineName(_aObjects) );
 }
-
 
 
 OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )

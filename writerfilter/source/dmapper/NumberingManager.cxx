@@ -388,7 +388,6 @@ void NumPicBullet::SetShape(uno::Reference<drawing::XShape> const& xShape)
 }
 
 
-
 //--------------------------------------- AbstractListDef implementation
 
 AbstractListDef::AbstractListDef( ) :
@@ -709,7 +708,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             return;
     }
     int nIntValue = rVal.getInt();
-
 
 
     switch(nName)

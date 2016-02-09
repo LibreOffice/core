@@ -78,7 +78,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::system;
 
 
-
 namespace dp_gui {
 
 #define TOP_OFFSET           5
@@ -235,7 +234,6 @@ void ExtBoxWithBtns_Impl::RecalcAll()
     if ( nActive != svt::IExtensionListBox::ENTRY_NOTFOUND )
         SetButtonPos( GetEntryRect( nActive ) );
 }
-
 
 
 //This function may be called with nPos < 0
@@ -961,7 +959,6 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCloseBtn, Button*, void)
 {
     Close();
 }
-
 
 
 IMPL_LINK_TYPED( ExtMgrDialog, startProgress, void*, _bLockInterface, void )

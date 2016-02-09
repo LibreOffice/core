@@ -109,8 +109,6 @@ private:
 };
 
 
-
-
 InitUpdateCheckJobThread::InitUpdateCheckJobThread(
             const uno::Reference< uno::XComponentContext > &xContext,
             const uno::Sequence< beans::NamedValue > &xParameters,
@@ -158,7 +156,6 @@ UpdateCheckJob::~UpdateCheckJob()
 }
 
 
-
 uno::Sequence< OUString >
 UpdateCheckJob::getServiceNames()
 {
@@ -167,14 +164,11 @@ UpdateCheckJob::getServiceNames()
 };
 
 
-
 OUString
 UpdateCheckJob::getImplName()
 {
     return OUString("vnd.sun.UpdateCheck");
 }
-
-
 
 
 uno::Any
@@ -259,13 +253,11 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
 }
 
 
-
 OUString SAL_CALL
 UpdateCheckJob::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
     return getImplName();
 }
-
 
 
 uno::Sequence< OUString > SAL_CALL
@@ -315,7 +307,6 @@ void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
 } // anonymous namespace
 
 
-
 static uno::Reference<uno::XInterface> SAL_CALL
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
@@ -327,13 +318,11 @@ createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
 }
 
 
-
 static uno::Reference<uno::XInterface> SAL_CALL
 createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
     return *UpdateCheckConfig::get(xContext, *UpdateCheck::get());
 }
-
 
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
@@ -356,7 +345,6 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
     },
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 } ;
-
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updchk_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)

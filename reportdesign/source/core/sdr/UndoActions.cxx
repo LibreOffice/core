@@ -82,7 +82,6 @@ namespace rptui
 }
 
 
-
 OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
     :SdrUndoAction(_rMod)
 {

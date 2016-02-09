@@ -67,7 +67,6 @@ namespace connectivity { namespace java { namespace sql {
 } } } // namespace connectivity::java::sql
 
 
-
 namespace comphelper { namespace log { namespace convert
 {
 

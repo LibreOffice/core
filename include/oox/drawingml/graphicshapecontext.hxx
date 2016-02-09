@@ -37,7 +37,6 @@ public:
 };
 
 
-
 class OOX_DLLPUBLIC GraphicalObjectFrameContext : public ShapeContext
 {
 public:
@@ -52,7 +51,6 @@ private:
 };
 
 
-
 class OleObjectGraphicDataContext : public ShapeContext
 {
 public:
@@ -63,7 +61,6 @@ public:
 private:
     ::oox::vml::OleObjectInfo& mrOleObjectInfo;
 };
-
 
 
 class Diagram;
@@ -84,7 +81,6 @@ private:
 };
 
 
-
 class ChartGraphicDataContext : public ShapeContext
 {
 public:
@@ -100,7 +96,6 @@ public:
 private:
     ChartShapeInfo&     mrChartShapeInfo;
 };
-
 
 
 } }

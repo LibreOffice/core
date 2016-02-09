@@ -34,7 +34,6 @@ namespace comphelper
 {
 
 
-
     //= OCommonAccessibleSelection
 
     /** base class encapsulating common functionality for the helper classes implementing

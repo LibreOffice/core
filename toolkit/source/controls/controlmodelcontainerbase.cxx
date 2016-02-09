@@ -582,7 +582,6 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     }
 
 
-
     if ( aName.isEmpty() || !xM.is() )
         lcl_throwIllegalArgumentException();
 
@@ -925,7 +924,6 @@ void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAcce
             static_cast< XChangesListener* >( pListener->get() )->changesOccurred( aEvent );
     }
 }
-
 
 
 void ControlModelContainerBase::implUpdateGroupStructure()
@@ -1342,7 +1340,6 @@ throw ( RuntimeException, std::exception )
         }
     }
 }
-
 
 
 //  class DialogContainerControl

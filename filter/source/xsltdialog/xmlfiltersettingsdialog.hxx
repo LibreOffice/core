@@ -81,7 +81,6 @@ public:
 };
 
 
-
 class XMLFilterSettingsDialog : public ModelessDialog
 {
 public:

@@ -58,7 +58,6 @@
 using namespace ::com::sun::star;
 
 
-
 uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                             bool bCanUseDocumentBaseURL )
 {
@@ -711,7 +710,6 @@ OUString OCommonEmbeddedObject::GetBaseURLFrom_Impl(
 
     return aBaseURL;
 }
-
 
 
 void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< document::XStorageBasedDocument >& xDoc, const uno::Reference< embed::XStorage >& xStorage )

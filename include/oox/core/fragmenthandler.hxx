@@ -34,7 +34,6 @@ namespace oox {
 namespace core {
 
 
-
 /** Base data of a fragment.
 
     This data is stored in a separate struct to make it accessible in every
@@ -55,7 +54,6 @@ struct FragmentBaseData
 };
 
 
-
 /** Describes record identifiers used to create contexts in a binary stream.
 
     If a record is used to start a new context, usually the record identifier
@@ -71,7 +69,6 @@ struct RecordInfo
     sal_Int32           mnStartRecId;       ///< Record identifier for context start.
     sal_Int32           mnEndRecId;         ///< Record identifier for context end, -1 = no record.
 };
-
 
 
 typedef ::cppu::ImplInheritanceHelper< ContextHandler, css::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
@@ -118,7 +115,6 @@ protected:
 };
 
 typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
-
 
 
 } // namespace core

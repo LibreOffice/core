@@ -84,5 +84,4 @@ sdbcx::ObjectType ODbaseIndexColumns::appendObject( const OUString& /*_rForName*
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

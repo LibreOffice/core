@@ -35,7 +35,6 @@ namespace dbtools
 {
 
 
-
     //= OCharsetMap
 
     /** is a class which translates between different charset representations.
@@ -112,7 +111,6 @@ namespace dbtools
         CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const OUString& _rIanaName );
 
     };
-
 
 
     //- OCharsetMap::CharsetIterator

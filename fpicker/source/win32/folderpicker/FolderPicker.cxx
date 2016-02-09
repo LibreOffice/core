@@ -57,17 +57,11 @@ namespace
 }
 
 
-
-
-
 CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
 {
     m_pFolderPickerImpl = std::unique_ptr< CWinFolderPickerImpl > ( new CWinFolderPickerImpl( this ) );
 }
-
-
-
 
 
 void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeException )
@@ -76,9 +70,6 @@ void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeEx
     MutexGuard aGuard( m_aMutex );
     m_pFolderPickerImpl->setTitle( aTitle );
 }
-
-
-
 
 
 void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
@@ -90,9 +81,6 @@ void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 }
 
 
-
-
-
 OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
     throw( RuntimeException )
 {
@@ -100,9 +88,6 @@ OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
     MutexGuard aGuard( m_aMutex );
     return m_pFolderPickerImpl->getDisplayDirectory( );
 }
-
-
-
 
 
 OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
@@ -113,18 +98,12 @@ OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
 }
 
 
-
-
-
 void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) throw( RuntimeException )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
     m_pFolderPickerImpl->setDescription( aDescription );
 }
-
-
-
 
 
 sal_Int16 SAL_CALL CFolderPicker::execute( )

@@ -46,8 +46,6 @@ using com::sun::star::xforms::XModel2;
 using namespace xmloff::token;
 
 
-
-
 static const struct SvXMLTokenMapEntry aAttributeMap[] =
 {
     TOKEN_MAP_ENTRY( NONE, NODESET ),

@@ -35,7 +35,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxVoidItem /*SfxUInt16Item*/ );
 
 
@@ -139,8 +138,6 @@ void SvxClipBoardControl::DelPopup()
         pPopup = nullptr;
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

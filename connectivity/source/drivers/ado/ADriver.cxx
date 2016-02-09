@@ -42,7 +42,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 
-
 ODriver::ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)

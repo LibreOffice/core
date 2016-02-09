@@ -1102,7 +1102,6 @@ void SAL_CALL PresenterController::mouseDragged (const css::awt::MouseEvent& rEv
 }
 
 
-
 void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
 {
     if ( ! rxPane.is())

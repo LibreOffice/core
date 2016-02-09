@@ -43,7 +43,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

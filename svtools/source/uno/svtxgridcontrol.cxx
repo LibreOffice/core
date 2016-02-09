@@ -671,7 +671,6 @@ void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& ) throw (R
 }
 
 
-
 void SAL_CALL SVTXGridControl::disposing( const EventObject& Source ) throw(RuntimeException, std::exception)
 {
     VCLXWindow::disposing( Source );

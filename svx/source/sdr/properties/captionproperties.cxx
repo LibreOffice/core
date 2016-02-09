@@ -25,7 +25,6 @@
 #include <svx/svdocapt.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

@@ -41,7 +41,6 @@
 SFX_IMPL_MENU_CONTROL(SvxFontSizeMenuControl, SvxFontHeightItem);
 
 
-
 /*  [Beschreibung]
 
     Select-Handler des Men"us; die aktuelle Fontgr"o\se
@@ -63,7 +62,6 @@ IMPL_LINK_TYPED( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen, void )
     SvxFontHeightItem aItem( nH, 100, GetId() );
     GetBindings().GetDispatcher()->Execute( GetId(), SfxCallMode::RECORD, &aItem, 0L );
 }
-
 
 
 /*  [Beschreibung]
@@ -149,7 +147,6 @@ void SvxFontSizeMenuControl::StateChanged(
 }
 
 
-
 /*  [Beschreibung]
 
     Ctor; setzt den Select-Handler am Men"u und tr"agt Men"u
@@ -174,7 +171,6 @@ SvxFontSizeMenuControl::SvxFontSizeMenuControl
 }
 
 
-
 /*  [Beschreibung]
 
     Dtor; gibt das Men"u frei.
@@ -184,7 +180,6 @@ SvxFontSizeMenuControl::~SvxFontSizeMenuControl()
 {
     delete pMenu;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

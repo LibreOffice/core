@@ -68,8 +68,6 @@ using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;
 
 
-
-
 // implement XFormsUIHelper1
 
 
@@ -257,7 +255,6 @@ OUString Model::getDefaultBindingExpressionForNode(
 
     return aBuffer.makeStringAndClear();
 }
-
 
 
 OUString Model::getDefaultBindingExpressionForNode( const XNode_t& xNode )
@@ -954,7 +951,6 @@ void Model::setNodeValue(
 {
     setSimpleContent( xNode, sValue );
 }
-
 
 
 // helper functions from model_helper.hxx

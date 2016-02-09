@@ -38,7 +38,6 @@ public:
 MyApp aMyApp;
 
 
-
 void MyApp::Main()
 {
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();

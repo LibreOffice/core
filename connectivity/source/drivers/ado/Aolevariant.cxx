@@ -750,6 +750,4 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,6 @@
 #include <sfx2/basedlgs.hxx>
 
 
-
 namespace sfx2 {
 
 
@@ -79,9 +78,7 @@ public:
 };
 
 
-
 } // namespace sfx2
-
 
 
 #endif // INCLUDED_SFX2_INC_SRCHDLG_HXX

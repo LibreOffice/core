@@ -56,7 +56,6 @@ IMPL_XTYPEPROVIDER_START( VCLXRegion )
 IMPL_XTYPEPROVIDER_END
 
 
-
 css::awt::Rectangle VCLXRegion::getBounds() throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -163,7 +162,6 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles() throw(css:
 
     return aRects;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

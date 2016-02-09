@@ -2906,7 +2906,6 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 }
 
 
-
 static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {
     Size aSize = rValueSet.CalcWindowSizePixel( aItemSize );

@@ -62,9 +62,7 @@ using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 
-
 // HierarchyContent implementation.
-
 
 
 #define MAKEPROPSEQUENCE( a ) \
@@ -74,10 +72,8 @@ using namespace hierarchy_ucp;
     uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
 
 
-
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            HierarchyContent::getPropertyValues(...) must be adapted too!
-
 
 
 // virtual
@@ -91,7 +87,6 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 
 
         // Link: Supported properties
-
 
 
         if ( isReadOnly() )
@@ -216,7 +211,6 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         // Folder: Supported properties
 
 
-
         if ( isReadOnly() )
         {
             static const beans::Property aFolderPropertyInfoTable[] =
@@ -326,7 +320,6 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         // Root Folder: Supported properties
 
 
-
         // Currently no difference between read-only/read-write
         // -> all props ar read-only
 
@@ -395,7 +388,6 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         // Link: Supported commands
 
 
-
         if ( isReadOnly() )
         {
             static const ucb::CommandInfo aLinkCommandInfoTable[] =
@@ -425,7 +417,6 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 )
 
                 // Optional standard commands
-
 
 
                 // New commands
@@ -485,7 +476,6 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
 
 
         // Folder: Supported commands
-
 
 
         if ( isReadOnly() )
@@ -596,7 +586,6 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
 
 
         // Root Folder: Supported commands
-
 
 
         if ( isReadOnly() )

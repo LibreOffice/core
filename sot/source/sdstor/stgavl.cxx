@@ -366,7 +366,6 @@ bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, bool bDel )
 // may be called when the key has changed.
 
 
-
 ////////////////////////// class AvlIterator
 
 // The iterator walks through a tree one entry by one.

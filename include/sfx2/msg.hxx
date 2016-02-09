@@ -101,7 +101,6 @@ enum SfxSlotKind
 };
 
 
-
 struct SfxTypeAttrib
 {
     sal_uInt16                  nAID;
@@ -216,7 +215,6 @@ struct SfxFormalArgument
 };
 
 
-
 class SfxSlot
 {
 public:
@@ -267,7 +265,6 @@ public:
     const SfxSlot*  GetLinkedSlot() const { return pLinkedSlot; }
     const SfxSlot*  GetNextSlot() const { return pNextSlot; }
 };
-
 
 
 // returns the id of the function

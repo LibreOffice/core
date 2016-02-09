@@ -39,7 +39,6 @@ public:
 };
 
 
-
 void OptLBoxString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
                                const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {

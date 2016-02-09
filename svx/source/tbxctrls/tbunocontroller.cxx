@@ -143,7 +143,6 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 }
 
 
-
 void SvxFontSizeBox_Impl::Select()
 {
     FontSizeBox::Select();
@@ -167,7 +166,6 @@ void SvxFontSizeBox_Impl::Select()
 }
 
 
-
 void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
 {
     if ( !bErase )
@@ -187,7 +185,6 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
     }
     SaveValue();
 }
-
 
 
 void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFont )
@@ -213,7 +210,6 @@ void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFo
     SetValue( nOldVal ); // alten Wert wiederherstellen
     m_aCurText = GetText(); // zum R"ucksetzen bei ESC merken
 }
-
 
 
 bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )

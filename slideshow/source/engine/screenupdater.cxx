@@ -234,15 +234,11 @@ UpdateLock::UpdateLock (
 }
 
 
-
-
 UpdateLock::~UpdateLock()
 {
     if (mbIsActivated)
         mrUpdater.unlockUpdates();
 }
-
-
 
 
 void UpdateLock::Activate()

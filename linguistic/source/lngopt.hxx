@@ -43,7 +43,6 @@ namespace com { namespace sun { namespace star {
 }}}
 
 
-
 // LinguOptions
 // This class represents all Linguistik relevant options.
 

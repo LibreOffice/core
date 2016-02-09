@@ -211,7 +211,6 @@ OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
 }
 
 
-
 OUString XMLTextListsHelper::GenerateNewListId() const
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);

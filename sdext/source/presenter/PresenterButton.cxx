@@ -362,7 +362,6 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
 }
 
 
-
 css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize()
 {
     if (mpFont.get()!=nullptr && !mpFont->mxFont.is() && mxCanvas.is())

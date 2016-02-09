@@ -29,7 +29,6 @@ namespace svx
 {
 
 
-
     //= SdrObjectFilter
 
     /** specifies a boolean predicate on the set of all SdrObjects - vulgo a filter.

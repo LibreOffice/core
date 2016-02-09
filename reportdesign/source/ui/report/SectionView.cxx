@@ -49,11 +49,9 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
 }
 
 
-
 OSectionView::~OSectionView()
 {
 }
-
 
 
 void OSectionView::MarkListHasChanged()
@@ -67,7 +65,6 @@ void OSectionView::MarkListHasChanged()
         m_pReportWindow->getReportView()->UpdatePropertyBrowserDelayed(*this);
     }
 }
-
 
 
 void OSectionView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )

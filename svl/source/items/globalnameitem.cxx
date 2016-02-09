@@ -40,7 +40,6 @@ SfxGlobalNameItem::SfxGlobalNameItem()
 }
 
 
-
 SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
 :   SfxPoolItem( nW ),
     m_aName( rName )
@@ -48,18 +47,15 @@ SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
 }
 
 
-
 SfxGlobalNameItem::~SfxGlobalNameItem()
 {
 }
-
 
 
 bool SfxGlobalNameItem::operator==( const SfxPoolItem& rItem ) const
 {
     return static_cast<const SfxGlobalNameItem&>(rItem).m_aName == m_aName;
 }
-
 
 
 SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const

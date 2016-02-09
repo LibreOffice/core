@@ -35,7 +35,6 @@ namespace dbp
 }   // namespace dbp
 
 
-
 #endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

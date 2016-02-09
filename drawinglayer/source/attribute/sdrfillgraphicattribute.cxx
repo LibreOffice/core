@@ -23,7 +23,6 @@
 #include <vcl/graphic.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

@@ -24,7 +24,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 class FontNameMenu;
 class SfxBindings;
 

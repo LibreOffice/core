@@ -26,9 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

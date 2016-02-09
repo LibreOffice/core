@@ -29,7 +29,6 @@ namespace oox {
 namespace core {
 
 
-
 /** Expands to an OUString containing an 'officeDocument' transitional relation type created
     from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATION_TYPE( ascii ) \
@@ -62,7 +61,6 @@ struct Relation
 
     Relation() : mbExternal( false ) {}
 };
-
 
 
 class Relations;
@@ -115,7 +113,6 @@ private:
     ::std::map< OUString, Relation > maMap;
     OUString     maFragmentPath;
 };
-
 
 
 } // namespace core

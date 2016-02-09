@@ -111,7 +111,6 @@ OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
 namespace dp_gui {
 
 
-
 class ProgressCmdEnv
     : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment,
                                       task::XInteractionHandler,
@@ -322,7 +321,6 @@ ProgressCmdEnv::~ProgressCmdEnv()
 {
     // TODO: stop all threads and wait
 }
-
 
 
 // XCommandEnvironment

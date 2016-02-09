@@ -145,7 +145,6 @@ SvXMLAttributeList::SvXMLAttributeList()
 }
 
 
-
 SvXMLAttributeList::~SvXMLAttributeList()
 {
 }

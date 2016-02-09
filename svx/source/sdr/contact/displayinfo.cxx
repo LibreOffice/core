@@ -20,7 +20,6 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 
 
-
 namespace sdr
 {
     namespace contact

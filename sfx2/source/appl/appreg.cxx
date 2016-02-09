@@ -41,7 +41,6 @@
 #include <sfx2/mnuitem.hxx>
 
 
-
 void SfxApplication::Registrations_Impl()
 {
     // Interfaces
@@ -62,7 +61,6 @@ void SfxApplication::Registrations_Impl()
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
 }
-
 
 
 void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, const SfxTbxCtrlFactory& rFact )
@@ -89,7 +87,6 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, const SfxTbxC
 }
 
 
-
 void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, const SfxStbCtrlFactory& rFact )
 {
     if ( pMod )
@@ -112,7 +109,6 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, const SfxSt
 
     pAppData_Impl->pStbCtrlFac->push_back( rFact );
 }
-
 
 
 void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, const SfxMenuCtrlFactory& rFact )

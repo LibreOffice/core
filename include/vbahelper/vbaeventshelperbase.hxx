@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-
 typedef ::cppu::WeakImplHelper<
     css::script::vba::XVBAEventProcessor,
     css::document::XEventListener,
@@ -105,7 +104,6 @@ protected:
             const sal_Char* pcMacroName,
             sal_Int32 nCancelIndex = -1,
             const css::uno::Any& rUserData = css::uno::Any() );
-
 
 
     struct EventQueueEntry
@@ -182,7 +180,6 @@ private:
     OUString maLibraryName;
     bool mbDisposed;
 };
-
 
 
 #endif

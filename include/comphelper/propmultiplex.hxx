@@ -28,7 +28,6 @@
 //= property helper classes
 
 
-
 namespace comphelper
 {
 

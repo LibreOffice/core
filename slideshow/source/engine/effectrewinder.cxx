@@ -52,7 +52,6 @@ private:
 };
 
 
-
 class RewinderAnimationEventHandler : public AnimationEventHandler
 {
 public:
@@ -64,7 +63,6 @@ private:
     virtual bool handleAnimationEvent (const AnimationNodeSharedPtr& rpNode) override
         { return maAction(rpNode); }
 };
-
 
 
 } // end of anonymous namespace
@@ -89,8 +87,6 @@ EffectRewinder::EffectRewinder (
 {
     initialize();
 }
-
-
 
 
 void EffectRewinder::initialize()
@@ -119,14 +115,10 @@ void EffectRewinder::initialize()
 }
 
 
-
-
 EffectRewinder::~EffectRewinder()
 {
     dispose();
 }
-
-
 
 
 void EffectRewinder::dispose()
@@ -157,15 +149,11 @@ void EffectRewinder::dispose()
 }
 
 
-
-
 void EffectRewinder::setRootAnimationNode (
     const uno::Reference<animations::XAnimationNode>& xRootNode)
 {
     mxCurrentAnimationRootNode = xRootNode;
 }
-
-
 
 
 bool EffectRewinder::rewind (
@@ -225,8 +213,6 @@ bool EffectRewinder::rewind (
 }
 
 
-
-
 void EffectRewinder::skipAllMainSequenceEffects()
 {
     // Do not allow nested rewinds.
@@ -247,8 +233,6 @@ void EffectRewinder::skipAllMainSequenceEffects()
         "EffectRewinder::asynchronousRewind");
     mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 }
-
-
 
 
 sal_Int32 EffectRewinder::countMainSequenceEffects()
@@ -292,8 +276,6 @@ sal_Int32 EffectRewinder::countMainSequenceEffects()
 }
 
 
-
-
 void EffectRewinder::skipSingleMainSequenceEffects()
 {
     // This basically just starts the next effect and then skips over its
@@ -305,15 +287,11 @@ void EffectRewinder::skipSingleMainSequenceEffects()
 }
 
 
-
-
 bool EffectRewinder::resetEffectCount()
 {
     mnMainSequenceEffectCount = 0;
     return false;
 }
-
-
 
 
 bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
@@ -347,8 +325,6 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 
     return false;
 }
-
-
 
 
 void EffectRewinder::asynchronousRewind (
@@ -395,8 +371,6 @@ void EffectRewinder::asynchronousRewind (
 }
 
 
-
-
 void EffectRewinder::asynchronousRewindToPreviousSlide (
     const ::std::function<void ()>& rSlideRewindFunctor)
 {
@@ -405,8 +379,6 @@ void EffectRewinder::asynchronousRewindToPreviousSlide (
     mpAsynchronousRewindEvent.reset();
     rSlideRewindFunctor();
 }
-
-
 
 
 } } // end of namespace ::slideshow::internal

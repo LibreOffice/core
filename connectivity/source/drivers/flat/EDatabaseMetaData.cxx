@@ -40,7 +40,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 
-
 OFlatDatabaseMetaData::OFlatDatabaseMetaData(::connectivity::file::OConnection* _pCon)  :ODatabaseMetaData(_pCon)
 {
 }
@@ -242,7 +241,6 @@ OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
     ::osl::MutexGuard aGuard( m_aMutex );
     return "sdbc:flat:" + m_pConnection->getURL();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

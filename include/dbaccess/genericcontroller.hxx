@@ -141,7 +141,6 @@ namespace dbaui
     // = helper
 
 
-
     struct ControllerFeature : public css::frame::DispatchInformation
     {
         sal_uInt16 nFeatureId;
@@ -256,8 +255,6 @@ namespace dbaui
 
         bool                    m_bCurrentlyModified : 1;
         bool                    m_bExternalTitle : 1;
-
-
 
 
         // attribute access

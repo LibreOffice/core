@@ -108,7 +108,6 @@ static long ImplGetNumber( sal_uInt8 **pBuf, sal_uInt32& nSecurityCount )
 }
 
 
-
 static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 {
     int nLen = 0;

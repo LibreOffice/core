@@ -59,7 +59,6 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
 size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
 
 
-
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     m_RefCnt( nRefCnt ),
     m_pCache( NULL )
@@ -67,7 +66,6 @@ CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     OutputDebugStringFormat( "CPropertyHdl: CTOR\n" );
     InterlockedIncrement( &g_DllRefCnt );
 }
-
 
 
 CPropertyHdl::~CPropertyHdl()

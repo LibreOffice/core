@@ -262,7 +262,6 @@ public:
     const std::vector<SdrObject*>& GetTransitiveHullOfMarkedObjects() const { return mpSdrViewSelection->GetAllMarkedObjects(); }
 
 
-
     // mechanism to complete disable handles at the view. Handles will be hidden and deleted
     // when set, no new ones created, no interaction allowed. Handles will be recreated and shown
     // when reset. Default is false.
@@ -452,7 +451,6 @@ public:
 };
 
 
-
 // - Hit tolarances:
 //   It has to be declared in logical coordinates. So please translate the
 //   wanted pixel value with PixelToLogic in Logical values.
@@ -466,7 +464,6 @@ public:
 //     2*Tol (200 units for this example) is created around the object.
 //     When an object is directly hit, the Edit method is called.
 //     In opposite, a hit in the surrounding sensitive area enables Dragging.
-
 
 
 #endif // INCLUDED_SVX_SVDMRKV_HXX

@@ -337,7 +337,6 @@ public:
 };
 
 
-
 BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
@@ -388,7 +387,6 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
     }
     return pBackend;
 }
-
 
 
 void BackendImpl::ComponentPackageImpl::disposing()
@@ -745,7 +743,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }
-
 
 
 void BackendImpl::unorc_verify_init(

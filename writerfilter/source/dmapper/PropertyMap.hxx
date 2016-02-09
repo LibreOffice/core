@@ -351,7 +351,6 @@ public:
 };
 
 
-
 class ParagraphProperties
 {
     bool                    m_bFrameMode;

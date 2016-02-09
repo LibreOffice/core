@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
 
-
 namespace accessibility {
 
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleTable >
@@ -259,9 +258,7 @@ protected:
 };
 
 
-
 } // namespace accessibility
-
 
 
 #endif

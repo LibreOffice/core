@@ -98,8 +98,6 @@ void IcnCursor_Impl::ImplCreate()
 }
 
 
-
-
 void IcnCursor_Impl::Clear()
 {
     if( xColumns )
@@ -269,7 +267,6 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     }
     return pResult;
 }
-
 
 
 /*
@@ -778,7 +775,6 @@ void IcnGridMap_Impl::GetGridCoord( GridId nId, sal_uInt16& rGridX, sal_uInt16& 
         rGridY = (sal_uInt16)(nId % _nGridRows);
     }
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

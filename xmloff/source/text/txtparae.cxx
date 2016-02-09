@@ -3149,7 +3149,6 @@ void XMLTextParagraphExport::_exportTextGraphic(
     }
 
 
-
     // script:events
     Reference<XEventsSupplier> xEventsSupp( rPropSet, UNO_QUERY );
     GetExport().GetEventExport().Export(xEventsSupp);

@@ -420,7 +420,6 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
 }
 
 
-
 sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
         sal_Int32 /*nPos*/, const Locale& /*rLocale*/ ) throw(RuntimeException, std::exception)
 {

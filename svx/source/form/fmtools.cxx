@@ -341,7 +341,6 @@ void FmXDisposeMultiplexer::dispose()
 }
 
 
-
 sal_Int16 getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxObject)
 {
     // ask for the persistent service name

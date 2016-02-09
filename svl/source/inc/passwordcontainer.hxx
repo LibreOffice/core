@@ -404,7 +404,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_SVL_SOURCE_INC_PASSWORDCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

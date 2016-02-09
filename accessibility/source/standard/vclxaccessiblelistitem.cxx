@@ -624,8 +624,6 @@ void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Refer
 }
 
 
-
-
 // AF (Oct. 29 2002): Return black as constant foreground color.  This is an
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.

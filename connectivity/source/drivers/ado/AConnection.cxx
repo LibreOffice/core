@@ -286,7 +286,6 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-
     m_pAdoConnection->put_Mode(readOnly ? adModeRead : adModeReadWrite);
     ADOS::ThrowException(*m_pAdoConnection,*this);
 }
@@ -609,8 +608,6 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
 //  OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
     return pTypeInfo;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

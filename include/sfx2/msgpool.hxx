@@ -65,7 +65,6 @@ public:
 };
 
 
-
 // seeks to the first func in the current group
 
 inline const SfxSlot* SfxSlotPool::FirstSlot()

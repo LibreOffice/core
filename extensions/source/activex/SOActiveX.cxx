@@ -34,8 +34,6 @@
 #define STAROFFICE_WINDOWCLASS "SOParentWindow"
 
 
-
-
 void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
     void* sMessage;
@@ -1161,8 +1159,6 @@ HRESULT CSOActiveX::GetURL( const OLECHAR* url,
                                   &aEmpty2,
                                   &aEmpty3 );
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

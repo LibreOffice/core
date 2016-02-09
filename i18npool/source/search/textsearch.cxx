@@ -477,7 +477,6 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 }
 
 
-
 bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 {
     bool bRet = true;
@@ -844,7 +843,6 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions& rOptions)
 }
 
 
-
 static bool lcl_findRegex( RegexMatcher * pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
 {
     if (!pRegexMatcher->find( nStartPos, rIcuErr))
@@ -982,7 +980,6 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
 
     return aRet;
 }
-
 
 
 // search for words phonetically

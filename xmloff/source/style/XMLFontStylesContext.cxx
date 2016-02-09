@@ -231,7 +231,6 @@ SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
 }
 
 
-
 XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference<

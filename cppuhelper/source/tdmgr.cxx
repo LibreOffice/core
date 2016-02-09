@@ -562,7 +562,6 @@ static typelib_TypeDescription * createCTD(
 }
 
 
-
 extern "C"
 {
 static void SAL_CALL typelib_callback(

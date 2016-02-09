@@ -26,7 +26,6 @@
 #include <vcl/edit.hxx>
 
 
-
 enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
 class NameClashDialog : public ModalDialog

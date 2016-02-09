@@ -3055,7 +3055,6 @@ HeaderFooterEntry::~HeaderFooterEntry()
 }
 
 
-
 sal_uInt32 HeaderFooterEntry::IsToDisplay( sal_uInt32 nInstance )
 {
     sal_uInt32 nMask = 0;
@@ -4662,7 +4661,6 @@ PPTTextCharacterStyleAtomInterpreter::PPTTextCharacterStyleAtomInterpreter()
     , nFontColor(0)
 {
 }
-
 
 
 PPTTextCharacterStyleAtomInterpreter::~PPTTextCharacterStyleAtomInterpreter()

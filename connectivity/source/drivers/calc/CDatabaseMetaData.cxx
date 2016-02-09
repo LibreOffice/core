@@ -47,11 +47,9 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 
 
-
 OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
 }
-
 
 
 OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
@@ -136,7 +134,6 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
     pResult->setRows(aRows);
     return xRef;
 }
-
 
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
@@ -235,7 +232,6 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
 }
 
 
-
 OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -244,12 +240,10 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
 }
 
 
-
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return SAL_MAX_INT32;
 }
-
 
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
@@ -271,7 +265,6 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExce
 {
     return 256;
 }
-
 
 
 static bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const OUString& rName )
@@ -343,7 +336,6 @@ static bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const OUSt
 
     return bUnnamed;
 }
-
 
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
@@ -439,7 +431,6 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 
     return xRef;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

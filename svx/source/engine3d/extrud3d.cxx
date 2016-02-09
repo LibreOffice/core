@@ -46,13 +46,10 @@ sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
 }
 
 
-
 sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dExtrudeProperties(*this);
 }
-
-
 
 
 // Constructor creates a two cover surface tools::PolyPolygon and (point-count 1) side

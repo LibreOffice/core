@@ -58,11 +58,9 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentCont
 }
 
 
-
 TypeDetection::~TypeDetection()
 {
 }
-
 
 
 OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
@@ -467,7 +465,6 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
 }
 
 
-
 void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDescriptor,
                                                       OUString&               sType      )
 {
@@ -624,7 +621,6 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
     catch(const css::uno::Exception&)
         {}
 }
-
 
 
 bool TypeDetection::impl_getPreselectionForType(
@@ -870,7 +866,6 @@ void TypeDetection::impl_getAllFormatTypes(
 }
 
 
-
 OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 bool                       bAllowDeep    ,
@@ -1068,7 +1063,6 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
 }
 
 
-
 OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescriptor& rDescriptor)
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteraction =
@@ -1129,7 +1123,6 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
 }
 
 
-
 void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
@@ -1160,7 +1153,6 @@ void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
 }
 
 
-
 void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rDescriptor)
 {
     utl::MediaDescriptor::iterator pItType   = rDescriptor.find(utl::MediaDescriptor::PROP_TYPENAME()  );
@@ -1170,7 +1162,6 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(utl::MediaDescriptor& rD
     if (pItFilter != rDescriptor.end())
         rDescriptor.erase(pItFilter);
 }
-
 
 
 bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescriptor& rDescriptor,
@@ -1190,7 +1181,6 @@ bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescript
     impl_removeTypeFilterFromDescriptor(rDescriptor);
     return false;
 }
-
 
 
 bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescriptor& rDescriptor,
@@ -1222,12 +1212,10 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescri
 }
 
 
-
 OUString TypeDetection::impl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.filter.config.TypeDetection" );
 }
-
 
 
 css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
@@ -1235,7 +1223,6 @@ css::uno::Sequence< OUString > TypeDetection::impl_getSupportedServiceNames()
     css::uno::Sequence< OUString > lServiceNames { "com.sun.star.document.TypeDetection" };
     return lServiceNames;
 }
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)

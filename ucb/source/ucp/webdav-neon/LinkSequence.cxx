@@ -36,7 +36,6 @@ using namespace webdav_ucp;
 using namespace com::sun::star;
 
 
-
 struct LinkSequenceParseContext
 {
     ucb::Link * pLink;

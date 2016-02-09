@@ -48,7 +48,6 @@
 using namespace ::com::sun::star;
 
 
-
 CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
         CGMOutAct       ( rCGM ),
         nFinalTextCount ( 0 )
@@ -91,7 +90,6 @@ bool CGMImpressOutAct::ImplInitPage()
 }
 
 
-
 bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
     uno::Reference< uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
@@ -106,7 +104,6 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 }
 
 
-
 void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrientation )
 {
     uno::Any aAny;
@@ -117,7 +114,6 @@ void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrien
     aAny <<= (sal_Int32)( rOrientation * 100.0 );
     maXPropSet->setPropertyValue( "RotateAngle", aAny );
 }
-
 
 
 void CGMImpressOutAct::ImplSetLineBundle()

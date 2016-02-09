@@ -314,7 +314,6 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) t
 }
 
 
-
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     return nullptr;
@@ -1179,7 +1178,6 @@ void OResultSet::sortRows()
     DELETEZ(m_pSortIndex);
     // now access to a sorted set is possible via Index
 }
-
 
 
 bool OResultSet::OpenImpl()

@@ -51,8 +51,6 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 }
 
 
-
-
 void ContextChangeEventMultiplexer::NotifyContextChange (
     SfxViewShell* pViewShell,
     const ::sfx2::sidebar::EnumContext::Context eContext)
@@ -60,8 +58,6 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
     if (pViewShell != nullptr)
         NotifyContextChange(pViewShell->GetController(), eContext);
 }
-
-
 
 
 ::rtl::OUString ContextChangeEventMultiplexer::GetModuleName (

@@ -43,7 +43,6 @@ using namespace css::registry;
 using namespace css::java;
 
 
-
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 {
 

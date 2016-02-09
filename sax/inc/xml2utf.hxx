@@ -71,7 +71,6 @@ private:
 };
 
 
-
 /*----------------------------------------
 *
 * XMLFile2UTFConverter
@@ -90,7 +89,6 @@ public:
 
     void setInputStream( css::uno::Reference< css::io::XInputStream > &r ) { m_in = r; }
     void setEncoding( const OString &s ) { m_sEncoding = s; }
-
 
 
     // @param nMaxToRead The number of chars, that should be read. Note that this is no exact number. There

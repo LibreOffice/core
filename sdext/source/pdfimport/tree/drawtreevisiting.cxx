@@ -383,7 +383,6 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
 }
 
 
-
 void DrawXmlOptimizer::visit( HyperlinkElement&, const std::list< Element* >::const_iterator& )
 {
 }

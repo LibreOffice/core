@@ -32,11 +32,9 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 
 
-
 OptimizationStats::OptimizationStats()
 {
 }
-
 
 
 void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const uno::Any& rStatValue )
@@ -45,13 +43,11 @@ void OptimizationStats::SetStatusValue( const PPPOptimizerTokenEnum eStat, const
 }
 
 
-
 const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum eStat ) const
 {
     std::map< PPPOptimizerTokenEnum, uno::Any, Compare >::const_iterator aIter( maStats.find( eStat ) );
     return aIter != maStats.end() ? &((*aIter).second) : nullptr;
 }
-
 
 
 css::beans::PropertyValues OptimizationStats::GetStatusSequence()
@@ -68,13 +64,11 @@ css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 }
 
 
-
 void OptimizationStats::InitializeStatusValues( const uno::Sequence< PropertyValue >& rOptimizationStats )
 {
     for( int i = 0; i < rOptimizationStats.getLength(); i++ )
         rOptimizationStats[ i ].Value >>= maStats[ TKGet( rOptimizationStats[ i ].Name ) ];
 }
-
 
 
 void OptimizationStats::InitializeStatusValuesFromDocument( Reference< XModel > rxModel )

@@ -119,14 +119,10 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
 }
 
 
-
 SvxViewHint::SvxViewHint (HintType eHintType)
     : meHintType(eHintType)
 {
 }
-
-
-
 
 
 BitmapEx convertMetafileToBitmapEx(
@@ -152,9 +148,6 @@ BitmapEx convertMetafileToBitmapEx(
 
     return aBitmapEx;
 }
-
-
-
 
 
 void SdrPaintView::ImpClearVars()
@@ -247,7 +240,6 @@ SdrPaintView::~SdrPaintView()
 }
 
 
-
 void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //If the stylesheet has been destroyed
@@ -333,7 +325,6 @@ void SdrPaintView::ModelHasChanged()
 }
 
 
-
 bool SdrPaintView::IsAction() const
 {
     return false;
@@ -371,7 +362,6 @@ SdrPageView* SdrPaintView::GetTextEditPageView() const
 {
     return nullptr;
 }
-
 
 
 sal_uInt16 SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const
@@ -415,7 +405,6 @@ void SdrPaintView::SetActualWin(const OutputDevice* pWin)
     mpActualOutDev = const_cast<OutputDevice *>(pWin);
     TheresNewMapMode();
 }
-
 
 
 void SdrPaintView::ClearPageView()
@@ -769,7 +758,6 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
 }
 
 
-
 SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
 {
     // #i74769# use BeginCompleteRedraw() as common base
@@ -853,7 +841,6 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl
 }
 
 
-
 void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
 {
     if(mpPageView)
@@ -874,7 +861,6 @@ void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
         }
     }
 }
-
 
 
 bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, vcl::Window* /*pWin*/)
@@ -1115,7 +1101,6 @@ bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHar
     SetDefaultStyleSheet(pStyleSheet,bDontRemoveHardAttr);
     return true;
 }
-
 
 
 #ifdef DBG_UTIL

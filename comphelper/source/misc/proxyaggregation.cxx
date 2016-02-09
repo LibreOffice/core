@@ -248,7 +248,6 @@ namespace comphelper
     }
 
 
-
 }   // namespace comphelper
 
 

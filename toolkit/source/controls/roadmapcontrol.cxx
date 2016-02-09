@@ -147,7 +147,6 @@ static void lcl_throwIndexOutOfBoundsException( )
  IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, UnoControlRoadmapModel_IBase )
 
 
-
     css::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
@@ -155,7 +154,6 @@ static void lcl_throwIndexOutOfBoundsException( )
             aRet = UnoControlRoadmapModel_IBase::queryInterface( rType );
          return aRet;
     }
-
 
 
     ::cppu::IPropertyArrayHelper& UnoControlRoadmapModel::getInfoHelper()
@@ -192,7 +190,6 @@ static void lcl_throwIndexOutOfBoundsException( )
         aAny = makeAny( maRoadmapItems.at( Index ));
         return aAny;
     }
-
 
 
     void UnoControlRoadmapModel::MakeRMItemValidation( sal_Int32 Index, Reference< XInterface > xRoadmapItem )
@@ -300,7 +297,6 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
                                                 throw    (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
     {
@@ -401,12 +397,10 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     }
 
 
-
     OUString UnoRoadmapControl::GetComponentServiceName()
     {
         return OUString("Roadmap");
     }
-
 
 
     void UnoRoadmapControl::dispose() throw(RuntimeException, std::exception)
@@ -416,7 +410,6 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
         maItemListeners.disposeAndClear( aEvt );
         UnoControl::dispose();
     }
-
 
 
 void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(RuntimeException, std::exception)

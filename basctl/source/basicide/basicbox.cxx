@@ -45,7 +45,6 @@ LibBoxControl::LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
 }
 
 
-
 void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     LibBox* pBox = static_cast<LibBox*>(GetToolBox().GetItemWindow(GetId()));
@@ -62,7 +61,6 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
         pBox->Update(dynamic_cast<SfxStringItem const*>(pState));
     }
 }
-
 
 
 VclPtr<vcl::Window> LibBoxControl::CreateItemWindow( vcl::Window *pParent )
@@ -145,7 +143,6 @@ LibBox::LibBox( vcl::Window* pParent, const uno::Reference< frame::XFrame >& rFr
     SetSizePixel( Size( 250, 200 ) );
     bIgnoreSelect = false;
 }
-
 
 
 LibBox::~LibBox()

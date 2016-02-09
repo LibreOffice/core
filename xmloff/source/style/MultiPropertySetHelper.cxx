@@ -110,7 +110,6 @@ bool MultiPropertySetHelper::checkedProperties()
 }
 
 
-
 void MultiPropertySetHelper::getValues(
     const Reference<XMultiPropertySet> & rMultiPropertySet )
 {

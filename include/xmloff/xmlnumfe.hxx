@@ -118,7 +118,6 @@ public:
     void SetWasUsed(const css::uno::Sequence<sal_Int32>& rWasUsed);
 
 
-
     // two methods to allow the field import/export to treat system languages
     // properly:
 

@@ -29,7 +29,6 @@ namespace xmloff
 {
 
 
-
     //= XMLExporter
 
     class SAL_NO_VTABLE XMLSettingsExportContext

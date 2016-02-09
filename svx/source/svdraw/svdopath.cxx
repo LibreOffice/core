@@ -2856,7 +2856,6 @@ void SdrPathObj::impDeleteDAC() const
 }
 
 
-
 // transformation interface for StarOfficeAPI. This implements support for
 // homogeneous 3x3 matrices containing the transformation of the SdrObject. At the
 // moment it contains a shearX, rotation and translation, but for setting all linear

@@ -52,8 +52,6 @@ const sal_Char sAPI_LabelCategory[] = "LabelCategory";
 const sal_Char sAPI_LabelDisplayType[] = "LabelDisplayType";
 
 
-
-
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
     const OUString& rLocalName, Reference<XPropertySet> & rPropSet)

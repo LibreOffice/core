@@ -32,7 +32,6 @@ namespace comphelper
 {
 
 
-
     //= OWeakListenerAdapterBase
 
     /** (the base for) an adapter which allows to add as listener to a foreign component, without
@@ -82,7 +81,6 @@ namespace comphelper
     protected:
         virtual ~OWeakListenerAdapterBase();
     };
-
 
 
     //= OWeakListenerAdapter

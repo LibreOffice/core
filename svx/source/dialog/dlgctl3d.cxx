@@ -243,7 +243,6 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 }
 
 
-
 #define RADIUS_LAMP_PREVIEW_SIZE    (4500.0)
 #define RADIUS_LAMP_SMALL           (600.0)
 #define RADIUS_LAMP_BIG             (1000.0)

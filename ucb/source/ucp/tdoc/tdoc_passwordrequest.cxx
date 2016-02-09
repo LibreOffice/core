@@ -74,17 +74,10 @@ namespace tdoc_ucp
 } // namespace tdoc_ucp
 
 
-
-
 // InteractionSupplyPassword Implementation.
 
 
-
-
-
-
 // XInterface methods.
-
 
 
 // virtual
@@ -118,9 +111,7 @@ InteractionSupplyPassword::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 // virtual
@@ -152,9 +143,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
 }
 
 
-
 // XInteractionContinuation methods.
-
 
 
 // virtual
@@ -165,9 +154,7 @@ void SAL_CALL InteractionSupplyPassword::select()
 }
 
 
-
 // XInteractionPassword methods.
-
 
 
 // virtual
@@ -188,11 +175,7 @@ OUString SAL_CALL InteractionSupplyPassword::getPassword()
 }
 
 
-
-
 // DocumentPasswordRequest Implementation.
-
-
 
 
 DocumentPasswordRequest::DocumentPasswordRequest(

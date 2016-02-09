@@ -322,7 +322,6 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 }
 
 
-
 // The OfficeIPCThreadController implementation is a bookkeeper for all pending requests
 // that were created by the OfficeIPCThread. The requests are waiting to be processed by
 // our framework loadComponentFromURL function (e.g. open/print request).

@@ -41,9 +41,7 @@ using namespace com::sun::star;
 using namespace http_dav_ucp;
 
 
-
 // ContentProvider implementation.
-
 
 
 bool ContentProvider::getProperty(
@@ -261,9 +259,7 @@ bool ContentProvider::getProperty(
 }
 
 
-
 // Content implementation.
-
 
 
 // virtual

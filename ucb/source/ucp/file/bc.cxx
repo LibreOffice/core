@@ -96,7 +96,6 @@ BaseContent::BaseContent( shell* pMyShell,
 }
 
 
-
 // Constructor for full featured Contents
 
 BaseContent::BaseContent( shell* pMyShell,
@@ -131,7 +130,6 @@ BaseContent::~BaseContent( )
     delete m_pPropertyListener;
     delete m_pPropertySetInfoChangeListeners;
 }
-
 
 
 // XInterface
@@ -170,9 +168,6 @@ BaseContent::queryInterface( const Type& rType )
                                      (static_cast< XContent* >(this)) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
-
-
-
 
 
 // XComponent
@@ -285,7 +280,6 @@ XTYPEPROVIDER_IMPL_10( BaseContent,
                        beans::XPropertiesChangeNotifier,
                        beans::XPropertyContainer,
                        beans::XPropertySetInfoChangeNotifier )
-
 
 
 //  XCommandProcessor
@@ -426,7 +420,6 @@ BaseContent::execute( const Command& aCommand,
 }
 
 
-
 void SAL_CALL
 BaseContent::addPropertiesChangeListener(
     const Sequence< OUString >& PropertyNames,
@@ -472,7 +465,6 @@ BaseContent::removePropertiesChangeListener( const Sequence< OUString >& Propert
 
     m_pPropertyListener->removeInterface( OUString(), Listener );
 }
-
 
 
 // XContent
@@ -535,7 +527,6 @@ BaseContent::getContentType()
 }
 
 
-
 void SAL_CALL
 BaseContent::addContentEventListener(
     const Reference< XContentEventListener >& Listener )
@@ -564,10 +555,7 @@ BaseContent::removeContentEventListener(
 }
 
 
-
-
 // XPropertyContainer
-
 
 
 void SAL_CALL
@@ -676,9 +664,7 @@ BaseContent::createNewContent(
 }
 
 
-
 // XPropertySetInfoChangeNotifier
-
 
 
 void SAL_CALL
@@ -704,7 +690,6 @@ BaseContent::removePropertySetInfoChangeListener(
     if( m_pPropertySetInfoChangeListeners )
         m_pPropertySetInfoChangeListeners->removeInterface( Listener );
 }
-
 
 
 // XChild
@@ -747,9 +732,7 @@ BaseContent::setParent(
 }
 
 
-
 // Private Methods
-
 
 
 Reference< XCommandInfo > SAL_CALL
@@ -962,7 +945,6 @@ BaseContent::setPropertyValues(
 }
 
 
-
 Reference< XDynamicResultSet > SAL_CALL
 BaseContent::open(
     sal_Int32 nMyCommandIdentifier,
@@ -1039,7 +1021,6 @@ BaseContent::open(
 }
 
 
-
 void SAL_CALL
 BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
 {
@@ -1052,7 +1033,6 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
         m_nState |= Deleted;
     }
 }
-
 
 
 void SAL_CALL
@@ -1123,8 +1103,6 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     else
         m_pMyShell->copy( nMyCommandIdentifier,srcUncPath,dstUncPath,NameClash );
 }
-
-
 
 
 void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
@@ -1244,13 +1222,11 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 }
 
 
-
 void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 {
     // This is the only function allowed to throw an exception
     m_pMyShell->endTask( CommandId,m_aUncPath,this );
 }
-
 
 
 ContentEventNotifier*
@@ -1321,7 +1297,6 @@ BaseContent::cPSL()
 
     return p;
 }
-
 
 
 PropertyChangeNotifier*

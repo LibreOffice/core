@@ -26,7 +26,6 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 
 
-
 // DrawContact section
 
 sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()

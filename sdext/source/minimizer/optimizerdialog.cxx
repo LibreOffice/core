@@ -47,8 +47,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 
-
-
 void OptimizerDialog::InitDialog()
 {
    // setting the dialog properties
@@ -77,7 +75,6 @@ void OptimizerDialog::InitDialog()
 
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
 }
-
 
 
 void OptimizerDialog::InitRoadmap()
@@ -134,7 +131,6 @@ void OptimizerDialog::InitRoadmap()
 }
 
 
-
 void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
 {
     try
@@ -153,7 +149,6 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const bool bEna
 
     }
 }
-
 
 
 void OptimizerDialog::UpdateConfiguration()
@@ -204,7 +199,6 @@ void OptimizerDialog::UpdateConfiguration()
 }
 
 
-
 OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
     UnoDialog( rxContext, rxFrame ),
     ConfigurationAccess( rxContext, nullptr ),
@@ -239,7 +233,6 @@ OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContex
 }
 
 
-
 OptimizerDialog::~OptimizerDialog()
 {
     // not saving configuration if the dialog has been finished via cancel or close window
@@ -258,7 +251,6 @@ bool OptimizerDialog::execute()
     maRoadmapBroadcaster->removeItemListener( mxItemListener );
     return mbStatus;
 }
-
 
 
 void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
@@ -307,7 +299,6 @@ void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
 }
 
 
-
 OUString OptimizerDialog::GetSelectedString( OUString const & token )
 {
     OUString aSelectedItem;
@@ -326,7 +317,6 @@ OUString OptimizerDialog::GetSelectedString( OUString const & token )
     }
     return aSelectedItem;
 }
-
 
 
 void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::PropertyValue >& rStatus )
@@ -358,7 +348,6 @@ void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::Proper
         mxReschedule->reschedule();
     }
 }
-
 
 
 void ItemListener::itemStateChanged( const ItemEvent& Event )
@@ -493,7 +482,6 @@ void ItemListener::disposing( const css::lang::EventObject& /* Source */ )
     throw ( css::uno::RuntimeException, std::exception )
 {
 }
-
 
 
 void ActionListener::actionPerformed( const ActionEvent& rEvent )
@@ -645,7 +633,6 @@ void ActionListener::disposing( const css::lang::EventObject& /* Source */ )
 }
 
 
-
 void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
     throw ( css::uno::RuntimeException, std::exception )
 {
@@ -664,7 +651,6 @@ void ActionListenerListBox0Pg0::disposing( const css::lang::EventObject& /* Sour
 }
 
 
-
 void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( css::uno::RuntimeException, std::exception )
 {
@@ -677,7 +663,6 @@ void TextListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /*
     throw ( css::uno::RuntimeException, std::exception )
 {
 }
-
 
 
 void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
@@ -706,7 +691,6 @@ void TextListenerComboBox0Pg1::disposing( const css::lang::EventObject& /* Sourc
     throw ( css::uno::RuntimeException, std::exception )
 {
 }
-
 
 
 void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )

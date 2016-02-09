@@ -993,5 +993,4 @@ com_sun_star_comp_Draw_PresenterCanvasFactory_get_implementation(css::uno::XComp
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

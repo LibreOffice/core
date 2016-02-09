@@ -332,7 +332,6 @@ extension(ext)
 }
 
 
-
 UpdateInfoMap getOnlineUpdateInfos(
     Reference<uno::XComponentContext> const &xContext,
     Reference<deployment::XExtensionManager> const & xExtMgr,

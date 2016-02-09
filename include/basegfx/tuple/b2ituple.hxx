@@ -197,7 +197,6 @@ namespace basegfx
     // external operators
 
 
-
     inline B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB)
     {
         B2ITuple aSum(rTupA);

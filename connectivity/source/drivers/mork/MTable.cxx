@@ -74,7 +74,4 @@ sdbcx::OCollection* OTable::createIndexes(const TStringVector& _rNames)
 }
 
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

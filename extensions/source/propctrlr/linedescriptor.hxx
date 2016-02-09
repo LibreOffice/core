@@ -27,7 +27,6 @@ namespace pcr
 {
 
 
-
     //= OLineDescriptor
 
     struct OLineDescriptor : public css::inspection::LineDescriptor

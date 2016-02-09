@@ -528,7 +528,6 @@ void DbGridColumn::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _
 //= cell controls
 
 
-
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
     :OPropertyChangeListener(m_aMutex)
     ,m_pModelChangeBroadcaster(nullptr)
@@ -3127,8 +3126,6 @@ IMPL_LINK_NOARG_TYPED(DbFilterField, OnClick, VclPtr<CheckBox>, void)
 }
 
 
-
-
 FmXGridCell::FmXGridCell( DbGridColumn* pColumn, DbCellControl* _pControl )
             :OComponentHelper(m_aMutex)
             ,m_pColumn(pColumn)
@@ -4319,7 +4316,6 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
 
     FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(FmXListBoxCell, OnDoubleClick, ListBox&, void)

@@ -26,12 +26,10 @@ namespace rptui
 // OObjectListener
 
 
-
 OObjectListener::OObjectListener(OObjectBase* _pObject)
           :m_pObject(_pObject)
 {
 }
-
 
 
 OObjectListener::~OObjectListener()
@@ -52,8 +50,6 @@ void SAL_CALL OObjectListener::propertyChange( const  css::beans::PropertyChange
 {
     m_pObject->_propertyChange( evt );
 }
-
-
 
 
 // DlgEdHint

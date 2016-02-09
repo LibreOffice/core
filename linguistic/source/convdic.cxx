@@ -161,7 +161,6 @@ bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType
 }
 
 
-
 ConvDic::ConvDic(
         const OUString &rName,
         sal_Int16 nLang,
@@ -673,7 +672,6 @@ uno::Sequence< OUString > ConvDic::getSupportedServiceNames_Static()
     uno::Sequence<OUString> aSNS { SN_CONV_DICTIONARY };
     return aSNS;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

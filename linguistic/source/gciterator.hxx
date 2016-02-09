@@ -43,7 +43,6 @@
 #include "defs.hxx"
 
 
-
 struct FPEntry
 {
     // flat paragraph iterator
@@ -68,8 +67,6 @@ struct FPEntry
     {
     }
 };
-
-
 
 
 class GrammarCheckingIterator:
@@ -181,7 +178,6 @@ public:
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
 };
-
 
 
 #endif

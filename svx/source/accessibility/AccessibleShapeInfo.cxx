@@ -36,8 +36,6 @@ AccessibleShapeInfo::AccessibleShapeInfo (
 }
 
 
-
-
 AccessibleShapeInfo::AccessibleShapeInfo (
         const css::uno::Reference<css::drawing::XShape>& rxShape,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,

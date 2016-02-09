@@ -35,7 +35,6 @@ using ::com::sun::star::xml::sax::XLocator;
 using ::com::sun::star::xml::sax::SAXParseException;
 
 
-
 /// ErrorRecord: contains all information for one error
 
 
@@ -83,8 +82,6 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
 ErrorRecord::~ErrorRecord()
 {
 }
-
-
 
 
 XMLErrors::XMLErrors()

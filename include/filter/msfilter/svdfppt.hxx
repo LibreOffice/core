@@ -464,8 +464,6 @@ public:
 };
 
 
-
-
 class SvxFieldItem;
 struct MSFILTER_DLLPUBLIC PPTFieldEntry
 {
@@ -517,7 +515,6 @@ struct ProcessData
         pTableRowProperties         ( nullptr ) {};
     ~ProcessData() { delete[] pTableRowProperties; };
 };
-
 
 
 class SdrTextObj;

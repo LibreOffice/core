@@ -176,7 +176,6 @@ public:
 };
 
 
-
 class SbUnoProperty : public SbxProperty
 {
     friend class SbUnoObject;
@@ -345,7 +344,6 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
 
 void disposeComVariablesForBasic( StarBASIC* pBasic );
 void clearNativeObjectWrapperVector();
-
 
 
 // #118116 Collection object

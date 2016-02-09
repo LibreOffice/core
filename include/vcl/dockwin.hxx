@@ -350,7 +350,6 @@ public:
 };
 
 
-
 inline void DockingWindow::RollDown()
 {
     if ( mpFloatWin )

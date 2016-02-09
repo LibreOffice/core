@@ -98,7 +98,6 @@ namespace slideshow
         }
 
 
-
         ViewAppletShape::~ViewAppletShape()
         {
             try
@@ -113,7 +112,6 @@ namespace slideshow
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }
-
 
 
         ViewLayerSharedPtr ViewAppletShape::getViewLayer() const
@@ -210,7 +208,6 @@ namespace slideshow
         }
 
 
-
         void ViewAppletShape::endApplet()
         {
             uno::Reference<util::XCloseable> xCloseable(
@@ -223,7 +220,6 @@ namespace slideshow
                 mxFrame.clear();
             }
         }
-
 
 
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const

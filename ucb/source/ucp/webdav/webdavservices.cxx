@@ -45,7 +45,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpdav1_component_getFactory(
     }
 
 
-
     if ( xFactory.is() )
     {
         xFactory->acquire();

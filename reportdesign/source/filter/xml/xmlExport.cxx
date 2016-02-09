@@ -156,7 +156,6 @@ namespace rptxml
     }
 
 
-
     class OSpecialHandleXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
     public:

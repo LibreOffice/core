@@ -355,7 +355,6 @@ OUString FTPURL::child() const
 }
 
 
-
 /** Listing of a directory.
  */
 
@@ -670,7 +669,6 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
 }
 
 
-
 void FTPURL::mkdir(bool ReplaceExisting) const
     throw (curl_exception, malformed_exception, std::exception)
 {
@@ -762,7 +760,6 @@ OUString FTPURL::ren(const OUString& NewTitle)
         m_aPathSegmentVec.back() = encodePathSegment(NewTitle);
     return OldTitle;
 }
-
 
 
 void FTPURL::del() const

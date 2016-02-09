@@ -131,5 +131,4 @@ Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeExc
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

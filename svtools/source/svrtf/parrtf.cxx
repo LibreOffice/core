@@ -52,8 +52,6 @@ SvRTFParser::~SvRTFParser()
 }
 
 
-
-
 int SvRTFParser::_GetNextToken()
 {
     int nRet = 0;

@@ -33,7 +33,6 @@ namespace svt
 {
 
 
-
     //= SortingData_Impl
 
     struct SortingData_Impl

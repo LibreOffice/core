@@ -28,7 +28,6 @@
 using namespace com::sun::star;
 
 
-
 static const LanguageType kSAME = 0xffff;
 
 namespace {
@@ -123,7 +122,6 @@ struct IsoLangOtherEntry
     LanguageType        mnLang;
     const sal_Char*     mpLanguage;
 };
-
 
 
 // Entries for languages are lower case, for countries upper case, as
@@ -803,7 +801,6 @@ css::lang::Locale Bcp47CountryEntry::getLocale() const
 }
 
 
-
 // In this table are the countries which should mapped to a specific
 // english language
 static IsoLangEngEntry const aImplIsoLangEngEntries[] =
@@ -872,7 +869,6 @@ static IsoLangEngEntry const aImplIsoLangEngEntries[] =
 };
 
 
-
 static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
 {
     { LANGUAGE_NORWEGIAN_BOKMAL,            "no", "BOK"      }, // registered subtags for "no" in rfc1766
@@ -885,7 +881,6 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
 };
 
 
-
 // in this table are only names to find the best language
 static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
 {
@@ -894,7 +889,6 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries2[] =
     { LANGUAGE_NORWEGIAN_NYNORSK,           "no", "nynorsk"  },
     { LANGUAGE_DONTKNOW,                    "",   ""         }  // marks end of table
 };
-
 
 
 // in this table are only names to find the best language
@@ -920,7 +914,6 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
     { LANGUAGE_USER_PRIV_JOKER,             "*"              }, //! not BCP47 but transferable in configmgr
     { LANGUAGE_DONTKNOW,                    nullptr             }  // marks end of table
 };
-
 
 
 // static
@@ -1004,7 +997,6 @@ Label_Override_Lang_Locale:
 
     // Not found. Passed rLocale argument remains unchanged.
 }
-
 
 
 // static
@@ -1152,7 +1144,6 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
 
     return aLastResortFallbackEntry.getLocale();
 }
-
 
 
 // static
@@ -1357,7 +1348,6 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
 }
 
 
-
 // static
 LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLang,
         const OString& rCountry )
@@ -1366,7 +1356,6 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLa
     OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);
     return convertIsoNamesToLanguage( aLang, aCountry);
 }
-
 
 
 struct IsoLangGLIBCModifiersEntry

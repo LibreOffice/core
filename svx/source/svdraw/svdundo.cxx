@@ -58,8 +58,6 @@ static void ImplUnmarkObject( SdrObject* pObj )
 }
 
 
-
-
 SdrUndoAction::~SdrUndoAction() {}
 
 bool SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
@@ -96,7 +94,6 @@ OUString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     return OUString();
 }
-
 
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
@@ -555,7 +552,6 @@ OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 }
 
 
-
 SdrUndoMoveObj::~SdrUndoMoveObj() {}
 
 void SdrUndoMoveObj::Undo()
@@ -597,7 +593,6 @@ OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
     ImpTakeDescriptionStr(STR_EditMove,aStr,true);
     return aStr;
 }
-
 
 
 SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
@@ -686,7 +681,6 @@ OUString SdrUndoGeoObj::GetComment() const
 }
 
 
-
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     : SdrUndoObj(rNewObj)
     , bOwner(false)
@@ -769,7 +763,6 @@ void SdrUndoRemoveObj::Redo()
 SdrUndoRemoveObj::~SdrUndoRemoveObj()
 {
 }
-
 
 
 void SdrUndoInsertObj::Undo()
@@ -858,7 +851,6 @@ OUString SdrUndoDelObj::GetSdrRepeatComment(SdrView& /*rView*/) const
     ImpTakeDescriptionStr(STR_EditDelete,aStr,true);
     return aStr;
 }
-
 
 
 void SdrUndoNewObj::Undo()
@@ -980,7 +972,6 @@ void SdrUndoReplaceObj::SetOldOwner(bool bNew)
 }
 
 
-
 OUString SdrUndoCopyObj::GetComment() const
 {
     OUString aStr;
@@ -1009,7 +1000,6 @@ void SdrUndoObjectLayerChange::Redo()
     pObj->SetLayer(maNewLayer);
     ImpShowPageOfThisObject();
 }
-
 
 
 SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
@@ -1053,7 +1043,6 @@ OUString SdrUndoObjOrdNum::GetComment() const
     ImpTakeDescriptionStr(STR_UndoObjOrdNum,aStr);
     return aStr;
 }
-
 
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
@@ -1314,7 +1303,6 @@ SdrUndoLayer::~SdrUndoLayer()
 }
 
 
-
 void SdrUndoNewLayer::Undo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoNewLayer::Undo(): Layer already belongs to UndoAction.");
@@ -1336,7 +1324,6 @@ OUString SdrUndoNewLayer::GetComment() const
 }
 
 
-
 void SdrUndoDelLayer::Undo()
 {
     DBG_ASSERT(bItsMine,"SdrUndoDelLayer::Undo(): Layer does not belong to UndoAction.");
@@ -1356,7 +1343,6 @@ OUString SdrUndoDelLayer::GetComment() const
 {
     return ImpGetResStr(STR_UndoDelLayer);
 }
-
 
 
 void SdrUndoMoveLayer::Undo()
@@ -1442,7 +1428,6 @@ void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, 
 }
 
 
-
 SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg)
     : SdrUndoPage(rNewPg)
     , bItsMine(false)
@@ -1457,7 +1442,6 @@ SdrUndoPageList::~SdrUndoPageList()
         delete (&mrPage);
     }
 }
-
 
 
 SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
@@ -1610,7 +1594,6 @@ void SdrUndoDelPage::restoreFillBitmap()
 }
 
 
-
 void SdrUndoNewPage::Undo()
 {
     ImpRemovePage(nPageNum);
@@ -1631,7 +1614,6 @@ OUString SdrUndoNewPage::GetComment() const
     ImpTakeDescriptionStr(STR_UndoNewPage,aStr);
     return aStr;
 }
-
 
 
 OUString SdrUndoCopyPage::GetComment() const
@@ -1657,7 +1639,6 @@ bool SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
     return false;
 }
-
 
 
 void SdrUndoSetPageNum::Undo()

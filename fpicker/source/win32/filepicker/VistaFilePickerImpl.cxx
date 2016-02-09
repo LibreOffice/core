@@ -85,7 +85,6 @@ namespace vista{
 // types, const etcpp.
 
 
-
 static const ::sal_Int16 INVALID_CONTROL_ID     = -1;
 static const ::sal_Int16 INVALID_CONTROL_ACTION = -1;
 

@@ -108,7 +108,6 @@ class VclMenuEvent;
 //    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model
 
 
-
 class TOOLKIT_DLLPUBLIC VCLXGraphicControl : public VCLXWindow
 {
 private:
@@ -399,8 +398,6 @@ public:
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
-
-
 
 
 //  class VCLXDialog

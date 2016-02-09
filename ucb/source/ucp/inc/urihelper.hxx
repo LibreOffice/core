@@ -25,7 +25,6 @@
 #include "rtl/uri.hxx"
 
 
-
 namespace ucb_impl { namespace urihelper {
 
     inline OUString encodeSegment( const OUString & rSegment )

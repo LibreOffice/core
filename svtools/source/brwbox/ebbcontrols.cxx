@@ -28,9 +28,6 @@ namespace svt
 {
 
 
-
-
-
     //= ComboBoxControl
 
     ComboBoxControl::ComboBoxControl(vcl::Window* pParent, WinBits nWinStyle)
@@ -594,7 +591,6 @@ namespace svt
 
 
 }   // namespace svt
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

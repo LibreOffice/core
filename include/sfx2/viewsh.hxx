@@ -89,7 +89,6 @@ namespace o3tl
 #define DEFAULT_MARGIN_HEIGHT 12
 
 
-
 //  @[SfxViewShell-Flags]
 
 enum class SfxViewShellFlags
@@ -111,7 +110,6 @@ namespace o3tl
     duration of its lifetime. They are defined in the constructor of
     <SfxViewShell>.
 */
-
 
 
 #define SFX_DECL_VIEWFACTORY(Class) \
@@ -328,7 +326,6 @@ public:
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitViewCallback(int nType, const char* pPayload) const;
 };
-
 
 
 inline SfxViewFrame* SfxViewShell::GetViewFrame() const

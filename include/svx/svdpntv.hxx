@@ -79,7 +79,6 @@ typedef unsigned char SDR_TRISTATE;
 #define SDRVIEWWIN_NOTFOUND     (0xFFFF)
 
 
-
 class SdrPaintView;
 
 namespace sdr
@@ -89,8 +88,6 @@ namespace sdr
         class ViewObjectContactRedirector;
     }
 }
-
-
 
 
 class SVX_DLLPUBLIC SvxViewHint : public SfxHint
@@ -117,7 +114,6 @@ BitmapEx SVX_DLLPUBLIC convertMetafileToBitmapEx(
     const GDIMetaFile& rMtf,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000);
-
 
 
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener

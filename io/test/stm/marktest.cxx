@@ -95,8 +95,6 @@ OMarkableOutputStreamTest::~OMarkableOutputStreamTest()
 }
 
 
-
-
 void OMarkableOutputStreamTest::testInvariant( const OUString& TestName,
                                                const Reference < XInterface >& TestObject )
     throw ( IllegalArgumentException, RuntimeException)
@@ -169,7 +167,6 @@ sal_Int32 OMarkableOutputStreamTest::test(
     }
     return hTestHandle;
 }
-
 
 
 sal_Bool OMarkableOutputStreamTest::testPassed()                        throw (RuntimeException)
@@ -357,9 +354,6 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
 ****/
 
 
-
-
-
 /**
 * for external binding
 *
@@ -370,7 +364,6 @@ Reference < XInterface > SAL_CALL OMarkableOutputStreamTest_CreateInstance( cons
     OMarkableOutputStreamTest *p = new OMarkableOutputStreamTest( rSMgr );
     return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
-
 
 
 Sequence<OUString> OMarkableOutputStreamTest_getSupportedServiceNames() throw ()
@@ -389,12 +382,6 @@ OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 {
     return OUString( "test.com.sun.starextensions.stm.MarkableOutputStream");
 }
-
-
-
-
-
-
 
 
 // Input stream
@@ -454,7 +441,6 @@ OMarkableInputStreamTest::~OMarkableInputStreamTest()
 {
 
 }
-
 
 
 void OMarkableInputStreamTest::testInvariant(
@@ -535,7 +521,6 @@ sal_Int32 OMarkableInputStreamTest::test(
     }
     return hTestHandle;
 }
-
 
 
 sal_Bool OMarkableInputStreamTest::testPassed()                                         throw (RuntimeException)
@@ -628,9 +613,6 @@ void OMarkableInputStreamTest::testSimple(      const Reference< XOutputStream >
 ****/
 
 
-
-
-
 /**
 * for external binding
 *
@@ -641,7 +623,6 @@ Reference < XInterface > SAL_CALL OMarkableInputStreamTest_CreateInstance( const
     OMarkableInputStreamTest *p = new OMarkableInputStreamTest( rSMgr );
     return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
-
 
 
 Sequence<OUString> OMarkableInputStreamTest_getSupportedServiceNames() throw ()

@@ -37,7 +37,6 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 
-
 namespace sdr
 {
     namespace contact

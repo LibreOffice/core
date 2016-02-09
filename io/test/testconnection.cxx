@@ -111,9 +111,6 @@ void MyThread::run()
 }
 
 
-
-
-
 void testConnection( const OUString &sConnectionDescription  ,
                      const Reference < XAcceptor > &rAcceptor,
                      const Reference < XConnector > &rConnector )

@@ -28,7 +28,6 @@ class XLineAttrSetItem;
 class XFillAttrSetItem;
 
 
-
 class SVX_DLLPUBLIC SdrItemPool : public XOutdevItemPool
 {
 public:

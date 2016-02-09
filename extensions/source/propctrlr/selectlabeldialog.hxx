@@ -33,7 +33,6 @@ namespace pcr
 {
 
 
-
     // OSelectLabelDialog
 
     class OSelectLabelDialog

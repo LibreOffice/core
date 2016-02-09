@@ -76,7 +76,6 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 }
 
 
-
 void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) const
 {
     OUString aName;
@@ -132,7 +131,6 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) 
 }
 
 
-
 IMPL_STATIC_LINK_TYPED( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
@@ -185,7 +183,6 @@ IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
         }
     }
 }
-
 
 
 void SfxURLToolBoxControl_Impl::StateChanged

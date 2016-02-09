@@ -24,7 +24,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
-
 namespace sdr
 {
     namespace contact
@@ -46,7 +45,6 @@ namespace sdr
         };
     } // end of namespace contact
 } // end of namespace sdr
-
 
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX

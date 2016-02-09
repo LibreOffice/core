@@ -55,8 +55,6 @@ using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
 using namespace std;
 
 
-
-
 namespace xforms
 {
 
@@ -69,7 +67,6 @@ PathExpression::PathExpression()
 PathExpression::~PathExpression()
 {
 }
-
 
 
 void PathExpression::setExpression( const OUString& rExpression )

@@ -552,7 +552,6 @@ IMPL_LINK_TYPED( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 // ObjectPage
 
 
-
 ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nMode)
     : TabPage(pParent, rName, "modules/BasicIDE/ui/" +
         OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
@@ -918,7 +917,6 @@ void ObjectPage::DeleteCurrent()
         }
     }
 }
-
 
 
 void ObjectPage::EndTabDialog( sal_uInt16 nRet )

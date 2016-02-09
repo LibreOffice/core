@@ -238,7 +238,6 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 }
 
 
-
 SvxPathTabPage::~SvxPathTabPage()
 {
     disposeOnce();
@@ -277,7 +276,6 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
     }
     return true;
 }
-
 
 
 void SvxPathTabPage::Reset( const SfxItemSet* )
@@ -378,7 +376,6 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
 }
 
 
-
 void SvxPathTabPage::FillUserData()
 {
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
@@ -389,7 +386,6 @@ void SvxPathTabPage::FillUserData()
     aUserData += bUp ? OUString("1") : OUString("0");
     SetUserData( aUserData );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
@@ -411,7 +407,6 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
     m_pPathBtn->Enable( 1 == nSelCount && bEnable);
     m_pStandardBtn->Enable( nSelCount > 0 && bEnable);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
@@ -480,7 +475,6 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
 }
 
 
-
 void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
@@ -542,7 +536,6 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         }
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPathTabPage, DoubleClickPathHdl_Impl, SvTreeListBox*, bool)
@@ -675,7 +668,6 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_TYPED( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     if (!pBar || pBar->GetCurItemId() != ITEMID_TYPE)
@@ -701,7 +693,6 @@ IMPL_LINK_TYPED( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
     pModel->SetSortMode( eMode );
     pModel->Resort();
 }
-
 
 
 IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
@@ -733,7 +724,6 @@ IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 }
 
 
-
 IMPL_LINK_TYPED( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if ( RET_OK == pEvt->DialogResult )
@@ -744,7 +734,6 @@ IMPL_LINK_TYPED( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void
         ChangeCurrentEntry( sURL );
     }
 }
-
 
 
 void SvxPathTabPage::GetPathList(
@@ -810,7 +799,6 @@ void SvxPathTabPage::GetPathList(
         OSL_FAIL( "SvxPathTabPage::GetPathList(): caught an exception!" );
     }
 }
-
 
 
 void SvxPathTabPage::SetPathList(

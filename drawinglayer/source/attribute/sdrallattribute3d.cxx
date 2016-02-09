@@ -20,7 +20,6 @@
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

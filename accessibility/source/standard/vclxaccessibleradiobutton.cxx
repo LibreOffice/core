@@ -44,7 +44,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 // VCLXAccessibleRadioButton
 
 
@@ -54,11 +53,9 @@ VCLXAccessibleRadioButton::VCLXAccessibleRadioButton( VCLXWindow* pVCLWindow )
 }
 
 
-
 VCLXAccessibleRadioButton::~VCLXAccessibleRadioButton()
 {
 }
-
 
 
 void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -85,7 +82,6 @@ void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWi
 }
 
 
-
 void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
@@ -107,7 +103,6 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
         }
     }
 }
-
 
 
 void VCLXAccessibleRadioButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -145,7 +140,6 @@ OUString VCLXAccessibleRadioButton::getImplementationName() throw (RuntimeExcept
 }
 
 
-
 Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleRadioButton" };
@@ -164,7 +158,6 @@ sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( ) throw (RuntimeE
 }
 
 
-
 sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -180,7 +173,6 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) thro
 }
 
 
-
 OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -190,7 +182,6 @@ OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 n
 
     return TK_RES_STRING( RID_STR_ACC_ACTION_SELECT );
 }
-
 
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -248,7 +239,6 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  ) throw (RuntimeException, std:
 }
 
 
-
 sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -274,7 +264,6 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw 
 }
 
 
-
 Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -286,7 +275,6 @@ Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException, std:
 }
 
 
-
 Any VCLXAccessibleRadioButton::getMinimumValue(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -296,7 +284,6 @@ Any VCLXAccessibleRadioButton::getMinimumValue(  ) throw (RuntimeException, std:
 
     return aValue;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

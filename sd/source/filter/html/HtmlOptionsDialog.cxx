@@ -245,5 +245,4 @@ com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation(css::uno::XCompone
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

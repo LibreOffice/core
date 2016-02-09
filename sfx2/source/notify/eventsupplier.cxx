@@ -48,7 +48,6 @@
 #include <macroloader.hxx>
 
 
-
 #define MACRO_PRFIX         "macro://"
 #define MACRO_POSTFIX       "()"
 
@@ -313,7 +312,6 @@ void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) t
         mxBroadcaster = nullptr;
     }
 }
-
 
 
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,

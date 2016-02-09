@@ -28,7 +28,6 @@ namespace svxform
 {
 
 
-
     //= DelayedEvent
 
     /** small class which encapsulates posting a Link instance as ApplicationUserEvent

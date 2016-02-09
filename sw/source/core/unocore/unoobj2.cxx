@@ -1640,7 +1640,6 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 };
 
 
-
 SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat)
     { return new SwXParaFrameEnumerationImpl(rPaM, eParaFrameMode, pFormat); }
 

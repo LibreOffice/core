@@ -58,7 +58,6 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
 }
 
 
-
 bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 {
     HKEY hKey;
@@ -155,7 +154,6 @@ std::string ClsidToString(const CLSID& clsid)
 
     return std::string(buff);
 }
-
 
 
 bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen)

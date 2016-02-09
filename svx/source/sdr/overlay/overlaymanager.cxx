@@ -32,7 +32,6 @@
 using namespace com::sun::star;
 
 
-
 namespace sdr
 {
     namespace overlay

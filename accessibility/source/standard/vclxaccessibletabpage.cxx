@@ -44,7 +44,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-
 // class VCLXAccessibleTabPage
 
 
@@ -60,13 +59,11 @@ VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt1
 }
 
 
-
 VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
 {
     delete m_pExternalLock;
     m_pExternalLock = nullptr;
 }
-
 
 
 bool VCLXAccessibleTabPage::IsFocused()
@@ -80,7 +77,6 @@ bool VCLXAccessibleTabPage::IsFocused()
 }
 
 
-
 bool VCLXAccessibleTabPage::IsSelected()
 {
     bool bSelected = false;
@@ -90,7 +86,6 @@ bool VCLXAccessibleTabPage::IsSelected()
 
     return bSelected;
 }
-
 
 
 void VCLXAccessibleTabPage::SetFocused( bool bFocused )
@@ -108,7 +103,6 @@ void VCLXAccessibleTabPage::SetFocused( bool bFocused )
 }
 
 
-
 void VCLXAccessibleTabPage::SetSelected( bool bSelected )
 {
     if ( m_bSelected != bSelected )
@@ -122,7 +116,6 @@ void VCLXAccessibleTabPage::SetSelected( bool bSelected )
         NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
-
 
 
 void VCLXAccessibleTabPage::SetPageText( const OUString& sPageText )
@@ -140,7 +133,6 @@ void VCLXAccessibleTabPage::SetPageText( const OUString& sPageText )
 }
 
 
-
 OUString VCLXAccessibleTabPage::GetPageText()
 {
     OUString sText;
@@ -149,7 +141,6 @@ OUString VCLXAccessibleTabPage::GetPageText()
 
     return sText;
 }
-
 
 
 void VCLXAccessibleTabPage::Update( bool bNew )
@@ -172,7 +163,6 @@ void VCLXAccessibleTabPage::Update( bool bNew )
         }
     }
 }
-
 
 
 void VCLXAccessibleTabPage::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -219,12 +209,10 @@ OUString VCLXAccessibleTabPage::implGetText()
 }
 
 
-
 lang::Locale VCLXAccessibleTabPage::implGetLocale()
 {
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
-
 
 
 void VCLXAccessibleTabPage::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
@@ -267,12 +255,10 @@ OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException,
 }
 
 
-
 sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
-
 
 
 Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -312,7 +298,6 @@ sal_Int32 VCLXAccessibleTabPage::getAccessibleChildCount() throw (RuntimeExcepti
 }
 
 
-
 Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -332,7 +317,6 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int32 i 
 }
 
 
-
 Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -343,7 +327,6 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleParent(  ) throw (R
 
     return xParent;
 }
-
 
 
 sal_Int32 VCLXAccessibleTabPage::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
@@ -358,14 +341,12 @@ sal_Int32 VCLXAccessibleTabPage::getAccessibleIndexInParent(  ) throw (RuntimeEx
 }
 
 
-
 sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::PAGE_TAB;
 }
-
 
 
 OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeException, std::exception)
@@ -380,14 +361,12 @@ OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeExc
 }
 
 
-
 OUString VCLXAccessibleTabPage::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return GetPageText();
 }
-
 
 
 Reference< XAccessibleRelationSet > VCLXAccessibleTabPage::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
@@ -398,7 +377,6 @@ Reference< XAccessibleRelationSet > VCLXAccessibleTabPage::getAccessibleRelation
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-
 
 
 Reference< XAccessibleStateSet > VCLXAccessibleTabPage::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
@@ -419,7 +397,6 @@ Reference< XAccessibleStateSet > VCLXAccessibleTabPage::getAccessibleStateSet(  
 
     return xSet;
 }
-
 
 
 Locale VCLXAccessibleTabPage::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
@@ -461,7 +438,6 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
 }
 
 
-
 void VCLXAccessibleTabPage::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -472,7 +448,6 @@ void VCLXAccessibleTabPage::grabFocus(  ) throw (RuntimeException, std::exceptio
         m_pTabControl->GrabFocus();
     }
 }
-
 
 
 sal_Int32 VCLXAccessibleTabPage::getForeground( ) throw (RuntimeException, std::exception)
@@ -490,7 +465,6 @@ sal_Int32 VCLXAccessibleTabPage::getForeground( ) throw (RuntimeException, std::
 
     return nColor;
 }
-
 
 
 sal_Int32 VCLXAccessibleTabPage::getBackground(  ) throw (RuntimeException, std::exception)
@@ -530,14 +504,12 @@ Reference< awt::XFont > VCLXAccessibleTabPage::getFont(  ) throw (RuntimeExcepti
 }
 
 
-
 OUString VCLXAccessibleTabPage::getTitledBorderText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return OUString();
 }
-
 
 
 OUString VCLXAccessibleTabPage::getToolTipText(  ) throw (RuntimeException, std::exception)
@@ -559,7 +531,6 @@ sal_Int32 VCLXAccessibleTabPage::getCaretPosition() throw (RuntimeException, std
 }
 
 
-
 sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -569,7 +540,6 @@ sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex ) throw (Inde
 
     return false;
 }
-
 
 
 Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -595,7 +565,6 @@ Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int
 }
 
 
-
 awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -614,7 +583,6 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex ) thr
 
     return aBounds;
 }
-
 
 
 sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException, std::exception)
@@ -637,7 +605,6 @@ sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& aPoint ) thr
 }
 
 
-
 sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -647,7 +614,6 @@ sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
     return false;
 }
-
 
 
 sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -678,7 +644,6 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 
     return bReturn;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -466,7 +466,6 @@ bool SdrTableObjImpl::ApplyCellStyles()
     return bChanges;
 }
 
-
 void SdrTableObjImpl::dispose()
 {
     disconnectTableStyle();
@@ -691,7 +690,6 @@ std::vector<sal_Int32> SdrTableObjImpl::getColumnWidths() const
 
     return aRet;
 }
-
 
 sal_Int32 SdrTableObjImpl::getRowCount() const
 {
@@ -1061,7 +1059,6 @@ void SdrTableObj::setTableStyleSettings( const TableStyleSettings& rStyle )
 }
 
 
-
 TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, int nTol ) const
 {
     if( !mpImpl || !mpImpl->mxTable.is() )
@@ -1243,7 +1240,6 @@ SdrText* SdrTableObj::getText( sal_Int32 nIndex ) const
 }
 
 
-
 /** returns the number of texts available for this object. */
 sal_Int32 SdrTableObj::getTextCount() const
 {
@@ -1259,7 +1255,6 @@ sal_Int32 SdrTableObj::getTextCount() const
         return 0;
     }
 }
-
 
 
 /** changes the current active text */
@@ -1509,12 +1504,10 @@ const CellRef& SdrTableObj::getActiveCell() const
 }
 
 
-
 sal_Int32 SdrTableObj::getColumnCount() const
 {
     return mpImpl ? mpImpl->getColumnCount() : 0;
 }
-
 
 
 void SdrTableObj::setActiveCell( const CellPos& rPos )
@@ -1541,12 +1534,10 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
 }
 
 
-
 void SdrTableObj::getActiveCellPos( CellPos& rPos ) const
 {
     rPos = mpImpl->maEditPos;
 }
-
 
 
 void SdrTableObj::getCellBounds( const CellPos& rPos, ::Rectangle& rCellRect )
@@ -1560,13 +1551,11 @@ void SdrTableObj::getCellBounds( const CellPos& rPos, ::Rectangle& rCellRect )
 }
 
 
-
 void SdrTableObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
 {
     if( mpImpl )
         TakeTextAnchorRect( mpImpl->maEditPos, rAnchorRect );
 }
-
 
 
 void SdrTableObj::TakeTextAnchorRect( const CellPos& rPos, Rectangle& rAnchorRect ) const
@@ -1585,13 +1574,11 @@ void SdrTableObj::TakeTextAnchorRect( const CellPos& rPos, Rectangle& rAnchorRec
 }
 
 
-
 void SdrTableObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
 {
     if( mpImpl )
         TakeTextEditArea( mpImpl->maEditPos, pPaperMin, pPaperMax, pViewInit, pViewMin );
 }
-
 
 
 void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin ) const
@@ -1650,7 +1637,6 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 }
 
 
-
 sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
 {
     EVAnchorMode eRet=ANCHOR_TOP_LEFT;
@@ -1678,7 +1664,6 @@ sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
 }
 
 
-
 OutlinerParaObject* SdrTableObj::GetEditOutlinerParaObject() const
 {
     return SdrTextObj::GetEditOutlinerParaObject();
@@ -1701,12 +1686,10 @@ OUString SdrTableObj::TakeObjNameSingul() const
 }
 
 
-
 OUString SdrTableObj::TakeObjNamePlural() const
 {
     return ImpGetResStr(STR_ObjNamePluralTable);
 }
-
 
 
 SdrTableObj* SdrTableObj::Clone() const
@@ -1741,12 +1724,10 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
 }
 
 
-
 basegfx::B2DPolyPolygon SdrTableObj::TakeXorPoly() const
 {
     return SdrTextObj::TakeXorPoly();
 }
-
 
 
 basegfx::B2DPolyPolygon SdrTableObj::TakeContour() const
@@ -1755,12 +1736,10 @@ basegfx::B2DPolyPolygon SdrTableObj::TakeContour() const
 }
 
 
-
 const Rectangle& SdrTableObj::GetSnapRect() const
 {
     return maRect;
 }
-
 
 
 void SdrTableObj::NbcSetSnapRect(const Rectangle& rRect)
@@ -1769,18 +1748,15 @@ void SdrTableObj::NbcSetSnapRect(const Rectangle& rRect)
 }
 
 
-
 const Rectangle& SdrTableObj::GetLogicRect() const
 {
     return maLogicRect;
 }
 
 
-
 void SdrTableObj::RecalcSnapRect()
 {
 }
-
 
 
 sal_uInt32 SdrTableObj::GetSnapPointCount() const
@@ -1789,13 +1765,10 @@ sal_uInt32 SdrTableObj::GetSnapPointCount() const
 }
 
 
-
-
 Point SdrTableObj::GetSnapPoint(sal_uInt32 i) const
 {
     return SdrTextObj::GetSnapPoint(i);
 }
-
 
 
 bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
@@ -1837,7 +1810,6 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
     return true;
 }
-
 
 
 void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
@@ -1893,7 +1865,6 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 }
 
 
-
 OutlinerParaObject* SdrTableObj::GetOutlinerParaObject() const
 {
     CellRef xCell( getActiveCell() );
@@ -1902,7 +1873,6 @@ OutlinerParaObject* SdrTableObj::GetOutlinerParaObject() const
     else
         return nullptr;
 }
-
 
 
 void SdrTableObj::NbcSetOutlinerParaObject( OutlinerParaObject* pTextObject)
@@ -1926,7 +1896,6 @@ void SdrTableObj::NbcSetOutlinerParaObject( OutlinerParaObject* pTextObject)
 }
 
 
-
 void SdrTableObj::NbcSetLogicRect(const Rectangle& rRect)
 {
     maLogicRect=rRect;
@@ -1943,15 +1912,12 @@ void SdrTableObj::NbcSetLogicRect(const Rectangle& rRect)
 }
 
 
-
-
 void SdrTableObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
 {
     Rectangle aAdjustRect( rMaxRect );
     aAdjustRect.setHeight( GetLogicRect().getHeight() );
     SetLogicRect( aAdjustRect );
 }
-
 
 
 void SdrTableObj::NbcMove(const Size& rSiz)
@@ -1963,7 +1929,6 @@ void SdrTableObj::NbcMove(const Size& rSiz)
 }
 
 
-
 void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     Rectangle aOldRect( maLogicRect );
@@ -1973,7 +1938,6 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
     NbcAdjustTextFrameWidthAndHeight( maLogicRect.GetHeight() == aOldRect.GetHeight(), maLogicRect.GetWidth() == aOldRect.GetWidth() );
     SetRectsDirty();
 }
-
 
 
 bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
@@ -1993,7 +1957,6 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     }
     return bRet;
 }
-
 
 
 bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, bool bWidth) const
@@ -2016,12 +1979,10 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, boo
 }
 
 
-
 void SdrTableObj::NbcReformatText()
 {
     NbcAdjustTextFrameWidthAndHeight();
 }
-
 
 
 void SdrTableObj::ReformatText()
@@ -2036,13 +1997,11 @@ void SdrTableObj::ReformatText()
 }
 
 
-
 bool SdrTableObj::IsVerticalWriting() const
 {
     const SvxWritingModeItem* pModeItem = dynamic_cast< const SvxWritingModeItem* >( &GetObjectItem( SDRATTR_TEXTDIRECTION ) );
     return pModeItem && pModeItem->GetValue() == css::text::WritingMode_TB_RL;
 }
-
 
 
 void SdrTableObj::SetVerticalWriting(bool bVertical )

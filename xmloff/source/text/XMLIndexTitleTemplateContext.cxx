@@ -33,7 +33,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_STYLE_NAME;
 
 
-
 XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,

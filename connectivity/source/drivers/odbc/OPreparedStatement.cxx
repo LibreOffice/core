@@ -492,7 +492,6 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
 }
 
 
-
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException, std::exception)
 {
     setScalarParameter(parameterIndex, DataType::FLOAT, 15, x);
@@ -645,7 +644,6 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 }
 
 
-
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     // LEM: It is quite unclear to me what the interface here is.
@@ -691,9 +689,7 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLExc
 }
 
 
-
 // methods
-
 
 
 // initBoundParam
@@ -720,7 +716,6 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 }
 
 
-
 // allocBindBuf
 // Allocate storage for the permanent data buffer for the bound
 // parameter.
@@ -741,7 +736,6 @@ void* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 }
 
 
-
 // getLengthBuf
 // Gets the length buffer for the given parameter index
 
@@ -760,7 +754,6 @@ SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
 
     return b;
 }
-
 
 
 // putParamData
@@ -877,8 +870,6 @@ void OPreparedStatement::setStream(
     // Save the input stream
     boundParams[ParameterIndex - 1].setInputStream (x, length);
 }
-
-
 
 
 void OPreparedStatement::FreeParams()

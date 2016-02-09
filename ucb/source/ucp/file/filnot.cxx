@@ -26,7 +26,6 @@
 #include "prov.hxx"
 
 
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
@@ -56,7 +55,6 @@ ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
       m_sListeners( sListeners )
 {
 }
-
 
 
 void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
@@ -95,7 +93,6 @@ void ContentEventNotifier::notifyDeleted()
             ref->contentEvent( aEvt );
     }
 }
-
 
 
 void ContentEventNotifier::notifyRemoved( const OUString& aChildName )

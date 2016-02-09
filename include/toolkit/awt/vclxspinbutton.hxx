@@ -30,7 +30,6 @@ namespace toolkit
 {
 
 
-
     //= VCLXSpinButton
 
     typedef ::cppu::ImplHelper1 <   css::awt::XSpinValue

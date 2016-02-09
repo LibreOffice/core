@@ -23,7 +23,6 @@
 #include <sdr/properties/e3dproperties.hxx>
 
 
-
 namespace sdr
 {
     namespace properties
@@ -80,7 +79,6 @@ namespace sdr
         };
     } // end of namespace properties
 } // end of namespace sdr
-
 
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX

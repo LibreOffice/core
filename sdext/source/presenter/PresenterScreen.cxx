@@ -328,7 +328,6 @@ void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
 }
 
 
-
 void PresenterScreen::InitializePresenterScreen()
 {
     try

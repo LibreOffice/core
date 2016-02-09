@@ -31,7 +31,6 @@
 
 
 
-
 // '\0' terminated Array with symbol, which should be treat as letters in
 // StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
 // other operators and symbols).
@@ -71,10 +70,7 @@ bool SmIsMathAlpha(const OUString &rText)
 }
 
 
-
-
 // SmRect members
-
 
 
 SmRect::SmRect()

@@ -199,7 +199,6 @@ void SvxNumberPreview::InitSettings( bool bForeground, bool bBackground )
 }
 
 
-
 void SvxNumberPreview::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::ControlForeground )
@@ -209,7 +208,6 @@ void SvxNumberPreview::StateChanged( StateChangedType nType )
 
     Window::StateChanged( nType );
 }
-
 
 
 void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
@@ -931,7 +929,6 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             bDoIt=true;
         }
     }
-
 
 
     if ( nCategory != nCurCategory || bDoIt)

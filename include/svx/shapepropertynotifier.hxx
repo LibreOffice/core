@@ -38,7 +38,6 @@ namespace svx
 {
 
 
-
     //= IPropertyValueProvider
 
     /** a provider for a property value

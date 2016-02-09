@@ -153,7 +153,6 @@ namespace xforms
     }
 
 
-
     sal_Int16 SAL_CALL OXSDDataType::getTypeClass() throw (RuntimeException, std::exception)
     {
         return m_nTypeClass;
@@ -656,7 +655,6 @@ namespace xforms
     }
 
 
-
     // validate decimals and return code for which facets failed
     // to be used by: ODecimalType::validate and ODecimalType::explainInvalid
     sal_uInt16 ODecimalType::_validate( const OUString& rValue )
@@ -747,7 +745,6 @@ namespace xforms
          classname##_Base::initializeClone( _rCloneSource );        \
         initializeTypedClone( static_cast< const classname& >( _rCloneSource ) ); \
     } \
-
 
 
     //= ODateType
@@ -940,7 +937,6 @@ namespace xforms
         OSL_VERIFY( _rValue >>= nValue );
         _rDoubleValue = nValue;
     }
-
 
 
 #define DATATYPES_INCLUDED_BY_MASTER_HEADER

@@ -2234,9 +2234,7 @@ namespace svxform
     }
 
 
-
     // class NavigatorFrameManager
-
 
 
     SFX_IMPL_DOCKINGWINDOW( DataNavigatorManager, SID_FM_SHOW_DATANAVIGATOR )

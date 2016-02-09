@@ -28,7 +28,6 @@ namespace svt
 {
 
 
-
     //= OFileNotation
 
     class SVL_DLLPUBLIC OFileNotation

@@ -36,7 +36,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 
-
 SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnde )
     : SwTextAttr( rAttr, nStt )

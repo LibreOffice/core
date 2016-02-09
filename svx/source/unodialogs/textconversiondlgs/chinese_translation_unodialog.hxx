@@ -36,7 +36,6 @@ namespace textconversiondlgs
 {
 
 
-
 /** This class provides the chinese translation dialog as an uno component.
 
 It can be created via lang::XMultiComponentFactory::createInstanceWithContext

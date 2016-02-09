@@ -457,7 +457,6 @@ FreeAllocStrings(int argc, wchar_t **argv)
 }
 
 
-
 /**
  * Launch a child process with the specified arguments.
  * @note argv[0] is ignored

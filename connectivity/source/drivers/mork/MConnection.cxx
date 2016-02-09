@@ -44,7 +44,6 @@ namespace connectivity { namespace mork {
 static const int defaultScope = 0x80;
 
 
-
 OConnection::OConnection(MorkDriver* _pDriver)
     :OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
     ,m_pDriver(_pDriver)
@@ -384,7 +383,6 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
     OSL_TRACE( "\tOUT OConnection::createCatalog()" );
     return xTab;
 }
-
 
 
 void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Reference< XInterface >& _rxContext )

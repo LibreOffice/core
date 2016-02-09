@@ -227,7 +227,6 @@ void View::setName( const OUString& aName ) throw (::com::sun::star::uno::Runtim
 }
 
 
-
 ViewDescriptor::ViewDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,

@@ -176,7 +176,6 @@ Sequence< OUString > MergeProposalSeqs(
 }
 
 
-
 SpellAlternatives::SpellAlternatives()
 {
     nLanguage   = LANGUAGE_NONE;

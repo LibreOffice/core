@@ -33,10 +33,7 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 
 
-
-
 // class DynamicResultSetWrapper
-
 
 
 DynamicResultSetWrapper::DynamicResultSetWrapper(
@@ -437,9 +434,7 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper::getCapabilities()
 }
 
 
-
 // class DynamicResultSetWrapperListener
-
 
 
 DynamicResultSetWrapperListener::DynamicResultSetWrapperListener(

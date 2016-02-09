@@ -36,8 +36,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-
-
 class SmXMLExportWrapper
 {
     css::uno::Reference<css::frame::XModel> xModel;
@@ -65,7 +63,6 @@ public:
         css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 };
-
 
 
 class SmXMLExport : public SvXMLExport
@@ -116,7 +113,6 @@ public:
 
     bool GetSuccess() {return bSuccess;}
 };
-
 
 
 #endif

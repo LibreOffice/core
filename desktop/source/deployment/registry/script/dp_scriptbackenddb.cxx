@@ -66,7 +66,6 @@ OUString ScriptBackendDb::getKeyElementName()
 }
 
 
-
 } // namespace executable
 } // namespace backend
 } // namespace dp_registry

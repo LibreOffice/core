@@ -85,7 +85,6 @@ namespace connectivity
             sal_Int32                                   m_nResultSetConcurrency;
 
 
-
             std::shared_ptr< ::connectivity::OSQLParseTreeIterator >
                                                         m_pSQLIterator;
             const connectivity::OSQLParseNode*          m_pParseTree;

@@ -136,7 +136,6 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (css::io::NotConnect
 }
 
 
-
 class FlashExportFilter : public cppu::WeakImplHelper
 <
     css::document::XFilter,
@@ -474,12 +473,10 @@ bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDes
 }
 
 
-
 void SAL_CALL FlashExportFilter::cancel(  )
     throw (RuntimeException, std::exception)
 {
 }
-
 
 
 // XExporter
@@ -488,7 +485,6 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const css::uno::Reference< c
 {
     mxDoc = xDoc;
 }
-
 
 
 // XInitialization

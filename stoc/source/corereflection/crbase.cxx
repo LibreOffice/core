@@ -228,12 +228,6 @@ Reference< XIdlArray > IdlClassImpl::getArray()
 }
 
 
-
-
-
-
-
-
 IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                               typelib_TypeDescription * pTypeDescr,
                               typelib_TypeDescription * pDeclTypeDescr )

@@ -1672,7 +1672,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL
 }
 
 
-
 RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rModel,
                               const uno::Sequence< beans::PropertyValue >& rProperties )
 {

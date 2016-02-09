@@ -28,7 +28,6 @@ namespace svt
 {
 
 
-
     //= GraphicAccess
 
     /** helper class for obtaining streams (which also can be used with the ImageProducer)

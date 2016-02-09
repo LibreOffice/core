@@ -31,7 +31,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct DataSequenceModel;
 
 class DataSequenceConverter : public ConverterBase< DataSequenceModel >
@@ -46,7 +45,6 @@ public:
 };
 
 
-
 struct DataSourceModel;
 
 class DataSourceConverter : public ConverterBase< DataSourceModel >
@@ -59,7 +57,6 @@ public:
     css::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole );
 };
-
 
 
 } // namespace chart

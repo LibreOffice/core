@@ -283,7 +283,6 @@ void SdrEditView::DeleteLayer(const OUString& rName)
 }
 
 
-
 void SdrEditView::EndUndo()
 {
     // #i13033#
@@ -661,7 +660,6 @@ void SdrEditView::CheckPossibilities()
 }
 
 
-
 void SdrEditView::ForceMarkedObjToAnotherPage()
 {
     bool bFlg=false;
@@ -959,7 +957,6 @@ void SdrEditView::CopyMarkedObj()
 }
 
 
-
 bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
 {
     if (nOptions & SdrInsertFlags::SETDEFLAYER) {
@@ -1032,7 +1029,6 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
 
     if (bMark) MarkObj(pNewObj,&rPV);
 }
-
 
 
 bool SdrEditView::IsUndoEnabled() const

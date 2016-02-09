@@ -285,7 +285,6 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
 }
 
 
-
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
@@ -356,7 +355,6 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
 }
 
 
-
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     sal_uInt16 nPolyCount=rPoly.Count();
@@ -380,7 +378,6 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
         CrookStretchPoly(rPoly[nPolyNum],rCenter,rRad,bVert,rRefRect);
     }
 }
-
 
 
 long GetAngle(const Point& rPnt)
@@ -447,7 +444,6 @@ long GetLen(const Point& rPnt)
 }
 
 
-
 void GeoStat::RecalcSinCos()
 {
     if (nRotationAngle==0) {
@@ -469,7 +465,6 @@ void GeoStat::RecalcTan()
         nTan=tan(a);
     }
 }
-
 
 
 tools::Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
@@ -527,7 +522,6 @@ void Poly2Rect(const tools::Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
 }
 
 
-
 void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {
     long dx=rPt.X()-rPt0.X();
@@ -556,7 +550,6 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
         rPt.X()=rPt0.X()+(dya* (dx>=0 ? 1 : -1) );
     }
 }
-
 
 
 long BigMulDiv(long nVal, long nMul, long nDiv)
@@ -658,7 +651,6 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
     return aRet;
 };
-
 
 
     // 1 mile    =  8 furlong = 63.360" = 1.609.344,0mm
@@ -1048,8 +1040,6 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
         }
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

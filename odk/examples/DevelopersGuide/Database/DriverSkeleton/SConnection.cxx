@@ -364,7 +364,6 @@ void OConnection::buildTypeInfo() throw( SQLException)
         aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
 
 
-
         // Now that we have the type info, save it
         // in the Hashtable if we don't already have an
         // entry for this SQL type.
@@ -397,8 +396,6 @@ void OConnection::disposing()
     dispose_ChildImpl();
     OConnection_BASE::disposing();
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

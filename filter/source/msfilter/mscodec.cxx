@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 namespace msfilter {
 
 
-
 namespace {
 
 /** Rotates rnValue left by nBits bits. */
@@ -114,7 +113,6 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Size nBufferSize )
 
 
 } // namespace
-
 
 
 MSCodec_Xor95::MSCodec_Xor95(int nRotateDistance) :
@@ -246,7 +244,6 @@ void MSCodec_Xor95::Skip( sal_Size nBytes )
 {
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
-
 
 
 MSCodec_Std97::MSCodec_Std97 ()
@@ -542,7 +539,6 @@ void MSCodec_Std97::GetDocId( sal_uInt8 pDocId[16] )
     if ( sizeof( m_pDocId ) == 16 )
         (void)memcpy( pDocId, m_pDocId, 16 );
 }
-
 
 
 }

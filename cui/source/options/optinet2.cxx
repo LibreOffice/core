@@ -119,7 +119,6 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
 }
 
 
-
 void SvxNoSpaceEdit::Modify()
 {
     Edit::Modify();
@@ -524,7 +523,6 @@ void SvxProxyTabPage::EnableControls_Impl(bool bEnable)
 }
 
 
-
 IMPL_LINK_TYPED( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 {
     sal_Int32 nPos = rBox.GetSelectEntryPos();
@@ -539,7 +537,6 @@ IMPL_LINK_TYPED( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 }
 
 
-
 IMPL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
 {
     Edit* pEdit = static_cast<Edit*>(&rControl);
@@ -548,7 +545,6 @@ IMPL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, 
     if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
         pEdit->SetText( OUString('0') );
 }
-
 
 
 void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
@@ -1089,7 +1085,6 @@ IMPL_LINK_TYPED(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
         }
     }
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

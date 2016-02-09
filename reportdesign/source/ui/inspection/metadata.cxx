@@ -201,7 +201,6 @@ namespace rptui
     }
 
 
-
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
         // intialisierung
@@ -301,7 +300,6 @@ namespace rptui
                 _rExcludeProperties.push_back(*pPropsIter);
         }
     }
-
 
 
 } // namespace pcr

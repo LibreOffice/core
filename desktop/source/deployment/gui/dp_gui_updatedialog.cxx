@@ -192,8 +192,6 @@ struct UpdateDialog::Index
 };
 
 
-
-
 class UpdateDialog::Thread: public salhelper::Thread {
 public:
     Thread(
@@ -696,8 +694,6 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 }
 
 
-
-
 sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKind kind )
 {
     m_pUpdates->InsertEntry( pEntry->m_aName, TREELIST_APPEND, static_cast< void * >( pEntry ), kind );
@@ -1139,7 +1135,6 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
         }
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(UpdateDialog, selectionHandler, SvTreeListBox*, void)

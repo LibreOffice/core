@@ -56,7 +56,6 @@ bool VCL_DLLPUBLIC ReadDIBV5(
     SvStream& rIStm);
 
 
-
 bool VCL_DLLPUBLIC WriteDIB( // WriteDIB(rBitmap, rOStm, false, true);
     const Bitmap& rSource,
     SvStream& rOStm,
@@ -71,7 +70,6 @@ sal_uInt32 getDIBInfoHeaderSize();
 sal_uInt32 getDIBV5HeaderSize();
 
 #endif // INCLUDED_VCL_DIBTOOLS_HXX
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

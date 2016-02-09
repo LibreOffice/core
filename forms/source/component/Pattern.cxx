@@ -71,7 +71,6 @@ Sequence<Type> OPatternModel::_getTypes()
 }
 
 
-
 OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, false, false )
                                     // use the old control name for compytibility reasons
@@ -109,7 +108,6 @@ css::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames() 
     pArray[aSupported.getLength()-1] = FRM_COMPONENT_PATTERNFIELD;
     return aSupported;
 }
-
 
 
 void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) const

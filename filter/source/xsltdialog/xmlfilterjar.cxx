@@ -235,9 +235,6 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 }
 
 
-
-
-
 void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVector& rFilters )
 {
     try

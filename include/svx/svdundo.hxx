@@ -724,7 +724,6 @@ public:
 };
 
 
-
 /**
  * The SdrUndoFactory can be set and retrieved from the SdrModel.
  * It is used by the drawing layer implementations to create undo actions.

@@ -44,7 +44,6 @@ namespace rptui
     class OSectionView;
 
 
-
     struct RectangleLess : public ::std::binary_function< Rectangle, Rectangle, bool>
     {
         enum CompareMode { POS_LEFT,POS_RIGHT,POS_UPPER,POS_DOWN,POS_CENTER_HORIZONTAL,POS_CENTER_VERTICAL };

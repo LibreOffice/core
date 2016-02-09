@@ -23,7 +23,6 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 
 
-
 namespace sdr
 {
     namespace overlay
@@ -43,7 +42,6 @@ namespace sdr
         };
     } // end of namespace overlay
 } // end of namespace sdr
-
 
 
 #endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYCROSSHAIR_HXX

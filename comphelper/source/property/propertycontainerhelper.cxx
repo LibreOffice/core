@@ -120,7 +120,6 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
 }
 
 
-
 void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const Type& _rType, const void* _pInitialValue)
 {
@@ -501,7 +500,6 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
 
 
 }   // namespace comphelper
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

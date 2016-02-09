@@ -1997,7 +1997,6 @@ bool SVGFilter::implCreateObjects()
 }
 
 
-
 bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )
 {
     Reference< XShape > xShape;

@@ -145,7 +145,6 @@ bool RemoveVirtuals::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
 }
 
 
-
 loplugin::Plugin::Registration< RemoveVirtuals > X("removevirtuals", false);
 
 }

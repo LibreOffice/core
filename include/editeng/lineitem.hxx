@@ -23,7 +23,6 @@
 #include <editeng/editengdllapi.h>
 
 
-
 // class SvxLineItem -----------------------------------------------------
 
 
@@ -66,8 +65,6 @@ public:
 private:
     editeng::SvxBorderLine*  pLine;
 };
-
-
 
 
 #endif

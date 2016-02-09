@@ -112,7 +112,6 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
 }
 
 
-
 BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
@@ -121,7 +120,6 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
 {
     ConstructImpl( nMode );
 }
-
 
 
 BrowseBox::BrowseBox( vcl::Window* pParent, const ResId& rId, BrowserMode nMode )
@@ -169,12 +167,10 @@ void BrowseBox::dispose()
 }
 
 
-
 short BrowseBox::GetCursorHideCount() const
 {
     return getDataWindow()->nCursorHidden;
 }
-
 
 
 void BrowseBox::DoShowCursor( const char * )
@@ -195,7 +191,6 @@ void BrowseBox::DoShowCursor( const char * )
 }
 
 
-
 void BrowseBox::DoHideCursor( const char * )
 {
     short nHiddenCount = ++getDataWindow()->nCursorHidden;
@@ -212,12 +207,10 @@ void BrowseBox::DoHideCursor( const char * )
 }
 
 
-
 void BrowseBox::SetRealRowCount( const OUString &rRealRowCount )
 {
     getDataWindow()->aRealRowCount = rRealRowCount;
 }
-
 
 
 void BrowseBox::SetFont( const vcl::Font& rNewFont )
@@ -227,12 +220,10 @@ void BrowseBox::SetFont( const vcl::Font& rNewFont )
 }
 
 
-
 sal_uLong BrowseBox::GetDefaultColumnWidth( const OUString& _rText ) const
 {
     return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth(OUString('0')) * 4;
 }
-
 
 
 void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
@@ -263,7 +254,6 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 
     ColumnInserted( 0 );
 }
-
 
 
 void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
@@ -410,7 +400,6 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, bool bFreeze )
 }
 
 
-
 void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 {
     // never set pos of the handle column
@@ -529,7 +518,6 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 }
 
 
-
 void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 {
 
@@ -572,7 +560,6 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
         }
     }
 }
-
 
 
 void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
@@ -682,7 +669,6 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
 }
 
 
-
 void BrowseBox::AutoSizeLastColumn()
 {
     if ( getDataWindow()->bAutoSizeLastCol &&
@@ -693,7 +679,6 @@ void BrowseBox::AutoSizeLastColumn()
         ColumnResized( nId );
     }
 }
-
 
 
 void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
@@ -778,7 +763,6 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 }
 
 
-
 void BrowseBox::RemoveColumns()
 {
     size_t nOldCount = pCols->size();
@@ -848,7 +832,6 @@ void BrowseBox::RemoveColumns()
 }
 
 
-
 OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
 {
 
@@ -859,12 +842,10 @@ OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
 }
 
 
-
 long BrowseBox::GetRowCount() const
 {
     return nRowCount;
 }
-
 
 
 sal_uInt16 BrowseBox::ColCount() const
@@ -872,7 +853,6 @@ sal_uInt16 BrowseBox::ColCount() const
 
     return (sal_uInt16) pCols->size();
 }
-
 
 
 long BrowseBox::ImpGetDataRowHeight() const
@@ -886,7 +866,6 @@ long BrowseBox::ImpGetDataRowHeight() const
 }
 
 
-
 void BrowseBox::SetDataRowHeight( long nPixel )
 {
 
@@ -896,13 +875,11 @@ void BrowseBox::SetDataRowHeight( long nPixel )
 }
 
 
-
 void BrowseBox::SetTitleLines( sal_uInt16 nLines )
 {
 
     nTitleLines = nLines;
 }
-
 
 
 long BrowseBox::ScrollColumns( long nCols )
@@ -1047,7 +1024,6 @@ long BrowseBox::ScrollColumns( long nCols )
 }
 
 
-
 long BrowseBox::ScrollRows( long nRows )
 {
 
@@ -1104,7 +1080,6 @@ long BrowseBox::ScrollRows( long nRows )
 }
 
 
-
 void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
 {
 
@@ -1123,7 +1098,6 @@ void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
     }
     getDataWindow()->Invalidate( aRect );
 }
-
 
 
 void BrowseBox::Clear()
@@ -1292,7 +1266,6 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeep
     DBG_ASSERT(nCurRow >= 0,"BrowseBox: nCurRow < 0");
     DBG_ASSERT(nCurRow < nRowCount,"nCurRow >= nRowCount");
 }
-
 
 
 void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
@@ -1466,12 +1439,10 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
 }
 
 
-
 bool BrowseBox::GoToRow( long nRow)
 {
     return GoToRow(nRow, false);
 }
-
 
 
 bool BrowseBox::GoToRow( long nRow, bool bRowColMove, bool bKeepSelection )
@@ -1560,7 +1531,6 @@ bool BrowseBox::GoToRow( long nRow, bool bRowColMove, bool bKeepSelection )
 }
 
 
-
 bool BrowseBox::GoToColumnId( sal_uInt16 nColId)
 {
     return GoToColumnId(nColId, true);
@@ -1626,7 +1596,6 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
 }
 
 
-
 bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
 {
 
@@ -1655,7 +1624,6 @@ bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
 
     return bMoved;
 }
-
 
 
 void BrowseBox::SetNoSelection()
@@ -1695,7 +1663,6 @@ void BrowseBox::SetNoSelection()
         );
     }
 }
-
 
 
 void BrowseBox::SelectAll()
@@ -1761,7 +1728,6 @@ void BrowseBox::SelectAll()
         ); // row header event
     }
 }
-
 
 
 void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
@@ -1836,14 +1802,12 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
 }
 
 
-
 long BrowseBox::GetSelectRowCount() const
 {
 
     return bMultiSelection ? uRow.pSel->GetSelectCount() :
            uRow.nSel == BROWSER_ENDOFSELECTION ? 0 : 1;
 }
-
 
 
 void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMakeVisible )
@@ -1910,7 +1874,6 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
 }
 
 
-
 sal_uInt16 BrowseBox::GetSelectColumnCount() const
 {
 
@@ -1926,13 +1889,11 @@ long BrowseBox::FirstSelectedColumn( ) const
 }
 
 
-
 long BrowseBox::FirstSelectedRow( bool bInverse )
 {
 
     return bMultiSelection ? uRow.pSel->FirstSelected(bInverse) : uRow.nSel;
 }
-
 
 
 long BrowseBox::NextSelectedRow()
@@ -1942,7 +1903,6 @@ long BrowseBox::NextSelectedRow()
 }
 
 
-
 long BrowseBox::LastSelectedRow()
 {
 
@@ -1950,13 +1910,11 @@ long BrowseBox::LastSelectedRow()
 }
 
 
-
 bool BrowseBox::IsRowSelected( long nRow ) const
 {
 
     return bMultiSelection ? uRow.pSel->IsSelected(nRow) : nRow == uRow.nSel;
 }
-
 
 
 bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
@@ -2047,7 +2005,6 @@ bool BrowseBox::MakeFieldVisible
 }
 
 
-
 bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
                                 bool bCompletely ) const
 {
@@ -2073,7 +2030,6 @@ bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
 }
 
 
-
 Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
                                         bool bRelToBrowser) const
 {
@@ -2093,7 +2049,6 @@ Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
 
     return Rectangle( aTopLeft, aRect.GetSize() );
 }
-
 
 
 Rectangle BrowseBox::GetRowRectPixel( long nRow, bool bRelToBrowser  ) const
@@ -2121,7 +2076,6 @@ Rectangle BrowseBox::GetRowRectPixel( long nRow, bool bRelToBrowser  ) const
 
     return Rectangle( aTopLeft, aRect.GetSize() );
 }
-
 
 
 Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
@@ -2153,7 +2107,6 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
 }
 
 
-
 long BrowseBox::GetRowAtYPosPixel( long nY, bool bRelToBrowser ) const
 {
 
@@ -2173,13 +2126,11 @@ long BrowseBox::GetRowAtYPosPixel( long nY, bool bRelToBrowser ) const
 }
 
 
-
 Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
 {
 
     return GetFieldRectPixel( nCurRow, nColumnId );
 }
-
 
 
 sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, bool ) const
@@ -2201,7 +2152,6 @@ sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, bool ) const
 }
 
 
-
 void BrowseBox::ReserveControlArea( sal_uInt16 nWidth )
 {
 
@@ -2214,7 +2164,6 @@ void BrowseBox::ReserveControlArea( sal_uInt16 nWidth )
 }
 
 
-
 Rectangle BrowseBox::GetControlArea() const
 {
 
@@ -2223,7 +2172,6 @@ Rectangle BrowseBox::GetControlArea() const
         Size( GetOutputSizePixel().Width() - aHScroll->GetSizePixel().Width(),
              aHScroll->GetSizePixel().Height() ) );
 }
-
 
 
 void BrowseBox::SetMode( BrowserMode nMode )
@@ -2352,7 +2300,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
 }
 
 
-
 void BrowseBox::VisibleRowsChanged( long, sal_uInt16 )
 {
 
@@ -2366,7 +2313,6 @@ void BrowseBox::VisibleRowsChanged( long, sal_uInt16 )
         RowRemoved(nRowCount-(nRowCount - GetRowCount()),nRowCount - GetRowCount(), false);
     }
 }
-
 
 
 bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
@@ -2388,12 +2334,10 @@ bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
 }
 
 
-
 long BrowseBox::GetDataRowHeight() const
 {
     return CalcZoom(nDataRowHeight ? nDataRowHeight : ImpGetDataRowHeight());
 }
-
 
 
 VclPtr<BrowserHeader> BrowseBox::CreateHeaderBar( BrowseBox* pParent )
@@ -2471,7 +2415,6 @@ void BrowseBox::LoseFocus()
     }
     Control::LoseFocus();
 }
-
 
 
 void BrowseBox::GetFocus()

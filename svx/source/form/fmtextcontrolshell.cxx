@@ -183,7 +183,6 @@ namespace svx
     };
 
 
-
     FmFocusListenerAdapter::FmFocusListenerAdapter( const Reference< css::awt::XControl >& _rxControl, IFocusObserver* _pObserver )
         :m_pObserver( _pObserver )
         ,m_xWindow( _rxControl, UNO_QUERY )

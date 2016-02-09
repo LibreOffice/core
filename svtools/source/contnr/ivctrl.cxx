@@ -55,7 +55,6 @@ OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
 }
 
 
-
 SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& rInfo )
     : aColText( rInfo.aColText ), aColImage( rInfo.aColImage )
 {

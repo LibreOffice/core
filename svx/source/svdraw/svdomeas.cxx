@@ -72,7 +72,6 @@
 #include <unotools/syslocale.hxx>
 
 
-
 SdrMeasureObjGeoData::SdrMeasureObjGeoData() {}
 SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
 
@@ -208,8 +207,6 @@ sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfSdrMeasureObj(*this);
 }
-
-
 
 
 SdrMeasureObj::SdrMeasureObj():
@@ -797,7 +794,6 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-
 bool SdrMeasureObj::hasSpecialDrag() const
 {
     return true;
@@ -966,7 +962,6 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
         } break;
     } // switch
 }
-
 
 
 bool SdrMeasureObj::BegCreate(SdrDragStat& rStat)

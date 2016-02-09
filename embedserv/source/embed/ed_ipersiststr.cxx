@@ -163,7 +163,6 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
 }
 
 
-
 // EmbedDocument_Impl
 
 
@@ -921,7 +920,6 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 }
 
 
-
 LockedEmbedDocument_Impl EmbeddedDocumentInstanceAccess_Impl::GetEmbedDocument()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -933,7 +931,6 @@ void EmbeddedDocumentInstanceAccess_Impl::ClearEmbedDocument()
     ::osl::MutexGuard aGuard( m_aMutex );
     m_pEmbedDocument = NULL;
 }
-
 
 
 LockedEmbedDocument_Impl::LockedEmbedDocument_Impl()

@@ -39,7 +39,6 @@ css::uno::Any ListenerMultiplexerBase::queryInterface( const css::uno::Type & rT
 }
 
 
-
 //  class EventListenerMultiplexer
 
 EventListenerMultiplexer::EventListenerMultiplexer( ::cppu::OWeakObject& rSource )

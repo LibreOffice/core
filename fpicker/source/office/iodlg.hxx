@@ -292,12 +292,10 @@ private:
 };
 
 
-
 inline void SvtFileDialog::SetPath( const OUString& rNewURL )
 {
     _aPath = rNewURL;
 }
-
 
 
 inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
@@ -306,12 +304,10 @@ inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
 }
 
 
-
 inline const OUString& SvtFileDialog::GetPath()
 {
     return _aPath;
 }
-
 
 
 inline void SvtFileDialog::SetDefaultExt( const OUString& rExt )

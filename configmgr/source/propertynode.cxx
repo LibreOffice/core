@@ -48,7 +48,6 @@ rtl::Reference< Node > PropertyNode::clone(bool) const {
 }
 
 
-
 css::uno::Any PropertyNode::getValue(Components & components) {
     if (!externalDescriptor_.isEmpty()) {
         css::beans::Optional< css::uno::Any > val(

@@ -119,7 +119,6 @@ public:
                             ::com::sun::star::beans::XPropertySet> & );
 
 
-
     /**
      * Get a value from the values array.
      *

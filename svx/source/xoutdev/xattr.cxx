@@ -3521,7 +3521,6 @@ SvStream& XLineAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) 
 }
 
 
-
 /// fill attribute set item
 XFillAttrSetItem::XFillAttrSetItem( SfxItemSet* pItemSet ) :
     SfxSetItem( XATTRSET_FILL, pItemSet)

@@ -37,9 +37,6 @@ using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 
-
-
-
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
 
@@ -72,9 +69,6 @@ _Entry CtrlIdToResIdTable[] = {
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
 
-
-
-
 sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
 {
     sal_Int16 aResId = -1;
@@ -92,15 +86,9 @@ sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
 }
 
 
-
-
-
 class CResourceProvider_Impl
 {
 public:
-
-
-
 
 
     CResourceProvider_Impl( )
@@ -111,16 +99,10 @@ public:
     }
 
 
-
-
-
     ~CResourceProvider_Impl( )
     {
         delete m_ResMgr;
     }
-
-
-
 
 
     OUString getResString( sal_Int16 aId )
@@ -149,25 +131,16 @@ public:
 };
 
 
-
-
-
 CResourceProvider::CResourceProvider( ) :
     m_pImpl( new CResourceProvider_Impl() )
 {
 }
 
 
-
-
-
 CResourceProvider::~CResourceProvider( )
 {
     delete m_pImpl;
 }
-
-
-
 
 
 OUString CResourceProvider::getResString( sal_Int16 aId )

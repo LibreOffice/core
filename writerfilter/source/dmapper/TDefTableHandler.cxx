@@ -32,7 +32,6 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-
 TDefTableHandler::TDefTableHandler() :
 LoggedProperties("TDefTableHandler"),
 m_nLineWidth(0),

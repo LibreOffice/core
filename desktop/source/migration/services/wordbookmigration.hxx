@@ -33,7 +33,6 @@
 class INetURLObject;
 
 
-
 namespace migration
 {
 
@@ -42,7 +41,6 @@ namespace migration
     css::uno::Sequence< OUString > SAL_CALL WordbookMigration_getSupportedServiceNames();
     css::uno::Reference< css::uno::XInterface > SAL_CALL WordbookMigration_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
-
 
 
     // class WordbookMigration

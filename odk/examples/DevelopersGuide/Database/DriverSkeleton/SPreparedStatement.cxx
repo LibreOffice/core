@@ -196,7 +196,6 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 }
 
 
-
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& aVal ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -219,7 +218,6 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 }
-
 
 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
@@ -326,7 +324,6 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 }
 
 
-
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -384,7 +381,6 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
     if( !_parameterIndex || _parameterIndex > m_nNumParams)
         throw SQLException();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,10 +18,7 @@
  */
 
 
-
-
 // Global header
-
 
 
 #include <limits.h>
@@ -40,9 +37,7 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 
 
-
 // Project-local header
-
 
 
 #include <editeng/editdata.hxx>
@@ -97,10 +92,7 @@ namespace accessibility
     }
 
 
-
     // AccessibleStaticTextBase_Impl declaration
-
-
 
 
     /** AccessibleStaticTextBase_Impl
@@ -186,9 +178,7 @@ namespace accessibility
     };
 
 
-
     // AccessibleStaticTextBase_Impl implementation
-
 
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
@@ -997,7 +987,6 @@ namespace accessibility
     }
 
 }  // end of namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

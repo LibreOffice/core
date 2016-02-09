@@ -267,7 +267,6 @@ OUString convertToFileUrl(const OString& fileName)
 }
 
 
-
 // FileStream
 
 FileStream::FileStream()

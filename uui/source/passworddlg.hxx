@@ -29,7 +29,6 @@
 #include <vcl/fixed.hxx>
 
 
-
 class PasswordDialog : public ModalDialog
 {
     VclPtr<FixedText>      m_pFTPassword;

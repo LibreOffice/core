@@ -28,7 +28,6 @@
 using namespace ::com::sun::star;
 
 
-
 namespace slideshow
 {
     namespace internal

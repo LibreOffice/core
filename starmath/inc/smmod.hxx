@@ -54,7 +54,6 @@ class SvtSysLocale;
 class VirtualDevice;
 
 
-
 class SmResId : public ResId
 {
 public:

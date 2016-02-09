@@ -27,7 +27,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct TextModel;
 
 /** Handler for a chart text context (c:tx element).
@@ -41,7 +40,6 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
 };
-
 
 
 struct TitleModel;
@@ -58,7 +56,6 @@ public:
 };
 
 
-
 struct LegendModel;
 
 /** Handler for a chart legend context (c:legend element).
@@ -71,7 +68,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

@@ -74,7 +74,6 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
     };
 
 
-
     class XInteractionAbortImpl : public cppu::WeakImplHelper<
         css::task::XInteractionAbort >
     {
@@ -101,7 +100,6 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
         bool          m_bSelected;
     };
-
 
 
     class XInteractionRequestImpl

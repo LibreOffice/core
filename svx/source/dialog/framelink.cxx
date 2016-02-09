@@ -43,7 +43,6 @@ namespace svx {
 namespace frame {
 
 
-
 namespace {
 
 typedef std::vector< Point > PointVec;
@@ -171,7 +170,6 @@ struct DiagBordersResult
 };
 
 
-
 /** A helper struct containing two points of a line.
  */
 struct LinePoints
@@ -185,7 +183,6 @@ struct LinePoints
                             maBeg( bTLBR ? rRect.TopLeft() : rRect.TopRight() ),
                             maEnd( bTLBR ? rRect.BottomRight() : rRect.BottomLeft() ) {}
 };
-
 
 
 /** Rounds and casts a double value to a long value. */
@@ -342,7 +339,6 @@ inline long lclGetBehindEnd( const Style& rBorder )
 
 
 // Linking functions
-
 
 
 // Linking of single horizontal line ends.
@@ -612,8 +608,6 @@ void lclLinkVerFrameBorder(
 }
 
 
-
-
 // Linking of diagonal frame borders.
 
 /** Calculates clipping offsets for a top-left to bottom-right frame border.
@@ -697,7 +691,6 @@ void lclLinkDiagFrameBorders(
 // Drawing functions
 
 
-
 // Simple helper functions
 
 /** Converts sub units to OutputDevice map units. */
@@ -750,7 +743,6 @@ void lclSetColorToOutDev( OutputDevice& rDev, const Color& rColor, const Color* 
     rDev.SetLineColor( pForceColor ? *pForceColor : rColor );
     rDev.SetFillColor( pForceColor ? *pForceColor : rColor );
 }
-
 
 
 // Drawing of horizontal frame borders.
@@ -1119,7 +1111,6 @@ void lclDrawDiagFrameBorders(
 }
 
 
-
 } // namespace
 
 
@@ -1311,7 +1302,6 @@ double GetHorDiagAngle( long nWidth, long nHeight )
 }
 
 
-
 long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
 {
     return lclD2L( nVerOffs / tan( fAngle ) + nDiagOffs / sin( fAngle ) );
@@ -1331,7 +1321,6 @@ long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
 {
     return -lclD2L( nVerOffs / tan( fAngle ) - nDiagOffs / sin( fAngle ) );
 }
-
 
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
@@ -1489,7 +1478,6 @@ void DrawHorFrameBorder( OutputDevice& rDev,
 }
 
 
-
 void DrawVerFrameBorder( OutputDevice& rDev,
         const Point& rTPos, const Point& rBPos, const Style& rBorder,
         const DiagStyle& rTFromBL, const Style& rTFromL, const Style& rTFromT, const Style& rTFromR, const DiagStyle& rTFromBR,
@@ -1507,7 +1495,6 @@ void DrawVerFrameBorder( OutputDevice& rDev,
 }
 
 
-
 void DrawDiagFrameBorders(
         OutputDevice& rDev, const Rectangle& rRect, const Style& rTLBR, const Style& rBLTR,
         const Style& rTLFromB, const Style& rTLFromR, const Style& rBRFromT, const Style& rBRFromL,
@@ -1522,7 +1509,6 @@ void DrawDiagFrameBorders(
         lclDrawDiagFrameBorders( rDev, rRect, rTLBR, rBLTR, aResult, pForceColor, bDiagDblClip );
     }
 }
-
 
 
 }

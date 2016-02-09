@@ -388,7 +388,6 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
     }
 
 
-
     OBoolOperator* pBoolOp = nullptr;
     if ( bNot )
         pBoolOp = new OOp_OR();
@@ -903,7 +902,6 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
     m_aCodeList.push_back(pOperator);
     return nullptr;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

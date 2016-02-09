@@ -30,7 +30,6 @@ namespace svxform
 {
 
 
-
     //= IFormScriptingEnvironment
 
     /** describes the interface implemented by a component which handles scripting requirements

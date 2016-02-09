@@ -160,7 +160,6 @@ namespace dxcanvas
         };
 
 
-
         // DXRenderModule
 
 
@@ -759,7 +758,6 @@ namespace dxcanvas
 
             return true;
         }
-
 
 
         // DXRenderModule::createDevice

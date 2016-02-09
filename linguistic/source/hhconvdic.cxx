@@ -70,7 +70,6 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
 }
 
 
-
 bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 {
     bool bIsAll = true;
@@ -81,7 +80,6 @@ bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
     }
     return bIsAll;
 }
-
 
 
 HHConvDic::HHConvDic( const OUString &rName, const OUString &rMainURL ) :

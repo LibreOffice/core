@@ -22,7 +22,6 @@
 #include <rtl/instance.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

@@ -41,7 +41,6 @@ using namespace com::sun::star::beans;
 using namespace cppu;
 
 
-
 void main( int argc, char * argv[] )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  m_xConnection;

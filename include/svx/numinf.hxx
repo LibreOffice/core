@@ -26,7 +26,6 @@
 // class SvxNumberInfoItem -----------------------------------------------
 
 
-
 /*
 This item is used as a transport medium for a number formatter
 */
@@ -78,7 +77,6 @@ private:
     sal_uInt32*         pDelFormatArr;
     sal_uInt32          nDelCount;
 };
-
 
 
 #endif

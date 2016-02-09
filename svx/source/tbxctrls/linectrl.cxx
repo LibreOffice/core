@@ -63,13 +63,11 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
 }
 
 
-
 SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 {
     delete pStyleItem;
     delete pDashItem;
 }
-
 
 
 void SvxLineStyleToolBoxControl::StateChanged (
@@ -112,7 +110,6 @@ void SvxLineStyleToolBoxControl::StateChanged (
         }
     }
 }
-
 
 
 void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
@@ -182,7 +179,6 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 }
 
 
-
 VclPtr<vcl::Window> SvxLineStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return VclPtr<SvxLineBox>::Create( pParent, m_xFrame ).get();
@@ -196,11 +192,9 @@ SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
 }
 
 
-
 SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 {
 }
-
 
 
 void SvxLineWidthToolBoxControl::StateChanged(
@@ -241,7 +235,6 @@ void SvxLineWidthToolBoxControl::StateChanged(
         }
     }
 }
-
 
 
 VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *pParent )
@@ -386,7 +379,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 }
 
 
-
 void SvxLineEndWindow::FillValueSet()
 {
     if( pLineEndList.is() )
@@ -437,7 +429,6 @@ void SvxLineEndWindow::FillValueSet()
 }
 
 
-
 void SvxLineEndWindow::Resize()
 {
     // since we change the size inside this call, check if we
@@ -461,7 +452,6 @@ void SvxLineEndWindow::Resize()
         mbInResize = false;
     }
 }
-
 
 
 void SvxLineEndWindow::Resizing( Size& rNewSize )
@@ -517,12 +507,10 @@ void SvxLineEndWindow::StartSelection()
 }
 
 
-
 bool SvxLineEndWindow::Close()
 {
     return SfxPopupWindow::Close();
 }
-
 
 
 void SvxLineEndWindow::StateChanged(
@@ -547,7 +535,6 @@ void SvxLineEndWindow::StateChanged(
 }
 
 
-
 void SvxLineEndWindow::PopupModeEnd()
 {
     if ( IsVisible() )
@@ -557,7 +544,6 @@ void SvxLineEndWindow::PopupModeEnd()
     }
     SfxPopupWindow::PopupModeEnd();
 }
-
 
 
 void SvxLineEndWindow::SetSize()
@@ -607,11 +593,9 @@ SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt
 }
 
 
-
 SvxLineEndToolBoxControl::~SvxLineEndToolBoxControl()
 {
 }
-
 
 
 VclPtr<SfxPopupWindow> SvxLineEndToolBoxControl::CreatePopupWindow()
@@ -626,7 +610,6 @@ VclPtr<SfxPopupWindow> SvxLineEndToolBoxControl::CreatePopupWindow()
     SetPopupWindow( pLineEndWin );
     return pLineEndWin;
 }
-
 
 
 void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )

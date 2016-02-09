@@ -74,11 +74,7 @@ using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 
-
-
 // HierarchyContent Implementation.
-
-
 
 
 // static ( "virtual" ctor )
@@ -151,9 +147,7 @@ HierarchyContent::~HierarchyContent()
 }
 
 
-
 // XInterface methods.
-
 
 
 // virtual
@@ -195,9 +189,7 @@ uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
@@ -279,9 +271,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -310,9 +300,7 @@ HierarchyContent::getSupportedServiceNames()
 }
 
 
-
 // XContent methods.
-
 
 
 // virtual
@@ -339,9 +327,7 @@ HierarchyContent::getIdentifier()
 }
 
 
-
 // XCommandProcessor methods.
-
 
 
 // virtual
@@ -572,9 +558,7 @@ void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
 }
 
 
-
 // XContentCreator methods.
-
 
 
 // virtual
@@ -1847,11 +1831,7 @@ void HierarchyContent::transfer(
 }
 
 
-
-
 // HierarchyContentProperties Implementation.
-
-
 
 
 uno::Sequence< ucb::ContentInfo >

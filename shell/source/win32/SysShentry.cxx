@@ -37,7 +37,6 @@ using com::sun::star::system::XSystemShellExecute;
 #define SYSSHEXEC_IMPL_NAME     "com.sun.star.sys.shell.SystemShellExecute"
 
 
-
 namespace
 {
     Reference< XInterface > SAL_CALL createInstance( const Reference< XComponentContext >& xContext )

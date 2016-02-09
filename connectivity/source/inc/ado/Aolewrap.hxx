@@ -138,7 +138,6 @@ namespace connectivity
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
 
-
             inline void Refresh(){pInterface->Refresh();}
 
             inline sal_Int32 GetItemCount() const

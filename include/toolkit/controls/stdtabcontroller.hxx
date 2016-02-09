@@ -88,7 +88,6 @@ public:
 };
 
 
-
 #endif // _TOOLKIT_AWT_STDTABCONTROLLER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

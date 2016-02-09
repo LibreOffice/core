@@ -150,7 +150,6 @@ namespace svgio
 } // end of namespace svgio
 
 
-
 namespace svgio
 {
     namespace svgreader
@@ -193,7 +192,6 @@ namespace svgio
 
     } // end of namespace svgreader
 } // end of namespace svgio
-
 
 
 namespace svgio
@@ -582,7 +580,6 @@ namespace svgio
 
     } // end of namespace svgreader
 } // end of namespace svgio
-
 
 
 namespace svgio

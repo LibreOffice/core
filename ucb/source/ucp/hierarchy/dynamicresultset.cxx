@@ -34,11 +34,7 @@ using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 
-
-
 // DynamicResultSet Implementation.
-
-
 
 
 DynamicResultSet::DynamicResultSet(
@@ -51,9 +47,7 @@ DynamicResultSet::DynamicResultSet(
 }
 
 
-
 // Non-interface methods.
-
 
 
 void DynamicResultSet::initStatic()

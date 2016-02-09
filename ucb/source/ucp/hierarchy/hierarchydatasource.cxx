@@ -43,7 +43,6 @@ using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 
-
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH    "nodepath"
 // true->async. update; false->sync. update
@@ -56,14 +55,11 @@ using namespace hierarchy_ucp;
                         "/org.openoffice.ucb.Hierarchy/Root"
 
 
-
 namespace hcp_impl
 {
 
 
-
 // HierarchyDataReadAccess Implementation.
-
 
 
 class HierarchyDataAccess : public cppu::OWeakObject,
@@ -217,11 +213,7 @@ public:
 using namespace hcp_impl;
 
 
-
-
 // HierarchyDataSource Implementation.
-
-
 
 
 HierarchyDataSource::HierarchyDataSource(
@@ -237,7 +229,6 @@ HierarchyDataSource::~HierarchyDataSource()
 {
     delete m_pDisposeEventListeners;
 }
-
 
 
 // XInterface methods.
@@ -268,7 +259,6 @@ css::uno::Any SAL_CALL HierarchyDataSource::queryInterface( const css::uno::Type
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
@@ -276,9 +266,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
                       lang::XMultiServiceFactory );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_0_CTX( HierarchyDataSource,
@@ -293,9 +281,7 @@ XSERVICEINFO_IMPL_0_CTX( HierarchyDataSource,
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyDataSource );
 
 
-
 // XComponent methods.
-
 
 
 // virtual
@@ -340,9 +326,7 @@ void SAL_CALL HierarchyDataSource::removeEventListener(
 }
 
 
-
 // XMultiServiceFactory methods.
-
 
 
 // virtual
@@ -386,9 +370,7 @@ HierarchyDataSource::getAvailableServiceNames()
 }
 
 
-
 // Non-interface methods
-
 
 
 uno::Reference< uno::XInterface > SAL_CALL
@@ -593,11 +575,7 @@ bool HierarchyDataSource::createConfigPath(
 }
 
 
-
-
 // HierarchyDataAccess Implementation.
-
-
 
 
 #define ENSURE_ORIG_INTERFACE( interface_name, member_name )    \
@@ -624,7 +602,6 @@ HierarchyDataAccess::HierarchyDataAccess( const uno::Reference<
 HierarchyDataAccess::~HierarchyDataAccess()
 {
 }
-
 
 
 // XInterface methods.
@@ -668,9 +645,7 @@ uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 XTYPEPROVIDER_COMMON_IMPL( HierarchyDataAccess );
@@ -745,9 +720,7 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_NOFACTORY_IMPL_0(
@@ -761,9 +734,7 @@ XSERVICEINFO_NOFACTORY_IMPL_0(
 }
 
 
-
 // XComponent methods.
-
 
 
 // virtual
@@ -807,9 +778,7 @@ void SAL_CALL HierarchyDataAccess::removeEventListener(
 }
 
 
-
 // XHierarchicalNameAccess methods.
-
 
 
 // virtual
@@ -842,9 +811,7 @@ sal_Bool SAL_CALL HierarchyDataAccess::hasByHierarchicalName(
 }
 
 
-
 // XNameAccess methods.
-
 
 
 // virtual
@@ -888,9 +855,7 @@ sal_Bool SAL_CALL HierarchyDataAccess::hasByName( const OUString & aName )
 }
 
 
-
 // XElementAccess methods.
-
 
 
 // virtual
@@ -919,9 +884,7 @@ sal_Bool SAL_CALL HierarchyDataAccess::hasElements()
 }
 
 
-
 // XChangesNotifier methods.
-
 
 
 // virtual
@@ -952,9 +915,7 @@ void SAL_CALL HierarchyDataAccess::removeChangesListener(
 }
 
 
-
 // XSingleServiceFactory methods.
-
 
 
 // virtual
@@ -985,9 +946,7 @@ HierarchyDataAccess::createInstanceWithArguments(
 }
 
 
-
 // XNameContainer methods.
-
 
 
 // virtual
@@ -1024,9 +983,7 @@ HierarchyDataAccess::removeByName( const OUString & Name )
 }
 
 
-
 // XNameReplace methods.
-
 
 
 // virtual
@@ -1046,9 +1003,7 @@ void SAL_CALL HierarchyDataAccess::replaceByName( const OUString & aName,
 }
 
 
-
 // XChangesBatch methods.
-
 
 
 // virtual

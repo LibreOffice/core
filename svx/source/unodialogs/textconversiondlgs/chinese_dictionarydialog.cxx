@@ -340,9 +340,6 @@ SvLBoxItem* DictionaryList::getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16
 }
 
 
-
-
-
 DictionaryEntry::DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType
                     , bool bNewEntry )

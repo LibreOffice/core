@@ -806,7 +806,6 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-
 //  class SVTXFormattedField
 
 
@@ -1296,8 +1295,6 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
 }
 
 
-
-
 void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier)
 {
     FormattedField* pField = GetAs< FormattedField >();
@@ -1399,7 +1396,6 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
     VCLXSpinField::ImplGetPropertyIds( rIds );
 }
-
 
 
 //  class SVTXRoadmap
@@ -1553,8 +1549,6 @@ void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent
 }
 
 
-
-
 void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1607,7 +1601,6 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
     else
         SVTXRoadmap_Base::setProperty( PropertyName, Value );
 }
-
 
 
 css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
@@ -2058,7 +2051,6 @@ void SVTXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-
 //  class VCLXProgressBar
 
 
@@ -2304,7 +2296,6 @@ void VCLXProgressBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
-
 
 
 //  class SVTXDateField

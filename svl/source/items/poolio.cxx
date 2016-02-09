@@ -69,7 +69,6 @@ static SfxItemKind convertUInt16ToSfxItemKind(sal_uInt16 x)
 }
 
 
-
 /**
  * The SfxItemPool is saved to the specified Stream (together with all its
  * secondary Pools) using its Pool Defaults and pooled Items.
@@ -881,7 +880,6 @@ bool SfxItemPool::StoreSurrogate ( SvStream& rStream, const SfxPoolItem*  pItem)
 }
 
 
-
 sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 {
     DBG_ASSERT( pItem, "no 0-Pointer Surrogate" );
@@ -1100,8 +1098,6 @@ sal_uInt16 SfxItemPool::GetNewWhich
     // Return original (nDiff==0) or mapped (nDiff!=0) Id
     return nFileWhich;
 }
-
-
 
 
 bool SfxItemPool::IsInVersionsRange( sal_uInt16 nWhich ) const

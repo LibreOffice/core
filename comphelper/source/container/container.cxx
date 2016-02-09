@@ -28,7 +28,6 @@ namespace comphelper
 {
 
 
-
 IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(xStartingPoint)
     ,m_xCurrentObject(nullptr)
@@ -135,7 +134,6 @@ css::uno::Reference< css::uno::XInterface> IndexAccessIterator::Next()
 
 
 }   // namespace comphelper
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

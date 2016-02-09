@@ -30,7 +30,6 @@ namespace rptui
 {
 
 
-
     // = ConditionalExpression
 
     class REPORTDESIGN_DLLPUBLIC ConditionalExpression

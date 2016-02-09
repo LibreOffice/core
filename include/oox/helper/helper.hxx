@@ -75,7 +75,6 @@ const sal_uInt8 WINDOWS_CHARSET_EASTERN     = 238;
 const sal_uInt8 WINDOWS_CHARSET_OEM         = 255;
 
 
-
 const sal_Int32 API_RGB_TRANSPARENT         = -1;       ///< Transparent color for API calls.
 const sal_uInt32 UNSIGNED_RGB_TRANSPARENT         = static_cast<sal_uInt32>(-1);       ///< Transparent color for unsigned int32 places.
 const sal_Int32 API_RGB_BLACK               = 0x000000;  ///< Black color for API calls.
@@ -99,7 +98,6 @@ const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     ///< Subscript: lower ch
 
 const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      ///< Relative character height if not escaped.
 const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       ///< Relative character height if escaped.
-
 
 
 // Limitate values ------------------------------------------------------------
@@ -167,7 +165,6 @@ inline void setFlag( Type& ornBitField, Type nMask, bool bSet = true )
 }
 
 
-
 /** Optional value, similar to ::boost::optional<>, with convenience accessors.
  */
 template< typename Type >
@@ -199,7 +196,6 @@ private:
     Type                maValue;
     bool                mbHasValue;
 };
-
 
 
 /** Provides platform independent functions to convert from or to little-endian
@@ -261,7 +257,6 @@ private:
 };
 
 
-
 template< typename Type >
 inline void ByteOrderConverter::writeLittleEndian( void* pDstBuffer, Type nValue )
 {
@@ -296,7 +291,6 @@ inline void ByteOrderConverter::swap8( sal_uInt8* pnData )
     ::std::swap( pnData[ 3 ], pnData[ 4 ] );
 }
 #endif
-
 
 
 } // namespace oox

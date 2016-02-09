@@ -39,8 +39,6 @@ namespace svxform
 {
 
 
-
-
     typedef ::std::set< SvTreeListEntry* >  ListBoxEntrySet;
 
 
@@ -229,7 +227,6 @@ namespace svxform
     protected:
         virtual OLocalExchange* createExchange() const override;
     };
-
 
 
     inline bool OControlExchange::hasFieldExchangeFormat( const DataFlavorExVector& _rFormats )

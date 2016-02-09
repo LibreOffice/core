@@ -2016,8 +2016,6 @@ bool LanguageTag::isValidBcp47() const
 }
 
 
-
-
 LanguageTag & LanguageTag::makeFallback()
 {
     if (!mbIsFallback)

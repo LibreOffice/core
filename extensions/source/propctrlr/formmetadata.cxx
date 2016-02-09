@@ -549,7 +549,6 @@ namespace pcr
     }
 
 
-
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
         // Initialization

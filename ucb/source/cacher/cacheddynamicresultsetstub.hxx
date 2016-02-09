@@ -27,7 +27,6 @@
 #define CACHED_DRS_STUB_FACTORY_NAME "com.sun.star.ucb.CachedDynamicResultSetStubFactory"
 
 
-
 class CachedDynamicResultSetStub
                 : public DynamicResultSetWrapper
                 , public css::lang::XTypeProvider
@@ -73,7 +72,6 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
 };
-
 
 
 class CachedDynamicResultSetStubFactory

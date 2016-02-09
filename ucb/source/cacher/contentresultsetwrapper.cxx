@@ -36,10 +36,7 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-
-
 // class ContentResultSetWrapper
-
 
 
 ContentResultSetWrapper::ContentResultSetWrapper(
@@ -487,7 +484,6 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
     }
     return m_xMetaDataFromOrigin;
 }
-
 
 
 // XPropertySet methods.
@@ -1315,9 +1311,7 @@ Reference< XArray > SAL_CALL ContentResultSetWrapper::getArray( sal_Int32 column
 }
 
 
-
 // class ContentResultSetWrapperListener
-
 
 
 ContentResultSetWrapperListener::ContentResultSetWrapperListener(

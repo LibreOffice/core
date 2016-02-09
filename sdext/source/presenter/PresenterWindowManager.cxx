@@ -370,7 +370,6 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
 }
 
 
-
 bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
     bool bChildInvalidated (false);
@@ -782,7 +781,6 @@ void PresenterWindowManager::LayoutNotesMode()
             aNextSlideOuterBox.Width,
             aNextSlideOuterBox.Height);
     }
-
 
 
 }

@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-
 /**
  * import change tracking/redlining markers
  * <text:change>, <text:change-start>, <text:change-end>

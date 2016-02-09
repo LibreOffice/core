@@ -27,7 +27,6 @@
 #define LABELBASEMAPHEIGHT      8
 
 
-
 namespace svt
 {
 

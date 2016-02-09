@@ -81,11 +81,9 @@ class QueryTokenizer : public std::unordered_map< OUString                    ,
         explicit QueryTokenizer(const OUString& sQuery);
 
 
-
         /** @short  destruct an instance of this class.
          */
         virtual ~QueryTokenizer();
-
 
 
         /** @short  can be used to check if analyzing of given query

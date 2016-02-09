@@ -27,7 +27,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct AxisDispUnitsModel;
 
 /** Handler for a value axis display units context (c:dispUnits element).
@@ -40,7 +39,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 struct AxisModel;
@@ -58,7 +56,6 @@ public:
 };
 
 
-
 /** Handler for a category axis context (c:catAx element).
  */
 class CatAxisContext : public AxisContextBase
@@ -69,7 +66,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 /** Handler for a date axis context (c:dateAx element).
@@ -84,7 +80,6 @@ public:
 };
 
 
-
 /** Handler for a series axis context (c:serAx element).
  */
 class SerAxisContext : public AxisContextBase
@@ -97,7 +92,6 @@ public:
 };
 
 
-
 /** Handler for a value axis context (c:valAx element).
  */
 class ValAxisContext : public AxisContextBase
@@ -108,7 +102,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
-
 
 
 } // namespace chart

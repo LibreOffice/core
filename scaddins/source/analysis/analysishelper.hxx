@@ -143,8 +143,6 @@ double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
                                 sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 
-
-
 enum FDCategory
 {
     FDCat_AddIn,
@@ -237,7 +235,6 @@ public:
     const OUString& GetString() const { return aStr; }
 
 };
-
 
 
 /// sorted list with unique sal_Int32 values
@@ -675,8 +672,6 @@ inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, doubl
     fOffs( fO )
 {
 }
-
-
 
 
 /// Helper class for date calculation for various financial functions

@@ -48,10 +48,8 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
 
 
-
 namespace stringresource
 {
-
 
 
 // mutex
@@ -71,7 +69,6 @@ namespace stringresource
     }
     return *s_pMutex;
 }
-
 
 
 // StringResourceImpl
@@ -96,8 +93,6 @@ static Reference< XInterface > SAL_CALL create_StringResourceImpl(
 }
 
 
-
-
 StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rxContext )
     : m_xContext( rxContext )
     , m_pCurrentLocaleItem( nullptr )
@@ -109,7 +104,6 @@ StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rx
     , m_nNextUniqueNumericId( UNIQUE_NUMBER_NEEDS_INITIALISATION )
 {
 }
-
 
 
 StringResourceImpl::~StringResourceImpl()
@@ -128,7 +122,6 @@ StringResourceImpl::~StringResourceImpl()
 }
 
 
-
 // XServiceInfo
 
 OUString StringResourceImpl::getImplementationName(  ) throw (RuntimeException, std::exception)
@@ -145,7 +138,6 @@ Sequence< OUString > StringResourceImpl::getSupportedServiceNames(  ) throw (Run
 {
     return getSupportedServiceNames_StringResourceImpl();
 }
-
 
 
 // XModifyBroadcaster
@@ -169,7 +161,6 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
     ::osl::MutexGuard aGuard( getMutex() );
     m_aListenerContainer.removeInterface( Reference<XInterface>( aListener, UNO_QUERY ) );
 }
-
 
 
 // XStringResourceResolver
@@ -317,7 +308,6 @@ Sequence< Locale > StringResourceImpl::getLocales(  )
     }
     return aLocalSeq;
 }
-
 
 
 // XStringResourceManager
@@ -636,7 +626,6 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 }
 
 
-
 // Private helper methods
 
 LocaleItem* StringResourceImpl::getItemForLocale
@@ -718,7 +707,6 @@ void StringResourceImpl::implNotifyListeners()
 }
 
 
-
 // Loading
 
 bool StringResourceImpl::loadLocale( LocaleItem* pLocaleItem )
@@ -762,7 +750,6 @@ StringResourcePersistenceImpl::StringResourcePersistenceImpl( const Reference< X
 }
 
 
-
 StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 {
 }
@@ -778,13 +765,11 @@ OUString StringResourcePersistenceImpl::getImplementationName(  )
 }
 
 
-
 sal_Bool StringResourcePersistenceImpl::supportsService( const OUString& rServiceName )
     throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
-
 
 
 Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
@@ -1240,7 +1225,6 @@ void StringResourcePersistenceImpl::implStoreAtLocation
 }
 
 
-
 // BinaryOutput, helper class for exportBinary
 
 class BinaryOutput
@@ -1650,7 +1634,6 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 
     delete[] pPositions;
 }
-
 
 
 // Private helper methods
@@ -2254,7 +2237,6 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 }
 
 
-
 // StringResourceWithStorageImpl
 
 
@@ -2277,13 +2259,11 @@ static Reference< XInterface > SAL_CALL create_StringResourceWithStorageImpl(
 }
 
 
-
 StringResourceWithStorageImpl::StringResourceWithStorageImpl( const Reference< XComponentContext >& rxContext )
     : StringResourceWithStorageImpl_BASE( rxContext )
     , m_bStorageChanged( false )
 {
 }
-
 
 
 StringResourceWithStorageImpl::~StringResourceWithStorageImpl()
@@ -2532,7 +2512,6 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 }
 
 
-
 // Private helper methods
 
 
@@ -2578,7 +2557,6 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
 }
 
 
-
 // StringResourceWithLocationImpl
 
 
@@ -2601,13 +2579,11 @@ static Reference< XInterface > SAL_CALL create_StringResourceWithLocationImpl(
 }
 
 
-
 StringResourceWithLocationImpl::StringResourceWithLocationImpl( const Reference< XComponentContext >& rxContext )
     : StringResourceWithLocationImpl_BASE( rxContext )
     , m_bLocationChanged( false )
 {
 }
-
 
 
 StringResourceWithLocationImpl::~StringResourceWithLocationImpl()
@@ -2886,7 +2862,6 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
 }
 
 
-
 // Private helper methods
 
 
@@ -2944,7 +2919,6 @@ const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFi
 }
 
 
-
 // component export operations
 
 
@@ -2972,10 +2946,7 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 };
 
 
-
 }   // namespace dlgprov
-
-
 
 
 // component exports

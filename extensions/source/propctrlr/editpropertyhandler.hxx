@@ -27,7 +27,6 @@ namespace pcr
 {
 
 
-
     //= EditPropertyHandler
 
     class EditPropertyHandler;

@@ -100,7 +100,6 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 }
 
 
-
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
@@ -142,7 +141,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
 }
 
 
-
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
@@ -160,8 +158,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
     }
     return xRet;
 }
-
-
 
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL )
@@ -191,7 +187,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
     }
     return xRet;
 }
-
 
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno::Reference< awt::XBitmap >& xBtm )
@@ -225,7 +220,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
     }
     return xRet;
 }
-
 
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const OUString& rResourceURL )
@@ -304,7 +298,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
 }
 
 
-
 uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
@@ -375,7 +368,6 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
     return xRet;
 }
-
 
 
 uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( const uno::Sequence< ::beans::PropertyValue >& rMediaProperties )
@@ -718,7 +710,6 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
         }
     }
 }
-
 
 
 void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )

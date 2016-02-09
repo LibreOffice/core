@@ -23,8 +23,6 @@
 #include <svx/dialmgr.hxx>
 
 
-
-
 SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorItem(0); }
 SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(0); }
 SfxPoolItem* SvxPostItTextItem::CreateDefault() { return new SvxPostItTextItem(0); }
@@ -35,13 +33,11 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 }
 
 
-
 SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
                                           sal_uInt16 _nWhich ) :
     SfxStringItem( _nWhich, rAuthor )
 {
 }
-
 
 
 bool SvxPostItAuthorItem::GetPresentation
@@ -66,7 +62,6 @@ bool SvxPostItAuthorItem::GetPresentation
 }
 
 
-
 SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItAuthorItem( *this );
@@ -78,13 +73,11 @@ SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
 }
 
 
-
 SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich ) :
 
     SfxStringItem( _nWhich, rDate )
 {
 }
-
 
 
 bool SvxPostItDateItem::GetPresentation
@@ -109,7 +102,6 @@ bool SvxPostItDateItem::GetPresentation
 }
 
 
-
 SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
@@ -121,13 +113,11 @@ SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
 }
 
 
-
 SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich ) :
 
     SfxStringItem( _nWhich, rText )
 {
 }
-
 
 
 bool SvxPostItTextItem::GetPresentation
@@ -150,7 +140,6 @@ bool SvxPostItTextItem::GetPresentation
     }
     return false;
 }
-
 
 
 SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const

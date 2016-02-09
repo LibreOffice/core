@@ -35,7 +35,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 struct RotationProperties
 {
     OptValue< sal_Int32 > mnLatitude;
@@ -84,7 +83,6 @@ struct Shape3DProperties
     static css::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
             const Color& rColor, const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr );
 };
-
 
 
 } // namespace drawingml

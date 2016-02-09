@@ -143,7 +143,6 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nati
 }
 
 
-
 jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name, jstring key, DataLogFile* logger )
 {
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
@@ -186,7 +185,6 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
 }
 
 
-
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
  * Method:    read
@@ -205,7 +203,6 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     return read_from_storage_stream( env, obj_this, name, key );
 #endif
 }
-
 
 
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
@@ -279,7 +276,6 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     return read_from_storage_stream_into_buffer( env, obj_this, name, key, buffer, off, len );
 #endif
 }
-
 
 
 /*
@@ -462,7 +458,6 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
 }
 
 
-
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess
  * Method:    write
@@ -519,7 +514,6 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
         StorageContainer::throwJavaException(e,env);
     }
 }
-
 
 
 /*

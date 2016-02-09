@@ -28,7 +28,6 @@
 #include "tablemodel.hxx"
 
 
-
 namespace sdr { namespace table {
 
 typedef ::cppu::ImplInheritanceHelper< FastPropertySet, css::table::XCellRange, css::container::XNamed > TableColumnBase;

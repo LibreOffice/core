@@ -65,7 +65,6 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
 }
 
 
-
 css::i18n::NumberFormatCode SAL_CALL
 NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
 {
@@ -88,7 +87,6 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::L
     return defaultNumberFormatCode;
 
 }
-
 
 
 css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL

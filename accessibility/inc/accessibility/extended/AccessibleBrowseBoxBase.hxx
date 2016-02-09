@@ -46,7 +46,6 @@
 #include <comphelper/uno3.hxx>
 
 
-
 namespace vcl { class Window; }
 
 namespace utl {
@@ -443,7 +442,6 @@ inline void AccessibleBrowseBoxBase::implSetName(
 }
 
 } // namespace accessibility
-
 
 
 #endif

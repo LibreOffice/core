@@ -130,7 +130,6 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 #endif
 
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

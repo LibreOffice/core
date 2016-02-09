@@ -39,7 +39,6 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 
-
 XMLSectionSourceImportContext::XMLSectionSourceImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

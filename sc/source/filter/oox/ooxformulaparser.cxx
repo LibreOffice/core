@@ -173,5 +173,4 @@ com_sun_star_comp_oox_xls_FormulaParser_get_implementation(css::uno::XComponentC
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

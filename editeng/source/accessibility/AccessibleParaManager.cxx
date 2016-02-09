@@ -18,8 +18,6 @@
  */
 
 
-
-
 // Global header
 
 
@@ -30,9 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 
-
 // Project-local header
-
 
 
 #include <editeng/unoedhlp.hxx>
@@ -44,7 +40,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-
 
 
 namespace accessibility
@@ -330,7 +325,6 @@ namespace accessibility
                     nEndPara >= nStartPara, "AccessibleParaManager::FireEvent: invalid index" );
 
 
-
         if( 0 <= nStartPara && 0 <= nEndPara &&
                 maChildren.size() > static_cast<size_t>(nStartPara) &&
                 maChildren.size() >= static_cast<size_t>(nEndPara) &&
@@ -390,7 +384,6 @@ namespace accessibility
     }
 
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

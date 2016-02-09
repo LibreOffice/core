@@ -269,7 +269,6 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )  // For Ka
 }
 
 
-
 //  class ImpEditEngine
 
 void ImpEditEngine::UpdateViews( EditView* pCurView )
@@ -708,7 +707,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         CreateTextPortions( pParaPortion, nRealInvalidStart );
     }
-
 
 
     // Search for line with InvalidPos, start one line before

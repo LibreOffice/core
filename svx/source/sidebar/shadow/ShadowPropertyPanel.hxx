@@ -26,7 +26,6 @@
 #include <svx/dlgctrl.hxx>
 
 
-
 namespace svx { namespace sidebar {
 
 class ShadowPropertyPanel

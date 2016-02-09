@@ -21,7 +21,6 @@
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

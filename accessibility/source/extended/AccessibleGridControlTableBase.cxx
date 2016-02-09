@@ -24,7 +24,6 @@
 #include <comphelper/servicehelper.hxx>
 
 
-
 using css::uno::Reference;
 using css::uno::Sequence;
 using css::uno::Any;
@@ -35,9 +34,7 @@ using namespace ::svt;
 using namespace ::svt::table;
 
 
-
 namespace accessibility {
-
 
 
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
@@ -272,9 +269,7 @@ void AccessibleGridControlTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 }
 
 
-
 } // namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

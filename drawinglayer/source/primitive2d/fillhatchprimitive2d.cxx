@@ -28,9 +28,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

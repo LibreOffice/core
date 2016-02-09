@@ -33,7 +33,6 @@ namespace cppu
 //#### destruction #################################################################################
 
 
-
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,

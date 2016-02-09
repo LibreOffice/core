@@ -21,7 +21,6 @@
 #include "embeddoc.hxx"
 
 
-
 CIIAObj::CIIAObj(DocumentHolder* pDocHolder)
     : m_refCount( 0L ),
       m_rDocHolder( pDocHolder )

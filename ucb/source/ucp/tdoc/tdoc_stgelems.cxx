@@ -39,11 +39,7 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-
-
 // ParentStorageHolder Implementation.
-
-
 
 
 ParentStorageHolder::ParentStorageHolder(
@@ -58,11 +54,7 @@ ParentStorageHolder::ParentStorageHolder(
 }
 
 
-
-
 // Storage Implementation.
-
-
 
 
 Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
@@ -149,9 +141,7 @@ Storage::~Storage()
 }
 
 
-
 // uno::XInterface
-
 
 
 // virtual
@@ -192,9 +182,7 @@ void SAL_CALL Storage::release()
 }
 
 
-
 // lang::XTypeProvider
-
 
 
 // virtual
@@ -211,7 +199,6 @@ uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 
 // lang::XComponent (base of embed::XStorage)
@@ -242,9 +229,7 @@ void SAL_CALL Storage::removeEventListener(
 }
 
 
-
 // container::XElementAccess (base of container::XNameAccess)
-
 
 
 // virtual
@@ -263,9 +248,7 @@ sal_Bool SAL_CALL Storage::hasElements()
 }
 
 
-
 // container::XNameAccess (base of embed::XStorage)
-
 
 
 // virtual
@@ -294,9 +277,7 @@ sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
 }
 
 
-
 // embed::XStorage
-
 
 
 // virtual
@@ -501,9 +482,7 @@ void SAL_CALL Storage::moveElementTo(
 }
 
 
-
 // embed::XTransactedObject
-
 
 
 // virtual
@@ -567,11 +546,7 @@ void SAL_CALL Storage::revert()
 }
 
 
-
-
 // OutputStream Implementation.
-
-
 
 
 OutputStream::OutputStream(
@@ -634,9 +609,7 @@ OutputStream::~OutputStream()
 }
 
 
-
 // uno::XInterface
-
 
 
 // virtual
@@ -655,9 +628,7 @@ uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
 }
 
 
-
 // lang::XTypeProvider
-
 
 
 // virtual
@@ -676,9 +647,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
 }
 
 
-
 // io::XOutputStream
-
 
 
 // virtual
@@ -721,9 +690,7 @@ OutputStream::closeOutput(  )
 }
 
 
-
 // lang::XComponent
-
 
 
 // virtual
@@ -759,11 +726,7 @@ OutputStream::removeEventListener(
 }
 
 
-
-
 // Stream Implementation.
-
-
 
 
 Stream::Stream(
@@ -829,9 +792,7 @@ Stream::~Stream()
 }
 
 
-
 // uno::XInterface
-
 
 
 // virtual
@@ -850,9 +811,7 @@ uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
 }
 
 
-
 // lang::XTypeProvider
-
 
 
 // virtual
@@ -871,9 +830,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
 }
 
 
-
 // io::XStream.
-
 
 
 // virtual
@@ -892,9 +849,7 @@ uno::Reference< io::XOutputStream > SAL_CALL Stream::getOutputStream()
 }
 
 
-
 // io::XOutputStream.
-
 
 
 // virtual
@@ -945,9 +900,7 @@ void SAL_CALL Stream::closeOutput()
 }
 
 
-
 // io::XTruncate.
-
 
 
 // virtual
@@ -963,9 +916,7 @@ void SAL_CALL Stream::truncate()
 }
 
 
-
 // io::XInputStream.
-
 
 
 // virtual
@@ -1023,9 +974,7 @@ void SAL_CALL Stream::closeInput()
 }
 
 
-
 // lang::XComponent
-
 
 
 // virtual
@@ -1058,9 +1007,7 @@ void SAL_CALL Stream::removeEventListener(
 }
 
 
-
 // Non-UNO
-
 
 
 void Stream::commitChanges()

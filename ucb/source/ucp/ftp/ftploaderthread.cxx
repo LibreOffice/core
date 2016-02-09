@@ -71,11 +71,9 @@ FTPLoaderThread::FTPLoaderThread()
 }
 
 
-
 FTPLoaderThread::~FTPLoaderThread() {
     osl_destroyThreadKey(m_threadKey);
 }
-
 
 
 CURL* FTPLoaderThread::handle() {

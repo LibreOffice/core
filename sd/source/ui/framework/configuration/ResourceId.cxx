@@ -529,5 +529,4 @@ com_sun_star_comp_Draw_framework_ResourceID_get_implementation(css::uno::XCompon
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

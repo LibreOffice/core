@@ -25,8 +25,6 @@
 #include "svx/hlnkitem.hxx"
 
 
-
-
 SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(0);}
 
 #define HYPERLINKFF_MARKER  0x599401FE

@@ -91,5 +91,4 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

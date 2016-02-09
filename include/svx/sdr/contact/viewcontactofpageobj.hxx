@@ -55,7 +55,6 @@ public:
 }}
 
 
-
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFPAGEOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

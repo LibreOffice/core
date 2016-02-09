@@ -196,7 +196,6 @@ BSTR UNO_ALL_STATES[] =
 using namespace com::sun::star::accessibility::AccessibleRole;
 
 
-
 #define QUERYXINTERFACE(ainterface) \
 {                           \
     if(pXAcc == NULL)       \
@@ -1230,7 +1229,6 @@ STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
     m_dState = pXSate;
     return S_OK;
 }
-
 
 
 /**

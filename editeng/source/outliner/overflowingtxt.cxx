@@ -64,7 +64,6 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
     }
 
 
-
     return pOutl->CreateParaObject();
 }
 

@@ -49,8 +49,6 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
                     & m_bInteractive, cppu::UnoType<decltype(m_bInteractive)>::get() );
 
 
-
-
     // Note that the list of registered properties has to be fixed: Different
     // instances of this class have to register the same set of properties with
     // the same attributes.

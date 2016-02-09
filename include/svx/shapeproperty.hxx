@@ -25,7 +25,6 @@ namespace svx
 {
 
 
-
     //= ShapeProperty
 
     enum ShapeProperty

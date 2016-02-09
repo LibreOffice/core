@@ -30,10 +30,8 @@
 #include <o3tl/typed_flags_set.hxx>
 
 
-
 class SfxObjectShellLock;
 class SfxObjectShell;
-
 
 
 #define SFXWB_PREVIEW 0x0003

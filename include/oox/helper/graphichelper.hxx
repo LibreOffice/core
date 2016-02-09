@@ -46,7 +46,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 
 
-
 /** Provides helper functions for colors, device measurement conversion,
     graphics, and graphic objects handling.
 
@@ -163,7 +162,6 @@ private:
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
 };
-
 
 
 } // namespace oox

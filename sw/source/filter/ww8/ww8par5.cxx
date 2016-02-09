@@ -704,7 +704,6 @@ WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) throw()
 }
 
 
-
 void WW8FieldEntry::SetBookmarkName(const OUString& bookmarkName)
 {
     msBookmarkName=bookmarkName;

@@ -115,5 +115,4 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

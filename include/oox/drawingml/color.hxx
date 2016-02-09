@@ -36,7 +36,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 class OOX_DLLPUBLIC Color
 {
 public:

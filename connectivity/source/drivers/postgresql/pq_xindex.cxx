@@ -160,7 +160,6 @@ Any Index::queryInterface( const Type & reqType ) throw (RuntimeException, std::
 }
 
 
-
 IndexDescriptor::IndexDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,
@@ -231,8 +230,6 @@ Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeExcept
             static_cast< com::sun::star::sdbcx::XColumnsSupplier * > ( this ) );
     return ret;
 }
-
-
 
 
 }

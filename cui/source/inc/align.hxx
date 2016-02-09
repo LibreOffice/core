@@ -50,7 +50,6 @@
 namespace svx {
 
 
-
 class AlignmentTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
@@ -112,7 +111,6 @@ private:
     VclPtr<VclContainer>        m_pOrientFrame;
     VclPtr<VclContainer>        m_pPropertiesFrame;
 };
-
 
 
 }

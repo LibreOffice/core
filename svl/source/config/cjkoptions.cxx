@@ -400,7 +400,6 @@ SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
 }
 
 
-
 SvtCJKOptions::~SvtCJKOptions()
 {
     // Global access, must be guarded (multithreading)

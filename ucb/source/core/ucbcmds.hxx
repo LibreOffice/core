@@ -21,9 +21,7 @@
 #define INCLUDED_UCB_SOURCE_CORE_UCBCMDS_HXX
 
 
-
 // Definitions for the commands supported by the UCB.
-
 
 
 #define GETCOMMANDINFO_NAME     "getCommandInfo"

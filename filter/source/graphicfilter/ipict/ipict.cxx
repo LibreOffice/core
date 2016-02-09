@@ -258,7 +258,6 @@ public:
 };
 
 
-
 #define SETBYTE                                         \
     switch ( nPixelSize )                               \
     {                                                   \
@@ -297,7 +296,6 @@ public:
             pAcc->SetPixelIndex( ny, nx++, nDat );      \
             break;                                      \
     }
-
 
 
 #define BITMAPERROR                                     \

@@ -30,9 +30,7 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

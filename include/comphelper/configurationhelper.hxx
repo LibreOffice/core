@@ -36,7 +36,6 @@
 namespace comphelper{
 
 
-
 class COMPHELPER_DLLPUBLIC ConfigurationHelper
 {
     public:

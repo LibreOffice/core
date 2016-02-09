@@ -741,7 +741,6 @@ void Connection::buildTypeInfo() throw( SQLException)
         aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
 
 
-
         // Now that we have the type info, save it
         // in the Hashtable if we don't already have an
         // entry for this SQL type.

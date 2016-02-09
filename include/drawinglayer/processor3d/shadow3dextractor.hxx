@@ -33,7 +33,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace processor3d

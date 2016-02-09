@@ -391,5 +391,4 @@ bool ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

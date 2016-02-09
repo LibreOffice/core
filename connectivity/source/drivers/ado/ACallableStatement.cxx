@@ -52,7 +52,6 @@ Any SAL_CALL OCallableStatement::queryInterface( const Type & rType ) throw(Runt
 }
 
 
-
 sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeException)
 {
     return m_aValue.isNull();
@@ -170,7 +169,6 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 }
 
 
-
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBinaryStream", *this );
@@ -220,7 +218,6 @@ void SAL_CALL OCallableStatement::release() throw()
 {
     OPreparedStatement::release();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

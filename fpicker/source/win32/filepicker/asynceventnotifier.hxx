@@ -37,9 +37,6 @@
 #include "eventnotification.hxx"
 
 
-
-
-
 class CAsyncEventNotifier
 {
 public:

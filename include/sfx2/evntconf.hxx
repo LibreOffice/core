@@ -90,7 +90,6 @@ public:
 };
 
 
-
 #define PROP_EVENT_TYPE     "EventType"
 #define PROP_LIBRARY        "Library"
 #define PROP_SCRIPT         "Script"

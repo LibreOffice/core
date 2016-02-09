@@ -2775,7 +2775,6 @@ IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
 }
 
 
-
 // Function to align entries to the grid
 
 
@@ -2902,7 +2901,6 @@ SvxIconChoiceCtrlTextMode SvxIconChoiceCtrl_Impl::GetEntryTextModeSmart( const S
 }
 
 
-
 // Draw my own focusrect, because the focusrect of the outputdevice has got the inverted color
 // of the background. But what will we see, if the backgroundcolor is gray ? - We will see
 // a gray focusrect on a gray background !!!
@@ -2955,8 +2953,6 @@ bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos 
 
     return bRet;
 }
-
-
 
 
 IMPL_LINK_TYPED(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId, void )

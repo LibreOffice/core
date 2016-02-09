@@ -41,7 +41,6 @@ struct ShapeParentAnchor;
 class ShapeContainer;
 
 
-
 const sal_Int32 VML_CLIENTDATA_UNCHECKED        = 0;
 const sal_Int32 VML_CLIENTDATA_CHECKED          = 1;
 const sal_Int32 VML_CLIENTDATA_MIXED            = 2;
@@ -51,7 +50,6 @@ const sal_Int32 VML_CLIENTDATA_INTEGER          = 1;
 const sal_Int32 VML_CLIENTDATA_NUMBER           = 2;
 const sal_Int32 VML_CLIENTDATA_REFERENCE        = 3;
 const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
-
 
 
 /** The shape model structure contains all properties shared by all types of shapes. */
@@ -116,7 +114,6 @@ struct OOX_DLLPUBLIC ShapeTypeModel
 };
 
 
-
 /** A shape template contains all formatting properties of shapes and can serve
     as templates for several shapes in a drawing. */
 class ShapeType
@@ -153,7 +150,6 @@ protected:
     Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
     ShapeTypeModel      maTypeModel;        ///< The model structure containing shape type data.
 };
-
 
 
 /** Excel specific shape client data (such as cell anchor). */
@@ -193,7 +189,6 @@ struct ClientData
 };
 
 
-
 struct ShapeModel
 {
     typedef ::std::vector< css::awt::Point >   PointVector;
@@ -219,7 +214,6 @@ struct ShapeModel
     /** Creates and returns a new shape client data structure. */
     ClientData&         createClientData();
 };
-
 
 
 /** A shape object that is part of a drawing. May inherit properties from a
@@ -282,7 +276,6 @@ protected:
 };
 
 
-
 /** A simple shape object based on a specific UNO shape service. */
 class SimpleShape : public ShapeBase
 {
@@ -307,7 +300,6 @@ private:
 };
 
 
-
 /** A rectangular shape object. */
 class RectangleShape : public SimpleShape
 {
@@ -322,14 +314,12 @@ protected:
 };
 
 
-
 /** An oval shape object. */
 class EllipseShape : public SimpleShape
 {
 public:
     explicit            EllipseShape( Drawing& rDrawing );
 };
-
 
 
 /** A polygon shape object. */
@@ -375,7 +365,6 @@ protected:
 };
 
 
-
 /** A shape object with custom geometry. */
 class CustomShape : public SimpleShape
 {
@@ -389,7 +378,6 @@ protected:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const override;
 };
-
 
 
 /** A complex shape object. This can be a picture shape, a custom shape, an OLE
@@ -406,7 +394,6 @@ protected:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const override;
 };
-
 
 
 /** A group shape that extends the basic shape by a container of child shapes. */
@@ -440,7 +427,6 @@ private:
     typedef ::std::unique_ptr< ShapeContainer > ShapeContainerPtr;
     ShapeContainerPtr   mxChildren;         ///< Shapes and templates that are part of this group.
 };
-
 
 
 } // namespace vml

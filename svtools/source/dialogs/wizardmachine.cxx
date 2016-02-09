@@ -30,7 +30,6 @@ namespace svt
 {
 
 
-
     //= WizardPageImplData
 
     struct WizardPageImplData

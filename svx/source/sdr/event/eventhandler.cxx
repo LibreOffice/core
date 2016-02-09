@@ -42,7 +42,6 @@ namespace sdr
 } // end of namespace sdr
 
 
-
 namespace sdr
 {
     namespace event
@@ -114,7 +113,6 @@ namespace sdr
         }
     } // end of namespace mixer
 } // end of namespace sdr
-
 
 
 namespace sdr

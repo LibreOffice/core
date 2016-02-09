@@ -29,7 +29,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 struct TextBodyProperties
 {
     PropertyMap                                     maPropertyMap;
@@ -48,7 +47,6 @@ struct TextBodyProperties
     void                pushRotationAdjustments();
     void                pushVertSimulation();
 };
-
 
 
 } // namespace drawingml

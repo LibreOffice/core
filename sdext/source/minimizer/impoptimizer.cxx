@@ -498,11 +498,9 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, con
 }
 
 
-
 ImpOptimizer::~ImpOptimizer()
 {
 }
-
 
 
 void ImpOptimizer::DispatchStatus()
@@ -515,7 +513,6 @@ void ImpOptimizer::DispatchStatus()
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }
 }
-
 
 
 bool ImpOptimizer::Optimize()

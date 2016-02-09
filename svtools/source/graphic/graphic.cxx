@@ -39,13 +39,11 @@ Graphic::Graphic() :
 }
 
 
-
 Graphic::~Graphic()
     throw()
 {
     delete mpGraphic;
 }
-
 
 
 void Graphic::init( const ::Graphic& rGraphic )
@@ -55,7 +53,6 @@ void Graphic::init( const ::Graphic& rGraphic )
     mpGraphic = new ::Graphic( rGraphic );
     ::unographic::GraphicDescriptor::init( *mpGraphic );
 }
-
 
 
 uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
@@ -75,7 +72,6 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
 }
 
 
-
 uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException, std::exception )
 {
@@ -86,13 +82,11 @@ uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
 }
 
 
-
 void SAL_CALL Graphic::acquire()
     throw()
 {
     ::unographic::GraphicDescriptor::acquire();
 }
-
 
 
 void SAL_CALL Graphic::release() throw()
@@ -105,7 +99,6 @@ OUString Graphic::getImplementationName_Static()
 {
     return OUString( "com.sun.star.comp.graphic.Graphic" );
 }
-
 
 
 uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
@@ -156,13 +149,11 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 }
 
 
-
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 
 ::sal_Int8 SAL_CALL Graphic::getType()
@@ -192,7 +183,6 @@ awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException, std::excep
 }
 
 
-
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -209,7 +199,6 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
         return uno::Sequence<sal_Int8>();
     }
 }
-
 
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException, std::exception)

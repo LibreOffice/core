@@ -62,7 +62,6 @@ using namespace com::sun::star::bridge;
 #include "sbintern.hxx"
 
 
-
 class SbiInputDialog : public ModalDialog {
     VclPtr<Edit> aInput;
     VclPtr<OKButton> aOk;
@@ -302,7 +301,6 @@ bool hasUno()
     }
     return bRetVal;
 }
-
 
 
 class OslStream : public SvStream
@@ -755,7 +753,6 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
     }
     return nError;
 }
-
 
 
 SbiIoSystem::SbiIoSystem()

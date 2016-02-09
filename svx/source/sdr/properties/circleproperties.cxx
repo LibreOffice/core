@@ -27,7 +27,6 @@
 #include <svx/sxciaitm.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

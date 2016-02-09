@@ -537,7 +537,6 @@ namespace dxcanvas
     }
 
 
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const rendering::ViewState&                        viewState,

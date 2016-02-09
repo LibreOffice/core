@@ -121,7 +121,6 @@ public:
 };
 
 
-
 SvBaseLink::SvBaseLink()
     : pImpl ( new BaseLink_Impl ),
       m_bIsReadOnly(false)
@@ -131,7 +130,6 @@ SvBaseLink::SvBaseLink()
     bVisible = bSynchron = bUseCache = true;
     bWasLastEditOK = false;
 }
-
 
 
 SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nContentType )
@@ -255,7 +253,6 @@ IMPL_LINK_TYPED( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
 }
 
 
-
 void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
 {
     DBG_ASSERT( nObjType != OBJECT_CLIENT_DDE, "type already set" );
@@ -265,12 +262,10 @@ void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
 }
 
 
-
 void SvBaseLink::SetName( const OUString & rNm )
 {
     aLinkName = rNm;
 }
-
 
 
 void SvBaseLink::SetObj( SvLinkSource * pObj )
@@ -281,7 +276,6 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
                 "no intern link" );
     xObj = pObj;
 }
-
 
 
 void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
@@ -299,10 +293,6 @@ void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
     _GetRealObject();
     ReleaseRef(); // should be superfluous
 }
-
-
-
-
 
 
 void SvBaseLink::SetUpdateMode( SfxLinkUpdateMode nMode )

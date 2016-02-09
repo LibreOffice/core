@@ -476,7 +476,6 @@ void SfxWorkWindow::Sort_Impl()
 }
 
 
-
 // constructor for workwin of a Frame
 
 SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMaster )
@@ -734,7 +733,6 @@ void SfxFrameWorkWin_Impl::ArrangeChildren_Impl( bool bForce )
 }
 
 
-
 SvBorder SfxWorkWindow::Arrange_Impl()
 
 /*  [Description]
@@ -899,7 +897,6 @@ bool SfxWorkWindow::PrepareClose_Impl()
 }
 
 
-
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
                     SfxChildAlignment eAlign, bool bCanGetFocus )
 {
@@ -920,7 +917,6 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
     nChildren++;
     return aChildren.back();
 }
-
 
 
 void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
@@ -948,7 +944,6 @@ void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
 }
 
 
-
 SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
 {
 
@@ -962,7 +957,6 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
 
     return nullptr;
 }
-
 
 
 void SfxWorkWindow::ShowChildren_Impl()
@@ -1035,7 +1029,6 @@ void SfxWorkWindow::ShowChildren_Impl()
 }
 
 
-
 void SfxWorkWindow::HideChildren_Impl()
 {
     for ( sal_uInt16 nPos = aChildren.size(); nPos > 0; --nPos )
@@ -1055,7 +1048,6 @@ void SfxWorkWindow::HideChildren_Impl()
         }
     }
 }
-
 
 
 void SfxWorkWindow::ResetObjectBars_Impl()
@@ -1120,7 +1112,6 @@ bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
 
     return false;
 }
-
 
 
 bool SfxWorkWindow::IsVisible_Impl( sal_uInt16 nMode ) const
@@ -1205,7 +1196,6 @@ Reference< css::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 }
 
 
-
 bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 {
     if ( pObjShell && pObjShell->GetMedium() )
@@ -1217,7 +1207,6 @@ bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 
     return false;
 }
-
 
 
 css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
@@ -1234,7 +1223,6 @@ css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
 
     return xFrame;
 }
-
 
 
 void SfxWorkWindow::UpdateObjectBars_Impl()
@@ -1618,7 +1606,6 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
 }
 
 
-
 void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             SfxDockingConfig eConfig, sal_uInt16 nId)
 {
@@ -1848,7 +1835,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 }
 
 
-
 void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, sal_uInt16 nMode )
 {
     sal_uInt16 nInter = (sal_uInt16) ( lId >> 16 );
@@ -2020,7 +2006,6 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
 }
 
 
-
 bool SfxWorkWindow::HasChildWindow_Impl(sal_uInt16 nId)
 {
     sal_uInt16 nCount = aChildWins.size();
@@ -2099,7 +2084,6 @@ bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
 }
 
 
-
 bool SfxWorkWindow::KnowsChildWindow_Impl(sal_uInt16 nId)
 {
     SfxChildWin_Impl *pCW=nullptr;
@@ -2123,7 +2107,6 @@ bool SfxWorkWindow::KnowsChildWindow_Impl(sal_uInt16 nId)
     else
         return false;
 }
-
 
 
 void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, bool bOn, bool bSetFocus)
@@ -2175,7 +2158,6 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, bool bOn, bool bSetFocus
     if ( pCW->bCreate != bOn )
         pWork->ToggleChildWindow_Impl(nId,bSetFocus);
 }
-
 
 
 void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSetFocus)
@@ -2265,7 +2247,6 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
 }
 
 
-
 SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
 {
     sal_uInt16 nCount = aChildWins.size();
@@ -2280,7 +2261,6 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(sal_uInt16 nId)
         return pParent->GetChildWindow_Impl( nId );
     return nullptr;
 }
-
 
 
 void SfxWorkWindow::ResetChildWindows_Impl()

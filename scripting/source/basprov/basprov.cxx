@@ -63,7 +63,6 @@ namespace basprov
 {
 
 
-
     // component operations
 
 
@@ -71,7 +70,6 @@ namespace basprov
     {
         return OUString( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
     }
-
 
 
     static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
@@ -109,11 +107,9 @@ namespace basprov
     }
 
 
-
     BasicProviderImpl::~BasicProviderImpl()
     {
     }
-
 
 
     bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const OUString& rLibName )
@@ -278,7 +274,6 @@ namespace basprov
     }
 
 
-
     // XScriptProvider
 
 
@@ -411,7 +406,6 @@ namespace basprov
     }
 
 
-
     Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
@@ -469,7 +463,6 @@ namespace basprov
     }
 
 
-
     sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
@@ -491,7 +484,6 @@ namespace basprov
     }
 
 
-
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
@@ -510,7 +502,6 @@ namespace basprov
     }
 
 
-
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
         {
@@ -522,11 +513,7 @@ namespace basprov
     };
 
 
-
-
 }   // namespace basprov
-
-
 
 
 // component exports

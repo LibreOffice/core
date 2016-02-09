@@ -45,9 +45,6 @@ public:
 };
 
 
-
-
-
 class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public css::lang::XServiceInfo,
@@ -99,7 +96,6 @@ public:
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) override;
     virtual Size getFormulaSize() const override;
 };
-
 
 
 #endif

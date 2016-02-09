@@ -29,7 +29,6 @@
 #define MSI_ERROR_DIRECTORY_NOT_EMPTY       9030
 
 
-
 void SetMsiErrorCode( int nErrorCode );
 
 #endif

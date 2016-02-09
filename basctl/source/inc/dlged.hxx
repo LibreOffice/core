@@ -81,7 +81,6 @@ public:
 };
 
 
-
 // DlgEditor
 
 

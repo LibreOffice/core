@@ -27,7 +27,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace processor2d
@@ -58,7 +57,6 @@ namespace drawinglayer
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_LINEGEOMETRYEXTRACTOR2D_HXX

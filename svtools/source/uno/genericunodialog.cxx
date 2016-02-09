@@ -45,7 +45,6 @@ namespace svt
 {
 
 
-
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())
         ,m_pDialog(nullptr)

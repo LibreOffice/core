@@ -35,10 +35,8 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-
 namespace comphelper
 {
-
 
 
     //= SynchronousDispatch

@@ -22,7 +22,6 @@
 #include <svgio/svgreader/svgnode.hxx>
 
 
-
 namespace svgio
 {
     namespace svgreader
@@ -48,7 +47,6 @@ namespace svgio
         };
     } // end of namespace svgreader
 } // end of namespace svgio
-
 
 
 #endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX

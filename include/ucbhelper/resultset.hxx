@@ -42,9 +42,7 @@
 namespace ucbhelper {
 
 
-
 #define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.ContentResultSet"
-
 
 
 class ResultSetDataSupplier;
@@ -412,7 +410,6 @@ public:
     const css::uno::Reference< css::ucb::XCommandEnvironment >&
     getEnvironment();
 };
-
 
 
 /**

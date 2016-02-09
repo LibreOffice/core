@@ -145,7 +145,6 @@ static Property * getPropertyTable4()
 }
 
 
-
 /**********************
 *
 * Note : all Property names must be in the 127 ASCII subset !
@@ -290,9 +289,6 @@ void test_PropertyArrayHelper()
 }
 
 
-
-
-
 //  test_OPropertySetHelper
 
 struct MutexContainer
@@ -418,7 +414,6 @@ Property * getBasicProps()
     }
     return pTable;
 }
-
 
 
 //  test_OPropertySetHelper_Listener

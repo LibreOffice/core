@@ -549,7 +549,6 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& 
 }
 
 
-
 OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const OUString& aMediaType )
 {
     OUString aResult = GetFactoryNameByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
@@ -869,7 +868,6 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
 
     return aFilterProps;
 }
-
 
 
 bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )

@@ -60,7 +60,6 @@ namespace connectivity
                 {WpOLEBase<ADOConnection>::operator=(rhs); return *this;}
 
 
-
             WpADOProperties get_Properties() const;
 
              OUString GetConnectionString() const;
@@ -154,7 +153,6 @@ namespace connectivity
                 WpOLEBase<ADOCommand>::operator=(rhs); return *this;}
 
 
-
             sal_Bool putref_ActiveConnection( WpADOConnection *pCon);
 
             void put_ActiveConnection(/* [in] */ const OLEVariant& vConn);
@@ -192,15 +190,12 @@ namespace connectivity
                 {WpOLEBase<ADOError>::operator=(rhs); return *this;}
 
 
-
              OUString GetDescription() const;
              OUString GetSource() const ;
              sal_Int32 GetNumber() const ;
              OUString GetSQLState() const ;
              sal_Int32 GetNativeError() const ;
         };
-
-
 
 
         class WpADOField : public WpOLEBase<ADOField>
@@ -249,8 +244,6 @@ namespace connectivity
 
              sal_Bool PutAttributes(sal_Int32 _nDefSize);
         };
-
-
 
 
         class WpADOProperty: public WpOLEBase<ADOProperty>

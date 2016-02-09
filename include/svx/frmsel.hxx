@@ -37,7 +37,6 @@ namespace svx {
 struct FrameSelectorImpl;
 
 
-
 typedef int FrameSelFlags;
 
 const FrameSelFlags FRAMESEL_NONE       = 0x0000;
@@ -67,7 +66,6 @@ const FrameSelFlags FRAMESEL_DIAGONAL   = FRAMESEL_DIAG_TLBR|FRAMESEL_DIAG_BLTR;
 
 /** If set, all frame borders will support the don't care state. */
 const FrameSelFlags FRAMESEL_DONTCARE   = 0x0100;
-
 
 
 /** All possible states of a frame border. */
@@ -189,7 +187,6 @@ protected:
 private:
     std::unique_ptr< FrameSelectorImpl > mxImpl;
 };
-
 
 
 }

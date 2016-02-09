@@ -41,7 +41,6 @@ namespace drawinglayer { namespace attribute {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -77,7 +76,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS_HXX

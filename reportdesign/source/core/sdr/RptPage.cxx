@@ -40,7 +40,6 @@ OReportPage::OReportPage( OReportModel& _rModel
 }
 
 
-
 OReportPage::OReportPage( const OReportPage& rPage )
     :SdrPage( rPage )
     ,rModel(rPage.rModel)
@@ -51,11 +50,9 @@ OReportPage::OReportPage( const OReportPage& rPage )
 }
 
 
-
 OReportPage::~OReportPage()
 {
 }
-
 
 
 SdrPage* OReportPage::Clone() const

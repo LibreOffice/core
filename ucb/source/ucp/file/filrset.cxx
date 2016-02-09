@@ -92,12 +92,6 @@ XResultSet_impl::~XResultSet_impl()
 }
 
 
-
-
-
-
-
-
 void SAL_CALL
 XResultSet_impl::disposing( const lang::EventObject& )
     throw( uno::RuntimeException, std::exception )
@@ -133,7 +127,6 @@ XResultSet_impl::removeEventListener(
 }
 
 
-
 void SAL_CALL
 XResultSet_impl::dispose()
     throw( uno::RuntimeException, std::exception )
@@ -156,7 +149,6 @@ XResultSet_impl::dispose()
         m_pIsFinalListeners->disposeAndClear( aEvt );
     }
 }
-
 
 
 void XResultSet_impl::rowCountChanged()
@@ -292,9 +284,6 @@ XResultSet_impl::OneMore(
 }
 
 
-
-
-
 sal_Bool SAL_CALL
 XResultSet_impl::next(
     void )
@@ -412,7 +401,6 @@ XResultSet_impl::getRow(
 }
 
 
-
 sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
     throw( sdbc::SQLException, uno::RuntimeException, std::exception)
 {
@@ -435,8 +423,6 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
 }
 
 
-
-
 sal_Bool SAL_CALL
 XResultSet_impl::relative(
     sal_Int32 row )
@@ -452,7 +438,6 @@ XResultSet_impl::relative(
 
     return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
-
 
 
 sal_Bool SAL_CALL
@@ -534,7 +519,6 @@ XResultSet_impl::close(
         m_nIsOpen = false;
     }
 }
-
 
 
 OUString SAL_CALL
@@ -722,7 +706,6 @@ XResultSet_impl::getMetaData(
 }
 
 
-
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 XResultSet_impl::getPropertySetInfo()
@@ -744,7 +727,6 @@ XResultSet_impl::getPropertySetInfo()
                                                           seq );
     return uno::Reference< beans::XPropertySetInfo > ( p );
 }
-
 
 
 void SAL_CALL XResultSet_impl::setPropertyValue(

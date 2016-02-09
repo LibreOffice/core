@@ -22,7 +22,6 @@
 #include <outact.hxx>
 
 
-
 #define ImplSetUnderlineMode()                                  \
                                                                 \
     sal_uInt32 nMode = ImplGetUI16();                               \
@@ -35,7 +34,6 @@
         default: pElement->eUnderlineMode = UM_OFF; break;      \
     }                                                           \
     pElement->nUnderlineColor = ImplGetBitmapColor();
-
 
 
 void CGM::ImplDoClass6()
@@ -198,7 +196,6 @@ void CGM::ImplDoClass6()
 };
 
 
-
 void CGM::ImplDoClass8()
 {
     switch ( mnElementID )
@@ -215,7 +212,6 @@ void CGM::ImplDoClass8()
         default: break;                         // NS
     }
 };
-
 
 
 void CGM::ImplDoClass9()
@@ -237,7 +233,6 @@ void CGM::ImplDoClass9()
 };
 
 
-
 void CGM::ImplDoClass15()
 {
     switch ( mnElementID )
@@ -248,7 +243,6 @@ void CGM::ImplDoClass15()
         default: break;
     }
 };
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

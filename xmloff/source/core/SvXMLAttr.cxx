@@ -35,6 +35,4 @@ bool SvXMLAttr::operator== (const SvXMLAttr &rCmp) const
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -176,9 +176,7 @@ inline bool AccessibleGridControlHeader::isColumnBar() const
 }
 
 
-
 } // namespace accessibility
-
 
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLHEADER_HXX

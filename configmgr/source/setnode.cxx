@@ -61,7 +61,6 @@ int SetNode::getMandatory() const {
 }
 
 
-
 bool SetNode::isValidTemplate(OUString const & templateName) const {
     return Data::equalTemplateNames(templateName, defaultTemplateName_) ||
         (std::find_if(

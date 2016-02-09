@@ -24,7 +24,6 @@
 #include <svx/xlineit0.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

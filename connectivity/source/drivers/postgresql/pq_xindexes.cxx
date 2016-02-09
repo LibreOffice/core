@@ -301,7 +301,6 @@ Reference< com::sun::star::container::XNameAccess > Indexes::create(
 }
 
 
-
 IndexDescriptors::IndexDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

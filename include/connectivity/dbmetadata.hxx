@@ -31,7 +31,6 @@ namespace dbtools
 {
 
 
-
     //= DatabaseMetaData
 
     struct DatabaseMetaData_Impl;

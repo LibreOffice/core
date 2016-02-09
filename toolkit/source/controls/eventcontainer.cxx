@@ -185,7 +185,6 @@ void NameContainer_Impl::removeContainerListener( const css::uno::Reference< css
 }
 
 
-
 // Ctor
 ScriptEventContainer::ScriptEventContainer()
     : NameContainer_Impl( cppu::UnoType<ScriptEventDescriptor>::get())
@@ -193,8 +192,6 @@ ScriptEventContainer::ScriptEventContainer()
 }
 
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

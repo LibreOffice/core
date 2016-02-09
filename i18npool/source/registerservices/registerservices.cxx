@@ -95,7 +95,6 @@ typedef uno::Reference<
         &implName##_CreateInstance }
 
 
-
 using namespace i18n;
 
 // At least for iOS it doesn't hurt if we have lots of functions here

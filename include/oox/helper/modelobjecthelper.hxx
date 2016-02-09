@@ -34,7 +34,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 
 
-
 /** This helper manages named objects in a container, which is created on demand.
  */
 class OOX_DLLPUBLIC ObjectContainer
@@ -67,7 +66,6 @@ private:
     OUString            maServiceName;          ///< Service name to create the container.
     sal_Int32           mnIndex;                ///< Index to create unique identifiers.
 };
-
 
 
 /** Contains tables for named drawing objects for a document model.
@@ -119,7 +117,6 @@ private:
     const OUString      maTransGradNameBase;   ///< Base name for all named fill gradients.
     const OUString      maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
 };
-
 
 
 } // namespace oox

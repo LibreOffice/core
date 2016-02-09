@@ -41,7 +41,6 @@ PPPOptimizer::PPPOptimizer(
 }
 
 
-
 PPPOptimizer::~PPPOptimizer()
 {
 }
@@ -61,7 +60,6 @@ Reference< css::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
     }
     return xRet;
 }
-
 
 
 Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizer::queryDispatches(

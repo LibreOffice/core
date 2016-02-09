@@ -32,8 +32,6 @@ class Size;
 class Point;
 
 
-
-
 /**
 This class provides drawing text with different script types on any output devices.
 */
@@ -87,7 +85,6 @@ public:
                                     The position of the top left edge of the text. */
     void                        DrawText( const Point& _rPos );
 };
-
 
 
 #endif

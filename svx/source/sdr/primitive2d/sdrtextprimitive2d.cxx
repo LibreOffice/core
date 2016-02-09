@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace
@@ -83,7 +81,6 @@ namespace
         return nRetval;
     }
 } // end of anonymous namespace
-
 
 
 namespace drawinglayer
@@ -246,7 +243,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -297,7 +293,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -353,7 +348,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -430,7 +424,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

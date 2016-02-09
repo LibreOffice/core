@@ -227,5 +227,4 @@ uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

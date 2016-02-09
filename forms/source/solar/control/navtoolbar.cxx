@@ -45,7 +45,6 @@ namespace frm
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
 
-
     namespace
     {
         static bool isArtificialItem( sal_Int16 _nFeatureId )
@@ -705,7 +704,6 @@ namespace frm
         else
             NumericField::KeyInput( rKeyEvent );
     }
-
 
 
 }   // namespace frm

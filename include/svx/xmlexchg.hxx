@@ -39,8 +39,6 @@ namespace svx
 {
 
 
-
-
     //= OXFormsDescriptor
 
 
@@ -83,7 +81,6 @@ namespace svx
             */
             static const OXFormsDescriptor &extractDescriptor( const TransferableDataHelper& _rData );
     };
-
 
 
 }

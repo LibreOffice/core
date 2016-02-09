@@ -171,7 +171,6 @@ IMPL_LINK_TYPED( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
 }
 
 
-
 IMPL_LINK_TYPED( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
 {
     if (&rEdit == m_pComboBox)
@@ -183,7 +182,6 @@ IMPL_LINK_TYPED( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
             pBrk->nStopAfter = rEdit.GetText().toInt32();
     }
 }
-
 
 
 IMPL_LINK_TYPED( BreakPointDialog, ButtonHdl, Button *, pButton, void )
@@ -236,7 +234,6 @@ IMPL_LINK_TYPED( BreakPointDialog, ButtonHdl, Button *, pButton, void )
 }
 
 
-
 void BreakPointDialog::UpdateFields( BreakPoint* pBrk )
 {
     if ( pBrk )
@@ -245,7 +242,6 @@ void BreakPointDialog::UpdateFields( BreakPoint* pBrk )
         m_pNumericField->SetValue( pBrk->nStopAfter );
     }
 }
-
 
 
 BreakPoint* BreakPointDialog::GetSelectedBreakPoint()

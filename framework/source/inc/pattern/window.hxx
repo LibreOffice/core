@@ -42,9 +42,6 @@ class WindowHelper
     public:
 
 
-
-
-
 static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     // even child frame containing top level windows (e.g. query designer of database) will be closed

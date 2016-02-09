@@ -50,7 +50,6 @@ namespace com { namespace sun { namespace star {
 // {
 
 
-
     //= OGeometryControlModel_Base
 
     typedef ::cppu::WeakAggComponentImplHelper2 <   css::util::XCloneable

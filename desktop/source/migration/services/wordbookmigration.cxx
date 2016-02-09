@@ -27,15 +27,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-
 namespace migration
 {
 
 
-
     static const char sSourceSubDir[] = "/user/wordbook";
     static const char sTargetSubDir[] = "/user/wordbook";
-
 
 
     // component operations
@@ -45,7 +42,6 @@ namespace migration
     {
         return OUString( "com.sun.star.comp.desktop.migration.Wordbooks" );
     }
-
 
 
     Sequence< OUString > WordbookMigration_getSupportedServiceNames()
@@ -62,11 +58,9 @@ namespace migration
     }
 
 
-
     WordbookMigration::~WordbookMigration()
     {
     }
-
 
 
     TStringVectorPtr WordbookMigration::getFiles( const OUString& rBaseURL ) const
@@ -161,8 +155,6 @@ bool IsUserWordbook( const OUString& rFile )
 }
 
 
-
-
     void WordbookMigration::copyFiles()
     {
         OUString sTargetDir;
@@ -209,13 +201,11 @@ bool IsUserWordbook( const OUString& rFile )
     }
 
 
-
     sal_Bool WordbookMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
-
 
 
     Sequence< OUString > WordbookMigration::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -272,8 +262,6 @@ bool IsUserWordbook( const OUString& rFile )
     {
         return static_cast< lang::XTypeProvider * >( new WordbookMigration() );
     }
-
-
 
 
 }   // namespace migration

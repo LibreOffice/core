@@ -40,7 +40,6 @@
 using namespace ::com::sun::star;
 
 
-
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);

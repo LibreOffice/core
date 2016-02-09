@@ -116,7 +116,6 @@ void XMLAxisOOoContext::StartElement(
 }
 
 
-
 XMLChartPlotAreaOOoTContext::XMLChartPlotAreaOOoTContext(
     XMLTransformerBase & rTransformer, const OUString & rQName ) :
         XMLProcAttrTransformerContext( rTransformer, rQName, OOO_SHAPE_ACTIONS )

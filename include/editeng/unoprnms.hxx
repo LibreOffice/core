@@ -66,7 +66,6 @@
 #define UNO_NAME_FILLBMP_MODE                   "FillBitmapMode"
 
 
-
 #define UNO_NAME_LINESTYLE                      "LineStyle"
 #define UNO_NAME_LINEDASH                       "LineDash"
 #define UNO_NAME_LINEWIDTH                      "LineWidth"

@@ -30,9 +30,7 @@
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

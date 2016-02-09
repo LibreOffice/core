@@ -49,7 +49,6 @@ namespace ole_adapter
 {
 
 
-
 struct hash_IUnknown_Impl
 {
     size_t operator()(const IUnknown* p) const
@@ -65,7 +64,6 @@ struct equal_to_IUnknown_Impl
         return s1 == s2;
     }
 };
-
 
 
 struct MemberInfo

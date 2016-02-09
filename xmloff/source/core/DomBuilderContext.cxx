@@ -179,7 +179,6 @@ void DomBuilderContext::Characters( const OUString& rCharacters )
 }
 
 
-
 // helper function implementations
 
 

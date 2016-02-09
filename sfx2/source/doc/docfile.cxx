@@ -2234,7 +2234,6 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 }
 
 
-
 void SfxMedium::DoBackup_Impl()
 {
     // source file name is the logical name of this medium
@@ -2633,12 +2632,10 @@ SfxMedium::SfxMedium() : pImp(new SfxMedium_Impl)
 }
 
 
-
 void SfxMedium::UseInteractionHandler( bool bUse )
 {
     pImp->bAllowDefaultIntHdl = bUse;
 }
-
 
 
 css::uno::Reference< css::task::XInteractionHandler >
@@ -2673,7 +2670,6 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
 }
 
 
-
 void SfxMedium::SetFilter( const SfxFilter* pFilterP, bool /*bResetOrig*/ )
 {
     pImp->m_pFilter = pFilterP;
@@ -2685,12 +2681,10 @@ const SfxFilter* SfxMedium::GetFilter() const
 }
 
 
-
 const SfxFilter* SfxMedium::GetOrigFilter( bool bNotCurrent ) const
 {
     return ( pImp->pOrigFilter || bNotCurrent ) ? pImp->pOrigFilter : pImp->m_pFilter;
 }
-
 
 
 sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter )
@@ -2712,7 +2706,6 @@ sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool 
 
     return nHash;
 }
-
 
 
 void SfxMedium::Close()
@@ -2855,7 +2848,6 @@ void SfxMedium::CloseStreams_Impl()
 }
 
 
-
 void SfxMedium::SetIsRemote_Impl()
 {
     INetURLObject aObj( GetName() );
@@ -2878,7 +2870,6 @@ void SfxMedium::SetIsRemote_Impl()
 }
 
 
-
 void SfxMedium::SetName( const OUString& aNameP, bool bSetOrigURL )
 {
     if (pImp->aOrigURL.isEmpty())
@@ -2896,7 +2887,6 @@ const OUString& SfxMedium::GetOrigURL() const
 {
     return pImp->aOrigURL.isEmpty() ? pImp->m_aLogicName : pImp->aOrigURL;
 }
-
 
 
 void SfxMedium::SetPhysicalName_Impl( const OUString& rNameP )
@@ -2919,7 +2909,6 @@ void SfxMedium::SetPhysicalName_Impl( const OUString& rNameP )
 }
 
 
-
 void SfxMedium::ReOpen()
 {
     bool bUseInteractionHandler = pImp->bUseInteractionHandler;
@@ -2927,7 +2916,6 @@ void SfxMedium::ReOpen()
     GetMedium_Impl();
     pImp->bUseInteractionHandler = bUseInteractionHandler;
 }
-
 
 
 void SfxMedium::CompleteReOpen()
@@ -3059,8 +3047,6 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 }
 
 
-
-
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl)
 {
@@ -3079,7 +3065,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
 }
 
 
-
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl)
 {
@@ -3095,7 +3080,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
     if ( p )
         GetItemSet()->Put( *p );
 }
-
 
 
 SfxMedium::~SfxMedium()

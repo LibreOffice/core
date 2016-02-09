@@ -48,7 +48,6 @@ public:
 };
 
 
-
 class SVX_DLLPUBLIC SdrDragEntryPolyPolygon : public SdrDragEntry
 {
 private:
@@ -60,7 +59,6 @@ public:
 
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
-
 
 
 class SdrDragEntrySdrObject : public SdrDragEntry
@@ -85,7 +83,6 @@ public:
 };
 
 
-
 class SdrDragEntryPrimitive2DSequence : public SdrDragEntry
 {
 private:
@@ -101,7 +98,6 @@ public:
 };
 
 
-
 class SdrDragEntryPointGlueDrag : public SdrDragEntry
 {
 private:
@@ -114,7 +110,6 @@ public:
 
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
-
 
 
 class SVX_DLLPUBLIC SdrDragMethod

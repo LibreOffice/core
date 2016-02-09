@@ -36,9 +36,7 @@ using namespace xmlsearch::db;
 using namespace xmlsearch::qe;
 
 
-
 extern RandomAccessStream* theFile();
-
 
 
 void print_rtl_OUString( const OUString bla )

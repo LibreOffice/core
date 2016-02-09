@@ -29,7 +29,6 @@ namespace comphelper
 {
 
 
-
 //= IndexAccessIterator
 
 /** an iterator that iterates through all elements, starting from an XIndexAccess (pre-order)

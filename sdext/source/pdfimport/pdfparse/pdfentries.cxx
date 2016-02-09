@@ -35,7 +35,6 @@
 #include <string.h>
 
 
-
 namespace pdfparse
 {
 

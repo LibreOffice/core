@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 
-
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -112,7 +111,6 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
     }
     return object;
 }
-
 
 
 // Logging

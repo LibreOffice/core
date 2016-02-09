@@ -32,7 +32,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct AxisDispUnitsModel;
 
 class AxisDispUnitsConverter : public ConverterBase< AxisDispUnitsModel >
@@ -65,7 +64,6 @@ public:
         RefVector<TypeGroupConverter>& rTypeGroups, const AxisModel* pCrossingAxis,
         sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx );
 };
-
 
 
 } // namespace chart

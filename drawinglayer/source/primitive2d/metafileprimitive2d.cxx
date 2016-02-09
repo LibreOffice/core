@@ -56,9 +56,7 @@
 #include <numeric>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace
@@ -197,7 +195,6 @@ namespace
         bool getLineOrFillActive() const { return (mbLineColor || mbFillColor); }
     };
 } // end of anonymous namespace
-
 
 
 namespace
@@ -359,7 +356,6 @@ namespace
 } // end of anonymous namespace
 
 
-
 namespace
 {
     /** helper to convert a vcl::Region to a B2DPolyPolygon
@@ -383,7 +379,6 @@ namespace
         return aRetval;
     }
 } // end of anonymous namespace
-
 
 
 namespace
@@ -465,7 +460,6 @@ namespace
 } // end of anonymous namespace
 
 
-
 namespace
 {
     /** Helper class which builds a stack on the TargetHolder class */
@@ -519,7 +513,6 @@ namespace
 } // end of anonymous namespace
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -565,7 +558,6 @@ namespace drawinglayer
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 namespace
@@ -3169,7 +3161,6 @@ namespace
         }
     }
 } // end of anonymous namespace
-
 
 
 namespace drawinglayer

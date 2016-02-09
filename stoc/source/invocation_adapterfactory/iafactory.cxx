@@ -905,10 +905,6 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 }
 
 
-
-
-
-
 static const struct ::cppu::ImplementationEntry g_entries[] =
 {
     {

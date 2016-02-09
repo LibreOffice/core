@@ -88,7 +88,6 @@ OUString VCLXAccessibleSvxFindReplaceDialog::getImplementationName() throw (Runt
 }
 
 
-
 Sequence< OUString > VCLXAccessibleSvxFindReplaceDialog::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "VCLXAccessibleSvxFindReplaceDialog" };

@@ -58,12 +58,10 @@ AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::X
 }
 
 
-
 AccessibleCell::~AccessibleCell()
 {
     DBG_ASSERT( mpText == nullptr, "svx::AccessibleCell::~AccessibleCell(), not disposed!?" );
 }
-
 
 
 void AccessibleCell::Init()
@@ -94,7 +92,6 @@ void AccessibleCell::Init()
 }
 
 
-
 bool AccessibleCell::SetState (sal_Int16 aState)
 {
     bool bStateHasChanged = false;
@@ -112,7 +109,6 @@ bool AccessibleCell::SetState (sal_Int16 aState)
 
     return bStateHasChanged;
 }
-
 
 
 bool AccessibleCell::ResetState (sal_Int16 aState)
@@ -150,12 +146,10 @@ Any SAL_CALL AccessibleCell::queryInterface( const Type& aType ) throw (RuntimeE
 }
 
 
-
 void SAL_CALL AccessibleCell::acquire(  ) throw ()
 {
     AccessibleCellBase::acquire();
 }
-
 
 
 void SAL_CALL AccessibleCell::release(  ) throw ()
@@ -177,7 +171,6 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (css::uno::Ru
 }
 
 
-
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
 */
@@ -189,7 +182,6 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nI
     // todo: does GetChild throw IndexOutOfBoundsException?
     return mpText->GetChild (nIndex);
 }
-
 
 
 /** Return a copy of the state set.
@@ -312,7 +304,6 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const c
 }
 
 
-
 css::awt::Rectangle SAL_CALL AccessibleCell::getBounds() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -359,14 +350,12 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds() throw(RuntimeException,
 }
 
 
-
 css::awt::Point SAL_CALL AccessibleCell::getLocation() throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     css::awt::Rectangle aBoundingBox(getBounds());
     return css::awt::Point(aBoundingBox.X, aBoundingBox.Y);
 }
-
 
 
 css::awt::Point SAL_CALL AccessibleCell::getLocationOnScreen() throw(RuntimeException, std::exception)
@@ -393,7 +382,6 @@ css::awt::Point SAL_CALL AccessibleCell::getLocationOnScreen() throw(RuntimeExce
 }
 
 
-
 awt::Size SAL_CALL AccessibleCell::getSize() throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
@@ -402,12 +390,10 @@ awt::Size SAL_CALL AccessibleCell::getSize() throw (RuntimeException, std::excep
 }
 
 
-
 void SAL_CALL AccessibleCell::addFocusListener ( const css::uno::Reference< css::awt::XFocusListener >& xListener) throw (css::uno::RuntimeException)
 {
     AccessibleComponentBase::addFocusListener( xListener );
 }
-
 
 
 void SAL_CALL AccessibleCell::removeFocusListener (const css::uno::Reference< css::awt::XFocusListener >& xListener ) throw (css::uno::RuntimeException)
@@ -416,12 +402,10 @@ void SAL_CALL AccessibleCell::removeFocusListener (const css::uno::Reference< cs
 }
 
 
-
 void SAL_CALL AccessibleCell::grabFocus() throw (css::uno::RuntimeException, std::exception)
 {
     AccessibleComponentBase::grabFocus();
 }
-
 
 
 sal_Int32 SAL_CALL AccessibleCell::getForeground() throw (RuntimeException, std::exception)
@@ -432,7 +416,6 @@ sal_Int32 SAL_CALL AccessibleCell::getForeground() throw (RuntimeException, std:
     // todo
     return nColor;
 }
-
 
 
 sal_Int32 SAL_CALL AccessibleCell::getBackground() throw (RuntimeException, std::exception)
@@ -455,12 +438,10 @@ css::uno::Reference< css::awt::XFont > SAL_CALL AccessibleCell::getFont() throw 
 }
 
 
-
 OUString SAL_CALL AccessibleCell::getTitledBorderText() throw (css::uno::RuntimeException, std::exception)
 {
     return AccessibleComponentBase::getTitledBorderText();
 }
-
 
 
 OUString SAL_CALL AccessibleCell::getToolTipText() throw (css::uno::RuntimeException, std::exception)
@@ -491,7 +472,6 @@ void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAcces
 }
 
 
-
 void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -508,7 +488,6 @@ OUString SAL_CALL AccessibleCell::getImplementationName() throw (RuntimeExceptio
 {
     return OUString("AccessibleCell");
 }
-
 
 
 Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames() throw (RuntimeException, std::exception)

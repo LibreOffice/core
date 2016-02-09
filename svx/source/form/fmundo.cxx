@@ -164,7 +164,6 @@ struct PropertySetInfo
 typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
 
-
 OUString static_STR_UNDO_PROPERTY;
 
 
@@ -827,7 +826,6 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
 }
 
 
-
 void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
@@ -963,7 +961,6 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
 }
 
 
-
 FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyChangeEvent& evt)
                      :SdrUndoAction(rNewMod)
                      ,xObj(evt.Source, UNO_QUERY)
@@ -976,7 +973,6 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
     if(static_STR_UNDO_PROPERTY.isEmpty())
         static_STR_UNDO_PROPERTY = SVX_RESSTR(RID_STR_UNDO_PROPERTY);
 }
-
 
 
 void FmUndoPropertyAction::Undo()
@@ -1028,7 +1024,6 @@ OUString FmUndoPropertyAction::GetComment() const
 }
 
 
-
 FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                                              Action _eAction,
                                              const Reference< XIndexContainer > & xCont,
@@ -1070,7 +1065,6 @@ FmUndoContainerAction::~FmUndoContainerAction()
     // if we own the object ....
     DisposeElement( m_xOwnElement );
 }
-
 
 
 void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xElem )
@@ -1214,7 +1208,6 @@ FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
     // dispose our element if nobody else is responsible for
     DisposeElement(m_xReplaced);
 }
-
 
 
 void FmUndoModelReplaceAction::DisposeElement( const css::uno::Reference< css::awt::XControlModel>& xReplaced )

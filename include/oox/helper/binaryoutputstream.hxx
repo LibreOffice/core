@@ -30,7 +30,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 
 
-
 /** Interface for binary output stream classes.
 
     The binary data in the stream is written in little-endian format.
@@ -121,7 +120,6 @@ void BinaryOutputStream::writeValue( Type nValue )
 }
 
 
-
 /** Wraps a UNO output stream and provides convenient access functions.
 
     The binary data in the stream is written in little-endian format.
@@ -163,7 +161,6 @@ private:
 };
 
 
-
 /** Wraps a StreamDataSequence and provides convenient access functions.
 
     The binary data in the stream is written in little-endian format. After
@@ -188,7 +185,6 @@ public:
     /** Write nBytes bytes from the (preallocated!) buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) override;
 };
-
 
 
 } // namespace oox

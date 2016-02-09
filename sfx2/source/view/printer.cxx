@@ -97,7 +97,6 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
 }
 
 
-
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 
 /*  [Description]
@@ -112,7 +111,6 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
     assert(pOptions);
     pImpl = new SfxPrinter_Impl;
 }
-
 
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
@@ -131,7 +129,6 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 }
 
 
-
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const OUString& rPrinterName ) :
 
@@ -143,7 +140,6 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
     assert(pOptions);
     pImpl = new SfxPrinter_Impl;
 }
-
 
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
@@ -165,7 +161,6 @@ SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
 }
 
 
-
 VclPtr<SfxPrinter> SfxPrinter::Clone() const
 {
     if ( IsDefPrinter() )
@@ -185,7 +180,6 @@ VclPtr<SfxPrinter> SfxPrinter::Clone() const
 }
 
 
-
 SfxPrinter::~SfxPrinter()
 {
     disposeOnce();
@@ -199,12 +193,10 @@ void SfxPrinter::dispose()
 }
 
 
-
 void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 {
     pOptions->Set(rNewOptions);
 }
-
 
 
 SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
@@ -231,7 +223,6 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
 }
 
 
-
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
     disposeOnce();
@@ -244,7 +235,6 @@ void SfxPrintOptionsDialog::dispose()
     delete pOptions;
     ModalDialog::dispose();
 }
-
 
 
 short SfxPrintOptionsDialog::Execute()
@@ -261,7 +251,6 @@ short SfxPrintOptionsDialog::Execute()
 }
 
 
-
 bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -272,7 +261,6 @@ bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 
     return ModalDialog::Notify( rNEvt );
 }
-
 
 
 void SfxPrintOptionsDialog::DisableHelp()

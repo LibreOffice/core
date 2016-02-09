@@ -120,7 +120,6 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 }
 
 
-
 XLibraryContainer * SfxApplication::GetBasicContainer()
 {
 #if !HAVE_FEATURE_SCRIPTING

@@ -31,14 +31,12 @@ class AbortContinuation;
 class PasswordContinuation;
 
 
-
 /** Selects which UNO document password request type to use. */
 enum DocPasswordRequestType
 {
     DocPasswordRequestType_STANDARD,    /// Uses the standard com.sun.star.task.DocumentPasswordRequest request.
     DocPasswordRequestType_MS           /// Uses the com.sun.star.task.DocumentMSPasswordRequest request.
 };
-
 
 
 class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
@@ -62,7 +60,6 @@ private:
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > maContinuations;
     PasswordContinuation *          mpPassword;
 };
-
 
 
 /** Implements the task.XInteractionRequest interface for requesting a password
@@ -96,7 +93,6 @@ private:
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > maContinuations;
     PasswordContinuation *          mpPassword;
 };
-
 
 
 } // namespace comphelper

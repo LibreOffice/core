@@ -269,7 +269,6 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 }
 
 
-
 //= UnoGridControl
 
 UnoGridControl::UnoGridControl()

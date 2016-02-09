@@ -560,6 +560,4 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

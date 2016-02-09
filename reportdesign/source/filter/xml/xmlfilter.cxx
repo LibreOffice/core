@@ -374,7 +374,6 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, S
 }
 
 
-
 ORptFilter::~ORptFilter() throw()
 {
 }

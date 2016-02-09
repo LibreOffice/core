@@ -243,12 +243,10 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
 }
 
 
-
 css::uno::Sequence< css::beans::Property> OPropertyArrayAggregationHelper::getProperties()
 {
     return m_aProperties;
 }
-
 
 
 sal_Int32 OPropertyArrayAggregationHelper::fillHandles(

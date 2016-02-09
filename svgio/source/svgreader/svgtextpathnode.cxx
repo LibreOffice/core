@@ -241,7 +241,6 @@ namespace svgio
 } // end of namespace svgio
 
 
-
 namespace svgio
 {
     namespace svgreader

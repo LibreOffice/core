@@ -625,7 +625,6 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
 // FractionItem
 
 
-
 SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
     SfxPoolItem(nId)
 {
@@ -695,7 +694,6 @@ SfxPoolItem* SdrFractionItem::Clone(SfxItemPool * /*pPool*/) const
 // ScaleItem
 
 
-
 bool SdrScaleItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
@@ -734,7 +732,6 @@ SfxPoolItem* SdrScaleItem::Clone(SfxItemPool * /*pPool*/) const
 
 
 // OnOffItem
-
 
 
 SfxPoolItem* SdrOnOffItem::Clone(SfxItemPool* /*pPool*/) const
@@ -802,7 +799,6 @@ bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
 // class SdrPercentItem
 
 
-
 SfxPoolItem* SdrPercentItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SdrPercentItem(Which(),GetValue());
@@ -833,7 +829,6 @@ bool SdrPercentItem::GetPresentation(
 
 
 // class SdrAngleItem
-
 
 
 SfxPoolItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
@@ -923,7 +918,6 @@ bool SdrAngleItem::GetPresentation(
 // class SdrMetricItem
 
 
-
 SfxPoolItem* SdrMetricItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SdrMetricItem(Which(),GetValue());
@@ -971,7 +965,6 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
 
 
 // items of the legend object
-
 
 
 SfxPoolItem* SdrCaptionTypeItem::Clone(SfxItemPool* /*pPool*/) const                { return new SdrCaptionTypeItem(*this); }
@@ -1970,7 +1963,6 @@ bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 
 
 // class SdrSignedPercentItem
-
 
 
 SfxPoolItem* SdrSignedPercentItem::Clone(SfxItemPool* /*pPool*/) const

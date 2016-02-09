@@ -29,13 +29,11 @@
 #include <vector>
 
 
-
 extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
 bool copyStreams( css::uno::Reference< css::io::XInputStream > xIS, css::uno::Reference< css::io::XOutputStream > xOS );
 bool createDirectory( OUString& rURL );
-
 
 
 class filter_info_impl
@@ -71,7 +69,6 @@ public:
 };
 
 
-
 struct application_info_impl
 {
     OUString   maDocumentService;
@@ -81,7 +78,6 @@ struct application_info_impl
 
     application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter );
 };
-
 
 
 extern std::vector< application_info_impl* >& getApplicationInfos();

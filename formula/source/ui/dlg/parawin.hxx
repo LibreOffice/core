@@ -152,7 +152,6 @@ public:
 };
 
 
-
 } // formula
 
 #endif // INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX

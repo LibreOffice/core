@@ -885,7 +885,6 @@ double UserFormGeometryHelper::getOffsetY() const
 }
 
 
-
 static const char saPosXName[] = "PositionX";
 static const char saPosYName[] = "PositionY";
 static const char saWidthName[] = "Width";
@@ -963,7 +962,6 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     awt::Size aSizeAppFont = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::APPFONT );
     mxModelProps->setPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName), uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
-
 
 
 double ConcreteXShapeGeometryAttributes::getLeft() const

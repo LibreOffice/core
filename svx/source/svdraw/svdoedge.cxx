@@ -49,7 +49,6 @@
 #include <svx/xpool.hxx>
 
 
-
 SdrObjConnection::~SdrObjConnection()
 {
 }
@@ -162,7 +161,6 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfSdrEdgeObj(*this);
 }
-
 
 
 SdrEdgeObj::SdrEdgeObj()
@@ -1809,7 +1807,6 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-
 bool SdrEdgeObj::hasSpecialDrag() const
 {
     return true;
@@ -1958,7 +1955,6 @@ OUString SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         return aStr;
     }
 }
-
 
 
 basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const

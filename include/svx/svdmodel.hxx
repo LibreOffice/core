@@ -141,7 +141,6 @@ public:
 };
 
 
-
 // Flag for cleaning up after the loading of the pools, meaning the
 // recalculate the RefCounts and dispose unused items)
 // sal_False == active
@@ -625,8 +624,6 @@ public:
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
-
-
 
 
 #endif // INCLUDED_SVX_SVDMODEL_HXX

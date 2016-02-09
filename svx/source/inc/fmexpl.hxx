@@ -257,7 +257,6 @@ public:
 };
 
 
-
 class FmControlData : public FmEntryData
 {
     css::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
@@ -283,8 +282,6 @@ public:
         const ImageList& _rNormalImages
     );
 };
-
-
 
 
 namespace svxform

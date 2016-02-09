@@ -28,7 +28,6 @@ namespace pcr
 {
 
 
-
     //= PropertyEventTranslation
 
     typedef ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener

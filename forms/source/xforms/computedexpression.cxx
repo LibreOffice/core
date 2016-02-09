@@ -72,7 +72,6 @@ ComputedExpression::~ComputedExpression()
 }
 
 
-
 void ComputedExpression::setExpression( const OUString& rExpression )
 {
     // set new expression, and clear pre-computed results
@@ -164,8 +163,6 @@ bool ComputedExpression::getBool( bool bDefault ) const
 {
     return mxResult.is() ? mxResult->getBoolean() : bDefault;
 }
-
-
 
 
 Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationContext& aContext)

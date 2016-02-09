@@ -18,7 +18,6 @@
  */
 
 
-
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVCONTENT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVCONTENT_HXX
 
@@ -55,10 +54,8 @@ namespace http_dav_ucp
 {
 
 
-
 // UNO service name for the content.
 #define WEBDAV_CONTENT_SERVICE_NAME "com.sun.star.ucb.WebDAVContent"
-
 
 
 class ContentProvider;

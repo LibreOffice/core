@@ -18,8 +18,6 @@
  */
 
 
-
-
 #include <svx/svdmark.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
@@ -244,7 +242,6 @@ static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
         return pOL1 < pOL2;
     }
 }
-
 
 
 void SdrMarkList::ForceSort() const
@@ -771,7 +768,6 @@ bool SdrMarkList::TakeSnapRect(SdrPageView* pPV, Rectangle& rRect) const
 
     return bFnd;
 }
-
 
 
 namespace sdr

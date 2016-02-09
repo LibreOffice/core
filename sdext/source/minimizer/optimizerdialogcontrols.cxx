@@ -46,7 +46,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
 
-
 void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
 {
     FontDescriptor aFontDescriptor;
@@ -56,7 +55,6 @@ void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
         rOptimizerDialog.setControlProperty( rControl, "FontDescriptor", Any( aFontDescriptor ) );
     }
 }
-
 
 
 OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, sal_Int32 nOrientation,
@@ -87,7 +85,6 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
         rControlName, aNames, aValues );
     return rControlName;
 }
-
 
 
 OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
@@ -126,7 +123,6 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
 }
 
 
-
 OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, bool bBold, sal_Int16 nTabIndex )
 {
@@ -160,7 +156,6 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
         SetBold( rOptimizerDialog, rControlName );
     return rControlName;
 }
-
 
 
 OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
@@ -197,7 +192,6 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         xCheckBox->addItemListener( xItemListener );
     return rControlName;
 }
-
 
 
 OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
@@ -247,7 +241,6 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
 }
 
 
-
 OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XTextListener >& rTextListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
@@ -288,7 +281,6 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
 }
 
 
-
 OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener >& rItemListener,
     const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex )
 {
@@ -322,7 +314,6 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
         xRadioButton->addItemListener( rItemListener );
     return rControlName;
 }
-
 
 
 OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
@@ -367,7 +358,6 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
 }
 
 
-
 void OptimizerDialog::InitNavigationBar()
 {
     sal_Int32   nCancelPosX = OD_DIALOG_WIDTH - BUTTON_WIDTH - 6;
@@ -385,7 +375,6 @@ void OptimizerDialog::InitNavigationBar()
 
     setControlProperty( "btnNavNext", "DefaultButton", Any( true ) );
 }
-
 
 
 void OptimizerDialog::UpdateControlStatesPage0()
@@ -436,7 +425,6 @@ void OptimizerDialog::InitPage0()
 }
 
 
-
 void OptimizerDialog::UpdateControlStatesPage1()
 {
     bool bDeleteUnusedMasterPages( GetConfigProperty( TK_DeleteUnusedMasterPages, false ) );
@@ -474,7 +462,6 @@ void OptimizerDialog::InitPage1()
 
     UpdateControlStatesPage1();
 }
-
 
 
 void OptimizerDialog::UpdateControlStatesPage2()
@@ -541,7 +528,6 @@ void OptimizerDialog::InitPage2()
 }
 
 
-
 void OptimizerDialog::UpdateControlStatesPage3()
 {
     bool bConvertOLEObjects( GetConfigProperty( TK_OLEOptimization, false ) );
@@ -581,7 +567,6 @@ void OptimizerDialog::InitPage3()
     DeactivatePage( 3 );
     UpdateControlStatesPage3();
 }
-
 
 
 static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = '.' )

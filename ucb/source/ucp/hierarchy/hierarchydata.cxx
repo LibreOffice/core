@@ -94,11 +94,7 @@ void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 }
 
 
-
-
 // HierarchyEntry Implementation.
-
-
 
 
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
@@ -1061,11 +1057,7 @@ HierarchyEntry::getRootReadAccess()
 }
 
 
-
-
 // HierarchyEntry::iterator Implementation.
-
-
 
 
 HierarchyEntry::iterator::iterator()

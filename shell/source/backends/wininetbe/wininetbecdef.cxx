@@ -27,13 +27,11 @@
 namespace uno = com::sun::star::uno ;
 
 
-
 static uno::Reference<uno::XInterface> SAL_CALL createWinInetBackend(
     const uno::Reference<uno::XComponentContext>&){
 
     return * WinInetBackend::createInstance();
 }
-
 
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
@@ -50,7 +48,6 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 } ;
 
 
-
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wininetbe1_component_getFactory( const sal_Char *aImplementationName,
     void *aServiceManager,
     void *aRegistryKey) {
@@ -61,7 +58,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL wininetbe1_component_getFactory(
         aRegistryKey,
         kImplementations_entries) ;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

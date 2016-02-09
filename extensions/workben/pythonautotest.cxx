@@ -38,9 +38,6 @@ using ::rtl::StringToOUString;
 #define USTRING_TO_PCHAR(x) OUStringToString(x , CHARSET_DONTKNOW ).GetCharStr()
 
 
-
-
-
 /*****
 *
 * A Test root object !
@@ -271,7 +268,6 @@ protected:
 };
 
 
-
 void TestListener::cmdLine()
 {
     // Condition is set by running listener
@@ -388,7 +384,6 @@ BOOL PythonCodeLibrary::queryInterface( Uik aUik, XInterfaceRef & rOut )
 
     return TRUE;
 }
-
 
 
 /*

@@ -18,7 +18,6 @@
  */
 
 
-
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
 
@@ -92,7 +91,6 @@ const sal_uInt16 SC_GATEWAY_TIMEOUT                  = 504;
 const sal_uInt16 SC_HTTP_VERSION_NOT_SUPPORTED       = 505;
 // DAV extensions
 const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
-
 
 
 class DAVException : public std::exception

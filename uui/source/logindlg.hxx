@@ -38,9 +38,6 @@
 #define LF_NO_USESYSCREDS       0x0100  // hide "use system credentials"
 
 
-
-
-
 class LoginDialog : public ModalDialog
 {
     VclPtr<FixedText>      m_pErrorFT;
@@ -86,11 +83,6 @@ public:
     void            ClearPassword();
     void            ClearAccount();
 };
-
-
-
-
-
 
 
 #endif // INCLUDED_UUI_SOURCE_LOGINDLG_HXX

@@ -30,7 +30,6 @@ namespace frm
 {
 
 
-
     //= ICommandDescriptionProvider
 
     class SAL_NO_VTABLE ICommandDescriptionProvider

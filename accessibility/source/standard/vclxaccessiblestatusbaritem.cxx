@@ -44,7 +44,6 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-
 // class VCLXAccessibleStatusBarItem
 
 
@@ -61,13 +60,11 @@ VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar,
 }
 
 
-
 VCLXAccessibleStatusBarItem::~VCLXAccessibleStatusBarItem()
 {
     delete m_pExternalLock;
     m_pExternalLock = nullptr;
 }
-
 
 
 bool VCLXAccessibleStatusBarItem::IsShowing()
@@ -79,7 +76,6 @@ bool VCLXAccessibleStatusBarItem::IsShowing()
 
     return bShowing;
 }
-
 
 
 void VCLXAccessibleStatusBarItem::SetShowing( bool bShowing )
@@ -97,7 +93,6 @@ void VCLXAccessibleStatusBarItem::SetShowing( bool bShowing )
 }
 
 
-
 void VCLXAccessibleStatusBarItem::SetItemName( const OUString& sItemName )
 {
     if ( !m_sItemName.equals( sItemName ) )
@@ -111,7 +106,6 @@ void VCLXAccessibleStatusBarItem::SetItemName( const OUString& sItemName )
 }
 
 
-
 OUString VCLXAccessibleStatusBarItem::GetItemName()
 {
     OUString sName;
@@ -120,7 +114,6 @@ OUString VCLXAccessibleStatusBarItem::GetItemName()
 
     return sName;
 }
-
 
 
 void VCLXAccessibleStatusBarItem::SetItemText( const OUString& sItemText )
@@ -132,7 +125,6 @@ void VCLXAccessibleStatusBarItem::SetItemText( const OUString& sItemText )
         NotifyAccessibleEvent( AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue );
     }
 }
-
 
 
 OUString VCLXAccessibleStatusBarItem::GetItemText()
@@ -148,7 +140,6 @@ OUString VCLXAccessibleStatusBarItem::GetItemText()
 
     return sText;
 }
-
 
 
 void VCLXAccessibleStatusBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -186,12 +177,10 @@ OUString VCLXAccessibleStatusBarItem::implGetText()
 }
 
 
-
 lang::Locale VCLXAccessibleStatusBarItem::implGetLocale()
 {
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
-
 
 
 void VCLXAccessibleStatusBarItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
@@ -235,12 +224,10 @@ OUString VCLXAccessibleStatusBarItem::getImplementationName() throw (RuntimeExce
 }
 
 
-
 sal_Bool VCLXAccessibleStatusBarItem::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
-
 
 
 Sequence< OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -272,7 +259,6 @@ sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleChildCount() throw (RuntimeE
 }
 
 
-
 Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -282,7 +268,6 @@ Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleChild( sal_In
 
     return Reference< XAccessible >();
 }
-
 
 
 Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleParent(  ) throw (RuntimeException, std::exception)
@@ -297,7 +282,6 @@ Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleParent(  ) th
 }
 
 
-
 sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -310,14 +294,12 @@ sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleIndexInParent(  ) throw (Run
 }
 
 
-
 sal_Int16 VCLXAccessibleStatusBarItem::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::LABEL;
 }
-
 
 
 OUString VCLXAccessibleStatusBarItem::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
@@ -332,14 +314,12 @@ OUString VCLXAccessibleStatusBarItem::getAccessibleDescription(  ) throw (Runtim
 }
 
 
-
 OUString VCLXAccessibleStatusBarItem::getAccessibleName(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return GetItemName();
 }
-
 
 
 Reference< XAccessibleRelationSet > VCLXAccessibleStatusBarItem::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
@@ -350,7 +330,6 @@ Reference< XAccessibleRelationSet > VCLXAccessibleStatusBarItem::getAccessibleRe
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
 }
-
 
 
 Reference< XAccessibleStateSet > VCLXAccessibleStatusBarItem::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
@@ -373,7 +352,6 @@ Reference< XAccessibleStateSet > VCLXAccessibleStatusBarItem::getAccessibleState
 }
 
 
-
 Locale VCLXAccessibleStatusBarItem::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -393,12 +371,10 @@ Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleAtPoint( cons
 }
 
 
-
 void VCLXAccessibleStatusBarItem::grabFocus(  ) throw (RuntimeException, std::exception)
 {
     // no focus for status bar items
 }
-
 
 
 sal_Int32 VCLXAccessibleStatusBarItem::getForeground(   ) throw (RuntimeException, std::exception)
@@ -416,7 +392,6 @@ sal_Int32 VCLXAccessibleStatusBarItem::getForeground(   ) throw (RuntimeExceptio
 
     return nColor;
 }
-
 
 
 sal_Int32 VCLXAccessibleStatusBarItem::getBackground(  ) throw (RuntimeException, std::exception)
@@ -456,14 +431,12 @@ Reference< awt::XFont > VCLXAccessibleStatusBarItem::getFont(  ) throw (RuntimeE
 }
 
 
-
 OUString VCLXAccessibleStatusBarItem::getTitledBorderText(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return GetItemText();
 }
-
 
 
 OUString VCLXAccessibleStatusBarItem::getToolTipText(  ) throw (RuntimeException, std::exception)
@@ -485,7 +458,6 @@ sal_Int32 VCLXAccessibleStatusBarItem::getCaretPosition() throw (RuntimeExceptio
 }
 
 
-
 sal_Bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -495,7 +467,6 @@ sal_Bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex ) throw
 
     return false;
 }
-
 
 
 Sequence< PropertyValue > VCLXAccessibleStatusBarItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -521,7 +492,6 @@ Sequence< PropertyValue > VCLXAccessibleStatusBarItem::getCharacterAttributes( s
 }
 
 
-
 awt::Rectangle VCLXAccessibleStatusBarItem::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -544,7 +514,6 @@ awt::Rectangle VCLXAccessibleStatusBarItem::getCharacterBounds( sal_Int32 nIndex
 }
 
 
-
 sal_Int32 VCLXAccessibleStatusBarItem::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -564,7 +533,6 @@ sal_Int32 VCLXAccessibleStatusBarItem::getIndexAtPoint( const awt::Point& aPoint
 }
 
 
-
 sal_Bool VCLXAccessibleStatusBarItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -574,7 +542,6 @@ sal_Bool VCLXAccessibleStatusBarItem::setSelection( sal_Int32 nStartIndex, sal_I
 
     return false;
 }
-
 
 
 sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -605,7 +572,6 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
 
     return bReturn;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
 
-
 XMLIndexMarkExport::XMLIndexMarkExport(
     SvXMLExport& rExp)
 :   sLevel("Level")

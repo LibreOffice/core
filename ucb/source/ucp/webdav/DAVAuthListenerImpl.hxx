@@ -18,7 +18,6 @@
  */
 
 
-
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENERIMPL_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENERIMPL_HXX
 
@@ -29,14 +28,7 @@ namespace http_dav_ucp
 {
 
 
-
-
-
-
 // class DAVAuthListenerImpl.
-
-
-
 
 
     class DAVAuthListener_Impl : public DAVAuthListener

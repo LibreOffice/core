@@ -55,7 +55,6 @@ inline FmInterfaceItem& FmInterfaceItem::operator=( const FmInterfaceItem &rCpy 
 }
 
 
-
 #endif // INCLUDED_SVX_SOURCE_INC_FMITEMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

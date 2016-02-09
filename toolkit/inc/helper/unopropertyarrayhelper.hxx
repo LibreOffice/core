@@ -51,7 +51,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_TOOLKIT_INC_HELPER_UNOPROPERTYARRAYHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

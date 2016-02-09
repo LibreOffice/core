@@ -183,7 +183,6 @@ public:
     static void setConfiguredAsianFallback( LanguageType nLang );
 
 
-
     /** Encapsulated methods that shall only be accessed through
         class LanguageTag.
      */
@@ -200,7 +199,6 @@ public:
     };
 
 
-
     struct LanguagetagMapping
     {
         OUString        maBcp47;
@@ -214,7 +212,6 @@ public:
         language tag strings.
      */
     static ::std::vector< LanguagetagMapping > getDefinedLanguagetags();
-
 
 
     /** Encapsulated conversion methods used by LanguageTag and conversions,

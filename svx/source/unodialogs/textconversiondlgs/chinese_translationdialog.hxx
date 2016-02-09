@@ -29,7 +29,6 @@ namespace textconversiondlgs
 {
 
 
-
 /**
 */
 class ChineseDictionaryDialog;

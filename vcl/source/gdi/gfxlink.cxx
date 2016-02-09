@@ -154,7 +154,6 @@ void GfxLink::SetPrefSize( const Size& rPrefSize )
 }
 
 
-
 void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     mpImpData->maPrefMapMode = rPrefMapMode;

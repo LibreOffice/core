@@ -23,7 +23,6 @@
 #include <sal/types.h>
 
 
-
 namespace basegfx
 {
     /** Fill rule to use for poly-polygon filling.

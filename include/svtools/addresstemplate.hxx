@@ -40,7 +40,6 @@ namespace svt
 {
 
 
-
     // = AddressBookSourceDialog
 
     struct AddressBookSourceDialogData;
@@ -134,7 +133,6 @@ namespace svt
         DECL_LINK_TYPED(OnOkClicked, Button*, void);
         DECL_LINK_TYPED(OnDelayedInitialize, void*, void);
     };
-
 
 
 }   // namespace svt

@@ -33,8 +33,6 @@ namespace oox {
 namespace dump {
 
 
-
-
 class OleInputObjectBase : public InputObjectBase
 {
 protected:
@@ -52,8 +50,6 @@ protected:
 };
 
 
-
-
 class StdFontObject : public OleInputObjectBase
 {
 public:
@@ -62,7 +58,6 @@ public:
 protected:
     virtual void        implDump() override;
 };
-
 
 
 class StdPicObject : public OleInputObjectBase
@@ -75,14 +70,11 @@ protected:
 };
 
 
-
-
 class OleStreamObject : public OleInputObjectBase
 {
 public:
     explicit            OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 };
-
 
 
 class OleCompObjObject : public OleStreamObject
@@ -93,8 +85,6 @@ public:
 protected:
     virtual void        implDump() override;
 };
-
-
 
 
 class OlePropertyStreamObject : public InputObjectBase
@@ -136,7 +126,6 @@ private:
 };
 
 
-
 class OleStorageObject : public StorageObjectBase
 {
 public:
@@ -154,8 +143,6 @@ protected:
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
 };
-
-
 
 
 class ComCtlObjectBase : public OleInputObjectBase
@@ -187,7 +174,6 @@ protected:
 };
 
 
-
 class ComCtlScrollBarObject : public ComCtlObjectBase
 {
 public:
@@ -196,7 +182,6 @@ public:
 protected:
     virtual void        implDumpProperties() override;
 };
-
 
 
 class ComCtlProgressBarObject : public ComCtlObjectBase
@@ -209,7 +194,6 @@ protected:
 };
 
 
-
 class ComCtlSliderObject : public ComCtlObjectBase
 {
 public:
@@ -220,7 +204,6 @@ protected:
 };
 
 
-
 class ComCtlUpDownObject : public ComCtlObjectBase
 {
 public:
@@ -229,7 +212,6 @@ public:
 protected:
     virtual void        implDumpProperties() override;
 };
-
 
 
 class ComCtlImageListObject : public ComCtlObjectBase
@@ -244,7 +226,6 @@ protected:
 };
 
 
-
 class ComCtlTabStripObject : public ComCtlObjectBase
 {
 public:
@@ -254,7 +235,6 @@ protected:
     virtual void        implDumpProperties() override;
     virtual void        implDumpCommonExtra( sal_Int64 nEndPos ) override;
 };
-
 
 
 class ComCtlTreeViewObject : public ComCtlObjectBase
@@ -271,7 +251,6 @@ private:
 };
 
 
-
 class ComCtlStatusBarObject : public ComCtlObjectBase
 {
 public:
@@ -282,8 +261,6 @@ protected:
     virtual void        implDumpCommonExtra( sal_Int64 nEndPos ) override;
     virtual void        implDumpCommonTrailing() override;
 };
-
-
 
 
 class AxPropertyObjectBase : public OleInputObjectBase
@@ -395,7 +372,6 @@ private:
 };
 
 
-
 template< typename Type >
 void AxPropertyObjectBase::alignInput()
 {
@@ -425,7 +401,6 @@ Type AxPropertyObjectBase::dumpHexProperty( Type nDefault, const NameListWrapper
 }
 
 
-
 class AxCFontNewObject : public AxPropertyObjectBase
 {
 public:
@@ -434,7 +409,6 @@ public:
 protected:
     virtual void        implDumpShortProperties() override;
 };
-
 
 
 class AxColumnInfoObject : public AxPropertyObjectBase
@@ -447,7 +421,6 @@ protected:
 };
 
 
-
 class AxCommandButtonObject : public AxPropertyObjectBase
 {
 public:
@@ -457,7 +430,6 @@ protected:
     virtual void        implDumpShortProperties() override;
     virtual void        implDumpExtended() override;
 };
-
 
 
 class AxMorphControlObject : public AxPropertyObjectBase
@@ -478,7 +450,6 @@ private:
 };
 
 
-
 class AxLabelObject : public AxPropertyObjectBase
 {
 public:
@@ -488,7 +459,6 @@ protected:
     virtual void        implDumpShortProperties() override;
     virtual void        implDumpExtended() override;
 };
-
 
 
 class AxImageObject : public AxPropertyObjectBase
@@ -501,7 +471,6 @@ protected:
 };
 
 
-
 class AxScrollBarObject : public AxPropertyObjectBase
 {
 public:
@@ -512,7 +481,6 @@ protected:
 };
 
 
-
 class AxSpinButtonObject : public AxPropertyObjectBase
 {
 public:
@@ -521,7 +489,6 @@ public:
 protected:
     virtual void        implDumpShortProperties() override;
 };
-
 
 
 class AxTabStripObject : public AxPropertyObjectBase
@@ -536,8 +503,6 @@ protected:
 private:
     sal_Int32           mnTabFlagCount;
 };
-
-
 
 
 class FormControlStreamObject : public OleInputObjectBase
@@ -565,8 +530,6 @@ private:
 };
 
 
-
-
 struct VbaFormSiteInfo
 {
     OUString     maProgId;
@@ -580,13 +543,11 @@ struct VbaFormSiteInfo
 typedef ::std::vector< VbaFormSiteInfo > VbaFormSiteInfoVector;
 
 
-
 struct VbaFormSharedData
 {
     OUStringVector      maClassInfoProgIds;
     VbaFormSiteInfoVector maSiteInfos;
 };
-
 
 
 class VbaFormClassInfoObject : public AxPropertyObjectBase
@@ -602,7 +563,6 @@ private:
 };
 
 
-
 class VbaFormSiteObject : public AxPropertyObjectBase
 {
 public:
@@ -616,7 +576,6 @@ private:
 };
 
 
-
 class VbaFormDesignExtObject : public AxPropertyObjectBase
 {
 public:
@@ -625,7 +584,6 @@ public:
 protected:
     virtual void        implDumpShortProperties() override;
 };
-
 
 
 class VbaFStreamObject : public AxPropertyObjectBase
@@ -653,7 +611,6 @@ private:
 };
 
 
-
 class VbaOStreamObject : public OleInputObjectBase
 {
 public:
@@ -671,7 +628,6 @@ private:
 };
 
 
-
 class VbaPageObject : public AxPropertyObjectBase
 {
 public:
@@ -680,7 +636,6 @@ public:
 protected:
     virtual void        implDumpShortProperties() override;
 };
-
 
 
 class VbaMultiPageObject : public AxPropertyObjectBase
@@ -695,7 +650,6 @@ protected:
 private:
     sal_Int32           mnPageCount;
 };
-
 
 
 class VbaXStreamObject : public InputObjectBase
@@ -713,7 +667,6 @@ protected:
 private:
     VbaFormSharedData&  mrFormData;
 };
-
 
 
 class VbaContainerStorageObject : public OleStorageObject
@@ -744,8 +697,6 @@ private:
 };
 
 
-
-
 struct VbaSharedData
 {
     typedef ::std::map< OUString, sal_Int32 > StreamOffsetMap;
@@ -758,7 +709,6 @@ struct VbaSharedData
     bool                isModuleStream( const OUString& rStrmName ) const;
     sal_Int32           getStreamOffset( const OUString& rStrmName ) const;
 };
-
 
 
 class VbaDirStreamObject : public SequenceRecordObjectBase
@@ -789,7 +739,6 @@ private:
 };
 
 
-
 class VbaModuleStreamObject : public InputObjectBase
 {
 public:
@@ -807,7 +756,6 @@ private:
     VbaSharedData&      mrVbaData;
     sal_Int32           mnStrmOffset;
 };
-
 
 
 class VbaStorageObject : public OleStorageObject
@@ -831,7 +779,6 @@ private:
 };
 
 
-
 class VbaFormStorageObject : public VbaContainerStorageObject
 {
 public:
@@ -851,7 +798,6 @@ protected:
 private:
     VbaSharedData&      mrVbaData;
 };
-
 
 
 class VbaProjectStorageObject : public OleStorageObject
@@ -876,8 +822,6 @@ private:
 };
 
 
-
-
 class ActiveXStorageObject : public VbaContainerStorageObject
 {
 public:
@@ -891,8 +835,6 @@ protected:
                             const BinaryInputStreamRef& rxStrm,
                             const OUString& rSysFileName ) override;
 };
-
-
 
 
 } // namespace dump

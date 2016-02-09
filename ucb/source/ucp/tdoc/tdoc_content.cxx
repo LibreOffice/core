@@ -89,11 +89,7 @@ static ContentType lcl_getContentType( const OUString & rType )
 }
 
 
-
-
 // Content Implementation.
-
-
 
 
 // static ( "virtual" ctor )
@@ -166,9 +162,7 @@ Content::~Content()
 }
 
 
-
 // XInterface methods.
-
 
 
 // virtual
@@ -208,9 +202,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 }
 
 
-
 // XTypeProvider methods.
-
 
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
@@ -292,9 +284,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -326,9 +316,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 }
 
 
-
 // XContent methods.
-
 
 
 // virtual
@@ -359,9 +347,7 @@ Content::getIdentifier()
 }
 
 
-
 // XCommandProcessor methods.
-
 
 
 // virtual
@@ -668,9 +654,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 }
 
 
-
 // XContentCreator methods.
-
 
 
 // virtual
@@ -2925,11 +2909,7 @@ uno::Reference< io::XStream > Content::getStream(
 }
 
 
-
-
 // ContentProperties Implementation.
-
-
 
 
 uno::Sequence< ucb::ContentInfo >

@@ -97,8 +97,6 @@ public:
 };
 
 
-
-
 typedef cppu::WeakComponentImplHelper<
     awt::XMouseListener,
     awt::XMouseMotionListener > Listener_UnoBase;
@@ -151,9 +149,6 @@ private:
     EventQueue*           mpEventQueue;
     EventMultiplexerImpl* mpEventMultiplexer;
 };
-
-
-
 
 
 struct EventMultiplexerImpl
@@ -307,9 +302,6 @@ struct EventMultiplexerImpl
 };
 
 
-
-
-
 void SAL_CALL EventMultiplexerListener::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
@@ -401,9 +393,6 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
                                     e ),
                        "EventMultiplexerImpl::mouseMoved") );
 }
-
-
-
 
 
 bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
@@ -689,8 +678,6 @@ bool EventMultiplexerImpl::notifyNextEffect()
         []( const PrioritizedHandlerEntry< EventHandler >& pHandler )
         { return pHandler.getHandler()->handleEvent(); } );
 }
-
-
 
 
 EventMultiplexer::EventMultiplexer( EventQueue&             rEventQueue,

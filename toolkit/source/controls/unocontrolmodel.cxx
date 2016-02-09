@@ -1356,7 +1356,6 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
 }
 
 
-
 void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*,
     uno::Any*, sal_Int32* ) const
 {

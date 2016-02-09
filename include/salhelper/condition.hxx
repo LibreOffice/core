@@ -58,7 +58,6 @@ namespace salhelper
     };
 
 
-
     class SALHELPER_DLLPUBLIC ConditionModifier
     {
     public:
@@ -74,7 +73,6 @@ namespace salhelper
 
         Condition& m_aCond;
     };
-
 
 
     class SALHELPER_DLLPUBLIC ConditionWaiter

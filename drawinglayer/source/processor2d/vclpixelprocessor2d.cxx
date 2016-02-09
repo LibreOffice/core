@@ -57,7 +57,6 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
 
-
 using namespace com::sun::star;
 
 namespace {

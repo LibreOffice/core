@@ -41,7 +41,6 @@
 namespace sdr { namespace table {
 
 
-
 class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
 protected:
@@ -55,7 +54,6 @@ public:
     OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
     virtual ~OverlayTableEdge();
 };
-
 
 
 TableEdgeHdl::TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges )
@@ -200,7 +198,6 @@ void TableEdgeHdl::CreateB2dIAObject()
 }
 
 
-
 OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
 :   OverlayObject(Color(COL_GRAY))
 ,   maPolyPolygon( rPolyPolygon )
@@ -243,7 +240,6 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
 
     return aRetval;
 }
-
 
 
 TableBorderHdl::TableBorderHdl(

@@ -25,8 +25,6 @@
 #include <sal/macros.h>
 
 
-
-
 STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =

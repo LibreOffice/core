@@ -30,7 +30,6 @@
 using namespace ::com::sun::star;
 
 
-
 TransferableClipboardListener::TransferableClipboardListener( const Link<TransferableDataHelper*,void>& rCallback ) :
     aLink( rCallback )
 {

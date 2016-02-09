@@ -26,13 +26,11 @@
 #include "svx/svdotable.hxx"
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::beans;
-
 
 
 namespace sdr { namespace table {
@@ -58,11 +56,9 @@ TableColumn::TableColumn( const TableModelRef& xTableModel, sal_Int32 nColumn )
 }
 
 
-
 TableColumn::~TableColumn()
 {
 }
-
 
 
 void TableColumn::dispose()
@@ -71,13 +67,11 @@ void TableColumn::dispose()
 }
 
 
-
 void TableColumn::throwIfDisposed() const throw (css::uno::RuntimeException)
 {
     if( !mxTableModel.is() )
         throw DisposedException();
 }
-
 
 
 TableColumn& TableColumn::operator=( const TableColumn& r )
@@ -106,7 +100,6 @@ Reference< XCell > SAL_CALL TableColumn::getCellByPosition( sal_Int32 nColumn, s
 }
 
 
-
 Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     throwIfDisposed();
@@ -116,7 +109,6 @@ Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByPosition( sal_Int32 
     }
     throw IndexOutOfBoundsException();
 }
-
 
 
 Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException, std::exception)
@@ -132,7 +124,6 @@ OUString SAL_CALL TableColumn::getName() throw (RuntimeException, std::exception
 {
     return maName;
 }
-
 
 
 void SAL_CALL TableColumn::setName( const OUString& aName ) throw (RuntimeException, std::exception)
@@ -232,7 +223,6 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
 }
 
 
-
 Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     switch( nHandle )
@@ -244,7 +234,6 @@ Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle ) throw (Unkno
     default:                        throw UnknownPropertyException();
     }
 }
-
 
 
 rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
@@ -303,7 +292,6 @@ sal_Int32 TableColumn::getWidth() const
 {
     return mnWidth;
 }
-
 
 } }
 

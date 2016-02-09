@@ -26,9 +26,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

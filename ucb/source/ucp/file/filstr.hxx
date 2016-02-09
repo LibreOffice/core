@@ -153,7 +153,6 @@ class XStream_impl :  public cppu::WeakImplHelper<
                    css::uno::RuntimeException, std::exception) override;
 
 
-
         void SAL_CALL
         flush()
             throw( css::io::NotConnectedException,

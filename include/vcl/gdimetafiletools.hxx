@@ -40,7 +40,6 @@ void VCL_DLLPUBLIC clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource);
 bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource);
 
 
-
 #endif // INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

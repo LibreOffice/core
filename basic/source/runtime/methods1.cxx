@@ -984,7 +984,6 @@ RTLFUNC(FindPropertyObject)
 }
 
 
-
 static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                                       bool bBinary, short nBlockLen, bool bIsArray )
 {

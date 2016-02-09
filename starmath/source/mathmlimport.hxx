@@ -37,7 +37,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-
 class SmXMLImportWrapper
 {
     css::uno::Reference<css::frame::XModel> xModel;
@@ -65,7 +64,6 @@ public:
         css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName );
 };
-
 
 
 class SmXMLImport : public SvXMLImport
@@ -252,7 +250,6 @@ public:
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
 };
-
 
 
 enum SmXMLMathElemTokenMap

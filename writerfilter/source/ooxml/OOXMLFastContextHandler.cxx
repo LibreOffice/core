@@ -310,7 +310,6 @@ void OOXMLFastContextHandler::setDefine(Id nDefine)
 }
 
 
-
 void OOXMLFastContextHandler::setToken(Token_t nToken)
 {
     mnToken = nToken;

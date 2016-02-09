@@ -27,7 +27,6 @@
 #include <svx/sdr/animation/animationstate.hxx>
 
 
-
 namespace sdr
 {
     namespace animation
@@ -41,7 +40,6 @@ namespace sdr
         };
     } // end of namespace animation
 } // end of namespace sdr
-
 
 
 #endif // INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX

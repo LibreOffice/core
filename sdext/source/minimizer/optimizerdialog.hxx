@@ -127,7 +127,6 @@ public:
 };
 
 
-
 class ItemListener : public ::cppu::WeakImplHelper< css::awt::XItemListener >
 {
 public:
@@ -139,7 +138,6 @@ private:
 
     OptimizerDialog& mrOptimizerDialog;
 };
-
 
 
 class ActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListener >
@@ -155,7 +153,6 @@ private:
 };
 
 
-
 class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper< css::awt::XActionListener >
 {
 public:
@@ -167,7 +164,6 @@ private:
 
     OptimizerDialog& mrOptimizerDialog;
 };
-
 
 
 class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper< css::awt::XTextListener >
@@ -183,7 +179,6 @@ private:
 };
 
 
-
 class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper< css::awt::XTextListener >
 {
 public:
@@ -195,7 +190,6 @@ private:
 
     OptimizerDialog& mrOptimizerDialog;
 };
-
 
 
 class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper< css::awt::XSpinListener >

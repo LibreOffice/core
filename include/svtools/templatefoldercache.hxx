@@ -29,7 +29,6 @@ namespace svt
 {
 
 
-
     //= TemplateFolderCache
 
     class TemplateFolderCacheImpl;

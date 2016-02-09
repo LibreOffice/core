@@ -1505,7 +1505,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG linde
 }
 
 
-
 // IOleWindow methods
 
 STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
@@ -1670,7 +1669,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid,
 
     return E_FAIL;
 }
-
 
 
 // InternalCacheWrapper

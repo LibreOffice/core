@@ -98,13 +98,9 @@ PanelFactory::PanelFactory()
 }
 
 
-
-
 PanelFactory::~PanelFactory()
 {
 }
-
-
 
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (

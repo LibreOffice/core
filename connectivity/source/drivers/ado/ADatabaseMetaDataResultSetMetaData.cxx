@@ -119,7 +119,6 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency( sal_Int32 colu
 }
 
 
-
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
@@ -218,7 +217,6 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 colu
         return (*m_mColumnsIter).second.isWritable();
     return isDefinitelyWritable(column);
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

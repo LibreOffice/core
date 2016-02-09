@@ -103,7 +103,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
 
-
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 
 static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
@@ -209,7 +208,6 @@ IMPL_LINK_TYPED( SfxToolBoxControl_Impl, WindowEventListener, VclWindowEvent&, r
 }
 
 
-
 SfxToolBoxControl::SfxToolBoxControl(
     sal_uInt16      nSlotID,
     sal_uInt16      nID,
@@ -228,12 +226,10 @@ SfxToolBoxControl::SfxToolBoxControl(
 }
 
 
-
 SfxToolBoxControl::~SfxToolBoxControl()
 {
     delete pImpl;
 }
-
 
 
 ToolBox& SfxToolBoxControl::GetToolBox() const
@@ -248,7 +244,6 @@ unsigned short SfxToolBoxControl::GetSlotId() const
 {
     return pImpl->nSlotId;
 }
-
 
 
 void SAL_CALL SfxToolBoxControl::dispose() throw (css::uno::RuntimeException, std::exception)
@@ -622,7 +617,6 @@ void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 {
     if ( pImpl->mpPopupWindow->IsVisible() )
@@ -652,7 +646,6 @@ IMPL_LINK_TYPED( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow,
     else
         pImpl->mpPopupWindow = nullptr;
 }
-
 
 
 void SfxToolBoxControl::StateChanged
@@ -713,12 +706,10 @@ void SfxToolBoxControl::StateChanged
 }
 
 
-
 void SfxToolBoxControl::Select( sal_uInt16 nSelectModifier )
 {
     svt::ToolboxController::execute( nSelectModifier );
 }
-
 
 
 void SfxToolBoxControl::DoubleClick()
@@ -726,11 +717,9 @@ void SfxToolBoxControl::DoubleClick()
 }
 
 
-
 void SfxToolBoxControl::Click()
 {
 }
-
 
 
 VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
@@ -768,11 +757,9 @@ SfxFrameStatusListener::SfxFrameStatusListener(
 }
 
 
-
 SfxFrameStatusListener::~SfxFrameStatusListener()
 {
 }
-
 
 
 // XStatusListener
@@ -997,14 +984,12 @@ SfxFrameStatusListener* SfxPopupWindow::GetOrCreateStatusListener()
 }
 
 
-
 void SfxPopupWindow::BindListener()
 {
     GetOrCreateStatusListener();
     if ( m_xStatusListener.is() )
         m_pStatusListener->bindListener();
 }
-
 
 
 void SfxPopupWindow::UnbindListener()
@@ -1015,14 +1000,12 @@ void SfxPopupWindow::UnbindListener()
 }
 
 
-
 void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 {
     GetOrCreateStatusListener();
     if ( m_xStatusListener.is() )
         m_pStatusListener->addStatusListener( rCommandURL );
 }
-
 
 
 bool SfxPopupWindow::Close()
@@ -1033,7 +1016,6 @@ bool SfxPopupWindow::Close()
     Delete();
     return true;
 }
-
 
 
 void SfxPopupWindow::PopupModeEnd()
@@ -1052,7 +1034,6 @@ void SfxPopupWindow::PopupModeEnd()
 }
 
 
-
 void SfxPopupWindow::DeleteFloatingWindow()
 {
     if ( m_bFloating )
@@ -1061,7 +1042,6 @@ void SfxPopupWindow::DeleteFloatingWindow()
         Delete();
     }
 }
-
 
 
 void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
@@ -1089,12 +1069,10 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
 }
 
 
-
 void SfxPopupWindow::StartCascading()
 {
     m_bCascading = true;
 }
-
 
 
 void SfxPopupWindow::StateChanged(
@@ -1121,7 +1099,6 @@ void SfxPopupWindow::StateChanged(
         Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
     }
 }
-
 
 
 void SfxPopupWindow::Delete()

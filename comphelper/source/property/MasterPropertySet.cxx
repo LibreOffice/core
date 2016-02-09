@@ -51,7 +51,6 @@ AutoOGuardArray::~AutoOGuardArray()
 }
 
 
-
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

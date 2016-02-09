@@ -60,7 +60,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace texture
@@ -95,7 +94,6 @@ namespace drawinglayer
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -193,7 +191,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace texture
@@ -278,7 +275,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace texture
@@ -333,7 +329,6 @@ namespace drawinglayer
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -412,7 +407,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace texture
@@ -469,7 +463,6 @@ namespace drawinglayer
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -546,7 +539,6 @@ namespace drawinglayer
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -694,7 +686,6 @@ namespace drawinglayer
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

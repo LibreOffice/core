@@ -85,7 +85,6 @@ void XMLAutoTextEventImport::initialize(
 }
 
 
-
 SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,

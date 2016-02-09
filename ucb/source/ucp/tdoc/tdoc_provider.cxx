@@ -43,11 +43,7 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-
-
 // ContentProvider Implementation.
-
-
 
 
 ContentProvider::ContentProvider(
@@ -65,7 +61,6 @@ ContentProvider::~ContentProvider()
     if ( m_xDocsMgr.is() )
         m_xDocsMgr->destroy();
 }
-
 
 
 // XInterface methods.
@@ -96,7 +91,6 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_4( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
@@ -104,9 +98,7 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
                       frame::XTransientDocumentsDocumentContentFactory );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_1_CTX(
@@ -115,17 +107,13 @@ XSERVICEINFO_IMPL_1_CTX(
     TDOC_CONTENT_PROVIDER_SERVICE_NAME );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 
-
 // XContentProvider methods.
-
 
 
 // virtual
@@ -161,9 +149,7 @@ ContentProvider::queryContent(
 }
 
 
-
 // XTransientDocumentsDocumentContentFactory methods.
-
 
 
 // virtual
@@ -227,9 +213,7 @@ ContentProvider::createDocumentContent(
 }
 
 
-
 // interface OfficeDocumentsEventListener
-
 
 
 // virtual
@@ -329,9 +313,7 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
 }
 
 
-
 // Non-UNO
-
 
 
 uno::Reference< embed::XStorage >

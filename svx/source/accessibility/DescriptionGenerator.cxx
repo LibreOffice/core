@@ -62,13 +62,9 @@ DescriptionGenerator::DescriptionGenerator (
 }
 
 
-
-
 DescriptionGenerator::~DescriptionGenerator()
 {
 }
-
-
 
 
 void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
@@ -83,8 +79,6 @@ void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
     // Forward the call with the resulting string.
     Initialize (sPrefix);
 }
-
-
 
 
 void DescriptionGenerator::Initialize (const OUString& sPrefix)
@@ -123,15 +117,11 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
 }
 
 
-
-
 OUString DescriptionGenerator::operator() (void)
 {
     msDescription.append('.');
     return msDescription.makeStringAndClear();
 }
-
-
 
 
 void DescriptionGenerator::AddProperty (
@@ -147,8 +137,6 @@ void DescriptionGenerator::AddProperty (
     }
     AddProperty (sPropertyName, aType, sLocalizedName, nWhichId);
 }
-
-
 
 
 void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
@@ -192,14 +180,10 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
 }
 
 
-
-
 void DescriptionGenerator::AppendString (const OUString& sString)
 {
     msDescription.append (sString);
 }
-
-
 
 
 void DescriptionGenerator::AddLineProperties()
@@ -211,8 +195,6 @@ void DescriptionGenerator::AddLineProperties()
 }
 
 
-
-
 /** The fill style is described by the property "FillStyle".  Depending on
     its value a hatch-, gradient-, or bitmap name is appended.
 */
@@ -220,8 +202,6 @@ void DescriptionGenerator::AddFillProperties()
 {
     AddProperty ("FillStyle", DescriptionGenerator::FILL_STYLE, SIP_XA_FILLSTYLE);
 }
-
-
 
 
 void DescriptionGenerator::Add3DProperties()
@@ -233,15 +213,11 @@ void DescriptionGenerator::Add3DProperties()
 }
 
 
-
-
 void DescriptionGenerator::AddTextProperties()
 {
     AddProperty ("CharColor", DescriptionGenerator::COLOR);
     AddFillProperties ();
 }
-
-
 
 
 /** Search for the given color in the global color table.  If found append
@@ -272,8 +248,6 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 }
 
 
-
-
 void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
@@ -295,8 +269,6 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
         msDescription.append ("<unknown>");
     }
 }
-
-
 
 
 void DescriptionGenerator::AddString (const OUString& sPropertyName,
@@ -330,8 +302,6 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
         msDescription.append ("<unknown>");
     }
 }
-
-
 
 
 void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,

@@ -437,5 +437,4 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoMarkerTable_createInstance( Sdr
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

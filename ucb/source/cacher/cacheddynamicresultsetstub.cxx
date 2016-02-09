@@ -126,9 +126,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
                         CACHED_DRS_STUB_SERVICE_NAME );
 
 
-
 // class CachedDynamicResultSetStubFactory
-
 
 
 CachedDynamicResultSetStubFactory::CachedDynamicResultSetStubFactory(

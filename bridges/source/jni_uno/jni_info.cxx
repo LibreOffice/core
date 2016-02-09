@@ -56,7 +56,6 @@ JNI_type_info::JNI_type_info(
 }
 
 
-
 void JNI_interface_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
@@ -222,7 +221,6 @@ JNI_interface_type_info::JNI_interface_type_info(
 }
 
 
-
 void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 {
     JNI_type_info::destruct( jni_env );
@@ -342,7 +340,6 @@ JNI_compound_type_info::JNI_compound_type_info(
 
     m_class = static_cast<jclass>(jni->NewGlobalRef( jo_class.get() ));
 }
-
 
 
 JNI_type_info const * JNI_info::create_type_info(

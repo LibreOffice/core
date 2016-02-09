@@ -25,7 +25,6 @@
 #include <svx/svdhdl.hxx>
 
 
-
 namespace sdr { namespace table {
 
 enum TableEdgeState { Empty, Invisible, Visible };

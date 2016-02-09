@@ -35,7 +35,6 @@ namespace comphelper
 {
 
 
-
     //= OInteraction
 
     /** template for instantiating concret interaction handlers<p/>

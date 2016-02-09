@@ -152,8 +152,6 @@ SmPrintUIOptions::SmPrintUIOptions()
 }
 
 
-
-
 // class SmModel
 
 
@@ -924,7 +922,6 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
         }
     }
 }
-
 
 
 sal_Int32 SAL_CALL SmModel::getRendererCount(

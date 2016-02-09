@@ -38,7 +38,6 @@
 #define OWN_CALLMODE    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD
 
 
-
 #define TEST_COLS()                                                 \
 {                                                                   \
     nR = aCol.GetRed(); nG = aCol.GetGreen(); nB = aCol.GetBlue();  \
@@ -156,7 +155,6 @@ void MaskSet::onEditColor()
 }
 
 
-
 class MaskData
 {
     VclPtr<SvxBmpMask>     pMask;
@@ -177,7 +175,6 @@ public:
                 DECL_LINK_TYPED( FocusLbHdl, Control&, void );
                 DECL_LINK_TYPED(ExecHdl, Button*, void);
 };
-
 
 
 MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
@@ -230,7 +227,6 @@ IMPL_LINK_TYPED( MaskData, CbxHdl, Button*, pButton, void )
         PipetteHdl(pMask->m_pTbxPipette);
     }
 }
-
 
 
 IMPL_LINK_TYPED( MaskData, CbxTransHdl, Button*, pButton, void )
@@ -294,7 +290,6 @@ IMPL_LINK_TYPED( MaskData, CbxTransHdl, Button*, pButton, void )
 }
 
 
-
 IMPL_LINK_TYPED( MaskData, FocusLbHdl, Control&, rControl, void )
 {
     ColorLB* pLb = static_cast<ColorLB*>(&rControl);
@@ -304,7 +299,6 @@ IMPL_LINK_TYPED( MaskData, FocusLbHdl, Control&, rControl, void )
     pMask->m_pQSet3->SelectItem( pLb == pMask->m_pLbColor3 ? 1 : 0 /* , false */ );
     pMask->m_pQSet4->SelectItem( pLb == pMask->m_pLbColor4 ? 1 : 0 /* , false */ );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(MaskData, ExecHdl, Button*, void)
@@ -605,7 +599,6 @@ void SvxBmpMask::SetExecState( bool bEnable )
 }
 
 
-
 sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
 {
     sal_uInt16  nCount = 0;
@@ -642,7 +635,6 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
 }
 
 
-
 Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
 {
     Bitmap          aBitmap( rBitmap );
@@ -657,7 +649,6 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
 
     return aBitmap;
 }
-
 
 
 BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const long nTol )
@@ -675,7 +666,6 @@ BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color&
 
     return aBmpEx;
 }
-
 
 
 Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
@@ -696,7 +686,6 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
 
     return aAnimation;
 }
-
 
 
 GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
@@ -955,7 +944,6 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 }
 
 
-
 BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color& rColor )
 {
     if( rBmpEx.IsTransparent() )
@@ -967,7 +955,6 @@ BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color
     else
         return rBmpEx;
 }
-
 
 
 Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Color& rColor )
@@ -984,7 +971,6 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
 
     return aAnimation;
 }
-
 
 
 GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const Color& rColor )
@@ -1018,7 +1004,6 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
 
     return aMtf;
 }
-
 
 
 Graphic SvxBmpMask::Mask( const Graphic& rGraphic )

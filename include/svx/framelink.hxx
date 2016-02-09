@@ -177,7 +177,6 @@ inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
 inline bool operator<=( const Style& rL, const Style& rR ) { return !(rR < rL); }
 
 
-
 /** Extends the Style struct with an angle for diagonal frame borders.
 
     The angle is specified in radian (a full circle is equivalent to 2*PI).
@@ -223,7 +222,6 @@ inline double GetHorDiagAngle( const Rectangle& rRect )
 { return GetHorDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
 
 
-
 /** Returns the angle between vertical border of a rectangle and its diagonal.
 
     The returned values represents the inner angle between the diagonals and
@@ -240,7 +238,6 @@ inline double GetVerDiagAngle( long nWidth, long nHeight )
  */
 inline double GetVerDiagAngle( const Rectangle& rRect )
 { return GetVerDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
-
 
 
 /** Returns an X coordinate for a diagonal frame border in the specified height.
@@ -356,7 +353,6 @@ long GetBRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
         Inner (left) angle between diagonal and horizontal frame border.
  */
 long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
-
 
 
 /** Checks whether two horizontal frame borders are "connectable".
@@ -541,7 +537,6 @@ SVX_DLLPUBLIC void DrawHorFrameBorder(
 );
 
 
-
 /** Draws a vertical frame border, regards all connected frame styles.
 
     The frame style to draw is passed as parameter rBorder. The function
@@ -612,7 +607,6 @@ SVX_DLLPUBLIC void DrawVerFrameBorder(
 );
 
 
-
 /** Draws both diagonal frame borders, regards all connected frame styles.
 
     One or both passed diagonal frame styles may be invisible.
@@ -639,7 +633,6 @@ SVX_DLLPUBLIC void DrawDiagFrameBorders(
     const Color*        pForceColor = nullptr,        /// If specified, overrides frame border color.
     bool                bDiagDblClip = false    /// true = Use clipping for crossing double frame borders.
 );
-
 
 
 }

@@ -352,5 +352,4 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

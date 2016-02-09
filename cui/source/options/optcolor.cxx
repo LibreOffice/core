@@ -499,7 +499,6 @@ void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
 }
 
 
-
 // ColorConfigWindow_Impl
 
 
@@ -1038,7 +1037,6 @@ IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
         ScrollHdl(m_pVScroll);
     }
 };
-
 
 
 // SvxColorOptionsTabPage

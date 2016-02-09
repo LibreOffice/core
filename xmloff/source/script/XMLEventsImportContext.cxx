@@ -38,7 +38,6 @@ using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::IllegalArgumentException;
 
 
-
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

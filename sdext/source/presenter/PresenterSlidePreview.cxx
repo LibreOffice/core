@@ -217,7 +217,6 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterSlidePreview::getCurrentPage()
 }
 
 
-
 void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPage)
 {
     mxCurrentSlide = rxPage;

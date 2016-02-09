@@ -31,7 +31,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 //  class VCLXAccessibleStatusBar
 
 
@@ -45,11 +44,9 @@ VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
 }
 
 
-
 VCLXAccessibleStatusBar::~VCLXAccessibleStatusBar()
 {
 }
-
 
 
 void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
@@ -65,7 +62,6 @@ void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
         }
     }
 }
-
 
 
 void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
@@ -86,7 +82,6 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 }
 
 
-
 void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 {
     if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
@@ -103,7 +98,6 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
         }
     }
 }
-
 
 
 void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
@@ -123,7 +117,6 @@ void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
         }
     }
 }
-
 
 
 void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
@@ -149,7 +142,6 @@ void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
         }
     }
 }
-
 
 
 void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -287,7 +279,6 @@ OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeExceptio
 }
 
 
-
 Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleStatusBar" };
@@ -304,7 +295,6 @@ sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeExcep
 
     return m_aAccessibleChildren.size();
 }
-
 
 
 Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -350,7 +340,6 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const aw
 
     return xChild;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

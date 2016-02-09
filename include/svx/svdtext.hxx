@@ -25,7 +25,6 @@
 #include <tools/weakbase.hxx>
 
 
-
 class OutlinerParaObject;
 class SdrOutliner;
 class SdrTextObj;

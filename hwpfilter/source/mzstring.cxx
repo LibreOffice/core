@@ -248,7 +248,6 @@ void MzString::replace(int pos, char ch)
 }
 
 
-
 // Private Methods.
 
 

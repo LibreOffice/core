@@ -42,7 +42,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 
 
-
 namespace basprov
 {
 
@@ -57,8 +56,6 @@ namespace basprov
     // BasicScriptImpl
 
 
-
-
     BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
@@ -69,7 +66,6 @@ namespace basprov
     {
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, cppu::UnoType<decltype(m_caller)>::get() );
     }
-
 
 
     BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod,
@@ -290,8 +286,6 @@ namespace basprov
 
         return aReturn;
     }
-
-
 
 
 }   // namespace basprov

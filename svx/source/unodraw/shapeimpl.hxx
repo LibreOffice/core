@@ -87,8 +87,6 @@ public:
 };
 
 
-
-
 class SvxTableShape : public SvxShape
 {
 protected:

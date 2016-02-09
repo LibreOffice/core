@@ -78,9 +78,6 @@ namespace connectivity
         };
 
 
-
-
-
         class ONDXPage;
 
         // Index Page Pointer
@@ -325,8 +322,6 @@ namespace connectivity
     }
 
 }
-
-
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXNODE_HXX

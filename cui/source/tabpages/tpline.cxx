@@ -554,7 +554,6 @@ void SvxLineTabPage::FillListboxes()
 }
 
 
-
 void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     const CntUInt16Item* pPageTypeItem = rSet.GetItem<CntUInt16Item>(SID_PAGE_TYPE, false);
@@ -684,7 +683,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-
 SfxTabPage::sfxpg SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( m_nDlgType == 0 ) // Line dialog
@@ -702,7 +700,6 @@ SfxTabPage::sfxpg SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
@@ -1112,7 +1109,6 @@ bool SvxLineTabPage::FillXLSet_Impl()
 }
 
 
-
 void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 {
     drawing::LineStyle  eXLS; // drawing::LineStyle_NONE, drawing::LineStyle_SOLID, drawing::LineStyle_DASH
@@ -1514,7 +1510,6 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 }
 
 
-
 VclPtr<SfxTabPage> SvxLineTabPage::Create( vcl::Window* pWindow,
                                            const SfxItemSet* rAttrs )
 {
@@ -1590,7 +1585,6 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(void * pCntrl )
 }
 
 
-
 IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartClickHdl_Impl, Button*, p, void )
 {
     ChangeStartHdl_Impl(p);
@@ -1617,7 +1611,6 @@ void SvxLineTabPage::ChangeStartHdl_Impl( void * p )
 
     ChangePreviewHdl_Impl( nullptr );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeEdgeStyleHdl_Impl, ListBox&, void)
@@ -1667,7 +1660,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ClickInvisibleHdl_Impl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndClickHdl_Impl, Button*, p, void )
 {
     ChangeEndHdl_Impl(p);
@@ -1696,7 +1688,6 @@ void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
@@ -1710,12 +1701,10 @@ IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
 }
 
 
-
 void SvxLineTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
 {
     m_eRP = eRcPt;
 }
-
 
 
 void SvxLineTabPage::FillUserData()

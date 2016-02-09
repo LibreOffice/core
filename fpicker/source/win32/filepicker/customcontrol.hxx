@@ -31,9 +31,6 @@
 #endif
 
 
-
-
-
 class CCustomControl
 {
 public:

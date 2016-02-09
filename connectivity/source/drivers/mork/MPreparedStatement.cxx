@@ -225,7 +225,6 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const D
 }
 
 
-
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setTime", *this );
@@ -242,7 +241,6 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, doubl
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setDouble", *this );
 }
-
 
 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -326,7 +324,6 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const 
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBytes", *this );
 }
-
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -512,7 +509,6 @@ sal_Bool SAL_CALL OPreparedStatement::getMoreResults(  ) throw(::com::sun::star:
 {
     return sal_False;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

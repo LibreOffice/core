@@ -178,7 +178,6 @@ css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype() throw (cs
 } // closing anonymous implementation namespace
 
 
-
 // component helper namespace
 namespace comp_CLiteral {
 

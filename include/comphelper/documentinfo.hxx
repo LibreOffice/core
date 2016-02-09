@@ -28,7 +28,6 @@
 namespace comphelper {
 
 
-
     //= DocumentInfo
 
     namespace  DocumentInfo

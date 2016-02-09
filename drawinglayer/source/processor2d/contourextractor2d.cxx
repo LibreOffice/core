@@ -30,9 +30,7 @@
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

@@ -40,7 +40,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
 
-
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -51,7 +50,6 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
     rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
-
 
 
 void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
@@ -65,7 +63,6 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         GetToolBox().CheckItem(
             GetId(), xLayoutMgr->isElementVisible( m_sToolboxName ) );
 }
-
 
 
 void SvxTbxCtlDraw::toggleToolbox()
@@ -89,7 +86,6 @@ void SvxTbxCtlDraw::toggleToolbox()
         GetToolBox().CheckItem( GetId(), bCheck );
     }
 }
-
 
 
 void SvxTbxCtlDraw::Select(sal_uInt16 /*nSelectModifier*/)

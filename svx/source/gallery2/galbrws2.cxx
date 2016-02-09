@@ -1312,7 +1312,6 @@ OUString GalleryBrowser2::GetFilterName() const
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(GalleryBrowser2, SelectObjectValueSetHdl, ValueSet*, void)
 {
     ImplUpdateInfoBar();

@@ -54,7 +54,6 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
 }
 
 
-
 void OAdoIndex::refreshColumns()
 {
     TStringVector aVector;
@@ -140,9 +139,6 @@ void SAL_CALL OAdoIndex::release() throw()
 {
     OIndex_ADO::release();
 }
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,6 @@ namespace basic
 {
 
 
-
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
     OUString maScriptLanguage;
@@ -174,7 +173,6 @@ public:
 protected:
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const override;
 };
-
 
 
 }   // namespace basic

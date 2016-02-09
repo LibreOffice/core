@@ -68,7 +68,6 @@
 using namespace ::com::sun::star;
 
 
-
 namespace slideshow
 {
 namespace internal
@@ -285,9 +284,6 @@ private:
 };
 
 
-
-
-
 void slideRenderer( SlideImpl* pSlide, const UnoViewSharedPtr& rView )
 {
     // fully clear view content to background color
@@ -312,9 +308,6 @@ void slideRenderer( SlideImpl* pSlide, const UnoViewSharedPtr& rView )
     pBitmap->clip( ::basegfx::B2DPolyPolygon() );
     pBitmap->draw( pDevicePixelCanvas );
 }
-
-
-
 
 
 SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDrawPage,
@@ -448,7 +441,6 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     mpShapeManager->activate( true );
 
 
-
     // render slide to screen, if requested
     if( !bSlideBackgoundPainted )
     {
@@ -457,7 +449,6 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
 
         maContext.mrScreenUpdater.notifyUpdate();
     }
-
 
 
     // fire up animations
@@ -505,10 +496,8 @@ void SlideImpl::hide()
         return; // already hidden/disposed
 
 
-
     // from now on, all animations are stopped
     meAnimationState = FINAL_STATE;
-
 
 
     // disable user paint overlay under all circumstances,
@@ -516,13 +505,11 @@ void SlideImpl::hide()
     deactivatePaintOverlay();
 
 
-
     // switch off all shape-intrinsic animations.
     endIntrinsicAnimations();
 
     // force-end all SMIL animations, too
     maAnimations.end();
-
 
 
     // disable shape management & event broadcasting for shapes of this
@@ -612,7 +599,6 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 
 
 // private methods
-
 
 
 void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )

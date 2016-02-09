@@ -1115,7 +1115,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction& rAct)
 }
 
 
-
 void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 {
     // #i73407# reformulation to use new B2DPolygon classes
@@ -1166,7 +1165,6 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 }
 
 
-
 void ImpSdrGDIMetaFileImport::DoAction(MetaLineColorAction& rAct)
 {
     rAct.Execute(mpVD);
@@ -1199,7 +1197,6 @@ void ImpSdrGDIMetaFileImport::MapScaling()
 
     mnMapScalingOfs = nCount;
 }
-
 
 
 void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rMtf, sal_uLong& a) // GDIMetaFile* pMtf )

@@ -38,7 +38,6 @@ class XFastTokenHandler;
 namespace sax_fastparser {
 
 
-
 class FastSaxParserImpl;
 
 // This class implements the external Parser interface

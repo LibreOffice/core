@@ -236,8 +236,6 @@ basegfx::B2IRange getLayerBoundsPixel( basegfx::B2DRange const&     rLayerBounds
 }
 
 
-
-
 /** Container class for sprites issued by a ViewLayer
 
     This class handles the sprite prioritization issues, that are
@@ -365,9 +363,6 @@ public:
         maSprites.clear();
     }
 };
-
-
-
 
 
 /** This class provides layers for a slide view
@@ -660,8 +655,6 @@ private:
         return bRet;
     }
 };
-
-
 
 
 typedef cppu::WeakComponentImplHelper<

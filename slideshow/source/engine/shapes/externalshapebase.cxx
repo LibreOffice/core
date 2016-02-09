@@ -100,7 +100,6 @@ namespace slideshow
         }
 
 
-
         ExternalShapeBase::~ExternalShapeBase()
         {
             try
@@ -118,12 +117,10 @@ namespace slideshow
         }
 
 
-
         uno::Reference< drawing::XShape > ExternalShapeBase::getXShape() const
         {
             return mxShape;
         }
-
 
 
         void ExternalShapeBase::play()
@@ -132,12 +129,10 @@ namespace slideshow
         }
 
 
-
         void ExternalShapeBase::stop()
         {
             implEndIntrinsicAnimation();
         }
-
 
 
         void ExternalShapeBase::pause()
@@ -146,12 +141,10 @@ namespace slideshow
         }
 
 
-
         bool ExternalShapeBase::isPlaying() const
         {
             return implIsIntrinsicAnimationPlaying();
         }
-
 
 
         void ExternalShapeBase::setMediaTime(double fTime)
@@ -160,12 +153,10 @@ namespace slideshow
         }
 
 
-
         bool ExternalShapeBase::update() const
         {
             return render();
         }
-
 
 
         bool ExternalShapeBase::render() const
@@ -181,12 +172,10 @@ namespace slideshow
         }
 
 
-
         bool ExternalShapeBase::isContentChanged() const
         {
             return true;
         }
-
 
 
         ::basegfx::B2DRectangle ExternalShapeBase::getBounds() const
@@ -195,12 +184,10 @@ namespace slideshow
         }
 
 
-
         ::basegfx::B2DRectangle ExternalShapeBase::getDomBounds() const
         {
             return maBounds;
         }
-
 
 
         ::basegfx::B2DRectangle ExternalShapeBase::getUpdateArea() const
@@ -209,19 +196,16 @@ namespace slideshow
         }
 
 
-
         bool ExternalShapeBase::isVisible() const
         {
             return true;
         }
 
 
-
         double ExternalShapeBase::getPriority() const
         {
             return mnPriority;
         }
-
 
 
         bool ExternalShapeBase::isBackgroundDetached() const

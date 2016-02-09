@@ -35,8 +35,6 @@
 // namespace directives
 
 
-
-
 // ctor
 
 
@@ -139,9 +137,6 @@ sal_Bool SAL_CALL CFilterContainer::getFilter( const OUString& aName, OUString& 
 }
 
 
-
-
-
 sal_Bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFilter ) const
 {
     sal_Bool bRet = sal_True;
@@ -158,9 +153,6 @@ sal_Bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFi
 
     return bRet;
 }
-
-
-
 
 
 sal_Int32 SAL_CALL CFilterContainer::getFilterPos( const OUString& aName ) const
@@ -229,9 +221,6 @@ OUString SAL_CALL CFilterContainer::getCurrentFilter() const
 }
 
 
-
-
-
 // calculates the length of a '\0' separated filter, that means
 // length of the name + '\0' + length of the filter string +
 // a trailing '\0'
@@ -260,9 +249,6 @@ static sal_uInt32 _getTotalFilterLength( CFilterContainer& aFilterContainer )
 
     return ( totalLength > 0 ) ? totalLength + 1 : totalLength;
 }
-
-
-
 
 
 inline

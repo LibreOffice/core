@@ -31,7 +31,6 @@ namespace oox {
 namespace ole {
 
 
-
 /** Implements stream access for binary OLE storages. */
 class OOX_DLLPUBLIC OleStorage : public StorageBase
 {
@@ -99,7 +98,6 @@ private:
                         mxStorage;          ///< Access to elements of this sub storage.
     const OleStorage*   mpParentStorage;    ///< Parent OLE storage that contains this storage.
 };
-
 
 
 } // namespace ole

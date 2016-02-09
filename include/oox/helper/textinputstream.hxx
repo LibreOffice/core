@@ -34,7 +34,6 @@ namespace oox {
 class BinaryInputStream;
 
 
-
 class TextInputStream
 {
 public:
@@ -88,7 +87,6 @@ public:
     OUString     readToChar( sal_Unicode cChar, bool bIncludeChar );
 
 
-
     /** Creates a UNO text input stream object from the passed UNO input stream.
      */
     static css::uno::Reference< css::io::XTextInputStream2 >
@@ -112,7 +110,6 @@ private:
                         mxTextStrm;
     sal_Unicode         mcPendingChar;
 };
-
 
 
 } // namespace oox

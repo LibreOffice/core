@@ -75,7 +75,6 @@ namespace frm
     }
 
 
-
     void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
         ControlModelLock aLock( m_rControlModel );

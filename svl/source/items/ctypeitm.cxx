@@ -33,7 +33,6 @@
 // class CntContentTypeItem Implementation.
 
 
-
 #define CONTENT_TYPE_NOT_INIT ( (INetContentType)-1 )
 
 CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const OUString& rType )

@@ -22,7 +22,6 @@
 #include <svtools/brwbox.hxx>
 
 
-
 BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
  :HeaderBar( pParent, nWinBits )
  ,_pBrowseBox( pParent )
@@ -48,7 +47,6 @@ void BrowserHeader::dispose()
 }
 
 
-
 void BrowserHeader::Command( const CommandEvent& rCEvt )
 {
     if ( !GetCurItemId() && CommandEventId::ContextMenu == rCEvt.GetCommand() )
@@ -63,12 +61,10 @@ void BrowserHeader::Command( const CommandEvent& rCEvt )
 }
 
 
-
 void BrowserHeader::Select()
 {
     HeaderBar::Select();
 }
-
 
 
 void BrowserHeader::EndDrag()
@@ -111,9 +107,6 @@ void BrowserHeader::EndDrag()
         }
     }
 }
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

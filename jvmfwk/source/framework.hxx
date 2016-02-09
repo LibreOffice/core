@@ -79,7 +79,6 @@ public:
     ::JavaInfo * pInfo;
 
 
-
     CJavaInfo();
     CJavaInfo(const CJavaInfo &);
     ~CJavaInfo();

@@ -34,7 +34,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 
-
 // static ServiceInfo
 
 OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
@@ -48,7 +47,6 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException, std
 }
 
 // service names from file::OFileDriver
-
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL

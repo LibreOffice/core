@@ -51,12 +51,7 @@ using namespace tdoc_ucp;
 // OfficeDocumentsCloseListener Implementation.
 
 
-
-
-
-
 // util::XCloseListener
-
 
 
 // virtual
@@ -81,9 +76,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
 }
 
 
-
 // lang::XDocumentEventListener (base of util::XCloseListener)
-
 
 
 // virtual
@@ -94,11 +87,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
 }
 
 
-
-
 // OfficeDocumentsManager Implementation.
-
-
 
 
 OfficeDocumentsManager::OfficeDocumentsManager(
@@ -175,9 +164,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 }
 
 
-
 // document::XDocumentEventListener
-
 
 
 // virtual

@@ -90,7 +90,6 @@ protected:
 };
 
 
-
 } // namespace salhelper
 
 #endif /* ! INCLUDED_SALHELPER_REFOBJ_HXX */

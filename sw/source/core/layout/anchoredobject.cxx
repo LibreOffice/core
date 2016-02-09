@@ -112,9 +112,6 @@ void SwAnchoredObject::SetDrawObj( SdrObject& _rDrawObj )
 }
 
 
-
-
-
 void SwAnchoredObject::ChgAnchorFrame( SwFrame* _pNewAnchorFrame )
 {
     mpAnchorFrame = _pNewAnchorFrame;
@@ -143,7 +140,6 @@ SwFrame* SwAnchoredObject::GetAnchorFrameContainingAnchPos()
 
     return pAnchorFrameContainingAnchPos;
 }
-
 
 
 void SwAnchoredObject::SetPageFrame( SwPageFrame* _pNewPageFrame )

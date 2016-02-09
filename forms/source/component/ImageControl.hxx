@@ -36,7 +36,6 @@ namespace frm
 {
 
 
-
 // OImageControlModel
 
 typedef ::cppu::ImplHelper2 <   css::form::XImageProducerSupplier

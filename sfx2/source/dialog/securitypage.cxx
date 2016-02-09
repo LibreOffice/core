@@ -45,7 +45,6 @@
 using namespace ::com::sun::star;
 
 
-
 namespace
 {
     enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
@@ -427,7 +426,6 @@ SfxSecurityPage::SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& rItemS
 {
     m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
 }
-
 
 
 bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )

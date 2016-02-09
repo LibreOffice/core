@@ -61,7 +61,6 @@
 #endif
 
 
-
 #ifdef UNX
 
 #ifndef ODBC_UNX
@@ -78,7 +77,6 @@
 #define SDB_ODBC_CHAR UCHAR
 
 #endif // UNX
-
 
 
 #ifndef SQL_WCHAR

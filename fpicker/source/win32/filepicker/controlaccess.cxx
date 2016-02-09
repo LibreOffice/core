@@ -30,9 +30,7 @@
 // which contains function pointer to control action functions
 
 
-
 // namespace directives
-
 
 
 namespace // private
@@ -108,9 +106,6 @@ namespace // private
     };
 
 
-
-
-
     CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction(
         CTRL_SETVALUE_FUNCTION_T* aCtrlSetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
     {
@@ -121,9 +116,6 @@ namespace // private
 
         return aCtrlSetValueFunctionTable[aCtrlAction];
     }
-
-
-
 
 
     CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction(
@@ -138,17 +130,11 @@ namespace // private
     }
 
 
-
-
-
     inline
     _ENTRY SAL_CALL GetCtrlClassSetValueFunctionTable( CTRL_CLASS aCtrlClass )
     {
         return CtrlClassSetValueFunctionTable[aCtrlClass];
     }
-
-
-
 
 
     inline
@@ -174,9 +160,6 @@ namespace // private
 }; // end namespace
 
 
-
-
-
 CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
     _ENTRY aEntry =
@@ -189,9 +172,6 @@ CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass
 }
 
 
-
-
-
 CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
     _ENTRY aEntry =
@@ -202,9 +182,6 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
         aEntry.TableSize,
         aCtrlAction );
 }
-
-
-
 
 
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
@@ -233,9 +210,6 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 
     return aCtrlClass;
 }
-
-
-
 
 
 int SAL_CALL CommonFilePickerCtrlIdToWinFileOpenCtrlId( sal_Int16 aControlId )

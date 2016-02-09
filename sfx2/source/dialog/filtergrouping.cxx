@@ -119,8 +119,6 @@ namespace sfx2
     */
 
 
-
-
     typedef StringPair                          FilterDescriptor;   // a single filter or a filter class (display name and filter mask)
     typedef ::std::list< FilterDescriptor >     FilterGroup;        // a list of single filter entries
     typedef ::std::list< FilterGroup >          GroupedFilterList;  // a list of all filters, already grouped
@@ -147,7 +145,6 @@ namespace sfx2
 
 
 // = reading of configuration data
-
 
 
     void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
@@ -335,7 +332,6 @@ namespace sfx2
 
 
 // = grouping and classifying
-
 
 
     // a struct which adds helps remembering a reference to a class entry
@@ -762,7 +758,6 @@ namespace sfx2
 // = handling for the "all files" entry
 
 
-
     bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
     {
         bool        bHasAll = false;
@@ -797,7 +792,6 @@ namespace sfx2
 
 
 // = filling an XFilterManager
-
 
 
     struct AppendFilterGroup : public ::std::unary_function< FilterGroup, void >
@@ -1188,7 +1182,6 @@ namespace sfx2
 
 
 }   // namespace sfx2
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

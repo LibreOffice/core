@@ -109,7 +109,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
 }
 
 
-
 // XServiceInfo methods.
 
 OUString SAL_CALL FTPContentProvider::getImplementationName()
@@ -288,7 +287,6 @@ bool  FTPContentProvider::setHost( const OUString& host,
 
     return !present;
 }
-
 
 
 Reference<XContentProvider> FTPContentProvider::getHttpProvider()

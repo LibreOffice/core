@@ -49,7 +49,6 @@
 #include "editattr.hxx"
 
 
-
 // class EditCharAttrib
 
 EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE ) :
@@ -68,7 +67,6 @@ EditCharAttrib::~EditCharAttrib()
 void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 {
 }
-
 
 
 // class EditCharAttribFont

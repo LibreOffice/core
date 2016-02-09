@@ -155,11 +155,9 @@ BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext
 }
 
 
-
 BackingComp::~BackingComp()
 {
 }
-
 
 
 /** return information about supported interfaces.
@@ -215,7 +213,6 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
 }
 
 
-
 /** increase ref count of this instance.
  */
 
@@ -226,7 +223,6 @@ void SAL_CALL BackingComp::acquire()
 }
 
 
-
 /** decrease ref count of this instance.
  */
 
@@ -235,7 +231,6 @@ void SAL_CALL BackingComp::release()
 {
     OWeakObject::release();
 }
-
 
 
 /** return collection about all supported interfaces.
@@ -285,7 +280,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     }
     return pTypeCollection->getTypes();
 }
-
 
 
 /** create one unique Id for all instances of this class.
@@ -453,7 +447,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
 }
 
 
-
 /** not supported.
 
     This component does not know any model. It will be represented by a window and
@@ -467,7 +460,6 @@ sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< cs
 {
     return false;
 }
-
 
 
 /** not supported.
@@ -485,7 +477,6 @@ css::uno::Reference< css::frame::XModel > SAL_CALL BackingComp::getModel()
 }
 
 
-
 /** not supported.
 
     return  An empty value.
@@ -498,7 +489,6 @@ css::uno::Any SAL_CALL BackingComp::getViewData()
 }
 
 
-
 /** not supported.
 
     @param  aData
@@ -509,7 +499,6 @@ void SAL_CALL BackingComp::restoreViewData( /*IN*/ const css::uno::Any& )
     throw (css::uno::RuntimeException, std::exception)
 {
 }
-
 
 
 /** returns the attached frame for this component.
@@ -528,7 +517,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     return m_xFrame;
     /* } SAFE */
 }
-
 
 
 /** ask controller for its current working state.
@@ -550,7 +538,6 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     /* FIXME ... implemented by using default :-( */
     return true;
 }
-
 
 
 /** callback from our window member.
@@ -586,7 +573,6 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     /* } SAFE */
 }
-
 
 
 /** kill this instance.
@@ -640,7 +626,6 @@ void SAL_CALL BackingComp::dispose()
 }
 
 
-
 /** not supported.
 
     @param  xListener
@@ -660,7 +645,6 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
 }
 
 
-
 /** not supported.
 
     Because registration is not supported too, we must do nothing here. Nobody can call this method really.
@@ -673,7 +657,6 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
     throw(css::uno::RuntimeException, std::exception)
 {
 }
-
 
 
 /**
@@ -739,7 +722,6 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 }
 
 
-
 /**
  */
 
@@ -747,7 +729,6 @@ void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
     throw(css::uno::RuntimeException, std::exception)
 {
 }
-
 
 
 /**

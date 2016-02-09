@@ -30,7 +30,6 @@ namespace pcr
 {
 
 
-
     //= IPropertyInfoService
 
     class SAL_NO_VTABLE IPropertyInfoService

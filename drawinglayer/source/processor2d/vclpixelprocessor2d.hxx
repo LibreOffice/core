@@ -38,7 +38,6 @@ namespace drawinglayer { namespace primitive2d {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace processor2d
@@ -76,7 +75,6 @@ namespace drawinglayer
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX

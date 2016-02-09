@@ -30,7 +30,6 @@ namespace oox {
 namespace drawingml {
 
 
-
 const sal_Int32 THEMED_STYLE_SUBTLE     = 1;
 const sal_Int32 THEMED_STYLE_MODERATE   = 2;
 const sal_Int32 THEMED_STYLE_INTENSE    = 3;
@@ -100,7 +99,6 @@ private:
     Shape               maTxDef;
     css::uno::Reference< css::xml::dom::XDocument> mxFragment;
 };
-
 
 
 } // namespace drawingml

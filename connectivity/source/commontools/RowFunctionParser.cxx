@@ -33,7 +33,6 @@
 #include <tools/fract.hxx>
 
 
-
 #if (OSL_DEBUG_LEVEL > 0)
 #include <iostream>
 #endif
@@ -122,10 +121,7 @@ public:
 };
 
 
-
-
 // FUNCTION PARSER
-
 
 
 typedef const sal_Char* StringIteratorT;

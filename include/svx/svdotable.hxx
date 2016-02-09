@@ -28,7 +28,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 class SvStream;
 class SfxStyleSheet;
 class SdrUndoAction;
@@ -59,7 +58,6 @@ enum TableHitKind
     SDRTABLEHIT_HORIZONTAL_BORDER,
     SDRTABLEHIT_VERTICAL_BORDER
 };
-
 
 
 struct CellPos
@@ -319,7 +317,6 @@ private:
 private:
     SdrTableObjImpl*    mpImpl;
 };
-
 
 
 } }

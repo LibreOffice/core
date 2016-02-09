@@ -28,7 +28,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
 
-
 XInputStream_impl::XInputStream_impl( const OUString& aUncPath )
     : m_bIsOpen( false ),
       m_aFile( aUncPath )
@@ -71,7 +70,6 @@ XInputStream_impl::release(
 {
     OWeakObject::release();
 }
-
 
 
 sal_Int32 SAL_CALL

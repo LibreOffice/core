@@ -59,7 +59,6 @@ OUString OO3ExtensionMigration_getImplementationName()
 }
 
 
-
 Sequence< OUString > OO3ExtensionMigration_getSupportedServiceNames()
 {
     return Sequence< OUString > { "com.sun.star.migration.Extensions" };
@@ -73,7 +72,6 @@ OO3ExtensionMigration::OO3ExtensionMigration(Reference< XComponentContext > cons
 m_ctx(ctx)
 {
 }
-
 
 
 OO3ExtensionMigration::~OO3ExtensionMigration()
@@ -296,7 +294,6 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 }
 
 
-
 // XServiceInfo
 
 
@@ -306,13 +303,11 @@ OUString OO3ExtensionMigration::getImplementationName() throw (RuntimeException,
 }
 
 
-
 sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
-
 
 
 Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames() throw (RuntimeException, std::exception)
@@ -461,7 +456,6 @@ Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
     return static_cast< lang::XTypeProvider * >( new OO3ExtensionMigration(
         ctx) );
 }
-
 
 
 }   // namespace migration

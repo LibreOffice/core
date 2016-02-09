@@ -186,7 +186,6 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
 }
 
 
-
 void SdrPaintWindow::impCreateOverlayManager()
 {
     // not yet one created?

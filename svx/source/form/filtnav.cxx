@@ -141,7 +141,6 @@ Image FmFilterData::GetImage() const
 }
 
 
-
 FmParentData::~FmParentData()
 {
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
@@ -150,13 +149,11 @@ FmParentData::~FmParentData()
 }
 
 
-
 Image FmFormItem::GetImage() const
 {
     ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
     return aNavigatorImages.GetImage( RID_SVXIMG_FORM );
 }
-
 
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
@@ -180,7 +177,6 @@ Image FmFilterItems::GetImage() const
     ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
     return aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
 }
-
 
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
@@ -1251,7 +1247,6 @@ IMPL_LINK_NOARG_TYPED(FmFilterNavigator, OnDropActionTimer, Timer *, void)
         break;
     }
 }
-
 
 
 sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )

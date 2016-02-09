@@ -111,12 +111,4 @@ SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSM
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
 
 
-
-
-
-
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

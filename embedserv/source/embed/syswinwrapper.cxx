@@ -48,7 +48,6 @@ typedef CHatchWin *PCHatchWin;
 void DrawShading(LPRECT prc, HDC hDC, UINT cWidth);
 
 
-
 winwrap::CWindow::CWindow(HINSTANCE hInst)
 {
     m_hInst=hInst;
@@ -65,7 +64,6 @@ winwrap::CWindow::~CWindow()
 }
 
 
-
 /*
  * CWindow::Window
  *
@@ -80,7 +78,6 @@ HWND winwrap::CWindow::Window()
 {
     return m_hWnd;
 }
-
 
 
 /*
@@ -131,8 +128,6 @@ BOOL winwrap::HatchWindowRegister(HINSTANCE hInst)
 }
 
 
-
-
 /*
  * CHatchWin:CHatchWin
  * CHatchWin::~CHatchWin
@@ -174,7 +169,6 @@ CHatchWin::~CHatchWin()
 
     return;
 }
-
 
 
 /*
@@ -305,7 +299,6 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
 }
 
 
-
 /*
  * CHatchWin::ChildSet
  *
@@ -333,7 +326,6 @@ void CHatchWin::ChildSet(HWND hWndKid)
 
     return;
 }
-
 
 
 /*
@@ -365,7 +357,6 @@ void CHatchWin::ShowHatch(BOOL fHatch)
     RectsSet(&m_rcPos, &m_rcClip);
     return;
 }
-
 
 
 /*

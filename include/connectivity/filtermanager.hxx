@@ -33,7 +33,6 @@ namespace dbtools
 {
 
 
-
     //= FilterManager
 
     /** manages the filter of a database component with filter properties

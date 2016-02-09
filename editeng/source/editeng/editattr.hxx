@@ -322,7 +322,6 @@ public:
 };
 
 
-
 // class EditCharAttribLanguage
 
 class EditCharAttribLanguage : public EditCharAttrib

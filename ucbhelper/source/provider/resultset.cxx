@@ -32,7 +32,6 @@
 using namespace com::sun::star;
 
 
-
 namespace ucbhelper_impl
 {
 
@@ -76,9 +75,7 @@ static const PropertyInfo aPropertyTable[] =
 #define RESULTSET_PROPERTY_COUNT 2
 
 
-
 // class PropertySetInfo
-
 
 
 class PropertySetInfo :
@@ -140,9 +137,7 @@ namespace ucbhelper
 {
 
 
-
 // struct ResultSet_Impl.
-
 
 
 struct ResultSet_Impl
@@ -193,11 +188,7 @@ inline ResultSet_Impl::~ResultSet_Impl()
 }
 
 
-
-
 // ResultSet Implementation.
-
-
 
 
 ResultSet::ResultSet(
@@ -229,7 +220,6 @@ ResultSet::ResultSet(
 ResultSet::~ResultSet()
 {
 }
-
 
 
 // XInterface methods.
@@ -266,7 +256,6 @@ css::uno::Any SAL_CALL ResultSet::queryInterface( const css::uno::Type & rType )
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_9( ResultSet,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
@@ -279,9 +268,7 @@ XTYPEPROVIDER_IMPL_9( ResultSet,
                       beans::XPropertySet );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
@@ -289,9 +276,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
                     RESULTSET_SERVICE_NAME );
 
 
-
 // XComponent methods.
-
 
 
 // virtual
@@ -346,9 +331,7 @@ void SAL_CALL ResultSet::removeEventListener(
 }
 
 
-
 // XResultSetMetaDataSupplier methods.
-
 
 
 // virtual
@@ -365,9 +348,7 @@ uno::Reference< sdbc::XResultSetMetaData > SAL_CALL ResultSet::getMetaData()
 }
 
 
-
 // XResultSet methods.
-
 
 
 // virtual
@@ -767,9 +748,7 @@ uno::Reference< uno::XInterface > SAL_CALL ResultSet::getStatement()
 }
 
 
-
 // XRow methods.
-
 
 
 // virtual
@@ -1244,9 +1223,7 @@ ResultSet::getArray( sal_Int32 columnIndex )
 }
 
 
-
 // XCloseable methods.
-
 
 
 // virtual
@@ -1258,9 +1235,7 @@ void SAL_CALL ResultSet::close()
 }
 
 
-
 // XContentAccess methods.
-
 
 
 // virtual
@@ -1300,9 +1275,7 @@ ResultSet::queryContent()
 }
 
 
-
 // XPropertySet methods.
-
 
 
 // virtual
@@ -1450,9 +1423,7 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
 }
 
 
-
 // Non-interface methods.
-
 
 
 void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt )
@@ -1544,11 +1515,7 @@ ResultSet::getEnvironment()
 namespace ucbhelper_impl {
 
 
-
-
 // PropertySetInfo Implementation.
-
-
 
 
 PropertySetInfo::PropertySetInfo(
@@ -1584,7 +1551,6 @@ PropertySetInfo::~PropertySetInfo()
 }
 
 
-
 // XInterface methods.
 void SAL_CALL PropertySetInfo::acquire()
     throw()
@@ -1612,15 +1578,12 @@ css::uno::Any SAL_CALL PropertySetInfo::queryInterface(
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_2( PropertySetInfo,
                          lang::XTypeProvider,
                          beans::XPropertySetInfo );
 
 
-
 // XPropertySetInfo methods.
-
 
 
 // virtual

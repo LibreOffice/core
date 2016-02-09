@@ -692,7 +692,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     pMainFrame->set_height_request(aMainFrame.Height());
 
 
-
     // groups that overlay each other
     m_pLbBitmap->Hide();
     m_pCtlBitmapPreview->Hide();
@@ -847,7 +846,6 @@ void SvxAreaTabPage::Construct()
 }
 
 
-
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_Int32 nCount(0);
@@ -996,7 +994,6 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-
 SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( m_nDlgType == 0 ) // area dialog
@@ -1046,7 +1043,6 @@ SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
@@ -1493,7 +1489,6 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
 }
 
 
-
 void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 {
     bool isMissingHatching(false);
@@ -1851,7 +1846,6 @@ VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, SelectDialogTypeHdl_Impl, ListBox&, void)
 {
     switch( (drawing::FillStyle)m_pTypeLB->GetSelectEntryPos() )
@@ -1888,7 +1882,6 @@ void SvxAreaTabPage::ClickInvisibleHdl_Impl()
 }
 
 
-
 void SvxAreaTabPage::ClickColorHdl_Impl()
 {
     m_pBxBitmap->Hide();
@@ -1910,7 +1903,6 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
 
     ModifyColorHdl_Impl( *m_pLbColor );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyColorHdl_Impl, ListBox&, void)
@@ -1966,7 +1958,6 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
@@ -1990,7 +1981,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 }
-
 
 
 void SvxAreaTabPage::ClickHatchingHdl_Impl()
@@ -2020,7 +2010,6 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
@@ -2046,7 +2035,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
@@ -2069,7 +2057,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl, ListBox&, 
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void)
 {
     // switch on/off backgroundcolor for hatches
@@ -2090,7 +2077,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl, CheckBox&,
         }
     }
 }
-
 
 
 void SvxAreaTabPage::ClickBitmapHdl_Impl()
@@ -2139,7 +2125,6 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
 {
     //UUUU
@@ -2168,7 +2153,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
 }
-
 
 
 IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountClickHdl_Impl, Button*, p, void )
@@ -2400,7 +2384,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyTileHdl_Impl, Edit&, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ClickScaleHdl_Impl, Button*, void)
 {
     if( m_pTsbScale->GetState() == TRISTATE_TRUE )
@@ -2434,7 +2417,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ClickScaleHdl_Impl, Button*, void)
 
     ModifyTileHdl_Impl( *m_pMtrFldXSize );
 }
-
 
 
 void SvxAreaTabPage::PointChanged( vcl::Window* , RECT_POINT eRcPt )

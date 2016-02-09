@@ -44,7 +44,6 @@ namespace pcr
 {
 
 
-
     //= ListLikeControlWithModifyHandler
 
     /** Very small helper class which adds a SetModifyHdl to a ListBox-derived class,

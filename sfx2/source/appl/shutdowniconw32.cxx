@@ -89,7 +89,6 @@ typedef struct tagMYITEM
 } MYITEM;
 
 
-
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw, const OUString& module )
 {
     MENUITEMINFOW mi;
@@ -132,7 +131,6 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
 
     InsertMenuItemW( hMenu, pos++, TRUE, &mi );
 }
-
 
 
 static HMENU createSystrayMenu( )
@@ -200,7 +198,6 @@ static HMENU createSystrayMenu( )
     }
 
 
-
     // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, "");
@@ -216,7 +213,6 @@ static HMENU createSystrayMenu( )
 
     return hMenu;
 }
-
 
 
 static void deleteSystrayMenu( HMENU hMenu )
@@ -243,7 +239,6 @@ static void deleteSystrayMenu( HMENU hMenu )
 }
 
 
-
 static void addTaskbarIcon( HWND hWnd )
 {
     OUString strTip;
@@ -266,7 +261,6 @@ static void addTaskbarIcon( HWND hWnd )
 
     Shell_NotifyIconW(NIM_ADD, &nid);
 }
-
 
 
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -387,7 +381,6 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -445,8 +438,6 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-
-
 DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 {
     osl_setThreadName("SystrayThread");
@@ -475,7 +466,6 @@ DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 
     return msg.wParam; // Exit code of WM_QUIT
 }
-
 
 
 void win32_init_sys_tray()
@@ -534,7 +524,6 @@ void win32_init_sys_tray()
 }
 
 
-
 void win32_shutdown_sys_tray()
 {
     if ( ShutdownIcon::IsQuickstarterInstalled() )
@@ -550,9 +539,6 @@ void win32_shutdown_sys_tray()
         UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( NULL ) );
     }
 }
-
-
-
 
 
 void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)

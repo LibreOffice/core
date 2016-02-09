@@ -18,7 +18,6 @@
  */
 
 
-
 //  sp_collector.cpp
 
 //  Copyright (c) 2002, 2003 Peter Dimov

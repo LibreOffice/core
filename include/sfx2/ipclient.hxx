@@ -37,7 +37,6 @@ class SfxObjectShell;
 class Fraction;
 
 
-
 class SFX2_DLLPUBLIC SfxInPlaceClient
 {
 friend class SfxInPlaceClient_Impl;

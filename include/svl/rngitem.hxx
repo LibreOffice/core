@@ -26,7 +26,6 @@
 class SvStream;
 
 
-
 class SVL_DLLPUBLIC SfxRangeItem : public SfxPoolItem
 {
 private:
@@ -47,7 +46,6 @@ public:
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 };
-
 
 
 class SVL_DLLPUBLIC SfxUShortRangesItem : public SfxPoolItem

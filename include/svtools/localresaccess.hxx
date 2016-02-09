@@ -29,7 +29,6 @@ namespace svt
 {
 
 
-
     //= OLocalResourceAccess
 
     /** helper class for acessing local resources

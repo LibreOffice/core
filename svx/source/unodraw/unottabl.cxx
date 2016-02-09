@@ -92,5 +92,4 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTransGradientTable_createInstan
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -193,9 +193,7 @@ UcbPropertiesManager::~UcbPropertiesManager()
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_1( UcbPropertiesManager,
@@ -203,17 +201,13 @@ XSERVICEINFO_IMPL_1( UcbPropertiesManager,
                      PROPERTIES_MANAGER_SERVICE_NAME );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbPropertiesManager );
 
 
-
 // XPropertySetInfo methods.
-
 
 
 // virtual
@@ -245,9 +239,7 @@ sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name 
 }
 
 
-
 // Non-Interface methods.
-
 
 
 bool UcbPropertiesManager::queryProperty(

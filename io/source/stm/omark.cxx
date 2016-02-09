@@ -316,7 +316,6 @@ sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 }
 
 
-
 // XActiveDataSource2
 void OMarkableOutputStream::setOutputStream(const Reference < XOutputStream >& aStream)
     throw (RuntimeException, std::exception)
@@ -334,7 +333,6 @@ Reference< XOutputStream > OMarkableOutputStream::getOutputStream() throw (Runti
 {
     return m_output;
 }
-
 
 
 void OMarkableOutputStream::setSuccessor( const Reference< XConnectable > &r )
@@ -456,14 +454,7 @@ Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames()
 }
 
 
-
-
-
-
-
-
 // XMarkableInputStream
-
 
 
 class OMarkableInputStream :
@@ -563,8 +554,6 @@ OMarkableInputStream::~OMarkableInputStream()
         delete m_pBuffer;
     }
 }
-
-
 
 
 // XInputStream
@@ -807,11 +796,6 @@ sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 }
 
 
-
-
-
-
-
 // XActiveDataSource
 void OMarkableInputStream::setInputStream(const Reference< XInputStream > & aStream)
     throw (RuntimeException, std::exception)
@@ -832,7 +816,6 @@ Reference< XInputStream > OMarkableInputStream::getInputStream() throw (RuntimeE
 {
     return m_input;
 }
-
 
 
 // XDataSink
@@ -874,8 +857,6 @@ Reference< XConnectable >  OMarkableInputStream::getPredecessor() throw (Runtime
 {
     return m_pred;
 }
-
-
 
 
 void OMarkableInputStream::checkMarksAndFlush()

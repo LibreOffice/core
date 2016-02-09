@@ -99,8 +99,6 @@ namespace cppu_threadpool
     }
 
 
-
-
     ThreadPool::ThreadPool() :
         m_DisposedCallerAdmin( DisposedCallerAdmin::getInstance() )
     {
@@ -368,7 +366,6 @@ struct uno_ThreadPool_Hash
             return reinterpret_cast<sal_Size>( a );
         }
 };
-
 
 
 typedef std::unordered_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;

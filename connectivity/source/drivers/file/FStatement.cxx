@@ -261,7 +261,6 @@ sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException,
 }
 
 
-
 Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

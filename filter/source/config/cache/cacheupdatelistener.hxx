@@ -30,8 +30,6 @@ namespace filter{
     namespace config{
 
 
-
-
 /** @short      implements a listener, which will update the
                 global filter cache, if the underlying configuration
                 wa changed by other processes.
@@ -83,17 +81,14 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
                             FilterCache::EItemType eConfigType);
 
 
-
         /** @short  standard dtor.
          */
         virtual ~CacheUpdateListener();
 
 
-
         /** @short  starts listening.
          */
         void startListening();
-
 
 
         /** @short  stop listening.

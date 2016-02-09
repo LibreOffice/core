@@ -87,7 +87,6 @@ RASReader::~RASReader()
 }
 
 
-
 bool RASReader::ReadRAS(Graphic & rGraphic)
 {
     sal_uInt32 nMagicNumber;
@@ -209,7 +208,6 @@ bool RASReader::ImplReadHeader()
     }
     return mbStatus;
 }
-
 
 
 bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)

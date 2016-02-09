@@ -49,11 +49,9 @@ namespace comphelper
     }
 
 
-
     OCommonAccessibleText::~OCommonAccessibleText()
     {
     }
-
 
 
     Reference < i18n::XBreakIterator > OCommonAccessibleText::implGetBreakIterator()
@@ -68,7 +66,6 @@ namespace comphelper
     }
 
 
-
     Reference < i18n::XCharacterClassification > OCommonAccessibleText::implGetCharacterClassification()
     {
         if ( !m_xCharClass.is() )
@@ -80,12 +77,10 @@ namespace comphelper
     }
 
 
-
     bool OCommonAccessibleText::implIsValidBoundary( i18n::Boundary& rBoundary, sal_Int32 nLength )
     {
         return ( rBoundary.startPos >= 0 ) && ( rBoundary.startPos < nLength ) && ( rBoundary.endPos >= 0 ) && ( rBoundary.endPos <= nLength );
     }
-
 
 
     bool OCommonAccessibleText::implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength )
@@ -94,12 +89,10 @@ namespace comphelper
     }
 
 
-
     bool OCommonAccessibleText::implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength )
     {
         return ( nStartIndex >= 0 ) && ( nStartIndex <= nLength ) && ( nEndIndex >= 0 ) && ( nEndIndex <= nLength );
     }
-
 
 
     void OCommonAccessibleText::implGetGlyphBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
@@ -130,7 +123,6 @@ namespace comphelper
             rBoundary.endPos = nIndex;
         }
     }
-
 
 
     bool OCommonAccessibleText::implGetWordBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
@@ -165,7 +157,6 @@ namespace comphelper
     }
 
 
-
     void OCommonAccessibleText::implGetSentenceBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
         OUString sText( implGetText() );
@@ -186,7 +177,6 @@ namespace comphelper
             rBoundary.endPos = nIndex;
         }
     }
-
 
 
     void OCommonAccessibleText::implGetParagraphBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
@@ -214,7 +204,6 @@ namespace comphelper
     }
 
 
-
     void OCommonAccessibleText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
         OUString sText( implGetText() );
@@ -233,7 +222,6 @@ namespace comphelper
     }
 
 
-
     sal_Unicode OCommonAccessibleText::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OUString sText( implGetText() );
@@ -245,12 +233,10 @@ namespace comphelper
     }
 
 
-
     sal_Int32 OCommonAccessibleText::getCharacterCount() throw (RuntimeException)
     {
         return implGetText().getLength();
     }
-
 
 
     OUString OCommonAccessibleText::getSelectedText() throw (RuntimeException)
@@ -273,7 +259,6 @@ namespace comphelper
     }
 
 
-
     sal_Int32 OCommonAccessibleText::getSelectionStart() throw (RuntimeException)
     {
         sal_Int32 nStartIndex;
@@ -283,7 +268,6 @@ namespace comphelper
 
         return nStartIndex;
     }
-
 
 
     sal_Int32 OCommonAccessibleText::getSelectionEnd() throw (RuntimeException)
@@ -297,12 +281,10 @@ namespace comphelper
     }
 
 
-
     OUString OCommonAccessibleText::getText() throw (RuntimeException)
     {
         return implGetText();
     }
-
 
 
     OUString OCommonAccessibleText::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -317,7 +299,6 @@ namespace comphelper
 
         return sText.copy( nMinIndex, nMaxIndex - nMinIndex );
     }
-
 
 
     TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
@@ -422,7 +403,6 @@ namespace comphelper
 
         return aResult;
     }
-
 
 
     TextSegment OCommonAccessibleText::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
@@ -547,7 +527,6 @@ namespace comphelper
 
         return aResult;
     }
-
 
 
     TextSegment OCommonAccessibleText::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
@@ -801,14 +780,12 @@ namespace comphelper
     }
 
 
-
     sal_Int32 OAccessibleTextHelper::getCharacterCount() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getCharacterCount();
     }
-
 
 
     OUString OAccessibleTextHelper::getSelectedText() throw (RuntimeException, std::exception)
@@ -819,14 +796,12 @@ namespace comphelper
     }
 
 
-
     sal_Int32 OAccessibleTextHelper::getSelectionStart() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getSelectionStart();
     }
-
 
 
     sal_Int32 OAccessibleTextHelper::getSelectionEnd() throw (RuntimeException, std::exception)
@@ -837,14 +812,12 @@ namespace comphelper
     }
 
 
-
     OUString OAccessibleTextHelper::getText() throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getText();
     }
-
 
 
     OUString OAccessibleTextHelper::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -855,14 +828,12 @@ namespace comphelper
     }
 
 
-
     TextSegment OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
     }
-
 
 
     TextSegment OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
@@ -873,15 +844,12 @@ namespace comphelper
     }
 
 
-
     TextSegment OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
     }
-
-
 
 
 }   // namespace comphelper

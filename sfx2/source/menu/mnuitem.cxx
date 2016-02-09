@@ -66,7 +66,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 
-
 // binds the instance to the specified id and assignes the title
 
 void SfxMenuControl::Bind(
@@ -89,8 +88,6 @@ void SfxMenuControl::Bind(
 }
 
 
-
-
 // binds the item to the specified menu and assignes the title
 
 void SfxMenuControl::Bind(
@@ -108,7 +105,6 @@ void SfxMenuControl::Bind(
 }
 
 
-
 // Constructor for explicit registration
 
 SfxMenuControl::SfxMenuControl( bool bShowStrings )
@@ -119,7 +115,6 @@ SfxMenuControl::SfxMenuControl( bool bShowStrings )
 }
 
 
-
 // Constructor for array
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(nullptr),
@@ -127,7 +122,6 @@ SfxMenuControl::SfxMenuControl():
     b_ShowStrings(false)
 {
 }
-
 
 
 SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
@@ -144,13 +138,10 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
 }
 
 
-
-
 SfxMenuControl::~SfxMenuControl()
 {
     delete pSubMenu;
 }
-
 
 
 // changes the state in the virtual menu
@@ -238,7 +229,6 @@ void SfxMenuControl::StateChanged
 }
 
 
-
 SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
 {
     return new SfxMenuControl( true );
@@ -288,7 +278,6 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
     }
     return nullptr;
 }
-
 
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const OUString& rCmd,

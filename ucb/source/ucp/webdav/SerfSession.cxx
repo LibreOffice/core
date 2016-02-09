@@ -213,7 +213,6 @@ char* SerfSession::getHostinfo()
 }
 
 
-
 // virtual
 bool SerfSession::CanUse( const OUString & inUri )
 {
@@ -769,7 +768,6 @@ SerfSession::GET( const OUString & inPath,
 
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
-
 
 
 // GET

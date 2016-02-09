@@ -75,7 +75,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_SVX_INC_XPOLYIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

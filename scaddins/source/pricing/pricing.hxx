@@ -44,7 +44,6 @@
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
 
 
-
 namespace sca {
 namespace pricing {
 
@@ -181,8 +180,6 @@ struct FindScaFuncData
 
 } // namespace pricing
 } // namespace sca
-
-
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(

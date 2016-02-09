@@ -247,7 +247,6 @@ SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
 };
 
 
-
 // property accessor helper functions
 inline bool GetBoolProperty(const OUString&,
                                       const Reference<XPropertySet> &);
@@ -270,7 +269,6 @@ inline util::DateTime const GetDateTimeProperty( const OUString& sPropName,
 inline Sequence<OUString> const GetStringSequenceProperty(
                                    const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
-
 
 
 XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
@@ -2426,7 +2424,6 @@ void XMLTextFieldExport::ProcessValueAndType(
 }
 
 
-
 /// process display related properties
 void XMLTextFieldExport::ProcessDisplay(bool bIsVisible,
                                         bool bIsCommand,
@@ -2451,7 +2448,6 @@ void XMLTextFieldExport::ProcessDisplay(bool bIsVisible,
 }
 
 
-
 /// export boolean property
 void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
                                         bool bBool, bool bDefault)
@@ -2467,8 +2463,6 @@ void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
                                  (bBool ? XML_TRUE : XML_FALSE) );
     }
 }
-
-
 
 
 /// export string attribute
@@ -2593,7 +2587,6 @@ void XMLTextFieldExport::ProcessIntegerDef(enum XMLTokenEnum eName,
     if (nNum != nDefault)
         ProcessInteger(eName, nNum);
 }
-
 
 
 /// export a numbering type
@@ -2739,7 +2732,6 @@ SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 };
 
 
-
 void XMLTextFieldExport::ProcessBibliographyData(
     const Reference<XPropertySet>& rPropSet)
 {
@@ -2880,7 +2872,6 @@ void XMLTextFieldExport::ExportDataBaseElement(
     // write presentation
     rExport.Characters( sPresentation );
 }
-
 
 
 // explode a field master name into field type and field name
@@ -3534,7 +3525,6 @@ OUString XMLTextFieldExport::MakeSequenceRefName(
 
 
 // to be relegated (does that word exist?) to a more appropriate place
-
 
 
 inline bool GetBoolProperty(

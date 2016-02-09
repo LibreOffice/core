@@ -63,7 +63,6 @@ void CacheUpdateListener::startListening()
 }
 
 
-
 void CacheUpdateListener::stopListening()
 {
     // SAFE ->
@@ -78,7 +77,6 @@ void CacheUpdateListener::stopListening()
     css::uno::Reference< css::util::XChangesListener > xThis(static_cast< css::util::XChangesListener* >(this), css::uno::UNO_QUERY);
     xNotifier->removeChangesListener(xThis);
 }
-
 
 
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
@@ -178,7 +176,6 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         xRefreshBroadcaster->refresh();
     }
 }
-
 
 
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)

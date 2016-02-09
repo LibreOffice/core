@@ -68,7 +68,6 @@ public:
 };
 
 
-
 static const sal_Int32 InitialObjectContainerCapacity (64);
 
 
@@ -679,8 +678,6 @@ size_t SdrObjList::GetObjCount() const
 }
 
 
-
-
 SdrObject* SdrObjList::GetObj(size_t nNum) const
 {
     if (nNum >= maList.size())
@@ -691,8 +688,6 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
     else
         return maList[nNum];
 }
-
-
 
 
 bool SdrObjList::IsReadOnly() const
@@ -760,14 +755,10 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
 }
 
 
-
-
 bool SdrObjList::HasObjectNavigationOrder() const
 {
     return mxNavigationOrder.get() != nullptr;
 }
-
-
 
 
 void SdrObjList::SetObjectNavigationPosition (
@@ -824,8 +815,6 @@ void SdrObjList::SetObjectNavigationPosition (
 }
 
 
-
-
 SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigationPosition) const
 {
     if (HasObjectNavigationOrder())
@@ -854,15 +843,11 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
 }
 
 
-
-
 void SdrObjList::ClearObjectNavigationOrder()
 {
     mxNavigationOrder.reset();
     mbIsNavigationOrderDirty = true;
 }
-
-
 
 
 bool SdrObjList::RecalcNavigationPositions()
@@ -883,8 +868,6 @@ bool SdrObjList::RecalcNavigationPositions()
 
     return mxNavigationOrder.get() != nullptr;
 }
-
-
 
 
 void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAccess>& rxOrder)
@@ -914,8 +897,6 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
 }
 
 
-
-
 void SdrObjList::InsertObjectIntoContainer (
     SdrObject& rObject,
     const sal_uInt32 nInsertPosition)
@@ -940,8 +921,6 @@ void SdrObjList::InsertObjectIntoContainer (
         maList.insert(maList.begin()+nInsertPosition, &rObject);
     bObjOrdNumsDirty=true;
 }
-
-
 
 
 void SdrObjList::ReplaceObjectInContainer (
@@ -977,8 +956,6 @@ void SdrObjList::ReplaceObjectInContainer (
     maList[nObjectPosition] = &rNewObject;
     bObjOrdNumsDirty=true;
 }
-
-
 
 
 void SdrObjList::RemoveObjectFromContainer (
@@ -1022,9 +999,6 @@ void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterEndElement(pWriter);
 }
-
-
-
 
 
 void SdrPageGridFrameList::Clear()
@@ -1190,8 +1164,6 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
     ImpPageChange(*mpSdrPage);
 }
-
-
 
 
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
@@ -1548,7 +1520,6 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         }
     }
 }
-
 
 
 // #i68775# React on PageNum changes (from Model in most cases)

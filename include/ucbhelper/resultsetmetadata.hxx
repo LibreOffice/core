@@ -44,7 +44,6 @@ namespace ucbhelper
 {
 
 
-
 /**
  * This is a structure that holds additional meta data for one column
  * of a resultset. The default values set in the constructor should be a
@@ -127,7 +126,6 @@ ResultSetColumnData::ResultSetColumnData()
   isDefinitelyWritable( false )
 {
 }
-
 
 
 /**

@@ -33,13 +33,11 @@ namespace oox {
 namespace core {
 
 
-
 namespace CodecHelper
 {
     /** Returns the password hash if it is in the required 16-bit limit. */
     OOX_DLLPUBLIC sal_uInt16   getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement );
 }
-
 
 
 /** Encodes and decodes data from/to protected MS Office documents.
@@ -164,7 +162,6 @@ private:
     sal_uInt16          mnBaseKey;          ///< Base key from password.
     sal_uInt16          mnHash;             ///< Hash value from password.
 };
-
 
 
 /** Encodes and decodes data from protected MSO 97+ documents.
@@ -296,7 +293,6 @@ private:
     sal_uInt8           mpnDigestValue[ RTL_DIGEST_LENGTH_MD5 ];
     sal_uInt8           mpnUnique[16];
 };
-
 
 
 } // namespace core

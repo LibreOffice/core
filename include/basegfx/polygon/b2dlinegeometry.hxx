@@ -28,7 +28,6 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-
 namespace basegfx
 {
     namespace tools

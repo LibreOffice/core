@@ -279,7 +279,6 @@ bool BackendImpl::activateEntry(OUString const & url)
 }
 
 
-
 // XPackageRegistry
 
 Sequence< Reference<deployment::XPackageTypeInfo> >
@@ -355,7 +354,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }
-
 
 
 void BackendImpl::configmgrini_verify_init(

@@ -26,7 +26,6 @@
 #include <com/sun/star/i18n/CharType.hpp>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

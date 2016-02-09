@@ -108,13 +108,11 @@ void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >&
 }
 
 
-
 uno::Type SAL_CALL GalleryThemeProvider::getElementType()
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<gallery::XGalleryTheme>::get();
 }
-
 
 
 sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
@@ -124,7 +122,6 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
 
     return( ( mpGallery != nullptr ) && ( mpGallery->GetThemeCount() > 0 ) );
 }
-
 
 
 uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
@@ -144,7 +141,6 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
 
     return aRet;
 }
-
 
 
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
@@ -168,7 +164,6 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
 }
 
 
-
 sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
     throw (uno::RuntimeException, std::exception)
 {
@@ -181,7 +176,6 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
 
     return bRet;
 }
-
 
 
 uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const OUString& rThemeName )
@@ -204,7 +198,6 @@ uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNe
 
     return xRet;
 }
-
 
 
 void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )

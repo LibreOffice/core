@@ -73,7 +73,6 @@ public:
 };
 
 
-
 static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pServicePurpose)
 {
     rtl::OUString result;

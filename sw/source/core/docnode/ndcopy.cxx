@@ -38,7 +38,6 @@
 #endif
 
 
-
 // Structure for the mapping from old and new frame formats to the
 // boxes and lines of a table
 struct _MapTableFrameFormat

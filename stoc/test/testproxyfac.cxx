@@ -97,7 +97,6 @@ Any TargetObject::queryInterface( Type const & type )
 int TargetObject::s_obj = 0;
 
 
-
 class TestMaster : public WeakImplHelper< lang::XServiceInfo >
 {
     Reference< XAggregation > m_xProxyTarget;

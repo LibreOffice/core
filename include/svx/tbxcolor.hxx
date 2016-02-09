@@ -27,7 +27,6 @@ namespace svx
 {
 
 
-
     //= ToolboxAccess
 
     class SVX_DLLPUBLIC ToolboxAccess

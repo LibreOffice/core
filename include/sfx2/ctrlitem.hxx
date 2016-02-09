@@ -84,7 +84,6 @@ public:
 };
 
 
-
 class SFX2_DLLPUBLIC SfxStatusForwarder: public SfxControllerItem
 {
     SfxControllerItem*      pMaster;

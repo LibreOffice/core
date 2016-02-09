@@ -28,11 +28,9 @@
 #include <vector>
 
 
-
 #define MIN_COLUMNWIDTH  2
 
 typedef ::std::vector< Rectangle* > RectangleList;
-
 
 
 class ButtonFrame
@@ -64,7 +62,6 @@ public:
 };
 
 
-
 class BrowserColumn
 {
     sal_uInt16          _nId;
@@ -93,7 +90,6 @@ public:
     void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);
     void                ZoomChanged(const Fraction& rNewZoom);
 };
-
 
 
 class BrowserDataWin
@@ -181,7 +177,6 @@ protected:
 };
 
 
-
 class BrowserScrollBar: public ScrollBar
 {
     sal_uLong           _nTip;
@@ -205,10 +200,8 @@ public:
 };
 
 
-
 void InitSettings_Impl( vcl::Window *pWin,
          bool bFont = true, bool bForeground = true, bool bBackground = true );
-
 
 
 #endif

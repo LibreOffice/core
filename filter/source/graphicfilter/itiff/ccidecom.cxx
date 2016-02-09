@@ -564,8 +564,6 @@ const CCIHuffmanTableEntry CCIUncompTableSave[CCIUncompTableSize]={
 };
 
 
-
-
 CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     bTableBad   ( false ),
     bStatus     ( false ),
@@ -1013,7 +1011,6 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
 
     } while (nTargetBits>0 || !bTerminatingCode);
 }
-
 
 
 void CCIDecompressor::Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits)

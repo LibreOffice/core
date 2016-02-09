@@ -46,14 +46,11 @@
 #include <sfx2/sfxresid.hxx>
 
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::cppu;
-
-
 
 
 sal_uInt16  SvxOpenGrfErr2ResId(    short   err     )

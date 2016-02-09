@@ -39,8 +39,6 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-
-
 PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet,

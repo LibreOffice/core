@@ -402,7 +402,6 @@ void OReportSection::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-
 void OReportSection::MouseMove( const MouseEvent& rMEvt )
 {
     m_pFunc->MouseMove( rMEvt );

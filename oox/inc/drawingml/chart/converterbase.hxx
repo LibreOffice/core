@@ -45,14 +45,12 @@ struct ChartSpaceModel;
 struct ConverterData;
 
 
-
 const sal_Int32 API_PRIM_AXESSET = 0;
 const sal_Int32 API_SECN_AXESSET = 1;
 
 const sal_Int32 API_X_AXIS = 0;
 const sal_Int32 API_Y_AXIS = 1;
 const sal_Int32 API_Z_AXIS = 2;
-
 
 
 class ConverterRoot
@@ -99,7 +97,6 @@ private:
 };
 
 
-
 /** Base class of all converter classes. Holds a reference to a model structure
     of the specified type.
  */
@@ -117,7 +114,6 @@ protected:
 protected:
     ModelType&          mrModel;
 };
-
 
 
 /** A layout converter calculates positions and sizes for various chart objects.
@@ -143,7 +139,6 @@ public:
                             double fRotationAngle );
     bool getAutoLayout(){return mrModel.mbAutoLayout;}
 };
-
 
 
 } // namespace chart

@@ -161,7 +161,6 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
 namespace dp_manager {
 
 
-
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
     ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >(getMutex()),
@@ -174,7 +173,6 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     m_repositoryNames.push_back("shared");
     m_repositoryNames.push_back("bundled");
 }
-
 
 
 ExtensionManager::~ExtensionManager()

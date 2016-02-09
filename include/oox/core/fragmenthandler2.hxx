@@ -29,7 +29,6 @@ namespace oox {
 namespace core {
 
 
-
 class OOX_DLLPUBLIC FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
 protected:
@@ -112,7 +111,6 @@ public:
 };
 
 typedef ::rtl::Reference< FragmentHandler2 > FragmentHandler2Ref;
-
 
 
 } // namespace core

@@ -407,7 +407,6 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
     const short aStatementType = getSqlInfoItem(isc_info_sql_stmt_type);
 
 
-
     ISC_STATUS_ARRAY aStatusVector;
     ISC_STATUS aErr;
 

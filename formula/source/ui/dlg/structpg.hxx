@@ -31,8 +31,6 @@
 #include "formula/omoduleclient.hxx"
 
 
-
-
 namespace formula
 {
 
@@ -63,7 +61,6 @@ public:
     void            GetFocus() override;
     void            LoseFocus() override;
 };
-
 
 
 class StructPage : public TabPage

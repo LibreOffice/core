@@ -88,7 +88,6 @@ namespace comphelper
 }
 
 
-
 GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 : PropertySetHelper( pInfo )
 ,m_aListener(maMutex)

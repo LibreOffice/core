@@ -29,7 +29,6 @@
 #include <vcl/settings.hxx>
 
 
-
 namespace sdr
 {
     namespace overlay

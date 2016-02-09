@@ -48,9 +48,6 @@ private:
 };
 
 
-
-
-
 class CValueControlCommandRequest : public CControlCommandRequest
 {
 public:

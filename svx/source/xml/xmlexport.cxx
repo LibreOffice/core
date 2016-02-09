@@ -176,7 +176,6 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             xTargetModel->lockControllers();
 
 
-
         pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
         xGraphicResolver = pGraphicHelper;
 
@@ -188,7 +187,6 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
                                         EMBEDDEDOBJECTHELPER_MODE_READ );
             xObjectResolver = pObjectHelper;
         }
-
 
 
         if( 0 == nRet )

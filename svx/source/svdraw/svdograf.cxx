@@ -640,7 +640,6 @@ bool SdrGrafObj::IsLinkedGraphic() const
 }
 
 
-
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;

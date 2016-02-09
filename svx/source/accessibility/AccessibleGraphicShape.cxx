@@ -39,8 +39,6 @@ AccessibleGraphicShape::AccessibleGraphicShape (
 }
 
 
-
-
 AccessibleGraphicShape::~AccessibleGraphicShape()
 {
 }
@@ -55,15 +53,11 @@ OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription()
 }
 
 
-
-
 sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight()
     throw (css::uno::RuntimeException, std::exception)
 {
     return AccessibleShape::getSize().Height;
 }
-
-
 
 
 sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth()
@@ -85,14 +79,12 @@ css::uno::Any SAL_CALL
 }
 
 
-
 void SAL_CALL
     AccessibleGraphicShape::acquire()
     throw ()
 {
     AccessibleShape::acquire ();
 }
-
 
 
 void SAL_CALL
@@ -109,8 +101,6 @@ OUString SAL_CALL
 {
     return OUString("AccessibleGraphicShape");
 }
-
-
 
 
 css::uno::Sequence< OUString> SAL_CALL
@@ -146,8 +136,6 @@ uno::Sequence<uno::Type> SAL_CALL
 
     return aTypeList;
 }
-
-
 
 
 /// Create the base name of this object, i.e. the name without appended number.

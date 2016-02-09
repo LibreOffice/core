@@ -195,7 +195,6 @@ void SvxShadowTabPage::Construct()
 }
 
 
-
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_Int32 nPos;
@@ -256,7 +255,6 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-
 SfxTabPage::sfxpg SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
@@ -264,7 +262,6 @@ SfxTabPage::sfxpg SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
@@ -380,7 +377,6 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 }
 
 
-
 void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 {
     if( !m_bDisable )
@@ -483,13 +479,11 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 }
 
 
-
 VclPtr<SfxTabPage> SvxShadowTabPage::Create( vcl::Window* pWindow,
                                              const SfxItemSet* rAttrs )
 {
     return VclPtr<SvxShadowTabPage>::Create( pWindow, *rAttrs );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
@@ -506,7 +500,6 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
 
     ModifyShadowHdl_Impl( *m_pMtrTransparent );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, SelectShadowHdl_Impl, ListBox&, void)
@@ -551,7 +544,6 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );
     m_pCtlXRectPreview->Invalidate();
 }
-
 
 
 void SvxShadowTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )

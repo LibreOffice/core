@@ -183,7 +183,6 @@ OUString SvtLanguageTable::GetLanguageString( const LanguageType eType, bool bUs
 }
 
 
-
 LanguageType SvtLanguageTableImpl::GetType( const OUString& rStr ) const
 {
     LanguageType eType = LANGUAGE_DONTKNOW;
@@ -206,7 +205,6 @@ LanguageType SvtLanguageTable::GetLanguageType( const OUString& rStr )
 }
 
 
-
 sal_uInt32 SvtLanguageTableImpl::GetEntryCount() const
 {
     return Count();
@@ -216,7 +214,6 @@ sal_uInt32 SvtLanguageTable::GetLanguageEntryCount()
 {
     return theLanguageTable::get().GetEntryCount();
 }
-
 
 
 LanguageType SvtLanguageTableImpl::GetTypeAtIndex( sal_uInt32 nIndex ) const

@@ -74,7 +74,6 @@ Proxy::Proxy(
 }
 
 
-
 void Proxy::do_acquire() {
     if (osl_atomic_increment(&references_) == 1) {
         bridge_->resurrectProxy(*this);

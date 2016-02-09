@@ -66,7 +66,6 @@ namespace svt
     }
 
 
-
     Reference< XAccessible > BrowseBoxImpl::getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType )
     {
         if ( m_pAccessible && m_pAccessible->isAlive() )
@@ -82,7 +81,6 @@ namespace svt
         return nullptr;
     }
 }
-
 
 
 Reference< XAccessible > BrowseBox::CreateAccessible()
@@ -317,7 +315,6 @@ OUString BrowseBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 {
     return OUString( GetColumnTitle( GetColumnId( _nColumn ) ) );
 }
-
 
 
 void BrowseBox::FillAccessibleStateSet(

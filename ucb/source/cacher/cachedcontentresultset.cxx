@@ -110,9 +110,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
 }
 
 
-
 // CCRS_Cache methods
-
 
 
 CachedContentResultSet::CCRS_Cache::CCRS_Cache(
@@ -367,9 +365,7 @@ const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
 }
 
 
-
 // class CCRS_PropertySetInfo
-
 
 
 class CCRS_PropertySetInfo :
@@ -660,9 +656,7 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
 }
 
 
-
 // class CachedContentResultSet
-
 
 
 CachedContentResultSet::CachedContentResultSet(
@@ -827,9 +821,7 @@ bool SAL_CALL CachedContentResultSet
 };
 
 
-
 //define for fetching data
-
 
 
 #define FETCH_XXX( aCache, fetchInterface, fetchMethod )            \
@@ -2200,9 +2192,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
 }
 
 
-
 // class CachedContentResultSetFactory
-
 
 
 CachedContentResultSetFactory::CachedContentResultSetFactory(

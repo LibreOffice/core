@@ -42,7 +42,6 @@ XCommandInfo_impl::~XCommandInfo_impl()
 }
 
 
-
 void SAL_CALL
 XCommandInfo_impl::acquire(
                  void )

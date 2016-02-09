@@ -561,7 +561,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_SVX_SVDPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -212,7 +212,6 @@ void SAL_CALL OFormattedField::setConditionalPrintExpression( const OUString& _c
 }
 
 
-
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  ) throw (uno::RuntimeException, std::exception)
 {

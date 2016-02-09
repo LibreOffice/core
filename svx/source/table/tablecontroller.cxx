@@ -128,7 +128,6 @@ rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView
 }
 
 
-
 rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController )
 {
     if( xRefController.is() )
@@ -139,7 +138,6 @@ rtl::Reference< sdr::SelectionController > SvxTableController::create( SdrObjEdi
     }
     return new SvxTableController( pView, pObj );
 }
-
 
 
 SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* pObj )
@@ -189,7 +187,6 @@ SvxTableController::~SvxTableController()
         }
     }
 }
-
 
 
 const sal_uInt16 ACTION_NONE = 0;
@@ -337,7 +334,6 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
 }
 
 
-
 bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* /*pWin*/)
 {
     if( !checkTableObject() )
@@ -350,7 +346,6 @@ bool SvxTableController::onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* /
 
     return false;
 }
-
 
 
 bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWindow )
@@ -382,7 +377,6 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWind
     }
     return false;
 }
-
 
 
 void SvxTableController::onSelectionHasChanged()
@@ -419,7 +413,6 @@ void SvxTableController::onSelectionHasChanged()
         destroySelectionOverlay();
     }
 }
-
 
 
 void SvxTableController::GetState( SfxItemSet& rSet )
@@ -518,7 +511,6 @@ void SvxTableController::GetState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
 
 
 void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
@@ -797,7 +789,6 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 }
 
 
-
 void SvxTableController::onDelete( sal_uInt16 nSId )
 {
     sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
@@ -854,7 +845,6 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             UpdateTableShape();
     }
 }
-
 
 
 void SvxTableController::onSelect( sal_uInt16 nSId )
@@ -1460,7 +1450,6 @@ bool SvxTableController::checkTableObject()
 }
 
 
-
 sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* /*pWindow*/ )
 {
     const bool bMod1 = rKEvt.GetKeyCode().IsMod1(); // ctrl
@@ -1759,7 +1748,6 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
 }
 
 
-
 void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, vcl::Window* pWindow, sal_uInt16 nAction )
 {
     if( mxTableObj.is() && static_cast<SdrTableObj*>(mxTableObj.get())->IsTextEditActive() )
@@ -1788,13 +1776,11 @@ void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, vcl::Windo
 }
 
 
-
 const CellPos& SvxTableController::getSelectionStart()
 {
     checkCell( maCursorFirstPos );
     return maCursorFirstPos;
 }
-
 
 
 void SvxTableController::setSelectionStart( const CellPos& rPos )
@@ -1803,13 +1789,11 @@ void SvxTableController::setSelectionStart( const CellPos& rPos )
 }
 
 
-
 const CellPos& SvxTableController::getSelectionEnd()
 {
     checkCell( maCursorLastPos );
     return maCursorLastPos;
 }
-
 
 
 void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow )
@@ -1839,9 +1823,6 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
 }
 
 
-
-
-
 void SvxTableController::checkCell( CellPos& rPos )
 {
     if( mxTable.is() ) try
@@ -1859,7 +1840,6 @@ void SvxTableController::checkCell( CellPos& rPos )
 }
 
 
-
 void SvxTableController::findMergeOrigin( CellPos& rPos )
 {
     if( mxTable.is() ) try
@@ -1875,7 +1855,6 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
         OSL_FAIL("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
     }
 }
-
 
 
 void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, const awt::MouseEvent* pMouseEvent /*= 0*/, sal_uInt16 nAction /*= ACTION_NONE */ )
@@ -1987,7 +1966,6 @@ bool SvxTableController::StopTextEdit()
 }
 
 
-
 void SvxTableController::getSelectedCells( CellPos& rFirst, CellPos& rLast )
 {
     if( mbCellSelectionMode )
@@ -2071,7 +2049,6 @@ void SvxTableController::getSelectedCells( CellPos& rFirst, CellPos& rLast )
 }
 
 
-
 void SvxTableController::StartSelection( const CellPos& rPos )
 {
     StopTextEdit();
@@ -2079,7 +2056,6 @@ void SvxTableController::StartSelection( const CellPos& rPos )
     maCursorLastPos = maCursorFirstPos = rPos;
     mpView->MarkListHasChanged();
 }
-
 
 
 void SvxTableController::setSelectedCells( const CellPos& rStart, const CellPos& rEnd )
@@ -2091,7 +2067,6 @@ void SvxTableController::setSelectedCells( const CellPos& rStart, const CellPos&
 }
 
 
-
 void SvxTableController::UpdateSelection( const CellPos& rPos )
 {
     maCursorLastPos = rPos;
@@ -2099,12 +2074,10 @@ void SvxTableController::UpdateSelection( const CellPos& rPos )
 }
 
 
-
 void SvxTableController::clearSelection()
 {
     RemoveSelection();
 }
-
 
 
 void SvxTableController::selectAll()
@@ -2120,7 +2093,6 @@ void SvxTableController::selectAll()
 }
 
 
-
 void SvxTableController::RemoveSelection()
 {
     if( mbCellSelectionMode )
@@ -2129,7 +2101,6 @@ void SvxTableController::RemoveSelection()
         mpView->MarkListHasChanged();
     }
 }
-
 
 
 void SvxTableController::onTableModified()
@@ -2214,7 +2185,6 @@ void SvxTableController::updateSelectionOverlay()
 }
 
 
-
 void SvxTableController::destroySelectionOverlay()
 {
     if( mpSelectionOverlay )
@@ -2231,7 +2201,6 @@ void SvxTableController::destroySelectionOverlay()
         }
     }
 }
-
 
 
 void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnlyHardAttr) const
@@ -2275,7 +2244,6 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
 }
 
 
-
 const sal_uInt16 CELL_BEFORE = 0x0001;
 const sal_uInt16 CELL_LEFT   = 0x0002;
 const sal_uInt16 CELL_RIGHT  = 0x0004;
@@ -2285,7 +2253,6 @@ const sal_uInt16 CELL_UPPER  = 0x0010;
 const sal_uInt16 CELL_TOP    = 0x0020;
 const sal_uInt16 CELL_BOTTOM = 0x0040;
 const sal_uInt16 CELL_LOWER  = 0x0080;
-
 
 
 static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, SvxBoxItemLine nLine )
@@ -2303,7 +2270,6 @@ static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine
     }
     rNewFrame.SetLine( pNew, nLine );
 }
-
 
 
 static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem, const SvxBoxInfoItem* pBoxInfoItem, SvxBoxItem& rNewFrame )
@@ -2363,7 +2329,6 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
 }
 
 
-
 static void ImplSetLineColor( SvxBoxItem& rNewFrame, SvxBoxItemLine nLine, const Color& rColor )
 {
     const SvxBorderLine* pSourceLine = rNewFrame.GetLine( nLine );
@@ -2374,7 +2339,6 @@ static void ImplSetLineColor( SvxBoxItem& rNewFrame, SvxBoxItemLine nLine, const
         rNewFrame.SetLine( &aLine, nLine );
     }
 }
-
 
 
 static void ImplApplyLineColorItem( sal_uInt16 nCellFlags, const SvxColorItem* pLineColorItem, SvxBoxItem& rNewFrame )
@@ -2393,7 +2357,6 @@ static void ImplApplyLineColorItem( sal_uInt16 nCellFlags, const SvxColorItem* p
     if( (nCellFlags & (CELL_UPPER|CELL_LOWER|CELL_BEFORE)) == 0 )
         ImplSetLineColor( rNewFrame, SvxBoxItemLine::LEFT, aColor );
 }
-
 
 
 static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine* pBorderLineItem, SvxBoxItem& rNewFrame )
@@ -2439,7 +2402,6 @@ static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine*
             ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::LEFT );
     }
 }
-
 
 
 void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
@@ -2530,7 +2492,6 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
 }
 
 
-
 void SvxTableController::UpdateTableShape()
 {
     SdrObject* pTableObj = mxTableObj.get();
@@ -2541,8 +2502,6 @@ void SvxTableController::UpdateTableShape()
     }
     updateSelectionOverlay();
 }
-
-
 
 
 void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bReplaceAll)
@@ -2596,7 +2555,6 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
 }
 
 
-
 bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if( mxTableObj.is() && hasSelectedCells() )
@@ -2626,7 +2584,6 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
 }
 
 
-
 bool SvxTableController::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     if( mbCellSelectionMode || mpView->IsTextEdit()  )
@@ -2636,7 +2593,6 @@ bool SvxTableController::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
     }
     return false;
 }
-
 
 
 bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
@@ -2666,7 +2622,6 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
 }
 
 
-
 bool SvxTableController::PasteObjModel( const SdrModel& rModel )
 {
     if( mxTableObj.is() && mpView && (rModel.GetPageCount() >= 1) )
@@ -2684,7 +2639,6 @@ bool SvxTableController::PasteObjModel( const SdrModel& rModel )
 
     return false;
 }
-
 
 
 bool SvxTableController::PasteObject( SdrTableObj* pPasteTableObj )
@@ -2822,8 +2776,6 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
     }
     return false;
 }
-
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxTableController, UpdateHdl, void*, void)

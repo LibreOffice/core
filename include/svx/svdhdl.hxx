@@ -82,7 +82,6 @@ enum SdrHdlKind
 };
 
 
-
 enum BitmapColorIndex
 {
     LightGreen,
@@ -92,7 +91,6 @@ enum BitmapColorIndex
     LightRed,
     Yellow
 };
-
 
 
 enum BitmapMarkerKind
@@ -128,7 +126,6 @@ enum BitmapMarkerKind
     Customshape_9x9,
     Customshape_11x11
 };
-
 
 
 class SVX_DLLPUBLIC SdrHdl
@@ -241,7 +238,6 @@ public:
 };
 
 
-
 #define SDR_HANDLE_COLOR_SIZE_NORMAL            Size(13, 13)
 #define SDR_HANDLE_COLOR_SIZE_SELECTED          Size(17, 17)
 
@@ -281,7 +277,6 @@ public:
 
     void SetColorChangeHdl(const Link<SdrHdlColor*,void>& rLink) { aColorChangeHdl = rLink; }
 };
-
 
 
 class SdrHdlGradient : public SdrHdl
@@ -332,7 +327,6 @@ public:
 };
 
 
-
 // Spiegelachse
 class SdrHdlLine: public SdrHdl
 {
@@ -368,7 +362,6 @@ public:
 };
 
 
-
 class E3dVolumeMarker : public SdrHdl
 {
     basegfx::B2DPolyPolygon             aWireframePoly;
@@ -379,7 +372,6 @@ class E3dVolumeMarker : public SdrHdl
 public:
     explicit E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly);
 };
-
 
 
 class ImpEdgeHdl: public SdrHdl
@@ -400,7 +392,6 @@ public:
 };
 
 
-
 class ImpMeasureHdl: public SdrHdl
 {
     // create marker for this kind
@@ -414,7 +405,6 @@ public:
 };
 
 
-
 class ImpTextframeHdl: public SdrHdl
 {
     const Rectangle maRect;
@@ -425,9 +415,6 @@ class ImpTextframeHdl: public SdrHdl
 public:
     explicit ImpTextframeHdl(const Rectangle& rRect);
 };
-
-
-
 
 
 class SVX_DLLPUBLIC SdrHdlList
@@ -490,7 +477,6 @@ public:
 };
 
 
-
 class SVX_DLLPUBLIC SdrCropHdl : public SdrHdl
 {
 private:
@@ -516,7 +502,6 @@ protected:
 };
 
 
-
 class SVX_DLLPUBLIC SdrCropViewHdl : public SdrHdl
 {
 private:
@@ -540,7 +525,6 @@ protected:
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 };
-
 
 
 #endif // INCLUDED_SVX_SVDHDL_HXX

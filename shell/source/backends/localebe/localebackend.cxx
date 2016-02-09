@@ -204,11 +204,9 @@ static OUString ImplGetLocale(int category)
 #endif
 
 
-
 LocaleBackend::LocaleBackend()
 {
 }
-
 
 
 LocaleBackend::~LocaleBackend()
@@ -216,12 +214,10 @@ LocaleBackend::~LocaleBackend()
 }
 
 
-
 LocaleBackend* LocaleBackend::createInstance()
 {
     return new LocaleBackend;
 }
-
 
 
 OUString LocaleBackend::getLocale()
@@ -236,7 +232,6 @@ OUString LocaleBackend::getLocale()
 }
 
 
-
 OUString LocaleBackend::getUILocale()
 {
 #if defined WNT
@@ -247,7 +242,6 @@ OUString LocaleBackend::getUILocale()
     return ImplGetLocale(LC_MESSAGES);
 #endif
 }
-
 
 
 OUString LocaleBackend::getSystemLocale()
@@ -299,7 +293,6 @@ css::uno::Any LocaleBackend::getPropertyValue(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
 }
-
 
 
 OUString SAL_CALL LocaleBackend::getBackendName() {

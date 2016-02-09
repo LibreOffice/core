@@ -27,7 +27,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 
 
-
     //= ContentProvider
 
     typedef ::ucbhelper::ContentProviderImplHelper  ContentProvider_Base;

@@ -52,7 +52,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 
 
-
 namespace remotebridges_officeclient {
 
 class OfficeClientMain : public WeakImplHelper1< XMain >

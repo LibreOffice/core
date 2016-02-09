@@ -158,7 +158,6 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 }
 
 
-
 // XTextOutputStream
 
 void OTextOutputStream::writeString( const OUString& aString )
@@ -221,7 +220,6 @@ void OTextOutputStream::checkOutputStream()
     if (! mxStream.is() )
         throw IOException("output stream is not initialized, you have to use setOutputStream first");
 }
-
 
 
 // XActiveDataSource

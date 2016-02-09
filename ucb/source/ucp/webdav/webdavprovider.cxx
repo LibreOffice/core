@@ -34,8 +34,6 @@ using namespace http_dav_ucp;
 // ContentProvider Implementation.
 
 
-
-
 ContentProvider::ContentProvider(
                 const uno::Reference< uno::XComponentContext >& rContext )
 : ::ucbhelper::ContentProviderImplHelper( rContext ),
@@ -50,7 +48,6 @@ ContentProvider::~ContentProvider()
 {
     delete m_pProps;
 }
-
 
 
 // XInterface methods.
@@ -80,16 +77,13 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       ucb::XContentProvider );
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
@@ -97,17 +91,13 @@ XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      WEBDAV_CONTENT_PROVIDER_SERVICE_NAME );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 
-
 // XContentProvider methods.
-
 
 
 // virtual

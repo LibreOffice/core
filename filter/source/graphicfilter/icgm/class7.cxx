@@ -23,7 +23,6 @@
 #include <outact.hxx>
 
 
-
 void CGM::ImplDoClass7()
 {
     switch ( mnElementID )

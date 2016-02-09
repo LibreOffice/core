@@ -41,7 +41,6 @@ namespace frm
 {
 
 
-
     //= FormOperations
 
     typedef ::cppu::WeakComponentImplHelper    <   css::form::runtime::XFormOperations

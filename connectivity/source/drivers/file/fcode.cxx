@@ -33,7 +33,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 
 
-
 OCode::OCode()
 {
 }
@@ -103,7 +102,6 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
 }
 
 
-
 const ORowSetValue& OOperandValue::getValue() const
 {
     return m_aValue;
@@ -150,12 +148,10 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
 // Implementation of the operators
 
 
-
 bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 {
     return false;
 }
-
 
 
 void OBoolOperator::Exec(OCodeStack& rCodeStack)
@@ -402,8 +398,6 @@ void OUnaryOperator::Exec(OCodeStack& rCodeStack)
     if (typeid(OOperandResult) == typeid(*pOperand))
         delete pOperand;
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

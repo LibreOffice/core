@@ -161,5 +161,4 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
 } // namespace accessibility
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,6 @@ namespace svx
 {
 
 
-
     //= OComponentTransferable
 
     class SVX_DLLPUBLIC SAL_WARN_UNUSED OComponentTransferable : public TransferableHelper

@@ -51,7 +51,6 @@ namespace svx
     }
 
 
-
     SotClipboardFormatId OComponentTransferable::getDescriptorFormatId(bool _bExtractForm)
     {
         static SotClipboardFormatId s_nReportFormat = static_cast<SotClipboardFormatId>(-1);
@@ -141,7 +140,6 @@ namespace svx
 
 
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

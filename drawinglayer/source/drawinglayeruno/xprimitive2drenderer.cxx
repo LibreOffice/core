@@ -42,7 +42,6 @@
 using namespace ::com::sun::star;
 
 
-
 namespace drawinglayer
 {
     namespace unorenderer
@@ -96,7 +95,6 @@ namespace drawinglayer
         }
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer

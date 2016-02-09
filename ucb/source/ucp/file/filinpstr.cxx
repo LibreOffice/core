@@ -76,12 +76,10 @@ XInputStream_impl::~XInputStream_impl()
 //  XTypeProvider
 
 
-
 XTYPEPROVIDER_IMPL_3( XInputStream_impl,
                       lang::XTypeProvider,
                       io::XSeekable,
                       io::XInputStream )
-
 
 
 uno::Any SAL_CALL
@@ -113,7 +111,6 @@ XInputStream_impl::release(
 {
     OWeakObject::release();
 }
-
 
 
 sal_Int32 SAL_CALL

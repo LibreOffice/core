@@ -29,14 +29,12 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
 }
 
 
-
 SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
     SfxPoolItem(which),
     pSet(pS)
 {
     DBG_ASSERT(pS, "SfxSetItem without set constructed" );
 }
-
 
 
 SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
@@ -46,12 +44,10 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
 }
 
 
-
 SfxSetItem::~SfxSetItem()
 {
     delete pSet; pSet = nullptr;
 }
-
 
 
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
@@ -59,7 +55,6 @@ bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
     return *pSet == *static_cast<const SfxSetItem &>(rCmp).pSet;
 }
-
 
 
 bool SfxSetItem::GetPresentation
@@ -73,7 +68,6 @@ bool SfxSetItem::GetPresentation
 {
     return false;
 }
-
 
 
 SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const

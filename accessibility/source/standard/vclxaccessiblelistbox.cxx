@@ -48,8 +48,6 @@ VCLXAccessibleListBox::VCLXAccessibleListBox (VCLXWindow* pVCLWindow)
 }
 
 
-
-
 VCLXAccessibleListBox::~VCLXAccessibleListBox()
 {
 }
@@ -71,8 +69,6 @@ OUString VCLXAccessibleListBox::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleListBox" );
 }
-
-
 
 
 Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames()

@@ -1146,7 +1146,6 @@ void SwInputField::SetFormatField( SwFormatField& rFormatField )
 }
 
 
-
 void SwInputField::LockNotifyContentChange()
 {
     if ( GetFormatField() != nullptr )

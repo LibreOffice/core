@@ -28,7 +28,6 @@
 namespace svx {
 
 
-
 struct OrientationHelper_Impl
 {
     typedef std::pair< VclPtr<vcl::Window>, TriState >  WindowPair;
@@ -51,7 +50,6 @@ struct OrientationHelper_Impl
 
     DECL_LINK_TYPED( ClickHdl, Button*, void );
 };
-
 
 
 OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
@@ -103,7 +101,6 @@ IMPL_LINK_NOARG_TYPED(OrientationHelper_Impl, ClickHdl, Button*, void)
 }
 
 
-
 OrientationHelper::OrientationHelper( DialControl& rCtrlDial, NumericField& rNfRotation, CheckBox& rCbStacked ) :
     mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
 {
@@ -153,7 +150,6 @@ void OrientationHelper::EnableStackedTriState( bool bEnable )
 }
 
 
-
 OrientStackedWrapper::OrientStackedWrapper( OrientationHelper& rOrientHlp ) :
     SingleControlWrapperType( rOrientHlp )
 {
@@ -179,7 +175,6 @@ void OrientStackedWrapper::SetControlValue( bool bValue )
 {
     GetControl().SetStackedState( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
-
 
 
 }

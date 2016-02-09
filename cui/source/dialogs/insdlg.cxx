@@ -100,7 +100,6 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl(vcl::Window * pParent, const OU
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog( RET_OK );
@@ -134,7 +133,6 @@ IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, RadioHdl, Button*, void)
 {
     if ( m_pRbNewObject->IsChecked() )
@@ -148,7 +146,6 @@ IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, RadioHdl, Button*, void)
         m_pObjectTypeFrame->Hide();
     }
 }
-
 
 
 void SvInsertOleDlg::SelectDefault()
@@ -731,7 +728,6 @@ short SfxInsertFloatingFrameDialog::Execute()
 }
 
 
-
 IMPL_LINK_TYPED( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void )
 {
     CheckBox* pCB = static_cast<CheckBox*>(pButton);
@@ -751,7 +747,6 @@ IMPL_LINK_TYPED( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void 
         m_pNMMarginHeight->Enable( !pCB->IsChecked() );
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)

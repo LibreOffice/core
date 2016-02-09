@@ -53,7 +53,6 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
 }
 
 
-
 void SAL_CALL Mapping_cli2uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -239,7 +238,6 @@ Bridge::~Bridge()
     (*m_uno_cli_env->release)( m_uno_cli_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );
 }
-
 
 
 } //namespace cli_uno

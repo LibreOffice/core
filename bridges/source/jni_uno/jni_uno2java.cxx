@@ -479,7 +479,6 @@ inline void UNO_proxy::release() const
 }
 
 
-
 uno_Interface * Bridge::map_to_uno(
     JNI_context const & jni,
     jobject javaI, JNI_interface_type_info const * info ) const

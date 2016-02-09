@@ -77,8 +77,6 @@ void SfxFrameViewWindow_Impl::Resize()
 }
 
 
-
-
 void SfxViewFrame::UpdateTitle()
 
 /*  [Description]

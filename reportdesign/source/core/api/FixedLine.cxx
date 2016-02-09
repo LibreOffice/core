@@ -566,7 +566,6 @@ void SAL_CALL OFixedLine::setPrintRepeatedValues( sal_Bool /*_printrepeatedvalue
 }
 
 
-
 } // namespace reportdesign
 
 

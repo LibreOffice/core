@@ -343,5 +343,4 @@ void ScGraphicShell::GetChangePictureState(SfxItemSet &rSet)
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

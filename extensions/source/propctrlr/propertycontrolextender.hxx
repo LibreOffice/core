@@ -32,7 +32,6 @@ namespace pcr
 {
 
 
-
     //= PropertyControlExtender
 
     struct PropertyControlExtender_Data;

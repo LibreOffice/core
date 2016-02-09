@@ -46,8 +46,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-
-
 XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,

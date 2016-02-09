@@ -58,7 +58,6 @@ namespace ucbhelper
 {
 
 
-
 class ContentProviderImplHelper;
 
 /**

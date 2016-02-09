@@ -41,7 +41,6 @@ HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
 }
 
 
-
 HelpDispatch_Impl::~HelpDispatch_Impl()
 {
 }
@@ -88,7 +87,6 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
 }
 
 
-
 void SAL_CALL HelpDispatch_Impl::addStatusListener(
 
     const Reference< XStatusListener >& xControl, const URL& aURL ) throw( RuntimeException, std::exception )
@@ -97,7 +95,6 @@ void SAL_CALL HelpDispatch_Impl::addStatusListener(
     DBG_ASSERT( m_xRealDispatch.is(), "invalid dispatch" );
     m_xRealDispatch->addStatusListener( xControl, aURL );
 }
-
 
 
 void SAL_CALL HelpDispatch_Impl::removeStatusListener(

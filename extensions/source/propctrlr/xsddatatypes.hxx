@@ -38,7 +38,6 @@ namespace pcr
 {
 
 
-
     //= XSDDataType
 
     class XSDDataType : public salhelper::SimpleReferenceObject

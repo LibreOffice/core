@@ -66,7 +66,6 @@ ConditionModifier::~ConditionModifier()
 }
 
 
-
 /******************************************************************
  *                                                                *
  *              ConditionWaiter                                   *

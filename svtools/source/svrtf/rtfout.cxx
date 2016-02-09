@@ -179,5 +179,4 @@ SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLe
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

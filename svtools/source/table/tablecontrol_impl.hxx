@@ -477,7 +477,6 @@ namespace svt { namespace table
     };
 
 
-
 } } // namespace svt::table
 
 

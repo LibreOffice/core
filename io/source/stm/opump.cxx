@@ -199,7 +199,6 @@ void Pump::fireTerminated()
 }
 
 
-
 void Pump::close()
 {
     // close streams and release references
@@ -301,7 +300,6 @@ void Pump::run()
 }
 
 
-
 /*
  * XConnectable
  */
@@ -313,13 +311,11 @@ void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw(std::e
 }
 
 
-
 Reference< XConnectable > Pump::getPredecessor() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xPred;
 }
-
 
 
 void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw(std::exception)
@@ -329,13 +325,11 @@ void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw(std::exc
 }
 
 
-
 Reference< XConnectable > Pump::getSuccessor() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xSucc;
 }
-
 
 
 /*
@@ -348,12 +342,10 @@ void Pump::addListener( const Reference< XStreamListener >& xListener ) throw(st
 }
 
 
-
 void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw(std::exception)
 {
     m_cnt.removeInterface( xListener );
 }
-
 
 
 void Pump::start() throw( RuntimeException, std::exception )
@@ -375,7 +367,6 @@ void Pump::start() throw( RuntimeException, std::exception )
 }
 
 
-
 void Pump::terminate() throw(std::exception)
 {
     close();
@@ -387,7 +378,6 @@ void Pump::terminate() throw(std::exception)
     fireTerminated();
     fireClose();
 }
-
 
 
 /*
@@ -405,13 +395,11 @@ void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw(std:
 }
 
 
-
 Reference< XInputStream > Pump::getInputStream() throw(std::exception)
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xInput;
 }
-
 
 
 /*

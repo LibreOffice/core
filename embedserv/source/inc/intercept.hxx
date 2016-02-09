@@ -71,7 +71,6 @@ public:
     dispose() throw(css::uno::RuntimeException);
 
 
-
     //XDispatch
     virtual void SAL_CALL
     dispatch(

@@ -357,7 +357,6 @@ IMPL_LINK_TYPED( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rE
 }
 
 
-
 /** updates the font color in the vcl window settings */
 void ColorConfig_Impl::ImplUpdateApplicationSettings()
 {

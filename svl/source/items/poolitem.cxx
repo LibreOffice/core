@@ -249,13 +249,11 @@ bool SfxPoolItem::HasMetrics() const
 }
 
 
-
 bool SfxPoolItem::QueryValue( css::uno::Any&, sal_uInt8 ) const
 {
     OSL_FAIL("There is no implementation for QueryValue for this item!");
     return false;
 }
-
 
 
 bool SfxPoolItem::PutValue( const css::uno::Any&, sal_uInt8 )

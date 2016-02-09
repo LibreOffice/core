@@ -328,7 +328,6 @@ void DoRestartActionsIfNecessary(bool quickstart) {
 }
 
 
-
 ResMgr* Desktop::GetDesktopResManager()
 {
     if ( !Desktop::pResMgr )
@@ -1872,7 +1871,6 @@ IMPL_STATIC_LINK_TYPED(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
 {
     DoFirstRunInitializations();
 }
-
 
 
 class ExitTimer : public Timer

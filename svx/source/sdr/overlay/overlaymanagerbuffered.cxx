@@ -31,7 +31,6 @@
 #include <vcl/dibtools.hxx>
 
 
-
 namespace sdr
 {
     namespace overlay

@@ -69,7 +69,6 @@ public:
 #endif
 
 
-
 struct StringList_Impl : private Resource
 {
 

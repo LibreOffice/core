@@ -90,7 +90,6 @@ void PyUNO_del (PyObject* self)
 }
 
 
-
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef , sal_Int32 mode )
 {
     assert( pVal );

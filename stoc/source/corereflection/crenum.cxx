@@ -168,11 +168,6 @@ void IdlEnumFieldImpl::set( Any &, const Any & )
 }
 
 
-
-
-
-
-
 EnumIdlClassImpl::~EnumIdlClassImpl()
 {
     delete _pFields;

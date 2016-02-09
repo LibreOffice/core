@@ -35,7 +35,6 @@ namespace sfx2
 {
 
 
-
     //= UserInputInterception
 
     struct UserInputInterception_Data;

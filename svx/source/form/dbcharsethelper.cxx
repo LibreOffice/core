@@ -47,6 +47,4 @@ namespace svxform { namespace charset_helper
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

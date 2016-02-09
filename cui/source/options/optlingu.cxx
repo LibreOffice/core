@@ -631,8 +631,6 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
 }
 
 
-
-
 static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
 {
     const Locale* pAdd = rAdd.getConstArray();
@@ -1217,7 +1215,6 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     }
 
 
-
     // activate dictionaries according to checkbox state
 
     Sequence< OUString > aActiveDics;
@@ -1359,7 +1356,6 @@ void SvxLinguTabPage::AddDicBoxEntry(
 }
 
 
-
 void SvxLinguTabPage::UpdateDicBox_Impl()
 {
     m_pLinguDicsCLB->SetUpdateMode(false);
@@ -1376,7 +1372,6 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
 
     m_pLinguDicsCLB->SetUpdateMode(true);
 }
-
 
 
 void SvxLinguTabPage::UpdateModulesBox_Impl()
@@ -1401,7 +1396,6 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
 }
 
 
-
 void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 {
     // if not HideGroups was called with GROUP_MODULES...
@@ -1411,7 +1405,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
             pLinguData = new SvxLinguData_Impl;
         UpdateModulesBox_Impl();
     }
-
 
 
     //  get data from configuration
@@ -1512,7 +1505,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 }
 
 
-
 IMPL_LINK_TYPED( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox, bool )
 {
     if (pBox == m_pLinguModulesCLB)
@@ -1531,12 +1523,10 @@ IMPL_LINK_TYPED( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox,
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
 {
     ClickHdl_Impl(m_pLinguModulesEditPB);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, OpenURLHdl_Impl, FixedHyperlink&, void)
@@ -1544,7 +1534,6 @@ IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, OpenURLHdl_Impl, FixedHyperlink&, void)
     OUString sURL( m_pMoreDictsLink->GetURL() );
     lcl_OpenURL( sURL );
 }
-
 
 
 IMPL_LINK_TYPED( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void )
@@ -1574,7 +1563,6 @@ IMPL_LINK_TYPED( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox,
         }
     }
 }
-
 
 
 IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
@@ -1756,7 +1744,6 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
 }
 
 
-
 IMPL_LINK_TYPED( SvxLinguTabPage, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     if (m_pLinguModulesCLB == pBox)
@@ -1790,7 +1777,6 @@ IMPL_LINK_TYPED( SvxLinguTabPage, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 }
 
 
-
 SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
@@ -1811,7 +1797,6 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 
     return pEntry;
 }
-
 
 
 void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
@@ -2307,7 +2292,6 @@ IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(nullptr);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, OpenURLHdl_Impl, FixedHyperlink&, void)

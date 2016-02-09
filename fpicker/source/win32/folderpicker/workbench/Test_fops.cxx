@@ -61,7 +61,6 @@ Reference< XMultiServiceFactory >   g_xFactory;
 //  main
 
 
-
 int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 {
     CoInitializeEx( NULL, COINIT_MULTITHREADED );

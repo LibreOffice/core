@@ -30,8 +30,6 @@ namespace filter{
     namespace config{
 
 
-
-
 /** @short      implements the service <type scope="com.sun.star.document">ContentHandlerFactory</type>.
  */
 class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContainer                   ,
@@ -54,7 +52,6 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
                     reference to the uno service manager, which created this service instance.
          */
         explicit ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-
 
 
         /** @short  standard dtor.
@@ -87,7 +84,6 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
     public:
 
 
-
         /** @short  return the uno implementation name of this class.
 
             @descr  Because this information is used at several places
@@ -99,7 +95,6 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
         static OUString impl_getImplementationName();
 
 
-
         /** @short  return the list of supported uno services of this class.
 
             @descr  Because this information is used at several places
@@ -109,7 +104,6 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
             @return The fix list of uno services supported by this class.
          */
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
-
 
 
         /** @short  return a new intsnace of this class.

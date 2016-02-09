@@ -29,10 +29,8 @@
 #include <comphelper/comphelperdllapi.h>
 
 
-
 namespace comphelper
 {
-
 
 
     // OCommonAccessibleText
@@ -97,7 +95,6 @@ namespace comphelper
     };
 
 
-
     // OAccessibleTextHelper
 
 
@@ -142,8 +139,6 @@ namespace comphelper
 #endif // INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 
 
-
-
 //  OAccessibleTextHelper is a helper class for implementing the
 //  XAccessibleText interface.
 
@@ -172,7 +167,6 @@ namespace comphelper
 //      getIndexAtPoint
 //      setSelection
 //      copyText
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -346,7 +346,6 @@ void printf_packages(
 }
 
 
-
 namespace {
 
 

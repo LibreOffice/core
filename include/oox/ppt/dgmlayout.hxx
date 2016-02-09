@@ -32,7 +32,6 @@
 namespace oox { namespace ppt {
 
 
-
 class QuickDiagrammingLayout : public oox::core::XmlFilterBase
 {
 public:

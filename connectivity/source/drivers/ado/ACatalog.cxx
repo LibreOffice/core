@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 
-
 using namespace connectivity;
 using namespace connectivity::ado;
 
@@ -111,7 +110,6 @@ void OCatalog::refreshUsers()
     else
         m_pUsers = new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -95,7 +95,6 @@ namespace slideshow
         }
 
 
-
         ViewMediaShape::~ViewMediaShape()
         {
             try
@@ -110,7 +109,6 @@ namespace slideshow
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }
-
 
 
         ViewLayerSharedPtr ViewMediaShape::getViewLayer() const
@@ -130,7 +128,6 @@ namespace slideshow
 
             return true;
         }
-
 
 
         void ViewMediaShape::endMedia()
@@ -164,7 +161,6 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::pauseMedia()
         {
             if (mxPlayer.is())
@@ -172,13 +168,11 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::setMediaTime(double fTime)
         {
             if (mxPlayer.is())
                 mxPlayer->setMediaTime(fTime);
         }
-
 
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
@@ -298,7 +292,6 @@ namespace slideshow
         }
 
 
-
         bool ViewMediaShape::implInitialize( const ::basegfx::B2DRectangle& rBounds )
         {
             if( !mxPlayer.is() && mxShape.is() )
@@ -360,7 +353,6 @@ namespace slideshow
         }
 
 
-
         void ViewMediaShape::implSetMediaProperties( const uno::Reference< beans::XPropertySet >& rxProps )
         {
             if( mxPlayer.is() )
@@ -398,7 +390,6 @@ namespace slideshow
                 }
             }
         }
-
 
 
         void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType )

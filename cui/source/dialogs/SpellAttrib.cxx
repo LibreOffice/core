@@ -26,13 +26,11 @@ using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
 
 
-
 SpellErrorAttrib::SpellErrorAttrib( const SpellErrorDescription& rDesc ) :
     TextAttrib(TEXTATTR_SPELL_ERROR),
     m_aSpellErrorDescription( rDesc )
 {
 }
-
 
 
 SpellErrorAttrib::SpellErrorAttrib( const SpellErrorAttrib& rAttr ) :

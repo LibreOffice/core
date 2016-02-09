@@ -30,7 +30,6 @@ namespace vcl
 {
 
 
-
     //= ImageRepository
 
     // provides access to the application's image repository (image.zip)

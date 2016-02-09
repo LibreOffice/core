@@ -30,7 +30,6 @@ namespace frm
 {
 
 
-
     //= OLimitedFormats
 
     /** maintains translation tables format key <-> enum value

@@ -24,7 +24,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

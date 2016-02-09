@@ -164,7 +164,6 @@ void TextChainCursorManager::HandleCursorEvent(
     SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
 
 
-
     switch ( aCurEvt ) {
             case CursorChainingEvent::UNCHANGED:
                 // Set same selection as before the chaining (which is saved as PostChainingSel)

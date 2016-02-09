@@ -132,7 +132,6 @@ public:
         _rAggregateProps = aggregate->getPropertySetInfo()->getProperties();    \
 
 
-
 #define DECL_PROP0(varname, type)   \
     DECL_PROP_IMPL(varname, type) 0)
 
@@ -180,10 +179,8 @@ public:
         DECL_BOOL_PROP_IMPL(varname) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 )
 
 
-
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
-
 
 
 #define REGISTER_PROP_2( prop, member, attrib1, attrib2 ) \

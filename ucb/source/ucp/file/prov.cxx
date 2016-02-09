@@ -67,7 +67,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
     }
 
 
-
     if ( xFactory.is() )
     {
         xFactory->acquire();
@@ -162,10 +161,7 @@ FileProvider::CreateInstance(
 }
 
 
-
-
 // XContent
-
 
 
 Reference< XContent > SAL_CALL
@@ -184,7 +180,6 @@ FileProvider::queryContent(
 
     return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
 }
-
 
 
 sal_Int32 SAL_CALL
@@ -245,7 +240,6 @@ FileProvider::compareContentIds(
 }
 
 
-
 Reference< XContentIdentifier > SAL_CALL
 FileProvider::createContentIdentifier(
                       const OUString& ContentId )
@@ -255,7 +249,6 @@ FileProvider::createContentIdentifier(
     FileContentIdentifier* p = new FileContentIdentifier( ContentId,false );
     return Reference< XContentIdentifier >( p );
 }
-
 
 
 //XPropertySetInfoImpl
@@ -375,7 +368,6 @@ XPropertySetInfoImpl2::getPropertyByName(
 }
 
 
-
 Sequence< Property > SAL_CALL
 XPropertySetInfoImpl2::getProperties(
     void )
@@ -395,9 +387,6 @@ XPropertySetInfoImpl2::hasPropertyByName(
             return true;
     return false;
 }
-
-
-
 
 
 void SAL_CALL FileProvider::initProperties()
@@ -455,7 +444,6 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
     else
         throw UnknownPropertyException( THROW_WHERE );
 }
-
 
 
 Any SAL_CALL
@@ -534,7 +522,6 @@ FileProvider::removeVetoableChangeListener(
 {
     return;
 }
-
 
 
 // XFileIdentifierConverter

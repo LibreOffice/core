@@ -60,13 +60,10 @@ namespace rptui
 using namespace ::com::sun::star;
 
 
-
-
 IMPL_LINK_NOARG_TYPED( DlgEdFunc, ScrollTimeout, Timer *, void )
 {
     ForceScroll( m_pParent->PixelToLogic( m_pParent->GetPointerPosPixel() ) );
 }
-
 
 
 void DlgEdFunc::ForceScroll( const Point& rPos )
@@ -163,7 +160,6 @@ DlgEdFunc::~DlgEdFunc()
 }
 
 
-
 bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     m_aMDPos = m_pParent->PixelToLogic( rMEvt.GetPosPixel() );
@@ -221,7 +217,6 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         m_pParent->CaptureMouse();
     return bHandled;
 }
-
 
 
 bool DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
@@ -653,12 +648,10 @@ DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
 }
 
 
-
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
     m_rView.SetEditMode();
 }
-
 
 
 bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
@@ -754,7 +747,6 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 
-
 bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseMove(rMEvt ) )
@@ -790,18 +782,15 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-
 DlgEdFuncSelect::DlgEdFuncSelect( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
 {
 }
 
 
-
 DlgEdFuncSelect::~DlgEdFuncSelect()
 {
 }
-
 
 
 bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
@@ -849,7 +838,6 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-
 bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseButtonUp( rMEvt ) )
@@ -871,7 +859,6 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     m_bSelectionMode = false;
     return true;
 }
-
 
 
 bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )

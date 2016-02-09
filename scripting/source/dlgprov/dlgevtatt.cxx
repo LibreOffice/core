@@ -53,7 +53,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::reflection;
 
 
-
 namespace dlgprov
 {
 
@@ -148,8 +147,6 @@ namespace dlgprov
     }
 
 
-
-
     // DialogEventsAttacherImpl
 
 
@@ -180,7 +177,6 @@ namespace dlgprov
         if ( mbUseFakeVBAEvents )
             listernersForTypes[ OUString("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
-
 
 
     DialogEventsAttacherImpl::~DialogEventsAttacherImpl()
@@ -371,7 +367,6 @@ namespace dlgprov
     }
 
 
-
     // DialogAllListenerImpl
 
 
@@ -384,11 +379,9 @@ namespace dlgprov
     }
 
 
-
     DialogAllListenerImpl::~DialogAllListenerImpl()
     {
     }
-
 
 
     void DialogAllListenerImpl::firing_impl( const AllEventObject& Event, Any* pRet )
@@ -431,7 +424,6 @@ namespace dlgprov
     }
 
 
-
     Any DialogAllListenerImpl::approveFiring( const AllEventObject& Event )
         throw ( reflection::InvocationTargetException, RuntimeException, std::exception )
     {
@@ -441,7 +433,6 @@ namespace dlgprov
         firing_impl( Event, &aReturn );
         return aReturn;
     }
-
 
 
     // DialogScriptListenerImpl
@@ -460,7 +451,6 @@ namespace dlgprov
         ,m_bDialogProviderMode( bDialogProviderMode )
     {
     }
-
 
 
     DialogScriptListenerImpl::~DialogScriptListenerImpl()
@@ -671,7 +661,6 @@ namespace dlgprov
     }
 
 
-
     Any DialogScriptListenerImpl::approveFiring( const ScriptEvent& aScriptEvent )
         throw ( reflection::InvocationTargetException, RuntimeException, std::exception )
     {
@@ -681,8 +670,6 @@ namespace dlgprov
         firing_impl( aScriptEvent, &aReturn );
         return aReturn;
     }
-
-
 
 
 }   // namespace dlgprov

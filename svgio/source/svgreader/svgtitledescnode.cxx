@@ -20,7 +20,6 @@
 #include <svgio/svgreader/svgtitledescnode.hxx>
 
 
-
 namespace svgio
 {
     namespace svgreader

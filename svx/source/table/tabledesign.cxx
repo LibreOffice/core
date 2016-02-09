@@ -251,12 +251,10 @@ sal_Bool SAL_CALL TableDesignStyle::isInUse() throw (RuntimeException, std::exce
 }
 
 
-
 OUString SAL_CALL TableDesignStyle::getParentStyle() throw (RuntimeException, std::exception)
 {
     return OUString();
 }
-
 
 
 void SAL_CALL TableDesignStyle::setParentStyle( const OUString& ) throw (NoSuchElementException, RuntimeException, std::exception)
@@ -271,7 +269,6 @@ OUString SAL_CALL TableDesignStyle::getName() throw (RuntimeException, std::exce
 {
     return msName;
 }
-
 
 
 void SAL_CALL TableDesignStyle::setName( const OUString& rName ) throw (RuntimeException, std::exception)
@@ -297,14 +294,12 @@ Any SAL_CALL TableDesignStyle::getByName( const OUString& rName ) throw(NoSuchEl
 }
 
 
-
 Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     return comphelper::mapKeysToSequence( getCellStyleNameMap() );
 }
-
 
 
 sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )  throw(RuntimeException, std::exception)
@@ -327,7 +322,6 @@ Type SAL_CALL TableDesignStyle::getElementType() throw(RuntimeException, std::ex
 }
 
 
-
 sal_Bool SAL_CALL TableDesignStyle::hasElements() throw(RuntimeException, std::exception)
 {
     return sal_True;
@@ -341,7 +335,6 @@ sal_Int32 SAL_CALL TableDesignStyle::getCount() throw(RuntimeException, std::exc
 {
     return style_count;
 }
-
 
 
 Any SAL_CALL TableDesignStyle::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
@@ -424,12 +417,10 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
 }
 
 
-
 void SAL_CALL TableDesignStyle::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
 }
-
 
 
 void TableDesignStyle::notifyModifyListener()
@@ -455,14 +446,12 @@ void SAL_CALL TableDesignStyle::modified( const css::lang::EventObject& ) throw 
 }
 
 
-
 void SAL_CALL TableDesignStyle::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 
 // TableStyle
-
 
 
 // XServiceInfo
@@ -510,7 +499,6 @@ Any SAL_CALL TableDesignFamily::getByName( const OUString& rName ) throw(NoSuchE
 }
 
 
-
 Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -525,7 +513,6 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(Runtime
 
     return aRet;
 }
-
 
 
 sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(RuntimeException, std::exception)
@@ -551,7 +538,6 @@ Type SAL_CALL TableDesignFamily::getElementType() throw(RuntimeException, std::e
 }
 
 
-
 sal_Bool SAL_CALL TableDesignFamily::hasElements() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -569,7 +555,6 @@ sal_Int32 SAL_CALL TableDesignFamily::getCount() throw(RuntimeException, std::ex
 
     return sal::static_int_cast< sal_Int32 >( maDesigns.size() );
 }
-
 
 
 Any SAL_CALL TableDesignFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
@@ -603,7 +588,6 @@ void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any&
 
     maDesigns.push_back( xStyle );
 }
-
 
 
 void SAL_CALL TableDesignFamily::removeByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
@@ -664,7 +648,6 @@ Reference< XInterface > SAL_CALL TableDesignFamily::createInstance() throw(Excep
 }
 
 
-
 Reference< XInterface > SAL_CALL TableDesignFamily::createInstanceWithArguments( const Sequence< Any >&  ) throw(Exception, RuntimeException, std::exception)
 {
     return createInstance();
@@ -688,11 +671,9 @@ void SAL_CALL TableDesignFamily::dispose(  ) throw (RuntimeException, std::excep
 }
 
 
-
 void SAL_CALL TableDesignFamily::addEventListener( const Reference< XEventListener >&  ) throw (RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL TableDesignFamily::removeEventListener( const Reference< XEventListener >&  ) throw (RuntimeException, std::exception)
@@ -710,12 +691,10 @@ Reference<XPropertySetInfo> TableDesignFamily::getPropertySetInfo() throw (Runti
 }
 
 
-
 void TableDesignFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
-
 
 
 Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -732,12 +711,10 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (U
 }
 
 
-
 void TableDesignFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
-
 
 
 void TableDesignFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -746,20 +723,16 @@ void TableDesignFamily::removePropertyChangeListener( const OUString& , const Re
 }
 
 
-
 void TableDesignFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
 
-
 void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     OSL_FAIL( "###unexpected!" );
 }
-
-
 
 
 Reference< XNameAccess > CreateTableDesignFamily()

@@ -155,7 +155,6 @@ public:
 };
 
 
-
 //  class PropertySetHelper
 
 OPropertySetHelper::OPropertySetHelper(
@@ -1223,7 +1222,6 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
 }
 
 } // end namespace cppu
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

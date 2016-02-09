@@ -57,7 +57,6 @@ namespace drawinglayer { namespace texture {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace processor3d
@@ -148,7 +147,6 @@ namespace drawinglayer
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer
-
 
 
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX

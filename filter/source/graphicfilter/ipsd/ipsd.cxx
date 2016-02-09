@@ -169,7 +169,6 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
 }
 
 
-
 bool PSDReader::ImplReadHeader()
 {
     mpFileHeader = new PSDFileHeader;

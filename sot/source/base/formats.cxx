@@ -1199,7 +1199,6 @@ static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
     };
 
 
-
 #define IMPL_DATA_ARRAY_1                                                 \
 EXCHG_EMPYT_ARRAY                                                         \
 EXCHG_DEST_DOC_OLEOBJ_ARRAY                                               \
@@ -1333,9 +1332,6 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
 };
 
 
-
-
-
 // - new style GetExchange methods -
 
 
@@ -1356,7 +1352,6 @@ bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, SotClipbo
 
     return bRet;
 }
-
 
 
 static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl& rEntry )
@@ -1418,7 +1413,6 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
 
     return bRet;
 }
-
 
 
 static sal_uInt16 GetTransferableAction_Impl(
@@ -1493,7 +1487,6 @@ static sal_uInt16 GetTransferableAction_Impl(
 
     return EXCHG_INOUT_ACTION_NONE;
 }
-
 
 
 sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
@@ -1607,7 +1600,6 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
     }
     return nUserAction;
 }
-
 
 
 sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )

@@ -41,7 +41,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-
 OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
         ::osl::Mutex& _rMutex,
         const TStringVector& _rVector

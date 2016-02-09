@@ -40,7 +40,6 @@ namespace pcr
 {
 
 
-
     //= TabOrderListBox
 
     class TabOrderListBox : public SvTreeListBox
@@ -57,7 +56,6 @@ namespace pcr
     private:
         using SvTreeListBox::MoveSelection;
     };
-
 
 
     //= TabOrderDialog

@@ -62,7 +62,6 @@ protected:
 };
 
 
-
 #endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,6 @@ namespace svt
 {
 
 
-
     //= OFilePickerInteractionHandler
 
     typedef ::cppu::WeakImplHelper <   css::task::XInteractionHandler

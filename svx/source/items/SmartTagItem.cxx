@@ -64,7 +64,6 @@ bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId
 }
 
 
-
 bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -81,19 +80,16 @@ bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-
 SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
 {
     return new SvxSmartTagItem( *this );
 }
 
 
-
 SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
-
 
 
 SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const

@@ -27,7 +27,6 @@
 namespace accessibility {
 
 
-
 /** <p>This interface provides the means to transform between internal
     coordinates in 100th of mm and screen coordinates without giving direct
     access to the underlying view.  Each view forwarder represents a

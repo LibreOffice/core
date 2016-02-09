@@ -1944,7 +1944,6 @@ const
 //    p   q   r   s   t   u   v   w   x   y   z
 
 
-
 void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, OUStringBuffer& sBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);

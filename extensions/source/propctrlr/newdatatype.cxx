@@ -25,7 +25,6 @@ namespace pcr
 {
 
 
-
     //= NewDataTypeDialog
 
 

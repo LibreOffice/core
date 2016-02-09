@@ -53,7 +53,6 @@ struct VCL_DLLPUBLIC PPDValue
 };
 
 
-
 /*
  * PPDKey - a container for the available options (=values) of a PPD keyword
  */
@@ -110,7 +109,6 @@ struct PPDKeyhash
     size_t operator()( const PPDKey * pKey) const
         { return reinterpret_cast<size_t>(pKey); }
 };
-
 
 
 /*
@@ -239,7 +237,6 @@ public:
                                      const OUString& i_rOption,
                                      const css::lang::Locale& i_rLocale = css::lang::Locale() ) const;
 };
-
 
 
 /*

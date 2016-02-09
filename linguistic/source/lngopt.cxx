@@ -138,7 +138,6 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 }
 
 
-
 //! map must be sorted by first entry in alphabetical increasing order.
 static const SfxItemPropertyMapEntry* lcl_GetLinguProps()
 {

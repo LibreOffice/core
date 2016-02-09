@@ -43,13 +43,11 @@ namespace /* private */
 }
 
 
-
 CColumnInfo::CColumnInfo(long RefCnt) :
     m_RefCnt(RefCnt)
 {
     InterlockedIncrement(&g_DllRefCnt);
 }
-
 
 
 CColumnInfo::~CColumnInfo()
@@ -77,12 +75,10 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFIID riid, void __RPC_FA
 }
 
 
-
 ULONG STDMETHODCALLTYPE CColumnInfo::AddRef()
 {
     return InterlockedIncrement(&m_RefCnt);
 }
-
 
 
 ULONG STDMETHODCALLTYPE CColumnInfo::Release()
@@ -186,7 +182,6 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOL
 
     return S_FALSE;
 }
-
 
 
 bool CColumnInfo::IsOOFileExtension(wchar_t* Extension) const

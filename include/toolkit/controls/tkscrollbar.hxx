@@ -32,7 +32,6 @@ namespace toolkit
 {
 
 
-
     //= UnoControlScrollBarModel
 
     class UnoControlScrollBarModel : public UnoControlModel
@@ -114,8 +113,6 @@ namespace toolkit
         css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
             throw (css::uno::RuntimeException, std::exception) override;
     };
-
-
 
 
 } // namespacetoolkit

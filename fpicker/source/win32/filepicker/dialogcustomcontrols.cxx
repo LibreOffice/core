@@ -21,17 +21,11 @@
 #include <osl/diagnose.h>
 
 
-
-
-
 CDialogCustomControlBase::CDialogCustomControlBase(HWND aControlHandle, HWND aParentHandle) :
     m_CustomControlHandle(aControlHandle),
     m_ParentHandle(aParentHandle)
 {
 }
-
-
-
 
 
 void SAL_CALL CDialogCustomControlBase::SetFont(HFONT hFont)
@@ -42,9 +36,6 @@ void SAL_CALL CDialogCustomControlBase::SetFont(HFONT hFont)
         (WPARAM)hFont,
         (LPARAM)sal_True);
 }
-
-
-
 
 
 void SAL_CALL CDialogCustomControlBase::AlignToBuddy(HWND aBuddyHandle)
@@ -80,15 +71,9 @@ void SAL_CALL CDialogCustomControlBase::AlignToBuddy(HWND aBuddyHandle)
 }
 
 
-
-
-
 CDummyCustomControl::CDummyCustomControl(HWND, HWND)
 {
 }
-
-
-
 
 
 void SAL_CALL CDummyCustomControl::Align()
@@ -97,16 +82,10 @@ void SAL_CALL CDummyCustomControl::Align()
 }
 
 
-
-
-
 void SAL_CALL CDummyCustomControl::SetFont(HFONT)
 {
     // do nothing
 }
-
-
-
 
 
 CStaticCustomControl::CStaticCustomControl(HWND aControlHandle, HWND aParentHandle) :
@@ -125,9 +104,6 @@ void SAL_CALL CStaticCustomControl::Align()
 }
 
 
-
-
-
 CPushButtonCustomControl::CPushButtonCustomControl(HWND aControlHandle, HWND aParentHandle) :
     CDialogCustomControlBase(aControlHandle,aParentHandle)
 {
@@ -144,9 +120,6 @@ void SAL_CALL CPushButtonCustomControl::Align()
 }
 
 
-
-
-
 CComboboxCustomControl::CComboboxCustomControl(HWND aControlHandle, HWND aParentHandle) :
     CDialogCustomControlBase(aControlHandle,aParentHandle)
 {
@@ -161,9 +134,6 @@ void SAL_CALL CComboboxCustomControl::Align()
 {
     AlignToBuddy(GetDlgItem(m_ParentHandle,cmb1));
 }
-
-
-
 
 
 CCheckboxCustomControl::CCheckboxCustomControl(HWND aControlHandle, HWND aParentHandle) :

@@ -85,12 +85,6 @@ XStream_impl::~XStream_impl()
 }
 
 
-
-
-
-
-
-
 uno::Reference< io::XInputStream > SAL_CALL
 XStream_impl::getInputStream(  )
     throw( uno::RuntimeException, std::exception)
@@ -124,8 +118,6 @@ void SAL_CALL XStream_impl::truncate()
     if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
         throw io::IOException( THROW_WHERE );
 }
-
-
 
 
 // XStream_impl private non interface methods

@@ -33,7 +33,6 @@ namespace drawinglayer { namespace animation {
 }}
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -98,7 +97,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -127,7 +125,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 namespace drawinglayer
@@ -164,7 +161,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ANIMATEDPRIMITIVE2D_HXX

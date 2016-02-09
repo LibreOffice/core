@@ -33,7 +33,6 @@ inline bool IsValidPrinter( const Printer* pPtr )
 }
 
 
-
 Size SvxPaperInfo::GetPaperSize( Paper ePaper, MapUnit eUnit )
 {
     PaperInfo aInfo(ePaper);
@@ -84,7 +83,6 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
 }
 
 
-
 Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy )
 {
     Size aSize(eUnit == MAP_100TH_MM ? rSize : OutputDevice::LogicToLogic(rSize, eUnit, MAP_100TH_MM));
@@ -95,14 +93,12 @@ Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy 
 }
 
 
-
 long SvxPaperInfo::GetSloppyPaperDimension( long nSize, MapUnit eUnit )
 {
     nSize = eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, eUnit, MAP_100TH_MM);
     nSize = PaperInfo::sloppyFitPageDimension(nSize);
     return eUnit == MAP_100TH_MM ? nSize : OutputDevice::LogicToLogic(nSize, MAP_100TH_MM, eUnit);
 }
-
 
 
 Size SvxPaperInfo::GetDefaultPaperSize( MapUnit eUnit )

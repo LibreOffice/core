@@ -53,7 +53,6 @@ using com::sun::star::container::XChild;
 using com::sun::star::container::XNameContainer;
 
 
-
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
            ,m_pImpl( new FmFormPageImpl( *this ) )

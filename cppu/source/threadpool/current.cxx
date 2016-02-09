@@ -97,8 +97,6 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 }
 
 
-
-
 class ThreadKey
 {
     bool     _bInit;

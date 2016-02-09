@@ -31,7 +31,6 @@ namespace drawingml {
 namespace chart {
 
 
-
 struct View3DModel;
 class TypeGroupConverter;
 
@@ -46,7 +45,6 @@ public:
                             const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
                             TypeGroupConverter& rTypeGroup );
 };
-
 
 
 struct WallFloorModel;
@@ -64,7 +62,6 @@ public:
 };
 
 
-
 struct DataTableModel;
 
 class DataTableConverter : public ConverterBase< DataTableModel >
@@ -77,7 +74,6 @@ public:
     void                convertFromModel(
                             const css::uno::Reference< css::chart2::XDiagram >& rxDiagram);
 };
-
 
 
 struct PlotAreaModel;
@@ -104,7 +100,6 @@ private:
     bool                mbWall3dChart;
     bool                mbPieChart;
 };
-
 
 
 } // namespace chart

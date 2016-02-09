@@ -28,7 +28,6 @@ struct Mapping;
 typedef std::vector<std::unique_ptr<Mapping> > MappingArray;
 
 
-
 #define COLUMN_COUNT                31
 #define IDENTIFIER_POS              0
 #define AUTHORITYTYPE_POS           1

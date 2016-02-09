@@ -405,7 +405,6 @@ bool ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 }
 
 
-
 } // namespace internal
 } // namespace presentation
 

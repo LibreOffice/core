@@ -32,7 +32,6 @@ namespace vba {
  */
 
 
-
 /** Locks or unlocks the controllers of all documents that have the same type
     as the specified document.
 
@@ -50,7 +49,6 @@ namespace vba {
 BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
     const css::uno::Reference< css::frame::XModel >& rxModel,
     bool bLockControllers );
-
 
 
 /** Enables or disables the container windows of all controllers of all
@@ -73,7 +71,6 @@ BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
     bool bEnableWindows );
 
 
-
 /** Registers the passed path as working directory for the application the
     passed document belongs to.
 
@@ -87,7 +84,6 @@ BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
 BASIC_DLLPUBLIC void registerCurrentDirectory(
     const css::uno::Reference< css::frame::XModel >& rxModel,
     const OUString& rPath );
-
 
 
 } // namespace vba

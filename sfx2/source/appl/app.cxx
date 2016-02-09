@@ -252,7 +252,6 @@ SfxApplication::~SfxApplication()
 }
 
 
-
 const OUString& SfxApplication::GetLastDir_Impl() const
 
 /*  [Description]
@@ -286,7 +285,6 @@ const OUString& SfxApplication::GetLastSaveDirectory() const
 }
 
 
-
 void SfxApplication::SetLastDir_Impl
 (
     const OUString&   rNewDir     /* Complete directory path as a string */
@@ -306,12 +304,10 @@ void SfxApplication::SetLastDir_Impl
 }
 
 
-
 void SfxApplication::ResetLastDir()
 {
     pAppData_Impl->aLastDir.clear();
 }
-
 
 
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
@@ -391,7 +387,6 @@ ResMgr* SfxApplication::GetSfxResManager()
 }
 
 
-
 void SfxApplication::SetProgress_Impl
 (
     SfxProgress *pProgress
@@ -413,19 +408,16 @@ void SfxApplication::SetProgress_Impl
 }
 
 
-
 sal_uInt16 SfxApplication::GetFreeIndex()
 {
     return pAppData_Impl->aIndexBitSet.GetFreeIndex()+1;
 }
 
 
-
 void SfxApplication::ReleaseIndex(sal_uInt16 i)
 {
     pAppData_Impl->aIndexBitSet.ReleaseIndex(i-1);
 }
-
 
 
 vcl::Window* SfxApplication::GetTopWindow() const

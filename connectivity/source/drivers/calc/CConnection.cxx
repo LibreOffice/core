@@ -42,7 +42,6 @@ using namespace connectivity::file;
 typedef connectivity::file::OConnection OConnection_BASE;
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -50,7 +49,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::sheet;
-
 
 
 OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nDocCount(0)
@@ -196,7 +194,6 @@ void OCalcConnection::disposing()
 IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connection", "com.sun.star.sdbc.Connection")
 
 
-
 Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -214,7 +211,6 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 }
 
 
-
 ::com::sun::star::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -229,7 +225,6 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 }
 
 
-
 Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -240,7 +235,6 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-
 
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
@@ -256,7 +250,6 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }
-
 
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )

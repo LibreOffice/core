@@ -36,8 +36,6 @@
 #endif
 
 
-
-
 class CControlCommand;
 class CFileOpenDialog;
 

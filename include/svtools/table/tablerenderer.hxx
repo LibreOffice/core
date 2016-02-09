@@ -33,7 +33,6 @@ namespace svt { namespace table
 {
 
 
-
     //= ITableRenderer
 
     /** interface to implement by components rendering a ->TableControl

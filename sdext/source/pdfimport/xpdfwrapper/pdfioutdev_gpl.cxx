@@ -444,8 +444,6 @@ inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,true,bInvert); }
 
 
-
-
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) const
 {
     FontAttributes aNewFont;

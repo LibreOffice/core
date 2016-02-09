@@ -42,10 +42,6 @@ FFDataHandler::~FFDataHandler()
 }
 
 
-
-
-
-
 bool FFDataHandler::getCheckboxChecked() const
 {
     if (m_nCheckboxChecked != -1)
@@ -55,8 +51,6 @@ bool FFDataHandler::getCheckboxChecked() const
     else
         return false;
 }
-
-
 
 
 void FFDataHandler::lcl_sprm(Sprm & r_Sprm)

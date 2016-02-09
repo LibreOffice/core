@@ -85,7 +85,6 @@ void SvxRelativeField::Modify()
 }
 
 
-
 void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
                                            sal_uInt16 nMax, sal_uInt16 nStep )
 {
@@ -95,7 +94,6 @@ void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
     nRelStep      = nStep;
     SetUnit( FUNIT_CM );
 }
-
 
 
 void SvxRelativeField::SetRelative( bool bNewRelative )

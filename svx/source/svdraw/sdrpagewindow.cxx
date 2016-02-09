@@ -38,7 +38,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
-
 using namespace ::com::sun::star;
 
 struct SdrPageWindow::Impl
@@ -301,7 +300,6 @@ namespace
     }
 } // end of anonymous namespace
 #endif // CLIPPER_TEST
-
 
 
 void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedirector )

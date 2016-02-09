@@ -56,7 +56,6 @@ public:
 };
 
 
-
 //---------------------------- DXFVector ---------------------------------------
 
 // common 3D vector with doubles
@@ -169,7 +168,6 @@ private:
 
 
 //------------------------------- inlines --------------------------------------
-
 
 
 inline DXFVector::DXFVector(double fX, double fY, double fZ)

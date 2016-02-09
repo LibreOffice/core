@@ -44,7 +44,6 @@ using namespace ::comphelper;
     OTools::ThrowException(m_pConnection,x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
 
 
-
 using namespace connectivity::odbc;
 
 using namespace com::sun::star::uno;
@@ -520,7 +519,6 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 }
 
 
-
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -629,7 +627,6 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 }
 
 
-
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -638,7 +635,6 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 
     return makeAny(m_aLastWarning);
 }
-
 
 
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)

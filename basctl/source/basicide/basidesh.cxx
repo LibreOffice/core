@@ -425,14 +425,12 @@ void Shell::InitScrollBars()
 }
 
 
-
 void Shell::InitTabBar()
 {
     pTabBar->Enable();
     pTabBar->Show();
     pTabBar->SetSelectHdl( LINK( this, Shell, TabBarHdl ) );
 }
-
 
 
 void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
@@ -454,7 +452,6 @@ IMPL_LINK_TYPED( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
 }
-
 
 
 bool Shell::NextPage( bool bPrev )
@@ -504,7 +501,6 @@ void Shell::ArrangeTabBar()
 
     return pMgr;
 }
-
 
 
 void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -583,7 +579,6 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-
 void Shell::CheckWindows()
 {
     bool bSetCurWindow = false;
@@ -607,7 +602,6 @@ void Shell::CheckWindows()
 }
 
 
-
 void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy )
 {
     bool bChangeCurWindow = pCurWin;
@@ -629,7 +623,6 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
     if ( bChangeCurWindow )
         SetCurWindow( FindApplicationWindow(), true );
 }
-
 
 
 void Shell::UpdateWindows()
@@ -840,14 +833,12 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
 }
 
 
-
 sal_uInt16 Shell::InsertWindowInTable( BaseWindow* pNewWin )
 {
     nCurKey++;
     aWindowTable[ nCurKey ] = pNewWin;
     return nCurKey;
 }
-
 
 
 void Shell::InvalidateBasicIDESlots()

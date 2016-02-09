@@ -25,7 +25,6 @@
 #include <vcl/field.hxx>
 
 
-
 class FmInputRecordNoDialog : public ModalDialog
 {
 public:

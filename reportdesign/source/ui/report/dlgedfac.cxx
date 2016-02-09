@@ -31,19 +31,16 @@ namespace rptui
 using namespace ::com::sun::star;
 
 
-
 DlgEdFactory::DlgEdFactory()
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
 
 
-
 DlgEdFactory::~DlgEdFactory()
 {
     SdrObjFactory::RemoveMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
-
 
 
 IMPL_STATIC_LINK_TYPED(

@@ -44,7 +44,6 @@ namespace ucbhelper {
 class PropertyValues;
 
 
-
 /**
   * This class implements the interface XRow. After construction of a valueset
   * the user can append properties ( incl. its values ) to the set. This class

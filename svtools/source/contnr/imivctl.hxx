@@ -41,7 +41,6 @@ class IcnViewEdit_Impl;
 class IcnGridMap_Impl;
 
 
-
 // some defines
 
 #define PAINTFLAG_HOR_CENTERED  0x0001
@@ -79,16 +78,12 @@ class IcnGridMap_Impl;
 #define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)
 
 
-
-
-
 enum IcnViewFieldType
 {
     IcnViewFieldTypeDontknow = 0,
     IcnViewFieldTypeImage = 1,
     IcnViewFieldTypeText = 2
 };
-
 
 
 // Data about the focus of entries
@@ -101,7 +96,6 @@ struct LocalFocus
 
     LocalFocus() { bOn = false; }
 };
-
 
 
 // Entry-List
@@ -143,8 +137,6 @@ public:
                             }
     void                    insert( size_t nPos, SvxIconChoiceCtrlEntry* pEntry );
 };
-
-
 
 
 // Implementation-class of IconChoiceCtrl
@@ -576,7 +568,6 @@ public:
     void                    CreateGridAjustData( IconChoiceMap& pLists, SvxIconChoiceCtrlEntry* pRow=nullptr);
     static void             DestroyGridAdjustData( IconChoiceMap& rLists );
 };
-
 
 
 typedef sal_uLong GridId;

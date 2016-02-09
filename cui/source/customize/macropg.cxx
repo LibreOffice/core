@@ -856,7 +856,6 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< fra
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(AssignComponentDialog, ButtonHandler, Button*, void)
 {
     OUString aMethodName = mpMethodEdit->GetText();
@@ -902,7 +901,6 @@ IMPL_LINK_NOARG_TYPED( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void
     GetTabPage()->FillItemSet( nullptr );
     EndDialog( RET_OK );
 }
-
 
 
 SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(vcl::Window *pParent,

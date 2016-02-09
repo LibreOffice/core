@@ -52,7 +52,6 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-
 static bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, bool& bNeg );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
@@ -228,8 +227,6 @@ bool DicEvtListenerHelper::RemoveDicListEvtListener(
 }
 
 
-
-
 sal_Int16 DicEvtListenerHelper::EndCollectEvents()
 {
     DBG_ASSERT(nNumCollectEvtListeners > 0, "lng: mismatched function call");
@@ -269,8 +266,6 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
 
     return nNumCollectEvtListeners;
 }
-
-
 
 
 void DicList::MyAppExitListener::AtExit()

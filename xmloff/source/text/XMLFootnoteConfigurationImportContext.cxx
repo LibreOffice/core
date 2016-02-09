@@ -42,7 +42,6 @@
 #include <com/sun/star/style/NumberingType.hpp>
 
 
-
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -108,10 +107,7 @@ void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 }
 
 
-
 // XMLFootnoteConfigurationImportContext
-
-
 
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(

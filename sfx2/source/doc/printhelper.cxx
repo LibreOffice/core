@@ -580,8 +580,6 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 };
 
 
-
-
 //  XPrintable
 
 void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >& rOptions)

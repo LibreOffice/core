@@ -52,7 +52,6 @@ OUString getElement(OUString const & version, ::sal_Int32 * index)
 }
 
 
-
 // Return 1 if version1 is greater then version 2, 0 if they are equal
 //and -1 if version1 is less version 2
 int compareVersions(

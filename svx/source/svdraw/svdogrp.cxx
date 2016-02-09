@@ -67,8 +67,6 @@ sdr::contact::ViewContact* SdrObjGroup::CreateObjectSpecificViewContact()
 }
 
 
-
-
 SdrObjGroup::SdrObjGroup()
 {
     pSub=new SdrObjList(nullptr,nullptr);
@@ -712,7 +710,6 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
         SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
     }
 }
-
 
 
 void SdrObjGroup::NbcSetRelativePos(const Point& rPnt)

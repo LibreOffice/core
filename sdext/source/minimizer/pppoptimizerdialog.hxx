@@ -97,7 +97,6 @@ css::uno::Reference< css::uno::XInterface > PPPOptimizerDialog_createInstance( c
     throw( css::uno::Exception );
 
 
-
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

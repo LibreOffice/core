@@ -1940,7 +1940,6 @@ bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 }
 
 
-
 bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
     bool bOk = true;
@@ -2479,7 +2478,6 @@ bool SfxObjectShell::ConvertTo
 {
     return false;
 }
-
 
 
 bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )

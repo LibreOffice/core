@@ -89,8 +89,6 @@ inline void reduceRange( Any& any);
 #endif
 
 
-
-
 // createUnoObjectWrapper gets a wrapper instance by calling createUnoWrapperInstance
     // and initializes it via XInitialization. The wrapper object is required to implement
     // XBridgeSupplier so that it can convert itself to IDispatch.
@@ -266,7 +264,6 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
     }
     return ret;
 }
-
 
 
 // Gets the invocation factory depending on the Type in the Any.

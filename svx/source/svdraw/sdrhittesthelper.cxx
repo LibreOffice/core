@@ -90,7 +90,6 @@ SdrObject* SdrObjectPrimitiveHit(
 }
 
 
-
 SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
     const Point& rPnt,
@@ -112,7 +111,6 @@ SdrObject* SdrObjListPrimitiveHit(
 
     return pRetval;
 }
-
 
 
 bool ViewObjectContactPrimitiveHit(

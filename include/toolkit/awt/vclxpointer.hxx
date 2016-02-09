@@ -69,8 +69,6 @@ public:
 };
 
 
-
-
 #endif // INCLUDED_TOOLKIT_AWT_VCLXPOINTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

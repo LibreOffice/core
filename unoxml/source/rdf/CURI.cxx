@@ -804,7 +804,6 @@ OUString SAL_CALL CURI::getLocalName() throw (css::uno::RuntimeException, std::e
 } // closing anonymous implementation namespace
 
 
-
 // component helper namespace
 namespace comp_CURI {
 

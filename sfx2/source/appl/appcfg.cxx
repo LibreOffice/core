@@ -80,7 +80,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
 
-
 class SfxEventAsyncer_Impl : public SfxListener
 {
     SfxEventHint        aHint;
@@ -95,7 +94,6 @@ public:
 };
 
 
-
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
@@ -105,7 +103,6 @@ void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         delete this;
     }
 }
-
 
 
 SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
@@ -120,12 +117,10 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
 }
 
 
-
 SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 {
     delete pIdle;
 }
-
 
 
 IMPL_LINK_TYPED(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)

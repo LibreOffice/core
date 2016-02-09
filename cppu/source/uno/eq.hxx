@@ -32,7 +32,6 @@ namespace cppu
 //#### equality ####################################################################################
 
 
-
 inline bool _equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )

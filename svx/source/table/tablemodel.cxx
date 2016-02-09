@@ -47,9 +47,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 
-
 namespace sdr { namespace table {
-
 
 
 // removes the given range from a vector
@@ -85,7 +83,6 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
 }
 
 
-
 /** inserts a range into a vector */
 template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
 {
@@ -111,7 +108,6 @@ template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVec
     }
     return nIndex;
 }
-
 
 
 TableModel::TableModel( SdrTableObj* pTableObj )
@@ -159,11 +155,9 @@ TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTabl
 }
 
 
-
 TableModel::~TableModel()
 {
 }
-
 
 
 void TableModel::init( sal_Int32 nColumns, sal_Int32 nRows )
@@ -197,12 +191,10 @@ sal_Int32 TableModel::getLeft()
 }
 
 
-
 sal_Int32 TableModel::getTop()
 {
     return 0;
 }
-
 
 
 sal_Int32 TableModel::getRight()
@@ -211,19 +203,16 @@ sal_Int32 TableModel::getRight()
 }
 
 
-
 sal_Int32 TableModel::getBottom()
 {
     return getRowCount();
 }
 
 
-
 Reference< XTable > TableModel::getTable()
 {
     return this;
 }
-
 
 
 void TableModel::UndoInsertRows( sal_Int32 nIndex, sal_Int32 nCount )
@@ -235,7 +224,6 @@ void TableModel::UndoInsertRows( sal_Int32 nIndex, sal_Int32 nCount )
     updateRows();
     setModified(sal_True);
 }
-
 
 
 void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
@@ -254,7 +242,6 @@ void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
 }
 
 
-
 void TableModel::UndoInsertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
     TableModelNotifyGuard aGuard( this );
@@ -268,7 +255,6 @@ void TableModel::UndoInsertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     updateColumns();
     setModified(sal_True);
 }
-
 
 
 void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellVector& aCells )
@@ -309,7 +295,6 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeExcep
 }
 
 
-
 Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& rRange ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
@@ -323,13 +308,11 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Referen
 }
 
 
-
 sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     return getRowCountImpl();
 }
-
 
 
 sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException, std::exception)
@@ -356,12 +339,10 @@ void TableModel::dispose() throw (RuntimeException, std::exception)
 }
 
 
-
 void SAL_CALL TableModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
 {
     TableModelBase::addEventListener( xListener );
 }
-
 
 
 void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
@@ -378,7 +359,6 @@ sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException, std::excep
     ::SolarMutexGuard aGuard;
     return mbModified;
 }
-
 
 
 void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoException, RuntimeException, std::exception)
@@ -401,7 +381,6 @@ void SAL_CALL TableModel::addModifyListener( const Reference< XModifyListener >&
 }
 
 
-
 void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<XModifyListener>::get() , xListener );
@@ -419,7 +398,6 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeExcep
         mxTableColumns.set( new TableColumns( this ) );
     return mxTableColumns.get();
 }
-
 
 
 Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException, std::exception)
@@ -447,7 +425,6 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
 }
 
 
-
 Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
@@ -460,7 +437,6 @@ Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 n
 
     throw IndexOutOfBoundsException();
 }
-
 
 
 Reference< XCellRange > SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException, std::exception)
@@ -479,11 +455,9 @@ Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw 
 }
 
 
-
 void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
 
 
 Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -492,11 +466,9 @@ Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ ) th
 }
 
 
-
 void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -504,11 +476,9 @@ void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPrope
 }
 
 
-
 void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
 
 
 void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -522,7 +492,6 @@ void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPrope
 void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
 }
-
 
 
 Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
@@ -541,12 +510,10 @@ sal_Int32 TableModel::getRowCountImpl() const
 }
 
 
-
 sal_Int32 TableModel::getColumnCountImpl() const
 {
     return static_cast< sal_Int32 >( maColumns.size() );
 }
-
 
 
 void TableModel::disposing()
@@ -628,7 +595,6 @@ void TableModel::notifyModification()
 }
 
 
-
 CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     if( ((nRow >= 0) && (nRow < getRowCountImpl())) && (nCol >= 0) && (nCol < getColumnCountImpl()) )
@@ -643,7 +609,6 @@ CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
 }
 
 
-
 CellRef TableModel::createCell()
 {
     CellRef xCell;
@@ -651,7 +616,6 @@ CellRef TableModel::createCell()
         mpTableObj->createCell( xCell );
     return xCell;
 }
-
 
 
 void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
@@ -732,7 +696,6 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         setModified(sal_True);
     }
 }
-
 
 
 void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
@@ -844,7 +807,6 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 }
 
 
-
 void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
     if( nCount && mpTableObj )
@@ -905,7 +867,6 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         setModified(sal_True);
     }
 }
-
 
 
 void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
@@ -1003,7 +964,6 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 }
 
 
-
 TableRowRef TableModel::getRow( sal_Int32 nRow ) const throw (IndexOutOfBoundsException)
 {
     if( (nRow >= 0) && (nRow < getRowCountImpl()) )
@@ -1013,7 +973,6 @@ TableRowRef TableModel::getRow( sal_Int32 nRow ) const throw (IndexOutOfBoundsEx
 }
 
 
-
 TableColumnRef TableModel::getColumn( sal_Int32 nColumn ) const throw (IndexOutOfBoundsException)
 {
     if( (nColumn >= 0) && (nColumn < getColumnCountImpl()) )
@@ -1021,7 +980,6 @@ TableColumnRef TableModel::getColumn( sal_Int32 nColumn ) const throw (IndexOutO
 
     throw IndexOutOfBoundsException();
 }
-
 
 
 /** deletes rows and columns that are completely merged. Must be called between BegUndo/EndUndo! */
@@ -1112,7 +1070,6 @@ void TableModel::optimize()
     if( bWasModified )
         setModified(sal_True);
 }
-
 
 
 void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )

@@ -145,8 +145,6 @@ SmCfgOther::SmCfgOther()
 }
 
 
-
-
 SmFontFormat::SmFontFormat()
 {
     aName       = FONTNAME_MATH;
@@ -191,8 +189,6 @@ bool SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
             nWeight  == rFntFmt.nWeight     &&
             nItalic  == rFntFmt.nItalic;
 }
-
-
 
 
 SmFntFmtListEntry::SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt ) :
@@ -266,7 +262,6 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( const OUString &rFntFmtId 
 }
 
 
-
 const SmFontFormat * SmFontFormatList::GetFontFormat( size_t nPos ) const
 {
     const SmFontFormat *pRes = nullptr;
@@ -330,7 +325,6 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
 
     return OUString();
 }
-
 
 
 SmMathConfig::SmMathConfig() :

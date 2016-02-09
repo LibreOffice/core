@@ -47,7 +47,6 @@ namespace connectivity
     };
 
 
-
     //************ Class: java.sql.Time
 
 

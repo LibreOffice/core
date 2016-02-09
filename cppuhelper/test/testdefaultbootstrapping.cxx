@@ -21,7 +21,6 @@
 #include <sal/main.h>
 
 
-
 #include <cstdio>
 
 #include <rtl/process.h>

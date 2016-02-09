@@ -32,11 +32,7 @@
 using namespace tdoc_ucp;
 
 
-
-
 // Uri Implementation.
-
-
 
 
 void Uri::init() const

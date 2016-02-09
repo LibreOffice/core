@@ -42,7 +42,6 @@
 #include <comphelper/uno3.hxx>
 
 
-
 namespace vcl { class Window; }
 
 namespace utl {
@@ -357,7 +356,6 @@ inline void AccessibleGridControlBase::implSetName(
 
 
 } // namespace accessibility
-
 
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBILEGRIDCONTROLBASE_HXX

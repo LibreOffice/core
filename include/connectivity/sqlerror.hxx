@@ -30,7 +30,6 @@ namespace connectivity
 {
 
 
-
     //= ErrorCondition
 
     /** the type of error codes to be used in SQLExceptions

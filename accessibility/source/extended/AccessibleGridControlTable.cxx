@@ -22,7 +22,6 @@
 #include <svtools/accessibletable.hxx>
 
 
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -34,7 +33,6 @@ using namespace ::svt::table;
 
 
 namespace accessibility {
-
 
 
 AccessibleGridControlTable::AccessibleGridControlTable(
@@ -390,10 +388,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
 }
 
 
-
-
 } // namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

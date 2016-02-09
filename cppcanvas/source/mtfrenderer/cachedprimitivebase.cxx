@@ -18,7 +18,6 @@
  */
 
 
-
 #include <com/sun/star/rendering/RepaintResult.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

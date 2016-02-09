@@ -41,7 +41,6 @@ namespace pcr
 {
 
 
-
     //= PropertyComposer
 
     typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler

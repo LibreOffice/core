@@ -67,7 +67,6 @@ public:
 };
 
 
-
 class EventList
 {
     std::deque < css::ucb::ListAction* > maData;
@@ -83,7 +82,6 @@ public:
     void            Clear();
     css::ucb::ListAction*     GetAction( sal_IntPtr nIndex ) { return maData[ nIndex ]; }
 };
-
 
 
 class SimpleList
@@ -108,9 +106,7 @@ public:
 };
 
 
-
 #define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedResultSet"
-
 
 
 class SortedResultSet: public cppu::WeakImplHelper <

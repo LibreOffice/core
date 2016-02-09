@@ -32,7 +32,6 @@
 SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 
-
 /*  [Beschreibung]
 
     Ctor; setzt den Select-Handler am Men"u und tr"agt das Men"u
@@ -55,7 +54,6 @@ SvxFontMenuControl::SvxFontMenuControl
 }
 
 
-
 /*  [Beschreibung]
 
     F"ullt das Men"u mit den aktuellen Fonts aus der Fontlist
@@ -75,7 +73,6 @@ void SvxFontMenuControl::FillMenu()
         pMenu->Fill( pList );
     }
 }
-
 
 
 /*  [Beschreibung]
@@ -109,7 +106,6 @@ void SvxFontMenuControl::StateChanged(
 }
 
 
-
 /*  [Beschreibung]
 
     Statusbenachrichtigung "uber Bindings;  bei DOCCHANGED
@@ -124,7 +120,6 @@ void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
          pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
         FillMenu();
 }
-
 
 
 /*  [Beschreibung]

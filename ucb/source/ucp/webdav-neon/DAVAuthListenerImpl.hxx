@@ -37,14 +37,7 @@ namespace webdav_ucp
 {
 
 
-
-
-
-
 // class DAVAuthListenerImpl.
-
-
-
 
 
     class DAVAuthListener_Impl : public DAVAuthListener

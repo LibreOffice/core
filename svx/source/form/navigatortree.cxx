@@ -1362,7 +1362,6 @@ namespace svxform
         }
 
 
-
         // insert form
         GetNavModel()->Insert( pNewFormData, TREELIST_APPEND, true );
 
@@ -1546,7 +1545,6 @@ namespace svxform
     {
         SynchronizeMarkList();
     }
-
 
 
     IMPL_LINK_NOARG_TYPED(NavigatorTree, OnClipboardAction, OLocalExchange&, void)
@@ -2176,7 +2174,6 @@ namespace svxform
 
 
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

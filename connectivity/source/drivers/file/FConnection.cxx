@@ -449,6 +449,4 @@ void OConnection::throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsM
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

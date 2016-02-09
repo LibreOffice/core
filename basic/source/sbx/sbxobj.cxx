@@ -34,7 +34,6 @@ static OUString pParentProp;        // Parent-Property
 static sal_uInt16 nNameHash = 0, nParentHash = 0;
 
 
-
 SbxObject::SbxObject( const OUString& rClass )
          : SbxVariable( SbxOBJECT ), aClassName( rClass )
 {

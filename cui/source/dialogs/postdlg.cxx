@@ -120,7 +120,6 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
 }
 
 
-
 SvxPostItDialog::~SvxPostItDialog()
 {
     disposeOnce();
@@ -141,7 +140,6 @@ void SvxPostItDialog::dispose()
 }
 
 
-
 void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
     OUString sTxt( rAuthor );
@@ -149,7 +147,6 @@ void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rD
     sTxt += rDate;
     m_pLastEditFT->SetText( sTxt );
 }
-
 
 
 const sal_uInt16* SvxPostItDialog::GetRanges()
@@ -164,13 +161,11 @@ const sal_uInt16* SvxPostItDialog::GetRanges()
 }
 
 
-
 void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)
 {
     m_pPrevBtn->Enable(bPrev);
     m_pNextBtn->Enable(bNext);
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPostItDialog, PrevHdl, Button*, void)
@@ -209,7 +204,6 @@ IMPL_LINK_NOARG_TYPED(SvxPostItDialog, Stamp, Button*, void)
     m_pEditED->GrabFocus();
     m_pEditED->SetSelection( Selection( nLen, nLen ) );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxPostItDialog, OKHdl, Button*, void)

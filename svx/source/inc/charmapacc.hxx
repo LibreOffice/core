@@ -113,7 +113,6 @@ namespace svx
     };
 
 
-
     typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
                                     css::accessibility::XAccessibleTable
                                 >   OAccessibleHelper_Base;

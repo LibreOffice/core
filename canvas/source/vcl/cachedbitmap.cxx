@@ -29,7 +29,6 @@
 #include "repainttarget.hxx"
 
 
-
 using namespace ::com::sun::star;
 
 namespace vclcanvas

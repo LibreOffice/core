@@ -24,7 +24,6 @@
 //  class SfxStringItem
 
 
-
 // virtual
 SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
     CntUnencodedStringItem(which)

@@ -193,7 +193,6 @@ void DocumentHolder::OnPosRectChanged(LPRECT lpRect) const
 }
 
 
-
 void DocumentHolder::DisableInplaceActivation(BOOL b)
 {
     m_bAllowInPlace = ! b;
@@ -1268,7 +1267,6 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 }
 
 
-
 sal_Bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
     throw(
         css::uno::RuntimeException
@@ -1407,7 +1405,6 @@ DocumentHolder::notifyTermination(
     if ( xDesktop.is() )
         xDesktop->removeTerminateListener( (frame::XTerminateListener*)this );
 }
-
 
 
 void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )

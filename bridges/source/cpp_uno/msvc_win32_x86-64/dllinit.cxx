@@ -18,8 +18,6 @@
  */
 
 
-
-
 #pragma warning(push,1) // disable warnings within system headers
 #include <windows.h>
 #pragma warning(pop)

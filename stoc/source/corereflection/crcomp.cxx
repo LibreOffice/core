@@ -275,11 +275,6 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
 }
 
 
-
-
-
-
-
 CompoundIdlClassImpl::~CompoundIdlClassImpl()
 {
     delete _pFields;

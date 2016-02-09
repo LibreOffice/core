@@ -80,7 +80,6 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, sal_uInt16 nVersion ) const
 }
 
 
-
 bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -147,8 +146,6 @@ bool SvxGrfCrop::GetPresentation(
         break;
     }
 }
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

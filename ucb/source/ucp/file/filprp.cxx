@@ -88,7 +88,6 @@ XPropertySetInfo_impl::getPropertyByName(
 }
 
 
-
 Sequence< beans::Property > SAL_CALL
 XPropertySetInfo_impl::getProperties(
                     void )

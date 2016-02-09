@@ -88,8 +88,6 @@ void InsertPropertyPanel::dispose()
 }
 
 
-
-
 IMPL_LINK_TYPED(InsertPropertyPanel, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     // We will be getting a lot of window events (well, basically all

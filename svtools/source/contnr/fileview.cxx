@@ -131,7 +131,6 @@ namespace
 }
 
 
-
 void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
 {
     if( _rFilterList.getLength() )
@@ -534,7 +533,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 }
 
 
-
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
     disposeOnce();
@@ -549,7 +547,6 @@ void ViewTabListBox_Impl::dispose()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -557,7 +554,6 @@ IMPL_LINK_NOARG_TYPED(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
     maQuickSearchText.clear();
     mnSearchIndex = 0;
 }
-
 
 
 void ViewTabListBox_Impl::Resize()
@@ -584,7 +580,6 @@ void ViewTabListBox_Impl::Resize()
         mbResizeDisabled = false;
     }
 }
-
 
 
 void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
@@ -621,7 +616,6 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
         SvHeaderTabListBox::KeyInput( rKEvt );
     }
 }
-
 
 
 std::unique_ptr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
@@ -709,7 +703,6 @@ std::unique_ptr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
 }
 
 
-
 void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     switch ( nSelectedPopupEntry )
@@ -723,7 +716,6 @@ void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEn
             break;
     }
 }
-
 
 
 void ViewTabListBox_Impl::ClearAll()
@@ -1029,7 +1021,6 @@ OUString SvtFileView::GetURL( SvTreeListEntry* pEntry )
 }
 
 
-
 OUString SvtFileView::GetCurrentURL() const
 {
     OUString aURL;
@@ -1050,7 +1041,6 @@ void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolde
 }
 
 
-
 FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDescriptor )
 {
     FileViewResult eResult = eFailure;
@@ -1061,7 +1051,6 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
 
     return eResult;
 }
-
 
 
 bool SvtFileView::GetParentURL( OUString& rParentURL ) const
@@ -1091,12 +1080,10 @@ bool SvtFileView::GetParentURL( OUString& rParentURL ) const
 }
 
 
-
 const OString& SvtFileView::GetHelpId( ) const
 {
     return mpImp->mpView->GetHelpId( );
 }
-
 
 
 void SvtFileView::SetHelpId( const OString& rHelpId )
@@ -1105,13 +1092,11 @@ void SvtFileView::SetHelpId( const OString& rHelpId )
 }
 
 
-
 void SvtFileView::SetSizePixel( const Size& rNewSize )
 {
     Control::SetSizePixel( rNewSize );
     mpImp->mpView->SetSizePixel( rNewSize );
 }
-
 
 
 void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
@@ -1194,7 +1179,6 @@ void SvtFileView::SetNoSelection()
 }
 
 
-
 void SvtFileView::GetFocus()
 {
     Control::GetFocus();
@@ -1203,12 +1187,10 @@ void SvtFileView::GetFocus()
 }
 
 
-
 void SvtFileView::SetSelectHdl( const Link<SvTreeListBox*,void>& rHdl )
 {
     mpImp->SetSelectHandler( rHdl );
 }
-
 
 
 void SvtFileView::SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl )
@@ -1217,19 +1199,16 @@ void SvtFileView::SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl )
 }
 
 
-
 sal_uLong SvtFileView::GetSelectionCount() const
 {
     return mpImp->mpView->GetSelectionCount();
 }
 
 
-
 SvTreeListEntry* SvtFileView::FirstSelected() const
 {
     return mpImp->mpView->FirstSelected();
 }
-
 
 
 SvTreeListEntry* SvtFileView::NextSelected( SvTreeListEntry* pEntry ) const

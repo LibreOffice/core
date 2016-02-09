@@ -313,7 +313,6 @@ extern "C"
 }
 
 
-
 // LocatorImpl
 
 class LocatorImpl :
@@ -362,8 +361,6 @@ private:
 
     SaxExpatParser_Impl *m_pParser;
 };
-
-
 
 
 SaxExpatParser::SaxExpatParser(  )
@@ -722,7 +719,6 @@ void SaxExpatParser_Impl::parse( )
 }
 
 
-
 // The C-Callbacks
 
 
@@ -834,7 +830,6 @@ void SaxExpatParser_Impl::callbackNotationDecl(
     }
 
 }
-
 
 
 bool SaxExpatParser_Impl::callbackExternalEntityRef(

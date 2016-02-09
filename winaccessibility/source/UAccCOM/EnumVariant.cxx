@@ -31,7 +31,6 @@ using namespace com::sun::star::accessibility;
 // CEnumVariant
 
 
-
 /**
    * enumarate method,get next element
    * @param  cElements The number of elements to be returned.

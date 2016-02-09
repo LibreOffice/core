@@ -52,8 +52,6 @@ AccessibleShape*
 }
 
 
-
-
 ShapeTypeHandler& ShapeTypeHandler::Instance()
 {
     // Using double check pattern to make sure that exactly one instance of
@@ -75,8 +73,6 @@ ShapeTypeHandler& ShapeTypeHandler::Instance()
 }
 
 
-
-
 /** The given service name is first transformed into a slot id that
     identifies the place of the type descriptor.  From that descriptor the
     shape type id is returned.
@@ -93,7 +89,6 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
 }
 
 
-
 /** Extract the specified shape's service name and forward the request to
     the appropriate method.
 */
@@ -105,8 +100,6 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const uno::Reference<drawing::XShape>& 
     else
         return -1;
 }
-
-
 
 
 /** This factory method determines the type descriptor for the type of the
@@ -128,8 +121,6 @@ rtl::Reference<AccessibleShape>
 }
 
 
-
-
 /** Create the single instance of this class and initialize its list of
     type descriptors with an entry of an unknown type.
 */
@@ -143,8 +134,6 @@ ShapeTypeHandler::ShapeTypeHandler()
     maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
     maServiceNameToSlotId[maShapeTypeDescriptorList[0].msServiceName] = 0;
 }
-
-
 
 
 ShapeTypeHandler::~ShapeTypeHandler()
@@ -191,8 +180,6 @@ bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
 }
 
 
-
-
 long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 {
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
@@ -201,8 +188,6 @@ long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
     else
         return 0;
 }
-
-
 
 
 // Extract the given shape's service name and forward request to appropriate

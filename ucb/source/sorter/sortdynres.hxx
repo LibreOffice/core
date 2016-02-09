@@ -159,7 +159,6 @@ public:
 };
 
 
-
 class SortedDynamicResultSetFactory: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XSortedDynamicResultSetFactory >

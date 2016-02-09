@@ -50,7 +50,6 @@
 using namespace com::sun::star;
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

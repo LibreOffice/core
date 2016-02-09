@@ -376,7 +376,6 @@ public:
     void                DrawArray( OutputDevice& rDev, const Color* pForceColor = nullptr ) const;
 
 
-
 private:
     typedef std::unique_ptr<ArrayImpl> ArrayImplPtr;
 

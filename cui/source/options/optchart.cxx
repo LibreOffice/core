@@ -172,8 +172,6 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 }
 
 
-
-
 // event handlers
 
 

@@ -49,8 +49,6 @@ class css::rendering::XCanvasFont;
 using namespace ::com::sun::star;
 
 
-
-
 namespace dxcanvas
 {
     TextLayoutDrawHelper::TextLayoutDrawHelper(

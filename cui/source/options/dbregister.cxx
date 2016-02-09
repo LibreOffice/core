@@ -160,7 +160,6 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 }
 
 
-
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
     disposeOnce();
@@ -179,13 +178,11 @@ void DbRegistrationOptionsPage::dispose()
 }
 
 
-
 VclPtr<SfxTabPage> DbRegistrationOptionsPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )
 {
     return VclPtr<DbRegistrationOptionsPage>::Create( pParent, *rAttrSet );
 }
-
 
 
 bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -213,7 +210,6 @@ bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
 
     return bModified;
 }
-
 
 
 void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
@@ -314,7 +310,6 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, EditHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     assert(pBar);
@@ -342,7 +337,6 @@ IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar,
     pModel->SetSortMode( eMode );
     pModel->Resort();
 }
-
 
 
 IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
@@ -449,7 +443,6 @@ IMPL_LINK_TYPED( DbRegistrationOptionsPage, NameValidator, const OUString&, _rNa
 }
 
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

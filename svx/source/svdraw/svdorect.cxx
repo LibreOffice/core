@@ -62,8 +62,6 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
 }
 
 
-
-
 SdrRectObj::SdrRectObj()
 :   mpXPoly(nullptr)
 {
@@ -382,7 +380,6 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-
 bool SdrRectObj::hasSpecialDrag() const
 {
     return true;
@@ -471,7 +468,6 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         }
     }
 }
-
 
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) const

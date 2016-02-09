@@ -34,7 +34,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 
 
-
     //= ExtensionContentType
 
     enum ExtensionContentType

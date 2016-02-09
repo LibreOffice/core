@@ -47,7 +47,6 @@ using namespace ::svxform;
 }
 
 
-
 // Encapsulation violation: We *know* that
 // SvxUnoDrawMSFactory::createInstanceWithArguments() always throws.
 

@@ -167,5 +167,4 @@ STDMETHODIMP UnoTypeWrapper::get_Name(BSTR  *pVal)
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

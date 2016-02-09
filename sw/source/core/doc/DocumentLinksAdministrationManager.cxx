@@ -561,7 +561,6 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
 }
 
 
-
 }
 
 

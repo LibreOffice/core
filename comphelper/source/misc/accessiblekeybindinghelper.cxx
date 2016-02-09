@@ -38,7 +38,6 @@ namespace comphelper
     }
 
 
-
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
         : cppu::WeakImplHelper<XAccessibleKeyBinding>( rHelper )
         , m_aKeyBindings( rHelper.m_aKeyBindings )
@@ -46,11 +45,9 @@ namespace comphelper
     }
 
 
-
     OAccessibleKeyBindingHelper::~OAccessibleKeyBindingHelper()
     {
     }
-
 
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const Sequence< awt::KeyStroke >& rKeyBinding ) throw (RuntimeException)
@@ -59,7 +56,6 @@ namespace comphelper
 
         m_aKeyBindings.push_back( rKeyBinding );
     }
-
 
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const awt::KeyStroke& rKeyStroke ) throw (RuntimeException)
@@ -83,7 +79,6 @@ namespace comphelper
     }
 
 
-
     Sequence< awt::KeyStroke > OAccessibleKeyBindingHelper::getAccessibleKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -93,8 +88,6 @@ namespace comphelper
 
         return m_aKeyBindings[nIndex];
     }
-
-
 
 
 }   // namespace comphelper

@@ -160,9 +160,7 @@ protected:
 }; // namespace inprocserv
 
 
-
 // Entry points
-
 
 
 extern "C" INPROC_DLLPUBLIC BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
@@ -239,7 +237,6 @@ namespace inprocserv
 // InprocCountedObject_Impl implementation
 
 
-
 InprocCountedObject_Impl::InprocCountedObject_Impl()
 {
     g_nObj++;
@@ -253,7 +250,6 @@ InprocCountedObject_Impl::~InprocCountedObject_Impl()
 
 
 // InprocEmbedProvider_Impl implementation
-
 
 
 InprocEmbedProvider_Impl::InprocEmbedProvider_Impl( const GUID& guid )

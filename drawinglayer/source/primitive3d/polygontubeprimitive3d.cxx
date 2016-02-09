@@ -29,7 +29,6 @@
 #include <rtl/instance.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -526,9 +525,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

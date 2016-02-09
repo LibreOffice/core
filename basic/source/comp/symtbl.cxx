@@ -490,7 +490,6 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 }
 
 
-
 SbiConstDef::SbiConstDef( const OUString& rName )
            : SbiSymDef( rName )
 {

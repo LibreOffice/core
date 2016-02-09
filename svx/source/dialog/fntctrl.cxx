@@ -425,7 +425,6 @@ void FontPrevWin_Impl::DrawPrev(vcl::RenderContext& rRenderContext, Printer* _pP
 }
 
 
-
 bool FontPrevWin_Impl::SetFontWidthScale(sal_uInt16 nScale)
 {
     if (mnFontWidthScale != nScale)

@@ -40,12 +40,10 @@ namespace stringresource
 {
 
 
-
 // mutex
 
 
 ::osl::Mutex& getMutex();
-
 
 
 // class stringresourceImpl

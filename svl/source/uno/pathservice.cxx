@@ -90,5 +90,4 @@ com_sun_star_comp_svl_PathService_get_implementation(css::uno::XComponentContext
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

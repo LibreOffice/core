@@ -80,7 +80,6 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 }
 
 
-
 // Destructor; releases the internal data
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
@@ -89,7 +88,6 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
         delete aFilterList[ i ];
     aFilterList.clear();
 }
-
 
 
 // Implementation of the resource constructor
@@ -110,7 +108,6 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
 
     updateImages( rResId );
 }
-
 
 
 // Destructor; releases the internal data

@@ -39,7 +39,6 @@ class RectangleShape;
 class ShapeContainer;
 
 
-
 class ShapeLayoutContext : public ::oox::core::ContextHandler2
 {
 public:
@@ -53,7 +52,6 @@ public:
 private:
     Drawing&            mrDrawing;
 };
-
 
 
 class ClientDataContext : public ::oox::core::ContextHandler2
@@ -75,7 +73,6 @@ private:
 };
 
 
-
 class ShapeContextBase : public ::oox::core::ContextHandler2
 {
 public:
@@ -89,7 +86,6 @@ public:
 protected:
     explicit            ShapeContextBase( ::oox::core::ContextHandler2Helper& rParent );
 };
-
 
 
 class ShapeTypeContext : public ShapeContextBase
@@ -113,7 +109,6 @@ private:
 private:
     ShapeTypeModel&     mrTypeModel;
 };
-
 
 
 class ShapeContext : public ShapeTypeContext
@@ -149,7 +144,6 @@ private:
 };
 
 
-
 class GroupShapeContext : public ShapeContext
 {
 public:
@@ -164,7 +158,6 @@ public:
 private:
     ShapeContainer&     mrShapes;
 };
-
 
 
 class RectangleShapeContext : public ShapeContext

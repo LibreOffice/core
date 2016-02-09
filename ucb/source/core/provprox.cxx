@@ -28,12 +28,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
 
-
-
-
 // UcbContentProviderProxyFactory Implementation.
-
-
 
 
 UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
@@ -51,23 +46,18 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 // XServiceInfo methods.
 
 
-
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
                      OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
                      "com.sun.star.ucb.ContentProviderProxyFactory" );
 
 
-
 // Service factory implementation.
-
 
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbContentProviderProxyFactory );
 
 
-
 // XContentProviderFactory methods.
-
 
 
 // virtual
@@ -81,11 +71,7 @@ UcbContentProviderProxyFactory::createContentProvider(
 }
 
 
-
-
 // UcbContentProviderProxy Implementation.
-
-
 
 
 UcbContentProviderProxy::UcbContentProviderProxy(
@@ -146,13 +132,10 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
 }
 
 
-
 // XTypeProvider methods.
 
 
-
 XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
-
 
 
 Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                                                           \
@@ -178,9 +161,7 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
@@ -189,7 +170,6 @@ XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
 
 
 // XContentProvider methods.
-
 
 
 // virtual
@@ -230,9 +210,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
 }
 
 
-
 // XParameterizedContentProvider methods.
-
 
 
 // virtual
@@ -295,9 +273,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
 }
 
 
-
 // XContentProviderSupplier methods.
-
 
 
 // virtual

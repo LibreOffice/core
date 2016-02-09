@@ -196,7 +196,6 @@ namespace svt
     }
 
 
-
     bool OCommonPicker::createPicker()
     {
         if ( !m_pDlg )

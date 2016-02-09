@@ -51,7 +51,6 @@ static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
 }
 
 
-
 //  release
 
 static void REGISTRY_CALLTYPE release(RegHandle hReg)
@@ -67,7 +66,6 @@ static void REGISTRY_CALLTYPE release(RegHandle hReg)
         }
     }
 }
-
 
 
 //  getName
@@ -93,7 +91,6 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
 }
 
 
-
 //  isReadOnly
 
 static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
@@ -103,7 +100,6 @@ static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
     else
         return sal_False;
 }
-
 
 
 //  createRegistry
@@ -149,7 +145,6 @@ static RegError REGISTRY_CALLTYPE openRootKey(RegHandle hReg,
 
     return RegError::NO_ERROR;
 }
-
 
 
 //  openRegistry
@@ -204,7 +199,6 @@ static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
 }
 
 
-
 //  destroyRegistry
 
 static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
@@ -233,7 +227,6 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
         return RegError::INVALID_REGISTRY;
     }
 }
-
 
 
 //  mergeKey
@@ -361,7 +354,6 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 }
 
 
-
 //  reg_openRegistry
 
 RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
@@ -398,7 +390,6 @@ RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
         return RegError::REGISTRY_NOT_OPEN;
     }
 }
-
 
 
 //  reg_dumpRegistry

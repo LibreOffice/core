@@ -177,7 +177,6 @@ void SvxGradientTabPage::Construct()
 }
 
 
-
 void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 {
     sal_Int32 nPos;
@@ -254,7 +253,6 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 }
 
 
-
 SfxTabPage::sfxpg SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( CheckChanges_Impl() == -1L )
@@ -265,7 +263,6 @@ SfxTabPage::sfxpg SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 
     return LEAVE_PAGE;
 }
-
 
 
 long SvxGradientTabPage::CheckChanges_Impl()
@@ -333,7 +330,6 @@ long SvxGradientTabPage::CheckChanges_Impl()
 }
 
 
-
 bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( m_nDlgType == 0 && *m_pPageType == PT_GRADIENT && !*m_pbAreaTP )
@@ -370,7 +366,6 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 }
 
 
-
 void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
     // m_pLbGradients->SelectEntryPos( 0 );
@@ -392,13 +387,11 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
 }
 
 
-
 VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
                                                const SfxItemSet* rOutAttrs )
 {
     return VclPtr<SvxGradientTabPage>::Create( pWindow, *rOutAttrs );
 }
-
 
 
 IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
@@ -433,7 +426,6 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
 
     m_pCtlPreview->Invalidate();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
@@ -537,7 +529,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
@@ -604,7 +595,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
@@ -634,7 +624,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, Button*, void)
         m_pBtnSave->Disable();
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickLoadHdl_Impl, Button*, void)
@@ -741,7 +730,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickLoadHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
@@ -807,7 +795,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
         }
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void)
@@ -880,7 +867,6 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void
         m_pCtlPreview->Invalidate();
     }
 }
-
 
 
 void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )

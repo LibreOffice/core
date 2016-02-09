@@ -204,7 +204,6 @@ private:
 };
 
 
-
 // helper defines needed for an interface container with a 32 bit key values
 
 struct equalInt32_Impl
@@ -340,7 +339,6 @@ protected:
     ~IEventNotificationHook() {}
         // avoid warnings about virtual members and non-virtual dtor
 };
-
 
 
 /**
@@ -713,7 +711,6 @@ public:
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
-
 private:
     OPropertySetHelper2( const OPropertySetHelper2 & ) SAL_DELETED_FUNCTION;
     OPropertySetHelper2 &    operator = ( const OPropertySetHelper2 & )
@@ -733,7 +730,6 @@ protected:
 
 } // end namespace cppuhelper
 #endif
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

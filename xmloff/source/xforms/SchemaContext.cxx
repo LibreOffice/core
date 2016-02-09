@@ -39,8 +39,6 @@ using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
 
-
-
 static const SvXMLTokenMapEntry aAttributes[] =
 {
     XML_TOKEN_MAP_END

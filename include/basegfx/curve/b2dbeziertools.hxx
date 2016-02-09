@@ -33,7 +33,6 @@ namespace basegfx
 }
 
 
-
 namespace basegfx
 {
     class BASEGFX_DLLPUBLIC B2DCubicBezierHelper
@@ -49,7 +48,6 @@ namespace basegfx
         double distanceToRelative(double fDistance) const;
     };
 } // end of namespace basegfx
-
 
 
 #endif // INCLUDED_BASEGFX_CURVE_B2DBEZIERTOOLS_HXX

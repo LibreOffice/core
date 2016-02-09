@@ -506,7 +506,6 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
 }
 
 
-
 uno::Sequence< OUString > VBAMacroResolver_getSupportedServiceNames()
 {
     uno::Sequence<OUString> aServiceNames { "com.sun.star.script.vba.VBAMacroResolver" };
@@ -522,7 +521,6 @@ uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( cons
 {
     return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
 }
-
 
 
 VBAMacroResolver::VBAMacroResolver() :

@@ -36,7 +36,6 @@
 using namespace ::com::sun::star;
 
 
-
 SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
     rEditEngine( rEngine )
 {
@@ -500,7 +499,6 @@ void SvxEditEngineForwarder::CopyText(const SvxTextForwarder& rSource)
     rEditEngine.SetText( *pNewTextObject );
     delete pNewTextObject;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

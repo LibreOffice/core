@@ -38,7 +38,6 @@ class TypeGroupConverter;
 #define OOX_CHART_SMOOTHED_PER_SERIES 0
 
 
-
 class DataLabelConverter : public ConverterBase< DataLabelModel >
 {
 public:
@@ -52,7 +51,6 @@ public:
 };
 
 
-
 class DataLabelsConverter : public ConverterBase< DataLabelsModel >
 {
 public:
@@ -64,7 +62,6 @@ public:
                             const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup );
 };
-
 
 
 class ErrorBarConverter : public ConverterBase< ErrorBarModel >
@@ -83,7 +80,6 @@ private:
 };
 
 
-
 class TrendlineLabelConverter : public ConverterBase< TrendlineLabelModel >
 {
 public:
@@ -93,7 +89,6 @@ public:
     /** Converts the OOXML trendline label. */
     void                convertFromModel( PropertySet& rPropSet );
 };
-
 
 
 class TrendlineConverter : public ConverterBase< TrendlineModel >
@@ -108,7 +103,6 @@ public:
 };
 
 
-
 class DataPointConverter : public ConverterBase< DataPointModel >
 {
 public:
@@ -121,7 +115,6 @@ public:
                             const TypeGroupConverter& rTypeGroup,
                             const SeriesModel& rSeries );
 };
-
 
 
 class SeriesConverter : public ConverterBase< SeriesModel >
@@ -147,7 +140,6 @@ private:
                             const OUString& rRole,
                             bool bUseTextLabel );
 };
-
 
 
 } // namespace chart

@@ -193,7 +193,6 @@ private:
     double GetMixerState(sal_uInt32 nTime);
 
 
-
     SlideShowContext                            maContext;
     boost::shared_ptr<WakeupEvent>              mpWakeupEvent;
     boost::weak_ptr<DrawShape>                  mpParentDrawShape;
@@ -244,7 +243,6 @@ private:
 };
 
 
-
 class IntrinsicAnimationListener : public IntrinsicAnimationEventHandler,
                                    private boost::noncopyable
 {
@@ -260,7 +258,6 @@ private:
 
     ActivityImpl& mrActivity;
 };
-
 
 
 double ActivityImpl::GetMixerState( sal_uInt32 nTime )

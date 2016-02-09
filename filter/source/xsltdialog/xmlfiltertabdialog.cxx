@@ -72,7 +72,6 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
 }
 
 
-
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
     disposeOnce();
@@ -87,7 +86,6 @@ void XMLFilterTabDialog::dispose()
     m_pOKBtn.clear();
     TabDialog::dispose();
 }
-
 
 
 bool XMLFilterTabDialog::onOk()
@@ -280,16 +278,11 @@ bool XMLFilterTabDialog::onOk()
 }
 
 
-
-
-
-
 IMPL_LINK_NOARG_TYPED(XMLFilterTabDialog, OkHdl, Button*, void)
 {
     if( onOk() )
         EndDialog(1);
 }
-
 
 
 IMPL_STATIC_LINK_TYPED( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
@@ -298,7 +291,6 @@ IMPL_STATIC_LINK_TYPED( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabC
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
     pTabPage->Show();
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

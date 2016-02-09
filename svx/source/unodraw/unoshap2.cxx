@@ -153,7 +153,6 @@ void SAL_CALL SvxShapeGroup::setPosition( const awt::Point& Position ) throw(uno
 }
 
 
-
 awt::Size SAL_CALL SvxShapeGroup::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShape::getSize();
@@ -378,7 +377,6 @@ SvxShapeConnector::~SvxShapeConnector() throw()
 }
 
 
-
 uno::Any SAL_CALL SvxShapeConnector::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {
@@ -441,7 +439,6 @@ void SAL_CALL SvxShapeConnector::setPosition( const awt::Point& Position ) throw
 }
 
 
-
 awt::Size SAL_CALL SvxShapeConnector::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getSize();
@@ -453,7 +450,6 @@ void SAL_CALL SvxShapeConnector::setSize( const awt::Size& rSize )
 {
     SvxShapeText::setSize( rSize );
 }
-
 
 
 // XConnectorShape
@@ -593,7 +589,6 @@ void SAL_CALL SvxShapeControl::setPosition( const awt::Point& Position ) throw(u
 {
     SvxShapeText::setPosition(Position);
 }
-
 
 
 awt::Size SAL_CALL SvxShapeControl::getSize() throw(uno::RuntimeException, std::exception)
@@ -1056,7 +1051,6 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
 }
 
 
-
 bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
@@ -1165,7 +1159,6 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
 }
 
 
-
 bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
                                                 css::uno::Any& rValue )
     throw(css::beans::UnknownPropertyException,
@@ -1241,8 +1234,6 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
 }
 
 
-
-
 void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(uno::RuntimeException)
 {
     ::SolarMutexGuard aGuard;
@@ -1287,7 +1278,6 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 }
 
 
-
 bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
@@ -1330,7 +1320,6 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
 }
 
 
-
 bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
@@ -1367,8 +1356,6 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
     }
     return true;
 }
-
-
 
 
 void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(uno::RuntimeException)
@@ -1657,7 +1644,6 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 }
 
 
-
 SvxShapeCaption::SvxShapeCaption( SdrObject* pObj ) throw()
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CAPTION), getSvxMapProvider().GetPropertySet(SVXMAP_CAPTION, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -1678,12 +1664,10 @@ SvxCustomShape::~SvxCustomShape() throw()
 }
 
 
-
 void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShapeText::Create( pNewObj, pNewPage );
 }
-
 
 
 uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
@@ -1710,7 +1694,6 @@ void SAL_CALL SvxCustomShape::release() throw ( )
 {
     SvxShapeText::release();
 }
-
 
 
 uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
@@ -1822,7 +1805,6 @@ void SAL_CALL SvxCustomShape::setPosition( const awt::Point& Position ) throw(un
 }
 
 
-
 awt::Size SAL_CALL SvxCustomShape::getSize() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getSize();
@@ -1834,8 +1816,6 @@ void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
 {
     SvxShapeText::setSize( rSize );
 }
-
-
 
 
 void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )

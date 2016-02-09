@@ -79,7 +79,6 @@ SAL_IMPLEMENT_MAIN()
 }
 
 
-
 class MyWin : public WorkWindow
 {
 public:
@@ -101,7 +100,6 @@ private:
 };
 
 
-
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
@@ -110,7 +108,6 @@ void Main()
 
     Application::Execute();
 }
-
 
 
 MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle )
@@ -123,12 +120,10 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle )
 }
 
 
-
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
-
 
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
@@ -137,12 +132,10 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
-
 
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
@@ -151,12 +144,10 @@ void MyWin::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
-
 
 
 void MyWin::Paint( const Rectangle& rRect )
@@ -165,12 +156,10 @@ void MyWin::Paint( const Rectangle& rRect )
 }
 
 
-
 void MyWin::Resize()
 {
     WorkWindow::Resize();
 }
-
 
 
 IMPL_LINK_TYPED( MyWin, Test, PushButton*, pBtn, void )

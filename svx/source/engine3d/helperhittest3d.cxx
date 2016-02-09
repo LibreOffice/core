@@ -29,9 +29,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 
-
 using namespace com::sun::star;
-
 
 
 class ImplPairDephAndObject
@@ -55,7 +53,6 @@ public:
     // data read access
     const E3dCompoundObject* getObject() const { return mpObject; }
 };
-
 
 
 void getAllHit3DObjectWithRelativePoint(
@@ -94,7 +91,6 @@ void getAllHit3DObjectWithRelativePoint(
         }
     }
 }
-
 
 
 E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInformation3D& o_rViewInformation3D, const E3dCompoundObject& rCandidate)
@@ -156,7 +152,6 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
 
     return pRootScene;
 }
-
 
 
 void getAllHit3DObjectsSortedFrontToBack(
@@ -233,7 +228,6 @@ void getAllHit3DObjectsSortedFrontToBack(
         }
     }
 }
-
 
 
 bool checkHitSingle3DObject(

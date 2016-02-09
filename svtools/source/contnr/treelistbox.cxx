@@ -543,8 +543,6 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 nActi
 }
 
 
-
-
 /*
     NotifyMoving/Copying
     ====================
@@ -1925,7 +1923,6 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
         }
     }
 }
-
 
 
 void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState eState)
@@ -3426,7 +3423,6 @@ void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags, void* pUserData 
             pTab->nFlags &= ~SvLBoxTabFlags::SHOW_SELECTION;
     }
 }
-
 
 
 SvLBoxTab* SvTreeListBox::GetFirstDynamicTab( sal_uInt16& rPos ) const

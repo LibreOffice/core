@@ -550,7 +550,6 @@ bool SvXMLImportPropertyMapper::_FillPropertySet(
 }
 
 
-
 typedef pair<const OUString*, const Any* > PropertyPair;
 typedef vector<PropertyPair> PropertyPairs;
 

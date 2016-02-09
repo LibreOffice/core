@@ -59,7 +59,6 @@ aDbgStyleSheetReferences;
 #endif
 
 
-
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
     sal_uInt16          nAction,        // SfxStyleSheetHintId::... (see above)

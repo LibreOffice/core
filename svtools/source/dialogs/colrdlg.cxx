@@ -56,15 +56,10 @@ void SvColorDialog::SetColor( const Color& rColor )
 }
 
 
-
-
-
-
 void SvColorDialog::SetMode( sal_Int16 eMode )
 {
     meMode = eMode;
 }
-
 
 
 short SvColorDialog::Execute()

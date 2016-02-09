@@ -100,7 +100,6 @@ namespace slideshow
         }
 
 
-
         void MediaShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
             const ::basegfx::B2DRectangle& rBounds = getBounds();
@@ -111,7 +110,6 @@ namespace slideshow
         }
 
 
-
         void MediaShape::implViewsChanged()
         {
             const ::basegfx::B2DRectangle& rBounds = getBounds();
@@ -119,7 +117,6 @@ namespace slideshow
             for( const auto& pViewMediaShape : maViewMediaShapes )
                 pViewMediaShape->resize( rBounds );
         }
-
 
 
         void MediaShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
@@ -137,7 +134,6 @@ namespace slideshow
             if( bRedrawLayer )
                 maViewMediaShapes.back()->render( getBounds() );
         }
-
 
 
         bool MediaShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
@@ -178,7 +174,6 @@ namespace slideshow
         }
 
 
-
         bool MediaShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
             // redraw all view shapes, by calling their update() method
@@ -198,7 +193,6 @@ namespace slideshow
         }
 
 
-
         bool MediaShape::implStartIntrinsicAnimation()
         {
             for( const auto& pViewMediaShape : maViewMediaShapes )
@@ -208,7 +202,6 @@ namespace slideshow
 
             return true;
         }
-
 
 
         bool MediaShape::implEndIntrinsicAnimation()
@@ -234,12 +227,10 @@ namespace slideshow
         }
 
 
-
         bool MediaShape::implIsIntrinsicAnimationPlaying() const
         {
             return mbIsPlaying;
         }
-
 
 
         void MediaShape::implSetIntrinsicAnimationTime(double fTime)
@@ -247,7 +238,6 @@ namespace slideshow
             for( const auto& pViewMediaShape : maViewMediaShapes )
                 pViewMediaShape->setMediaTime( fTime );
         }
-
 
 
         ShapeSharedPtr createMediaShape(

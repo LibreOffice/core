@@ -47,7 +47,6 @@ FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlot
 }
 
 
-
 FormatPaintBrushToolBoxControl::~FormatPaintBrushToolBoxControl()
 {
     m_aDoubleClickTimer.Stop();

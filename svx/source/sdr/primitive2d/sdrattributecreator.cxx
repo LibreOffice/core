@@ -211,7 +211,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

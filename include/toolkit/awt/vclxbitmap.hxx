@@ -29,7 +29,6 @@
 #include <vcl/bitmapex.hxx>
 
 
-
 //  class VCLXBitmap
 
 
@@ -71,8 +70,6 @@ public:
     css::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw(css::uno::RuntimeException, std::exception) override;
     css::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw(css::uno::RuntimeException, std::exception) override;
 };
-
-
 
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXBITMAP_HXX

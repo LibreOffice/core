@@ -64,7 +64,4 @@ void ElementMark::setSecurityId(sal_Int32 nSecurityId)
 }
 
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

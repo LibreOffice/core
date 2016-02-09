@@ -98,7 +98,6 @@ void o2u_attachCurrentThread()
 }
 
 
-
 // EmbedServer_Impl
 
 EmbedServer_Impl::EmbedServer_Impl( const uno::Reference<lang::XMultiServiceFactory>& xFactory):

@@ -63,7 +63,6 @@ SvXMLEnumMapEntry const aLineNumberPositionMap[] =
 };
 
 
-
 void XMLLineNumberingExport::Export()
 {
     // export element if we have line numbering info

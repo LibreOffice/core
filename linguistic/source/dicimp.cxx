@@ -52,7 +52,6 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-
 #define BUFSIZE             4096
 #define VERS2_NOLANGUAGE    1024
 
@@ -1146,7 +1145,6 @@ OUString SAL_CALL DicEntry::getReplacementText(  )
     MutexGuard  aGuard( GetLinguMutex() );
     return aReplacement;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

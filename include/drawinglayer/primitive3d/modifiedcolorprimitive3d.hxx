@@ -26,7 +26,6 @@
 #include <basegfx/color/bcolormodifier.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive3d
@@ -61,7 +60,6 @@ namespace drawinglayer
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX

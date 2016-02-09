@@ -260,7 +260,6 @@ public:
     }
 
 
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.

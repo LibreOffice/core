@@ -116,7 +116,6 @@ FilterCache::~FilterCache()
 }
 
 
-
 FilterCache* FilterCache::clone() const
 {
     // SAFE -> ----------------------------------
@@ -147,7 +146,6 @@ FilterCache* FilterCache::clone() const
     return pClone;
     // <- SAFE ----------------------------------
 }
-
 
 
 void FilterCache::takeOver(const FilterCache& rClone)
@@ -199,7 +197,6 @@ void FilterCache::takeOver(const FilterCache& rClone)
 }
 
 
-
 void FilterCache::load(EFillState eRequired)
     throw(css::uno::Exception)
 {
@@ -242,7 +239,6 @@ void FilterCache::load(EFillState eRequired)
 }
 
 
-
 bool FilterCache::isFillState(FilterCache::EFillState eState) const
     throw(css::uno::Exception)
 {
@@ -251,7 +247,6 @@ bool FilterCache::isFillState(FilterCache::EFillState eState) const
     return ((m_eFillState & eState) == eState);
     // <- SAFE
 }
-
 
 
 OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
@@ -291,7 +286,6 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
 }
 
 
-
 bool FilterCache::hasItems(EItemType eType) const
     throw(css::uno::Exception)
 {
@@ -306,7 +300,6 @@ bool FilterCache::hasItems(EItemType eType) const
     return !rList.empty();
     // <- SAFE
 }
-
 
 
 OUStringList FilterCache::getItemNames(EItemType eType) const
@@ -330,7 +323,6 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
     return lKeys;
     // <- SAFE
 }
-
 
 
 bool FilterCache::hasItem(      EItemType        eType,
@@ -364,7 +356,6 @@ bool FilterCache::hasItem(      EItemType        eType,
     return false;
     // <- SAFE
 }
-
 
 
 CacheItem FilterCache::getItem(      EItemType        eType,
@@ -418,7 +409,6 @@ CacheItem FilterCache::getItem(      EItemType        eType,
 }
 
 
-
 void FilterCache::removeItem(      EItemType        eType,
                              const OUString& sItem)
     throw(css::uno::Exception)
@@ -438,7 +428,6 @@ void FilterCache::removeItem(      EItemType        eType,
 
     impl_addItem2FlushList(eType, sItem);
 }
-
 
 
 void FilterCache::setItem(      EItemType        eType ,
@@ -478,7 +467,6 @@ void FilterCache::refreshItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
     impl_loadItemOnDemand(eType, sItem);
 }
-
 
 
 void FilterCache::addStatePropsToItem(      EItemType        eType,
@@ -577,7 +565,6 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
 }
 
 
-
 void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
     throw(css::uno::Exception)
 {
@@ -589,7 +576,6 @@ void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
     if (pIt != rItem.end())
         rItem.erase(pIt);
 }
-
 
 
 void FilterCache::flush()
@@ -627,7 +613,6 @@ void FilterCache::flush()
 
     /*TODO FrameLoader/ContentHandler must be flushed here too ... */
 }
-
 
 
 void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
@@ -689,7 +674,6 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
         }
     }
 }
-
 
 
 void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
@@ -925,7 +909,6 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
 }
 
 
-
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess(const OUString& sRoot       ,
                                                                                        bool         bReadOnly   ,
                                                                                        bool         bLocalesMode)
@@ -983,7 +966,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     return xCfg;
     // <- SAFE
 }
-
 
 
 void FilterCache::impl_validateAndOptimize()
@@ -1419,7 +1401,6 @@ void FilterCache::impl_load(EFillState eRequiredState)
 }
 
 
-
 void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                      EItemType                                           eType  ,
                                      EReadOption                                         eOption,
@@ -1530,7 +1511,6 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
 }
 
 
-
 void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                               CacheItem&                                          rItem)
     throw(css::uno::Exception)
@@ -1590,7 +1570,6 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (pUIName != lUINames.end())
         rItem[PROPNAME_UINAME] = pUIName->second;
 }
-
 
 
 void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
@@ -1731,7 +1710,6 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
 }
 
 
-
 CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType        eType,
                                                            const OUString& sItem)
     throw(css::uno::Exception)
@@ -1804,7 +1782,6 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
     return pList->find(sItem);
 }
-
 
 
 void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xItem,
@@ -2062,7 +2039,6 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
 }
 
 
-
 void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
                                                    sal_Int32        nProp ,
                                                    CacheItem&       rItem )
@@ -2091,7 +2067,6 @@ void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
                     break;
     }
 }
-
 
 
 void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
@@ -2242,7 +2217,6 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
 }
 
 
-
 OUStringList FilterCache::impl_tokenizeString(const OUString& sData     ,
                                                     sal_Unicode      cSeparator)
 {
@@ -2280,7 +2254,6 @@ OUString FilterCache::impl_searchFrameLoaderForType(const OUString& sType) const
 }
 
 
-
 OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) const
 {
     CacheItemList::const_iterator pIt;
@@ -2299,7 +2272,6 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
     return OUString();
 }
 #endif
-
 
 
 bool FilterCache::impl_isModuleInstalled(const OUString& sModule)

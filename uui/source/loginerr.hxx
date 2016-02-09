@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 
 
-
 #define LOGINERROR_FLAG_MODIFY_ACCOUNT         1
 #define LOGINERROR_FLAG_MODIFY_USER_NAME       2
 #define LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD  4

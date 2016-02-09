@@ -38,8 +38,6 @@ namespace filter{
     namespace config{
 
 
-
-
 /** @short      implements the interface css::container::XNameContainer
                 on top of a FilterCache reference.
 
@@ -124,11 +122,9 @@ class BaseContainer : public BaseLock
         BaseContainer();
 
 
-
         /** @short  standard dtor.
          */
         virtual ~BaseContainer();
-
 
 
         /** @short  initialize this generic intsnace with some specialized values
@@ -166,12 +162,10 @@ class BaseContainer : public BaseLock
     protected:
 
 
-
         /** @short  check if the underlying configuration data was already loaded
                     and do it if necessary automatically.
          */
         void impl_loadOnDemand();
-
 
 
         /** @short  it creates the global instance m_pFilterCache, which is a copy
@@ -183,7 +177,6 @@ class BaseContainer : public BaseLock
          */
         void impl_initFlushMode()
             throw (css::uno::RuntimeException);
-
 
 
         /** @short  returns a pointer to the current used cache member.

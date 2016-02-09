@@ -42,7 +42,6 @@ namespace dbaui
 {
 
 
-
     //= DBSubComponentController
 
     class DBSubComponentController;

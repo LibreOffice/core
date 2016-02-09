@@ -33,7 +33,6 @@ namespace accessibility {
     class AccessibleBrowseBoxTable;
 
 
-
 /** This class represents the complete accessible BrowseBox object. */
 class AccessibleBrowseBox : public AccessibleBrowseBoxBase
 {
@@ -282,7 +281,6 @@ private:
 
 
 } // namespace accessibility
-
 
 
 #endif

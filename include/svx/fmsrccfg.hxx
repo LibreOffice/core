@@ -25,7 +25,6 @@
 #include <svx/svxdllapi.h>
 
 
-
 #define MATCHING_ANYWHERE       0
 #define MATCHING_BEGINNING      1
 #define MATCHING_END            2
@@ -37,10 +36,8 @@
 // to be adapted)
 
 
-
 namespace svxform
 {
-
 
 
     // = struct FmSearchParams - parameters of a search
@@ -138,8 +135,6 @@ namespace svxform
 
 
 }
-
-
 
 
 #endif // INCLUDED_SVX_FMSRCCFG_HXX

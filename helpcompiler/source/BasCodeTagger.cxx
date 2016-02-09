@@ -49,8 +49,6 @@ bool LibXmlTreeWalker::end()
 }
 
 
-
-
 BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
     m_Highlighter(HIGHLIGHT_BASIC)
 {

@@ -30,7 +30,6 @@
 #define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
 
 
-
 CntWallpaperItem::CntWallpaperItem( sal_uInt16 which )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {

@@ -614,7 +614,6 @@ bool ScColorScaleFormat::NeedsRepaint() const
 }
 
 
-
 condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
 {
     return condformat::COLORSCALE;

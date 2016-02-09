@@ -79,9 +79,6 @@ using namespace ::svxform;
 using namespace ::svx;
 
 
-
-
-
 FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
     :E3dView(pModel,pOut)
 {

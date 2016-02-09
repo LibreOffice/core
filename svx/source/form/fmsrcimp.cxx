@@ -65,7 +65,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 
-
 // = FmSearchThread
 
 void FmSearchThread::run()
@@ -661,7 +660,6 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
     return bFound ? SR_FOUND : SR_NOTFOUND;
 }
-
 
 
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,

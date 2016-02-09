@@ -203,15 +203,12 @@ public:
         throw( css::uno::RuntimeException, std::exception ) override;
 
 
-
-
     // XUnoTunnel
 
 
     virtual sal_Int64 SAL_CALL getSomething(
         const css::uno::Sequence<sal_Int8>& )
         throw( css::uno::RuntimeException, std::exception ) override;
-
 
 
     // XSubmission

@@ -544,7 +544,6 @@ bool WrongList::DbgIsBuggy() const
 }
 
 
-
 EdtAutoCorrDoc::EdtAutoCorrDoc(
     EditEngine* pE, ContentNode* pN, sal_Int32 nCrsr, sal_Unicode cIns) :
     mpEditEngine(pE),

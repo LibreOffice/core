@@ -28,7 +28,6 @@ namespace comphelper
 {
 
 
-
     //= ComponentBase
 
     class COMPHELPER_DLLPUBLIC ComponentBase

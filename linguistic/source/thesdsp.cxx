@@ -39,7 +39,6 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-
 static bool SvcListHasLanguage(
         const Sequence< Reference< XThesaurus > > &rRefs,
         const Locale &rLocale )
@@ -56,7 +55,6 @@ static bool SvcListHasLanguage(
 
     return bHasLanguage;
 }
-
 
 
 ThesaurusDispatcher::ThesaurusDispatcher()

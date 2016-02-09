@@ -61,7 +61,6 @@ namespace rptui
     using namespace report;
 
 
-
 struct PropertyInfo
 {
     bool    bIsReadonlyOrTransient;
@@ -89,7 +88,6 @@ struct ObjectInfo
 typedef ::std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterfaceCompare< XPropertySet > >    PropertySetInfoCache;
 
 
-
 class OXUndoEnvironmentImpl: private boost::noncopyable
 {
 public:
@@ -115,7 +113,6 @@ OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_
         ,m_bIsUndo(false)
 {
 }
-
 
 
 OXUndoEnvironment::OXUndoEnvironment(OReportModel& _rModel)
@@ -540,7 +537,6 @@ void OXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & 
             xSet->removePropertyChangeListener( OUString(), this );
     }
 }
-
 
 
 void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxContainer, bool _bStartListening )

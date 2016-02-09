@@ -37,8 +37,6 @@ VCLXAccessibleComboBox::VCLXAccessibleComboBox (VCLXWindow* pVCLWindow)
 }
 
 
-
-
 VCLXAccessibleComboBox::~VCLXAccessibleComboBox()
 {
 }
@@ -54,7 +52,6 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 }
 
 
-
 // XServiceInfo
 
 OUString VCLXAccessibleComboBox::getImplementationName()
@@ -62,8 +59,6 @@ OUString VCLXAccessibleComboBox::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleComboBox" );
 }
-
-
 
 
 Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames()

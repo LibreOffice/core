@@ -33,7 +33,6 @@ namespace basegfx {
 }
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -63,7 +62,6 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS2D_HXX

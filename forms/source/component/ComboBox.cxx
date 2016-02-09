@@ -118,7 +118,6 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 }
 
 
-
 OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, true, true, true )
      // use the old control name for compatibility reasons

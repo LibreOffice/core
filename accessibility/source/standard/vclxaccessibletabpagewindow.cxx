@@ -29,7 +29,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 //  class VCLXAccessibleTabPageWindow
 
 
@@ -57,7 +56,6 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
         }
     }
 }
-
 
 
 VCLXAccessibleTabPageWindow::~VCLXAccessibleTabPageWindow()
@@ -130,14 +128,12 @@ Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  ) th
 }
 
 
-
 sal_Int32 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return 0;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,6 @@ namespace frm
 {
 
 
-
     //= class IPropertyBagHelperContext
 
     class SAL_NO_VTABLE IPropertyBagHelperContext

@@ -735,5 +735,4 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( SdrModel*
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

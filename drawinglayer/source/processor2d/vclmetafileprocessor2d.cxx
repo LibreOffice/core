@@ -745,12 +745,9 @@ namespace drawinglayer
               as intended, the original file is exported. Works, Done.
 
 
-
-
             To be done:
 
             - Maybe there are more places to take care of for vcl::PDFExtOutDevData!
-
 
 
         ****************************************************************************************************/

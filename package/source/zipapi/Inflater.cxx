@@ -68,7 +68,6 @@ void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
 }
 
 
-
 sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())

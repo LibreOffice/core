@@ -41,7 +41,6 @@ namespace xforms
 {
 
 
-
     //= OXSDDataType
 
     typedef ::cppu::WeakImplHelper             <   css::xsd::XDataType

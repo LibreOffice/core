@@ -28,7 +28,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::PropertyValue;
 
 
-
 XMLIndexSpanEntryContext::XMLIndexSpanEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate,

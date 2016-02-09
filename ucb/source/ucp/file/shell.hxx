@@ -159,7 +159,6 @@ namespace fileaccess {
         virtual ~shell();
 
 
-
         /**
          *  This two methods register and deregister a change listener for the content belonging
          *  to URL aUnqPath
@@ -168,7 +167,6 @@ namespace fileaccess {
         void SAL_CALL registerNotifier( const OUString& aUnqPath,Notifier* pNotifier );
 
         void SAL_CALL deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier );
-
 
 
         /**
@@ -193,11 +191,8 @@ namespace fileaccess {
                    css::uno::RuntimeException);
 
 
-
-
         //  Every method having a command id is not allowed to throw anything,
         //  but instead must install every error code in the task handler
-
 
 
         /**
@@ -352,7 +347,6 @@ namespace fileaccess {
                const OUString& aUnqPath,
                bool OverWrite,
                const css::uno::Reference< css::io::XInputStream >& aInputStream );
-
 
 
         void SAL_CALL insertDefaultProperties( const OUString& aUnqPath );

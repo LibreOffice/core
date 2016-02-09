@@ -59,7 +59,6 @@ ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 }
 
 
-
 vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
     vcl::Window* pRetval = nullptr;
@@ -77,7 +76,6 @@ vcl::Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 }
 
 
-
 Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 {
     Size aRet;
@@ -87,7 +85,6 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 
     return aRet;
 }
-
 
 
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
@@ -117,7 +114,6 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
 }
 
 
-
 void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
     if( mpMediaWindow )
@@ -131,7 +127,6 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
         static_cast< ViewContactOfSdrMediaObj& >( GetViewContact() ).mediaPropertiesChanged( aUpdatedItem );
     }
 }
-
 
 
 }} // end of namespace sdr::contact

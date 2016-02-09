@@ -33,11 +33,7 @@ using namespace com::sun::star;
 using namespace ucb_cmdenv;
 
 
-
-
 // UcbCommandEnvironment Implementation.
-
-
 
 
 UcbCommandEnvironment::UcbCommandEnvironment(
@@ -53,9 +49,7 @@ UcbCommandEnvironment::~UcbCommandEnvironment()
 }
 
 
-
 // XInitialization methods.
-
 
 
 // virtual
@@ -71,9 +65,7 @@ void SAL_CALL UcbCommandEnvironment::initialize(
 }
 
 
-
 // XServiceInfo methods.
-
 
 
 // virtual
@@ -118,9 +110,7 @@ UcbCommandEnvironment::getSupportedServiceNames_Static()
 }
 
 
-
 // XCommandInfo methods.
-
 
 
 // virtual
@@ -141,9 +131,7 @@ UcbCommandEnvironment::getProgressHandler()
 }
 
 
-
 // Service factory implementation.
-
 
 
 static uno::Reference< uno::XInterface > SAL_CALL

@@ -25,7 +25,6 @@
 #include <vector>
 
 
-
 namespace drawinglayer
 {
     namespace animation
@@ -50,7 +49,6 @@ namespace drawinglayer
         };
 
 
-
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryFixed : public AnimationEntry
         {
         protected:
@@ -67,7 +65,6 @@ namespace drawinglayer
             virtual double getStateAtTime(double fTime) const override;
             virtual double getNextEventTime(double fTime) const override;
         };
-
 
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryLinear : public AnimationEntry
@@ -88,7 +85,6 @@ namespace drawinglayer
             virtual double getStateAtTime(double fTime) const override;
             virtual double getNextEventTime(double fTime) const override;
         };
-
 
 
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryList : public AnimationEntry
@@ -113,7 +109,6 @@ namespace drawinglayer
         };
 
 
-
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryLoop : public AnimationEntryList
         {
         protected:
@@ -133,7 +128,6 @@ namespace drawinglayer
 
     } // end of namespace animation
 } // end of namespace drawinglayer
-
 
 
 #endif //INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX

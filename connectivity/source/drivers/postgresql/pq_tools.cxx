@@ -959,8 +959,6 @@ OUString sqltype2string( const Reference< XPropertySet > & desc )
 }
 
 
-
-
 static void keyType2String( OUStringBuffer & buf, sal_Int32 keyType )
 {
     if( com::sun::star::sdbc::KeyRule::CASCADE == keyType )

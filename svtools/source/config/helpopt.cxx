@@ -120,8 +120,6 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 }
 
 
-
-
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( OUString( "Office.Common/Help" ) )
     , bExtendedHelp( false )
@@ -215,7 +213,6 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
 }
 
 
-
 void SvtHelpOptions_Impl::ImplCommit()
 {
     Sequence< OUString > aNames = GetPropertyNames();
@@ -251,7 +248,6 @@ void SvtHelpOptions_Impl::ImplCommit()
 }
 
 
-
 void SvtHelpOptions_Impl::Notify( const Sequence<OUString>& aPropertyNames )
 {
     Load( aPropertyNames );
@@ -270,7 +266,6 @@ SvtHelpOptions::SvtHelpOptions()
     }
     pImp = pOptions;
 }
-
 
 
 SvtHelpOptions::~SvtHelpOptions()
@@ -304,7 +299,6 @@ bool SvtHelpOptions::IsHelpTips() const
 {
     return pImp->IsHelpTips();
 }
-
 
 
 void SvtHelpOptions::SetWelcomeScreen( bool b )

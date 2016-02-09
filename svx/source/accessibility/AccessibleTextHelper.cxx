@@ -18,10 +18,7 @@
  */
 
 
-
-
 // Global header
-
 
 
 #include <limits.h>
@@ -48,7 +45,6 @@
 #include <vcl/unohelp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-
 
 
 // Project-local header
@@ -1641,7 +1637,6 @@ namespace accessibility
     }
 
 
-
     // AccessibleTextHelper implementation (simply forwards to impl)
 
     AccessibleTextHelper::AccessibleTextHelper( ::std::unique_ptr< SvxEditSource > && pEditSource ) :
@@ -1900,7 +1895,6 @@ namespace accessibility
     }
 
 } // end of namespace accessibility
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

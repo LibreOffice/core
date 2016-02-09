@@ -108,7 +108,6 @@ OUString RootAccess::getAbsolutePathRepresentation() {
 }
 
 
-
 void RootAccess::setAlive(bool b) {
     alive_ = b;
 }

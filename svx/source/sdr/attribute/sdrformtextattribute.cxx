@@ -143,7 +143,6 @@ namespace
 } // end of anonymous namespace
 
 
-
 namespace drawinglayer
 {
     namespace attribute

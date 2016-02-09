@@ -2131,7 +2131,6 @@ bool SVGReader::parseAndConvert()
     m_xDocumentHandler->endElement( "office:master-styles" );
 
 
-
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:body", xUnoAttrs );
     m_xDocumentHandler->startElement( "office:drawing", xUnoAttrs );

@@ -78,7 +78,6 @@ using ::com::sun::star::sdb::XRowSetSupplier;
 using ::com::sun::star::awt::XVclWindowPeer;
 
 
-
 css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 {
     css::awt::FontDescriptor aFD;
@@ -283,7 +282,6 @@ void FmXContainerMultiplexer::elementRemoved(const ContainerEvent& e) throw( Run
 }
 
 
-
 void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( RuntimeException, std::exception )
 {
     ContainerEvent aMulti( e );
@@ -326,7 +324,6 @@ void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _even
 
 
 //= FmXGridControl
-
 
 
 Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
@@ -1512,7 +1509,6 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException, std::exception )
         m_aUpdateListeners.notifyEach( &XUpdateListener::updated, aEvt );
     return !bCancel;
 }
-
 
 
 void FmXGridPeer::cursorMoved(const EventObject& _rEvent) throw( RuntimeException, std::exception )

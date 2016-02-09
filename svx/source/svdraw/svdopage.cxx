@@ -65,8 +65,6 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
 }
 
 
-
-
 SdrPageObj::SdrPageObj(SdrPage* pNewPage)
 :   mpShownPage(pNewPage)
 {

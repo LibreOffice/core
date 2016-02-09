@@ -171,7 +171,6 @@ static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess()
 }
 
 
-
 // Properties and methods lie down the return value at the Get (bPut = sal_False) in the
 // element 0 of the Argv; the value of element 0 is saved at Put (bPut = sal_True)
 
@@ -295,7 +294,6 @@ RTLFUNC(Atn)
         rPar.Get( 0 )->PutDouble( atan( pArg->GetDouble() ) );
     }
 }
-
 
 
 RTLFUNC(Abs)
@@ -1075,7 +1073,6 @@ RTLFUNC(Int)
         rPar.Get(0)->PutDouble( aDouble );
     }
 }
-
 
 
 RTLFUNC(Fix)
@@ -2682,7 +2679,6 @@ RTLFUNC(IsNumeric)
         rPar.Get( 0 )->PutBool( rPar.Get( 1 )->IsNumericRTL() );
     }
 }
-
 
 
 RTLFUNC(IsMissing)

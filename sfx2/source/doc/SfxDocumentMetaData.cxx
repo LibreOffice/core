@@ -1347,7 +1347,6 @@ void SAL_CALL SfxDocumentMetaData::init(
 }
 
 
-
 SfxDocumentMetaData::SfxDocumentMetaData(
         css::uno::Reference< css::uno::XComponentContext > const & context)
     : BaseMutex()

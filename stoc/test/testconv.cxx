@@ -261,7 +261,6 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
 }
 
 
-
 typedef struct _ConvBlock
 {
     Any         _value;
@@ -285,7 +284,6 @@ typedef struct _ConvBlock
     {
     }
 } ConvBlock;
-
 
 
 static sal_Int32 initBlocks( ConvBlock * pTestBlocks )

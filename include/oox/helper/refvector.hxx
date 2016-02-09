@@ -29,7 +29,6 @@
 namespace oox {
 
 
-
 /** Template for a vector of ref-counted objects with additional accessor functions.
 
     An instance of the class RefVector< Type > stores elements of the type
@@ -151,7 +150,6 @@ private:
                                 &(*this)[ static_cast< size_type >( nIndex ) ] : 0;
                         }
 };
-
 
 
 } // namespace oox

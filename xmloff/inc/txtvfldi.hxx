@@ -94,7 +94,6 @@ public:
 };
 
 
-
 /**
  * abstract parent class for all variable related fields
  * - variable-set/get/decl      (not -decls),
@@ -195,7 +194,6 @@ protected:
 };
 
 
-
 /** import variable get fields (<text:variable-get>) */
 class XMLVariableGetFieldImportContext : public XMLVarFieldImportContext
 {
@@ -215,7 +213,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
-
 
 
 /** import expression fields (<text:expression>) */
@@ -257,10 +254,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
-
-
-
-
 
 
 /**
@@ -309,7 +302,6 @@ protected:
 };
 
 
-
 /** import variable set fields (<text:variable-set>) */
 class XMLVariableSetFieldImportContext : public XMLSetVarFieldImportContext
 {
@@ -330,7 +322,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
-
 
 
 /** variable input fields (<text:variable-input>) */
@@ -355,7 +346,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
-
 
 
 /** user fields (<text:user-field-get>) */
@@ -391,7 +381,6 @@ public:
 };
 
 
-
 /** sequence fields (<text:sequence>) */
 class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
 {
@@ -423,10 +412,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
-
-
-
-
 
 
 /**
@@ -493,7 +478,6 @@ public:
 };
 
 
-
 /** import table formula fields (deprecated; for Writer 2.0 compatibility) */
 class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 {
@@ -525,7 +509,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet) override;
 };
-
 
 
 /** import database display fields (<text:database-display>) */

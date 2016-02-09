@@ -24,7 +24,6 @@ namespace comphelper
 {
 
 
-
 const css::uno::Reference<css::io::XObjectOutputStream>& operator << (
         const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream,
         const css::awt::FontDescriptor& _rFont)

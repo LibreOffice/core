@@ -140,7 +140,6 @@ void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
 }
 
 
-
 void PresenterPane::CreateCanvases (
     const Reference<awt::XWindow>& rxParentWindow,
     const Reference<rendering::XSpriteCanvas>& rxParentCanvas)

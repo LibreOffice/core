@@ -61,7 +61,6 @@
 #include <svx/xpool.hxx>
 
 
-
 enum EscDir {LKS,RTS,OBN,UNT};
 
 class ImpCaptParams
@@ -192,8 +191,6 @@ sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
 }
 
 
-
-
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),
     aTailPoly(3),  // default size: 3 points = 2 lines
@@ -307,7 +304,6 @@ SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-
 bool SdrCaptionObj::hasSpecialDrag() const
 {
     return true;
@@ -417,7 +413,6 @@ OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         }
     }
 }
-
 
 
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const

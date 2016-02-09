@@ -528,7 +528,6 @@ namespace connectivity
     typedef ::rtl::Reference< OAssignValues > ORefAssignValues;
 
 
-
     typedef ::rtl::Reference< OValueVector >                    OValueRow;
     typedef ::rtl::Reference< OValueRefVector >             OValueRefRow;
 }

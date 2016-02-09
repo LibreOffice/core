@@ -106,7 +106,6 @@ void OXMLCharContent::InsertString(const OUString& _sString)
 }
 
 
-
 OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName
                 ,OXMLCell& _rCell

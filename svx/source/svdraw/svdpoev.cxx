@@ -36,7 +36,6 @@
 using namespace sdr;
 
 
-
 void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
     eMarkedPointsSmooth=SDRPATHSMOOTH_DONTCARE;
@@ -610,7 +609,6 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
         }
     }
 }
-
 
 
 static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)

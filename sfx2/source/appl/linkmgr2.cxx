@@ -103,7 +103,6 @@ void LinkManager::CloseCachedComps()
 }
 
 
-
 void LinkManager::Remove( SvBaseLink *pLink )
 {
     // No duplicate links inserted
@@ -344,7 +343,6 @@ void LinkManager::UpdateAllLinks(
 }
 
 
-
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {
     switch( pLink->GetObjType() )
@@ -510,7 +508,6 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
 }
 
 
-
 bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const css::uno::Any & rValue,
                                 Graphic& rGrf )
@@ -552,7 +549,6 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
     }
     return bRet;
 }
-
 
 
 OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
@@ -692,7 +688,6 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

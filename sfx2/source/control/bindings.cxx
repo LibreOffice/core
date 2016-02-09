@@ -353,7 +353,6 @@ void SfxBindings::DeleteControllers_Impl()
 }
 
 
-
 void SfxBindings::HidePopups( bool bHide )
 {
     // Hide SfxPopupWindows
@@ -877,7 +876,6 @@ void SfxBindings::Invalidate
         }
     }
 }
-
 
 
 bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )

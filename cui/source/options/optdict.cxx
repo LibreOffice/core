@@ -204,7 +204,6 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, ModifyHdl_Impl, Edit&, void)
 {
     if ( !pNameEdit->GetText().isEmpty() )
@@ -383,7 +382,6 @@ void SvxEditDictionaryDialog::SetDicReadonly_Impl(
 }
 
 
-
 void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
 {
     // select language
@@ -430,7 +428,6 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
@@ -452,7 +449,6 @@ IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, voi
         pLangLB->Enable( bEnable );
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
@@ -486,7 +482,6 @@ IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, voi
             SetLanguage_Impl( nOldLang );
     }
 }
-
 
 
 void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
@@ -560,7 +555,6 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 }
 
 
-
 IMPL_LINK_TYPED(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
 {
     if(!bDoNothing)
@@ -584,7 +578,6 @@ IMPL_LINK_TYPED(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
         pDeletePB->Enable( true && !IsDicReadonly_Impl() );
     }
 };
-
 
 
 IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelButtonHdl, Button*, pBtn, void)
@@ -691,7 +684,6 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
     ModifyHdl(*pWordED);
     return true;
 }
-
 
 
 IMPL_LINK_TYPED(SvxEditDictionaryDialog, ModifyHdl, Edit&, rEdt, void)

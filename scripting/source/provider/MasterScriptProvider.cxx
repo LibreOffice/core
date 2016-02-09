@@ -203,7 +203,6 @@ throw ( Exception, RuntimeException, std::exception )
 }
 
 
-
 void MasterScriptProvider::createPkgProvider()
 {
     try
@@ -361,7 +360,6 @@ throw ( provider::ScriptFrameworkErrorException,
 }
 
 
-
 ProviderCache*
 MasterScriptProvider::providerCache()
 {
@@ -385,7 +383,6 @@ MasterScriptProvider::providerCache()
     }
     return m_pPCache;
 }
-
 
 
 OUString SAL_CALL
@@ -462,7 +459,6 @@ MasterScriptProvider::getType()
 {
     return browse::BrowseNodeTypes::CONTAINER;
 }
-
 
 
 OUString
@@ -771,7 +767,6 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
         throw RuntimeException( errorMsg.concat( errorMsg ) );
     }
 }
-
 
 
 OUString SAL_CALL MasterScriptProvider::getImplementationName( )

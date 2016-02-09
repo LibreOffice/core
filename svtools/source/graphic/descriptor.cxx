@@ -154,13 +154,11 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 }
 
 
-
 OUString GraphicDescriptor::getImplementationName_Static()
     throw()
 {
     return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
 }
-
 
 
 uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
@@ -169,7 +167,6 @@ uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
     uno::Sequence< OUString > aSeq { "com.sun.star.graphic.GraphicDescriptor" };
     return aSeq;
 }
-
 
 
 uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
@@ -194,13 +191,11 @@ uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
 }
 
 
-
 uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
-
 
 
 void SAL_CALL GraphicDescriptor::acquire()
@@ -210,13 +205,11 @@ void SAL_CALL GraphicDescriptor::acquire()
 }
 
 
-
 void SAL_CALL GraphicDescriptor::release()
     throw()
 {
     OWeakAggObject::release();
 }
-
 
 
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
@@ -232,13 +225,11 @@ sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceNam
 }
 
 
-
 uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
-
 
 
 uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
@@ -262,7 +253,6 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 
 ::comphelper::PropertySetInfo* GraphicDescriptor::createPropertySetInfo()
@@ -290,7 +280,6 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 }
 
 
-
 void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry** /*ppEntries*/, const uno::Any* /*pValues*/ )
     throw( beans::UnknownPropertyException,
            beans::PropertyVetoException,
@@ -299,7 +288,6 @@ void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry**
 {
     // we only have readonly attributes
 }
-
 
 
 void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )

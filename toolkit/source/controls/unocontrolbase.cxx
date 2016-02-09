@@ -255,5 +255,4 @@ void UnoControlBase::Impl_getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLine
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

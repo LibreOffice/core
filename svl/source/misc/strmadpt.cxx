@@ -129,7 +129,6 @@ inline bool SvDataPipe_Impl::isEOF() const
 //  SvOutputStreamOpenLockBytes
 
 
-
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uInt64, void *, sal_uLong, sal_uLong*)
     const

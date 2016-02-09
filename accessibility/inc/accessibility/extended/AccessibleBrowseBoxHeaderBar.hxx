@@ -26,9 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 
-
 namespace accessibility {
-
 
 
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
@@ -250,9 +248,7 @@ inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 }
 
 
-
 } // namespace accessibility
-
 
 
 #endif

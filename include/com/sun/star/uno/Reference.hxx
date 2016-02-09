@@ -359,8 +359,6 @@ inline Reference< interface_type > Reference< interface_type >::query(
 }
 
 
-
-
 inline bool BaseReference::operator == ( XInterface * pInterface ) const
 {
     if (_pInterface == pInterface)

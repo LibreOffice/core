@@ -33,7 +33,6 @@ namespace oox {
 class BinaryOutputStream;
 
 
-
 /** Interface for binary input stream classes.
 
     The binary data in the stream is assumed to be in little-endian format.
@@ -211,7 +210,6 @@ private:
 typedef std::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
 
 
-
 template< typename Type >
 Type BinaryInputStream::readValue()
 {
@@ -240,7 +238,6 @@ sal_Int32 BinaryInputStream::readArray( ::std::vector< Type >& orVector, sal_Int
     orVector.resize( static_cast< size_t >( nElemCount ) );
     return orVector.empty() ? 0 : readArray( &orVector.front(), nElemCount );
 }
-
 
 
 /** Wraps a UNO input stream and provides convenient access functions.
@@ -290,7 +287,6 @@ private:
 };
 
 
-
 /** Wraps a StreamDataSequence and provides convenient access functions.
 
     The binary data in the stream is assumed to be in little-endian format.
@@ -324,7 +320,6 @@ private:
     sal_Int32    getMaxBytes( sal_Int32 nBytes ) const
                             { return getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mpData->getLength() - mnPos ); }
 };
-
 
 
 /** Wraps a BinaryInputStream and provides access to a specific part of the
@@ -391,7 +386,6 @@ private:
     sal_Int64           mnRelPos;
     sal_Int64           mnSize;
 };
-
 
 
 } // namespace oox

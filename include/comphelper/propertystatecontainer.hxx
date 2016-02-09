@@ -34,7 +34,6 @@ namespace comphelper
 {
 
 
-
     //= OPropertyStateContainer
 
     typedef ::cppu::ImplHelper1 <   css::beans::XPropertyState

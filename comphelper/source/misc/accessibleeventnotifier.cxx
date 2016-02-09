@@ -144,7 +144,6 @@ namespace comphelper
 {
 
 
-
     AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient( )
     {
         ::osl::MutexGuard aGuard( lclMutex::get() );

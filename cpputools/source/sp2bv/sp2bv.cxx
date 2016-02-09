@@ -44,8 +44,6 @@ static bool hasOption(char const * szOption, int argc, char** argv);
 "    Display help information.\n"
 
 
-
-
 int main(int argc, char **argv)
 {
     if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
@@ -108,7 +106,6 @@ int main(int argc, char **argv)
 }
 
 
-
 static bool hasOption(char const * szOption, int argc, char** argv)
 {
     bool retVal = false;
@@ -122,9 +119,6 @@ static bool hasOption(char const * szOption, int argc, char** argv)
     }
     return retVal;
 }
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

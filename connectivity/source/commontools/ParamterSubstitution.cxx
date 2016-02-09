@@ -110,8 +110,6 @@ namespace connectivity
     }
 
 
-
-
 } // connectivity
 
 

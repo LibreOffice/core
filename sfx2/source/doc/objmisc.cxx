@@ -161,7 +161,6 @@ public:
 };
 
 
-
 sal_uInt16 const aTitleMap_Impl[3][2] =
 {
                                 //  local               remote
@@ -171,19 +170,16 @@ sal_uInt16 const aTitleMap_Impl[3][2] =
 };
 
 
-
 void SfxObjectShell::AbortImport()
 {
     pImp->bIsAbortingImport = true;
 }
 
 
-
 bool SfxObjectShell::IsAbortingImport() const
 {
     return pImp->bIsAbortingImport;
 }
-
 
 
 uno::Reference<document::XDocumentProperties>
@@ -199,11 +195,9 @@ SfxObjectShell::getDocProperties()
 }
 
 
-
 void SfxObjectShell::DoFlushDocInfo()
 {
 }
-
 
 
 // Note: the only thing that calls this is the modification event handler
@@ -223,7 +217,6 @@ void SfxObjectShell::FlushDocInfo()
 }
 
 
-
 void SfxObjectShell::SetError( sal_uInt32 lErr, const OUString& aLogMessage )
 {
     if(pImp->lErr==ERRCODE_NONE)
@@ -236,12 +229,10 @@ void SfxObjectShell::SetError( sal_uInt32 lErr, const OUString& aLogMessage )
 }
 
 
-
 sal_uInt32 SfxObjectShell::GetError() const
 {
     return ERRCODE_TOERROR(GetErrorCode());
 }
-
 
 
 sal_uInt32 SfxObjectShell::GetErrorCode() const
@@ -251,7 +242,6 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
         lError=GetMedium()->GetErrorCode();
     return lError;
 }
-
 
 
 void SfxObjectShell::ResetError()
@@ -266,12 +256,10 @@ void SfxObjectShell::ResetError()
 }
 
 
-
 bool SfxObjectShell::IsTemplate() const
 {
     return pImp->bIsTemplate;
 }
-
 
 
 void SfxObjectShell::EnableSetModified( bool bEnable )
@@ -284,12 +272,10 @@ void SfxObjectShell::EnableSetModified( bool bEnable )
 }
 
 
-
 bool SfxObjectShell::IsEnableSetModified() const
 {
     return pImp->m_bEnableSetModified && !IsReadOnly();
 }
-
 
 
 bool SfxObjectShell::IsModified()
@@ -334,7 +320,6 @@ bool SfxObjectShell::IsModified()
 }
 
 
-
 void SfxObjectShell::SetModified( bool bModifiedP )
 {
 #ifdef DBG_UTIL
@@ -351,7 +336,6 @@ void SfxObjectShell::SetModified( bool bModifiedP )
         ModifyChanged();
     }
 }
-
 
 
 void SfxObjectShell::ModifyChanged()
@@ -373,7 +357,6 @@ void SfxObjectShell::ModifyChanged()
 }
 
 
-
 bool SfxObjectShell::IsReadOnlyUI() const
 
 /*  [Description]
@@ -385,7 +368,6 @@ bool SfxObjectShell::IsReadOnlyUI() const
 {
     return pImp->bReadOnlyUI;
 }
-
 
 
 bool SfxObjectShell::IsReadOnlyMedium() const
@@ -407,7 +389,6 @@ bool SfxObjectShell::IsOriginallyReadOnlyMedium() const
 }
 
 
-
 void SfxObjectShell::SetReadOnlyUI( bool bReadOnly )
 
 /*  [Description]
@@ -423,7 +404,6 @@ void SfxObjectShell::SetReadOnlyUI( bool bReadOnly )
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
     }
 }
-
 
 
 void SfxObjectShell::SetReadOnly()
@@ -458,7 +438,6 @@ bool SfxObjectShell::IsReadOnly() const
 }
 
 
-
 bool SfxObjectShell::IsInModalMode() const
 {
     return pImp->bModalMode || pImp->bRunningMacro;
@@ -470,7 +449,6 @@ bool SfxObjectShell::AcceptStateUpdate() const
 }
 
 
-
 void SfxObjectShell::SetMacroMode_Impl( bool bModal )
 {
     if ( !pImp->bRunningMacro != !bModal )
@@ -479,7 +457,6 @@ void SfxObjectShell::SetMacroMode_Impl( bool bModal )
         Broadcast( SfxSimpleHint( SFX_HINT_MODECHANGED ) );
     }
 }
-
 
 
 void SfxObjectShell::SetModalMode_Impl( bool bModal )
@@ -617,7 +594,6 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
 }
 
 
-
 void SfxObjectShell::FreeSharedFile()
 {
     if ( pMedium )
@@ -684,7 +660,6 @@ bool SfxObjectShell::IsDocShared() const
 }
 
 
-
 OUString SfxObjectShell::GetSharedFileURL() const
 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
@@ -698,8 +673,6 @@ Size SfxObjectShell::GetFirstPageSize()
 {
     return GetVisArea(ASPECT_THUMBNAIL).GetSize();
 }
-
-
 
 
 IndexBitSet& SfxObjectShell::GetNoSet_Impl()
@@ -750,7 +723,6 @@ void SfxObjectShell::SetTitle
         Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
     }
 }
-
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -950,7 +922,6 @@ OUString SfxObjectShell::GetTitle
 }
 
 
-
 void SfxObjectShell::InvalidateName()
 
 /*  [Description]
@@ -965,7 +936,6 @@ void SfxObjectShell::InvalidateName()
 
     Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
 }
-
 
 
 void SfxObjectShell::SetNamedVisibility_Impl()
@@ -990,12 +960,10 @@ void SfxObjectShell::SetNoName()
 }
 
 
-
 SfxProgress* SfxObjectShell::GetProgress() const
 {
     return pImp->pProgress;
 }
-
 
 
 void SfxObjectShell::SetProgress_Impl
@@ -1018,7 +986,6 @@ void SfxObjectShell::SetProgress_Impl
 }
 
 
-
 void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
     SfxApplication* pSfxApp = SfxGetpApp();
@@ -1036,7 +1003,6 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
         }
     }
 }
-
 
 
 void SfxObjectShell::SetActivateEvent_Impl(sal_uInt16 nId )
@@ -1379,7 +1345,6 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 }
 
 
-
 void SfxObjectShell::PositionView_Impl()
 {
     MarkData_Impl *pMark = Get_Impl()->pMarkData;
@@ -1395,7 +1360,6 @@ void SfxObjectShell::PositionView_Impl()
 }
 
 
-
 bool SfxObjectShell::IsLoading() const
 /*  [Description]
 
@@ -1404,7 +1368,6 @@ bool SfxObjectShell::IsLoading() const
 {
     return !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT );
 }
-
 
 
 void SfxObjectShell::CancelTransfers()
@@ -1423,14 +1386,12 @@ void SfxObjectShell::CancelTransfers()
 }
 
 
-
 AutoReloadTimer_Impl::AutoReloadTimer_Impl(
     const OUString& rURL, sal_uInt32 nTime, SfxObjectShell* pSh )
     : aUrl( rURL ), pObjSh( pSh )
 {
     SetTimeout( nTime );
 }
-
 
 
 void AutoReloadTimer_Impl::Invoke()

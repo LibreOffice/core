@@ -93,7 +93,6 @@ private:
 };
 
 
-
 typedef std::vector< FrameBorder* > FrameBorderPtrVec;
 
 struct FrameSelectorImpl : public Resource
@@ -221,7 +220,6 @@ struct FrameSelectorImpl : public Resource
     /** Returns true, if all selected frame borders are equal (or if nothing is selected). */
     bool                SelectedBordersEqual() const;
 };
-
 
 
 /** Dummy predicate for frame border iterators to use all borders in a container. */

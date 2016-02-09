@@ -255,7 +255,6 @@ IMPL_LINK_NOARG_TYPED(OLEObjCache, UnloadCheckHdl, Timer*, void)
 }
 
 
-
 void SdrLinkList::Clear()
 {
     aList.clear();
@@ -296,7 +295,6 @@ void SdrLinkList::RemoveLink(const Link<SdrObjFactory*,void>& rLink)
         OSL_FAIL("SdrLinkList::RemoveLink(): Link not found.");
     }
 }
-
 
 
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
@@ -548,7 +546,6 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
     }
     return pNewWhichTable;
 }
-
 
 
 SvdProgressInfo::SvdProgressInfo( const Link<void*,bool>&_rLink )

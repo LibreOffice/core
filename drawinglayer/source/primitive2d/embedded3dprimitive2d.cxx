@@ -29,9 +29,7 @@
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 
 
-
 using namespace com::sun::star;
-
 
 
 namespace drawinglayer

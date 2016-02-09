@@ -48,7 +48,6 @@ namespace vista{
 // types, const etcpp.
 
 
-
 /** todo document me
  */
 class VistaFilePickerEventHandler : public ::cppu::BaseMutex
@@ -125,7 +124,6 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 
 
         // native interface
-
 
 
         /** start listening for file picker events on the given file open dialog COM object.

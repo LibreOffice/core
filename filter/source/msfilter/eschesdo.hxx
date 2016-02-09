@@ -89,8 +89,6 @@ public:
 };
 
 
-
-
 // fractions of the Draw PPTWriter
 
 class EscherEx;
@@ -187,7 +185,6 @@ public:
     void                ImplExitPage();
     void                ImplFlushSolverContainer();
 };
-
 
 
 #endif // INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX

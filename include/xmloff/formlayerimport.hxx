@@ -40,7 +40,6 @@ namespace xmloff
 {
 
 
-
     //= OFormLayerXMLImport
 
     class OFormLayerXMLImport_Impl;

@@ -377,7 +377,6 @@ bool parseOpacity (const char* sOpacity, ARGBColor& rColor )
 }
 
 
-
 bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
 {
     using namespace ::boost::spirit::classic;
@@ -493,7 +492,6 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
 }
 
 
-
 bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
 {
     using namespace ::boost::spirit::classic;
@@ -521,7 +519,6 @@ bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
 }
 
 
-
 bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector )
 {
     using namespace ::boost::spirit::classic;
@@ -543,7 +540,6 @@ bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector 
         //  End grammar
         space_p).full;
 }
-
 
 
 bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
@@ -569,7 +565,6 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
 
     return bRes;
 }
-
 
 
 bool parseXlinkHref( const char* sXlinkHref, OUString& data )

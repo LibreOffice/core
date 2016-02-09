@@ -31,9 +31,6 @@
 #endif
 
 
-
-
-
 class CDummyCustomControl : public CCustomControl
 {
 public:
@@ -42,9 +39,6 @@ public:
     virtual void SAL_CALL Align();
     virtual void SAL_CALL SetFont(HFONT hFont);
 };
-
-
-
 
 
 class CDialogCustomControlBase : public CCustomControl
@@ -65,9 +59,6 @@ protected:
 };
 
 
-
-
-
 class CStaticCustomControl : public CDialogCustomControlBase
 {
 public:
@@ -75,9 +66,6 @@ public:
 
     virtual void SAL_CALL Align();
 };
-
-
-
 
 
 class CPushButtonCustomControl : public CDialogCustomControlBase
@@ -89,9 +77,6 @@ public:
 };
 
 
-
-
-
 class CComboboxCustomControl : public CDialogCustomControlBase
 {
 public:
@@ -99,9 +84,6 @@ public:
 
     virtual void SAL_CALL Align();
 };
-
-
-
 
 
 class CCheckboxCustomControl : public CDialogCustomControlBase

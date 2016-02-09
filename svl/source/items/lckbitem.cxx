@@ -25,16 +25,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-
-
 SfxPoolItem* SfxLockBytesItem::CreateDefault() { return new SfxLockBytesItem; }
-
 
 
 SfxLockBytesItem::SfxLockBytesItem()
 {
 }
-
 
 
 SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
@@ -48,7 +44,6 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 }
 
 
-
 SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
 :   SfxPoolItem( rItem ),
     _xVal( rItem._xVal )
@@ -56,11 +51,9 @@ SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
 }
 
 
-
 SfxLockBytesItem::~SfxLockBytesItem()
 {
 }
-
 
 
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
@@ -69,12 +62,10 @@ bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-
 SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 {
     return new SfxLockBytesItem( *this );
 }
-
 
 
 #define MAX_BUF 32000
@@ -99,7 +90,6 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
 
     return new SfxLockBytesItem( Which(), aNewStream );
 }
-
 
 
 SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const

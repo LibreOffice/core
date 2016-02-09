@@ -45,11 +45,9 @@ GraphicAttr::GraphicAttr() :
 }
 
 
-
 GraphicAttr::~GraphicAttr()
 {
 }
-
 
 
 bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
@@ -70,7 +68,6 @@ bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
             ( mcTransparency == rAttr.mcTransparency ) &&
             ( meDrawMode == rAttr.meDrawMode ) );
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

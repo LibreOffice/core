@@ -20,7 +20,6 @@
 #define INCLUDED_EDITENG_SVXENUM_HXX
 
 
-
 enum SvxCaseMap
 {
     SVX_CASEMAP_NOT_MAPPED,

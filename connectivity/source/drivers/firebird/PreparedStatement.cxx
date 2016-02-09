@@ -527,7 +527,6 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 }
 
 
-
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException, std::exception)
 {
     (void) parameterIndex;
@@ -623,7 +622,6 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
     setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
-
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)

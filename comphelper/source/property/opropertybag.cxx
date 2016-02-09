@@ -37,7 +37,6 @@
 #include <iterator>
 
 
-
 using namespace ::com::sun::star;
 
 void createRegistryInfo_OPropertyBag()
@@ -261,7 +260,6 @@ namespace comphelper
         // So, everything of XSet except insert is implemented empty
         throw NoSuchElementException( OUString(), *this );
     }
-
 
 
     Reference< XEnumeration > SAL_CALL OPropertyBag::createEnumeration(  ) throw (RuntimeException, std::exception)

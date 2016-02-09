@@ -119,8 +119,6 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 }
 
 
-
-
 PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
             const OUString &rHyphWord,
             const Sequence< sal_Int16 > &rPositions) :
@@ -182,7 +180,6 @@ css::uno::Reference < css::linguistic2::XPossibleHyphens > PossibleHyphens::Crea
 {
     return new PossibleHyphens( rWord, nLang, rHyphWord, rPositions );
 }
-
 
 
 }   // namespace linguistic

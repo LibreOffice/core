@@ -21,7 +21,6 @@
 #include <svx/svdorect.hxx>
 
 
-
 namespace sdr
 {
     namespace properties

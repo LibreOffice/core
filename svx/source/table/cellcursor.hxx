@@ -26,7 +26,6 @@
 #include "cellrange.hxx"
 
 
-
 namespace sdr { namespace table {
 
 struct CellPos;

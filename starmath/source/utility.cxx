@@ -33,8 +33,6 @@
 #include "smdll.hxx"
 
 
-
-
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
 //!! Since this method is based on the current focus it is somewhat
@@ -44,9 +42,6 @@ SmViewShell * SmGetActiveView()
     SfxViewShell *pView = SfxViewShell::Current();
     return  dynamic_cast<SmViewShell*>( pView);
 }
-
-
-
 
 
 /**************************************************************************/
@@ -220,7 +215,6 @@ void SmFontPickListBox::Remove(const vcl::Font &rFont)
 }
 
 
-
 bool IsItalic( const vcl::Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
@@ -289,7 +283,6 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
                        Fraction(rFaceSize.Height()) *= rFrac));
     return rFace;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

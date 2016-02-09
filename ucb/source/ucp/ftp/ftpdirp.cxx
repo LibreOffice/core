@@ -37,7 +37,6 @@ inline bool ascii_isWhitespace( sal_Unicode ch )
 }
 
 
-
 /*========================================================================
  *
  * FTPDirectoryParser implementation.

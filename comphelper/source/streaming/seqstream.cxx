@@ -34,7 +34,6 @@ using namespace ::osl;
 // class SequenceInputStream
 
 
-
 SequenceInputStream::SequenceInputStream(
     css::uno::Sequence<sal_Int8> const & rData)
 :   m_aData(rData)

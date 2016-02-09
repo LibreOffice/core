@@ -60,8 +60,6 @@ void printResultVariantArray( VARIANT & var);
 void printVariant( VARIANT & var);
 
 
-
-
 int SAL_CALL _tmain( int argc, _TCHAR * argv[] )
 {
     HRESULT hr;
@@ -218,7 +216,6 @@ HRESULT doTest()
 
     hr = oletest.p->Invoke( dispid, IID_NULL, LOCALE_USER_DEFAULT,
         DISPATCH_METHOD | DISPATCH_PROPERTYGET, &params, &varRet, NULL, NULL);
-
 
 
     CComVariant varByteArray;

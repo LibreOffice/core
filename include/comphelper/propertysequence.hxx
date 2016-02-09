@@ -36,7 +36,6 @@ namespace comphelper
 }   // namespace comphelper
 
 
-
 #endif // INCLUDED_COMPHELPER_PROPERTYSEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

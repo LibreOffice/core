@@ -181,7 +181,6 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 #define MAX_FILTER_ENTRIES          14
 
 
-
 class SfxCommonTemplateDialog_Impl::DeletionWatcher : private boost::noncopyable
 {
     typedef void (DeletionWatcher::* bool_type)();
@@ -574,7 +573,6 @@ void StyleTree_Impl::Put(StyleTree_Impl* pIns, sal_uIntPtr lPos)
     else
         pChildren.insert( pChildren.begin() + (sal_uInt16)lPos, pIns );
 }
-
 
 
 StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)

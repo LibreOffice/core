@@ -29,7 +29,6 @@ namespace oox {
 namespace ole {
 
 
-
 /** A wrapper for a binary input stream that supports aligned read operations.
 
     The implementation does not support seeking back the wrapped stream. All
@@ -83,13 +82,11 @@ private:
 };
 
 
-
 /** A pair of integer values as a property. */
 typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
 
 /** An array of string values as a property. */
 typedef ::std::vector< OUString > AxArrayString;
-
 
 
 /** Import helper to read simple and complex ActiveX form control properties
@@ -241,7 +238,6 @@ private:
     sal_Int64           mnPropsEnd;         ///< End position of simple/large properties.
     bool                mbValid;            ///< True = stream still valid.
 };
-
 
 
 } // namespace ole

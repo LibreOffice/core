@@ -1143,7 +1143,6 @@ inline short ImpEditEngine::GetXValue( short nXValue ) const
 }
 
 
-
 inline long ImpEditEngine::GetXValue( long nXValue ) const
 {
     if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )

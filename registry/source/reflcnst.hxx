@@ -227,7 +227,4 @@ sal_uInt32 UINT16StringLen(const sal_uInt8* wstring);
 #endif
 
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

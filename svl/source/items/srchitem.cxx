@@ -197,7 +197,6 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 }
 
 
-
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
@@ -224,7 +223,6 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 }
 
 
-
 SvxSearchItem::~SvxSearchItem()
 {
 }
@@ -234,7 +232,6 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 {
     return new SvxSearchItem(*this);
 }
-
 
 
 //! used below
@@ -271,7 +268,6 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( m_aSearchOpt     == rSItem.m_aSearchOpt )      &&
            ( m_bNotes         == rSItem.m_bNotes );
 }
-
 
 
 bool SvxSearchItem::GetPresentation
@@ -464,7 +460,6 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 
     return true;
 }
-
 
 
 bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )

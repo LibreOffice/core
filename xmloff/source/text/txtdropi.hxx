@@ -23,7 +23,6 @@
 #include "XMLElementPropertyContext.hxx"
 
 
-
 class XMLTextDropCapImportContext :public XMLElementPropertyContext
 {
     XMLPropertyState aWholeWordProp;

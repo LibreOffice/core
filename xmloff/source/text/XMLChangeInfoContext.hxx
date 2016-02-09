@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star {
 class XMLChangedRegionImportContext;
 
 
-
 /**
  * Import <office:change-info> elements as children of <text:changed-region>
  * elements. The attribute values will be passed to the enclosing

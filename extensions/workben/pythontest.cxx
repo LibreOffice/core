@@ -39,7 +39,6 @@ using ::rtl::StringToOUString;
 #define PCHAR_TO_USTRING(x) StringToOUString(String(x),CHARSET_SYSTEM)
 
 
-
 class NullEngineListenerRef : public XEngineListenerRef
 {
     virtual void interrupt(const InterruptEngineEvent& Evt) THROWS( (UsrSystemException) ) {}
@@ -147,7 +146,6 @@ protected:
     int m_bIsRunning;
     int m_bIsTerminating;       // The listeners ignore everything when set
 };
-
 
 
 void CmdDebugger::cmdLine()
@@ -454,10 +452,6 @@ BOOL CmdDebugger::queryInterface( Uik aUik, XInterfaceRef & rOut )
 }
 
 
-
-
-
-
 /*
  * main.
  */
@@ -518,7 +512,6 @@ int SAL_CALL main (int argc, char **argv)
         xEngine->runAsync( UString( L"x=x+1\nprint 2\n") ,  XInterfaceRef(), args , XEngineListenerRef() );
         xEngine->runAsync( UString( L"x=x+1\nprint 3\n") ,  XInterfaceRef(), args , XEngineListenerRef());
         xEngine->runAsync( UString( L"x=x+1\nprint 4\n") ,  XInterfaceRef(), args , XEngineListenerRef() );
-
 
 
     }

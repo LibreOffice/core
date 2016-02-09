@@ -111,7 +111,6 @@ public:
     const OUString sLevelFormat;
 
 
-
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
         ::com::sun::star::uno::Reference<

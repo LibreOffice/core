@@ -651,7 +651,6 @@ namespace osl
     };
 
 
-
     /** A connectionless socket to send and receive datagrams.
      */
     class DatagramSocket : public Socket

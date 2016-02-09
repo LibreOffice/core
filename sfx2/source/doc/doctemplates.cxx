@@ -142,7 +142,6 @@ public:
 #define Y_OFFSET 15
 
 
-
 struct NamePair_Impl
 {
     OUString maShortName;
@@ -309,7 +308,6 @@ public:
 };
 
 
-
 class Updater_Impl : public ::osl::Thread
 {
 private:
@@ -322,7 +320,6 @@ public:
     virtual void SAL_CALL   run() override;
     virtual void SAL_CALL   onTerminated() override;
 };
-
 
 
 class DocTemplates_EntryData_Impl
@@ -359,7 +356,6 @@ public:
     void                setTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                setType( const OUString& rType ) { maType = rType; }
 };
-
 
 
 class GroupData_Impl
@@ -1347,7 +1343,6 @@ bool SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
 }
 
 
-
 bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUserPath,
                                                                 const uno::Sequence< beans::StringPair >& aUINames )
 {
@@ -2260,7 +2255,6 @@ SfxDocTplService::SfxDocTplService( const uno::Reference< XComponentContext >& x
 }
 
 
-
 SfxDocTplService::~SfxDocTplService()
 {
     delete pImp;
@@ -2275,7 +2269,6 @@ lang::Locale SAL_CALL SfxDocTplService::getLocale()
 {
     return pImp->getLocale();
 }
-
 
 
 void SAL_CALL SfxDocTplService::setLocale( const lang::Locale & rLocale )
@@ -2387,7 +2380,6 @@ void SAL_CALL SfxDocTplService::update()
     if ( pImp->init() )
         pImp->update( true );
 }
-
 
 
 Updater_Impl::Updater_Impl( SfxDocTplService_Impl* pTemplates )

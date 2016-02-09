@@ -25,7 +25,6 @@
 #include <memory>
 
 
-
 struct SfxSecurityPage_Impl;
 
 class SfxSecurityPage : public SfxTabPage

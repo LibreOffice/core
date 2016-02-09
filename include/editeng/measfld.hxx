@@ -50,7 +50,6 @@ public:
 };
 
 
-
 #endif // INCLUDED_EDITENG_MEASFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

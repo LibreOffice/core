@@ -36,10 +36,8 @@
 //= property helper classes
 
 
-
 namespace comphelper
 {
-
 
 
     //= OPropertyStateHelper

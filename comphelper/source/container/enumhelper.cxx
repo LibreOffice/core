@@ -270,5 +270,4 @@ css::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
 }   // namespace comphelper
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

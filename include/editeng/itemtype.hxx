@@ -41,7 +41,6 @@ OUString GetColorString( const Color& rCol );
 EDITENG_DLLPUBLIC sal_uInt16 GetMetricId( SfxMapUnit eUnit );
 
 
-
 inline long Scale( long nVal, long nMult, long nDiv )
 {
     BigInt aVal( nVal );

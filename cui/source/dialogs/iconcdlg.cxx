@@ -75,7 +75,6 @@ void IconChoicePage::ActivatePage( const SfxItemSet& )
 }
 
 
-
 int IconChoicePage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
@@ -116,7 +115,6 @@ void IconChoicePage::ImplInitSettings()
 }
 
 
-
 void IconChoicePage::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
@@ -127,7 +125,6 @@ void IconChoicePage::StateChanged( StateChangedType nType )
         Invalidate();
     }
 }
-
 
 
 void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
@@ -143,9 +140,7 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-
 // Class IconChoiceDialog
-
 
 
 /**********************************************************************
@@ -322,7 +317,6 @@ void IconChoiceDialog::ShowPageImpl ( IconChoicePageData* pData )
 }
 
 
-
 void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
 {
     if ( pData->pPage )
@@ -425,7 +419,6 @@ IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ResetHdl, Button*, void)
     else
         pData->pPage->Reset( *pSet );
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(IconChoiceDialog, CancelHdl, Button*, void)
@@ -559,7 +552,6 @@ bool IconChoiceDialog::DeActivatePageImpl ()
 }
 
 
-
 void IconChoiceDialog::ResetPageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
@@ -630,7 +622,6 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 }
 
 
-
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
     bool bSet = ( pSet != nullptr );
@@ -645,12 +636,10 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 }
 
 
-
 void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*/ )
 {
     // not interested in
 }
-
 
 
 SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
@@ -677,7 +666,6 @@ short IconChoiceDialog::Execute()
 }
 
 
-
 void IconChoiceDialog::Start( bool bShow )
 {
 
@@ -690,7 +678,6 @@ void IconChoiceDialog::Start( bool bShow )
         Window::Show();
 
 }
-
 
 
 bool IconChoiceDialog::QueryClose()
@@ -775,7 +762,6 @@ bool IconChoiceDialog::OK_Impl()
 
     return bEnd;
 }
-
 
 
 short IconChoiceDialog::Ok()

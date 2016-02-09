@@ -44,8 +44,6 @@ ChildrenManager::ChildrenManager (
 }
 
 
-
-
 ChildrenManager::~ChildrenManager()
 {
     if (mpImpl != nullptr)

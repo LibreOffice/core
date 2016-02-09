@@ -28,11 +28,8 @@
 #include "tablecolumn.hxx"
 
 
-
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
-
 
 
 namespace sdr { namespace table {
@@ -173,7 +170,6 @@ static void Dispose( RowVector& rRows )
 }
 
 
-
 InsertRowUndo::InsertRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aNewRows )
     : SdrUndoAction( *xTable->getSdrTableObj()->GetModel() )
     , mxTable( xTable )
@@ -184,13 +180,11 @@ InsertRowUndo::InsertRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, Row
 }
 
 
-
 InsertRowUndo::~InsertRowUndo()
 {
     if( !mbUndo )
         Dispose( maRows );
 }
-
 
 
 void InsertRowUndo::Undo()
@@ -201,7 +195,6 @@ void InsertRowUndo::Undo()
         mbUndo = false;
     }
 }
-
 
 
 void InsertRowUndo::Redo()
@@ -227,13 +220,11 @@ RemoveRowUndo::RemoveRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, Row
 }
 
 
-
 RemoveRowUndo::~RemoveRowUndo()
 {
     if( mbUndo )
         Dispose( maRows );
 }
-
 
 
 void RemoveRowUndo::Undo()
@@ -244,7 +235,6 @@ void RemoveRowUndo::Undo()
         mbUndo = false;
     }
 }
-
 
 
 void RemoveRowUndo::Redo()
@@ -268,14 +258,12 @@ static void Dispose( ColumnVector& rCols )
 }
 
 
-
 static void Dispose( CellVector& rCells )
 {
     CellVector::iterator aIter( rCells.begin() );
     while( aIter != rCells.end() )
         (*aIter++)->dispose();
 }
-
 
 
 InsertColUndo::InsertColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells  )
@@ -289,7 +277,6 @@ InsertColUndo::InsertColUndo( const TableModelRef& xTable, sal_Int32 nIndex, Col
 }
 
 
-
 InsertColUndo::~InsertColUndo()
 {
     if( !mbUndo )
@@ -300,7 +287,6 @@ InsertColUndo::~InsertColUndo()
 }
 
 
-
 void InsertColUndo::Undo()
 {
     if( mxTable.is() )
@@ -309,7 +295,6 @@ void InsertColUndo::Undo()
         mbUndo = false;
     }
 }
-
 
 
 void InsertColUndo::Redo()
@@ -336,7 +321,6 @@ RemoveColUndo::RemoveColUndo( const TableModelRef& xTable, sal_Int32 nIndex, Col
 }
 
 
-
 RemoveColUndo::~RemoveColUndo()
 {
     if( mbUndo )
@@ -347,7 +331,6 @@ RemoveColUndo::~RemoveColUndo()
 }
 
 
-
 void RemoveColUndo::Undo()
 {
     if( mxTable.is() )
@@ -356,7 +339,6 @@ void RemoveColUndo::Undo()
         mbUndo = false;
     }
 }
-
 
 
 void RemoveColUndo::Redo()
@@ -381,11 +363,9 @@ TableColumnUndo::TableColumnUndo( const TableColumnRef& xCol )
 }
 
 
-
 TableColumnUndo::~TableColumnUndo()
 {
 }
-
 
 
 void TableColumnUndo::Undo()
@@ -399,12 +379,10 @@ void TableColumnUndo::Undo()
 }
 
 
-
 void TableColumnUndo::Redo()
 {
     setData( maRedoData );
 }
-
 
 
 bool TableColumnUndo::Merge( SfxUndoAction *pNextAction )
@@ -412,7 +390,6 @@ bool TableColumnUndo::Merge( SfxUndoAction *pNextAction )
     TableColumnUndo* pNext = dynamic_cast< TableColumnUndo* >( pNextAction );
     return pNext && pNext->mxCol == mxCol;
 }
-
 
 
 void TableColumnUndo::setData( const Data& rData )
@@ -427,7 +404,6 @@ void TableColumnUndo::setData( const Data& rData )
     // Trigger re-layout of the table.
     mxCol->getModel()->setModified(true);
 }
-
 
 
 void TableColumnUndo::getData( Data& rData )
@@ -453,11 +429,9 @@ TableRowUndo::TableRowUndo( const TableRowRef& xRow )
 }
 
 
-
 TableRowUndo::~TableRowUndo()
 {
 }
-
 
 
 void TableRowUndo::Undo()
@@ -471,12 +445,10 @@ void TableRowUndo::Undo()
 }
 
 
-
 void TableRowUndo::Redo()
 {
     setData( maRedoData );
 }
-
 
 
 bool TableRowUndo::Merge( SfxUndoAction *pNextAction )
@@ -484,7 +456,6 @@ bool TableRowUndo::Merge( SfxUndoAction *pNextAction )
     TableRowUndo* pNext = dynamic_cast< TableRowUndo* >( pNextAction );
     return pNext && pNext->mxRow == mxRow;
 }
-
 
 
 void TableRowUndo::setData( const Data& rData )
@@ -501,7 +472,6 @@ void TableRowUndo::setData( const Data& rData )
  }
 
 
-
 void TableRowUndo::getData( Data& rData )
 {
     rData.mnRow = mxRow->mnRow;
@@ -511,7 +481,6 @@ void TableRowUndo::getData( Data& rData )
     rData.mbIsStartOfNewPage = mxRow->mbIsStartOfNewPage;
     rData.maName = mxRow->maName;
 }
-
 
 
 TableStyleUndo::TableStyleUndo( const SdrTableObj& rTableObj )

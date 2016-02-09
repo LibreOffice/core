@@ -279,7 +279,6 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 /*columnIndex*/ ) t
 }
 
 
-
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     return nullptr;
@@ -323,7 +322,6 @@ sal_uInt32 OResultSet::currentRowCount()
     // new implementation
     return m_aQueryHelper.getResultCount();
 }
-
 
 
 bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
@@ -391,7 +389,6 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 }
 
 
-
 OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
@@ -411,7 +408,6 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 /*columnIndex*/ ) throw(SQLExceptio
     ResultSetEntryGuard aGuard( *this );
     return Time();
 }
-
 
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -1029,7 +1025,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 }
 
 
-
 void OResultSet::fillRowData()
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
@@ -1314,8 +1309,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 }
 
 
-
-
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
@@ -1397,7 +1390,6 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 }
 
 
-
 bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
@@ -1408,7 +1400,6 @@ bool OResultSet::isCount() const
             m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
             );
 }
-
 
 
 // Check for valid row in m_aQuery

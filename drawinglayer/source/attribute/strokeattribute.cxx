@@ -22,7 +22,6 @@
 #include <numeric>
 
 
-
 namespace drawinglayer
 {
     namespace attribute

@@ -25,7 +25,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
-
 namespace drawinglayer
 {
     namespace primitive2d

@@ -346,7 +346,6 @@ public:
     const Date&             GetMax() const { return maMax; }
 
 
-
     // MT: Remove these methods too, ExtDateFormat should be enough!
     //     What should happen if using DDMMYYYY, but ShowCentury=false?
 

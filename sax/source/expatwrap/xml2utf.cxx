@@ -341,8 +341,6 @@ void XMLFile2UTFConverter::initializeDecoding()
 }
 
 
-
-
 // Text2UnicodeConverter
 
 
@@ -442,9 +440,6 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
 
     return seqUnicode;
 }
-
-
-
 
 
 // Unicode2TextConverter

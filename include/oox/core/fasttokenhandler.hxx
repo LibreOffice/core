@@ -32,7 +32,6 @@ namespace oox {
 namespace core {
 
 
-
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
     that provides access to the tokens generated from the internal token name list.
  */
@@ -60,7 +59,6 @@ public:
 private:
     const TokenMap&     mrTokenMap;     ///< Reference to global token map singleton.
 };
-
 
 
 } // namespace core

@@ -229,7 +229,6 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, ClickOKHdl, Button*, void)
 {
     insertSelectedFontwork();
@@ -237,13 +236,11 @@ IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, ClickOKHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
 {
     insertSelectedFontwork();
     EndDialog( RET_OK );
 }
-
 
 
 class FontworkAlignmentWindow : public ToolbarMenu
@@ -357,13 +354,10 @@ public:
 };
 
 
-
-
 FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentContext >& rxContext )
 : svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
 {
 }
-
 
 
 VclPtr<vcl::Window> FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
@@ -392,13 +386,11 @@ OUString SAL_CALL FontworkAlignmentControl_getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
-
 
 
 Reference< XInterface > SAL_CALL SAL_CALL FontworkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
@@ -407,12 +399,10 @@ Reference< XInterface > SAL_CALL SAL_CALL FontworkAlignmentControl_createInstanc
 }
 
 
-
 OUString SAL_CALL FontworkAlignmentControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return FontworkAlignmentControl_getImplementationName();
 }
-
 
 
 Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
@@ -488,13 +478,11 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
 }
 
 
-
 void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool, bool bEnabled )
 {
     enableEntry( 6, bEnabled );
     checkEntry( 6, bEnabled );
 }
-
 
 
 void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException )
@@ -526,7 +514,6 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
         }
     }
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
@@ -600,7 +587,6 @@ FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Referenc
 }
 
 
-
 VclPtr<vcl::Window> FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<FontworkCharacterSpacingWindow>::Create( *this, m_xFrame, pParent );
@@ -627,13 +613,11 @@ OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName()
 }
 
 
-
 Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
-
 
 
 Reference< XInterface > SAL_CALL SAL_CALL FontworkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
@@ -642,12 +626,10 @@ Reference< XInterface > SAL_CALL SAL_CALL FontworkCharacterSpacingControl_create
 }
 
 
-
 OUString SAL_CALL FontworkCharacterSpacingControl::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return FontworkCharacterSpacingControl_getImplementationName();
 }
-
 
 
 Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)

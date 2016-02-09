@@ -598,7 +598,6 @@ IMPL_LINK_NOARG_TYPED(SfxInPlaceClient_Impl, TimerHdl, Timer *, void)
 }
 
 
-
 // SfxInPlaceClient
 
 
@@ -616,7 +615,6 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
     m_pImp->m_aTimer.SetTimeoutHdl( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
 }
-
 
 
 SfxInPlaceClient::~SfxInPlaceClient()

@@ -22,9 +22,7 @@
 #include <dxfblkrd.hxx>
 
 
-
 //---------------- DXFBlock --------------------------------------------------
-
 
 
 DXFBlock::DXFBlock()
@@ -66,9 +64,7 @@ void DXFBlock::Read(DXFGroupReader & rDGR)
 }
 
 
-
 //---------------- DXFBlocks -------------------------------------------------
-
 
 
 DXFBlocks::DXFBlocks()
@@ -125,7 +121,6 @@ void DXFBlocks::Clear()
         delete ptmp;
     }
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

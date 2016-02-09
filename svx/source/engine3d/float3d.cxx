@@ -2174,7 +2174,6 @@ IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickAssignHdl, Button*, void)
 }
 
 
-
 IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
 {
 
@@ -2441,7 +2440,6 @@ IMPL_LINK_TYPED( Svx3DWin, ClickHdl, Button *, pButton, void )
 }
 
 
-
 IMPL_LINK_TYPED( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
 {
     SvColorDialog aColorDlg( this );
@@ -2594,7 +2592,6 @@ IMPL_LINK_TYPED( Svx3DWin, ModifyHdl, Edit&, rField, void )
 }
 
 
-
 void Svx3DWin::ClickLight(PushButton& rBtn)
 {
     sal_uInt16 nLightSource = GetLightSource( &rBtn );
@@ -2620,7 +2617,6 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
     m_pCtlLightPreview->GetSvx3DLightControl().SelectLight(nLightSource);
     m_pCtlLightPreview->CheckSelection();
 }
-
 
 
 IMPL_LINK_NOARG_TYPED(Svx3DWin, ChangeSelectionCallbackHdl, SvxLightCtl3D*, void)

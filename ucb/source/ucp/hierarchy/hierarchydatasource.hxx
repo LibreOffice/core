@@ -34,7 +34,6 @@ namespace cppu { class OInterfaceContainerHelper; }
 namespace hierarchy_ucp {
 
 
-
 class HierarchyDataSource : public cppu::OWeakObject,
                             public css::lang::XServiceInfo,
                             public css::lang::XTypeProvider,

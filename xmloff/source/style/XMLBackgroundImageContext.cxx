@@ -71,7 +71,6 @@ static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 }
 
 
-
 static const SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },

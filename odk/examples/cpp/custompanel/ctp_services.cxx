@@ -27,8 +27,6 @@ namespace sd { namespace colortoolpanel
 {
 
 
-
-
     //= descriptors for the services implemented in this component
 
     static struct ::cppu::ImplementationEntry s_aServiceEntries[] =

@@ -36,7 +36,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-
 //  class VCLXAccessibleTabControl
 
 
@@ -50,11 +49,9 @@ VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
 }
 
 
-
 VCLXAccessibleTabControl::~VCLXAccessibleTabControl()
 {
 }
-
 
 
 void VCLXAccessibleTabControl::UpdateFocused()
@@ -72,7 +69,6 @@ void VCLXAccessibleTabControl::UpdateFocused()
 }
 
 
-
 void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
 {
     if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
@@ -86,7 +82,6 @@ void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
         }
     }
 }
-
 
 
 void VCLXAccessibleTabControl::UpdatePageText( sal_Int32 i )
@@ -104,7 +99,6 @@ void VCLXAccessibleTabControl::UpdatePageText( sal_Int32 i )
 }
 
 
-
 void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
 {
     if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
@@ -118,7 +112,6 @@ void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
         }
     }
 }
-
 
 
 void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
@@ -138,7 +131,6 @@ void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
         }
     }
 }
-
 
 
 void VCLXAccessibleTabControl::RemoveChild( sal_Int32 i )
@@ -164,7 +156,6 @@ void VCLXAccessibleTabControl::RemoveChild( sal_Int32 i )
         }
     }
 }
-
 
 
 void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -261,7 +252,6 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
 }
 
 
-
 void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )
@@ -289,8 +279,6 @@ void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rV
             VCLXAccessibleComponent::ProcessWindowChildEvent( rVclWindowEvent );
     }
 }
-
-
 
 
 void VCLXAccessibleTabControl::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
@@ -346,7 +334,6 @@ OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeExcepti
 }
 
 
-
 Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames { "com.sun.star.awt.AccessibleTabControl" };
@@ -363,7 +350,6 @@ sal_Int32 VCLXAccessibleTabControl::getAccessibleChildCount() throw (RuntimeExce
 
     return m_aAccessibleChildren.size();
 }
-
 
 
 Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -390,14 +376,12 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
 }
 
 
-
 sal_Int16 VCLXAccessibleTabControl::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::PAGE_TAB_LIST;
 }
-
 
 
 OUString VCLXAccessibleTabControl::getAccessibleName(  ) throw (RuntimeException, std::exception)
@@ -423,7 +407,6 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex ) th
 }
 
 
-
 sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -439,12 +422,10 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
 }
 
 
-
 void VCLXAccessibleTabControl::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
 {
     // This method makes no sense in a tab control, and so does nothing.
 }
-
 
 
 void VCLXAccessibleTabControl::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
@@ -455,14 +436,12 @@ void VCLXAccessibleTabControl::selectAllAccessibleChildren(  ) throw (RuntimeExc
 }
 
 
-
 sal_Int32 VCLXAccessibleTabControl::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
     return 1;
 }
-
 
 
 Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -487,7 +466,6 @@ Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( s
 }
 
 
-
 void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
@@ -497,7 +475,6 @@ void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex ) 
 
     // This method makes no sense in a tab control, and so does nothing.
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

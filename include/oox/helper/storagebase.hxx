@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 
 
-
 class StorageBase;
 typedef std::shared_ptr< StorageBase > StorageRef;
 
@@ -181,7 +180,6 @@ private:
     bool                mbBaseStreamAccess; ///< True = access base streams with empty stream name.
     bool                mbReadOnly;         ///< True = storage opened read-only (based on input stream).
 };
-
 
 
 } // namespace oox

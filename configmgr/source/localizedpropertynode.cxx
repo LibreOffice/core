@@ -45,7 +45,6 @@ NodeMap & LocalizedPropertyNode::getMembers() {
 }
 
 
-
 LocalizedPropertyNode::LocalizedPropertyNode(
     LocalizedPropertyNode const & other):
     Node(other), staticType_(other.staticType_), nillable_(other.nillable_)

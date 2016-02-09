@@ -62,7 +62,6 @@ static const char aDecorationPropName[] = "Decoration";
 static const char aTitlePropName[] = "Title";
 
 
-
 // DlgEdHint
 
 

@@ -192,8 +192,6 @@ void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyl
 }
 
 
-
-
 DocumentListsManager::~DocumentListsManager()
 {
     for ( std::unordered_map< OUString, SwList*, OUStringHash >::iterator

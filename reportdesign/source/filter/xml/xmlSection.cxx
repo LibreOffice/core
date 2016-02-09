@@ -50,7 +50,6 @@ namespace rptxml
     }
 
 
-
 OXMLSection::OXMLSection( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & _xAttrList

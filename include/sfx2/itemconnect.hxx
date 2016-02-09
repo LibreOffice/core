@@ -213,7 +213,6 @@ private:
 };
 
 
-
 /** Base class template for single item <-> single control connection objects.
 
     This template uses functions provided by the SingleItemWrapper and the
@@ -288,7 +287,6 @@ protected:
 private:
     sal_uInt16              mnSlot;
 };
-
 
 
 /** Connection between an SfxBoolItem and a VCL CheckBox. */

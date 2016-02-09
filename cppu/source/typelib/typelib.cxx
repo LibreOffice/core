@@ -148,7 +148,6 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 }
 
 
-
 struct equalStr_Impl
 {
     bool operator()(const sal_Unicode * const & s1, const sal_Unicode * const & s2) const
@@ -161,7 +160,6 @@ struct hashStr_Impl
     size_t operator()(const sal_Unicode * const & s) const
         { return rtl_ustr_hashCode( s ); }
 };
-
 
 
 // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
@@ -1096,7 +1094,6 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
 }
 
 
-
 namespace {
 
 typelib_TypeDescriptionReference ** copyExceptions(
@@ -1197,7 +1194,6 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
 }
 
 
-
 extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
@@ -1282,7 +1278,6 @@ extern "C" void SAL_CALL typelib_typedescription_acquire(
 {
     osl_atomic_increment( &pTypeDescription->nRefCount );
 }
-
 
 
 namespace {
@@ -1764,7 +1759,6 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
 
     return newAlignedSize( nOffset, nSize, rMaxIntegralTypeSize );
 }
-
 
 
 namespace {

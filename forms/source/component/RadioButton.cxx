@@ -55,7 +55,6 @@ css::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNa
 }
 
 
-
 ORadioButtonControl::ORadioButtonControl(const Reference<XComponentContext>& _rxFactory)
                       :OBoundControl(_rxFactory, VCL_CONTROL_RADIOBUTTON)
 {

@@ -2045,7 +2045,6 @@ char msg[];
     }
 
 
-
 /* Internal utility routines. */
 
 #ifndef yytext_ptr

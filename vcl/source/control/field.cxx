@@ -104,7 +104,6 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     aStr = aStr.trim();
 
 
-
     // find position of decimal point
     nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
     // find position of fraction

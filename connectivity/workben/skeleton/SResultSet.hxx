@@ -102,7 +102,6 @@ namespace connectivity
             void releaseBuffer();
 
 
-
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper

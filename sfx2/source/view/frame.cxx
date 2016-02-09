@@ -90,7 +90,6 @@ void SfxFrame::Construct_Impl()
 }
 
 
-
 SfxFrame::~SfxFrame()
 {
     RemoveTopFrame_Impl( this );
@@ -234,7 +233,6 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
 
     return bRet;
 }
-
 
 
 SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
@@ -452,7 +450,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilter ));
 }
-
 
 
 SfxFrameDescriptor* SfxFrame::GetDescriptor() const

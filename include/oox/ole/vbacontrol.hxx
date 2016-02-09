@@ -34,7 +34,6 @@ namespace oox {
 namespace ole {
 
 
-
 /** Common properties for all controls that are part of a VBA user form or of
     another container control in a VBA user form. */
 class VbaSiteModel
@@ -93,7 +92,6 @@ protected:
 };
 
 typedef std::shared_ptr< VbaSiteModel > VbaSiteModelRef;
-
 
 
 /** A control that is embedded in a VBA user form or in another container
@@ -172,7 +170,6 @@ private:
 };
 
 
-
 class VbaUserForm : public VbaFormControl
 {
 public:
@@ -195,7 +192,6 @@ private:
     css::uno::Reference< css::frame::XModel >          mxDocModel;
     ControlConverter                                   maConverter;
 };
-
 
 
 } // namespace ole

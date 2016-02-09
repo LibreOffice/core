@@ -42,7 +42,6 @@ namespace svt { namespace table
 {
 
 
-
     //= UnoControlTableModel
 
     class UnoGridColumnFacade;

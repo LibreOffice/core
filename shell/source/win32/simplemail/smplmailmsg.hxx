@@ -41,13 +41,11 @@ public:
         throw (css::uno::RuntimeException);
 
 
-
     virtual void SAL_CALL setRecipient( const OUString& aRecipient )
         throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getRecipient(  )
         throw (css::uno::RuntimeException);
-
 
 
     virtual void SAL_CALL setCcRecipient( const css::uno::Sequence< OUString >& aCcRecipient )
@@ -57,13 +55,11 @@ public:
         throw (css::uno::RuntimeException);
 
 
-
     virtual void SAL_CALL setBccRecipient( const css::uno::Sequence< OUString >& aBccRecipient )
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
         throw (css::uno::RuntimeException);
-
 
 
     virtual void SAL_CALL setOriginator( const OUString& aOriginator )
@@ -73,13 +69,11 @@ public:
         throw (css::uno::RuntimeException);
 
 
-
     virtual void SAL_CALL setSubject( const OUString& aSubject )
         throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getSubject(  )
         throw (css::uno::RuntimeException);
-
 
 
     virtual void SAL_CALL setAttachement( const css::uno::Sequence< OUString >& aAttachement )

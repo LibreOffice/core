@@ -1255,7 +1255,6 @@ namespace cppcanvas
                     // are all handled locally.
 
 
-
                     case MetaActionType::PUSH:
                     {
                         MetaPushAction* pPushAction = static_cast<MetaPushAction*>(pCurrAct);
@@ -1536,12 +1535,10 @@ namespace cppcanvas
                     break;
 
 
-
                     // In the second part of this monster-switch, we
                     // handle all recursing meta actions. These are the
                     // ones generating a metafile by themselves, which is
                     // then processed by recursively calling this method.
-
 
 
                     case MetaActionType::GRADIENT:
@@ -1801,12 +1798,10 @@ namespace cppcanvas
                     break;
 
 
-
                     // In the third part of this monster-switch, we
                     // handle all 'acting' meta actions. These are all
                     // processed by constructing function objects for
                     // them, which will later ease caching.
-
 
 
                     case MetaActionType::POINT:

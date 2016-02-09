@@ -239,7 +239,6 @@ bool needToSyncRepository(OUString const & name)
 } // anon namespace
 
 
-
 namespace {
 inline OUString encodeForRcFile( OUString const & str )
 {
@@ -304,8 +303,6 @@ OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const &
         RTL_TEXTENCODING_UTF8);
     return makeURL(baseURL, segment);
 }
-
-
 
 
 OUString expandUnoRcTerm( OUString const & term_ )

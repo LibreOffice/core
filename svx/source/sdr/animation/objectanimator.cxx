@@ -21,7 +21,6 @@
 #include <svx/sdr/animation/animationstate.hxx>
 
 
-
 namespace sdr
 {
     namespace animation

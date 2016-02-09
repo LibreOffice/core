@@ -41,5 +41,4 @@ LRESULT HostWin::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, B
 }
 
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

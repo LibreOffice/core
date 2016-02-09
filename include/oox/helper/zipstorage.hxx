@@ -29,7 +29,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 
 
-
 /** Implements stream access for ZIP storages containing XML streams. */
 class ZipStorage : public StorageBase
 {
@@ -78,7 +77,6 @@ private:
     css::uno::Reference< css::embed::XStorage >
                         mxStorage;      ///< Storage based on input or output stream.
 };
-
 
 
 } // namespace oox

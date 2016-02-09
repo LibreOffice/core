@@ -32,7 +32,6 @@ namespace accessibility {
     class AccessibleGridControl_Impl;
 
 
-
 /** This class represents the complete accessible Grid Control object. */
 class AccessibleGridControl : public AccessibleGridControlBase
 {
@@ -234,7 +233,6 @@ private:
 
 
 } // namespace accessibility
-
 
 
 #endif

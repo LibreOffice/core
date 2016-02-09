@@ -71,7 +71,6 @@ namespace ftp {
     };
 
 
-
 /*========================================================================
  *
  * the directory information structure

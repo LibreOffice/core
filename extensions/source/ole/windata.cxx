@@ -24,7 +24,6 @@ namespace ole_adapter
 {
 
 
-
 }
 
 

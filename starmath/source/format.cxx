@@ -23,7 +23,6 @@
 #include "format.hxx"
 
 
-
 // Latin default-fonts
 static const DefaultFontType aLatinDefFnts[FNT_END] =
 {
@@ -92,7 +91,6 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
                         GetDefaultFontFlags::OnlyOne ).GetName();
     }
 }
-
 
 
 SmFormat::SmFormat()

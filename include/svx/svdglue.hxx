@@ -150,8 +150,6 @@ public:
 };
 
 
-
-
 #endif // INCLUDED_SVX_SVDGLUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,10 +34,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 
 
-
 namespace basprov
 {
-
 
 
     // BasicModuleNodeImpl
@@ -51,7 +49,6 @@ namespace basprov
         ,m_bIsAppScript( isAppScript )
     {
     }
-
 
 
     BasicModuleNodeImpl::~BasicModuleNodeImpl()
@@ -72,7 +69,6 @@ namespace basprov
 
         return sModuleName;
     }
-
 
 
     Sequence< Reference< browse::XBrowseNode > > BasicModuleNodeImpl::getChildNodes(  ) throw (RuntimeException, std::exception)
@@ -111,7 +107,6 @@ namespace basprov
     }
 
 
-
     sal_Bool BasicModuleNodeImpl::hasChildNodes(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
@@ -128,15 +123,12 @@ namespace basprov
     }
 
 
-
     sal_Int16 BasicModuleNodeImpl::getType(  ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::CONTAINER;
     }
-
-
 
 
 }   // namespace basprov

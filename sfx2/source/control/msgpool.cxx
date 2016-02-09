@@ -94,7 +94,6 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 }
 
 
-
 const std::type_info* SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 {
     const SfxSlot* pSlot = (const_cast <SfxSlotPool*> (this))->GetSlot( nId );
@@ -135,7 +134,6 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
     // Then try any of the possible existing parent
     return _pParentPool ? _pParentPool->GetSlot( nId ) : nullptr;
 }
-
 
 
 // skips to the next group
@@ -181,14 +179,10 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 }
 
 
-
-
 sal_uInt16 SfxSlotPool::GetGroupCount()
 {
     return _pGroups->size();
 }
-
-
 
 
 // internal search loop
@@ -280,7 +274,6 @@ const SfxSlot* SfxSlotPool::NextSlot()
 }
 
 
-
 // Query SlotName with help text
 
 
@@ -291,8 +284,6 @@ SfxInterface* SfxSlotPool::FirstInterface()
         return nullptr;
     return _pParentPool ? _pParentPool->FirstInterface() : (*_pInterfaces)[0];
 }
-
-
 
 
 const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName )

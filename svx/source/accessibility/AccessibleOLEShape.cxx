@@ -39,8 +39,6 @@ AccessibleOLEShape::AccessibleOLEShape (
 }
 
 
-
-
 AccessibleOLEShape::~AccessibleOLEShape()
 {
 }
@@ -53,15 +51,11 @@ sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount()
 }
 
 
-
-
 sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
-
-
 
 
 OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
@@ -70,8 +64,6 @@ OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 
 {
     throw lang::IndexOutOfBoundsException();
 }
-
-
 
 
 Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
@@ -94,14 +86,12 @@ css::uno::Any SAL_CALL
 }
 
 
-
 void SAL_CALL
     AccessibleOLEShape::acquire()
     throw ()
 {
     AccessibleShape::acquire ();
 }
-
 
 
 void SAL_CALL
@@ -118,8 +108,6 @@ OUString SAL_CALL
 {
     return OUString("AccessibleOLEShape");
 }
-
-
 
 
 css::uno::Sequence< OUString> SAL_CALL

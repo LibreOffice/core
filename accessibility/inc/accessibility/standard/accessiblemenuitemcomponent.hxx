@@ -23,7 +23,6 @@
 #include <accessibility/standard/accessiblemenubasecomponent.hxx>
 
 
-
 //  class OAccessibleMenuItemComponent
 
 

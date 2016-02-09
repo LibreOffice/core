@@ -133,7 +133,6 @@ public:
                                                                 throw( css::uno::RuntimeException, std::exception ) override;
 
 
-
         css::uno::Reference< css::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
 
         css::uno::Reference< css::awt::XControlModel >            updateGridModel();

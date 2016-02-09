@@ -78,7 +78,6 @@
 #include <svx/e3dsceneupdater.hxx>
 
 
-
 using namespace com::sun::star;
 
 
@@ -172,13 +171,10 @@ SdrObject* E3dObjList::RemoveObject(size_t nObjNum)
 }
 
 
-
 sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dProperties(*this);
 }
-
-
 
 
 E3dObject::E3dObject()
@@ -771,8 +767,6 @@ sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperti
 {
     return new sdr::properties::E3dCompoundProperties(*this);
 }
-
-
 
 
 E3dCompoundObject::E3dCompoundObject()

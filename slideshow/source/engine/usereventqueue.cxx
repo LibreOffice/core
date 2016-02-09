@@ -533,7 +533,6 @@ void UserEventQueue::registerEvent(
 }
 
 
-
 UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
                                 EventQueue&         rEventQueue,
                                 CursorManager&      rCursorManager )

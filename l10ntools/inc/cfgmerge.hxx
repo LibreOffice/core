@@ -30,7 +30,6 @@
 typedef std::unordered_map<OString, OString, OStringHash> OStringHashMap;
 
 
-
 // class CfgStackData
 
 

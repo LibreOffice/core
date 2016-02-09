@@ -57,6 +57,4 @@ void OFlatCatalog::refreshTables()
 }
 
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
