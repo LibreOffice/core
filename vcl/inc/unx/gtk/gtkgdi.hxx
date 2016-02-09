@@ -33,6 +33,43 @@
 #include <headless/svpgdi.hxx>
 #include "textrender.hxx"
 
+enum class GtkControlPart
+{
+    Button,
+    CheckButton,
+    CheckButtonCheck,
+    RadioButton,
+    RadioButtonRadio,
+    Entry,
+    SpinButton,
+    SpinButtonUpButton,
+    SpinButtonDownButton,
+    ScrollbarVertical,
+    ScrollbarHorizontal,
+    ScrollbarTrough,
+    ScrollbarSlider,
+    ScrollbarButton,
+    ProgressBar,
+    ProgressBarTrough,
+    ProgressBarProgress,
+    MenuBar,
+    MenuItem,
+    MenuItemArrow,
+    Menu,
+    CheckMenuItem,
+    CheckMenuItemCheck,
+    RadioMenuItem,
+    RadioMenuItemRadio,
+    SeparatorMenuItem,
+    SeparatorMenuItemSeparator,
+    Notebook,
+    NotebookHeader,
+    NotebookStack,
+    NotebookHeaderTabs,
+    NotebookHeaderTabsTab,
+    FrameBorder,
+};
+
 class GtkSalGraphics : public SvpSalGraphics
 {
     GtkSalFrame *mpFrame;
@@ -66,27 +103,47 @@ private:
     static GtkStyleContext *mpEntryStyle;
     static GtkStyleContext *mpTextViewStyle;
     static GtkStyleContext *mpVScrollbarStyle;
+    static GtkStyleContext *mpVScrollbarTroughStyle;
+    static GtkStyleContext *mpVScrollbarSliderStyle;
+    static GtkStyleContext *mpVScrollbarButtonStyle;
     static GtkStyleContext *mpHScrollbarStyle;
+    static GtkStyleContext *mpHScrollbarTroughStyle;
+    static GtkStyleContext *mpHScrollbarSliderStyle;
+    static GtkStyleContext *mpHScrollbarButtonStyle;
     static GtkStyleContext *mpToolbarStyle;
     static GtkStyleContext *mpToolButtonStyle;
     static GtkStyleContext *mpToolbarSeperatorStyle;
     static GtkStyleContext *mpCheckButtonStyle;
+    static GtkStyleContext *mpRadioButtonStyle;
     static GtkStyleContext *mpMenuBarStyle;
     static GtkStyleContext *mpMenuBarItemStyle;
     static GtkStyleContext *mpMenuStyle;
     static GtkStyleContext *mpSpinStyle;
+    static GtkStyleContext *mpSpinUpStyle;
+    static GtkStyleContext *mpSpinDownStyle;
+    static GtkStyleContext *mpMenuItemStyle;
+    static GtkStyleContext *mpMenuItemArrowStyle;
     static GtkStyleContext *mpCheckMenuItemStyle;
+    static GtkStyleContext *mpRadioMenuItemStyle;
+    static GtkStyleContext *mpSeparatorMenuItemStyle;
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpComboboxButtonStyle;
     static GtkStyleContext *mpListboxStyle;
     static GtkStyleContext *mpListboxButtonStyle;
-    static GtkStyleContext *mpNoteBookStyle;
     static GtkStyleContext *mpFrameInStyle;
     static GtkStyleContext *mpFrameOutStyle;
     static GtkStyleContext *mpFixedHoriLineStyle;
     static GtkStyleContext *mpFixedVertLineStyle;
     static GtkStyleContext *mpTreeHeaderButtonStyle;
     static GtkStyleContext *mpProgressBarStyle;
+    static GtkStyleContext *mpProgressBarTroughStyle;
+    static GtkStyleContext *mpProgressBarProgressStyle;
+    static GtkStyleContext *mpNotebookStyle;
+    static GtkStyleContext *mpNotebookStackStyle;
+    static GtkStyleContext *mpNotebookHeaderStyle;
+    static GtkStyleContext *mpNotebookHeaderTabsStyle;
+    static GtkStyleContext *mpNotebookHeaderTabsTabStyle;
+    static GtkStyleContext *mpNotebookHeaderTabsTabLabelStyle;
 
     static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     static Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
@@ -116,10 +173,16 @@ private:
                         ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue);
-    static void PaintCheckOrRadio(GtkStyleContext *context,
-                           cairo_t *cr,
-                           const Rectangle& rControlRectangle,
-                           ControlType nType);
+    static void PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
+                                  const Rectangle& rControlRectangle,
+                                  bool bIsCheck, bool bInMenu);
+
+    static void PaintCheck(cairo_t *cr, GtkStyleContext *context,
+                           const Rectangle& rControlRectangle, bool bInMenu);
+
+    static void PaintRadio(cairo_t *cr, GtkStyleContext *context,
+                           const Rectangle& rControlRectangle, bool bInMenu);
+
 
     static bool style_loaded;
 };
