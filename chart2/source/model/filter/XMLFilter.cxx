@@ -383,7 +383,8 @@ sal_Int32 XMLFilter::impl_Import(
             }
         }
 
-        assert(!aBaseUri.isEmpty()); // needed for relative URLs
+        // needed for relative URLs, but in clipboard copy/paste there may be none
+        SAL_INFO_IF(aBaseUri.isEmpty(), "chart2", "chart::XMLFilter: no base URL");
         if( !aBaseUri.isEmpty() )
             xImportInfo->setPropertyValue( "BaseURI", uno::makeAny( aBaseUri ) );
 

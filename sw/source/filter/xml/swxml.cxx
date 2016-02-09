@@ -492,7 +492,9 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
 
 sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
 {
-    // TODO: sadly SwXMLTextBlocks doesn't set this? assert(!rBaseURL.isEmpty()); // needed for relative URLs
+    // needed for relative URLs, but in clipboard copy/paste there may be none
+    // and also there is the SwXMLTextBlocks special case
+    SAL_INFO_IF(rBaseURL.isEmpty(), "sw.filter", "sw::XMLReader: no base URL");
 
     // Get service factory
     uno::Reference< uno::XComponentContext > xContext =

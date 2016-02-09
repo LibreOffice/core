@@ -587,7 +587,8 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     // Set base URI
     OUString const baseURI(mrMedium.GetBaseURL());
-    assert(!baseURI.isEmpty()); // needed for relative URLs
+    // needed for relative URLs, but in clipboard copy/paste there may be none
+    SAL_INFO_IF(baseURI.isEmpty(), "sd.filter", "SdXMLFilter: no base URL");
     xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
 
     if( 0 == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
