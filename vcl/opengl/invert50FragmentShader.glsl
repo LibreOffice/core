@@ -10,9 +10,9 @@
 /*precision mediump float;*/
 
 void main() {
-    vec2 tex_mod = mod(gl_FragCoord, 2);
-    bool bLeft = tex_mod.x > 0 && tex_mod.x < 1;
-    bool bTop = tex_mod.y > 0 && tex_mod.y < 1;
+    vec2 tex_mod = mod(gl_FragCoord, 2).xy;
+    bool bLeft = (tex_mod.x > 0.0) && (tex_mod.x < 1.0);
+    bool bTop = (tex_mod.y > 0.0) && (tex_mod.y < 1.0);
     // horrors - where is the XOR operator ?
     if ((bTop && bLeft) || (!bTop && !bLeft))
         gl_FragColor = vec4(255,255,255,0);
