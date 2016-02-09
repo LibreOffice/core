@@ -258,7 +258,7 @@ namespace accessibility
 
         mnParagraphIndex = nIndex;
 
-        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        auto aChild( maImageBullet.get() );
         if( aChild.is() )
             aChild->SetParagraphIndex(mnParagraphIndex);
 
@@ -318,7 +318,7 @@ namespace accessibility
 
     void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
-        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        auto aChild( maImageBullet.get() );
         if( aChild.is() )
             aChild->SetEditSource(pEditSource);
 
@@ -561,7 +561,7 @@ namespace accessibility
 
     void AccessibleEditableTextPara::SetEEOffset( const Point& rOffset )
     {
-        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        auto aChild( maImageBullet.get() );
         if( aChild.is() )
             aChild->SetEEOffset(rOffset);
 
@@ -700,7 +700,7 @@ namespace accessibility
                                                   uno::Reference< uno::XInterface >
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
 
-        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        auto aChild( maImageBullet.get() );
 
         if( !aChild.is() )
         {
@@ -713,7 +713,7 @@ namespace accessibility
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* > (this) ) );
 
-            aChild = WeakBullet::HardRefType( xChild, pChild );
+            aChild = pChild;
 
             aChild->SetEditSource( &GetEditSource() );
             aChild->SetParagraphIndex( GetParagraphIndex() );
@@ -722,7 +722,7 @@ namespace accessibility
             maImageBullet = aChild;
         }
 
-        return aChild.getRef();
+        return aChild.get();
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleParent() throw (uno::RuntimeException, std::exception)
@@ -817,7 +817,7 @@ namespace accessibility
                  mpParaManager->IsReferencable( nMyParaIndex - 1 ) )
             {
                 uno::Sequence<uno::Reference<XInterface> > aSequence
-                    { mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().getRef() };
+                    { static_cast<cppu::OWeakObject *>(mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().get()) };
                 AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
                                             aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );
@@ -828,7 +828,7 @@ namespace accessibility
                  mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
             {
                 uno::Sequence<uno::Reference<XInterface> > aSequence
-                    { mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().getRef() };
+                    { static_cast<cppu::OWeakObject *>(mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().get()) };
                 AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
                                             aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );

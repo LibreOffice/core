@@ -104,13 +104,14 @@ namespace accessibility
 
         if( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara) )
         {
-            WeakPara::HardRefType maChild( GetChild( nPara ).first.get() );
+            auto maChild( GetChild( nPara ).first.get() );
             if( maChild.is() )
                 maChild->FireEvent( nEventId, rNewValue, rOldValue );
         }
     }
 
-    bool AccessibleParaManager::IsReferencable( WeakPara::HardRefType aChild )
+    bool AccessibleParaManager::IsReferencable(
+        rtl::Reference<AccessibleEditableTextPara> const & aChild)
     {
         return aChild.is();
     }
@@ -157,7 +158,7 @@ namespace accessibility
         if( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex) )
         {
             // retrieve hard reference from weak one
-            WeakPara::HardRefType aChild( GetChild( nParagraphIndex ).first.get() );
+            auto aChild( GetChild( nParagraphIndex ).first.get() );
 
             if( !IsReferencable( nParagraphIndex ) )
             {
@@ -169,14 +170,14 @@ namespace accessibility
                 if( !xChild.is() )
                     throw uno::RuntimeException("Child creation failed", xFrontEnd);
 
-                aChild = WeakPara::HardRefType( xChild, pChild );
+                aChild = pChild;
 
                 InitChild( *aChild, rEditSource, nChild, nParagraphIndex );
 
                 maChildren[ nParagraphIndex ] = WeakChild( aChild, pChild->getBounds() );
             }
 
-            return Child( aChild.getRef(), GetChild( nParagraphIndex ).second );
+            return Child( aChild.get(), GetChild( nParagraphIndex ).second );
         }
         else
         {
@@ -377,7 +378,7 @@ namespace accessibility
 
     void AccessibleParaManager::ShutdownPara( const WeakChild& rChild )
     {
-        WeakPara::HardRefType aChild( rChild.first.get() );
+        auto aChild( rChild.first.get() );
 
         if( IsReferencable( aChild ) )
             aChild->SetEditSource( nullptr );

@@ -110,7 +110,6 @@ static std::vector<std::string> PROBABLY_GOOD_TEMPLATES = {
     "com::sun::star::uno::Reference",
     "com::sun::star::uno::WeakReference",
     "com::sun::star::uno::Sequence",
-    "accessibility::HardCppRef",
     "accessibility::WeakCppRef",
     "dba::OAutoRegistration",
     "dba::OSingletonRegistration",

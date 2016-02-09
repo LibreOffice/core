@@ -37,52 +37,6 @@ namespace accessibility
 {
     class AccessibleEditableTextPara;
 
-    /** Helper class for WeakCppRef
-
-        This class is returned by WeakChild::get() and contains a hard
-        reference and a reference to the c++ object. This combination
-        prevents the c++ object from destruction during usage. Hold
-        this object only as long as absolutely necessary, prevents
-        referenced object from vanishing otherwise
-    */
-    template < class UnoType, class CppType > class HardCppRef
-    {
-    public:
-
-        typedef UnoType UnoInterfaceType;
-        typedef CppType InterfaceType;
-
-        HardCppRef( const css::uno::WeakReference< UnoInterfaceType >& xRef, InterfaceType* rImpl ) :
-            mxRef( xRef ),
-            mpImpl( rImpl )
-        {
-        }
-
-        /** Query whether the reference is still valid.
-
-            Hands off also from the implementation pointer if this
-            returns sal_False!
-         */
-        bool is() const { return mxRef.is(); }
-        InterfaceType* operator->() const { return mpImpl; }
-        InterfaceType& operator*() const { return *mpImpl; }
-        css::uno::Reference< UnoInterfaceType >& getRef() { return mxRef; }
-        const css::uno::Reference< UnoInterfaceType >& getRef() const { return mxRef; }
-
-        // default copy constructor and assignment will do
-        // HardCppRef( const HardCppRef& );
-        // HardCppRef& operator= ( const HardCppRef& );
-
-    private:
-
-        // the interface, hard reference to prevent object from vanishing
-        css::uno::Reference< UnoInterfaceType >                 mxRef;
-
-        // the c++ object, for our internal stuff
-        InterfaceType*                                          mpImpl;
-
-    };
-
     /** Helper class for weak object references plus implementation
 
         This class combines a weak reference (to facilitate automatic
@@ -96,7 +50,6 @@ namespace accessibility
 
         typedef UnoType UnoInterfaceType;
         typedef CppType InterfaceType;
-        typedef HardCppRef< UnoInterfaceType, InterfaceType >  HardRefType;
 
         WeakCppRef() : maWeakRef(), maUnsafeRef( nullptr ) {}
         WeakCppRef( InterfaceType& rImpl ) :
@@ -105,15 +58,18 @@ namespace accessibility
         {
         }
 
-        WeakCppRef( HardRefType& rImpl ) :
-            maWeakRef( rImpl.getRef() ),
-            maUnsafeRef( rImpl.operator->() )
+        WeakCppRef(rtl::Reference<InterfaceType> const & rImpl):
+            maWeakRef(rImpl.get()),
+            maUnsafeRef(rImpl.get())
         {
         }
 
         // get object with c++ object and hard reference (which
         // prevents the c++ object from destruction during use)
-        HardRefType get() const { return HardRefType( maWeakRef, maUnsafeRef ); }
+        rtl::Reference<InterfaceType> get() const {
+            css::uno::Reference<UnoInterfaceType> ref(maWeakRef);
+            return ref.is() ? maUnsafeRef : rtl::Reference<InterfaceType>();
+        }
 
         // default copy constructor and assignment will do
         // WeakCppRef( const WeakCppRef& );
@@ -178,7 +134,7 @@ namespace accessibility
                         const css::uno::Any& rNewValue = css::uno::Any(),
                         const css::uno::Any& rOldValue = css::uno::Any() ) const;
 
-        static bool IsReferencable( WeakPara::HardRefType aChild );
+        static bool IsReferencable(rtl::Reference<AccessibleEditableTextPara> const & aChild);
         bool IsReferencable( sal_Int32 nChild ) const;
         static void ShutdownPara( const WeakChild& rChild );
 
@@ -248,7 +204,7 @@ namespace accessibility
             void operator()( const WeakChild& rPara )
             {
                 // retrieve hard reference from weak one
-                WeakPara::HardRefType aHardRef( rPara.first.get() );
+                auto aHardRef( rPara.first.get() );
 
                 if( aHardRef.is() )
                     mrFunctor( *aHardRef );
@@ -276,7 +232,7 @@ namespace accessibility
             void operator()( const WeakChild& rPara )
             {
                 // retrieve hard reference from weak one
-                WeakPara::HardRefType aHardRef( rPara.first.get() );
+                auto aHardRef( rPara.first.get() );
 
                 if( aHardRef.is() )
                     (*aHardRef.*maFunPtr)( maArg );

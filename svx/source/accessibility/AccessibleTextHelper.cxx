@@ -848,7 +848,7 @@ namespace accessibility
         ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
         {
             // retrieve hard reference from weak one
-            ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rChild.first.get() );
+            auto aHardRef( rChild.first.get() );
 
             if( aHardRef.is() )
             {
@@ -899,10 +899,10 @@ namespace accessibility
         void operator()( const ::accessibility::AccessibleParaManager::WeakChild& rPara )
         {
             // retrieve hard reference from weak one
-            ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rPara.first.get() );
+            auto aHardRef( rPara.first.get() );
 
             if( aHardRef.is() )
-                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny( aHardRef.getRef() ) );
+                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny<css::uno::Reference<css::accessibility::XAccessible>>(aHardRef.get()) );
         }
 
     private:
@@ -1126,10 +1126,7 @@ namespace accessibility
 
                 // #i61812# remember para to be removed for later notification
                 // AFTER the new state is applied (that after the para got removed)
-                ::uno::Reference< XAccessible > xPara;
-                ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( begin->first.get() );
-                if( aHardRef.is() )
-                    xPara.set( aHardRef.getRef(), ::uno::UNO_QUERY );
+                ::uno::Reference< XAccessible > xPara(begin->first.get().get());
 
                 // release everything from the remove position until the end
                 maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);
