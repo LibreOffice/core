@@ -20,7 +20,6 @@
 #include <svtools/prnsetup.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
-#include <vcl/configsettings.hxx>
 #include <vcl/print.hxx>
 
 
@@ -355,10 +354,6 @@ short PrinterSetupDialog::Execute()
     {
         if ( mpTempPrinter )
             mpPrinter->SetPrinterProps( mpTempPrinter );
-
-        vcl::SettingsConfigItem* const pItem = vcl::SettingsConfigItem::get();
-        pItem->setValue("PrintDialog", "LastPrinter", mpPrinter->GetName());
-        pItem->Commit();
     }
 
     maStatusTimer.Stop();
