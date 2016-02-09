@@ -429,4 +429,14 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
     }
 }
 
+void ScDocument::finalizeOutlineImport()
+{
+    TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScTable* p = *it;
+        p->finalizeOutlineImport();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
