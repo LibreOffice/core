@@ -1036,6 +1036,14 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
     xDocumentHandler->startElement(TAG_SIGNATUREVALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     xDocumentHandler->characters(rInformation.ouSignatureValue);
     xDocumentHandler->endElement(TAG_SIGNATUREVALUE);
+
+    xDocumentHandler->startElement(TAG_KEYINFO, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement(TAG_X509DATA, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement(TAG_X509CERTIFICATE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rInformation.ouX509Certificate);
+    xDocumentHandler->endElement(TAG_X509CERTIFICATE);
+    xDocumentHandler->endElement(TAG_X509DATA);
+    xDocumentHandler->endElement(TAG_KEYINFO);
 }
 
 SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
