@@ -162,7 +162,7 @@ public:
     void dumpDependedTypes(
         codemaker::GeneratedTypeSet & generated, CppuOptions const & options);
 
-    virtual void dumpHFile(
+    virtual void dumpHdlFile(
         FileStream & out, codemaker::cppumaker::Includes & includes)
     { dumpHFileContent(out, includes); }
 
@@ -417,7 +417,7 @@ bool CppuType::dumpFile(
             addGetCppuTypeIncludes(includes);
             dumpHppFile(out, includes);
         } else {
-            dumpHFile(out, includes);
+            dumpHdlFile(out, includes);
         }
     } catch (...) {
         out.close();
@@ -1691,7 +1691,7 @@ public:
     bool hasConstants() const { return !entity_->getMembers().empty(); }
 
 private:
-    virtual void dumpHFile(
+    virtual void dumpHdlFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
     virtual void dumpHppFile(
@@ -1702,7 +1702,7 @@ private:
     rtl::Reference< unoidl::ConstantGroupEntity > entity_;
 };
 
-void ConstantGroup::dumpHFile(
+void ConstantGroup::dumpHdlFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(out, "HDL"));
@@ -3336,14 +3336,14 @@ public:
 private:
     virtual void dumpDeclaration(FileStream& o) override;
 
-    void dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
+    void dumpHdlFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     rtl::Reference< unoidl::TypedefEntity > entity_;
 };
 
-void Typedef::dumpHFile(
+void Typedef::dumpHdlFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
     OUString headerDefine(dumpHeaderDefine(o, "HDL"));
@@ -3393,7 +3393,7 @@ public:
         CppuType(name, manager) {}
 
 private:
-    virtual void dumpHFile(FileStream &, codemaker::cppumaker::Includes &) override
+    virtual void dumpHdlFile(FileStream &, codemaker::cppumaker::Includes &) override
     { assert(false); } // this cannot happen
 
     virtual void dumpFiles(OUString const & uri, CppuOptions const & options) override
