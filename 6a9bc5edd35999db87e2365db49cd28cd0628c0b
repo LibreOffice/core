@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_e95c92ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-09T08:33:00Z",
+      "side": 1,
+      "message": "Can you please update your git config to use your full name? See https://help.github.com/articles/setting-your-username-in-git/",
+      "revId": "6a9bc5edd35999db87e2365db49cd28cd0628c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_296fba93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-09T08:33:00Z",
+      "side": 1,
+      "message": "Please also mention the renaming of \"Assign\" to \"Add\" in the commit message.",
+      "revId": "6a9bc5edd35999db87e2365db49cd28cd0628c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_0958fef9",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-09T08:33:00Z",
+      "side": 1,
+      "message": "Can you instead of remove \u0026 insert update the existing entry?\nThat would prevent moving edited entries to the end of the list.",
+      "revId": "6a9bc5edd35999db87e2365db49cd28cd0628c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a9628aab",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-09T08:33:00Z",
+      "side": 1,
+      "message": "This code seems to be the same as in EditHdl_Impl. Please factor it out in a new method.",
+      "revId": "6a9bc5edd35999db87e2365db49cd28cd0628c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_695262df",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-09T08:33:00Z",
+      "side": 1,
+      "message": "This method name should be singular.",
+      "revId": "6a9bc5edd35999db87e2365db49cd28cd0628c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c95d56ee",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-09T08:33:00Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "6a9bc5edd35999db87e2365db49cd28cd0628c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
