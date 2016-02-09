@@ -656,6 +656,10 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
     if (oTarget)
     {
         GtkSelectionData* pSelectionData = gtk_clipboard_wait_for_contents(pClipboard, *oTarget);
+        if (!pSelectionData)
+        {
+            return;
+        }
         gint nLength;
         const guchar* pData = gtk_selection_data_get_data_with_length(pSelectionData, &nLength);
         bool bSuccess = lok_doc_view_paste(pLOKDocView, aTargetName.c_str(), reinterpret_cast<const char*>(pData), nLength);
