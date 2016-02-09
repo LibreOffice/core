@@ -171,10 +171,10 @@
                 <property name="can_focus">False</property>
                 <property name="popup_fixed_width">False</property>
                 <items>
-                  <item translatable="yes">Motion Paths</item>
-                  <item translatable="yes">Emphasis</item>
                   <item translatable="yes">Entrance</item>
+                  <item translatable="yes">Emphasis</item>
                   <item translatable="yes">Exit</item>
+                  <item translatable="yes">Motion Paths</item>
                   <item translatable="yes">Misc Effects</item>
                 </items>
               </object>
