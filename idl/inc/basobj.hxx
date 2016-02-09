@@ -107,24 +107,6 @@ public:
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 };
 
-class SvMetaObjectMemberStack
-{
-    SvRefMemberList<SvMetaObject *> aList;
-public:
-            SvMetaObjectMemberStack() {;}
-
-    void            Push( SvMetaObject * pObj )
-                    { aList.push_back( pObj ); }
-    void            Pop() { aList.pop_back(); }
-    SvMetaObject *  Get( std::function<bool ( const SvMetaObject* )> isSvMetaObject )
-                    {
-                        for( SvRefMemberList<SvMetaObject *>::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
-                            if( isSvMetaObject(*it) )
-                                return *it;
-                        return nullptr;
-                    }
-};
-
 class SvMetaReference : public SvMetaObject
 {
 protected:

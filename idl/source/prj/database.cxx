@@ -87,7 +87,7 @@ void SvIdlDataBase::SetError( const OString& rError, SvToken& rTok )
 
 void SvIdlDataBase::Push( SvMetaObject * pObj )
 {
-    GetStack().Push( pObj );
+    GetStack().push_back( pObj );
 }
 
 bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )

@@ -67,10 +67,10 @@ class SvIdlDataBase
     SvRefMemberList<SvMetaModule *>    aModuleList;
     SvRefMemberList<SvMetaAttribute *> aAttrList;
     SvRefMemberList<SvMetaType *>      aTmpTypeList; // not persistent
+    SvRefMemberList<SvMetaObject *>    aContextStack;
 
 protected:
     ::std::set< OUString >      m_DepFiles;
-    SvMetaObjectMemberStack     aContextStack;
     OUString                    aPath;
     SvIdlError                  aError;
     void WriteReset()
@@ -102,7 +102,7 @@ public:
                             { aError = r; }
 
     const OUString &        GetPath() const { return aPath; }
-    SvMetaObjectMemberStack & GetStack()      { return aContextStack; }
+    SvRefMemberList<SvMetaObject *>& GetStack() { return aContextStack; }
 
     void                    Write(const OString& rText);
     static void             WriteError(const OString& rErrWrn,

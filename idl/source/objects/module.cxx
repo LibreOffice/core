@@ -177,7 +177,7 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             // set pointer to itself
             bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
-        rBase.GetStack().Pop(); // remove from stack
+        rBase.GetStack().pop_back(); // remove from stack
     }
     if( !bOk )
         rInStm.Seek( nTokPos );
