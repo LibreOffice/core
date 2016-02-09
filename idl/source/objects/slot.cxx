@@ -423,7 +423,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     if ( !nListCount )
         nPos = 0;
     else if ( nListCount == 1 )
-        nPos = rList[ 0 ]->xSlot->GetSlotId().GetValue() >= nId ? 0 : 1;
+        nPos = rList[ 0 ]->GetSlotId().GetValue() >= nId ? 0 : 1;
     else
     {
         sal_uInt16 nMid = 0, nLow = 0;
@@ -433,7 +433,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
         {
             nMid = (nLow + nHigh) >> 1;
             DBG_ASSERT( nMid < nListCount, "bsearch ist buggy" );
-            int nDiff = (int) nId - (int) rList[ nMid ]->xSlot->GetSlotId().GetValue();
+            int nDiff = (int) nId - (int) rList[ nMid ]->GetSlotId().GetValue();
             if ( nDiff < 0)
             {
                 if ( nMid == 0 )
@@ -457,24 +457,24 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     DBG_ASSERT( nPos <= nListCount,
         "nPos too large" );
     DBG_ASSERT( nPos == nListCount || nId <=
-        (sal_uInt16) rList[ nPos ]->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[ nPos ]->GetSlotId().GetValue(),
         "Successor has lower SlotId" );
     DBG_ASSERT( nPos == 0 || nId >
-        (sal_uInt16) rList[ nPos-1 ]->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[ nPos-1 ]->GetSlotId().GetValue(),
         "Predecessor has higher SlotId" );
     DBG_ASSERT( nPos+1 >= nListCount || nId <
-        (sal_uInt16) rList[ nPos+1 ]->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[ nPos+1 ]->GetSlotId().GetValue(),
         "Successor has lower SlotId" );
 
     if ( nPos < rList.size() )
     {
         SvSlotElementList::iterator it = rList.begin();
         std::advance( it, nPos );
-        rList.insert( it, new SvSlotElement( this ) );
+        rList.insert( it, this );
     }
     else
     {
-        rList.push_back( new SvSlotElement( this ) );
+        rList.push_back( this );
     }
 
     // iron out EnumSlots
@@ -547,14 +547,14 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
         // concatenate slaves among themselves
         xEnumSlot = pFirstEnumSlot;
         size_t i = 0;
-        SvSlotElement *pEle;
+        SvMetaSlot* pEle;
         do
         {
             pEle = ( ++i < rList.size() ) ? rList[ i ] : nullptr;
-            if ( pEle && pEle->xSlot->pLinkedSlot == this )
+            if ( pEle && pEle->pLinkedSlot == this )
             {
-                xEnumSlot->pNextSlot = pEle->xSlot;
-                xEnumSlot = pEle->xSlot;
+                xEnumSlot->pNextSlot = pEle;
+                xEnumSlot = pEle;
             }
         }
         while ( pEle );
@@ -685,8 +685,8 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         // look for the next slot with the same StateMethod like me
         // the slotlist is set to the current slot
         size_t i = nStart;
-        SvSlotElement* pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
-        pNextSlot = pEle ? &pEle->xSlot : nullptr;
+        SvMetaSlot* pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
+        pNextSlot = pEle;
         while ( pNextSlot )
         {
             if ( !pNextSlot->pNextSlot &&
@@ -695,7 +695,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
                 break;
             }
             pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
-            pNextSlot = pEle ? &pEle->xSlot : nullptr;
+            pNextSlot = pEle;
         }
 
         if ( !pNextSlot )
@@ -704,14 +704,14 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
             // So I search for the first slot with it (could be myself).
             i = 0;
             pEle = rSlotList.empty() ? nullptr : rSlotList[ i ];
-            pNextSlot = pEle ? &pEle->xSlot : nullptr;
+            pNextSlot = pEle;
             while ( pNextSlot != this )
             {
                 if ( !pNextSlot->pEnumValue &&
                     pNextSlot->GetStateMethod() == GetStateMethod() )
                     break;
                 pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
-                pNextSlot = pEle ? &pEle->xSlot : nullptr;
+                pNextSlot = pEle;
             }
         }
 

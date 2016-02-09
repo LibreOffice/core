@@ -24,13 +24,6 @@
 #include <slot.hxx>
 #include <vector>
 
-struct SvSlotElement
-{
-    tools::SvRef<SvMetaSlot>   xSlot;
-    SvSlotElement( SvMetaSlot * pS ) : xSlot( pS ) {}
-};
-typedef std::vector< SvSlotElement* > SvSlotElementList;
-
 class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 

@@ -24,10 +24,9 @@
 #include <tools/ref.hxx>
 #include <basobj.hxx>
 
-struct SvSlotElement;
-typedef std::vector< SvSlotElement* > SvSlotElementList;
-
 class SvMetaType;
+class SvMetaSlot;
+typedef SvRefMemberList< SvMetaSlot* > SvSlotElementList;
 
 class SvMetaAttribute : public SvMetaReference
 {

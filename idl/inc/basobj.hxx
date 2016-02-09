@@ -49,8 +49,8 @@ public:
     using typename base_t::reverse_iterator;
     using base_t::empty;
 
-    inline ~SvRefMemberList() { clear(); }
-    inline void clear()
+    ~SvRefMemberList() { clear(); }
+    void clear()
     {
         for( typename base_t::const_iterator it = base_t::begin(); it != base_t::end(); ++it )
         {
@@ -61,13 +61,19 @@ public:
         base_t::clear();
     }
 
-    inline void push_back( T p )
+    void push_back( T p )
     {
         base_t::push_back( p );
         p->AddFirstRef();
     }
 
-    inline T pop_back()
+    void insert( typename base_t::iterator it, T p )
+    {
+        base_t::insert( it, p );
+        p->AddFirstRef();
+    }
+
+    T pop_back()
     {
         T p = base_t::back();
         base_t::pop_back();

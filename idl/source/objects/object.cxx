@@ -201,8 +201,7 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
     sal_uInt16 nCount = 0;
     for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
     {
-        SvSlotElement *pEle = rSlotList[ i ];
-        SvMetaSlot *pAttr = pEle->xSlot;
+        SvMetaSlot *pAttr = rSlotList[ i ];
         nCount = nCount + pAttr->WriteSlotParamArray( rBase, rOutStm );
     }
 
@@ -217,8 +216,7 @@ sal_uInt16 SvMetaClass::WriteSlots( const OString& rShellName,
     sal_uInt16 nSCount = 0;
     for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
     {
-        SvSlotElement * pEle = rSlotList[ i ];
-        SvMetaSlot * pAttr = pEle->xSlot;
+        SvMetaSlot * pAttr = rSlotList[ i ];
         nSCount = nSCount + pAttr->WriteSlotMap( rShellName, nCount + nSCount,
                                         rSlotList, i, rBase,
                                         rOutStm );
@@ -319,8 +317,7 @@ void SvMetaClass::WriteSlotStubs( const OString& rShellName,
     // write all attributes
     for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
     {
-        SvSlotElement *pEle = rSlotList[ i ];
-        SvMetaSlot *pAttr = pEle->xSlot;
+        SvMetaSlot *pAttr = rSlotList[ i ];
         pAttr->WriteSlotStubs( rShellName, rList, rOutStm );
     }
 }
@@ -350,8 +347,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     InsertSlots(aSlotList, aSuperList, classList, OString(), rBase);
     for ( size_t i = 0, n = aSlotList.size(); i < n; ++i )
     {
-        SvSlotElement *pEle = aSlotList[ i ];
-        SvMetaSlot *pSlot = pEle->xSlot;
+        SvMetaSlot *pSlot = aSlotList[ i ];
         pSlot->SetListPos( i );
     }
 
@@ -402,13 +398,10 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     for( size_t i = 0, n = aSlotList.size(); i < n; ++i )
     {
-        SvSlotElement* pEle = aSlotList[ i ];
-        SvMetaSlot* pAttr = pEle->xSlot;
+        SvMetaSlot* pAttr = aSlotList[ i ];
         pAttr->ResetSlotPointer();
     }
 
-    for( size_t i = 0, n = aSlotList.size(); i < n; ++i )
-        delete aSlotList[ i ];
     aSlotList.clear();
 }
 
