@@ -45,8 +45,8 @@ namespace slideshow
 
 
 #if defined(DBG_UTIL)
-        int& debugGetCurrentOffset();
-        void debugNodesShowTree( const BaseNode* );
+        OUString debugGetNodeName( const BaseNode *pNode );
+        void     debugNodesShowTree( const BaseNode* );
 #endif
 
         /** Look up an AttributableShape from ShapeManager.
