@@ -50,14 +50,14 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
         if( pClass )
         {
-            tools::SvRef<SvClassElement> xEle = new SvClassElement();
-            xEle->SetClass( pClass );
-            aClassList.push_back( xEle );
+            SvClassElement xEle;
+            xEle.SetClass( pClass );
+            aClassElementList.push_back( xEle );
 
             pTok = &rInStm.GetToken();
             if( pTok->IsString() )
             {
-                xEle->SetPrefix( pTok->GetString() );
+                xEle.SetPrefix( pTok->GetString() );
                 rInStm.GetToken_Next();
             }
             return;
@@ -267,14 +267,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
 
     // Write all attributes of the imported classes, as long as they have
     // not already been imported by the superclass.
-    for( n = 0; n < aClassList.size(); n++ )
+    for( n = 0; n < aClassElementList.size(); n++ )
     {
-        SvClassElement * pEle = aClassList[n];
-        SvMetaClass * pCl = pEle->GetClass();
+        SvClassElement& rElement = aClassElementList[n];
+        SvMetaClass * pCl = rElement.GetClass();
         OStringBuffer rPre(rPrefix);
-        if( !rPre.isEmpty() && !pEle->GetPrefix().isEmpty() )
+        if( !rPre.isEmpty() && !rElement.GetPrefix().isEmpty() )
             rPre.append('.');
-        rPre.append(pEle->GetPrefix());
+        rPre.append(rElement.GetPrefix());
 
         // first of all write direct imported interfaces
         pCl->InsertSlots( rList, rSuperList, rClassList,
@@ -298,10 +298,10 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
     rList.push_back( this );
 
     // my imports
-    for( size_t n = 0; n < aClassList.size(); n++ )
+    for( size_t n = 0; n < aClassElementList.size(); n++ )
     {
-        SvClassElement * pEle = aClassList[n];
-        SvMetaClass * pCl = pEle->GetClass();
+        SvClassElement& rElement = aClassElementList[n];
+        SvMetaClass * pCl = rElement.GetClass();
         pCl->FillClasses( rList );
     }
 

@@ -34,7 +34,7 @@ typedef std::vector< SvSlotElement* > SvSlotElementList;
 class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
-class SvClassElement : public SvRttiBase
+class SvClassElement
 {
     OString                   aPrefix;
     tools::SvRef<SvMetaClass> xClass;
@@ -56,7 +56,7 @@ public:
 class SvMetaClass : public SvMetaType
 {
     SvRefMemberList<SvMetaAttribute *>  aAttrList;
-    SvRefMemberList<SvClassElement *>   aClassList;
+    std::vector<SvClassElement>         aClassElementList;
     tools::SvRef<SvMetaClass>           aSuperClass;
 
     bool                    TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
