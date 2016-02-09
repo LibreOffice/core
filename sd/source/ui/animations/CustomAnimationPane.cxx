@@ -2125,39 +2125,7 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 {
-    CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
-    const double fDuration = (*pPreset)->getDuration();
-    sal_uInt32 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if( fDuration == 5.0 )
-        nPos = 0;
-    else if( fDuration == 3.0 )
-        nPos = 1;
-    else if( fDuration == 2.0 )
-        nPos = 2;
-    else if( fDuration == 1.0 )
-        nPos = 3;
-    else if( fDuration == 0.5 )
-        nPos = 4;
-    mpCBSpeed->SelectEntryPos( nPos );
-    bool bHasSpeed = (*pPreset)->getDuration() > 0.001;
-    mpCBSpeed->Enable( bHasSpeed );
-    mpFTSpeed->Enable( bHasSpeed );
-    MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-    // get selected effect
-    EffectSequence::iterator aIter( maListSelection.begin() );
-    const EffectSequence::iterator aEnd( maListSelection.end() );
-    while( aIter != aEnd )
-    {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
-
-        EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-        if( !pEffectSequence )
-            pEffectSequence = mpMainSequence.get();
-
-        pEffectSequence->replace( pEffect, *pPreset, fDuration );
-    }
-    onPreview(true);
+    animationChange();
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
