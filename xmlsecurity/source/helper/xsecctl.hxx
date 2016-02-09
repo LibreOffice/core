@@ -77,6 +77,7 @@
 #define TAG_OBJECT          "Object"
 #define TAG_SIGNATUREPROPERTIES     "SignatureProperties"
 #define TAG_SIGNATUREPROPERTY       "SignatureProperty"
+#define TAG_MANIFEST "Manifest"
 #define TAG_TIMESTAMP           "timestamp"
 #define TAG_DATE            "date"
 #define TAG_DESCRIPTION "description"
