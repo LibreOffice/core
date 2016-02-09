@@ -1,0 +1,11 @@
+--- jcphuff.c
++++ jcphuff.c
+@@ -255,7 +255,7 @@
+     if (c == 0xFF) {            /* need to stuff a zero byte? */
+       emit_byte(entropy, 0);
+     }
+-    put_buffer <<= 8;
++    put_buffer = (unsigned) put_buffer << 8;
+     put_bits -= 8;
+   }
+ 
