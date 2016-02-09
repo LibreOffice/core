@@ -739,6 +739,7 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>dot</string>
+                    <string>wpt</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>

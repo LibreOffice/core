@@ -36,6 +36,7 @@ static const CHAR* g_Extensions[] =
     ".doc",     // Microsoft Word Text [0]
     ".dot",     // Microsoft Word Template
     ".rtf",     // rtf text
+    ".wpt",     // Kingsoft Writer
     ".docx",    // Office Word 2007 XML document
     ".docm",    // Office Word 2007 XML macro-enabled document
     ".dotx",    // Office Word 2007 XML template
@@ -56,6 +57,7 @@ static const CHAR* g_Extensions[] =
     ".potx",    // Office PowerPoint 2007 XML template
     ".potm",    // Office PowerPoint 2007 macro-enabled XML template
     ".ppsx",    // Office PowerPoint 2007 XML show
+    ".dpt",     // Kingsoft Presentation
     ".vsd",     // Visio 2000/XP/2003 document
     ".vst",     // Visio 2000/XP/2003 template
     0
