@@ -534,6 +534,12 @@ bool OpenGLSalBitmap::ReadTexture()
     {
         determineTextureFormat(mnBits, nFormat, nType);
 
+#if OSL_DEBUG_LEVEL > 0
+        // help valgrind & drmemory rescue us - touch last and first bits.
+        pData[0] = 0;
+        pData[mnBits/8*mnWidth*mnHeight-1] = 0;
+#endif
+
         maTexture.Read(nFormat, nType, pData);
         mnBufWidth = mnWidth;
         mnBufHeight = mnHeight;
