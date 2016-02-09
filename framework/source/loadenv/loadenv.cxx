@@ -27,6 +27,7 @@
 #include <protocols.h>
 #include <services.h>
 #include <comphelper/interaction.hxx>
+#include <comphelper/lok.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
@@ -1724,7 +1725,11 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // and apply it on the window.
         // Do nothing, if no configuration entry exists!
         OUString sWindowState;
-        ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES) >>= sWindowState;
+
+        // Don't look for persistent window attributes when used through LibreOfficeKit
+        if( !comphelper::LibreOfficeKit::isActive() )
+            comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES) >>= sWindowState;
+
         if (!sWindowState.isEmpty())
         {
             // SOLAR SAFE ->
