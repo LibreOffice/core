@@ -50,7 +50,7 @@ namespace basegfx
                            sal_Int32&      io_rPos,
                            const OUString& rStr)
         {
-            sal_Unicode aChar( rStr[io_rPos] );
+            sal_Unicode aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
             OUStringBuffer sNumberString;
 
             // sign
