@@ -762,6 +762,8 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>docx</string>
+                    <string>dpt</string>
+                    <string>wpt</string>
                 </array>
                 <key>public.mime-type</key>
                 <array>
