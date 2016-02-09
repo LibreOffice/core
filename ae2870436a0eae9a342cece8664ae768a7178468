@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_097c7e71",
+        "filename": "vcl/opengl/greyscaleFragmentShader.glsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-09T07:47:58Z",
+      "side": 1,
+      "message": "Where do these numbers come from? Don\u0027t seem to match any of the commonly used magic numbers used for this (not well-defined) purpose. (But yeah, I am sure it doesn\u0027t matter at all in practice anyway.)",
+      "range": {
+        "startLine": 15,
+        "startChar": 57,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "ae2870436a0eae9a342cece8664ae768a7178468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
