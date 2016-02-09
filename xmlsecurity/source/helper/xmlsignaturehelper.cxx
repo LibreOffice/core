@@ -500,17 +500,11 @@ bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(css::uno::Reference<css::e
     xSaxWriter->setOutputStream(xOutputStream);
     xSaxWriter->startDocument();
 
-    SvXMLAttributeList* pAttributeList = new SvXMLAttributeList();
-    pAttributeList->AddAttribute(ATTR_XMLNS, NS_XMLDSIG);
-    pAttributeList->AddAttribute(ATTR_ID, "idPackageSignature");
-    xSaxWriter->startElement(TAG_SIGNATURE, uno::Reference<xml::sax::XAttributeList>(pAttributeList));
-
     mbError = false;
     uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
     if (!mpXSecController->WriteOOXMLSignature(xDocumentHandler))
         mbError = true;
 
-    xSaxWriter->endElement(TAG_SIGNATURE);
     xSaxWriter->endDocument();
 
     return !mbError;
