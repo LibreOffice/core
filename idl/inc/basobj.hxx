@@ -100,10 +100,6 @@ public:
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 };
-template<class T> bool checkSvMetaObject(const SvMetaObject* pObject)
-{
-    return dynamic_cast<const T*>(pObject) != nullptr;
-}
 
 class SvMetaObjectMemberStack
 {
