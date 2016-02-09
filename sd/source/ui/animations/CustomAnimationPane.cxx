@@ -515,8 +515,6 @@ void CustomAnimationPane::updateControls()
     mpFTSpeed->Enable( mxView.is() );
     mpCBSpeed->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
-    mpPBMoveUp->Enable( mxView.is() );
-    mpPBMoveDown->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
 
@@ -542,7 +540,8 @@ void CustomAnimationPane::updateControls()
 
     mpPBAddEffect->Enable( maViewSelection.hasValue() );
     mpPBRemoveEffect->Enable(nSelectionCount);
-    if(maViewSelection.hasValue() && (nSelectionCount == 1))
+    bool IsSelected = (nSelectionCount == 1);
+    if(IsSelected)
     {
         mpFTAnimation->Enable();
         mpLBAnimation->Enable();
@@ -555,8 +554,8 @@ void CustomAnimationPane::updateControls()
         mpLBAnimation->Clear();
     }
 
-    mpLBCategory->Enable(maViewSelection.hasValue() && (nSelectionCount == 1));
-    mpFTCategory->Enable(maViewSelection.hasValue() && (nSelectionCount == 1));
+    mpLBCategory->Enable(IsSelected);
+    mpFTCategory->Enable(IsSelected);
 
     mpFTStart->Enable(nSelectionCount > 0);
     mpLBStart->Enable(nSelectionCount > 0);
@@ -567,7 +566,7 @@ void CustomAnimationPane::updateControls()
 
     mnPropertyType = nPropertyTypeNone;
 
-    if( nSelectionCount == 1 )
+    if(IsSelected)
     {
         CustomAnimationEffectPtr pEffect = maListSelection.front();
 
@@ -630,10 +629,10 @@ void CustomAnimationPane::updateControls()
         sal_uInt32 nCategoryPos = LISTBOX_ENTRY_NOTFOUND;
         switch(pEffect->getPresetClass())
         {
-            case EffectPresetClass::MOTIONPATH: nCategoryPos = 0; break;
+            case EffectPresetClass::ENTRANCE: nCategoryPos = 0; break;
             case EffectPresetClass::EMPHASIS: nCategoryPos = 1; break;
-            case EffectPresetClass::ENTRANCE: nCategoryPos = 2; break;
-            case EffectPresetClass::EXIT: nCategoryPos = 3; break;
+            case EffectPresetClass::EXIT: nCategoryPos = 2; break;
+            case EffectPresetClass::MOTIONPATH: nCategoryPos = 3; break;
             default:
                 break;
         }
@@ -774,8 +773,8 @@ void CustomAnimationPane::updateControls()
         }
     }
 
-    mpPBMoveUp->Enable(bEnableUp);
-    mpPBMoveDown->Enable(bEnableDown);
+    mpPBMoveUp->Enable(mxView.is() &&  bEnableUp);
+    mpPBMoveDown->Enable(mxView.is() && bEnableDown);
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() );
@@ -918,7 +917,7 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
         onRemove();
         break;
     case CM_CREATE:
-        if( maViewSelection.hasValue() ) onChange();
+        if( maViewSelection.hasValue() ) onAdd();
         break;
     }
 
@@ -1795,7 +1794,7 @@ void CustomAnimationPane::animationChange()
 
 }
 
-void CustomAnimationPane::onChange()
+void CustomAnimationPane::onAdd()
 {
     bool bHasText = true;
 
@@ -1853,7 +1852,7 @@ void CustomAnimationPane::onChange()
     }
     else
     {
-        OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
+        OSL_FAIL("sd::CustomAnimationPane::onAdd(), unknown view selection!" );
         return;
     }
 
@@ -1862,8 +1861,11 @@ void CustomAnimationPane::onChange()
     mpLBCategory->Enable();
     mpFTAnimation->Enable();
     mpLBAnimation->Enable();
-    mpLBCategory->SelectEntryPos(1);
-    fillAnimationLB();
+    mpLBCategory->SelectEntryPos(0);
+    sal_uInt32 nFirstEffect = fillAnimationLB();
+    if(nFirstEffect == LISTBOX_ENTRY_NOTFOUND)
+        return;
+    mpLBAnimation->SelectEntryPos(nFirstEffect);
     void* pEntryData = mpLBAnimation->GetSelectEntryData();
     if( pEntryData )
         pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
@@ -2165,17 +2167,17 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
     fillAnimationLB();
 }
 
-void CustomAnimationPane::fillAnimationLB()
+sal_uInt32 CustomAnimationPane::fillAnimationLB()
 {
     PresetCategoryList rCategoryList;
     sal_uInt16 nPosition = mpLBCategory->GetSelectEntryPos();
     const CustomAnimationPresets& rPresets (getPresets());
     switch(nPosition)
     {
-        case 0:rCategoryList = rPresets.getMotionPathsPresets();break;
+        case 0:rCategoryList = rPresets.getEntrancePresets();break;
         case 1:rCategoryList = rPresets.getEmphasisPresets();break;
-        case 2:rCategoryList = rPresets.getEntrancePresets();break;
-        case 3:rCategoryList = rPresets.getExitPresets();break;
+        case 2:rCategoryList = rPresets.getExitPresets();break;
+        case 3:rCategoryList = rPresets.getMotionPathsPresets();break;
         case 4:rCategoryList = rPresets.getMiscPresets();break;
     }
 
@@ -2219,7 +2221,7 @@ void CustomAnimationPane::fillAnimationLB()
             }
         }
     }
-    mpLBAnimation->SelectEntryPos(nFirstEffect);
+    return nFirstEffect;
 }
 
 
@@ -2236,10 +2238,7 @@ IMPL_LINK_TYPED( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox,
 void CustomAnimationPane::implControlHdl(Control* pControl )
 {
     if( pControl == mpPBAddEffect )
-    {
-        onChange();
-        onPreview(true);
-    }
+        onAdd();
     else if( pControl == mpPBRemoveEffect )
         onRemove();
     else if( pControl == mpLBStart )
@@ -2259,8 +2258,6 @@ void CustomAnimationPane::implControlHdl(Control* pControl )
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
         pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() );
     }
-
-    updateControls();
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, lateInitCallback, Timer *, void)
