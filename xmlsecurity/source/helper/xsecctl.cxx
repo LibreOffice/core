@@ -986,11 +986,12 @@ static bool lcl_isOOXMLBlacklist(const OUString& rStreamName)
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist =
     {
-        OUStringLiteral("%5BContent_Types%5D.xml"),
-        OUStringLiteral("docProps/app.xml"),
-        OUStringLiteral("docProps/core.xml")
+        OUStringLiteral("/%5BContent_Types%5D.xml"),
+        OUStringLiteral("/docProps/app.xml"),
+        OUStringLiteral("/docProps/core.xml")
     };
-    return std::find(vBlacklist.begin(), vBlacklist.end(), rStreamName) != vBlacklist.end();
+    // Just check the prefix, as we don't care about the content type part of the stream name.
+    return std::find_if(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral) { return rStreamName.startsWith(rLiteral); }) != vBlacklist.end();
 }
 
 void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)

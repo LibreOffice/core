@@ -20,6 +20,8 @@
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
 
+#include <algorithm>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -27,8 +29,11 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
@@ -290,6 +295,51 @@ DocumentSignatureHelper::CreateElementList(
     }
 
     return aElements;
+}
+
+void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XStorage>& xStorage, std::vector<OUString>& rElements)
+{
+    uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    if (!xNameAccess.is() || !xNameAccess->hasByName("[Content_Types].xml"))
+        // ODF
+        return;
+
+    sal_Int32 nOpenMode = embed::ElementModes::READ;
+    uno::Reference<io::XInputStream> xRelStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
+    uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xRelStream, comphelper::getProcessComponentContext());
+    if (aContentTypeInfo.getLength() < 2)
+    {
+        SAL_WARN("xmlsecurity.helper", "no defaults or overrides in aContentTypeInfo");
+        return;
+    }
+    uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
+    uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+
+    for (OUString& rElement : rElements)
+    {
+        auto it = std::find_if(rOverrides.begin(), rOverrides.end(), [&](const beans::StringPair& rPair)
+        {
+            return rPair.First == "/" + rElement;
+        });
+
+        if (it != rOverrides.end())
+        {
+            rElement = "/" + rElement + "?ContentType=" + it->Second;
+            continue;
+        }
+
+        it = std::find_if(rDefaults.begin(), rDefaults.end(), [&](const beans::StringPair& rPair)
+        {
+            return rElement.endsWith("." + rPair.First);
+        });
+
+        if (it != rOverrides.end())
+        {
+            rElement = "/" + rElement + "?ContentType=" + it->Second;
+            continue;
+        }
+        SAL_WARN("xmlsecurity.helper", "found no content type for " << rElement);
+    }
 }
 
 SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(

@@ -474,6 +474,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
             std::vector< OUString > aElements =
                 DocumentSignatureHelper::CreateElementList(
                     mxStore, meSignatureMode, OOo3_2Document);
+            DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
 
             sal_Int32 nElements = aElements.size();
             for ( sal_Int32 n = 0; n < nElements; n++ )

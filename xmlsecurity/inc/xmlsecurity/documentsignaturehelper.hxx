@@ -92,6 +92,8 @@ public:
     static OUString GetDocumentContentSignatureDefaultStreamName();
     static OUString GetScriptingContentSignatureDefaultStreamName();
     static OUString GetPackageSignatureDefaultStreamName();
+    /// In case the storage is OOXML, prepend a leading '/' and append content type to the element URIs.
+    static void AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
 
 };
 
