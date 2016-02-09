@@ -33,6 +33,9 @@ interface XImplementationRegistration2: com::sun::star::registry::XImplementatio
 
     /** registers a component which provides one or more implementations.
 
+        @param aImplementationLoader
+            the URL of the implementation loader.
+
         @param aLocation
             specifies the location of the component with the URL.
 

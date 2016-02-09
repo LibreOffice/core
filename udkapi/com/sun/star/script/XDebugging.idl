@@ -49,11 +49,13 @@ published interface XDebugging: com::sun::star::uno::XInterface
 
     /** Evaluates an expression.
 
-        @returns the value of the expression as string.
+        @param aSourceCode the expression to be evaluated.
 
         @param nCallStackPos Position in the call stack for which the expression
                     should be evaluated. 0 is the top/actual position in the call
                     in the call stack, 1 the next and so on.
+
+        @returns the value of the expression as string.
      */
     string eval( [in] string aSourceCode,
              [in] short nCallStackPos );

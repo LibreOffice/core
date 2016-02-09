@@ -51,6 +51,7 @@ published interface XInvocation: com::sun::star::uno::XInterface
 
     /** provides access to methods exposed by an object.
 
+        @param aFunctionName the method to invoke
         @param aParams all parameters; pure out params are undefined in sequence,
                        the value has to be ignored by the callee
         @param aOutParamIndex This sequence contains the indices of all parameters

@@ -39,6 +39,7 @@ published interface XDirectInvocation: com::sun::star::uno::XInterface
 {
     /** provides access to methods and properties exposed by an object.
 
+        @param aName the method to invoke
         @param aParams all parameters, out parameters are not supported
      */
     any directInvoke( [in] string aName,

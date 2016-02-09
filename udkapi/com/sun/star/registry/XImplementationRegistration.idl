@@ -36,6 +36,9 @@ published interface XImplementationRegistration: com::sun::star::uno::XInterface
 {
     /** registers a component which provides one or more implementations.
 
+        @param aImplementationLoader
+            the URL of the implementation loader.
+
         @param aLocation
             specifies the location of the component with the URL.
 
