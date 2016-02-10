@@ -370,7 +370,7 @@ bool XSecController::WriteSignature(
     return rc;
 }
 
-bool XSecController::WriteOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler)
+bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler)
 {
     bool bRet = false;
 
@@ -396,7 +396,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<xml::sax::XDocumen
                 // Prepare the signature creator.
                 rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation, embed::StorageFormats::OFOPXML);
 
-                exportOOXMLSignature(xSEKHandler, rInformation.signatureInfor);
+                exportOOXMLSignature(xRootStorage, xSEKHandler, rInformation.signatureInfor);
             }
 
             m_bIsSAXEventKeeperSticky = false;
