@@ -850,12 +850,27 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
                               const char *name, int no = 0 )
 {
+    static OUString sTempDirURL;
+    if( sTempDirURL.isEmpty() )
+    {
+        SvtPathOptions aPathOpt;
+        utl::TempFile aTempDir( &aPathOpt.GetTempPath(), true );
+        if( aTempDir.IsValid() )
+        {
+            INetURLObject aTempDirURL( aTempDir.GetURL() );
+            sTempDirURL = aTempDirURL.GetMainURL( INetURLObject::NO_DECODE );
+            SAL_INFO( "sw.mailmerge", "Dump directory: " << sTempDirURL );
+        }
+    }
+    if( sTempDirURL.isEmpty() )
+        return;
+
     const OUString sExt( ".odt" );
     OUString basename = OUString::createFromAscii( name );
     if (no > 0)
         basename += OUString::number(no) + "-";
     // aTempFile is not deleted, but that seems to be intentional
-    utl::TempFile aTempFile(basename, true, &sExt);
+    utl::TempFile aTempFile( basename, true, &sExt, &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
     SfxMedium* pDstMed = new SfxMedium(
         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
@@ -1101,7 +1116,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if (!sMaxDumpDocs)
             sMaxDumpDocs = "";
         else
-            nMaxDumpDocs = rtl_ustr_toInt32(reinterpret_cast<const sal_Unicode*>( sMaxDumpDocs ), 10);
+            nMaxDumpDocs = OUString(sMaxDumpDocs, strlen(sMaxDumpDocs), osl_getThreadTextEncoding()).toInt32();
     }
 
     ::rtl::Reference< MailDispatcher >  xMailDispatcher;
