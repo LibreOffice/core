@@ -773,7 +773,7 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream)
 
     SignatureStreamHelper aStreamHelper = ImplOpenSignatureStream(
         css::embed::ElementModes::READ, bUseTempStream);
-    if ( aStreamHelper.xSignatureStream.is() )
+    if ( aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML && aStreamHelper.xSignatureStream.is() )
     {
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
         maSignatureHelper.ReadAndVerifySignature( xInputStream );
@@ -852,6 +852,8 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
             OSL_ASSERT(mxTempSignatureStream.is());
         }
         aHelper.xSignatureStream = mxTempSignatureStream;
+        if (aHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+            aHelper.xSignatureStorage = mxTempSignatureStorage;
     }
     else
     {
