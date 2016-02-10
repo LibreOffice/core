@@ -131,27 +131,6 @@ bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
     return typelib_typedescription_isAssignableFrom(pAssignable, pFrom);
 }
 
-bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
-{
-    return ( _rLeft.Name.equals( _rRight.Name ) ) &&
-    ( _rLeft.Height == _rRight.Height ) &&
-    ( _rLeft.Width == _rRight.Width ) &&
-    ( _rLeft.StyleName.equals( _rRight.StyleName ) ) &&
-    ( _rLeft.Family == _rRight.Family ) &&
-    ( _rLeft.CharSet == _rRight.CharSet ) &&
-    ( _rLeft.Pitch == _rRight.Pitch ) &&
-    ( _rLeft.CharacterWidth == _rRight.CharacterWidth ) &&
-    ( _rLeft.Weight == _rRight.Weight ) &&
-    ( _rLeft.Slant == _rRight.Slant ) &&
-    ( _rLeft.Underline == _rRight.Underline ) &&
-    ( _rLeft.Strikeout == _rRight.Strikeout ) &&
-    ( _rLeft.Orientation == _rRight.Orientation ) &&
-    ( _rLeft.Kerning == _rRight.Kerning ) &&
-    ( _rLeft.WordLineMode == _rRight.WordLineMode ) &&
-    ( _rLeft.Type == _rRight.Type ) ;
-}
-
-
 Type getSequenceElementType(const Type& _rSequenceType)
 {
     OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,

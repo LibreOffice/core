@@ -816,25 +816,6 @@ ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
 }
 
 
-bool operator==(const Date& _rLH, const Date& _rRH)
-{
-    return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year;
-}
-
-
-bool operator==(const css::util::Time& _rLH, const css::util::Time& _rRH)
-{
-    return _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
-}
-
-
-bool operator==(const DateTime& _rLH, const DateTime& _rRH)
-{
-    return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year &&
-        _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
-}
-
-
 bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 {
     if ( m_bNull != _rRH.isNull() )
