@@ -114,7 +114,7 @@ public:
     sal_uInt16      GetSortedCol(){ return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
-    CommandEvent    GetCommandEvent()const { return aCEvt;}
+    CommandEvent    GetCommandEvent() const { return aCEvt; }
     inline bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
     void            SetCommandHdl( const Link<SvSimpleTable*,void>& rLink ) { aCommandLink = rLink; }
 
