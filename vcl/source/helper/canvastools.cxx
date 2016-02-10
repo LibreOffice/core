@@ -74,18 +74,6 @@ namespace vcl
 
         namespace
         {
-            inline bool operator==( const rendering::IntegerBitmapLayout& rLHS,
-                                    const rendering::IntegerBitmapLayout& rRHS )
-            {
-                return
-                    rLHS.ScanLineBytes       == rRHS.ScanLineBytes &&
-                    rLHS.ScanLineStride      == rRHS.ScanLineStride &&
-                    rLHS.PlaneStride         == rRHS.PlaneStride &&
-                    rLHS.ColorSpace          == rRHS.ColorSpace &&
-                    rLHS.Palette             == rRHS.Palette &&
-                    rLHS.IsMsbFirst          == rRHS.IsMsbFirst;
-            }
-
             bool readBmp( sal_Int32                                                  nWidth,
                           sal_Int32                                                  nHeight,
                           const rendering::IntegerBitmapLayout&                      rLayout,
