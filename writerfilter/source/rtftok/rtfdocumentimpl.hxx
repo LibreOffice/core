@@ -522,7 +522,6 @@ private:
     /// Buffered superscript, till footnote is reached (or not).
     RTFBuffer_t m_aSuperBuffer;
 
-    bool m_bHasFootnote;
     /// Superstream of this substream.
     RTFDocumentImpl* m_pSuperstream;
     /// Type of the stream: header, footer, footnote, etc.

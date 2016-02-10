@@ -2364,6 +2364,13 @@ DECLARE_RTFIMPORT_TEST(testTdf96308Tabpos, "tdf96308-tabpos.rtf")
     CPPUNIT_ASSERT(!aTabStops.hasElements());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf87034, "tdf87034.rtf")
+{
+    // This was A1BC34D, i.e. the first "super" text portion was mis-imported,
+    // and was inserted instead right before the second "super" text portion.
+    CPPUNIT_ASSERT_EQUAL(OUString("A1B3C4D"), getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
