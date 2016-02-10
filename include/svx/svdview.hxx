@@ -265,11 +265,11 @@ public:
 // ~~~~~~~~~~~~~~~~~~~~
 //   simple events:
 //   ~~~~~~~~~~~~~~~~
-//     sal_Bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
-//     sal_Bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
-//     sal_Bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin);
-//     sal_Bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
-//     sal_Bool Command(const CommandEvent& rCEvt, vcl::Window* pWin);
+//     bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
+//     bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
+//     bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin);
+//     bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin);
+//     bool Command(const CommandEvent& rCEvt, vcl::Window* pWin);
 //
 //   Exchange (Clipboard derzeit noch ohne SdrPrivateData):
 //   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
