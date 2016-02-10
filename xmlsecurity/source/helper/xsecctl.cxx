@@ -31,11 +31,13 @@
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/datetime.hxx>
+#include <comphelper/ofopxmlhelper.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -996,6 +998,21 @@ static bool lcl_isOOXMLBlacklist(const OUString& rStreamName)
     return std::find_if(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral) { return rStreamName.startsWith(rLiteral); }) != vBlacklist.end();
 }
 
+/// Should we intentionally not sign this relation type?
+static bool lcl_isOOXMLRelationBlacklist(const OUString& rRelationName)
+{
+#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
+    static
+#endif
+    const std::initializer_list<OUStringLiteral> vBlacklist =
+    {
+        OUStringLiteral("http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"),
+        OUStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"),
+        OUStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin")
+    };
+    return std::find(vBlacklist.begin(), vBlacklist.end(), rRelationName) != vBlacklist.end();
+}
+
 void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
 {
     uno::Reference<embed::XHierarchicalStorageAccess> xHierarchicalStorageAccess(xRootStorage, uno::UNO_QUERY);
@@ -1111,6 +1128,32 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
                     pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_RELATIONSHIP);
                     xDocumentHandler->startElement(TAG_TRANSFORM, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
                 }
+
+                uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, aURI, mxCtx);
+                for (const uno::Sequence<beans::StringPair>& rPairs : aRelationsInfo)
+                {
+                    OUString aId;
+                    OUString aType;
+                    for (const beans::StringPair& rPair : rPairs)
+                    {
+                        if (rPair.First == "Id")
+                            aId = rPair.Second;
+                        else if (rPair.First == "Type")
+                            aType = rPair.Second;
+                    }
+
+                    if (lcl_isOOXMLRelationBlacklist(aType))
+                        continue;
+
+                    {
+                        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                        pAttributeList->AddAttribute(ATTR_XMLNS ":" NSTAG_MDSSI, NS_MDSSI);
+                        pAttributeList->AddAttribute(ATTR_SOURCEID, aId);
+                        xDocumentHandler->startElement(NSTAG_MDSSI ":" TAG_RELATIONSHIPREFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+                    }
+                    xDocumentHandler->endElement(NSTAG_MDSSI ":" TAG_RELATIONSHIPREFERENCE);
+                }
+
                 xDocumentHandler->endElement(TAG_TRANSFORM);
                 {
                     rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());

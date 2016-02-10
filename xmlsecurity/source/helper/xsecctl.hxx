@@ -84,20 +84,24 @@
 #define TAG_DESCRIPTION "description"
 #define TAG_QUALIFYINGPROPERTIES "QualifyingProperties"
 #define TAG_SIGNEDPROPERTIES "SignedProperties"
+#define TAG_RELATIONSHIPREFERENCE "RelationshipReference"
 
 #define ATTR_XMLNS          "xmlns"
 #define ATTR_ALGORITHM          "Algorithm"
 #define ATTR_URI            "URI"
 #define ATTR_ID             "Id"
 #define ATTR_TARGET         "Target"
+#define ATTR_SOURCEID "SourceId"
 
 #define NSTAG_DC            "dc"
 #define NSTAG_XD "xd"
+#define NSTAG_MDSSI "mdssi"
 
 #define NS_XMLDSIG          "http://www.w3.org/2000/09/xmldsig#"
 //#define NS_DATETIME           "http://www.ietf.org/rfcXXXX.txt"
 #define NS_DC               "http://purl.org/dc/elements/1.1/"
 #define NS_XD "http://uri.etsi.org/01903/v1.3.2#"
+#define NS_MDSSI "http://schemas.openxmlformats.org/package/2006/digital-signature"
 
 #define ALGO_C14N           "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
 #define ALGO_RSASHA1            "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
@@ -515,7 +519,7 @@ public:
     /// Writes XML elements inside a single OOXML signature's <Signature> element.
     bool WriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
     /// Exports an OOXML signature, called by WriteOOXMLSignature().
-    static void exportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
+    void exportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
 };
 
 #endif
