@@ -341,11 +341,13 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 }
 
 
-MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window* pSource, vcl::Window* pDest )
+static MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window* pSource, vcl::Window* pDest )
 {
+    // the mouse event occured in a different window, we need to translate the coordinates of
+    // the mouse cursor within that (source) window to the coordinates the mouse cursor would
+    // be in the destination window
     Point aPos = pSource->OutputToScreenPixel( rE.GetPosPixel() );
-    aPos = pDest->ScreenToOutputPixel( aPos );
-    return MouseEvent( aPos, rE.GetClicks(), rE.GetMode(), rE.GetButtons(), rE.GetModifier() );
+    return MouseEvent( pDest->ScreenToOutputPixel( aPos ), rE.GetClicks(), rE.GetMode(), rE.GetButtons(), rE.GetModifier() );
 }
 
 CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, vcl::Window* pSource, vcl::Window* pDest )
@@ -370,13 +372,26 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
-            if ( rNEvt.GetWindow() == this )
-                // not interested in: The event listeners are already called in ::Command,
-                // and calling them here a second time doesn't make sense
-                ;
-            else
+            // not interested: The event listeners are already called in ::Command,
+            // and calling them here a second time doesn't make sense
+            if ( rNEvt.GetWindow() != this )
             {
-                CommandEvent aCommandEvent = ImplTranslateCommandEvent( *pCEvt, rNEvt.GetWindow(), this );
+                CommandEvent aCommandEvent;
+
+                if ( !pCEvt->IsMouseEvent() )
+                {
+                    aCommandEvent = *pCEvt;
+                }
+                else
+                {
+                    // the mouse event occured in a different window, we need to translate the coordinates of
+                    // the mouse cursor within that window to the coordinates the mouse cursor would be in the
+                    // current window
+                    vcl::Window* pSource = rNEvt.GetWindow();
+                    Point aPos = pSource->OutputToScreenPixel( pCEvt->GetMousePosPixel() );
+                    aCommandEvent = CommandEvent( ScreenToOutputPixel( aPos ), pCEvt->GetCommand(), pCEvt->IsMouseEvent(), pCEvt->GetEventData() );
+                }
+
                 CallEventListeners( VCLEVENT_WINDOW_COMMAND, &aCommandEvent );
             }
         }
