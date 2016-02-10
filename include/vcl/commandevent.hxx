@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_CMDEVT_HXX
-#define INCLUDED_VCL_CMDEVT_HXX
+#ifndef INCLUDED_VCL_COMMANDEVENT_HXX
+#define INCLUDED_VCL_COMMANDEVENT_HXX
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -507,6 +507,6 @@ inline const CommandLongPressData* CommandEvent::GetLongPressData() const
         return nullptr;
 }
 
-#endif // INCLUDED_VCL_CMDEVT_HXX
+#endif // INCLUDED_VCL_COMMANDEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
