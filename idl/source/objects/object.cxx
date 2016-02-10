@@ -356,7 +356,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     // write all attributes
     sal_uInt16 nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
     if( nArgCount )
-        Back2Delemitter( rOutStm );
+        Back2Delimiter( rOutStm );
     else
     {
         // at least one dummy
@@ -381,7 +381,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     // write all attributes
     WriteSlots( GetName(), 0, aSlotList, rBase, rOutStm );
     if( nSlotCount )
-        Back2Delemitter( rOutStm );
+        Back2Delimiter( rOutStm );
     else
     {
         // at least one dummy

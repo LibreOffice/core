@@ -97,7 +97,7 @@ public:
             SvMetaObject();
 
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
-    static void         Back2Delemitter( SvStream & );
+    static void         Back2Delimiter( SvStream & );
     static void         WriteStars( SvStream & );
 
     void                      SetName( const OString& rName );

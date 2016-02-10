@@ -42,7 +42,7 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
     rOutStm.WriteChar( '/' ) << endl;
 }
 
-void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
+void SvMetaObject::Back2Delimiter( SvStream & rOutStm )
 {
     // write no empty brackets
     sal_uLong nPos = rOutStm.Tell();
