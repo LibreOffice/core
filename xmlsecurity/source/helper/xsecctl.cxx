@@ -1219,11 +1219,69 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
 
     xDocumentHandler->endElement(TAG_OBJECT);
 
+    // idOfficeObject
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute(ATTR_ID, "idOfficeObject");
         xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     }
+    xDocumentHandler->startElement(TAG_SIGNATUREPROPERTIES, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ID, "idOfficeV1Details");
+        pAttributeList->AddAttribute(ATTR_TARGET, "#idPackageSignature");
+        xDocumentHandler->startElement(TAG_SIGNATUREPROPERTY, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_XMLNS, "http://schemas.microsoft.com/office/2006/digsig");
+        xDocumentHandler->startElement("SignatureInfoV1", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    xDocumentHandler->startElement("SetupId", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement("SetupId");
+    xDocumentHandler->startElement("SignatureText", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement("SignatureText");
+    xDocumentHandler->startElement("SignatureImage", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement("SignatureImage");
+    xDocumentHandler->startElement("SignatureComments", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rInformation.ouDescription);
+    xDocumentHandler->endElement("SignatureComments");
+    // Just hardcode something valid according to [MS-OFFCRYPTO].
+    xDocumentHandler->startElement("WindowsVersion", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("6.1");
+    xDocumentHandler->endElement("WindowsVersion");
+    xDocumentHandler->startElement("OfficeVersion", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("16.0");
+    xDocumentHandler->endElement("OfficeVersion");
+    xDocumentHandler->startElement("ApplicationVersion", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("16.0");
+    xDocumentHandler->endElement("ApplicationVersion");
+    xDocumentHandler->startElement("Monitors", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("1");
+    xDocumentHandler->endElement("Monitors");
+    xDocumentHandler->startElement("HorizontalResolution", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("1280");
+    xDocumentHandler->endElement("HorizontalResolution");
+    xDocumentHandler->startElement("VerticalResolution", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("800");
+    xDocumentHandler->endElement("VerticalResolution");
+    xDocumentHandler->startElement("ColorDepth", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("32");
+    xDocumentHandler->endElement("ColorDepth");
+    xDocumentHandler->startElement("SignatureProviderId", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("{00000000-0000-0000-0000-000000000000}");
+    xDocumentHandler->endElement("SignatureProviderId");
+    xDocumentHandler->startElement("SignatureProviderUrl", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement("SignatureProviderUrl");
+    xDocumentHandler->startElement("SignatureProviderDetails", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("9"); // This is what MSO 2016 writes, though [MS-OFFCRYPTO] doesn't document what the value means.
+    xDocumentHandler->endElement("SignatureProviderDetails");
+    xDocumentHandler->startElement("SignatureType", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("1");
+    xDocumentHandler->endElement("SignatureType");
+    xDocumentHandler->endElement("SignatureInfoV1");
+    xDocumentHandler->endElement(TAG_SIGNATUREPROPERTY);
+    xDocumentHandler->endElement(TAG_SIGNATUREPROPERTIES);
     xDocumentHandler->endElement(TAG_OBJECT);
 
     xDocumentHandler->startElement(TAG_OBJECT, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
