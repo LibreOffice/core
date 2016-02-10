@@ -76,14 +76,16 @@ void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo
     m_pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-#if OSL_DEBUG_LEVEL > 1
+
+#if 0
     if( ALIGN_BASELINE != pMyFnt->GetAlign() )
     {
-        OSL_ENSURE( ALIGN_BASELINE == pMyFnt->GetAlign(),
+        assert( ALIGN_BASELINE == pMyFnt->GetAlign() &&
                 "+SwTextPainter::CTOR: font alignment revolution" );
         pMyFnt->SetAlign( ALIGN_BASELINE );
     }
 #endif
+
     bPaintDrop = false;
 }
 
@@ -139,10 +141,6 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
 void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const bool bUnderSz )
 {
-#if OSL_DEBUG_LEVEL > 1
-//    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
-//    sal_uInt16 nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
-#endif
 
     // Adjustierung ggf. nachholen
     GetAdjusted();
@@ -214,7 +212,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             bClip = false;
             rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
         }
-#if OSL_DEBUG_LEVEL > 1
+#if 0
         static bool bClipAlways = false;
         if( bClip && bClipAlways )
         {   bClip = false;
