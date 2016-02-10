@@ -36,15 +36,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 namespace comphelper
 {
-    /** compare two FontDescriptor's
-    */
-    COMPHELPER_DLLPUBLIC bool   operator ==(const css::awt::FontDescriptor& _rLeft, const css::awt::FontDescriptor& _rRight);
-    inline  bool    operator !=(const css::awt::FontDescriptor& _rLeft, const css::awt::FontDescriptor& _rRight)
-    {
-        return !(_rLeft == _rRight);
-    }
-
-
     /// returns sal_True if objects of the types given are "compatible"
     COMPHELPER_DLLPUBLIC bool isAssignableFrom(const css::uno::Type& _rAssignable, const css::uno::Type& _rFrom);
 

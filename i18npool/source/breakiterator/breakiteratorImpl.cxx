@@ -523,10 +523,6 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
     return nRet;
 }
 
-static inline bool operator == (const Locale& l1, const Locale& l2) {
-        return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
-}
-
 bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUString& aLocaleName) throw( RuntimeException )
 {
     // to share service between same Language but different Country code, like zh_CN and zh_TW

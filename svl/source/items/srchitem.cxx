@@ -232,7 +232,7 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 
 
 //! used below
-static bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+static bool equalsWithoutLocale( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
@@ -262,7 +262,7 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( m_nCellType      == rSItem.m_nCellType )       &&
            ( m_nAppFlag       == rSItem.m_nAppFlag )        &&
            ( m_bAsianOptions  == rSItem.m_bAsianOptions )   &&
-           ( m_aSearchOpt     == rSItem.m_aSearchOpt )      &&
+           ( equalsWithoutLocale(m_aSearchOpt,rSItem.m_aSearchOpt )) &&
            ( m_bNotes         == rSItem.m_bNotes );
 }
 

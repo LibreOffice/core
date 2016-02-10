@@ -41,28 +41,6 @@ using namespace ::com::sun::star;
 /// Invalid value for date to create invalid instance of TimeStamp.
 #define TIMESTAMP_INVALID_UTILDATE  (util::Date(1, 1, 1601))
 
-static
-bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
-{
-    return i_rLeft.Year             == i_rRight.Year
-        && i_rLeft.Month            == i_rRight.Month
-        && i_rLeft.Day              == i_rRight.Day
-        && i_rLeft.Hours            == i_rRight.Hours
-        && i_rLeft.Minutes          == i_rRight.Minutes
-        && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds
-        && i_rLeft.IsUTC            == i_rRight.IsUTC;
-}
-
-static
-bool operator==(const util::Date &i_rLeft, const util::Date &i_rRight)
-{
-    return i_rLeft.Year             == i_rRight.Year
-        && i_rLeft.Month            == i_rRight.Month
-        && i_rLeft.Day              == i_rRight.Day;
-}
-
-
 /** Property representing a signed 32-bit integer value. */
 class SfxOleInt32Property : public SfxOlePropertyBase
 {

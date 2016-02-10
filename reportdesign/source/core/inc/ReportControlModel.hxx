@@ -33,13 +33,6 @@
 
 namespace reportdesign
 {
-    bool operator==( const css::awt::FontDescriptor& _lhs, const css::awt::FontDescriptor& _rhs );
-
-    inline bool operator!=( const css::awt::FontDescriptor& _lhs, const css::awt::FontDescriptor& _rhs )
-    {
-        return !( _lhs == _rhs );
-    }
-
     struct OFormatProperties
     {
         ::sal_Int16                                         nAlign;

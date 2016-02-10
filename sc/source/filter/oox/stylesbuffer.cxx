@@ -1463,19 +1463,6 @@ bool ApiBorderData::hasAnyOuterBorder() const
         ( ( lcl_isBorder( maRight ) && maRight.OuterLineWidth > 0 ) );
 }
 
-namespace {
-
-bool operator==( const BorderLine& rLeft, const BorderLine& rRight )
-{
-    return
-        (rLeft.Color          == rRight.Color) &&
-        (rLeft.InnerLineWidth == rRight.InnerLineWidth) &&
-        (rLeft.OuterLineWidth == rRight.OuterLineWidth) &&
-        (rLeft.LineDistance   == rRight.LineDistance);
-}
-
-} // namespace
-
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
 {
     return

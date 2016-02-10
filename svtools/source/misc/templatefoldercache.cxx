@@ -91,26 +91,6 @@ namespace svt
         return _rStorage;
     }
 
-
-    bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
-    {
-        return  _rLHS.NanoSeconds == _rRHS.NanoSeconds
-            &&  _rLHS.Seconds   == _rRHS.Seconds
-            &&  _rLHS.Minutes   == _rRHS.Minutes
-            &&  _rLHS.Hours     == _rRHS.Hours
-            &&  _rLHS.Day       == _rRHS.Day
-            &&  _rLHS.Month     == _rRHS.Month
-            &&  _rLHS.Year      == _rRHS.Year
-            &&  _rLHS.IsUTC     == _rRHS.IsUTC;
-    }
-
-
-    bool operator != ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
-    {
-        return !( _rLHS == _rRHS );
-    }
-
-
     //= TemplateContent
 
     struct TemplateContent;

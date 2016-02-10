@@ -1902,7 +1902,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
             if (Value >>= aFont)
             {
                 vcl::Font aNewVclFont;
-                if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
+                if (aFont != ::comphelper::getDefaultFont())    // ist das der Default
                     aNewVclFont = ImplCreateFont( aFont );
 
                 // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor

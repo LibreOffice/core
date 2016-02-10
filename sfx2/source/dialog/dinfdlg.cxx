@@ -90,19 +90,6 @@ struct CustomProperty
         m_sName( sName ), m_aValue( rValue ) {}
 };
 
-static
-bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
-{
-    return i_rLeft.Year             == i_rRight.Year
-        && i_rLeft.Month            == i_rRight.Month
-        && i_rLeft.Day              == i_rRight.Day
-        && i_rLeft.Hours            == i_rRight.Hours
-        && i_rLeft.Minutes          == i_rRight.Minutes
-        && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds
-        && i_rLeft.IsUTC            == i_rRight.IsUTC;
-}
-
 SfxPoolItem* SfxDocumentInfoItem::CreateDefault() { return new SfxDocumentInfoItem; }
 
 const sal_uInt16 HI_NAME = 1;

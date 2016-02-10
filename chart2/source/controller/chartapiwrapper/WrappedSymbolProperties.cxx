@@ -44,16 +44,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-namespace com { namespace sun { namespace star { namespace awt {
-
-// this operator is not defined by default
-bool operator!=( const awt::Size & rSize1, const awt::Size & rSize2 )
-{
-    return (rSize1.Width != rSize2.Width) || (rSize1.Height != rSize2.Height);
-}
-
-} } } }
-
 namespace chart
 {
 namespace wrapper
