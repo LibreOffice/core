@@ -256,14 +256,6 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
             aVbaProject.importVbaProject(*xVbaPrjStrg, gHelper);
         }
 
-        // Document signature.
-        writerfilter::ooxml::OOXMLStream::Pointer_t pSignatureStream;
-        pSignatureStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage, writerfilter::ooxml::OOXMLStream::SIGNATURE);
-        if (pSignatureStream->getDocumentStream().is())
-        {
-            // TODO found, handle it.
-        }
-
         pStream.reset();
 
         return sal_True;
