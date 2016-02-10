@@ -957,26 +957,15 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
             sdr::table::CellRef xCellRef (pTableObj->getActiveCell());
             if ( xCellRef.is() )
             {
-                const bool bCellEditing = xCellRef->IsTextEditActive();
-                if (bCellEditing)
+                try
                 {
-                    //Reference< XCell > xCell(xCellRef.get(), UNO_QUERY);
-                    xAccCell = mxImpl->getAccessibleCell(Reference< XCell >( xCellRef.get() ));
-                    if (xAccCell.is())
+                    CellPos rPos;
+                    pTableObj->getActiveCellPos( rPos );
+                    xAccCell = mxImpl->getAccessibleCell( rPos.mnRow, rPos.mnCol );
+                    if ( xAccCell.is() )
                         pAccCell = xAccCell.get();
                 }
-                else
-                {
-                    try
-                    {
-                        CellPos rPos;
-                        pTableObj->getActiveCellPos( rPos );
-                        xAccCell = mxImpl->getAccessibleCell( rPos.mnRow, rPos.mnCol );
-                        if ( xAccCell.is() )
-                            pAccCell = xAccCell.get();
-                    }
-                    catch ( IndexOutOfBoundsException& ) {}
-                }
+                catch ( IndexOutOfBoundsException& ) {}
             }
         }
     }
