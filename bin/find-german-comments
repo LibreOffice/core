@@ -224,6 +224,7 @@ class Parser:
         """
         checks each _tracked_ file in a directory recursively
         """
+        # FIXME: eventually should scan .c .mm etc. too ...
         sock = os.popen(r"git ls-files '%s' |egrep '\.(c|h)xx$'" % directory)
         lines = sock.readlines()
         sock.close()
@@ -280,7 +281,9 @@ class Parser:
             "javaunohelper" : 1,
             "jvmaccess" : 1,
             "jvmfwk" : 1,
+            "jurt" : 1,
             "l10ntools" : 1,
+            "libreofficekit" : 1,
             "lingucomponent" : 1,
             "linguistic" : 1,
             "lotuswordpro" : 1,
@@ -288,6 +291,8 @@ class Parser:
             "o3tl" : 1,
             "odk" : 1,
             "officecfg" : 1,
+            "onlineupdate" : 1,
+            "opencl" : 1,
             "oox" : 1,
             "package" : 1,
             "postprocess" : 1,
@@ -347,8 +352,10 @@ class Parser:
             "xmlscript" : 1,
         }
 
-        if not directory is '.':
-            sys.stderr.write("Warning: pass an absolute path to the top-level in order to use the faster white-list search\n")
+        if directory is '.':
+            sys.stderr.write("Overriding the white-list for the current directory - pass an absolute path to the top-level for faster global white-list searches.\n")
+
+        num_checked = 0
 
         for path in lines:
             baseDir = self.first_elem(path)
@@ -357,10 +364,16 @@ class Parser:
             if directory is '.':
                 self.check_file(path.strip())
             elif not baseDir in directory_whitelist:
-                print ("Missing path %s " % baseDir)
+                sys.stderr.write ("\n - Error: Missing path %s -\n\n" % baseDir)
+                sys.exit(1)
             elif directory_whitelist[baseDir] is 0:
-#                print ("Scan path %s " % baseDir)
                 self.check_file(path.strip())
+                num_checked = num_checked + 1
+            elif directory_whitelist[baseDir] is 1:
+                sys.stderr.write ("Skipping whitelisted directory %s\n" % baseDir)
+                directory_whitelist[baseDir] = 2
+
+        sys.stderr.write ("Scanned %s files\n" % num_checked)
 
 try:
     Parser()
