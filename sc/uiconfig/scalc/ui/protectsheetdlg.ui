@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ProtectSheetDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -15,7 +16,7 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="layout_style">start</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
@@ -112,10 +113,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">_Password:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">password1</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -127,10 +128,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">_Confirm:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">password2</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -191,10 +192,10 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Allow all users of this sheet to:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">checklist:border</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -204,14 +205,14 @@
                 </child>
                 <child>
                   <object class="svxcorelo-SvxCheckListBox" id="checklist:border">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Checked Tree List-selection1"/>
-                            </child>
-                          </object>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Checked Tree List-selection1"/>
+                    </child>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
