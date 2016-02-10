@@ -22,7 +22,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-struct SvxAccessibilityOptionsTabPage_Impl;
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
     VclPtr<CheckBox>       m_pAccessibilityTool;
@@ -32,8 +31,6 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox>       m_pAutoDetectHC;
     VclPtr<CheckBox>       m_pAutomaticFontColor;
     VclPtr<CheckBox>       m_pPagePreviews;
-
-    SvxAccessibilityOptionsTabPage_Impl* m_pImpl;
 
 public:
     SvxAccessibilityOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
