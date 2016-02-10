@@ -383,7 +383,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
             DBG_ASSERT( nOpenMode == css::embed::ElementModes::READ, "Error creating signature stream..." );
         }
     }
-    else if(xNameAccess->hasByName("_xmlsignatures"))
+    else if(xNameAccess->hasByName("[Content_Types].xml"))
     {
         try
         {
@@ -392,7 +392,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
         }
         catch (const io::IOException& rException)
         {
-            SAL_WARN("xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException.Message);
+            SAL_WARN_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException.Message);
         }
     }
 
