@@ -20,22 +20,14 @@
 #include <optaccessibility.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include <svtools/accessibilityoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-
-struct SvxAccessibilityOptionsTabPage_Impl
-{
-    SvtAccessibilityOptions     m_aConfig;
-    SvxAccessibilityOptionsTabPage_Impl()
-            : m_aConfig(){}
-};
+#include <officecfg/Office/Common.hxx>
 
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptAccessibilityPage",
         "cui/ui/optaccessibilitypage.ui", &rSet)
-    , m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
 {
     get(m_pAccessibilityTool, "acctool");
     get(m_pTextSelectionInReadonly, "textselinreadonly");
@@ -59,8 +51,6 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 
 void SvxAccessibilityOptionsTabPage::dispose()
 {
-    delete m_pImpl;
-    m_pImpl = nullptr;
     m_pAccessibilityTool.clear();
     m_pTextSelectionInReadonly.clear();
     m_pAnimatedGraphics.clear();
@@ -78,14 +68,20 @@ VclPtr<SfxTabPage> SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent,
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 {
-    //aConfig.Set... from controls
-
-    m_pImpl->m_aConfig.SetIsForPagePreviews( m_pPagePreviews->IsChecked() );
-    m_pImpl->m_aConfig.SetIsAllowAnimatedGraphics( m_pAnimatedGraphics->IsChecked() );
-    m_pImpl->m_aConfig.SetIsAllowAnimatedText( m_pAnimatedTexts->IsChecked() );
-    m_pImpl->m_aConfig.SetIsAutomaticFontColor( m_pAutomaticFontColor->IsChecked() );
-    m_pImpl->m_aConfig.SetSelectionInReadonly( m_pTextSelectionInReadonly->IsChecked());
-    m_pImpl->m_aConfig.SetAutoDetectSystemHC( m_pAutoDetectHC->IsChecked());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
+    if ( !officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly() )
+        officecfg::Office::Common::Accessibility::IsForPagePreviews::set(m_pPagePreviews->IsChecked(), batch);
+    if ( !officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly() )
+        officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::set(m_pAnimatedGraphics->IsChecked(), batch);
+    if ( !officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly() )
+        officecfg::Office::Common::Accessibility::IsAllowAnimatedText::set(m_pAnimatedTexts->IsChecked(), batch);
+    if ( !officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly() )
+        officecfg::Office::Common::Accessibility::IsAutomaticFontColor::set(m_pAutomaticFontColor->IsChecked(), batch);
+    if ( !officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
+        officecfg::Office::Common::Accessibility::IsSelectionInReadonly::set(m_pTextSelectionInReadonly->IsChecked(), batch);
+    if ( !officecfg::Office::Common::Accessibility::AutoDetectSystemHC::isReadOnly() )
+        officecfg::Office::Common::Accessibility::AutoDetectSystemHC::set(m_pAutoDetectHC->IsChecked(), batch);
+    batch->commit();
 
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
@@ -101,15 +97,29 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 
 void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
 {
-    //set controls from aConfig.Get...
+    m_pPagePreviews->Check( officecfg::Office::Common::Accessibility::IsForPagePreviews::get() );
+    if( officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly() )
+        m_pPagePreviews->Disable();
 
-    m_pPagePreviews->Check(            m_pImpl->m_aConfig.GetIsForPagePreviews() );
-    m_pAnimatedGraphics->Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
-    m_pAnimatedTexts->Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
-    m_pAutomaticFontColor->Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
-    m_pTextSelectionInReadonly->Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
-    m_pAutoDetectHC->Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
+    m_pAnimatedGraphics->Check( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() );
+    if( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly() )
+        m_pAnimatedGraphics->Disable();
 
+    m_pAnimatedTexts->Check( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get() );
+    if( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly() )
+        m_pAnimatedTexts->Disable();
+
+    m_pAutomaticFontColor->Check( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() );
+    if( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly() )
+        m_pAutomaticFontColor->Disable();
+
+    m_pTextSelectionInReadonly->Check( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get() );
+    if( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
+        m_pTextSelectionInReadonly->Disable();
+
+    m_pAutoDetectHC->Check( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get() );
+    if( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::isReadOnly() )
+        m_pAutoDetectHC->Disable();
 
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
