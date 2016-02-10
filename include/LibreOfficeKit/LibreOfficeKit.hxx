@@ -48,6 +48,11 @@ public:
      * @param pUrl the location where to store the document
      * @param pFormat the format to use while exporting, when omitted, then deducted from pURL's extension
      * @param pFilterOptions options for the export filter, e.g. SkipImages.
+     *        Another useful FilterOption is "TakeOwnership".  It is consumed
+     *        by the saveAs() itself, and when provided, the document identity
+     *        changes to the provided pUrl - meaning that '.uno:ModifiedStatus'
+     *        is triggered as with the "Save As..." in the UI.
+     *        "TakeOwnership" mode must not be used when saving to PNG or PDF.
      */
     inline bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
