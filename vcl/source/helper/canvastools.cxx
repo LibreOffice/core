@@ -74,7 +74,7 @@ namespace vcl
 
         namespace
         {
-            inline bool operator==( const rendering::IntegerBitmapLayout& rLHS,
+            inline bool equalsLayout( const rendering::IntegerBitmapLayout& rLHS,
                                     const rendering::IntegerBitmapLayout& rRHS )
             {
                 return
@@ -85,7 +85,6 @@ namespace vcl
                     rLHS.Palette             == rRHS.Palette &&
                     rLHS.IsMsbFirst          == rRHS.IsMsbFirst;
             }
-
             bool readBmp( sal_Int32                                                  nWidth,
                           sal_Int32                                                  nHeight,
                           const rendering::IntegerBitmapLayout&                      rLayout,
@@ -111,7 +110,7 @@ namespace vcl
                         // re-read bmp from the start
                         return false;
                     }
-                    if( !(aCurrLayout == rLayout) )
+                    if( !equalsLayout(aCurrLayout, rLayout) )
                         return false; // re-read bmp from the start
 
                     if( rAlphaAcc.get() )

@@ -391,19 +391,6 @@ public:
     }
 };
 
-bool operator== (const css::util::DateTime &i_rLeft,
-                 const css::util::DateTime &i_rRight)
-{
-    return i_rLeft.Year             == i_rRight.Year
-        && i_rLeft.Month            == i_rRight.Month
-        && i_rLeft.Day              == i_rRight.Day
-        && i_rLeft.Hours            == i_rRight.Hours
-        && i_rLeft.Minutes          == i_rRight.Minutes
-        && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds
-        && i_rLeft.IsUTC            == i_rRight.IsUTC;
-}
-
 // NB: keep these two arrays in sync!
 const char* s_stdStatAttrs[] = {
     "meta:page-count",
