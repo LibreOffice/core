@@ -4176,9 +4176,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwTextNode* pSttTextNd = pStt->nNode.GetNode().GetTextNode();
     SwTextNode* pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
     SwTextNode* pDestTextNd = aInsPos.GetNode().GetTextNode();
-    bool bCopyCollFormat = !pDoc->IsInsOnlyTextGlossary() &&
-                        ( (pDestTextNd && !pDestTextNd->GetText().getLength()) ||
-                          ( !bOneNode && !rPos.nContent.GetIndex() ) );
+    bool bCopyCollFormat =  false;
     bool bCopyBookmarks = true;
     bool bStartIsTextNode = nullptr != pSttTextNd;
 
@@ -4218,96 +4216,93 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         if( pSttTextNd )
         {
             // Don't copy the beginning completely?
-            if( !bCopyCollFormat || bColumnSel || pStt->nContent.GetIndex() )
+            SwIndex aDestIdx( rPos.nContent );
+            bool bCopyOk = false;
+            if( !pDestTextNd )
             {
-                SwIndex aDestIdx( rPos.nContent );
-                bool bCopyOk = false;
-                if( !pDestTextNd )
+                if( pStt->nContent.GetIndex() || bOneNode )
+                    pDestTextNd = pDoc->GetNodes().MakeTextNode( aInsPos,
+                        pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+                else
                 {
-                    if( pStt->nContent.GetIndex() || bOneNode )
-                        pDestTextNd = pDoc->GetNodes().MakeTextNode( aInsPos,
-                            pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
-                    else
-                    {
-                        pDestTextNd = pSttTextNd->MakeCopy( pDoc, aInsPos )->GetTextNode();
-                        bCopyOk = true;
-                    }
-                    aDestIdx.Assign( pDestTextNd, 0 );
-                    bCopyCollFormat = true;
+                    pDestTextNd = pSttTextNd->MakeCopy( pDoc, aInsPos )->GetTextNode();
+                    bCopyOk = true;
                 }
-                else if( !bOneNode || bColumnSel )
-                {
-                    const sal_Int32 nContentEnd = pEnd->nContent.GetIndex();
-                    {
-                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                        pDoc->getIDocumentContentOperations().SplitNode( rPos, false );
-                    }
-
-                    if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
-                    {
-                        // after the SplitNode, span the CpyPam correctly again
-                        pCopyPam->Move( fnMoveBackward, fnGoContent );
-                        pCopyPam->Move( fnMoveBackward, fnGoContent );
-                    }
-
-                    pDestTextNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTextNode();
-                    aDestIdx.Assign(
-                            pDestTextNd, pDestTextNd->GetText().getLength());
-
-                    // Correct the area again
-                    if( bEndEqualIns )
-                    {
-                        bool bChg = pEnd != rPam.GetPoint();
-                        if( bChg )
-                            rPam.Exchange();
-                        rPam.Move( fnMoveBackward, fnGoContent );
-                        if( bChg )
-                            rPam.Exchange();
-
-                        aRg.aEnd = pEnd->nNode;
-                        pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
-                    }
-                    else if( rPos == *pEnd )
-                    {
-                        // The end was also moved
-                        pEnd->nNode--;
-                        pEnd->nContent.Assign( pDestTextNd, nContentEnd );
-                        aRg.aEnd = pEnd->nNode;
-                        pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
-                    }
-                }
-
-                NUMRULE_STATE
-                if( bCopyCollFormat && bOneNode )
-                {
-                    PUSH_NUMRULE_STATE
-                }
-
-                if( !bCopyOk )
-                {
-                    const sal_Int32 nCpyLen = ( (bOneNode)
-                                           ? pEnd->nContent.GetIndex()
-                                           : pSttTextNd->GetText().getLength())
-                                         - pStt->nContent.GetIndex();
-                    pSttTextNd->CopyText( pDestTextNd, aDestIdx,
-                                            pStt->nContent, nCpyLen );
-                    if( bEndEqualIns )
-                        pEnd->nContent -= nCpyLen;
-                }
-
-                if( bOneNode )
-                {
-                    if (bCopyCollFormat)
-                    {
-                        pSttTextNd->CopyCollFormat( *pDestTextNd );
-                        POP_NUMRULE_STATE
-                    }
-
-                    break;
-                }
-
-                aRg.aStart++;
+                aDestIdx.Assign( pDestTextNd, 0 );
+                bCopyCollFormat = true;
             }
+            else if( !bOneNode || bColumnSel )
+            {
+                const sal_Int32 nContentEnd = pEnd->nContent.GetIndex();
+                {
+                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+                    pDoc->getIDocumentContentOperations().SplitNode( rPos, false );
+                }
+
+                if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
+                {
+                    // after the SplitNode, span the CpyPam correctly again
+                    pCopyPam->Move( fnMoveBackward, fnGoContent );
+                    pCopyPam->Move( fnMoveBackward, fnGoContent );
+                }
+
+                pDestTextNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTextNode();
+                aDestIdx.Assign(
+                        pDestTextNd, pDestTextNd->GetText().getLength());
+
+                // Correct the area again
+                if( bEndEqualIns )
+                {
+                    bool bChg = pEnd != rPam.GetPoint();
+                    if( bChg )
+                        rPam.Exchange();
+                    rPam.Move( fnMoveBackward, fnGoContent );
+                    if( bChg )
+                        rPam.Exchange();
+
+                    aRg.aEnd = pEnd->nNode;
+                    pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
+                }
+                else if( rPos == *pEnd )
+                {
+                    // The end was also moved
+                    pEnd->nNode--;
+                    pEnd->nContent.Assign( pDestTextNd, nContentEnd );
+                    aRg.aEnd = pEnd->nNode;
+                    pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
+                }
+            }
+
+            NUMRULE_STATE
+            if( bCopyCollFormat && bOneNode )
+            {
+                PUSH_NUMRULE_STATE
+            }
+
+            if( !bCopyOk )
+            {
+                const sal_Int32 nCpyLen = ( (bOneNode)
+                                        ? pEnd->nContent.GetIndex()
+                                        : pSttTextNd->GetText().getLength())
+                                        - pStt->nContent.GetIndex();
+                pSttTextNd->CopyText( pDestTextNd, aDestIdx,
+                                        pStt->nContent, nCpyLen );
+                if( bEndEqualIns )
+                    pEnd->nContent -= nCpyLen;
+            }
+
+            if( bOneNode )
+            {
+                if (bCopyCollFormat)
+                {
+                    pSttTextNd->CopyCollFormat( *pDestTextNd );
+                    POP_NUMRULE_STATE
+                }
+
+                break;
+            }
+
+            aRg.aStart++;
         }
         else if( pDestTextNd )
         {
