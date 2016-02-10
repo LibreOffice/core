@@ -4176,9 +4176,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwTextNode* pSttTextNd = pStt->nNode.GetNode().GetTextNode();
     SwTextNode* pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
     SwTextNode* pDestTextNd = aInsPos.GetNode().GetTextNode();
-    bool bCopyCollFormat = !pDoc->IsInsOnlyTextGlossary() &&
-                        ( (pDestTextNd && !pDestTextNd->GetText().getLength()) ||
-                          ( !bOneNode && !rPos.nContent.GetIndex() ) );
+    bool bCopyCollFormat =  false;
     bool bCopyBookmarks = true;
     bool bStartIsTextNode = nullptr != pSttTextNd;
 
