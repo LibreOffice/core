@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_cced6490",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-10T13:08:33Z",
+      "side": 0,
+      "message": "is this change still accidental?",
+      "revId": "555ee51b77a789253bffdd9ffb16bdc5e51b980a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
