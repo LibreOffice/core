@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_ecaf8092",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-02-10T08:36:50Z",
+      "side": 1,
+      "message": "will break text with plain colour fill if they don\u0027t have parent with gradient fill",
+      "revId": "f9d25f990ac501b2e16259873c3b920dbdfbfa27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
