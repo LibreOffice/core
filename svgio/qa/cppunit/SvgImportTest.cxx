@@ -279,7 +279,7 @@ void Test::testTdf79163()
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/mask/unifiedtransparence", "transparence", "0");
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence", "transparence", "0");
 }
 
 void Test::testTdf97542_1()
