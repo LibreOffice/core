@@ -341,6 +341,8 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
         }
         SAL_WARN("xmlsecurity.helper", "found no content type for " << rElement);
     }
+
+    std::sort(rElements.begin(), rElements.end());
 }
 
 SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
