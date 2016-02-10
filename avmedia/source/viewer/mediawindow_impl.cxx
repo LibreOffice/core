@@ -117,7 +117,7 @@ void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
 void MediaChildWindow::Command( const CommandEvent& rCEvt )
 {
     const CommandEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ),
-                                            rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData() );
+                                          rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData() );
 
     SystemChildWindow::Command( rCEvt );
     GetParent()->Command( aTransformedEvent );

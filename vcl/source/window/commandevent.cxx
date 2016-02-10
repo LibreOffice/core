@@ -32,7 +32,10 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
         memcpy( mpTextAttr, pTextAttr, maText.getLength()*sizeof(sal_uInt16) );
     }
     else
+    {
         mpTextAttr = nullptr;
+    }
+
     mnCursorPos     = nCursorPos;
     mnCursorFlags   = nCursorFlags;
     mbOnlyCursor    = bOnlyCursor;
@@ -47,7 +50,10 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
         memcpy( mpTextAttr, rData.mpTextAttr, maText.getLength()*sizeof(sal_uInt16) );
     }
     else
+    {
         mpTextAttr = nullptr;
+    }
+
     mnCursorPos     = rData.mnCursorPos;
     mnCursorFlags   = rData.mnCursorFlags;
     mbOnlyCursor    = rData.mbOnlyCursor;
@@ -56,6 +62,162 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 CommandExtTextInputData::~CommandExtTextInputData()
 {
     delete [] mpTextAttr;
+}
+
+CommandInputContextData::CommandInputContextData()
+{
+    meLanguage = LANGUAGE_DONTKNOW;
+}
+
+CommandInputContextData::CommandInputContextData( LanguageType eLang )
+{
+    meLanguage = eLang;
+}
+
+CommandWheelData::CommandWheelData()
+{
+    mnDelta         = 0;
+    mnNotchDelta    = 0;
+    mnLines         = 0;
+    mnWheelMode     = CommandWheelMode::NONE;
+    mnCode          = 0;
+    mbHorz          = false;
+    mbDeltaIsPixel  = false;
+}
+
+CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
+                                    sal_uLong nScrollLines,
+                                    CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
+                                    bool bHorz, bool bDeltaIsPixel )
+{
+    mnDelta         = nWheelDelta;
+    mnNotchDelta    = nWheelNotchDelta;
+    mnLines         = nScrollLines;
+    mnWheelMode     = nWheelMode;
+    mnCode          = nKeyModifier;
+    mbHorz          = bHorz;
+    mbDeltaIsPixel  = bDeltaIsPixel;
+}
+
+CommandScrollData::CommandScrollData()
+{
+    mnDeltaX    = 0;
+    mnDeltaY    = 0;
+}
+
+CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
+{
+    mnDeltaX    = nDeltaX;
+    mnDeltaY    = nDeltaY;
+}
+
+CommandModKeyData::CommandModKeyData()
+{
+    mnCode = 0L;
+}
+
+CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
+{
+    mnCode = nCode;
+}
+
+CommandSelectionChangeData::CommandSelectionChangeData()
+{
+    mnStart = mnEnd = 0;
+}
+
+CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart, sal_uLong nEnd )
+{
+    mnStart = nStart;
+    mnEnd = nEnd;
+}
+
+CommandEvent::CommandEvent()
+{
+    mpData          = nullptr;
+    mnCommand       = CommandEventId::NONE;
+    mbMouseEvent    = false;
+}
+
+CommandEvent::CommandEvent( const Point& rMousePos,
+                                   CommandEventId nCmd, bool bMEvt, const void* pCmdData ) :
+            maPos( rMousePos )
+{
+    mpData          = const_cast<void*>(pCmdData);
+    mnCommand       = nCmd;
+    mbMouseEvent    = bMEvt;
+}
+
+const CommandExtTextInputData* CommandEvent::GetExtTextInputData() const
+{
+    if ( mnCommand == CommandEventId::ExtTextInput )
+        return static_cast<const CommandExtTextInputData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandWheelData* CommandEvent::GetWheelData() const
+{
+    if ( mnCommand == CommandEventId::Wheel )
+        return static_cast<const CommandWheelData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandScrollData* CommandEvent::GetAutoScrollData() const
+{
+    if ( mnCommand == CommandEventId::AutoScroll )
+        return static_cast<const CommandScrollData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandModKeyData* CommandEvent::GetModKeyData() const
+{
+    if( mnCommand == CommandEventId::ModKeyChange )
+        return static_cast<const CommandModKeyData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandDialogData* CommandEvent::GetDialogData() const
+{
+    if( mnCommand == CommandEventId::ShowDialog )
+        return static_cast<const CommandDialogData*>(mpData);
+    else
+        return nullptr;
+}
+
+CommandMediaData* CommandEvent::GetMediaData() const
+{
+    if( mnCommand == CommandEventId::Media )
+        return static_cast<CommandMediaData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const
+{
+    if( mnCommand == CommandEventId::SelectionChange )
+        return static_cast<const CommandSelectionChangeData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandSwipeData* CommandEvent::GetSwipeData() const
+{
+    if( mnCommand == CommandEventId::Swipe )
+        return static_cast<const CommandSwipeData*>(mpData);
+    else
+        return nullptr;
+}
+
+const CommandLongPressData* CommandEvent::GetLongPressData() const
+{
+    if( mnCommand == CommandEventId::LongPress )
+        return static_cast<const CommandLongPressData*>(mpData);
+    else
+        return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
