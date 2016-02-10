@@ -1960,7 +1960,7 @@ namespace svgio
                     return &maFill.getBColor();
                 }
             }
-            else
+            else if (!mpSvgGradientNodeFill || !mpSvgPatternNodeFill)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -1990,7 +1990,7 @@ namespace svgio
                     return &maStroke.getBColor();
                 }
             }
-            else
+            else if (!mpSvgGradientNodeStroke || !mpSvgPatternNodeStroke)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2025,7 +2025,7 @@ namespace svgio
             {
                 return mpSvgGradientNodeFill;
             }
-            else
+            else if (!maFill.isSet() || !mpSvgPatternNodeFill)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2048,7 +2048,7 @@ namespace svgio
             {
                 return mpSvgGradientNodeStroke;
             }
-            else
+            else if (!maStroke.isSet() || !mpSvgPatternNodeStroke)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2071,7 +2071,7 @@ namespace svgio
             {
                 return mpSvgPatternNodeFill;
             }
-            else
+            else if (!maFill.isSet() || !mpSvgGradientNodeFill)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
@@ -2094,7 +2094,7 @@ namespace svgio
             {
                 return mpSvgPatternNodeStroke;
             }
-            else
+            else if (!maStroke.isSet() || !mpSvgGradientNodeStroke)
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
