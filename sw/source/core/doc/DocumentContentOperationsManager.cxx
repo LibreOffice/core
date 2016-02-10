@@ -4180,6 +4180,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         ( (pDestTextNd && !pDestTextNd->GetText().getLength()) ||
                           ( !bOneNode && !rPos.nContent.GetIndex() ) );
     bool bCopyBookmarks = true;
+    bool bCopyPageSource  = false;
     bool bStartIsTextNode = nullptr != pSttTextNd;
 
     // #i104585# copy outline num rule to clipboard (for ASCII filter)
@@ -4444,9 +4445,23 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     pCopyPam->GetPoint()->nNode.GetIndex()+1 ]->GetTextNode()))
             {
                 pDestTextNd->SetAttr( aBrkSet );
+                bCopyPageSource = true;
             }
         }
     } while( false );
+
+
+    // it is not possible to make this test when copy from the clipBoard to document
+    //  in this case the PageNum not exist anymore
+    // tdf#39400 and tdf#97526
+    // when copy from document to ClipBoard, and it is from the first page
+    //  and not the source has the page break
+    if (pDoc->IsClipBoard() && (rPam.GetPageNum(pStt == rPam.GetPoint()) == 1) && !bCopyPageSource)
+    {
+        pDestTextNd->ResetAttr(RES_BREAK);        // remove the page-break
+        pDestTextNd->ResetAttr(RES_PAGEDESC);
+    }
+
 
     // Adjust position (in case it was moved / in another node)
     rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(),
