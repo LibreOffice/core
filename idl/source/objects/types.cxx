@@ -267,15 +267,12 @@ void SvMetaType::WriteSfxItem(
     const OString& rItemName, SvIdlDataBase& rBase, SvStream& rOutStm )
 {
     WriteStars( rOutStm );
-    OStringBuffer aVarName(" a");
-    aVarName.append(rItemName).append("_Impl");
+    OString aVarName = " a" + rItemName + "_Impl";
 
-    OStringBuffer aTypeName("SfxType");
     OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
-    OString aAttrCount(
-        OString::number(nAttrCount));
-    aTypeName.append(aAttrCount);
+    OString aAttrCount( OString::number(nAttrCount));
+    OString aTypeName = "SfxType" + aAttrCount;
 
     bool bExport = false, bReturn = false;
     // these are exported from sfx library
@@ -293,8 +290,8 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( "extern " );
     if (bExport)
         rOutStm.WriteCharPtr( "SFX2_DLLPUBLIC " );
-    rOutStm.WriteCharPtr( aTypeName.getStr() )
-           .WriteCharPtr( aVarName.getStr() ).WriteChar( ';' ) << endl;
+    rOutStm.WriteOString( aTypeName )
+           .WriteOString( aVarName ).WriteChar( ';' ) << endl;
     if (bReturn)
         return;
 
@@ -303,13 +300,13 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( "#if !defined(_WIN32) && ((defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS))) || STATIC_LINKING)" ) << endl;
     rOutStm.WriteCharPtr( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteCharPtr( "#endif" ) << endl;
-    rOutStm.WriteCharPtr( aTypeName.getStr() ).WriteCharPtr( aVarName.getStr() )
+    rOutStm.WriteOString( aTypeName ).WriteOString( aVarName )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
-    rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteCharPtr( rItemName.getStr() )
-        .WriteCharPtr(">, &typeid(").WriteCharPtr( rItemName.getStr() ).WriteCharPtr( "), " );
-    rOutStm.WriteCharPtr( aAttrCount.getStr() );
+    rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteOString( rItemName )
+        .WriteCharPtr(">, &typeid(").WriteOString( rItemName ).WriteCharPtr( "), " );
+    rOutStm.WriteOString( aAttrCount );
     if( nAttrCount )
     {
         rOutStm.WriteCharPtr( ", { " );

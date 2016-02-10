@@ -590,7 +590,7 @@ struct WriteDep
     void operator() (OUString const& rItem)
     {
         m_rStream.WriteCharPtr( " \\\n " );
-        m_rStream.WriteCharPtr( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr() );
+        m_rStream.WriteOString( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8) );
     }
 };
 
@@ -602,7 +602,7 @@ struct WriteDummy
     explicit WriteDummy(SvFileStream & rStream) : m_rStream(rStream) { }
     void operator() (OUString const& rItem)
     {
-        m_rStream.WriteCharPtr( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr() );
+        m_rStream.WriteOString( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8) );
         m_rStream.WriteCharPtr( " :\n\n" );
     }
 };
@@ -610,7 +610,7 @@ struct WriteDummy
 void SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, OUString const& rTarget)
 {
-    rStream.WriteCharPtr( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr() );
+    rStream.WriteOString( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8) );
     rStream.WriteCharPtr( " :" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
     rStream.WriteCharPtr( "\n\n" );

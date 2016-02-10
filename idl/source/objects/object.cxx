@@ -326,10 +326,10 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
     // define class
-    rOutStm.WriteCharPtr( "#ifdef " ).WriteCharPtr( GetName().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#ifdef " ).WriteOString( GetName() ) << endl;
     rOutStm.WriteCharPtr( "#undef ShellClass" ) << endl;
-    rOutStm.WriteCharPtr( "#undef " ).WriteCharPtr( GetName().getStr() ) << endl;
-    rOutStm.WriteCharPtr( "#define ShellClass " ).WriteCharPtr( GetName().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#undef " ).WriteOString( GetName() ) << endl;
+    rOutStm.WriteCharPtr( "#define ShellClass " ).WriteOString( GetName() ) << endl;
 
     // no slotmaps get written for interfaces
     if( GetMetaTypeType() != MetaTypeType::Shell )
@@ -338,7 +338,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // write parameter array
-    rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteCharPtr(GetName().getStr()).WriteCharPtr("Args_Impl[] =") << endl;
+    rOutStm.WriteCharPtr("static SfxFormalArgument a").WriteOString(GetName()).WriteCharPtr("Args_Impl[] =") << endl;
     rOutStm.WriteChar('{') << endl;
 
     std::vector<sal_uLong> aSuperList;
@@ -375,7 +375,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm.WriteCharPtr("static SfxSlot a").WriteCharPtr(GetName().getStr()).WriteCharPtr("Slots_Impl[] =") << endl;
+    rOutStm.WriteCharPtr("static SfxSlot a").WriteOString(GetName()).WriteCharPtr("Slots_Impl[] =") << endl;
     rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes
@@ -386,7 +386,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteCharPtr( GetName().getStr() )
+        rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteOString( GetName() )
                .WriteCharPtr( ", 0, 0, " )
                .WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE," )
                .WriteCharPtr( "SFX_STUB_PTR_STATE_NONE," )
