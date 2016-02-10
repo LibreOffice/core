@@ -38,6 +38,10 @@
 
 #include "opengl/FixedTextureAtlas.hxx"
 
+#if OSL_DEBUG_LEVEL > 0
+#  define CANARY "tex-canary"
+#endif
+
 namespace
 {
 
@@ -146,6 +150,9 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
         maTexture = OpenGLTexture( nX, nY, nWidth, nHeight );
     mbDirtyTexture = false;
     VCL_GL_INFO( "Created texture " << maTexture.Id() );
+
+    assert(mnWidth == maTexture.GetWidth() &&
+           mnHeight == maTexture.GetHeight());
 
     return true;
 }
@@ -258,7 +265,15 @@ bool OpenGLSalBitmap::AllocateUserData()
     {
         try
         {
-            mpUserBuffer = o3tl::make_shared_array<sal_uInt8>(static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight);
+            size_t nToAllocate = static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight;
+#if OSL_DEBUG_LEVEL > 0
+            nToAllocate += sizeof(CANARY);
+#endif
+            mpUserBuffer = o3tl::make_shared_array<sal_uInt8>(nToAllocate);
+#if OSL_DEBUG_LEVEL > 0
+            memcpy(mpUserBuffer.get() + nToAllocate - sizeof(CANARY),
+                   CANARY, sizeof(CANARY));
+#endif
             alloc = true;
         }
         catch (const std::bad_alloc &) {}
@@ -538,9 +553,19 @@ bool OpenGLSalBitmap::ReadTexture()
         // help valgrind & drmemory rescue us - touch last and first bits.
         pData[0] = 0;
         pData[mnBits/8*mnWidth*mnHeight-1] = 0;
+        // if this fails we can read too much into pData
+        assert(mnWidth == maTexture.GetWidth() &&
+               mnHeight == maTexture.GetHeight());
 #endif
 
         maTexture.Read(nFormat, nType, pData);
+
+#if OSL_DEBUG_LEVEL > 0
+        // If we read over the end of pData we have a real hidden memory
+        // corruption problem !
+        size_t nCanary = static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight;
+        assert(!memcmp(pData + nCanary, CANARY, sizeof (CANARY)));
+#endif
         mnBufWidth = mnWidth;
         mnBufHeight = mnHeight;
         return true;
