@@ -241,7 +241,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_nBackupTopLevelCurrentCellX(0),
       m_aTableBufferStack(1), // create top-level buffer already
       m_aSuperBuffer(),
-      m_bHasFootnote(false),
       m_pSuperstream(nullptr),
       m_nStreamType(0),
       m_nHeaderFooterPositions(),
@@ -1695,7 +1694,6 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (aKeyword.equals("\\ftnalt"))
                     nId = NS_ooxml::LN_endnote;
 
-                m_bHasFootnote = true;
                 if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
                     m_aStates.top().pCurrentBuffer = nullptr;
                 bool bCustomMark = false;
@@ -6055,10 +6053,8 @@ RTFError RTFDocumentImpl::popState()
     {
         OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == nullptr);
 
-        if (!m_bHasFootnote)
+        if (!m_aSuperBuffer.empty())
             replayBuffer(m_aSuperBuffer, nullptr, nullptr);
-
-        m_bHasFootnote = false;
     }
 
     return RTFError::OK;
