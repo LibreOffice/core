@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_6cf9d04d",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-10T13:23:59Z",
+      "side": 1,
+      "message": "bool bSingleSelection  \u003d (nSelectionCount \u003d\u003d 1)\n\nor something along that line",
+      "revId": "484a1337b0da6b597ad77e7ae5e5259538c8ec8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_8cfcfc3f",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-10T13:23:59Z",
+      "side": 1,
+      "message": "This can return LISTBOX_ENTRY_NOTFOUND and bad things may happen if you try to select that, so please handle that case",
+      "revId": "484a1337b0da6b597ad77e7ae5e5259538c8ec8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
