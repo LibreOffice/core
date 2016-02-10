@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_ac673824",
+        "filename": "svtools/source/control/valueset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-10T16:15:05Z",
+      "side": 1,
+      "message": "Where does 65 come from and why there has to be a special case for it? Is it the same value for every platform? What does it depend on?",
+      "revId": "a886c352975bbb4d0c2b0fe185433835479d48ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_0c6dac04",
+        "filename": "svtools/source/control/valueset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-10T16:15:05Z",
+      "side": 1,
+      "message": "The same question here: why 62? (and not 42, for example :D)",
+      "revId": "a886c352975bbb4d0c2b0fe185433835479d48ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_ec7140e2",
+        "filename": "svtools/source/control/valueset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-10T16:15:05Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "a886c352975bbb4d0c2b0fe185433835479d48ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
