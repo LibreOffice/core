@@ -1177,6 +1177,46 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
         }
     }
     xDocumentHandler->endElement(TAG_MANIFEST);
+
+    // SignatureProperties
+    xDocumentHandler->startElement(TAG_SIGNATUREPROPERTIES, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ID, "idSignatureTime");
+        pAttributeList->AddAttribute(ATTR_TARGET, "#idPackageSignature");
+        xDocumentHandler->startElement(TAG_SIGNATUREPROPERTY, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_XMLNS ":" NSTAG_MDSSI, NS_MDSSI);
+        xDocumentHandler->startElement(NSTAG_MDSSI ":" TAG_SIGNATURETIME, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    xDocumentHandler->startElement(NSTAG_MDSSI ":" TAG_FORMAT, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters("YYYY-MM-DDThh:mm:ssTZD");
+    xDocumentHandler->endElement(NSTAG_MDSSI ":" TAG_FORMAT);
+
+    xDocumentHandler->startElement(NSTAG_MDSSI ":" TAG_VALUE, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    OUString aSignatureTimeValue;
+    if (!rInformation.ouDateTime.isEmpty())
+        aSignatureTimeValue = rInformation.ouDateTime;
+    else
+    {
+        aSignatureTimeValue = utl::toISO8601(rInformation.stDateTime);
+        // Ignore sub-seconds.
+        sal_Int32 nCommaPos = aSignatureTimeValue.indexOf(',');
+        if (nCommaPos != -1)
+        {
+            aSignatureTimeValue = aSignatureTimeValue.copy(0, nCommaPos);
+            aSignatureTimeValue += "Z";
+        }
+    }
+    xDocumentHandler->characters(aSignatureTimeValue);
+    xDocumentHandler->endElement(NSTAG_MDSSI ":" TAG_VALUE);
+
+    xDocumentHandler->endElement(NSTAG_MDSSI ":" TAG_SIGNATURETIME);
+    xDocumentHandler->endElement(TAG_SIGNATUREPROPERTY);
+    xDocumentHandler->endElement(TAG_SIGNATUREPROPERTIES);
+
     xDocumentHandler->endElement(TAG_OBJECT);
 
     {
