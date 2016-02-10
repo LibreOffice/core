@@ -89,10 +89,6 @@ public:
 #endif
 };
 
-bool operator == (const css::sheet::DataPilotFieldSortInfo &l, const css::sheet::DataPilotFieldSortInfo &r );
-bool operator == (const css::sheet::DataPilotFieldAutoShowInfo &l, const css::sheet::DataPilotFieldAutoShowInfo &r );
-bool operator == (const css::sheet::DataPilotFieldReference &l, const css::sheet::DataPilotFieldReference &r );
-
 class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:

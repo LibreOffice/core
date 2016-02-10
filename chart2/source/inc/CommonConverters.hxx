@@ -134,11 +134,6 @@ OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D
                 operator-( const com::sun::star::drawing::Position3D& rPos1
                            , const com::sun::star::drawing::Position3D& rPos2);
 
-/** Position3D == Position3D ?
-*/
-OOO_DLLPUBLIC_CHARTTOOLS
-bool            operator==( const com::sun::star::drawing::Position3D& rPos1
-                           , const com::sun::star::drawing::Position3D& rPos2);
 
 /** awt::Rect --> awt::Point (2D)
 */
