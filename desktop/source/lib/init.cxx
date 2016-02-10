@@ -658,6 +658,30 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         OUString aFilterOptions = getUString(pFilterOptions);
 
+        // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
+        // gets a new name).  When this is not provided, the meaning of
+        // saveAs() is more like save-a-copy, which allows saving to any
+        // random format like PDF or PNG.
+        // It is not a real filter option, so we have to filter it out.
+        bool bTakeOwnership = false;
+        int nIndex = -1;
+        if (aFilterOptions == "TakeOwnership")
+        {
+            bTakeOwnership = true;
+            aFilterOptions = "";
+        }
+        else if ((nIndex = aFilterOptions.indexOf(",TakeOwnership")) >= 0 || (nIndex = aFilterOptions.indexOf("TakeOwnership,")) >= 0)
+        {
+            OUString aFiltered;
+            if (nIndex > 0)
+                aFiltered = aFilterOptions.copy(0, nIndex);
+            if (nIndex + 14 < aFilterOptions.getLength())
+                aFiltered = aFiltered + aFilterOptions.copy(nIndex + 14);
+
+            bTakeOwnership = true;
+            aFilterOptions = aFiltered;
+        }
+
         MediaDescriptor aSaveMediaDescriptor;
         aSaveMediaDescriptor["Overwrite"] <<= sal_True;
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
@@ -675,7 +699,11 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         }
 
         uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-        xStorable->storeToURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
+
+        if (bTakeOwnership)
+            xStorable->storeAsURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
+        else
+            xStorable->storeToURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
 
         return true;
     }
