@@ -705,15 +705,7 @@ namespace accessibility
         if( !aChild.is() )
         {
             // there is no hard reference available, create object then
-            AccessibleImageBullet* pChild = new AccessibleImageBullet( uno::Reference< XAccessible >( this ) );
-            uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
-
-            if( !xChild.is() )
-                throw uno::RuntimeException("Child creation failed",
-                                            uno::Reference< uno::XInterface >
-                                            ( static_cast< ::cppu::OWeakObject* > (this) ) );
-
-            aChild = pChild;
+            aChild = new AccessibleImageBullet(this);
 
             aChild->SetEditSource( &GetEditSource() );
             aChild->SetParagraphIndex( GetParagraphIndex() );

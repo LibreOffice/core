@@ -164,17 +164,11 @@ namespace accessibility
             {
                 // there is no hard reference available, create object then
                 // #i27138#
-                AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd, this );
-                uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
-
-                if( !xChild.is() )
-                    throw uno::RuntimeException("Child creation failed", xFrontEnd);
-
-                aChild = pChild;
+                aChild = new AccessibleEditableTextPara(xFrontEnd, this);
 
                 InitChild( *aChild, rEditSource, nChild, nParagraphIndex );
 
-                maChildren[ nParagraphIndex ] = WeakChild( aChild, pChild->getBounds() );
+                maChildren[ nParagraphIndex ] = WeakChild( aChild, aChild->getBounds() );
             }
 
             return Child( aChild.get(), GetChild( nParagraphIndex ).second );
