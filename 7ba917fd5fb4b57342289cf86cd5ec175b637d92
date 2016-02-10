@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_2cf6a8d7",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-10T06:28:30Z",
+      "side": 1,
+      "message": "EditParameter may be a better name",
+      "revId": "7ba917fd5fb4b57342289cf86cd5ec175b637d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_8c035cb8",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-10T06:28:30Z",
+      "side": 1,
+      "message": "better use the empty() method of OUString",
+      "revId": "7ba917fd5fb4b57342289cf86cd5ec175b637d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_ec2ae02b",
+        "filename": "cui/source/options/optjava.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-10T06:28:30Z",
+      "side": 1,
+      "message": "Do you still need this line? nPos should not have changed.",
+      "revId": "7ba917fd5fb4b57342289cf86cd5ec175b637d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
