@@ -24,7 +24,7 @@ ToxWhitespaceStripper::ToxWhitespaceStripper(const OUString& inputString)
     for (sal_Int32 pos = 0; pos < inputString.getLength(); ++pos) {
         sal_Unicode cur = inputString[pos];
 
-        if (cur == ' ' || cur == '\n') {
+        if (cur == ' ' || cur == '\n' || cur == '\t') {
             // merge consecutive whitespaces (and translate them to spaces)
             if (!lastCharacterWasWhitespace) {
                 buffer.append(' ');
