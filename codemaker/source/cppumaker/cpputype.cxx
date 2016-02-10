@@ -1859,6 +1859,10 @@ void PlainStructType::dumpDeclaration(FileStream & out) {
         }
         out << ");\n";
     }
+    // print out operator== and operator!=
+    out << indent() << "inline bool operator==(const " << id_ << "& Other);\n\n";
+    out << indent() << "inline bool operator!=(const " << id_ << "& Other);\n\n";
+    // print out member fields
     if (!entity_->getDirectMembers().empty()) {
         out << "\n";
         for (std::vector< unoidl::PlainStructTypeEntity::Member >::
@@ -1942,6 +1946,32 @@ void PlainStructType::dumpHppFile(
         dec();
         out << "{\n}\n\n";
     }
+    // print the operator==
+    out << "\ninline bool " << id_ << "::operator==(const " << id_ << "& Other)\n";
+    out << "{\n";
+    inc();
+    out << indent() << "return ";
+    bFirst = true;
+    if (!base.isEmpty()) {
+        out << codemaker::cpp::scopedCppName(u2b(base)) << "::operator==(Other)\n";
+        bFirst = false;
+    }
+    for (const unoidl::PlainStructTypeEntity::Member& member : entity_->getDirectMembers())
+    {
+        if (!bFirst)
+            out << "\n" << indent() << indent() << "&& ";
+        out << member.name << " == Other." << member.name;
+        bFirst = false;
+    }
+    out << ";\n";
+    dec();
+    out << "}\n";
+    // print the operator!=
+    out << "\ninline bool " << id_ << "::operator!=(const " << id_ << "& Other)\n";
+    out << "{\n";
+    out << indent() << "return !operator==(Other);\n";
+    out << "}\n";
+    // close namespace
     if (codemaker::cppumaker::dumpNamespaceClose(out, name_, false)) {
         out << "\n";
     }
@@ -2233,6 +2263,17 @@ void PolyStructType::dumpDeclaration(FileStream & out) {
             out << " " << i->name << "_";
         }
         out << ");\n\n";
+    }
+    // print the operator==
+    out << indent() << "inline bool operator==(const " <<  id_ ;
+    dumpTemplateParameters(out);
+    out << "& Other);\n\n";
+    // print the operator!=
+    out << indent() << "inline bool operator!=(const " <<  id_ ;
+    dumpTemplateParameters(out);
+    out << "& Other);\n\n";
+    // print the member fields
+    if (!entity_->getMembers().empty()) {
         for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member :
                  entity_->getMembers())
         {
@@ -2260,6 +2301,7 @@ void PolyStructType::dumpHppFile(
         out << "\n";
     }
     out << "\n";
+    // dump default (no-arg) constructor
     dumpTemplateHead(out);
     out << "inline " << id_;
     dumpTemplateParameters(out);
@@ -2277,6 +2319,7 @@ void PolyStructType::dumpHppFile(
     dec();
     out << "{\n}\n\n";
     if (!entity_->getMembers().empty()) {
+        // dump takes-all-fields constructor
         dumpTemplateHead(out);
         out << "inline " << id_;
         dumpTemplateParameters(out);
@@ -2309,6 +2352,7 @@ void PolyStructType::dumpHppFile(
         }
         dec();
         out << "{\n}\n\n" << indent();
+        // dump make_T method
         dumpTemplateHead(out);
         out << "\n" << indent() << "inline " << id_;
         dumpTemplateParameters(out);
@@ -2348,6 +2392,38 @@ void PolyStructType::dumpHppFile(
         dec();
         out << indent() << "}\n\n";
     }
+    // print the operator==
+    dumpTemplateHead(out);
+    out << " inline bool " << id_;
+    dumpTemplateParameters(out);
+    out << "::operator==(const " << id_;
+    dumpTemplateParameters(out);
+    out << "& Other)\n";
+    out << "{\n";
+    inc();
+    out << indent() << "return ";
+    bool bFirst = true;
+    for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member : entity_->getMembers())
+    {
+        if (!bFirst)
+            out << "\n" << indent() << indent() << "&& ";
+        out << member.name << " == Other." << member.name;
+        bFirst = false;
+    }
+    out << ";\n";
+    dec();
+    out << "}\n";
+    // print the operator!=
+    dumpTemplateHead(out);
+    out << " inline bool " << id_;
+    dumpTemplateParameters(out);
+    out << "::operator!=(const " << id_;
+    dumpTemplateParameters(out);
+    out << "& Other)\n";
+    out << "{\n";
+    out << indent() << "return !operator==(Other);\n";
+    out << "}\n";
+    // close namespace
     if (codemaker::cppumaker::dumpNamespaceClose(out, name_, false)) {
         out << "\n";
     }
