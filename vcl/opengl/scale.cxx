@@ -68,6 +68,8 @@ bool OpenGLSalBitmap::ImplScaleFilter(
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
+    mnBufWidth = mnWidth;
+    mnBufHeight = mnHeight;
     maTexture = aNewTex;
 
     CHECK_GL_ERROR();
@@ -181,6 +183,8 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
+    mnBufWidth = mnWidth;
+    mnBufHeight = mnHeight;
 
     CHECK_GL_ERROR();
     return true;
@@ -256,6 +260,8 @@ bool OpenGLSalBitmap::ImplScaleArea( const rtl::Reference< OpenGLContext > &xCon
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
+    mnBufWidth = mnWidth;
+    mnBufHeight = mnHeight;
 
     CHECK_GL_ERROR();
     return true;
