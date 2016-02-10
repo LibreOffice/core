@@ -563,8 +563,10 @@ namespace svgio
                                          drawinglayer::geometry::ViewInformation2D()));
                                 const double fChildWidth(aChildRange.getWidth());
                                 const double fChildHeight(aChildRange.getHeight());
-                                fW = bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : fChildWidth;
-                                fH = bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : fChildHeight;
+                                const double fChildLeft(aChildRange.getMinX());
+                                const double fChildTop(aChildRange.getMinY());
+                                fW = bWidthIsAbsolute ? getWidth().solveNonPercentage(*this) : fChildWidth + fChildLeft;
+                                fH = bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : fChildHeight + fChildTop;
                             }
                             // SVG 1.1 defines in section 5.1.2 that x,y has no meanig for the outermost SVG element.
                             aSvgCanvasRange = basegfx::B2DRange(0.0, 0.0, fW, fH);
