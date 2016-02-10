@@ -360,14 +360,6 @@ drawing::Direction3D  operator-( const drawing::Position3D& rPos1
         );
 }
 
-bool operator==( const drawing::Position3D& rPos1
-                           , const drawing::Position3D& rPos2)
-{
-    return rPos1.PositionX == rPos2.PositionX
-        && rPos1.PositionY == rPos2.PositionY
-        && rPos1.PositionZ == rPos2.PositionZ;
-}
-
 awt::Point Position3DToAWTPoint( const drawing::Position3D& rPos )
 {
     awt::Point aRet;

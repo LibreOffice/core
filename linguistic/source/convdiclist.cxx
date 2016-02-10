@@ -58,13 +58,6 @@ using namespace linguistic;
 
 #define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
-bool operator == ( const Locale &r1, const Locale &r2 )
-{
-    return  r1.Language == r2.Language &&
-            r1.Country  == r2.Country  &&
-            r1.Variant  == r2.Variant;
-}
-
 OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectoryURL )
 {
     // build URL to use for new (persistent) dictionaries

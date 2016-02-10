@@ -308,16 +308,6 @@ namespace pcr
             ::std::copy( aListeners.begin(), aListeners.end(),
                          ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
         }
-
-        bool operator ==( const ScriptEventDescriptor& _lhs, const ScriptEventDescriptor& _rhs )
-        {
-            return  (   ( _lhs.ListenerType         == _rhs.ListenerType        )
-                    &&  ( _lhs.EventMethod          == _rhs.EventMethod         )
-                    &&  ( _lhs.AddListenerParam     == _rhs.AddListenerParam    )
-                    &&  ( _lhs.ScriptType           == _rhs.ScriptType          )
-                    &&  ( _lhs.ScriptCode           == _rhs.ScriptCode          )
-                    );
-        }
     }
 
     typedef ::cppu::WeakImplHelper <   css::container::XNameReplace

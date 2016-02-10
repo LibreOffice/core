@@ -76,10 +76,6 @@ TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTex
     return xTC->interactiveConversion(rLocale, nTextConversionType, nTextConversionOptions);
 }
 
-static inline bool operator != (const Locale& l1, const Locale& l2) {
-    return l1.Language != l2.Language || l1.Country != l2.Country || l1.Variant != l2.Variant;
-}
-
 void SAL_CALL
 TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw( NoSupportException )
 {

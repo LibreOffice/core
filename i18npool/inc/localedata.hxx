@@ -58,10 +58,6 @@ struct LocaleDataLookupTableItem;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-inline bool operator ==(const css::lang::Locale& l1, const css::lang::Locale& l2) {
-    return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
-};
-
 class LocaleDataImpl : public cppu::WeakImplHelper
 <
     css::i18n::XLocaleData4,
@@ -122,8 +118,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    friend bool operator ==(const css::lang::Locale& l1, const css::lang::Locale& l2);
-
     ::std::unique_ptr< LocaleDataLookupTableItem > cachedItem;
     css::i18n::Calendar2 ref_cal;
     OUString ref_name;

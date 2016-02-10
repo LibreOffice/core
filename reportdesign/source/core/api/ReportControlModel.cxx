@@ -24,27 +24,6 @@ namespace reportdesign
 using namespace com::sun::star;
 using namespace comphelper;
 
-bool operator==( const css::awt::FontDescriptor& _lhs, const css::awt::FontDescriptor& _rhs )
-{
-    return  ( _lhs.Name           == _rhs.Name )
-        &&  ( _lhs.Height         == _rhs.Height )
-        &&  ( _lhs.Width          == _rhs.Width )
-        &&  ( _lhs.StyleName      == _rhs.StyleName )
-        &&  ( _lhs.Family         == _rhs.Family )
-        &&  ( _lhs.CharSet        == _rhs.CharSet )
-        &&  ( _lhs.Pitch          == _rhs.Pitch )
-        &&  ( _lhs.CharacterWidth == _rhs.CharacterWidth )
-        &&  ( _lhs.Weight         == _rhs.Weight )
-        &&  ( _lhs.Slant          == _rhs.Slant )
-        &&  ( _lhs.Underline      == _rhs.Underline )
-        &&  ( _lhs.Strikeout      == _rhs.Strikeout )
-        &&  ( _lhs.Orientation    == _rhs.Orientation )
-        &&  ( _lhs.Kerning        == _rhs.Kerning )
-        &&  ( _lhs.WordLineMode   == _rhs.WordLineMode )
-        &&  ( _lhs.Type           == _rhs.Type );
-}
-
-
 // XContainer
 void OReportControlModel::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {

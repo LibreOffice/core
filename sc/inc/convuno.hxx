@@ -127,35 +127,6 @@ inline bool ScUnoConversion::Contains(
         (rApiOuter.StartRow <= rApiInner.StartRow) && (rApiInner.EndRow <= rApiOuter.EndRow);
 }
 
-inline bool operator==(
-        const css::table::CellAddress& rApiAddress1,
-        const css::table::CellAddress& rApiAddress2 )
-{
-    return
-        (rApiAddress1.Column == rApiAddress2.Column) &&
-        (rApiAddress1.Row == rApiAddress2.Row) &&
-        (rApiAddress1.Sheet == rApiAddress2.Sheet);
-}
-
-inline bool operator==(
-        const css::table::CellRangeAddress& rApiRange1,
-        const css::table::CellRangeAddress& rApiRange2 )
-{
-    return
-        (rApiRange1.StartColumn == rApiRange2.StartColumn) &&
-        (rApiRange1.StartRow == rApiRange2.StartRow) &&
-        (rApiRange1.EndColumn == rApiRange2.EndColumn) &&
-        (rApiRange1.EndRow == rApiRange2.EndRow) &&
-        (rApiRange1.Sheet == rApiRange2.Sheet);
-}
-
-inline bool operator!=(
-        const css::table::CellRangeAddress& rApiRange1,
-        const css::table::CellRangeAddress& rApiRange2 )
-{
-    return !(rApiRange1 == rApiRange2);
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

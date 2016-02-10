@@ -86,11 +86,6 @@ public:
     virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override { return nullptr; }
 };
 
-static bool operator==(beans::StringPair p1, beans::StringPair p2)
-{
-    return p1.First == p2.First && p1.Second == p2.Second;
-}
-
 void MetadatableTest::test()
 {
     std::unique_ptr< ::sfx2::IXmlIdRegistry > const pReg(

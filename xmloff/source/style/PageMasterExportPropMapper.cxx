@@ -42,13 +42,6 @@ static inline bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const
             (rLine1.LineWidth == rLine2.LineWidth);
 }
 
-inline bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
-{
-    return  (rLine1.Color == rLine2.Color) &&
-            lcl_HasSameLineWidth( rLine1, rLine2 ) &&
-            ( rLine1.LineStyle == rLine2.LineStyle );
-}
-
 static inline void lcl_RemoveState( XMLPropertyState* pState )
 {
     pState->mnIndex = -1;
