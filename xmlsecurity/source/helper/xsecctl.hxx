@@ -85,6 +85,9 @@
 #define TAG_QUALIFYINGPROPERTIES "QualifyingProperties"
 #define TAG_SIGNEDPROPERTIES "SignedProperties"
 #define TAG_RELATIONSHIPREFERENCE "RelationshipReference"
+#define TAG_SIGNATURETIME "SignatureTime"
+#define TAG_FORMAT "Format"
+#define TAG_VALUE "Value"
 
 #define ATTR_XMLNS          "xmlns"
 #define ATTR_ALGORITHM          "Algorithm"
