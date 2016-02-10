@@ -73,7 +73,7 @@ ScAddress ApiCellRangeList::getBaseAddress() const
 {
     if( mvAddresses.empty() )
         return ScAddress();
-    return ScAddress( mvAddresses.front().Sheet, mvAddresses.front().StartColumn, mvAddresses.front().StartRow );
+    return ScAddress( SCCOL( mvAddresses.front().StartColumn ), SCROW( mvAddresses.front().StartRow ), SCTAB( mvAddresses.front().Sheet ) );
 }
 
 css::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const

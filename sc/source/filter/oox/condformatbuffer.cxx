@@ -861,13 +861,8 @@ void CondFormatRule::finalizeImport()
         appendFormula( aReplaceFormula );
         eOperator = SC_COND_DIRECT;
     }
-    
-    ScAddress aPos = mrCondFormat.getRanges().getBaseAddress();
 
-    //This conversion is not necessary now
-    //CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
-    //ScAddress aPos;
-    //ScUnoConversion::FillScAddress( aPos, aBaseAddr );
+    ScAddress aPos = mrCondFormat.getRanges().getBaseAddress();
 
     if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
     {

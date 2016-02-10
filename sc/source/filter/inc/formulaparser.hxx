@@ -107,21 +107,21 @@ public:
     ApiTokenSequence    importFormula(
                             const css::table::CellAddress& rBaseAddr,
                             const OUString& rFormulaString ) const;
+
     ApiTokenSequence    importFormula(
                             const ScAddress& rBaseAddr,
-                            const OUString& rFormulaString ) const;		    
-    
+                            const OUString& rFormulaString ) const;
 
     /** Imports and converts a BIFF12 token array from the passed stream. */
     ApiTokenSequence    importFormula(
                             const css::table::CellAddress& rBaseAddr,
                             FormulaType eType,
                             SequenceInputStream& rStrm ) const;
-			    
+
     ApiTokenSequence    importFormula(
                             const ScAddress& rBaseAddr,
                             FormulaType eType,
-                            SequenceInputStream& rStrm ) const;		    
+                            SequenceInputStream& rStrm ) const;
 
     /** Converts the passed XML formula to an OLE link target. */
     OUString     importOleTargetLink( const OUString& rFormulaString );

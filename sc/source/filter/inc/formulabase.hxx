@@ -657,7 +657,7 @@ public:
     static OUString generateAddress2dString(
                             const css::table::CellAddress& rAddress,
                             bool bAbsolute );
-    
+
     static OUString generateAddress2dString(
                             const ScAddress& rAddress,
                             bool bAbsolute );

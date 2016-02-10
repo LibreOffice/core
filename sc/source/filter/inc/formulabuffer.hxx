@@ -44,6 +44,9 @@ public:
         SharedFormulaEntry(
             const css::table::CellAddress& rAddress,
             const OUString& rTokenStr, sal_Int32 nSharedId );
+        SharedFormulaEntry(
+            const ScAddress& rAddress,
+            const OUString& rTokenStr, sal_Int32 nSharedId );
     };
 
     /**
@@ -59,6 +62,9 @@ public:
         SharedFormulaDesc(
             const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
             const OUString& rCellValue, sal_Int32 nValueType );
+        SharedFormulaDesc(
+            const ScAddress& rAddr, sal_Int32 nSharedId,
+            const OUString& rCellValue, sal_Int32 nValueType );
     };
 
     struct TokenAddressItem
@@ -66,6 +72,7 @@ public:
         OUString maTokenStr;
         css::table::CellAddress maCellAddress;
         TokenAddressItem( const OUString& rTokenStr, const css::table::CellAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
+        TokenAddressItem( const OUString& rTokenStr, const ScAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress.Tab(), rCellAddress.Col(), rCellAddress.Row() ) {}
     };
 
     struct TokenRangeAddressItem
@@ -117,18 +124,26 @@ public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
     void                finalizeImport();
     void                setCellFormula( const css::table::CellAddress& rAddress, const OUString&  );
+    void                setCellFormula( const ScAddress& rAddress, const OUString&  );
 
     void setCellFormula(
         const css::table::CellAddress& rAddress, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
+    void setCellFormula(
+        const ScAddress& rAddress, sal_Int32 nSharedId,
+        const OUString& rCellValue, sal_Int32 nValueType );
 
     void setCellFormulaValue(
         const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
+    void setCellFormulaValue(
+        const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
 
     void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress,
                                              const css::table::CellAddress& rTokenAddress,
                                              const OUString& );
     void                createSharedFormulaMapEntry( const css::table::CellAddress& rAddress,
+                                                     sal_Int32 nSharedId, const OUString& rTokens );
+    void                createSharedFormulaMapEntry( const ScAddress& rAddress,
                                                      sal_Int32 nSharedId, const OUString& rTokens );
 
     /// ensure sizes of vectors matches the number of sheets
