@@ -29,6 +29,8 @@
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>
@@ -994,8 +996,10 @@ static bool lcl_isOOXMLBlacklist(const OUString& rStreamName)
     return std::find_if(vBlacklist.begin(), vBlacklist.end(), [&](const OUStringLiteral& rLiteral) { return rStreamName.startsWith(rLiteral); }) != vBlacklist.end();
 }
 
-void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
+void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation)
 {
+    uno::Reference<embed::XHierarchicalStorageAccess> xHierarchicalStorageAccess(xRootStorage, uno::UNO_QUERY);
+
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute(ATTR_XMLNS, NS_XMLDSIG);
@@ -1087,6 +1091,36 @@ void XSecController::exportOOXMLSignature(const uno::Reference<xml::sax::XDocume
                 pAttributeList->AddAttribute(ATTR_URI, rReference.ouURI);
                 xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
             }
+
+            // Transforms
+            if (rReference.ouURI.endsWith("?ContentType=application/vnd.openxmlformats-package.relationships+xml"))
+            {
+                OUString aURI = rReference.ouURI;
+                // Ignore leading slash.
+                if (aURI.startsWith("/"))
+                    aURI = aURI.copy(1);
+                // Ignore query part of the URI.
+                sal_Int32 nQueryPos = aURI.indexOf('?');
+                if (nQueryPos != -1)
+                    aURI = aURI.copy(0, nQueryPos);
+
+                uno::Reference<io::XInputStream> xRelStream(xHierarchicalStorageAccess->openStreamElementByHierarchicalName(aURI, embed::ElementModes::READ), uno::UNO_QUERY);
+                xDocumentHandler->startElement(TAG_TRANSFORMS, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+                {
+                    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                    pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_RELATIONSHIP);
+                    xDocumentHandler->startElement(TAG_TRANSFORM, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+                }
+                xDocumentHandler->endElement(TAG_TRANSFORM);
+                {
+                    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+                    pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_C14N);
+                    xDocumentHandler->startElement(TAG_TRANSFORM, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+                }
+                xDocumentHandler->endElement(TAG_TRANSFORM);
+                xDocumentHandler->endElement(TAG_TRANSFORMS);
+            }
+
             {
                 rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
                 pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_XMLDSIGSHA256);

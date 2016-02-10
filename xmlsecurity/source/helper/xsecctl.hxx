@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -512,9 +513,9 @@ public:
         throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     /// Writes XML elements inside a single OOXML signature's <Signature> element.
-    bool WriteOOXMLSignature(const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
+    bool WriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
     /// Exports an OOXML signature, called by WriteOOXMLSignature().
-    static void exportOOXMLSignature(const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
+    static void exportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
 };
 
 #endif

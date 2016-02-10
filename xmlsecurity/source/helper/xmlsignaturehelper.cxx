@@ -492,17 +492,17 @@ void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
-bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureIndex)
+bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(uno::Reference<embed::XStorage> xRootStorage, uno::Reference<embed::XStorage> xSignatureStorage, int nSignatureIndex)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
-    uno::Reference<io::XOutputStream> xOutputStream(xStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
     xSaxWriter->setOutputStream(xOutputStream);
     xSaxWriter->startDocument();
 
     mbError = false;
     uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
-    if (!mpXSecController->WriteOOXMLSignature(xDocumentHandler))
+    if (!mpXSecController->WriteOOXMLSignature(xRootStorage, xDocumentHandler))
         mbError = true;
 
     xSaxWriter->endDocument();
