@@ -3072,7 +3072,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
             "SwXFieldEnumeration::nextElement",
             css::uno::Reference<css::uno::XInterface>());
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
     (void)pItems;
 #endif

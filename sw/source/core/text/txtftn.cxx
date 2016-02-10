@@ -606,7 +606,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
 
     SwFootnoteBossFrame *pBoss = pContent->FindFootnoteBossFrame( !bEnd );
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     SwTwips nRstHeight = GetRstHeight();
 #endif
 
@@ -770,7 +770,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
         ValidateFrame();
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     // pFootnoteFrame may have changed due to Calc ...
     SwFootnoteFrame *pFootnoteFrame = pBoss->FindFootnote( this, pFootnote );
     if( pFootnoteFrame && pBoss != pFootnoteFrame->FindFootnoteBossFrame( !bEnd ) )
