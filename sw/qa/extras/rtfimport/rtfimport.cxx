@@ -2484,6 +2484,13 @@ DECLARE_RTFIMPORT_TEST(testTdf97035, "tdf97035.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2299), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf87034, "tdf87034.rtf")
+{
+    // This was A1BC34D, i.e. the first "super" text portion was mis-imported,
+    // and was inserted instead right before the second "super" text portion.
+    CPPUNIT_ASSERT_EQUAL(OUString("A1B3C4D"), getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
