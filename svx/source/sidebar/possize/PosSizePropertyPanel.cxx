@@ -937,7 +937,7 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
     SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
     if(bPosYBlank)
         mpMtrPosY->SetText(OUString());
-    SetPosXYMinMax();
+    SetPosSizeMinMax();
 
     if (mpMtrWidth->GetText().isEmpty())
         bWidthBlank = true;
@@ -1073,7 +1073,7 @@ void PosSizePropertyPanel::DisableControls()
     }
 }
 
-void PosSizePropertyPanel::SetPosXYMinMax()
+void PosSizePropertyPanel::SetPosSizeMinMax()
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
     if (!pPV)
@@ -1118,6 +1118,13 @@ void PosSizePropertyPanel::SetPosXYMinMax()
     mpMtrPosY->SetFirst(basegfx::fround64(fTop));
     mpMtrPosY->SetMax(basegfx::fround64(fBottom));
     mpMtrPosY->SetLast(basegfx::fround64(fBottom));
+
+    double fMaxWidth = maWorkArea.getWidth() - (maRect.getMinX() - fLeft);
+    double fMaxHeight = maWorkArea.getHeight() - (maRect.getMinY() - fTop);
+    mpMtrWidth->SetMax(basegfx::fround64(fMaxWidth));
+    mpMtrWidth->SetLast(basegfx::fround64(fMaxWidth));
+    mpMtrHeight->SetMax(basegfx::fround64(fMaxHeight));
+    mpMtrHeight->SetLast(basegfx::fround64(fMaxHeight));
 }
 
 void PosSizePropertyPanel::UpdateUIScale()
