@@ -350,16 +350,6 @@ static MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window* pS
     return MouseEvent( pDest->ScreenToOutputPixel( aPos ), rE.GetClicks(), rE.GetMode(), rE.GetButtons(), rE.GetModifier() );
 }
 
-CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, vcl::Window* pSource, vcl::Window* pDest )
-{
-    if ( !rCEvt.IsMouseEvent() )
-        return rCEvt;
-
-    Point aPos = pSource->OutputToScreenPixel( rCEvt.GetMousePosPixel() );
-    aPos = pDest->ScreenToOutputPixel( aPos );
-    return CommandEvent( aPos, rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData() );
-}
-
 void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
