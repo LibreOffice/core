@@ -52,13 +52,11 @@ const SvIdentifier & SvMetaAttribute::GetSlotId() const
 
 bool SvMetaAttribute::Test( SvTokenStream & rInStm )
 {
-    bool bOk = true;
     if( GetType()->IsItem() && !GetSlotId().IsSet() )
     {
         throw SvParseException( rInStm, "slot without id declared" );
-        bOk = false;
     }
-    return bOk;
+    return true;
 }
 
 bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
