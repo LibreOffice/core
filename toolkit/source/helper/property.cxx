@@ -311,8 +311,8 @@ void ImplAssertValidPropertyArray()
     if( !bSorted )
     {
         sal_uInt16 nElements;
-        ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
-        ::std::sort(pInfos, pInfos+nElements,ImplPropertyInfoCompareFunctor());
+        ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
+        ::std::sort(pInfo, pInfo+nElements,ImplPropertyInfoCompareFunctor());
         bSorted = true;
     }
 }
@@ -322,14 +322,14 @@ sal_uInt16 GetPropertyId( const OUString& rPropertyName )
     ImplAssertValidPropertyArray();
 
     sal_uInt16 nElements;
-    ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
-    ImplPropertyInfo* pInf = ::std::lower_bound(pInfos,pInfos+nElements,rPropertyName,ImplPropertyInfoCompareFunctor());
+    ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
+    ImplPropertyInfo* pInf = ::std::lower_bound(pInfo,pInfo+nElements,rPropertyName,ImplPropertyInfoCompareFunctor());
 /*
         (ImplPropertyInfo*)
-                                bsearch( &aSearch, pInfos, nElements, sizeof( ImplPropertyInfo ), ImplPropertyInfoCompare );
+                                bsearch( &aSearch, pInfo, nElements, sizeof( ImplPropertyInfo ), ImplPropertyInfoCompare );
 */
 
-    return ( pInf && pInf != (pInfos+nElements) && pInf->aName == rPropertyName) ? pInf->nPropId: 0;
+    return ( pInf && pInf != (pInfo+nElements) && pInf->aName == rPropertyName) ? pInf->nPropId: 0;
 }
 
 const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
@@ -337,12 +337,12 @@ const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
     ImplAssertValidPropertyArray();
 
     sal_uInt16 nElements;
-    ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
+    ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
     sal_uInt16 n;
-    for ( n = 0; n < nElements && pInfos[n].nPropId != nPropertyId; ++n)
+    for ( n = 0; n < nElements && pInfo[n].nPropId != nPropertyId; ++n)
         ;
 
-    return (n < nElements) ? &pInfos[n] : nullptr;
+    return (n < nElements) ? &pInfo[n] : nullptr;
 }
 
 sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )
@@ -350,10 +350,10 @@ sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )
     ImplAssertValidPropertyArray();
 
     sal_uInt16 nElements;
-    ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
+    ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
     for ( sal_uInt16 n = nElements; n; )
     {
-        if ( pInfos[--n].nPropId == nPropertyId )
+        if ( pInfo[--n].nPropId == nPropertyId )
             return n;
     }
     return 0xFFFF;

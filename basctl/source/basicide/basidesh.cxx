@@ -324,7 +324,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
 
     // remove lib info
     if (ExtraData* pData = GetExtraData())
-        pData->GetLibInfos().RemoveInfoFor( _rDocument );
+        pData->GetLibInfo().RemoveInfoFor( _rDocument );
 
     if ( bSetCurLib )
         SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", true, false );
@@ -665,9 +665,9 @@ void Shell::UpdateWindows()
 
                 if ( !bProtected )
                 {
-                    LibInfos::Item const* pLibInfoItem = nullptr;
+                    LibInfo::Item const* pLibInfoItem = nullptr;
                     if (ExtraData* pData = GetExtraData())
-                        pLibInfoItem = pData->GetLibInfos().GetInfo(*doc, aLibName);
+                        pLibInfoItem = pData->GetLibInfo().GetInfo(*doc, aLibName);
 
                     // modules
                     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )

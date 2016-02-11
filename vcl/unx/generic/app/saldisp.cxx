@@ -136,16 +136,16 @@ static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
 {
     int         nInfos;
     XVisualInfo aTemplate;
-    XVisualInfo*pInfos;
+    XVisualInfo*pInfo;
 
     aTemplate.visualid = nVID;
 
-    pInfos = XGetVisualInfo( pDisplay, VisualIDMask, &aTemplate, &nInfos );
-    if( !pInfos )
+    pInfo = XGetVisualInfo( pDisplay, VisualIDMask, &aTemplate, &nInfos );
+    if( !pInfo )
         return false;
 
-    rVI = *pInfos;
-    XFree( pInfos );
+    rVI = *pInfo;
+    XFree( pInfo );
 
     DBG_ASSERT( rVI.visualid == nVID,
                 "sal_GetVisualInfo: could not get correct visual by visualId" );

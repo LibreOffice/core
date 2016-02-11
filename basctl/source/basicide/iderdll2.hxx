@@ -37,7 +37,7 @@ class ExtraData
 private:
     std::unique_ptr<SvxSearchItem> pSearchItem;
 
-    LibInfos        aLibInfos;
+    LibInfo        aLibInfo;
 
     EntryDescriptor m_aLastEntryDesc;
 
@@ -54,7 +54,7 @@ public:
     ExtraData();
     ~ExtraData();
 
-    LibInfos&         GetLibInfos () { return aLibInfos; }
+    LibInfo&         GetLibInfo () { return aLibInfo; }
 
     EntryDescriptor&  GetLastEntryDescriptor () { return m_aLastEntryDesc; }
     void              SetLastEntryDescriptor (EntryDescriptor& rDesc) { m_aLastEntryDesc = rDesc; }
