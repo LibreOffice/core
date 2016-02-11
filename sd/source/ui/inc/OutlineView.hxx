@@ -151,8 +151,8 @@ public:
     void UpdateParagraph( sal_Int32 nPara );
 
 protected:
-    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos ) override;
-    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos ) override;
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo ) override;
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo ) override;
 
 private:
     /** call this method before you do anything that can modify the outliner

@@ -972,7 +972,7 @@ void Invocation_Impl::fillInfoForMethod
     sal_Int32 nParamCount = aParamInfos.getLength();
     if( nParamCount > 0 )
     {
-        const ParamInfo* pInfos = aParamInfos.getConstArray();
+        const ParamInfo* pInfo = aParamInfos.getConstArray();
 
         rInfo.aParamTypes.realloc( nParamCount );
         Type* pParamTypes = rInfo.aParamTypes.getArray();
@@ -981,10 +981,10 @@ void Invocation_Impl::fillInfoForMethod
 
         for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
         {
-            Reference< XIdlClass > xParamClass = pInfos[i].aType;
+            Reference< XIdlClass > xParamClass = pInfo[i].aType;
             Type aParamType( xParamClass->getTypeClass(), xParamClass->getName() );
             pParamTypes[ i ] = aParamType;
-            pParamModes[ i ] = pInfos[i].aMode;
+            pParamModes[ i ] = pInfo[i].aMode;
         }
     }
 }

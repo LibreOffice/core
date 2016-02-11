@@ -1304,10 +1304,10 @@ void OpenGLContext::initGLWindow(Visual* pVisual)
         XVisualInfo aTemplate;
         aTemplate.visualid = XVisualIDFromVisual( pVisual );
         int nVisuals = 0;
-        XVisualInfo* pInfos = XGetVisualInfo( m_aGLWin.dpy, VisualIDMask, &aTemplate, &nVisuals );
+        XVisualInfo* pInfo = XGetVisualInfo( m_aGLWin.dpy, VisualIDMask, &aTemplate, &nVisuals );
         if( nVisuals != 1 )
             SAL_WARN( "vcl.opengl", "match count for visual id is not 1" );
-        m_aGLWin.vi = pInfos;
+        m_aGLWin.vi = pInfo;
     }
 
     // Check multisample support

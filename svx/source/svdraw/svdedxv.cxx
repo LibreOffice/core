@@ -1992,14 +1992,14 @@ void SdrObjEditView::MarkListHasChanged()
     }
 }
 
-IMPL_LINK_TYPED( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos, void )
+IMPL_LINK_TYPED( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfo, void )
 {
-    OnEndPasteOrDrop( pInfos );
+    OnEndPasteOrDrop( pInfo );
 }
 
-IMPL_LINK_TYPED( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos, void )
+IMPL_LINK_TYPED( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfo, void )
 {
-    OnBeginPasteOrDrop( pInfos );
+    OnBeginPasteOrDrop( pInfo );
 }
 
 void SdrObjEditView::OnBeginPasteOrDrop( PasteOrDropInfos* )

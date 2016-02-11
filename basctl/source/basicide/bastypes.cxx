@@ -222,7 +222,7 @@ void BaseWindow::OnNewDocument ()
 void BaseWindow::InsertLibInfo () const
 {
     if (ExtraData* pData = GetExtraData())
-        pData->GetLibInfos().InsertInfo(m_aDocument, m_aLibName, m_aName, GetType());
+        pData->GetLibInfo().InsertInfo(m_aDocument, m_aLibName, m_aName, GetType());
 }
 
 bool BaseWindow::Is (
@@ -703,16 +703,16 @@ sal_uLong CalcLineCount( SvStream& rStream )
 }
 
 
-// LibInfos
+// LibInfo
 
 
-LibInfos::LibInfos ()
+LibInfo::LibInfo ()
 { }
 
-LibInfos::~LibInfos ()
+LibInfo::~LibInfo ()
 { }
 
-void LibInfos::InsertInfo (
+void LibInfo::InsertInfo (
     ScriptDocument const& rDocument,
     OUString const& rLibName,
     OUString const& rCurrentName,
@@ -724,7 +724,7 @@ void LibInfos::InsertInfo (
     m_aMap.insert(Map::value_type(aKey, Item(rDocument, rCurrentName, eCurrentType)));
 }
 
-void LibInfos::RemoveInfoFor (ScriptDocument const& rDocument)
+void LibInfo::RemoveInfoFor (ScriptDocument const& rDocument)
 {
     Map::iterator it;
     for (it = m_aMap.begin(); it != m_aMap.end(); ++it)
@@ -734,7 +734,7 @@ void LibInfos::RemoveInfoFor (ScriptDocument const& rDocument)
         m_aMap.erase(it);
 }
 
-LibInfos::Item const* LibInfos::GetInfo (
+LibInfo::Item const* LibInfo::GetInfo (
     ScriptDocument const& rDocument, OUString const& rLibName
 )
 {
@@ -742,24 +742,24 @@ LibInfos::Item const* LibInfos::GetInfo (
     return it != m_aMap.end() ? &it->second : nullptr;
 }
 
-LibInfos::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :
+LibInfo::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :
     m_aDocument(rDocument), m_aLibName(rLibName)
 { }
 
-LibInfos::Key::~Key ()
+LibInfo::Key::~Key ()
 { }
 
-bool LibInfos::Key::operator == (Key const& rKey) const
+bool LibInfo::Key::operator == (Key const& rKey) const
 {
     return m_aDocument == rKey.m_aDocument && m_aLibName == rKey.m_aLibName;
 }
 
-size_t LibInfos::Key::Hash::operator () (Key const& rKey) const
+size_t LibInfo::Key::Hash::operator () (Key const& rKey) const
 {
     return rKey.m_aDocument.hashCode() + rKey.m_aLibName.hashCode();
 }
 
-LibInfos::Item::Item (
+LibInfo::Item::Item (
     ScriptDocument const& rDocument,
     OUString const& rCurrentName,
     ItemType eCurrentType
@@ -769,7 +769,7 @@ LibInfos::Item::Item (
     m_eCurrentType(eCurrentType)
 { }
 
-LibInfos::Item::~Item ()
+LibInfo::Item::~Item ()
 { }
 
 bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )

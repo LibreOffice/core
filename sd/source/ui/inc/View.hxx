@@ -243,8 +243,8 @@ protected:
     DECL_LINK_TYPED( OnParagraphInsertedHdl, ::Outliner *, void );
     DECL_LINK_TYPED( OnParagraphRemovingHdl, ::Outliner *, void );
 
-    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos ) override;
-    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos ) override;
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo ) override;
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo ) override;
 
     SdDrawDocument&         mrDoc;
     DrawDocShell*           mpDocSh;

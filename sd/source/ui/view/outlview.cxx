@@ -1724,18 +1724,18 @@ void OutlineView::UpdateParagraph( sal_Int32 nPara )
     mrOutliner.SetParaAttribs( nPara, aNewAttrs2 );
 }
 
-void OutlineView::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
+void OutlineView::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfo*/ )
 {
 }
 
 /** this is called after a paste or drop operation, make sure that the newly inserted paragraphs
     get the correct style sheet and new slides are inserted. */
-void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
+void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
 {
     SdPage* pPage = nullptr;
     SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
 
-    for( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+    for( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
     {
         Paragraph* pPara = mrOutliner.GetParagraph( nPara );
 
@@ -1755,7 +1755,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
         if( !pPara )
             continue; // fatality!?
 
-        if( bPage && (nPara != pInfos->nStartPara) )
+        if( bPage && (nPara != pInfo->nStartPara) )
         {
             // insert new slide for this paragraph
             pPage = InsertSlideForParagraph( pPara );

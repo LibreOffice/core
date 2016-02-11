@@ -1272,16 +1272,16 @@ script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& Mod
     {
         throw NoSuchElementException();
     }
-    return mModuleInfos[ ModuleName ];
+    return mModuleInfo[ ModuleName ];
 }
 
 sal_Bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
     throw (RuntimeException, std::exception)
 {
     bool bRes = false;
-    ModuleInfoMap::iterator it = mModuleInfos.find( ModuleName );
+    ModuleInfoMap::iterator it = mModuleInfo.find( ModuleName );
 
-    if ( it != mModuleInfos.end() )
+    if ( it != mModuleInfo.end() )
     {
         bRes = true;
     }
@@ -1295,7 +1295,7 @@ void SAL_CALL SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, co
     {
         throw ElementExistException();
     }
-    mModuleInfos[ ModuleName ] = ModuleInfo;
+    mModuleInfo[ ModuleName ] = ModuleInfo;
 }
 
 void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
@@ -1306,7 +1306,7 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
     {
         throw NoSuchElementException();
     }
-    mModuleInfos.erase( mModuleInfos.find( ModuleName ) );
+    mModuleInfo.erase( mModuleInfo.find( ModuleName ) );
 }
 
 }   // namespace basic

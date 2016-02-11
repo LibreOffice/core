@@ -77,11 +77,11 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     XVisualInfo aTemplate;
     aTemplate.visualid = aVisID;
     int nVisuals = 0;
-    XVisualInfo* pInfos = XGetVisualInfo( pDisp, VisualIDMask, &aTemplate, &nVisuals );
+    XVisualInfo* pInfo = XGetVisualInfo( pDisp, VisualIDMask, &aTemplate, &nVisuals );
     // only one VisualInfo structure can match the visual id
     DBG_ASSERT( nVisuals == 1, "match count for visual id is not 1" );
-    unsigned int nDepth     = pInfos->depth;
-    XFree( pInfos );
+    unsigned int nDepth     = pInfo->depth;
+    XFree( pInfo );
     XSetWindowAttributes aAttribs;
     aAttribs.event_mask =   StructureNotifyMask
                           | ButtonPressMask

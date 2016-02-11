@@ -1187,13 +1187,13 @@ void View::CheckPossibilities()
     maSmartTags.CheckPossibilities();
 }
 
-void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
+void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfo*/ )
 {
 }
 
 /** this is called after a paste or drop operation, make sure that the newly inserted paragraphs
     get the correct style sheet. */
-void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
+void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
 {
     /* Style Sheet handling */
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
@@ -1216,7 +1216,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             // new paragraph, depending on the paragraph depth
             SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
 
-            for ( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+            for ( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
             {
                 sal_Int16 nDepth = pOutliner->GetDepth( nPara );
 
@@ -1240,7 +1240,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
         else
         {
             // just put the object style on each new paragraph
-            for ( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+            for ( sal_Int32 nPara = pInfo->nStartPara; nPara <= pInfo->nEndPara; nPara++ )
             {
                 pOutliner->SetStyleSheet( nPara, pStyleSheet );
             }

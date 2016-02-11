@@ -4055,10 +4055,10 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
         sal_uInt32 nParamCount = aParamSeq.getLength();
         if( nParamCount > 1 )
         {
-            const ParamInfo* pInfos = aParamSeq.getConstArray();
+            const ParamInfo* pInfo = aParamSeq.getConstArray();
             for( sal_uInt32 i = 0 ; i < nParamCount ; i++ )
             {
-                if( pInfos[ i ].aMode != ParamMode_IN )
+                if( pInfo[ i ].aMode != ParamMode_IN )
                 {
                     bApproveFiring = true;
                     break;
