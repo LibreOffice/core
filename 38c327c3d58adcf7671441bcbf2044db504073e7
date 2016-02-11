@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_275881fa",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-11T09:16:34Z",
+      "side": 1,
+      "message": "Better not do this, those fLeft, fRight etc. values are clamped against LONG_MAX (double equivalent thereof) for a reason -- just reuse the ones from above",
+      "revId": "38c327c3d58adcf7671441bcbf2044db504073e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_6772897e",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-11T09:16:34Z",
+      "side": 1,
+      "message": "Very misleading variable name (the same for fNewY below)\n\nThis is the maximum width of the object, right? Make it fMaxWidth or sth along that line",
+      "revId": "38c327c3d58adcf7671441bcbf2044db504073e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
