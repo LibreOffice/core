@@ -36,8 +36,8 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     if( pTok->Is( pName ) )
     {
         bool bOk = true;
-        bool bBraket = rInStm.Read( '(' );
-        if( bBraket || rInStm.Read( '=' ) )
+        bool bBracket = rInStm.Read( '(' );
+        if( bBracket || rInStm.Read( '=' ) )
         {
             pTok = &rInStm.GetToken();
             if( pTok->IsBool() )
@@ -46,7 +46,7 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 
                 rInStm.GetToken_Next();
             }
-            if( bOk && bBraket )
+            if( bOk && bBracket )
                 bOk = rInStm.Read( ')' );
         }
         else
@@ -66,8 +66,8 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
     if( pTok->Is( pName ) )
     {
         bool bOk = true;
-        bool bBraket = rInStm.Read( '(' );
-        if( bBraket || rInStm.Read( '=' ) )
+        bool bBracket = rInStm.Read( '(' );
+        if( bBracket || rInStm.Read( '=' ) )
         {
             pTok = &rInStm.GetToken();
             if( pTok->IsIdentifier() )
@@ -75,7 +75,7 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
                 setString(pTok->GetString());
                 rInStm.GetToken_Next();
             }
-            if( bOk && bBraket )
+            if( bOk && bBracket )
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
@@ -116,8 +116,8 @@ bool ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString
     if( pTok->Is( pName ) )
     {
         bool bOk = true;
-        bool bBraket = rInStm.Read( '(' );
-        if( bBraket || rInStm.Read( '=' ) )
+        bool bBracket = rInStm.Read( '(' );
+        if( bBracket || rInStm.Read( '=' ) )
         {
             pTok = &rInStm.GetToken();
             if( pTok->IsString() )
@@ -125,7 +125,7 @@ bool ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString
                 aRetString = pTok->GetString();
                 rInStm.GetToken_Next();
             }
-            if( bOk && bBraket )
+            if( bOk && bBracket )
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
