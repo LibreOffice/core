@@ -29,8 +29,6 @@
 #include <string.h>
 #include <stdio.h>
 
-extern AllocMode alloc_mode;
-
 /* ================================================================= *
  *
  * cache internals.
