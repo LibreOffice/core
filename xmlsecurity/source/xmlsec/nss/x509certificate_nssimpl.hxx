@@ -29,11 +29,12 @@
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
+#include <certificate.hxx>
 #include "cert.h"
 
 class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::security::XCertificate ,
-    ::com::sun::star::lang::XUnoTunnel >
+    ::com::sun::star::lang::XUnoTunnel > , public xmlsecurity::Certificate
 {
     private:
         CERTCertificate* m_pCert ;
@@ -81,6 +82,9 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException, std::exception) override;
+
+        /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
+        virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() throw (css::uno::RuntimeException, std::exception) override;
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
