@@ -66,11 +66,10 @@ bool ScBiffReader::nextRecord()
     mpStream->ReadUInt16( mnId ).ReadUInt16( mnLength );
 
     mnOffset = mpStream->Tell();
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
-        (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
 
-#if 1  // rather verbose
+    SAL_WARN("sc.qpro", "Read record " << std::hex << (unsigned)mnId << " length " << std::hex << 
+                        (unsigned)mnLength << " at offset " << std::hex << (unsigned)mnOffset << "\n");
+
     int len = mnLength;
     while (len > 0) {
         int i, chunk = len < 16 ? len : 16;
@@ -78,17 +77,15 @@ bool ScBiffReader::nextRecord()
         mpStream->Read( data, chunk );
 
         for (i = 0; i < chunk; i++)
-            fprintf( stderr, "%.2x ", data[i] );
-        fprintf( stderr, "| " );
+            SAL_WARN("sc.qpro", std::hex << data[i]);
+        SAL_WARN( "sc.qpro", "| " );
         for (i = 0; i < chunk; i++)
-            fprintf( stderr, "%c", data[i] < 127 && data[i] > 30 ? data[i] : '.' );
-        fprintf( stderr, "\n" );
+            SAL_WARN( "sc.qpro", (data[i] < 127 && data[i] > 30 ? data[i] : '.') );
+        SAL_WARN( "sc.qpro", "\n" );
 
         len -= chunk;
     }
     mpStream->Seek( mnOffset );
-#endif
-#endif
     return true;
 }
 
