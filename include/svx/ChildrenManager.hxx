@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVX_CHILDRENMANAGER_HXX
 #define INCLUDED_SVX_CHILDRENMANAGER_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -67,8 +70,7 @@ class ChildrenManagerImpl;
     accessible objects access to data normally known only to the top level
     owner of the shapes.</p>
 */
-class SVX_DLLPUBLIC ChildrenManager
-    :   public IAccessibleViewForwarderListener
+class SVX_DLLPUBLIC ChildrenManager final
 {
 public:
     /** Create a children manager, which manages the children of the given
@@ -98,7 +100,7 @@ public:
     /** If there still are managed children these are marked as DEFUNC and
         released.
     */
-    virtual ~ChildrenManager();
+    ~ChildrenManager();
 
     /** Return the number of currently visible accessible children.
         @return
@@ -190,13 +192,13 @@ public:
     */
     void RemoveFocus();
 
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder) override;
-
-protected:
-    ChildrenManagerImpl* mpImpl;
+    void ViewForwarderChanged(
+        IAccessibleViewForwarderListener::ChangeType aChangeType,
+        const IAccessibleViewForwarder* pViewForwarder);
 
 private:
+    rtl::Reference<ChildrenManagerImpl> mpImpl;
+
     ChildrenManager (const ChildrenManager&) = delete;
     ChildrenManager& operator= (const ChildrenManager&) = delete;
 };

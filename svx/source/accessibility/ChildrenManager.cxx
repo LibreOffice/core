@@ -33,21 +33,17 @@ ChildrenManager::ChildrenManager (
     const css::uno::Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
-    : mpImpl (nullptr)
+    : mpImpl(
+        new ChildrenManagerImpl(
+            rxParent, rxShapeList, rShapeTreeInfo, rContext))
 {
-    mpImpl = new ChildrenManagerImpl (rxParent, rxShapeList, rShapeTreeInfo, rContext);
-    if (mpImpl != nullptr)
-        mpImpl->Init ();
-    else
-        throw uno::RuntimeException(
-            "ChildrenManager::ChildrenManager can't create implementation object", nullptr);
+    mpImpl->Init ();
 }
 
 
 ChildrenManager::~ChildrenManager()
 {
-    if (mpImpl != nullptr)
-        mpImpl->dispose();
+    mpImpl->dispose();
 
     // emtpy
     OSL_TRACE ("~ChildrenManager");
@@ -55,7 +51,6 @@ ChildrenManager::~ChildrenManager()
 
 long ChildrenManager::GetChildCount() const throw ()
 {
-    assert(mpImpl != nullptr);
     return mpImpl->GetChildCount();
 }
 
@@ -63,14 +58,12 @@ css::uno::Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
     throw (css::uno::RuntimeException,
            css::lang::IndexOutOfBoundsException)
 {
-    assert(mpImpl != nullptr);
     return mpImpl->GetChild (nIndex);
 }
 
 Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShape>& xShape)
     throw (css::uno::RuntimeException)
 {
-    assert(mpImpl != nullptr);
     return mpImpl->GetChild (xShape);
 }
 
@@ -78,63 +71,54 @@ css::uno::Reference<css::drawing::XShape> ChildrenManager::GetChildShape(long nI
     throw (css::uno::RuntimeException,
            css::lang::IndexOutOfBoundsException)
 {
-    assert(mpImpl != nullptr);
     return mpImpl->GetChildShape(nIndex);
 }
 
 void ChildrenManager::Update (bool bCreateNewObjectsOnDemand)
 {
-    assert(mpImpl != nullptr);
     mpImpl->Update (bCreateNewObjectsOnDemand);
 }
 
 void ChildrenManager::SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList)
 {
-    assert(mpImpl != nullptr);
     mpImpl->SetShapeList (xShapeList);
 }
 
 void ChildrenManager::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
 {
-    assert(mpImpl != nullptr);
     mpImpl->AddAccessibleShape (shape);
 }
 
 void ChildrenManager::ClearAccessibleShapeList()
 {
-    assert(mpImpl != nullptr);
     mpImpl->ClearAccessibleShapeList ();
 }
 
 void ChildrenManager::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
 {
-    assert(mpImpl != nullptr);
     mpImpl->SetInfo (rShapeTreeInfo);
 }
 
 void ChildrenManager::UpdateSelection()
 {
-    assert(mpImpl != nullptr);
     mpImpl->UpdateSelection ();
 }
 
 bool ChildrenManager::HasFocus()
 {
-    assert(mpImpl != nullptr);
     return mpImpl->HasFocus ();
 }
 
 void ChildrenManager::RemoveFocus()
 {
-    assert(mpImpl != nullptr);
     mpImpl->RemoveFocus ();
 }
 
 // IAccessibleViewForwarderListener
-void ChildrenManager::ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder)
+void ChildrenManager::ViewForwarderChanged(
+    IAccessibleViewForwarderListener::ChangeType aChangeType,
+    const IAccessibleViewForwarder* pViewForwarder)
 {
-    assert(mpImpl != nullptr);
     mpImpl->ViewForwarderChanged (aChangeType, pViewForwarder);
 }
 
