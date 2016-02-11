@@ -229,13 +229,13 @@ namespace abp
 
             for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {
-#ifdef DBG_UTIL
-                OUString sRedundantProgrammaticName;
-                aFields.openNode( *pExistentFields ).getNodeValue( sProgrammaticNodeName ) >>= sRedundantProgrammaticName;
-                DBG_ASSERT( sRedundantProgrammaticName == *pExistentFields,
-                    "fieldmapping::writeTemplateAddressFieldMapping: inconsistent config data!" );
+                SAL_WARN_IF(
+                    ((aFields.openNode(*pExistentFields)
+                      .getNodeValue(sProgrammaticNodeName).get<OUString>())
+                     != *pExistentFields),
+                    "extensions.abpilot",
+                    "fieldmapping::writeTemplateAddressFieldMapping: inconsistent config data!");
                     // there should be a redundancy in the config data .... if this asserts, there isn't anymore!
-#endif
 
                 // do we have a new alias for the programmatic?
                 MapString2String::iterator aPos = aFieldAssignment.find( *pExistentFields );
