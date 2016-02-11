@@ -184,11 +184,9 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                               || pTok->GetChar() == '^'
                               || pTok->GetChar() == '~' )
                             {
-                                OStringBuffer aStr("unknown operator '");
-                                aStr.append(pTok->GetChar());
-                                aStr.append("'in define");
+                                OString aStr = "unknown operator '" + OString(pTok->GetChar()) + "'in define";
                                 // set error
-                                SetError( aStr.makeStringAndClear(), *pTok );
+                                SetError( aStr, *pTok );
                                 WriteError( aTokStm );
                                 return false;
                             }
@@ -244,9 +242,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     if (!ReadIdFile(OStringToOUString(aName.toString(),
                         RTL_TEXTENCODING_ASCII_US)))
                     {
-                        OStringBuffer aStr("cannot read file: ");
-                        aStr.append(aName.makeStringAndClear());
-                        SetError(aStr.makeStringAndClear(), *pTok);
+                        SetError("cannot read file: " + aName, *pTok);
                         WriteError( aTokStm );
                         return false;
                     }
