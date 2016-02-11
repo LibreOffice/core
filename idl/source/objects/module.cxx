@@ -29,7 +29,7 @@
 
 
 SvMetaModule::SvMetaModule( bool bImp )
-    : bImported( bImp ), bIsModified( false )
+    : bImported( bImp )
 {
 }
 
@@ -149,8 +149,6 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
 bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    bIsModified = true; // up to now always when compiler running
-
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken&    rTok  = rInStm.GetToken_Next();
     bool        bOk = rTok.Is( SvHash_module() );

@@ -29,8 +29,7 @@ class SvMetaModule : public SvMetaReference
 // browser
     OString                 aSlotIdFile;
 
-    bool                    bImported   : 1,
-                            bIsModified : 1;
+    bool                    bImported   : 1;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
