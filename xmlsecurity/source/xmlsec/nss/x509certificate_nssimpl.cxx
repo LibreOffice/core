@@ -35,6 +35,7 @@
 #include "sanextension_nssimpl.hxx"
 #include <tools/time.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
 
@@ -337,8 +338,22 @@ OUString getAlgorithmDescription(SECAlgorithmID *aid)
     if( pCert != nullptr )
     {
         SECStatus rv;
-        unsigned char fingerprint[20];
-        int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
+        unsigned char fingerprint[32];
+        int length = 0;
+        switch (id)
+        {
+        case SEC_OID_MD5:
+            length = MD5_LENGTH;
+            break;
+        case SEC_OID_SHA1:
+            length = SHA1_LENGTH;
+            break;
+        case SEC_OID_SHA256:
+            length = SHA256_LENGTH;
+            break;
+        default:
+            break;
+        }
 
         memset(fingerprint, 0, sizeof fingerprint);
         rv = PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
@@ -407,6 +422,11 @@ OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getThumbprint(m_pCert, SEC_OID_SHA1);
+}
+
+uno::Sequence<sal_Int8> X509Certificate_NssImpl::getSHA256Thumbprint() throw (uno::RuntimeException, std::exception)
+{
+    return getThumbprint(m_pCert, SEC_OID_SHA256);
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getMD5Thumbprint()
