@@ -926,11 +926,12 @@ namespace
     {
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
-#if HAVE_FEATURE_MACOSX_SANDBOX
-        return eProt == INetProtocol::Sftp;
-#else
-        return eProt == INetProtocol::File || eProt == INetProtocol::Sftp;
+#if !HAVE_FEATURE_MACOSX_SANDBOX
+        if (eProt == INetProtocol::File) {
+            return true;
+        }
 #endif
+        return eProt == INetProtocol::Smb || eProt == INetProtocol::Sftp;
     }
 }
 
