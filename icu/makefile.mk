@@ -42,7 +42,7 @@ TARFILE_MD5=
 .ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILES=${TARFILE_NAME}.patch icu-mp.patch
+PATCH_FILES=${TARFILE_NAME}.patch icu-mp.patch icu-win-layoutex.patch
 
 # ADDITIONAL_FILES=
 

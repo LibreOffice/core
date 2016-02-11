@@ -1,0 +1,10 @@
+--- misc/build/icu/source/allinone/allinone.sln	2009-01-15 09:46:06.000000000 +0200
++++ misc/build/icu/source/allinone/allinone.sln	2016-02-11 01:00:15.492392000 +0200
+@@ -114,6 +114,7 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "layoutex", "..\layoutex\layoutex.vcproj", "{37FC2C7F-1904-4811-8955-2F478830EAD1}"
+ 	ProjectSection(ProjectDependencies) = postProject
++		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+ 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+ 		{C920062A-0647-4553-A3B2-37C58065664B} = {C920062A-0647-4553-A3B2-37C58065664B}
+ 	EndProjectSection
