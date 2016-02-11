@@ -43,10 +43,7 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         sal_uInt32 nTokPos = rInStm.Tell();
         if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile, RTL_TEXTENCODING_ASCII_US)) )
         {
-            OStringBuffer aStr("cannot read file: ");
-            aStr.append(aSlotIdFile);
-            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
-            rBase.WriteError( rInStm );
+            rBase.SetAndWriteError( rInStm, "cannot read file: " + aSlotIdFile );
 
             rInStm.Seek( nTokPos );
         }

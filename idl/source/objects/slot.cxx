@@ -292,11 +292,9 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                         {
                             return;
                         }
-                        rBase.SetError( "the SlotType is not a item", rInStm.GetToken() );
-                        rBase.WriteError( rInStm );
+                        rBase.SetAndWriteError( rInStm, "the SlotType is not a item" );
                     }
-                    rBase.SetError( "SlotType with unknown item type", rInStm.GetToken() );
-                    rBase.WriteError( rInStm );
+                    rBase.SetAndWriteError( rInStm, "SlotType with unknown item type" );
                 }
             }
             rInStm.Seek( nTokPos );
@@ -335,8 +333,7 @@ bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             pType = pType->GetReturnType();
         if( !pType->IsItem() )
         {
-            rBase.SetError( "this attribute is not a slot", rInStm.GetToken() );
-            rBase.WriteError( rInStm );
+            rBase.SetAndWriteError( rInStm, "this attribute is not a slot" );
             bOk = false;
         }
     }
@@ -362,11 +359,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         }
         else
         {
-            OStringBuffer aStr( "attribute " );
-            aStr.append(pAttr->GetName());
-            aStr.append(" is method or variable but not a slot");
-            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
-            rBase.WriteError( rInStm );
+            rBase.SetAndWriteError( rInStm, "attribute " + pAttr->GetName() + " is method or variable but not a slot" );
             bOk = false;
         }
     }
@@ -395,11 +388,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             }
             else
             {
-                OStringBuffer aStr("attribute ");
-                aStr.append(pAttr2->GetName());
-                aStr.append(" is method or variable but not a slot");
-                rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
-                rBase.WriteError( rInStm );
+                rBase.SetAndWriteError( rInStm, "attribute " + pAttr2->GetName() + " is method or variable but not a slot" );
                 bOk = false;
             }
         }

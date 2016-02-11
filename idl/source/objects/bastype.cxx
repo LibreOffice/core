@@ -102,10 +102,7 @@ void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            OStringBuffer aStr("no value for identifier <");
-            aStr.append(getString()).append("> ");
-            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
-            rBase.WriteError( rInStm );
+            rBase.SetAndWriteError( rInStm, "no value for identifier <" + getString() + "> " );
         }
     }
     rInStm.Seek( nTokPos );

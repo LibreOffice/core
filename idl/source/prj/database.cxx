@@ -85,6 +85,12 @@ void SvIdlDataBase::SetError( const OString& rError, SvToken& rTok )
     }
 }
 
+void SvIdlDataBase::SetAndWriteError( SvTokenStream & rInStm, const OString& rError )
+{
+    SetError( rError, rInStm.GetToken() );
+    WriteError( rInStm );
+}
+
 void SvIdlDataBase::Push( SvMetaObject * pObj )
 {
     GetStack().push_back( pObj );

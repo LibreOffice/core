@@ -56,8 +56,7 @@ bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
     bool bOk = true;
     if( GetType()->IsItem() && !GetSlotId().IsSet() )
     {
-        rBase.SetError( "slot without id declared", rInStm.GetToken() );
-        rBase.WriteError( rInStm );
+        rBase.SetAndWriteError( rInStm, "slot without id declared" );
         bOk = false;
     }
     return bOk;
@@ -208,9 +207,7 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            OString aStr("wrong typedef: ");
-            rBase.SetError( aStr, rInStm.GetToken() );
-            rBase.WriteError( rInStm );
+            rBase.SetAndWriteError( rInStm, "wrong typedef: ");
         }
     }
     if( !bOk )

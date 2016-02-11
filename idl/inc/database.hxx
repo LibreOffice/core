@@ -111,6 +111,7 @@ public:
                                     sal_uLong nRow = 0, sal_uLong nColumn = 0 );
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const OString& rError, SvToken& rTok );
+    void                    SetAndWriteError( SvTokenStream & rInStm, const OString& rError );
     void                    Push( SvMetaObject * pObj );
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     bool                    FindId( const OString& rIdName, sal_uLong * pVal );

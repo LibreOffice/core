@@ -65,8 +65,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         else
         {
             // set error
-            rBase.SetError( "unknown imported interface", rInStm.GetToken() );
-            rBase.WriteError( rInStm );
+            rBase.SetAndWriteError( rInStm, "unknown imported interface" );
         }
     }
     else
@@ -120,8 +119,7 @@ bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             if( !bOk )
             {
                 // set error
-                rBase.SetError( "unknown super class", rInStm.GetToken() );
-                rBase.WriteError( rInStm );
+                rBase.SetAndWriteError( rInStm, "unknown super class" );
             }
         }
         if( bOk )
@@ -158,11 +156,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 
-                OStringBuffer aStr("Attribute's ");
-                aStr.append(pS->GetName());
-                aStr.append(" with different id's");
-                rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
-                rBase.WriteError( rInStm );
+                rBase.SetAndWriteError(rInStm, "Attribute's " + pS->GetName() + " with different id's");
                 return false;
              }
         }
@@ -177,13 +171,8 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 
-                OStringBuffer aStr("Attribute ");
-                aStr.append(pS->GetName());
-                aStr.append(" and Attribute ");
-                aStr.append(rAttr.GetName());
-                aStr.append(" with equal id's");
-                rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
-                rBase.WriteError( rInStm );
+                OString aStr = "Attribute " + pS->GetName() + " and Attribute " + rAttr.GetName() + " with equal id's";
+                rBase.SetAndWriteError(rInStm, aStr);
                 return false;
              }
         }
