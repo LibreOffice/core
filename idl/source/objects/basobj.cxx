@@ -108,7 +108,7 @@ void SvMetaObject::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
 }
 
-bool SvMetaObject::Test( SvIdlDataBase &, SvTokenStream & )
+bool SvMetaObject::Test( SvTokenStream & )
 {
     return true;
 }

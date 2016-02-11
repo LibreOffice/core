@@ -136,7 +136,7 @@ public:
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = nullptr; }
 
-    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    virtual bool        Test( SvTokenStream & rInStm ) override;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm ) override;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;

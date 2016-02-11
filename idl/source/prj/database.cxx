@@ -29,6 +29,21 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
+
+SvParseException::SvParseException( SvTokenStream & rInStm, const OString& rError )
+{
+    SvToken& rTok = rInStm.GetToken();
+    aError = SvIdlError( rTok.GetLine(), rTok.GetColumn() );
+    aError.SetText( rError );
+};
+
+SvParseException::SvParseException( const OString& rError, SvToken& rTok )
+{
+    aError = SvIdlError( rTok.GetLine(), rTok.GetColumn() );
+    aError.SetText( rError );
+};
+
+
 SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( false )
     , nUniqueId( 0 )
@@ -150,16 +165,9 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                 {
                     rTok = aTokStm.GetToken_Next();
                     OString aDefName;
-                    if( rTok.IsIdentifier() )
-                        aDefName = rTok.GetString();
-                    else
-                    {
-                        OString aStr("unexpected token after define");
-                        // set error
-                        SetError( aStr, rTok );
-                        WriteError( aTokStm );
-                        return false;
-                    }
+                    if( !rTok.IsIdentifier() )
+                        throw SvParseException( "unexpected token after define", rTok );
+                    aDefName = rTok.GetString();
 
                     sal_uLong nVal = 0;
                     bool bOk = true;
@@ -184,11 +192,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                               || rTok.GetChar() == '^'
                               || rTok.GetChar() == '~' )
                             {
-                                OString aStr = "unknown operator '" + OString(rTok.GetChar()) + "'in define";
-                                // set error
-                                SetError( aStr, rTok );
-                                WriteError( aTokStm );
-                                return false;
+                                throw SvParseException( "unknown operator '" + OString(rTok.GetChar()) + "'in define", rTok );
                             }
                             if( rTok.GetChar() != '+'
                               && rTok.GetChar() != '('
@@ -208,10 +212,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     {
                         if( !InsertId( aDefName, nVal ) )
                         {
-                            OString aStr("hash table overflow: ");
-                            SetError( aStr, rTok );
-                            WriteError( aTokStm );
-                            return false;
+                            throw SvParseException( "hash table overflow: ", rTok );
                         }
                     }
                 }
@@ -232,19 +233,13 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         }
                         if( rTok.IsEof() )
                         {
-                            OString aStr("unexpected eof in #include");
-                            // set error
-                            SetError(aStr, rTok);
-                            WriteError( aTokStm );
-                            return false;
+                            throw SvParseException("unexpected eof in #include", rTok);
                         }
                     }
                     if (!ReadIdFile(OStringToOUString(aName.toString(),
                         RTL_TEXTENCODING_ASCII_US)))
                     {
-                        SetError("cannot read file: " + aName, rTok);
-                        WriteError( aTokStm );
-                        return false;
+                        throw SvParseException("cannot read file: " + aName, rTok);
                     }
                 }
             }
@@ -394,21 +389,6 @@ void SvIdlDataBase::Write(const OString& rText)
         fprintf( stdout, "%s", rText.getStr() );
 }
 
-void SvIdlDataBase::WriteError( const OString& rErrWrn,
-                                const OString& rFileName,
-                                const OString& rErrorText,
-                                sal_uLong nRow, sal_uLong nColumn )
-{
-    // error treatment
-    fprintf( stderr, "\n%s --- %s: ( %" SAL_PRIuUINTPTR ", %" SAL_PRIuUINTPTR " )\n",
-             rFileName.getStr(), rErrWrn.getStr(), nRow, nColumn );
-
-    if( !rErrorText.isEmpty() )
-    { // error set
-        fprintf( stderr, "\t%s\n", rErrorText.getStr() );
-    }
-}
-
 void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
     // error treatment
@@ -453,8 +433,15 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         aError = SvIdlError();
     }
 
-    WriteError("error", OUStringToOString(aFileName,
-        RTL_TEXTENCODING_UTF8), aErrorText.makeStringAndClear(), nRow, nColumn);
+    // error treatment
+    fprintf( stderr, "\n%s --- %s: ( %" SAL_PRIuUINTPTR ", %" SAL_PRIuUINTPTR " )\n",
+             OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8).getStr(),
+             "error", nRow, nColumn );
+
+    if( !aErrorText.isEmpty() )
+    { // error set
+        fprintf( stderr, "\t%s\n", aErrorText.getStr() );
+    }
 
     // look for identifier close by
     if( !rTok.IsIdentifier() )

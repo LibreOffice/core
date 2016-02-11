@@ -48,25 +48,19 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
     if( rTok.Is( SvHash_import() ) )
     {
         SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
-        if( pClass )
-        {
-            SvClassElement xEle;
-            xEle.SetClass( pClass );
-            aClassElementList.push_back( xEle );
+        if( !pClass )
+            throw SvParseException( rInStm, "unknown imported interface" );
+        SvClassElement xEle;
+        xEle.SetClass( pClass );
+        aClassElementList.push_back( xEle );
 
-            rTok = rInStm.GetToken();
-            if( rTok.IsString() )
-            {
-                xEle.SetPrefix( rTok.GetString() );
-                rInStm.GetToken_Next();
-            }
-            return;
-        }
-        else
+        rTok = rInStm.GetToken();
+        if( rTok.IsString() )
         {
-            // set error
-            rBase.SetAndWriteError( rInStm, "unknown imported interface" );
+            xEle.SetPrefix( rTok.GetString() );
+            rInStm.GetToken_Next();
         }
+        return;
     }
     else
     {
@@ -79,13 +73,13 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         {
             xAttr = new SvMetaSlot( pType );
             if( xAttr->ReadSvIdl( rBase, rInStm ) )
-                bOk = xAttr->Test( rBase, rInStm );
+                bOk = xAttr->Test( rInStm );
         }
         else
         {
             xAttr = new SvMetaAttribute( pType );
             if( xAttr->ReadSvIdl( rBase, rInStm ) )
-                bOk = xAttr->Test( rBase, rInStm );
+                bOk = xAttr->Test( rInStm );
         }
 
         if( bOk )
@@ -118,8 +112,7 @@ bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             bOk = aSuperClass.Is();
             if( !bOk )
             {
-                // set error
-                rBase.SetAndWriteError( rInStm, "unknown super class" );
+                throw SvParseException( rInStm, "unknown super class" );
             }
         }
         if( bOk )
@@ -151,13 +144,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             // values have to match
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
-                OSL_FAIL( "Same Name in MetaClass : " );
-                OSL_FAIL( pS->GetName().getStr() );
-                OSL_FAIL( pS->GetSlotId().getString().getStr() );
-                OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
-
-                rBase.SetAndWriteError(rInStm, "Attribute's " + pS->GetName() + " with different id's");
-                return false;
+                throw SvParseException( rInStm, "Attribute's " + pS->GetName() + " with different id's");
              }
         }
         else
@@ -166,14 +153,8 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             sal_uInt32 nId2 = rAttr.GetSlotId().GetValue();
             if( nId1 == nId2 && nId1 != 0 )
             {
-                OSL_FAIL( "Gleiche Id in MetaClass : " );
-                OSL_FAIL(OString::number(pS->GetSlotId().GetValue()).getStr());
-                OSL_FAIL( pS->GetSlotId().getString().getStr() );
-                OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
-
                 OString aStr = "Attribute " + pS->GetName() + " and Attribute " + rAttr.GetName() + " with equal id's";
-                rBase.SetAndWriteError(rInStm, aStr);
-                return false;
+                throw SvParseException(rInStm, aStr);
              }
         }
     }

@@ -286,15 +286,11 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                 if( rInStm.Read( '=' ) )
                 {
                     aSlotType = rBase.ReadKnownType( rInStm );
-                    if( aSlotType.Is() )
-                    {
-                        if( aSlotType->IsItem() )
-                        {
-                            return;
-                        }
-                        rBase.SetAndWriteError( rInStm, "the SlotType is not a item" );
-                    }
-                    rBase.SetAndWriteError( rInStm, "SlotType with unknown item type" );
+                    if( !aSlotType.Is() )
+                        throw SvParseException( rInStm, "SlotType with unknown item type" );
+                    if( !aSlotType->IsItem() )
+                        throw SvParseException( rInStm, "the SlotType is not a item" );
+                    return;
                 }
             }
             rInStm.Seek( nTokPos );
@@ -312,7 +308,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                     if( aMethod->IsMethod() )
                     {
                         aMethod->SetSlotId( GetSlotId() );
-                        if( aMethod->Test( rBase, rInStm ) )
+                        if( aMethod->Test( rInStm ) )
                             return;
                     }
                     rInStm.Seek( nTokPos );
@@ -323,9 +319,9 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaSlot::Test( SvTokenStream & rInStm )
 {
-    bool bOk = SvMetaAttribute::Test( rBase, rInStm );
+    bool bOk = SvMetaAttribute::Test( rInStm );
     if( bOk )
     {
         SvMetaType * pType = GetType();
@@ -333,8 +329,7 @@ bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             pType = pType->GetReturnType();
         if( !pType->IsItem() )
         {
-            rBase.SetAndWriteError( rInStm, "this attribute is not a slot" );
-            bOk = false;
+            throw SvParseException( rInStm, "this attribute is not a slot" );
         }
     }
 
@@ -351,17 +346,11 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     {
         // c
         SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr  );
-        if( pKnownSlot )
-        {
-            SetRef( pKnownSlot );
-            SetName( pKnownSlot->GetName() );
-            bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
-        }
-        else
-        {
-            rBase.SetAndWriteError( rInStm, "attribute " + pAttr->GetName() + " is method or variable but not a slot" );
-            bOk = false;
-        }
+        if( !pKnownSlot )
+            throw SvParseException( rInStm, "attribute " + pAttr->GetName() + " is method or variable but not a slot" );
+        SetRef( pKnownSlot );
+        SetName( pKnownSlot->GetName() );
+        bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
     }
     else
     {
@@ -372,25 +361,19 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         {
             // for testing purposes: reference in case of complete definition
             SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr2  );
-            if( pKnownSlot )
-            {
-                SetRef( pKnownSlot );
+            if( !pKnownSlot )
+                throw SvParseException( rInStm, "attribute " + pAttr2->GetName() + " is method or variable but not a slot" );
+            SetRef( pKnownSlot );
 
-                  // names may differ, because explicitly given
-                if ( pKnownSlot->GetName() != GetName() )
-                {
-                    OSL_FAIL("Illegal definition!");
-                    rInStm.Seek( nTokPos );
-                    return false;
-                }
-
-                  SetName( pKnownSlot->GetName() );
-            }
-            else
+              // names may differ, because explicitly given
+            if ( pKnownSlot->GetName() != GetName() )
             {
-                rBase.SetAndWriteError( rInStm, "attribute " + pAttr2->GetName() + " is method or variable but not a slot" );
-                bOk = false;
+                OSL_FAIL("Illegal definition!");
+                rInStm.Seek( nTokPos );
+                return false;
             }
+
+            SetName( pKnownSlot->GetName() );
         }
     }
 

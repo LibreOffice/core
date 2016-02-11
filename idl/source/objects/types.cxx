@@ -50,13 +50,12 @@ const SvIdentifier & SvMetaAttribute::GetSlotId() const
     return static_cast<SvMetaAttribute *>(GetRef())->GetSlotId();
 }
 
-bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
-                            SvTokenStream & rInStm )
+bool SvMetaAttribute::Test( SvTokenStream & rInStm )
 {
     bool bOk = true;
     if( GetType()->IsItem() && !GetSlotId().IsSet() )
     {
-        rBase.SetAndWriteError( rInStm, "slot without id declared" );
+        throw SvParseException( rInStm, "slot without id declared" );
         bOk = false;
     }
     return bOk;
@@ -199,15 +198,10 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         bIsItem = true;
 
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
-        if( pType )
-        {
-            SetRef( pType );
-            bOk = ReadNameSvIdl( rInStm );
-        }
-        else
-        {
-            rBase.SetAndWriteError( rInStm, "wrong typedef: ");
-        }
+        if( !pType )
+            throw SvParseException( rInStm, "wrong typedef: ");
+        SetRef( pType );
+        bOk = ReadNameSvIdl( rInStm );
     }
     if( !bOk )
         rInStm.Seek( nTokPos );
@@ -236,7 +230,7 @@ void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
     tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
     if( xAttr->ReadSvIdl( rBase, rInStm ) )
     {
-        if( xAttr->Test( rBase, rInStm ) )
+        if( xAttr->Test( rInStm ) )
             GetAttrList().push_back( xAttr );
     }
 }

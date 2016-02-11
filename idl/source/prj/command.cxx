@@ -124,9 +124,15 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         OUString aFileName ( rCommand.aInFileList[ n ] );
         pDataBase->AddDepFile(aFileName);
         SvTokenStream aTokStm( aFileName );
-        SvIdlParser aParser(*pDataBase, aTokStm);
-        if( !aParser.ReadSvIdl( false, rCommand.aPath ) )
-            return false;
+        try {
+            SvIdlParser aParser(*pDataBase, aTokStm);
+            if( !aParser.ReadSvIdl( false, rCommand.aPath ) )
+                return false;
+        } catch (const SvParseException& ex) {
+            pDataBase->SetError(ex.aError);
+            pDataBase->WriteError(aTokStm);
+             return false;
+        }
     }
     return true;
 }

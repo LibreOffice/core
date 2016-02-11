@@ -28,6 +28,7 @@
 
 #include <rtl/ustring.hxx>
 #include <set>
+#include <exception>
 
 class SvCommand;
 
@@ -52,6 +53,16 @@ public:
                         return *this;
                     }
 };
+
+class SvParseException : public std::exception
+{
+public:
+    SvIdlError aError;
+    SvParseException( SvTokenStream & rInStm, const OString& rError );
+    SvParseException( const OString& rError, SvToken& rTok );
+};
+
+
 
 class SvIdlDataBase
 {
@@ -106,10 +117,6 @@ public:
     SvRefMemberList<SvMetaObject *>& GetStack() { return aContextStack; }
 
     void                    Write(const OString& rText);
-    static void             WriteError(const OString& rErrWrn,
-                                    const OString& rFileName,
-                                    const OString& rErrorText,
-                                    sal_uLong nRow = 0, sal_uLong nColumn = 0 );
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const OString& rError, SvToken& rTok );
     void                    SetAndWriteError( SvTokenStream & rInStm, const OString& rError );

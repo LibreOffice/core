@@ -40,12 +40,9 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
     if( ReadStringSvIdl( SvHash_SlotIdFile(), rInStm, aSlotIdFile ) )
     {
-        sal_uInt32 nTokPos = rInStm.Tell();
         if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile, RTL_TEXTENCODING_ASCII_US)) )
         {
-            rBase.SetAndWriteError( rInStm, "cannot read file: " + aSlotIdFile );
-
-            rInStm.Seek( nTokPos );
+            throw SvParseException( rInStm, "cannot read file: " + aSlotIdFile );
         }
     }
 }
@@ -96,48 +93,41 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             OUString aFullName(OStringToOUString(rTok.GetString(), RTL_TEXTENCODING_ASCII_US));
             rBase.StartNewFile( aFullName );
             osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
-            osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
-
-            if( osl::FileBase::E_None == searchError )
-            {
-                rBase.AddDepFile( aFullName );
-                SvTokenStream aTokStm( aFullName );
-
-                if( SVSTREAM_OK == aTokStm.GetStream().GetError() )
-                {
-                    // rescue error from old file
-                    SvIdlError aOldErr = rBase.GetError();
-                    // reset error
-                    rBase.SetError( SvIdlError() );
-
-                    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
-                    while( nBeginPos != aTokStm.Tell() )
-                    {
-                        nBeginPos = aTokStm.Tell();
-                        ReadContextSvIdl( rBase, aTokStm );
-                        aTokStm.ReadDelimiter();
-                    }
-                    bOk = aTokStm.GetToken().IsEof();
-                    if( !bOk )
-                    {
-                        rBase.WriteError( aTokStm );
-                    }
-                    // recover error from old file
-                    rBase.SetError( aOldErr );
-                }
-                else
-                {
-                    OStringBuffer aStr("cannot open file: ");
-                    aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                    rBase.SetError(aStr.makeStringAndClear(), rTok);
-                }
-            }
-            else
+            if( osl::FileBase::E_None != searchError )
             {
                 OStringBuffer aStr("cannot find file:");
                 aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                rBase.SetError(aStr.makeStringAndClear(), rTok);
+                throw SvParseException(aStr.makeStringAndClear(), rTok);
             }
+            osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
+            rBase.AddDepFile( aFullName );
+            SvTokenStream aTokStm( aFullName );
+
+            if( SVSTREAM_OK != aTokStm.GetStream().GetError() )
+            {
+                OStringBuffer aStr("cannot open file: ");
+                aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
+                throw SvParseException(aStr.makeStringAndClear(), rTok);
+            }
+            // rescue error from old file
+            SvIdlError aOldErr = rBase.GetError();
+            // reset error
+            rBase.SetError( SvIdlError() );
+
+            sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
+            while( nBeginPos != aTokStm.Tell() )
+            {
+                nBeginPos = aTokStm.Tell();
+                ReadContextSvIdl( rBase, aTokStm );
+                aTokStm.ReadDelimiter();
+            }
+            bOk = aTokStm.GetToken().IsEof();
+            if( !bOk )
+            {
+                rBase.WriteError( aTokStm );
+            }
+            // recover error from old file
+            rBase.SetError( aOldErr );
         }
         if( !bOk )
             rInStm.Seek( nTokPos );
@@ -148,7 +138,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( xSlot->ReadSvIdl( rBase, rInStm ) )
         {
-            if( xSlot->Test( rBase, rInStm ) )
+            if( xSlot->Test( rInStm ) )
             {
                 // announce globally
                 rBase.AppendSlot( xSlot );

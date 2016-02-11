@@ -103,7 +103,7 @@ public:
     void                      SetName( const OString& rName );
     virtual const OString &  GetName() const { return aName; }
 
-    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual bool        Test( SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 };
 

@@ -94,16 +94,11 @@ void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     if( rTok.IsIdentifier() )
     {
         sal_uLong n;
-        if( rBase.FindId( rTok.GetString(), &n ) )
-        {
-            setString(rTok.GetString());
-            nValue = n;
-            return;
-        }
-        else
-        {
+        if( !rBase.FindId( rTok.GetString(), &n ) )
             rBase.SetAndWriteError( rInStm, "no value for identifier <" + getString() + "> " );
-        }
+        setString(rTok.GetString());
+        nValue = n;
+        return;
     }
     rInStm.Seek( nTokPos );
 }
