@@ -417,6 +417,9 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
         // OOXML
         size_t nSignatureCount = maCurrentSignatureInformations.size();
         maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+
+        for (size_t i = 0; i < nSignatureCount; ++i)
+            maSignatureHelper.ExportOOXMLSignature(mxStore, aStreamHelper.xSignatureStorage, maCurrentSignatureInformations[i], i + 1);
     }
 
     // If stream was not provided, we are responsible for committing it....

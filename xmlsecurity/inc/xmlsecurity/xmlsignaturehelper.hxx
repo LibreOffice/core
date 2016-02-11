@@ -187,6 +187,7 @@ public:
     void ExportSignatureRelations(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount);
     /// Given that xSignatureStorage is an OOXML _xmlsignatures storage, create and write a new signature.
     bool CreateAndWriteOOXMLSignature(css::uno::Reference<css::embed::XStorage> xRootStorage, css::uno::Reference<css::embed::XStorage> xSignatureStorage, int nSignatureIndex);
+    void ExportOOXMLSignature(css::uno::Reference<css::embed::XStorage> xRootStorage, css::uno::Reference<css::embed::XStorage> xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX
