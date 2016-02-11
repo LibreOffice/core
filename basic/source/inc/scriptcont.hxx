@@ -132,7 +132,7 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 
     bool mbLoadedSource;
     bool mbLoadedBinary;
-    ModuleInfoMap mModuleInfos;
+    ModuleInfoMap mModuleInfo;
 
     // Provide modify state including resources
     virtual bool isModified() override;
