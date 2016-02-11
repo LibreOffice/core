@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_87c5f55c",
+        "filename": "sc/inc/attarray.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-11T11:57:35Z",
+      "side": 1,
+      "message": "Please do not disable tests! Convert them to be active in a debug/dbgutil build instead, so #if OSL_DEBUG_LEVEL \u003e 0",
+      "revId": "6f69f4b440738011815a2e0f4bf93b45a1019c91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
