@@ -1176,7 +1176,7 @@ AC_ARG_ENABLE(gtk,
 ,enable_gtk=yes)
 
 AC_ARG_ENABLE(gtk3,
-    AS_HELP_STRING([--enable-gtk3],
+    AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.
          This is experimental and may not work.]),
 ,enable_gtk3=yes)
