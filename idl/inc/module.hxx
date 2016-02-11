@@ -25,21 +25,13 @@
 
 class SvMetaModule : public SvMetaReference
 {
-    SvRefMemberList<SvMetaClass *>      aClassList;
-// browser
-    OString                 aSlotIdFile;
-
-    bool                    bImported   : 1;
-protected:
-    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
+    bool                            bImported;
 public:
+    SvRefMemberList<SvMetaClass *>  aClassList;
 
                         SvMetaModule( bool bImported );
 
     bool                IsImported() const { return bImported; }
-
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     void                WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
 };

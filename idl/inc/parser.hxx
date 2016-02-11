@@ -24,6 +24,7 @@
 
 class SvTokenStream;
 class SvIdlDataBase;
+class SvMetaModule;
 
 class SvIdlParser
 {
@@ -32,8 +33,9 @@ class SvIdlParser
 public:
     SvIdlParser( SvIdlDataBase& rBase_, SvTokenStream & rInStrm_) : rBase(rBase_), rInStm(rInStrm_) {}
     bool        ReadSvIdl( bool bImported, const OUString & rPath );
-    bool        ReadModuleImport(const OUString & rPath);
-
+    bool        ReadModuleHeader(SvMetaModule& rModule);
+    bool        ReadModuleBody(SvMetaModule& rModule);
+    void        ReadModuleElement( SvMetaModule& rModule );
 };
 
 #endif // INCLUDED_IDL_INC_PARSER_HXX
