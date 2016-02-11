@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <string.h>
 #include <stdlib.h>
 
@@ -53,16 +56,14 @@ void SalYieldMutex::acquire()
 
 void SalYieldMutex::release()
 {
-    OSL_ENSURE(mnCount > 0, "SalYieldMutex::release() called with zero count");
-    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
+    assert(mnCount != 0);
+    assert(mnThreadId == osl::Thread::getCurrentIdentifier());
+    if ( mnCount == 1 )
     {
-        if ( mnCount == 1 )
-        {
-            OpenGLContext::prepareForYield();
-            mnThreadId = 0;
-        }
-        mnCount--;
+        OpenGLContext::prepareForYield();
+        mnThreadId = 0;
     }
+    mnCount--;
     m_mutex.release();
 }
 
