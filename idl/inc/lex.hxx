@@ -216,7 +216,7 @@ public:
         SetMax();
     }
 
-    void SeekEnd()
+    void SeekToMax()
     {
         pCurToken = aTokList.begin()+nMaxPos;
     }

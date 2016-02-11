@@ -416,7 +416,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     OStringBuffer aErrorText;
     sal_uLong   nRow = 0, nColumn = 0;
 
-    rInStm.SeekEnd();
+    rInStm.SeekToMax();
     SvToken& rTok = rInStm.GetToken();
 
     // error position
