@@ -182,11 +182,11 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     }
     else
     {
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "#idPackageObject", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "idPackageObject", -1);
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "#idOfficeObject", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "idOfficeObject", -1);
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "#idSignedProperties", -1);
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, "idSignedProperties", -1);
         size++;
     }
 
