@@ -1046,14 +1046,14 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
         {
             {
                 rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-                if (rReference.ouURI != "#idSignedProperties")
+                if (rReference.ouURI != "idSignedProperties")
                     pAttributeList->AddAttribute("Type", "http://www.w3.org/2000/09/xmldsig#Object");
                 else
                     pAttributeList->AddAttribute("Type", "http://uri.etsi.org/01903#SignedProperties");
-                pAttributeList->AddAttribute(ATTR_URI, rReference.ouURI);
+                pAttributeList->AddAttribute(ATTR_URI, CHAR_FRAGMENT + rReference.ouURI);
                 xDocumentHandler->startElement(TAG_REFERENCE, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
             }
-            if (rReference.ouURI == "#idSignedProperties")
+            if (rReference.ouURI == "idSignedProperties")
             {
                 xDocumentHandler->startElement(TAG_TRANSFORMS, uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
                 rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
