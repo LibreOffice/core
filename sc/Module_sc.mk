@@ -89,6 +89,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_editfieldobj_cell \
 	CppunitTest_sc_editfieldobj_header \
 	CppunitTest_sc_modelobj \
+	CppunitTest_sc_check_xcell_ranges_query \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
