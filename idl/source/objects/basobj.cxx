@@ -100,7 +100,7 @@ void SvMetaObject::DoReadContextSvIdl( SvIdlDataBase & rBase,
     {
         nBeginPos = rInStm.Tell();
         ReadContextSvIdl( rBase, rInStm );
-        rInStm.ReadDelemiter();
+        rInStm.ReadDelimiter();
     }
 }
 
@@ -124,7 +124,7 @@ bool SvMetaObject::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         {
             nBeginPos = rInStm.Tell();
             ReadAttributesSvIdl( rBase, rInStm );
-            rInStm.ReadDelemiter();
+            rInStm.ReadDelimiter();
         }
         bOk = rInStm.Read( ']' );
     }

@@ -199,7 +199,7 @@ public:
                             return false;
                     }
 
-    void     ReadDelemiter()
+    void     ReadDelimiter()
                     {
                         if( (*pCurToken)->IsChar()
                           && (';' == (*pCurToken)->GetChar()
