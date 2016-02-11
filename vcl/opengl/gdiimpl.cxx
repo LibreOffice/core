@@ -1072,6 +1072,10 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     const long nDestWidth = basegfx::fround(basegfx::B2DVector(rX - rNull).getLength());
     const long nDestHeight = basegfx::fround(basegfx::B2DVector(rY - rNull).getLength());
 
+    // Invisibly small images shouldn't divide by zero.
+    if( nDestHeight == 0 || nDestWidth == 0 )
+        return;
+
     const double ixscale = rTexture.GetWidth()  / nDestWidth;
     const double iyscale = rTexture.GetHeight() / nDestHeight;
 
