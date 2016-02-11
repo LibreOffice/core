@@ -42,7 +42,7 @@ class GtkPrintWrapper;
 class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {
-    std::list<sal_uLong> aYieldStack;
+    thread_local static sal_uIntPtr yieldCount;
 
 public:
          GtkYieldMutex() {}
