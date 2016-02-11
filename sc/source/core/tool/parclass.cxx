@@ -28,7 +28,7 @@
 #include <sal/macros.h>
 #include <string.h>
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_TOOL
 // the documentation thingy
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <rtl/strbuf.hxx>
@@ -245,7 +245,7 @@ void ScParameterClassification::Init()
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_TOOL
             if ( pRun->aData.nParam[0] != Unknown )
             {
                 OSL_TRACE( "already assigned: %d", pRaw->eOp);
@@ -298,7 +298,7 @@ void ScParameterClassification::Init()
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_TOOL
     GenerateDocumentation();
 #endif
 }
@@ -422,7 +422,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
     return eRet;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_SC_TOOL
 
 // add remaining functions, all Value parameters
 void ScParameterClassification::MergeArgumentsFromFunctionResource()

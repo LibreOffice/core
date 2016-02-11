@@ -104,7 +104,7 @@ public:
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     void    TestData() const;
 #endif
     void    Reset( const ScPatternAttr* pPattern);
