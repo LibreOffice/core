@@ -38,9 +38,9 @@
 
 static void
 lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
-        SfxItemPool const& rPool, SfxItemInfo const* pInfos)
+        SfxItemPool const& rPool, SfxItemInfo const* pInfo)
 {
-    if (!pInfos)
+    if (!pInfo)
         return; // may not be initialized yet
     if (rPool.GetName() == "EditEngineItemPool")
         return; // HACK: this one has loads of duplicates already, ignore it :(
@@ -48,7 +48,7 @@ lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
     sal_uInt16 const nCount(rPool.GetLastWhich() - rPool.GetFirstWhich() + 1);
     for (sal_uInt16 n = 0; n < nCount; ++n)
     {
-        sal_uInt16 const nSlotId(pInfos[n]._nSID);
+        sal_uInt16 const nSlotId(pInfo[n]._nSID);
         if (nSlotId != 0
             && nSlotId != 10883  // preexisting duplicate SID_ATTR_GRAF_CROP
             && nSlotId != 10023  // preexisting duplicate SID_ATTR_BORDER_INNER
@@ -166,13 +166,13 @@ SfxItemPool::SfxItemPool
     const OUString&     rName,          /* Pool name to identify in the file format */
     sal_uInt16          nStartWhich,    /* First WhichId of the Pool */
     sal_uInt16          nEndWhich,      /* Last WhichId of the Pool */
-    const SfxItemInfo*  pInfos,         /* SID Map and Item flags */
+    const SfxItemInfo*  pInfo,         /* SID Map and Item flags */
     SfxPoolItem**       pDefaults,      /* Pointer to static Defaults;
                                            is directly referenced by the Pool,
                                            but no transfer of ownership */
     bool                bLoadRefCounts  /* Load RefCounts or set to 1? */
 ) :
-    pItemInfos(pInfos),
+    pItemInfos(pInfo),
     pImp( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
     pImp->eDefMetric = SFX_MAPUNIT_TWIP;
@@ -441,9 +441,9 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
     CHECK_SLOTS();
 }
 
-void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfos)
+void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfo)
 {
-    pItemInfos = pInfos;
+    pItemInfos = pInfo;
     CHECK_SLOTS();
 }
 

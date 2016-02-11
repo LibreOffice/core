@@ -276,8 +276,8 @@ public:
     static void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
 protected:
-    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
-    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo );
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo );
 
 };
 

@@ -237,13 +237,13 @@ public:
     virtual bool HasActiveEditor () const;
 };
 
-class LibInfos
+class LibInfo
 {
 public:
     class Item;
 public:
-    LibInfos ();
-    ~LibInfos ();
+    LibInfo ();
+    ~LibInfo ();
 public:
     void InsertInfo (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, ItemType eCurrentType);
     void RemoveInfoFor (ScriptDocument const&);
