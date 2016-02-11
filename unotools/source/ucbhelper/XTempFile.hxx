@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_SOURCE_UCBHELPER_XTEMPFILE_HXX
 #define INCLUDED_UNOTOOLS_SOURCE_UCBHELPER_XTEMPFILE_HXX
 
+#include <memory>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -44,7 +45,7 @@ class OTempFileService : public OTempFileBase
     , public ::cppu::PropertySetMixin< css::io::XTempFile >
 {
 protected:
-    ::utl::TempFile* mpTempFile;
+    std::unique_ptr<utl::TempFile> mpTempFile;
     ::osl::Mutex maMutex;
     SvStream* mpStream;
     bool mbRemoveFile;

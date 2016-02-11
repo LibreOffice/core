@@ -39,13 +39,12 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 , mbHasCachedPos( false )
 
 {
-    mpTempFile = new ::utl::TempFile;
+    mpTempFile.reset(new utl::TempFile());
     mpTempFile->EnableKillingFile();
 }
 
 OTempFileService::~OTempFileService ()
 {
-    delete mpTempFile;
 }
 
 // XInterface
@@ -248,10 +247,7 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
         mpStream = nullptr;
 
         if ( mpTempFile )
-        {
-            delete mpTempFile;
-            mpTempFile = nullptr;
-        }
+            mpTempFile.reset(nullptr);
     }
 }
 
@@ -307,10 +303,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
         mpStream = nullptr;
 
         if ( mpTempFile )
-        {
-            delete mpTempFile;
-            mpTempFile = nullptr;
-        }
+            mpTempFile.reset(nullptr);
     }
 }
 
