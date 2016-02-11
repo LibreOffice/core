@@ -1450,7 +1450,7 @@ AC_ARG_ENABLE(lotuswordpro,
 AC_ARG_ENABLE(firebird-sdbc,
     AS_HELP_STRING([--disable-firebird-sdbc],
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
-)
+,enable_firebird_sdbc=yes)
 
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
