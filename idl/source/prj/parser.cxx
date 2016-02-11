@@ -32,26 +32,7 @@ bool SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
     // only one import at the very beginning
     if( rTok.Is( SvHash_import() ) )
     {
-        rTok = rInStm.GetToken_Next();
-        if( rTok.IsString() )
-        {
-            OUString aFullName;
-            if( osl::FileBase::E_None == osl::File::searchFileURL(
-                OStringToOUString(rTok.GetString(), RTL_TEXTENCODING_ASCII_US),
-                rPath,
-                aFullName) )
-            {
-                osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
-                rBase.AddDepFile(aFullName);
-                SvTokenStream aTokStm( aFullName );
-                SvIdlParser aInputParser(rBase, aTokStm);
-                bOk = aInputParser.ReadSvIdl( true, rPath );
-            }
-            else
-                bOk = false;
-        }
-        else
-            bOk = false;
+        bOk = ReadModuleImport(rPath);
     }
 
     while( bOk )
@@ -80,4 +61,29 @@ bool SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
     return true;
 }
 
+bool SvIdlParser::ReadModuleImport(const OUString & rPath)
+{
+    SvToken& rTok = rInStm.GetToken_Next();
+    bool bOk = true;
+    if( rTok.IsString() )
+    {
+        OUString aFullName;
+        if( osl::FileBase::E_None == osl::File::searchFileURL(
+            OStringToOUString(rTok.GetString(), RTL_TEXTENCODING_ASCII_US),
+            rPath,
+            aFullName) )
+        {
+            osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
+               rBase.AddDepFile(aFullName);
+                SvTokenStream aTokStm( aFullName );
+                SvIdlParser aInputParser(rBase, aTokStm);
+                bOk = aInputParser.ReadSvIdl( true, rPath );
+            }
+            else
+                bOk = false;
+        }
+        else
+            bOk = false;
+    return bOk;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

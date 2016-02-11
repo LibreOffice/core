@@ -32,6 +32,7 @@ class SvIdlParser
 public:
     SvIdlParser( SvIdlDataBase& rBase_, SvTokenStream & rInStrm_) : rBase(rBase_), rInStm(rInStrm_) {}
     bool        ReadSvIdl( bool bImported, const OUString & rPath );
+    bool        ReadModuleImport(const OUString & rPath);
 
 };
 
