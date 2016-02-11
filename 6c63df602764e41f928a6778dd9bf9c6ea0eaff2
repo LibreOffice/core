@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a75591c7",
+        "filename": "sysui/desktop/mimetypes/ms-word-document.desktop",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-11T07:59:39Z",
+      "side": 1,
+      "message": "Does this really work ? multiple Patterns statements does not seem to be supported.",
+      "revId": "6c63df602764e41f928a6778dd9bf9c6ea0eaff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_875215dc",
+        "filename": "sysui/desktop/mimetypes/ms-word-document2.desktop",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-11T07:59:39Z",
+      "side": 1,
+      "message": "Does this really work ? multiple Patterns statements does not seem to be supported.",
+      "revId": "6c63df602764e41f928a6778dd9bf9c6ea0eaff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
