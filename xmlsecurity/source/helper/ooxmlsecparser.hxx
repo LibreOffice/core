@@ -39,6 +39,9 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     OUString m_aMdssiValue;
     bool m_bInSignatureComments;
     OUString m_aSignatureComments;
+    bool m_bInX509IssuerName;
+    OUString m_aX509IssuerName;
+
     /// Last seen <Reference URI="...">.
     OUString m_aReferenceURI;
     /// Already called addStreamReference() for this reference.
