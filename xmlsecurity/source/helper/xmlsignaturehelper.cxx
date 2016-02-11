@@ -513,6 +513,51 @@ void XMLSignatureHelper::ExportSignatureRelations(css::uno::Reference<css::embed
     xTransact->commit();
 }
 
+void XMLSignatureHelper::ExportSignatureContentTypes(css::uno::Reference<css::embed::XStorage> xStorage, int nSignatureCount)
+{
+    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
+    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
+    uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxCtx);
+    if (aContentTypeInfo.getLength() < 2)
+    {
+        SAL_WARN("xmlsecurity.helper", "no defaults or overrides in aContentTypeInfo");
+        return;
+    }
+
+    // Append sigs to defaults, if it's not there already.
+    uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
+    auto it = std::find_if(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair)
+    {
+        return rPair.First == "sigs";
+    });
+    if (it == rDefaults.end())
+    {
+        auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
+        aDefaults.push_back(beans::StringPair("sigs", "application/vnd.openxmlformats-package.digital-signature-origin"));
+        rDefaults = comphelper::containerToSequence(aDefaults);
+    }
+
+    // Remove existing signature overrides.
+    uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+    auto aOverrides = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rOverrides);
+    aOverrides.erase(std::remove_if(aOverrides.begin(), aOverrides.end(), [](const beans::StringPair& rPair)
+    {
+        return rPair.First.startsWith("/_xmlsignatures/sig");
+    }), aOverrides.end());
+
+    // Add our signature overrides.
+    for (int i = 1; i <= nSignatureCount; ++i)
+        aOverrides.push_back(beans::StringPair("/_xmlsignatures/sig" + OUString::number(i) + ".xml", "application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml"));
+
+    rOverrides = comphelper::containerToSequence(aOverrides);
+    uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();
+    uno::Reference <io::XTruncate> xTruncate(xOutputStream, uno::UNO_QUERY);
+    xTruncate->truncate();
+    comphelper::OFOPXMLHelper::WriteContentSequence(xOutputStream, rDefaults, rOverrides, mxCtx);
+    uno::Reference<embed::XTransactedObject> xTransact(xStorage, uno::UNO_QUERY);
+    xTransact->commit();
+}
 bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(uno::Reference<embed::XStorage> xRootStorage, uno::Reference<embed::XStorage> xSignatureStorage, int nSignatureIndex)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
