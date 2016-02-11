@@ -19,6 +19,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInX509Certificate(false)
     ,m_bInMdssiValue(false)
     ,m_bInSignatureComments(false)
+    ,m_bInX509IssuerName(false)
     ,m_bReferenceUnresolved(false)
 {
 }
@@ -100,6 +101,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aSignatureComments.clear();
         m_bInSignatureComments = true;
     }
+    else if (rName == "X509IssuerName")
+    {
+        m_aX509IssuerName.clear();
+        m_bInX509IssuerName = true;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -141,6 +147,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setDescription(m_aSignatureComments);
         m_bInSignatureComments = false;
     }
+    else if (rName == "X509IssuerName")
+    {
+        m_pXSecController->setX509IssuerName(m_aX509IssuerName);
+        m_bInX509IssuerName = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -158,6 +169,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
         m_aMdssiValue += rChars;
     else if (m_bInSignatureComments)
         m_aSignatureComments += rChars;
+    else if (m_bInX509IssuerName)
+        m_aX509IssuerName += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
