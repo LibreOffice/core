@@ -377,6 +377,13 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
             std::vector<beans::StringPair>::iterator it = std::find_if(aRelation.begin(), aRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
             if (it != aRelation.end())
             {
+                uno::Reference<container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+                if (xNameAccess.is() && !xNameAccess->hasByName(it->Second))
+                {
+                    SAL_WARN("xmlsecurity.helper", "expected stream, but not found: " << it->Second);
+                    continue;
+                }
+
                 uno::Reference<io::XInputStream> xInputStream(xStorage->openStreamElement(it->Second, nOpenMode), uno::UNO_QUERY);
                 if (!ReadAndVerifySignatureStorageStream(xInputStream))
                     return false;

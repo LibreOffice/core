@@ -411,13 +411,20 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
 
         XMLSignatureHelper::CloseDocumentHandler( xDocumentHandler);
 
-        // If stream was not provided, we are responsible for committing it....
-        if ( !mxSignatureStream.is() )
-        {
-            uno::Reference< embed::XTransactedObject > xTrans(
-                aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-            xTrans->commit();
-        }
+    }
+    else if (aStreamHelper.xSignatureStorage.is() && aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+    {
+        // OOXML
+        size_t nSignatureCount = maCurrentSignatureInformations.size();
+        maSignatureHelper.ExportSignatureRelations(aStreamHelper.xSignatureStorage, nSignatureCount);
+    }
+
+    // If stream was not provided, we are responsible for committing it....
+    if ( !mxSignatureStream.is() )
+    {
+        uno::Reference< embed::XTransactedObject > xTrans(
+            aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+        xTrans->commit();
     }
 
     EndDialog(RET_OK);
