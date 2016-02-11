@@ -93,9 +93,8 @@ using ::sax_fastparser::FSHelperPtr;
 
 // FIXME: this should be removed and replaced by SAL_INFO
 #ifndef DBG
-#  if OSL_DEBUG_LEVEL > 1
-#    define DBG(x) x
-#  else
+#  define DBG(x) x
+#  if OSL_DEBUG_LEVEL < 1
 #    define DBG(x)
 #  endif
 #endif
