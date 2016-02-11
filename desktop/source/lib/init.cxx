@@ -668,7 +668,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         if (aFilterOptions == "TakeOwnership")
         {
             bTakeOwnership = true;
-            aFilterOptions = "";
+            aFilterOptions.clear();
         }
         else if ((nIndex = aFilterOptions.indexOf(",TakeOwnership")) >= 0 || (nIndex = aFilterOptions.indexOf("TakeOwnership,")) >= 0)
         {
