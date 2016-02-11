@@ -288,29 +288,24 @@ SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
  * for each pair, so we can accurately restore
  * it later.
  */
+thread_local sal_uIntPtr GtkYieldMutex::yieldCount;
+
 void GtkYieldMutex::ThreadsEnter()
 {
     acquire();
-    if( !aYieldStack.empty() )
-    { /* Previously called ThreadsLeave() */
-        sal_uLong nCount = aYieldStack.front();
-        aYieldStack.pop_front();
-        while( nCount-- > 1 )
-            acquire();
+    for (; yieldCount != 0; --yieldCount) {
+        acquire();
     }
 }
 
 void GtkYieldMutex::ThreadsLeave()
 {
-    aYieldStack.push_front( mnCount );
-
-    SAL_WARN_IF(
-        mnThreadId && mnThreadId != osl::Thread::getCurrentIdentifier(),
-        "vcl.gtk", "other thread " << mnThreadId << " owns the mutex");
-
-    while( mnCount > 1 )
+    assert(mnCount != 0);
+    assert(yieldCount == 0);
+    yieldCount = mnCount - 1;
+    for (sal_uIntPtr i = 0; i != yieldCount + 1; ++i) {
         release();
-    release();
+    }
 }
 
 SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
