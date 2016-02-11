@@ -376,7 +376,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     create_folder( nullptr, registryCachePath, Reference<XCommandEnvironment>());
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DESKTOP_REGISTRY
     // dump tables:
     {
         t_registryset allBackends;
