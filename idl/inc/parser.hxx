@@ -27,8 +27,11 @@ class SvIdlDataBase;
 
 class SvIdlParser
 {
+    SvIdlDataBase&  rBase;
+    SvTokenStream & rInStm;
 public:
-    bool        ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream &, bool bImported, const OUString & rPath );
+    SvIdlParser( SvIdlDataBase& rBase_, SvTokenStream & rInStrm_) : rBase(rBase_), rInStm(rInStrm_) {}
+    bool        ReadSvIdl( bool bImported, const OUString & rPath );
 
 };
 

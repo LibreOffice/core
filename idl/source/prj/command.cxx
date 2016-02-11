@@ -123,21 +123,10 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
     {
         OUString aFileName ( rCommand.aInFileList[ n ] );
         pDataBase->AddDepFile(aFileName);
-        SvFileStream aStm( aFileName, STREAM_STD_READ | StreamMode::NOCREATE );
-        if( aStm.GetError() == SVSTREAM_OK )
-        {
-            SvTokenStream aTokStm( aStm, aFileName );
-            SvIdlParser aParser;
-            if( !aParser.ReadSvIdl( *pDataBase, aTokStm, false, rCommand.aPath ) )
-                return false;
-        }
-        else
-        {
-            const OString aStr(OUStringToOString(aFileName,
-                RTL_TEXTENCODING_UTF8));
-            fprintf( stderr, "unable to read input file: %s\n", aStr.getStr() );
+        SvTokenStream aTokStm( aFileName );
+        SvIdlParser aParser(*pDataBase, aTokStm);
+        if( !aParser.ReadSvIdl( false, rCommand.aPath ) )
             return false;
-        }
     }
     return true;
 }

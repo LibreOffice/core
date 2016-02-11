@@ -150,7 +150,6 @@ class SvTokenStream
                     }
 public:
                     SvTokenStream( const OUString & rFileName );
-                    SvTokenStream( SvStream & rInStream, const OUString & rFileName );
                     ~SvTokenStream();
 
     const OUString &  GetFileName() const { return aFileName; }

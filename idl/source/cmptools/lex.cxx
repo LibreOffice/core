@@ -91,14 +91,6 @@ SvTokenStream::SvTokenStream( const OUString & rFileName )
     InitCtor();
 }
 
-SvTokenStream::SvTokenStream( SvStream & rStream, const OUString & rFileName )
-    : pInStream( nullptr )
-    , rInStream( rStream )
-    , aFileName( rFileName )
-{
-    InitCtor();
-}
-
 SvTokenStream::~SvTokenStream()
 {
     delete pInStream;

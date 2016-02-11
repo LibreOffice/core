@@ -24,7 +24,7 @@
 #include <globals.hxx>
 #include <osl/file.hxx>
 
-bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool bImported, const OUString & rPath )
+bool SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
 {
     rBase.SetPath(rPath); // only valid for this iteration
     bool bOk = true;
@@ -32,7 +32,6 @@ bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool 
     // only one import at the very beginning
     if( rTok.Is( SvHash_import() ) )
     {
-        rInStm.GetToken_Next();
         rTok = rInStm.GetToken_Next();
         if( rTok.IsString() )
         {
@@ -44,9 +43,9 @@ bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool 
             {
                 osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
                 rBase.AddDepFile(aFullName);
-                SvFileStream aStm( aFullName, STREAM_STD_READ | StreamMode::NOCREATE );
-                SvTokenStream aTokStm( aStm, aFullName );
-                bOk = ReadSvIdl( rBase, aTokStm, true, rPath );
+                SvTokenStream aTokStm( aFullName );
+                SvIdlParser aInputParser(rBase, aTokStm);
+                bOk = aInputParser.ReadSvIdl( true, rPath );
             }
             else
                 bOk = false;
