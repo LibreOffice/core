@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_c7ed3d27",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-11T07:21:38Z",
+      "side": 1,
+      "message": "This looks like a duplicate of the UpdateSubType method. Better integrate the filter directly in the UpdateSubType method.\n\nAlso sParams should be sFilter or something like that",
+      "revId": "f13e12ea2516c725c7a2a3b822ff3943ad1e2659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_878df57d",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-11T07:21:38Z",
+      "side": 1,
+      "message": "Please give the variables descriptive names instead of str1 and str2",
+      "revId": "f13e12ea2516c725c7a2a3b822ff3943ad1e2659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_e7e83919",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-11T07:21:38Z",
+      "side": 1,
+      "message": "There seems to be some issue here.\nE.g.:\nA Heading named \"Test\", search for \"Test1234\" and it will find \"Test\".",
+      "revId": "f13e12ea2516c725c7a2a3b822ff3943ad1e2659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_27f3610c",
+        "filename": "sw/uiconfig/swriter/ui/fldrefpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-11T07:21:38Z",
+      "side": 1,
+      "message": "The placeholder should be \"Filter Selection\"",
+      "revId": "f13e12ea2516c725c7a2a3b822ff3943ad1e2659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
