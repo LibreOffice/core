@@ -249,10 +249,7 @@ rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
 // Into a hex string of well known length ff132a86...
 OUString CreateMD5FromString( const OUString& aMsg )
 {
-#if (OSL_DEBUG_LEVEL > 2)
-    fprintf( stderr, "create md5 from '%s'\n",
-             OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8).getStr() );
-#endif
+    SAL_WARN("desktop.app", "create md5 from '" << OUStringToOString(aMsg, RTL_TEXTENCODING_UTF8).getStr() << "'\n");
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle )
@@ -757,7 +754,7 @@ void OfficeIPCThread::execute()
             }
             catch ( const CommandLineArgs::Supplier::Exception & )
             {
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+#ifdef DBG_UTIL
                 fprintf( stderr, "Error in received command line arguments\n" );
 #endif
                 continue;
@@ -976,7 +973,7 @@ void OfficeIPCThread::execute()
                 }
             }
 
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+#ifdef DBG_UTIL
             fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
             TimeValue tval;
