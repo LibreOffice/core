@@ -322,10 +322,10 @@ bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
                                  SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos = rInStm.Tell();
-    if( rInStm.Read( '(' ) )
+    if( rInStm.ReadIf( '(' ) )
     {
         DoReadContextSvIdl( rBase, rInStm );
-        if( rInStm.Read( ')' ) )
+        if( rInStm.ReadIf( ')' ) )
         {
             SetType( MetaTypeType::Method );
             return true;

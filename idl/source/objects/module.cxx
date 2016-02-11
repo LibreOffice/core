@@ -119,7 +119,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             {
                 nBeginPos = aTokStm.Tell();
                 ReadContextSvIdl( rBase, aTokStm );
-                aTokStm.ReadDelimiter();
+                aTokStm.ReadIfDelimiter();
             }
             bOk = aTokStm.GetToken().IsEof();
             if( !bOk )
@@ -154,7 +154,7 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken&    rTok  = rInStm.GetToken_Next();
     bool        bOk = rTok.Is( SvHash_module() );
-    rInStm.ReadDelimiter();
+    rInStm.ReadIfDelimiter();
     if( bOk )
     {
         rBase.Push( this ); // onto the context stack

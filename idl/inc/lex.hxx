@@ -186,7 +186,7 @@ public:
 
     SvToken& GetToken() const { return *(*pCurToken).get(); }
 
-    bool     Read( char cChar )
+    bool     ReadIf( char cChar )
                     {
                         if( (*pCurToken)->IsChar()
                           && cChar == (*pCurToken)->GetChar() )
@@ -198,7 +198,7 @@ public:
                             return false;
                     }
 
-    void     ReadDelimiter()
+    void     ReadIfDelimiter()
                     {
                         if( (*pCurToken)->IsChar()
                           && (';' == (*pCurToken)->GetChar()

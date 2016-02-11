@@ -283,7 +283,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
             SvToken& rTok = rInStm.GetToken_Next();
             if( rTok.Is( SvHash_SlotType() ) )
             {
-                if( rInStm.Read( '=' ) )
+                if( rInStm.ReadIf( '=' ) )
                 {
                     aSlotType = rBase.ReadKnownType( rInStm );
                     if( !aSlotType.Is() )

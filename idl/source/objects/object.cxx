@@ -106,7 +106,7 @@ bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         (GetMetaTypeType() == MetaTypeType::Interface || GetMetaTypeType() == MetaTypeType::Shell) )
     {
         bool bOk = true;
-        if( rInStm.Read( ':' ) )
+        if( rInStm.ReadIf( ':' ) )
         {
             aSuperClass = rBase.ReadKnownClass( rInStm );
             bOk = aSuperClass.Is();

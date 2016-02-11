@@ -100,7 +100,7 @@ void SvMetaObject::DoReadContextSvIdl( SvIdlDataBase & rBase,
     {
         nBeginPos = rInStm.Tell();
         ReadContextSvIdl( rBase, rInStm );
-        rInStm.ReadDelimiter();
+        rInStm.ReadIfDelimiter();
     }
 }
 
@@ -117,24 +117,24 @@ bool SvMetaObject::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     bool bOk = true;
-    if( rInStm.Read( '[' ) )
+    if( rInStm.ReadIf( '[' ) )
     {
         sal_uInt32 nBeginPos = 0; // can not happen with Tell
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
             ReadAttributesSvIdl( rBase, rInStm );
-            rInStm.ReadDelimiter();
+            rInStm.ReadIfDelimiter();
         }
-        bOk = rInStm.Read( ']' );
+        bOk = rInStm.ReadIf( ']' );
     }
 
     if( bOk )
     {
-        if( rInStm.Read( '{' ) )
+        if( rInStm.ReadIf( '{' ) )
         {
             DoReadContextSvIdl( rBase, rInStm );
-            bOk = rInStm.Read( '}' );
+            bOk = rInStm.ReadIf( '}' );
         }
     }
 

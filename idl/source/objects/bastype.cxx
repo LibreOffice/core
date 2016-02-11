@@ -36,8 +36,8 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     if( rTok.Is( pName ) )
     {
         bool bOk = true;
-        bool bBracket = rInStm.Read( '(' );
-        if( bBracket || rInStm.Read( '=' ) )
+        bool bBracket = rInStm.ReadIf( '(' );
+        if( bBracket || rInStm.ReadIf( '=' ) )
         {
             rTok = rInStm.GetToken();
             if( rTok.IsBool() )
@@ -47,7 +47,7 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
                 rInStm.GetToken_Next();
             }
             if( bOk && bBracket )
-                bOk = rInStm.Read( ')' );
+                bOk = rInStm.ReadIf( ')' );
         }
         else
             *this = true; //default action set to TRUE
@@ -66,8 +66,8 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
     if( rTok.Is( pName ) )
     {
         bool bOk = true;
-        bool bBracket = rInStm.Read( '(' );
-        if( bBracket || rInStm.Read( '=' ) )
+        bool bBracket = rInStm.ReadIf( '(' );
+        if( bBracket || rInStm.ReadIf( '=' ) )
         {
             rTok = rInStm.GetToken();
             if( rTok.IsIdentifier() )
@@ -76,7 +76,7 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
                 rInStm.GetToken_Next();
             }
             if( bOk && bBracket )
-                bOk = rInStm.Read( ')' );
+                bOk = rInStm.ReadIf( ')' );
         }
         if( bOk )
             return true;
@@ -111,8 +111,8 @@ bool ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString
     if( rTok.Is( pName ) )
     {
         bool bOk = true;
-        bool bBracket = rInStm.Read( '(' );
-        if( bBracket || rInStm.Read( '=' ) )
+        bool bBracket = rInStm.ReadIf( '(' );
+        if( bBracket || rInStm.ReadIf( '=' ) )
         {
             rTok = rInStm.GetToken();
             if( rTok.IsString() )
@@ -121,7 +121,7 @@ bool ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString
                 rInStm.GetToken_Next();
             }
             if( bOk && bBracket )
-                bOk = rInStm.Read( ')' );
+                bOk = rInStm.ReadIf( ')' );
         }
         if( bOk )
             return true;
