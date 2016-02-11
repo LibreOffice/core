@@ -55,18 +55,12 @@ bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool 
             bOk = false;
     }
 
-    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
-
-    while( bOk && nBeginPos != rInStm.Tell() )
+    while( bOk )
     {
-        nBeginPos = rInStm.Tell();
         pTok = &rInStm.GetToken();
         if( pTok->IsEof() )
             return true;
-        if( pTok->IsEmpty() )
-            bOk = false;
 
-        // only one import at the very beginning
         if( pTok->Is( SvHash_module() ) )
         {
             tools::SvRef<SvMetaModule> aModule = new SvMetaModule( bImported );
