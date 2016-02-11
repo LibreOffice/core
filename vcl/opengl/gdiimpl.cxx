@@ -1069,8 +1069,17 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     // If downscaling at a higher scale ratio, use the area scaling algorithm rather
     // than plain OpenGL's scaling, for better results.
     // See OpenGLSalBitmap::ImplScaleArea().
-    double ixscale = rTexture.GetWidth() / fabs( rX.getX() - rNull.getX());
-    double iyscale = rTexture.GetHeight() / fabs( rY.getY() - rNull.getY());
+
+    const long nDestWidth = basegfx::fround(basegfx::B2DVector(rX - rNull).getLength());
+    const long nDestHeight = basegfx::fround(basegfx::B2DVector(rY - rNull).getLength());
+
+    // Invisibly small images shouldn't divide by zero.
+    if( nDestHeight == 0 || nDestWidth == 0 )
+        return;
+
+    const double ixscale = rTexture.GetWidth()  / nDestWidth;
+    const double iyscale = rTexture.GetHeight() / nDestHeight;
+
     bool areaScaling = false;
     bool fastAreaScaling = false;
     OUString textureFragmentShader;
