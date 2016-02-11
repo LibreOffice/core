@@ -374,7 +374,9 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     }
     SAL_INFO("slideshow", "created the context");
 
+    mpContext->makeCurrent();
     CHECK_GL_ERROR();
+
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
     mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
@@ -550,6 +552,9 @@ bool OGLTransitionerImpl::setTransition( std::shared_ptr<OGLTransitionImpl> pTra
         return true;
 
     mpTransition = pTransition;
+
+    mpContext->makeCurrent();
+    CHECK_GL_ERROR();
 
     bool succeeded = impl_prepareTransition();
     if (!succeeded) {
@@ -1288,6 +1293,9 @@ void OGLTransitionerImpl::disposeTextures()
 
 void OGLTransitionerImpl::impl_dispose()
 {
+    mpContext->makeCurrent();
+    CHECK_GL_ERROR();
+
     impl_finishTransition();
     disposeTextures();
     if( mpContext.is() )
