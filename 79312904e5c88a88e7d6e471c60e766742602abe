@@ -16,6 +16,24 @@
       "revId": "79312904e5c88a88e7d6e471c60e766742602abe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_677c4921",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-11T12:56:42Z",
+      "side": 1,
+      "message": "I have tested and is solved the bug 97526. \nIt not copy the first page-break, and it is not only the first line from the first page. The Bug 39400 descript the first line of the first page, but in the current LO it is solve but i think the solution is a break of the odt.\n\nWhen you make a manual break, then it copy this to the next page. But it is not logical when i copy the first line of the page, i get a new page.\n\np.s: at the line 1032 it set to true, but i can remove in line 1015 it is always true, now",
+      "parentUuid": "3aaa91ec_a76c719d",
+      "revId": "79312904e5c88a88e7d6e471c60e766742602abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
