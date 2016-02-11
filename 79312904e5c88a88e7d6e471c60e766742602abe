@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a76c719d",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-11T09:30:40Z",
+      "side": 1,
+      "message": "With this change the break is only copied if the selection starts before the paragraph with break. That solves the problem from #39400.\n\nThe negative side is that I cannot copy a (e.g. landscape) page format from the first page anymore. If I want to copy such a page  I have to make sure to select from the end of the previous page. That is not possible if the previous page ends with a section, or a table.\n\np.s.: If this change will really be integrated then the variable bCopyCollFormat and all related code should also be removed.",
+      "revId": "79312904e5c88a88e7d6e471c60e766742602abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
