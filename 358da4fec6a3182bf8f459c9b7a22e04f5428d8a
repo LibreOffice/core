@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_e781594f",
+        "filename": "sw/source/core/tox/ToxWhitespaceStripper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-11T05:24:08Z",
+      "side": 1,
+      "message": "just a suggestion, because I know nothing about this code, but doesnt tab normally translate to 8 spaces?",
+      "revId": "358da4fec6a3182bf8f459c9b7a22e04f5428d8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
