@@ -29,6 +29,7 @@
 #include <command.hxx>
 #include <globals.hxx>
 #include <database.hxx>
+#include <parser.hxx>
 
 char const * SyntaxStrings[] = {
 "basic-type:",
@@ -126,7 +127,8 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         if( aStm.GetError() == SVSTREAM_OK )
         {
             SvTokenStream aTokStm( aStm, aFileName );
-            if( !pDataBase->ReadSvIdl( aTokStm, false, rCommand.aPath ) )
+            SvIdlParser aParser;
+            if( !aParser.ReadSvIdl( *pDataBase, aTokStm, false, rCommand.aPath ) )
                 return false;
         }
         else

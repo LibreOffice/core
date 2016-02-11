@@ -478,68 +478,6 @@ SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 {
 }
 
-bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const OUString & rPath )
-{
-    aPath = rPath; // only valid for this iteration
-    bool bOk = true;
-    SvToken * pTok = &rInStm.GetToken();
-    // only one import at the very beginning
-    if( pTok->Is( SvHash_import() ) )
-    {
-        rInStm.GetToken_Next();
-        pTok = rInStm.GetToken_Next();
-        if( pTok && pTok->IsString() )
-        {
-            OUString aFullName;
-            if( osl::FileBase::E_None == osl::File::searchFileURL(
-                OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
-                rPath,
-                aFullName) )
-            {
-                osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
-                this->AddDepFile(aFullName);
-                SvFileStream aStm( aFullName, STREAM_STD_READ | StreamMode::NOCREATE );
-                SvTokenStream aTokStm( aStm, aFullName );
-                bOk = ReadSvIdl( aTokStm, true, rPath );
-            }
-            else
-                bOk = false;
-        }
-        else
-            bOk = false;
-    }
-
-    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
-
-    while( bOk && nBeginPos != rInStm.Tell() )
-    {
-        nBeginPos = rInStm.Tell();
-        pTok = &rInStm.GetToken();
-        if( pTok->IsEof() )
-            return true;
-        if( pTok->IsEmpty() )
-            bOk = false;
-
-        // only one import at the very beginning
-        if( pTok->Is( SvHash_module() ) )
-        {
-            tools::SvRef<SvMetaModule> aModule = new SvMetaModule( bImported );
-            if( aModule->ReadSvIdl( *this, rInStm ) )
-                GetModuleList().push_back( aModule );
-            else
-                bOk = false;
-        }
-        else
-            bOk = false;
-    }
-    if( !bOk || !pTok->IsEof() )
-    {
-         // error treatment
-         WriteError( rInStm );
-         return false;
-    }
-    return true;
-}
 
 bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
 {

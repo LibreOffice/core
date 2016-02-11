@@ -102,6 +102,7 @@ public:
                             { aError = r; }
 
     const OUString &        GetPath() const { return aPath; }
+    void                    SetPath(const OUString &s) { aPath = s; }
     SvRefMemberList<SvMetaObject *>& GetStack() { return aContextStack; }
 
     void                    Write(const OString& rText);
@@ -134,8 +135,6 @@ class SvIdlWorkingBase : public SvIdlDataBase
 {
 public:
                 explicit SvIdlWorkingBase( const SvCommand& rCmd );
-
-    bool        ReadSvIdl( SvTokenStream &, bool bImported, const OUString & rPath );
 
     bool        WriteSfx( SvStream & );
 };

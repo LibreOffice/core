@@ -47,6 +47,7 @@ $(eval $(call gb_Executable_add_exception_objects,svidl,\
 	idl/source/prj/database \
 	idl/source/prj/globals \
 	idl/source/prj/svidl \
+	idl/source/prj/parser \
 ))
 
 # vim: set noet sw=4 ts=4:
