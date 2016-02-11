@@ -676,12 +676,16 @@ unsigned int GraphiteLayout::ScanFwdForChar(int &findChar, bool fallback) const
             for (++findChar; findChar - mnMinCharPos < int(mvChar2Glyph.size()); ++findChar)
                 if ((res = mvChar2Glyph[findChar - mnMinCharPos]) != -1)
                     return res;
+            --findChar;
+            return mvGlyphs.size() - 1;
         }
         else
         {
             for (--findChar; findChar >= mnMinCharPos; --findChar)
                 if ((res = mvChar2Glyph[findChar - mnMinCharPos]) != -1)
                     return res;
+            ++findChar;
+            return 0;
         }
         fallback = !fallback;
     }
@@ -693,8 +697,8 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
     int startChar = args.mnMinCharPos < mnMinCharPos ? mnMinCharPos : args.mnMinCharPos;
     int endChar = args.mnEndCharPos >= mnEndCharPos ? mnEndCharPos - 1 : args.mnEndCharPos;
-    unsigned int startGi = ScanFwdForChar(startChar, !bRtl);
-    unsigned int endGi = ScanFwdForChar(endChar, bRtl);
+    unsigned int startGi = ScanFwdForChar(startChar, bRtl);
+    unsigned int endGi = ScanFwdForChar(endChar, !bRtl);
     int nChars = endChar - startChar + 1;
     if (nChars <= 0) return;
     if (startGi > endGi)
