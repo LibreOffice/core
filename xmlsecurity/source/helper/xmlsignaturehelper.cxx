@@ -201,6 +201,20 @@ void XMLSignatureHelper::ExportSignature(
     XSecController::exportSignature(xDocumentHandler, signatureInfo);
 }
 
+void XMLSignatureHelper::ExportOOXMLSignature(uno::Reference<embed::XStorage> xRootStorage, uno::Reference<embed::XStorage> xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex)
+{
+    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
+    uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
+    xSaxWriter->setOutputStream(xOutputStream);
+    xSaxWriter->startDocument();
+
+    uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xSaxWriter, uno::UNO_QUERY);
+    mpXSecController->exportOOXMLSignature(xRootStorage, xDocumentHandler, rInformation);
+
+    xSaxWriter->endDocument();
+}
+
 bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler )
 {
     mbError = false;
