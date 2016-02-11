@@ -280,8 +280,8 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         if( !aSlotType.Is() )
         {
             sal_uInt32 nTokPos = rInStm.Tell();
-            SvToken * pTok = rInStm.GetToken_Next();
-            if( pTok->Is( SvHash_SlotType() ) )
+            SvToken& rTok = rInStm.GetToken_Next();
+            if( rTok.Is( SvHash_SlotType() ) )
             {
                 if( rInStm.Read( '=' ) )
                 {

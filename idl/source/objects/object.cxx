@@ -43,9 +43,9 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken&    rTok = rInStm.GetToken_Next();
 
-    if( pTok->Is( SvHash_import() ) )
+    if( rTok.Is( SvHash_import() ) )
     {
         SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
         if( pClass )
@@ -54,10 +54,10 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
             xEle.SetClass( pClass );
             aClassElementList.push_back( xEle );
 
-            pTok = &rInStm.GetToken();
-            if( pTok->IsString() )
+            rTok = rInStm.GetToken();
+            if( rTok.IsString() )
             {
-                xEle.SetPrefix( pTok->GetString() );
+                xEle.SetPrefix( rTok.GetString() );
                 rInStm.GetToken_Next();
             }
             return;

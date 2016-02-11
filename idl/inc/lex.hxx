@@ -156,7 +156,7 @@ public:
     const OUString &  GetFileName() const { return aFileName; }
     SvStream &        GetStream() { return rInStream; }
 
-    SvToken* GetToken_PrevAll()
+    SvToken& GetToken_PrevAll()
     {
         std::vector<std::unique_ptr<SvToken> >::iterator pRetToken = pCurToken;
 
@@ -164,10 +164,10 @@ public:
         if(pCurToken != aTokList.begin())
             --pCurToken;
 
-        return (*pRetToken).get();
+        return *(*pRetToken).get();
     }
 
-    SvToken* GetToken_NextAll()
+    SvToken& GetToken_NextAll()
     {
         std::vector<std::unique_ptr<SvToken> >::iterator pRetToken = pCurToken++;
 
@@ -176,10 +176,10 @@ public:
 
         SetMax();
 
-        return (*pRetToken).get();
+        return *(*pRetToken).get();
     }
 
-    SvToken* GetToken_Next()
+    SvToken& GetToken_Next()
     {
         // comments get removed initially
         return GetToken_NextAll();

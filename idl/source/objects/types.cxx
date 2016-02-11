@@ -172,32 +172,31 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
 {
     bool bOk = false;
     sal_uInt32  nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken& rTok = rInStm.GetToken_Next();
 
-    if( pTok->Is( SvHash_interface() ) )
+    if( rTok.Is( SvHash_interface() ) )
     {
         SetType( MetaTypeType::Interface );
         bOk = ReadNamesSvIdl( rInStm );
     }
-    else if( pTok->Is( SvHash_shell() ) )
+    else if( rTok.Is( SvHash_shell() ) )
     {
         SetType( MetaTypeType::Shell );
         bOk = ReadNamesSvIdl( rInStm );
     }
-    else if( pTok->Is( SvHash_struct() ) )
+    else if( rTok.Is( SvHash_struct() ) )
     {
         SetType( MetaTypeType::Struct );
         bOk = ReadNamesSvIdl( rInStm );
     }
-    else if( pTok->Is( SvHash_enum() ) )
+    else if( rTok.Is( SvHash_enum() ) )
     {
         SetType( MetaTypeType::Enum );
         bOk = ReadNameSvIdl( rInStm );
     }
-    else if( pTok->Is( SvHash_item() ) )
+    else if( rTok.Is( SvHash_item() ) )
     {
-          if( pTok->Is( SvHash_item() ) )
-            bIsItem = true;
+        bIsItem = true;
 
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
         if( pType )

@@ -31,18 +31,18 @@
 bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken& rTok = rInStm.GetToken_Next();
 
-    if( pTok->Is( pName ) )
+    if( rTok.Is( pName ) )
     {
         bool bOk = true;
         bool bBracket = rInStm.Read( '(' );
         if( bBracket || rInStm.Read( '=' ) )
         {
-            pTok = &rInStm.GetToken();
-            if( pTok->IsBool() )
+            rTok = rInStm.GetToken();
+            if( rTok.IsBool() )
             {
-                *this = pTok->GetBool();
+                *this = rTok.GetBool();
 
                 rInStm.GetToken_Next();
             }
@@ -61,18 +61,18 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken& rTok = rInStm.GetToken_Next();
 
-    if( pTok->Is( pName ) )
+    if( rTok.Is( pName ) )
     {
         bool bOk = true;
         bool bBracket = rInStm.Read( '(' );
         if( bBracket || rInStm.Read( '=' ) )
         {
-            pTok = &rInStm.GetToken();
-            if( pTok->IsIdentifier() )
+            rTok = rInStm.GetToken();
+            if( rTok.IsIdentifier() )
             {
-                setString(pTok->GetString());
+                setString(rTok.GetString());
                 rInStm.GetToken_Next();
             }
             if( bOk && bBracket )
@@ -89,14 +89,14 @@ void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken& rTok = rInStm.GetToken_Next();
 
-    if( pTok->IsIdentifier() )
+    if( rTok.IsIdentifier() )
     {
         sal_uLong n;
-        if( rBase.FindId( pTok->GetString(), &n ) )
+        if( rBase.FindId( rTok.GetString(), &n ) )
         {
-            setString(pTok->GetString());
+            setString(rTok.GetString());
             nValue = n;
             return;
         }
@@ -111,18 +111,18 @@ void SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
 bool ReadStringSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm, OString& aRetString )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken& rTok = rInStm.GetToken_Next();
 
-    if( pTok->Is( pName ) )
+    if( rTok.Is( pName ) )
     {
         bool bOk = true;
         bool bBracket = rInStm.Read( '(' );
         if( bBracket || rInStm.Read( '=' ) )
         {
-            pTok = &rInStm.GetToken();
-            if( pTok->IsString() )
+            rTok = rInStm.GetToken();
+            if( rTok.IsString() )
             {
-                aRetString = pTok->GetString();
+                aRetString = rTok.GetString();
                 rInStm.GetToken_Next();
             }
             if( bOk && bBracket )

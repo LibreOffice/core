@@ -90,10 +90,10 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     {
         bool bOk = false;
         rInStm.GetToken_Next();
-        SvToken * pTok = rInStm.GetToken_Next();
-        if( pTok->IsString() )
+        SvToken& rTok = rInStm.GetToken_Next();
+        if( rTok.IsString() )
         {
-            OUString aFullName(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
+            OUString aFullName(OStringToOUString(rTok.GetString(), RTL_TEXTENCODING_ASCII_US));
             rBase.StartNewFile( aFullName );
             osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
             osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
@@ -129,14 +129,14 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 {
                     OStringBuffer aStr("cannot open file: ");
                     aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                    rBase.SetError(aStr.makeStringAndClear(), *pTok);
+                    rBase.SetError(aStr.makeStringAndClear(), rTok);
                 }
             }
             else
             {
                 OStringBuffer aStr("cannot find file:");
                 aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                rBase.SetError(aStr.makeStringAndClear(), *pTok);
+                rBase.SetError(aStr.makeStringAndClear(), rTok);
             }
         }
         if( !bOk )
@@ -162,8 +162,8 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     bIsModified = true; // up to now always when compiler running
 
     sal_uInt32  nTokPos = rInStm.Tell();
-    SvToken * pTok  = rInStm.GetToken_Next();
-    bool bOk = pTok->Is( SvHash_module() );
+    SvToken&    rTok  = rInStm.GetToken_Next();
+    bool        bOk = rTok.Is( SvHash_module() );
     rInStm.ReadDelimiter();
     if( bOk )
     {

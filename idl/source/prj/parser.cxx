@@ -28,17 +28,17 @@ bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool 
 {
     rBase.SetPath(rPath); // only valid for this iteration
     bool bOk = true;
-    SvToken * pTok = &rInStm.GetToken();
+    SvToken& rTok = rInStm.GetToken();
     // only one import at the very beginning
-    if( pTok->Is( SvHash_import() ) )
+    if( rTok.Is( SvHash_import() ) )
     {
         rInStm.GetToken_Next();
-        pTok = rInStm.GetToken_Next();
-        if( pTok && pTok->IsString() )
+        rTok = rInStm.GetToken_Next();
+        if( rTok.IsString() )
         {
             OUString aFullName;
             if( osl::FileBase::E_None == osl::File::searchFileURL(
-                OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
+                OStringToOUString(rTok.GetString(), RTL_TEXTENCODING_ASCII_US),
                 rPath,
                 aFullName) )
             {
@@ -57,11 +57,11 @@ bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool 
 
     while( bOk )
     {
-        pTok = &rInStm.GetToken();
-        if( pTok->IsEof() )
+        rTok = rInStm.GetToken();
+        if( rTok.IsEof() )
             return true;
 
-        if( pTok->Is( SvHash_module() ) )
+        if( rTok.Is( SvHash_module() ) )
         {
             tools::SvRef<SvMetaModule> aModule = new SvMetaModule( bImported );
             if( aModule->ReadSvIdl( rBase, rInStm ) )
@@ -72,7 +72,7 @@ bool SvIdlParser::ReadSvIdl( SvIdlDataBase& rBase, SvTokenStream & rInStm, bool 
         else
             bOk = false;
     }
-    if( !bOk || !pTok->IsEof() )
+    if( !bOk || !rTok.IsEof() )
     {
          // error treatment
          rBase.WriteError( rInStm );

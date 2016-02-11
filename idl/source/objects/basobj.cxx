@@ -74,12 +74,12 @@ void SvMetaObject::SetName( const OString& rName )
 bool SvMetaObject::ReadNameSvIdl( SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
-    SvToken * pTok = rInStm.GetToken_Next();
+    SvToken& rTok = rInStm.GetToken_Next();
 
     // read module name
-    if( pTok->IsIdentifier() )
+    if( rTok.IsIdentifier() )
     {
-        SetName( pTok->GetString() );
+        SetName( rTok.GetString() );
         return true;
     }
 
