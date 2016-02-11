@@ -1128,7 +1128,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
     // handle potential interaction
-    if (aCommand == ".uno:Save")
+    if (gImpl && aCommand == ".uno:Save")
     {
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "save", gImpl, pDocument));
