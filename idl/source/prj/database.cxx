@@ -487,8 +487,7 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
     if( pTok->Is( SvHash_import() ) )
     {
         rInStm.GetToken_Next();
-        bOk = rInStm.Read( '(' ); // optional
-        pTok = bOk ? rInStm.GetToken_Next() : nullptr;
+        pTok = rInStm.GetToken_Next();
         if( pTok && pTok->IsString() )
         {
             OUString aFullName;
