@@ -224,8 +224,7 @@ class Parser:
         """
         checks each _tracked_ file in a directory recursively
         """
-        # FIXME: eventually should scan .c .mm etc. too ...
-        sock = os.popen(r"git ls-files '%s' |egrep '\.(c|h)xx$'" % directory)
+        sock = os.popen(r"git ls-files '%s' |egrep '\.(c|cc|cpp|cxx|h|hxx|mm)$'" % directory)
         lines = sock.readlines()
         sock.close()
 
