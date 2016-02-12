@@ -307,31 +307,17 @@ void
 X11SalObject::EndSetClipRegion()
 {
     XRectangle *pRectangles = maClipRegion.EndSetClipRegion ();
-    const int   nType       = SAL_OBJECT_CLIP_INCLUDERECTS;
     const int   nRectangles = maClipRegion.GetRectangleCount();
-
-    const int   dest_kind   = ShapeBounding;
-    const int   ordering    = YSorted;
-    int         op;
-
-    switch ( nType )
-    {
-        case SAL_OBJECT_CLIP_INCLUDERECTS :
-            op = ShapeSet;
-            break;
-        default :
-            op = ShapeUnion;
-    }
 
     ::Window aShapeWindow = maPrimary;
 
     XShapeCombineRectangles ( static_cast<Display*>(maSystemChildData.pDisplay),
                               aShapeWindow,
-                              dest_kind,
+                              ShapeBounding,
                               0, 0, // x_off, y_off
                               pRectangles,
                               nRectangles,
-                              op, ordering );
+                              ShapeSet, YSorted );
 }
 
 sal_uInt16
