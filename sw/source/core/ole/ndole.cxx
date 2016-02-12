@@ -864,11 +864,8 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
                     if( xMod.is() && xMod->isModified() )
                     {
                         uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
-                        if ( xPers.is() )
-                            xPers->storeOwn();
-                        else {
-                            OSL_FAIL("Modified object without persistence in cache!");
-                        }
+                        assert(xPers.is() && "Modified object without persistence in cache!");
+                        xPers->storeOwn();
                     }
 
                     // setting object to loaded state will remove it from cache

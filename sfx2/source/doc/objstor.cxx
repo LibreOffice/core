@@ -2278,14 +2278,9 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     if (xModifiable.is() && xModifiable->isModified())
                     {
                         uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
-                        if (xPers.is())
-                        {   // store it before resetting modified!
-                            xPers->storeOwn();
-                        }
-                        else
-                        {
-                            SAL_WARN("sfx.doc", "Modified object without persistence!");
-                        }
+                        assert(xPers.is() && "Modified object without persistence!");
+                        // store it before resetting modified!
+                        xPers->storeOwn();
                         xModifiable->setModified(sal_False);
                     }
                 }
