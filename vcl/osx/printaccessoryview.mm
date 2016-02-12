@@ -21,11 +21,11 @@
 
 #include "tools/resary.hxx"
 
-#include "vcl/print.hxx"
-#include "vcl/image.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/unohelp.hxx"
+#include <vcl/print.hxx>
+#include <vcl/image.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 
 #include "osx/printview.h"

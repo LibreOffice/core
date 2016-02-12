@@ -31,7 +31,7 @@
 #include "comphelper/processfactory.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 #include <lookupcolorname.hxx>
 #include <unordered_map>

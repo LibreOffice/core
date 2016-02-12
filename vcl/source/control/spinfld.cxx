@@ -19,10 +19,10 @@
 
 #include "tools/rc.h"
 
-#include "vcl/event.hxx"
-#include "vcl/decoview.hxx"
-#include "vcl/spinfld.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/event.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/spinfld.hxx>
+#include <vcl/settings.hxx>
 
 #include "controldata.hxx"
 #include "spin.hxx"

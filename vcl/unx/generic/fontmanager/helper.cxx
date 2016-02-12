@@ -29,8 +29,8 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>
-#include "vcl/helper.hxx"
-#include "vcl/ppdparser.hxx"
+#include <vcl/helper.hxx>
+#include <vcl/ppdparser.hxx>
 #include <memory>
 
 using ::rtl::Bootstrap;

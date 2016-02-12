@@ -19,13 +19,13 @@
 
 #include "tools/rc.h"
 
-#include "vcl/decoview.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/event.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/implimagetree.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/decoview.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/event.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/implimagetree.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <comphelper/string.hxx>
 #include "controldata.hxx"

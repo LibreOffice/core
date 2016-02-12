@@ -19,7 +19,7 @@
 
 #include "osl/diagnose.h"
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"

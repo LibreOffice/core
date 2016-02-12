@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "PresenterSlideSorter.hxx"
 #include "PresenterButton.hxx"

@@ -47,7 +47,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
-#include "vcl/window.hxx"
+#include <vcl/window.hxx>
 #include <helpid.hrc>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/ctrl.hxx"
-#include "vcl/outdev.hxx"
+#include <vcl/ctrl.hxx>
+#include <vcl/outdev.hxx>
 
 #include "fontinstance.hxx"
 #include "textlayout.hxx"

@@ -19,7 +19,7 @@
 
 #include "rtl/ustrbuf.hxx"
 
-#include "vcl/button.hxx"
+#include <vcl/button.hxx>
 
 #include "osx/salsys.h"
 #include "osx/saldata.hxx"

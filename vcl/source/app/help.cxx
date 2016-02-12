@@ -23,12 +23,12 @@
 #include "tools/diagnose_ex.h"
 #include "tools/time.hxx"
 
-#include "vcl/window.hxx"
-#include "vcl/event.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/help.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/window.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 
 #include "helpwin.hxx"
 #include "salframe.hxx"

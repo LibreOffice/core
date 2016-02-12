@@ -20,7 +20,7 @@
 #include <poll.h>
 #include "salgdiimpl.hxx"
 
-#include "vcl/salbtype.hxx"
+#include <vcl/salbtype.hxx>
 
 #include "unx/pixmap.hxx"
 #include "unx/salunx.h"
@@ -36,7 +36,7 @@
 
 #include "unx/printergfx.hxx"
 
-#include "vcl/bitmapaccess.hxx"
+#include <vcl/bitmapaccess.hxx>
 #include <outdata.hxx>
 
 void X11SalGraphics::CopyScreenArea( Display* pDisplay,

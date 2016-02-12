@@ -28,9 +28,9 @@
 
 #include "unx/printerjob.hxx"
 #include "unx/printergfx.hxx"
-#include "vcl/ppdparser.hxx"
-#include "vcl/strhelper.hxx"
-#include "vcl/printerinfomanager.hxx"
+#include <vcl/ppdparser.hxx>
+#include <vcl/strhelper.hxx>
+#include <vcl/printerinfomanager.hxx>
 
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.hxx"

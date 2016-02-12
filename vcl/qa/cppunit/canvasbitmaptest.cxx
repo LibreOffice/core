@@ -32,13 +32,13 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
 
-#include "vcl/svapp.hxx"
-#include "vcl/canvastools.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/bitmapaccess.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/bitmapex.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/canvastools.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include "canvasbitmap.hxx"
 #include <algorithm>

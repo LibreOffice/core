@@ -29,11 +29,11 @@
 
 #include "rtl/ustrbuf.hxx"
 
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
-#include "vcl/idle.hxx"
-#include "vcl/svmain.hxx"
-#include "vcl/opengl/OpenGLContext.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/svmain.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"

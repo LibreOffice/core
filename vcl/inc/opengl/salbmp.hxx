@@ -22,7 +22,7 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include "vcl/salbtype.hxx"
+#include <vcl/salbtype.hxx>
 #include "opengl/bmpop.hxx"
 #include "opengl/texture.hxx"
 

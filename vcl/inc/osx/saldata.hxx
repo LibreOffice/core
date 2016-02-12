@@ -28,7 +28,7 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 
-#include "vcl/ptrstyle.hxx"
+#include <vcl/ptrstyle.hxx>
 
 #include "svdata.hxx"
 #include "salwtype.hxx"

@@ -22,7 +22,7 @@
 
 #include "unx/freetype_glyphcache.hxx"
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 #include <fontinstance.hxx>
 #include <impfont.hxx>
 #include "fontattributes.hxx"

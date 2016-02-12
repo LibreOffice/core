@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
-#include "vcl/toolbox.hxx"
-#include "vcl/menu.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/menu.hxx>
 
 #include "osx/a11yfocustracker.hxx"
 

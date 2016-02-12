@@ -32,7 +32,7 @@
 
 #include "atklistener.hxx"
 #include "atkwrapper.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 #include <rtl/ref.hxx>
 

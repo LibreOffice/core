@@ -14,11 +14,11 @@
 #include "unx/gtk/gtkinst.hxx"
 #include "unx/gtk/gtkprn.hxx"
 
-#include "vcl/configsettings.hxx"
-#include "vcl/help.hxx"
-#include "vcl/print.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
+#include <vcl/configsettings.hxx>
+#include <vcl/help.hxx>
+#include <vcl/print.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <gtk/gtk.h>
 

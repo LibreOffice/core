@@ -19,12 +19,12 @@
 
 #include "pdfwriter_impl.hxx"
 
-#include "vcl/pdfextoutdevdata.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/metaact.hxx"
-#include "vcl/bitmapaccess.hxx"
-#include "vcl/graph.hxx"
+#include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/graph.hxx>
 
 #include "svdata.hxx"
 

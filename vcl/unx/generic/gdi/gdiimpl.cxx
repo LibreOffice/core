@@ -23,7 +23,7 @@
 
 #include "gdiimpl.hxx"
 
-#include "vcl/salbtype.hxx"
+#include <vcl/salbtype.hxx>
 #include <vcl/gradient.hxx>
 
 #include "unx/salunx.h"

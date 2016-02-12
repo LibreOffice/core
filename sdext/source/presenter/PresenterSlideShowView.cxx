@@ -19,7 +19,7 @@
  */
 
 #include "PresenterSlideShowView.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterHelper.hxx"

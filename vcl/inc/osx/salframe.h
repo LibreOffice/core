@@ -24,7 +24,7 @@
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #include <postmac.h>
 
-#include "vcl/sysdata.hxx"
+#include <vcl/sysdata.hxx>
 
 #include "osx/salmenu.h"
 #include "osx/saldata.hxx"

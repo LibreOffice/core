@@ -25,7 +25,7 @@
 
 #include "rtl/ustrbuf.hxx"
 
-#include "vcl/i18nhelp.hxx"
+#include <vcl/i18nhelp.hxx>
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/i18n/TransliterationModules.hpp"

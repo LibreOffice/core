@@ -36,7 +36,7 @@
 #include "osl/module.h"
 
 #include <opengl/win/gdiimpl.hxx>
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include "win/svsys.h"

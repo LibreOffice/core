@@ -77,7 +77,7 @@
 #include <sys/stat.h>
 
 #include "parseAFM.hxx"
-#include "vcl/strhelper.hxx"
+#include <vcl/strhelper.hxx>
 
 #include "rtl/alloc.h"
 

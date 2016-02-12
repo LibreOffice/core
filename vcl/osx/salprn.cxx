@@ -21,7 +21,7 @@
 
 #include "officecfg/Office/Common.hxx"
 
-#include "vcl/print.hxx"
+#include <vcl/print.hxx>
 #include <sal/macros.h>
 
 #include "osx/salinst.h"

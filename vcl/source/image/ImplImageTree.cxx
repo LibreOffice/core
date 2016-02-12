@@ -38,12 +38,12 @@
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
-#include "vcl/bitmapex.hxx"
+#include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/implimagetree.hxx>
-#include "vcl/pngread.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/pngread.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcldemo-debug.hxx>
 
 #include <vcl/BitmapProcessor.hxx>

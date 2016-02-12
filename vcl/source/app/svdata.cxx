@@ -28,15 +28,15 @@
 #include <tools/gen.hxx>
 #include <uno/current_context.hxx>
 
-#include "vcl/configsettings.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/layout.hxx"
-#include "vcl/button.hxx"
-#include "vcl/dockwin.hxx"
-#include "vcl/print.hxx"
-#include "vcl/virdev.hxx"
+#include <vcl/configsettings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dockwin.hxx>
+#include <vcl/print.hxx>
+#include <vcl/virdev.hxx>
 #include "salinst.hxx"
 #include "salframe.hxx"
 #include "salgdi.hxx"
@@ -52,7 +52,7 @@
 
 #include "officecfg/Office/Common.hxx"
 
-#include "vcl/opengl/OpenGLContext.hxx"
+#include <vcl/opengl/OpenGLContext.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

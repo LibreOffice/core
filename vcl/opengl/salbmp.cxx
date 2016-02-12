@@ -21,14 +21,14 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include "vcl/bitmap.hxx"
-#include "vcl/checksum.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/salbtype.hxx"
+#include <vcl/bitmap.hxx>
+#include <vcl/checksum.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/salbtype.hxx>
 #include "svdata.hxx"
 #include "salgdi.hxx"
 #include "vcleventlisteners.hxx"
-#include "vcl/lazydelete.hxx"
+#include <vcl/lazydelete.hxx>
 
 #include <o3tl/make_shared.hxx>
 

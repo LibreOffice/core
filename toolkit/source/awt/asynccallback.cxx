@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 #include "osl/mutex.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"

@@ -42,7 +42,7 @@
 
 #define round_to_long(a) ((a) >= 0 ? ((long)((a) + 0.5)) : ((long)((a) - 0.5)))
 
-#include "vcl/salgtype.hxx"
+#include <vcl/salgtype.hxx>
 
 std::ostream &operator <<(std::ostream& s, CTFontRef pFont);
 

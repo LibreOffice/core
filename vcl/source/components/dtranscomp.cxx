@@ -19,7 +19,7 @@
 
 #include "osl/mutex.hxx"
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 #include "factory.hxx"
 #include "svdata.hxx"

@@ -27,14 +27,14 @@
 
 #include "sal/alloca.h"
 
-#include "vcl/floatwin.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/keycodes.hxx"
-#include "vcl/layout.hxx"
-#include "vcl/printerinfomanager.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/bitmapaccess.hxx"
-#include "vcl/opengl/OpenGLContext.hxx"
+#include <vcl/floatwin.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/keycodes.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/printerinfomanager.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include <prex.h>
 #include <X11/Xatom.h>

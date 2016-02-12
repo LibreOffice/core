@@ -20,8 +20,8 @@
 #undef ENABLE_PANE_RESIZING
 //#define ENABLE_PANE_RESIZING
 
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "PresenterWindowManager.hxx"
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"

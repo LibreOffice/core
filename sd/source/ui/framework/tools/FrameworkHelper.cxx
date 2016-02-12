@@ -39,7 +39,7 @@
 #include <sfx2/dispatch.hxx>
 
 #include "MutexOwner.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <tools/diagnose_ex.h>

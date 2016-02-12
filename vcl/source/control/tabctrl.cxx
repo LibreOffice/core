@@ -20,17 +20,17 @@
 #include "tools/debug.hxx"
 #include "tools/rc.h"
 
-#include "vcl/svapp.hxx"
-#include "vcl/help.hxx"
-#include "vcl/event.hxx"
-#include "vcl/menu.hxx"
-#include "vcl/button.hxx"
-#include "vcl/tabpage.hxx"
-#include "vcl/tabctrl.hxx"
-#include "vcl/controllayout.hxx"
-#include "vcl/layout.hxx"
-#include "vcl/lstbox.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/help.hxx>
+#include <vcl/event.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/button.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/controllayout.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/settings.hxx>
 
 #include "controldata.hxx"
 #include "svdata.hxx"

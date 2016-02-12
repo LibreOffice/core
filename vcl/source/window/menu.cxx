@@ -63,7 +63,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/configsettings.hxx>
 
-#include "vcl/lazydelete.hxx"
+#include <vcl/lazydelete.hxx>
 
 #include <sfx2/sfxsids.hrc>
 

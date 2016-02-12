@@ -30,7 +30,7 @@
 #include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
-#include "vcl/bitmap.hxx"
+#include <vcl/bitmap.hxx>
 
 using namespace x11;
 

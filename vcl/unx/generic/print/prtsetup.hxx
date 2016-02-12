@@ -22,17 +22,17 @@
 
 #include "tools/link.hxx"
 
-#include "vcl/tabdlg.hxx"
-#include "vcl/tabpage.hxx"
-#include "vcl/tabctrl.hxx"
-#include "vcl/button.hxx"
-#include "vcl/edit.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/lstbox.hxx"
-#include "vcl/field.hxx"
-#include "vcl/combobox.hxx"
-#include "vcl/ppdparser.hxx"
-#include "vcl/printerinfomanager.hxx"
+#include <vcl/tabdlg.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/button.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/field.hxx>
+#include <vcl/combobox.hxx>
+#include <vcl/ppdparser.hxx>
+#include <vcl/printerinfomanager.hxx>
 
 class RTSPaperPage;
 class RTSDevicePage;

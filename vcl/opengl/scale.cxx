@@ -21,7 +21,7 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include "vcl/bitmap.hxx"
+#include <vcl/bitmap.hxx>
 
 #include "opengl/zone.hxx"
 #include "opengl/salbmp.hxx"

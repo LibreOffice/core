@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/window.hxx"
-#include "vcl/waitobj.hxx"
-#include "vcl/button.hxx"
+#include <vcl/window.hxx>
+#include <vcl/waitobj.hxx>
+#include <vcl/button.hxx>
 
 WaitObject::~WaitObject()
 {

@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 
-#include "vcl/window.hxx"
+#include <vcl/window.hxx>
 #include "unx/gtk/gtkframe.hxx"
 #include "gtk/fpicker/SalGtkPicker.hxx"
 

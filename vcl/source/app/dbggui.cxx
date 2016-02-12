@@ -27,9 +27,9 @@
 #include <tools/lineend.hxx>
 #include "sal/log.hxx"
 
-#include "vcl/svapp.hxx"
-#include "vcl/event.hxx"
-#include "vcl/threadex.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
+#include <vcl/threadex.hxx>
 
 #include "svdata.hxx"
 #include "dbggui.hxx"

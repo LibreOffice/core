@@ -22,7 +22,7 @@
 
 #include "tools/gen.hxx"
 
-#include "vcl/salbtype.hxx"
+#include <vcl/salbtype.hxx>
 
 #include "quartz/salgdi.h"
 

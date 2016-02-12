@@ -33,7 +33,7 @@
 #include <osl/thread.h>
 #include <unotools/configmgr.hxx>
 
-#include "vcl/unohelp.hxx"
+#include <vcl/unohelp.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

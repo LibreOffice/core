@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/quickselectionengine.hxx"
-#include "vcl/event.hxx"
-#include "vcl/timer.hxx"
-#include "vcl/i18nhelp.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/quickselectionengine.hxx>
+#include <vcl/event.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/i18nhelp.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <boost/optional.hpp>
 

@@ -30,8 +30,8 @@
 #include <win/salgdi.h>
 #include <win/salframe.h>
 
-#include "vcl/salbtype.hxx"
-#include "vcl/bitmapaccess.hxx"
+#include <vcl/salbtype.hxx>
+#include <vcl/bitmapaccess.hxx>
 #include "outdata.hxx"
 #include "salgdiimpl.hxx"
 #include "opengl/win/gdiimpl.hxx"

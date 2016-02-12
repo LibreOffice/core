@@ -22,7 +22,7 @@
 #include <signal.h>
 
 #include "unx/cupsmgr.hxx"
-#include "vcl/strhelper.hxx"
+#include <vcl/strhelper.hxx>
 
 #include "unx/saldata.hxx"
 

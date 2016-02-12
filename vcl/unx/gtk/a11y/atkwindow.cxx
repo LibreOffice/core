@@ -20,7 +20,7 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include "vcl/popupmenuwindow.hxx"
+#include <vcl/popupmenuwindow.hxx>
 
 #include "atkwindow.hxx"
 #include "atkwrapper.hxx"

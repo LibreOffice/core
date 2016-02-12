@@ -18,7 +18,7 @@
  */
 
 
-#include "vcl/print.hxx"
+#include <vcl/print.hxx>
 
 #include "osx/printview.h"
 #include "osx/salprn.h"

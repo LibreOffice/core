@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 
-#include "vcl/svapp.hxx"
-#include "vcl/sysdata.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
 
 #ifdef MACOSX
 #include "osx/salinst.h"

@@ -15,7 +15,7 @@
 #include "swtypes.hxx"
 #include "calbck.hxx"
 #include "unocrsr.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 class   SwWrtShell;
 struct  SwPosition;

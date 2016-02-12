@@ -20,11 +20,11 @@
 #include <stdlib.h>
 
 #include <comphelper/string.hxx>
-#include "vcl/ppdparser.hxx"
-#include "vcl/strhelper.hxx"
-#include "vcl/helper.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/ppdparser.hxx>
+#include <vcl/strhelper.hxx>
+#include <vcl/helper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "unx/cupsmgr.hxx"
 

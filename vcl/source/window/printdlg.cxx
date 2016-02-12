@@ -22,19 +22,19 @@
 #include "svids.hrc"
 #include "jobset.h"
 
-#include "vcl/print.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/button.hxx"
-#include "vcl/wall.hxx"
-#include "vcl/status.hxx"
-#include "vcl/decoview.hxx"
-#include "vcl/configsettings.hxx"
-#include "vcl/help.hxx"
-#include "vcl/layout.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/unohelp.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/builderfactory.hxx"
+#include <vcl/print.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/status.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/configsettings.hxx>
+#include <vcl/help.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "unotools/localedatawrapper.hxx"
 

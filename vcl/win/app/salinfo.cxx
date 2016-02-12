@@ -22,7 +22,7 @@
 
 #include "tools/debug.hxx"
 
-#include "vcl/window.hxx"
+#include <vcl/window.hxx>
 
 #include "win/salsys.h"
 #include "win/salframe.h"

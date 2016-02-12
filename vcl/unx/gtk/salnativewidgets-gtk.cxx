@@ -19,7 +19,7 @@
 
 #include <config_version.h>
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 #include "unx/gtk/gtkframe.hxx"
 #include "unx/gtk/gtkdata.hxx"
@@ -38,7 +38,7 @@
 
 #include <boost/optional.hpp>
 
-#include "vcl/vclenum.hxx"
+#include <vcl/vclenum.hxx>
 #include <vcl/settings.hxx>
 #include "unx/fontmanager.hxx"
 #include <vcl/decoview.hxx>

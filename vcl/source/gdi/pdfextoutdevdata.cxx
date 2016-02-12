@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/pdfextoutdevdata.hxx"
-#include "vcl/graph.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/gfxlink.hxx"
+#include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/gfxlink.hxx>
 #include "vcl/dllapi.h"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"

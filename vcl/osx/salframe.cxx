@@ -24,9 +24,9 @@
 
 #include "osl/file.h"
 
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
-#include "vcl/syswin.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/settings.hxx>
 
 #include "osx/saldata.hxx"

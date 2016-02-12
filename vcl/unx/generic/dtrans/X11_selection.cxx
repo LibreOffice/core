@@ -48,7 +48,7 @@
 #include <X11_dndcontext.hxx>
 #include <bmp.hxx>
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 // pointer bitmaps
 #include <copydata_curs.h>

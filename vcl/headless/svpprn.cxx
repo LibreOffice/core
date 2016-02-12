@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/svapp.hxx"
-#include "vcl/timer.hxx"
-#include "vcl/printerinfomanager.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/printerinfomanager.hxx>
 
 #include "jobset.h"
 #include "print.h"
