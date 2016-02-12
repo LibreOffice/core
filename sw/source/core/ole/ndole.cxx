@@ -932,33 +932,31 @@ void SwOLELRUCache::Load()
     Sequence< Any > aValues = GetProperties( aNames );
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if( aValues.getLength() == aNames.getLength() && pValues->hasValue() )
+    if (aValues.getLength() != aNames.getLength() || !pValues->hasValue())
+        return;
+
+    sal_Int32 nVal = 0;
+    *pValues >>= nVal;
+
+    if (nVal < m_nLRU_InitSize)
     {
-        sal_Int32 nVal = 0;
-        *pValues >>= nVal;
+        std::shared_ptr<SwOLELRUCache> tmp(g_pOLELRU_Cache); // prevent delete this
+        // size of cache has been changed
+        sal_Int32 nCount = m_OleObjects.size();
+        sal_Int32 nPos = nCount;
 
+        // try to remove the last entries until new maximum size is reached
+        while( nCount > nVal )
         {
-            if (nVal < m_nLRU_InitSize)
-            {
-                std::shared_ptr<SwOLELRUCache> tmp(g_pOLELRU_Cache); // prevent delete this
-                // size of cache has been changed
-                sal_Int32 nCount = m_OleObjects.size();
-                sal_Int32 nPos = nCount;
-
-                // try to remove the last entries until new maximum size is reached
-                while( nCount > nVal )
-                {
-                    SwOLEObj *const pObj = m_OleObjects[ --nPos ];
-                    if ( pObj->UnloadObject() )
-                        nCount--;
-                    if ( !nPos )
-                        break;
-                }
-            }
+            SwOLEObj *const pObj = m_OleObjects[ --nPos ];
+            if ( pObj->UnloadObject() )
+                nCount--;
+            if ( !nPos )
+                break;
         }
-
-        m_nLRU_InitSize = nVal;
     }
+
+    m_nLRU_InitSize = nVal;
 }
 
 void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
