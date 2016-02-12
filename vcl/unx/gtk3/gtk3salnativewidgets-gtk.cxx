@@ -1929,12 +1929,19 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         GdkRGBA field_background_color;
         gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &field_background_color);
-        g_object_unref( pCStyle );
 
         ::Color aBackFieldColor = getColor( field_background_color );
         aStyleSet.SetFieldColor( aBackFieldColor );
         // This baby is the default page/paper color
         aStyleSet.SetWindowColor( aBackFieldColor );
+
+        // Dark shadow color
+        gtk_style_context_set_state(pCStyle, GTK_STATE_FLAG_INSENSITIVE);
+        gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &color);
+        ::Color aDarkShadowColor = getColor( color );
+        aStyleSet.SetDarkShadowColor( aDarkShadowColor );
+
+        g_object_unref( pCStyle );
 
         // Tab colors
         aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
@@ -1973,21 +1980,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gtk_style_context_get_color( mpMenuBarItemStyle, gtk_style_context_get_state(mpMenuBarItemStyle), &text_color );
     aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
     aStyleSet.SetMenuBarHighlightTextColor( aTextColor );
-
-    // Awful hack for menu separators in the Sonar and similar themes.
-    // If the menu color is not too dark, and the menu text color is lighter,
-    // make the "light" color lighter than the menu color and the "shadow"
-    // color darker than it.
-    if ( aStyleSet.GetMenuColor().GetLuminance() >= 32 &&
-     aStyleSet.GetMenuColor().GetLuminance() <= aStyleSet.GetMenuTextColor().GetLuminance() )
-    {
-        ::Color temp = aStyleSet.GetMenuColor();
-        temp.IncreaseLuminance( 8 );
-        aStyleSet.SetLightColor( temp );
-        temp = aStyleSet.GetMenuColor();
-        temp.DecreaseLuminance( 16 );
-        aStyleSet.SetShadowColor( temp );
-    }
 
     gtk_style_context_set_state(mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT);
     gtk_style_context_get_background_color( mpMenuItemStyle, gtk_style_context_get_state(mpMenuItemStyle), &background_color );
