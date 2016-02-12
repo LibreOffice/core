@@ -592,11 +592,9 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     GtkIconInfo *info = gtk_icon_theme_lookup_icon(pIconTheme, icon, std::min(iconWidth, iconHeight),
                                                    static_cast<GtkIconLookupFlags>(0));
 
-    GdkPixbuf *pixbuf = gtk_icon_info_load_symbolic_for_context
-                                                        (info,
-                                                         context,
-                                                         nullptr,
-                                                         nullptr);
+    GdkPixbuf *pixbuf = gtk_icon_info_load_symbolic_for_context(info, context, nullptr, nullptr);
+    g_object_unref(info);
+
     iconWidth = gdk_pixbuf_get_width(pixbuf);
     iconHeight = gdk_pixbuf_get_height(pixbuf);
     Rectangle arrowRect;
@@ -606,7 +604,6 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 
     gtk_render_icon(context, cr, pixbuf, arrowRect.Left(), arrowRect.Top());
     g_object_unref(pixbuf);
-    gtk_icon_info_free(info);
 }
 
 Rectangle GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
