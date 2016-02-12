@@ -80,12 +80,13 @@ enum class RectVerAlign
 };
 
 // different methods of copying baselines and mid's in 'ExtendBy' function
-enum RectCopyMBL
-{   RCP_THIS,   // keep baseline of current object even if it has none
-    RCP_ARG,    // as above but for the argument
-    RCP_NONE,   // result will have no baseline
-    RCP_XOR     // if current object has a baseline keep it else copy
-                //   the arguments baseline (even if it has none)
+enum class RectCopyMBL
+{
+    This,   // keep baseline of current object even if it has none
+    Arg,    // as above but for the argument
+    None,   // result will have no baseline
+    Xor     // if current object has a baseline keep it else copy
+            //   the arguments baseline (even if it has none)
 };
 
 

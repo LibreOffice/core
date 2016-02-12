@@ -714,7 +714,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             if (i)
                 aPos.Y() += nDist;
             pNode->MoveTo(aPos);
-            ExtendBy(rNodeRect, nSize > 1 ? RCP_NONE : RCP_ARG);
+            ExtendBy(rNodeRect, nSize > 1 ? RectCopyMBL::None : RectCopyMBL::Arg);
         }
     }
     // #i972#
@@ -811,7 +811,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             aPos.X() += nDist;
 
             pNode->MoveTo(aPos);
-            ExtendBy( *pNode, RCP_XOR );
+            ExtendBy( *pNode, RectCopyMBL::Xor );
         }
 }
 
@@ -861,7 +861,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (*pBody);
     long  nOldBot = GetBottom();
 
-    ExtendBy(*pOper, RCP_XOR);
+    ExtendBy(*pOper, RectCopyMBL::Xor);
 
     // workaround for Bug 50865: "a^2 a^+2" have different baselines
     // for exponents (if size of exponent is large enough)
@@ -948,9 +948,9 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pRootSym, RCP_THIS);
+    ExtendBy(*pRootSym, RectCopyMBL::This);
     if (pExtra)
-        ExtendBy(*pExtra, RCP_THIS, true);
+        ExtendBy(*pExtra, RectCopyMBL::This, true);
 }
 
 
@@ -1000,7 +1000,7 @@ void SmDynIntegralNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // override its own rectangle with pBody's
     SmRect::operator = (*pBody);
     // extends this rectangle with the symbol's one
-    ExtendBy(*pDynIntegralSym, RCP_THIS);
+    ExtendBy(*pDynIntegralSym, RectCopyMBL::This);
 
 }
 
@@ -1050,13 +1050,13 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     aPos = pOper->AlignTo(*this, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
     aPos.X() += nDist;
     pOper->MoveTo(aPos);
-    ExtendBy(*pOper, RCP_XOR);
+    ExtendBy(*pOper, RectCopyMBL::Xor);
 
     aPos = pRight->AlignTo(*this, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
     aPos.X() += nDist;
 
     pRight->MoveTo(aPos);
-    ExtendBy(*pRight, RCP_XOR);
+    ExtendBy(*pRight, RectCopyMBL::Xor);
 }
 
 
@@ -1117,7 +1117,7 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pDenom->MoveTo(aPos);
 
     SmRect::operator = (*pNum);
-    ExtendBy(*pDenom, RCP_NONE).ExtendBy(*pLine, RCP_NONE, pLine->GetCenterY());
+    ExtendBy(*pDenom, RectCopyMBL::None).ExtendBy(*pLine, RectCopyMBL::None, pLine->GetCenterY());
 }
 
 void SmBinVerNode::CreateTextFromNode(OUString &rText)
@@ -1371,7 +1371,7 @@ void SmBinDiagonalNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
                        nTmpBaseline);
 
     SmRect::operator = (*pLeft);
-    ExtendBy(*pRight, RCP_NONE);
+    ExtendBy(*pRight, RectCopyMBL::None);
 
 
     // determine position and size of diagonal line
@@ -1386,7 +1386,7 @@ void SmBinDiagonalNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     pOper->MoveTo(aPos);
 
-    ExtendBy(*pOper, RCP_NONE, nTmpBaseline);
+    ExtendBy(*pOper, RectCopyMBL::None, nTmpBaseline);
 }
 
 
@@ -1494,7 +1494,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         }
 
         pSubSup->MoveTo(aPos);
-        ExtendBy(*pSubSup, RCP_THIS, true);
+        ExtendBy(*pSubSup, RectCopyMBL::This, true);
 
         // update rectangle to which  RSUB, RSUP, LSUB, LSUP
         // will be aligned to
@@ -1682,7 +1682,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pRight->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pLeft, RCP_THIS).ExtendBy(*pRight, RCP_THIS);
+    ExtendBy(*pLeft, RectCopyMBL::This).ExtendBy(*pRight, RectCopyMBL::This);
 }
 
 
@@ -1707,7 +1707,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         SmRect aTmpRect (*GetSubNode(i));
         Point  aPos = aTmpRect.AlignTo(aRefRect, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
         aTmpRect.MoveTo(aPos);
-        aRefRect.ExtendBy(aTmpRect, RCP_XOR);
+        aRefRect.ExtendBy(aTmpRect, RectCopyMBL::Xor);
     }
 
     nBodyHeight = aRefRect.GetHeight();
@@ -1744,7 +1744,7 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         aPosX.X() += nDist;
 
         pRight->MoveTo(Point(aPosX.X(), aPosY.Y()));
-        ExtendBy(*pRight, bIsSeparator ? RCP_THIS : RCP_XOR);
+        ExtendBy(*pRight, bIsSeparator ? RectCopyMBL::This : RectCopyMBL::Xor);
 
         pLeft = pRight;
     }
@@ -1808,7 +1808,7 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pScript->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pBrace, RCP_THIS).ExtendBy(*pScript, RCP_THIS);
+    ExtendBy(*pBrace, RectCopyMBL::This).ExtendBy(*pScript, RectCopyMBL::This);
 }
 
 
@@ -1876,7 +1876,7 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pSymbol->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pSymbol, RCP_THIS);
+    ExtendBy(*pSymbol, RectCopyMBL::This);
 }
 
 
@@ -1944,7 +1944,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pAttr->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pAttr, RCP_THIS, true);
+    ExtendBy(*pAttr, RectCopyMBL::This, true);
 }
 
 void SmFontNode::CreateTextFromNode(OUString &rText)
@@ -2556,7 +2556,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             }
 
             pTmpNode->MoveTo(aPos);
-            aLineRect.ExtendBy(rNodeRect, RCP_XOR);
+            aLineRect.ExtendBy(rNodeRect, RectCopyMBL::Xor);
         }
 
         aPos = aLineRect.AlignTo(*this, RectPos::Bottom, RectHorAlign::Center, RectVerAlign::Baseline);
@@ -2570,7 +2570,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             if (nullptr != (pNode = GetSubNode(i * nNumCols + j)))
                 pNode->Move(aDelta);
 
-        ExtendBy(aLineRect, RCP_NONE);
+        ExtendBy(aLineRect, RectCopyMBL::None);
     }
 }
 
