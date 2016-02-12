@@ -139,11 +139,6 @@ void AquaSalObject::ResetClipRegion()
     setClippedPosSize();
 }
 
-sal_uInt16 AquaSalObject::GetClipRegionType()
-{
-    return SAL_OBJECT_CLIP_INCLUDERECTS;
-}
-
 void AquaSalObject::BeginSetClipRegion( sal_uLong )
 {
     mbClip = false;

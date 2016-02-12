@@ -101,11 +101,6 @@ void GtkSalObject::ResetClipRegion()
         gdk_window_shape_combine_region( widget_get_window(m_pSocket), nullptr, 0, 0 );
 }
 
-sal_uInt16 GtkSalObject::GetClipRegionType()
-{
-    return SAL_OBJECT_CLIP_INCLUDERECTS;
-}
-
 void GtkSalObject::BeginSetClipRegion( sal_uLong )
 {
     if( m_pRegion )

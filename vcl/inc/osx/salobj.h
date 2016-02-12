@@ -55,7 +55,6 @@ public:
     virtual ~AquaSalObject();
 
     virtual void                    ResetClipRegion() override;
-    virtual sal_uInt16              GetClipRegionType() override;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) override;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
     virtual void                    EndSetClipRegion() override;

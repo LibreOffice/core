@@ -26,8 +26,6 @@
 
 struct SystemEnvData;
 
-#define SAL_OBJECT_CLIP_INCLUDERECTS            ((sal_uInt16)0x0001)
-
 class VCL_PLUGIN_PUBLIC SalObject
 {
     void*               m_pInst;
@@ -39,7 +37,6 @@ public:
             virtual ~SalObject();
 
     virtual void                    ResetClipRegion() = 0;
-    virtual sal_uInt16              GetClipRegionType() = 0;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    EndSetClipRegion() = 0;

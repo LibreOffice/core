@@ -320,12 +320,6 @@ X11SalObject::EndSetClipRegion()
                               ShapeSet, YSorted );
 }
 
-sal_uInt16
-X11SalObject::GetClipRegionType()
-{
-    return SAL_OBJECT_CLIP_INCLUDERECTS;
-}
-
 void
 X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
