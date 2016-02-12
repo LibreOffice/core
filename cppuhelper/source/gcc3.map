@@ -436,3 +436,7 @@ GLIBCXX_3.4 {
         _ZGVNSt7num_put*; _ZNSt7num_put*;
         _ZNSs4_Rep20_S_empty_rep_storageE;
 };
+
+LIBO_UDK_5.2 { # LibO 5.2
+        _ZN4cppu16preInitBootstrapEv;
+} LIBO_UDK_5.2;
