@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
@@ -41,6 +42,8 @@
 #include "FrameView.hxx"
 
 #include <tools/diagnose_ex.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -521,6 +524,7 @@ vcl::Region SlideSorterModel::RestoreSelection()
 bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
 {
     ::osl::MutexGuard aGuard (maMutex);
+    sal_Int32 nIndex = -1;
 
     SdPage* pPage = const_cast<SdPage*>(dynamic_cast<const SdPage*>(pSdrPage));
     if (pPage == nullptr)
@@ -534,30 +538,42 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
         return false;
 
     if (pPage->IsInserted())
-        InsertSlide(pPage);
+        nIndex = InsertSlide(pPage);
     else
-        DeleteSlide(pPage);
+        nIndex = DeleteSlide(pPage);
     CheckModel(*this);
+
+    if (comphelper::LibreOfficeKit::isActive() &&
+        nIndex != -1)
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream;
+        aTree.put("action", pPage->IsInserted() ? "PartInserted" : "PartDeleted");
+        aTree.put("part", OUString::number(nIndex).toUtf8().getStr());
+        boost::property_tree::write_json(aStream, aTree);
+        const OString aPayload = aStream.str().c_str();
+        GetDocument()->libreOfficeKitCallback(LOK_CALLBACK_PARTS_COUNT_CHANGED, aPayload.getStr());
+    }
 
     return true;
 }
 
-void SlideSorterModel::InsertSlide (SdPage* pPage)
+sal_Int32 SlideSorterModel::InsertSlide (SdPage* pPage)
 {
     // Find the index at which to insert the given page.
     sal_uInt16 nCoreIndex (pPage->GetPageNum());
     sal_Int32 nIndex (FromCoreIndex(nCoreIndex));
     if (pPage != GetPage(nIndex))
-        return;
+        return -1;
 
     // Check that the pages in the document before and after the given page
     // are present in this model.
     if (nIndex>0)
         if (GetPage(nIndex-1) != GetPageDescriptor(nIndex-1)->GetPage())
-            return;
+            return -1;
     if (size_t(nIndex)<maPageDescriptors.size()-1)
         if (GetPage(nIndex+1) != GetPageDescriptor(nIndex)->GetPage())
-            return;
+            return -1;
 
     // Insert the given page at index nIndex
     maPageDescriptors.insert(
@@ -570,9 +586,11 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
 
     // Update page indices.
     UpdateIndices(nIndex+1);
+
+    return nIndex;
 }
 
-void SlideSorterModel::DeleteSlide (const SdPage* pPage)
+sal_Int32 SlideSorterModel::DeleteSlide (const SdPage* pPage)
 {
     sal_Int32 nIndex(0);
 
@@ -599,11 +617,13 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
     {
         if (maPageDescriptors[nIndex])
             if (maPageDescriptors[nIndex]->GetPage() != pPage)
-                return;
+                return -1;
 
         maPageDescriptors.erase(maPageDescriptors.begin()+nIndex);
         UpdateIndices(nIndex);
     }
+
+    return nIndex;
 }
 
 void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
