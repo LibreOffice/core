@@ -320,12 +320,6 @@ X11SalObject::EndSetClipRegion()
         case SAL_OBJECT_CLIP_INCLUDERECTS :
             op = ShapeSet;
             break;
-        case SAL_OBJECT_CLIP_EXCLUDERECTS :
-            op = ShapeSubtract;
-            break;
-        case SAL_OBJECT_CLIP_ABSOLUTE :
-            op = ShapeSet;
-            break;
         default :
             op = ShapeUnion;
     }
