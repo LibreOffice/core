@@ -65,12 +65,6 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 
-#ifdef DEBUG
-#define DBG(x) x
-#include <stdio.h>
-#else
-#define DBG(x)
-#endif
 
 using namespace com::sun::star;
 
@@ -143,7 +137,7 @@ PPTWriterBase::PPTWriterBase()
     , meLatestPageType(NORMAL)
     , mpStyleSheet(nullptr)
 {
-    DBG(printf ("PPTWriterBase::PPTWriterBase()\n"));
+    SAL_INFO("sd.eppt", "PPTWriterBase::PPTWriterBase()");
 }
 
 PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
@@ -210,7 +204,7 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
     maDestPageSize = MapSize( awt::Size( nWidth, nHeight ) );
     maPageSize = awt::Size(nWidth, nHeight);
 
-    DBG(printf( "call exportDocumentPre()\n"));
+    SAL_INFO("sd.eppt", "call exportDocumentPre()");
     exportPPTPre(rMediaData);
 
     if ( !GetStyleSheets() )
@@ -239,7 +233,7 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
 
     for ( i = 0; i < mnPages; i++ )
     {
-        DBG(printf( "call ImplCreateSlide( %" SAL_PRIuUINT32 " )\n", i));
+        SAL_INFO("sd.eppt", "call ImplCreateSlide( " << i << " )");
         if ( !CreateSlide( i ) )
             return;
     }
@@ -250,7 +244,7 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
             return;
     }
 
-    DBG(printf( "call exportDocumentPost()\n"));
+    SAL_INFO("sd.eppt", "call exportDocumentPost()");
     exportPPTPost();
 }
 
@@ -446,7 +440,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const css::uno::Reference< css::beans:
     if ( GetPropertyValue( aAny, rXPropSet, "Layout", true ) )
         aAny >>= nLayout;
 
-    DBG(printf("GetLayoutOffset %" SAL_PRIdINT32 "\n", nLayout));
+    SAL_INFO("sd.eppt", "GetLayoutOffset " << nLayout);
 
     return nLayout;
 }
@@ -475,7 +469,7 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset )
     if( nOffset >= 0 && nOffset < EPP_LAYOUT_SIZE )
         return pPHLayout[ nOffset ];
 
-    DBG(printf("asked %" SAL_PRIdINT32 " for layout outside of 0,%d array scope\n", nOffset, EPP_LAYOUT_SIZE ));
+    SAL_INFO("sd.eppt", "asked " << nOffset << " for layout outside of 0, " << EPP_LAYOUT_SIZE  << " array scope");
 
     return pPHLayout[ 0 ];
 }
@@ -992,7 +986,7 @@ bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( bool bForOOMLX )
             else
                 bOtherThanPlaceHolders = true;
         }
-        DBG(printf("mType == %s\n", mType.getStr()));
+        SAL_INFO("sd.eppt", "mType == " << mType.getStr());
     }
 
     return bOtherThanPlaceHolders;
