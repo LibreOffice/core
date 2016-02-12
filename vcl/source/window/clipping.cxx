@@ -321,14 +321,12 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
                 vcl::Region      aRegion = *pWinChildClipRegion;
                 Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 vcl::Region      aWinRectRegion( aWinRect );
-                sal_uInt16      nClipFlags = mpWindowImpl->mpSysObj->GetClipRegionType();
 
                 if ( aRegion == aWinRectRegion )
                     mpWindowImpl->mpSysObj->ResetClipRegion();
                 else
                 {
-                    if ( !(nClipFlags & SAL_OBJECT_CLIP_ABSOLUTE) )
-                        aRegion.Move( -mnOutOffX, -mnOutOffY );
+                    aRegion.Move( -mnOutOffX, -mnOutOffY );
 
                     // set/update clip region
                     RectangleVector aRectangles;
