@@ -51,7 +51,6 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
 
         // system data
         m_aSystemData.nSize         = sizeof( SystemEnvData );
-#if !GTK_CHECK_VERSION(3,0,0)
         SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
         m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getXScreenNumber()).GetVisual();
@@ -59,12 +58,6 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getXScreenNumber()).GetXColormap();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
         m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pParent->getWindow())));
-#else
-        static int nWindow = 0;
-        m_aSystemData.aWindow       = nWindow;
-        ++nWindow;
-        m_aSystemData.aShellWindow  = reinterpret_cast<long>(this);
-#endif
         m_aSystemData.pSalFrame     = nullptr;
         m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
@@ -86,11 +79,7 @@ GtkSalObject::~GtkSalObject()
 {
     if( m_pRegion )
     {
-#if GTK_CHECK_VERSION(3,0,0)
-        cairo_region_destroy( m_pRegion );
-#else
         gdk_region_destroy( m_pRegion );
-#endif
     }
     if( m_pSocket )
     {
@@ -119,15 +108,9 @@ sal_uInt16 GtkSalObject::GetClipRegionType()
 
 void GtkSalObject::BeginSetClipRegion( sal_uLong )
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    if( m_pRegion )
-        cairo_region_destroy( m_pRegion );
-    m_pRegion = cairo_region_create();
-#else
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
     m_pRegion = gdk_region_new();
-#endif
 }
 
 void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
@@ -138,11 +121,7 @@ void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
     aRect.width     = nWidth;
     aRect.height    = nHeight;
 
-#if GTK_CHECK_VERSION(3,0,0)
-    cairo_region_union_rectangle( m_pRegion, &aRect );
-#else
     gdk_region_union_with_rect( m_pRegion, &aRect );
-#endif
 }
 
 void GtkSalObject::EndSetClipRegion()
