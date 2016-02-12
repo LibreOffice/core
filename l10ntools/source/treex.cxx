@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <cstring>
-#include "sal/main.h"
+#include <sal/main.h>
 
 #include "common.hxx"
 #include "treemerge.hxx"

@@ -23,10 +23,10 @@
 #include "DrawController.hxx"
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#include "comphelper/anytostring.hxx"
-#include "comphelper/scopeguard.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "rtl/ref.hxx"
+#include <comphelper/anytostring.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ref.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>

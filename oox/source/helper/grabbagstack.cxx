@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/helper/grabbagstack.hxx"
+#include <oox/helper/grabbagstack.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 

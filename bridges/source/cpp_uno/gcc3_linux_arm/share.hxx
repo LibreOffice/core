@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
-#include "uno/mapping.h"
+#include <uno/mapping.h>
 
 #include <typeinfo>
 #include <exception>

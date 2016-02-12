@@ -19,9 +19,9 @@
 
 #include "CenterViewFocusModule.hxx"
 
-#include "framework/ConfigurationController.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/ViewShellWrapper.hxx"
+#include <framework/ConfigurationController.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ViewShellWrapper.hxx>
 
 #include "DrawController.hxx"
 #include "ViewShellBase.hxx"

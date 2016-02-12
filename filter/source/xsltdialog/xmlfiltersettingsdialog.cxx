@@ -23,7 +23,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
@@ -33,7 +33,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <rtl/uri.hxx>
 

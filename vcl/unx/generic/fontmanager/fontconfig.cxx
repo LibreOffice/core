@@ -47,11 +47,11 @@ using namespace psp;
 #include <unotools/atom.hxx>
 #include <unotools/configmgr.hxx>
 
-#include "osl/module.h"
-#include "osl/thread.h"
-#include "osl/process.h"
+#include <osl/module.h>
+#include <osl/thread.h>
+#include <osl/process.h>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <utility>
 #include <algorithm>

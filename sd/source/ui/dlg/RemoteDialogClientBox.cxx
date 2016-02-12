@@ -19,15 +19,15 @@
 
 #include <vector>
 
-#include "svtools/controldims.hrc"
+#include <svtools/controldims.hrc>
 
 #include "RemoteDialogClientBox.hxx"
 #include "RemoteServer.hxx"
 
-#include "comphelper/processfactory.hxx"
-#include "com/sun/star/i18n/CollatorOptions.hpp"
-#include "com/sun/star/deployment/DependencyException.hpp"
-#include "com/sun/star/deployment/DeploymentException.hpp"
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/deployment/DependencyException.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 

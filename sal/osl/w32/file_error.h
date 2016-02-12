@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_OSL_W32_FILE_ERROR_H
 #define INCLUDED_SAL_OSL_W32_FILE_ERROR_H
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 #ifdef __cplusplus
 extern "C" {

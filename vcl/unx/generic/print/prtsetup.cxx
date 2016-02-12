@@ -21,7 +21,7 @@
 #include "svdata.hxx"
 #include "svids.hrc"
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 
 #include <officecfg/Office/Common.hxx>
 

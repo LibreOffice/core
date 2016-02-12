@@ -22,9 +22,9 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "rtl/math.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <rtl/math.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 CPPUNIT_NS_BEGIN
 

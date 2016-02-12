@@ -43,8 +43,8 @@
 #include <postithelper.hxx>
 #include <PostItMgr.hxx>
 #include <SidebarWin.hxx>
-#include "com/sun/star/text/XDefaultNumberingProvider.hpp"
-#include "com/sun/star/awt/FontUnderline.hpp"
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -66,20 +66,20 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "com/sun/star/util/XNumberFormatTypes.hpp"
-#include "com/sun/star/util/NumberFormat.hpp"
-#include "com/sun/star/util/XNumberFormatsSupplier.hpp"
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include "com/sun/star/util/SearchAlgorithms.hpp"
-#include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
-#include "com/sun/star/sdbcx/XTablesSupplier.hpp"
-#include "com/sun/star/text/XParagraphCursor.hpp"
-#include "com/sun/star/util/XPropertyReplace.hpp"
-#include "com/sun/star/awt/FontStrikeout.hpp"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/text/XTextField.hpp"
-#include "com/sun/star/text/TextMarkupType.hpp"
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/util/XPropertyReplace.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 #include <osl/file.hxx>
 #include <paratr.hxx>
 #include <drawfont.hxx>

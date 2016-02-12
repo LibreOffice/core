@@ -26,9 +26,9 @@
 #include "unx/fontmanager.hxx"
 #include <vcl/helper.hxx>
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
 using namespace psp ;
 

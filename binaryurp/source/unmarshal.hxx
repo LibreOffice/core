@@ -20,14 +20,14 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_UNMARSHAL_HXX
 #define INCLUDED_BINARYURP_SOURCE_UNMARSHAL_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "com/sun/star/uno/Sequence.hxx"
-#include "rtl/ref.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
 
 namespace binaryurp {
     class BinaryAny;

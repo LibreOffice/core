@@ -23,8 +23,8 @@
 #include "keyimpl.hxx"
 
 #include "reflcnst.hxx"
-#include "rtl/alloc.h"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 

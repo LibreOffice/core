@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/soundactioncontext.hxx"
+#include <oox/ppt/soundactioncontext.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertymap.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertymap.hxx>
 #include "drawingml/embeddedwavaudiofile.hxx"
 
 using namespace ::oox::core;

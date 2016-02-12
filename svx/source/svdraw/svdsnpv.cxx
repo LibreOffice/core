@@ -25,7 +25,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <sdr/overlay/overlaycrosshair.hxx>
 #include <sdr/overlay/overlayhelpline.hxx>

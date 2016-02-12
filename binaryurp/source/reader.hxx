@@ -20,14 +20,14 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_READER_HXX
 #define INCLUDED_BINARYURP_SOURCE_READER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/byteseq.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "salhelper/thread.hxx"
-#include "typelib/typedescription.hxx"
+#include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <salhelper/thread.hxx>
+#include <typelib/typedescription.hxx>
 
 #include "readerstate.hxx"
 

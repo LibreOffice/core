@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "oox/ppt/comments.hxx"
+#include <oox/ppt/comments.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/math.hxx>
 

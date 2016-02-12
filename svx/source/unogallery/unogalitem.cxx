@@ -20,8 +20,8 @@
 
 #include "unogalitem.hxx"
 #include "unogaltheme.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/galmisc.hxx"
+#include <svx/galtheme.hxx>
+#include <svx/galmisc.hxx>
 #include <svx/fmmodel.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

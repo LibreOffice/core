@@ -47,10 +47,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/documentundoguard.hxx>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uri/XUriReference.hpp"
-#include "com/sun/star/uri/UriReferenceFactory.hpp"
-#include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
 #include <memory>
 

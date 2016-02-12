@@ -22,19 +22,19 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/ppt/pptshape.hxx"
-#include "oox/ppt/pptgraphicshapecontext.hxx"
-#include "oox/ppt/pptshapecontext.hxx"
-#include "oox/ppt/pptshapegroupcontext.hxx"
-#include "oox/drawingml/graphicshapecontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/ppt/pptshape.hxx>
+#include <oox/ppt/pptgraphicshapecontext.hxx>
+#include <oox/ppt/pptshapecontext.hxx>
+#include <oox/ppt/pptshapegroupcontext.hxx>
+#include <oox/drawingml/graphicshapecontext.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/customshapegeometry.hxx"
 #include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/textbodycontext.hxx"
-#include "oox/drawingml/connectorshapecontext.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include <oox/drawingml/connectorshapecontext.hxx>
+#include <oox/drawingml/fillproperties.hxx>
 #include "extdrawingfragmenthandler.hxx"
 
 using namespace oox::core;

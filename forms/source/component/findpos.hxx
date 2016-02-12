@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FINDPOS_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FINDPOS_HXX
 
-#include "sal/config.h"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sal/types.h>
 
 
 namespace detail {

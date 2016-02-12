@@ -27,7 +27,7 @@
     #include <vcl/msgbox.hxx>
     #include <sfx2/filedlghelper.hxx>
     #include <tools/urlobj.hxx>
-    #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+    #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/editeng.hxx>

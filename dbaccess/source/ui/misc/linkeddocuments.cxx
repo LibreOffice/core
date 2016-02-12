@@ -56,7 +56,7 @@
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include "com/sun/star/sdb/RowSetVetoException.hpp"
+#include <com/sun/star/sdb/RowSetVetoException.hpp>
 
 namespace dbaui
 {

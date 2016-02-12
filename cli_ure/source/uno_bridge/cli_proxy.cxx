@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "typelib/typedescription.h"
-#include "rtl/ustrbuf.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/mutex.hxx"
+#include <typelib/typedescription.h>
+#include <rtl/ustrbuf.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/mutex.hxx>
 #include "cli_proxy.h"
 #include "cli_base.h"
 #include "cli_bridge.h"

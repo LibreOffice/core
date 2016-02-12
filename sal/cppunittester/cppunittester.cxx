@@ -30,16 +30,16 @@
 #include <iostream>
 #include <string>
 #include <sal/types.h>
-#include "cppunittester/protectorfactory.hxx"
-#include "osl/module.h"
-#include "osl/module.hxx"
-#include "osl/thread.h"
-#include "rtl/process.h"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/textcvt.h"
-#include "rtl/ustring.hxx"
-#include "sal/main.h"
+#include <cppunittester/protectorfactory.hxx>
+#include <osl/module.h>
+#include <osl/module.hxx>
+#include <osl/thread.h>
+#include <rtl/process.h>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/textcvt.h>
+#include <rtl/ustring.hxx>
+#include <sal/main.h>
 
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/Exception.h"

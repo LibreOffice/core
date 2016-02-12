@@ -19,11 +19,11 @@
 #ifndef INCLUDED_VCL_INC_UNX_SM_HXX
 #define INCLUDED_VCL_INC_UNX_SM_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <X11/SM/SMlib.h>
 
-#include "tools/link.hxx"
+#include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
 

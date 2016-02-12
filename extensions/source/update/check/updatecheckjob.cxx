@@ -30,8 +30,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
-#include "com/sun/star/frame/Desktop.hpp"
-#include "com/sun/star/frame/XTerminateListener.hpp"
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/task/XJob.hpp>
 
 namespace beans = com::sun::star::beans ;

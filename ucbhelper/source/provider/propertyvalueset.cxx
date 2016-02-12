@@ -31,8 +31,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/script/Converter.hpp>
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 
 using namespace com::sun::star::beans;

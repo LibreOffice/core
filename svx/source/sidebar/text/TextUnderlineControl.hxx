@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINECONTROL_HXX
 
-#include "svx/sidebar/PopupControl.hxx"
+#include <svx/sidebar/PopupControl.hxx>
 #include <sfx2/bindings.hxx>
 #include "TextPropertyPanel.hxx"
 #include <vcl/button.hxx>

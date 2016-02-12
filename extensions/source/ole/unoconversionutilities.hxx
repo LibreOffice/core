@@ -20,15 +20,15 @@
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
 
 #include <memory>
-#include "com/sun/star/script/XInvocationAdapterFactory.hpp"
-#include "com/sun/star/script/XInvocationAdapterFactory2.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
-#include "com/sun/star/script/FailReason.hpp"
-#include "com/sun/star/bridge/oleautomation/Date.hpp"
-#include "com/sun/star/bridge/oleautomation/Currency.hpp"
-#include "com/sun/star/bridge/oleautomation/SCode.hpp"
-#include "com/sun/star/bridge/oleautomation/Decimal.hpp"
-#include "typelib/typedescription.hxx"
+#include <com/sun/star/script/XInvocationAdapterFactory.hpp>
+#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/FailReason.hpp>
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
+#include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/SCode.hpp>
+#include <com/sun/star/bridge/oleautomation/Decimal.hpp>
+#include <typelib/typedescription.hxx>
 #include "ole2uno.hxx"
 #include <cppuhelper/weakref.hxx>
 

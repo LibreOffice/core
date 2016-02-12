@@ -21,8 +21,8 @@
 #include "alloc_impl.hxx"
 #include "alloc_arena.hxx"
 #include "internal/rtllifecycle.h"
-#include "sal/macros.h"
-#include "osl/diagnose.h"
+#include <sal/macros.h>
+#include <osl/diagnose.h>
 #include <osl/thread.hxx>
 
 #include <cassert>

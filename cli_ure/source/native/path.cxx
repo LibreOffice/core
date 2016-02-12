@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined WNT
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace cli_ure {
 

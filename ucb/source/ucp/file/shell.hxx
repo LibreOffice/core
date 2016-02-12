@@ -27,7 +27,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/file.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>

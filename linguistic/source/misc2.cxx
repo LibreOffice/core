@@ -33,7 +33,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 
 using namespace com::sun::star;
 

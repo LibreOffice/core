@@ -19,9 +19,9 @@
 
 #include <stdio.h>
 
-#include "codemaker/global.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/process.h"
+#include <codemaker/global.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/process.h>
 #include "unodevtools/options.hxx"
 
 namespace unodevtools {

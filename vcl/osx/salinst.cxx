@@ -23,11 +23,11 @@
 
 #include <comphelper/solarmutex.hxx>
 
-#include "comphelper/lok.hxx"
+#include <comphelper/lok.hxx>
 
-#include "osl/process.h"
+#include <osl/process.h>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -61,7 +61,7 @@
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import "apple_remote/RemoteMainController.h"
-#include "apple_remote/RemoteControl.h"
+#include <apple_remote/RemoteControl.h>
 #include "postmac.h"
 
 using namespace std;

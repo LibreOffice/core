@@ -23,17 +23,17 @@
 #include "fmhelp.hrc"
 #include "fmprop.hrc"
 #include "fmPropBrw.hxx"
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "fmpgeimp.hxx"
 
-#include "svx/dialmgr.hxx"
-#include "svx/fmpage.hxx"
-#include "svx/fmshell.hxx"
-#include "svx/sdrpagewindow.hxx"
-#include "svx/svdpagv.hxx"
-#include "svx/svxids.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/fmpage.hxx>
+#include <svx/fmshell.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svxids.hrc>
 
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

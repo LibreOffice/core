@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "tools/resary.hxx"
+#include <tools/resary.hxx>
 
 #include <vcl/print.hxx>
 #include <vcl/image.hxx>
@@ -35,8 +35,8 @@
 #include "svdata.hxx"
 #include "svids.hrc"
 
-#include "com/sun/star/i18n/XBreakIterator.hpp"
-#include "com/sun/star/i18n/WordType.hpp"
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <map>
 

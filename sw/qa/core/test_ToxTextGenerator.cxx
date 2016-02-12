@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "chpfld.hxx"
 #include "ndtxt.hxx"
 #include "tox.hxx"

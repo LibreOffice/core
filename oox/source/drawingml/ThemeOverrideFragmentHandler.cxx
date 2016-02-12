@@ -8,7 +8,7 @@
  */
 
 #include <drawingml/ThemeOverrideFragmentHandler.hxx>
-#include "oox/drawingml/theme.hxx"
+#include <oox/drawingml/theme.hxx>
 #include "drawingml/themeelementscontext.hxx"
 
 using namespace ::oox::core;

@@ -33,12 +33,12 @@
 
 #include "cell.hxx"
 #include "celltypes.hxx"
-#include "svx/svdotable.hxx"
-#include "svx/svdoutl.hxx"
-#include "editeng/editeng.hxx"
-#include "editeng/editdata.hxx"
-#include "svx/svdmodel.hxx"
-#include "editeng/svxrtf.hxx"
+#include <svx/svdotable.hxx>
+#include <svx/svdoutl.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editdata.hxx>
+#include <svx/svdmodel.hxx>
+#include <editeng/svxrtf.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;

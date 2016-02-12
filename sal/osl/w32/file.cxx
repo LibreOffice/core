@@ -19,17 +19,17 @@
 
 #define UNICODE
 #define _UNICODE
-#include "systools/win32/uwinapi.h"
+#include <systools/win32/uwinapi.h>
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 
 #include "file_url.h"
 #include "file_error.h"
 
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
-#include "rtl/byteseq.h"
-#include "rtl/ustring.hxx"
+#include <osl/diagnose.h>
+#include <rtl/alloc.h>
+#include <rtl/byteseq.h>
+#include <rtl/ustring.hxx>
 
 #include <stdio.h>
 #include <tchar.h>

@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOLORNODE_HXX
 
 #include "animationbasenode.hxx"
-#include "com/sun/star/animations/XAnimateColor.hpp"
+#include <com/sun/star/animations/XAnimateColor.hpp>
 
 namespace slideshow {
 namespace internal {

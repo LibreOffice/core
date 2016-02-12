@@ -46,8 +46,8 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
-#include "svx/sidebar/PopupContainer.hxx"
-#include "svx/sidebar/PopupControl.hxx"
+#include <svx/sidebar/PopupContainer.hxx>
+#include <svx/sidebar/PopupControl.hxx>
 #include "LineWidthControl.hxx"
 
 using namespace css;

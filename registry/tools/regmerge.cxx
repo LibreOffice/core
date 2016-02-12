@@ -18,12 +18,12 @@
  */
 
 
-#include "registry/registry.hxx"
+#include <registry/registry.hxx>
 #include "fileurl.hxx"
 #include "options.hxx"
 
-#include "rtl/ustring.hxx"
-#include "osl/diagnose.h"
+#include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 
 #include <stdio.h>
 #include <string.h>

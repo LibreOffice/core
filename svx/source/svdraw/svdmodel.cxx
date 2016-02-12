@@ -48,7 +48,7 @@
 
 #include <svx/xtable.hxx>
 
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
@@ -61,21 +61,21 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdoutlinercache.hxx"
 
-#include "svx/xflclit.hxx"
-#include "svx/xlnclit.hxx"
+#include <svx/xflclit.hxx>
+#include <svx/xlnclit.hxx>
 
 #include "officecfg/Office/Common.hxx"
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/bulletitem.hxx>
 #include <editeng/outlobj.hxx>
-#include "editeng/forbiddencharacterstable.hxx"
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>

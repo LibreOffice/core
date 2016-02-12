@@ -28,7 +28,7 @@
 #include <strings.h>
 #include <unistd.h>
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -39,7 +39,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.h>
-#include "rtl/textcvt.h"
+#include <rtl/textcvt.h>
 #include <sal/log.hxx>
 
 #include "file_error_transl.hxx"

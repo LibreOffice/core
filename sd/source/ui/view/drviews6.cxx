@@ -49,7 +49,7 @@
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <svx/svdoashp.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 

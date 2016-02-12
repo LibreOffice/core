@@ -22,7 +22,7 @@
 
 #include "parametricpolypolygon.hxx"
 #include "transitiontools.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 
 namespace slideshow {

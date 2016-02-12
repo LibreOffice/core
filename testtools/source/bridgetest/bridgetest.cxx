@@ -21,15 +21,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <osl/diagnose.h>
-#include "osl/diagnose.hxx"
+#include <osl/diagnose.hxx>
 #include <osl/time.h>
 #include <sal/types.h>
-#include "typelib/typedescription.hxx"
+#include <typelib/typedescription.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/lbnames.h>
-#include "uno/mapping.hxx"
+#include <uno/mapping.hxx>
 #include <uno/data.h>
-#include "uno/environment.hxx"
+#include <uno/environment.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -40,14 +40,14 @@
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Type.hxx"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Type.hxx>
 
-#include "test/testtools/bridgetest/BadConstructorArguments.hpp"
-#include "test/testtools/bridgetest/TestPolyStruct.hpp"
-#include "test/testtools/bridgetest/XBridgeTest.hpp"
-#include "test/testtools/bridgetest/XBridgeTest2.hpp"
-#include "test/testtools/bridgetest/XMulti.hpp"
+#include <test/testtools/bridgetest/BadConstructorArguments.hpp>
+#include <test/testtools/bridgetest/TestPolyStruct.hpp>
+#include <test/testtools/bridgetest/XBridgeTest.hpp>
+#include <test/testtools/bridgetest/XBridgeTest2.hpp>
+#include <test/testtools/bridgetest/XMulti.hpp>
 
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"

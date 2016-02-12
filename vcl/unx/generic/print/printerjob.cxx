@@ -32,9 +32,9 @@
 #include <vcl/strhelper.hxx>
 #include <vcl/printerinfomanager.hxx>
 
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <osl/thread.h>
 #include <osl/security.hxx>

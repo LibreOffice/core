@@ -24,7 +24,7 @@
 
  *************************************************************************/
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

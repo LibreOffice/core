@@ -35,7 +35,7 @@
 #include "tests.hxx"
 #include "view.hxx"
 #include "unoview.hxx"
-#include "com/sun/star/presentation/XSlideShowView.hpp"
+#include <com/sun/star/presentation/XSlideShowView.hpp>
 
 #include <vector>
 #include <exception>

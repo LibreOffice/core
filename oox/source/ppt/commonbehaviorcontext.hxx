@@ -21,8 +21,8 @@
 #define INCLUDED_OOX_SOURCE_PPT_COMMONBEHAVIORCONTEXT_HXX
 
 #include <rtl/ustring.hxx>
-#include "oox/ppt/timenodelistcontext.hxx"
-#include "oox/ppt/animationspersist.hxx"
+#include <oox/ppt/timenodelistcontext.hxx>
+#include <oox/ppt/animationspersist.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include "conditioncontext.hxx"
 

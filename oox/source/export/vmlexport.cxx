@@ -18,7 +18,7 @@
  */
 
 #include <config_folders.h>
-#include "rtl/bootstrap.hxx"
+#include <rtl/bootstrap.hxx>
 #include <oox/export/vmlexport.hxx>
 
 #include <oox/token/tokens.hxx>

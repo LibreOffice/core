@@ -20,10 +20,10 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PROVIDER_HXX
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include "ucbhelper/providerhelper.hxx"
+#include <ucbhelper/providerhelper.hxx>
 #include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"
 #include "tdoc_storage.hxx"

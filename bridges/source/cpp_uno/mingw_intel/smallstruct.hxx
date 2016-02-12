@@ -19,8 +19,8 @@
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_INTEL_SMALLSTRUCT_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_INTEL_SMALLSTRUCT_HXX
 
-#include "typelib/typeclass.h"
-#include "typelib/typedescription.h"
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

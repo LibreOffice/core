@@ -19,8 +19,8 @@
 #include <config_features.h>
 #include <config_folders.h>
 
-#include "rtl/bootstrap.h"
-#include "rtl/bootstrap.hxx"
+#include <rtl/bootstrap.h>
+#include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
 #include <osl/module.h>
 #include <osl/process.h>

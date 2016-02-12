@@ -22,7 +22,7 @@
 
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
-#include "tools/AsynchronousTask.hxx"
+#include <tools/AsynchronousTask.hxx>
 
 namespace sd {
 class TemplateScanner;

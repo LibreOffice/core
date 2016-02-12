@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "cfglex.hxx"
 #include "common.hxx"
@@ -27,7 +27,7 @@
 #include <cstring>
 
 #include <memory>
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
 #include "helper.hxx"
 #include "export.hxx"

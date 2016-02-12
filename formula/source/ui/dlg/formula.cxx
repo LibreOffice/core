@@ -42,13 +42,13 @@
 
 #include "formdlgs.hrc"
 #include "funcpage.hxx"
-#include "formula/formula.hxx"
-#include "formula/IFunctionDescription.hxx"
-#include "formula/FormulaCompiler.hxx"
-#include "formula/token.hxx"
-#include "formula/tokenarray.hxx"
-#include "formula/formdata.hxx"
-#include "formula/formulahelper.hxx"
+#include <formula/formula.hxx>
+#include <formula/IFunctionDescription.hxx>
+#include <formula/FormulaCompiler.hxx>
+#include <formula/token.hxx>
+#include <formula/tokenarray.hxx>
+#include <formula/formdata.hxx>
+#include <formula/formulahelper.hxx>
 #include "structpg.hxx"
 #include "parawin.hxx"
 #include "ModuleHelper.hxx"

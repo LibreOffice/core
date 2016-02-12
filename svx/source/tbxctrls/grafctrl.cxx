@@ -49,8 +49,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdtrans.hxx>
-#include "svx/grafctrl.hxx"
-#include "svx/tbxcolor.hxx"
+#include <svx/grafctrl.hxx>
+#include <svx/tbxcolor.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

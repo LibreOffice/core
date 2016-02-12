@@ -21,8 +21,8 @@
 
 #include "basecontainernode.hxx"
 #include "soundplayer.hxx"
-#include "com/sun/star/animations/XAnimationNode.hpp"
-#include "com/sun/star/animations/XAudio.hpp"
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
 
 namespace slideshow {
 namespace internal {

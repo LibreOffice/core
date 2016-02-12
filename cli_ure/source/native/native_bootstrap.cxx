@@ -33,9 +33,9 @@
 
 #include "native_share.h"
 
-#include "rtl/bootstrap.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/bootstrap.hxx"
+#include <rtl/bootstrap.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/bootstrap.hxx>
 #include <stdio.h>
 
 using namespace ::com::sun::star;

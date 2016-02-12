@@ -32,7 +32,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include "ucbhelper/content.hxx"
+#include <ucbhelper/content.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;

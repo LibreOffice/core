@@ -15,16 +15,16 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "com/sun/star/io/XInputStream.hpp"
-#include "com/sun/star/ucb/XSimpleFileAccess.hpp"
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include "comphelper/processfactory.hxx"
-#include "comphelper/seqstream.hxx"
+#include <comphelper/processfactory.hxx>
+#include <comphelper/seqstream.hxx>
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
-#include "test/bootstrapfixture.hxx"
+#include <test/bootstrapfixture.hxx>
 
 #include <WPXSvInputStream.hxx>
 

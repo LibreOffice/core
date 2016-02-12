@@ -18,8 +18,8 @@
  */
 
 #include "drawingml/transform2dcontext.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/shape.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/drawingml/shape.hxx>
 #include "drawingml/customshapeproperties.hxx"
 #include "drawingml/textbody.hxx"
 

@@ -18,12 +18,12 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/module.h"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
+#include <osl/module.h>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 
 #include "loadmodule.hxx"
 

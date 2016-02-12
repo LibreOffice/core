@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
 #define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 namespace codemaker { class GeneratedTypeSet; }
 namespace rtl { class OUString; }

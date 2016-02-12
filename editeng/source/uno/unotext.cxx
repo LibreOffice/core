@@ -47,7 +47,7 @@
 #include <comphelper/serviceinfohelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "editeng/unonames.hxx"
+#include <editeng/unonames.hxx>
 
 #include <memory>
 

@@ -31,7 +31,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdoole2.hxx>

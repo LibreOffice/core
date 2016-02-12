@@ -26,7 +26,7 @@
 
 #include "wincommon.hxx"
 
-#include "com/sun/star/media/XPlayer.hpp"
+#include <com/sun/star/media/XPlayer.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

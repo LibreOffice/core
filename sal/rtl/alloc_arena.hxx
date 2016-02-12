@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SAL_RTL_ALLOC_ARENA_HXX
 #define INCLUDED_SAL_RTL_ALLOC_ARENA_HXX
 
-#include "sal/types.h"
-#include "rtl/alloc.h"
+#include <sal/types.h>
+#include <rtl/alloc.h>
 #include "alloc_impl.hxx"
 
 /** rtl_arena_stat_type

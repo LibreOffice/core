@@ -28,7 +28,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <editeng/eedata.hxx>
-#include "editeng/editeng.hxx"
+#include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>

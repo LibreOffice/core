@@ -26,22 +26,22 @@
 #include <set>
 #include <unordered_map>
 
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "osl/module.h"
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
-#include "osl/interlck.h"
-#include "sal/log.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <osl/module.h>
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+#include <osl/interlck.h>
+#include <sal/log.hxx>
 
-#include "uno/dispatcher.h"
-#include "uno/mapping.h"
-#include "uno/lbnames.h"
-#include "uno/environment.hxx"
+#include <uno/dispatcher.h>
+#include <uno/mapping.h>
+#include <uno/lbnames.h>
+#include <uno/environment.hxx>
 
-#include "typelib/typedescription.h"
+#include <typelib/typedescription.h>
 
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 #include "cascade_mapping.hxx"
 #include "loadmodule.hxx"
 

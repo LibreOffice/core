@@ -21,15 +21,15 @@
 
 #include <vcclr.h>
 
-#include "osl/diagnose.h"
-#include "com/sun/star/reflection/XConstantTypeDescription.hpp"
-#include "com/sun/star/reflection/XConstantsTypeDescription.hpp"
-#include "com/sun/star/reflection/XEnumTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
-#include "com/sun/star/reflection/XCompoundTypeDescription.hpp"
-#include "com/sun/star/reflection/XServiceTypeDescription2.hpp"
-#include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
-#include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
+#include <osl/diagnose.h>
+#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
+#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
+#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XSingletonTypeDescription2.hpp>
+#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 
 
 namespace climaker

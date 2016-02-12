@@ -36,7 +36,7 @@
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
 #include "unx/saldata.hxx"
-#include "osl/process.h"
+#include <osl/process.h>
 
 #include "KDESalDisplay.hxx"
 

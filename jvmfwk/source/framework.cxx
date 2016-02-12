@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "rtl/ustring.hxx"
-#include "rtl/bootstrap.hxx"
-#include "osl/thread.hxx"
-#include "osl/file.hxx"
-#include "jvmfwk/framework.h"
+#include <rtl/ustring.hxx>
+#include <rtl/bootstrap.hxx>
+#include <osl/thread.hxx>
+#include <osl/file.hxx>
+#include <jvmfwk/framework.h>
 #include "vendorplugin.hxx"
 #include <cassert>
 #include <vector>

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/thread.hxx"
+#include <osl/thread.hxx>
 
-#include "codemaker/commonjava.hxx"
-#include "codemaker/commoncpp.hxx"
-#include "codemaker/generatedtypeset.hxx"
-#include "codemaker/global.hxx"
-#include "unoidl/unoidl.hxx"
+#include <codemaker/commonjava.hxx>
+#include <codemaker/commoncpp.hxx>
+#include <codemaker/generatedtypeset.hxx>
+#include <codemaker/global.hxx>
+#include <unoidl/unoidl.hxx>
 
 #include "skeletoncommon.hxx"
 

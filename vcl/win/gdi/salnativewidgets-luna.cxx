@@ -31,9 +31,9 @@
 // Drawing in non-client area (general DWM-related info):
 //   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
 
-#include "rtl/ustring.h"
+#include <rtl/ustring.h>
 
-#include "osl/module.h"
+#include <osl/module.h>
 
 #include <opengl/win/gdiimpl.hxx>
 #include <vcl/svapp.hxx>

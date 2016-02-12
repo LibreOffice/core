@@ -26,7 +26,7 @@
 #include <sal/main.h>
 #include <osl/process.h>
 #include <stdio.h>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 namespace task = ::com::sun::star::task;
 namespace uno  = ::com::sun::star::uno;

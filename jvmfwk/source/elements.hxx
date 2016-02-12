@@ -20,10 +20,10 @@
 #define INCLUDED_JVMFWK_SOURCE_ELEMENTS_HXX
 
 #include <vector>
-#include "jvmfwk/framework.h"
+#include <jvmfwk/framework.h>
 #include "fwkutil.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/byteseq.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/byteseq.hxx>
 #include "libxml/parser.h"
 #include "boost/optional.hpp"
 

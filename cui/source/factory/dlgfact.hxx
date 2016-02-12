@@ -23,7 +23,7 @@
 #include <svx/zoom_def.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
 
-#include "tools/link.hxx"
+#include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 class SfxTabDialog;

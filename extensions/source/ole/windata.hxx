@@ -43,7 +43,7 @@
 
 #pragma warning (pop)
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
 namespace ole_adapter
 {

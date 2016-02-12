@@ -20,26 +20,26 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_BRIDGE_HXX
 #define INCLUDED_BINARYURP_SOURCE_BRIDGE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <list>
 #include <map>
 #include <vector>
 
-#include "com/sun/star/bridge/XBridge.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "cppuhelper/implbase.hxx"
-#include "osl/conditn.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "uno/environment.hxx"
-#include "uno/mapping.hxx"
-#include "uno/threadpool.h"
+#include <com/sun/star/bridge/XBridge.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <uno/environment.hxx>
+#include <uno/mapping.hxx>
+#include <uno/threadpool.h>
 
 #include "outgoingrequest.hxx"
 #include "outgoingrequests.hxx"

@@ -24,17 +24,17 @@
 
 #include <cassert>
 
-#include "jvmaccess/unovirtualmachine.hxx"
-#include "jvmaccess/virtualmachine.hxx"
+#include <jvmaccess/unovirtualmachine.hxx>
+#include <jvmaccess/virtualmachine.hxx>
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
-#include "rtl/alloc.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
-#include "uno/environment.h"
-#include "typelib/typedescription.h"
+#include <uno/environment.h>
+#include <typelib/typedescription.h>
 
 
 namespace jni_uno

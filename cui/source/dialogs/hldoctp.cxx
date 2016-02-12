@@ -20,7 +20,7 @@
 #include "cuihyperdlg.hxx"
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include "hldoctp.hxx"
 #include "hlmarkwn_def.hxx"

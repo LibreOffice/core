@@ -18,12 +18,12 @@
  */
 
 #include "ole2uno.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 
-#include "osl/diagnose.h"
-#include "osl/doublecheckedlocking.h"
-#include "osl/thread.h"
+#include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
+#include <osl/thread.h>
 
 #include <memory>
 #include <com/sun/star/script/FailReason.hpp>
@@ -41,8 +41,8 @@
 #include <com/sun/star/script/XLibraryAccess.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 
-#include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"
-#include "com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp"
+#include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
+#include <com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp>
 
 #include <typelib/typedescription.hxx>
 #include <rtl/uuid.h>

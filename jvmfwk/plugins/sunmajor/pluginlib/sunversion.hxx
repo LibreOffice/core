@@ -20,7 +20,7 @@
 #ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace jfw_plugin {
 // Define OSL_DEBUG_LEVEL >= 2 to run a test when this lib is loaded

@@ -31,7 +31,7 @@
 
 #include <com/sun/star/awt/XWindow2.hpp>
 
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

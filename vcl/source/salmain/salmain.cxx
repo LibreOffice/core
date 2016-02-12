@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
+#include <sal/main.h>
+#include <tools/extendapplicationenvironment.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/svmain.hxx>
 

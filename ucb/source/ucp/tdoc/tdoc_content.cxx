@@ -24,42 +24,42 @@
 
  *************************************************************************/
 
-#include "osl/diagnose.h"
-#include "osl/doublecheckedlocking.h"
-#include "rtl/ustrbuf.hxx"
+#include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
+#include <rtl/ustrbuf.hxx>
 
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/embed/ElementModes.hpp"
-#include "com/sun/star/embed/XStorage.hpp"
-#include "com/sun/star/embed/XTransactedObject.hpp"
-#include "com/sun/star/io/XActiveDataSink.hpp"
-#include "com/sun/star/io/XActiveDataStreamer.hpp"
-#include "com/sun/star/lang/IllegalAccessException.hpp"
-#include "com/sun/star/sdbc/XRow.hpp"
-#include "com/sun/star/ucb/ContentAction.hpp"
-#include "com/sun/star/ucb/ContentInfoAttribute.hpp"
-#include "com/sun/star/ucb/InsertCommandArgument.hpp"
-#include "com/sun/star/ucb/InteractiveBadTransferURLException.hpp"
-#include "com/sun/star/ucb/MissingInputStreamException.hpp"
-#include "com/sun/star/ucb/MissingPropertiesException.hpp"
-#include "com/sun/star/ucb/NameClash.hpp"
-#include "com/sun/star/ucb/NameClashException.hpp"
-#include "com/sun/star/ucb/OpenCommandArgument2.hpp"
-#include "com/sun/star/ucb/OpenMode.hpp"
-#include "com/sun/star/ucb/TransferInfo.hpp"
-#include "com/sun/star/ucb/UnsupportedCommandException.hpp"
-#include "com/sun/star/ucb/UnsupportedDataSinkException.hpp"
-#include "com/sun/star/ucb/UnsupportedNameClashException.hpp"
-#include "com/sun/star/ucb/UnsupportedOpenModeException.hpp"
-#include "com/sun/star/ucb/XCommandInfo.hpp"
-#include "com/sun/star/ucb/XPersistentPropertySet.hpp"
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/ucb/ContentAction.hpp>
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#include <com/sun/star/ucb/MissingInputStreamException.hpp>
+#include <com/sun/star/ucb/MissingPropertiesException.hpp>
+#include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
+#include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
+#include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
+#include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
+#include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 
-#include "comphelper/processfactory.hxx"
-#include "ucbhelper/cancelcommandexecution.hxx"
-#include "ucbhelper/contentidentifier.hxx"
-#include "ucbhelper/propertyvalueset.hxx"
+#include <comphelper/processfactory.hxx>
+#include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/propertyvalueset.hxx>
 
 #include "tdoc_content.hxx"
 #include "tdoc_resultset.hxx"

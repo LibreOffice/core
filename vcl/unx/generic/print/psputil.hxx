@@ -20,12 +20,12 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 
-#include "rtl/ustring.hxx"
-#include "rtl/string.hxx"
-#include "rtl/tencinfo.h"
-#include "rtl/textcvt.h"
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
+#include <rtl/tencinfo.h>
+#include <rtl/textcvt.h>
 
 #include <map>
 

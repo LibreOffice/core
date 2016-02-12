@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uno/environment.hxx"
+#include <uno/environment.hxx>
 #include <uno/lbnames.h>
 
-#include "cppu/EnvDcp.hxx"
-#include "cppu/Enterable.hxx"
+#include <cppu/EnvDcp.hxx>
+#include <cppu/Enterable.hxx>
 
-#include "rtl/instance.hxx"
+#include <rtl/instance.hxx>
 
-#include "osl/thread.h"
-#include "osl/thread.hxx"
-#include "osl/mutex.hxx"
+#include <osl/thread.h>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 
 #include <unordered_map>
 

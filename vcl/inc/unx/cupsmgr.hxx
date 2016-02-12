@@ -21,9 +21,9 @@
 #define INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 
 #include <vcl/printerinfomanager.hxx>
-#include "osl/module.h"
-#include "osl/thread.h"
-#include "osl/mutex.hxx"
+#include <osl/module.h>
+#include <osl/thread.h>
+#include <osl/mutex.hxx>
 
 namespace psp
 {

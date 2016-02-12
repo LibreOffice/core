@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/locale.h"
+#include <rtl/locale.h>
 
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
+#include <osl/diagnose.h>
+#include <rtl/alloc.h>
 
 #include "internal/rtllifecycle.h"
 

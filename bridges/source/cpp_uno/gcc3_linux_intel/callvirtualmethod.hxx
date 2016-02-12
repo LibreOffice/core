@@ -20,11 +20,11 @@
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_INTEL_CALLVIRTUALMETHOD_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_INTEL_CALLVIRTUALMETHOD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "cppu/macros.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.h"
+#include <cppu/macros.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.h>
 
 namespace CPPU_CURRENT_NAMESPACE {
 

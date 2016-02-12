@@ -22,9 +22,9 @@
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
-#include "oox/helper/helper.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertymap.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertymap.hxx>
 #include <unordered_map>
 
 using namespace ::oox::core;

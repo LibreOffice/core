@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDERFACTORY_HXX
 #define INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDERFACTORY_HXX
 
-#include "rtl/ustring.hxx"
-#include "rtl/ref.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

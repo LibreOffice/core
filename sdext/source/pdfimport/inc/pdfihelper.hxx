@@ -28,8 +28,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <com/sun/star/rendering/XColorSpace.hpp>
-#include "com/sun/star/rendering/PathCapType.hpp"
-#include "com/sun/star/rendering/PathJoinType.hpp"
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
 
 #include <unordered_map>
 #include <vector>

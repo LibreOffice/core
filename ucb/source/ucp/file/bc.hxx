@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FILE_BC_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FILE_BC_HXX
 
-#include "osl/mutex.hxx"
-#include "rtl/ustring.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 #include <comphelper/interfacecontainer2.hxx>

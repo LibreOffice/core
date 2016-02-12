@@ -21,10 +21,10 @@
 #define INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_PROXY_H
 
 #pragma warning(push, 1)
-#include "uno/environment.hxx"
+#include <uno/environment.hxx>
 #pragma warning(pop)
-#include "uno/mapping.hxx"
-#include "uno/dispatcher.h"
+#include <uno/mapping.hxx>
+#include <uno/dispatcher.h>
 #include "cli_bridge.h"
 #include "cli_environment.h"
 

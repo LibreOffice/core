@@ -23,7 +23,7 @@
 #include <svl/filenotation.hxx>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <cuires.hrc>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>

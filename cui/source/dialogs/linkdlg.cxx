@@ -32,7 +32,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <svtools/svtabbx.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <svuidlg.hrc>
 #include <sfx2/linkmgr.hxx>

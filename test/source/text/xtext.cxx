@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "test/text/xtext.hxx"
+#include <test/text/xtext.hxx>
 
 using namespace css;
 using namespace css::uno;

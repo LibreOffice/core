@@ -33,8 +33,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <editeng/unolingu.hxx>
-#include "editeng/AccessibleEditableTextPara.hxx"
-#include "editeng/AccessibleImageBullet.hxx"
+#include <editeng/AccessibleEditableTextPara.hxx>
+#include <editeng/AccessibleImageBullet.hxx>
 #include <editeng/eerdll.hxx>
 
 #include <editeng/editdata.hxx>

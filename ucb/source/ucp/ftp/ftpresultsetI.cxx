@@ -18,13 +18,13 @@
  */
 
 
-#include "comphelper/processfactory.hxx"
-#include "ucbhelper/propertyvalueset.hxx"
-#include "rtl/ref.hxx"
-#include "com/sun/star/ucb/Command.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/ucb/XCommandProcessor.hpp"
-#include "com/sun/star/sdbc/XRow.hpp"
+#include <comphelper/processfactory.hxx>
+#include <ucbhelper/propertyvalueset.hxx>
+#include <rtl/ref.hxx>
+#include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include "ftpresultsetI.hxx"
 #include "ftpcontent.hxx"
 

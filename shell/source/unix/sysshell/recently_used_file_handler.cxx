@@ -20,12 +20,12 @@
 #include <sal/config.h>
 
 #include "boost/noncopyable.hpp"
-#include "osl/process.h"
-#include "rtl/ustring.hxx"
-#include "rtl/string.hxx"
-#include "rtl/strbuf.hxx"
+#include <osl/process.h>
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 #include <osl/diagnose.h>
 #include "recently_used_file.hxx"
 

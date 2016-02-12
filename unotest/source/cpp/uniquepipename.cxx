@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include "cppunit/TestAssert.h"
-#include "osl/process.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "unotest/uniquepipename.hxx"
+#include <osl/process.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <unotest/uniquepipename.hxx>
 
 namespace test {
 

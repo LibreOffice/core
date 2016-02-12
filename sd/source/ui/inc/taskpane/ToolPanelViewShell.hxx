@@ -23,7 +23,7 @@
 #include "ViewShell.hxx"
 #include "glob.hxx"
 #include "taskpane/PanelId.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <vcl/button.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>

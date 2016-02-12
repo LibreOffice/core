@@ -18,17 +18,17 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "vm.hxx"
 
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/compbase.hxx>
-#include "cppuhelper/component_context.hxx"
-#include "jvmaccess/virtualmachine.hxx"
-#include "jvmaccess/unovirtualmachine.hxx"
-#include "osl/mutex.hxx"
+#include <cppuhelper/component_context.hxx>
+#include <jvmaccess/virtualmachine.hxx>
+#include <jvmaccess/unovirtualmachine.hxx>
+#include <osl/mutex.hxx>
 
 namespace {
 

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_BRIDGE_H
 #define INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_BRIDGE_H
 #include <vcclr.h>
-#include "osl/interlck.h"
-#include "uno/mapping.h"
-#include "uno/environment.h"
-#include "uno/dispatcher.h"
+#include <osl/interlck.h>
+#include <uno/mapping.h>
+#include <uno/environment.h>
+#include <uno/dispatcher.h>
 #include "cli_base.h"
 #include "cli_environment.h"
 //#using <cli_uretypes.dll>

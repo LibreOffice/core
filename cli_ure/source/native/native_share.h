@@ -20,9 +20,9 @@
 #using "cli_ure.dll"
 #using "cli_uretypes.dll"
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <uno/lbnames.h>
-#include "uno/mapping.hxx"
+#include <uno/mapping.hxx>
 
 #include <vcclr.h>
 

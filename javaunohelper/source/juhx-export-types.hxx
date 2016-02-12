@@ -20,7 +20,7 @@
 #ifndef INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_TYPES_HXX
 #define INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_TYPES_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "jni.h"
 

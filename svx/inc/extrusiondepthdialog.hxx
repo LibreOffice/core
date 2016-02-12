@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX
 #define INCLUDED_SVX_INC_EXTRUSIONDEPTHDIALOG_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>

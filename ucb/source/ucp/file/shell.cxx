@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 
 #include <stack>
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>

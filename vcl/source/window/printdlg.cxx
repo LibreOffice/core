@@ -36,14 +36,14 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "unotools/localedatawrapper.hxx"
+#include <unotools/localedatawrapper.hxx>
 
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/awt/Size.hpp"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 using namespace vcl;
 using namespace com::sun::star;

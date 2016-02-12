@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "sal/log.hxx"
-#include "osl/module.h"
-#include "osl/module.hxx"
-#include "rtl/malformeduriexception.hxx"
-#include "rtl/uri.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/log.hxx>
+#include <osl/module.h>
+#include <osl/module.hxx>
+#include <rtl/malformeduriexception.hxx>
+#include <rtl/uri.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 extern "C" {
 

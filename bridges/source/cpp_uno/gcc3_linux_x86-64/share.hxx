@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <typeinfo>
 #include <exception>
@@ -29,8 +29,8 @@
 #endif
 
 #include "config_gcc.h"
-#include "uno/any2.h"
-#include "uno/mapping.h"
+#include <uno/any2.h>
+#include <uno/mapping.h>
 
 #ifdef _LIBCPP_VERSION
 

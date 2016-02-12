@@ -27,10 +27,10 @@
 
 #include <rtl/ref.hxx>
 #include <svl/style.hxx>
-#include "svx/sdtaitm.hxx"
+#include <svx/sdtaitm.hxx>
 #include "tablemodel.hxx"
-#include "editeng/unotext.hxx"
-#include "svx/svdtext.hxx"
+#include <editeng/unotext.hxx>
+#include <svx/svdtext.hxx>
 
 
 class SfxItemSet;

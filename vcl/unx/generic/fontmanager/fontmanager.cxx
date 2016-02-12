@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <osl/thread.h>
 
-#include "unotools/atom.hxx"
+#include <unotools/atom.hxx>
 
 #include "unx/fontcache.hxx"
 #include "fontsubset.hxx"
@@ -36,21 +36,21 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "tools/urlobj.hxx"
-#include "tools/stream.hxx"
-#include "tools/debug.hxx"
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
+#include <tools/debug.hxx>
 
-#include "osl/file.hxx"
-#include "osl/process.h"
+#include <osl/file.hxx>
+#include <osl/process.h>
 
-#include "rtl/tencinfo.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/strbuf.hxx"
+#include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <sal/macros.h>
 
-#include "i18nlangtag/applelangid.hxx"
-#include "i18nlangtag/mslangid.hxx"
+#include <i18nlangtag/applelangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include "parseAFM.hxx"
 #include "sft.hxx"
@@ -72,8 +72,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include "com/sun/star/beans/XMaterialHolder.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 using namespace vcl;
 using namespace utl;

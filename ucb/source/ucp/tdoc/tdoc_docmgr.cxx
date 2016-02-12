@@ -24,23 +24,23 @@
 
  *************************************************************************/
 
-#include "osl/diagnose.h"
-#include "rtl/ref.hxx"
-#include "cppuhelper/weak.hxx"
+#include <osl/diagnose.h>
+#include <rtl/ref.hxx>
+#include <cppuhelper/weak.hxx>
 
-#include "comphelper/documentinfo.hxx"
-#include "comphelper/namedvaluecollection.hxx"
-#include "comphelper/sequence.hxx"
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/sequence.hxx>
 
-#include "com/sun/star/awt/XTopWindow.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/document/XDocumentEventBroadcaster.hpp"
-#include "com/sun/star/document/XStorageBasedDocument.hpp"
-#include "com/sun/star/frame/theGlobalEventBroadcaster.hpp"
-#include "com/sun/star/frame/XStorable.hpp"
-#include "com/sun/star/frame/ModuleManager.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/util/XCloseBroadcaster.hpp"
+#include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
 
 #include "tdoc_docmgr.hxx"
 

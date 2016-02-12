@@ -20,7 +20,7 @@
 
 #include <set>
 
-#include "svx/UnoNamespaceMap.hxx"
+#include <svx/UnoNamespaceMap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -30,8 +30,8 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <svl/itempool.hxx>
-#include "svx/unoapi.hxx"
-#include "editeng/xmlcnitm.hxx"
+#include <svx/unoapi.hxx>
+#include <editeng/xmlcnitm.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;

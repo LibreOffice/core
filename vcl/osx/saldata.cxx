@@ -22,7 +22,7 @@
 #include "osx/saldata.hxx"
 #include "osx/salnsmenu.h"
 #include "osx/salinst.h"
-#include "o3tl/enumarray.hxx"
+#include <o3tl/enumarray.hxx>
 
 #import "apple_remote/RemoteMainController.h"
 

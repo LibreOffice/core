@@ -29,8 +29,8 @@ struct _oslMutexImpl
 };
 #pragma managed
 #include <memory>
-#include "rtl/ustring.hxx"
-#include "typelib/typedescription.hxx"
+#include <rtl/ustring.hxx>
+#include <typelib/typedescription.hxx>
 
 #using <system.dll>
 

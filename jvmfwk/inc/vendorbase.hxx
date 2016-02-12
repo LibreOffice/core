@@ -22,10 +22,10 @@
 
 #include "config_java.h"
 
-#include "rtl/ustring.hxx"
-#include "rtl/ref.hxx"
-#include "osl/endian.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
+#include <osl/endian.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <vector>
 
 namespace jfw_plugin

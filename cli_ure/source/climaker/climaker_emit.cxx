@@ -19,14 +19,14 @@
 
 #include "climaker_share.h"
 
-#include "rtl/string.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
-#include "com/sun/star/reflection/XStructTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
-#include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp"
+#include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
+#include <com/sun/star/reflection/XStructTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
 #include <vector>
 
 using namespace ::System::Reflection;

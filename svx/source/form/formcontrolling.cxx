@@ -21,9 +21,9 @@
 #include <sal/macros.h>
 #include "formcontrolling.hxx"
 #include "fmurl.hxx"
-#include "svx/svxids.hrc"
+#include <svx/svxids.hrc>
 #include "fmprop.hrc"
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>

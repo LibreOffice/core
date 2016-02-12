@@ -11,7 +11,7 @@
 #define SW_TOXLINKPROCESSOR_HXX_
 
 #include "fmtinfmt.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <memory>
 #include <vector>

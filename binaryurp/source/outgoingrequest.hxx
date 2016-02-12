@@ -20,9 +20,9 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUEST_HXX
 #define INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUEST_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "typelib/typedescription.hxx"
+#include <typelib/typedescription.hxx>
 
 namespace binaryurp {
 

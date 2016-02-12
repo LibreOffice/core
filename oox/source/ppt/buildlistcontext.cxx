@@ -19,7 +19,7 @@
 
 #include "buildlistcontext.hxx"
 #include <rtl/ustring.hxx>
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 namespace oox { namespace ppt {
 

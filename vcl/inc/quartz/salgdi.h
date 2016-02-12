@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include "premac.h"
 #ifdef MACOSX

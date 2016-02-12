@@ -22,11 +22,11 @@
 #include <exception>
 #include <typeinfo>
 
-#include "rtl/alloc.h"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
 
 #include <bridges/cpp_uno/shared/bridge.hxx>

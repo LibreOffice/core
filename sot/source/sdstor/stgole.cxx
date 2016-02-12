@@ -19,9 +19,9 @@
 
 #include <algorithm>
 
-#include "rtl/string.h"
+#include <rtl/string.h>
 #include "stgole.hxx"
-#include "sot/storinfo.hxx"
+#include <sot/storinfo.hxx>
 #include <memory>
 #include <sot/exchange.hxx>
 

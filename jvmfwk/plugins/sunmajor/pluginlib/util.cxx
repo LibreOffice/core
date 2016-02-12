@@ -22,20 +22,20 @@
 
 #include "util.hxx"
 
-#include "osl/process.h"
-#include "osl/security.hxx"
-#include "osl/file.hxx"
-#include "osl/module.hxx"
+#include <osl/process.h>
+#include <osl/security.hxx>
+#include <osl/file.hxx>
+#include <osl/module.hxx>
 #include <osl/diagnose.h>
 #include <osl/getglobalmutex.hxx>
-#include "rtl/byteseq.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/instance.hxx"
-#include "salhelper/linkhelper.hxx"
-#include "salhelper/thread.hxx"
+#include <rtl/byteseq.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
+#include <salhelper/linkhelper.hxx>
+#include <salhelper/thread.hxx>
 #include "boost/noncopyable.hpp"
 #include <memory>
-#include "com/sun/star/uno/Sequence.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
 #include <utility>
 #include <algorithm>
 #include <map>

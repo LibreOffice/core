@@ -22,11 +22,11 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 
 #include "fmhelp.hrc"
 #include "fmexpl.hxx"
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmundo.hxx"
@@ -50,7 +50,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 namespace svxform
 {

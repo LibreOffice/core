@@ -20,11 +20,11 @@
 #include "drawingml/table/tablecell.hxx"
 #include "drawingml/table/tableproperties.hxx"
 #include <basegfx/color/bcolor.hxx>
-#include "oox/drawingml/shapepropertymap.hxx"
+#include <oox/drawingml/shapepropertymap.hxx>
 #include "drawingml/textbody.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/drawingml/theme.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/propertyset.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

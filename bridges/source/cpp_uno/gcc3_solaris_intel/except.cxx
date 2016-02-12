@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 #include <unordered_map>

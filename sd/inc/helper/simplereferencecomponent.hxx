@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
 #define INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
 
-#include "osl/interlck.h"
+#include <osl/interlck.h>
 
 #include <cstddef>
 #include <new>

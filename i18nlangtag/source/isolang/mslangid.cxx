@@ -22,11 +22,11 @@
 #include <rtl/string.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-#include "i18nlangtag/mslangid.hxx"
+#include <i18nlangtag/mslangid.hxx>
 
 // Only very limited few functions that are guaranteed to not be called from
 // LanguageTag may use LanguageTag ...
-#include "i18nlangtag/languagetag.hxx"
+#include <i18nlangtag/languagetag.hxx>
 
 
 LanguageType MsLangId::nConfiguredSystemLanguage   = LANGUAGE_SYSTEM;

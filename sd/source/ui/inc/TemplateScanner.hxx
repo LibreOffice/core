@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TEMPLATESCANNER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TEMPLATESCANNER_HXX
 
-#include "tools/AsynchronousTask.hxx"
+#include <tools/AsynchronousTask.hxx>
 #include "sddllapi.h"
 #include <ucbhelper/content.hxx>
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
 #include <vector>

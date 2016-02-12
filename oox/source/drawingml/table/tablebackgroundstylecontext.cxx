@@ -21,7 +21,7 @@
 
 #include "drawingml/table/tablebackgroundstylecontext.hxx"
 #include "drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

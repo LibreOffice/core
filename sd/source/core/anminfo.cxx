@@ -18,7 +18,7 @@
  */
 
 #include <svl/smplhint.hxx>
-#include "svx/xtable.hxx"
+#include <svx/xtable.hxx>
 #include <svx/svdopath.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/flditem.hxx>

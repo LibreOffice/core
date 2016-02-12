@@ -17,9 +17,9 @@ bool rtl_string_unittest_non_const_literal_function;
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/strbuf.hxx"
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
 namespace test { namespace ostring {
 

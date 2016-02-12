@@ -25,12 +25,12 @@
 #include "win/svsys.h"
 #endif
 
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
-#include "i18nlangtag/mslangid.hxx"
-#include "i18nlangtag/languagetag.hxx"
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <comphelper/lok.hxx>
 
@@ -47,12 +47,12 @@
 #include <vcl/gradient.hxx>
 #include <vcl/outdev.hxx>
 
-#include "unotools/fontcfg.hxx"
-#include "unotools/localedatawrapper.hxx"
-#include "unotools/collatorwrapper.hxx"
-#include "unotools/confignode.hxx"
-#include "unotools/configmgr.hxx"
-#include "unotools/syslocaleoptions.hxx"
+#include <unotools/fontcfg.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/confignode.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star;
 

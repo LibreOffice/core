@@ -18,7 +18,7 @@
  */
 
 #include <svsys.h>
-#include "rtl/tencinfo.h"
+#include <rtl/tencinfo.h>
 #include <vcl/svapp.hxx>
 
 #include "win/saldata.hxx"

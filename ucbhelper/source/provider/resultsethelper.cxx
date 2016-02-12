@@ -34,7 +34,7 @@
 #include <ucbhelper/resultsethelper.hxx>
 #include <ucbhelper/getcomponentcontext.hxx>
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

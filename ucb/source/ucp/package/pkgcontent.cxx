@@ -24,7 +24,7 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 
-#include "osl/doublecheckedlocking.h"
+#include <osl/doublecheckedlocking.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

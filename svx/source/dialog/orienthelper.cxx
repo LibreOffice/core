@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/orienthelper.hxx"
+#include <svx/orienthelper.hxx>
 
 #include <vector>
 #include <utility>
 
 #include <vcl/button.hxx>
-#include "svx/dialcontrol.hxx"
+#include <svx/dialcontrol.hxx>
 
 namespace svx {
 

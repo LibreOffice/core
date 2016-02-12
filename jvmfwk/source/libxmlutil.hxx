@@ -21,7 +21,7 @@
 
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace jfw
 {

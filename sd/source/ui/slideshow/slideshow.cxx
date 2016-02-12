@@ -38,7 +38,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/unoprov.hxx>
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include "FrameView.hxx"
 #include "createpresentation.hxx"

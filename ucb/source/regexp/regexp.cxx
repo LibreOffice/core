@@ -21,7 +21,7 @@
 
 #include <cstddef>
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>

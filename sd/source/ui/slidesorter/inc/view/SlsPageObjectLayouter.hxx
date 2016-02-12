@@ -22,7 +22,7 @@
 
 #include "SlideSorter.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
-#include "tools/gen.hxx"
+#include <tools/gen.hxx>
 #include <vcl/image.hxx>
 
 namespace vcl { class Font; }

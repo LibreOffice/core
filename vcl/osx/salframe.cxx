@@ -20,9 +20,9 @@
 #include <string>
 
 #include <comphelper/fileurl.hxx>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

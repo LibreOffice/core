@@ -34,7 +34,7 @@
 
 #include "textattr.hxx"
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <sfx2/request.hxx>
 #include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>

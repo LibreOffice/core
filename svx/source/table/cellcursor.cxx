@@ -18,12 +18,12 @@
  */
 
 
-#include "svx/svdotable.hxx"
+#include <svx/svdotable.hxx>
 #include "cellcursor.hxx"
 #include "tablelayouter.hxx"
 #include "cell.hxx"
-#include "svx/svdmodel.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdmodel.hxx>
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 
 

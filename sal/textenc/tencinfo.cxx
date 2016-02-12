@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <cstring>
 
-#include "rtl/tencinfo.h"
+#include <rtl/tencinfo.h>
 
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"

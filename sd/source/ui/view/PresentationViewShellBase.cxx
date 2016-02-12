@@ -21,8 +21,8 @@
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
 #include "strings.hrc"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/PresentationModule.hxx"
+#include <framework/FrameworkHelper.hxx>
+#include <framework/PresentationModule.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

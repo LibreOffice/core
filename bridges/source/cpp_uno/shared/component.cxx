@@ -19,21 +19,21 @@
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/mutex.hxx"
-#include "osl/time.h"
-#include "rtl/process.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/mutex.hxx>
+#include <osl/time.h>
+#include <rtl/process.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include "sal/types.h"
-#include "uno/environment.h"
-#include "uno/lbnames.h"
-#include "uno/mapping.h"
-#include "cppu/EnvDcp.hxx"
+#include <sal/types.h>
+#include <uno/environment.h>
+#include <uno/lbnames.h>
+#include <uno/mapping.h>
+#include <cppu/EnvDcp.hxx>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

@@ -25,8 +25,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/contentinfo.hxx>
 

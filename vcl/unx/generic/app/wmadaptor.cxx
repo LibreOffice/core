@@ -21,11 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sal/alloca.h"
-#include "rtl/locale.h"
+#include <sal/alloca.h>
+#include <rtl/locale.h>
 
-#include "osl/thread.h"
-#include "osl/process.h"
+#include <osl/thread.h>
+#include <osl/process.h>
 #include <sal/macros.h>
 #include <vcl/configsettings.hxx>
 

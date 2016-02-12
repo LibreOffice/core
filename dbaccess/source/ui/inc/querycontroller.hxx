@@ -24,7 +24,7 @@
 #include "JoinTableView.hxx"
 #include "querycontainerwindow.hxx"
 #include "queryview.hxx"
-#include "svx/ParseContext.hxx"
+#include <svx/ParseContext.hxx>
 #include "TableFieldDescription.hxx"
 
 #include <com/sun/star/io/XObjectInputStream.hpp>

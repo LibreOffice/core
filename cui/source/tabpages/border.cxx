@@ -37,7 +37,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
-#include "svx/flagsdef.hxx"
+#include <svx/flagsdef.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>

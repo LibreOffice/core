@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <cstring>
 #include <vector>
 
-#include "codemaker/global.hxx"
-#include "codemaker/typemanager.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "unoidl/unoidl.hxx"
+#include <codemaker/global.hxx>
+#include <codemaker/typemanager.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <unoidl/unoidl.hxx>
 
 TypeManager::TypeManager(): manager_(new unoidl::Manager) {}
 

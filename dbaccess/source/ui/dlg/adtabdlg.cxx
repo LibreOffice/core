@@ -38,7 +38,7 @@
 #include "UITools.hxx"
 #include "imageprovider.hxx"
 #include <comphelper/containermultiplexer.hxx>
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <algorithm>
 
 // slot ids

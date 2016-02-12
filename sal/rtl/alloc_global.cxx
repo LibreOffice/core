@@ -18,7 +18,7 @@
  */
 
 #include "alloc_impl.hxx"
-#include "rtl/alloc.h"
+#include <rtl/alloc.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 
@@ -44,7 +44,7 @@ static void determine_alloc_mode()
  *
  * ================================================================= */
 
-#include "sal/macros.h"
+#include <sal/macros.h>
 
 /* ================================================================= *
  *

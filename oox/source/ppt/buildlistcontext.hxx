@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_SOURCE_PPT_BUILDLISTCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_PPT_BUILDLISTCONTEXT_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
+#include <oox/core/fragmenthandler2.hxx>
 
 namespace oox { namespace ppt {
 

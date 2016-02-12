@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <com/sun/star/ucb/DuplicateCommandIdentifierException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "unotest/gettestargument.hxx"
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <unotest/gettestargument.hxx>
 
 #include "getargument.hxx"
 

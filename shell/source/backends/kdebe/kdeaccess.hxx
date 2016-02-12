@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SHELL_SOURCE_BACKENDS_KDEBE_KDEACCESS_HXX
 #define INCLUDED_SHELL_SOURCE_BACKENDS_KDEBE_KDEACCESS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/beans/Optional.hpp"
+#include <com/sun/star/beans/Optional.hpp>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;

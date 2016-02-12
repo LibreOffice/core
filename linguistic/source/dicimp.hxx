@@ -29,7 +29,7 @@
 #include <tools/solar.h>
 
 #include "defs.hxx"
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 
 #define DIC_MAX_ENTRIES     30000
 

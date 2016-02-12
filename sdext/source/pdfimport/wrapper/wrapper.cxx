@@ -24,37 +24,37 @@
 #include "pdfihelper.hxx"
 #include "wrapper.hxx"
 
-#include "osl/file.h"
-#include "osl/file.hxx"
-#include "osl/thread.h"
-#include "osl/process.h"
-#include "osl/diagnose.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/byteseq.hxx"
+#include <osl/file.h>
+#include <osl/file.hxx>
+#include <osl/thread.h>
+#include <osl/process.h>
+#include <osl/diagnose.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/byteseq.hxx>
 
-#include "cppuhelper/exc_hlp.hxx"
-#include "com/sun/star/io/XInputStream.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/awt/FontDescriptor.hpp"
-#include "com/sun/star/beans/XMaterialHolder.hpp"
-#include "com/sun/star/rendering/PathCapType.hpp"
-#include "com/sun/star/rendering/PathJoinType.hpp"
-#include "com/sun/star/rendering/XColorSpace.hpp"
-#include "com/sun/star/rendering/XPolyPolygon2D.hpp"
-#include "com/sun/star/rendering/XBitmap.hpp"
-#include "com/sun/star/geometry/Matrix2D.hpp"
-#include "com/sun/star/geometry/AffineMatrix2D.hpp"
-#include "com/sun/star/geometry/RealRectangle2D.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
+#include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/rendering/PathCapType.hpp>
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#include <com/sun/star/rendering/XColorSpace.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include "basegfx/point/b2dpoint.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/tools/canvastools.hxx"
-#include "basegfx/tools/unopolypolygon.hxx"
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
@@ -66,7 +66,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "rtl/bootstrap.h"
+#include <rtl/bootstrap.h>
 
 using namespace com::sun::star;
 

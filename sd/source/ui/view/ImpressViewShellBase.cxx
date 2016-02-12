@@ -23,8 +23,8 @@
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "app.hrc"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/ImpressModule.hxx"
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ImpressModule.hxx>
 #include "MasterPageObserver.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

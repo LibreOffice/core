@@ -20,16 +20,16 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_INCOMINGREQUEST_HXX
 #define INCLUDED_BINARYURP_SOURCE_INCOMINGREQUEST_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "rtl/byteseq.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
-#include "uno/dispatcher.hxx"
+#include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
+#include <uno/dispatcher.hxx>
 
 namespace binaryurp {
     class BinaryAny;

@@ -21,14 +21,14 @@
 
 #include <boost/noncopyable.hpp>
 #include <vcl/svapp.hxx>
-#include "osl/mutex.hxx"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
+#include <osl/mutex.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "com/sun/star/lang/XServiceInfo.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "com/sun/star/awt/XRequestCallback.hpp"
+#include <com/sun/star/awt/XRequestCallback.hpp>
 
 /// anonymous implementation namespace
 namespace {

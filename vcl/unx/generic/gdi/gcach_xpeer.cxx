@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/ustring.hxx"
-#include "osl/module.h"
-#include "osl/thread.h"
+#include <rtl/ustring.hxx>
+#include <osl/module.h>
+#include <osl/thread.h>
 
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"

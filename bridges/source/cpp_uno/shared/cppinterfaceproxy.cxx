@@ -24,12 +24,12 @@
 #include "bridges/cpp_uno/shared/bridge.hxx"
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/getglobalmutex.hxx"
-#include "osl/interlck.h"
-#include "osl/mutex.hxx"
-#include "rtl/instance.hxx"
-#include "typelib/typedescription.h"
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/getglobalmutex.hxx>
+#include <osl/interlck.h>
+#include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
+#include <typelib/typedescription.h>
 
 #include <cstddef>
 #include <new>

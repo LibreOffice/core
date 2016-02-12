@@ -25,9 +25,9 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include "com/sun/star/util/URL.hpp"
-#include "com/sun/star/util/URLTransformer.hpp"
-#include "com/sun/star/util/XURLTransformer.hpp"
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 

@@ -10,7 +10,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotest/filters-test.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
-#include "com/sun/star/packages/zip/ZipFileAccess.hpp"
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 using namespace ::com::sun::star;
 

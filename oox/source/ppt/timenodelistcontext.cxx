@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/timenodelistcontext.hxx"
+#include <oox/ppt/timenodelistcontext.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 
@@ -38,11 +38,11 @@
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/colorchoicecontext.hxx"
-#include "oox/ppt/slidetransition.hxx"
+#include <oox/ppt/slidetransition.hxx>
 
 #include "animvariantcontext.hxx"
 #include "commonbehaviorcontext.hxx"

@@ -19,8 +19,8 @@
 
 #include "winlayout.hxx"
 
-#include "osl/module.h"
-#include "osl/file.h"
+#include <osl/module.h>
+#include <osl/file.h>
 
 #include <comphelper/windowserrorstring.hxx>
 

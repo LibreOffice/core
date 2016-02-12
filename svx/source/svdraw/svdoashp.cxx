@@ -18,7 +18,7 @@
  */
 
 #include <svx/svdoashp.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/datetime.hxx>
@@ -40,21 +40,21 @@
 #include <svx/svddrgmt.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include <editeng/eeitem.hxx>
-#include "editeng/editstat.hxx"
+#include <editeng/editstat.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
-#include "svx/EnhancedCustomShapeGeometry.hxx"
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
-#include "svx/EnhancedCustomShape2d.hxx"
+#include <svx/EnhancedCustomShapeGeometry.hxx>
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
+#include <svx/EnhancedCustomShape2d.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>

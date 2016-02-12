@@ -20,7 +20,7 @@
 #include <vcl/oldprintadaptor.hxx>
 #include <vcl/gdimtf.hxx>
 
-#include "com/sun/star/awt/Size.hpp"
+#include <com/sun/star/awt/Size.hpp>
 
 #include <vector>
 

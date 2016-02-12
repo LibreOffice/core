@@ -20,8 +20,8 @@
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "rtl/string.h"
-#include "rtl/ustring.hxx"
+#include <rtl/string.h>
+#include <rtl/ustring.hxx>
 
 namespace test { namespace oustring {
 

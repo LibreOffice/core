@@ -19,9 +19,9 @@
 #ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORLIST_HXX
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORLIST_HXX
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 #include "vendorbase.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace jfw_plugin
 {

@@ -36,7 +36,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 #include "FPServiceInfo.hxx"
 #include "VCLKDEApplication.hxx"

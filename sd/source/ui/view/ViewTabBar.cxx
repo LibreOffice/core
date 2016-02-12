@@ -24,8 +24,8 @@
 #include "DrawViewShell.hxx"
 #include "FrameView.hxx"
 #include "EventMultiplexer.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/Pane.hxx"
+#include <framework/FrameworkHelper.hxx>
+#include <framework/Pane.hxx>
 #include "DrawController.hxx"
 
 #include "sdresid.hxx"

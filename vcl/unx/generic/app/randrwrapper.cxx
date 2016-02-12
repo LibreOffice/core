@@ -23,8 +23,8 @@
 #include <X11/extensions/Xrandr.h>
 #include <postx.h>
 
-#include "osl/module.h"
-#include "rtl/ustring.hxx"
+#include <osl/module.h>
+#include <rtl/ustring.hxx>
 
 namespace
 {

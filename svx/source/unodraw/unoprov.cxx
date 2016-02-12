@@ -33,11 +33,11 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
 #include <editeng/editeng.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>

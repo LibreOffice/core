@@ -27,9 +27,9 @@
  ************************************************************************/
 
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 #include "NeonTypes.hxx"
 #include "DAVException.hxx"
 #include "DAVProperties.hxx"

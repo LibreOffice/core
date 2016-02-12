@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/DrawModule.hxx"
+#include <framework/DrawModule.hxx>
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
 #include "ToolBarModule.hxx"

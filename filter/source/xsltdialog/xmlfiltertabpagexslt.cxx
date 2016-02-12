@@ -19,7 +19,7 @@
 
 #include <com/sun/star/frame/XConfigManager.hpp>
 
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>

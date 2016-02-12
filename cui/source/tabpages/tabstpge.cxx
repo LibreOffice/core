@@ -27,7 +27,7 @@
 #include <editeng/lrspitem.hxx>
 #include "tabstpge.hxx"
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <sfx2/module.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>

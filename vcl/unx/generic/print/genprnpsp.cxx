@@ -37,7 +37,7 @@
 #endif
 
 #include <comphelper/fileurl.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

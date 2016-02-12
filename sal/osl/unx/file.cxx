@@ -20,11 +20,11 @@
 #include <config_features.h>
 
 #include "boost/noncopyable.hpp"
-#include "osl/file.hxx"
-#include "osl/detail/file.h"
+#include <osl/file.hxx>
+#include <osl/detail/file.h>
 
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
+#include <osl/diagnose.h>
+#include <rtl/alloc.h>
 
 #include <rtl/string.hxx>
 

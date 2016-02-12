@@ -25,9 +25,9 @@
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
 #include "services.hxx"
-#include "oox/vml/vmldrawingfragment.hxx"
-#include "oox/vml/vmlshape.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
+#include <oox/vml/vmldrawingfragment.hxx>
+#include <oox/vml/vmlshape.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
 

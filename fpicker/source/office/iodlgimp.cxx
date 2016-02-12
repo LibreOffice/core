@@ -18,24 +18,24 @@
  */
 
 #include "iodlgimp.hxx"
-#include "svtools/headbar.hxx"
+#include <svtools/headbar.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
-#include "svl/ctypeitm.hxx"
-#include "svl/eitem.hxx"
-#include "unotools/viewoptions.hxx"
-#include "svtools/fileview.hxx"
-#include "svtools/inettbc.hxx"
+#include <svl/ctypeitm.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/viewoptions.hxx>
+#include <svtools/fileview.hxx>
+#include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
 #include "iodlg.hrc"
-#include "svtools/imagemgr.hxx"
+#include <svtools/imagemgr.hxx>
 #include <unotools/localfilehelper.hxx>
-#include "unotools/useroptions.hxx"
-#include "rtl/instance.hxx"
+#include <unotools/useroptions.hxx>
+#include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <svl/svl.hrc>
 

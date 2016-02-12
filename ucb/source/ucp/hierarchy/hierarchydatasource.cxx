@@ -29,7 +29,7 @@
 #include "hierarchydatasource.hxx"
 #include <osl/diagnose.h>
 
-#include "osl/doublecheckedlocking.h"
+#include <osl/doublecheckedlocking.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

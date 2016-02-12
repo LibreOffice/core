@@ -19,7 +19,7 @@
 
 #include <sal/alloca.h>
 #include <osl/diagnose.h>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "cli_base.h"
 #include "cli_bridge.h"
 

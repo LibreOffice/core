@@ -18,9 +18,9 @@
  */
 
 
-#include "sal/types.h"
+#include <sal/types.h>
 
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/implementationentry.hxx>
 
 #include "OfficeFilePicker.hxx"
 #include "OfficeFolderPicker.hxx"

@@ -10,9 +10,9 @@
 #include <config_folders.h>
 #include <config_liblangtag.h>
 
-#include "i18nlangtag/languagetag.hxx"
-#include "i18nlangtag/applelangid.hxx"
-#include "i18nlangtag/mslangid.hxx"
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/applelangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>

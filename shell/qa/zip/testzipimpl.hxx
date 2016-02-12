@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "sal/types.h"
+#include <sal/types.h>
 
 using namespace std;
 

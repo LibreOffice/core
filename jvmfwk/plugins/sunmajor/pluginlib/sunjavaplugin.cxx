@@ -32,22 +32,22 @@
 
 #include <memory>
 #include "config_options.h"
-#include "osl/diagnose.h"
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "osl/module.hxx"
-#include "osl/mutex.hxx"
-#include "osl/process.h"
-#include "osl/thread.hxx"
-#include "osl/file.hxx"
-#include "rtl/instance.hxx"
-#include "osl/getglobalmutex.hxx"
+#include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <osl/module.hxx>
+#include <osl/mutex.hxx>
+#include <osl/process.h>
+#include <osl/thread.hxx>
+#include <osl/file.hxx>
+#include <rtl/instance.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <setjmp.h>
 #include <signal.h>
 #include <stack>
 
 #include "jni.h"
-#include "rtl/byteseq.hxx"
+#include <rtl/byteseq.hxx>
 #include "vendorplugin.hxx"
 #include "util.hxx"
 #include "sunversion.hxx"

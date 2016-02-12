@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
 #define INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 namespace rtl { class OUString; }
 

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_STORE_SOURCE_OBJECT_HXX
 #define INCLUDED_STORE_SOURCE_OBJECT_HXX
 
-#include "sal/types.h"
-#include "osl/interlck.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include <sal/types.h>
+#include <osl/interlck.h>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace store
 {

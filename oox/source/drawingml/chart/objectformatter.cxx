@@ -25,15 +25,15 @@
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
 #include "drawingml/textbody.hxx"
 #include "drawingml/textparagraph.hxx"
-#include "oox/drawingml/theme.hxx"
+#include <oox/drawingml/theme.hxx>
 #include "drawingml/chart/chartspacemodel.hxx"
-#include "oox/helper/modelobjecthelper.hxx"
+#include <oox/helper/modelobjecthelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 
 namespace oox {

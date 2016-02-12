@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -27,18 +27,18 @@
 #include <iostream>
 
 #include "boost/noncopyable.hpp"
-#include "rtl/alloc.h"
-#include "rtl/ref.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
-#include "unoidl/unoidl.hxx"
+#include <rtl/alloc.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
+#include <unoidl/unoidl.hxx>
 
-#include "codemaker/commoncpp.hxx"
-#include "codemaker/exceptiontree.hxx"
-#include "codemaker/generatedtypeset.hxx"
-#include "codemaker/typemanager.hxx"
-#include "codemaker/unotype.hxx"
+#include <codemaker/commoncpp.hxx>
+#include <codemaker/exceptiontree.hxx>
+#include <codemaker/generatedtypeset.hxx>
+#include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 
 #include "cpputype.hxx"
 #include "cppuoptions.hxx"

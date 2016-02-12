@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "com/sun/star/io/IOException.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/diagnose.h"
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/diagnose.h>
 #include "filstr.hxx"
 #include "shell.hxx"
 #include "prov.hxx"

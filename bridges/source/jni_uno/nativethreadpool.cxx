@@ -19,12 +19,12 @@
 
 
 #include <string.h>
-#include "jvmaccess/virtualmachine.hxx"
-#include "rtl/byteseq.h"
-#include "rtl/byteseq.hxx"
-#include "rtl/ref.hxx"
-#include "sal/types.h"
-#include "uno/threadpool.h"
+#include <jvmaccess/virtualmachine.hxx>
+#include <rtl/byteseq.h>
+#include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
+#include <sal/types.h>
+#include <uno/threadpool.h>
 
 #include "jni.h"
 

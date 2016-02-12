@@ -21,10 +21,10 @@
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
 
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/interlck.h"
-#include "typelib/typedescription.h"
-#include "uno/dispatcher.h"
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/interlck.h>
+#include <typelib/typedescription.h>
+#include <uno/dispatcher.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

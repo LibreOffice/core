@@ -19,7 +19,7 @@
 
 
 #include <svx/svdcrtv.hxx>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdoedge.hxx>

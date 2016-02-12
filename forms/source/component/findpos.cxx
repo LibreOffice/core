@@ -18,14 +18,14 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "findpos.hxx"
 
-#include "com/sun/star/uno/Sequence.hxx"
-#include "comphelper/types.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/types.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <algorithm>
 

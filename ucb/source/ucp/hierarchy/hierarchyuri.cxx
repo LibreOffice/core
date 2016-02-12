@@ -24,8 +24,8 @@
 
  *************************************************************************/
 
-#include "rtl/ustrbuf.hxx"
-#include "osl/diagnose.h"
+#include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include "hierarchyuri.hxx"
 

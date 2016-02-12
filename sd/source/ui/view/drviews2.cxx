@@ -114,7 +114,7 @@
 #include "glob.hrc"
 #include "strings.hrc"
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include "AnimationChildWindow.hxx"
 #include "DrawDocShell.hxx"

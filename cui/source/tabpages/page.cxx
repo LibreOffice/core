@@ -42,7 +42,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <editeng/paperinf.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_IO_SOURCE_SERVICES_HXX
 #define INCLUDED_IO_SOURCE_SERVICES_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

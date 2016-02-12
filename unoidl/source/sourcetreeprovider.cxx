@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <vector>
 #include <cstring>
 
-#include "osl/file.h"
-#include "osl/file.hxx"
-#include "rtl/character.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "unoidl/unoidl.hxx"
+#include <osl/file.h>
+#include <osl/file.hxx>
+#include <rtl/character.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <unoidl/unoidl.hxx>
 
 #include "sourceprovider-parser-requires.hxx"
 #include "sourceprovider-parser.hxx"
@@ -28,7 +28,7 @@
 
 #if defined MACOSX
 #include <dirent.h>
-#include "osl/thread.h"
+#include <osl/thread.h>
 #endif
 
 namespace unoidl { namespace detail {

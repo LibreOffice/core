@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REGISTRY_TOOLS_FILEURL_HXX
 #define INCLUDED_REGISTRY_TOOLS_FILEURL_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace registry
 {

@@ -19,10 +19,10 @@
 
 #include "pyuno_impl.hxx"
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ref.hxx"
-#include "salhelper/thread.hxx"
+#include <rtl/ref.hxx>
+#include <salhelper/thread.hxx>
 
 namespace pyuno
 {

@@ -23,7 +23,7 @@
 #include "macavfcommon.hxx"
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/media/XManager.hdl"
+#include <com/sun/star/media/XManager.hdl>
 
 
 namespace avmedia { namespace macavf {

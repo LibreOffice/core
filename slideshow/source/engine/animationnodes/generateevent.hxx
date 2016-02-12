@@ -22,7 +22,7 @@
 
 #include "slideshowcontext.hxx"
 #include "delayevent.hxx"
-#include "com/sun/star/uno/Any.hxx"
+#include <com/sun/star/uno/Any.hxx>
 
 namespace slideshow {
 namespace internal {

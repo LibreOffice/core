@@ -22,13 +22,13 @@
 #include <config_features.h>
 #include <config_folders.h>
 
-#include "sal/config.h"
-#include "osl/mutex.hxx"
-#include "rtl/bootstrap.hxx"
-#include "rtl/instance.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/byteseq.hxx"
-#include "osl/thread.hxx"
+#include <sal/config.h>
+#include <osl/mutex.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/instance.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/byteseq.hxx>
+#include <osl/thread.hxx>
 
 namespace jfw
 {

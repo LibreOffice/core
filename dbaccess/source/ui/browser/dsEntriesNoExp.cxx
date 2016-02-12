@@ -30,7 +30,7 @@
 #include "dbtreelistbox.hxx"
 #include "dbu_brw.hrc"
 #include "dbtreemodel.hxx"
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;

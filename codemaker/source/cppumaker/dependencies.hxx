@@ -20,12 +20,12 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DEPENDENCIES_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DEPENDENCIES_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 
 #include "boost/noncopyable.hpp"
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 namespace rtl { class OUString; }
 class TypeManager;

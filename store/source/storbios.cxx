@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "storbios.hxx"
 
-#include "sal/types.h"
-#include "sal/macros.h"
-#include "sal/log.hxx"
+#include <sal/types.h>
+#include <sal/macros.h>
+#include <sal/log.hxx>
 
-#include "rtl/alloc.h"
-#include "rtl/ref.hxx"
+#include <rtl/alloc.h>
+#include <rtl/ref.hxx>
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "object.hxx"
 #include "lockbyte.hxx"
 #include "storcach.hxx"

@@ -27,7 +27,7 @@ CComModule _Module;
 #include "axhost.hxx"
 
 #include <stdio.h>
-#include "typelib/typedescription.hxx"
+#include <typelib/typedescription.hxx>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>

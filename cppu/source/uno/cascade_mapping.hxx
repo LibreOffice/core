@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_CASCADE_MAPPING_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_CASCADE_MAPPING_HXX
 
-#include "uno/environment.h"
-#include "uno/mapping.h"
-#include "rtl/ustring.h"
+#include <uno/environment.h>
+#include <uno/mapping.h>
+#include <rtl/ustring.h>
 
 
 void getCascadeMapping(uno_Mapping     ** ppMapping,

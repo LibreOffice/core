@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <float.h>
 
-#include "svx/chrtitem.hxx"
+#include <svx/chrtitem.hxx>
 
 using namespace ::com::sun::star;
 

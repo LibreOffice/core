@@ -27,7 +27,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 #include <svx/scene3d.hxx>
 #include <editeng/editdata.hxx>

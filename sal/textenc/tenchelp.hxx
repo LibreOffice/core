@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SAL_TEXTENC_TENCHELP_HXX
 #define INCLUDED_SAL_TEXTENC_TENCHELP_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/tencinfo.h"
-#include "rtl/textcvt.h"
-#include "rtl/textenc.h"
-#include "sal/types.h"
+#include <rtl/tencinfo.h>
+#include <rtl/textcvt.h>
+#include <rtl/textenc.h>
+#include <sal/types.h>
 
 #include "unichars.hxx"
 

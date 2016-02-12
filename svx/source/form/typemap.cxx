@@ -29,9 +29,9 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/postitem.hxx>
-#include "svx/clipfmtitem.hxx"
+#include <svx/clipfmtitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>

@@ -42,7 +42,7 @@
 #include <svl/itemset.hxx>
 #include <unicode/uchar.h>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

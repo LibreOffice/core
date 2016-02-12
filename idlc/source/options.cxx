@@ -24,8 +24,8 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#include "rtl/ustring.hxx"
-#include "osl/file.hxx"
+#include <rtl/ustring.hxx>
+#include <osl/file.hxx>
 
 #ifdef WNT
 #   include <windows.h>

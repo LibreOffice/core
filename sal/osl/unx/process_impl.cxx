@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/process.h"
+#include <osl/process.h>
 
 #include <limits.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "osl/diagnose.h"
-#include "osl/file.h"
-#include "osl/module.h"
-#include "osl/thread.h"
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.h"
-#include "sal/log.hxx"
+#include <osl/diagnose.h>
+#include <osl/file.h>
+#include <osl/module.h>
+#include <osl/thread.h>
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.h>
+#include <sal/log.hxx>
 
 #include "file_path_helper.hxx"
 

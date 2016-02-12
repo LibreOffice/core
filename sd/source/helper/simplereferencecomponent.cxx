@@ -19,8 +19,8 @@
 
 #include "helper/simplereferencecomponent.hxx"
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/diagnose.h"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/diagnose.h>
 
 #include <new>
 

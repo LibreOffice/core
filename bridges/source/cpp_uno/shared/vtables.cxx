@@ -20,8 +20,8 @@
 
 #include "bridges/cpp_uno/shared/vtables.hxx"
 
-#include "sal/types.h"
-#include "typelib/typedescription.h"
+#include <sal/types.h>
+#include <typelib/typedescription.h>
 
 #include <algorithm>
 #include <cassert>

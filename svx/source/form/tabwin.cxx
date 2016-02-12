@@ -19,7 +19,7 @@
 
 
 #include "tabwin.hxx"
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "fmservs.hxx"
 #include "stringlistresource.hxx"
 
@@ -42,7 +42,7 @@
 
 #include "fmprop.hrc"
 
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/objitem.hxx>
@@ -50,7 +50,7 @@
 #include <comphelper/property.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <vcl/settings.hxx>
 
 const long STD_WIN_SIZE_X = 120;

@@ -30,8 +30,8 @@
 
 #include "getallcharpropids.hxx"
 #include "svdglob.hxx"
-#include "svx/svditer.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svditer.hxx>
+#include <svx/svdstr.hrc>
 
 #include <svx/AffineMatrixItem.hxx>
 #include <svx/e3dsceneupdater.hxx>

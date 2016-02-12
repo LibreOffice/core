@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <typeinfo>
 #include <exception>
@@ -30,7 +30,7 @@
 
 #include "config_gcc.h"
 #include <uno/any2.h>
-#include "uno/mapping.h"
+#include <uno/mapping.h>
 
 namespace CPPU_CURRENT_NAMESPACE
 {

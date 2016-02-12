@@ -20,14 +20,14 @@
 #include <sal/config.h>
 
 #include <rtl/byteseq.h>
-#include "rtl/uuid.h"
-#include "osl/thread.h"
-#include "osl/mutex.hxx"
+#include <rtl/uuid.h>
+#include <osl/thread.h>
+#include <osl/mutex.hxx>
 
-#include "uno/current_context.h"
-#include "uno/environment.hxx"
-#include "uno/mapping.hxx"
-#include "typelib/typedescription.h"
+#include <uno/current_context.h>
+#include <uno/environment.hxx>
+#include <uno/mapping.hxx>
+#include <typelib/typedescription.h>
 
 #include "current.hxx"
 

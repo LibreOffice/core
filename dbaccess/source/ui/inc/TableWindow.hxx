@@ -29,7 +29,7 @@
 #include <vcl/window.hxx>
 
 #include <comphelper/containermultiplexer.hxx>
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/basemutex.hxx>
 
 class SvTreeListEntry;
 namespace dbaui

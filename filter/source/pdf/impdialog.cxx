@@ -25,18 +25,18 @@
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include "sfx2/passwd.hxx"
-#include "svtools/miscopt.hxx"
+#include <sfx2/passwd.hxx>
+#include <svtools/miscopt.hxx>
 
-#include "comphelper/storagehelper.hxx"
+#include <comphelper/storagehelper.hxx>
 
-#include "com/sun/star/text/XTextRange.hpp"
-#include "com/sun/star/drawing/XShapes.hpp"
-#include "com/sun/star/container/XIndexAccess.hpp"
-#include "com/sun/star/frame/XController.hpp"
-#include "com/sun/star/view/XSelectionSupplier.hpp"
-#include "com/sun/star/security/DocumentDigitalSignatures.hpp"
-#include "com/sun/star/security/XCertificate.hpp"
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 static ResMgr& getPDFFilterResMgr()
 {

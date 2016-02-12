@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALDATA_HXX
 #define INCLUDED_VCL_INC_WIN_SALDATA_HXX
 
-#include "osl/module.h"
+#include <osl/module.h>
 
 #include <svdata.hxx>
 #include <salwtype.hxx>

@@ -14,7 +14,7 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppcanvas/customsprite.hxx>
 
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 
 #include "vieweventhandler.hxx"
 #include "screenupdater.hxx"

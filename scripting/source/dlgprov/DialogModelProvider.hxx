@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_DLGPROV_DIALOGMODELPROVIDER_HXX
 #define INCLUDED_SCRIPTING_SOURCE_DLGPROV_DIALOGMODELPROVIDER_HXX
 
-#include "sal/config.h"
-#include "cppuhelper/factory.hxx"
+#include <sal/config.h>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/container/XNameContainer.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 /// anonymous implementation namespace
 namespace dlgprov{

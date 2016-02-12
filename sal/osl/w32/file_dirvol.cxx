@@ -19,9 +19,9 @@
 
 #define UNICODE
 #define _UNICODE
-#include "systools/win32/uwinapi.h"
+#include <systools/win32/uwinapi.h>
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 #include "file_url.h"
 #include <sal/macros.h>
@@ -29,10 +29,10 @@
 
 #include "path_helper.hxx"
 
-#include "osl/diagnose.h"
-#include "osl/time.h"
-#include "rtl/alloc.h"
-#include "rtl/ustring.hxx"
+#include <osl/diagnose.h>
+#include <osl/time.h>
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
 
 #include <tchar.h>
 #ifdef __MINGW32__

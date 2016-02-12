@@ -19,7 +19,7 @@
 
 #include "Scaling.hxx"
 #include <rtl/math.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace

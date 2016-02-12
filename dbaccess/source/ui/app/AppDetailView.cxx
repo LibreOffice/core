@@ -40,12 +40,12 @@
 #include <dbaccess/IController.hxx>
 #include "moduledbu.hxx"
 #include <svtools/localresaccess.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <algorithm>
 #include "dbtreelistbox.hxx"
 #include "imageprovider.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 #include "AppController.hxx"
 
 using namespace ::dbaui;

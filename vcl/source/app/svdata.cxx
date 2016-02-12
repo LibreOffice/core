@@ -48,7 +48,7 @@
 #include "helpwin.hxx"
 #include "../window/scrwnd.hxx"
 
-#include "com/sun/star/accessibility/MSAAService.hpp"
+#include <com/sun/star/accessibility/MSAAService.hpp>
 
 #include "officecfg/Office/Common.hxx"
 

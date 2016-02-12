@@ -29,7 +29,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "svtools/imageresourceaccess.hxx"
+#include <svtools/imageresourceaccess.hxx>
 #include <comphelper/processfactory.hxx>
 
 

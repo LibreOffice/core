@@ -8,10 +8,10 @@
  */
 
 #include "effectproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <o3tl/make_unique.hxx>

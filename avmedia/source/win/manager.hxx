@@ -22,7 +22,7 @@
 
 #include "wincommon.hxx"
 #include <cppuhelper/implbase.hxx>
-#include "com/sun/star/media/XManager.hpp"
+#include <com/sun/star/media/XManager.hpp>
 
 
 namespace avmedia { namespace win {

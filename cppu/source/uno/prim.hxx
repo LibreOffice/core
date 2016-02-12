@@ -19,22 +19,22 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_PRIM_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_PRIM_HXX
 
-#include "typelib/typedescription.h"
-#include "typelib/typeclass.h"
-#include "uno/sequence2.h"
-#include "uno/any2.h"
-#include "uno/data.h"
-#include "uno/mapping.h"
-#include "uno/dispatcher.h"
+#include <typelib/typedescription.h>
+#include <typelib/typeclass.h>
+#include <uno/sequence2.h>
+#include <uno/any2.h>
+#include <uno/data.h>
+#include <uno/mapping.h>
+#include <uno/dispatcher.h>
 
-#include "osl/interlck.h"
-#include "osl/diagnose.h"
-#include "rtl/ustring.hxx"
-#include "rtl/alloc.h"
+#include <osl/interlck.h>
+#include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
+#include <rtl/alloc.h>
 
 #if OSL_DEBUG_LEVEL > 1
-#include "rtl/ustrbuf.hxx"
-#include "rtl/string.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <rtl/string.hxx>
 #endif
 
 

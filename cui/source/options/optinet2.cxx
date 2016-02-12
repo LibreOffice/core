@@ -83,9 +83,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/task/PasswordContainer.hpp"
-#include "com/sun/star/task/XPasswordContainer2.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
 #include "certpath.hxx"

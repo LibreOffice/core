@@ -50,7 +50,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/sfx.hrc>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include "updatecheckui.hrc"
 

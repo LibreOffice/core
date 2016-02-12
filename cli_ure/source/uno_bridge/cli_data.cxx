@@ -23,10 +23,10 @@
 
 #include <memory>
 
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "uno/sequence2.h"
-#include "typelib/typedescription.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <uno/sequence2.h>
+#include <typelib/typedescription.hxx>
 #include "cli_proxy.h"
 #include "cli_base.h"
 #include "cli_bridge.h"

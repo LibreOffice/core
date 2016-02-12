@@ -45,17 +45,17 @@
 #include "Struct2b.hpp"
 #include "boost/noncopyable.hpp"
 #include "boost/type_traits/is_same.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
-#include "osl/interlck.h"
-#include "rtl/string.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/diagnose.h>
+#include <osl/interlck.h>
+#include <rtl/string.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 namespace {
 

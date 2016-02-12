@@ -20,12 +20,12 @@
 #ifndef INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_UNOINTERFACEPROXY_HXX
 #define INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_UNOINTERFACEPROXY_HXX
 
-#include "osl/interlck.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.h"
-#include "uno/dispatcher.h"
-#include "uno/environment.h"
+#include <osl/interlck.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.h>
+#include <uno/dispatcher.h>
+#include <uno/environment.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;

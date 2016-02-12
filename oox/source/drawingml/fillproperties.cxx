@@ -36,10 +36,10 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <oox/core/fragmenthandler.hxx>
-#include "oox/helper/graphichelper.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/helper/graphichelper.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/token/tokens.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 

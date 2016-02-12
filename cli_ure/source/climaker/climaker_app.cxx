@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -26,18 +26,18 @@
 
 #include "climaker_share.h"
 
-#include "sal/main.h"
-#include "osl/process.h"
-#include "osl/file.hxx"
-#include "osl/thread.h"
-#include "rtl/ustrbuf.hxx"
-#include "cppuhelper/bootstrap.hxx"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/container/XSet.hpp"
-#include "com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "unoidl/unoidl.hxx"
+#include <sal/main.h>
+#include <osl/process.h>
+#include <osl/file.hxx>
+#include <osl/thread.h>
+#include <rtl/ustrbuf.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <unoidl/unoidl.hxx>
 
 using namespace ::std;
 using namespace ::System::Reflection;

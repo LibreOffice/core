@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SAL_OSL_W32_FILE_URL_H
 #define INCLUDED_SAL_OSL_W32_FILE_URL_H
 
-#include "sal/types.h"
-#include "rtl/ustring.h"
-#include "osl/file.h"
+#include <sal/types.h>
+#include <rtl/ustring.h>
+#include <osl/file.h>
 
 #ifdef _MSC_VER
 #pragma warning(push,1)

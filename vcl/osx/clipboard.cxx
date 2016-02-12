@@ -22,7 +22,7 @@
 #include "DataFlavorMapping.hxx"
 #include "OSXTransferable.hxx"
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/assert.hpp>
 

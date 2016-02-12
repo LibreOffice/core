@@ -32,7 +32,7 @@
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
 
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 

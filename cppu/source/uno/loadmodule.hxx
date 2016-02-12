@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPU_SOURCE_UNO_LOADMODULE_HXX
 #define INCLUDED_CPPU_SOURCE_UNO_LOADMODULE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <osl/module.hxx>
 
 namespace rtl { class OUString; }

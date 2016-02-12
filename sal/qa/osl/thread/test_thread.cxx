@@ -21,9 +21,9 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "osl/conditn.hxx"
-#include "osl/thread.hxx"
-#include "osl/time.h"
+#include <osl/conditn.hxx>
+#include <osl/thread.hxx>
+#include <osl/time.h>
 
 namespace {
 

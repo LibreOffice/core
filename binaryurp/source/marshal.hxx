@@ -20,15 +20,15 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_MARSHAL_HXX
 #define INCLUDED_BINARYURP_SOURCE_MARSHAL_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "rtl/byteseq.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
+#include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
 
 namespace binaryurp {
     class BinaryAny;

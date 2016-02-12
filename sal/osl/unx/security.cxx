@@ -35,8 +35,8 @@
 #include <rtl/bootstrap.h>
 #include <sal/log.hxx>
 
-#include "osl/thread.h"
-#include "osl/file.h"
+#include <osl/thread.h>
+#include <osl/file.h>
 
 #if defined LINUX || defined SOLARIS
 #include <crypt.h>

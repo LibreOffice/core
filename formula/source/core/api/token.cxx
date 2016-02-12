@@ -27,9 +27,9 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
-#include "formula/token.hxx"
-#include "formula/tokenarray.hxx"
-#include "formula/FormulaCompiler.hxx"
+#include <formula/token.hxx>
+#include <formula/tokenarray.hxx>
+#include <formula/FormulaCompiler.hxx>
 #include <formula/compiler.hrc>
 #include <svl/sharedstringpool.hxx>
 #include <memory>

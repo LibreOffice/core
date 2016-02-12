@@ -36,13 +36,13 @@
 #endif
 #include <unotools/fontdefs.hxx>
 
-#include "tools/poly.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/matrix/b2dhommatrixtools.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <tools/poly.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include "osl/file.hxx"
-#include "osl/thread.hxx"
+#include <osl/file.hxx>
+#include <osl/thread.hxx>
 
 #include "langboost.hxx"
 #include "PhysicalFontCollection.hxx"
@@ -58,7 +58,7 @@
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
 
-#include "rtl/instance.hxx"
+#include <rtl/instance.hxx>
 
 #include <vector>
 

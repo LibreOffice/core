@@ -18,9 +18,9 @@
  */
 
 #include "ShapeFilterBase.hxx"
-#include "oox/drawingml/chart/chartconverter.hxx"
-#include "oox/ole/vbaproject.hxx"
-#include "oox/drawingml/theme.hxx"
+#include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/drawingml/theme.hxx>
 
 namespace oox {
 namespace shape {

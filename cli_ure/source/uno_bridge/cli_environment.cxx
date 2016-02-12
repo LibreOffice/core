@@ -21,7 +21,7 @@
 
 #using <cli_ure.dll>
 #using <system.dll>
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include "cli_proxy.h"
 
 using namespace System::Runtime::Remoting;

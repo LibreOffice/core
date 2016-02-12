@@ -54,7 +54,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/configmgr.hxx>
 #include "dialmgr.hxx"

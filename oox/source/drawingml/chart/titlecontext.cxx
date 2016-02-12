@@ -24,7 +24,7 @@
 #include "drawingml/chart/datasourcecontext.hxx"
 #include "drawingml/chart/titlemodel.hxx"
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
 

@@ -26,7 +26,7 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vcl/ptrstyle.hxx>
 
@@ -43,7 +43,7 @@
 #include <cstdio>
 #include <cstdarg>
 
-#include "apple_remote/RemoteMainController.h"
+#include <apple_remote/RemoteMainController.h>
 
 class AquaSalInstance;
 class SalObject;

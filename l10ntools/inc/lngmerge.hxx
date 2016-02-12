@@ -20,7 +20,7 @@
 #ifndef INCLUDED_L10NTOOLS_INC_LNGMERGE_HXX
 #define INCLUDED_L10NTOOLS_INC_LNGMERGE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <iosfwd>
 #include <vector>

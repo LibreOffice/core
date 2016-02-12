@@ -79,7 +79,7 @@
 #include "parseAFM.hxx"
 #include <vcl/strhelper.hxx>
 
-#include "rtl/alloc.h"
+#include <rtl/alloc.h>
 
 #define lineterm EOL    /* line terminating character */
 #define normalEOF 1 /* return code from parsing routines used only */

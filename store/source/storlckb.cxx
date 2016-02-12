@@ -19,13 +19,13 @@
 
 #include "storlckb.hxx"
 
-#include "sal/types.h"
-#include "sal/macros.h"
-#include "rtl/string.h"
-#include "rtl/ref.hxx"
-#include "osl/mutex.hxx"
+#include <sal/types.h>
+#include <sal/macros.h>
+#include <rtl/string.h>
+#include <rtl/ref.hxx>
+#include <osl/mutex.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "object.hxx"
 
 #include "storbase.hxx"

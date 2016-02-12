@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/crypto/Standard2007Engine.hxx"
+#include <oox/crypto/Standard2007Engine.hxx>
 
 #include <osl/time.h>
 #include <rtl/random.h>

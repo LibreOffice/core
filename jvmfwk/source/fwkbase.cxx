@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/uri.hxx"
-#include "osl/thread.hxx"
-#include "osl/process.h"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/uri.hxx>
+#include <osl/thread.hxx>
+#include <osl/process.h>
 #include "libxml/xpathInternals.h"
-#include "osl/file.hxx"
-#include "osl/module.hxx"
+#include <osl/file.hxx>
+#include <osl/module.hxx>
 #include "framework.hxx"
 #include "fwkutil.hxx"
 #include "elements.hxx"

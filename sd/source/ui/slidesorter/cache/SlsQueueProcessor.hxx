@@ -24,7 +24,7 @@
 #include "SlsRequestPriorityClass.hxx"
 #include "SlsBitmapFactory.hxx"
 #include "view/SlideSorterView.hxx"
-#include "tools/IdleDetection.hxx"
+#include <tools/IdleDetection.hxx>
 #include "SlsBitmapCache.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"

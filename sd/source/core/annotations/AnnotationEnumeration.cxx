@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "boost/noncopyable.hpp"
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/office/XAnnotationEnumeration.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/office/XAnnotationEnumeration.hpp>
 
 #include "AnnotationEnumeration.hxx"
 #include "sdpage.hxx"

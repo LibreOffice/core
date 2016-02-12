@@ -22,12 +22,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
-#include "oox/ppt/pptimport.hxx"
-#include "oox/drawingml/chart/chartconverter.hxx"
-#include "oox/dump/pptxdumper.hxx"
+#include <oox/ppt/pptimport.hxx>
+#include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/dump/pptxdumper.hxx>
 #include "drawingml/table/tablestylelistfragmenthandler.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/ole/vbaproject.hxx"
+#include <oox/helper/graphichelper.hxx>
+#include <oox/ole/vbaproject.hxx>
 
 #include <services.hxx>
 

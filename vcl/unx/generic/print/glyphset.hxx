@@ -22,9 +22,9 @@
 
 #include "unx/fontmanager.hxx"
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 
-#include "rtl/string.hxx"
+#include <rtl/string.hxx>
 
 #include <list>
 #include <unordered_map>

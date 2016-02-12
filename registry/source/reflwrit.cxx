@@ -24,12 +24,12 @@
 #include <sal/macros.h>
 #include <osl/endian.h>
 #include <rtl/alloc.h>
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include "reflwrit.hxx"
-#include "registry/version.h"
-#include "registry/writer.h"
+#include <registry/version.h>
+#include <registry/writer.h>
 
 #include "reflcnst.hxx"
 

@@ -28,7 +28,7 @@
 #include "FrameWindowPane.hxx"
 #include "FullScreenPane.hxx"
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "ViewShellBase.hxx"
 #include "PaneChildWindows.hxx"
 #include "DrawController.hxx"

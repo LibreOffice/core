@@ -25,20 +25,20 @@
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/module.hxx>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include "cuitabarea.hxx"
 #include "defdlgname.hxx"
 #include "dlgname.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>

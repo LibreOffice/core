@@ -57,8 +57,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include "sot/stg.hxx"
-#include "sot/storinfo.hxx"
+#include <sot/stg.hxx>
+#include <sot/storinfo.hxx>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

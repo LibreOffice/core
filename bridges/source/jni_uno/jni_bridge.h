@@ -23,13 +23,13 @@
 #include "jni_base.h"
 #include "jni_helper.h"
 
-#include "osl/diagnose.h"
-#include "osl/interlck.h"
+#include <osl/diagnose.h>
+#include <osl/interlck.h>
 
-#include "uno/mapping.h"
-#include "uno/dispatcher.h"
+#include <uno/mapping.h>
+#include <uno/dispatcher.h>
 
-#include "com/sun/star/uno/XInterface.hpp"
+#include <com/sun/star/uno/XInterface.hpp>
 
 
 namespace jni_uno

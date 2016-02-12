@@ -48,7 +48,7 @@
 #include <basegfx/tools/canvastools.hxx>
 
 #include <vcl/font.hxx>
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -70,7 +70,7 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
 #include "unoviewcontainer.hxx"

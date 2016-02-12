@@ -26,10 +26,10 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

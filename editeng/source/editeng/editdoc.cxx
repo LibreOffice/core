@@ -46,10 +46,10 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/editids.hrc>
-#include "editeng/editdata.hxx"
-#include "editeng/lrspitem.hxx"
-#include "editeng/ulspitem.hxx"
-#include "editeng/lspcitem.hxx"
+#include <editeng/editdata.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 
 #include <editdoc.hxx>
 #include <editdbg.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_ACCESSIBILITY_LOOKUPCOLORNAME_HXX
 #define INCLUDED_SVX_SOURCE_ACCESSIBILITY_LOOKUPCOLORNAME_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 
 namespace accessibility {

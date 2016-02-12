@@ -19,7 +19,7 @@
 
 #include "fmvwimp.hxx"
 #include <svx/fmshell.hxx>
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "fmservs.hxx"
 #include "fmprop.hrc"
 #include "fmpgeimp.hxx"
@@ -50,12 +50,12 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include "fmobj.hxx"
 
 #include <svx/svxids.hrc>
 
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
@@ -79,7 +79,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-#include "svx/sdrobjectfilter.hxx"
+#include <svx/sdrobjectfilter.hxx>
 
 #define FmFormShell
 #include "svxslots.hxx"

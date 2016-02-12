@@ -84,7 +84,7 @@
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <memory>
 

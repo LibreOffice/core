@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/file.h"
+#include <osl/file.h>
 
-#include "osl/diagnose.h"
-#include "osl/thread.h"
-#include "rtl/alloc.h"
+#include <osl/diagnose.h>
+#include <osl/thread.h>
+#include <rtl/alloc.h>
 
 #include "file_error_transl.hxx"
 #include "file_url.hxx"
