@@ -118,7 +118,6 @@ bool SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
 
 void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
 {
-    sal_uInt32  nTokPos = rInStm.Tell();
     if( rInStm.GetToken().Is( SvHash_interface() )
       || rInStm.GetToken().Is( SvHash_shell() ) )
     {
@@ -132,11 +131,7 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
     }
     else if( rInStm.GetToken().Is( SvHash_enum() ) )
     {
-        tools::SvRef<SvMetaTypeEnum> aEnum( new SvMetaTypeEnum() );
-
-        ReadEnum(*aEnum);
-        // announce globally
-        rBase.GetTypeList().push_back( aEnum );
+        ReadEnum();
     }
     else if( rInStm.GetToken().Is( SvHash_item() )
       || rInStm.GetToken().Is( SvHash_struct() ) )
@@ -151,58 +146,7 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
     }
     else if( rInStm.GetToken().Is( SvHash_include() ) )
     {
-        bool bOk = false;
-        rInStm.GetToken_Next();
-        SvToken& rTok = rInStm.GetToken_Next();
-        if( rTok.IsString() )
-        {
-            OUString aFullName(OStringToOUString(rTok.GetString(), RTL_TEXTENCODING_ASCII_US));
-            rBase.StartNewFile( aFullName );
-            osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
-            if( osl::FileBase::E_None != searchError )
-            {
-                OStringBuffer aStr("cannot find file:");
-                aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                throw SvParseException(aStr.makeStringAndClear(), rTok);
-            }
-            osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
-            rBase.AddDepFile( aFullName );
-            SvTokenStream aTokStm( aFullName );
-
-            if( SVSTREAM_OK != aTokStm.GetStream().GetError() )
-            {
-                OStringBuffer aStr("cannot open file: ");
-                aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                throw SvParseException(aStr.makeStringAndClear(), rTok);
-            }
-            // rescue error from old file
-            SvIdlError aOldErr = rBase.GetError();
-            // reset error
-            rBase.SetError( SvIdlError() );
-
-            try {
-                SvIdlParser aIncludeParser( rBase, aTokStm );
-                sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
-                while( nBeginPos != aTokStm.Tell() )
-                {
-                    nBeginPos = aTokStm.Tell();
-                    aIncludeParser.ReadModuleElement(rModule);
-                    aTokStm.ReadIfDelimiter();
-                }
-            } catch (const SvParseException& ex) {
-                rBase.SetError(ex.aError);
-                rBase.WriteError(aTokStm);
-            }
-            bOk = aTokStm.GetToken().IsEof();
-            if( !bOk )
-            {
-                rBase.WriteError( aTokStm );
-            }
-            // recover error from old file
-            rBase.SetError( aOldErr );
-        }
-        if( !bOk )
-            rInStm.Seek( nTokPos );
+        ReadInclude(rModule);
     }
     else
     {
@@ -219,38 +163,89 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
     }
 }
 
-void SvIdlParser::ReadEnum(SvMetaTypeEnum& rEnum)
+void SvIdlParser::ReadInclude( SvMetaModule& rModule )
 {
+    sal_uInt32  nTokPos = rInStm.Tell();
+    bool bOk = false;
     rInStm.GetToken_Next();
-    rEnum.SetType( MetaTypeType::Enum );
-    rEnum.SetName( ReadIdentifier() );
+    OUString aFullName(OStringToOUString(ReadString(), RTL_TEXTENCODING_ASCII_US));
+    rBase.StartNewFile( aFullName );
+    osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
+    if( osl::FileBase::E_None != searchError )
+    {
+        OStringBuffer aStr("cannot find file:");
+        aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
+        throw SvParseException(aStr.makeStringAndClear(), rInStm.GetToken());
+    }
+    osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
+    rBase.AddDepFile( aFullName );
+    SvTokenStream aTokStm( aFullName );
+    if( SVSTREAM_OK != aTokStm.GetStream().GetError() )
+    {
+        OStringBuffer aStr("cannot open file: ");
+        aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
+        throw SvParseException(aStr.makeStringAndClear(), rInStm.GetToken());
+    }
+    // rescue error from old file
+    SvIdlError aOldErr = rBase.GetError();
+    // reset error
+    rBase.SetError( SvIdlError() );
+
+    try {
+        SvIdlParser aIncludeParser( rBase, aTokStm );
+        sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
+        while( nBeginPos != aTokStm.Tell() )
+        {
+            nBeginPos = aTokStm.Tell();
+            aIncludeParser.ReadModuleElement(rModule);
+            aTokStm.ReadIfDelimiter();
+        }
+    } catch (const SvParseException& ex) {
+        rBase.SetError(ex.aError);
+        rBase.WriteError(aTokStm);
+    }
+    bOk = aTokStm.GetToken().IsEof();
+    if( !bOk )
+    {
+        rBase.WriteError( aTokStm );
+    }
+    // recover error from old file
+    rBase.SetError( aOldErr );
+    if( !bOk )
+        rInStm.Seek( nTokPos );
+}
+
+void SvIdlParser::ReadEnum()
+{
+    tools::SvRef<SvMetaTypeEnum> xEnum( new SvMetaTypeEnum() );
+    rInStm.GetToken_Next();
+    xEnum->SetType( MetaTypeType::Enum );
+    xEnum->SetName( ReadIdentifier() );
 
     ReadChar('{');
     while( true )
     {
-        ReadEnumValue( rEnum );
+        ReadEnumValue( *xEnum );
         if( !rInStm.ReadIfDelimiter() )
             break;
     }
     ReadChar( '}' );
+    // announce globally
+    rBase.GetTypeList().push_back( xEnum );
 }
 
-namespace
+static OString getCommonSubPrefix(const OString &rA, const OString &rB)
 {
-    OString getCommonSubPrefix(const OString &rA, const OString &rB)
+    sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
+    sal_Int32 nI = 0;
+    while (nI < nMax)
     {
-        sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
-        sal_Int32 nI = 0;
-        while (nI < nMax)
-        {
-            if (rA[nI] != rB[nI])
-                break;
-            ++nI;
-        }
-        return rA.copy(0, nI);
+        if (rA[nI] != rB[nI])
+            break;
+        ++nI;
     }
+    return rA.copy(0, nI);
 }
-
 
 void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
 {
@@ -296,4 +291,13 @@ OString SvIdlParser::ReadIdentifier()
         throw SvParseException("expected identifier", rTok);
     return rTok.GetString();
 }
+
+OString SvIdlParser::ReadString()
+{
+    SvToken& rTok = rInStm.GetToken_Next();
+    if( !rTok.IsString() )
+        throw SvParseException("expected string", rTok);
+    return rTok.GetString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

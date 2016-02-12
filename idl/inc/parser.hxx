@@ -37,11 +37,13 @@ public:
     bool        ReadModuleHeader(SvMetaModule& rModule);
     bool        ReadModuleBody(SvMetaModule& rModule);
     void        ReadModuleElement( SvMetaModule& rModule );
-    void        ReadEnum(SvMetaTypeEnum& rEnum);
+    void        ReadInclude( SvMetaModule& rModule );
+    void        ReadEnum();
     void        ReadEnumValue( SvMetaTypeEnum& rEnum );
     void        ReadChar(char cChar);
     void        ReadDelimiter();
     OString     ReadIdentifier();
+    OString     ReadString();
 };
 
 #endif // INCLUDED_IDL_INC_PARSER_HXX
