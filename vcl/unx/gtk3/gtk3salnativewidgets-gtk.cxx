@@ -22,6 +22,7 @@
 #include <boost/optional.hpp>
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpLinkButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpTextViewStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = nullptr;
@@ -820,6 +821,15 @@ static GtkStyleContext* createStyleContext(GtkControlPart ePart, GtkStyleContext
 #else
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
 #endif
+            break;
+        case GtkControlPart::LinkButton:
+            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+#if GTK_CHECK_VERSION(3, 19, 2)
+            gtk_widget_path_iter_set_object_name(path, -1, "button");
+#else
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
+#endif
+            gtk_widget_path_iter_add_class(path, -1, "link");
             break;
         case GtkControlPart::CheckButton:
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
@@ -1989,23 +1999,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     // hyperlink colors
-    GdkColor *link_color = nullptr;
-    gtk_style_context_get_style(pStyle,
-                                 "link-color", &link_color,
-                                 nullptr);
-    if (link_color) {
-        aStyleSet.SetLinkColor(getColorFromColor(*link_color));
-        gdk_color_free(link_color);
-    }
-
-    link_color = nullptr;
-    gtk_style_context_get_style(pStyle,
-                                "visited-link-color", &link_color,
-                                nullptr);
-    if (link_color) {
-        aStyleSet.SetVisitedLinkColor(getColorFromColor(*link_color));
-        gdk_color_free(link_color);
-    }
+    gtk_style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_LINK);
+    gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
+    aStyleSet.SetLinkColor(getColor(text_color));
+    gtk_style_context_set_state(mpLinkButtonStyle, GTK_STATE_FLAG_VISITED);
+    gtk_style_context_get_color(mpLinkButtonStyle, gtk_style_context_get_state(mpLinkButtonStyle), &text_color);
+    aStyleSet.SetVisitedLinkColor(getColor(text_color));
 
 #if GTK_CHECK_VERSION(3, 19, 2)
     {
@@ -2344,6 +2343,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpTextViewStyle, gtk_text_view_new());
 
     mpButtonStyle = createStyleContext(GtkControlPart::Button);
+    mpLinkButtonStyle = createStyleContext(GtkControlPart::LinkButton);
 
     GtkWidget* pToolbar = gtk_toolbar_new();
     mpToolbarStyle = gtk_widget_get_style_context(pToolbar);

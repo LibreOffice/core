@@ -18,6 +18,7 @@
  */
 
 #include <vcl/fixedhyper.hxx>
+#include <vcl/svapp.hxx>
 
 FixedHyperlink::FixedHyperlink(vcl::Window* pParent, WinBits nWinStyle)
     : FixedText(pParent, nWinStyle)
@@ -35,8 +36,8 @@ void FixedHyperlink::Initialize()
     // to underline
     aFont.SetUnderline( LINESTYLE_SINGLE );
     SetControlFont( aFont );
-    // changes the color to light blue
-    SetControlForeground( Color( COL_LIGHTBLUE ) );
+    // changes the color to link color
+    SetControlForeground( Application::GetSettings().GetStyleSettings().GetLinkColor() );
     // calculates text len
     m_nTextLen = GetCtrlTextWidth( GetText() );
 }

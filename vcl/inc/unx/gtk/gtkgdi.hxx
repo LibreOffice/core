@@ -36,6 +36,7 @@
 enum class GtkControlPart
 {
     Button,
+    LinkButton,
     CheckButton,
     CheckButtonCheck,
     RadioButton,
@@ -100,6 +101,7 @@ public:
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
+    static GtkStyleContext *mpLinkButtonStyle;
     static GtkStyleContext *mpEntryStyle;
     static GtkStyleContext *mpTextViewStyle;
     static GtkStyleContext *mpVScrollbarStyle;
