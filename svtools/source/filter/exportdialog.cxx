@@ -37,7 +37,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/processfactory.hxx>

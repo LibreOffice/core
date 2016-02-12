@@ -23,7 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class SvxCropExample : public vcl::Window

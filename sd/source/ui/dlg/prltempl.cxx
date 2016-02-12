@@ -28,7 +28,7 @@
 #include <editeng/bulletitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/cjkoptions.hxx>

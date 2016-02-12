@@ -18,7 +18,7 @@
  */
 
 #include <vcl/pdfextoutdevdata.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include "vcl/dllapi.h"

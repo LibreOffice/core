@@ -25,7 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <tools/debug.hxx>
 #include <svx/fmdpage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -30,7 +30,7 @@
 #include <editeng/editrids.hrc>
 #include <editeng/numdef.hxx>
 #include <editeng/eeitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>

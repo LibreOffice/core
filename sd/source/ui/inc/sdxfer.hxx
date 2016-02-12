@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
 
 #include <svtools/transfer.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/lstner.hxx>
 

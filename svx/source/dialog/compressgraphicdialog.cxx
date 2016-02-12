@@ -18,7 +18,7 @@
  */
 
 #include <dlgunit.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

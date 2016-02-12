@@ -13,7 +13,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>

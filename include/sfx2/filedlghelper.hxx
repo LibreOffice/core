@@ -29,7 +29,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfilt.hxx>
 

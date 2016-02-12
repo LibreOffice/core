@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_INC_GALOBJ_HXX
 
 #include <tools/urlobj.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include "svx/galmisc.hxx"
 
 #define S_THUMB 80

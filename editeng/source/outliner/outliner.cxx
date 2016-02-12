@@ -44,7 +44,7 @@
 #include <vcl/metric.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <svtools/grfmgr.hxx>

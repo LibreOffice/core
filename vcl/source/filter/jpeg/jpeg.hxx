@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/fltcall.hxx>
 #include <com/sun/star/uno/Sequence.h>

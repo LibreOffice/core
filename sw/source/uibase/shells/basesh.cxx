@@ -38,7 +38,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svl/slstitm.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/ptitem.hxx>

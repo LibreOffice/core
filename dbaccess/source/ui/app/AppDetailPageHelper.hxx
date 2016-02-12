@@ -31,7 +31,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/graphic.hxx>
 #include <svtools/grfmgr.hxx>
 #include "callbacks.hxx"
 #include <memory>
