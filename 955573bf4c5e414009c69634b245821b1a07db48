@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_62e71713",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-12T15:59:50Z",
+      "side": 1,
+      "message": "sFilter might be a better variable name",
+      "revId": "955573bf4c5e414009c69634b245821b1a07db48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_42e49b0c",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-12T15:59:50Z",
+      "side": 1,
+      "message": "Why this temporary list_item_string variable and not pass the thing directly to MatchSubstring()?",
+      "revId": "955573bf4c5e414009c69634b245821b1a07db48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_22b4eff0",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-12T15:59:50Z",
+      "side": 1,
+      "message": "Instead of checking for sFilter.isEmpty on every branch, I would let MatchSubstring return true if the filter is empty.",
+      "revId": "955573bf4c5e414009c69634b245821b1a07db48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_02b9f3e9",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-12T15:59:50Z",
+      "side": 1,
+      "message": "You can remove this additional check and just put the code in the previous if branch (remove lines 602-604).",
+      "revId": "955573bf4c5e414009c69634b245821b1a07db48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
