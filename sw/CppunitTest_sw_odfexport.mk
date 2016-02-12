@@ -81,6 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfexport,\
     writerfilter/util/writerfilter \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
     xmloff/util/xo \
+    xmlscript/util/xmlscript \
 ))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sw_odfexport,\
