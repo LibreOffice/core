@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
+#include <osl/module.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
@@ -872,6 +873,40 @@ void cppuhelper::ServiceManager::loadImplementation(
         implementation->constructor = ctor;
         implementation->factory1 = f1;
         implementation->factory2 = f2;
+    }
+}
+
+void cppuhelper::ServiceManager::loadAllImplementations()
+{
+    rtl::OUString aUri;
+    osl::MutexGuard g(rBHelper.rMutex);
+
+    for (Data::NamedImplementations::const_iterator iterator(
+            data_.namedImplementations.begin());
+            iterator != data_.namedImplementations.end(); ++iterator)
+    {
+        try
+        {
+            aUri = cppu::bootstrap_expandUri(iterator->second->info->uri);
+        }
+        catch (css::lang::IllegalArgumentException& aError)
+        {
+            throw css::uno::DeploymentException(
+                "Cannot expand URI" + iterator->second->info->uri + ": " + aError.Message,
+                static_cast< cppu::OWeakObject * >(this));
+        }
+
+        if (iterator->second->info->loader == "com.sun.star.loader.SharedLibrary" &&
+            iterator->second->status != Data::Implementation::STATUS_LOADED)
+        {
+            oslModule aModule = osl_loadModule( aUri.pData, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL );
+            SAL_INFO("lok", "loaded component library " << aUri << ( aModule ? " ok" : " no"));
+
+            // leak aModule
+            // osl_unloadModule(aModule);
+            if ( aModule )
+                iterator->second->status = Data::Implementation::STATUS_LOADED;
+        }
     }
 }
 

@@ -203,6 +203,8 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         std::shared_ptr< Data::Implementation > & implementation);
 
+    void loadAllImplementations();
+
 private:
     virtual ~ServiceManager();
 
