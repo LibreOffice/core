@@ -40,7 +40,7 @@ public:
     void        ResetClipRegion()   {
         numClipRectangles = 0;      }
     sal_uInt16      GetClipRegionType() {
-        return nClipRegionType;     }
+        return SAL_OBJECT_CLIP_INCLUDERECTS; }
     int         GetRectangleCount() {
         return numClipRectangles;   }
 
@@ -49,7 +49,6 @@ private:
     XRectangle* ClipRectangleList;
     int         numClipRectangles;
     int         maxClipRectangles;
-    sal_uInt16      nClipRegionType;
 };
 
 class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject

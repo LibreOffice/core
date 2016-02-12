@@ -184,7 +184,6 @@ SalClipRegion::SalClipRegion()
     ClipRectangleList = nullptr;
     numClipRectangles = 0;
     maxClipRectangles = 0;
-    nClipRegionType   = SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 SalClipRegion::~SalClipRegion()
