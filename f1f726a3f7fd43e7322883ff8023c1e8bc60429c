@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_c71c1d7a",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-12T06:49:33Z",
+      "side": 1,
+      "message": "SAL_WARN adds a \\n",
+      "revId": "f1f726a3f7fd43e7322883ff8023c1e8bc60429c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_07174552",
+        "filename": "desktop/source/splash/unxsplash.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-12T06:49:33Z",
+      "side": 1,
+      "message": "I assume you get an extra empty line here ?",
+      "revId": "f1f726a3f7fd43e7322883ff8023c1e8bc60429c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_670c4943",
+        "filename": "desktop/source/splash/unxsplash.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-12T06:49:33Z",
+      "side": 1,
+      "message": "I assume you get an extra empty line here ?",
+      "revId": "f1f726a3f7fd43e7322883ff8023c1e8bc60429c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
