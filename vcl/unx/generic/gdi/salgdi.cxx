@@ -53,7 +53,7 @@
 #include <unx/x11/xlimits.hxx>
 
 #include "salgdiimpl.hxx"
-#include "unx/x11windowprovider.hxx"
+#include "unx/nativewindowhandleprovider.hxx"
 #include "textrender.hxx"
 #include "gdiimpl.hxx"
 #include "opengl/x11/gdiimpl.hxx"
