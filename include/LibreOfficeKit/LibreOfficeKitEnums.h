@@ -280,6 +280,15 @@ typedef enum
      * }
      */
     LOK_CALLBACK_ERROR,
+
+    /**
+     * Editing a document requires notify changes.
+     *
+     * The payload format is generic according the required information
+     * to notify.
+     */
+
+    LOK_CALLBACK_DOCUMENT_NOTIFY
 }
 LibreOfficeKitCallbackType;
 
