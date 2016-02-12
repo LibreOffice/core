@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #include <parser.hxx>
 #include <database.hxx>
 #include <globals.hxx>
