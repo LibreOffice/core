@@ -85,7 +85,7 @@ public:
     void RemoveObj( SwOLEObj& rObj );
 };
 
-SwOLELRUCache* pOLELRU_Cache = nullptr;
+std::shared_ptr<SwOLELRUCache> g_pOLELRU_Cache;
 
 class SwOLEListener_Impl : public ::cppu::WeakImplHelper< embed::XStateChangeListener >
 {
@@ -103,7 +103,7 @@ SwOLEListener_Impl::SwOLEListener_Impl( SwOLEObj* pObj )
 {
     if ( mpObj->IsOleRef() && mpObj->GetOleRef()->getCurrentState() == embed::EmbedStates::RUNNING )
     {
-        pOLELRU_Cache->InsertObj( *mpObj );
+        g_pOLELRU_Cache->InsertObj( *mpObj );
     }
 }
 
@@ -115,29 +115,29 @@ void SAL_CALL SwOLEListener_Impl::stateChanged( const lang::EventObject&, ::sal_
 {
     if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
-        if( !pOLELRU_Cache )
-            pOLELRU_Cache = new SwOLELRUCache;
-        pOLELRU_Cache->InsertObj( *mpObj );
+        if (!g_pOLELRU_Cache)
+            g_pOLELRU_Cache.reset(new SwOLELRUCache);
+        g_pOLELRU_Cache->InsertObj( *mpObj );
     }
     else if ( mpObj && nNewState == embed::EmbedStates::LOADED && nOldState == embed::EmbedStates::RUNNING )
     {
-        if ( pOLELRU_Cache )
-            pOLELRU_Cache->RemoveObj( *mpObj );
+        if (g_pOLELRU_Cache)
+            g_pOLELRU_Cache->RemoveObj( *mpObj );
     }
 }
 
 void SwOLEListener_Impl::Release()
 {
-    if ( mpObj && pOLELRU_Cache )
-        pOLELRU_Cache->RemoveObj( *mpObj );
+    if (mpObj && g_pOLELRU_Cache)
+        g_pOLELRU_Cache->RemoveObj( *mpObj );
     mpObj=nullptr;
     release();
 }
 
 void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (uno::RuntimeException, std::exception)
 {
-    if ( mpObj && pOLELRU_Cache )
-        pOLELRU_Cache->RemoveObj( *mpObj );
+    if (mpObj && g_pOLELRU_Cache)
+        g_pOLELRU_Cache->RemoveObj( *mpObj );
 }
 
 // TODO/LATER: actually SwEmbedObjectLink should be used here, but because different objects are used to control
@@ -813,9 +813,9 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
     else if ( xOLERef->getCurrentState() == embed::EmbedStates::RUNNING )
     {
         // move object to first position in cache
-        if( !pOLELRU_Cache )
-            pOLELRU_Cache = new SwOLELRUCache;
-        pOLELRU_Cache->InsertObj( *this );
+        if (!g_pOLELRU_Cache)
+            g_pOLELRU_Cache.reset(new SwOLELRUCache);
+        g_pOLELRU_Cache->InsertObj( *this );
     }
 
     return xOLERef.GetObject();
@@ -940,6 +940,7 @@ void SwOLELRUCache::Load()
         {
             if (nVal < m_nLRU_InitSize)
             {
+                std::shared_ptr<SwOLELRUCache> tmp(g_pOLELRU_Cache); // prevent delete this
                 // size of cache has been changed
                 sal_Int32 nCount = m_OleObjects.size();
                 sal_Int32 nPos = nCount;
@@ -973,6 +974,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
     }
     if (it == m_OleObjects.end())
     {
+        std::shared_ptr<SwOLELRUCache> tmp(g_pOLELRU_Cache); // prevent delete this
         // try to remove objects if necessary
         sal_Int32 nCount = m_OleObjects.size();
         sal_Int32 nPos = nCount-1;
@@ -996,7 +998,10 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
     }
     if (m_OleObjects.empty())
     {
-        DELETEZ( pOLELRU_Cache );
+        if (g_pOLELRU_Cache.unique()) // test that we're not in InsertObj()
+        {
+            g_pOLELRU_Cache.reset();
+        }
     }
 }
 
