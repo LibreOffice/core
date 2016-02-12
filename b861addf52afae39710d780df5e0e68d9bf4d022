@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_872cd5ac",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-12T06:41:34Z",
+      "side": 1,
+      "message": "This cannot work. \n1) you have a different logic (OSL_DEBUG_LEVEL \u003d\u003d 1)\n2) you redefine DBG which will cause problems on some platforms\n3) the idea was to remove OSL_DEBUG_LEVEL",
+      "revId": "b861addf52afae39710d780df5e0e68d9bf4d022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
