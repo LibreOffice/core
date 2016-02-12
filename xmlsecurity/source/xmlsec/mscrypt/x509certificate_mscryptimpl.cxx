@@ -33,6 +33,7 @@
 #include <utility>
 #include <tools/time.hxx>
 
+using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
 
@@ -507,8 +508,8 @@ OUString findOIDDescription(char *oid)
 {
     if( pCertContext != NULL )
     {
-        DWORD cbData = 20;
-        unsigned char fingerprint[20];
+        DWORD cbData = dwPropId == CERT_SHA256_HASH_PROP_ID ? 32 : 20;
+        unsigned char fingerprint[32];
         if (CertGetCertificateContextProperty(pCertContext, dwPropId, (void*)fingerprint, &cbData))
         {
             Sequence< sal_Int8 > thumbprint( cbData ) ;
@@ -576,6 +577,11 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
     {
         return OUString() ;
     }
+}
+
+uno::Sequence<sal_Int8> X509Certificate_MSCryptImpl::getSHA256Thumbprint() throw (uno::RuntimeException, std::exception)
+{
+    return getThumbprint(m_pCertContext, CERT_SHA256_HASH_PROP_ID);
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSHA1Thumbprint()
