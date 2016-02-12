@@ -36,10 +36,11 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <certificate.hxx>
 
 class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::security::XCertificate ,
-    ::com::sun::star::lang::XUnoTunnel >
+    ::com::sun::star::lang::XUnoTunnel > , public xmlsecurity::Certificate
 {
     private:
         const CERT_CONTEXT* m_pCertContext ;
@@ -76,6 +77,9 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException);
+
+        /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
+        virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() throw (css::uno::RuntimeException, std::exception) override;
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
         static X509Certificate_MSCryptImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rObj ) ;
