@@ -1749,11 +1749,6 @@ static inline ::Color getColor( const GdkRGBA& rCol )
     return ::Color( (int)(rCol.red * 0xFFFF) >> 8, (int)(rCol.green * 0xFFFF) >> 8, (int)(rCol.blue * 0xFFFF) >> 8 );
 }
 
-static inline ::Color getColorFromColor( const GdkColor& rCol )
-{
-    return ::Color( rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
-}
-
 void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
     GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
