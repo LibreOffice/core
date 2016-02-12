@@ -810,6 +810,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	xmlsec \
 	chart2_opengl_shader \
 	vcl_opengl_shader \
+	$(if $(filter WNT,$(OS)), \
+		vcl_opengl_blacklist \
+	) \
 	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
 ))
 
