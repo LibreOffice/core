@@ -814,7 +814,7 @@ namespace svgio
             }
         }
 
-        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, bool bCaseIndependent)
+        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, bool bCaseIndependent, SvgNumber& rOpacity)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -866,8 +866,12 @@ namespace svgio
 
                     if(rCandidate.matchIgnoreAsciiCase(aStrRgb, 0))
                     {
-                        // rgb definition
+                        // rgb/rgba definition
                         sal_Int32 nPos(strlen(aStrRgb));
+
+                        //Delete the 'a' from 'rbga' if it exists
+                        skip_char(rCandidate, ' ', 'a', nPos, nLen);
+
                         skip_char(rCandidate, ' ', '(', nPos, nLen);
                         double fR(0.0);
 
@@ -901,6 +905,21 @@ namespace svgio
 
                                     if(readNumber(rCandidate, nPos, fB, nLen))
                                     {
+                                        double fA(1.0);
+
+                                        if(bIsPercent)
+                                        {
+                                            skip_char(rCandidate, '%', nPos, nLen);
+                                        }
+
+                                        skip_char(rCandidate, ' ', ',', nPos, nLen);
+
+                                        if(readNumber(rCandidate, nPos, fA, nLen))
+                                        {
+                                            const double fFac(bIsPercent ? 0.01 : 1);
+                                            rOpacity = SvgNumber(fA * fFac);
+                                        }
+
                                         const double fFac(bIsPercent ? 0.01 : fFactor);
 
                                         rColor.setRed(fR * fFac);
@@ -1207,13 +1226,14 @@ namespace svgio
             return false;
         }
 
-        bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL, bool bCaseIndependent)
+        bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint,
+            OUString& rURL, bool bCaseIndependent, SvgNumber& rOpacity)
         {
             if( !rCandidate.isEmpty() )
             {
                 basegfx::BColor aColor;
 
-                if(read_color(rCandidate, aColor, bCaseIndependent))
+                if(read_color(rCandidate, aColor, bCaseIndependent, rOpacity))
                 {
                     rSvgPaint = SvgPaint(aColor, true, true);
                     return true;

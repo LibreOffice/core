@@ -1258,10 +1258,15 @@ namespace svgio
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
+                    SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
                         setFill(aSvgPaint);
+                        if(aOpacity.isSet())
+                        {
+                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                        }
                     }
                     else if(!aURL.isEmpty())
                     {
@@ -1310,10 +1315,15 @@ namespace svgio
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
+                    SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
                         setStroke(aSvgPaint);
+                        if(aOpacity.isSet())
+                        {
+                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                        }
                     }
                     else if(!aURL.isEmpty())
                     {
@@ -1448,10 +1458,15 @@ namespace svgio
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
+                    SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
                         setStopColor(aSvgPaint);
+                        if(aOpacity.isSet())
+                        {
+                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                        }
                     }
                     break;
                 }
@@ -1767,10 +1782,15 @@ namespace svgio
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
+                    SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
                     {
                         setColor(aSvgPaint);
+                        if(aOpacity.isSet())
+                        {
+                            setOpacity(SvgNumber(basegfx::clamp(aOpacity.getNumber(), 0.0, 1.0)));
+                        }
                     }
                     break;
                 }
