@@ -81,6 +81,8 @@ struct SignatureInformation
     OUString ouDescription;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
     OUString ouDescriptionPropertyId;
+    /// OOXML certificate SHA-256 digest, empty for ODF.
+    OUString ouCertDigest;
 
     SignatureInformation( sal_Int32 nId )
     {

@@ -389,6 +389,7 @@ private:
 
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);
+    void setCertDigest(const OUString& rCertDigest);
 
     void setId( OUString& ouId );
     void setPropertyId( OUString& ouPropertyId );

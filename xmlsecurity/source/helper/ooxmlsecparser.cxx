@@ -21,6 +21,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInSignatureComments(false)
     ,m_bInX509IssuerName(false)
     ,m_bInX509SerialNumber(false)
+    ,m_bInCertDigest(false)
     ,m_bReferenceUnresolved(false)
 {
 }
@@ -77,7 +78,7 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             }
         }
     }
-    else if (rName == "DigestValue")
+    else if (rName == "DigestValue" && !m_bInCertDigest)
     {
         m_aDigestValue.clear();
         m_bInDigestValue = true;
@@ -112,6 +113,11 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aX509SerialNumber.clear();
         m_bInX509SerialNumber = true;
     }
+    else if (rName == "xd:CertDigest")
+    {
+        m_aCertDigest.clear();
+        m_bInCertDigest = true;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -131,7 +137,7 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         }
         m_pXSecController->setDigestValue(m_aDigestValue);
     }
-    else if (rName == "DigestValue")
+    else if (rName == "DigestValue" && !m_bInCertDigest)
         m_bInDigestValue = false;
     else if (rName == "SignatureValue")
     {
@@ -163,6 +169,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setX509SerialNumber(m_aX509SerialNumber);
         m_bInX509SerialNumber = false;
     }
+    else if (rName == "xd:CertDigest")
+    {
+        m_pXSecController->setCertDigest(m_aCertDigest);
+        m_bInCertDigest = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -170,7 +181,7 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
 
 void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
-    if (m_bInDigestValue)
+    if (m_bInDigestValue && !m_bInCertDigest)
         m_aDigestValue += rChars;
     else if (m_bInSignatureValue)
         m_aSignatureValue += rChars;
@@ -184,6 +195,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
         m_aX509IssuerName += rChars;
     else if (m_bInX509SerialNumber)
         m_aX509SerialNumber += rChars;
+    else if (m_bInCertDigest)
+        m_aCertDigest += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
