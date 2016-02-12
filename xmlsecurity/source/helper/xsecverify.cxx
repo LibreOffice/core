@@ -274,6 +274,15 @@ void XSecController::setDescription(const OUString& rDescription)
     rInformation.signatureInfor.ouDescription = rDescription;
 }
 
+void XSecController::setCertDigest(const OUString& rCertDigest)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.ouCertDigest = rCertDigest;
+}
+
 void XSecController::setId( OUString& ouId )
 {
     if (m_vInternalSignatureInformations.empty())
