@@ -24,8 +24,8 @@
 // draw rectangle
 class ConstArc : public SwDrawBase
 {
-    Point aStartPnt;
-    sal_uInt16 nAnzButUp;
+    Point m_aStartPoint;
+    sal_uInt16 m_nButtonUpCount;
 
 public:
     ConstArc(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);

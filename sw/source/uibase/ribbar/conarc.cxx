@@ -26,7 +26,7 @@
 #include "conarc.hxx"
 
 ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView), nAnzButUp(0)
+    : SwDrawBase(pWrtShell, pEditWin, pSwView), m_nButtonUpCount(0)
 {
 }
 
@@ -36,8 +36,8 @@ bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)))
     {
-        if (!nAnzButUp)
-            aStartPnt = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
+        if (!m_nButtonUpCount)
+            m_aStartPoint = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
     }
     return bReturn;
 }
@@ -49,18 +49,18 @@ bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
     if ((m_pSh->IsDrawCreate() || m_pWin->IsDrawAction()) && rMEvt.IsLeft())
     {
         Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
-        if (!nAnzButUp && aPnt == aStartPnt)
+        if (!m_nButtonUpCount && aPnt == m_aStartPoint)
         {
             SwDrawBase::MouseButtonUp(rMEvt);
             bReturn = true;
         }
         else
-        {   nAnzButUp++;
+        {   m_nButtonUpCount++;
 
-            if (nAnzButUp == 3)     // Generating of circular arc finished
+            if (m_nButtonUpCount == 3)     // Generating of circular arc finished
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
-                nAnzButUp = 0;
+                m_nButtonUpCount = 0;
                 bReturn = true;
             }
             else
@@ -94,7 +94,7 @@ void ConstArc::Activate(const sal_uInt16 nSlotId)
 
 void ConstArc::Deactivate()
 {
-    nAnzButUp = 0;
+    m_nButtonUpCount = 0;
 
     SwDrawBase::Deactivate();
 }
