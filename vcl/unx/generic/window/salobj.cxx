@@ -341,12 +341,6 @@ X11SalObject::EndSetClipRegion()
                               op, ordering );
 }
 
-sal_uInt16
-X11SalObject::GetClipRegionType()
-{
-    return maClipRegion.GetClipRegionType();
-}
-
 void
 X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {

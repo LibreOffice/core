@@ -44,8 +44,7 @@ public:
     virtual ~GtkSalObject();
 
     // override all pure virtual methods
-     virtual void                   ResetClipRegion() SAL_OVERRIDE;
-    virtual sal_uInt16              GetClipRegionType() SAL_OVERRIDE;
+    virtual void                    ResetClipRegion() SAL_OVERRIDE;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                    EndSetClipRegion() SAL_OVERRIDE;
