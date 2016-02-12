@@ -71,6 +71,7 @@ public:
     void onSelectionChanged();
     void onChangeCurrentPage();
     void onChange();
+    void animationChange();
     void onRemove();
     void onChangeStart();
     void onChangeStart( sal_Int16 nNodeType );

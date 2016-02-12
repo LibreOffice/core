@@ -1744,6 +1744,33 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     return false;
 }
 
+void CustomAnimationPane::animationChange()
+{
+    if( maListSelection.size() == 1 )
+    {
+        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+        const double fDuration = (*pPreset)->getDuration();
+        CustomAnimationPresetPtr pDescriptor(*pPreset);
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+        // get selected effect
+        EffectSequence::iterator aIter( maListSelection.begin() );
+        const EffectSequence::iterator aEnd( maListSelection.end() );
+        while( aIter != aEnd )
+        {
+            CustomAnimationEffectPtr pEffect = (*aIter++);
+
+            EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+            if( !pEffectSequence )
+                pEffectSequence = mpMainSequence.get();
+
+            pEffectSequence->replace( pEffect, pDescriptor, fDuration );
+        }
+        onPreview(true);
+    }
+
+}
+
 void CustomAnimationPane::onChange()
 {
     bool bHasText = true;
