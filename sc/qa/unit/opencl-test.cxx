@@ -300,7 +300,7 @@ public:
     void testFinancialMDurationFormula1();
 
     CPPUNIT_TEST_SUITE(ScOpenCLTest);
-    CPPUNIT_TEST(testSystematic);
+//  CPPUNIT_TEST(testSystematic);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
     CPPUNIT_TEST(testStatisticalFormulaFisher);
