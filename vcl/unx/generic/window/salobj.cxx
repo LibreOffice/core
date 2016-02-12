@@ -307,7 +307,7 @@ void
 X11SalObject::EndSetClipRegion()
 {
     XRectangle *pRectangles = maClipRegion.EndSetClipRegion ();
-    const int   nType       = maClipRegion.GetClipRegionType();
+    const int   nType       = SAL_OBJECT_CLIP_INCLUDERECTS;
     const int   nRectangles = maClipRegion.GetRectangleCount();
 
     const int   dest_kind   = ShapeBounding;
@@ -337,7 +337,7 @@ X11SalObject::EndSetClipRegion()
 sal_uInt16
 X11SalObject::GetClipRegionType()
 {
-    return maClipRegion.GetClipRegionType();
+    return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 void

@@ -39,8 +39,6 @@ public:
         return ClipRectangleList;   }
     void        ResetClipRegion()   {
         numClipRectangles = 0;      }
-    sal_uInt16      GetClipRegionType() {
-        return SAL_OBJECT_CLIP_INCLUDERECTS; }
     int         GetRectangleCount() {
         return numClipRectangles;   }
 
