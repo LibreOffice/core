@@ -48,6 +48,8 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf97542_1();
     void testTdf97542_2();
     void testTdf97543();
+    void testRGBColor();
+    void testRGBAColor();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -66,6 +68,8 @@ public:
     CPPUNIT_TEST(testTdf97542_1);
     CPPUNIT_TEST(testTdf97542_2);
     CPPUNIT_TEST(testTdf97543);
+    CPPUNIT_TEST(testRGBColor);
+    CPPUNIT_TEST(testRGBAColor);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -232,6 +236,7 @@ void Test::testTdf85770()
 
 void Test::testTdf79163()
 {
+    //Check Opacity
     Primitive2DSequence aSequenceTdf79163 = parseSvg("/svgio/qa/cppunit/data/tdf79163.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf79163.getLength());
 
@@ -284,6 +289,33 @@ void Test::testTdf97543()
 
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00cc00");
 }
+
+void Test::testRGBColor()
+{
+    Primitive2DSequence aSequenceRGBColor = parseSvg("/svgio/qa/cppunit/data/RGBColor.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceRGBColor.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBColor));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#646464");
+}
+
+void Test::testRGBAColor()
+{
+    Primitive2DSequence aSequenceRGBAColor = parseSvg("/svgio/qa/cppunit/data/RGBAColor.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceRGBAColor.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceRGBAColor));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence", "transparence", "0");
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
