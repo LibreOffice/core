@@ -1386,15 +1386,6 @@ main/connectivity/qa/complex/connectivity/hsqldb/TestCacheSize.java
 
 ##############################################################################
 #
-# FSF, contains MIT equal license
-# A case for https://issues.apache.org/jira/browse/LEGAL-130
-#
-
-main/hwpfilter/source/ksc5601.h
-
-
-##############################################################################
-#
 # originally from XConsortium, mkdepend.man contains license info (permission)
 # and looks like MIT1.1
 # A case for https://issues.apache.org/jira/browse/LEGAL-130

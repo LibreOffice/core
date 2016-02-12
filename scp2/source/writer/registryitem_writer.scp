@@ -1328,24 +1328,6 @@ RegistryItem gid_Regitem_OpenOffice_XML_OpenWith_Writer
     Value = " ";
 End
 
-// .WPD
-RegistryItem gid_Regitem_OpenOffice_WPD_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".wpd\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "soffice.StarWriterDocument.6";
-    Value = " ";
-End
-
-// .HWP
-RegistryItem gid_Regitem_OpenOffice_HWP_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".hwp\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "soffice.StarWriterDocument.6";
-    Value = " ";
-End
-
 // .SXG
 RegistryItem gid_Regitem_OpenOffice_SXG_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
