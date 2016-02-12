@@ -897,8 +897,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         sc::SetFormulaDirtyContext aFormulaDirtyCxt;
         SetAllFormulasDirty(aFormulaDirtyCxt);
 
-        if (pDrawLayer)
-            DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+        if (pDrawLayer) //  Skip cloning Note caption object
+            DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos), true );
 
         if (pDPCollection)
             pDPCollection->CopyToTab(nOldPos, nNewPos);
