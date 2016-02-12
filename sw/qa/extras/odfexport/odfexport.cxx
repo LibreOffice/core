@@ -73,9 +73,39 @@ public:
             pBatch->commit();
             return pResetter;
         }
+        if (OString(pFilename) == "2_MathType3.docx")
+        {
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [this] () {
+                    mpFilter = "writer8";
+                    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                            comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Common::Cache::Writer::OLE_Objects::set(20, pBatch);
+                    return pBatch->commit();
+                }));
+            mpFilter = "OpenDocument Text Flat XML"; // doesn't happen with ODF package
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                    comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Cache::Writer::OLE_Objects::set(1, pBatch);
+            pBatch->commit();
+            return pResetter;
+        }
         return nullptr;
     }
 };
+
+DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
+{
+    uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!xModifiable->isModified());
+    // see preTest(), set the OLE cache to 1 for this test
+    // and the problem was that the formulas that were in the cache
+    // (the second one) were lost
+    OUString formula1(getFormula(getRun(getParagraph(1), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString(" size 12{1+1=2} {}"), formula1);
+    OUString formula2(getFormula(getRun(getParagraph(2), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString(" size 12{2+2=4} {}"), formula2);
+}
 
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
 {
