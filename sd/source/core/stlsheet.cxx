@@ -1133,7 +1133,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pEntry, aAny ))
                 return aAny;
 
-            // Hole Wert aus ItemSet
+            // Get value of ItemSet
             aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
         }
 
