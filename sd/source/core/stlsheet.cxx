@@ -1090,7 +1090,18 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
         }
         else if( pEntry->nWID == WID_STYLE_DISPNAME )
         {
-            aAny <<= maDisplayName;
+            OUString aDisplayName;
+            if ( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
+            {
+                const SdStyleSheet* pStyleSheet = GetPseudoStyleSheet();
+                if (pStyleSheet != nullptr)
+                    aDisplayName = pStyleSheet->GetDisplayName();
+            }
+
+            if (aDisplayName.isEmpty())
+                aDisplayName = GetDisplayName();
+
+            aAny <<= aDisplayName;
         }
         else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
         {
