@@ -72,6 +72,7 @@ struct SystemEnvData
     void*               pAppContext;    // the application context in use
     long                aShellWindow;   // the window of the frame's shell
     void*               pShellWidget;   // the frame's shell widget
+    const char*         pToolkit;       // the toolkit in use (gtk2 vs gtk3)
 #endif
 
     SystemEnvData()
@@ -95,6 +96,7 @@ struct SystemEnvData
         , pAppContext(nullptr)
         , aShellWindow(0)
         , pShellWidget(nullptr)
+        , pToolkit(nullptr)
 #endif
     {
     }

@@ -7,19 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_X11_X11DISPLAY_HXX
-#define INCLUDED_VCL_INC_UNX_X11_X11DISPLAY_HXX
+#include "unx/nativewindowhandleprovider.hxx"
 
-#include <prex.h>
-#include <X11/Xproto.h>
-#include <postx.h>
+NativeWindowHandleProvider::~NativeWindowHandleProvider()
+{
+}
 
-#include <rtl/string.hxx>
-
-#include <vcl/dllapi.h>
-
-VCL_DLLPUBLIC Display* OpenX11Display(OString& rDisplay);
-
-#endif // INCLUDED_VCL_INC_UNX_X11_X11DISPLAY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

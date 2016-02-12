@@ -33,7 +33,7 @@
 
 #include <salframe.hxx>
 #include <vcl/sysdata.hxx>
-#include <unx/x11windowprovider.hxx>
+#include <unx/nativewindowhandleprovider.hxx>
 #include <unx/saltype.h>
 #include <unx/screensaverinhibitor.hxx>
 
@@ -66,7 +66,8 @@ class GtkDnDTransferable;
     typedef void GDBusConnection;
 #endif
 
-class GtkSalFrame : public SalFrame, public X11WindowProvider
+class GtkSalFrame : public SalFrame
+                  , public NativeWindowHandleProvider
 {
     struct IMHandler
     {
@@ -518,7 +519,8 @@ public:
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
 
-    virtual Window              GetX11Window() override;
+    sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget);
+    virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
     static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
         guint* pGdkKeyCode, GdkModifierType *pGdkModifiers);

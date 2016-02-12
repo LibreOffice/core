@@ -1022,6 +1022,7 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pAppContext   = nullptr;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
+    m_aSystemData.pToolkit      = "gtk2";
 
     m_bGraphics = false;
     m_pGraphics = NULL;
@@ -3929,7 +3930,7 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
-Window GtkSalFrame::GetX11Window()
+sal_uIntPtr GtkSalFrame::GetNativeWindowHandle()
 {
     return widget_get_xid(m_pWindow);
 }

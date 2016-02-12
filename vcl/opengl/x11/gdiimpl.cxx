@@ -47,12 +47,12 @@ void X11OpenGLSalGraphicsImpl::Init()
 
 rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
 {
-    X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
+    NativeWindowHandleProvider *pProvider = dynamic_cast<NativeWindowHandleProvider*>(mrParent.m_pFrame);
 
     if( !pProvider )
         return nullptr;
 
-    Window aWin = pProvider->GetX11Window();
+    sal_uIntPtr aWin = pProvider->GetNativeWindowHandle();
     rtl::Reference<OpenGLContext> pContext = OpenGLContext::Create();
     pContext->setVCLOnly();
     pContext->init( mrParent.GetXDisplay(), aWin,

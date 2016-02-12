@@ -7,20 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UNX_X11WINDOWPROVIDER
-#define INCLUDED_VCL_UNX_X11WINDOWPROVIDER
-
-#include <prex.h>
-#include <postx.h>
+#ifndef INCLUDED_VCL_UNX_NATIVEWINDOWHANDLEPROVIDER
+#define INCLUDED_VCL_UNX_NATIVEWINDOWHANDLEPROVIDER
 
 #include <vcl/dllapi.h>
 
-class VCL_PLUGIN_PUBLIC X11WindowProvider
+class VCL_PLUGIN_PUBLIC NativeWindowHandleProvider
 {
 public:
-    virtual ~X11WindowProvider();
+    virtual ~NativeWindowHandleProvider();
 
-    virtual Window GetX11Window() = 0;
+    virtual sal_uIntPtr GetNativeWindowHandle() = 0;
 };
 
 #endif
