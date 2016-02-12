@@ -1005,7 +1005,7 @@ OUString SvxJavaParameterEditDlg::GetParameter() const
 }
 
 
-void SvxJavaParameterEditDlg::SetParameter( OUString strParams )
+void SvxJavaParameterEditDlg::SetParameter( OUString const & strParams )
 {
         m_pParameterEditField->SetText( strParams );
         m_pParameterEditField->SetCursorAtLast();

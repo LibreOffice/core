@@ -192,7 +192,7 @@ public:
     virtual short           Execute() override;
 
     OUString GetParameter() const;
-    void SetParameter( OUString rParams );
+    void SetParameter( OUString const & rParams );
 };
 
 // class SvxJavaClassPathDlg ---------------------------------------------
