@@ -261,10 +261,10 @@ void ScDocument::DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
     pDrawLayer->ScMovePage(nOldPos,nNewPos);
 }
 
-void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
+void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, bool bSkipNotes )
 {
     // page is already created in ScTable ctor
-    pDrawLayer->ScCopyPage( nOldPos, nNewPos );
+    pDrawLayer->ScCopyPage( nOldPos, nNewPos, bSkipNotes );
 }
 
 void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
