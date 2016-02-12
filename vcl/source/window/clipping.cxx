@@ -327,11 +327,6 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
                     mpWindowImpl->mpSysObj->ResetClipRegion();
                 else
                 {
-                    if ( nClipFlags & SAL_OBJECT_CLIP_EXCLUDERECTS )
-                    {
-                        aWinRectRegion.Exclude( aRegion );
-                        aRegion = aWinRectRegion;
-                    }
                     if ( !(nClipFlags & SAL_OBJECT_CLIP_ABSOLUTE) )
                         aRegion.Move( -mnOutOffX, -mnOutOffY );
 
