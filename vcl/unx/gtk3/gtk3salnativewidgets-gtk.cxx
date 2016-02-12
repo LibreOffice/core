@@ -1316,6 +1316,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         break;
     case CTRL_LISTNET:
+        return true;
         break;
     case CTRL_TAB_PANE:
         context = mpNotebookStyle;
