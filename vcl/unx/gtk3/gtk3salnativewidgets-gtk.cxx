@@ -1940,6 +1940,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aStyleSet.SetFieldColor( aBackFieldColor );
         // This baby is the default page/paper color
         aStyleSet.SetWindowColor( aBackFieldColor );
+
+        // Tab colors
+        aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
+        aStyleSet.SetInactiveTabColor( aBackColor );
     }
 
     // menu disabled entries handling
