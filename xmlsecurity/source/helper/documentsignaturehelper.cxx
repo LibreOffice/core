@@ -333,7 +333,7 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
             return rElement.endsWith("." + rPair.First);
         });
 
-        if (it != rOverrides.end())
+        if (it != rDefaults.end())
         {
             rElement = "/" + rElement + "?ContentType=" + it->Second;
             continue;
