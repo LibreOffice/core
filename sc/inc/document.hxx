@@ -2192,7 +2192,7 @@ private:
     void    DeleteDrawLayer();
     SC_DLLPUBLIC bool   DrawGetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) const;
     void    DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
-    void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
+    void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, bool bSkipNotes = false );
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();
