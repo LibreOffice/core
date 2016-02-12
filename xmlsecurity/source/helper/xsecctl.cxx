@@ -38,6 +38,9 @@
 #include <rtl/ref.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <sax/tools/converter.hxx>
+
+#include <certificate.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -1296,6 +1299,56 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
         pAttributeList->AddAttribute(ATTR_ID, "idSignedProperties");
         xDocumentHandler->startElement(NSTAG_XD ":" TAG_SIGNEDPROPERTIES, uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     }
+
+    xDocumentHandler->startElement("xd:SignedSignatureProperties", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:SigningTime", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(aSignatureTimeValue);
+    xDocumentHandler->endElement("xd:SigningTime");
+    xDocumentHandler->startElement("xd:SigningCertificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:Cert", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:CertDigest", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    {
+        rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+        pAttributeList->AddAttribute(ATTR_ALGORITHM, ALGO_XMLDSIGSHA256);
+        xDocumentHandler->startElement("DigestMethod", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    }
+    xDocumentHandler->endElement("DigestMethod");
+    xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+
+    if (rInformation.ouCertDigest.isEmpty())
+    {
+        uno::Reference<xml::crypto::XSecurityEnvironment> xEnvironment = m_xSecurityContext->getSecurityEnvironment();
+        uno::Reference<security::XCertificate> xCertificate = xEnvironment->createCertificateFromAscii(rInformation.ouX509Certificate);
+        if (xmlsecurity::Certificate* pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCertificate.get()))
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::encodeBase64(aBuffer, pCertificate->getSHA256Thumbprint());
+            xDocumentHandler->characters(aBuffer.makeStringAndClear());
+        }
+        else
+            SAL_WARN("xmlsecurity.helper", "XCertificate implementation without an xmlsecurity::Certificate one");
+    }
+    else
+        xDocumentHandler->characters(rInformation.ouCertDigest);
+
+    xDocumentHandler->endElement("DigestValue");
+    xDocumentHandler->endElement("xd:CertDigest");
+    xDocumentHandler->startElement("xd:IssuerSerial", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("X509IssuerName", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rInformation.ouX509IssuerName);
+    xDocumentHandler->endElement("X509IssuerName");
+    xDocumentHandler->startElement("X509SerialNumber", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rInformation.ouX509SerialNumber);
+    xDocumentHandler->endElement("X509SerialNumber");
+    xDocumentHandler->endElement("xd:IssuerSerial");
+    xDocumentHandler->endElement("xd:Cert");
+    xDocumentHandler->endElement("xd:SigningCertificate");
+    xDocumentHandler->startElement("xd:SignaturePolicyIdentifier", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:SignaturePolicyImplied", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->endElement("xd:SignaturePolicyImplied");
+    xDocumentHandler->endElement("xd:SignaturePolicyIdentifier");
+    xDocumentHandler->endElement("xd:SignedSignatureProperties");
+
     xDocumentHandler->endElement(NSTAG_XD ":" TAG_SIGNEDPROPERTIES);
     xDocumentHandler->endElement(NSTAG_XD ":" TAG_QUALIFYINGPROPERTIES);
     xDocumentHandler->endElement(TAG_OBJECT);
