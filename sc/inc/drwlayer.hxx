@@ -121,7 +121,7 @@ public:
     void            ScRemovePage( SCTAB nTab );
     void            ScRenamePage( SCTAB nTab, const OUString& rNewName );
     void            ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
-    void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos);
+    void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, bool bSkipNotes = false );
     void            ResetTab( SCTAB nStart, SCTAB nEnd );
 
     ScDocument*     GetDocument() const { return pDoc; }
