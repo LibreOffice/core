@@ -18,6 +18,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/detail/preinit.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
@@ -105,6 +106,21 @@ css::uno::Reference< css::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext()
 {
     return defaultBootstrap_InitialComponentContext(getUnoIniUri());
+}
+
+void
+cppu::preInitBootstrap()
+{
+    rtl::OUString iniUri(getUnoIniUri());
+    rtl::Bootstrap bs(iniUri);
+    if (bs.getHandle() == nullptr)
+        throw css::uno::DeploymentException("Cannot open uno ini " + iniUri);
+
+    // create the service manager
+    rtl::Reference< cppuhelper::ServiceManager > aManager(new cppuhelper::ServiceManager);
+    // read rdb files
+    aManager->init(getBootstrapVariable(bs, "UNO_SERVICES"));
+    aManager->loadAllImplementations();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

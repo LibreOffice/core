@@ -436,3 +436,8 @@ GLIBCXX_3.4 {
         _ZGVNSt7num_put*; _ZNSt7num_put*;
         _ZNSs4_Rep20_S_empty_rep_storageE;
 };
+
+PRIVATE_1.0 { # LibO 5.2
+    global:
+        _ZN4cppu16preInitBootstrapEv;
+};
