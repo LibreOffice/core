@@ -87,6 +87,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfexport,\
     sd/util/sd \
     svx/util/svxcore \
     xmloff/source/transform/xof \
+    xmlscript/util/xmlscript \
 ))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sw_odfexport,\

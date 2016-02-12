@@ -2275,8 +2275,19 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                 if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
                 {
                     uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-                    if ( xModifiable.is() )
+                    if (xModifiable.is() && xModifiable->isModified())
+                    {
+                        uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
+                        if (xPers.is())
+                        {   // store it before resetting modified!
+                            xPers->storeOwn();
+                        }
+                        else
+                        {
+                            SAL_WARN("sfx.doc", "Modified object without persistence!");
+                        }
                         xModifiable->setModified(sal_False);
+                    }
                 }
             }
         }
