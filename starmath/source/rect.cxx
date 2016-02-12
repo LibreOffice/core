@@ -451,22 +451,22 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
         OSL_ENSURE(HasAlignInfo(), "Sm: ooops...");
 
         switch (eCopyMode)
-        {   case RCP_THIS:
+        {   case RectCopyMBL::This:
                 // already done
                 break;
-            case RCP_ARG:
+            case RectCopyMBL::Arg:
                 CopyMBL(rRect);
                 break;
-            case RCP_NONE:
+            case RectCopyMBL::None:
                 ClearBaseline();
                 nAlignM = (nAlignT + nAlignB) / 2;
                 break;
-            case RCP_XOR:
+            case RectCopyMBL::Xor:
                 if (!HasBaseline())
                     CopyMBL(rRect);
                 break;
             default :
-                SAL_WARN("starmath", "unknown case");
+                assert(false);
         }
     }
 
