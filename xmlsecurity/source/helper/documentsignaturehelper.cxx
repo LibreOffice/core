@@ -93,6 +93,10 @@ void ImplFillElementList(
 
     for ( sal_Int32 n = 0; n < nElements; n++ )
     {
+        if (pNames[n] == "[Content_Types].xml")
+            // OOXML
+            continue;
+
         if (mode != OOo3_2Document
             && (pNames[n] == "META-INF" || pNames[n] == "mimetype"))
         {
