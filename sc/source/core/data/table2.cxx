@@ -1081,9 +1081,14 @@ void ScTable::CopyToTable(
         return;
 
     if (nFlags != InsertDeleteFlags::NONE)
+    {
+        InsertDeleteFlags nTempFlags = nFlags;
+        nTempFlags = static_cast<InsertDeleteFlags>( static_cast<sal_uInt16>(nTempFlags) &
+                        (~static_cast<sal_uInt16>(InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES)));
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked,
+            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, nTempFlags, bMarked,
                                 pDestTab->aCol[i], pMarkData, bAsLink);
+    }
 
     if (!bColRowFlags)      // Column widths/Row heights/Flags
         return;
@@ -1190,6 +1195,16 @@ void ScTable::CopyToTable(
 
     if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
         pDestTab->SetOutlineTable( pOutlineTable );
+
+    if (nFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
+    {
+        bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
+        for (SCCOL i = nCol1; i <= nCol2; i++)
+        {
+            aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->aCol[i], bCloneCaption);
+            pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2);
+        }
+    }
 }
 
 void ScTable::UndoToTable(
