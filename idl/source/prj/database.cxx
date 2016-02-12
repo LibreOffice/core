@@ -274,34 +274,15 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken& rTok = rInStm.GetToken_Next();
 
-    if( rTok.HasHash() )
-    {
-        sal_uInt32 nBeginPos = 0; // can not happen with Tell
-        while( nBeginPos != rInStm.Tell() )
-        {
-            nBeginPos = rInStm.Tell();
-        }
-    }
-
     if( rTok.IsIdentifier() )
     {
         OString aName = rTok.GetString();
-        SvRefMemberList<SvMetaType *> & rList = GetTypeList();
-        SvRefMemberList<SvMetaType *>::const_iterator it = rList.begin();
-        SvMetaType * pType = nullptr;
-        while( it != rList.end() )
+        for( const auto& aType : GetTypeList() )
         {
-            if( (*it)->GetName().equals(aName) )
+            if( aType->GetName().equals(aName) )
             {
-                pType = *it;
-                break;
+                return aType;
             }
-            ++it;
-        }
-        if( pType )
-        {
-            // is exactly this type
-            return pType;
         }
     }
     rInStm.Seek( nTokPos );

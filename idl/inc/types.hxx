@@ -30,13 +30,12 @@ typedef SvRefMemberList< SvMetaSlot* > SvSlotElementList;
 
 class SvMetaAttribute : public SvMetaReference
 {
-    tools::SvRef<SvMetaType> aType;
-    SvIdentifier             aSlotId;
-
 protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) override;
 public:
+    tools::SvRef<SvMetaType> aType;
+    SvIdentifier             aSlotId;
                         SvMetaAttribute();
                         SvMetaAttribute( SvMetaType * );
 
@@ -81,6 +80,7 @@ public:
     MetaTypeType        GetMetaTypeType() const { return nType; }
     SvMetaType *        GetBaseType() const;
     SvMetaType *        GetReturnType() const;
+    void                SetItem(bool b) { bIsItem = b; }
     bool                IsItem() const { return bIsItem; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
@@ -101,8 +101,6 @@ class SvMetaEnumValue : public SvMetaObject
 {
 public:
     SvMetaEnumValue();
-
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
 class SvMetaTypeEnum : public SvMetaType

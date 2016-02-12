@@ -133,16 +133,13 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
     {
         ReadEnum();
     }
-    else if( rInStm.GetToken().Is( SvHash_item() )
-      || rInStm.GetToken().Is( SvHash_struct() ) )
+    else if( rInStm.GetToken().Is( SvHash_item() ) )
     {
-        tools::SvRef<SvMetaType> xItem(new SvMetaType() );
-
-        if( xItem->ReadSvIdl( rBase, rInStm ) )
-        {
-            // announce globally
-            rBase.GetTypeList().push_back( xItem );
-        }
+        ReadItem();
+    }
+    else if( rInStm.GetToken().Is( SvHash_struct() ) )
+    {
+        ReadStruct();
     }
     else if( rInStm.GetToken().Is( SvHash_include() ) )
     {
@@ -215,10 +212,66 @@ void SvIdlParser::ReadInclude( SvMetaModule& rModule )
         rInStm.Seek( nTokPos );
 }
 
+void SvIdlParser::ReadStruct()
+{
+    ReadToken( SvHash_struct() );
+    rInStm.GetToken_Next();
+    tools::SvRef<SvMetaType> xStruct(new SvMetaType() );
+    xStruct->SetType( MetaTypeType::Struct );
+    xStruct->SetName( ReadIdentifier() );
+    ReadChar( '{' );
+    sal_uInt32 nBeginPos = 0; // can not happen with Tell
+    while( nBeginPos != rInStm.Tell() )
+    {
+        nBeginPos = rInStm.Tell();
+        tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
+        xAttr->aType = ReadKnownType();
+        xAttr->SetName(ReadIdentifier());
+        xAttr->aSlotId.setString(ReadIdentifier());
+        sal_uLong n;
+        if( !rBase.FindId( xAttr->aSlotId.getString(), &n ) )
+            throw SvParseException( rInStm, "no value for identifier <" + xAttr->aSlotId.getString() + "> " );
+        xAttr->aSlotId.SetValue(n);
+        xStruct->GetAttrList().push_back( xAttr );
+        rInStm.ReadIfDelimiter();
+        if ( rInStm.GetToken().IsChar() && rInStm.GetToken().GetChar() == '}')
+            break;
+    }
+    ReadChar( '}' );
+    // announce globally
+    rBase.GetTypeList().push_back( xStruct );
+}
+
+void SvIdlParser::ReadItem()
+{
+    ReadToken( SvHash_item() );
+    rInStm.GetToken_Next();
+    tools::SvRef<SvMetaType> xItem(new SvMetaType() );
+    xItem->SetItem(true);
+    xItem->SetRef( ReadKnownType() );
+    xItem->SetName( ReadIdentifier() );
+    // announce globally
+    rBase.GetTypeList().push_back( xItem );
+}
+
+SvMetaType * SvIdlParser::ReadKnownType()
+{
+    OString aName = ReadIdentifier();
+    for( const auto& aType : rBase.GetTypeList() )
+    {
+        if( aType->GetName().equals(aName) )
+        {
+            return aType;
+        }
+    }
+    throw SvParseException( rInStm, "wrong typedef: ");
+}
+
+
 void SvIdlParser::ReadEnum()
 {
-    tools::SvRef<SvMetaTypeEnum> xEnum( new SvMetaTypeEnum() );
     rInStm.GetToken_Next();
+    tools::SvRef<SvMetaTypeEnum> xEnum( new SvMetaTypeEnum() );
     xEnum->SetType( MetaTypeType::Enum );
     xEnum->SetName( ReadIdentifier() );
 
@@ -249,25 +302,18 @@ static OString getCommonSubPrefix(const OString &rA, const OString &rB)
 
 void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
 {
-    sal_uInt32 nTokPos = rInStm.Tell();
-
     tools::SvRef<SvMetaEnumValue> aEnumVal = new SvMetaEnumValue();
-    bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
-    if( bOk )
+    aEnumVal->SetName( ReadIdentifier() );
+    if( rEnum.aEnumValueList.empty() )
     {
-        if( rEnum.aEnumValueList.empty() )
-        {
-           // the first
-           rEnum.aPrefix = aEnumVal->GetName();
-        }
-        else
-        {
-            rEnum.aPrefix = getCommonSubPrefix(rEnum.aPrefix, aEnumVal->GetName());
-        }
-        rEnum.aEnumValueList.push_back( aEnumVal );
+       // the first
+       rEnum.aPrefix = aEnumVal->GetName();
     }
-    if( !bOk )
-        rInStm.Seek( nTokPos );
+    else
+    {
+        rEnum.aPrefix = getCommonSubPrefix(rEnum.aPrefix, aEnumVal->GetName());
+    }
+    rEnum.aEnumValueList.push_back( aEnumVal );
 }
 
 
@@ -298,6 +344,12 @@ OString SvIdlParser::ReadString()
     if( !rTok.IsString() )
         throw SvParseException("expected string", rTok);
     return rTok.GetString();
+}
+
+void SvIdlParser::ReadToken(SvStringHashEntry* entry)
+{
+    if( !rInStm.GetToken().Is(entry) )
+        throw SvParseException("expected " + entry->GetName(), rInStm.GetToken());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

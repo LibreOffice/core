@@ -74,7 +74,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
 
         bOk = true;
         SvToken& rTok  = rInStm.GetToken();
-        if( bOk && rTok.IsChar() && rTok.GetChar() == '(' )
+        if( rTok.IsChar() && rTok.GetChar() == '(' )
         {
             tools::SvRef<SvMetaType> xT(new SvMetaType() );
             xT->SetRef( GetType() );
@@ -164,7 +164,7 @@ SvMetaType * SvMetaType::GetReturnType() const
     return static_cast<SvMetaType *>(GetRef());
 }
 
-bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
+bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & ,
                                   SvTokenStream & rInStm )
 {
     bool bOk = false;
@@ -180,26 +180,6 @@ bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     {
         SetType( MetaTypeType::Shell );
         bOk = ReadNamesSvIdl( rInStm );
-    }
-    else if( rTok.Is( SvHash_struct() ) )
-    {
-        SetType( MetaTypeType::Struct );
-        bOk = ReadNamesSvIdl( rInStm );
-    }
-    else if( rTok.Is( SvHash_enum() ) )
-    {
-        SetType( MetaTypeType::Enum );
-        bOk = ReadNameSvIdl( rInStm );
-    }
-    else if( rTok.Is( SvHash_item() ) )
-    {
-        bIsItem = true;
-
-        SvMetaType * pType = rBase.ReadKnownType( rInStm );
-        if( !pType )
-            throw SvParseException( rInStm, "wrong typedef: ");
-        SetRef( pType );
-        bOk = ReadNameSvIdl( rInStm );
     }
     if( !bOk )
         rInStm.Seek( nTokPos );
@@ -342,12 +322,6 @@ SvMetaTypeString::SvMetaTypeString()
 
 SvMetaEnumValue::SvMetaEnumValue()
 {
-}
-
-bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & ,
-                                 SvTokenStream & rInStm )
-{
-    return ReadNameSvIdl( rInStm );
 }
 
 SvMetaTypeEnum::SvMetaTypeEnum()
