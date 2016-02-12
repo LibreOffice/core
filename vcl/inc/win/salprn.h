@@ -92,7 +92,7 @@ public:
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
-                                              sal_uIntPtr nCopies,
+                                              sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData ) override;

@@ -1445,7 +1445,7 @@ static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
 bool WinSalPrinter::StartJob( const OUString* pFileName,
                            const OUString& rJobName,
                            const OUString&,
-                           sal_uLong nCopies,
+                           sal_uInt32 nCopies,
                            bool bCollate,
                            bool /*bDirect*/,
                            ImplJobSetup* pSetupData )
