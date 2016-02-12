@@ -56,24 +56,24 @@ public:
         return std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end();
     }
 
-    virtual void preTest(const char* pFilename) override
+    virtual std::unique_ptr<Resetter> preTest(const char* pFilename) override
     {
         if (OString(pFilename) == "fdo58949.docx")
         {
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [] () {
+                    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                            comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(true, pBatch);
+                    return pBatch->commit();
+                }));
+
             std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(false, pBatch);
             pBatch->commit();
+            return pResetter;
         }
-    }
-
-    virtual void postTest(const char* pFilename) override
-    {
-        if (OString(pFilename) == "fdo58949.docx")
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(true, pBatch);
-            pBatch->commit();
-        }
+        return nullptr;
     }
 };
 
