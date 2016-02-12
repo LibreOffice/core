@@ -107,19 +107,15 @@ public:
 
 class SvMetaTypeEnum : public SvMetaType
 {
+public:
     SvRefMemberList<SvMetaEnumValue *> aEnumValueList;
     OString                            aPrefix;
-protected:
-    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-public:
             SvMetaTypeEnum();
 
     sal_uLong           Count() const { return aEnumValueList.size(); }
     const OString&      GetPrefix() const { return aPrefix; }
     SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList[n]; }
-
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 };
 
 class SvMetaTypevoid : public SvMetaType

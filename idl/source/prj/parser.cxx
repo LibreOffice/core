@@ -83,40 +83,31 @@ bool SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
     bool bOk = true;
     if( rInStm.ReadIf( '[' ) )
     {
-        sal_uInt32 nBeginPos = 0; // can not happen with Tell
-        while( nBeginPos != rInStm.Tell() )
+        while( true )
         {
-            nBeginPos = rInStm.Tell();
             OString aSlotIdFile;
-            if( ReadStringSvIdl( SvHash_SlotIdFile(), rInStm, aSlotIdFile ) )
+            if( !ReadStringSvIdl( SvHash_SlotIdFile(), rInStm, aSlotIdFile ) )
+                break;
+            if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile, RTL_TEXTENCODING_ASCII_US)) )
             {
-                if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile, RTL_TEXTENCODING_ASCII_US)) )
-                {
-                    throw SvParseException( rInStm, "cannot read file: " + aSlotIdFile );
-                }
+                throw SvParseException( rInStm, "cannot read file: " + aSlotIdFile );
             }
             rInStm.ReadIfDelimiter();
         }
-        bOk = rInStm.ReadIf( ']' );
-    }
-
-    if( !bOk )
-    {
-        rInStm.Seek( nTokPos );
-        return bOk;
+        ReadChar( ']' );
     }
 
     if( !rInStm.ReadIf( '{' ) )
         return bOk;
 
-    sal_uInt32 nBeginPos = 0; // can not happen with Tell
+    sal_uInt32 nBeginPos = 0;
     while( nBeginPos != rInStm.Tell() )
     {
         nBeginPos = rInStm.Tell();
         ReadModuleElement( rModule );
         rInStm.ReadIfDelimiter();
     }
-    bOk = rInStm.ReadIf( '}' );
+    ReadChar( '}' );
 
     if( !bOk )
         rInStm.Seek( nTokPos );
@@ -141,11 +132,9 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
     {
         tools::SvRef<SvMetaTypeEnum> aEnum( new SvMetaTypeEnum() );
 
-        if( aEnum->ReadSvIdl( rBase, rInStm ) )
-        {
-            // announce globally
-            rBase.GetTypeList().push_back( aEnum );
-        }
+        ReadEnum(*aEnum);
+        // announce globally
+        rBase.GetTypeList().push_back( aEnum );
     }
     else if( rInStm.GetToken().Is( SvHash_item() )
       || rInStm.GetToken().Is( SvHash_struct() ) )
@@ -189,13 +178,18 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
             // reset error
             rBase.SetError( SvIdlError() );
 
-            SvIdlParser aIncludeParser( rBase, aTokStm );
-            sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
-            while( nBeginPos != aTokStm.Tell() )
-            {
-                nBeginPos = aTokStm.Tell();
-                aIncludeParser.ReadModuleElement(rModule);
-                aTokStm.ReadIfDelimiter();
+            try {
+                SvIdlParser aIncludeParser( rBase, aTokStm );
+                sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
+                while( nBeginPos != aTokStm.Tell() )
+                {
+                    nBeginPos = aTokStm.Tell();
+                    aIncludeParser.ReadModuleElement(rModule);
+                    aTokStm.ReadIfDelimiter();
+                }
+            } catch (const SvParseException& ex) {
+                rBase.SetError(ex.aError);
+                rBase.WriteError(aTokStm);
             }
             bOk = aTokStm.GetToken().IsEof();
             if( !bOk )
@@ -223,6 +217,81 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
     }
 }
 
+void SvIdlParser::ReadEnum(SvMetaTypeEnum& rEnum)
+{
+    rInStm.GetToken_Next();
+    rEnum.SetType( MetaTypeType::Enum );
+    rEnum.SetName( ReadIdentifier() );
+
+    ReadChar('{');
+    while( true )
+    {
+        ReadEnumValue( rEnum );
+        if( !rInStm.ReadIfDelimiter() )
+            break;
+    }
+    ReadChar( '}' );
+}
+
+namespace
+{
+    OString getCommonSubPrefix(const OString &rA, const OString &rB)
+    {
+        sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
+        sal_Int32 nI = 0;
+        while (nI < nMax)
+        {
+            if (rA[nI] != rB[nI])
+                break;
+            ++nI;
+        }
+        return rA.copy(0, nI);
+    }
+}
 
 
+void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
+{
+    sal_uInt32 nTokPos = rInStm.Tell();
+
+    tools::SvRef<SvMetaEnumValue> aEnumVal = new SvMetaEnumValue();
+    bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
+    if( bOk )
+    {
+        if( rEnum.aEnumValueList.empty() )
+        {
+           // the first
+           rEnum.aPrefix = aEnumVal->GetName();
+        }
+        else
+        {
+            rEnum.aPrefix = getCommonSubPrefix(rEnum.aPrefix, aEnumVal->GetName());
+        }
+        rEnum.aEnumValueList.push_back( aEnumVal );
+    }
+    if( !bOk )
+        rInStm.Seek( nTokPos );
+}
+
+
+
+void SvIdlParser::ReadChar(char cChar)
+{
+    if( !rInStm.ReadIf( cChar ) )
+        throw SvParseException(rInStm, "expected char '" + OString(cChar) + "'");
+}
+
+void SvIdlParser::ReadDelimiter()
+{
+    if( !rInStm.ReadIfDelimiter() )
+        throw SvParseException(rInStm, "expected delimiter");
+}
+
+OString SvIdlParser::ReadIdentifier()
+{
+    SvToken& rTok = rInStm.GetToken_Next();
+    if( !rTok.IsIdentifier() )
+        throw SvParseException("expected identifier", rTok);
+    return rTok.GetString();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

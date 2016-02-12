@@ -198,14 +198,16 @@ public:
                             return false;
                     }
 
-    void     ReadIfDelimiter()
+    bool     ReadIfDelimiter()
                     {
                         if( (*pCurToken)->IsChar()
                           && (';' == (*pCurToken)->GetChar()
                                 || ',' == (*pCurToken)->GetChar()) )
                         {
                             GetToken_Next();
+                            return true;
                         }
+                        return false;
                     }
 
     sal_uInt32 Tell() const { return pCurToken-aTokList.begin(); }

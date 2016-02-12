@@ -131,7 +131,7 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         } catch (const SvParseException& ex) {
             pDataBase->SetError(ex.aError);
             pDataBase->WriteError(aTokStm);
-             return false;
+            return false;
         }
     }
     return true;

@@ -354,60 +354,6 @@ SvMetaTypeEnum::SvMetaTypeEnum()
 {
 }
 
-namespace
-{
-    OString getCommonSubPrefix(const OString &rA, const OString &rB)
-    {
-        sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
-        sal_Int32 nI = 0;
-        while (nI < nMax)
-        {
-            if (rA[nI] != rB[nI])
-                break;
-            ++nI;
-        }
-        return rA.copy(0, nI);
-    }
-}
-
-void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
-                                       SvTokenStream & rInStm )
-{
-    sal_uInt32 nTokPos = rInStm.Tell();
-
-    tools::SvRef<SvMetaEnumValue> aEnumVal = new SvMetaEnumValue();
-    bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
-    if( bOk )
-    {
-        if( aEnumValueList.empty() )
-        {
-           // the first
-           aPrefix = aEnumVal->GetName();
-        }
-        else
-        {
-            aPrefix = getCommonSubPrefix(aPrefix, aEnumVal->GetName());
-        }
-        aEnumValueList.push_back( aEnumVal );
-    }
-    if( !bOk )
-        rInStm.Seek( nTokPos );
-}
-
-bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
-                                SvTokenStream & rInStm )
-{
-    sal_uInt32  nTokPos = rInStm.Tell();
-    if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm )
-      && GetMetaTypeType() == MetaTypeType::Enum )
-    {
-        if( SvMetaObject::ReadSvIdl( rBase, rInStm ) )
-             return true;
-    }
-    rInStm.Seek( nTokPos );
-    return false;
-}
-
 SvMetaTypevoid::SvMetaTypevoid()
     : SvMetaType( "void" )
 {

@@ -25,6 +25,7 @@
 class SvTokenStream;
 class SvIdlDataBase;
 class SvMetaModule;
+class SvMetaTypeEnum;
 
 class SvIdlParser
 {
@@ -36,6 +37,11 @@ public:
     bool        ReadModuleHeader(SvMetaModule& rModule);
     bool        ReadModuleBody(SvMetaModule& rModule);
     void        ReadModuleElement( SvMetaModule& rModule );
+    void        ReadEnum(SvMetaTypeEnum& rEnum);
+    void        ReadEnumValue( SvMetaTypeEnum& rEnum );
+    void        ReadChar(char cChar);
+    void        ReadDelimiter();
+    OString     ReadIdentifier();
 };
 
 #endif // INCLUDED_IDL_INC_PARSER_HXX

@@ -23,7 +23,7 @@
 #include <slot.hxx>
 #include <object.hxx>
 
-class SvMetaModule : public SvMetaReference
+class SvMetaModule : public SvMetaObject
 {
     bool                            bImported;
 public:
