@@ -91,17 +91,20 @@ public:
     {
     }
 
-    virtual void preTest(const char* filename) override
+    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
+        {
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [] () {
+                    SvtFilterOptions::Get().SetSmartArt2Shape(false);
+                }));
             SvtFilterOptions::Get().SetSmartArt2Shape(true);
+            return pResetter;
+        }
+        return nullptr;
     }
 
-    virtual void postTest(const char* filename) override
-    {
-        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
-            SvtFilterOptions::Get().SetSmartArt2Shape(false);
-    }
 protected:
     /// Copy&paste helper.
     bool paste(const OUString& rFilename, const uno::Reference<text::XTextRange>& xTextRange)

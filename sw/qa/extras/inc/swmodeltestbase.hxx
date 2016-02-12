@@ -149,6 +149,31 @@ protected:
     bool mbExported; ///< Does maTempFile already contain something useful?
 
 protected:
+
+    class Resetter
+    {
+    private:
+        std::function<void ()> m_Func;
+
+    public:
+        Resetter(std::function<void ()> const& rFunc)
+            : m_Func(rFunc)
+        {
+        }
+        ~Resetter()
+        {
+            try
+            {
+                m_Func();
+            }
+            catch (...) // has to be reliable
+            {
+                fprintf(stderr, "resetter failed with exception\n");
+                abort();
+            }
+        }
+    };
+
     virtual OUString getTestName() { return OUString(); }
 
 public:
@@ -197,7 +222,7 @@ protected:
         {
             maTempFile.EnableKillingFile(false);
             header();
-            preTest(filename);
+            std::unique_ptr<Resetter> const pChanges(preTest(filename));
             load(mpTestDocumentPath, filename);
             postTest(filename);
             verify();
@@ -215,7 +240,7 @@ protected:
     {
         maTempFile.EnableKillingFile(false);
         header();
-        preTest(filename);
+        std::unique_ptr<Resetter> const pChanges(preTest(filename));
         load(mpTestDocumentPath, filename);
         postLoad(filename);
         reload(mpFilter, filename);
@@ -235,7 +260,7 @@ protected:
     {
         maTempFile.EnableKillingFile(false);
         header();
-        preTest(filename);
+        std::unique_ptr<Resetter> const pChanges(preTest(filename));
         load(mpTestDocumentPath, filename);
         save(OUString::createFromAscii(mpFilter), maTempFile);
         maTempFile.EnableKillingFile(false);
@@ -263,8 +288,9 @@ protected:
     /**
      * Override this function if some special filename-specific setup is needed
      */
-    virtual void preTest(const char* /*filename*/)
+    virtual std::unique_ptr<Resetter> preTest(const char* /*filename*/)
     {
+        return nullptr;
     }
 
     /// Override this function if some special file-specific setup is needed during export test: after load, but before save.

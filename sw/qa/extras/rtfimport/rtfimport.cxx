@@ -66,27 +66,32 @@ public:
     {
     }
 
-    virtual void preTest(const char* filename) override
+    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         m_aSavedSettings = Application::GetSettings();
         if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf")
         {
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [this] () {
+                    Application::SetSettings(this->m_aSavedSettings);
+                }));
             AllSettings aSettings(m_aSavedSettings);
             aSettings.SetLanguageTag(LanguageTag("ru"));
             Application::SetSettings(aSettings);
+            return pResetter;
         }
         else if (OString(filename) == "fdo44211.rtf")
         {
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [this] () {
+                    Application::SetSettings(this->m_aSavedSettings);
+                }));
             AllSettings aSettings(m_aSavedSettings);
             aSettings.SetLanguageTag(LanguageTag("lt"));
             Application::SetSettings(aSettings);
+            return pResetter;
         }
-    }
-
-    virtual void postTest(const char* filename) override
-    {
-        if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf" || OString(filename) == "fdo44211.rtf")
-            Application::SetSettings(m_aSavedSettings);
+        return nullptr;
     }
 
 protected:

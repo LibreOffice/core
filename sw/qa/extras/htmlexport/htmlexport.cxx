@@ -41,7 +41,7 @@ private:
         return OString(filename) != "fdo62336.docx";
     }
 
-    void preTest(const char* filename) override
+    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         if (getTestName().indexOf("SkipImage") != -1)
             setFilterOptions("SkipImages");
@@ -50,22 +50,22 @@ private:
 
         if (OString(filename) == "charborder.odt")
         {
+
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
             SwGlobals::ensure(); // make sure that SW_MOD() is not 0
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [this] () {
+                    SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
+                    pPref->SetMetric(this->m_eUnit);
+                }));
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
             m_eUnit = pPref->GetMetric();
             pPref->SetMetric(FUNIT_CM);
+            return pResetter;
         }
+        return nullptr;
     }
 
-    void postTest(const char* filename) override
-    {
-        if (OString(filename) == "charborder.odt")
-        {
-            SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
-            pPref->SetMetric(m_eUnit);
-        }
-    }
 };
 
 #define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, HtmlExportTest)
