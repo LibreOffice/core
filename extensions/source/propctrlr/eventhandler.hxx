@@ -143,7 +143,7 @@ namespace pcr
                 Our introspectee is a form component
         */
         void    impl_getFormComponentScriptEvents_nothrow(
-                    css::uno::Sequence< css::script::ScriptEventDescriptor >& _out_rEvents
+                    std::vector< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const;
 
         /** returns the script events associated with our introspectee
@@ -153,7 +153,7 @@ namespace pcr
                 Our introspectee is a dialog element
         */
         void    impl_getDialogElementScriptEvents_nothrow(
-                    css::uno::Sequence< css::script::ScriptEventDescriptor >& _out_rEvents
+                    std::vector< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const;
 
         /** returns the script events associated with our introspectee
@@ -161,7 +161,7 @@ namespace pcr
                 Takes, the events currently associated with the introspectee
         */
         inline void impl_getComponentScriptEvents_nothrow(
-                    css::uno::Sequence< css::script::ScriptEventDescriptor >& _out_rEvents
+                    std::vector< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const
         {
             if ( m_bIsDialogElement )

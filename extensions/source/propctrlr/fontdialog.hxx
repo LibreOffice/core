@@ -58,7 +58,7 @@ namespace pcr
         */
         static void translateItemsToProperties(
             const SfxItemSet& _rSet,
-            css::uno::Sequence< css::beans::NamedValue >& _out_properties );
+            std::vector< css::beans::NamedValue >& _out_properties );
 
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;

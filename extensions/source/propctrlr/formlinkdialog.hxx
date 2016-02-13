@@ -61,10 +61,8 @@ namespace pcr
         css::uno::Reference< css::beans::XPropertySet >
                                         m_xMasterForm;
 
-        css::uno::Sequence< OUString >
-                                        m_aRelationDetailColumns;
-        css::uno::Sequence< OUString >
-                                        m_aRelationMasterColumns;
+        std::vector< OUString >         m_aRelationDetailColumns;
+        std::vector< OUString >         m_aRelationMasterColumns;
 
         OUString                 m_sDetailLabel;
         OUString                 m_sMasterLabel;
@@ -98,8 +96,8 @@ namespace pcr
         void        commitLinkPairs();
 
         void        initializeFieldRowsFrom(
-                        css::uno::Sequence< OUString >& _rDetailFields,
-                        css::uno::Sequence< OUString >& _rMasterFields
+                        std::vector< OUString >& _rDetailFields,
+                        std::vector< OUString >& _rMasterFields
                     );
 
         static OUString getFormDataSourceType(
@@ -126,8 +124,8 @@ namespace pcr
         static bool getExistingRelation(
                         const css::uno::Reference< css::beans::XPropertySet >& _rxLHS,
                         const css::uno::Reference< css::beans::XPropertySet >& _rxRHS,
-                        css::uno::Sequence< OUString >& /* [out] */ _rLeftFields,
-                        css::uno::Sequence< OUString >& /* [out] */ _rRightFields
+                        std::vector< OUString >& /* [out] */ _rLeftFields,
+                        std::vector< OUString >& /* [out] */ _rRightFields
                     );
     };
 

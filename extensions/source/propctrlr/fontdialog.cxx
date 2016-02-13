@@ -291,17 +291,16 @@ namespace pcr
 
     namespace
     {
-        void lcl_pushBackPropertyValue( Sequence< NamedValue >& _out_properties, const OUString& _name, const Any& _value )
+        void lcl_pushBackPropertyValue( std::vector< NamedValue >& _out_properties, const OUString& _name, const Any& _value )
         {
-            _out_properties.realloc( _out_properties.getLength() + 1 );
-            _out_properties[ _out_properties.getLength() - 1 ] = NamedValue( _name, _value );
+            _out_properties.push_back( NamedValue( _name, _value ) );
         }
     }
 
 
-    void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, Sequence< NamedValue >& _out_properties )
+    void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, std::vector< NamedValue >& _out_properties )
     {
-        _out_properties.realloc( 0 );
+        _out_properties.clear();
 
         try
         {
@@ -462,14 +461,12 @@ namespace pcr
         if ( !_rxModel.is())
             return;
 
-        Sequence< NamedValue > aPropertyValues;
+        std::vector< NamedValue > aPropertyValues;
         translateItemsToProperties( _rSet, aPropertyValues );
         try
         {
-            const NamedValue* propertyValue = aPropertyValues.getConstArray();
-            const NamedValue* propertyValueEnd = propertyValue + aPropertyValues.getLength();
-            for ( ; propertyValue != propertyValueEnd; ++propertyValue )
-                _rxModel->setPropertyValue( propertyValue->Name, propertyValue->Value );
+            for ( const NamedValue& rNV : aPropertyValues )
+                _rxModel->setPropertyValue( rNV.Name, rNV.Value );
         }
         catch( const Exception& )
         {

@@ -36,6 +36,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <rtl/string.hxx>
+#include <vector>
 
 class ResMgr;
 
@@ -69,13 +70,13 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
         static OString   s_sResPrefix;
 
         // auto registration administration
-        static  css::uno::Sequence< OUString >*
+        static  std::vector< OUString >*
             s_pImplementationNames;
-        static  css::uno::Sequence< css::uno::Sequence< OUString > >*
+        static  std::vector< css::uno::Sequence< OUString > >*
             s_pSupportedServices;
-        static  css::uno::Sequence< sal_Int64 >*
+        static  std::vector< cppu::ComponentInstantiation >*
             s_pCreationFunctionPointers;
-        static  css::uno::Sequence< sal_Int64 >*
+        static  std::vector< FactoryInstantiation >*
             s_pFactoryFunctionPointers;
 
     public:
