@@ -201,7 +201,6 @@ public:
     typedef std::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface >    ObjectMap;
     typedef std::unordered_set< Reference< XInterface >, HashReferenceXInterface >                          ObjectSet;
     typedef Sequence< Reference< XInterface > >                                                                 ObjectSequence;
-    typedef Sequence< Reference< XDrawPage > >                                                                  XDrawPageSequence;
 
     typedef std::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
     typedef std::unordered_map< OUString, UCharSet, OUStringHash >                                          UCharSetMap;
@@ -240,7 +239,7 @@ private:
     // #i124608# explicit ShapeSelection for export when export of the selection is wanted
     Reference< XShapes >                maShapeSelection;
     bool                                mbExportShapeSelection;
-    XDrawPageSequence                   mSelectedPages;
+    std::vector< Reference< XDrawPage > > mSelectedPages;
     std::vector< Reference< XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
@@ -264,7 +263,7 @@ private:
 
     bool                            implExportMasterPages( const std::vector< Reference< XDrawPage > >& rxPages,
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    void                            implExportDrawPages( const XDrawPageSequence& rxPages,
+    void                            implExportDrawPages( const std::vector< Reference< XDrawPage > >& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
     bool                            implExportPage( const OUString & sPageId,
                                                         const Reference< XDrawPage > & rxPage,
