@@ -163,6 +163,8 @@ public:
     MapMode         GetPrefMapMode() const;
     void            SetPrefMapMode( const MapMode& rPrefMapMode );
 
+    Size            GetPPI() const;
+
     Size            GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
 
     sal_uLong       GetSizeBytes() const;
