@@ -134,7 +134,7 @@ public:
     MapMode             GetPrefMapMode() const;
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
 
-    Size                GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
+    basegfx::B2DSize GetPPI() const;
 
     sal_uLong               GetSizeBytes() const;
 
