@@ -183,6 +183,7 @@ class SwRubyPortion : public SwMultiPortion
 {
     sal_Int32 nRubyOffset;
     sal_uInt16 nAdjustment;
+    SwFieldPortion *pRubyTextPortion;
     void _Adjust( SwTextFormatInfo &rInf);
 public:
     SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd );
@@ -193,6 +194,7 @@ public:
                    const bool* pForceRubyPos );
 
     void CalcRubyOffset();
+    SwFieldPortion *GetRubyTextPortion() { return pRubyTextPortion; }
     inline void Adjust( SwTextFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
     inline sal_uInt16 GetAdjustment() const { return nAdjustment; }

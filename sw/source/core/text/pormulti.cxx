@@ -536,7 +536,8 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
 SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     SwMultiPortion( nEnd ),
     nRubyOffset( rRuby.GetRubyOffset() ),
-    nAdjustment( rRuby.GetAdjustment() )
+    nAdjustment( rRuby.GetAdjustment() ),
+    pRubyTextPortion( nullptr )
 {
     SetDirection( rRuby.GetDirection() ),
     SetTop( rRuby.OnTop() );
@@ -550,6 +551,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                               sal_Int32 nEnd, sal_Int32 nOffs,
                               const bool* pForceRubyPos )
      : SwMultiPortion( nEnd )
+    ,pRubyTextPortion( nullptr )
 {
     SetRuby();
     OSL_ENSURE( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
@@ -574,7 +576,10 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         pRubyFont->SetDiffFnt( &rSet, &rIDocumentSettingAccess );
 
         // we do not allow a vertical font for the ruby text
-        pRubyFont->SetVertical( rFnt.GetOrientation() );
+        if( OnTop() )
+            pRubyFont->SetVertical( 0, true );
+        else
+            pRubyFont->SetVertical( rFnt.GetOrientation() );
     }
     else
         pRubyFont = nullptr;
@@ -585,7 +590,10 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     pField->SetFollow( true );
 
     if( OnTop() )
-        GetRoot().SetPortion( pField );
+    {
+        // GetRoot().SetPortion( pField );
+        pRubyTextPortion = pField ;
+    }
     else
     {
         GetRoot().SetNext( new SwLineLayout() );
@@ -1943,6 +1951,14 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         {
             static_cast<SwRubyPortion&>(rMulti).Adjust( rInf );
             static_cast<SwRubyPortion&>(rMulti).CalcRubyOffset();
+
+            SwFieldPortion *pField = static_cast<SwRubyPortion&>(rMulti).GetRubyTextPortion();
+            rMulti.Append( pField );
+            pField->Format( rInf );
+            sal_uInt16 nTmp = pField->Width();
+            pField->Width( pField->Height() );
+            pField->Height( nTmp );
+            pField->SetAscent( rInf.GetAscent() );
         }
     }
     if( rMulti.HasRotation() )
