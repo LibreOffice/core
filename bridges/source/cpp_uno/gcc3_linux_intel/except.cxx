@@ -47,7 +47,7 @@ void dummy_can_throw_anything( char const * )
 
 static OUString toUNOname( char const * p )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     char const * start = p;
 #endif
 
@@ -72,14 +72,14 @@ static OUString toUNOname( char const * p )
             buf.append( '.' );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     OUString ret( buf.makeStringAndClear() );
     OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
     return ret;
-#else
-    return buf.makeStringAndClear();
 #endif
+    return buf.makeStringAndClear();
+
 }
 
 class RTTI
@@ -153,9 +153,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
+                SAL_WARN("bridges.gcc3_linux_intel", "generated rtti for " << rttiName);
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
@@ -207,13 +205,11 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-#if OSL_DEBUG_LEVEL > 1
     OString cstr(
         OUStringToOString(
             OUString::unacquired( &pUnoExc->pType->pTypeName ),
             RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
-#endif
+    SAL_WARN("bridges.gcc3_linux_intel", "> uno exception occured: " << cstr.getStr());
     void * pCppExc;
     type_info * rtti;
 
@@ -276,10 +272,8 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-#if OSL_DEBUG_LEVEL > 1
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
-#endif
+    SAL_WARN("bridges.gcc3_linux_intel", "> c++ exception occured: " << cstr_unoName.getStr());
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (0 == pExcTypeDescr)
     {

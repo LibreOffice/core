@@ -50,7 +50,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
     static OUString toUNOname( char const * p )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if 0
         char const * start = p;
 #endif
 
@@ -75,14 +75,14 @@ namespace CPPU_CURRENT_NAMESPACE
                 buf.append( '.' );
         }
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
         OUString ret( buf.makeStringAndClear() );
         OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
         return ret;
-#else
-        return buf.makeStringAndClear();
 #endif
+        return buf.makeStringAndClear();
+
     }
 
     class RTTI
@@ -180,9 +180,7 @@ namespace CPPU_CURRENT_NAMESPACE
                     // return NULL;
 #endif
                     char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
+                    SAL_WARN("bridges.gcc3_linux_arm", "generated rtti for " << rttiName);
                     if (pTypeDescr->pBaseTypeDescription)
                     {
                         // ensure availability of base
@@ -232,13 +230,11 @@ namespace CPPU_CURRENT_NAMESPACE
 
     void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
-#if OSL_DEBUG_LEVEL > 1
         OString cstr(
             OUStringToOString(
                 OUString::unacquired( &pUnoExc->pType->pTypeName ),
                 RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
-#endif
+        SAL_WARN("bridges.gcc3_linux_arm", "> uno exception occurred: " << cstr.getStr());
         void * pCppExc;
         type_info * rtti;
 
@@ -313,10 +309,9 @@ namespace CPPU_CURRENT_NAMESPACE
 
         typelib_TypeDescription * pExcTypeDescr = 0;
         OUString unoName( toUNOname( header->exceptionType->name() ) );
-#if OSL_DEBUG_LEVEL > 1
         OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
-#endif
+        SAL_WARN("bridges.gcc3_linux_arm", "> c++ exception occured: " << cstr_unoName.getStr());
         typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
         if (0 == pExcTypeDescr)
         {

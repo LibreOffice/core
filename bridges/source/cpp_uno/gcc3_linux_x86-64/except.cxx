@@ -43,7 +43,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 static OUString toUNOname( char const * p )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     char const * start = p;
 #endif
 
@@ -68,14 +68,13 @@ static OUString toUNOname( char const * p )
             buf.append( '.' );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     OUString ret( buf.makeStringAndClear() );
     OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
     return ret;
-#else
-    return buf.makeStringAndClear();
 #endif
+    return buf.makeStringAndClear();
 }
 
 extern "C" {
@@ -96,13 +95,13 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-#if OSL_DEBUG_LEVEL > 1
+
     OString cstr(
         OUStringToOString(
             OUString::unacquired( &pUnoExc->pType->pTypeName ),
             RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
-#endif
+    SAL_WARN("bridges.gcc3_linux_x86-64", "> uno exception occured: " << cstr.getStr());
+
     void * pCppExc;
     type_info * rtti;
 
@@ -151,10 +150,8 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 
     typelib_TypeDescription * pExcTypeDescr = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-#if OSL_DEBUG_LEVEL > 1
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
-#endif
+    SAL_WARN("bridges.gcc3_linux_x86-64", "> c++ exception occured: " << cstr_unoName.getStr());
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (nullptr == pExcTypeDescr)
     {
