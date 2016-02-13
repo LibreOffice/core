@@ -58,7 +58,7 @@ SbiExprNode::SbiExprNode( const OUString& rVal ):
 {
 }
 
-SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprList* l ) :
+SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprListPtr l ) :
     pWithParent(nullptr),
     eNodeType(SbxVARVAL),
     eTok(NIL),
@@ -66,7 +66,7 @@ SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprList* l ) :
 {
     eType     = ( t == SbxVARIANT ) ? r.GetType() : t;
     aVar.pDef = const_cast<SbiSymDef*>(&r);
-    aVar.pPar = l;
+    aVar.pPar = l.release();
     aVar.pvMorePar = nullptr;
     aVar.pNext= nullptr;
 }
@@ -109,13 +109,7 @@ SbiExprNode::~SbiExprNode()
     {
         delete aVar.pPar;
         delete aVar.pNext;
-        SbiExprListVector* pvMorePar = aVar.pvMorePar;
-        if( pvMorePar )
-        {
-            for( const auto& pParam : *pvMorePar )
-                delete pParam;
-            delete pvMorePar;
-        }
+        delete aVar.pvMorePar;
     }
 }
 

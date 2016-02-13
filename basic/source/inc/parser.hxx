@@ -44,7 +44,7 @@ class SbiParser : public SbiTokenizer
     bool        bSingleLineIf;
     bool        bCodeCompleting;
 
-    SbiSymDef*  VarDecl( SbiExprList**, bool, bool );
+    SbiSymDef*  VarDecl( SbiExprListPtr*, bool, bool );
     SbiProcDef* ProcDecl(bool bDecl);
     void DefStatic( bool bPrivate );
     void DefProc( bool bStatic, bool bPrivate ); // read in procedure
