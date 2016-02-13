@@ -31,6 +31,7 @@
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/svgdata.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
@@ -134,7 +135,7 @@ public:
     MapMode             GetPrefMapMode() const;
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
 
-    Size                GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
+    basegfx::B2DSize GetPPI() const;
 
     sal_uLong               GetSizeBytes() const;
 

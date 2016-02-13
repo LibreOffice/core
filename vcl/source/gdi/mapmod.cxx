@@ -210,6 +210,52 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
     mpImplMapMode->maScaleY.ReduceInaccurate(32);
 }
 
+double MapMode::GetUnitMultiplier() const
+{
+    double  nMul;
+    switch ( GetMapUnit() )
+    {
+        case MAP_PIXEL :
+        case MAP_SYSFONT :
+        case MAP_APPFONT :
+
+        case MAP_100TH_MM :
+            nMul = 1;
+            break;
+        case MAP_10TH_MM :
+            nMul = 10;
+            break;
+        case MAP_MM :
+            nMul = 100;
+            break;
+        case MAP_CM :
+            nMul = 1000;
+            break;
+        case MAP_1000TH_INCH :
+            nMul = 2.54;
+            break;
+        case MAP_100TH_INCH :
+            nMul = 25.4;
+            break;
+        case MAP_10TH_INCH :
+            nMul = 254;
+            break;
+        case MAP_INCH :
+            nMul = 2540;
+            break;
+        case MAP_TWIP :
+            nMul = 1.76388889;
+            break;
+        case MAP_POINT :
+            nMul = 35.27777778;
+            break;
+        default:
+            nMul = 1.0;
+            break;
+    }
+    return nMul;
+}
+
 MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
