@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 // Return-value: a new instance, which were inserted and then deleted.
 // Array-Index were returned as SbiExprList
 
-SbiSymDef* SbiParser::VarDecl( SbiExprList** ppDim, bool bStatic, bool bConst )
+SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst )
 {
     bool bWithEvents = false;
     if( Peek() == WITHEVENTS )
@@ -50,7 +50,7 @@ SbiSymDef* SbiParser::VarDecl( SbiExprList** ppDim, bool bStatic, bool bConst )
     if( !TestSymbol() ) return nullptr;
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
-    SbiExprList* pDim = nullptr;
+    SbiExprListPtr pDim;
     // Brackets?
     if( Peek() == LPAREN )
     {
@@ -68,10 +68,9 @@ SbiSymDef* SbiParser::VarDecl( SbiExprList** ppDim, bool bStatic, bool bConst )
     {
         if(pDim->GetDims() )
             Error( ERRCODE_BASIC_EXPECTED, "()" );
-        delete pDim;
     }
     else if( ppDim )
-        *ppDim = pDim;
+        *ppDim = std::move(pDim);
     return pDef;
 }
 
@@ -294,7 +293,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
     }
     SbiSymDef* pDef;
-    SbiExprList* pDim;
+    SbiExprListPtr pDim;
 
     // #40689, Statics -> Modul-Initialising, skip in Sub
     sal_uInt32 nEndOfStaticLbl = 0;
@@ -430,14 +429,14 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                     aGen.Gen( _REDIMP_ERASE );
 
                     pDef->SetDims( pDim->GetDims() );
-                    SbiExpression aExpr2( this, *pDef, pDim );
+                    SbiExpression aExpr2( this, *pDef, std::move(pDim) );
                     aExpr2.Gen();
                     aGen.Gen( _DCREATE_REDIMP, pDef->GetId(), pDef->GetTypeId() );
                 }
                 else
                 {
                     pDef->SetDims( pDim->GetDims() );
-                    SbiExpression aExpr( this, *pDef, pDim );
+                    SbiExpression aExpr( this, *pDef, std::move(pDim) );
                     aExpr.Gen();
                     aGen.Gen( _DCREATE, pDef->GetId(), pDef->GetTypeId() );
                 }
@@ -462,7 +461,6 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 if( pDim )
                 {
                     Error( ERRCODE_BASIC_SYNTAX );
-                    delete pDim;
                 }
                 SbiExpression aVar( this, *pDef );
                 if( !TestToken( EQ ) )
@@ -510,7 +508,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 pDef->SetDims( pDim->GetDims() );
                 if( bPersistantGlobal )
                     pDef->SetGlobal( true );
-                SbiExpression aExpr( this, *pDef, pDim );
+                SbiExpression aExpr( this, *pDef, std::move(pDim) );
                 aExpr.Gen();
                 pDef->SetGlobal( false );
                 aGen.Gen( (eOp == _STATIC) ? _DIM : eOp );
@@ -588,12 +586,12 @@ void SbiParser::DefType( bool bPrivate )
 
     SbxObject *pType = new SbxObject(aSym);
 
-    std::unique_ptr<SbiSymDef> pElem;
-    SbiExprList* pDim = nullptr;
     bool bDone = false;
 
     while( !bDone && !IsEof() )
     {
+        std::unique_ptr<SbiSymDef> pElem;
+        SbiExprListPtr pDim;
         switch( Peek() )
         {
             case ENDTYPE :
@@ -675,8 +673,6 @@ void SbiParser::DefType( bool bPrivate )
                 }
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
             }
-            delete pDim, pDim = nullptr;
-            pElem.reset();
         }
     }
 
@@ -713,7 +709,6 @@ void SbiParser::DefEnum( bool bPrivate )
         pEnum->SetFlag( SbxFlagBits::Private );
     }
     SbiSymDef* pElem;
-    SbiExprList* pDim;
     bool bDone = false;
 
     // Starting with -1 to make first default value 0 after ++
@@ -736,8 +731,7 @@ void SbiParser::DefEnum( bool bPrivate )
 
             default:
             {
-                // TODO: Check existing!
-                pDim = nullptr;
+                SbiExprListPtr pDim;
                 pElem = VarDecl( &pDim, false, true );
                 if( !pElem )
                 {
@@ -746,7 +740,6 @@ void SbiParser::DefEnum( bool bPrivate )
                 }
                 else if( pDim )
                 {
-                    delete pDim;
                     Error( ERRCODE_BASIC_SYNTAX );
                     bDone = true;   // Error occurred
                     break;
