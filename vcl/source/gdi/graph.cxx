@@ -37,8 +37,8 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                              vcl::Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
-    sal_uInt16      nPixel = (sal_uInt16) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
-    sal_uInt16      nPixelWidth = nPixel;
+    sal_uInt16  nPixel = (sal_uInt16) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
+    sal_uInt16  nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
     bool        bFilled = ( pBitmap != nullptr || pBitmapEx != nullptr || pFont != nullptr );
@@ -405,6 +405,18 @@ void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     ImplTestRefCount();
     mpImpGraphic->ImplSetPrefMapMode( rPrefMapMode );
+}
+
+Size Graphic::GetPPI() const
+{
+    MapMode aMapMode = GetPrefMapMode();
+
+    float fWidthInches = ( GetPrefSize().Width() * aMapMode.GetUnitMultiplier() ) / 2540;
+    float fHeightInches = ( GetPrefSize().Height() * aMapMode.GetUnitMultiplier() ) / 2540;
+    float fPpiX = GetSizePixel().Width() / fWidthInches;
+    float fPpiY = GetSizePixel().Height() / fHeightInches;
+
+    return Size( fPpiX, fPpiY );
 }
 
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
