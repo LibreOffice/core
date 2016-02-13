@@ -31,6 +31,7 @@
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/svgdata.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
 
 enum GraphicType
@@ -162,6 +163,8 @@ public:
 
     MapMode         GetPrefMapMode() const;
     void            SetPrefMapMode( const MapMode& rPrefMapMode );
+
+    basegfx::B2DSize GetPPI() const;
 
     Size            GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
 
