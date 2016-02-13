@@ -35,6 +35,7 @@
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
@@ -316,22 +317,19 @@ namespace pcr
     }
 
 
-    void FormLinkDialog::initializeFieldRowsFrom( Sequence< OUString >& _rDetailFields, Sequence< OUString >& _rMasterFields )
+    void FormLinkDialog::initializeFieldRowsFrom( std::vector< OUString >& _rDetailFields, std::vector< OUString >& _rMasterFields )
     {
         // our UI does allow 4 fields max
-        _rDetailFields.realloc( 4 );
-        _rMasterFields.realloc( 4 );
-
-        const OUString* pDetailFields = _rDetailFields.getConstArray();
-        const OUString* pMasterFields = _rMasterFields.getConstArray();
+        _rDetailFields.resize( 4 );
+        _rMasterFields.resize( 4 );
 
         FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
         };
-        for ( sal_Int32 i = 0; i < 4; ++i, ++pDetailFields, ++pMasterFields )
+        for ( sal_Int32 i = 0; i < 4; ++i )
         {
-            aRows[ i ]->SetFieldName( FieldLinkRow::eDetailField, *pDetailFields );
-            aRows[ i ]->SetFieldName( FieldLinkRow::eMasterField, *pMasterFields );
+            aRows[ i ]->SetFieldName( FieldLinkRow::eDetailField, _rDetailFields[i] );
+            aRows[ i ]->SetFieldName( FieldLinkRow::eMasterField, _rMasterFields[i] );
         }
     }
 
@@ -350,7 +348,11 @@ namespace pcr
                 xDetailFormProps->getPropertyValue( PROPERTY_MASTERFIELDS ) >>= aMasterFields;
             }
 
-            initializeFieldRowsFrom( aDetailFields, aMasterFields );
+            std::vector< OUString > aDetailFields1;
+            comphelper::sequenceToContainer(aDetailFields1, aDetailFields);
+            std::vector< OUString > aMasterFields1;
+            comphelper::sequenceToContainer(aMasterFields1, aMasterFields);
+            initializeFieldRowsFrom( aDetailFields1, aMasterFields1 );
         }
         catch( const Exception& )
         {
@@ -516,7 +518,7 @@ namespace pcr
 
     bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
             // TODO: fix the usage of _rxRHS. This is issue #i81956#.
-        Sequence< OUString >& _rLeftFields, Sequence< OUString >& _rRightFields )
+        std::vector< OUString >& _rLeftFields, std::vector< OUString >& _rRightFields )
     {
         try
         {
@@ -552,8 +554,8 @@ namespace pcr
                         continue;
 
                     const sal_Int32 columnCount = xKeyColumns->getCount();
-                    _rLeftFields.realloc( columnCount );
-                    _rRightFields.realloc( columnCount );
+                    _rLeftFields.resize( columnCount );
+                    _rRightFields.resize( columnCount );
                     for ( sal_Int32 column = 0; column < columnCount; ++column )
                     {
                         xKeyColumn.clear();
@@ -576,7 +578,7 @@ namespace pcr
             OSL_FAIL( "FormLinkDialog::getExistingRelation: caught an exception!" );
         }
 
-        return ( _rLeftFields.getLength() > 0 ) && ( !_rLeftFields[ 0 ].isEmpty() );
+        return ( !_rLeftFields.empty() ) && ( !_rLeftFields[ 0 ].isEmpty() );
     }
 
 
@@ -626,15 +628,15 @@ namespace pcr
             }
 
             // only enable the button if there is a relation between both tables
-            m_aRelationDetailColumns.realloc( 0 );
-            m_aRelationMasterColumns.realloc( 0 );
+            m_aRelationDetailColumns.clear();
+            m_aRelationMasterColumns.clear();
             if ( bEnable )
             {
                 bEnable = getExistingRelation( xDetailTable, xMasterTable, m_aRelationDetailColumns, m_aRelationMasterColumns );
-                SAL_WARN_IF( m_aRelationMasterColumns.getLength() != m_aRelationDetailColumns.getLength(),
+                SAL_WARN_IF( m_aRelationMasterColumns.size() != m_aRelationDetailColumns.size(),
                     "extensions.propctrlr",
                     "FormLinkDialog::initializeSuggest: nonsense!" );
-                if ( m_aRelationMasterColumns.getLength() == 0 )
+                if ( m_aRelationMasterColumns.empty() )
                 {   // okay, there is no relation "pointing" (via a foreign key) from the detail table to the master table
                     // but perhaps the other way round (would make less sense, but who knows ...)
                     bEnable = getExistingRelation( xMasterTable, xDetailTable, m_aRelationMasterColumns, m_aRelationDetailColumns );
@@ -644,7 +646,7 @@ namespace pcr
             // only enable the button if the relation contains at most 4 field pairs
             if ( bEnable )
             {
-                bEnable = ( m_aRelationMasterColumns.getLength() <= 4 );
+                bEnable = ( m_aRelationMasterColumns.size() <= 4 );
             }
 
             m_pSuggest->Enable( bEnable );

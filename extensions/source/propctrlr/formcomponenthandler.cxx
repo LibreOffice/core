@@ -277,9 +277,8 @@ namespace pcr
                 const OUString* pStrings = aStrings.getConstArray();
                 sal_Int32 nCount = aStrings.getLength();
 
-                Sequence< OUString > aResolvedStrings;
-                aResolvedStrings.realloc( nCount );
-                OUString* pResolvedStrings = aResolvedStrings.getArray();
+                std::vector< OUString > aResolvedStrings;
+                aResolvedStrings.resize( nCount );
                 try
                 {
                     for ( sal_Int32 i = 0; i < nCount; ++i )
@@ -287,14 +286,14 @@ namespace pcr
                         OUString aIdStr = pStrings[i];
                         OUString aPureIdStr = aIdStr.copy( 1 );
                         if( xStringResourceResolver->hasEntryForId( aPureIdStr ) )
-                            pResolvedStrings[i] = xStringResourceResolver->resolveString( aPureIdStr );
+                            aResolvedStrings[i] = xStringResourceResolver->resolveString( aPureIdStr );
                         else
-                            pResolvedStrings[i] = aIdStr;
+                            aResolvedStrings[i] = aIdStr;
                     }
                 }
                 catch( const resource::MissingResourceException & )
                 {}
-                aPropertyValue <<= aResolvedStrings;
+                aPropertyValue <<= comphelper::containerToSequence(aResolvedStrings);
             }
         }
         else
@@ -2873,9 +2872,9 @@ namespace pcr
                 const SfxItemSet* pOut = aDlg->GetOutputItemSet();
                 if ( pOut )
                 {
-                    Sequence< NamedValue > aFontPropertyValues;
+                    std::vector< NamedValue > aFontPropertyValues;
                     ControlCharacterDialog::translateItemsToProperties( *pOut, aFontPropertyValues );
-                    _out_rNewValue <<= aFontPropertyValues;
+                    _out_rNewValue <<= comphelper::containerToSequence(aFontPropertyValues);
                     bSuccess = true;
                 }
             }

@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -668,7 +669,7 @@ UpdateInformationProvider::getUpdateInformation(
         getUpdateInformationEnumeration(repositories, extensionId)
     );
 
-    uno::Sequence< uno::Reference< xml::dom::XElement > > aRet;
+    std::vector< uno::Reference< xml::dom::XElement > > aRet;
 
     if( xEnumeration.is() )
     {
@@ -679,9 +680,7 @@ UpdateInformationProvider::getUpdateInformation(
                 deployment::UpdateInformationEntry aEntry;
                 if( (xEnumeration->nextElement() >>= aEntry ) && aEntry.UpdateDocument.is() )
                 {
-                    sal_Int32 n = aRet.getLength();
-                    aRet.realloc(n + 1);
-                    aRet[n] = aEntry.UpdateDocument;
+                    aRet.push_back(aEntry.UpdateDocument);
                 }
             }
 
@@ -698,7 +697,7 @@ UpdateInformationProvider::getUpdateInformation(
         }
     }
 
-    return aRet;
+    return comphelper::containerToSequence(aRet);
 }
 
 

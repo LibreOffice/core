@@ -140,10 +140,10 @@ namespace COMPMOD_NAMESPACE
     //- registration helper
 
 
-    Sequence< OUString >*                OModule::s_pImplementationNames = nullptr;
-    Sequence< Sequence< OUString > >*    OModule::s_pSupportedServices = nullptr;
-    Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = nullptr;
-    Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = nullptr;
+    std::vector< OUString >*                OModule::s_pImplementationNames = nullptr;
+    std::vector< Sequence< OUString > >*    OModule::s_pSupportedServices = nullptr;
+    std::vector< ComponentInstantiation >*  OModule::s_pCreationFunctionPointers = nullptr;
+    std::vector< FactoryInstantiation >*    OModule::s_pFactoryFunctionPointers = nullptr;
 
 
     void OModule::registerComponent(
@@ -156,29 +156,23 @@ namespace COMPMOD_NAMESPACE
         {
             OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
                 "OModule::registerComponent : inconsistent state (the pointers (1)) !");
-            s_pImplementationNames = new Sequence< OUString >;
-            s_pSupportedServices = new Sequence< Sequence< OUString > >;
-            s_pCreationFunctionPointers = new Sequence< sal_Int64 >;
-            s_pFactoryFunctionPointers = new Sequence< sal_Int64 >;
+            s_pImplementationNames = new std::vector< OUString >;
+            s_pSupportedServices = new std::vector< Sequence< OUString > >;
+            s_pCreationFunctionPointers = new std::vector< ComponentInstantiation >;
+            s_pFactoryFunctionPointers = new std::vector< FactoryInstantiation >;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::registerComponent : inconsistent state (the pointers (2)) !");
 
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->size() == s_pSupportedServices->size())
+                    &&  (s_pImplementationNames->size() == s_pCreationFunctionPointers->size())
+                    &&  (s_pImplementationNames->size() == s_pFactoryFunctionPointers->size()),
             "OModule::registerComponent : inconsistent state !");
 
-        sal_Int32 nOldLen = s_pImplementationNames->getLength();
-        s_pImplementationNames->realloc(nOldLen + 1);
-        s_pSupportedServices->realloc(nOldLen + 1);
-        s_pCreationFunctionPointers->realloc(nOldLen + 1);
-        s_pFactoryFunctionPointers->realloc(nOldLen + 1);
-
-        s_pImplementationNames->getArray()[nOldLen] = _rImplementationName;
-        s_pSupportedServices->getArray()[nOldLen] = _rServiceNames;
-        s_pCreationFunctionPointers->getArray()[nOldLen] = reinterpret_cast<sal_Int64>(_pCreateFunction);
-        s_pFactoryFunctionPointers->getArray()[nOldLen] = reinterpret_cast<sal_Int64>(_pFactoryFunction);
+        s_pImplementationNames->push_back(_rImplementationName);
+        s_pSupportedServices->push_back(_rServiceNames);
+        s_pCreationFunctionPointers->push_back(_pCreateFunction);
+        s_pFactoryFunctionPointers->push_back(_pFactoryFunction);
     }
 
 
@@ -191,26 +185,25 @@ namespace COMPMOD_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::revokeComponent : inconsistent state (the pointers) !");
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->size() == s_pSupportedServices->size())
+                    &&  (s_pImplementationNames->size() == s_pCreationFunctionPointers->size())
+                    &&  (s_pImplementationNames->size() == s_pFactoryFunctionPointers->size()),
             "OModule::revokeComponent : inconsistent state !");
 
-        sal_Int32 nLen = s_pImplementationNames->getLength();
-        const OUString* pImplNames = s_pImplementationNames->getConstArray();
-        for (sal_Int32 i=0; i<nLen; ++i, ++pImplNames)
+        sal_Int32 nLen = s_pImplementationNames->size();
+        for (sal_Int32 i=0; i<nLen; ++i)
         {
-            if (pImplNames->equals(_rImplementationName))
+            if ((*s_pImplementationNames)[i] == _rImplementationName)
             {
-                removeElementAt(*s_pImplementationNames, i);
-                removeElementAt(*s_pSupportedServices, i);
-                removeElementAt(*s_pCreationFunctionPointers, i);
-                removeElementAt(*s_pFactoryFunctionPointers, i);
+                s_pImplementationNames->erase(s_pImplementationNames->begin() + i);
+                s_pSupportedServices->erase(s_pSupportedServices->begin() + i);
+                s_pCreationFunctionPointers->erase(s_pCreationFunctionPointers->begin() + i);
+                s_pFactoryFunctionPointers->erase(s_pFactoryFunctionPointers->begin() + i);
                 break;
             }
         }
 
-        if (s_pImplementationNames->getLength() == 0)
+        if (s_pImplementationNames->empty())
         {
             delete s_pImplementationNames; s_pImplementationNames = nullptr;
             delete s_pSupportedServices; s_pSupportedServices = nullptr;
@@ -234,35 +227,33 @@ namespace COMPMOD_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::getComponentFactory : inconsistent state (the pointers) !");
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE( (s_pImplementationNames->size() == s_pSupportedServices->size())
+                    &&  (s_pImplementationNames->size() == s_pCreationFunctionPointers->size())
+                    &&  (s_pImplementationNames->size() == s_pFactoryFunctionPointers->size()),
             "OModule::getComponentFactory : inconsistent state !");
 
 
         Reference< XInterface > xReturn;
 
 
-        sal_Int32 nLen = s_pImplementationNames->getLength();
-        const OUString* pImplName = s_pImplementationNames->getConstArray();
-        const Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
-        const sal_Int64* pComponentFunction = s_pCreationFunctionPointers->getConstArray();
-        const sal_Int64* pFactoryFunction = s_pFactoryFunctionPointers->getConstArray();
+        sal_Int32 nLen = s_pImplementationNames->size();
 
-        for (sal_Int32 i=0; i<nLen; ++i, ++pImplName, ++pServices, ++pComponentFunction, ++pFactoryFunction)
+        for (sal_Int32 i=0; i<nLen; ++i)
         {
-            if (pImplName->equals(_rImplementationName))
+            if ((*s_pImplementationNames)[i] == _rImplementationName)
             {
-                const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<const FactoryInstantiation>(*pFactoryFunction);
-                const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<const ComponentInstantiation>(*pComponentFunction);
+                const FactoryInstantiation FactoryInstantiationFunction = (*s_pFactoryFunctionPointers)[i];
 
-                xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, nullptr);
+                xReturn = FactoryInstantiationFunction( _rxServiceManager, _rImplementationName,
+                    (*s_pCreationFunctionPointers)[i],
+                    (*s_pSupportedServices)[i], nullptr);
                 if (xReturn.is())
                 {
                     xReturn->acquire();
                     return xReturn.get();
                 }
             }
+            return nullptr;
         }
 
         return nullptr;
