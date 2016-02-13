@@ -35,7 +35,8 @@ class SbiProcDef;
 
 
 #include <vector>
-typedef ::std::vector<SbiExprList*> SbiExprListVector;
+typedef ::std::unique_ptr<SbiExprList> SbiExprListPtr;
+typedef ::std::vector<SbiExprListPtr> SbiExprListVector;
 
 struct SbVar {
     SbiExprNode*        pNext;      // next element (for structures)
@@ -120,7 +121,7 @@ public:
     SbiExprNode();
     SbiExprNode( double, SbxDataType );
     SbiExprNode( const OUString& );
-    SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprList* = nullptr );
+    SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprListPtr = nullptr );
     SbiExprNode( SbiExprNode*, SbiToken, SbiExprNode* );
     SbiExprNode( SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
     SbiExprNode( sal_uInt16 );                  // new <type>
@@ -186,7 +187,7 @@ public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
         SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr ); // parsing Ctor
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
-    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = nullptr );
+    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprListPtr = nullptr );
    ~SbiExpression();
     OUString& GetName()             { return aArgName;            }
     void SetBased()                 { bBased = true;              }
@@ -224,8 +225,8 @@ class SbiExprList final {            // class for parameters and dims
 public:
     SbiExprList();
     ~SbiExprList();
-    static SbiExprList* ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
-    static SbiExprList* ParseDimList( SbiParser* );
+    static SbiExprListPtr ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
+    static SbiExprListPtr ParseDimList( SbiParser* );
     bool  IsBracket()               { return bBracket;        }
     bool  IsValid()                 { return !bError; }
     short GetSize()                 { return aData.size();    }
