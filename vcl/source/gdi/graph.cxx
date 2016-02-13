@@ -37,8 +37,8 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                              vcl::Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
-    sal_uInt16      nPixel = (sal_uInt16) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
-    sal_uInt16      nPixelWidth = nPixel;
+    sal_uInt16  nPixel = (sal_uInt16) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
+    sal_uInt16  nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
     bool        bFilled = ( pBitmap != NULL || pBitmapEx != NULL || pFont != NULL );
@@ -422,6 +422,28 @@ void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     ImplTestRefCount();
     mpImpGraphic->ImplSetPrefMapMode( rPrefMapMode );
+}
+
+basegfx::B2DSize Graphic::GetPPI() const
+{
+    MapMode aMapMode = GetPrefMapMode();
+
+    double fWidthInches = ( GetPrefSize().Width() * aMapMode.GetUnitMultiplier() ) / 2540;
+    double fHeightInches = ( GetPrefSize().Height() * aMapMode.GetUnitMultiplier() ) / 2540;
+    double fPpiX = 0;
+    double fPpiY = 0;
+
+    if ( fWidthInches > 0 || fHeightInches > 0 ) // we don't want a divide by 0 situation
+    {
+        fPpiX = GetSizePixel().Width() / fWidthInches;
+        fPpiY = GetSizePixel().Height() / fHeightInches;
+    }
+    else
+    {
+        SAL_WARN("vcl", "PPI X is " << fPpiX << " and PPI Y is " << fPpiY << ": thus we are making this 0 DPI. This is unlikely.");
+    }
+
+    return basegfx::B2DSize( fPpiX, fPpiY );
 }
 
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const

@@ -224,7 +224,6 @@ private:
     inline void         ImplWriteTextColor( sal_uLong nMode = PS_RET );
     void                ImplWriteColor( sal_uLong nMode );
 
-    static double       ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
     static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
     static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
@@ -2324,60 +2323,10 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
-
-
-double PSWriter::ImplGetScaling( const MapMode& rMapMode )
-{
-    double  nMul;
-    switch ( rMapMode.GetMapUnit() )
-    {
-        case MAP_PIXEL :
-        case MAP_SYSFONT :
-        case MAP_APPFONT :
-
-        case MAP_100TH_MM :
-            nMul = 1;
-            break;
-        case MAP_10TH_MM :
-            nMul = 10;
-            break;
-        case MAP_MM :
-            nMul = 100;
-            break;
-        case MAP_CM :
-            nMul = 1000;
-            break;
-        case MAP_1000TH_INCH :
-            nMul = 2.54;
-            break;
-        case MAP_100TH_INCH :
-            nMul = 25.4;
-            break;
-        case MAP_10TH_INCH :
-            nMul = 254;
-            break;
-        case MAP_INCH :
-            nMul = 2540;
-            break;
-        case MAP_TWIP :
-            nMul = 1.76388889;
-            break;
-        case MAP_POINT :
-            nMul = 35.27777778;
-            break;
-        default:
-            nMul = 1.0;
-            break;
-    }
-    return nMul;
-}
-
-
-
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
-    double fMul = ImplGetScaling( rMapMode );
+    double fMul = rMapMode.GetUnitMultiplier();
     double fScaleX = (double)rMapMode.GetScaleX() * fMul;
     double fScaleY = (double)rMapMode.GetScaleY() * fMul;
     ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
