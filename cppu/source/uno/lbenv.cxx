@@ -1108,10 +1108,7 @@ static uno_Environment * initDefaultEnvironment(
     else
     {
         // late init with some code from matching uno language binding
-        ::rtl::OUStringBuffer aLibName( 16 );
-        aLibName.append( envTypeName );
-        aLibName.append( "_uno" );
-        OUString aStr( aLibName.makeStringAndClear() );
+        OUString aStr( envTypeName + "_uno" );
 
         if (!loadEnv(aStr, pEnv))
         {

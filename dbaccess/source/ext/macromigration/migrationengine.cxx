@@ -991,7 +991,7 @@ namespace dbmm
         {
             const OUString sHierarhicalBase(
                 _rContainerLoc.isEmpty() ? OUString() :
-                                           OUStringBuffer( _rContainerLoc ).append( "/" ).makeStringAndClear());
+                                           OUString( _rContainerLoc +  "/" ) );
 
             Sequence< OUString > aElementNames( _rxContainer->getElementNames() );
             for (   const OUString* elementName = aElementNames.getConstArray();
