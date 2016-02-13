@@ -215,7 +215,6 @@ private:
     inline void         ImplWriteTextColor( sal_uLong nMode = PS_RET );
     void                ImplWriteColor( sal_uLong nMode );
 
-    static double       ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
     static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
     static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
@@ -2197,6 +2196,7 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
     ImplExecMode( nMode );
 }
 
+
 double PSWriter::ImplGetScaling( const MapMode& rMapMode )
 {
     double  nMul;
@@ -2243,10 +2243,11 @@ double PSWriter::ImplGetScaling( const MapMode& rMapMode )
     return nMul;
 }
 
+
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
-    double fMul = ImplGetScaling( rMapMode );
+    double fMul = rMapMode.GetUnitMultiplier();
     double fScaleX = (double)rMapMode.GetScaleX() * fMul;
     double fScaleY = (double)rMapMode.GetScaleY() * fMul;
     ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
