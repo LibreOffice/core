@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_42865bba",
+        "filename": "sw/source/ui/fldui/fldref.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-02-13T09:25:11Z",
+      "side": 1,
+      "message": "Useless. Makes no sense.. removing it in next patch",
+      "range": {
+        "startLine": 435,
+        "startChar": 8,
+        "endLine": 435,
+        "endChar": 31
+      },
+      "revId": "86795363728543bacc5c0fc833de43a7b0557f6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
