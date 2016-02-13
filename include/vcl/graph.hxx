@@ -63,7 +63,7 @@ public:
 
     virtual         ~GraphicReader();
 
-    const OUString&   GetUpperFilterName() const { return maUpperName; }
+    const OUString& GetUpperFilterName() const { return maUpperName; }
 
     // TODO: when incompatible changes are possible again
     // the preview size hint should be redone
@@ -78,10 +78,10 @@ private:
     Size            maSizePixel;            // default is (0,0)
 
     // bitfield
-    bool mbUnlimitedSize : 1;    // default is false
-    bool mbAntiAliase : 1;       // default is false
-    bool mbSnapHorVerLines : 1;  // default is false
-    bool mbScaleHighQuality : 1; // default is false
+    bool            mbUnlimitedSize : 1;    // default is false
+    bool            mbAntiAliase : 1;       // default is false
+    bool            mbSnapHorVerLines : 1;  // default is false
+    bool            mbScaleHighQuality : 1; // default is false
 
 public:
     GraphicConversionParameters(
@@ -99,45 +99,45 @@ public:
     }
 
     // data read access
-    const Size getSizePixel() const { return maSizePixel; }
-    bool getUnlimitedSize() const { return mbUnlimitedSize; }
-    bool getAntiAliase() const { return mbAntiAliase; }
-    bool getSnapHorVerLines() const { return mbSnapHorVerLines; }
-    bool getScaleHighQuality() const { return mbScaleHighQuality; }
+    const Size      getSizePixel() const { return maSizePixel; }
+    bool            getUnlimitedSize() const { return mbUnlimitedSize; }
+    bool            getAntiAliase() const { return mbAntiAliase; }
+    bool            getSnapHorVerLines() const { return mbSnapHorVerLines; }
+    bool            getScaleHighQuality() const { return mbScaleHighQuality; }
 };
 
 class VCL_DLLPUBLIC Graphic : public SvDataCopyStream
 {
 private:
 
-    ImpGraphic*         mpImpGraphic;
+    ImpGraphic*    mpImpGraphic;
 
 public:
 
-    SAL_DLLPRIVATE void         ImplTestRefCount();
-    SAL_DLLPRIVATE ImpGraphic*  ImplGetImpGraphic() const { return mpImpGraphic; }
+    SAL_DLLPRIVATE void ImplTestRefCount();
+    SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mpImpGraphic; }
 
 public:
-                        Graphic();
-                        Graphic( const Graphic& rGraphic );
-                        Graphic( const Bitmap& rBmp );
-                        Graphic( const BitmapEx& rBmpEx );
-                        Graphic( const SvgDataPtr& rSvgDataPtr );
-                        Graphic( const Animation& rAnimation );
-                        Graphic( const GDIMetaFile& rMtf );
-                        Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
-    virtual             ~Graphic();
+                    Graphic();
+                    Graphic( const Graphic& rGraphic );
+                    Graphic( const Bitmap& rBmp );
+                    Graphic( const BitmapEx& rBmpEx );
+                    Graphic( const SvgDataPtr& rSvgDataPtr );
+                    Graphic( const Animation& rAnimation );
+                    Graphic( const GDIMetaFile& rMtf );
+                    Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
+    virtual         ~Graphic();
 
-    Graphic&            operator=( const Graphic& rGraphic );
-    bool                operator==( const Graphic& rGraphic ) const;
-    bool                operator!=( const Graphic& rGraphic ) const;
-    bool                operator!() const;
+    Graphic&        operator=( const Graphic& rGraphic );
+    bool            operator==( const Graphic& rGraphic ) const;
+    bool            operator!=( const Graphic& rGraphic ) const;
+    bool            operator!() const;
 
-    void                Clear();
+    void            Clear();
 
-    GraphicType         GetType() const;
-    void                SetDefaultType();
-    bool                IsSupportedGraphic() const;
+    GraphicType     GetType() const;
+    void            SetDefaultType();
+    bool            IsSupportedGraphic() const;
 
     bool            IsTransparent() const;
     bool            IsAlpha() const;
@@ -149,75 +149,76 @@ public:
     // allow giving parameters which control AntiAliasing and LineSnapping of the
     // MetaFile when played. Defaults will use a no-AAed, not snapped conversion as
     // before.
-    Bitmap              GetBitmap(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
-    BitmapEx            GetBitmapEx(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
+    Bitmap          GetBitmap(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
+    BitmapEx        GetBitmapEx(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
 
-    Animation               GetAnimation() const;
-    const GDIMetaFile&      GetGDIMetaFile() const;
+    Animation       GetAnimation() const;
+    const GDIMetaFile& GetGDIMetaFile() const;
 
     css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
-    Size                GetPrefSize() const;
-    void                SetPrefSize( const Size& rPrefSize );
+    Size            GetPrefSize() const;
+    void            SetPrefSize( const Size& rPrefSize );
 
-    MapMode             GetPrefMapMode() const;
-    void                SetPrefMapMode( const MapMode& rPrefMapMode );
+    MapMode         GetPrefMapMode() const;
+    void            SetPrefMapMode( const MapMode& rPrefMapMode );
 
-    Size                GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
+    Size            GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
 
-    sal_uLong               GetSizeBytes() const;
+    sal_uLong       GetSizeBytes() const;
 
-    void                Draw( OutputDevice* pOutDev,
-                              const Point& rDestPt ) const;
-    void                Draw( OutputDevice* pOutDev,
-                              const Point& rDestPt,
-                              const Size& rDestSize ) const;
-    static void         DrawEx( OutputDevice* pOutDev, const OUString& rText,
-                              vcl::Font& rFont, const BitmapEx& rBitmap,
-                              const Point& rDestPt, const Size& rDestSize );
+    void            Draw( OutputDevice* pOutDev,
+                          const Point& rDestPt ) const;
+    void            Draw( OutputDevice* pOutDev,
+                          const Point& rDestPt,
+                          const Size& rDestSize ) const;
+    static void     DrawEx( OutputDevice* pOutDev, const OUString& rText,
+                          vcl::Font& rFont, const BitmapEx& rBitmap,
+                          const Point& rDestPt, const Size& rDestSize );
 
-    void                StartAnimation( OutputDevice* pOutDev,
-                                        const Point& rDestPt,
-                                        const Size& rDestSize,
-                                        long nExtraData = 0L,
-                                        OutputDevice* pFirstFrameOutDev = nullptr );
-    void                StopAnimation( OutputDevice* pOutputDevice = nullptr,
-                                       long nExtraData = 0L );
+    void            StartAnimation( OutputDevice* pOutDev,
+                          const Point& rDestPt,
+                          const Size& rDestSize,
+                          long nExtraData = 0L,
+                          OutputDevice* pFirstFrameOutDev = nullptr );
+    void            StopAnimation( OutputDevice* pOutputDevice = nullptr,
+                          long nExtraData = 0L );
 
-    void                SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
-    Link<Animation*,void>  GetAnimationNotifyHdl() const;
+    void            SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
+    Link<Animation*,void> GetAnimationNotifyHdl() const;
 
-    sal_uLong           GetAnimationLoopCount() const;
+    sal_uLong       GetAnimationLoopCount() const;
 
-    BitmapChecksum      GetChecksum() const;
+    BitmapChecksum  GetChecksum() const;
 
 public:
 
-    GraphicReader*      GetContext();
-    void                SetContext( GraphicReader* pReader );
+    GraphicReader*  GetContext();
+    void            SetContext( GraphicReader* pReader );
 
 private:
     friend class GraphicObject;
-    bool                SwapOut();
-    void                SwapOutAsLink();
-    bool                SwapOut( SvStream* pOStm );
-    bool                SwapIn();
-    bool                SwapIn( SvStream* pIStm );
-    bool                IsSwapOut() const;
+
+    bool            SwapOut();
+    void            SwapOutAsLink();
+    bool            SwapOut( SvStream* pOStm );
+    bool            SwapIn();
+    bool            SwapIn( SvStream* pIStm );
+    bool            IsSwapOut() const;
 
 public:
-    void                SetLink( const GfxLink& );
-    GfxLink             GetLink() const;
-    bool                IsLink() const;
+    void            SetLink( const GfxLink& );
+    GfxLink         GetLink() const;
+    bool            IsLink() const;
 
-    bool                ExportNative( SvStream& rOStream ) const;
+    bool            ExportNative( SvStream& rOStream ) const;
 
-    friend VCL_DLLPUBLIC SvStream&    WriteGraphic( SvStream& rOStream, const Graphic& rGraphic );
-    friend VCL_DLLPUBLIC SvStream&    ReadGraphic( SvStream& rIStream, Graphic& rGraphic );
+    friend VCL_DLLPUBLIC SvStream& WriteGraphic( SvStream& rOStream, const Graphic& rGraphic );
+    friend VCL_DLLPUBLIC SvStream& ReadGraphic( SvStream& rIStream, Graphic& rGraphic );
 
 public:
 
-    const SvgDataPtr&   getSvgData() const;
+    const SvgDataPtr& getSvgData() const;
 
     static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 };
