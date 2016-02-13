@@ -167,12 +167,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 
     m_pJavaList->SvSimpleTable::SetTabs( aStaticTabs );
 
-    OUStringBuffer sHeader;
-    sHeader.append("\t").append(get<FixedText>("vendor")->GetText())
-        .append("\t").append(get<FixedText>("version")->GetText())
-        .append("\t").append(get<FixedText>("features")->GetText())
-        .append("\t");
-    m_pJavaList->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HeaderBarItemBits::LEFT);
+    OUString sHeader ( "\t" + get<FixedText>("vendor")->GetText() +
+        "\t" + get<FixedText>("version")->GetText() +
+        "\t" + get<FixedText>("features")->GetText() +
+        "\t" );
+    m_pJavaList->InsertHeaderEntry(sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT);
     m_pJavaList->setColSizes();
 
     m_pJavaEnableCB->SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
