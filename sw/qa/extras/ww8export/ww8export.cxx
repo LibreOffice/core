@@ -23,7 +23,9 @@
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
+#include <grfatr.hxx>
 #include <pagedesc.hxx>
+#include <ndgrf.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -565,6 +567,24 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
     Desc = pTextDoc->GetDocShell()->GetDoc()->GetPageDesc( 3 );
     nVA = Desc.GetVerticalAdjustment();
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BLOCK, nVA );
+}
+
+DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    for (int n = 0; ; n++)
+    {
+        SwNode* pNode = pDoc->GetNodes()[ n ];
+        if (SwGrfNode *pGrfNode = pNode->GetGrfNode())
+        {
+            CPPUNIT_ASSERT(pGrfNode->GetSwAttrSet().GetMirrorGrf().GetValue() == 3);
+            break;
+        }
+    }
 }
 
 DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
