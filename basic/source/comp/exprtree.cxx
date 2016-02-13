@@ -63,14 +63,14 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     pExpr->Optimize(pParser);
 }
 
-SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPar )
+SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprListPtr pPar )
 {
     pParser = p;
     bBased = bError = bByVal = bBracket = false;
     nParenLevel = 0;
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
-    pExpr = o3tl::make_unique<SbiExprNode>( r, SbxVARIANT, pPar );
+    pExpr = o3tl::make_unique<SbiExprNode>( r, SbxVARIANT, std::move(pPar) );
 }
 
 SbiExpression::~SbiExpression() { }
@@ -197,7 +197,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     pParser->LockColumn();
     OUString aSym( (pKeywordSymbolInfo == nullptr) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
     SbxDataType eType = (pKeywordSymbolInfo == nullptr) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
-    SbiExprList* pPar = nullptr;
+    SbiExprListPtr pPar;
     SbiExprListVector* pvMoreParLcl = nullptr;
     // are there parameters following?
     SbiToken eNextTok = pParser->Peek();
@@ -233,8 +233,8 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             {
                 pvMoreParLcl = new SbiExprListVector();
             }
-            SbiExprList* pAddPar = SbiExprList::ParseParameters( pParser );
-            pvMoreParLcl->push_back( pAddPar );
+            SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
+            pvMoreParLcl->push_back( std::move(pAddPar) );
             bError = bError || !pAddPar->IsValid();
             eTok = pParser->Peek();
         }
@@ -281,7 +281,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         {
             eType = SbxOBJECT;
         }
-        pDef = AddSym( eTok, *pParser->pPool, eCurExpr, aSym, eType, pPar );
+        pDef = AddSym( eTok, *pParser->pPool, eCurExpr, aSym, eType, pPar.get() );
         // Looks like this is a local ( but undefined variable )
         // if it is in a static procedure then make this Symbol
         // static
@@ -296,7 +296,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         SbiConstDef* pConst = pDef->GetConstDef();
         if( pConst )
         {
-            delete pPar;
+            pPar = nullptr;
             delete pvMoreParLcl;
             if( pConst->GetType() == SbxSTRING )
             {
@@ -360,7 +360,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     {
         pPar = SbiExprList::ParseParameters( pParser,false,false );
     }
-    pNd->aVar.pPar = pPar;
+    pNd->aVar.pPar = pPar.release();
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
     {
@@ -413,7 +413,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     }
     OUString aSym( pParser->GetSym() );
     SbxDataType eType = pParser->GetType();
-    SbiExprList* pPar = nullptr;
+    SbiExprListPtr pPar;
     SbiExprListVector* pvMoreParLcl = nullptr;
     eTok = pParser->Peek();
 
@@ -431,8 +431,8 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             {
                 pvMoreParLcl = new SbiExprListVector();
             }
-            SbiExprList* pAddPar = SbiExprList::ParseParameters( pParser );
-            pvMoreParLcl->push_back( pAddPar );
+            SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
+            pvMoreParLcl->push_back( std::move(pAddPar) );
             bError = bError || !pPar->IsValid();
             eTok = pParser->Peek();
         }
@@ -458,12 +458,12 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     SbiSymDef* pDef = rPool.Find( aSym );
     if( !pDef )
     {
-        pDef = AddSym( eTok, rPool, eCurExpr, aSym, eType, pPar );
+        pDef = AddSym( eTok, rPool, eCurExpr, aSym, eType, pPar.get() );
         pDef->SetType( eType );
     }
 
     SbiExprNode* pNd = new SbiExprNode( *pDef, eType );
-    pNd->aVar.pPar = pPar;
+    pNd->aVar.pPar = pPar.release();
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
     {
@@ -941,9 +941,9 @@ void SbiExprList::addExpression( std::unique_ptr<SbiExpression>&& pExpr )
 // #i79918/#i80532: bConst has never been set to true
 // -> reused as bStandaloneExpression
 //SbiParameters::SbiParameters( SbiParser* p, sal_Bool bConst, sal_Bool bPar) :
-SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneExpression, bool bPar)
+SbiExprListPtr SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneExpression, bool bPar)
 {
-    SbiExprList* pExprList = new SbiExprList;
+    auto pExprList = o3tl::make_unique<SbiExprList>();
     if( !bPar )
     {
         return pExprList;
@@ -1087,9 +1087,9 @@ SbiExprList* SbiExprList::ParseParameters( SbiParser* pParser, bool bStandaloneE
 
 // A list of array dimensions is parsed.
 
-SbiExprList* SbiExprList::ParseDimList( SbiParser* pParser )
+SbiExprListPtr SbiExprList::ParseDimList( SbiParser* pParser )
 {
-    SbiExprList* pExprList = new SbiExprList;
+    auto pExprList = o3tl::make_unique<SbiExprList>();
 
     if( pParser->Next() != LPAREN )
     {
