@@ -992,14 +992,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::MOVECLIPREGION:
             {
-/*
-                if ( !aClipRegion.IsEmpty() )
-                {
-                    const MetaMoveClipRegionAction* pA = static_cast<const MetaMoveClipRegionAction*>(pMA);
-                    aClipRegion.Move( pA->GetHorzMove(), pA->GetVertMove() );
-                    ImplSetClipRegion();
-                }
-*/
+                // TODO: Implement!
             }
             break;
 
@@ -1195,7 +1188,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::Transparent:
             {
-//              ImplLine( ( (const MetaTransparentAction*) pMA )->GetPolyPolygon() );
+                // TODO: Implement!
             }
             break;
 
@@ -1281,7 +1274,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                             tools::PolyPolygon aStartArrow;
                             tools::PolyPolygon aEndArrow;
-//                          double fTransparency( aStroke.getTransparency() );
                             double fStrokeWidth( aStroke.getStrokeWidth() );
                             SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
                             SvtGraphicStroke::DashArray l_aDashArray;
@@ -1684,32 +1676,6 @@ void PSWriter::ImplSetClipRegion( vcl::Region& rClipRegion )
             ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
         }
 
-        //Rectangle     aRect;
-        //RegionHandle  hRegionHandle = rClipRegion.BeginEnumRects();
-        //
-        //while ( rClipRegion.GetEnumRects( hRegionHandle, aRect ) )
-        //{
-        //  double nX1 = aRect.Left();
-        //  double nY1 = aRect.Top();
-        //  double nX2 = aRect.Right();
-        //  double nY2 = aRect.Bottom();
-        //  ImplWriteDouble( nX1 );
-        //  ImplWriteDouble( nY1 );
-        //  ImplWriteByte( 'm' );
-        //  ImplWriteDouble( nX2 );
-        //  ImplWriteDouble( nY1 );
-        //  ImplWriteByte( 'l' );
-        //  ImplWriteDouble( nX2 );
-        //  ImplWriteDouble( nY2 );
-        //  ImplWriteByte( 'l' );
-        //  ImplWriteDouble( nX1 );
-        //  ImplWriteDouble( nY2 );
-        //  ImplWriteByte( 'l' );
-        //  ImplWriteDouble( nX1 );
-        //  ImplWriteDouble( nY1 );
-        //  ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
-        //};
-        //rClipRegion.EndEnumRects( hRegionHandle );
         ImplWriteLine( "eoclip newpath" );
     }
 }
@@ -1808,26 +1774,6 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                 ImplWriteByte( 'p', PS_SPACE | PS_WRAP );
             }
 
-            //RegionHandle  hRegionHandle = aRegion.BeginEnumRects();
-            //
-            //while ( aRegion.GetEnumRects( hRegionHandle, aRect ) )
-            //{
-            //  aRect.Move( 0, - ( nHeightOrg - nHeightLeft ) );
-            //  ImplWriteLong( aRect.Left() );
-            //  ImplWriteLong( aRect.Top() );
-            //  ImplWriteByte( 'm' );
-            //  ImplWriteLong( aRect.Right() + 1 );
-            //  ImplWriteLong( aRect.Top() );
-            //  ImplWriteByte( 'l' );
-            //  ImplWriteLong( aRect.Right() + 1 );
-            //  ImplWriteLong( aRect.Bottom() + 1 );
-            //  ImplWriteByte( 'l' );
-            //  ImplWriteLong( aRect.Left() );
-            //  ImplWriteLong( aRect.Bottom() + 1 );
-            //  ImplWriteByte( 'l' );
-            //  ImplWriteByte( 'p', PS_SPACE | PS_WRAP );
-            //};
-            //aRegion.EndEnumRects( hRegionHandle );
             ImplWriteLine( "eoclip newpath" );
             ImplWriteLine( "pom" );
         }
@@ -2514,8 +2460,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
 }
 
 
-// writes the number to stream: nNumber / ( 10^nCount )
-
+/// Writes the number to stream: nNumber / ( 10^nCount )
 void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode )
 {
     if ( nNumber < 0 )
