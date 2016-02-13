@@ -228,7 +228,11 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         if( !mbNative )
             mpBuffer = new sal_uInt8[ AlignedWidth4Bytes( mbGreys ? mpReadAccess->Width() * 8L : mpReadAccess->Width() * 24L ) ];
 
-        bRet = WriteJPEG( this, &mrStream, mpReadAccess->Width(), mpReadAccess->Height(), mbGreys, mnQuality, maChromaSubsampling, mxStatusIndicator );
+        SAL_INFO("vcl", "\nJPEG Export - DPI X: " << rGraphic.GetPPI().getX() << "\nJPEG Export - DPI Y: " << rGraphic.GetPPI().getY());
+
+        bRet = WriteJPEG( this, &mrStream, mpReadAccess->Width(),
+                          mpReadAccess->Height(), rGraphic.GetPPI(), mbGreys,
+                          mnQuality, maChromaSubsampling, mxStatusIndicator );
 
         delete[] mpBuffer;
         mpBuffer = NULL;
