@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "a11ywrapperradiogroup.h"
 #include "a11ytextwrapper.h"
 

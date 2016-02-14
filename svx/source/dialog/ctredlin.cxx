@@ -24,12 +24,12 @@
 #include <sfx2/module.hxx>
 #include <unotools/textsearch.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/viewdataentry.hxx"
+#include <svtools/viewdataentry.hxx>
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include <svx/ctredlin.hxx>
 #include "helpid.hrc"
 

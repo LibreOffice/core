@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTVIEWDLLAPI_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTVIEWDLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_CHARTVIEW
 #define OOO_DLLPUBLIC_CHARTVIEW SAL_DLLPUBLIC_EXPORT

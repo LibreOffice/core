@@ -18,11 +18,11 @@
  */
 
 
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/sphere3d.hxx>
 
 #include <svx/svxids.hrc>

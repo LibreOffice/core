@@ -37,13 +37,13 @@
 #include <memory>
 #include <set>
 
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/modelobjecthelper.hxx"
-#include "oox/ole/oleobjecthelper.hxx"
-#include "oox/ole/vbaproject.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/helper/modelobjecthelper.hxx>
+#include <oox/ole/oleobjecthelper.hxx>
+#include <oox/ole/vbaproject.hxx>
 
 namespace oox {
 namespace core {

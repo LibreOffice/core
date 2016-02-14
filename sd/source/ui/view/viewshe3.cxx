@@ -68,7 +68,7 @@
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "FrameView.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 

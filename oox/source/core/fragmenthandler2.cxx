@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 
 namespace oox {
 namespace core {

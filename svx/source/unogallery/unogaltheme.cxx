@@ -21,9 +21,9 @@
 
 #include "unogaltheme.hxx"
 #include "unogalitem.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/gallery1.hxx"
-#include "svx/galmisc.hxx"
+#include <svx/galtheme.hxx>
+#include <svx/gallery1.hxx>
+#include <svx/galmisc.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>

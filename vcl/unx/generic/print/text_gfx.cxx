@@ -28,7 +28,7 @@
 
 #include "osl/thread.h"
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
 using namespace psp ;
 

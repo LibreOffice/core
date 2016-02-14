@@ -10,7 +10,7 @@
 #ifndef INCLUDED_UNOIDL_SOURCE_SOURCEPROVIDER_SCANNER_HXX
 #define INCLUDED_UNOIDL_SOURCE_SOURCEPROVIDER_SCANNER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <map>
@@ -19,9 +19,9 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "salhelper/simplereferenceobject.hxx"
-#include "unoidl/unoidl.hxx"
+#include <sal/types.h>
+#include <salhelper/simplereferenceobject.hxx>
+#include <unoidl/unoidl.hxx>
 
 #include "sourceprovider-parser-requires.hxx"
 #include "sourceprovider-parser.hxx"

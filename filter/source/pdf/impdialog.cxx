@@ -25,10 +25,10 @@
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include "sfx2/passwd.hxx"
-#include "svtools/miscopt.hxx"
+#include <sfx2/passwd.hxx>
+#include <svtools/miscopt.hxx>
 
-#include "comphelper/storagehelper.hxx"
+#include <comphelper/storagehelper.hxx>
 
 #include "com/sun/star/text/XTextRange.hpp"
 #include "com/sun/star/drawing/XShapes.hpp"

@@ -21,7 +21,7 @@
 
 #include "ViewTabBar.hxx"
 #include "facreg.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

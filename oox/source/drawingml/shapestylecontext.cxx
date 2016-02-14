@@ -19,7 +19,7 @@
 
 #include "drawingml/shapestylecontext.hxx"
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "drawingml/colorchoicecontext.hxx"
 
 using namespace ::oox::core;

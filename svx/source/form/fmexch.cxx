@@ -24,7 +24,7 @@
 
 #include <sot/formats.hxx>
 #include <svtools/treelistbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <tools/diagnose_ex.h>
 
 

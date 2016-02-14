@@ -18,7 +18,7 @@
  */
 
 #include <svx/AccessibleShape.hxx>
-#include "svx/DescriptionGenerator.hxx"
+#include <svx/DescriptionGenerator.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -45,7 +45,7 @@
 #include <svx/SvxShapeTypes.hxx>
 
 #include "accessibility.hrc"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

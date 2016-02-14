@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
 
-#include "sal/config.h"
-#include "tools/solar.h"
+#include <sal/config.h>
+#include <tools/solar.h>
 
 #include <salbmp.hxx>
 

@@ -34,7 +34,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <unotools/pathoptions.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;

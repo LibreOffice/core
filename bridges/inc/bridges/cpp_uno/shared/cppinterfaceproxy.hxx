@@ -22,11 +22,11 @@
 
 #include "osl/interlck.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include "typelib/typedescription.h"
 #include "uno/dispatcher.h"
 #include "uno/environment.h"
-#include "bridges/cpp_uno/shared/vtablefactory.hxx"
+#include <bridges/cpp_uno/shared/vtablefactory.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;

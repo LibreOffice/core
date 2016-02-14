@@ -26,7 +26,7 @@
 #include <postmac.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 enum InfoType {
     FULLPATH,

@@ -23,7 +23,7 @@
 #include <vcl/helper.hxx>
 #include "sallayout.hxx"
 #include "osl/file.hxx"
-#include "tools/gen.hxx"
+#include <tools/gen.hxx>
 #include "vclpluginapi.h"
 
 #include <list>

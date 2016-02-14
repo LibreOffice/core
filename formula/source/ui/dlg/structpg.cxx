@@ -20,14 +20,14 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include "structpg.hxx"
 #include "formdlgs.hrc"
-#include "formula/formdata.hxx"
-#include "formula/formula.hxx"
+#include <formula/formdata.hxx>
+#include <formula/formula.hxx>
 #include "ModuleHelper.hxx"
-#include "formula/IFunctionDescription.hxx"
+#include <formula/IFunctionDescription.hxx>
 #include "ForResId.hrc"
 
 

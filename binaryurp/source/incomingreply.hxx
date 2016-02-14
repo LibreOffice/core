@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_INCOMINGREPLY_HXX
 #define INCLUDED_BINARYURP_SOURCE_INCOMINGREPLY_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 

@@ -23,7 +23,7 @@
 #include "sdrcelldlg.hxx"
 #include "dialmgr.hxx"
 #include "cuitabarea.hxx"
-#include "svx/svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "border.hxx"
 #include <svx/dialogs.hrc>
 

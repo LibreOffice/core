@@ -38,10 +38,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "svx/unoprov.hxx"
-#include "svx/sdr/table/tabledesign.hxx"
-#include "svx/dialmgr.hxx"
-#include "svx/dialogs.hrc"
+#include <svx/unoprov.hxx>
+#include <svx/sdr/table/tabledesign.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #include "celltypes.hxx"
 

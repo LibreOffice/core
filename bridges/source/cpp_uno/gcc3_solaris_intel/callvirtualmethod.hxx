@@ -22,14 +22,14 @@
 
 
 #include <malloc.h>
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstring>
 
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 

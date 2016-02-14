@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/token/tokenmap.hxx"
+#include <oox/token/tokenmap.hxx>
 
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include "oox/token/tokens.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 

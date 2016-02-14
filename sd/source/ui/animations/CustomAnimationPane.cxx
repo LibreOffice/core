@@ -67,7 +67,7 @@
 #include "optsitem.hxx"
 #include "sddll.hxx"
 #include "sdmod.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include "EventMultiplexer.hxx"
 

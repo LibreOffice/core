@@ -27,7 +27,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
 
-#include "svtools/extensionlistbox.hxx"
+#include <svtools/extensionlistbox.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/lang/Locale.hpp"

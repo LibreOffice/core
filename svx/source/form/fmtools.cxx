@@ -20,8 +20,8 @@
 
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "svx/fmtools.hxx"
-#include "svx/fmglob.hxx"
+#include <svx/fmtools.hxx>
+#include <svx/fmglob.hxx>
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stddef.h>
 
 #include <windows.h>
 
 #include "jni.h"
-#include "sal/types.h"
+#include <sal/types.h>
 
 
 static HMODULE   module   = NULL;

@@ -21,10 +21,10 @@
 
 #include <tools/diagnose_ex.h>
 #include <svx/svdobj.hxx>
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "fmservs.hxx"
 
-#include "svx/fmobjfac.hxx"
+#include <svx/fmobjfac.hxx>
 
 #include <svx/fmglob.hxx>
 
@@ -37,7 +37,7 @@
 #include "tbxform.hxx"
 #include <tools/resid.hxx>
 
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include <svx/dialmgr.hxx>
 #include "tabwin.hxx"
 #include "fmexpl.hxx"

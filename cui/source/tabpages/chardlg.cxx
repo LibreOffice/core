@@ -34,7 +34,7 @@
 #include <svl/languageoptions.hxx>
 #include <svx/xtable.hxx>
 #include "chardlg.hxx"
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -49,12 +49,12 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/blinkitem.hxx>
-#include "editeng/flstitem.hxx"
+#include <editeng/flstitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
-#include "svx/drawitem.hxx"
-#include "svx/dlgutil.hxx"
+#include <svx/drawitem.hxx>
+#include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include "cuicharmap.hxx"
@@ -70,7 +70,7 @@
 #include <cuires.hrc>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include "svx/flagsdef.hxx"
+#include <svx/flagsdef.hxx>
 
 using namespace ::com::sun::star;
 

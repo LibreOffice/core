@@ -34,17 +34,17 @@
 
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include "svx/xoutbmp.hxx"
-#include "svx/drawitem.hxx"
+#include <svx/xoutbmp.hxx>
+#include <svx/drawitem.hxx>
 #include "cuitabarea.hxx"
 #include "defdlgname.hxx"
 #include "dlgname.hxx"
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include "sfx2/opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 #include "paragrph.hrc"
 
 using namespace com::sun::star;

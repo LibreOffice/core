@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstring>
 
-#include "codemaker/codemaker.hxx"
-#include "codemaker/commonjava.hxx"
-#include "codemaker/global.hxx"
+#include <codemaker/codemaker.hxx>
+#include <codemaker/commonjava.hxx>
+#include <codemaker/global.hxx>
 
 #include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"

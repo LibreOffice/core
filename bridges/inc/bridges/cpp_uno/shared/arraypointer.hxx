@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_ARRAYPOINTER_HXX
 #define INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_ARRAYPOINTER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

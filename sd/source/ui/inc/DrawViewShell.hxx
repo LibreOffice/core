@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_DRAWVIEWSHELL_HXX
 
 #include "ViewShell.hxx"
-#include "tools/AsynchronousCall.hxx"
+#include <tools/AsynchronousCall.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include "TabControl.hxx"

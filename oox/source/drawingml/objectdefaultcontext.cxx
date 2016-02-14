@@ -19,7 +19,7 @@
 
 #include "drawingml/objectdefaultcontext.hxx"
 #include "drawingml/spdefcontext.hxx"
-#include "oox/drawingml/theme.hxx"
+#include <oox/drawingml/theme.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

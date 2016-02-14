@@ -19,7 +19,7 @@
 
 #include "drawingml/chart/datasourcecontext.hxx"
 
-#include "oox/drawingml/chart/datasourcemodel.hxx"
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <oox/core/xmlfilterbase.hxx>

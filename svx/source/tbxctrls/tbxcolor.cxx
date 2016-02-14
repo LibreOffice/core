@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/tbxcolor.hxx"
+#include <svx/tbxcolor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

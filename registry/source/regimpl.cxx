@@ -35,10 +35,10 @@
 
 #include <reflwrit.hxx>
 
-#include "registry/reader.hxx"
-#include "registry/refltype.hxx"
-#include "registry/types.hxx"
-#include "registry/version.h"
+#include <registry/reader.hxx>
+#include <registry/refltype.hxx>
+#include <registry/types.hxx>
+#include <registry/version.h>
 
 #include "reflcnst.hxx"
 #include "keyimpl.hxx"

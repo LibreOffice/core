@@ -19,7 +19,7 @@
 
 #include <idlc/fehelper.hxx>
 #include <idlc/errorhandler.hxx>
-#include "idlc/idlc.hxx"
+#include <idlc/idlc.hxx>
 
 FeDeclarator::FeDeclarator(const OString& name)
     : m_name(name)

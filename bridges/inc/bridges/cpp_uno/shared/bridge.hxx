@@ -21,7 +21,7 @@
 #define INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_BRIDGE_HXX
 
 #include "osl/interlck.h"
-#include "sal/types.h"
+#include <sal/types.h>
 #include "typelib/typedescription.h"
 #include "uno/environment.h"
 #include "uno/mapping.h"

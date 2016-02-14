@@ -25,7 +25,7 @@
 #include <exception>
 #include <cstddef>
 
-#include "cppu/macros.hxx"
+#include <cppu/macros.hxx>
 #include "uno/any2.h"
 
 namespace CPPU_CURRENT_NAMESPACE

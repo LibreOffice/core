@@ -32,7 +32,7 @@
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "osl/interlck.h"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include "uno/dispatcher.h"
 #include "uno/mapping.h"
@@ -41,7 +41,7 @@
 
 #include "typelib/typedescription.h"
 
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 #include "cascade_mapping.hxx"
 #include "loadmodule.hxx"
 

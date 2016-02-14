@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined MACOSX
 #include <cassert>
@@ -29,8 +29,8 @@
 #endif
 
 #include "osl/process.h"
-#include "sal/main.h"
-#include "sal/types.h"
+#include <sal/main.h>
+#include <sal/types.h>
 
 #include <saltime.hxx>
 

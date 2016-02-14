@@ -29,7 +29,7 @@
 #include "x509certificate_nssimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include <xmlsecurity/xmlsec-wrapper.h>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>

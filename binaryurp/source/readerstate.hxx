@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_READERSTATE_HXX
 #define INCLUDED_BINARYURP_SOURCE_READERSTATE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "rtl/byteseq.hxx"
 #include "rtl/ustring.hxx"

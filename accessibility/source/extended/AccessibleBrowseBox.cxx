@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/AccessibleBrowseBox.hxx"
-#include "accessibility/extended/AccessibleBrowseBoxTable.hxx"
-#include "accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx"
+#include <accessibility/extended/AccessibleBrowseBox.hxx>
+#include <accessibility/extended/AccessibleBrowseBoxTable.hxx>
+#include <accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx>
 #include <svtools/accessibletableprovider.hxx>
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

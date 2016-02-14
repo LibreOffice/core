@@ -28,11 +28,11 @@
 #include <idlc/astinterface.hxx>
 #include <idlc/astoperation.hxx>
 #include <idlc/astbasetype.hxx>
-#include "idlc/astdeclaration.hxx"
-#include "idlc/astparameter.hxx"
-#include "idlc/astsequence.hxx"
-#include "idlc/asttype.hxx"
-#include "idlc/asttypedef.hxx"
+#include <idlc/astdeclaration.hxx>
+#include <idlc/astparameter.hxx>
+#include <idlc/astsequence.hxx>
+#include <idlc/asttype.hxx>
+#include <idlc/asttypedef.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

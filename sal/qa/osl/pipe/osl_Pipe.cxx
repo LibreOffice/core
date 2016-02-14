@@ -24,7 +24,7 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "unotest/uniquepipename.hxx"
+#include <unotest/uniquepipename.hxx>
 #include <rtl/ustring.hxx>
 
 #include <osl/thread.hxx>

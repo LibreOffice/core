@@ -33,7 +33,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <rtl/uri.hxx>
 

@@ -69,7 +69,7 @@
 #include "ViewShellBase.hxx"
 #include "SpellDialogChildWindow.hxx"
 #include "ToolBarManager.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editerr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

@@ -24,8 +24,8 @@
 
 #include "parawin.hxx"
 #include "helpids.hrc"
-#include "formula/formdata.hxx"
-#include "formula/IFunctionDescription.hxx"
+#include <formula/formdata.hxx>
+#include <formula/IFunctionDescription.hxx>
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"
 

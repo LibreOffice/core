@@ -28,11 +28,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
-#include "osx/salframeview.h"
-#include "osx/salinst.h"
-#include "osx/vclnsapp.h"
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
+#include <osx/salframeview.h>
+#include <osx/salinst.h>
+#include <osx/vclnsapp.h>
 #include "quartz/utils.h"
 
 #include "premac.h"

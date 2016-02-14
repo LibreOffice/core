@@ -19,11 +19,11 @@
 
 
 #include "sdr/properties/textproperties.hxx"
-#include "editeng/outlobj.hxx"
+#include <editeng/outlobj.hxx>
 
 #include "cell.hxx"
 #include "tableundo.hxx"
-#include "svx/svdotable.hxx"
+#include <svx/svdotable.hxx>
 #include "tablerow.hxx"
 #include "tablecolumn.hxx"
 

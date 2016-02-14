@@ -39,7 +39,7 @@
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
 #include "rtl/ustring.hxx"
-#include "sal/main.h"
+#include <sal/main.h>
 
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/Exception.h"

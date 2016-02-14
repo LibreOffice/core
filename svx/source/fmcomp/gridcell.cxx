@@ -20,8 +20,8 @@
 
 #include <sal/macros.h>
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
-#include "svx/fmtools.hxx"
+#include <svx/fmresids.hrc>
+#include <svx/fmtools.hxx>
 #include "gridcell.hxx"
 #include "gridcols.hxx"
 #include "sdbdatacolumn.hxx"

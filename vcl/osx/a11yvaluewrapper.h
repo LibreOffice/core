@@ -20,9 +20,9 @@
 #ifndef INCLUDED_VCL_OSX_A11YVALUEWRAPPER_H
 #define INCLUDED_VCL_OSX_A11YVALUEWRAPPER_H
 
-#include "osx/salinst.h"
-#include "osx/osxvcltypes.h"
-#include "osx/a11ywrapper.h"
+#include <osx/salinst.h>
+#include <osx/osxvcltypes.h>
+#include <osx/a11ywrapper.h>
 
 @interface AquaA11yValueWrapper : NSObject
 {

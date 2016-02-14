@@ -67,13 +67,13 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/settings.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include "rtl/ref.hxx"
 #include "slideshow.hrc"
-#include "canvas/elapsedtime.hxx"
-#include "avmedia/mediawindow.hxx"
-#include "svtools/colrdlg.hxx"
+#include <canvas/elapsedtime.hxx>
+#include <avmedia/mediawindow.hxx>
+#include <svtools/colrdlg.hxx>
 #include "RemoteServer.hxx"
 #include "customshowlist.hxx"
 #include "unopage.hxx"

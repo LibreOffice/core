@@ -37,13 +37,13 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svdviter.hxx"
+#include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>

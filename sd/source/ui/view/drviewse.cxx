@@ -65,7 +65,7 @@
 #include "slideshow.hxx"
 #include "ViewShellImplementation.hxx"
 #include "ViewShellHint.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "app.hrc"
 #include "glob.hrc"
 #include "strings.hrc"

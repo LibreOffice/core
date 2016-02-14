@@ -21,11 +21,11 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/connectorshapecontext.hxx"
-#include "oox/drawingml/graphicshapecontext.hxx"
-#include "oox/drawingml/shapecontext.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/connectorshapecontext.hxx>
+#include <oox/drawingml/graphicshapecontext.hxx>
+#include <oox/drawingml/shapecontext.hxx>
+#include <oox/drawingml/shapegroupcontext.hxx>
 
 namespace oox {
 namespace drawingml {

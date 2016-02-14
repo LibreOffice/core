@@ -20,7 +20,7 @@
 #define INCLUDED_IDLC_INC_IDLC_ASTATTRIBUTE_HXX
 
 #include <idlc/astdeclaration.hxx>
-#include "idlc/astscope.hxx"
+#include <idlc/astscope.hxx>
 
 #include <registry/types.hxx>
 #include <rtl/ustring.hxx>

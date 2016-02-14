@@ -27,7 +27,7 @@
 #include <svx/xtextit.hxx>
 
 #include <svx/dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/fontwork.hxx>

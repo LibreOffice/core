@@ -22,7 +22,7 @@
 #include <config_features.h>
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include "osl/mutex.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/instance.hxx"

@@ -24,7 +24,7 @@
 
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <salhelper/simplereferenceobject.hxx>
 
 #include "com/sun/star/embed/XStorage.hpp"
 

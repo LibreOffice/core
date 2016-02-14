@@ -39,7 +39,7 @@
 #include "pres.hxx"
 #include "glob.hrc"
 #include "sdiocmpt.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 

@@ -19,7 +19,7 @@
 
 #include "drawingml/chart/chartcontextbase.hxx"
 
-#include "oox/drawingml/chart/modelbase.hxx"
+#include <oox/drawingml/chart/modelbase.hxx>
 #include "drawingml/shapepropertiescontext.hxx"
 
 namespace oox {

@@ -23,9 +23,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>

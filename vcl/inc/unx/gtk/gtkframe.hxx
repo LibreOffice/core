@@ -37,7 +37,7 @@
 #include <unx/saltype.h>
 #include <unx/screensaverinhibitor.hxx>
 
-#include "tools/link.hxx"
+#include <tools/link.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

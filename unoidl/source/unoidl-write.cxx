@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstddef>
@@ -28,9 +28,9 @@
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
 #include "rtl/ustring.hxx"
-#include "sal/macros.h"
-#include "sal/main.h"
-#include "unoidl/unoidl.hxx"
+#include <sal/macros.h>
+#include <sal/main.h>
+#include <unoidl/unoidl.hxx>
 
 namespace {
 

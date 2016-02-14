@@ -34,7 +34,7 @@
 #include <vcl/settings.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/dialmgr.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 
 #include <svx/dialogs.hrc>
 #include "frmsel.hrc"

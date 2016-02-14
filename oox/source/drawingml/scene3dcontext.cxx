@@ -23,10 +23,10 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include "drawingml/colorchoicecontext.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/attributelist.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

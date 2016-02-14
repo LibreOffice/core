@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "cppuhelper/unourl.hxx"
+#include <cppuhelper/unourl.hxx>
 #include "rtl/malformeduriexception.hxx"
 
 #include <com/sun/star/connection/XAcceptor.hpp>

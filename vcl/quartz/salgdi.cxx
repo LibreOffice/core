@@ -43,7 +43,7 @@
 #include "impfontmetricdata.hxx"
 
 #ifdef MACOSX
-#include "osx/salframe.h"
+#include <osx/salframe.h>
 #endif
 #include "quartz/utils.h"
 #ifdef IOS

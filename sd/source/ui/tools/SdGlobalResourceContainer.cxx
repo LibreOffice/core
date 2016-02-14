@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 
 #include <algorithm>
 #include <vector>

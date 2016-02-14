@@ -23,8 +23,8 @@
 #include "cell.hxx"
 #include "tablerow.hxx"
 #include "tableundo.hxx"
-#include "svx/svdmodel.hxx"
-#include "svx/svdotable.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdotable.hxx>
 
 
 using namespace ::com::sun::star::uno;

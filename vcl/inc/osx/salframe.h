@@ -26,9 +26,9 @@
 
 #include <vcl/sysdata.hxx>
 
-#include "osx/salmenu.h"
-#include "osx/saldata.hxx"
-#include "osx/osxvcltypes.h"
+#include <osx/salmenu.h>
+#include <osx/saldata.hxx>
+#include <osx/osxvcltypes.h>
 
 #include "salframe.hxx"
 

@@ -22,7 +22,7 @@
 #include "rtl/ustring.hxx"
 #include "osl/process.h"
 #include "osl/diagnose.hxx"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 #include "boost/bind.hpp"
 #include <algorithm>
 #include <vector>

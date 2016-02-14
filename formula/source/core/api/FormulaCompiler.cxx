@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sal/macros.h>
-#include "formula/FormulaCompiler.hxx"
-#include "formula/errorcodes.hxx"
-#include "formula/token.hxx"
-#include "formula/tokenarray.hxx"
+#include <formula/FormulaCompiler.hxx>
+#include <formula/errorcodes.hxx>
+#include <formula/token.hxx>
+#include <formula/tokenarray.hxx>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 

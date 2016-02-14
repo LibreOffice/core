@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <exception>
 #include <vector>
@@ -26,7 +26,7 @@
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include "osl/mutex.hxx"
 #include "uno/dispatcher.hxx"
 

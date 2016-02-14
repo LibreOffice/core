@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "tools/resary.hxx"
+#include <tools/resary.hxx>
 
 #include <vcl/print.hxx>
 #include <vcl/image.hxx>
@@ -28,8 +28,8 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 
-#include "osx/printview.h"
-#include "osx/salinst.h"
+#include <osx/printview.h>
+#include <osx/salinst.h>
 #include "quartz/utils.h"
 
 #include "svdata.hxx"

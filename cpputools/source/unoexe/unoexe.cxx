@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-#include "sal/main.h"
+#include <sal/main.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

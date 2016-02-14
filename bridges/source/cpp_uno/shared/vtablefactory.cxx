@@ -18,11 +18,11 @@
  */
 
 
-#include "bridges/cpp_uno/shared/vtablefactory.hxx"
+#include <bridges/cpp_uno/shared/vtablefactory.hxx>
 
 #include "guardedarray.hxx"
 
-#include "bridges/cpp_uno/shared/vtables.hxx"
+#include <bridges/cpp_uno/shared/vtables.hxx>
 
 #include "osl/thread.h"
 #include "osl/security.hxx"
@@ -30,8 +30,8 @@
 #include "osl/mutex.hxx"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
+#include <sal/log.hxx>
+#include <sal/types.h>
 #include "typelib/typedescription.hxx"
 
 #include <boost/noncopyable.hpp>

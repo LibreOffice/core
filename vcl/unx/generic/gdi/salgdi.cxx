@@ -27,18 +27,18 @@
 #include <X11/Xproto.h>
 #include <postx.h>
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygontools.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
-#include "basegfx/polygon/b2dpolygonclipper.hxx"
-#include "basegfx/polygon/b2dlinegeometry.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/matrix/b2dhommatrixtools.hxx"
-#include "basegfx/polygon/b2dpolypolygoncutter.hxx"
-#include "basegfx/polygon/b2dtrapezoid.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 
 #include <vcl/jobdata.hxx>
 #include <vcl/virdev.hxx>

@@ -25,7 +25,7 @@
 #include <sys/timeb.h>
 #include <sys/types.h>
 
-#include "registry/registry.h"
+#include <registry/registry.h>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>
 

@@ -28,7 +28,7 @@
 
 #include <svx/xdash.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/unofill.hxx"
+#include <svx/unofill.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cppu;

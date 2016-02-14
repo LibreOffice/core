@@ -22,7 +22,7 @@
 #include <svl/memberid.hrc>
 #include <basic/sbxvar.hxx>
 
-#include "svx/hlnkitem.hxx"
+#include <svx/hlnkitem.hxx>
 
 
 SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(0);}

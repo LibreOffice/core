@@ -21,10 +21,10 @@
 #include "rtl/uri.hxx"
 #include "osl/mutex.hxx"
 #include <cppuhelper/compbase.hxx>
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "ucbhelper/content.hxx"
+#include <ucbhelper/content.hxx>
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/dgmimport.hxx"
-#include "oox/drawingml/theme.hxx"
+#include <oox/ppt/dgmimport.hxx>
+#include <oox/drawingml/theme.hxx>
 #include "drawingml/diagram/diagram.hxx"
-#include "oox/dump/pptxdumper.hxx"
+#include <oox/dump/pptxdumper.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

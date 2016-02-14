@@ -39,7 +39,7 @@
 #include "ViewShellBase.hxx"
 #include "drawview.hxx"
 #include "sdpage.hxx"
-#include "sfx2/viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 

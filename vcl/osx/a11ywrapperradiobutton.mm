@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "a11ywrapperradiobutton.h"
 #include "a11ytextwrapper.h"
 #include "a11yvaluewrapper.h"

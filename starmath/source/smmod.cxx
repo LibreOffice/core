@@ -37,7 +37,7 @@
 #include "edit.hxx"
 #include "view.hxx"
 #include "starmath.hrc"
-#include "svx/modctrl.hxx"
+#include <svx/modctrl.hxx>
 
 
 #define SmModule

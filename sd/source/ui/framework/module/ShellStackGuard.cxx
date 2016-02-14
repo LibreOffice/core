@@ -19,8 +19,8 @@
 
 #include "ShellStackGuard.hxx"
 
-#include "framework/ConfigurationController.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/ConfigurationController.hxx>
+#include <framework/FrameworkHelper.hxx>
 
 #include "DrawController.hxx"
 #include "ViewShellBase.hxx"

@@ -18,7 +18,7 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "osl/module.h"
 #include "rtl/string.h"

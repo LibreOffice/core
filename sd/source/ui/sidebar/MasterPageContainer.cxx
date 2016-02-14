@@ -23,7 +23,7 @@
 #include "MasterPageContainerFiller.hxx"
 #include "MasterPageContainerQueue.hxx"
 #include "TemplateScanner.hxx"
-#include "tools/AsynchronousTask.hxx"
+#include <tools/AsynchronousTask.hxx>
 #include "strings.hrc"
 #include <algorithm>
 #include <list>
@@ -50,7 +50,7 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include "sdresid.hxx"
-#include "tools/TimerBasedTaskExecution.hxx"
+#include <tools/TimerBasedTaskExecution.hxx>
 #include "pres.hxx"
 #include <osl/mutex.hxx>
 #include <osl/getglobalmutex.hxx>

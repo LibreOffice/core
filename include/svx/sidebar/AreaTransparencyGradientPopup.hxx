@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
+#include <svx/sidebar/Popup.hxx>
 
 #include <functional>
 

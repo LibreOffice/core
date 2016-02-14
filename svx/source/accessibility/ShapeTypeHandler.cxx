@@ -28,9 +28,9 @@
 
 #include <svx/unoshape.hxx>
 #include <svx/svdoashp.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

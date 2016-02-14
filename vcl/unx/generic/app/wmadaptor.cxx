@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 #include "rtl/locale.h"
 
 #include "osl/thread.h"

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SAL_TEXTENC_CONVERTSINGLEBYTETOBMPUNICODE_HXX
 #define INCLUDED_SAL_TEXTENC_CONVERTSINGLEBYTETOBMPUNICODE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 
 /// @HTML

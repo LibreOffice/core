@@ -18,10 +18,10 @@
  */
 
 
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 #include <svx/cube3d.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <sdr/contact/viewcontactofe3dcube.hxx>

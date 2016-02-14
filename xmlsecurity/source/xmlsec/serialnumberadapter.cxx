@@ -32,7 +32,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include "xmlsecurity/biginteger.hxx"
+#include <xmlsecurity/biginteger.hxx>
 
 #include "serialnumberadapter.hxx"
 

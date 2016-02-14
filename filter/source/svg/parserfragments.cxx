@@ -24,7 +24,7 @@
 
 #include "units.hxx"
 #include "tokenmap.hxx"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

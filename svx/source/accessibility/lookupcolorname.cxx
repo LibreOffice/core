@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -28,7 +28,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include <vcl/svapp.hxx>

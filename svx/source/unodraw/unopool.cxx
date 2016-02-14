@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "svx/unopool.hxx"
+#include <svx/unopool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
@@ -37,7 +37,7 @@
 #include <svx/svdetc.hxx>
 #include <editeng/editeng.hxx>
 
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

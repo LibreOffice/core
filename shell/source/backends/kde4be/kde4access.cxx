@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <QtGui/QFont>
 #include <QtCore/QString>
@@ -26,7 +26,7 @@
 #include <kprotocolmanager.h>
 
 #include "com/sun/star/uno/Any.hxx"
-#include "cppu/unotype.hxx"
+#include <cppu/unotype.hxx>
 #include "osl/diagnose.h"
 #include "osl/file.h"
 #include "rtl/string.h"

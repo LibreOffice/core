@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 #include <vector>
@@ -17,7 +17,7 @@
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "unoidl/unoidl.hxx"
+#include <unoidl/unoidl.hxx>
 
 #include "legacyprovider.hxx"
 #include "sourcefileprovider.hxx"

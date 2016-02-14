@@ -19,16 +19,16 @@
 
 #include "animvariantcontext.hxx"
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/core/fragmenthandler.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include "drawingml/colorchoicecontext.hxx"
 
 using namespace ::oox::core;

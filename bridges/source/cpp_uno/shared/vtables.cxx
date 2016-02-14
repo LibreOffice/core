@@ -18,9 +18,9 @@
  */
 
 
-#include "bridges/cpp_uno/shared/vtables.hxx"
+#include <bridges/cpp_uno/shared/vtables.hxx>
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include "typelib/typedescription.h"
 
 #include <algorithm>

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <string.h>
 #include <rtl/uri.hxx>

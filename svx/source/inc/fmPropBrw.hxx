@@ -27,7 +27,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/childwin.hxx>
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 
 
 class FmPropBrwMgr : public SfxChildWindow

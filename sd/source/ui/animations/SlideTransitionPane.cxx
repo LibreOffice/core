@@ -46,7 +46,7 @@
 #include "undoanim.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
 

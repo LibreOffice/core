@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/svxerr.hxx"
+#include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <svx/dialogs.hrc>

@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/crypto/AgileEngine.hxx"
+#include <oox/crypto/AgileEngine.hxx>
 
 namespace oox {
 namespace core {

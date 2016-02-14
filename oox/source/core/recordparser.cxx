@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/recordparser.hxx"
+#include <oox/core/recordparser.hxx>
 
 #include <vector>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
-#include "oox/core/fragmenthandler.hxx"
+#include <oox/core/fragmenthandler.hxx>
 
 namespace oox {
 namespace core {

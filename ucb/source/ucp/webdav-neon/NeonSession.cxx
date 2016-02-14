@@ -45,10 +45,10 @@ extern "C" {
 
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
-#include "comphelper/processfactory.hxx"
-#include "comphelper/sequence.hxx"
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
-#include "ucbhelper/simplecertificatevalidationrequest.hxx"
+#include <ucbhelper/simplecertificatevalidationrequest.hxx>
 
 #include "DAVAuthListener.hxx"
 #include "NeonTypes.hxx"

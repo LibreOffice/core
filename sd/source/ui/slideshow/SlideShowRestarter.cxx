@@ -19,8 +19,8 @@
 
 #include "DrawController.hxx"
 #include "SlideShowRestarter.hxx"
-#include "framework/ConfigurationController.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/ConfigurationController.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

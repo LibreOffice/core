@@ -20,10 +20,10 @@
 #ifndef INCLUDED_STORE_SOURCE_STORBASE_HXX
 #define INCLUDED_STORE_SOURCE_STORBASE_HXX
 
-#include "sal/config.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include <sal/config.h>
+#include <salhelper/simplereferenceobject.hxx>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "rtl/alloc.h"
 #include "rtl/crc.h"
@@ -32,7 +32,7 @@
 #include "osl/diagnose.h"
 #include "osl/endian.h"
 
-#include "store/types.h"
+#include <store/types.h>
 
 #include <stddef.h>
 #include <string.h>

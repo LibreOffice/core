@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include "fmexpl.hxx"
 
 #include "fmhelp.hrc"
@@ -33,7 +33,7 @@
 
 #include "fmprop.hrc"
 #include <svx/dialmgr.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/msgbox.hxx>

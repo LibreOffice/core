@@ -19,14 +19,14 @@
 
 #include "storpage.hxx"
 
-#include "sal/types.h"
-#include "sal/log.hxx"
+#include <sal/types.h>
+#include <sal/log.hxx>
 #include "rtl/string.h"
 #include "rtl/ref.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 
-#include "store/types.h"
+#include <store/types.h>
 
 #include "object.hxx"
 #include "lockbyte.hxx"

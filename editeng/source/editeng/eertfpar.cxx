@@ -30,7 +30,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
-#include "editeng/editeng.hxx"
+#include <editeng/editeng.hxx>
 
 #include <svtools/rtftoken.h>
 

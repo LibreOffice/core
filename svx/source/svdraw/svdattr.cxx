@@ -30,10 +30,10 @@
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "editeng/boxitem.hxx"
-#include "editeng/lineitem.hxx"
-#include "editeng/shaditem.hxx"
-#include "editeng/xmlcnitm.hxx"
+#include <editeng/boxitem.hxx>
+#include <editeng/lineitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editdata.hxx>
@@ -47,7 +47,7 @@
 #include <vcl/settings.hxx>
 
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdtfchim.hxx>

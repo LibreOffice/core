@@ -31,11 +31,11 @@
 #include "drawingml/textparagraph.hxx"
 #include "drawingml/chart/datasourceconverter.hxx"
 #include "drawingml/chart/titlemodel.hxx"
-#include "oox/helper/containerhelper.hxx"
+#include <oox/helper/containerhelper.hxx>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
 
-#include "oox/drawingml/chart/modelbase.hxx"
+#include <oox/drawingml/chart/modelbase.hxx>
 namespace oox {
 namespace drawingml {
 namespace chart {

@@ -27,7 +27,7 @@
 #include "sdpage.hxx"
 #include "Window.hxx"
 #include "drawdoc.hxx"
-#include "tools/IdleDetection.hxx"
+#include <tools/IdleDetection.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <vcl/window.hxx>

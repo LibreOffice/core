@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/timenode.hxx"
-#include "oox/ppt/pptshape.hxx"
-#include "oox/ppt/slidepersist.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/ppt/timenode.hxx>
+#include <oox/ppt/pptshape.hxx>
+#include <oox/ppt/slidepersist.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include "drawingml/textliststyle.hxx"
 #include "drawingml/textparagraphproperties.hxx"
 

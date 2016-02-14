@@ -23,8 +23,8 @@
 #include "ViewShellBase.hxx"
 #include "slideshow.hxx"
 #include "slideshowimpl.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/ConfigurationController.hxx"
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ConfigurationController.hxx>
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>

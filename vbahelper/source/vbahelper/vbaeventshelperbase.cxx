@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vbahelper/vbaeventshelperbase.hxx"
+#include <vbahelper/vbaeventshelperbase.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>

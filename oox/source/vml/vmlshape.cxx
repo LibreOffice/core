@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <boost/optional.hpp>
 
-#include "oox/vml/vmlshape.hxx"
+#include <oox/vml/vmlshape.hxx>
 #include <vcl/wmf.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -47,18 +47,18 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svdtrans.hxx>
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/ole/axcontrol.hxx"
-#include "oox/ole/axcontrolfragment.hxx"
-#include "oox/ole/oleobjecthelper.hxx"
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmlshapecontainer.hxx"
-#include "oox/vml/vmltextbox.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/ole/axcontrol.hxx>
+#include <oox/ole/axcontrolfragment.hxx>
+#include <oox/ole/oleobjecthelper.hxx>
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
+#include <oox/vml/vmltextbox.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <comphelper/sequence.hxx>

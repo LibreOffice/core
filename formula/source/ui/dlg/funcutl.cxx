@@ -22,8 +22,8 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "formula/funcutl.hxx"
-#include "formula/IControlReferenceHandler.hxx"
+#include <formula/funcutl.hxx>
+#include <formula/IControlReferenceHandler.hxx>
 #include "ControlHelper.hxx"
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"

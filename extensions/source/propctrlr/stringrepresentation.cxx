@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "boost/noncopyable.hpp"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/XServiceInfo.hpp"

@@ -20,8 +20,8 @@
 #include "EmptyPanel.hxx"
 #include "EmptyPanel.hrc"
 #include "area/AreaPropertyPanel.hrc"
-#include "svx/dialogs.hrc"
-#include "svx/dialmgr.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 
 
 namespace svx { namespace sidebar {

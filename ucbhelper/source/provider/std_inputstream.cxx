@@ -11,7 +11,7 @@
 
 #include <sal/log.hxx>
 
-#include "ucbhelper/std_inputstream.hxx"
+#include <ucbhelper/std_inputstream.hxx>
 
 using namespace std;
 using namespace com::sun::star;

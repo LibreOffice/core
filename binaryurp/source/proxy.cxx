@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <exception>
 #include <vector>
 
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include "typelib/typedescription.h"
 #include "typelib/typedescription.hxx"
 #include "uno/any2.h"

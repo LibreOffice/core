@@ -10,11 +10,11 @@
 #ifndef INCLUDED_SAL_OSL_ALL_LOGFORMAT_HXX
 #define INCLUDED_SAL_OSL_ALL_LOGFORMAT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdarg>
 
-#include "sal/detail/log.h"
+#include <sal/detail/log.h>
 
 namespace osl { namespace detail {
 

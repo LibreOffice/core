@@ -18,7 +18,7 @@
  */
 
 #include "drawingml/clrschemecontext.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

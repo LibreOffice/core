@@ -22,12 +22,12 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 
 

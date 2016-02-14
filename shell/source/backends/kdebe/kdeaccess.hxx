@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_BACKENDS_KDEBE_KDEACCESS_HXX
 #define INCLUDED_SHELL_SOURCE_BACKENDS_KDEBE_KDEACCESS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "com/sun/star/beans/Optional.hpp"
 

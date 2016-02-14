@@ -20,9 +20,9 @@
 #include "drawingml/textfont.hxx"
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
-#include "oox/drawingml/theme.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/drawingml/theme.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/attributelist.hxx>
 
 using ::oox::core::XmlFilterBase;
 

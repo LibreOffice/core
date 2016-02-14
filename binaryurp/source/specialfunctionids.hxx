@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_SPECIALFUNCTIONIDS_HXX
 #define INCLUDED_BINARYURP_SOURCE_SPECIALFUNCTIONIDS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace binaryurp {
 

@@ -21,7 +21,7 @@
 #include "border.hxx"
 #include "backgrnd.hxx"
 //UUUU
-#include "svx/svxids.hrc"
+#include <svx/svxids.hrc>
 #include "cuitabarea.hxx"
 
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,

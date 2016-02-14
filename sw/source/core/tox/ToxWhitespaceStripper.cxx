@@ -10,7 +10,7 @@
 #include "ToxWhitespaceStripper.hxx"
 
 #include "rtl/ustrbuf.hxx"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include <boost/numeric/conversion/cast.hpp>
 

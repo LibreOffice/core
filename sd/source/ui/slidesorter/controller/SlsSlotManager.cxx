@@ -40,7 +40,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fuzoom.hxx"

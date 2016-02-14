@@ -28,8 +28,8 @@
 
 #include "quartz/salgdi.h"
 #include "quartz/utils.h"
-#include "osx/salframe.h"
-#include "osx/saldata.hxx"
+#include <osx/salframe.h>
+#include <osx/saldata.hxx>
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {

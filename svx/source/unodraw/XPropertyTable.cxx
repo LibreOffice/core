@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/XPropertyTable.hxx"
+#include <svx/XPropertyTable.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -32,7 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/xdef.hxx>
 
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/tools/unotools.hxx>

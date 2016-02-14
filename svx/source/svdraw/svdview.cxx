@@ -19,7 +19,7 @@
 
 #include <editeng/eeitem.hxx>
 
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
@@ -34,13 +34,13 @@
 #include <svdibrow.hxx>
 #endif
 
-#include "svx/svdoutl.hxx"
-#include "svx/svdview.hxx"
-#include "editeng/editview.hxx"
-#include "editeng/flditem.hxx"
-#include "svx/obj3d.hxx"
-#include "svx/svddrgmt.hxx"
-#include "svx/svdotable.hxx"
+#include <svx/svdoutl.hxx>
+#include <svx/svdview.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
+#include <svx/obj3d.hxx>
+#include <svx/svddrgmt.hxx>
+#include <svx/svdotable.hxx>
 #include <tools/tenccvt.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

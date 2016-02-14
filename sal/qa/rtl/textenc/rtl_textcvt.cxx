@@ -19,7 +19,7 @@
 
 #include <config_locales.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <cstring>
@@ -32,7 +32,7 @@
 #include "rtl/tencinfo.h"
 #include "rtl/textcvt.h"
 #include "rtl/textenc.h"
-#include "sal/types.h"
+#include <sal/types.h>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 

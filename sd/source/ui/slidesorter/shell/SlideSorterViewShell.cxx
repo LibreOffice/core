@@ -36,7 +36,7 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsPageDescriptor.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "ViewShellBase.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"

@@ -29,13 +29,13 @@
 #include <vcl/syswin.hxx>
 #include <vcl/settings.hxx>
 
-#include "osx/saldata.hxx"
+#include <osx/saldata.hxx>
 #include "quartz/salgdi.h"
-#include "osx/salframe.h"
-#include "osx/salmenu.h"
-#include "osx/salinst.h"
-#include "osx/salframeview.h"
-#include "osx/a11yfactory.h"
+#include <osx/salframe.h>
+#include <osx/salmenu.h>
+#include <osx/salinst.h>
+#include <osx/salframeview.h>
+#include <osx/a11yfactory.h>
 #include "quartz/utils.h"
 
 #include "salwtype.hxx"

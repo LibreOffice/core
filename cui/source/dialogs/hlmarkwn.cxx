@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <cuires.hrc>
 #include "hlmarkwn.hxx"

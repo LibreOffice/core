@@ -47,7 +47,7 @@
 #include "imapdlg.hrc"
 #include "imapwnd.hxx"
 #include "imapimp.hxx"
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>

@@ -29,7 +29,7 @@
 #include <memory>
 #include <set>
 #include <unordered_map>
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "defs.hxx"
 
 // text conversion dictionary extension

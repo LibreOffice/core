@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_INC_FORMS_FORM_HANDLER_FACTORY_HXX
 #define INCLUDED_XMLOFF_INC_FORMS_FORM_HANDLER_FACTORY_HXX
 
-#include "forms/property_handler.hxx"
+#include <forms/property_handler.hxx>
 
 namespace xmloff
 {

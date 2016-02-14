@@ -50,7 +50,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/style.hxx>
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "TableDesignPane.hxx"
 #include "app.hrc"
 #include "glob.hrc"

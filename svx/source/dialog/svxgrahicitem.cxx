@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/svxgrahicitem.hxx"
+#include <svx/svxgrahicitem.hxx>
 SvxGraphicItem::SvxGraphicItem( sal_uInt16 _nWhich, const Graphic& rGraphic )
     : SfxPoolItem( _nWhich ), aGraphic( rGraphic )
 {

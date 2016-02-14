@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/fasttokenhandler.hxx"
+#include <oox/core/fasttokenhandler.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "oox/helper/helper.hxx"
-#include "oox/token/tokenmap.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/token/tokenmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <services.hxx>

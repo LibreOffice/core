@@ -18,7 +18,7 @@
  */
 
 
-#include "registry/registry.hxx"
+#include <registry/registry.hxx>
 #include "fileurl.hxx"
 #include "options.hxx"
 

@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/io/TempFile.hpp>
-#include "oox/drawingml/graphicshapecontext.hxx"
+#include <oox/drawingml/graphicshapecontext.hxx>
 
 #include <osl/diagnose.h>
 
@@ -28,18 +28,18 @@
 #include "drawingml/customshapeproperties.hxx"
 #include "drawingml/diagram/diagram.hxx"
 #include "drawingml/table/tablecontext.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmlshape.hxx"
-#include "oox/vml/vmlshapecontainer.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmlshape.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
+#include <oox/drawingml/fillproperties.hxx>
 #include "drawingml/transform2dcontext.hxx"
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
-#include "oox/ppt/pptshapegroupcontext.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/ppt/pptshapegroupcontext.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;

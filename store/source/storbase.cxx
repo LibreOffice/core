@@ -20,12 +20,12 @@
 #include "storbase.hxx"
 
 #include "boost/noncopyable.hpp"
-#include "sal/types.h"
+#include <sal/types.h>
 #include "rtl/alloc.h"
 #include "rtl/ref.hxx"
 #include "osl/diagnose.h"
 
-#include "store/types.h"
+#include <store/types.h>
 #include "object.hxx"
 
 #include <stdio.h>

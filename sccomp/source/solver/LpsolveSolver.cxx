@@ -36,7 +36,7 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <config_lgpl.h>
 
 #undef LANGUAGE_NONE

@@ -22,7 +22,7 @@
 
 #include "osl/interlck.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include "typelib/typedescription.h"
 #include "uno/dispatcher.h"
 #include "uno/environment.h"

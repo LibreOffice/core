@@ -18,9 +18,9 @@
  */
 
 
-#include "accessibility/extended/AccessibleGridControlTableCell.hxx"
+#include <accessibility/extended/AccessibleGridControlTableCell.hxx>
 #include <svtools/accessibletable.hxx>
-#include "accessibility/extended/AccessibleGridControl.hxx"
+#include <accessibility/extended/AccessibleGridControl.hxx>
 #include <tools/gen.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
