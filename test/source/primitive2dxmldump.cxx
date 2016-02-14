@@ -102,31 +102,31 @@ void Primitive2dXmlDump::decomposeAndWrite(
         {
             case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
             {
-                const HiddenGeometryPrimitive2D* pHiddenGeometryPrimitive2D = dynamic_cast<const HiddenGeometryPrimitive2D*>(pBasePrimitive);
+                const HiddenGeometryPrimitive2D& rHiddenGeometryPrimitive2D = dynamic_cast<const HiddenGeometryPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("hiddengeometry");
-                decomposeAndWrite(pHiddenGeometryPrimitive2D->getChildren(), rWriter);
+                decomposeAndWrite(rHiddenGeometryPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
             break;
 
             case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
             {
-                const TransformPrimitive2D* pTransformPrimitive2D = dynamic_cast<const TransformPrimitive2D*>(pBasePrimitive);
+                const TransformPrimitive2D& rTransformPrimitive2D = dynamic_cast<const TransformPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("transform");
                 //pTransformPrimitive2D->getTransformation()
-                decomposeAndWrite(pTransformPrimitive2D->getChildren(), rWriter);
+                decomposeAndWrite(rTransformPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
             break;
 
             case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
             {
-                const PolyPolygonColorPrimitive2D* pPolyPolygonColorPrimitive2D = dynamic_cast<const PolyPolygonColorPrimitive2D*>(pBasePrimitive);
+                const PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D = dynamic_cast<const PolyPolygonColorPrimitive2D&>(*pBasePrimitive);
 
                 rWriter.startElement("polypolygoncolor");
-                rWriter.attribute("color", convertColorToString(pPolyPolygonColorPrimitive2D->getBColor()));
+                rWriter.attribute("color", convertColorToString(rPolyPolygonColorPrimitive2D.getBColor()));
                 rWriter.startElement("polypolygon");
-                rWriter.content(basegfx::tools::exportToSvgD(pPolyPolygonColorPrimitive2D->getB2DPolyPolygon(), true, true, false));
+                rWriter.content(basegfx::tools::exportToSvgD(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), true, true, false));
                 rWriter.endElement();
                 rWriter.endElement();
             }
@@ -134,11 +134,11 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D:
             {
-                const PolyPolygonStrokePrimitive2D* pPolyPolygonStrokePrimitive2D = dynamic_cast<const PolyPolygonStrokePrimitive2D*>(pBasePrimitive);
+                const PolyPolygonStrokePrimitive2D& rPolyPolygonStrokePrimitive2D = dynamic_cast<const PolyPolygonStrokePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polypolygonstroke");
 
                 rWriter.startElement("line");
-                drawinglayer::attribute::LineAttribute aLineAttribute = pPolyPolygonStrokePrimitive2D->getLineAttribute();
+                drawinglayer::attribute::LineAttribute aLineAttribute = rPolyPolygonStrokePrimitive2D.getLineAttribute();
                 rWriter.attribute("color", convertColorToString(aLineAttribute.getColor()));
                 rWriter.attribute("width", aLineAttribute.getWidth());
                 //rWriter.attribute("linejoin", aLineAttribute.getLineJoin());
@@ -148,7 +148,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 //getStrokeAttribute()
 
                 rWriter.startElement("polypolygon");
-                rWriter.content(basegfx::tools::exportToSvgD(pPolyPolygonStrokePrimitive2D->getB2DPolyPolygon(), true, true, false));
+                rWriter.content(basegfx::tools::exportToSvgD(rPolyPolygonStrokePrimitive2D.getB2DPolyPolygon(), true, true, false));
                 rWriter.endElement();
 
                 rWriter.endElement();
@@ -157,13 +157,13 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
             {
-                const PolygonHairlinePrimitive2D* pPolygonHairlinePrimitive2D = dynamic_cast<const PolygonHairlinePrimitive2D*>(pBasePrimitive);
+                const PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D = dynamic_cast<const PolygonHairlinePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polygonhairline");
 
-                rWriter.attribute("color", convertColorToString(pPolygonHairlinePrimitive2D->getBColor()));
+                rWriter.attribute("color", convertColorToString(rPolygonHairlinePrimitive2D.getBColor()));
 
                 rWriter.startElement("polygon");
-                rWriter.content(basegfx::tools::exportToSvgPoints(pPolygonHairlinePrimitive2D->getB2DPolygon()));
+                rWriter.content(basegfx::tools::exportToSvgPoints(rPolygonHairlinePrimitive2D.getB2DPolygon()));
                 rWriter.endElement();
 
 
@@ -173,37 +173,37 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
             {
-                const TextSimplePortionPrimitive2D* pTextSimplePortionPrimitive2D = dynamic_cast<const TextSimplePortionPrimitive2D*>(pBasePrimitive);
+                const TextSimplePortionPrimitive2D& rTextSimplePortionPrimitive2D = dynamic_cast<const TextSimplePortionPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("textsimpleportion");
 
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
-                if(pTextSimplePortionPrimitive2D->getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
+                if(rTextSimplePortionPrimitive2D.getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
                 {
                     rWriter.attribute("height", aScale.getY());
                 }
-                rWriter.attribute("text", pTextSimplePortionPrimitive2D->getText());
-                rWriter.attribute("fontcolor", convertColorToString(pTextSimplePortionPrimitive2D->getFontColor()));
+                rWriter.attribute("text", rTextSimplePortionPrimitive2D.getText());
+                rWriter.attribute("fontcolor", convertColorToString(rTextSimplePortionPrimitive2D.getFontColor()));
                 rWriter.endElement();
             }
             break;
 
             case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
             {
-                const MaskPrimitive2D* pMaskPrimitive2D = dynamic_cast<const MaskPrimitive2D*>(pBasePrimitive);
+                const MaskPrimitive2D& rMaskPrimitive2D = dynamic_cast<const MaskPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("mask");
 
-                decomposeAndWrite(pMaskPrimitive2D->getChildren(), rWriter);
+                decomposeAndWrite(rMaskPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
             break;
 
             case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
             {
-                const UnifiedTransparencePrimitive2D* pUnifiedTransparencePrimitive2D = dynamic_cast<const UnifiedTransparencePrimitive2D*>(pBasePrimitive);
+                const UnifiedTransparencePrimitive2D& rUnifiedTransparencePrimitive2D = dynamic_cast<const UnifiedTransparencePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("unifiedtransparence");
 
-                rWriter.attribute("transparence", pUnifiedTransparencePrimitive2D->getTransparence());
+                rWriter.attribute("transparence", rUnifiedTransparencePrimitive2D.getTransparence());
 
                 rWriter.endElement();
             }
@@ -211,21 +211,21 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D:
             {
-                const ObjectInfoPrimitive2D* pObjectInfoPrimitive2D = dynamic_cast<const ObjectInfoPrimitive2D*>(pBasePrimitive);
+                const ObjectInfoPrimitive2D& rObjectInfoPrimitive2D = dynamic_cast<const ObjectInfoPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("objectinfo");
 
-                decomposeAndWrite(pObjectInfoPrimitive2D->getChildren(), rWriter);
+                decomposeAndWrite(rObjectInfoPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }
             break;
 
             case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
             {
-                const SvgRadialGradientPrimitive2D* pSvgRadialGradientPrimitive2D = dynamic_cast<const SvgRadialGradientPrimitive2D*>(pBasePrimitive);
+                const SvgRadialGradientPrimitive2D& rSvgRadialGradientPrimitive2D = dynamic_cast<const SvgRadialGradientPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("svgradialgradient");
-                basegfx::B2DPoint aFocusAttribute = pSvgRadialGradientPrimitive2D->getFocal();
+                basegfx::B2DPoint aFocusAttribute = rSvgRadialGradientPrimitive2D.getFocal();
 
-                rWriter.attribute("radius", pSvgRadialGradientPrimitive2D->getRadius());
+                rWriter.attribute("radius", rSvgRadialGradientPrimitive2D.getRadius());
                 rWriter.attribute("x", aFocusAttribute.getX());
                 rWriter.attribute("y", aFocusAttribute.getY());
 
