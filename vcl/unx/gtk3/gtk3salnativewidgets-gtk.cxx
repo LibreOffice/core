@@ -1614,7 +1614,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         {
             indicator_size = 0;
 
-            GtkStyleContext *pMenuItemStyle = (nType == PART_MENU_ITEM_CHECK_MARK ) ? mpCheckMenuItemStyle : mpRadioMenuItemStyle;
+            GtkStyleContext *pMenuItemStyle = (nPart == PART_MENU_ITEM_CHECK_MARK ) ? mpCheckMenuItemStyle : mpRadioMenuItemStyle;
 
             gtk_style_context_get_style( pMenuItemStyle,
                                          "indicator-size", &indicator_size,
