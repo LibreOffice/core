@@ -163,16 +163,16 @@ Write_Bases( csi::xml::Element &            o_out,
         for (uintt i = 0; i < io_setColumns.size(); ++i)
         {
             if (io_setColumns[i] == 1)
-                o_out << new csi::xml::XmlCode("&#x2503");
+                o_out << new csi::xml::XmlCode("&#x2503;");
             else
                 o_out << "  ";
             o_out << " ";
         }
 
         if (bThereComesMore)
-            o_out << new csi::xml::XmlCode("&#x2523");
+            o_out << new csi::xml::XmlCode("&#x2523;");
         else
-            o_out << new csi::xml::XmlCode("&#x2517");
+            o_out << new csi::xml::XmlCode("&#x2517;");
         o_out << " ";
 
         HF_IdlTypeText
