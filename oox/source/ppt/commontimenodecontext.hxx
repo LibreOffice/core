@@ -21,8 +21,8 @@
 #define INCLUDED_OOX_SOURCE_PPT_COMMONTIMENODECONTEXT_HXX
 
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#include "oox/ppt/timenode.hxx"
-#include "oox/ppt/timenodelistcontext.hxx"
+#include <oox/ppt/timenode.hxx>
+#include <oox/ppt/timenodelistcontext.hxx>
 #include "conditioncontext.hxx"
 
 namespace oox { namespace ppt {

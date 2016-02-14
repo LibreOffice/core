@@ -18,8 +18,8 @@
  */
 
 
-#include "osx/salinst.h"
-#include "osx/a11yfactory.h"
+#include <osx/salinst.h>
+#include <osx/a11yfactory.h>
 
 #include "a11yselectionwrapper.h"
 

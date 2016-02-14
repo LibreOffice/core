@@ -18,7 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "drawingml/guidcontext.hxx"
 #include "drawingml/table/tablecontext.hxx"
 #include "drawingml/table/tableproperties.hxx"

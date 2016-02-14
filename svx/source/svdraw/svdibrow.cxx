@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <limits>
 
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include "svdibrow.hxx"
 #include <editeng/charscaleitem.hxx>
 #include <editeng/colritem.hxx>

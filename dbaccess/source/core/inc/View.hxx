@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEW_HXX
 
-#include "connectivity/sdbcx/VView.hxx"
+#include <connectivity/sdbcx/VView.hxx>
 
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 #include <com/sun/star/sdb/tools/XViewAccess.hpp>

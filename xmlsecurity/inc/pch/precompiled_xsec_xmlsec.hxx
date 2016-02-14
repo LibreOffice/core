@@ -13,8 +13,8 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-10 17:36:56 using:
- ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=2 --exclude:system --include:module --include:local
+ Generated on 2016-02-14 21:42:42 using:
+ ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx "make xmlsecurity.build" --find-conflicts
@@ -23,46 +23,27 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
-#include <cstring>
-#include <exception>
-#include <iomanip>
-#include <memory>
 #include <new>
 #include <ostream>
-#include <pk11pub.h>
 #include <sstream>
-#include <stdio.h>
+#include <stddef.h>
 #include <string.h>
 #include <string>
-#include <utility>
 #include <boost/noncopyable.hpp>
-#include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/bootstrap.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.h>
-#include <rtl/byteseq.hxx>
-#include <rtl/instance.hxx>
-#include <rtl/malformeduriexception.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/uri.h>
+#include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -70,62 +51,14 @@
 #include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
+#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <sal/typesizes.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
-#include <com/sun/star/uno/genfunc.h>
-#include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
-#include <cppu/cppudllapi.h>
-#include <cppu/unotype.hxx>
+#include <com/sun/star/uno/Sequence.h>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <typelib/typeclass.h>
-#include <typelib/typedescription.h>
-#include <typelib/uik.h>
-#include <uno/any2.h>
-#include <uno/data.h>
-#include <uno/sequence2.h>
-#include <xmloff/dllapi.h>
-#include <xmlsec/base64.h>
-#include <xmlsec/bn.h>
-#include <xmlsec/errors.h>
-#include <xmlsec/io.h>
-#include <xmlsec/keysmngr.h>
-#include <xmlsec/strings.h>
-#include <xmlsec/xmldsig.h>
-#include <xmlsec/xmlenc.h>
-#include <xmlsec/xmlsec.h>
-#include <xmlsec/xmltree.h>
-#include <xmlsecurity/biginteger.hxx>
 
 // Cleanup windows header macro pollution.
 #if defined(WNT) && defined(WINAPI)

@@ -23,13 +23,13 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include "cppunit/Message.h"
 #include "osl/thread.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "cppunittester/protectorfactory.hxx"
 

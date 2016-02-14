@@ -13,18 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch connectivity postgresql-sdbc-impl --cutoff=3 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 21:31:03 using:
+ ./bin/update_pch connectivity postgresql-sdbc-impl --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_postgresql-sdbc-impl.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_postgresql-sdbc-impl.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <string.h>
-#include <osl/diagnose.h>
 #include <osl/module.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uuid.h>
@@ -34,15 +34,12 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <connectivity/dbconversion.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

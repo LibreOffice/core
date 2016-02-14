@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include "svl/inettype.hxx"
+#include <svl/inettype.hxx>
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"

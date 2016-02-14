@@ -21,7 +21,7 @@
 #define INCLUDED_LINGUISTIC_SOURCE_SPELLDSP_HXX
 
 #include "lngopt.hxx"
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "iprcache.hxx"
 
 #include <cppuhelper/implbase.hxx>

@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "quartz/utils.h"
 
 #include "a11yactionwrapper.h"

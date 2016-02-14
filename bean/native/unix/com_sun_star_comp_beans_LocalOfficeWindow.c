@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -28,7 +28,7 @@
 #include "jawt_md.h"
 #include "jawt.h"
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #define SYSTEM_XWINDOW 6
 

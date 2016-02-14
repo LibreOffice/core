@@ -13,24 +13,25 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:39 using:
- ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:41:51 using:
+ ./bin/update_pch svgio svgio --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svgio/inc/pch/precompiled_svgio.hxx "/opt/lo/bin/make svgio.build" --find-conflicts
+ ./bin/update_pch_bisect ./svgio/inc/pch/precompiled_svgio.hxx "make svgio.build" --find-conflicts
 */
 
-#include <set>
 #include <stddef.h>
 #include <stdlib.h>
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>
+#include <osl/diagnose.h>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/instance.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -39,29 +40,33 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/vclenum.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <tools/toolsdllapi.h>
 #include <svgio/svgreader/svgdocument.hxx>
 #include <svgio/svgreader/svgnode.hxx>
 #include <svgio/svgreader/svgpaint.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
 #include <svgio/svgreader/svgtoken.hxx>
 #include <svgio/svgreader/svgtools.hxx>
+#include <svgio/svgreader/svgtrefnode.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

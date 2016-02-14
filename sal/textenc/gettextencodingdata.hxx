@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_TEXTENC_GETTEXTENCODINGDATA_HXX
 #define INCLUDED_SAL_TEXTENC_GETTEXTENCODINGDATA_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "rtl/textenc.h"
 

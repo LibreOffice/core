@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_OSX_A11YSELECTIONWRAPPER_H
 #define INCLUDED_VCL_OSX_A11YSELECTIONWRAPPER_H
 
-#include "osx/osxvcltypes.h"
-#include "osx/a11ywrapper.h"
+#include <osx/osxvcltypes.h>
+#include <osx/a11ywrapper.h>
 
 @interface AquaA11ySelectionWrapper : NSObject
 {

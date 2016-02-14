@@ -25,8 +25,8 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/chart/chartconverter.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include "drawingml/chart/chartdrawingfragment.hxx"
 #include "drawingml/chart/chartspacemodel.hxx"

@@ -13,19 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:30 using:
- ./bin/update_pch desktop deployment --cutoff=3 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 20:44:31 using:
+ ./bin/update_pch desktop deployment --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deployment.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deployment.hxx "make desktop.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <config_features.h>
 #include <cstddef>
 #include <list>
-#include <memory>
-#include <unordered_map>
+#include <stdlib.h>
 #include <vector>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
@@ -37,31 +36,20 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
-#include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/deployment/InstallException.hpp>
-#include <com/sun/star/deployment/LicenseException.hpp>
-#include <com/sun/star/deployment/VersionException.hpp>
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <comphelper/anytostring.hxx>
@@ -69,10 +57,8 @@
 #include <comphelper/servicedecl.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <svl/inettype.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/unotoolsdllapi.h>
 #include <xmlscript/xml_helper.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

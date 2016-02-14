@@ -13,22 +13,25 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 15:48:57 using:
- ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:35:52 using:
+ ./bin/update_pch writerfilter writerfilter --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "/opt/lo/bin/make writerfilter.build" --find-conflicts
+ ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "make writerfilter.build" --find-conflicts
 */
 
 #include <cassert>
 #include <cstddef>
+#include <exception>
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <ostream>
 #include <stdlib.h>
-#include <tuple>
+#include <string.h>
+#include <string>
+#include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/logic/tribool.hpp>
@@ -39,9 +42,9 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
-#include <osl/thread.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
@@ -50,16 +53,26 @@
 #include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/macros.h>
+#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
+#include <vcl/svapp.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -67,6 +80,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -77,18 +91,25 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/weak.hxx>
+#include <dmapper/GraphicZOrderHelper.hxx>
 #include <filter/msfilter/util.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <oox/dllapi.h>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
 #include <ooxml/QNameToString.hxx>
 #include <ooxml/resourceids.hxx>
+#include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>

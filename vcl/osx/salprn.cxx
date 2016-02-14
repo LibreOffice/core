@@ -19,16 +19,16 @@
 
 #include <boost/bind.hpp>
 
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/print.hxx>
 #include <sal/macros.h>
 
-#include "osx/salinst.h"
-#include "osx/salprn.h"
-#include "osx/printview.h"
+#include <osx/salinst.h>
+#include <osx/salprn.h>
+#include <osx/printview.h>
 #include "quartz/salgdi.h"
-#include "osx/saldata.hxx"
+#include <osx/saldata.hxx>
 #include "quartz/utils.h"
 
 #include "jobset.h"

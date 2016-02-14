@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/relationshandler.hxx"
+#include <oox/core/relationshandler.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 namespace oox {
 namespace core {

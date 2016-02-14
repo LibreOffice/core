@@ -28,7 +28,7 @@
 #include <osl/thread.hxx>
 
 #ifdef MACOSX
-#include "osx/osxvcltypes.h"
+#include <osx/osxvcltypes.h>
 #endif
 #include "salinst.hxx"
 

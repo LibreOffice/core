@@ -22,7 +22,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlsFontProvider.hxx"
 #include "view/SlsTheme.hxx"
-#include "tools/IconCache.hxx"
+#include <tools/IconCache.hxx>
 #include "Window.hxx"
 #include "res_bmp.hrc"
 

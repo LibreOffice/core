@@ -24,7 +24,7 @@
 
 #include <com/sun/star/style/TabStop.hpp>
 
-#include "oox/core/contexthandler2.hxx"
+#include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 

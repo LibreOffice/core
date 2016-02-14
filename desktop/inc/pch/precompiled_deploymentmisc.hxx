@@ -13,22 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:31 using:
- ./bin/update_pch desktop deploymentmisc --cutoff=3 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 20:44:37 using:
+ ./bin/update_pch desktop deploymentmisc --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentmisc.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentmisc.hxx "make desktop.build" --find-conflicts
 */
 
 #include <cassert>
-#include <config_folders.h>
 #include <cstddef>
-#include <cstdlib>
-#include <exception>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <utility>
+#include <stddef.h>
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
@@ -42,43 +36,39 @@
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
 #include <osl/thread.hxx>
-#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
+#include <rtl/textcvt.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
-#include <sal/log.hxx>
+#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <sal/typesizes.h>
 #include <salhelper/linkhelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/processfactory.hxx>
+#include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
 

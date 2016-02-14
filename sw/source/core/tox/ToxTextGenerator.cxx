@@ -39,7 +39,7 @@
 #include "ToxTabStopTokenHandler.hxx"
 #include "txatbase.hxx"
 
-#include "svl/itemiter.hxx"
+#include <svl/itemiter.hxx>
 
 #include <cassert>
 #include <memory>

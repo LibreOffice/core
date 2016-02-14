@@ -44,7 +44,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
 #include "Window.hxx"

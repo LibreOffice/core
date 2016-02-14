@@ -20,14 +20,14 @@
 #ifndef INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_MULTI_HXX
 #define INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_MULTI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <cppuhelper/implbase.hxx>
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "test/testtools/bridgetest/XMulti.hpp"
+#include <sal/types.h>
+#include <test/testtools/bridgetest/XMulti.hpp>
 
 namespace testtools { namespace bridgetest {
 

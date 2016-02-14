@@ -22,7 +22,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/menu.hxx>
 
-#include "osx/a11yfocustracker.hxx"
+#include <osx/a11yfocustracker.hxx>
 
 #include "documentfocuslistener.hxx"
 

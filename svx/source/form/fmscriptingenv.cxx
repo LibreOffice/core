@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include "fmscriptingenv.hxx"
-#include "svx/fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>

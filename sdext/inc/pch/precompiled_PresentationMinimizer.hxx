@@ -13,78 +13,26 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:37 using:
- ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
+ Generated on 2016-02-14 21:44:43 using:
+ ./bin/update_pch sdext PresentationMinimizer --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresentationMinimizer.hxx "/opt/lo/bin/make sdext.build" --find-conflicts
+ ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresentationMinimizer.hxx "make sdext.build" --find-conflicts
 */
 
-#include <cassert>
-#include <config_typesizes.h>
-#include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <new>
-#include <ostream>
-#include <sstream>
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <string>
-#include <osl/diagnose.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
-#include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/time.h>
-#include <rtl/alloc.h>
-#include <rtl/byteseq.h>
-#include <rtl/byteseq.hxx>
-#include <rtl/string.h>
-#include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
-#include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
-#include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
-#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/io/TempFile.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
-#include <com/sun/star/presentation/XPresentationPage.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/view/XControlAccess.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "a11ywrappersplitter.h"
 
 using namespace ::com::sun::star::accessibility;

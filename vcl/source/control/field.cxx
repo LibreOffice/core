@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
-#include "tools/rc.h"
+#include <tools/rc.h>
 
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
@@ -35,7 +35,7 @@
 #include "svids.hrc"
 #include "svdata.hxx"
 
-#include "i18nutil/unicode.hxx"
+#include <i18nutil/unicode.hxx>
 
 #include "rtl/math.hxx"
 

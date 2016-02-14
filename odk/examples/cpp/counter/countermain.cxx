@@ -34,7 +34,7 @@
  *************************************************************************/
 
 // simple client application registering and using the counter component.
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <stdio.h>

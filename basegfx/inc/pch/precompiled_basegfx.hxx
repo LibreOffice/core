@@ -13,22 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch basegfx basegfx --cutoff=3 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:33:06 using:
+ ./bin/update_pch basegfx basegfx --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./basegfx/inc/pch/precompiled_basegfx.hxx "/opt/lo/bin/make basegfx.build" --find-conflicts
+ ./bin/update_pch_bisect ./basegfx/inc/pch/precompiled_basegfx.hxx "make basegfx.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
-#include <limits>
 #include <numeric>
 #include <ostream>
-#include <sstream>
-#include <string>
 #include <vector>
 #include <boost/next_prior.hpp>
 #include <osl/diagnose.h>
@@ -38,7 +34,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
-#include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -46,6 +41,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <cppu/unotype.hxx>
+#include <o3tl/cow_wrapper.hxx>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
 #include <basegfx/basegfxdllapi.h>
@@ -59,25 +55,18 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
-#include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2drangeclipper.hxx>
 #include <basegfx/range/b3drange.hxx>
-#include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <basegfx/tuple/b3ituple.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <basegfx/vector/b3dvector.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

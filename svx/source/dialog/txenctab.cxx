@@ -20,7 +20,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/txenctab.hxx"
+#include <svx/txenctab.hxx>
 
 SvxTextEncodingTable::SvxTextEncodingTable()
     :

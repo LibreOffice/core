@@ -27,7 +27,7 @@
 #include <documentlinkmgr.hxx>
 
 #include <config_orcus.h>
-#include "officecfg/Office/Calc.hxx"
+#include <officecfg/Office/Calc.hxx>
 
 
 #if ENABLE_ORCUS

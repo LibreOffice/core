@@ -24,7 +24,7 @@
 #include "uno/mapping.hxx"
 #include "uno/dispatcher.h"
 
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 
 #include "cascade_mapping.hxx"
 

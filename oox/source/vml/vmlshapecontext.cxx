@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmlshapecontext.hxx"
+#include <oox/vml/vmlshapecontext.hxx>
 
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmlshape.hxx"
-#include "oox/vml/vmlshapecontainer.hxx"
-#include "oox/vml/vmltextboxcontext.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmlshape.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
+#include <oox/vml/vmltextboxcontext.hxx>
 
 #include <osl/diagnose.h>
 

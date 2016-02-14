@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "android/log.h"
+#include <android/log.h>
 
 #include "progressui.h"
 

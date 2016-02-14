@@ -34,8 +34,8 @@
 #include <osl/mutex.hxx>
 
 #include "hyphdsp.hxx"
-#include "linguistic/hyphdta.hxx"
-#include "linguistic/lngprops.hxx"
+#include <linguistic/hyphdta.hxx>
+#include <linguistic/lngprops.hxx>
 #include "lngsvcmgr.hxx"
 
 using namespace osl;

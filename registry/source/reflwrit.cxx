@@ -28,8 +28,8 @@
 #include "rtl/ustring.hxx"
 
 #include "reflwrit.hxx"
-#include "registry/version.h"
-#include "registry/writer.h"
+#include <registry/version.h>
+#include <registry/writer.h>
 
 #include "reflcnst.hxx"
 

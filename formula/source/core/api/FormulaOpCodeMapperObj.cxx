@@ -21,8 +21,8 @@
 
 #include <utility>
 
-#include "formula/FormulaOpCodeMapperObj.hxx"
-#include "formula/opcode.hxx"
+#include <formula/FormulaOpCodeMapperObj.hxx>
+#include <formula/opcode.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

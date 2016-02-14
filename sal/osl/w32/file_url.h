@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_OSL_W32_FILE_URL_H
 #define INCLUDED_SAL_OSL_W32_FILE_URL_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include "rtl/ustring.h"
 #include "osl/file.h"
 

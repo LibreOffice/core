@@ -18,12 +18,12 @@
  */
 
 #include "drawingml/textparagraph.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/textcharacterproperties.hxx"
 
 #include <rtl/ustring.hxx>
 #include <oox/mathml/importutils.hxx>
-#include "oox/helper/propertyset.hxx"
+#include <oox/helper/propertyset.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>

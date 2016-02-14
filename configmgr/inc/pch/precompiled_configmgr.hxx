@@ -13,64 +13,54 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch configmgr configmgr --cutoff=6 --exclude:system --include:module --include:local
+ Generated on 2016-02-14 20:51:39 using:
+ ./bin/update_pch configmgr configmgr --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./configmgr/inc/pch/precompiled_configmgr.hxx "/opt/lo/bin/make configmgr.build" --find-conflicts
+ ./bin/update_pch_bisect ./configmgr/inc/pch/precompiled_configmgr.hxx "make configmgr.build" --find-conflicts
 */
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <new>
 #include <set>
-#include <utility>
 #include <vector>
 #include <osl/conditn.hxx>
-#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
-#include <osl/time.h>
-#include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/byteseq.h>
 #include <rtl/character.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
+#include <rtl/string.hxx>
 #include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/config.h>
-#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <typelib/typeclass.h>
-#include <typelib/typedescription.h>
-#include <typelib/uik.h>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 

@@ -43,7 +43,7 @@
 #include <cstdio>
 #include <cstdarg>
 
-#include "apple_remote/RemoteMainController.h"
+#include <apple_remote/RemoteMainController.h>
 
 class AquaSalInstance;
 class SalObject;

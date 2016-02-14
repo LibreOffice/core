@@ -19,7 +19,7 @@
 
 #include "PanelFactory.hxx"
 #include "facreg.hxx"
-#include "framework/Pane.hxx"
+#include <framework/Pane.hxx>
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
 #include "LayoutMenu.hxx"

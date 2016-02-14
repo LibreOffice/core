@@ -21,7 +21,7 @@
 #include "MasterPageObserver.hxx"
 #include "MasterPagesSelector.hxx"
 #include "MasterPageDescriptor.hxx"
-#include "tools/ConfigurationAccess.hxx"
+#include <tools/ConfigurationAccess.hxx>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 

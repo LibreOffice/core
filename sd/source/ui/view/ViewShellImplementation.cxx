@@ -42,7 +42,7 @@
 #include "DrawViewShell.hxx"
 #include "ViewShellHint.hxx"
 #include "SidebarPanelId.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

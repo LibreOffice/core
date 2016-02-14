@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/EnhancedCustomShape2d.hxx"
+#include <svx/EnhancedCustomShape2d.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>

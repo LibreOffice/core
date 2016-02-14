@@ -26,8 +26,8 @@
 
 #include <svx/fntctl.hxx>
 #include <svx/svxids.hrc>
-#include "editeng/flstitem.hxx"
-#include "editeng/fontitem.hxx"
+#include <editeng/flstitem.hxx>
+#include <editeng/fontitem.hxx>
 
 SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 

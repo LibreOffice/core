@@ -24,8 +24,8 @@
 #include <osl/diagnose.h>
 
 #include <cppu/Enterable.hxx>
-#include "cppu/helper/purpenv/Environment.hxx"
-#include "cppu/helper/purpenv/Mapping.hxx"
+#include <cppu/helper/purpenv/Environment.hxx>
+#include <cppu/helper/purpenv/Mapping.hxx>
 
 
 #ifdef debug

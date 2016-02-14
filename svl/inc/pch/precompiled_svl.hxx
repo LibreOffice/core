@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:39 using:
- ./bin/update_pch svl svl --cutoff=6 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 20:43:50 using:
+ ./bin/update_pch svl svl --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svl/inc/pch/precompiled_svl.hxx "/opt/lo/bin/make svl.build" --find-conflicts
+ ./bin/update_pch_bisect ./svl/inc/pch/precompiled_svl.hxx "make svl.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -26,8 +26,8 @@
 #include <memory>
 #include <new>
 #include <ostream>
-#include <stddef.h>
 #include <string.h>
+#include <unordered_map>
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
@@ -40,6 +40,7 @@
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
 #include <osl/thread.h>
+#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
@@ -48,6 +49,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -55,6 +57,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/config.h>
@@ -62,31 +65,45 @@
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <sal/typesizes.h>
 #include <salhelper/linkhelper.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
-#include <i18nlangtag/i18nlangtagdllapi.h>
-#include <i18nlangtag/lang.h>
+#include <cppuhelper/cppuhelperdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <libxml/xmlwriter.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
+#include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/digitgroupingiterator.hxx>
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <svl/SfxBroadcaster.hxx>
+#include <svl/cintitem.hxx>
+#include <svl/hint.hxx>
+#include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/languageoptions.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/smplhint.hxx>
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

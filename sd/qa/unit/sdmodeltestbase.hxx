@@ -18,7 +18,7 @@
 
 #include "drawdoc.hxx"
 #include "../source/ui/inc/DrawDocShell.hxx"
-#include "unotools/tempfile.hxx"
+#include <unotools/tempfile.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfile.hxx>

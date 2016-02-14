@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 
@@ -15,7 +15,7 @@
 #include "osl/pipe.h"
 #include "osl/socket.h"
 #include "osl/time.h"
-#include "sal/types.h"
+#include <sal/types.h>
 
 // Stubs for removed functionality, to be killed when we bump sal SONAME
 

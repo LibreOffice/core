@@ -60,7 +60,7 @@
 #include "sdattr.hxx"
 #include "ViewShellBase.hxx"
 #include "sdabstdlg.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "DrawViewShell.hxx"
 #include "slideshow.hxx"
 #include <memory>

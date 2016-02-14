@@ -20,7 +20,7 @@
 #ifndef INCLUDED_STORE_SOURCE_STORLCKB_HXX
 #define INCLUDED_STORE_SOURCE_STORLCKB_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "rtl/ustring.h"
 #include "rtl/ref.hxx"

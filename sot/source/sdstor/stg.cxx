@@ -25,7 +25,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
-#include "sot/stg.hxx"
+#include <sot/stg.hxx>
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"

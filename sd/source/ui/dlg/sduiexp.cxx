@@ -33,7 +33,7 @@
 #include "prltempl.hxx"
 #include "custsdlg.hxx"
 #include "copydlg.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 
 extern "C"
 {

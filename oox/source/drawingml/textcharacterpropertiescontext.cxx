@@ -19,13 +19,13 @@
 
 #include "drawingml/textcharacterpropertiescontext.hxx"
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/colorchoicecontext.hxx"
 #include "drawingml/texteffectscontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include <oox/drawingml/lineproperties.hxx>
 #include "drawingml/textparagraphproperties.hxx"
-#include "oox/core/relations.hxx"
+#include <oox/core/relations.hxx>
 #include "hyperlinkcontext.hxx"
 
 using namespace ::oox::core;

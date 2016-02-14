@@ -56,10 +56,10 @@
 #include "com/sun/star/ucb/XCommandInfo.hpp"
 #include "com/sun/star/ucb/XPersistentPropertySet.hpp"
 
-#include "comphelper/processfactory.hxx"
-#include "ucbhelper/cancelcommandexecution.hxx"
-#include "ucbhelper/contentidentifier.hxx"
-#include "ucbhelper/propertyvalueset.hxx"
+#include <comphelper/processfactory.hxx>
+#include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/propertyvalueset.hxx>
 
 #include "tdoc_content.hxx"
 #include "tdoc_resultset.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/ViewShellWrapper.hxx"
-#include "framework/Pane.hxx"
+#include <framework/ViewShellWrapper.hxx>
+#include <framework/Pane.hxx>
 #include "sdpage.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"

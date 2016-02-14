@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:42 using:
+ Generated on 2016-02-14 20:52:08 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sd/inc/pch/precompiled_sd.hxx "/opt/lo/bin/make sd.build" --find-conflicts
+ ./bin/update_pch_bisect ./sd/inc/pch/precompiled_sd.hxx "make sd.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -82,14 +82,13 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
@@ -101,7 +100,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
@@ -112,7 +110,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
@@ -260,6 +257,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/extract.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -347,6 +345,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/ipclient.hxx>
@@ -370,7 +369,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sot/formats.hxx>
-#include <sot/sotdllapi.h>
 #include <sot/storage.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
@@ -439,6 +437,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>

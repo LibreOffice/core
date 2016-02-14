@@ -32,7 +32,7 @@
 #include "quartz/utils.h"
 
 #ifdef MACOSX
-#include "osx/saldata.hxx"
+#include <osx/saldata.hxx>
 #else
 #include "saldatabasic.hxx"
 #endif

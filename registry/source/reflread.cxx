@@ -30,8 +30,8 @@
 #include <reflread.hxx>
 #include <sal/log.hxx>
 
-#include "registry/typereg_reader.hxx"
-#include "registry/version.h"
+#include <registry/typereg_reader.hxx>
+#include <registry/version.h>
 
 #include "reflcnst.hxx"
 

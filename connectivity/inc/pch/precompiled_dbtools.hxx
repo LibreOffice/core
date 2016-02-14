@@ -13,17 +13,19 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:29:55 using:
+ ./bin/update_pch connectivity dbtools --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_dbtools.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_dbtools.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
+#include <config_features.h>
 #include <cstddef>
 #include <cstdlib>
+#include <exception>
 #include <functional>
 #include <iterator>
 #include <map>
@@ -41,6 +43,7 @@
 #include <boost/optional.hpp>
 #include <boost/type_traits.hpp>
 #include <osl/diagnose.h>
+#include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
@@ -64,136 +67,85 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <salhelper/singletonref.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/i18n/LocaleData.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/sdb/BooleanComparisonMode.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/DriverManager.hpp>
-#include <com/sun/star/sdbc/IndexType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbc/ProcedureResult.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/officeresourcebundle.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
-#include <i18nlangtag/i18nlangtagdllapi.h>
-#include <i18nlangtag/lang.h>
-#include <o3tl/functional.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/toolsdllapi.h>
 #include <unotools/sharedunocomponent.hxx>
-#include <unotools/unotoolsdllapi.h>
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/DriversConfig.hxx>
-#include <connectivity/FValue.hxx>
-#include <connectivity/IParseContext.hxx>
-#include <connectivity/OSubComponent.hxx>
-#include <connectivity/PColumn.hxx>
-#include <connectivity/ParameterCont.hxx>
-#include <connectivity/TIndex.hxx>
-#include <connectivity/TIndexColumns.hxx>
-#include <connectivity/TKey.hxx>
-#include <connectivity/TKeyColumns.hxx>
 #include <connectivity/TTableHelper.hxx>
-#include <connectivity/conncleanup.hxx>
-#include <connectivity/dbcharset.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <connectivity/filtermanager.hxx>
-#include <connectivity/internalnode.hxx>
-#include <connectivity/paramwrapper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
-#include <connectivity/sdbcx/VIndex.hxx>
-#include <connectivity/sdbcx/VIndexColumn.hxx>
-#include <connectivity/sdbcx/VKey.hxx>
-#include <connectivity/sdbcx/VKeyColumn.hxx>
-#include <connectivity/sdbcx/VTable.hxx>
-#include <connectivity/sqlerror.hxx>
+#include <connectivity/sdbcx/VTypeDef.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <connectivity/statementcomposer.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

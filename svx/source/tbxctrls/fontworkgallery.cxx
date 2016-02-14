@@ -44,7 +44,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 
-#include "svx/gallery.hxx"
+#include <svx/gallery.hxx>
 #include <svx/dlgutil.hxx>
 
 #include <svx/fontworkgallery.hxx>

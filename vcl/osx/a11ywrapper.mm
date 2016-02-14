@@ -18,13 +18,13 @@
  */
 
 
-#include "osx/salinst.h"
-#include "osx/saldata.hxx"
+#include <osx/salinst.h>
+#include <osx/saldata.hxx>
 
-#include "osx/a11ywrapper.h"
-#include "osx/a11ylistener.hxx"
-#include "osx/a11yfactory.h"
-#include "osx/a11yfocustracker.hxx"
+#include <osx/a11ywrapper.h>
+#include <osx/a11ylistener.hxx>
+#include <osx/a11yfactory.h>
+#include <osx/a11yfocustracker.hxx>
 
 #include "quartz/utils.h"
 

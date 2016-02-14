@@ -28,9 +28,9 @@
 
 #include "unx/cupsmgr.hxx"
 
-#include "tools/urlobj.hxx"
-#include "tools/stream.hxx"
-#include "tools/zcodec.hxx"
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
+#include <tools/zcodec.hxx>
 #include "osl/mutex.hxx"
 #include "osl/file.hxx"
 #include "osl/process.h"

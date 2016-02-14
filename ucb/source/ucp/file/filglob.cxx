@@ -43,7 +43,7 @@
 #include "rtl/ustrbuf.hxx"
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
-#include "sal/types.h"
+#include <sal/types.h>
 
 using namespace ucbhelper;
 using namespace osl;

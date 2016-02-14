@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <osl/mutex.hxx>
 #include <unordered_map>
 #include <memory>

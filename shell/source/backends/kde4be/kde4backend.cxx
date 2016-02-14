@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <kapplication.h>
 
@@ -39,14 +39,14 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
-#include "cppuhelper/factory.hxx"
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/weak.hxx"
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/weak.hxx>
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include "uno/current_context.hxx"
 
 #include "kde4access.hxx"

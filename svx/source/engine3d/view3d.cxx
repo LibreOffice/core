@@ -21,7 +21,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdmodel.hxx>
@@ -32,7 +32,7 @@
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/sphere3d.hxx>

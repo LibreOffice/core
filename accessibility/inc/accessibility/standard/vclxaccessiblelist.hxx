@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <functional>
-#include "accessibility/standard/vclxaccessiblelistitem.hxx"
+#include <accessibility/standard/vclxaccessiblelistitem.hxx>
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_PROXY_HXX
 #define INCLUDED_BINARYURP_SOURCE_PROXY_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "osl/interlck.h"
 #include "rtl/ref.hxx"

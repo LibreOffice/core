@@ -22,13 +22,13 @@
 
 #include <vector>
 
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include "premac.h"
 #ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
-#include "osx/osxvcltypes.h"
-#include "osx/salframe.h"
+#include <osx/osxvcltypes.h>
+#include <osx/salframe.h>
 #else
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>

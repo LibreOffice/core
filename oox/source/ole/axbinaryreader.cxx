@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/axbinaryreader.hxx"
+#include <oox/ole/axbinaryreader.hxx>
 
-#include "oox/ole/olehelper.hxx"
+#include <oox/ole/olehelper.hxx>
 
 #include <osl/diagnose.h>
 

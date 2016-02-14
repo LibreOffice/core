@@ -18,7 +18,7 @@
  */
 
 
-#include "cppu/helper/purpenv/Environment.hxx"
+#include <cppu/helper/purpenv/Environment.hxx>
 
 #include "osl/diagnose.h"
 #include "uno/lbnames.h"

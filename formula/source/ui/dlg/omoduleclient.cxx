@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "formula/omoduleclient.hxx"
+#include <formula/omoduleclient.hxx>
 
 #include "ModuleHelper.hxx"
 

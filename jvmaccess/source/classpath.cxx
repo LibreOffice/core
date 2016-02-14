@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "jvmaccess/classpath.hxx"
+#include <jvmaccess/classpath.hxx>
 
 #include <cassert>
 #include <vector>
@@ -34,7 +34,7 @@
 #include "com/sun/star/uri/XVndSunStarExpandUrlReference.hpp"
 #include "com/sun/star/util/theMacroExpander.hpp"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "jni.h"
 

@@ -21,7 +21,7 @@
 
 #include "app.hrc"
 #include "drawdoc.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "glob.hrc"
 #include "glob.hxx"
 #include "helpids.h"
@@ -30,7 +30,7 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
-#include "tools/SlotStateListener.hxx"
+#include <tools/SlotStateListener.hxx>
 #include "DrawController.hxx"
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"

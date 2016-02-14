@@ -13,57 +13,24 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-07 22:01:39 using:
- ./bin/update_pch xmlsecurity xsec_fw --cutoff=2 --exclude:system --include:module --exclude:local
+ Generated on 2016-02-14 21:42:34 using:
+ ./bin/update_pch xmlsecurity xsec_fw --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmlsecurity/inc/pch/precompiled_xsec_fw.hxx "/opt/lo/bin/make xmlsecurity.build" --find-conflicts
+ ./bin/update_pch_bisect ./xmlsecurity/inc/pch/precompiled_xsec_fw.hxx "make xmlsecurity.build" --find-conflicts
 */
 
-#include <cassert>
-#include <config_typesizes.h>
-#include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <new>
-#include <ostream>
-#include <sstream>
-#include <stddef.h>
-#include <string.h>
-#include <string>
+#include <stdlib.h>
 #include <osl/diagnose.h>
-#include <osl/interlck.h>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/time.h>
-#include <rtl/string.h>
-#include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
-#include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/config.h>
-#include <sal/detail/log.h>
-#include <sal/log.hxx>
-#include <sal/macros.h>
-#include <sal/saldllapi.h>
-#include <sal/types.h>
-#include <sal/typesizes.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
-#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/supportsservice.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "filter/msfilter/countryid.hxx"
+#include <filter/msfilter/countryid.hxx>
 
 #include <algorithm>
 #include <sal/macros.h>

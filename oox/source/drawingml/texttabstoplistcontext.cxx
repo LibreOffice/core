@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "texttabstoplistcontext.hxx"
 
 using namespace ::oox::core;

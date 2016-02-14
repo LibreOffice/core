@@ -21,7 +21,7 @@
 
 #include <idlc/asttype.hxx>
 #include <idlc/astscope.hxx>
-#include "idlc/inheritedinterface.hxx"
+#include <idlc/inheritedinterface.hxx>
 
 #include <map>
 #include <vector>

@@ -18,9 +18,9 @@
  */
 
 #include <oox/token/tokens.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/export/chartexport.hxx"
-#include "oox/export/utils.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/export/chartexport.hxx>
+#include <oox/export/utils.hxx>
 #include "drawingml/chart/typegroupconverter.hxx"
 
 #include <cstdio>

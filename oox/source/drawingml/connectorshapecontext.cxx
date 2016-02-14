@@ -21,10 +21,10 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include "oox/drawingml/connectorshapecontext.hxx"
-#include "oox/drawingml/graphicshapecontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/connectorshapecontext.hxx>
+#include <oox/drawingml/graphicshapecontext.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/customshapegeometry.hxx"
 #include "drawingml/textbodycontext.hxx"
 

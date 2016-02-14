@@ -30,10 +30,10 @@
 #include <svx/fntszctl.hxx>
 #include <svx/dialogs.hrc>
 #include <editeng/fhgtitem.hxx>
-#include "editeng/fontitem.hxx"
-#include "editeng/flstitem.hxx"
+#include <editeng/fontitem.hxx>
+#include <editeng/flstitem.hxx>
 
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 
 #define LOGIC   OutputDevice::LogicToLogic

@@ -13,30 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:29 using:
- ./bin/update_pch dbaccess sdbt --cutoff=1 --exclude:system --include:module --exclude:local
+ Generated on 2016-02-14 21:40:26 using:
+ ./bin/update_pch dbaccess sdbt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_sdbt.hxx "/opt/lo/bin/make dbaccess.build" --find-conflicts
+ ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_sdbt.hxx "make dbaccess.build" --find-conflicts
 */
 
-#include <algorithm>
 #include <memory>
 #include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/tools/CompositionType.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <comphelper/namedvaluecollection.hxx>
-#include <connectivity/dbmetadata.hxx>
-#include <connectivity/dbtools.hxx>
-#include <connectivity/sqlerror.hxx>
-#include <connectivity/statementcomposer.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

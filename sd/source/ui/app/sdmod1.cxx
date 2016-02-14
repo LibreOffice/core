@@ -21,7 +21,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/moduleoptions.hxx>
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <svx/dialogs.hrc>
 

@@ -13,8 +13,8 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-10 12:04:24 using:
- ./bin/update_pch sal sal --cutoff=2 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:35:24 using:
+ ./bin/update_pch sal sal --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sal/inc/pch/precompiled_sal.hxx "make sal.build" --find-conflicts
@@ -24,13 +24,8 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
-#include <cstring>
-#include <float.h>
-#include <list>
-#include <math.h>
 #include <new>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
@@ -41,46 +36,31 @@
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
-#include <osl/module.h>
 #include <osl/module.hxx>
-#include <osl/mutex.h>
-#include <osl/mutex.hxx>
-#include <osl/pipe.h>
-#include <osl/process.h>
 #include <osl/profile.hxx>
 #include <osl/security.hxx>
-#include <osl/socket.h>
-#include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/bootstrap.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.h>
-#include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
 #include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
-#include <rtl/locale.h>
-#include <rtl/malformeduriexception.hxx>
-#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/process.h>
 #include <rtl/random.h>
-#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
-#include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
-#include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.h>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
@@ -89,7 +69,6 @@
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <internal/rtllifecycle.h>

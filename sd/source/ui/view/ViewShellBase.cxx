@@ -57,7 +57,7 @@
 #include "ToolBarManager.hxx"
 #include "SidebarPanelId.hxx"
 #include "Window.hxx"
-#include "framework/ConfigurationController.hxx"
+#include <framework/ConfigurationController.hxx>
 #include "DocumentRenderer.hxx"
 #include "sdattr.hxx"
 #include "optsitem.hxx"
@@ -73,7 +73,7 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <rtl/ref.hxx>
 #include <sfx2/msg.hxx>

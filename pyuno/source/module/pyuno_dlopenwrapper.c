@@ -21,7 +21,7 @@
    warnings: */
 #include "Python.h"
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stdlib.h>
 #include <string.h>

@@ -13,55 +13,38 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
- ./bin/update_pch unoxml unoxml --cutoff=1 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 20:48:19 using:
+ ./bin/update_pch unoxml unoxml --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./unoxml/inc/pch/precompiled_unoxml.hxx "/opt/lo/bin/make unoxml.build" --find-conflicts
+ ./bin/update_pch_bisect ./unoxml/inc/pch/precompiled_unoxml.hxx "make unoxml.build" --find-conflicts
 */
 
-#include <algorithm>
+#include <cassert>
+#include <cstddef>
 #include <memory>
-#include <stdarg.h>
-#include <stdio.h>
+#include <new>
 #include <string.h>
 #include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
+#include <osl/getglobalmutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
+#include <rtl/ustring.h>
 #include <rtl/uuid.h>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/xml/dom/DOMException.hpp>
-#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
-#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
-#include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <sal/config.h>
+#include <sal/log.hxx>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <comphelper/attributelist.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/supportsservice.hxx>
-#include <libxml/tree.h>
-#include <libxml/xmlerror.h>
-#include <libxml/xmlstring.h>
-#include <libxml/xpath.h>
-#include <libxml/xpathInternals.h>
-#include <ucbhelper/commandenvironment.hxx>
-#include <ucbhelper/content.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

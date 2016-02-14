@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_OSX_A11YWRAPPERTOOLBAR_H
 #define INCLUDED_VCL_OSX_A11YWRAPPERTOOLBAR_H
 
-#include "osx/a11ywrapper.h"
+#include <osx/a11ywrapper.h>
 
 @interface AquaA11yWrapperToolbar : AquaA11yWrapper
 {

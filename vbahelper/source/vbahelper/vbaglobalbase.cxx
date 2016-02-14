@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "vbahelper/vbaglobalbase.hxx"
+#include <vbahelper/vbaglobalbase.hxx>
 #include <sal/macros.h>
 
 #include <cppuhelper/component_context.hxx>

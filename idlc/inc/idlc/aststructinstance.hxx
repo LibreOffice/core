@@ -20,8 +20,8 @@
 #ifndef INCLUDED_IDLC_INC_IDLC_ASTSTRUCTINSTANCE_HXX
 #define INCLUDED_IDLC_INC_IDLC_ASTSTRUCTINSTANCE_HXX
 
-#include "idlc/asttype.hxx"
-#include "idlc/idlctypes.hxx"
+#include <idlc/asttype.hxx>
+#include <idlc/idlctypes.hxx>
 
 class AstScope;
 

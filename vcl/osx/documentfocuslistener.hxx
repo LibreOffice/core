@@ -24,7 +24,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "osx/a11yfocustracker.hxx"
+#include <osx/a11yfocustracker.hxx>
 
 #include <set>
 

@@ -29,8 +29,8 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "svx/tbxctl.hxx"
-#include "svx/tbxcolor.hxx"
+#include <svx/tbxctl.hxx>
+#include <svx/tbxcolor.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxBoolItem);

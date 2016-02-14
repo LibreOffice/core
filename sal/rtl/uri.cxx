@@ -27,8 +27,8 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "sal/macros.h"
+#include <sal/types.h>
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <cstddef>

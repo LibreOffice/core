@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "test/sheet/xgoalseek.hxx"
+#include <test/sheet/xgoalseek.hxx>
 #include <com/sun/star/sheet/XGoalSeek.hpp>
 #include <com/sun/star/sheet/GoalResult.hpp>
 #include <com/sun/star/table/CellAddress.hpp>

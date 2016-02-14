@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/slidetimingcontext.hxx"
+#include <oox/ppt/slidetimingcontext.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
-#include "oox/ppt/backgroundproperties.hxx"
-#include "oox/ppt/slidefragmenthandler.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/ppt/timenodelistcontext.hxx"
+#include <oox/ppt/backgroundproperties.hxx>
+#include <oox/ppt/slidefragmenthandler.hxx>
+#include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/ppt/timenodelistcontext.hxx>
 #include "buildlistcontext.hxx"
 
 using namespace ::com::sun::star;

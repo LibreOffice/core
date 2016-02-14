@@ -26,7 +26,7 @@
 #include <sfx2/app.hxx>
 
 #include <svx/dialogs.hrc>
-#include "svx/layctrl.hxx"
+#include <svx/layctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

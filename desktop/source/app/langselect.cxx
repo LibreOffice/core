@@ -30,9 +30,9 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include "officecfg/Office/Linguistic.hxx"
-#include "officecfg/Setup.hxx"
-#include "officecfg/System.hxx"
+#include <officecfg/Office/Linguistic.hxx>
+#include <officecfg/Setup.hxx>
+#include <officecfg/System.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>

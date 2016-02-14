@@ -30,7 +30,7 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 using namespace ::com::sun::star;
 

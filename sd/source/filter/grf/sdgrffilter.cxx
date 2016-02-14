@@ -44,8 +44,8 @@
 #include "../../ui/inc/ClientView.hxx"
 #include "../../ui/inc/FrameView.hxx"
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>

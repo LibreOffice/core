@@ -37,8 +37,8 @@
 
 #include <map>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include "rtl/ref.hxx"
 #include <animations/animationnodehelper.hxx>
 

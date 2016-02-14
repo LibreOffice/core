@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 
@@ -32,7 +32,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include "UITools.hxx"
 #include <svtools/imgdef.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include "browserids.hxx"
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>

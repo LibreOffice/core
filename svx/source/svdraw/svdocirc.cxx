@@ -27,7 +27,7 @@
 #include <svl/style.hxx>
 
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <sdr/properties/circleproperties.hxx>

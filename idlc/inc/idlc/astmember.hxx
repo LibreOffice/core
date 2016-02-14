@@ -20,7 +20,7 @@
 #ifndef INCLUDED_IDLC_INC_IDLC_ASTMEMBER_HXX
 #define INCLUDED_IDLC_INC_IDLC_ASTMEMBER_HXX
 
-#include "idlc/astdeclaration.hxx"
+#include <idlc/astdeclaration.hxx>
 
 class AstScope;
 class AstType;

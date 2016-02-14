@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 #include <tools/multisel.hxx>
 
@@ -33,15 +33,15 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
+#include <oox/drawingml/theme.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
 #include "drawingml/textliststylecontext.hxx"
-#include "oox/ppt/pptshape.hxx"
-#include "oox/ppt/presentationfragmenthandler.hxx"
-#include "oox/ppt/slidefragmenthandler.hxx"
-#include "oox/ppt/layoutfragmenthandler.hxx"
-#include "oox/ppt/pptimport.hxx"
+#include <oox/ppt/pptshape.hxx>
+#include <oox/ppt/presentationfragmenthandler.hxx>
+#include <oox/ppt/slidefragmenthandler.hxx>
+#include <oox/ppt/layoutfragmenthandler.hxx>
+#include <oox/ppt/pptimport.hxx>
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>

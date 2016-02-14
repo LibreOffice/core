@@ -23,13 +23,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/shapecontext.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/drawingml/shapecontext.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include "drawingml/shapestylecontext.hxx"
 #include "drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/customshapegeometry.hxx"
 #include "drawingml/textbodycontext.hxx"
 #include "drawingml/textbodypropertiescontext.hxx"

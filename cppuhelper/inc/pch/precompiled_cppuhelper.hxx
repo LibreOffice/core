@@ -13,46 +13,46 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch cppuhelper cppuhelper --cutoff=3 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 21:39:31 using:
+ ./bin/update_pch cppuhelper cppuhelper --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "/opt/lo/bin/make cppuhelper.build" --find-conflicts
+ ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "make cppuhelper.build" --find-conflicts
 */
 
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <exception>
 #include <memory>
 #include <new>
+#include <ostream>
+#include <string.h>
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
+#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/malformeduriexception.hxx>
 #include <rtl/process.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
-#include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
-#include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -66,17 +66,9 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
-#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
-#include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include <com/sun/star/reflection/XTypeDescription.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -84,6 +76,7 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <typelib/typeclass.h>
@@ -92,18 +85,14 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

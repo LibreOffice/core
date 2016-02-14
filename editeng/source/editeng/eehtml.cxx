@@ -34,7 +34,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <tools/tenccvt.hxx>
 
-#include "editeng/editeng.hxx"
+#include <editeng/editeng.hxx>
 
 #define STYLE_PRE               101
 

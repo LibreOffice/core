@@ -19,7 +19,7 @@
 
 #include "MasterPageContainerQueue.hxx"
 
-#include "tools/IdleDetection.hxx"
+#include <tools/IdleDetection.hxx>
 
 #include <set>
 

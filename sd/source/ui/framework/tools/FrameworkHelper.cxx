@@ -19,11 +19,11 @@
 
 #include <osl/time.h>
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
-#include "framework/ConfigurationController.hxx"
-#include "framework/ResourceId.hxx"
-#include "framework/ViewShellWrapper.hxx"
+#include <framework/ConfigurationController.hxx>
+#include <framework/ResourceId.hxx>
+#include <framework/ViewShellWrapper.hxx>
 #include "ViewShellBase.hxx"
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"

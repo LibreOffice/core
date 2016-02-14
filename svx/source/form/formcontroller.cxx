@@ -25,10 +25,10 @@
 #include "fmdocumentclassification.hxx"
 #include "formcontrolling.hxx"
 #include "fmprop.hrc"
-#include "svx/dialmgr.hxx"
-#include "svx/fmresids.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/fmresids.hrc>
 #include "fmservs.hxx"
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "fmurl.hxx"
 
 #include <com/sun/star/awt/FocusChangeReason.hpp>

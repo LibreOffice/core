@@ -13,8 +13,8 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:33:50 using:
- ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:32:40 using:
+ ./bin/update_pch starmath sm --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./starmath/inc/pch/precompiled_sm.hxx "make starmath.build" --find-conflicts
@@ -23,13 +23,12 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
-#include <cstdarg>
 #include <cstddef>
 #include <cstdlib>
 #include <deque>
-#include <functional>
 #include <limits.h>
 #include <limits>
+#include <map>
 #include <memory>
 #include <new>
 #include <ostream>
@@ -57,7 +56,6 @@
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/config.h>
@@ -97,6 +95,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -105,25 +106,34 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <cursor.hxx>
 #include <dialog.hxx>
 #include <document.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/editstat.hxx>
 #include <error.hxx>
 #include <format.hxx>
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <node.hxx>
+#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rect.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
+#include <rsc/rscsfx.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/stbitem.hxx>
 #include <smdll.hxx>
 #include <smmod.hxx>
 #include <sot/formats.hxx>
@@ -137,6 +147,7 @@
 #include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
+#include <svtools/svtdllapi.h>
 #include <svx/svxdllapi.h>
 #include <symbol.hxx>
 #include <token.hxx>
@@ -144,6 +155,7 @@
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
 #include <tools/gen.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>

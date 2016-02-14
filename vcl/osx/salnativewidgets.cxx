@@ -26,9 +26,9 @@
 #include <vcl/settings.hxx>
 
 #include "quartz/salgdi.h"
-#include "osx/salnativewidgets.h"
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
+#include <osx/salnativewidgets.h>
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
 
 #include "premac.h"
 #include <Carbon/Carbon.h>

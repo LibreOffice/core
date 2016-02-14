@@ -18,8 +18,8 @@
  */
 
 
-#include "toolkit/awt/animatedimagespeer.hxx"
-#include "toolkit/helper/property.hxx"
+#include <toolkit/awt/animatedimagespeer.hxx>
+#include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/awt/Size.hpp>

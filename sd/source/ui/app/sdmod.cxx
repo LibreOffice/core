@@ -52,7 +52,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "cfgids.hxx"
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 
 
 #define SdModule

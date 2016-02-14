@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <stdlib.h>
@@ -46,8 +46,8 @@
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 

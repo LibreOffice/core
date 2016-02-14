@@ -34,10 +34,10 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <osl/diagnose.h>
-#include "oox/drawingml/lineproperties.hxx"
+#include <oox/drawingml/lineproperties.hxx>
 #include "drawingml/chart/seriesconverter.hxx"
 #include "drawingml/chart/typegroupmodel.hxx"
-#include "oox/helper/containerhelper.hxx"
+#include <oox/helper/containerhelper.hxx>
 
 namespace oox {
 namespace drawingml {

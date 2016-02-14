@@ -13,18 +13,17 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:29 using:
- ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 20:44:24 using:
+ ./bin/update_pch desktop deploymentgui --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "make desktop.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
-#include <deque>
 #include <iomanip>
 #include <limits.h>
 #include <memory>
@@ -36,6 +35,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/conditn.hxx>
+#include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
@@ -44,12 +44,17 @@
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
+#include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
@@ -57,63 +62,42 @@
 #include <salhelper/thread.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/quickselectionengine.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/seleng.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/deployment/DependencyException.hpp>
-#include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <i18nlangtag/i18nlangtagdllapi.h>
-#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/transfer.hxx>
-#include <svtools/treelist.hxx>
-#include <svtools/treelistbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
-#include <ucbhelper/content.hxx>
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>

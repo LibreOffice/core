@@ -21,7 +21,7 @@
 #include "fmhelp.hrc"
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -47,7 +47,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>

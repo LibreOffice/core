@@ -47,7 +47,7 @@
 #include "worksheetfragment.hxx"
 #include "sheetdatacontext.hxx"
 #include "extlstcontext.hxx"
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include "document.hxx"
 #include "docsh.hxx"

@@ -20,8 +20,8 @@
 #include "GalleryControl.hxx"
 
 #include "gallery.hrc"
-#include "svx/galmisc.hxx"
-#include "svx/gallery1.hxx"
+#include <svx/galmisc.hxx>
+#include <svx/gallery1.hxx>
 #include "galbrws1.hxx"
 #include "galbrws2.hxx"
 #include "GallerySplitter.hxx"

@@ -13,48 +13,36 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 12:47:53 using:
- ./bin/update_pch connectivity odbc --cutoff=2 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:30:39 using:
+ ./bin/update_pch connectivity odbc --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_odbc.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_odbc.hxx "make connectivity.build" --find-conflicts
 */
 
-#include <algorithm>
-#include <cstddef>
-#include <string.h>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/time.h>
+#include <rtl/ref.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/extract.hxx>
-#include <comphelper/property.hxx>
+#include <com/sun/star/uno/Any.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <connectivity/FValue.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

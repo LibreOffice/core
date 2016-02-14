@@ -9,9 +9,9 @@
 
 #include "effectpropertiescontext.hxx"
 #include "effectproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 #include <o3tl/make_unique.hxx>
 

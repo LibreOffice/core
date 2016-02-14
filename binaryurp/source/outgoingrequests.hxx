@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUESTS_HXX
 #define INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUESTS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <vector>

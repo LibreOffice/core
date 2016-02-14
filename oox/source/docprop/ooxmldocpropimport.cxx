@@ -25,10 +25,10 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include "oox/core/fastparser.hxx"
-#include "oox/core/relations.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/helper.hxx"
+#include <oox/core/fastparser.hxx>
+#include <oox/core/relations.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/helper.hxx>
 #include "docprophandler.hxx"
 
 #include <cppuhelper/supportsservice.hxx>

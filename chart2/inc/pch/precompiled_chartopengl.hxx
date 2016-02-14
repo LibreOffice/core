@@ -13,23 +13,38 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch chart2 chartopengl --cutoff=12 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 21:32:08 using:
+ ./bin/update_pch chart2 chartopengl --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartopengl.hxx "/opt/lo/bin/make chart2.build" --find-conflicts
+ ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartopengl.hxx "make chart2.build" --find-conflicts
 */
 
+#include <cassert>
+#include <cstddef>
+#include <new>
+#include <ostream>
+#include <string.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <sal/types.h>
+#include <vcl/dllapi.h>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/genfunc.hxx>
+#include <cppu/unotype.hxx>
+#include <tools/solar.h>
+#include <uno/data.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

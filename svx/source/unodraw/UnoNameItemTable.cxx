@@ -30,7 +30,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

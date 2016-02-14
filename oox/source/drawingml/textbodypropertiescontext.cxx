@@ -23,9 +23,9 @@
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include "drawingml/textbodyproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertymap.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertymap.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

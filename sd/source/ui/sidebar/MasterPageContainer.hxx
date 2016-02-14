@@ -27,7 +27,7 @@
 #include "PreviewRenderer.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/timer.hxx>
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 
 #include <memory>
 

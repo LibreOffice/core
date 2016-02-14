@@ -21,7 +21,7 @@
 #include <UIKit/UIKit.h>
 #include <postmac.h>
 
-#include "ios/iosinst.hxx"
+#include <ios/iosinst.hxx>
 #include "headless/svpdummies.hxx"
 #include "generic/gendata.hxx"
 #include "quartz/utils.h"

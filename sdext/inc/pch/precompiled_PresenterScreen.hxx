@@ -13,148 +13,45 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:38 using:
- ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
+ Generated on 2016-02-14 21:44:53 using:
+ ./bin/update_pch sdext PresenterScreen --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresenterScreen.hxx "/opt/lo/bin/make sdext.build" --find-conflicts
+ ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresenterScreen.hxx "make sdext.build" --find-conflicts
 */
 
 #include <algorithm>
-#include <cassert>
-#include <config_typesizes.h>
 #include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <exception>
-#include <iomanip>
-#include <map>
 #include <math.h>
-#include <memory>
-#include <new>
-#include <ostream>
-#include <sstream>
-#include <stddef.h>
 #include <stdlib.h>
-#include <string.h>
-#include <string>
-#include <utility>
-#include <vector>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
-#include <osl/getglobalmutex.hxx>
-#include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/thread.hxx>
-#include <osl/time.h>
-#include <rtl/alloc.h>
 #include <rtl/instance.hxx>
-#include <rtl/string.h>
-#include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
-#include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
-#include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/detail/log.h>
-#include <sal/log.hxx>
-#include <sal/macros.h>
-#include <sal/saldllapi.h>
-#include <sal/types.h>
-#include <sal/typesizes.h>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/InvalidateStyle.hpp>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
-#include <com/sun/star/drawing/CanvasFeature.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
-#include <com/sun/star/drawing/XSlideSorterBase.hpp>
-#include <com/sun/star/drawing/framework/Configuration.hpp>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/presentation/XSlideShow.hpp>
-#include <com/sun/star/presentation/XSlideShowView.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/FillRule.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
-#include <com/sun/star/uno/genfunc.h>
-#include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
-#include <cppu/cppudllapi.h>
-#include <cppu/unotype.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <typelib/typeclass.h>
-#include <typelib/typedescription.h>
-#include <typelib/uik.h>
-#include <uno/any2.h>
-#include <uno/data.h>
-#include <uno/sequence2.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

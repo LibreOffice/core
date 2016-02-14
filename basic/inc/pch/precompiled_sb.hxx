@@ -13,41 +13,43 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 21:39:07 using:
+ ./bin/update_pch basic sb --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./basic/inc/pch/precompiled_sb.hxx "/opt/lo/bin/make basic.build" --find-conflicts
+ ./bin/update_pch_bisect ./basic/inc/pch/precompiled_sb.hxx "make basic.build" --find-conflicts
 */
 
 #include <cassert>
 #include <config_features.h>
 #include <cstddef>
 #include <cstdlib>
-#include <ctype.h>
 #include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <sstream>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <osl/file.hxx>
+#include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
@@ -55,43 +57,16 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <vcl/mapmod.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <basrid.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/KParseTokens.hpp>
-#include <com/sun/star/i18n/KParseType.hpp>
-#include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-#include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
-#include <sbobjmod.hxx>
-#include <sbxbase.hxx>
-#include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
-#include <tools/link.hxx>
-#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
-#include <tools/urlobj.hxx>
-#include <unotools/charclass.hxx>
-#include <unotools/unotoolsdllapi.h>
 #include <basic/basicdllapi.h>
-#include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
-#include <basic/sbxfac.hxx>
-#include <basic/sbxform.hxx>
 #include <basic/sbxobj.hxx>
-#include <basic/sbxvar.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

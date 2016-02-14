@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 
 #include "a11ywrappercombobox.h"
 #include "a11yrolehelper.h"

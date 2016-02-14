@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHCONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHCONTROL_HXX
 
-#include "svx/sidebar/PopupControl.hxx"
+#include <svx/sidebar/PopupControl.hxx>
 #include "LineWidthValueSet.hxx"
 #include <svl/poolitem.hxx>
 #include <vcl/fixed.hxx>

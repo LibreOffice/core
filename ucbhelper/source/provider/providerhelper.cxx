@@ -30,7 +30,7 @@
 
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
-#include "cppuhelper/weakref.hxx"
+#include <cppuhelper/weakref.hxx>
 
 #include <unordered_map>
 

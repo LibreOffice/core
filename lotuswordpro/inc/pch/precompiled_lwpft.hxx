@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:33 using:
- ./bin/update_pch lotuswordpro lwpft --cutoff=2 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 20:45:33 using:
+ ./bin/update_pch lotuswordpro lwpft --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./lotuswordpro/inc/pch/precompiled_lwpft.hxx "/opt/lo/bin/make lotuswordpro.build" --find-conflicts
+ ./bin/update_pch_bisect ./lotuswordpro/inc/pch/precompiled_lwpft.hxx "make lotuswordpro.build" --find-conflicts
 */
 
 #include <assert.h>
@@ -27,15 +27,10 @@
 #include <new>
 #include <ostream>
 #include <stddef.h>
-#include <stdio.h>
 #include <string.h>
-#include <vector>
 #include <boost/cast.hpp>
-#include <osl/diagnose.h>
 #include <osl/endian.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
@@ -46,43 +41,21 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
+#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/svapp.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/fileformat.h>
-#include <cppu/cppudllapi.h>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <sfx2/dllapi.h>
-#include <tools/color.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/ucbhelperdllapi.h>
-#include <xmloff/attrlist.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

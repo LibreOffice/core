@@ -23,11 +23,11 @@
 #ifdef WNT
 #include "win/svsys.h"
 #elif defined MACOSX
-#include "osx/svsys.h"
+#include <osx/svsys.h>
 #elif defined IOS
-#include "ios/svsys.h"
+#include <ios/svsys.h>
 #elif defined ANDROID
-#include "android/svsys.h"
+#include <android/svsys.h>
 #elif defined LIBO_HEADLESS
 #else
 #include "unx/svsys.h"

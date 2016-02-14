@@ -40,7 +40,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
-#include "svx/flagsdef.hxx"
+#include <svx/flagsdef.hxx>
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <memory>

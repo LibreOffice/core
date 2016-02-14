@@ -23,7 +23,7 @@
 #include "rtl/ref.hxx"
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include "ucbhelper/providerhelper.hxx"
+#include <ucbhelper/providerhelper.hxx>
 #include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"
 #include "tdoc_storage.hxx"

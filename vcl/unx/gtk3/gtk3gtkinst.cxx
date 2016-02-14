@@ -23,7 +23,7 @@
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include "cppuhelper/compbase.hxx"
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

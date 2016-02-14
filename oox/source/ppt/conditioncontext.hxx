@@ -23,10 +23,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/Event.hpp>
 
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/ppt/timenode.hxx"
-#include "oox/ppt/timenodelistcontext.hxx"
-#include "oox/ppt/animationspersist.hxx"
+#include <oox/core/fragmenthandler.hxx>
+#include <oox/ppt/timenode.hxx>
+#include <oox/ppt/timenodelistcontext.hxx>
+#include <oox/ppt/animationspersist.hxx>
 
 namespace oox { namespace ppt {
 

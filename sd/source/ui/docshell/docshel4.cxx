@@ -73,7 +73,7 @@
 #include "sdcgmfilter.hxx"
 #include "sdgrffilter.hxx"
 #include "sdhtmlfilter.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include "SdUnoDrawView.hxx"
 

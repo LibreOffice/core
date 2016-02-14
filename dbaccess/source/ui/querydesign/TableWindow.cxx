@@ -43,7 +43,7 @@
 #include "TableWindowAccess.hxx"
 #include "browserids.hxx"
 #include <connectivity/dbtools.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace dbaui;
 using namespace ::utl;

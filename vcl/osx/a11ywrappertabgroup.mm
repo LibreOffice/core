@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "a11ywrappertabgroup.h"
 
 // Wrapper for AXTabGroup role

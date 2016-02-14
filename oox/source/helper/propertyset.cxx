@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/propertyset.hxx"
+#include <oox/helper/propertyset.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
-#include "oox/helper/propertymap.hxx"
+#include <oox/helper/propertymap.hxx>
 
 namespace oox {
 

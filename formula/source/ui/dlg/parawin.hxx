@@ -29,8 +29,8 @@
 #include <vcl/scrbar.hxx>
 
 #include <vector>
-#include "formula/funcutl.hxx"
-#include "formula/omoduleclient.hxx"
+#include <formula/funcutl.hxx>
+#include <formula/omoduleclient.hxx>
 #include "ControlHelper.hxx"
 
 namespace formula

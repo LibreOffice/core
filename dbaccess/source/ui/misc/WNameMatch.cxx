@@ -26,7 +26,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <o3tl/make_unique.hxx>
 using namespace ::dbaui;

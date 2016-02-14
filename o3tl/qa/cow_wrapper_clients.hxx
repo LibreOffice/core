@@ -20,7 +20,7 @@
 #ifndef INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 #define INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
-#include "o3tl/cow_wrapper.hxx"
+#include <o3tl/cow_wrapper.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 
 /* Definition of Cow_Wrapper_Clients classes */

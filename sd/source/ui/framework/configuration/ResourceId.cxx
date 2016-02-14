@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/ResourceId.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <framework/ResourceId.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <tools/SdGlobalResourceContainer.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

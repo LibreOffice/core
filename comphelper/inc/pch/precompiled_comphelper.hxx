@@ -13,29 +13,24 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch comphelper comphelper --cutoff=4 --exclude:system --include:module --include:local
+ Generated on 2016-02-14 21:41:00 using:
+ ./bin/update_pch comphelper comphelper --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./comphelper/inc/pch/precompiled_comphelper.hxx "/opt/lo/bin/make comphelper.build" --find-conflicts
+ ./bin/update_pch_bisect ./comphelper/inc/pch/precompiled_comphelper.hxx "make comphelper.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
-#include <config_typesizes.h>
 #include <cstddef>
-#include <cstring>
-#include <exception>
 #include <functional>
 #include <iomanip>
 #include <map>
-#include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/noncopyable.hpp>
@@ -46,22 +41,18 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/byteseq.h>
 #include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
@@ -74,13 +65,10 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -93,7 +81,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -103,21 +90,13 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -127,29 +106,15 @@
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/proptypehlp.h>
-#include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <typelib/typeclass.h>
-#include <typelib/typedescription.h>
-#include <typelib/uik.h>
-#include <ucbhelper/ucbhelperdllapi.h>
-#include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <comphelper/PropertyInfoHash.hxx>
@@ -162,7 +127,6 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

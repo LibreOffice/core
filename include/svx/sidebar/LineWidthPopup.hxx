@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
+#include <svx/sidebar/Popup.hxx>
 
 #include <svl/poolitem.hxx>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/basedlgs.hxx"
+#include <sfx2/basedlgs.hxx>
 #include "cuigaldlg.hxx"
 #include "hlmarkwn.hxx"
 #include "srchxtra.hxx"
@@ -47,7 +47,7 @@
 #include "hangulhanjadlg.hxx"
 #include "dstribut.hxx"
 #include "dlgfact.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace cui
 {

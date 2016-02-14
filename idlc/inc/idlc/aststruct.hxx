@@ -21,7 +21,7 @@
 
 #include <idlc/asttype.hxx>
 #include <idlc/astscope.hxx>
-#include "idlc/idlctypes.hxx"
+#include <idlc/idlctypes.hxx>
 
 class AstStruct;
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "forms/form_handler_factory.hxx"
+#include <forms/form_handler_factory.hxx>
 #include "vcl_date_handler.hxx"
 #include "vcl_time_handler.hxx"
 #include <osl/diagnose.h>

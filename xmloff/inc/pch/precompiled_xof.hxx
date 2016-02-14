@@ -13,43 +13,32 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
- ./bin/update_pch xmloff xof --cutoff=1 --exclude:system --exclude:module --include:local
+ Generated on 2016-02-14 20:54:03 using:
+ ./bin/update_pch xmloff xof --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xof.hxx "/opt/lo/bin/make xmloff.build" --find-conflicts
+ ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xof.hxx "make xmloff.build" --find-conflicts
 */
 
-#include <string.h>
-#include <unordered_map>
+#include <stdlib.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/i18n/CharacterClassification.hpp>
-#include <com/sun/star/i18n/UnicodeType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
+#include <rtl/ustring.hxx>
+#include <rtl/uuid.h>
+#include <sal/config.h>
+#include <sal/types.h>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <facreg.hxx>
 #include <sax/tools/converter.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/pptshape.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/ppt/pptshape.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include "drawingml/textbody.hxx"
 
 #include <com/sun/star/container/XNamed.hpp>
@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/ppt/slidepersist.hxx>
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

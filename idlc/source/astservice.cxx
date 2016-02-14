@@ -20,10 +20,10 @@
 
 #include <sal/config.h>
 
-#include "idlc/astmember.hxx"
-#include "idlc/astoperation.hxx"
-#include "idlc/astservice.hxx"
-#include "idlc/asttype.hxx"
+#include <idlc/astmember.hxx>
+#include <idlc/astoperation.hxx>
+#include <idlc/astservice.hxx>
+#include <idlc/asttype.hxx>
 
 bool AstService::checkLastConstructor() const {
     AstOperation const * last = static_cast< AstOperation const * >(getLast());

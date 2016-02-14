@@ -12,8 +12,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "oox/token/tokenmap.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/token/tokenmap.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace std;
 using namespace com::sun::star::uno;

@@ -26,10 +26,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include "osx/a11yfactory.h"
-#include "osx/salframe.h"
-#include "osx/salframeview.h"
-#include "osx/salinst.h"
+#include <osx/a11yfactory.h>
+#include <osx/salframe.h>
+#include <osx/salframeview.h>
+#include <osx/salinst.h>
 #include "quartz/salgdi.h"
 #include "quartz/utils.h"
 

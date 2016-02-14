@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPACCESS_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_CONFIG_LDAP_LDAPACCESS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 

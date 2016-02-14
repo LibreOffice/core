@@ -18,7 +18,7 @@
  */
 
 #include <stdio.h>
-#include "sal/main.h"
+#include <sal/main.h>
 #include <rtl/process.h>
 #include <rtl_Process_Const.h>
 

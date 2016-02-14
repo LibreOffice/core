@@ -19,11 +19,11 @@
 
 #include "BasicViewFactory.hxx"
 
-#include "framework/ViewShellWrapper.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/ViewShellWrapper.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include "framework/Pane.hxx"
+#include <framework/Pane.hxx>
 #include "DrawController.hxx"
 #include "DrawSubController.hxx"
 #include "ViewShellBase.hxx"

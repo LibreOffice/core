@@ -13,58 +13,38 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
- ./bin/update_pch connectivity firebird_sdbc --cutoff=2 --exclude:system --exclude:module --exclude:local
+ Generated on 2016-02-14 21:30:08 using:
+ ./bin/update_pch connectivity firebird_sdbc --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_firebird_sdbc.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_firebird_sdbc.hxx "make connectivity.build" --find-conflicts
 */
 
-#include <cassert>
 #include <cstddef>
 #include <stddef.h>
-#include <string.h>
-#include <time.h>
-#include <osl/diagnose.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/time.h>
+#include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
-#include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <sal/log.hxx>
+#include <sal/detail/log.h>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/singletonref.hxx>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <tools/stream.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/unotoolsdllapi.h>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 

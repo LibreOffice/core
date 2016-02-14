@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/storagebase.hxx"
+#include <oox/helper/storagebase.hxx>
 
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
 
 namespace oox {
 

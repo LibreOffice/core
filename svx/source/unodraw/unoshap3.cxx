@@ -32,14 +32,14 @@
 #include <svx/unopage.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/polysc3d.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/polygn3d.hxx>
-#include "svx/unoshprp.hxx"
-#include "svx/svdmodel.hxx"
+#include <svx/unoshprp.hxx>
+#include <svx/svdmodel.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>

@@ -22,7 +22,7 @@
 #include "fmhelp.hrc"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -54,8 +54,8 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 
 #include <functional>
 

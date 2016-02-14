@@ -25,7 +25,7 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-#include "svx/obj3d.hxx"
+#include <svx/obj3d.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

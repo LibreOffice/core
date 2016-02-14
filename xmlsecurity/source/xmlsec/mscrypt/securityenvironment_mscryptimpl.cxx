@@ -38,7 +38,7 @@
 #include "x509certificate_mscryptimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include <xmlsecurity/xmlsec-wrapper.h>
 #include "xmlsec/mscrypto/akmngr.h"
 
 #include <xmlsecurity/biginteger.hxx>

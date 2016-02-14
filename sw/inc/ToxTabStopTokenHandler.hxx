@@ -14,7 +14,7 @@
 #include "swdllapi.h"
 #include "rtl/ustring.hxx"
 
-#include "editeng/tstpitem.hxx"
+#include <editeng/tstpitem.hxx>
 
 struct SwFormToken;
 class SwPageDesc;

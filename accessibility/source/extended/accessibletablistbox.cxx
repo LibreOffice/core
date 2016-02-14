@@ -18,8 +18,8 @@
  */
 
 
-#include "accessibility/extended/accessibletablistbox.hxx"
-#include "accessibility/extended/accessibletablistboxtable.hxx"
+#include <accessibility/extended/accessibletablistbox.hxx>
+#include <accessibility/extended/accessibletablistboxtable.hxx>
 #include <svtools/svtabbx.hxx>
 #include <comphelper/sequence.hxx>
 

@@ -39,7 +39,7 @@
 #include "com/sun/star/uno/TypeClass.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "cppu/unotype.hxx"
+#include <cppu/unotype.hxx>
 #include "rtl/ustring.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {

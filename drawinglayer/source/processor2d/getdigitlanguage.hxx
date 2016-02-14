@@ -10,9 +10,9 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_GETDIGITLANGUAGE_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_GETDIGITLANGUAGE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "i18nlangtag/lang.h"
+#include <i18nlangtag/lang.h>
 
 namespace drawinglayer { namespace detail {
 

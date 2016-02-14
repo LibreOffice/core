@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 #include "headerfootercontext.hxx"
-#include "oox/ppt/layoutfragmenthandler.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
+#include <oox/ppt/layoutfragmenthandler.hxx>
+#include <oox/drawingml/shapegroupcontext.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;

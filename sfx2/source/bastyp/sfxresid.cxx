@@ -19,7 +19,7 @@
 
 
 #include <sfx2/sfxresid.hxx>
-#include "tools/resmgr.hxx"
+#include <tools/resmgr.hxx>
 
 
 static ResMgr* pMgr=nullptr;

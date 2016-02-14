@@ -20,9 +20,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_INC_DBADLLAPI_HXX
 #define INCLUDED_DBACCESS_SOURCE_INC_DBADLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_DBA
 #define OOO_DLLPUBLIC_DBA SAL_DLLPUBLIC_EXPORT

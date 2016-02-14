@@ -21,8 +21,8 @@
 
 #include <algorithm>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
@@ -33,11 +33,11 @@
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/ppt/pptimport.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/core/fragmenthandler.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include "animationtypes.hxx"
 
