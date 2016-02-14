@@ -2047,7 +2047,7 @@ static void writeOfficeStyles(  StateMap&                                       
 
 }
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef DEBUG_FILTER_SVG
 struct DumpingVisitor
 {
     void operator()( const uno::Reference<xml::dom::XElement>& xElem )
@@ -2254,7 +2254,7 @@ bool SVGReader::parseAndConvert()
     annotateStyles(aStatePool,aStateMap,aInitialState,
                    xDocElem,m_xDocumentHandler,maUseElementVector);
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef DEBUG_FILTER_SVG
     dumpTree(xDocElem);
 #endif
 

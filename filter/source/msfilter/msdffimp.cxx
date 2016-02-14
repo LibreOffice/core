@@ -6357,7 +6357,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
             pGrStream = xOut.get();
         }
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef DEBUG_FILTER_MSFILTER
         // extract graphics from ole storage into "dbggfxNNN.*"
         static sal_Int32 nGrfCount;
 
@@ -6920,7 +6920,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
                 pFilter = aMatch.GetFilter4EA( aType );
         }
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef DEBUG_FILTER_MSFILTER
         // extract embedded ole streams into "/tmp/embedded_stream_NNN"
         static sal_Int32 nOleCount(0);
         OUString aTmpName("/tmp/embedded_stream_");
