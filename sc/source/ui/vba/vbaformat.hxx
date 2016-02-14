@@ -50,7 +50,7 @@ protected:
     bool isAmbiguous(const OUString& _sPropertyName) throw ( css::script::BasicErrorException );
     css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
     void initializeNumberFormats() throw ( css::script::BasicErrorException, css::uno::RuntimeException );
-    SfxItemSet*  getCurrentDataSet( ) throw ( css::uno::RuntimeException );
+    SfxItemSet*  getCurrentDataSet( ) throw (css::uno::RuntimeException, std::exception);
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
 public:
@@ -64,7 +64,7 @@ public:
     virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setNumberFormat( const css::uno::Any& NumberFormat ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getNumberFormat(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getNumberFormat(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setNumberFormatLocal( const css::uno::Any& NumberFormatLocal ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getNumberFormatLocal(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setIndentLevel( const css::uno::Any& IndentLevel ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

@@ -717,7 +717,7 @@ ScVbaFormat< Ifc... >::getReadingOrder(  ) throw (script::BasicErrorException, u
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getNumberFormat(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getNumberFormat(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Any aFormat = aNULL();
     try
@@ -789,7 +789,7 @@ ScVbaFormat< Ifc... >::getCellRangesBase() throw ( ::uno::RuntimeException )
 
 template< typename... Ifc >
 SfxItemSet*
-ScVbaFormat< Ifc... >::getCurrentDataSet( ) throw ( uno::RuntimeException )
+ScVbaFormat< Ifc... >::getCurrentDataSet() throw (uno::RuntimeException, std::exception)
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )

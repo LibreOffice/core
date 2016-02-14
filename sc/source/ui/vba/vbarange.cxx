@@ -263,7 +263,7 @@ ScCellRangeObj* ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
     return dynamic_cast< ScCellRangeObj* >( getCellRangesBase() );
 }
 
-SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw ( uno::RuntimeException )
+SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw (uno::RuntimeException, std::exception)
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
@@ -2560,7 +2560,7 @@ ScVbaRange::setNumberFormat( const uno::Any& aFormat ) throw ( script::BasicErro
 }
 
 uno::Any
-ScVbaRange::getNumberFormat() throw ( script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::getNumberFormat() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
 
     if ( m_Areas->getCount() > 1 )

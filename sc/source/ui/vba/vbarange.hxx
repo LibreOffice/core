@@ -115,7 +115,7 @@ class ScVbaRange : public ScVbaRange_BASE
 
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException ) override;
-    SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
+    SfxItemSet* getCurrentDataSet() throw (css::uno::RuntimeException, std::exception);
 public:
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
@@ -163,7 +163,7 @@ public:
     virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
     using ScVbaRange_BASE::setNumberFormat;
     virtual void SAL_CALL setNumberFormat( const css::uno::Any& rNumberFormat ) throw ( css::script::BasicErrorException, css::uno::RuntimeException) override;
-    virtual css::uno::Any SAL_CALL getNumberFormat() throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
+    virtual css::uno::Any SAL_CALL getNumberFormat() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setMergeCells( const css::uno::Any& bMerge ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
     virtual css::uno::Any SAL_CALL getMergeCells() throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
     virtual void SAL_CALL setWrapText( const css::uno::Any& bIsWrapped ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
