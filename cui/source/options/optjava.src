@@ -32,7 +32,7 @@ String RID_SVXSTR_JRE_FAILED_VERSION
 
 String RID_SVXSTR_OPTIONS_RESTART
 {
-    Text [ en-US ] = "You have to restart %PRODUCTNAME so the new or modified values can take effect.\nPlease restart %PRODUCTNAME now." ;
+    Text [ en-US ] = "Please restart %PRODUCTNAME now so the new or modified values can take effect." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
