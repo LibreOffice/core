@@ -412,7 +412,11 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
 LibLODocument_Impl::~LibLODocument_Impl()
 {
-    mxComponent->dispose();
+    uno::Reference<util::XCloseable> xClose(mxComponent, uno::UNO_QUERY);
+    if (xClose.is())
+        xClose->close(false);
+    else
+        mxComponent->dispose();
 }
 
 static void doc_destroy(LibreOfficeKitDocument *pThis)
