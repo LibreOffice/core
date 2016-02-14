@@ -789,7 +789,7 @@ ScFormulaGroupIterator::ScFormulaGroupIterator( ScDocument* pDoc ) :
     mnIndex(0)
 {
     ScTable *pTab = mpDoc->FetchTable(mnTab);
-    ScColumn *pCol = pTab->FetchColumn(mnCol);
+    ScColumn *pCol = pTab ? pTab->FetchColumn(mnCol) : nullptr;
     if (pCol)
     {
         mbNullCol = false;
@@ -820,7 +820,7 @@ sc::FormulaGroupEntry* ScFormulaGroupIterator::next()
                     return nullptr;
             }
             ScTable *pTab = mpDoc->FetchTable(mnTab);
-            ScColumn *pCol = pTab->FetchColumn(mnCol);
+            ScColumn *pCol = pTab ? pTab->FetchColumn(mnCol) : nullptr;
             if (pCol)
             {
                 mbNullCol = false;
