@@ -195,7 +195,7 @@ namespace connectivity
             bool Find(const ONDXKey&);  // Descend recursively
             sal_uInt16 FindPos(const ONDXKey& rKey) const;
 
-#if OSL_DEBUG_LEVEL > 1
+#if 0 
             void PrintPage();
 #endif
         };

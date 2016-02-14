@@ -270,7 +270,7 @@ bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
     // insert in the current leaf
     if (!m_aCurLeaf.Is())
         return false;
-#if OSL_DEBUG_LEVEL > 1
+#if 0
     m_aRoot->PrintPage();
 #endif
 

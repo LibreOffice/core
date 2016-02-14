@@ -73,7 +73,7 @@ public:
             throw ::com::sun::star::io::IOException();
 
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CONNECTIVITY_INIPARSER
         OString sFile = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE(__FILE__" -- parser() - %s\n", sFile.getStr());
 #endif
@@ -125,7 +125,7 @@ public:
             }
             osl_closeFile(handle);
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CONNECTIVITY_INIPARSER
         else
         {
             OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
@@ -134,7 +134,7 @@ public:
         }
 #endif
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CONNECTIVITY_INIPARSER
     void Dump()
     {
         IniSectionMap::iterator iBegin = mAllSection.begin();
