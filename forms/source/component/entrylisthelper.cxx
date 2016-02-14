@@ -81,13 +81,13 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryChanged: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < m_aStringItems.getLength() ),
+        OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < (sal_Int32)m_aStringItems.size() ),
             "OEntryListHelper::entryChanged: invalid index!" );
         OSL_ENSURE( _rEvent.Entries.getLength() == 1,
             "OEntryListHelper::entryChanged: invalid string list!" );
 
         if  (   ( _rEvent.Position >= 0 )
-            &&  ( _rEvent.Position < m_aStringItems.getLength() )
+            &&  ( _rEvent.Position < (sal_Int32)m_aStringItems.size() )
             &&  ( _rEvent.Entries.getLength() > 0 )
             )
         {
@@ -103,31 +103,15 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeInserted: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < m_aStringItems.getLength() ) && ( _rEvent.Entries.getLength() > 0 ),
+        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < (sal_Int32)m_aStringItems.size() ) && ( _rEvent.Entries.getLength() > 0 ),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
         if  (   ( _rEvent.Position > 0 )
-            &&  ( _rEvent.Position < m_aStringItems.getLength() )
+            &&  ( _rEvent.Position < (sal_Int32)m_aStringItems.size() )
             &&  ( _rEvent.Entries.getLength() > 0 )
             )
         {
-            // the entries *before* the insertion pos
-            Sequence< OUString > aKeepEntries(
-                m_aStringItems.getConstArray(),
-                _rEvent.Position
-            );
-            // the entries *behind* the insertion pos
-            Sequence< OUString > aMovedEntries(
-                m_aStringItems.getConstArray() + _rEvent.Position,
-                m_aStringItems.getLength() - _rEvent.Position
-            );
-
-            // concat all three parts
-            m_aStringItems = ::comphelper::concatSequences(
-                aKeepEntries,
-                _rEvent.Entries,
-                aMovedEntries
-            );
+            m_aStringItems.insert(m_aStringItems.begin() + _rEvent.Position, _rEvent.Entries.begin(), _rEvent.Entries.end());
 
             stringItemListChanged( aLock );
         }
@@ -140,23 +124,16 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeRemoved: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= m_aStringItems.getLength() ),
+        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= (sal_Int32)m_aStringItems.size() ),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
         if  (   ( _rEvent.Position > 0 )
             &&  ( _rEvent.Count > 0 )
-            &&  ( _rEvent.Position + _rEvent.Count <= m_aStringItems.getLength() )
+            &&  ( _rEvent.Position + _rEvent.Count <= (sal_Int32)m_aStringItems.size() )
             )
         {
-            // copy all items after the removed ones
-            ::std::copy(
-                m_aStringItems.getConstArray() + _rEvent.Position + _rEvent.Count,
-                m_aStringItems.getConstArray() + m_aStringItems.getLength(),
-                m_aStringItems.getArray( ) + _rEvent.Position
-            );
-            // shrink the array
-            m_aStringItems.realloc( m_aStringItems.getLength() - _rEvent.Count );
-
+            m_aStringItems.erase(m_aStringItems.begin() + _rEvent.Position,
+                                 m_aStringItems.begin() + _rEvent.Position + _rEvent.Count );
             stringItemListChanged( aLock );
         }
     }
@@ -208,7 +185,7 @@ namespace frm
     {
         if ( hasExternalListSource() )
         {
-            m_aStringItems = m_xListSource->getAllListEntries( );
+            comphelper::sequenceToContainer(m_aStringItems, m_xListSource->getAllListEntries());
             stringItemListChanged( _rInstanceLock );
         }
         else
@@ -274,7 +251,7 @@ namespace frm
             // be notified when the list changes ...
             m_xListSource->addListEntryListener( this );
 
-            m_aStringItems = m_xListSource->getAllListEntries( );
+            comphelper::sequenceToContainer( m_aStringItems, m_xListSource->getAllListEntries() );
             stringItemListChanged( _rInstanceLock );
 
             // let derivees react on the new list source
@@ -290,14 +267,16 @@ namespace frm
             throw IllegalArgumentException( );
             // TODO: error message
 
-        return ::comphelper::tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aStringItems );
+        return ::comphelper::tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, comphelper::containerToSequence(m_aStringItems) );
     }
 
 
     void OEntryListHelper::setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
-        OSL_VERIFY( _rValue >>= m_aStringItems );
+        css::uno::Sequence<OUString> aTmp;
+        OSL_VERIFY( _rValue >>= aTmp );
+        comphelper::sequenceToContainer(m_aStringItems, aTmp);
         stringItemListChanged( _rInstanceLock );
     }
 

@@ -282,7 +282,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_STRINGITEMLIST:
-            _rValue <<= getStringItemList();
+            _rValue <<= comphelper::containerToSequence(getStringItemList());
             break;
 
         default:
@@ -1077,12 +1077,12 @@ namespace frm
             return m_aConvertedBoundValues;
         }
 
-        Sequence< OUString > aStringItems( getStringItemList() );
-        ValueList aValues( aStringItems.getLength() );
+        const std::vector< OUString >& aStringItems( getStringItemList() );
+        ValueList aValues( aStringItems.size() );
         ValueList::iterator dst = aValues.begin();
-        const OUString *src (aStringItems.getConstArray());
-        const OUString * const end = src + aStringItems.getLength();
-        for (; src < end; ++src, ++dst )
+        std::vector< OUString >::const_iterator src(aStringItems.begin());
+        std::vector< OUString >::const_iterator const end = aStringItems.end();
+        for (; src != end; ++src, ++dst )
         {
             *dst = *src;
             dst->setTypeKind(nFieldType);
@@ -1369,7 +1369,7 @@ namespace frm
         {
             sal_Int32 nSelectIndex = -1;
             OSL_VERIFY( _rExternalValue >>= nSelectIndex );
-            if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < getStringItemList().getLength() ) )
+            if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < (sal_Int32)getStringItemList().size() ) )
             {
                 aSelectIndexes.realloc( 1 );
                 aSelectIndexes[ 0 ] = static_cast< sal_Int16 >( nSelectIndex );
@@ -1390,16 +1390,14 @@ namespace frm
             const OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
             while ( pSelectEntries != pSelectEntriesEnd )
             {
-                // the indexes where the current string appears in our string items
-                Sequence< sal_Int16 > aThisEntryIndexes;
-                aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++ );
-
-                // insert all the indexes of this entry into our set
-                ::std::copy(
-                    aThisEntryIndexes.getConstArray(),
-                    aThisEntryIndexes.getConstArray() + aThisEntryIndexes.getLength(),
-                    ::std::insert_iterator< ::std::set< sal_Int16 > >( aSelectionSet, aSelectionSet.begin() )
-                );
+                int idx = 0;
+                for(const OUString& s : getStringItemList())
+                {
+                    if (s==*pSelectEntries)
+                        aSelectionSet.insert(idx);
+                    ++idx;
+                }
+                ++pSelectEntries;
             }
 
             // copy the indexes to the sequence
@@ -1411,8 +1409,16 @@ namespace frm
         {
             OUString sStringToSelect;
             OSL_VERIFY( _rExternalValue >>= sStringToSelect );
+            ::std::set< sal_Int16 > aSelectionSet;
+            int idx = 0;
+            for(const OUString& s : getStringItemList())
+            {
+                if (s==sStringToSelect)
+                    aSelectionSet.insert(idx);
+                ++idx;
+            }
 
-            aSelectIndexes = findValue( getStringItemList(), sStringToSelect );
+            aSelectIndexes = comphelper::containerToSequence<sal_Int16>( aSelectionSet );
         }
         break;
         }
@@ -1427,22 +1433,22 @@ namespace frm
         struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, OUString >
         {
         protected:
-            const Sequence< OUString >&  m_rList;
+            const std::vector< OUString >&  m_rList;
 
         public:
-            explicit ExtractStringFromSequence_Safe( const Sequence< OUString >& _rList ) : m_rList( _rList ) { }
+            explicit ExtractStringFromSequence_Safe( const std::vector< OUString >& _rList ) : m_rList( _rList ) { }
 
             OUString operator ()( sal_Int16 _nIndex )
             {
-                OSL_ENSURE( _nIndex < m_rList.getLength(), "ExtractStringFromSequence_Safe: inconsistence!" );
-                if ( _nIndex < m_rList.getLength() )
+                OSL_ENSURE( _nIndex < (sal_Int32)m_rList.size(), "ExtractStringFromSequence_Safe: inconsistence!" );
+                if ( _nIndex < (sal_Int32)m_rList.size() )
                     return m_rList[ _nIndex ];
                 return OUString();
             }
         };
 
 
-        Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
+        Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const std::vector< OUString >& _rStringList )
         {
             Any aReturn;
 
@@ -1462,7 +1468,7 @@ namespace frm
         }
 
 
-        Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
+        Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const std::vector< OUString >& _rStringList )
         {
             Sequence< OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
             ::std::transform(
@@ -1674,7 +1680,7 @@ namespace frm
         suspendValueListening();
         try
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( comphelper::containerToSequence(getStringItemList()) ) );
         }
         catch( const Exception& )
         {

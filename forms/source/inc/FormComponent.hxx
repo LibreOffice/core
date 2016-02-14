@@ -132,11 +132,11 @@ namespace frm
         void    impl_notifyAll_nothrow();
 
     private:
-        OControlModel&                                     m_rModel;
-        bool                                               m_bLocked;
-        css::uno::Sequence< sal_Int32 >                    m_aHandles;
-        css::uno::Sequence< css::uno::Any >                m_aOldValues;
-        css::uno::Sequence< css::uno::Any >                m_aNewValues;
+        OControlModel&                              m_rModel;
+        bool                                        m_bLocked;
+        std::vector< sal_Int32 >                    m_aHandles;
+        std::vector< css::uno::Any >                m_aOldValues;
+        std::vector< css::uno::Any >                m_aNewValues;
 
     private:
         ControlModelLock( const ControlModelLock& ) = delete;
@@ -495,6 +495,12 @@ public:
     void                lockInstance( LockAccess );
     oslInterlockedCount unlockInstance( LockAccess );
 
+    void                firePropertyChanges(
+                            const std::vector< sal_Int32 >& _rHandles,
+                            const std::vector< css::uno::Any >& _rOldValues,
+                            const std::vector< css::uno::Any >& _rNewValues,
+                            LockAccess
+                        );
     void                firePropertyChanges(
                             const css::uno::Sequence< sal_Int32 >& _rHandles,
                             const css::uno::Sequence< css::uno::Any >& _rOldValues,
