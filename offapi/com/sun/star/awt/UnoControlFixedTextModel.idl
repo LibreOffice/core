@@ -169,6 +169,13 @@ published service UnoControlFixedTextModel
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
+    //-------------------------------------------------------------------------
+
+    /** supresses automatic accelerator assignment on this control.
+
+        @since OpenOffice 2.4
+     */
+    [optional, property] boolean NoLabel;
 };
 
 //=============================================================================
