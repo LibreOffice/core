@@ -2508,6 +2508,7 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
     return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error,
                                        "lopath", pPath == nullptr ? LOK_PATH : pPath,
                                        "halign", GTK_ALIGN_CENTER,
+                                       "valign", GTK_ALIGN_CENTER,
                                        nullptr));
 }
 
@@ -2519,6 +2520,7 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
                                                        "lopointer", pOldPriv->m_pOffice,
                                                        "docpointer", pOldPriv->m_pDocument,
                                                        "halign", GTK_ALIGN_CENTER,
+                                                       "valign", GTK_ALIGN_CENTER,
                                                        nullptr));
 
     // No documentLoad(), just a createView().
