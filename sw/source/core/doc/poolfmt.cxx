@@ -300,8 +300,7 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
     rSet.Put( aLR );
     rSet.Put( aUL );
 
-    if( !pColl )
-        pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool( nNxt ));
+    pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool( nNxt ));
 }
 
 
