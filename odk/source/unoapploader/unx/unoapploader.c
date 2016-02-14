@@ -28,9 +28,9 @@
 #endif
 #include <dlfcn.h>
 
-#include "cppuhelper/findsofficepath.h"
+#include <cppuhelper/findsofficepath.h>
 #include "rtl/string.h"
-#include "sal/types.h"
+#include <sal/types.h>
 
 char const* getPath(void);
 char* createCommandName( char* argv0 );

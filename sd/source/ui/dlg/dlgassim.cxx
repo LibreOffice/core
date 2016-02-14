@@ -26,8 +26,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
-#include "svtools/svlbitm.hxx"
-#include "svtools/treelistentry.hxx"
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 
 #include "dlgassim.hxx"
 

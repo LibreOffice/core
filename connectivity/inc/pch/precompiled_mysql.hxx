@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-15 12:49:37 using:
  ./bin/update_pch connectivity mysql --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_mysql.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_mysql.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -125,6 +125,7 @@
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/propstate.hxx>

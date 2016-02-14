@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <vector>
@@ -19,7 +19,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
-#include "unoidl/unoidl.hxx"
+#include <unoidl/unoidl.hxx>
 
 #include "sourceprovider-parser-requires.hxx"
 #include "sourceprovider-parser.hxx"

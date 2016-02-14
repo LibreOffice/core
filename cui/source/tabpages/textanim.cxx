@@ -26,7 +26,7 @@
 #include "textanim.hxx"
 #include "textattr.hxx"
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 
 const sal_uInt16 SvxTextAnimationPage::pRanges[] =
 {

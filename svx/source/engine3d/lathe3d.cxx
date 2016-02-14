@@ -18,11 +18,11 @@
  */
 
 
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 #include <tools/poly.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svxids.hrc>

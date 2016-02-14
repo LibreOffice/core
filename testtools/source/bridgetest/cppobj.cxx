@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-#include "cppu/unotype.hxx"
+#include <cppu/unotype.hxx>
 #include <osl/diagnose.h>
 #include "osl/diagnose.hxx"
 #include <osl/thread.h>
@@ -28,8 +28,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/compbase_ex.hxx"
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -37,12 +37,12 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 
-#include "test/testtools/bridgetest/Constructors.hpp"
-#include "test/testtools/bridgetest/Constructors2.hpp"
-#include "test/testtools/bridgetest/TestPolyStruct.hpp"
-#include "test/testtools/bridgetest/TestPolyStruct2.hpp"
-#include "test/testtools/bridgetest/XBridgeTest2.hpp"
-#include "test/testtools/bridgetest/XMulti.hpp"
+#include <test/testtools/bridgetest/Constructors.hpp>
+#include <test/testtools/bridgetest/Constructors2.hpp>
+#include <test/testtools/bridgetest/TestPolyStruct.hpp>
+#include <test/testtools/bridgetest/TestPolyStruct2.hpp>
+#include <test/testtools/bridgetest/XBridgeTest2.hpp>
+#include <test/testtools/bridgetest/XMulti.hpp>
 
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"

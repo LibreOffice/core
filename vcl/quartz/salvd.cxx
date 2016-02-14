@@ -23,9 +23,9 @@
 #include <vcl/sysdata.hxx>
 
 #ifdef MACOSX
-#include "osx/salinst.h"
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
+#include <osx/salinst.h>
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
 #else
 #include "headless/svpframe.hxx"
 #include "headless/svpgdi.hxx"

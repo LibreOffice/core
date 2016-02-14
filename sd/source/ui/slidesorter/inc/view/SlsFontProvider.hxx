@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSFONTPROVIDER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSFONTPROVIDER_HXX
 
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 
 #include <memory>
 #include <vcl/mapmod.hxx>

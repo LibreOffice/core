@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstdarg>
@@ -22,9 +22,9 @@
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"
-#include "sal/detail/log.h"
-#include "sal/log.hxx"
-#include "sal/types.h"
+#include <sal/detail/log.h>
+#include <sal/log.hxx>
+#include <sal/types.h>
 #include "internal/misc.hxx"
 
 #include "logformat.hxx"

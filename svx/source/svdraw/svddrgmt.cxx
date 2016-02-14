@@ -24,7 +24,7 @@
 #include <o3tl/numeric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
@@ -32,7 +32,7 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
 #include <svx/svddrgv.hxx>
 #include <svx/svdograf.hxx>
@@ -54,7 +54,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

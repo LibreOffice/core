@@ -36,7 +36,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "unotools/localedatawrapper.hxx"
+#include <unotools/localedatawrapper.hxx>
 
 #include "rtl/strbuf.hxx"
 

@@ -21,14 +21,14 @@
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
 
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <cuires.hrc>
 #include <svx/svdattr.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include "cuitabarea.hxx"
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <cuitabline.hxx>
 #include "paragrph.hrc"
 #include <svx/xlineit0.hxx>

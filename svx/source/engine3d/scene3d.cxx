@@ -18,9 +18,9 @@
  */
 
 
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 #include "svdglob.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 
 #include <stdlib.h>
 #include <svx/globl3d.hxx>

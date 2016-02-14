@@ -19,11 +19,11 @@
 
 #include <config_features.h>
 
-#include "svx/txencbox.hxx"
-#include "svx/txenctab.hxx"
+#include <svx/txencbox.hxx>
+#include <svx/txenctab.hxx>
 #include <svx/dialogs.hrc>
 #if HAVE_FEATURE_DBCONNECTIVITY
-#include "svx/dbcharsethelper.hxx"
+#include <svx/dbcharsethelper.hxx>
 #endif
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>

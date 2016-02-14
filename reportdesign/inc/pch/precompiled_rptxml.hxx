@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:37 using:
+ Generated on 2016-02-15 12:48:46 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rptxml.hxx "/opt/lo/bin/make reportdesign.build" --find-conflicts
+ ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rptxml.hxx "make reportdesign.build" --find-conflicts
 */
 
 #include <cassert>

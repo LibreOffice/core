@@ -60,7 +60,7 @@
 
 #include <editeng/unolingu.hxx>
 #include <editeng/unopracc.hxx>
-#include "editeng/AccessibleEditableTextPara.hxx"
+#include <editeng/AccessibleEditableTextPara.hxx>
 #include "AccessibleHyperlink.hxx"
 
 #include <svtools/colorcfg.hxx>

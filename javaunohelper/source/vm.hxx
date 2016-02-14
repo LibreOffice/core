@@ -20,7 +20,7 @@
 #ifndef INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
 #define INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "jni.h"
 #include "com/sun/star/uno/Reference.hxx"

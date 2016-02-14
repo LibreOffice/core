@@ -78,7 +78,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <set>
 #include <oox/ole/olehelper.hxx>
-#include "i18nlangtag/languagetag.hxx"
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 

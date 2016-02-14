@@ -24,9 +24,9 @@
 
 #include "osl/thread.h"
 
-#include "unotools/atom.hxx"
+#include <unotools/atom.hxx>
 
-#include "tools/stream.hxx"
+#include <tools/stream.hxx>
 
 #include <rtl/strbuf.hxx>
 

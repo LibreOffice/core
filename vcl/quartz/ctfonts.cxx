@@ -28,8 +28,8 @@
 #include "ctfonts.hxx"
 #include "impfont.hxx"
 #ifdef MACOSX
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
 #endif
 #include "fontinstance.hxx"
 #include "fontattributes.hxx"

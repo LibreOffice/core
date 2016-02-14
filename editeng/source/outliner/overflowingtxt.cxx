@@ -18,13 +18,13 @@
  */
 
 #include "rtl/ustring.hxx"
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
-#include "editeng/overflowingtxt.hxx"
-#include "editeng/outliner.hxx"
-#include "editeng/outlobj.hxx"
-#include "editeng/editobj.hxx"
-#include "editeng/editdata.hxx"
+#include <editeng/overflowingtxt.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editdata.hxx>
 
 #include "outleeng.hxx"
 #include "editdoc.hxx"

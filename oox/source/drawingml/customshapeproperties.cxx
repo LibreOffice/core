@@ -18,10 +18,10 @@
  */
 
 #include "drawingml/customshapeproperties.hxx"
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/tokenmap.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/tokenmap.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

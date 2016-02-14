@@ -23,7 +23,7 @@
 #include "com/sun/star/embed/ElementModes.hpp"
 #include "com/sun/star/embed/StorageFactory.hpp"
 #include <osl/diagnose.h>
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"

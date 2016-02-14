@@ -44,9 +44,9 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdouno.hxx>
 #include "shapeimpl.hxx"
-#include "svx/unoshprp.hxx"
+#include <svx/unoshprp.hxx>
 #include <svx/svdoashp.hxx>
-#include "svx/svdviter.hxx"
+#include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

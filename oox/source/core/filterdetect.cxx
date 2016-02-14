@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/filterdetect.hxx"
+#include <oox/core/filterdetect.hxx>
 
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -25,12 +25,12 @@
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "oox/core/fastparser.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/zipstorage.hxx"
-#include "oox/ole/olestorage.hxx"
+#include <oox/core/fastparser.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/zipstorage.hxx>
+#include <oox/ole/olestorage.hxx>
 
-#include "oox/crypto/DocumentDecryption.hxx"
+#include <oox/crypto/DocumentDecryption.hxx>
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 

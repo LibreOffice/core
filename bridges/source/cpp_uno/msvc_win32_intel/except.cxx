@@ -32,7 +32,7 @@
 #include "com/sun/star/uno/Any.hxx"
 #include <unordered_map>
 #include "msci.hxx"
-#include "bridges/cpp_uno/shared/except.hxx"
+#include <bridges/cpp_uno/shared/except.hxx>
 
 
 #pragma pack(push, 8)

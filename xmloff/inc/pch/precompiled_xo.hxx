@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:43 using:
+ Generated on 2016-02-15 12:49:36 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xo.hxx "/opt/lo/bin/make xmloff.build" --find-conflicts
+ ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xo.hxx "make xmloff.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -36,7 +36,6 @@
 #include <ostream>
 #include <set>
 #include <sstream>
-#include <tuple>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -46,6 +45,7 @@
 #include <boost/iterator_adaptors.hpp>
 #include <boost/noncopyable.hpp>
 #include <osl/diagnose.h>
+#include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -146,6 +146,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>

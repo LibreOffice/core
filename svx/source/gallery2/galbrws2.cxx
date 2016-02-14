@@ -33,12 +33,12 @@
 #include <vcl/graphicfilter.hxx>
 #include <editeng/brushitem.hxx>
 #include "helpid.hrc"
-#include "svx/gallery.hxx"
+#include <svx/gallery.hxx>
 #include "galobj.hxx"
-#include "svx/gallery1.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/galctrl.hxx"
-#include "svx/galmisc.hxx"
+#include <svx/gallery1.hxx>
+#include <svx/galtheme.hxx>
+#include <svx/galctrl.hxx>
+#include <svx/galmisc.hxx>
 #include "galbrws2.hxx"
 #include "gallery.hrc"
 #include <vcl/svapp.hxx>

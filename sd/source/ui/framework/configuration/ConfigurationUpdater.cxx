@@ -21,8 +21,8 @@
 #include "ConfigurationTracer.hxx"
 #include "ConfigurationClassifier.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
-#include "framework/Configuration.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/Configuration.hxx>
+#include <framework/FrameworkHelper.hxx>
 
 #include <comphelper/scopeguard.hxx>
 #include <tools/diagnose_ex.h>

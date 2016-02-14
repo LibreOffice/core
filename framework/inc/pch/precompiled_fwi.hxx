@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:37 using:
+ Generated on 2016-02-15 12:50:11 using:
  ./bin/update_pch framework fwi --cutoff=9 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwi.hxx "/opt/lo/bin/make framework.build" --find-conflicts
+ ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwi.hxx "make framework.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -116,6 +116,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>

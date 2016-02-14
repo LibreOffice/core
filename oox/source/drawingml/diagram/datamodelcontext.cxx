@@ -18,7 +18,7 @@
  */
 
 #include "datamodelcontext.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/textbodycontext.hxx"

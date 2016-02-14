@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-15 12:49:44 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcore.hxx "/opt/lo/bin/make chart2.build" --find-conflicts
+ ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcore.hxx "make chart2.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -66,12 +66,9 @@
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/fntstyle.hxx>
-#include <vcl/font.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/wall.hxx>
 #include <ChartModel.hxx>
 #include <GL/glew.h>
 #include <basegfx/basegfxdllapi.h>
@@ -163,6 +160,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -174,6 +172,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>

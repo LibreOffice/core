@@ -31,7 +31,7 @@
 #include <svtools/treelistbox.hxx>
 
 #include <vector>
-#include "formula/omoduleclient.hxx"
+#include <formula/omoduleclient.hxx>
 
 namespace formula
 {

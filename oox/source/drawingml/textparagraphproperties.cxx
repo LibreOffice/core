@@ -32,10 +32,10 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <vcl/unohelp.hxx>

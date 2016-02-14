@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "oox/helper/graphichelper.hxx"
+#include <oox/helper/graphichelper.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -36,10 +36,10 @@
 #include <vcl/wmf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/properties.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 

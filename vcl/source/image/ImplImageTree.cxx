@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
@@ -30,14 +30,14 @@
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 #include "osl/file.hxx"
 #include "osl/diagnose.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/uri.hxx"
 
-#include "tools/stream.hxx"
-#include "tools/urlobj.hxx"
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/implimagetree.hxx>

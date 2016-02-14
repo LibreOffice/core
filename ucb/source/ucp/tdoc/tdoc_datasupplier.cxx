@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "osl/diagnose.h"
-#include "ucbhelper/contentidentifier.hxx"
+#include <ucbhelper/contentidentifier.hxx>
 
 #include "tdoc_datasupplier.hxx"
 #include "tdoc_content.hxx"

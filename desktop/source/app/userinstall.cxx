@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <comphelper/configuration.hxx>
 #include "config_folders.h"
-#include "officecfg/Setup.hxx"
+#include <officecfg/Setup.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>

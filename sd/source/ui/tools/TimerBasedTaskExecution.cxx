@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tools/TimerBasedTaskExecution.hxx"
-#include "tools/AsynchronousTask.hxx"
+#include <tools/TimerBasedTaskExecution.hxx>
+#include <tools/AsynchronousTask.hxx>
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 #include <memory>
 
 namespace sd { namespace tools {

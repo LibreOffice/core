@@ -22,9 +22,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "registry/registry.hxx"
-#include "registry/reflread.hxx"
-#include "registry/reflwrit.hxx"
+#include <registry/registry.hxx>
+#include <registry/reflread.hxx>
+#include <registry/reflwrit.hxx>
 #include "regdiagnose.h"
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>

@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-02-15 12:50:42 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svtools/inc/pch/precompiled_svt.hxx "/opt/lo/bin/make svtools.build" --find-conflicts
+ ./bin/update_pch_bisect ./svtools/inc/pch/precompiled_svt.hxx "make svtools.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -93,7 +93,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salhelper/salhelperdllapi.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <salhelper/timer.hxx>
 #include <vcl/alpha.hxx>
@@ -102,8 +101,8 @@
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
@@ -168,7 +167,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -199,7 +197,6 @@
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XView.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
@@ -220,7 +217,6 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
@@ -295,11 +291,11 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -314,13 +310,11 @@
 #include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <cppuhelper/implbase_ex.hxx>

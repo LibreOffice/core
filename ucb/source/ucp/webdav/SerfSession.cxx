@@ -20,9 +20,9 @@
 #include <vector>
 #include <string.h>
 #include <rtl/string.h>
-#include "comphelper/processfactory.hxx"
-#include "comphelper/sequence.hxx"
-#include "ucbhelper/simplecertificatevalidationrequest.hxx"
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <ucbhelper/simplecertificatevalidationrequest.hxx>
 
 #include "AprEnv.hxx"
 #include <apr_strings.h>

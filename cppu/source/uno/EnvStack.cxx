@@ -20,8 +20,8 @@
 #include "uno/environment.hxx"
 #include <uno/lbnames.h>
 
-#include "cppu/EnvDcp.hxx"
-#include "cppu/Enterable.hxx"
+#include <cppu/EnvDcp.hxx>
+#include <cppu/Enterable.hxx>
 
 #include "rtl/instance.hxx"
 

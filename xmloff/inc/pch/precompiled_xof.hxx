@@ -13,20 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-02-15 12:49:34 using:
  ./bin/update_pch xmloff xof --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xof.hxx "/opt/lo/bin/make xmloff.build" --find-conflicts
+ ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xof.hxx "make xmloff.build" --find-conflicts
 */
 
 #include <string.h>
 #include <unordered_map>
+#include <vector>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/config.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>

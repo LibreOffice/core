@@ -32,7 +32,7 @@
 #include "osl/time.h"
 #include "osl/thread.hxx"
 #include <osl/diagnose.h>
-#include "salhelper/thread.hxx"
+#include <salhelper/thread.hxx>
 #include "NeonSession.hxx"
 #include "NeonLockStore.hxx"
 

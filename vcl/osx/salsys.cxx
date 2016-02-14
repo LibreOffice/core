@@ -21,9 +21,9 @@
 
 #include <vcl/button.hxx>
 
-#include "osx/salsys.h"
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
+#include <osx/salsys.h>
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
 #include "quartz/utils.h"
 
 #include "svids.hrc"

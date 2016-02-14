@@ -18,7 +18,7 @@
  */
 
 
-#include "idlc/idlc.hxx"
+#include <idlc/idlc.hxx>
 #include <sal/main.h>
 
 #include <string.h>

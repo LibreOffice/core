@@ -30,7 +30,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/aeitem.hxx>
-#include "svx/xtable.hxx"
+#include <svx/xtable.hxx>
 
 #include "strings.hrc"
 #include "glob.hrc"

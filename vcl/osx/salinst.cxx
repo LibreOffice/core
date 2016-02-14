@@ -23,7 +23,7 @@
 
 #include <comphelper/solarmutex.hxx>
 
-#include "comphelper/lok.hxx"
+#include <comphelper/lok.hxx>
 
 #include "osl/process.h"
 
@@ -35,17 +35,17 @@
 #include <vcl/svmain.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
-#include "osx/salframe.h"
-#include "osx/salobj.h"
-#include "osx/salsys.h"
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
+#include <osx/salframe.h>
+#include <osx/salobj.h>
+#include <osx/salsys.h>
 #include "quartz/salvd.h"
 #include "quartz/salbmp.h"
 #include "quartz/utils.h"
-#include "osx/salprn.h"
-#include "osx/saltimer.h"
-#include "osx/vclnsapp.h"
+#include <osx/salprn.h>
+#include <osx/saltimer.h>
+#include <osx/vclnsapp.h>
 
 #include "print.h"
 #include "impbmp.hxx"
@@ -61,7 +61,7 @@
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import "apple_remote/RemoteMainController.h"
-#include "apple_remote/RemoteControl.h"
+#include <apple_remote/RemoteControl.h>
 #include "postmac.h"
 
 using namespace std;

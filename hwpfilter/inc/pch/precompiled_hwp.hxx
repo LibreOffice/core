@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:33 using:
+ Generated on 2016-02-15 12:49:25 using:
  ./bin/update_pch hwpfilter hwp --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./hwpfilter/inc/pch/precompiled_hwp.hxx "/opt/lo/bin/make hwpfilter.build" --find-conflicts
+ ./bin/update_pch_bisect ./hwpfilter/inc/pch/precompiled_hwp.hxx "make hwpfilter.build" --find-conflicts
 */
 
 #include <cassert>

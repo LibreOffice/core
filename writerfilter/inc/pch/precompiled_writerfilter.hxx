@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 15:48:57 using:
+ Generated on 2016-02-15 12:50:11 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "/opt/lo/bin/make writerfilter.build" --find-conflicts
+ ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "make writerfilter.build" --find-conflicts
 */
 
 #include <cassert>
@@ -28,7 +28,6 @@
 #include <memory>
 #include <ostream>
 #include <stdlib.h>
-#include <tuple>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/logic/tribool.hpp>
@@ -42,6 +41,7 @@
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>

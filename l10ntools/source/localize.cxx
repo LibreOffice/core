@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <cstdlib>
@@ -35,9 +35,9 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/macros.h"
-#include "sal/main.h"
-#include "sal/types.h"
+#include <sal/macros.h>
+#include <sal/main.h>
+#include <sal/types.h>
 
 #include "po.hxx"
 

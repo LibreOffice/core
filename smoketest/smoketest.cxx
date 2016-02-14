@@ -49,9 +49,9 @@
 #include "osl/time.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "unotest/gettestargument.hxx"
-#include "unotest/officeconnection.hxx"
-#include "unotest/toabsolutefileurl.hxx"
+#include <unotest/gettestargument.hxx>
+#include <unotest/officeconnection.hxx>
+#include <unotest/toabsolutefileurl.hxx>
 
 namespace {
 

@@ -21,7 +21,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPDYNRESULTSET_HXX
 
 #include "rtl/ref.hxx"
-#include "ucbhelper/resultsethelper.hxx"
+#include <ucbhelper/resultsethelper.hxx>
 
 #include "ftpcontent.hxx"
 

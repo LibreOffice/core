@@ -39,7 +39,7 @@
 #include <basic/sbx.hxx>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/fmview.hxx>
@@ -47,7 +47,7 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include "fmpgeimp.hxx"
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmprop.hrc"
@@ -64,7 +64,7 @@
 #include <vcl/stdtext.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

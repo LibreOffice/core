@@ -27,7 +27,7 @@
 
  *************************************************************************/
 
-#include "ucbhelper/resultset.hxx"
+#include <ucbhelper/resultset.hxx>
 
 #include "tdoc_datasupplier.hxx"
 #include "tdoc_resultset.hxx"

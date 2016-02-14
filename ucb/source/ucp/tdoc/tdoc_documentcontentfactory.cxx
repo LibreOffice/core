@@ -24,7 +24,7 @@
 
  *************************************************************************/
 
-#include "cppuhelper/factory.hxx"
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "tdoc_documentcontentfactory.hxx"

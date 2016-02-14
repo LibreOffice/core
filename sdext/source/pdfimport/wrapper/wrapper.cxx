@@ -35,7 +35,7 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/byteseq.hxx"
 
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/awt/FontDescriptor.hpp"
@@ -50,11 +50,11 @@
 #include "com/sun/star/geometry/RealRectangle2D.hpp"
 #include "com/sun/star/task/XInteractionHandler.hpp"
 
-#include "basegfx/point/b2dpoint.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/tools/canvastools.hxx"
-#include "basegfx/tools/unopolypolygon.hxx"
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>

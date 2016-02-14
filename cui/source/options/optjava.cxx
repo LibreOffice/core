@@ -35,8 +35,8 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include "svtools/restartdialog.hxx"
-#include "svtools/treelistentry.hxx"
+#include <svtools/restartdialog.hxx>
+#include <svtools/treelistentry.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <DataFlavorMapping.hxx>
 #include "HtmlFmtFlt.hxx"
@@ -26,7 +26,7 @@
 #include "com/sun/star/datatransfer/XMimeContentType.hpp"
 #include "com/sun/star/datatransfer/MimeContentTypeFactory.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include <rtl/ustring.hxx>
 #include <osl/endian.h>

@@ -18,16 +18,16 @@
  */
 
 
-#include "svx/svxerr.hxx"
+#include <svx/svxerr.hxx>
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
-#include "svx/svditer.hxx"
-#include "svx/fmresids.hrc"
+#include <svx/svditer.hxx>
+#include <svx/fmresids.hrc>
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>

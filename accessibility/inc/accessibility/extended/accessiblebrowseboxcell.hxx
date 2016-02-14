@@ -20,7 +20,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX
 
-#include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
+#include <accessibility/extended/AccessibleBrowseBoxBase.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 
 

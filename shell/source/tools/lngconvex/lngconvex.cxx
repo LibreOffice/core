@@ -41,10 +41,10 @@ typedef unsigned short WORD;
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/file.hxx"
-#include "sal/main.h"
+#include <sal/main.h>
 
-#include "tools/config.hxx"
-#include "i18nlangtag/languagetag.hxx"
+#include <tools/config.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <iostream>
 #include <fstream>

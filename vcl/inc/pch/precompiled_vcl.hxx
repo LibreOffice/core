@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-25 19:34:08 using:
+ Generated on 2016-02-15 12:50:35 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,11 +23,9 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
-#include <cmath>
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_global.h>
-#include <config_graphite.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -53,12 +51,10 @@
 #include <vector>
 #include <window.h>
 #include <boost/dynamic_bitset.hpp>
-#include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <boost/signals2/connection.hpp>
 #include <boost/signals2/signal.hpp>
 #include <osl/conditn.hxx>
@@ -114,7 +110,6 @@
 #include <salframe.hxx>
 #include <salgdi.hxx>
 #include <salgdiimpl.hxx>
-#include <salgeom.hxx>
 #include <salglyphid.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
@@ -129,8 +124,8 @@
 #include <salvd.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/configsettings.hxx>
@@ -148,7 +143,6 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/fontcharmap.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
@@ -192,7 +186,6 @@
 #include <GL/glew.h>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
-#include <PhysicalFontFamily.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -258,7 +251,6 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <dndlistenercontainer.hxx>
-#include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <helpwin.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
@@ -266,7 +258,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <impbmp.hxx>
-#include <impfont.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>

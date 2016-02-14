@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "jvmaccess/javainfo.hxx"
+#include <jvmaccess/javainfo.hxx>
 
 #include "osl/file.hxx"
 #include "osl/thread.h"

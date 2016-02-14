@@ -18,12 +18,12 @@
  */
 #include <iostream>
 
-#include "codemaker/global.hxx"
-#include "codemaker/typemanager.hxx"
-#include "sal/main.h"
+#include <codemaker/global.hxx>
+#include <codemaker/typemanager.hxx>
+#include <sal/main.h>
 #include "rtl/process.h"
-#include "unodevtools/options.hxx"
-#include "unoidl/unoidl.hxx"
+#include <unodevtools/options.hxx>
+#include <unoidl/unoidl.hxx>
 
 #include "skeletonjava.hxx"
 #include "skeletoncpp.hxx"

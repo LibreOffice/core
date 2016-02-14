@@ -19,8 +19,8 @@
 
 #include <vcl/svapp.hxx>
 
-#include "svx/connctrl.hxx"
-#include "svx/dlgutil.hxx"
+#include <svx/connctrl.hxx>
+#include <svx/dlgutil.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

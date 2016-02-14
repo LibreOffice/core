@@ -28,9 +28,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include "drawingml/textparagraphproperties.hxx"
 #include "drawingml/textcharacterproperties.hxx"
 

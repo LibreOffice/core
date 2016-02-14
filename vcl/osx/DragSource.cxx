@@ -30,7 +30,7 @@
 #include "clipboard.hxx"
 #include "DragActionConversion.hxx"
 
-#include "osx/salframe.h"
+#include <osx/salframe.h>
 
 #include <cassert>
 

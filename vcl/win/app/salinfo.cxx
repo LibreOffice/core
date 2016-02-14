@@ -20,7 +20,7 @@
 #include "svsys.h"
 #include "rtl/ustrbuf.hxx"
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
 #include <vcl/window.hxx>
 

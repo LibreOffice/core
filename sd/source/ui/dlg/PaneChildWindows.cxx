@@ -20,7 +20,7 @@
 #include "PaneChildWindows.hxx"
 #include "PaneDockingWindow.hxx"
 #include "ViewShellBase.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "taskpane/ToolPanelViewShell.hxx"
 #include "app.hrc"
 #include "strings.hrc"

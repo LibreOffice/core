@@ -27,7 +27,7 @@
 #include <svl/style.hxx>
 #include <editeng/memberids.hrc>
 #include <svx/dialogs.hrc>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>

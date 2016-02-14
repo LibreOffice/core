@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/sidebar/ContextChangeEventMultiplexer.hxx"
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>

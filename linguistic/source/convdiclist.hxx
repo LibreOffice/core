@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "lngopt.hxx"
 
 

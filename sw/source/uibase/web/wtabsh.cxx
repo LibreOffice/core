@@ -38,7 +38,7 @@
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebTableShell
 #include <sfx2/msg.hxx>
-#include "svx/svxids.hrc"
+#include <svx/svxids.hrc>
 #include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell)

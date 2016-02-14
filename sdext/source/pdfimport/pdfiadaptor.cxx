@@ -28,7 +28,7 @@
 
 #include <osl/file.h>
 #include <osl/thread.h>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "rtl/ref.hxx"
 

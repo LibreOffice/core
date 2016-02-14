@@ -19,11 +19,11 @@
 
 #include <sal/config.h>
 
-#include "osx/saltimer.h"
-#include "osx/salnstimer.h"
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
-#include "osx/salinst.h"
+#include <osx/saltimer.h>
+#include <osx/salnstimer.h>
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
+#include <osx/salinst.h>
 
 NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;

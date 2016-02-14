@@ -18,7 +18,7 @@
  */
 
 
-#include "cppu/helper/purpenv/Mapping.hxx"
+#include <cppu/helper/purpenv/Mapping.hxx>
 
 #include "Proxy.hxx"
 

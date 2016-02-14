@@ -20,7 +20,7 @@
 #ifndef INCLUDED_L10NTOOLS_INC_CFGMERGE_HXX
 #define INCLUDED_L10NTOOLS_INC_CFGMERGE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <fstream>
 #include <unordered_map>

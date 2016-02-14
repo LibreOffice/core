@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/PresentationFactory.hxx"
+#include <framework/PresentationFactory.hxx>
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "DrawController.hxx"
 #include "ViewShellBase.hxx"
 #include "facreg.hxx"

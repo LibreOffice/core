@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/main.h"
+#include <sal/main.h>
 
 #include "common.hxx"
 #include "propmerge.hxx"

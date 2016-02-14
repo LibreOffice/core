@@ -36,7 +36,7 @@
 #   include <unistd.h>
 #endif
 
-#include "codemaker/global.hxx"
+#include <codemaker/global.hxx>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'

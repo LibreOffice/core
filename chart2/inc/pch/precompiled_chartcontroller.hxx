@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:31 using:
+ Generated on 2016-02-15 12:49:43 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcontroller.hxx "/opt/lo/bin/make chart2.build" --find-conflicts
+ ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcontroller.hxx "make chart2.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -57,7 +57,6 @@
 #include <boost/checked_delete.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
@@ -150,6 +149,7 @@
 #include <vcl/prntypes.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -188,6 +188,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -240,6 +241,7 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -283,6 +285,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -307,6 +310,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
@@ -314,6 +318,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
@@ -356,7 +361,12 @@
 #include <editeng/eedata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/numdef.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/svxfont.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -495,7 +505,6 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <tools/globname.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
@@ -523,6 +532,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>

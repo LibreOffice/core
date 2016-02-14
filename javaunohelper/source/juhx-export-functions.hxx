@@ -20,9 +20,9 @@
 #ifndef INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_FUNCTIONS_HXX
 #define INCLUDED_JAVAUNOHELPER_SOURCE_JUHX_EXPORT_FUNCTIONS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "juhx-export-types.hxx"
 

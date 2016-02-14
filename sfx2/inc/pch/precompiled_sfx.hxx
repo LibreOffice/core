@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-07 14:31:00 using:
+ Generated on 2016-02-15 12:50:45 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sfx2/inc/pch/precompiled_sfx.hxx "/opt/lo/bin/make sfx2.build" --find-conflicts
+ ./bin/update_pch_bisect ./sfx2/inc/pch/precompiled_sfx.hxx "make sfx2.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -57,6 +57,7 @@
 #include <osl/socket.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
+#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
@@ -90,6 +91,7 @@
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dibtools.hxx>
@@ -308,6 +310,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>

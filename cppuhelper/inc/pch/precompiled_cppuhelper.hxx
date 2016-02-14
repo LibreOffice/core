@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-15 12:50:19 using:
  ./bin/update_pch cppuhelper cppuhelper --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "/opt/lo/bin/make cppuhelper.build" --find-conflicts
+ ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "make cppuhelper.build" --find-conflicts
 */
 
 #include <cassert>

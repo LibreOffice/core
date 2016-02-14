@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:43 using:
+ Generated on 2016-02-15 12:50:19 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svx/inc/pch/precompiled_svxcore.hxx "/opt/lo/bin/make svx.build" --find-conflicts
+ ./bin/update_pch_bisect ./svx/inc/pch/precompiled_svxcore.hxx "make svx.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -103,13 +103,13 @@
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
@@ -170,12 +170,14 @@
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <basic/basicdllapi.h>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
+#include <basic/sbxobj.hxx>
 #include <basic/sbxvar.hxx>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -293,6 +295,8 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
+#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>

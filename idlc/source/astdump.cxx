@@ -27,7 +27,7 @@
 #include <idlc/astobserves.hxx>
 #include <idlc/astneeds.hxx>
 #include <idlc/astsequence.hxx>
-#include "idlc/astoperation.hxx"
+#include <idlc/astoperation.hxx>
 
 #include <osl/diagnose.h>
 

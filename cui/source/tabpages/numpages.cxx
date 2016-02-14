@@ -64,7 +64,7 @@
 
 #include <algorithm>
 #include <vector>
-#include "sfx2/opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 
 #include <cuires.hrc>
 #include <sfx2/request.hxx>
@@ -72,8 +72,8 @@
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "svx/gallery1.hxx"
-#include "svx/galtheme.hxx"
+#include <svx/gallery1.hxx>
+#include <svx/galtheme.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <rtl/ustring.h>

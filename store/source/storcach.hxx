@@ -20,10 +20,10 @@
 #ifndef INCLUDED_STORE_SOURCE_STORCACH_HXX
 #define INCLUDED_STORE_SOURCE_STORCACH_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include "rtl/ref.hxx"
 
-#include "store/types.h"
+#include <store/types.h>
 #include "storbase.hxx"
 #include "object.hxx"
 #include "boost/noncopyable.hpp"

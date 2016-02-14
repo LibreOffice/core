@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-02-15 12:48:22 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sc/inc/pch/precompiled_vbaobj.hxx "/opt/lo/bin/make sc.build" --find-conflicts
+ ./bin/update_pch_bisect ./sc/inc/pch/precompiled_vbaobj.hxx "make sc.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -224,6 +224,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/unwrapargs.hxx>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTUNDERLINEPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
+#include <svx/sidebar/Popup.hxx>
 
 #include <vcl/vclenum.hxx>
 

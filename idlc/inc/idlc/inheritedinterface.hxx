@@ -20,7 +20,7 @@
 #ifndef INCLUDED_IDLC_INC_IDLC_INHERITEDINTERFACE_HXX
 #define INCLUDED_IDLC_INC_IDLC_INHERITEDINTERFACE_HXX
 
-#include "idlc/idlc.hxx"
+#include <idlc/idlc.hxx>
 
 #include <rtl/ustring.hxx>
 

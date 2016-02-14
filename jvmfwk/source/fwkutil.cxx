@@ -42,7 +42,7 @@
 #include "rtl/uri.hxx"
 #include "osl/getglobalmutex.hxx"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "cppuhelper/bootstrap.hxx"
+#include <cppuhelper/bootstrap.hxx>
 
 #include "framework.hxx"
 #include "fwkutil.hxx"

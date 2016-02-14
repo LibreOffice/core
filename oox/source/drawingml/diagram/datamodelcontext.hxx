@@ -22,7 +22,7 @@
 
 #include <com/sun/star/drawing/XShapes.hpp>
 
-#include "oox/core/contexthandler2.hxx"
+#include <oox/core/contexthandler2.hxx>
 #include "diagram.hxx"
 
 namespace oox { namespace drawingml {

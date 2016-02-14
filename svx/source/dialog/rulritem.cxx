@@ -18,7 +18,7 @@
  */
 
 #include <svx/dialogs.hrc>
-#include "svx/rulritem.hxx"
+#include <svx/rulritem.hxx>
 #include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/awt/Rectangle.hpp>

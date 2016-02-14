@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_WRITER_HXX
 #define INCLUDED_BINARYURP_SOURCE_WRITER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <deque>
 #include <vector>
@@ -30,7 +30,7 @@
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "salhelper/thread.hxx"
+#include <salhelper/thread.hxx>
 #include "typelib/typedescription.hxx"
 #include "uno/dispatcher.hxx"
 

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/backgroundproperties.hxx"
+#include <oox/ppt/backgroundproperties.hxx>
 #include "drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/contexthandler2.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/core/contexthandler2.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

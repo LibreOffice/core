@@ -18,7 +18,7 @@
  */
 
 #include "sqlparserclient.hxx"
-#include "svx/ParseContext.hxx"
+#include <svx/ParseContext.hxx>
 
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlparse.hxx>

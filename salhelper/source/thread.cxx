@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stdexcept>
 #include <string>
 
-#include "sal/log.hxx"
-#include "salhelper/thread.hxx"
+#include <sal/log.hxx>
+#include <salhelper/thread.hxx>
 
 salhelper::Thread::Thread(char const * name): name_(name) {}
 

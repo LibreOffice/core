@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_XMLXTEXP_HXX
 #define INCLUDED_SVX_SOURCE_INC_XMLXTEXP_HXX
 
-#include "xmloff/xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }

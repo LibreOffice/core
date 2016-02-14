@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 12:43:10 using:
+ Generated on 2016-02-15 12:49:59 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sw/inc/pch/precompiled_sw.hxx "/opt/lo/bin/make sw.build" --find-conflicts
+ ./bin/update_pch_bisect ./sw/inc/pch/precompiled_sw.hxx "make sw.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -46,7 +46,6 @@
 #include <string>
 #include <swdllapi.h>
 #include <swerror.h>
-#include <tuple>
 #include <typeinfo>
 #include <unomid.h>
 #include <unordered_map>
@@ -212,17 +211,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -230,7 +226,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
@@ -245,6 +240,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -255,12 +251,9 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <crsrsh.hxx>
 #include <crsskip.hxx>
@@ -384,6 +377,7 @@
 #include <numrule.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <pagedesc.hxx>
 #include <pam.hxx>
@@ -424,7 +418,6 @@
 #include <shellres.hxx>
 #include <sortopt.hxx>
 #include <sot/formats.hxx>
-#include <sot/sotdllapi.h>
 #include <sot/storage.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
@@ -543,7 +536,6 @@
 #include <txtrfmrk.hxx>
 #include <txttxmrk.hxx>
 #include <typelib/typedescription.h>
-#include <uno/any2.h>
 #include <uno/sequence2.h>
 #include <unobaseclass.hxx>
 #include <unochart.hxx>

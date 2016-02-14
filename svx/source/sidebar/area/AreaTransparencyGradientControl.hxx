@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTCONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTCONTROL_HXX
 
-#include "svx/sidebar/PopupControl.hxx"
+#include <svx/sidebar/PopupControl.hxx>
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

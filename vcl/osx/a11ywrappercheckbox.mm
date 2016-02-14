@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 
 #include "a11ywrappercheckbox.h"
 #include "a11yvaluewrapper.h"

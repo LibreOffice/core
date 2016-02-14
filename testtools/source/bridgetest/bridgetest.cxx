@@ -43,11 +43,11 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Type.hxx"
 
-#include "test/testtools/bridgetest/BadConstructorArguments.hpp"
-#include "test/testtools/bridgetest/TestPolyStruct.hpp"
-#include "test/testtools/bridgetest/XBridgeTest.hpp"
-#include "test/testtools/bridgetest/XBridgeTest2.hpp"
-#include "test/testtools/bridgetest/XMulti.hpp"
+#include <test/testtools/bridgetest/BadConstructorArguments.hpp>
+#include <test/testtools/bridgetest/TestPolyStruct.hpp>
+#include <test/testtools/bridgetest/XBridgeTest.hpp>
+#include <test/testtools/bridgetest/XBridgeTest2.hpp>
+#include <test/testtools/bridgetest/XMulti.hpp>
 
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"

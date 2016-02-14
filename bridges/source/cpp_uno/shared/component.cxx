@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
+#include <bridges/cpp_uno/shared/bridge.hxx>
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -29,11 +29,11 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include <sal/log.hxx>
-#include "sal/types.h"
+#include <sal/types.h>
 #include "uno/environment.h"
 #include "uno/lbnames.h"
 #include "uno/mapping.h"
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

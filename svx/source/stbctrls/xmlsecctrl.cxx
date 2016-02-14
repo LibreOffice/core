@@ -34,7 +34,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/xmlsecctrl.hxx"
+#include <svx/xmlsecctrl.hxx>
 #include <tools/urlobj.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );

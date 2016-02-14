@@ -20,7 +20,7 @@
 
 #include <atlbase.h>
 #include <stdio.h>
-#include "cppuhelper/bootstrap.hxx"
+#include <cppuhelper/bootstrap.hxx>
 #include "rtl/process.h"
 #include "typelib/typedescription.hxx"
 

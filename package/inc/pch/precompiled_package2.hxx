@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2016-02-15 12:49:24 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./package/inc/pch/precompiled_package2.hxx "/opt/lo/bin/make package.build" --find-conflicts
+ ./bin/update_pch_bisect ./package/inc/pch/precompiled_package2.hxx "make package.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -118,6 +118,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>

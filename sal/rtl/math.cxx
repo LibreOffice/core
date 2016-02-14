@@ -27,8 +27,8 @@
 #include "rtl/string.h"
 #include "rtl/ustrbuf.h"
 #include "rtl/ustring.h"
-#include "sal/mathconf.h"
-#include "sal/types.h"
+#include <sal/mathconf.h>
+#include <sal/types.h>
 
 #include <algorithm>
 #include <cassert>

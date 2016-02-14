@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/XReference.hpp>
 #include <filter/msfilter/escherex.hxx>
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 

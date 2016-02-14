@@ -23,7 +23,7 @@
 #include "com/sun/star/task/PasswordRequestMode.hpp"
 #include "com/sun/star/task/XInteractionPassword.hpp"
 
-#include "ucbhelper/interactionrequest.hxx"
+#include <ucbhelper/interactionrequest.hxx>
 
 namespace tdoc_ucp {
 

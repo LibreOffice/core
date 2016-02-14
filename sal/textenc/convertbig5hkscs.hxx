@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_TEXTENC_CONVERTBIG5HKSCS_HXX
 #define INCLUDED_SAL_TEXTENC_CONVERTBIG5HKSCS_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "tenchelp.hxx"
 

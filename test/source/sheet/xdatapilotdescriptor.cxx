@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "test/sheet/xdatapilotdescriptor.hxx"
+#include <test/sheet/xdatapilotdescriptor.hxx>
 
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>

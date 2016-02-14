@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:29 using:
+ Generated on 2016-02-15 12:50:22 using:
  ./bin/update_pch dbaccess sdbt --cutoff=1 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_sdbt.hxx "/opt/lo/bin/make dbaccess.build" --find-conflicts
+ ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_sdbt.hxx "make dbaccess.build" --find-conflicts
 */
 
 #include <algorithm>

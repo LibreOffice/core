@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:40 using:
+ Generated on 2016-02-15 12:49:24 using:
  ./bin/update_pch package xstor --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./package/inc/pch/precompiled_xstor.hxx "/opt/lo/bin/make package.build" --find-conflicts
+ ./bin/update_pch_bisect ./package/inc/pch/precompiled_xstor.hxx "make package.build" --find-conflicts
 */
 
 #include <cassert>

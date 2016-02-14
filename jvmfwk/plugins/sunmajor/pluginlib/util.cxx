@@ -31,8 +31,8 @@
 #include "rtl/byteseq.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"
-#include "salhelper/linkhelper.hxx"
-#include "salhelper/thread.hxx"
+#include <salhelper/linkhelper.hxx>
+#include <salhelper/thread.hxx>
 #include "boost/noncopyable.hpp"
 #include <memory>
 #include "com/sun/star/uno/Sequence.hxx"

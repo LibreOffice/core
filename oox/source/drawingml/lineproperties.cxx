@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/lineproperties.hxx"
+#include <oox/drawingml/lineproperties.hxx>
 #include <vector>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -29,11 +29,11 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/token/tokens.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

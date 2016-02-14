@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "codemaker/commonjava.hxx"
-#include "codemaker/global.hxx"
+#include <codemaker/commonjava.hxx>
+#include <codemaker/global.hxx>
 #include "rtl/strbuf.hxx"
 
 #include "skeletoncommon.hxx"

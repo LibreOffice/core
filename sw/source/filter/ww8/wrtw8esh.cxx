@@ -95,7 +95,7 @@
 #include <unotools/streamwrap.hxx>
 #include <fmtinfmt.hxx>
 #include <fmturl.hxx>
-#include "sfx2/sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
 #include <o3tl/enumrange.hxx>

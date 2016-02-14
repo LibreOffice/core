@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -39,8 +39,8 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/weak.hxx"
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/weak.hxx>
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"
 #include "rtl/byteseq.hxx"
@@ -49,8 +49,8 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
+#include <sal/log.hxx>
+#include <sal/types.h>
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 #include "typelib/typedescription.hxx"

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "osl/diagnose.h"
 
@@ -29,14 +29,14 @@
 #include "uno/mapping.hxx"
 #include "uno/environment.hxx"
 
-#include "cppuhelper/bootstrap.hxx"
+#include <cppuhelper/bootstrap.hxx>
 
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 
 #include "jni.h"
-#include "jvmaccess/virtualmachine.hxx"
-#include "jvmaccess/unovirtualmachine.hxx"
+#include <jvmaccess/virtualmachine.hxx>
+#include <jvmaccess/unovirtualmachine.hxx>
 
 #include "juhx-export-functions.hxx"
 #include "vm.hxx"

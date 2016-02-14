@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_CURRENTCONTEXT_HXX
 #define INCLUDED_BINARYURP_SOURCE_CURRENTCONTEXT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class UnoInterfaceReference;

@@ -35,9 +35,9 @@
 #include <vector>
 
 #include "spelldsp.hxx"
-#include "linguistic/spelldta.hxx"
+#include <linguistic/spelldta.hxx>
 #include "lngsvcmgr.hxx"
-#include "linguistic/lngprops.hxx"
+#include <linguistic/lngprops.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

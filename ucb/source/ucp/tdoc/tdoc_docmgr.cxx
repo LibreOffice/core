@@ -26,11 +26,11 @@
 
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
-#include "cppuhelper/weak.hxx"
+#include <cppuhelper/weak.hxx>
 
-#include "comphelper/documentinfo.hxx"
-#include "comphelper/namedvaluecollection.hxx"
-#include "comphelper/sequence.hxx"
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"

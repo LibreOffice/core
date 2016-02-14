@@ -32,7 +32,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdview.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdstr.hrc>
 
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>

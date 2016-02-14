@@ -26,7 +26,7 @@
 #include "uno/mapping.hxx"
 #include "uno/dispatcher.h"
 
-#include "cppu/helper/purpenv/Mapping.hxx"
+#include <cppu/helper/purpenv/Mapping.hxx>
 
 
 class Proxy : public uno_Interface

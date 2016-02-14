@@ -32,7 +32,7 @@
 #include "abpresid.hrc"
 #include "componentmodule.hxx"
 #include <unotools/confignode.hxx>
-#include "sal/macros.h"
+#include <sal/macros.h>
 
 
 namespace abp

@@ -26,7 +26,7 @@
 
 #include <osl/mutex.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "object.hxx"
 
 #include "storbase.hxx"

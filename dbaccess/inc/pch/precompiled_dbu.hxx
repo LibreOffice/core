@@ -13,16 +13,15 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-15 12:50:23 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbu.hxx "/opt/lo/bin/make dbaccess.build" --find-conflicts
+ ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbu.hxx "make dbaccess.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
 #include <cstddef>
 #include <functional>
 #include <memory>
@@ -31,7 +30,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
@@ -64,31 +62,43 @@
 #include <salhelper/singletonref.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/cairo.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/font.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
+#include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/wall.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -141,6 +151,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/poly.hxx>
 #include <tools/rc.hxx>
 #include <tools/ref.hxx>
 #include <tools/resid.hxx>
@@ -148,6 +159,7 @@
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

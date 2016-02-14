@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmlformatting.hxx"
-#include "oox/vml/vmltextboxcontext.hxx"
-#include "oox/vml/vmlshape.hxx"
+#include <oox/vml/vmlformatting.hxx>
+#include <oox/vml/vmltextboxcontext.hxx>
+#include <oox/vml/vmlshape.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <osl/diagnose.h>
 

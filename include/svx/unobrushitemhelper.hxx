@@ -19,7 +19,7 @@
 #ifndef _UNOBRUSHITEMHELPER_HXX
 #define _UNOBRUSHITEMHELPER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <editeng/brushitem.hxx>
 
 //UUUU Helper function definitions for UNO API fallbacks to replace SvxBrushItem. The

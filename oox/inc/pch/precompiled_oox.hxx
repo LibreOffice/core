@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2016-02-15 12:49:27 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./oox/inc/pch/precompiled_oox.hxx "/opt/lo/bin/make oox.build" --find-conflicts
+ ./bin/update_pch_bisect ./oox/inc/pch/precompiled_oox.hxx "make oox.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -92,6 +92,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -140,7 +141,9 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -151,6 +154,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -178,6 +182,7 @@
 #include <drawingml/textspacing.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sax/fastattribs.hxx>
@@ -188,6 +193,7 @@
 #include <svtools/svtdllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/date.hxx>
 #include <tools/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
@@ -195,6 +201,7 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
@@ -219,6 +226,7 @@
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/drawingml/theme.hxx>
+#include <oox/export/utils.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>

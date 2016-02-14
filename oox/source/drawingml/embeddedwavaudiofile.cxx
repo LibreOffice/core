@@ -18,7 +18,7 @@
  */
 
 #include "drawingml/embeddedwavaudiofile.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 namespace oox { namespace drawingml {
 

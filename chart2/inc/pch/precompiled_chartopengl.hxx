@@ -13,13 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-15 12:49:43 using:
  ./bin/update_pch chart2 chartopengl --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartopengl.hxx "/opt/lo/bin/make chart2.build" --find-conflicts
+ ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartopengl.hxx "make chart2.build" --find-conflicts
 */
 
+#include <cassert>
+#include <cstddef>
+#include <ostream>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>

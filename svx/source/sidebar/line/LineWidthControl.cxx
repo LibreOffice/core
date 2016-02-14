@@ -30,7 +30,7 @@
 #include <svx/xlnwtit.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "svx/sidebar/PopupContainer.hxx"
+#include <svx/sidebar/PopupContainer.hxx>
 
 namespace svx { namespace sidebar {
 

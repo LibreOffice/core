@@ -36,7 +36,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
-#include "svx/chrtitem.hxx"
+#include <svx/chrtitem.hxx>
 
 #include <svx/extrusionbar.hxx>
 #include "extrusiondepthdialog.hxx"

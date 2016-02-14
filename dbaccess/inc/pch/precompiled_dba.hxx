@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2016-02-15 12:50:21 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dba.hxx "/opt/lo/bin/make dbaccess.build" --find-conflicts
+ ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dba.hxx "make dbaccess.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -47,6 +47,7 @@
 #include <string.h>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/bind.hpp>
@@ -149,12 +150,14 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basic/basicdllapi.h>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
+#include <basic/sbxobj.hxx>
 #include <basic/sbxvar.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -267,7 +270,10 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
+#include <svl/hint.hxx>
+#include <svl/lstner.hxx>
 #include <svl/svldllapi.h>
+#include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

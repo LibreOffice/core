@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tools/rc.h"
-#include "tools/debug.hxx"
+#include <tools/rc.h>
+#include <tools/debug.hxx>
 
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>

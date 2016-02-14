@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:40 using:
+ Generated on 2016-02-15 12:48:24 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scfilt.hxx "/opt/lo/bin/make sc.build" --find-conflicts
+ ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scfilt.hxx "make sc.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -49,6 +49,7 @@
 #include <utility>
 #include <vector>
 #include <boost/checked_delete.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional/optional.hpp>
 #include <osl/conditn.hxx>
@@ -100,6 +101,7 @@
 #include <vcl/vclptr.hxx>
 #include <attrib.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Point.hpp>

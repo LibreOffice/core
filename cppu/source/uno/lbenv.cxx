@@ -19,9 +19,9 @@
 
 #include <config_features.h>
 
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"

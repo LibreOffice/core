@@ -19,9 +19,9 @@
 
 #include <string.h>
 
-#include "osx/saldata.hxx"
-#include "osx/salobj.h"
-#include "osx/salframe.h"
+#include <osx/saldata.hxx>
+#include <osx/salobj.h>
+#include <osx/salframe.h>
 #include <AppKit/NSOpenGLView.h>
 
 AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowData ) :

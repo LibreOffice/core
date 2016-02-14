@@ -23,7 +23,7 @@
 
 #include <editeng/eeitem.hxx>
 
-#include "svx/flagsdef.hxx"
+#include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>

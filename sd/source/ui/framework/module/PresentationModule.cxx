@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/PresentationModule.hxx"
+#include <framework/PresentationModule.hxx>
 
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"

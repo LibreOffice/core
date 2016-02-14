@@ -46,7 +46,7 @@
 
 #include <editeng/editdata.hxx>
 #include <editeng/colritem.hxx>
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 
 #include <svx/xlnstcit.hxx>
@@ -70,7 +70,7 @@
 #include <svx/xlnstit.hxx>
 #include <sdr/properties/attributeproperties.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include "svx/xlinjoit.hxx"
+#include <svx/xlinjoit.hxx>
 
 using namespace com::sun::star;
 

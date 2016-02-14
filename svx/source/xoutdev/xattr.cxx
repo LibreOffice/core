@@ -33,14 +33,14 @@
 #include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
 
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <svl/style.hxx>
 
 #include <tools/bigint.hxx>
 #include <svl/itemset.hxx>
 #include <svx/dialogs.hrc>
-#include "svx/svdstr.hrc"
-#include "svx/xattr.hxx"
+#include <svx/svdstr.hrc>
+#include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>

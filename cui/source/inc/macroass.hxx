@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_MACROASS_HXX
 #define INCLUDED_CUI_SOURCE_INC_MACROASS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>

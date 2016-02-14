@@ -114,7 +114,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
-#include "toolkit/awt/vclxspinbutton.hxx"
+#include <toolkit/awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>

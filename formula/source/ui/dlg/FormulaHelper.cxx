@@ -19,7 +19,7 @@
 
 #include <algorithm>
 
-#include "formula/formulahelper.hxx"
+#include <formula/formulahelper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>
 

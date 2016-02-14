@@ -19,7 +19,7 @@
 
 #include "drawingml/textliststyle.hxx"
 #include "drawingml/textliststylecontext.hxx"
-#include "oox/ppt/slidemastertextstylescontext.hxx"
+#include <oox/ppt/slidemastertextstylescontext.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

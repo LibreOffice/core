@@ -50,7 +50,7 @@
 
 #include "com/sun/star/accessibility/MSAAService.hpp"
 
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/opengl/OpenGLContext.hxx>
 

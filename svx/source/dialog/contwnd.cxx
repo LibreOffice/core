@@ -27,7 +27,7 @@
 #include <svx/xfillit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 
 using namespace css;
 

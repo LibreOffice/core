@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:29 using:
+ Generated on 2016-02-15 12:48:46 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "make desktop.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -67,6 +67,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/seleng.hxx>

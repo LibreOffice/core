@@ -24,8 +24,8 @@
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
 
 #include <cppuhelper/queryinterface.hxx>
-#include "cppuhelper/typeprovider.hxx"
-#include "ucbhelper/interactionrequest.hxx"
+#include <cppuhelper/typeprovider.hxx>
+#include <ucbhelper/interactionrequest.hxx>
 
 #include "tdoc_passwordrequest.hxx"
 

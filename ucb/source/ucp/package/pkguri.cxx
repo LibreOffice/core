@@ -26,7 +26,7 @@
 
 #include "rtl/ustrbuf.hxx"
 #include "osl/diagnose.h"
-#include "comphelper/storagehelper.hxx"
+#include <comphelper/storagehelper.hxx>
 
 #include "../inc/urihelper.hxx"
 

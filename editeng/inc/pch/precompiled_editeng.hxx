@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:31 using:
+ Generated on 2016-02-15 12:50:39 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./editeng/inc/pch/precompiled_editeng.hxx "/opt/lo/bin/make editeng.build" --find-conflicts
+ ./bin/update_pch_bisect ./editeng/inc/pch/precompiled_editeng.hxx "make editeng.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -50,7 +50,6 @@
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
@@ -102,7 +101,6 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/impdel.hxx>
 #include <vcl/keycod.hxx>
@@ -114,6 +112,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -154,7 +153,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
@@ -176,7 +174,6 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -272,7 +269,6 @@
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
-#include <tools/globname.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
@@ -300,6 +296,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
+#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>

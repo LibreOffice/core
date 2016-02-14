@@ -23,9 +23,9 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 
-#include "svx/svdotable.hxx"
-#include "svx/svdobj.hxx"
-#include "svx/svdundo.hxx"
+#include <svx/svdotable.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/sdrobjectuser.hxx>
 
 #include "celltypes.hxx"

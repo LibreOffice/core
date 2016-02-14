@@ -62,7 +62,7 @@
 #include <vcl/settings.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include "AppController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>

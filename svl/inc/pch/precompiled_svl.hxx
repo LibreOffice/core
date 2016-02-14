@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:39 using:
+ Generated on 2016-02-15 12:48:45 using:
  ./bin/update_pch svl svl --cutoff=6 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svl/inc/pch/precompiled_svl.hxx "/opt/lo/bin/make svl.build" --find-conflicts
+ ./bin/update_pch_bisect ./svl/inc/pch/precompiled_svl.hxx "make svl.build" --find-conflicts
 */
 
 #include <algorithm>

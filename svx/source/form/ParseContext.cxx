@@ -19,9 +19,9 @@
 
 
 #include <sal/macros.h>
-#include "svx/ParseContext.hxx"
+#include <svx/ParseContext.hxx>
 #include "stringlistresource.hxx"
-#include "svx/fmresids.hrc"
+#include <svx/fmresids.hrc>
 
 #include <svx/dialmgr.hxx>
 

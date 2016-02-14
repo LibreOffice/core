@@ -19,9 +19,9 @@
 
 
 #include <rtl/strbuf.hxx>
-#include "svx/fmresids.hrc"
-#include "svx/fmtools.hxx"
-#include "svx/fmsrccfg.hxx"
+#include <svx/fmresids.hrc>
+#include <svx/fmtools.hxx>
+#include <svx/fmsrccfg.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/wldcrd.hxx>
@@ -46,7 +46,7 @@
 
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "svx/fmsrcimp.hxx"
+#include <svx/fmsrcimp.hxx>
 #include <svx/fmsearch.hxx>
 
 #include <comphelper/numbers.hxx>

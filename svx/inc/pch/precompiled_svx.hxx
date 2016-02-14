@@ -13,21 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2016-02-15 12:50:16 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svx/inc/pch/precompiled_svx.hxx "/opt/lo/bin/make svx.build" --find-conflicts
+ ./bin/update_pch_bisect ./svx/inc/pch/precompiled_svx.hxx "make svx.build" --find-conflicts
 */
 
 #ifdef WNT
-#define UNICODE
-#define _UNICODE
+#   define UNICODE
+#   define _UNICODE
 #endif
 
 #include <algorithm>
 #include <cassert>
 #include <climits>
+#include <config_features.h>
 #include <cstddef>
 #include <deque>
 #include <exception>
@@ -228,7 +229,6 @@
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -242,7 +242,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -253,6 +252,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
@@ -312,6 +312,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rsc/rscsfx.hxx>
 #include <sfx2/app.hxx>
@@ -326,7 +327,6 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/itemconnect.hxx>
-#include <sfx2/mnuitem.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -368,7 +368,6 @@
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/stdmenu.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolbarmenu.hxx>
@@ -389,7 +388,6 @@
 #include <tools/errcode.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
-#include <tools/globname.hxx>
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/rc.hxx>

@@ -8,12 +8,12 @@
  *
  */
 
-#include "oox/crypto/DocumentEncryption.hxx"
+#include <oox/crypto/DocumentEncryption.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
 
 namespace oox {
 namespace core {

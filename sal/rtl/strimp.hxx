@@ -26,7 +26,7 @@
 #endif
 
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 /* ======================================================================= */
 /* Help functions for String and UString                                   */

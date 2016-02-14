@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2016-02-15 12:48:22 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scui.hxx "/opt/lo/bin/make sc.build" --find-conflicts
+ ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scui.hxx "make sc.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -49,9 +49,6 @@
 #include <appoptio.hxx>
 #include <attrib.hxx>
 #include <autoform.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbstar.hxx>
 #include <calcconfig.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -75,7 +72,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
-#include <compiler.hxx>
 #include <defaultsoptions.hxx>
 #include <docoptio.hxx>
 #include <document.hxx>
@@ -102,7 +98,6 @@
 #include <editeng/wghtitem.hxx>
 #include <editutil.hxx>
 #include <formula/grammar.hxx>
-#include <formula/opcode.hxx>
 #include <formulaopt.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
@@ -122,7 +117,6 @@
 #include <scresid.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/childwin.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docinsert.hxx>
@@ -132,8 +126,6 @@
 #include <sfx2/sfxcommands.h>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <stringutil.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
@@ -169,7 +161,6 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/useroptions.hxx>
 #include <userlist.hxx>
-#include <validat.hxx>
 #include <viewopti.hxx>
 #include <zforauto.hxx>
 

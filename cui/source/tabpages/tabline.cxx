@@ -31,7 +31,7 @@
 #include <dialmgr.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xtable.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 
 SvxLineTabDialog::SvxLineTabDialog
 (

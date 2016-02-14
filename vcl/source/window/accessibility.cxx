@@ -21,12 +21,12 @@
 
 #include <i18nlangtag/mslangid.hxx>
 
-#include "tools/time.hxx"
-#include "tools/debug.hxx"
-#include "tools/rc.h"
+#include <tools/time.hxx>
+#include <tools/debug.hxx>
+#include <tools/rc.h>
 
-#include "unotools/fontcfg.hxx"
-#include "unotools/confignode.hxx"
+#include <unotools/fontcfg.hxx>
+#include <unotools/confignode.hxx>
 
 #include <vcl/layout.hxx>
 #include <vcl/salgtype.hxx>
@@ -90,7 +90,7 @@
 #include "com/sun/star/rendering/CanvasFactory.hpp"
 #include "com/sun/star/rendering/XCanvas.hpp"
 #include "com/sun/star/rendering/XSpriteCanvas.hpp"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>

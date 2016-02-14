@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2016-02-15 12:50:13 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwk.hxx "/opt/lo/bin/make framework.build" --find-conflicts
+ ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwk.hxx "make framework.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -55,7 +55,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
@@ -113,6 +112,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
@@ -126,12 +126,10 @@
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
@@ -168,6 +166,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -290,6 +289,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -322,7 +322,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
-#include <svl/svldllapi.h>
 #include <svtools/miscopt.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>

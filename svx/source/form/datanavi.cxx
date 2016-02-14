@@ -36,7 +36,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/svtools.hrc>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objitem.hxx>

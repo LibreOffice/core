@@ -26,12 +26,12 @@
 
 #include "unx/saldata.hxx"
 
-#include "tools/urlobj.hxx"
-#include "tools/stream.hxx"
-#include "tools/debug.hxx"
-#include "tools/config.hxx"
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
+#include <tools/debug.hxx>
+#include <tools/config.hxx>
 
-#include "i18nutil/paper.hxx"
+#include <i18nutil/paper.hxx>
 #include <comphelper/string.hxx>
 #include "rtl/strbuf.hxx"
 #include <sal/macros.h>

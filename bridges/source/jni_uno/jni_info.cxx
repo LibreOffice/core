@@ -25,7 +25,7 @@
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 
-#include "jvmaccess/unovirtualmachine.hxx"
+#include <jvmaccess/unovirtualmachine.hxx>
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"

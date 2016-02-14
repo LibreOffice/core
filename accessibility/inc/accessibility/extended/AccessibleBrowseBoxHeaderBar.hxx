@@ -21,7 +21,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
 
-#include "accessibility/extended/AccessibleBrowseBoxTableBase.hxx"
+#include <accessibility/extended/AccessibleBrowseBoxTableBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 

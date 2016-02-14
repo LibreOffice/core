@@ -28,7 +28,7 @@
 #include "sdmod.hxx"
 #include "customshowlist.hxx"
 #include <vcl/msgbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 // SdCustomShowDlg
 SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,

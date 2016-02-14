@@ -9,8 +9,8 @@
 
 #include "ToxTabStopTokenHandler.hxx"
 
-#include "editeng/tstpitem.hxx"
-#include "editeng/lrspitem.hxx"
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include "cntfrm.hxx"
 #include "fmtfsize.hxx"

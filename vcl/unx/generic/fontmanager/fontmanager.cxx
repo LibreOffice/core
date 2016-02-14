@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <osl/thread.h>
 
-#include "unotools/atom.hxx"
+#include <unotools/atom.hxx>
 
 #include "unx/fontcache.hxx"
 #include "fontsubset.hxx"
@@ -36,9 +36,9 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "tools/urlobj.hxx"
-#include "tools/stream.hxx"
-#include "tools/debug.hxx"
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
+#include <tools/debug.hxx>
 
 #include "osl/file.hxx"
 #include "osl/process.h"
@@ -49,8 +49,8 @@
 
 #include <sal/macros.h>
 
-#include "i18nlangtag/applelangid.hxx"
-#include "i18nlangtag/mslangid.hxx"
+#include <i18nlangtag/applelangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include "parseAFM.hxx"
 #include "sft.hxx"

@@ -20,7 +20,7 @@
 #include "PaneDockingWindow.hxx"
 #include "Window.hxx"
 #include "ViewShellBase.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include "sdresid.hxx"
 #include "res_bmp.hrc"
 #include <sfx2/dispatch.hxx>

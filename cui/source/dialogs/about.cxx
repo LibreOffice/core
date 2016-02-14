@@ -33,9 +33,9 @@
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/system/SystemShellExecute.hpp"
 #include <comphelper/processfactory.hxx>
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/bootstrap.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <svtools/optionsdrawinglayer.hxx>
