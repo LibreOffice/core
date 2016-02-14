@@ -687,7 +687,6 @@ unsigned int GraphiteLayout::ScanFwdForChar(int &findChar, bool fallback) const
             ++findChar;
             return 0;
         }
-        fallback = !fallback;
     }
     return unsigned(res);
 }
