@@ -190,7 +190,7 @@ void OComboBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) cons
             break;
 
         case PROPERTY_ID_STRINGITEMLIST:
-            _rValue <<= getStringItemList();
+            _rValue <<= comphelper::containerToSequence(getStringItemList());
             break;
 
         default:
@@ -815,7 +815,7 @@ Any OComboBoxModel::getDefaultForReset() const
 void OComboBoxModel::stringItemListChanged( ControlModelLock& /*_rInstanceLock*/ )
 {
     if ( m_xAggregateSet.is() )
-        m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( comphelper::containerToSequence(getStringItemList()) ) );
 }
 
 
