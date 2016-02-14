@@ -1960,6 +1960,11 @@ static void lo_destroy(LibreOfficeKit* pThis)
     SAL_INFO("lok", "LO Destroy");
 
     comphelper::LibreOfficeKit::setStatusIndicatorCallback(nullptr, nullptr);
+    uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
+    if (xDesktop.is())
+    {
+        xDesktop->terminate();
+    }
 
     Application::Quit();
     osl_joinWithThread(pLib->maThread);
