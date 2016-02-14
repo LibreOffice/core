@@ -2024,14 +2024,26 @@ int lok_preinit(const char* install_path, const char* user_profile_path)
 
 static void lo_destroy(LibreOfficeKit* pThis)
 {
+    bool bSuccess = false;
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     gImpl = nullptr;
 
     SAL_INFO("lok", "LO Destroy");
 
     comphelper::LibreOfficeKit::setStatusIndicatorCallback(nullptr, nullptr);
+    uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
+    bSuccess = xDesktop.is() && xDesktop->terminate();
 
-    Application::Quit();
+    if (!bSuccess)
+    {
+        bSuccess = GetpApp() && GetpApp()->QueryExit();
+    }
+
+    if (!bSuccess)
+    {
+        Application::Quit();
+    }
+
     osl_joinWithThread(pLib->maThread);
     osl_destroyThread(pLib->maThread);
 
