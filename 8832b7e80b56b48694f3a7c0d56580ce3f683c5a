@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_1d41540c",
+        "filename": "vcl/source/gdi/graph.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-02-14T14:05:44Z",
+      "side": 1,
+      "message": "You will loose decimals here with long - what you want is double for fWidthInches, fHeightInches, fPpiX and fPpiY. Remember that you put the values in B2DSize which uses double for storing its values.",
+      "range": {
+        "startLine": 414,
+        "startChar": 4,
+        "endLine": 414,
+        "endChar": 8
+      },
+      "revId": "8832b7e80b56b48694f3a7c0d56580ce3f683c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_bd3be09b",
+        "filename": "vcl/source/gdi/graph.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2016-02-14T14:05:44Z",
+      "side": 1,
+      "message": "you mean fWidthInches and fHeightInches here as fPpiX and fPpiY are always 0 :)",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 33
+      },
+      "revId": "8832b7e80b56b48694f3a7c0d56580ce3f683c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
