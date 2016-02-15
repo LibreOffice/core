@@ -1127,7 +1127,7 @@ private:
     double              mfX;
     double              mfY;
 public:
-    Vector2D( const Pair& rPair ) : mfX( rPair.A() ), mfY( rPair.B() ) {};
+    explicit     Vector2D( const Point& rPair ) : mfX( rPair.A() ), mfY( rPair.B() ) {};
     double       GetLength() const { return hypot( mfX, mfY ); }
     Vector2D&    operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX, mfY -= rVec.mfY; return *this; }
     double       Scalar( const Vector2D& rVec ) const { return mfX * rVec.mfX + mfY * rVec.mfY ; }
@@ -1167,10 +1167,10 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                 sal_uInt16      nIndPrevPrev = !nIndPrev ? nPntCnt - 1 : nIndPrev - 1;
                 sal_uInt16      nIndNext = ( n == nPntCnt-1 ) ? 0 : n + 1;
                 sal_uInt16      nIndNextNext = ( nIndNext == nPntCnt - 1 ) ? 0 : nIndNext + 1;
-                Vector2D    aVec1( rPoly[ nIndPrev ] ); aVec1 -= rPoly[ nIndPrevPrev ];
-                Vector2D    aVec2( rPoly[ n ] ); aVec2 -= rPoly[ nIndPrev ];
-                Vector2D    aVec3( rPoly[ nIndNext ] ); aVec3 -= rPoly[ n ];
-                Vector2D    aVec4( rPoly[ nIndNextNext ] ); aVec4 -= rPoly[ nIndNext ];
+                Vector2D    aVec1( rPoly[ nIndPrev ] ); aVec1 -= Vector2D(rPoly[ nIndPrevPrev ]);
+                Vector2D    aVec2( rPoly[ n ] ); aVec2 -= Vector2D(rPoly[ nIndPrev ]);
+                Vector2D    aVec3( rPoly[ nIndNext ] ); aVec3 -= Vector2D(rPoly[ n ]);
+                Vector2D    aVec4( rPoly[ nIndNextNext ] ); aVec4 -= Vector2D(rPoly[ nIndNext ]);
                 double      fDist1 = aVec1.GetLength(), fDist2 = aVec2.GetLength();
                 double      fDist3 = aVec3.GetLength(), fDist4 = aVec4.GetLength();
                 double      fTurnB = aVec2.Normalize().Scalar( aVec3.Normalize() );
@@ -1180,7 +1180,7 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                 else
                 {
                     Vector2D    aVecB( rPoly[ nIndNext ] );
-                    double      fDistB = ( aVecB -= rPoly[ nIndPrev ] ).GetLength();
+                    double      fDistB = ( aVecB -= Vector2D(rPoly[ nIndPrev ] )).GetLength();
                     double      fLenWithB = fDist2 + fDist3;
                     double      fLenFact = ( fDistB != 0.0 ) ? fLenWithB / fDistB : 1.0;
                     double      fTurnPrev = aVec1.Normalize().Scalar( aVec2 );
