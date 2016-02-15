@@ -668,27 +668,24 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
 unsigned int GraphiteLayout::ScanFwdForChar(int &findChar, bool fallback) const
 {
     int res = mvChar2Glyph[findChar - mnMinCharPos];
-    int done = 3;
-    while (res == -1 && --done)
+    if (res >= 0)
+        return unsigned(res);
+    if (fallback)
     {
-        if (fallback)
-        {
-            for (++findChar; findChar - mnMinCharPos < int(mvChar2Glyph.size()); ++findChar)
-                if ((res = mvChar2Glyph[findChar - mnMinCharPos]) != -1)
-                    return res;
-            --findChar;
-            return mvGlyphs.size() - 1;
-        }
-        else
-        {
-            for (--findChar; findChar >= mnMinCharPos; --findChar)
-                if ((res = mvChar2Glyph[findChar - mnMinCharPos]) != -1)
-                    return res;
-            ++findChar;
-            return 0;
-        }
+        for (++findChar; findChar - mnMinCharPos < int(mvChar2Glyph.size()); ++findChar)
+            if ((res = mvChar2Glyph[findChar - mnMinCharPos]) != -1)
+                return res;
+        --findChar;
+        return mvGlyphs.size() - 1;
     }
-    return unsigned(res);
+    else
+    {
+        for (--findChar; findChar >= mnMinCharPos; --findChar)
+            if ((res = mvChar2Glyph[findChar - mnMinCharPos]) != -1)
+                return res;
+        ++findChar;
+        return 0;
+    }
 }
 
 void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDeltaWidth)
