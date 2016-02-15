@@ -485,14 +485,14 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
         GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
         const Reference< XComponentContext > &rComponentContext )
 {
-    bool bGetSettingsState( false );
-
     SolarMutexResettableGuard aWriteLock;
     Reference< XNameAccess > xPersistentWindowState( rPersistentWindowState );
     aWriteLock.clear();
 
     if ( xPersistentWindowState.is() )
     {
+        bool bGetSettingsState( false );
+
         aWriteLock.reset();
         bool bGlobalSettings( bInGlobalSettings );
         GlobalSettings* pGlobalSettings( nullptr );

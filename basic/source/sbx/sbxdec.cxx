@@ -354,15 +354,12 @@ void SbxDecimal::getString( OUString& rString )
 #ifdef _WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
-    bool bRet = false;
-
     OLECHAR sz[100];
     BSTR aBStr = SysAllocString( sz );
     if( aBStr != NULL )
     {
         HRESULT hResult = VarBstrFromDec( &maDec, nLANGID, 0, &aBStr );
-        bRet = ( hResult == S_OK );
-        if( bRet )
+        if( hResult == S_OK )
         {
             // Convert delimiter
             sal_Unicode cDecimalSep;
