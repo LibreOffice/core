@@ -1849,7 +1849,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     static bool bPreInited = false;
 
     // What stage are we at ?
-    if (pThis == NULL)
+    if (pThis == nullptr)
         eStage = PRE_INIT;
     else if (bPreInited)
         eStage = SECOND_INIT;
@@ -2019,7 +2019,7 @@ LibreOfficeKit *libreofficekit_hook(const char* install_path)
 SAL_JNI_EXPORT
 int lok_preinit(const char* install_path, const char* user_profile_path)
 {
-    return lo_initialize(NULL, install_path, user_profile_path);
+    return lo_initialize(nullptr, install_path, user_profile_path);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
