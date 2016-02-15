@@ -9,7 +9,7 @@
 
 #include "opengl/win/WinDeviceInfo.hxx"
 
-#include "blocklist_parser.hxx"
+#include "opengl/win/blocklist_parser.hxx"
 #include <config_folders.h>
 
 #include <windows.h>
@@ -441,67 +441,69 @@ private:
 
 }
 
-bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
+bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(std::vector<wgl::DriverInfo>& aDeviceInfos,
+                                                      OUString sDriverVersion, OUString sAdapterVendorID,
+                                                      OUString sAdapterDeviceID, uint32_t nWindowsVersion)
 {
     uint64_t driverVersion;
-    wgl::ParseDriverVersion(maDriverVersion, driverVersion);
+    wgl::ParseDriverVersion(sDriverVersion, driverVersion);
 
-    wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(mnWindowsVersion);
+    wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(nWindowsVersion);
     bool match = false;
     uint32_t i = 0;
-    for (; i < maDriverInfo.size(); i++)
+    for (; i < aDeviceInfos.size(); i++)
     {
-        if (maDriverInfo[i].meOperatingSystem != wgl::DRIVER_OS_ALL &&
-                maDriverInfo[i].meOperatingSystem != eOS)
+        if (aDeviceInfos[i].meOperatingSystem != wgl::DRIVER_OS_ALL &&
+                aDeviceInfos[i].meOperatingSystem != eOS)
         {
             continue;
         }
 
-        if (maDriverInfo[i].mnOperatingSystemVersion && maDriverInfo[i].mnOperatingSystemVersion != mnWindowsVersion)
+        if (aDeviceInfos[i].mnOperatingSystemVersion && aDeviceInfos[i].mnOperatingSystemVersion != nWindowsVersion)
         {
             continue;
         }
 
-        if (!maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(GetDeviceVendor(wgl::VendorAll)) &&
-                !maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(maAdapterVendorID))
+        if (!aDeviceInfos[i].maAdapterVendor.equalsIgnoreAsciiCase(GetDeviceVendor(wgl::VendorAll)) &&
+                !aDeviceInfos[i].maAdapterVendor.equalsIgnoreAsciiCase(sAdapterVendorID))
         {
             continue;
         }
 
-        if (std::none_of(maDriverInfo[i].maDevices.begin(), maDriverInfo[i].maDevices.end(), compareIgnoreAsciiCase("all")) &&
-            std::none_of(maDriverInfo[i].maDevices.begin(), maDriverInfo[i].maDevices.end(), compareIgnoreAsciiCase(maAdapterDeviceID)))
+        if (std::none_of(aDeviceInfos[i].maDevices.begin(), aDeviceInfos[i].maDevices.end(), compareIgnoreAsciiCase("all")) &&
+            std::none_of(aDeviceInfos[i].maDevices.begin(), aDeviceInfos[i].maDevices.end(), compareIgnoreAsciiCase(sAdapterDeviceID)))
         {
             continue;
         }
 
-        switch (maDriverInfo[i].meComparisonOp)
+        switch (aDeviceInfos[i].meComparisonOp)
         {
             case wgl::DRIVER_LESS_THAN:
-                match = driverVersion < maDriverInfo[i].mnDriverVersion;
+                match = driverVersion < aDeviceInfos[i].mnDriverVersion;
                 break;
             case wgl::DRIVER_LESS_THAN_OR_EQUAL:
-                match = driverVersion <= maDriverInfo[i].mnDriverVersion;
+                match = driverVersion <= aDeviceInfos[i].mnDriverVersion;
                 break;
             case wgl::DRIVER_GREATER_THAN:
-                match = driverVersion > maDriverInfo[i].mnDriverVersion;
+                match = driverVersion > aDeviceInfos[i].mnDriverVersion;
                 break;
             case wgl::DRIVER_GREATER_THAN_OR_EQUAL:
-                match = driverVersion >= maDriverInfo[i].mnDriverVersion;
+                match = driverVersion >= aDeviceInfos[i].mnDriverVersion;
                 break;
             case wgl::DRIVER_EQUAL:
-                match = driverVersion == maDriverInfo[i].mnDriverVersion;
+                match = driverVersion == aDeviceInfos[i].mnDriverVersion;
                 break;
             case wgl::DRIVER_NOT_EQUAL:
-                match = driverVersion != maDriverInfo[i].mnDriverVersion;
+                match = driverVersion != aDeviceInfos[i].mnDriverVersion;
                 break;
             case wgl::DRIVER_BETWEEN_EXCLUSIVE:
-                match = driverVersion > maDriverInfo[i].mnDriverVersion && driverVersion < maDriverInfo[i].mnDriverVersionMax;
+                match = driverVersion > aDeviceInfos[i].mnDriverVersion && driverVersion < aDeviceInfos[i].mnDriverVersionMax;
                 break;
             case wgl::DRIVER_BETWEEN_INCLUSIVE:
-                match = driverVersion >= maDriverInfo[i].mnDriverVersion && driverVersion <= maDriverInfo[i].mnDriverVersionMax;
+                match = driverVersion >= aDeviceInfos[i].mnDriverVersion && driverVersion <= aDeviceInfos[i].mnDriverVersionMax;
                 break;
             case wgl::DRIVER_BETWEEN_INCLUSIVE_START:
-                match = driverVersion >= maDriverInfo[i].mnDriverVersion && driverVersion < maDriverInfo[i].mnDriverVersionMax;
+                match = driverVersion >= aDeviceInfos[i].mnDriverVersion && driverVersion < aDeviceInfos[i].mnDriverVersionMax;
                 break;
             case wgl::DRIVER_COMPARISON_IGNORED:
                 // We don't have a comparison op, so we match everything.
@@ -512,23 +514,28 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
                 break;
         }
 
-        if (match || maDriverInfo[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions)
+        if (match || aDeviceInfos[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions)
         {
             // white listed drivers
-            if (maDriverInfo[i].mbWhitelisted)
+            if (aDeviceInfos[i].mbWhitelisted)
             {
                 SAL_WARN("vcl.opengl", "whitelisted driver");
                 return false;
             }
 
             match = true;
-            SAL_WARN("vcl.opengl", "use : " << maDriverInfo[i].maSuggestedVersion);
+            SAL_WARN("vcl.opengl", "use : " << aDeviceInfos[i].maSuggestedVersion);
             break;
         }
     }
 
     SAL_INFO("vcl.opengl", (match ? "BLACKLISTED" : "not blacklisted"));
     return match;
+}
+
+bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
+{
+    return FindBlocklistedDeviceInList(maDriverInfo, maDriverVersion, maAdapterVendorID, maAdapterDeviceID, mnWindowsVersion);
 }
 
 namespace {
