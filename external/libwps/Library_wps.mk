@@ -32,6 +32,7 @@ $(eval $(call gb_Library_add_defs,wps,\
 $(eval $(call gb_Library_set_generated_cxx_suffix,wps,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,wps,\
+	UnpackedTarball/libwps/src/lib/DosWord \
 	UnpackedTarball/libwps/src/lib/Lotus \
 	UnpackedTarball/libwps/src/lib/LotusGraph \
 	UnpackedTarball/libwps/src/lib/LotusSpreadsheet \

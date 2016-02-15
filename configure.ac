@@ -7842,7 +7842,7 @@ dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.4])
-libo_PKG_VERSION([WPS], [libwps-0.4], [0.4.2])
+libo_PKG_VERSION([WPS], [libwps-0.4], [0.4.3])
 
 dnl ===================================================================
 dnl Check for system libwpg
