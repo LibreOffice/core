@@ -112,6 +112,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <svl/cjkoptions.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1451,73 +1452,44 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     }
 }
 
-#define NUM_VIEW_SETTINGS 12
 void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, bool bBrowse )
 {
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
 
-    rSequence.realloc ( NUM_VIEW_SETTINGS );
-    sal_Int16 nIndex = 0;
-    beans::PropertyValue *pValue = rSequence.getArray();
+    std::vector<beans::PropertyValue> aVector;
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    pValue->Name = "ViewId";
     OUStringBuffer sBuffer ( OUString( "view" ) );
     ::sax::Converter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
-    pValue->Value <<= sBuffer.makeStringAndClear();
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ViewId", sBuffer.makeStringAndClear()));
 
-    pValue->Name = "ViewLeft";
-    pValue->Value <<= convertTwipToMm100 ( rRect.Left() );
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ViewLeft", convertTwipToMm100 ( rRect.Left() )));
 
-    pValue->Name = "ViewTop";
-    pValue->Value <<= convertTwipToMm100 ( rRect.Top() );
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ViewTop", convertTwipToMm100 ( rRect.Top() )));
 
-    pValue->Name = "VisibleLeft";
-    pValue->Value <<= convertTwipToMm100 ( rVis.Left() );
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("VisibleLeft", convertTwipToMm100 ( rVis.Left() )));
 
-    pValue->Name = "VisibleTop";
-    pValue->Value <<= convertTwipToMm100 ( rVis.Top() );
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("VisibleTop", convertTwipToMm100 ( rVis.Top() )));
 
-    pValue->Name = "VisibleRight";
-    pValue->Value <<= convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Right() );
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("VisibleRight", convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Right() )));
 
-    pValue->Name = "VisibleBottom";
-    pValue->Value <<= convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("VisibleBottom", convertTwipToMm100 ( bBrowse ? LONG_MIN : rVis.Bottom() )));
 
-    pValue->Name = "ZoomType";
     const sal_Int16 nZoomType = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetZoomType());
-    pValue->Value <<= nZoomType;
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ZoomType", nZoomType));
 
-    pValue->Name = "ViewLayoutColumns";
     const sal_Int16 nViewLayoutColumns = static_cast< sal_Int16 >(m_pWrtShell->GetViewOptions()->GetViewLayoutColumns());
-    pValue->Value <<= nViewLayoutColumns;
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ViewLayoutColumns", nViewLayoutColumns));
 
-    pValue->Name = "ViewLayoutBookMode";
-    pValue->Value <<= m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode();
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ViewLayoutBookMode", m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode()));
 
-    pValue->Name = "ZoomFactor";
-    pValue->Value <<= static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom());
-    pValue++;nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("ZoomFactor", static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom())));
 
-    pValue->Name = "IsSelectedFrame";
-    pValue->Value <<= FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType();
-    nIndex++;
+    aVector.push_back(comphelper::makePropertyValue("IsSelectedFrame", FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType()));
 
-    assert(nIndex == NUM_VIEW_SETTINGS);
-    (void)nIndex;
+    rSequence = comphelper::containerToSequence(aVector);
 }
-#undef NUM_VIEW_SETTINGS
 
 void SwView::ShowCursor( bool bOn )
 {
