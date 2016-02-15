@@ -1,15 +1,15 @@
-From 1562c2ee1f30ec9983e2f7e5a7bf4a89b594d706 Mon Sep 17 00:00:00 2001
+From 6240557e4429a4bb6be19a0e27479a5a0df9fa34 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Tue, 2 Feb 2016 15:49:10 +0100
 Subject: [PATCH] mscrypto glue layer: add SHA-256 support
 
 ---
- include/xmlsec/mscrypto/crypto.h | 27 ++++++++++++++++
- src/mscrypto/certkeys.c          |  2 +-
- src/mscrypto/crypto.c            |  4 +++
- src/mscrypto/digests.c           | 70 ++++++++++++++++++++++++++++++++++++++++
- src/mscrypto/signatures.c        | 64 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 166 insertions(+), 1 deletion(-)
+ include/xmlsec/mscrypto/crypto.h |  27 ++++++++
+ src/mscrypto/certkeys.c          |   2 +-
+ src/mscrypto/crypto.c            |   4 ++
+ src/mscrypto/digests.c           |  70 +++++++++++++++++++++
+ src/mscrypto/signatures.c        | 130 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 232 insertions(+), 1 deletion(-)
 
 diff --git a/include/xmlsec/mscrypto/crypto.h b/include/xmlsec/mscrypto/crypto.h
 index 28d792a..96aaa78 100644
@@ -201,7 +201,7 @@ index 19acc65..2b466b7 100644
  /******************************************************************************
   *
 diff --git a/src/mscrypto/signatures.c b/src/mscrypto/signatures.c
-index a567db7..bc69b44 100644
+index a567db7..34c17bb 100644
 --- a/src/mscrypto/signatures.c
 +++ b/src/mscrypto/signatures.c
 @@ -97,6 +97,9 @@ static int xmlSecMSCryptoSignatureCheckId(xmlSecTransformPtr transform) {
@@ -238,7 +238,87 @@ index a567db7..bc69b44 100644
      } else {
  	xmlSecError(XMLSEC_ERRORS_HERE, 
  		    xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
-@@ -487,6 +500,13 @@ xmlSecMSCryptoSignatureExecute(xmlSecTransformPtr transform, int last, xmlSecTra
+@@ -372,6 +385,68 @@ xmlSecMSCryptoSignatureExecute(xmlSecTransformPtr transform, int last, xmlSecTra
+ 			XMLSEC_ERRORS_NO_MESSAGE);
+ 	    return (-1);
+ 	}
++
++        if (transform->operation == xmlSecTransformOperationSign && ctx->digestAlgId == CALG_SHA_256)
++        {
++            /* CryptCreateHash() would fail with NTE_BAD_ALGID, as hProv is of
++             * type PROV_RSA_FULL, not PROV_RSA_AES. */
++
++            DWORD dwDataLen;
++            xmlSecSize nameSize;
++            xmlSecBuffer nameBuffer;
++            BYTE* nameData;
++
++            if (!CryptGetProvParam(hProv, PP_CONTAINER, NULL, &dwDataLen, 0))
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                            "CryptGetProvParam",
++                            XMLSEC_ERRORS_R_CRYPTO_FAILED,
++                            XMLSEC_ERRORS_NO_MESSAGE);
++                return -1;
++            }
++
++            nameSize = (xmlSecSize)dwDataLen;
++            ret = xmlSecBufferInitialize(&nameBuffer, nameSize);
++            if (ret < 0)
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                            "mlSecBufferInitialize",
++                            XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                            "size=%d", nameSize);
++                return -1;
++            }
++
++            nameData = xmlSecBufferGetData(&nameBuffer);
++            if (!CryptGetProvParam(hProv, PP_CONTAINER, nameData, &dwDataLen, 0))
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                            "CryptGetProvParam",
++                            XMLSEC_ERRORS_R_CRYPTO_FAILED,
++                            XMLSEC_ERRORS_NO_MESSAGE);
++                xmlSecBufferFinalize(&nameBuffer);
++                return -1;
++            }
++
++            HCRYPTPROV hCryptProv;
++            if (!CryptAcquireContext(&hCryptProv, nameData, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_SILENT))
++            {
++                xmlSecError(XMLSEC_ERRORS_HERE,
++                            xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                            "CryptAcquireContext",
++                            XMLSEC_ERRORS_R_CRYPTO_FAILED,
++                            XMLSEC_ERRORS_NO_MESSAGE);
++                xmlSecBufferFinalize(&nameBuffer);
++                return -1;
++            }
++            xmlSecBufferFinalize(&nameBuffer);
++
++            hProv = hCryptProv;
++        }
++
++
+ 	if (!CryptCreateHash(hProv, ctx->digestAlgId, 0, 0, &(ctx->mscHash))) {
+ 	    xmlSecError(XMLSEC_ERRORS_HERE,
+ 			NULL,
+@@ -445,6 +520,10 @@ xmlSecMSCryptoSignatureExecute(xmlSecTransformPtr transform, int last, xmlSecTra
+ 		xmlSecBufferFinalize(&tmp);
+ 		return(-1);
+ 	    }
++
++            if (ctx->digestAlgId == CALG_SHA_256)
++                CryptReleaseContext(hProv, 0);
++
+ 	    outSize = (xmlSecSize)dwSigLen;
+ 
+ 	    ret = xmlSecBufferSetSize(out, outSize);
+@@ -487,6 +566,13 @@ xmlSecMSCryptoSignatureExecute(xmlSecTransformPtr transform, int last, xmlSecTra
  		while (j >= outBuf) {
  		    *j-- = *i++;
  		}
@@ -252,7 +332,7 @@ index a567db7..bc69b44 100644
  	    } else {
  		/* We shouldn't get at this place */
  		xmlSecError(XMLSEC_ERRORS_HERE, 
-@@ -563,6 +583,50 @@ xmlSecMSCryptoTransformRsaSha1GetKlass(void) {
+@@ -563,6 +649,50 @@ xmlSecMSCryptoTransformRsaSha1GetKlass(void) {
      return(&xmlSecMSCryptoRsaSha1Klass);
  }
  
