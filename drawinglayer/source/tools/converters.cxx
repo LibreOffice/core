@@ -43,12 +43,13 @@ namespace drawinglayer
             sal_uInt32 nMaxQuadratPixels)
         {
             BitmapEx aRetval;
+
+            if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
+            {
 #ifdef DBG_UTIL
             static bool bDoSaveForVisualControl(false);
 #endif
 
-            if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
-            {
                 // get destination size in pixels
                 const MapMode aMapModePixel(MAP_PIXEL);
                 const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);

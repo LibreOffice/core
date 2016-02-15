@@ -1347,12 +1347,12 @@ bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const OString& rUniqueId )
 void EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     const OUString& rBitmapUrl, css::drawing::BitmapMode eBitmapMode )
 {
-    bool bRetValue = false;
     OUString aVndUrl( "vnd.sun.star.GraphicObject:" );
     OUString aBmpUrl( rBitmapUrl );
     sal_Int32 nIndex = aBmpUrl.indexOf( aVndUrl );
     if( nIndex != -1 )
     {
+        bool bRetValue = false;
         nIndex += aVndUrl.getLength();
         if( aBmpUrl.getLength() > nIndex )
         {
