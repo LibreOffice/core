@@ -48,7 +48,12 @@
 #include <gtk/gtk.h>
 #include <prex.h>
 #include <X11/Xatom.h>
-#include <gdk/gdkx.h>
+#if defined(GDK_WINDOWING_X11)
+#   include <gdk/gdkx.h>
+#endif
+#if defined(GDK_WINDOWING_WAYLAND)
+#   include <gdk/gdkwayland.h>
+#endif
 #include <postx.h>
 
 #include <dlfcn.h>
@@ -1084,9 +1089,7 @@ void GtkSalFrame::InitCommon()
 
     //system data
     m_aSystemData.nSize         = sizeof( SystemEnvData );
-    static int nWindow = 0;
-    m_aSystemData.aWindow       = nWindow;
-    ++nWindow;
+    m_aSystemData.aWindow       = GetNativeWindowHandle(m_pWindow);
     m_aSystemData.aShellWindow  = reinterpret_cast<long>(this);
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
@@ -3904,9 +3907,30 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
+sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
+{
+    GdkDisplay *pDisplay = getGdkDisplay();
+    GdkWindow *pWindow = gtk_widget_get_window(pWidget);
+
+#if defined(GDK_WINDOWING_X11)
+    if (GDK_IS_X11_DISPLAY(pDisplay))
+    {
+        return GDK_WINDOW_XID(pWindow);
+    }
+    else
+#endif
+#if defined(GDK_WINDOWING_WAYLAND)
+    if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+    {
+        return reinterpret_cast<sal_uIntPtr>(gdk_wayland_window_get_wl_surface(pWindow));
+    }
+#endif
+    return 0;
+}
+
 sal_uIntPtr GtkSalFrame::GetNativeWindowHandle()
 {
-    return widget_get_xid(m_pWindow);
+    return GetNativeWindowHandle(m_pWindow);
 }
 
 void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,

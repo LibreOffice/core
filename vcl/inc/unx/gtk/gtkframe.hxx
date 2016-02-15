@@ -521,6 +521,7 @@ public:
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
 
+    sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget);
     virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
     static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
