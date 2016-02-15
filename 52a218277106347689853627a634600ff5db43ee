@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_5d259cc0",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-15T16:21:54Z",
+      "side": 1,
+      "message": "Looks like a good start, although I wouldn\u0027t set the size and style to any specific value.\n\nMaybe just create a new Font object with default values and set it to monospaced afterwards.",
+      "revId": "52a218277106347689853627a634600ff5db43ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
