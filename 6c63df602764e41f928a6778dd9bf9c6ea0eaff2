@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_5df8fc7c",
+        "filename": "setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001212
+      },
+      "writtenOn": "2016-02-15T09:04:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa91ec_47f66dd8",
+      "revId": "6c63df602764e41f928a6778dd9bf9c6ea0eaff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_c7309da1",
         "filename": "sysui/desktop/macosx/Info.plist.in",
         "patchSetId": 3
