@@ -946,28 +946,17 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     if ( !bFound )
                     {
                         sal_Bool bLoadInternal = sal_False;
-
-                        // security reservation: => we have to check the referer before executing
-                        if (SFX_APP()->IsSecureURL(OUString(), &aReferer))
+                        try
                         {
-                            try
-                            {
-                                sfx2::openUriExternally(
-                                    aURL.Complete, pFilter == 0);
-                            }
-                            catch ( ::com::sun::star::system::SystemShellExecuteException& )
-                            {
-                                rReq.RemoveItem( SID_TARGETNAME );
-                                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
-                                bLoadInternal = sal_True;
-                            }
+                            sfx2::openUriExternally(
+                                aURL.Complete, pFilter == 0);
                         }
-                        else
+                        catch ( ::com::sun::star::system::SystemShellExecuteException& )
                         {
-                            SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL.Complete );
-                            ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
+                            rReq.RemoveItem( SID_TARGETNAME );
+                            rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
+                            bLoadInternal = sal_True;
                         }
-
                         if ( !bLoadInternal )
                             return;
                     }
@@ -982,7 +971,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    if ( !SFX_APP()->IsSecureURL( INetURLObject(aFileName), &aReferer ) )
+    if (!SvtSecurityOptions().isSecureMacroUri(aFileName, aReferer))
     {
         SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aFileName );
         ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );

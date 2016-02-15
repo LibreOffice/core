@@ -79,7 +79,6 @@ class SfxModule;
 class SfxModule;
 typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
 class Window;
-class INetURLObject;
 struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;
 struct SfxStbCtrlFactory;
@@ -200,7 +199,6 @@ public:
     virtual void                Invalidate(sal_uInt16 nId = 0);
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     sal_Bool                        IsDowning() const;
-    sal_Bool                        IsSecureURL( const INetURLObject &rURL, const String *pReferer ) const;
     void                        ResetLastDir();
 
     SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}

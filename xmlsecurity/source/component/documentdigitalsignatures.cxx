@@ -36,13 +36,10 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
-#include <unotools/ucbhelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include "comphelper/documentconstants.hxx"
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
@@ -440,17 +437,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 
 ::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location ) throw (RuntimeException)
 {
-    sal_Bool bFound = sal_False;
-    INetURLObject aLocObj( Location );
-    INetURLObject aLocObjLowCase( Location.toAsciiLowerCase() ); // will be used for case insensitive comparing
-
-    Sequence< OUString > aSecURLs = SvtSecurityOptions().GetSecureURLs();
-    const OUString* pSecURLs = aSecURLs.getConstArray();
-    const OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
-    for ( ; pSecURLs != pSecURLsEnd && !bFound; ++pSecURLs )
-        bFound = ::utl::UCBContentHelper::IsSubPath( *pSecURLs, Location );
-
-    return bFound;
+    return SvtSecurityOptions().isTrustedLocationUri(Location);
 }
 
 void DocumentDigitalSignatures::addAuthorToTrustedSources(
