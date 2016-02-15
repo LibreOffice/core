@@ -47,6 +47,7 @@ void WpftWriterFilterTest::test()
     };
     const writerperfect::test::WpftOptionalMap_t aWpsOptional
     {
+        {"Word_5.0_DOS.doc", REQUIRE_WPS_VERSION(0, 4, 3)},
         {"Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2)},
     };
 
