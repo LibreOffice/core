@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_9d49c4d3",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-02-15T09:11:34Z",
+      "side": 1,
+      "message": "close() (unlike dispose()) can throw util::CloseVetoException, are you sure it\u0027s a good idea to not handle it? Throwing in a C++ destructor is problematic in general.",
+      "revId": "09ff5bddb08eba6f9c60513f1ee0da58d3afc59d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
