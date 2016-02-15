@@ -39,6 +39,9 @@ public class PlainSourceView extends JScrollPane implements
     private GlyphGutter gg;
     private int linecount;
     private boolean isModified = false;
+    private int defaultFontSize = 14;
+    private int defaultFontStyle = Font.BOLD;
+    private String defaultFont = Font.MONOSPACED;
 
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
@@ -95,6 +98,7 @@ public class PlainSourceView extends JScrollPane implements
         ta.setColumns(40);
         ta.setLineWrap(false);
         ta.insert(model.getText(), 0);
+        ta.setFont(new Font(defaultFont, defaultFontStyle, defaultFontSize));
         linecount = ta.getLineCount();
 
         gg = new GlyphGutter(this);
