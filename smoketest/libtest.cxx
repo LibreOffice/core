@@ -101,7 +101,7 @@ int main (int argc, char **argv)
             fprintf( stderr, "Failed to find pre-init symbol: %s\n", lok_dlerror() );
             return -1;
         }
-        preinit( install_path, NULL );
+        preinit(install_path, nullptr);
     }
 
     Office *pOffice = lok_cpp_init( install_path );
