@@ -244,9 +244,9 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
 static bool isInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return  pExceptionHandler != NULL &&
-            pSVData->mpApp != NULL &&
-            pSVData->mpDefInst != NULL;
+    return  pExceptionHandler != nullptr &&
+            pSVData->mpApp != nullptr &&
+            pSVData->mpDefInst != nullptr;
 }
 
 bool InitVCL()
