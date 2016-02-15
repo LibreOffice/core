@@ -151,8 +151,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
                     convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
 
-                SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
+                SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
                 rSh.GetCurAttr( aSet );
+                SwMirrorGrf aMirror( static_cast<const SwMirrorGrf&>( aSet.Get(RES_GRFATR_MIRRORGRF)) );
                 SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF)) );
 
                 Rectangle aCropRectangle(
@@ -179,6 +180,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     rSh.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aCompressedGraphic));
 
                     rSh.SetAttrItem(aCrop);
+                    rSh.SetAttrItem(aMirror);
 
                     rSh.EndUndo(UNDO_END);
                     rSh.EndAllAction();
