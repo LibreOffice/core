@@ -864,6 +864,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, UpdateCallback, void*, voi
 IMPL_LINK_TYPED(ToolBarManager::Implementation,EventMultiplexerCallback,
     sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
+    SolarMutexGuard g;
     switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
