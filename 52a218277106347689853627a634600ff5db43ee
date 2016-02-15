@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3aaa91ec_9d2f04a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-02-15T16:22:46Z",
+      "side": 1,
+      "message": "A better commit message would be:\n\ntdf#97640 Fixed-width font for Beanshell Editor",
+      "revId": "52a218277106347689853627a634600ff5db43ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_5d259cc0",
         "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
         "patchSetId": 1
