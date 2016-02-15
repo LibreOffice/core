@@ -32,8 +32,6 @@ Module gid_Module_Root
              gid_File_Txt_Pagein_Impress,
              gid_File_Txt_Pagein_Writer,
              gid_File_extras_newfiles,
-             gid_File_Wizards_Common,
-             gid_File_Wizards_Fax,
              gid_File_Rdb_Offapi,
              gid_Starregistry_Services_Rdb,
              auto_ooo_ALL,
@@ -130,7 +128,6 @@ Module gid_Module_Root
              gid_File_Share_Config_Sofficecfg_uiconfig_xmlsec,
              gid_File_Share_Registry_Main_Xcd,
              gid_File_Share_Registry_Forcedefault_Xcd,
-             gid_File_Pymailmerge,
              gid_File_Extra_Fontunxpsprint,
              gid_File_Extra_Fontunxppds,
              gid_File_Extra_Fontunxafm);
