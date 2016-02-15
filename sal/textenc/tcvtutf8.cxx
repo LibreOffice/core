@@ -163,7 +163,7 @@ sal_Size ImplConvertUtf8ToUnicode(
                     *pDestBufPtr++ = (sal_Unicode) nUtf32;
                 else
                     goto no_output;
-            else if (nUtf32 <= 0x10FFFF)
+            else if (rtl::isUnicodeCodePoint(nUtf32))
                 if (pDestBufEnd - pDestBufPtr >= 2)
                 {
                     *pDestBufPtr++ = (sal_Unicode) ImplGetHighSurrogate(nUtf32);

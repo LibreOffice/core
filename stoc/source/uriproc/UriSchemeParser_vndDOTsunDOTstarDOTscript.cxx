@@ -34,6 +34,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -110,9 +111,8 @@ OUString parsePart(
                     }
                     encoded |= (n & 0x3F) << shift;
                 }
-                if (!utf8 || encoded < min
-                    || (encoded >= 0xD800 && encoded <= 0xDFFF)
-                    || encoded > 0x10FFFF)
+                if (!utf8 || !rtl::isUnicodeCodePoint(encoded) || encoded < min
+                    || (encoded >= 0xD800 && encoded <= 0xDFFF))
                 {
                     break;
                 }

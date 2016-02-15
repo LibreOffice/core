@@ -20,9 +20,12 @@
 #ifndef INCLUDED_SAL_TEXTENC_UNICHARS_HXX
 #define INCLUDED_SAL_TEXTENC_UNICHARS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
+
 #include <cassert>
-#include "sal/types.h"
+
+#include <rtl/character.hxx>
+#include <sal/types.h>
 
 #define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD
 
@@ -30,7 +33,7 @@ inline bool ImplIsNoncharacter(sal_uInt32 nUtf32)
 {
     return (nUtf32 >= 0xFDD0 && nUtf32 <= 0xFDEF)
            || (nUtf32 & 0xFFFF) >= 0xFFFE
-           || nUtf32 > 0x10FFFF;
+           || !rtl::isUnicodeCodePoint(nUtf32);
 }
     // All code points that are noncharacters, as of Unicode 3.1.1.
 

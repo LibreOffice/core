@@ -270,7 +270,7 @@ sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
 inline sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
                                                  sal_uInt32 nUTF32)
 {
-    DBG_ASSERT(nUTF32 <= 0x10FFFF, "putUTF32Character(): Bad char");
+    DBG_ASSERT(rtl::isUnicodeCodePoint(nUTF32), "putUTF32Character(): Bad char");
     if (nUTF32 < 0x10000)
         *pBuffer++ = sal_Unicode(nUTF32);
     else
@@ -375,7 +375,7 @@ bool translateUTF8Char(const sal_Char *& rBegin,
         else
             return false;
 
-    if (nUCS4 < nMin || nUCS4 > 0x10FFFF)
+    if (!rtl::isUnicodeCodePoint(nUCS4) || nUCS4 < nMin)
         return false;
 
     if (eEncoding >= RTL_TEXTENCODING_UCS4)
@@ -1279,7 +1279,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         if (bEscape)
                         {
                             DBG_ASSERT(
-                                nUTF32 < 0x10FFFF,
+                                rtl::isUnicodeCodePoint(nUTF32),
                                 "INetMIMEEncodedWordOutputSink::finish():"
                                     " Bad char");
                             if (nUTF32 < 0x80)

@@ -1190,14 +1190,14 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
     {
         nUnicode = sIn.copy(0, nUPlus).toString().toUInt32(16);
         //prevent creating control characters or invalid Unicode values
-        if( nUnicode < 0x20 || nUnicode > 0x10ffff )
+        if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20  )
             maInput = sIn.copy(nUPlus);
         sIn = sIn.copy(nUPlus+2);
         nUPlus =  sIn.indexOf("U+");
     }
 
     nUnicode = sIn.toString().toUInt32(16);
-    if( nUnicode < 0x20 || nUnicode > 0x10ffff )
+    if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20 )
        maInput.truncate().append( sIn[sIn.getLength()-1] );
     return maInput.toString();
 }

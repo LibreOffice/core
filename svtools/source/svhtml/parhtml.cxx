@@ -502,7 +502,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     else
                         nNextCh = 0U;
 
-                    if ( ! rtl::isValidCodePoint( cChar ) )
+                    if ( ! rtl::isUnicodeCodePoint( cChar ) )
                         cChar = '?';
                 }
                 else if( HTML_ISALPHA( nNextCh ) )

@@ -4744,8 +4744,8 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                                         break;
                                     nShift -= 6;
                                 }
-                                if (bUTF8 && nEncoded >= nMin
-                                    && nEncoded <= 0x10FFFF
+                                if (bUTF8 && rtl::isUnicodeCodePoint(nEncoded)
+                                    && nEncoded >= nMin
                                     && !rtl::isHighSurrogate(nEncoded)
                                     && !rtl::isLowSurrogate(nEncoded))
                                 {

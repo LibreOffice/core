@@ -394,7 +394,7 @@ sal_uInt32 SvParser::GetNextChar()
         while( 0 == nChars  && !bErr );
     }
 
-    if ( ! rtl::isValidCodePoint( c ) )
+    if ( ! rtl::isUnicodeCodePoint( c ) )
         c = (sal_uInt32) '?' ;
 
     if( bErr )

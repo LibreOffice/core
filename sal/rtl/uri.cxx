@@ -132,8 +132,8 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     p += 3;
                     nEncoded |= ((nWeight1 & 3) << 4 | nWeight2) << nShift;
                 }
-                if (bUTF8 && nEncoded >= nMin && nEncoded <= 0x10FFFF
-                    && !rtl::isHighSurrogate(nEncoded)
+                if (bUTF8 && rtl::isUnicodeCodePoint(nEncoded)
+                    && nEncoded >= nMin && !rtl::isHighSurrogate(nEncoded)
                     && !rtl::isLowSurrogate(nEncoded))
                 {
                     *pBegin = p;
@@ -213,7 +213,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 
 void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 {
-    assert(nUtf32 <= 0x10FFFF); // bad UTF-32 char
+    assert(rtl::isUnicodeCodePoint(nUtf32));
     if (nUtf32 <= 0xFFFF) {
         writeUnicode(
             pBuffer, pCapacity, static_cast< sal_Unicode >(nUtf32));
@@ -245,7 +245,7 @@ void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
 bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                      sal_uInt32 nUtf32, rtl_TextEncoding eCharset, bool bStrict)
 {
-    assert(nUtf32 <= 0x10FFFF); // bad UTF-32 char
+    assert(rtl::isUnicodeCodePoint(nUtf32));
     if (eCharset == RTL_TEXTENCODING_UTF8) {
         if (nUtf32 < 0x80)
             writeEscapeOctet(pBuffer, pCapacity, nUtf32);

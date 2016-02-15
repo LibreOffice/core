@@ -3324,7 +3324,7 @@ void ScInterpreter::ScUnichar()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         double dVal = ::rtl::math::approxFloor( GetDouble() );
-        if ((dVal < 0x000000) || (dVal > 0x10FFFF))
+        if (dVal < 0 || !rtl::isUnicodeCodePoint(dVal))
             PushIllegalArgument();
         else
         {

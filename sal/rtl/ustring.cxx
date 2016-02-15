@@ -578,7 +578,7 @@ void SAL_CALL rtl_uString_newFromCodePoints(
     }
     n = codePointCount;
     for (i = 0; i < codePointCount; ++i) {
-        OSL_ASSERT(codePoints[i] <= 0x10FFFF);
+        OSL_ASSERT(rtl::isUnicodeCodePoint(codePoints[i]));
         if (codePoints[i] >= 0x10000) {
             ++n;
         }

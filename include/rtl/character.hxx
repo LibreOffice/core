@@ -29,6 +29,19 @@
 namespace rtl
 {
 
+/** Check for Unicode code point.
+
+    @param code  An integer.
+
+    @return  True if code is a Unicode code point.
+
+    @since LibreOffice 5.2
+*/
+inline bool isUnicodeCodePoint(sal_uInt32 code)
+{
+    return code <= 0x10FFFF;
+}
+
 /** Check for ASCII character.
 
     @param code  A Unicode code point.
@@ -39,7 +52,7 @@ namespace rtl
  */
 inline bool isAscii(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code <= 0x7F;
 }
 
@@ -54,7 +67,7 @@ inline bool isAscii(sal_uInt32 code)
  */
 inline bool isAsciiLowerCase(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code >= 'a' && code <= 'z';
 }
 
@@ -69,7 +82,7 @@ inline bool isAsciiLowerCase(sal_uInt32 code)
  */
 inline bool isAsciiUpperCase(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code >= 'A' && code <= 'Z';
 }
 
@@ -84,7 +97,7 @@ inline bool isAsciiUpperCase(sal_uInt32 code)
  */
 inline bool isAsciiAlpha(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return isAsciiLowerCase(code) || isAsciiUpperCase(code);
 }
 
@@ -99,7 +112,7 @@ inline bool isAsciiAlpha(sal_uInt32 code)
  */
 inline bool isAsciiDigit(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code >= '0' && code <= '9';
 }
 
@@ -114,7 +127,7 @@ inline bool isAsciiDigit(sal_uInt32 code)
  */
 inline bool isAsciiAlphanumeric(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || isAsciiAlpha(code);
 }
 
@@ -129,7 +142,7 @@ inline bool isAsciiAlphanumeric(sal_uInt32 code)
  */
 inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
 }
 
@@ -144,7 +157,7 @@ inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
  */
 inline bool isAsciiHexDigit(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
@@ -158,7 +171,7 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
  */
 inline bool isAsciiOctalDigit(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code >= '0' && code <= '7';
 }
 
@@ -173,7 +186,7 @@ inline bool isAsciiOctalDigit(sal_uInt32 code)
 */
 inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return isAsciiLowerCase(code) ? code - 32 : code;
 }
 
@@ -187,7 +200,7 @@ inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 */
 inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return isAsciiUpperCase(code) ? code + 32 : code;
 }
 
@@ -205,8 +218,8 @@ inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
  */
 inline sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
 {
-    assert(code1 <= 0x10FFFF);
-    assert(code2 <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code1));
+    assert(isUnicodeCodePoint(code2));
     return static_cast<sal_Int32>(toAsciiLowerCase(code1))
         - static_cast<sal_Int32>(toAsciiLowerCase(code2));
 }
@@ -222,19 +235,6 @@ sal_uInt32 const surrogatesLowLast = 0xDFFF;
 }
 /// @endcond
 
-/** Check if a codepoint is accessible via utf16 per RFC3629
-
-    @param code  A non-BMP Unicode code point.
-
-    @return  True if the code is a valid codepoint.
-
-    @since LibreOffice 5.2
-*/
-inline bool isValidCodePoint( sal_uInt32 code)
-{
-    return code <= 0x10FFFF;
-}
-
 /** Check for high surrogate.
 
     @param code  A Unicode code point.
@@ -244,7 +244,7 @@ inline bool isValidCodePoint( sal_uInt32 code)
     @since LibreOffice 5.0
 */
 inline bool isHighSurrogate(sal_uInt32 code) {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesHighFirst
         && code <= detail::surrogatesHighLast;
 }
@@ -258,7 +258,7 @@ inline bool isHighSurrogate(sal_uInt32 code) {
     @since LibreOffice 5.0
 */
 inline bool isLowSurrogate(sal_uInt32 code) {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesLowFirst
         && code <= detail::surrogatesLowLast;
 }
@@ -272,7 +272,7 @@ inline bool isLowSurrogate(sal_uInt32 code) {
     @since LibreOffice 5.0
  */
 inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     assert(code >= 0x10000);
     return static_cast<sal_Unicode>(((code - 0x10000) >> 10) | detail::surrogatesHighFirst);
 }
@@ -286,7 +286,7 @@ inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
     @since LibreOffice 5.0
  */
 inline sal_Unicode getLowSurrogate(sal_uInt32 code) {
-    assert(code <= 0x10FFFF);
+    assert(isUnicodeCodePoint(code));
     assert(code >= 0x10000);
     return static_cast<sal_Unicode>(((code - 0x10000) & 0x3FF) | detail::surrogatesLowFirst);
 }
