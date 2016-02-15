@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<root>
+    <whitelist>
+        <entry os="all" vendor="all" compare="less" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="xp" vendor="intel" compare="less_equal" version="11.21.31.41">
+            <device id="all"/>
+        </entry>
+        <entry os="server2003" vendor="ati" compare="greater" version="12.22.32.42">
+            <device id="all"/>
+        </entry>
+        <entry os="vista" vendor="amd" compare="greater_equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="7" vendor="nvidia" compare="equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="8" vendor="microsoft" compare="not_equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="8_1" compare="between_exclusive" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="10" compare="between_inclusive" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="all" compare="between_inclusive_start" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="all">
+            <device id="all"/>
+        </entry>
+    </whitelist>
+    <blacklist>
+        <entry os="all" vendor="all" compare="less" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="xp" vendor="intel" compare="less_equal" version="11.21.31.41">
+            <device id="all"/>
+        </entry>
+        <entry os="server2003" vendor="ati" compare="greater" version="12.22.32.42">
+            <device id="all"/>
+        </entry>
+        <entry os="vista" vendor="amd" compare="greater_equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="7" vendor="nvidia" compare="equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="8" vendor="microsoft" compare="not_equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="8_1" compare="between_exclusive" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="10" compare="between_inclusive" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="all" compare="between_inclusive_start" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="all">
+            <device id="all"/>
+        </entry>
+    </blacklist>
+</root>
