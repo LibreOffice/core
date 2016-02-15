@@ -1790,31 +1790,29 @@ bool SbModule::HasExeCode()
 // Store only image, no source
 void SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    bool bRet = Compile();
-    if( bRet )
-    {
-        bool bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
+    if (!Compile())
+        return;
+    bool bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
 
-        if ( bFixup ) // save in old image format, fix up method starts
-            fixUpMethodStart( true );
-        bRet = SbxObject::StoreData( rStrm );
-        if( bRet )
-        {
-            (pImage->aOUSource).clear();
-            pImage->aComment = aComment;
-            pImage->aName = GetName();
+    if ( bFixup ) // save in old image format, fix up method starts
+        fixUpMethodStart( true );
 
-            rStrm.WriteUChar( 1 );
-            if ( nVer )
-                bRet = pImage->Save( rStrm );
-            else
-                bRet = pImage->Save( rStrm, B_LEGACYVERSION );
-            if ( bFixup )
-                fixUpMethodStart( false ); // restore method starts
+    if (!SbxObject::StoreData(rStrm))
+        return;
 
-            pImage->aOUSource = aOUSource;
-        }
-    }
+    pImage->aOUSource.clear();
+    pImage->aComment = aComment;
+    pImage->aName = GetName();
+
+    rStrm.WriteUChar(1);
+    if (nVer)
+        pImage->Save(rStrm);
+    else
+        pImage->Save(rStrm, B_LEGACYVERSION);
+    if (bFixup)
+        fixUpMethodStart(false); // restore method starts
+
+    pImage->aOUSource = aOUSource;
 }
 
 // Called for >= OO 1.0 passwd protected libraries only
