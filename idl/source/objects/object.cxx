@@ -99,34 +99,6 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
     rInStm.Seek( nTokPos );
 }
 
-bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
-{
-    sal_uLong nTokPos = rInStm.Tell();
-    if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) &&
-        (GetMetaTypeType() == MetaTypeType::Interface || GetMetaTypeType() == MetaTypeType::Shell) )
-    {
-        bool bOk = true;
-        if( rInStm.ReadIf( ':' ) )
-        {
-            aSuperClass = rBase.ReadKnownClass( rInStm );
-            bOk = aSuperClass.Is();
-            if( !bOk )
-            {
-                throw SvParseException( rInStm, "unknown super class" );
-            }
-        }
-        if( bOk )
-        {
-            rBase.Write(OString('.'));
-            bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
-        }
-        if( bOk )
-            return bOk;
-    }
-    rInStm.Seek( nTokPos );
-    return false;
-}
-
 bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                  SvMetaAttribute & rAttr ) const
 {

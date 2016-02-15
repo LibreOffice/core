@@ -21,6 +21,7 @@
 #define INCLUDED_IDL_INC_PARSER_HXX
 
 #include <rtl/ustring.hxx>
+#include <types.hxx>
 
 class SvTokenStream;
 class SvIdlDataBase;
@@ -40,6 +41,7 @@ public:
     bool        ReadModuleBody(SvMetaModule& rModule);
     void        ReadModuleElement( SvMetaModule& rModule );
     void        ReadInclude( SvMetaModule& rModule );
+    void        ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );
     void        ReadItem();
     void        ReadStruct();
     void        ReadEnum();

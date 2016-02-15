@@ -48,9 +48,11 @@ public:
 
 class SvMetaClass : public SvMetaType
 {
+public:
+    tools::SvRef<SvMetaClass>           aSuperClass;
+private:
     SvRefMemberList<SvMetaAttribute *>  aAttrList;
     std::vector<SvClassElement>         aClassElementList;
-    tools::SvRef<SvMetaClass>           aSuperClass;
 
     bool                    TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
@@ -70,15 +72,13 @@ class SvMetaClass : public SvMetaType
                                     SvMetaClassList & rClassList,
                                     const OString& rPrefix, SvIdlDataBase& rBase );
 
-protected:
-    virtual void            ReadContextSvIdl( SvIdlDataBase &,
-                                     SvTokenStream & rInStm ) override;
 public:
             SvMetaClass();
+    virtual void            ReadContextSvIdl( SvIdlDataBase &,
+                                     SvTokenStream & rInStm ) override;
 
     void                    FillClasses( SvMetaClassList & rList );
 
-    virtual bool            ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void            WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) override;
 };
 

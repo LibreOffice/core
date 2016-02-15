@@ -118,16 +118,13 @@ bool SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
 
 void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
 {
-    if( rInStm.GetToken().Is( SvHash_interface() )
-      || rInStm.GetToken().Is( SvHash_shell() ) )
+    if( rInStm.GetToken().Is( SvHash_interface() ) )
     {
-        tools::SvRef<SvMetaClass> aClass( new SvMetaClass() );
-        if( aClass->ReadSvIdl( rBase, rInStm ) )
-        {
-            rModule.aClassList.push_back( aClass );
-            // announce globally
-            rBase.GetClassList().push_back( aClass );
-        }
+        ReadInterfaceOrShell(rModule, MetaTypeType::Interface);
+    }
+    else if( rInStm.GetToken().Is( SvHash_shell() ) )
+    {
+        ReadInterfaceOrShell(rModule, MetaTypeType::Shell);
     }
     else if( rInStm.GetToken().Is( SvHash_enum() ) )
     {
@@ -254,20 +251,6 @@ void SvIdlParser::ReadItem()
     rBase.GetTypeList().push_back( xItem );
 }
 
-SvMetaType * SvIdlParser::ReadKnownType()
-{
-    OString aName = ReadIdentifier();
-    for( const auto& aType : rBase.GetTypeList() )
-    {
-        if( aType->GetName().equals(aName) )
-        {
-            return aType;
-        }
-    }
-    throw SvParseException( rInStm, "wrong typedef: ");
-}
-
-
 void SvIdlParser::ReadEnum()
 {
     rInStm.GetToken_Next();
@@ -316,13 +299,51 @@ void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
     rEnum.aEnumValueList.push_back( aEnumVal );
 }
 
-
-
-void SvIdlParser::ReadChar(char cChar)
+void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType )
 {
-    if( !rInStm.ReadIf( cChar ) )
-        throw SvParseException(rInStm, "expected char '" + OString(cChar) + "'");
+    tools::SvRef<SvMetaClass> aClass( new SvMetaClass() );
+
+    rInStm.GetToken_Next();
+
+    aClass->SetType( aMetaTypeType );
+
+    aClass->SetName( ReadIdentifier() );
+
+    if( rInStm.ReadIf( ':' ) )
+    {
+        aClass->aSuperClass = rBase.ReadKnownClass( rInStm );
+        if( !aClass->aSuperClass.Is() )
+            throw SvParseException( rInStm, "unknown super class" );
+    }
+    if( rInStm.ReadIf( '{' ) )
+    {
+        sal_uInt32 nBeginPos = 0; // can not happen with Tell
+        while( nBeginPos != rInStm.Tell() )
+        {
+            nBeginPos = rInStm.Tell();
+            aClass->ReadContextSvIdl( rBase, rInStm );
+            rInStm.ReadIfDelimiter();
+        }
+        ReadChar( '}' );
+    }
+    rModule.aClassList.push_back( aClass );
+    // announce globally
+    rBase.GetClassList().push_back( aClass );
 }
+
+SvMetaType * SvIdlParser::ReadKnownType()
+{
+    OString aName = ReadIdentifier();
+    for( const auto& aType : rBase.GetTypeList() )
+    {
+        if( aType->GetName().equals(aName) )
+        {
+            return aType;
+        }
+    }
+    throw SvParseException( rInStm, "wrong typedef: ");
+}
+
 
 void SvIdlParser::ReadDelimiter()
 {
@@ -344,6 +365,12 @@ OString SvIdlParser::ReadString()
     if( !rTok.IsString() )
         throw SvParseException("expected string", rTok);
     return rTok.GetString();
+}
+
+void SvIdlParser::ReadChar(char cChar)
+{
+    if( !rInStm.ReadIf( cChar ) )
+        throw SvParseException(rInStm, "expected char '" + OString(cChar) + "'");
 }
 
 void SvIdlParser::ReadToken(SvStringHashEntry* entry)
