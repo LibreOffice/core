@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_targets,writerperfect,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,writerperfect,\
+	AllLangResTarget_writerperfect \
 	UIConfig_writerperfect \
 ))
 

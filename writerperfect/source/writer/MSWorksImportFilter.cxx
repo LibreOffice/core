@@ -15,7 +15,9 @@
 #include <libwps/libwps.h>
 
 #include "WPFTEncodingDialog.hxx"
+#include "WPFTResMgr.hxx"
 #include "MSWorksImportFilter.hxx"
+#include "strings.hrc"
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -49,19 +51,19 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
             switch (creator)
             {
             case libwps::WPS_MSWORKS:
-                title = "Import MsWorks files(libwps)";
+                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWORKS);
                 encoding = "CP850";
                 break;
             case libwps::WPS_RESERVED_0: // MS Write
-                title = "Import MsWrite files(libwps)";
+                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWRITE);
                 encoding = "CP1251";
                 break;
             case libwps::WPS_RESERVED_1: // DosWord
-                title = "Import DosWord files(libwps)";
+                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_DOSWORD);
                 encoding = "CP850";
                 break;
             default:
-                title = "Import files(libwps)";
+                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE);
                 encoding = "CP850";
                 break;
             }

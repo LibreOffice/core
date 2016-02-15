@@ -15,7 +15,9 @@
 #include <libwps/libwps.h>
 
 #include "WPFTEncodingDialog.hxx"
+#include "WPFTResMgr.hxx"
 #include "MSWorksCalcImportFilter.hxx"
+#include "strings.hrc"
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -38,22 +40,22 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
         OUString title, encoding;
         if (creator == libwps::WPS_MSWORKS)
         {
-            title="Import MsWorks files(libwps)";
+            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWORKS);
             encoding="CP850";
         }
         else if (creator == libwps::WPS_LOTUS)
         {
-            title="Import Lotus files(libwps)";
+            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_LOTUS);
             encoding="CP437";
         }
         else if (creator == libwps::WPS_SYMPHONY)
         {
-            title="Import Symphony files(libwps)";
+            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
             encoding="CP437";
         }
         else
         {
-            title="Import Quattro Pro files(libwps)";
+            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
             encoding="CP437";
         }
         try

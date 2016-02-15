@@ -104,6 +104,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Tubes,
              gid_File_Res_Uui,
              gid_File_Res_Vcl,
+             gid_File_Res_Writerperfect,
              gid_File_Res_Wzi,
              gid_File_Res_Xsltdlg,
              gid_File_Res_AVMedia,
