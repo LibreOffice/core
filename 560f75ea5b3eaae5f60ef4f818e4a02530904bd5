@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_5d547c53",
+        "filename": "cppuhelper/source/defaultbootstrap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "what\u0027s the meaning of \"uri\" in \"bsUri\"?",
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_3d51b063",
+        "filename": "cppuhelper/source/defaultbootstrap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "nullptr",
+      "range": {
+        "startLine": 49,
+        "startChar": 29,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_9d4ee4bf",
+        "filename": "cppuhelper/source/defaultbootstrap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "why trivially split out the body into a function of its own?",
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_7d4b38b1",
+        "filename": "cppuhelper/source/gcc3.map",
+        "patchSetId": 4
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "* please move directly below the section it derives from\n\n* or better make it a PRIVATE_* section?",
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_ddc6ac15",
+        "filename": "cppuhelper/source/servicemanager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "please keep the list of includes sorted",
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_bdcbe01d",
+        "filename": "cppuhelper/source/servicemanager.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "something like \"preloadImplementations\" (or \"loadAllImplementations\", although it only loads shared-library ones) might be more descriptive?",
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_1dd154ce",
+        "filename": "include/cppuhelper/bootstrap.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-15T11:00:36Z",
+      "side": 1,
+      "message": "* documentation, @since tag\n\n* @cond INTERNAL?",
+      "revId": "560f75ea5b3eaae5f60ef4f818e4a02530904bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
