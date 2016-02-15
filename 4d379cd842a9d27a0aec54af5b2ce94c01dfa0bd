@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_b8780e91",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-15T19:56:58Z",
+      "side": 0,
+      "message": "why remove this? pPar is not a unique_ptr so needs to be deleted, no?",
+      "revId": "4d379cd842a9d27a0aec54af5b2ce94c01dfa0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
