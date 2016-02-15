@@ -1797,7 +1797,7 @@ void SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 
         if ( bFixup ) // save in old image format, fix up method starts
             fixUpMethodStart( true );
-         bRet = SbxObject::StoreData( rStrm );
+        bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
             (pImage->aOUSource).clear();
@@ -1805,12 +1805,12 @@ void SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
             pImage->aName = GetName();
 
             rStrm.WriteUChar( 1 );
-                    if ( nVer )
-                        bRet = pImage->Save( rStrm );
-                    else
-                        bRet = pImage->Save( rStrm, B_LEGACYVERSION );
-                    if ( bFixup )
-                        fixUpMethodStart( false ); // restore method starts
+            if ( nVer )
+                bRet = pImage->Save( rStrm );
+            else
+                bRet = pImage->Save( rStrm, B_LEGACYVERSION );
+            if ( bFixup )
+                fixUpMethodStart( false ); // restore method starts
 
             pImage->aOUSource = aOUSource;
         }
