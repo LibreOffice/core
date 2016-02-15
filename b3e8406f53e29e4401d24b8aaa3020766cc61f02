@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_788d067b",
+        "filename": "scp2/InstallModule_ooo.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-15T21:50:38Z",
+      "side": 0,
+      "message": "okay this is unused in \"ooo\" module anyway",
+      "revId": "b3e8406f53e29e4401d24b8aaa3020766cc61f02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_d8e87a19",
+        "filename": "scp2/source/ooo/file_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-15T21:50:38Z",
+      "side": 0,
+      "message": "the AIX check is missing in Repository.mk",
+      "revId": "b3e8406f53e29e4401d24b8aaa3020766cc61f02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
