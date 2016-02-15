@@ -92,6 +92,7 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
         }
         else
         {
+            // NOTE: this handles MS Word for DOS too ATM
             rTypeName = "writer_MS_Write";
         }
         return true;
