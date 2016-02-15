@@ -37,10 +37,15 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
 {
     /** Returns native number string for given number string.
 
+        @param aNumberString
+            The input string.
+
         @param nNativeNumberMode
             One of NativeNumberMode values.
-     */
 
+        @param aLocale
+            The locale.
+     */
     string getNativeNumberString( [in] string aNumberString,
                     [in] ::com::sun::star::lang::Locale aLocale,
                     [in] short nNativeNumberMode );
@@ -49,8 +54,10 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
 
         @param nNativeNumberMode
             One of NativeNumberMode values.
-     */
 
+        @param aLocale
+            The locale.
+     */
     boolean isValidNatNum( [in] ::com::sun::star::lang::Locale aLocale,
                     [in] short nNativeNumberMode );
 
@@ -59,8 +66,10 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
 
         @param nNativeNumberMode
             One of NativeNumberMode values.
-     */
 
+        @param aLocale
+            The locale.
+     */
     NativeNumberXmlAttributes convertToXmlAttributes(
             [in] ::com::sun::star::lang::Locale aLocale,
             [in] short nNativeNumberMode );
@@ -70,7 +79,6 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
         @returns
             One of NativeNumberMode
      */
-
     short convertFromXmlAttributes( [in] NativeNumberXmlAttributes aAttr );
 
 };

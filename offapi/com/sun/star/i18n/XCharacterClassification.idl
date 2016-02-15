@@ -219,6 +219,21 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         @param  nTokenType
             One or more of the KParseType constants.
 
+        @param aText
+            See #parseAnyToken
+        @param nPos
+            See #parseAnyToken
+        @param aLocale
+            See #parseAnyToken
+        @param nStartCharFlags
+            See #parseAnyToken
+        @param aUserDefinedCharactersStart
+            See #parseAnyToken
+        @param nContCharFlags
+            See #parseAnyToken
+        @param aUserDefinedCharactersCont
+            See #parseAnyToken
+
         @code{.cpp}
             // Determine if a given name is a valid name (not quoted) and contains
             // only allowed characters.

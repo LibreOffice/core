@@ -44,6 +44,19 @@ published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConve
         ::com::sun::star::i18n::XTextConversion::getConversion(),
         except an additional output parameter rOffset.
 
+        @param aText
+            See ::com::sun::star::i18n::XTextConversion::getConversion()
+        @param nStartPos
+            See ::com::sun::star::i18n::XTextConversion::getConversion()
+        @param nLength
+            See ::com::sun::star::i18n::XTextConversion::getConversion()
+        @param aLocale
+            See ::com::sun::star::i18n::XTextConversion::getConversion()
+        @param nTextConversionType
+            See ::com::sun::star::i18n::XTextConversion::getConversion()
+        @param nTextConversionOptions
+            See ::com::sun::star::i18n::XTextConversion::getConversion()
+
         @param rOffset
             To find the grapheme of input string corresponding to the
             grapheme of output string, rOffset provides the offset array

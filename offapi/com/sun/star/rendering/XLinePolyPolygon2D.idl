@@ -66,6 +66,8 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
         This method can either set the whole poly-polygon to the new
         data, or insert the points at the given index
 
+        @param points the points.
+
         @param nPolygonIndex
         The index of the polygon to start point insertion with. This
         index must be in the range [0,numPolygons], and the insertion

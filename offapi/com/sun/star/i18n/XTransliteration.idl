@@ -137,6 +137,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         @param aImplName
             The module's {implName} under which it is registered with
             com.sun.star.i18n.Transliteration.l10n.{implName}.
+        @param aLocale
+            The locale for which the module is requested.
      */
     void    loadModuleByImplName(   [in] string aImplName,
                                     [in] ::com::sun::star::lang::Locale aLocale );
@@ -148,6 +150,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
         @param aImplNameList
             Only IGNORE type modules can be specified.
+        @param aLocale
+            The locale for which the modules are requested.
     */
     void    loadModulesByImplNames( [in] sequence <string> aImplNameList,
                                     [in] ::com::sun::star::lang::Locale aLocale );
@@ -158,6 +162,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         @param nType
             A bitmask field of values defined in
             TransliterationType
+        @param aLocale
+            The locale for which the modules are requested.
     */
     sequence<string>    getAvailableModules(
                             [in] ::com::sun::star::lang::Locale aLocale,

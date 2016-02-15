@@ -43,6 +43,9 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
 
         @param nFormatUsage
             one of KNumberFormatUsage values
+
+        @param rLocale
+            The locale for which the format code is requested.
      */
     NumberFormatCode getDefault( [in] short nFormatType,
                                  [in] short nFormatUsage,
@@ -54,6 +57,9 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
 
         @param nFormatIndex
             one of NumberFormatIndex values
+
+        @param rLocale
+            The locale for which the format code is requested.
      */
     NumberFormatCode getFormatCode( [in] short nFormatIndex,
                                     [in] com::sun::star::lang::Locale rLocale );
@@ -63,6 +69,9 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
 
         @param nFormatUsage
             one of KNumberFormatUsage values
+
+        @param rLocale
+            The locale for which the format codes are requested.
      */
     sequence< NumberFormatCode > getAllFormatCode(
                                 [in] short nFormatUsage,
@@ -70,6 +79,9 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
 
     /**
         returns all format codes for a given locale.
+
+        @param rLocale
+            The locale for which the format codes are requested.
      */
     sequence< NumberFormatCode > getAllFormatCodes(
                                 [in] com::sun::star::lang::Locale rLocale );

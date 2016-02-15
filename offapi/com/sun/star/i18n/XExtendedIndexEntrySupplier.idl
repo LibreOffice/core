@@ -70,6 +70,9 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
     /**
         Loads index algorithm for the locale.
 
+        @param aLocale
+            The locale.
+
         @param aIndexAlgorithm
             Index algorithm to be loaded.
 

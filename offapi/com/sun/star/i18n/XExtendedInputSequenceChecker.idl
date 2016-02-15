@@ -41,6 +41,17 @@ published interface XExtendedInputSequenceChecker : ::com::sun::star::i18n::XInp
     /** @returns
             Next nPos, or length of aText if nothing is corrected.
 
+        @param aText
+            Text to be checked and corrected.
+
+        @param nPos
+            Index in aText where checking starts.
+
+        @param cInputChar
+            The input character.  Or at least, a UTF16 code unit thereof.
+            It looks like this interface was not designed with non-BMP
+            characters in mind.  Not sure if that is a problem.
+
         @param nInputCheckMode
             One of InputSequenceCheckMode constants.
     */

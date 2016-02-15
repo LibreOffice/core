@@ -98,6 +98,8 @@ interface XColorSpace
         therefore, batch conversion of multiple color values is
         possible.
 
+        @param targetColorSpace the color space to convert to.
+
         @return the corresponding sequence of device colors in the
         target color space (e.g. `sequence<double>` or
         `sequence<byte>`).

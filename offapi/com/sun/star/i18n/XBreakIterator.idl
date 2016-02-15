@@ -43,10 +43,26 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         CharacterIteratorMode can be cell based or
         character based. A cell is made of more than one character.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
+        @param nCharacterIteratorMode
+            A constant from CharacterIteratorMode
+
         @param nCount
             Number of characters to traverse, it should not be less than 0.
             If you want to traverse in the opposite direction use
             XBreakIterator::previousCharacters() instead.
+
+        @param nDone
+            Out parameter to receive the number of cells/Unicode characters
+            traversed.
      */
     long nextCharacters( [in] string aText, [in] long nStartPos,
                      [in] ::com::sun::star::lang::Locale aLocale,
@@ -58,10 +74,27 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         CharacterIteratorMode can be cell based or
         character based. A cell is made of more than one character.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
+        @param nCharacterIteratorMode
+            A constant from CharacterIteratorMode
+
         @param nCount
             Number of characters to traverse, it should not be less than 0.
             If you want to traverse in the opposite direction use
             XBreakIterator::nextCharacters() instead.
+
+        @param nDone
+            Out parameter to receive the number of cells/Unicode characters
+            traversed.
+
      */
     long previousCharacters( [in] string aText, [in] long nStartPos,
                      [in] ::com::sun::star::lang::Locale aLocale,
@@ -69,6 +102,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
                      [in] long nCount, [out] long nDone );
 
     /** Traverses one word in Text from <em>nStartPos</em> forwards.
+
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
 
         @param nWordType
             One of WordType, specifies the type of
@@ -83,6 +125,12 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
                    [in] short nWordType);
 
     /** Traverses one word in Text from <em>nStartPos</em> backwards.
+
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
 
         @param aLocale
             The locale of the character preceding <em>nStartPos</em>.
@@ -128,8 +176,23 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         <em>nPos</em> is considered to be the start of the next word and
         we look forwards for the end of the word. </p>
 
+        @param aText
+            The input text.
+
+        @param nPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
         @param nWordType
             One of WordType.
+
+        @param bPreferForward
+            If `TRUE`, nPos should be considered the start of the next
+            word and search proceeds forwards.
+            If `FALSE`, nPos should be considered the end of the
+            current word, and search proceeds backwards.
 
         @returns
             The Boundary of the current word.
@@ -174,6 +237,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the start of a
         sentence.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
         @returns
             The position where the sentence starts.
      */
@@ -183,6 +255,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the end of a
         sentence.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
         @returns
             The position where the sentence ends.
      */
@@ -191,6 +272,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
     /** Calculate the line break position in the Text from the specified
         <em>nStartPos</em>.
+
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
 
         @param nMinBreakPos
             Defines a minimum break position for hyphenated line break.
@@ -219,6 +309,12 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the beginning of
         the specified script type.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
         @param nScriptType
             One of ScriptType.
 
@@ -230,6 +326,12 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
     /** Traverses in Text from <em>nStartPos</em> to the end of the
         specified script type.
+
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
 
         @param nScriptType
             One of ScriptType.
@@ -243,6 +345,12 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the next start of
         the specified script type.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
         @param nScriptType
             One of ScriptType.
 
@@ -255,6 +363,12 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the previous start
         of the specified script type.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
         @param nScriptType
             One of ScriptType.
 
@@ -266,6 +380,12 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
     /** Get the script type of the character at position <em>nPos</em>.
 
+        @param aText
+            The input text.
+
+        @param nPos
+            The index in aText.
+
         @returns
             One of ScriptType.
      */
@@ -273,6 +393,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
     /** Traverses in Text from <em>nStartPos</em> to the beginning of
         the specified character type.
+
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharType
             One of CharType
@@ -287,6 +416,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the end of the
         specified character type.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
         @param nCharType
             One of CharType
 
@@ -300,6 +438,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses in Text from <em>nStartPos</em> to the next start of
         the specified character type.
 
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
         @param nCharType
             One of CharType
 
@@ -312,6 +459,15 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
     /** Traverses in Text from <em>nStartPos</em> to the previous start
         of the specified character type.
+
+        @param aText
+            The input text.
+
+        @param nStartPos
+            The start index in aText.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharType
             One of CharType

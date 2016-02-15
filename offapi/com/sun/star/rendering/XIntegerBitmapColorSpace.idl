@@ -96,6 +96,8 @@ interface XIntegerBitmapColorSpace : XColorSpace
         therefore, batch conversion of multiple color values is
         possible.<p>
 
+        @param targetColorSpace the color space to convert to.
+
         @return the corresponding sequence of device colors in the
         target color space
 
@@ -116,6 +118,8 @@ interface XIntegerBitmapColorSpace : XColorSpace
         permitted to contain more than one device color element,
         therefore, batch conversion of multiple color values is
         possible.<p>
+
+        @param targetColorSpace the color space to convert to.
 
         @return the corresponding sequence of device colors in the
         target color space
