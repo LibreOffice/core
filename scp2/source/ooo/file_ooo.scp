@@ -115,54 +115,6 @@ File gid_File_Help_Schart_Zip
 End
 #endif
 
-
-#ifndef AIX
-#ifndef DISABLE_PYUNO
-
-File gid_File_Wizards_Common
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "Pyuno/commonwizards.filelist";
-End
-
-File gid_File_Wizards_Fax
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "Pyuno/fax.filelist";
-End
-
-File gid_File_Wizards_Letter
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "Pyuno/letter.filelist";
-End
-
-File gid_File_Wizards_Agenda
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "Pyuno/agenda.filelist";
-End
-
-File gid_File_Wizards_Web
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "Pyuno/web.filelist";
-End
-
-File gid_File_Pymailmerge
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "Pyuno/mailmerge.filelist";
-End
-#endif
-#endif
-
 // mod files
 
 File gid_File_Share_Registry_Main_Xcd
