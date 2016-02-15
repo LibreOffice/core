@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_9d770402",
+        "filename": "cppuhelper/source/gcc3.map",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-15T10:33:42Z",
+      "side": 1,
+      "message": "Can not add to existing thingies (don\u0027t know proper term) like UDK_3.7 , need to introduce a new one for API that is new in 5.2.",
+      "revId": "f061cd506b3ccb125571871c7901786a7cb985d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
