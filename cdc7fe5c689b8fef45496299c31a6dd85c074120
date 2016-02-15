@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_1d0cb493",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-02-15T09:25:18Z",
+      "side": 1,
+      "message": "Do I get right that this is a notification about slide insertions and deletions in Impress? If so, the above name and description just confused me. :-)\n\nWhat about:\n\n/**\n * A part has been added to or removed from the document.\n *\n * ... give a payload example, like it\u0027s done for LOK_CALLBACK_ERROR ...\n *\n * Note: this is currently emitted by Impress.\n */\nLOK_CALLBACK_PARTS_COUNT_CHANGED",
+      "revId": "cdc7fe5c689b8fef45496299c31a6dd85c074120",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
