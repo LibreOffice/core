@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_bde120d3",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-15T08:14:36Z",
+      "side": 1,
+      "message": "Please, do not use the comma operator like this just to save lines of code. Does this actually even do what you think? (I don\u0027t know.)",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 86
+      },
+      "revId": "caa77ef33bcebbb0933ea3b4e5239e9c0533de54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
