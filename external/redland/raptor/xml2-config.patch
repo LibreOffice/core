@@ -1,0 +1,14 @@
+--- configure
++++ configure
+@@ -14197,6 +14197,11 @@
+   test -n "$XML_CONFIG" && break
+ done
+ 
++    if test -n "$XML_CONFIG"; then
++      if ! "$XML_CONFIG" --version; then
++        XML_CONFIG=
++      fi
++    fi
+   fi
+ fi
+ 

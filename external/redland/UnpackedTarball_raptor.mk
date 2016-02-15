@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
 	$(if $(filter ANDROID,$(OS)),external/redland/raptor/raptor-android.patch.1) \
 	external/redland/raptor/ubsan.patch \
 	$(if $(SYSTEM_LIBXML),,external/redland/raptor/rpath.patch) \
+	external/redland/raptor/xml2-config.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
