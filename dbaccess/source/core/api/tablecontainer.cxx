@@ -332,12 +332,11 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
             }
         }
     }
-    const static OUString s_pTableProps[] = {    OUString(PROPERTY_FILTER), OUString(PROPERTY_ORDER)
-                                                    , OUString(PROPERTY_APPLYFILTER), OUString(PROPERTY_FONT)
-                                                    , OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR)
-                                                    , OUString(PROPERTY_TEXTLINECOLOR), OUString(PROPERTY_TEXTEMPHASIS)
-                                                    , OUString(PROPERTY_TEXTRELIEF) };
-    Sequence< OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
+    Sequence< OUString> aNames {    PROPERTY_FILTER, PROPERTY_ORDER
+                                  , PROPERTY_APPLYFILTER, PROPERTY_FONT
+                                  , PROPERTY_ROW_HEIGHT, PROPERTY_TEXTCOLOR
+                                  , PROPERTY_TEXTLINECOLOR, PROPERTY_TEXTEMPHASIS
+                                  , PROPERTY_TEXTRELIEF };
     if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
         ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,true);
 

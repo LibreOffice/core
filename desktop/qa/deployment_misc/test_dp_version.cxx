@@ -47,18 +47,12 @@ void Test::test() {
         ::dp_misc::Order order;
     };
     static Data const data[] = {
-        { OUString(),
-          OUString("0.0000.00.0"),
-          ::dp_misc::EQUAL },
-        { OUString(".01"),
-          OUString("0.1"),
-          ::dp_misc::EQUAL },
-        { OUString("10"),
-          OUString("2"),
-          ::dp_misc::GREATER },
-        { OUString("9223372036854775808"),
+        { "",    "0.0000.00.0", ::dp_misc::EQUAL },
+        { ".01", "0.1",         ::dp_misc::EQUAL },
+        { "10",  "2",           ::dp_misc::GREATER },
+        { "9223372036854775808",
               // 2^63
-          OUString("9223372036854775807"),
+          "9223372036854775807",
           ::dp_misc::GREATER }
     };
     for (::std::size_t i = 0; i < sizeof data / sizeof (Data); ++i) {

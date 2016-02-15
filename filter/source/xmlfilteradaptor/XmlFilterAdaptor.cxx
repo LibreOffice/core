@@ -96,7 +96,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
     // create an XProperty set to configure the exporter for pretty printing
     PropertyMapEntry aImportInfoMap[] =
     {
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
+        { "BaseURI", 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -247,17 +247,17 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
         }
 
         // create an XProperty set to configure the exporter for pretty printing
-         PropertyMapEntry aImportInfoMap[] =
+        PropertyMapEntry aImportInfoMap[] =
          {
-             { OUString("UsePrettyPrinting"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
-             { OUString("ExportTextNumberElement"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
-             { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { "UsePrettyPrinting",       0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { "ExportTextNumberElement", 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { "BaseURI",                 0, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
              { OUString(), 0, css::uno::Type(), 0, 0 }
          };
 
-         Reference< XPropertySet > xInfoSet(
+        Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-         xInfoSet->setPropertyValue("UsePrettyPrinting", makeAny( bPrettyPrint ));
+        xInfoSet->setPropertyValue("UsePrettyPrinting", makeAny( bPrettyPrint ));
         xInfoSet->setPropertyValue(
                         "ExportTextNumberElement",
                         makeAny( bExportTextNumberElementForListItems ));

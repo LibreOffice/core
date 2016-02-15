@@ -466,12 +466,12 @@ namespace
     /** property map for import/export info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =
      {
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        {OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { "BaseURI",           0, cppu::UnoType<OUString>::get(),        beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName",        0, cppu::UnoType<OUString>::get(),        beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "UsePrettyPrinting", 0, cppu::UnoType<sal_Bool>::get(),        beans::PropertyAttribute::MAYBEVOID, 0},
+        { "TargetStorage",     0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        { "StreamRelPath",     0, cppu::UnoType<OUString>::get(),        beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString(),          0, css::uno::Type(), 0, 0 }
      };
 }
 
@@ -1909,9 +1909,9 @@ namespace
 /// Property map for embedded import info set.
 comphelper::PropertyMapEntry const aEmbeddedImportInfoMap[] =
 {
-    {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-    {OUString("StreamName"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-    {OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+    {"StreamRelPath", 0, cppu::UnoType<OUString>::get(),        beans::PropertyAttribute::MAYBEVOID, 0},
+    {"StreamName",    0, cppu::UnoType<OUString>::get(),        beans::PropertyAttribute::MAYBEVOID, 0},
+    {"SourceStorage", 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
     {OUString(), 0, css::uno::Type(), 0, 0}
 };
 }

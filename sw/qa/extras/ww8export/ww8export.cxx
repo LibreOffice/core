@@ -596,26 +596,26 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
     };
 
     const TextPortionInfo aTextPortions[] = {
-        {OUString("Annotation"), OUString("Comment on [A...A]"), 0},
-        {OUString("Text"), OUString("[A xx "), 0},
-        {OUString("Annotation"), OUString("Comment on [B...B]"), 1},
-        {OUString("Text"), OUString("[B x "), 0},
-        {OUString("Annotation"), OUString("Comment on [C..C]"), 2},
-        {OUString("Text"), OUString("[C x B]"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 1},
-        {OUString("Text"), OUString(" x C]"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 2},
-        {OUString("Text"), OUString(" xx A]"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 0},
-        {OUString("Text"), OUString(" Comment on a point"), 0},
-        {OUString("Annotation"), OUString("Comment on point"), 3},
-        {OUString("Text"), OUString("x "), 0},
-        {OUString("Annotation"), OUString("Comment on AA...BB"), 4},
-        {OUString("Annotation"), OUString("Comment on AAAAAA"), 5},
-        {OUString("Text"), OUString("AAAAAA"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 5},
-        {OUString("Text"), OUString(" BBBBBB"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 4}
+        { "Annotation",    "Comment on [A...A]", 0},
+        { "Text",          "[A xx ", 0},
+        { "Annotation",    "Comment on [B...B]", 1},
+        { "Text",          "[B x ", 0},
+        { "Annotation",    "Comment on [C..C]", 2},
+        { "Text",          "[C x B]", 0},
+        { "AnnotationEnd", "", 1},
+        { "Text",          " x C]", 0},
+        { "AnnotationEnd", "", 2},
+        { "Text",          " xx A]", 0},
+        { "AnnotationEnd", "", 0},
+        { "Text",          " Comment on a point", 0},
+        { "Annotation",    "Comment on point", 3},
+        { "Text",          "x ", 0},
+        { "Annotation",    "Comment on AA...BB", 4},
+        { "Annotation",    "Comment on AAAAAA", 5},
+        { "Text",          "AAAAAA", 0},
+        { "AnnotationEnd", "", 5},
+        { "Text",          " BBBBBB", 0},
+        { "AnnotationEnd", "", 4}
     };
 
     OUString sNames[6];

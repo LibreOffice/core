@@ -79,11 +79,9 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         uno::Reference< uno::XComponentContext > xContext = getComponentContext();
         try
         {
-            ::comphelper::PropertyMapEntry const aInfoMap[] =
+            static ::comphelper::PropertyMapEntry const aInfoMap[] =
             {
-                { OUString("Class"), 0,
-                    ::cppu::UnoType<OUString>::get(),
-                    beans::PropertyAttribute::MAYBEVOID, 0},
+                { "Class", 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
             uno::Reference< beans::XPropertySet > xConvPropSet(

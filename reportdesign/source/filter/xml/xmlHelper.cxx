@@ -258,22 +258,22 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,
         css::awt::FontDescriptor aFont;
         static comphelper::PropertyMapEntry const pMap[] =
         {
-            {OUString(PROPERTY_FONTNAME),         PROPERTY_ID_FONTNAME,           cppu::UnoType<decltype(aFont.Name)>::get()         ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_CHARFONTHEIGHT),   PROPERTY_ID_FONTHEIGHT,         cppu::UnoType<decltype(aFont.Height)>::get()       ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTWIDTH),        PROPERTY_ID_FONTWIDTH,          cppu::UnoType<decltype(aFont.Width)>::get()        ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTSTYLENAME),    PROPERTY_ID_FONTSTYLENAME,      cppu::UnoType<decltype(aFont.StyleName)>::get()    ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTFAMILY),       PROPERTY_ID_FONTFAMILY,         cppu::UnoType<decltype(aFont.Family)>::get()       ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTCHARSET),      PROPERTY_ID_FONTCHARSET,        cppu::UnoType<decltype(aFont.CharSet)>::get()      ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTPITCH),        PROPERTY_ID_FONTPITCH,          cppu::UnoType<decltype(aFont.Pitch)>::get()        ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTCHARWIDTH),    PROPERTY_ID_FONTCHARWIDTH,      cppu::UnoType<decltype(aFont.CharacterWidth)>::get(),PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTWEIGHT),       PROPERTY_ID_FONTWEIGHT,         cppu::UnoType<decltype(aFont.Weight)>::get()       ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_CHARPOSTURE),      PROPERTY_ID_FONTSLANT,          cppu::UnoType<decltype(aFont.Slant)>::get()        ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTUNDERLINE),    PROPERTY_ID_FONTUNDERLINE,      cppu::UnoType<decltype(aFont.Underline)>::get()    ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_CHARSTRIKEOUT),    PROPERTY_ID_FONTSTRIKEOUT,      cppu::UnoType<decltype(aFont.Strikeout)>::get()    ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTORIENTATION),  PROPERTY_ID_FONTORIENTATION,    cppu::UnoType<decltype(aFont.Orientation)>::get()  ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTKERNING),      PROPERTY_ID_FONTKERNING,        cppu::UnoType<decltype(aFont.Kerning)>::get()      ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_CHARWORDMODE),     PROPERTY_ID_FONTWORDLINEMODE,   cppu::UnoType<decltype(aFont.WordLineMode)>::get() ,PropertyAttribute::BOUND,0},
-            {OUString(PROPERTY_FONTTYPE),         PROPERTY_ID_FONTTYPE,           cppu::UnoType<decltype(aFont.Type)>::get()         ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTNAME,         PROPERTY_ID_FONTNAME,           cppu::UnoType<decltype(aFont.Name)>::get()         ,PropertyAttribute::BOUND,0},
+            { PROPERTY_CHARFONTHEIGHT,   PROPERTY_ID_FONTHEIGHT,         cppu::UnoType<decltype(aFont.Height)>::get()       ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTWIDTH,        PROPERTY_ID_FONTWIDTH,          cppu::UnoType<decltype(aFont.Width)>::get()        ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTSTYLENAME,    PROPERTY_ID_FONTSTYLENAME,      cppu::UnoType<decltype(aFont.StyleName)>::get()    ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTFAMILY,       PROPERTY_ID_FONTFAMILY,         cppu::UnoType<decltype(aFont.Family)>::get()       ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTCHARSET,      PROPERTY_ID_FONTCHARSET,        cppu::UnoType<decltype(aFont.CharSet)>::get()      ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTPITCH,        PROPERTY_ID_FONTPITCH,          cppu::UnoType<decltype(aFont.Pitch)>::get()        ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTCHARWIDTH,    PROPERTY_ID_FONTCHARWIDTH,      cppu::UnoType<decltype(aFont.CharacterWidth)>::get(),PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTWEIGHT,       PROPERTY_ID_FONTWEIGHT,         cppu::UnoType<decltype(aFont.Weight)>::get()       ,PropertyAttribute::BOUND,0},
+            { PROPERTY_CHARPOSTURE,      PROPERTY_ID_FONTSLANT,          cppu::UnoType<decltype(aFont.Slant)>::get()        ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,      cppu::UnoType<decltype(aFont.Underline)>::get()    ,PropertyAttribute::BOUND,0},
+            { PROPERTY_CHARSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,      cppu::UnoType<decltype(aFont.Strikeout)>::get()    ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION,    cppu::UnoType<decltype(aFont.Orientation)>::get()  ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,        cppu::UnoType<decltype(aFont.Kerning)>::get()      ,PropertyAttribute::BOUND,0},
+            { PROPERTY_CHARWORDMODE,     PROPERTY_ID_FONTWORDLINEMODE,   cppu::UnoType<decltype(aFont.WordLineMode)>::get() ,PropertyAttribute::BOUND,0},
+            { PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,           cppu::UnoType<decltype(aFont.Type)>::get()         ,PropertyAttribute::BOUND,0},
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         try
@@ -321,10 +321,10 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 {
     static comphelper::PropertyMapEntry const pMap[] =
     {
-        {OUString(PROPERTY_BORDERLEFT),   0,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
-        {OUString(PROPERTY_BORDERRIGHT),  1,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
-        {OUString(PROPERTY_BORDERTOP),    2,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
-        {OUString(PROPERTY_BORDERBOTTOM), 3,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        { PROPERTY_BORDERLEFT,   0,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        { PROPERTY_BORDERRIGHT,  1,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        { PROPERTY_BORDERTOP,    2,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        { PROPERTY_BORDERBOTTOM, 3,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));

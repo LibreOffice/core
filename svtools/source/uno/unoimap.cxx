@@ -131,13 +131,13 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry const aPolygonObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
-                { OUString("Polygon"),     HANDLE_POLYGON,     cppu::UnoType<PointSequence>::get(),    0, 0 },
+                { "URL",         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Title",       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Description", HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Target",      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Name",        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
+                { "IsActive",    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
+                { "Polygon",     HANDLE_POLYGON,     cppu::UnoType<PointSequence>::get(),    0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
@@ -147,14 +147,14 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry const aCircleObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
-                { OUString("Center"),      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
-                { OUString("Radius"),      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
+                { "URL",         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Title",       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Description", HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Target",      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Name",        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
+                { "IsActive",    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
+                { "Center",      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
+                { "Radius",      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
@@ -165,13 +165,13 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry const aRectangleObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
-                { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),            0, 0 },
-                { OUString("Boundary"),    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
+                { "URL",         HANDLE_URL,         cppu::UnoType<OUString>::get(), 0, 0 },
+                { "Title",       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { "Description", HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(), 0, 0 },
+                { "Target",      HANDLE_TARGET,      cppu::UnoType<OUString>::get(), 0, 0 },
+                { "Name",        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
+                { "IsActive",    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),            0, 0 },
+                { "Boundary",    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 

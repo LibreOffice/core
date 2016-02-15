@@ -81,9 +81,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFlatParagraph::getPropertySetInfo()
 throw (uno::RuntimeException, std::exception)
 {
-    static comphelper::PropertyMapEntry s_Entries[] = {
-        { OUString("FieldPositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("FootnotePositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+    static const comphelper::PropertyMapEntry s_Entries[] = {
+        { "FieldPositions", -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "FootnotePositions", -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), -1, css::uno::Type(), 0, 0 }
     };
     return new comphelper::PropertySetInfo(s_Entries);

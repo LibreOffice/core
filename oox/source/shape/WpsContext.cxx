@@ -123,8 +123,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
                         oInsets[i] = (aInsets[i] == XML_lIns || aInsets[i] == XML_rIns) ? 254 : 127;
                 }
-                OUString aProps[] = { OUString("LeftBorderDistance"), OUString("TopBorderDistance"), OUString("RightBorderDistance"), OUString("BottomBorderDistance") };
-                OUString aShapeProps[] = { OUString("TextLeftDistance"), OUString("TextUpperDistance"), OUString("TextRightDistance"), OUString("TextLowerDistance") };
+                const OUString aProps[] { "LeftBorderDistance", "TopBorderDistance", "RightBorderDistance", "BottomBorderDistance" };
+                const OUString aShapeProps[] { "TextLeftDistance", "TextUpperDistance", "TextRightDistance", "TextLowerDistance" };
                 for (size_t i = 0; i < SAL_N_ELEMENTS(bTextFrame ? aProps : aShapeProps); ++i)
                     if (oInsets[i])
                         xPropertySet->setPropertyValue((bTextFrame ? aProps : aShapeProps)[i], uno::makeAny(*oInsets[i]));

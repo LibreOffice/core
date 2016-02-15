@@ -299,21 +299,21 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     /** property map for export info set */
     comphelper::PropertyMapEntry const aImportInfoMap[] =
     {
-        { OUString("ProgressRange"), 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"), 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("NumberStyles"), 0, cppu::UnoType<container::XNameAccess>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("PrivateData"), 0, cppu::UnoType<uno::XInterface>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("VBACompatibilityMode"), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("ScriptConfiguration"), 0, cppu::UnoType<container::XNameAccess>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("OrganizerMode"), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(SC_UNO_ODS_LOCK_SOLAR_MUTEX), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(SC_UNO_ODS_IMPORT_STYLES), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "ProgressRange",        0, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressMax",          0, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressCurrent",      0, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "NumberStyles",         0, cppu::UnoType<container::XNameAccess>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "PrivateData",          0, cppu::UnoType<uno::XInterface>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BaseURI",              0, cppu::UnoType<OUString>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath",        0, cppu::UnoType<OUString>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName",           0, cppu::UnoType<OUString>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BuildId",              0, cppu::UnoType<OUString>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "VBACompatibilityMode", 0, cppu::UnoType<bool>::get(),      css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "ScriptConfiguration",  0, cppu::UnoType<container::XNameAccess>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "OrganizerMode",        0, cppu::UnoType<bool>::get(),      css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "SourceStorage",        0, cppu::UnoType<embed::XStorage>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { SC_UNO_ODS_LOCK_SOLAR_MUTEX, 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { SC_UNO_ODS_IMPORT_STYLES, 0, cppu::UnoType<bool>::get(),    css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
@@ -741,18 +741,18 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     /** property map for export info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =
     {
-        { OUString("ProgressRange"), 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"), 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("WrittenNumberStyles"), 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StyleNames"), 0, cppu::UnoType<uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StyleFamilies"), 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { "ProgressRange",       0, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressMax",         0, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressCurrent",     0, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "WrittenNumberStyles", 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "UsePrettyPrinting",   0, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { "BaseURI",             0, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath",       0, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName",          0, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StyleNames",          0, cppu::UnoType<uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StyleFamilies",       0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "TargetStorage",       0, cppu::UnoType<embed::XStorage>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(),            0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 

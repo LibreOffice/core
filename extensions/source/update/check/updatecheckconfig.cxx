@@ -325,11 +325,10 @@ UpdateCheckConfig::getDownloadDestination() const
 void
 UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 nFileSize)
 {
-    const sal_uInt8 nItems = 2;
-    const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
-    const uno::Any aValueList[nItems] = { uno::makeAny(rLocalFileName), uno::makeAny(nFileSize) };
+    const OUString aNameList[] { LOCAL_FILE, DOWNLOAD_SIZE };
+    const uno::Any aValueList[] { uno::makeAny(rLocalFileName), uno::makeAny(nFileSize) };
 
-    for( sal_uInt8 i=0; i < nItems; ++i )
+    for( sal_uInt8 i=0; i < SAL_N_ELEMENTS(aNameList); ++i )
     {
         if( m_xContainer->hasByName(aNameList[i]) )
             m_xContainer->replaceByName(aNameList[i], aValueList[i]);
@@ -343,10 +342,9 @@ UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 
 void
 UpdateCheckConfig::clearLocalFileName()
 {
-    const sal_uInt8 nItems = 2;
-    const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
+    const OUString aNameList[] { LOCAL_FILE, DOWNLOAD_SIZE };
 
-    for( sal_uInt8 i=0; i < nItems; ++i )
+    for( sal_uInt8 i=0; i < SAL_N_ELEMENTS(aNameList); ++i )
     {
         if( m_xContainer->hasByName(aNameList[i]) )
             m_xContainer->removeByName(aNameList[i]);

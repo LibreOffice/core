@@ -195,10 +195,10 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     };
     PropertyDescriptor aProps[] =
     {
-        { OUString(PROPERTY_CATALOGNAME),      PROPERTY_ID_CATALOGNAME },
-        { OUString(PROPERTY_SCHEMANAME),       PROPERTY_ID_SCHEMANAME },
-        { OUString(PROPERTY_TABLENAME),        PROPERTY_ID_TABLENAME },
-        { OUString(PROPERTY_REALNAME),         PROPERTY_ID_REALNAME }
+        { PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME },
+        { PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME },
+        { PROPERTY_TABLENAME,        PROPERTY_ID_TABLENAME },
+        { PROPERTY_REALNAME,         PROPERTY_ID_REALNAME }
     };
     for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
     {

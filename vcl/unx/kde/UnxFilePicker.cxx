@@ -161,19 +161,19 @@ bool controlActionInfo( sal_Int16 nControlAction, OUString &rType )
     } ElementToName;
 
     const ElementToName *pPtr;
-    const ElementToName pArray[] =
+    static const ElementToName pArray[]
     {
-        { ControlActions::ADD_ITEM,                OUString( "addItem" ) },
-        { ControlActions::ADD_ITEMS,               OUString( "addItems" ) },
-        { ControlActions::DELETE_ITEM,             OUString( "deleteItem" ) },
-        { ControlActions::DELETE_ITEMS,            OUString( "deleteItems" ) },
-        { ControlActions::SET_SELECT_ITEM,         OUString( "setSelectedItem" ) },
-        { ControlActions::GET_ITEMS,               OUString( "getItems" ) },
-        { ControlActions::GET_SELECTED_ITEM,       OUString( "getSelectedItem" ) },
-        { ControlActions::GET_SELECTED_ITEM_INDEX, OUString( "getSelectedItemIndex" ) },
-        { ControlActions::SET_HELP_URL,            OUString( "setHelpURL" ) },
-        { ControlActions::GET_HELP_URL,            OUString( "getHelpURL" ) },
-        { 0,                                       OUString( "noAction" ) }
+        { ControlActions::ADD_ITEM,                "addItem" },
+        { ControlActions::ADD_ITEMS,               "addItems" },
+        { ControlActions::DELETE_ITEM,             "deleteItem" },
+        { ControlActions::DELETE_ITEMS,            "deleteItems" },
+        { ControlActions::SET_SELECT_ITEM,         "setSelectedItem" },
+        { ControlActions::GET_ITEMS,               "getItems" },
+        { ControlActions::GET_SELECTED_ITEM,       "getSelectedItem" },
+        { ControlActions::GET_SELECTED_ITEM_INDEX, "getSelectedItemIndex" },
+        { ControlActions::SET_HELP_URL,            "setHelpURL" },
+        { ControlActions::GET_HELP_URL,            "getHelpURL" },
+        { 0,                                       "noAction" }
     };
 
     for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlAction ); ++pPtr )

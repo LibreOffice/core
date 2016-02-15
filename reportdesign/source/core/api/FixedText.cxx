@@ -31,15 +31,15 @@
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
 
+using namespace com::sun::star;
+using namespace comphelper;
+
 namespace reportdesign
 {
 
-    using namespace com::sun::star;
-    using namespace comphelper;
 uno::Sequence< OUString > lcl_getFixedTextOptionals()
 {
-    OUString pProps[] = { OUString(PROPERTY_DATAFIELD),OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
-    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString > { PROPERTY_DATAFIELD, PROPERTY_MASTERFIELDS, PROPERTY_DETAILFIELDS };
 }
 
 OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContext)

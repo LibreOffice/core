@@ -45,8 +45,7 @@ uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::X
 
 uno::Sequence< OUString > lcl_getFormattedFieldOptionals()
 {
-    OUString pProps[] = { OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
-    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString > { PROPERTY_MASTERFIELDS, PROPERTY_DETAILFIELDS };
 }
 
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext)

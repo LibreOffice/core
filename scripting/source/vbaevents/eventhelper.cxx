@@ -227,49 +227,49 @@ TypeList listBoxList = {&typeXListBox, 1};
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { OUString("actionPerformed"), { OUString("_Change"), nullptr, DenyType, static_cast<void*>(&radioButtonList) } },
+    { "actionPerformed",  { "_Change", nullptr, DenyType, static_cast<void*>(&radioButtonList) } },
     // actionPerformed ooo event
-    { OUString("actionPerformed"), { OUString("_Click"), nullptr, ApproveAll, nullptr } },
-    { OUString("itemStateChanged"), { OUString("_Change"), nullptr, ApproveType, static_cast<void*>(&radioButtonList) } },
+    { "actionPerformed",  { "_Click", nullptr, ApproveAll, nullptr } },
+    { "itemStateChanged", { "_Change", nullptr, ApproveType, static_cast<void*>(&radioButtonList) } },
     // itemStateChanged ooo event
-    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void*>(&comboBoxList) } },
+    { "itemStateChanged", { "_Click", nullptr, ApproveType, static_cast<void*>(&comboBoxList) } },
 
-    { OUString("itemStateChanged"), { OUString("_Click"), nullptr, ApproveType, static_cast<void*>(&listBoxList) } },
+    { "itemStateChanged", { "_Click", nullptr, ApproveType, static_cast<void*>(&listBoxList) } },
     // changed ooo event
-    { OUString("changed"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
+    { "changed",          { "_Change", nullptr, ApproveAll, nullptr } },
 
     // focusGained ooo event
-    { OUString("focusGained"), { OUString("_GotFocus"), nullptr, ApproveAll, nullptr } },
+    { "focusGained", { "_GotFocus", nullptr, ApproveAll, nullptr } },
 
     // focusLost ooo event
-    { OUString("focusLost"), { OUString("_LostFocus"), nullptr, ApproveAll, nullptr } },
-    { OUString("focusLost"), { OUString("_Exit"), nullptr, ApproveType, static_cast<void*>(&textCompList) } }, // support VBA TextBox_Exit event
+    { "focusLost", { "_LostFocus", nullptr, ApproveAll, nullptr } },
+    { "focusLost", { "_Exit", nullptr, ApproveType, static_cast<void*>(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
-    { OUString("adjustmentValueChanged"), { OUString("_Scroll"), nullptr, ApproveAll, nullptr } },
-    { OUString("adjustmentValueChanged"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
+    { "adjustmentValueChanged", { "_Scroll", nullptr, ApproveAll, nullptr } },
+    { "adjustmentValueChanged", { "_Change", nullptr, ApproveAll, nullptr } },
 
     // textChanged ooo event
-    { OUString("textChanged"), { OUString("_Change"), nullptr, ApproveAll, nullptr } },
+    { "textChanged", { "_Change", nullptr, ApproveAll, nullptr } },
 
     // keyReleased ooo event
-    { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
+    { "keyReleased", { "_KeyUp", ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
 
     // mouseReleased ooo event
-    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void*>(&fixedTextList) } },
-    { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { "mouseReleased", { "_Click", ooMouseEvtToVBAMouseEvt, ApproveType, static_cast<void*>(&fixedTextList) } },
+    { "mouseReleased", { "_MouseUp", ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
 
     // mousePressed ooo event
-    { OUString("mousePressed"), { OUString("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
-    { OUString("mousePressed"), { OUString("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, nullptr } },
+    { "mousePressed", { "_MouseDown", ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { "mousePressed", { "_DblClick", ooMouseEvtToVBADblClick, ApproveAll, nullptr } },
 
     // mouseMoved ooo event
-    { OUString("mouseMoved"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
-    { OUString("mouseDragged"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, nullptr } },
+    { "mouseMoved", { "_MouseMove", ooMouseEvtToVBAMouseEvt, ApproveAll, nullptr } },
+    { "mouseDragged", { "_MouseMove", ooMouseEvtToVBAMouseEvt, DenyMouseDrag, nullptr } },
 
     // keyPressed ooo event
-    { OUString("keyPressed"), { OUString("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
-    { OUString("keyPressed"), { OUString("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, nullptr } }
+    { "keyPressed", { "_KeyDown", ooKeyPressedToVBAKeyUpDown, ApproveAll, nullptr } },
+    { "keyPressed", { "_KeyPress", ooKeyPressedToVBAKeyPressed, ApproveAll, nullptr } }
 };
 
 EventInfoHash& getEventTransInfo()

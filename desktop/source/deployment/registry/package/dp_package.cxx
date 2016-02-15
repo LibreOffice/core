@@ -342,7 +342,7 @@ sal_Bool BackendImpl::supportsService(OUString const & ServiceName)
 Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    return { OUString(BACKEND_SERVICE_NAME) };
+    return { BACKEND_SERVICE_NAME };
 }
 
 // XPackageRegistry
@@ -1581,10 +1581,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     if (title.endsWithIgnoreAsciiCase("skip_registration") )
         skip_registration = true;
 
-    OUString ar [] = { OUString("Title"), OUString("IsFolder") };
     Reference<sdbc::XResultSet> xResultSet(
-        ucbContent.createCursor(
-            Sequence<OUString>( ar, ARLEN(ar) ) ) );
+        ucbContent.createCursor( Sequence<OUString>{ "Title", "IsFolder" } ) );
     while (xResultSet->next())
     {
         checkAborted( abortChannel );
