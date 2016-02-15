@@ -36,9 +36,9 @@ class SvIdlParser
     SvTokenStream & rInStm;
 public:
     SvIdlParser( SvIdlDataBase& rBase_, SvTokenStream & rInStrm_) : rBase(rBase_), rInStm(rInStrm_) {}
-    bool        ReadSvIdl( bool bImported, const OUString & rPath );
-    bool        ReadModuleHeader(SvMetaModule& rModule);
-    bool        ReadModuleBody(SvMetaModule& rModule);
+    void        ReadSvIdl( bool bImported, const OUString & rPath );
+    void        ReadModuleHeader(SvMetaModule& rModule);
+    void        ReadModuleBody(SvMetaModule& rModule);
     void        ReadModuleElement( SvMetaModule& rModule );
     void        ReadInclude( SvMetaModule& rModule );
     void        ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );

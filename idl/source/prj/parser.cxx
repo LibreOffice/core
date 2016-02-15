@@ -26,63 +26,38 @@
 #include <globals.hxx>
 #include <osl/file.hxx>
 
-bool SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
+void SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
 {
     rBase.SetPath(rPath); // only valid for this iteration
-    bool bOk = true;
     SvToken& rTok = rInStm.GetToken();
 
-    while( bOk )
+    while( true )
     {
         rTok = rInStm.GetToken();
         if( rTok.IsEof() )
-            return true;
+            return;
 
         if( rTok.Is( SvHash_module() ) )
         {
             tools::SvRef<SvMetaModule> aModule = new SvMetaModule( bImported );
-            if( ReadModuleHeader(*aModule) )
-                rBase.GetModuleList().push_back( aModule );
-            else
-                bOk = false;
+            ReadModuleHeader(*aModule);
+            rBase.GetModuleList().push_back( aModule );
         }
-        else
-            bOk = false;
     }
-    if( !bOk || !rTok.IsEof() )
-    {
-         // error treatment
-         rBase.WriteError( rInStm );
-         return false;
-    }
-    return true;
 }
 
-bool SvIdlParser::ReadModuleHeader(SvMetaModule& rModule)
+void SvIdlParser::ReadModuleHeader(SvMetaModule& rModule)
 {
-    sal_uInt32  nTokPos = rInStm.Tell();
-    SvToken&    rTok  = rInStm.GetToken_Next();
-    bool        bOk = true;
-
-    rTok = rInStm.GetToken_Next();
-    if( !rTok.IsIdentifier() )
-    {
-        rInStm.Seek( nTokPos );
-        return false;
-    }
+    rInStm.GetToken_Next();
+    OString aName = ReadIdentifier();
     rBase.Push( &rModule ); // onto the context stack
-    rModule.SetName( rTok.GetString() );
-    bOk = ReadModuleBody(rModule);
+    rModule.SetName( aName );
+    ReadModuleBody(rModule);
     rBase.GetStack().pop_back(); // remove from stack
-    if( !bOk )
-        rInStm.Seek( nTokPos );
-    return bOk;
 }
 
-bool SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
+void SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
 {
-    sal_uInt32 nTokPos = rInStm.Tell();
-    bool bOk = true;
     if( rInStm.ReadIf( '[' ) )
     {
         while( true )
@@ -100,7 +75,7 @@ bool SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
     }
 
     if( !rInStm.ReadIf( '{' ) )
-        return bOk;
+        return;
 
     sal_uInt32 nBeginPos = 0;
     while( nBeginPos != rInStm.Tell() )
@@ -110,10 +85,6 @@ bool SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
         rInStm.ReadIfDelimiter();
     }
     ReadChar( '}' );
-
-    if( !bOk )
-        rInStm.Seek( nTokPos );
-    return bOk;
 }
 
 void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
