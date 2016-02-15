@@ -2036,8 +2036,9 @@ AC_ARG_WITH(ant-home,
 
 AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--with-export-validation],
-        [If you want the exported files to be validated. Right now limited to OOXML files in calc export tests.
-         Note: You need an executable script officeotron that takes the path to the file.])
+        [If you want the exported files to be validated. Right now limited to OOXML and ODF files.
+         Note: You need executable scripts officeotron and odfvalidator that take the path to the file.
+         See https://cgit.freedesktop.org/libreoffice/contrib/dev-tools/tree/export-validation])
     [
                             Usage: --with-export-validation
     ],
