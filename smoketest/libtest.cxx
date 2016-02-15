@@ -95,7 +95,7 @@ int main (int argc, char **argv)
             fprintf( stderr, "Failed to link '%s'\n", lok_dlerror() );
             return -1;
         }
-        LokHookPreInit *preinit = (LokHookPreInit *) lok_dlsym( dlhandle, "lok_preinit" );
+        LokHookPreInit *preinit = reinterpret_cast<LokHookPreInit *>(lok_dlsym( dlhandle, "lok_preinit" ));
         if( !preinit )
         {
             fprintf( stderr, "Failed to find pre-init symbol: %s\n", lok_dlerror() );
