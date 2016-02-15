@@ -2223,7 +2223,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     static bool bPreInited = false;
 
     // What stage are we at ?
-    if (pThis == NULL)
+    if (pThis == nullptr)
         eStage = PRE_INIT;
     else if (bPreInited)
         eStage = SECOND_INIT;
