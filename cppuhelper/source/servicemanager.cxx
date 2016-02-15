@@ -878,6 +878,9 @@ void cppuhelper::ServiceManager::loadImplementation(
 
 void cppuhelper::ServiceManager::loadAllImplementations()
 {
+#ifdef DISABLE_DYNLOADING
+    abort();
+#else
     rtl::OUString aUri;
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -908,6 +911,7 @@ void cppuhelper::ServiceManager::loadAllImplementations()
                 iterator->second->status = Data::Implementation::STATUS_LOADED;
         }
     }
+#endif
 }
 
 void cppuhelper::ServiceManager::disposing() {
