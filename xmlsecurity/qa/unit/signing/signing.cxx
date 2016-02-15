@@ -59,11 +59,13 @@ public:
     void testOOXMLPartial();
     /// Test a typical broken OOXML signature where one stream is corrupted.
     void testOOXMLBroken();
+    void testOOXMLDescription();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
     CPPUNIT_TEST(testOOXMLPartial);
     CPPUNIT_TEST(testOOXMLBroken);
+    CPPUNIT_TEST(testOOXMLDescription);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -129,6 +131,39 @@ void SigningTest::testDescription()
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
+    CPPUNIT_ASSERT(aManager.maSignatureHelper.Init());
+    uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.mxStore = xStorage;
+    aManager.maSignatureHelper.SetStorage(xStorage, "1.2");
+
+    // Then add a signature document.
+    uno::Reference<security::XCertificate> xCertificate = getCertificate(aManager.maSignatureHelper);
+    CPPUNIT_ASSERT(xCertificate.is());
+    OUString aDescription("SigningTest::testDescription");
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, aDescription, nSecurityId);
+
+    // Read back the signature and make sure that the description survives the roundtrip.
+    aManager.read(/*bUseTempStream=*/true);
+    std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rInformations.size());
+    CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
+}
+
+void SigningTest::testOOXMLDescription()
+{
+    // Create an empty document and store it to a tempfile, finally load it as a storage.
+    createDoc();
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
     xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     DocumentSignatureManager aManager(mxComponentContext, SignatureModeDocumentContent);
