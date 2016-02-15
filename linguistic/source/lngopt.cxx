@@ -141,46 +141,26 @@ static const SfxItemPropertyMapEntry* lcl_GetLinguProps()
 {
     static const SfxItemPropertyMapEntry aLinguProps[] =
     {
-        { OUString(UPN_DEFAULT_LANGUAGE),           UPH_DEFAULT_LANGUAGE,
-                ::cppu::UnoType<sal_Int16>::get(),    0, 0 },
-        { OUString(UPN_DEFAULT_LOCALE),             UPH_DEFAULT_LOCALE,
-                ::cppu::UnoType<Locale>::get(),       0, 0 },
-        { OUString(UPN_DEFAULT_LOCALE_CJK),         UPH_DEFAULT_LOCALE_CJK,
-                ::cppu::UnoType<Locale>::get(),       0, 0 },
-        { OUString(UPN_DEFAULT_LOCALE_CTL),         UPH_DEFAULT_LOCALE_CTL,
-                ::cppu::UnoType<Locale>::get(),       0, 0 },
-        { OUString(UPN_HYPH_MIN_LEADING),           UPH_HYPH_MIN_LEADING,
-                ::cppu::UnoType<sal_Int16>::get(),    0, 0 },
-        { OUString(UPN_HYPH_MIN_TRAILING),          UPH_HYPH_MIN_TRAILING,
-                ::cppu::UnoType<sal_Int16>::get(),    0, 0 },
-        { OUString(UPN_HYPH_MIN_WORD_LENGTH),       UPH_HYPH_MIN_WORD_LENGTH,
-                ::cppu::UnoType<sal_Int16>::get(),    0, 0 },
-        { OUString(UPN_IS_GERMAN_PRE_REFORM),       UPH_IS_GERMAN_PRE_REFORM,       /*! deprecated !*/
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_HYPH_AUTO),               UPH_IS_HYPH_AUTO,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_HYPH_SPECIAL),            UPH_IS_HYPH_SPECIAL,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_IGNORE_CONTROL_CHARACTERS),   UPH_IS_IGNORE_CONTROL_CHARACTERS,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_AUTO),              UPH_IS_SPELL_AUTO,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_CAPITALIZATION),    UPH_IS_SPELL_CAPITALIZATION,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_HIDE),              UPH_IS_SPELL_HIDE,              /*! deprecated !*/
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_IN_ALL_LANGUAGES),  UPH_IS_SPELL_IN_ALL_LANGUAGES,  /*! deprecated !*/
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_SPECIAL),           UPH_IS_SPELL_SPECIAL,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_UPPER_CASE),        UPH_IS_SPELL_UPPER_CASE,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_SPELL_WITH_DIGITS),       UPH_IS_SPELL_WITH_DIGITS,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_USE_DICTIONARY_LIST),     UPH_IS_USE_DICTIONARY_LIST,
-                cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(UPN_IS_WRAP_REVERSE),            UPH_IS_WRAP_REVERSE,
-                cppu::UnoType<bool>::get(),            0, 0 },
+        { UPN_DEFAULT_LANGUAGE,           UPH_DEFAULT_LANGUAGE,          cppu::UnoType<sal_Int16>::get(),    0, 0 },
+        { UPN_DEFAULT_LOCALE,             UPH_DEFAULT_LOCALE,            cppu::UnoType<Locale>::get(),       0, 0 },
+        { UPN_DEFAULT_LOCALE_CJK,         UPH_DEFAULT_LOCALE_CJK,        cppu::UnoType<Locale>::get(),       0, 0 },
+        { UPN_DEFAULT_LOCALE_CTL,         UPH_DEFAULT_LOCALE_CTL,        cppu::UnoType<Locale>::get(),       0, 0 },
+        { UPN_HYPH_MIN_LEADING,           UPH_HYPH_MIN_LEADING,          cppu::UnoType<sal_Int16>::get(),    0, 0 },
+        { UPN_HYPH_MIN_TRAILING,          UPH_HYPH_MIN_TRAILING,         cppu::UnoType<sal_Int16>::get(),    0, 0 },
+        { UPN_HYPH_MIN_WORD_LENGTH,       UPH_HYPH_MIN_WORD_LENGTH,      cppu::UnoType<sal_Int16>::get(),    0, 0 },
+        { UPN_IS_GERMAN_PRE_REFORM,       UPH_IS_GERMAN_PRE_REFORM,      cppu::UnoType<bool>::get(),         0, 0 },  /*! deprecated !*/
+        { UPN_IS_HYPH_AUTO,               UPH_IS_HYPH_AUTO,              cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_HYPH_SPECIAL,            UPH_IS_HYPH_SPECIAL,           cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS,  cppu::UnoType<bool>::get(), 0, 0 },
+        { UPN_IS_SPELL_AUTO,              UPH_IS_SPELL_AUTO,             cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_SPELL_CAPITALIZATION,    UPH_IS_SPELL_CAPITALIZATION,   cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_SPELL_HIDE,              UPH_IS_SPELL_HIDE,             cppu::UnoType<bool>::get(),         0, 0 }, /*! deprecated !*/
+        { UPN_IS_SPELL_IN_ALL_LANGUAGES,  UPH_IS_SPELL_IN_ALL_LANGUAGES, cppu::UnoType<bool>::get(),         0, 0 }, /*! deprecated !*/
+        { UPN_IS_SPELL_SPECIAL,           UPH_IS_SPELL_SPECIAL,          cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_SPELL_UPPER_CASE,        UPH_IS_SPELL_UPPER_CASE,       cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_SPELL_WITH_DIGITS,       UPH_IS_SPELL_WITH_DIGITS,      cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_USE_DICTIONARY_LIST,     UPH_IS_USE_DICTIONARY_LIST,    cppu::UnoType<bool>::get(),         0, 0 },
+        { UPN_IS_WRAP_REVERSE,            UPH_IS_WRAP_REVERSE,           cppu::UnoType<bool>::get(),         0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aLinguProps;

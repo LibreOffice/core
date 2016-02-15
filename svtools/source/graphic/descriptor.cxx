@@ -259,14 +259,14 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("GraphicType"), UNOGRAPHIC_GRAPHICTYPE, cppu::UnoType<sal_Int8>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("MimeType"), UNOGRAPHIC_MIMETYPE, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("SizePixel"), UNOGRAPHIC_SIZEPIXEL, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Size100thMM"), UNOGRAPHIC_SIZE100THMM, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("BitsPerPixel"), UNOGRAPHIC_BITSPERPIXEL, cppu::UnoType<sal_uInt8>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Transparent"), UNOGRAPHIC_TRANSPARENT, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Alpha"), UNOGRAPHIC_ALPHA, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Animated"), UNOGRAPHIC_ANIMATED, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "GraphicType", UNOGRAPHIC_GRAPHICTYPE, cppu::UnoType<sal_Int8>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "MimeType", UNOGRAPHIC_MIMETYPE, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "SizePixel", UNOGRAPHIC_SIZEPIXEL, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "Size100thMM", UNOGRAPHIC_SIZE100THMM, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "BitsPerPixel", UNOGRAPHIC_BITSPERPIXEL, cppu::UnoType<sal_uInt8>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "Transparent", UNOGRAPHIC_TRANSPARENT, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "Alpha", UNOGRAPHIC_ALPHA, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { "Animated", UNOGRAPHIC_ANIMATED, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

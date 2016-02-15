@@ -597,21 +597,11 @@ bool WriterThread::iteration() {
 void Test::testThreads()
 {
     struct Entry { OUString path; OUString relative; };
-    Entry list[] = {
-        { OUString(
-                  "/org.openoffice.Office.UI.GenericCommands"),
-          OUString(
-                  "UserInterface/Commands/.uno:WebHtml") },
-        { OUString(
-                  "/org.openoffice.Office.UI.GenericCommands"),
-          OUString(
-                  "UserInterface/Commands/.uno:NewPresentation") },
-        { OUString(
-                  "/org.openoffice.Office.UI.GenericCommands"),
-          OUString(
-                  "UserInterface/Commands/.uno:RecentFileList") },
-        { OUString("/org.openoffice.System"),
-          OUString("L10N/Locale") }
+    static Entry list[] = {
+        { "/org.openoffice.Office.UI.GenericCommands", "UserInterface/Commands/.uno:WebHtml" },
+        { "/org.openoffice.Office.UI.GenericCommands", "UserInterface/Commands/.uno:NewPresentation" },
+        { "/org.openoffice.Office.UI.GenericCommands", "UserInterface/Commands/.uno:RecentFileList" },
+        { "/org.openoffice.System",                    "L10N/Locale" }
     };
     std::size_t const numReaders = sizeof list / sizeof (Entry);
     std::size_t const numWriters = numReaders - 2;

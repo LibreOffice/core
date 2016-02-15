@@ -1333,10 +1333,10 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     /** property map for export info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =
     {
-        { OUString("UsePrettyPrinting") , 0, cppu::UnoType<sal_Bool>::get(),          beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName")        , 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath")     , 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI")           , 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "UsePrettyPrinting" , 0, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName"        , 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath"     , 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BaseURI"           , 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );

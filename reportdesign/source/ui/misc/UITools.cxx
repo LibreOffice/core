@@ -536,9 +536,9 @@ namespace
                 sal_uInt16 nWhich;
                 OUString sPropertyName;
         };
-        const Items pItems[] = { {ITEMID_LANGUAGE,OUString(PROPERTY_CHARLOCALE)}
-                                ,{ITEMID_LANGUAGE_ASIAN,OUString(PROPERTY_CHARLOCALEASIAN)}
-                                ,{ITEMID_LANGUAGE_COMPLEX,OUString(PROPERTY_CHARLOCALECOMPLEX)}
+        const Items pItems[] = { {ITEMID_LANGUAGE, PROPERTY_CHARLOCALE}
+                                       ,{ITEMID_LANGUAGE_ASIAN, PROPERTY_CHARLOCALEASIAN}
+                                       ,{ITEMID_LANGUAGE_COMPLEX, PROPERTY_CHARLOCALECOMPLEX}
         };
         for(size_t k = 0; k < sizeof(pItems)/sizeof(pItems[0]);++k)
         {
