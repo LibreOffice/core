@@ -81,7 +81,8 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
             rRenderContext.IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnLowerPart))
         {
             // only paint the embedded spin buttons, all buttons are painted at once
-            bNativeOK = rRenderContext.DrawNativeControl(CTRL_SPINBOX, PART_ALL_BUTTONS, Rectangle(),
+            Rectangle aUpperAndLowerButtons( rSpinbuttonValue.maUpperRect.GetUnion( rSpinbuttonValue.maLowerRect ) );
+            bNativeOK = rRenderContext.DrawNativeControl(CTRL_SPINBOX, PART_ALL_BUTTONS, aUpperAndLowerButtons,
                                                          ControlState::ENABLED, rSpinbuttonValue, OUString());
         }
         else
