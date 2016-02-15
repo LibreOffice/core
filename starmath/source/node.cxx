@@ -840,8 +840,8 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     SmNode *pOper = GetSubNode(bIsPostfix ? 1 : 0),
            *pBody = GetSubNode(bIsPostfix ? 0 : 1);
-    OSL_ENSURE(pOper, "Sm: NULL pointer");
-    OSL_ENSURE(pBody, "Sm: NULL pointer");
+    assert(pOper);
+    assert(pBody);
 
     pOper->SetSize(Fraction (rFormat.GetRelSize(SIZ_OPERATOR), 100));
     pOper->Arrange(rDev, rFormat);
@@ -2524,7 +2524,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     {   aLineRect = SmRect();
         for (j = 0;  j < nNumCols;  j++)
         {   SmNode *pTmpNode = GetSubNode(i * nNumCols + j);
-            OSL_ENSURE(pTmpNode, "Sm: NULL pointer");
+            assert(pTmpNode);
 
             const SmRect &rNodeRect = pTmpNode->GetRect();
 
