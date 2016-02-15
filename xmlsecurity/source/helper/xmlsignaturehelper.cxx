@@ -525,18 +525,23 @@ void XMLSignatureHelper::ExportSignatureContentTypes(css::uno::Reference<css::em
         return;
     }
 
-    // Append sigs to defaults, if it's not there already.
+    // Append rels and sigs to defaults, if it's not there already.
     uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
+    auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
     auto it = std::find_if(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair)
+    {
+        return rPair.First == "rels";
+    });
+    if (it == rDefaults.end())
+        aDefaults.push_back(beans::StringPair("rels", "application/vnd.openxmlformats-package.relationships+xml"));
+
+    it = std::find_if(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair)
     {
         return rPair.First == "sigs";
     });
     if (it == rDefaults.end())
-    {
-        auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
         aDefaults.push_back(beans::StringPair("sigs", "application/vnd.openxmlformats-package.digital-signature-origin"));
-        rDefaults = comphelper::containerToSequence(aDefaults);
-    }
+    rDefaults = comphelper::containerToSequence(aDefaults);
 
     // Remove existing signature overrides.
     uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
