@@ -62,16 +62,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 ))
 endif
 
-ifeq ($(DISABLE_PYTHON),TRUE)
-$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DDISABLE_PYUNO \
-))
-else ifneq ($(SYSTEM_PYTHON),)
-$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DSYSTEM_PYTHON \
-))
-endif
-
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DICU_MAJOR=$(ICU_MAJOR) \
 ))
