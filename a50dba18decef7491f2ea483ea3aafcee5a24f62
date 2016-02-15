@@ -16,6 +16,24 @@
       "revId": "a50dba18decef7491f2ea483ea3aafcee5a24f62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_b8512e11",
+        "filename": "basic/source/inc/expr.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-02-15T18:50:53Z",
+      "side": 1,
+      "message": "That was the plane but SbVar is used inside an union. I will refactor the code after to make this better and use there a std::unique_ptr.",
+      "parentUuid": "3aaa91ec_fdb448d2",
+      "revId": "a50dba18decef7491f2ea483ea3aafcee5a24f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
