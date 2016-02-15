@@ -3904,7 +3904,7 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
-Window GtkSalFrame::GetX11Window()
+sal_uIntPtr GtkSalFrame::GetNativeWindowHandle()
 {
     return widget_get_xid(m_pWindow);
 }

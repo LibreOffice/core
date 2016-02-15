@@ -4134,7 +4134,7 @@ void X11SalFrame::EndSetClipRegion()
 
 }
 
-Window X11SalFrame::GetX11Window()
+sal_uIntPtr X11SalFrame::GetNativeWindowHandle()
 {
     return mhWindow;
 }

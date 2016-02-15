@@ -27,7 +27,7 @@
 #include <unx/saltype.h>
 #include <unx/saldisp.hxx>
 #include <unx/screensaverinhibitor.hxx>
-#include <unx/x11windowprovider.hxx>
+#include <unx/nativewindowhandleprovider.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
 #include <salinst.hxx>
@@ -50,7 +50,7 @@ namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 #define SHOWSTATE_NORMAL        1
 #define SHOWSTATE_HIDDEN        2
 
-class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
+class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandleProvider
 {
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;
@@ -261,7 +261,7 @@ public:
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() override;
 
-    virtual Window GetX11Window() override;
+    virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
     /// @internal
     void setPendingSizeEvent();
