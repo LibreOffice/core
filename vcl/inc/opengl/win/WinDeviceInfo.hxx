@@ -10,7 +10,10 @@
 #ifndef INCLUDED_VCL_OPENGL_WIN_WINDEVICEINFO_HXX
 #define INCLUDED_VCL_OPENGL_WIN_WINDEVICEINFO_HXX
 
+#include <vcl/dllapi.h>
+
 #include "opengl/DeviceInfo.hxx"
+
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <cstdint>
@@ -60,14 +63,14 @@ enum DeviceVendor {
 
 bool ParseDriverVersion(const OUString& rString, uint64_t& rVersion);
 
-struct DriverInfo
+struct VCL_DLLPUBLIC DriverInfo
 {
 
     DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
             uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr);
 
     DriverInfo();
-    ~DriverInfo();
+    virtual ~DriverInfo();
 
     OperatingSystem meOperatingSystem;
     uint32_t mnOperatingSystemVersion;
@@ -96,7 +99,7 @@ struct DriverInfo
 #define GFX_DRIVER_VERSION(a,b,c,d) \
     ((uint64_t(a)<<48) | (uint64_t(b)<<32) | (uint64_t(c)<<16) | uint64_t(d))
 
-inline uint64_t V(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+inline VCL_DLLPUBLIC uint64_t V(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
     // We make sure every driver number is padded by 0s, this will allow us the
     // easiest 'compare as if decimals' approach. See ParseDriverVersion for a
@@ -115,7 +118,7 @@ inline uint64_t V(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 
 }
 
-class WinOpenGLDeviceInfo : public OpenGLDeviceInfo
+class VCL_DLLPUBLIC WinOpenGLDeviceInfo : public OpenGLDeviceInfo
 {
 private:
     OUString maDriverVersion;
@@ -204,6 +207,9 @@ public:
         return mnWindowsVersion;
     }
 
+    static bool FindBlocklistedDeviceInList(std::vector<wgl::DriverInfo>& aDeviceInfos,
+                                            OUString sDriverVersion, OUString sAdapterVendorID,
+                                            OUString sAdapterDeviceID, uint32_t nWindowsVersion);
 };
 
 #endif
