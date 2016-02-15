@@ -267,11 +267,11 @@ void FmPropBrw::dispose()
         Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
-            const OUString pProps[] = { OUString( "ContextDocument" )
-                                             , OUString( "DialogParentWindow" )
-                                             , OUString( "ControlContext" )
-                                             , OUString( "ControlShapeAccess" ) };
-            for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
+            static const OUString pProps[] = {  "ContextDocument"
+                                             ,  "DialogParentWindow"
+                                             ,  "ControlContext"
+                                             ,  "ControlShapeAccess" };
+            for ( size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i )
                 xName->removeByName( pProps[i] );
         }
     }

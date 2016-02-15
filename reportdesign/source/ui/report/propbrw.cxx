@@ -191,9 +191,9 @@ void PropBrw::dispose()
         uno::Reference<container::XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
-            const OUString pProps[] = { OUString( "ContextDocument" )
-                                            ,  OUString( "DialogParentWindow" )
-                                            , OUString( "ActiveConnection" )};
+            const OUString pProps[] { "ContextDocument"
+                                    , "DialogParentWindow"
+                                    , "ActiveConnection" };
             for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
                 xName->removeByName(pProps[i]);
         }

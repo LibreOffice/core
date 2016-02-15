@@ -1705,7 +1705,7 @@ namespace pcr
                 OSL_VERIFY( _rNewValue >>= bUseSep );
 
             // propagate the changes to the min/max/default fields
-            OUString aAffectedProps[] = { OUString(PROPERTY_VALUE), OUString(PROPERTY_DEFAULT_VALUE), OUString(PROPERTY_VALUEMIN), OUString(PROPERTY_VALUEMAX) };
+            const OUString aAffectedProps[] { PROPERTY_VALUE, PROPERTY_DEFAULT_VALUE, PROPERTY_VALUEMIN, PROPERTY_VALUEMAX };
             for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(aAffectedProps); ++i)
             {
                 Reference< XPropertyControl > xControl;

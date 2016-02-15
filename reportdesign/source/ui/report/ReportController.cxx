@@ -3200,14 +3200,14 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
             uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
 
-            const OUString sProps[] = {   OUString(PROPERTY_NAME)
-                                          ,OUString(PROPERTY_FONTDESCRIPTOR)
-                                          ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
-                                          ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
-                                          ,OUString(PROPERTY_ORIENTATION)
-                                          ,OUString(PROPERTY_BORDER)
-                                          ,OUString(PROPERTY_FORMATSSUPPLIER)
-                                          ,OUString(PROPERTY_BACKGROUNDCOLOR)
+            const OUString sProps[] {   PROPERTY_NAME
+                                          ,PROPERTY_FONTDESCRIPTOR
+                                          ,PROPERTY_FONTDESCRIPTORASIAN
+                                          ,PROPERTY_FONTDESCRIPTORCOMPLEX
+                                          ,PROPERTY_ORIENTATION
+                                          ,PROPERTY_BORDER
+                                          ,PROPERTY_FORMATSSUPPLIER
+                                          ,PROPERTY_BACKGROUNDCOLOR
             };
             for(size_t i = 0; i < sizeof (sProps) / sizeof (sProps[0]); ++i)
             {
@@ -3502,11 +3502,11 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                         uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
                         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
-                        const OUString sProps[] = {   OUString(PROPERTY_FONTDESCRIPTOR)
-                                                            ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
-                                                            ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
-                                                            ,OUString(PROPERTY_BORDER)
-                                                            ,OUString(PROPERTY_BACKGROUNDCOLOR)
+                        const OUString sProps[] { PROPERTY_FONTDESCRIPTOR
+                                                        ,PROPERTY_FONTDESCRIPTORASIAN
+                                                        ,PROPERTY_FONTDESCRIPTORCOMPLEX
+                                                        ,PROPERTY_BORDER
+                                                        ,PROPERTY_BACKGROUNDCOLOR
                         };
                         for(size_t k = 0; k < sizeof(sProps)/sizeof(sProps[0]);++k)
                         {
@@ -3672,9 +3672,9 @@ void OReportController::changeZOrder(sal_Int32 _nId)
 
 void OReportController::listen(const bool _bAdd)
 {
-    const OUString aProps [] = {    OUString(PROPERTY_REPORTHEADERON),OUString(PROPERTY_REPORTFOOTERON)
-                                            ,OUString(PROPERTY_PAGEHEADERON),OUString(PROPERTY_PAGEFOOTERON)
-                                            ,OUString(PROPERTY_COMMAND), OUString(PROPERTY_COMMANDTYPE),OUString(PROPERTY_CAPTION)
+    const OUString aProps [] {  PROPERTY_REPORTHEADERON, PROPERTY_REPORTFOOTERON
+                                      ,PROPERTY_PAGEHEADERON, PROPERTY_PAGEFOOTERON
+                                      ,PROPERTY_COMMAND, PROPERTY_COMMANDTYPE, PROPERTY_CAPTION
     };
 
     void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const OUString&, const uno::Reference< XPropertyChangeListener >& ) =
@@ -4077,9 +4077,7 @@ OUString SAL_CALL OReportController::getMode(  ) throw (css::uno::RuntimeExcepti
 }
 css::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    static const OUString s_sModes[] = { OUString("remote"),
-                                          OUString("normal") };
-    return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
+    return uno::Sequence< OUString> { "remote", "normal" };
 }
 sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception)
 {

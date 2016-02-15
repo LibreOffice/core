@@ -208,24 +208,12 @@ sal_Int8 SAL_CALL GalleryItem::getType()
 
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("GalleryItemType"), UNOGALLERY_GALLERYITEMTYPE, cppu::UnoType<sal_Int8>::get(),
-          beans::PropertyAttribute::READONLY, 0 },
-
-        { OUString("URL"), UNOGALLERY_URL, ::cppu::UnoType<OUString>::get(),
-          beans::PropertyAttribute::READONLY, 0 },
-
-        { OUString("Title"), UNOGALLERY_TITLE, ::cppu::UnoType<OUString>::get(),
-          0, 0 },
-
-        { OUString("Thumbnail"), UNOGALLERY_THUMBNAIL, cppu::UnoType<graphic::XGraphic>::get(),
-          beans::PropertyAttribute::READONLY, 0 },
-
-        { OUString("Graphic"), UNOGALLERY_GRAPHIC, cppu::UnoType<graphic::XGraphic>::get(),
-          beans::PropertyAttribute::READONLY, 0 },
-
-        { OUString("Drawing"), UNOGALLERY_DRAWING, cppu::UnoType<lang::XComponent>::get(),
-          beans::PropertyAttribute::READONLY, 0 },
-
+        { "GalleryItemType", UNOGALLERY_GALLERYITEMTYPE, cppu::UnoType<sal_Int8>::get(),           beans::PropertyAttribute::READONLY, 0 },
+        { "URL", UNOGALLERY_URL,                         cppu::UnoType<OUString>::get(),           beans::PropertyAttribute::READONLY, 0 },
+        { "Title", UNOGALLERY_TITLE,                     cppu::UnoType<OUString>::get(),           0, 0 },
+        { "Thumbnail", UNOGALLERY_THUMBNAIL,             cppu::UnoType<graphic::XGraphic>::get(),  beans::PropertyAttribute::READONLY, 0 },
+        { "Graphic", UNOGALLERY_GRAPHIC,                 cppu::UnoType<graphic::XGraphic>::get(),  beans::PropertyAttribute::READONLY, 0 },
+        { "Drawing", UNOGALLERY_DRAWING,                 cppu::UnoType<lang::XComponent>::get(),   beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

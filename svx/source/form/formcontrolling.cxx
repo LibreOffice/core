@@ -88,26 +88,26 @@ namespace svx
                 if ( s_aFeatureDescriptions.empty() )
                 {
                     FeatureDescription aDescriptions[] = {
-                        { OUString(FMURL_FORM_POSITION),        SID_FM_RECORD_ABSOLUTE,     FormFeature::MoveAbsolute },
-                        { OUString(FMURL_FORM_RECORDCOUNT),     SID_FM_RECORD_TOTAL,        FormFeature::TotalRecords },
-                        { OUString(FMURL_RECORD_MOVEFIRST),     SID_FM_RECORD_FIRST,        FormFeature::MoveToFirst },
-                        { OUString(FMURL_RECORD_MOVEPREV),      SID_FM_RECORD_PREV,         FormFeature::MoveToPrevious },
-                        { OUString(FMURL_RECORD_MOVENEXT),      SID_FM_RECORD_NEXT,         FormFeature::MoveToNext },
-                        { OUString(FMURL_RECORD_MOVELAST),      SID_FM_RECORD_LAST,         FormFeature::MoveToLast },
-                        { OUString(FMURL_RECORD_MOVETONEW),     SID_FM_RECORD_NEW,          FormFeature::MoveToInsertRow },
-                        { OUString(FMURL_RECORD_SAVE),          SID_FM_RECORD_SAVE,         FormFeature::SaveRecordChanges },
-                        { OUString(FMURL_RECORD_DELETE),        SID_FM_RECORD_DELETE,       FormFeature::DeleteRecord },
-                        { OUString(FMURL_FORM_REFRESH),         SID_FM_REFRESH,             FormFeature::ReloadForm },
-                        { OUString(FMURL_FORM_REFRESH_CURRENT_CONTROL),
+                        { FMURL_FORM_POSITION,        SID_FM_RECORD_ABSOLUTE,     FormFeature::MoveAbsolute },
+                        { FMURL_FORM_RECORDCOUNT,     SID_FM_RECORD_TOTAL,        FormFeature::TotalRecords },
+                        { FMURL_RECORD_MOVEFIRST,     SID_FM_RECORD_FIRST,        FormFeature::MoveToFirst },
+                        { FMURL_RECORD_MOVEPREV,      SID_FM_RECORD_PREV,         FormFeature::MoveToPrevious },
+                        { FMURL_RECORD_MOVENEXT,      SID_FM_RECORD_NEXT,         FormFeature::MoveToNext },
+                        { FMURL_RECORD_MOVELAST,      SID_FM_RECORD_LAST,         FormFeature::MoveToLast },
+                        { FMURL_RECORD_MOVETONEW,     SID_FM_RECORD_NEW,          FormFeature::MoveToInsertRow },
+                        { FMURL_RECORD_SAVE,          SID_FM_RECORD_SAVE,         FormFeature::SaveRecordChanges },
+                        { FMURL_RECORD_DELETE,        SID_FM_RECORD_DELETE,       FormFeature::DeleteRecord },
+                        { FMURL_FORM_REFRESH,         SID_FM_REFRESH,             FormFeature::ReloadForm },
+                        { FMURL_FORM_REFRESH_CURRENT_CONTROL,
                                                       SID_FM_REFRESH_FORM_CONTROL,FormFeature::RefreshCurrentControl },
-                        { OUString(FMURL_RECORD_UNDO),          SID_FM_RECORD_UNDO,         FormFeature::UndoRecordChanges },
-                        { OUString(FMURL_FORM_SORT_UP),         SID_FM_SORTUP,              FormFeature::SortAscending },
-                        { OUString(FMURL_FORM_SORT_DOWN),       SID_FM_SORTDOWN,            FormFeature::SortDescending },
-                        { OUString(FMURL_FORM_SORT),            SID_FM_ORDERCRIT,           FormFeature::InteractiveSort },
-                        { OUString(FMURL_FORM_AUTO_FILTER),     SID_FM_AUTOFILTER,          FormFeature::AutoFilter },
-                        { OUString(FMURL_FORM_FILTER),          SID_FM_FILTERCRIT,          FormFeature::InteractiveFilter },
-                        { OUString(FMURL_FORM_APPLY_FILTER),    SID_FM_FORM_FILTERED,       FormFeature::ToggleApplyFilter },
-                        { OUString(FMURL_FORM_REMOVE_FILTER),   SID_FM_REMOVE_FILTER_SORT,  FormFeature::RemoveFilterAndSort }
+                        { FMURL_RECORD_UNDO,          SID_FM_RECORD_UNDO,         FormFeature::UndoRecordChanges },
+                        { FMURL_FORM_SORT_UP,         SID_FM_SORTUP,              FormFeature::SortAscending },
+                        { FMURL_FORM_SORT_DOWN,       SID_FM_SORTDOWN,            FormFeature::SortDescending },
+                        { FMURL_FORM_SORT,            SID_FM_ORDERCRIT,           FormFeature::InteractiveSort },
+                        { FMURL_FORM_AUTO_FILTER,     SID_FM_AUTOFILTER,          FormFeature::AutoFilter },
+                        { FMURL_FORM_FILTER,          SID_FM_FILTERCRIT,          FormFeature::InteractiveFilter },
+                        { FMURL_FORM_APPLY_FILTER,    SID_FM_FORM_FILTERED,       FormFeature::ToggleApplyFilter },
+                        { FMURL_FORM_REMOVE_FILTER,   SID_FM_REMOVE_FILTER_SORT,  FormFeature::RemoveFilterAndSort }
                     };
                     for ( size_t i=0; i<sizeof(aDescriptions)/sizeof(aDescriptions[0]); ++i )
                         s_aFeatureDescriptions.push_back( aDescriptions[i] );
