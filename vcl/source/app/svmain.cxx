@@ -158,7 +158,7 @@ int ImplSVMain()
 
     int nReturn = EXIT_FAILURE;
 
-    bool bInit = (!isInitVCL() ? InitVCL() : true);
+    bool bInit = isInitVCL() || InitVCL();
 
     if( bInit )
     {
