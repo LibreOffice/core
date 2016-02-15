@@ -52,41 +52,53 @@ enum CurveStyle
 
     /** Data points are connected via a 2-segmented stepped line.
         The line starts horizontally.
+
+        \verbatim
                    O
                    |
                    |
                    |
              O-----+
+        \endverbatim
      */
     STEP_START,
 
     /** Data points are connected via a 2-segmented stepped line.
         The line ends horizontally.
+
+        \verbatim
             +------O
             |
             |
             |
             O
+        \endverbatim
      */
     STEP_END,
 
     /** Data points are connected via a 3-segmented stepped line.
         The lines is horizontal till the center of the X values.
+
+        \verbatim
                 +--O
                 |
                 |
                 |
              O--+
+        \endverbatim
      */
     STEP_CENTER_X,
 
     /** Data points are connected via a 3-segmented stepped line.
         The lines is horizontal at the center of the Y values.
+
+        \verbatim
                    O
                    |
              +-----+
              |
              O
+        \endverbatim
      */
     STEP_CENTER_Y
 };
