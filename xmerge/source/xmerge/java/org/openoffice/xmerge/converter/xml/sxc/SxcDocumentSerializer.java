@@ -469,15 +469,20 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             Debug.log(Debug.TRACE, "traverseColumn() default-cell-style : " + cellStyleName);
         }
 
+        CellStyle cellStyle = null;
+
         if(cellStyleName.equalsIgnoreCase("Default") || cellStyleName.length()==0) {
 
             Debug.log(Debug.TRACE, "No default cell Style Attribute was found");
 
         } else {
 
-            CellStyle cellStyle = (CellStyle)styleCat.lookup(cellStyleName,
+            cellStyle = (CellStyle)styleCat.lookup(cellStyleName,
                                 SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
                                 CellStyle.class);
+        }
+
+        if (cellStyle != null) {
             Format defaultFmt = new Format(cellStyle.getFormat());
             col.setFormat(defaultFmt);
         }
