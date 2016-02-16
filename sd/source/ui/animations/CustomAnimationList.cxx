@@ -209,6 +209,7 @@ public:
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
     SvLBoxItem* Create() const override;
     void Clone(SvLBoxItem* pSource) override;
+    void AddEffectNameInDescription();
 
     virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) override;
@@ -216,6 +217,8 @@ private:
     VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
     CustomAnimationEffectPtr mpEffect;
+    const CustomAnimationPresets* mpCustomAnimationPresets;
+    const CustomAnimationPresets& getPresets();
 };
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
@@ -223,11 +226,28 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEn
 , mpParent( pParent )
 , maDescription( aDescription )
 , mpEffect(pEffect)
+, mpCustomAnimationPresets(nullptr)
 {
+    AddEffectNameInDescription();
 }
 
 CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
 {
+}
+
+void CustomAnimationListEntryItem::AddEffectNameInDescription()
+{
+    OUString effectName( getPresets().getUINameForPresetId( mpEffect->getPresetId() ) );
+    effectName = effectName + ": ";
+    effectName += maDescription;
+    maDescription = effectName;
+}
+
+const CustomAnimationPresets& CustomAnimationListEntryItem::getPresets()
+{
+    if (mpCustomAnimationPresets == nullptr)
+        mpCustomAnimationPresets = &CustomAnimationPresets::getCustomAnimationPresets();
+    return *mpCustomAnimationPresets;
 }
 
 void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
