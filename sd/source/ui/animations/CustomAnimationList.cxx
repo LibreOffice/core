@@ -209,35 +209,66 @@ public:
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
     SvLBoxItem* Create() const override;
     void Clone(SvLBoxItem* pSource) override;
+    void GetEffectDetails();
 
     virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) override;
 private:
     VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
+    OUString        effectName;
     CustomAnimationEffectPtr mpEffect;
+    const CustomAnimationPresets* mpCustomAnimationPresets;
 };
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
 : SvLBoxString( pEntry, nFlags, aDescription )
 , mpParent( pParent )
 , maDescription( aDescription )
+, effectName( OUString() )
 , mpEffect(pEffect)
+, mpCustomAnimationPresets(&CustomAnimationPresets::getCustomAnimationPresets())
 {
+    GetEffectDetails();
 }
 
 CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
 {
 }
 
+void CustomAnimationListEntryItem::GetEffectDetails()
+{
+    sal_Int16 nNodeType = mpEffect->getNodeType();
+    if (nNodeType == EffectNodeType::ON_CLICK )
+    {
+        effectName = SD_RESSTR(STR_CUSTOMANIMATION_ON_CLICK) + ": " +
+                    mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId());
+    }
+    else if (nNodeType == EffectNodeType::AFTER_PREVIOUS)
+    {
+        effectName = SD_RESSTR(STR_CUSTOMANIMATION_AFTER_PREVIOUS) + ": " +
+                    mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId());
+    }
+    else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
+    {
+        effectName = SD_RESSTR(STR_CUSTOMANIMATION_WITH_PREVIOUS) + ": " +
+                    mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId());
+    }
+}
+
+
 void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    Size aSize(pView->GetTextWidth( maDescription ) + 2 * 19, pView->GetTextHeight() );
-    if( aSize.Height() < 19 )
-        aSize.Height() = 19;
+    long width = pView->GetTextWidth( maDescription ) + 19;
+    if( width < (pView->GetTextWidth( effectName ) + 2*19))
+        width = pView->GetTextWidth( effectName ) + 2*19;
+
+    Size aSize( width, pView->GetTextHeight() );
+    if( aSize.Height() < 38 )
+        aSize.Height() = 38;
     pViewData->maSize = aSize;
 }
 
@@ -259,8 +290,17 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     {
         rRenderContext.DrawImage(aPos, mpParent->getImage(IMG_CUSTOMANIMATION_AFTER_PREVIOUS));
     }
+    else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
+    {
+        //rRenderContext.DrawImage(aPos, mpParent->getImage(IMG_CUSTOMANIMATION_WITH_PREVIOUS));  not defined in CustomAnimation.src
+    }
 
     aPos.X() += 19;
+
+
+    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(maDescription, rDev.GetOutputSizePixel().Width() - aPos.X()));
+
+    aPos.Y() += 19;
 
     sal_uInt16 nImage;
     switch (mpEffect->getPresetClass())
@@ -295,14 +335,14 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     {
         const Image& rImage = mpParent->getImage(nImage);
         Point aImagePos(aPos);
-        aImagePos.Y() += (aSize.Height() - rImage.GetSizePixel().Height()) >> 1;
+        aImagePos.Y() += (aSize.Height()/2 - rImage.GetSizePixel().Height()) >> 1;
         rRenderContext.DrawImage(aImagePos, rImage);
     }
 
     aPos.X() += 19;
-    aPos.Y() += (aSize.Height() - rDev.GetTextHeight()) >> 1;
+    aPos.Y() += (aSize.Height()/2 - rDev.GetTextHeight()) >> 1;
 
-    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(maDescription, rDev.GetOutputSizePixel().Width() - aPos.X()));
+    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(effectName, rDev.GetOutputSizePixel().Width() - aPos.X()));
 }
 
 SvLBoxItem* CustomAnimationListEntryItem::Create() const

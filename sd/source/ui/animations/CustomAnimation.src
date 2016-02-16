@@ -394,6 +394,21 @@ String STR_SLIDETRANSITION_NONE
     Text [ en-US ] = "None";
 };
 
+String STR_CUSTOMANIMATION_ON_CLICK
+{
+    Text [ en-US ] = "On click";
+};
+
+String STR_CUSTOMANIMATION_AFTER_PREVIOUS
+{
+    Text [ en-US ] = "After previous";
+};
+
+String STR_CUSTOMANIMATION_WITH_PREVIOUS
+{
+    Text [ en-US ] = "With previous";
+};
+
 Image IMG_CUSTOMANIMATION_ON_CLICK
 {
     ImageBitmap = Bitmap { File = "click_16.png" ; };
