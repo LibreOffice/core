@@ -441,7 +441,7 @@ namespace svgio
             void setDesc(const OUString& rNew) { maDesc = rNew; }
 
             // ClipPathXLink content
-            const OUString getClipPathXLink() const { return maClipPathXLink; }
+            OUString getClipPathXLink() const;
 
             // MaskXLink content
             const OUString getMaskXLink() const { return maMaskXLink; }
