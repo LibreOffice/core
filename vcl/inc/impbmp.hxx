@@ -37,7 +37,6 @@ class Bitmap;
 class ImpBitmap
 {
 private:
-    sal_uLong           mnRefCount;
     SalBitmap*          mpSalBitmap;
 
 public:
@@ -62,10 +61,6 @@ public:
 
     BitmapBuffer*       ImplAcquireBuffer( BitmapAccessMode nMode );
     void                ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode );
-
-    sal_uLong           ImplGetRefCount() const { return mnRefCount; }
-    void                ImplIncRefCount() { mnRefCount++; }
-    void                ImplDecRefCount() { mnRefCount--; }
 
     BitmapChecksum      ImplGetChecksum() const;
     void                ImplInvalidateChecksum();

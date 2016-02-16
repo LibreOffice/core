@@ -245,19 +245,14 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
 bool Bitmap::Convert( BmpConversion eConversion )
 {
     // try to convert in backend
-    if (mpImpBmp)
+    if (mxImpBmp)
     {
-        ImpBitmap* pImpBmp = new ImpBitmap;
-
-        if (pImpBmp->ImplCreate(*mpImpBmp) && pImpBmp->ImplConvert(eConversion))
+        std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
+        if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ImplConvert(eConversion))
         {
-            ImplSetImpBitmap(pImpBmp);
-            SAL_INFO( "vcl.opengl", "Ref count: " << mpImpBmp->ImplGetRefCount() );
+            ImplSetImpBitmap(xImpBmp);
+            SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
             return true;
-        }
-        else
-        {
-            delete pImpBmp;
         }
     }
 
@@ -898,22 +893,17 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
     const sal_uInt16 nStartCount(GetBitCount());
 
-    if( mpImpBmp )
+    if (mxImpBmp)
     {
         // implementation specific scaling
-        ImpBitmap* pImpBmp = new ImpBitmap;
-
-        if( pImpBmp->ImplCreate( *mpImpBmp ) && pImpBmp->ImplScale( rScaleX, rScaleY, nScaleFlag ) )
+        std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
+        if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ImplScale(rScaleX, rScaleY, nScaleFlag))
         {
-            ImplSetImpBitmap( pImpBmp );
-            SAL_INFO( "vcl.opengl", "Ref count: " << mpImpBmp->ImplGetRefCount() );
+            ImplSetImpBitmap(xImpBmp);
+            SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
             maPrefMapMode = MapMode( MAP_PIXEL );
-            maPrefSize = pImpBmp->ImplGetSize();
+            maPrefSize = xImpBmp->ImplGetSize();
             return true;
-        }
-        else
-        {
-            delete pImpBmp;
         }
     }
 

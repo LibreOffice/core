@@ -716,10 +716,9 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE void     ImplReleaseRef();
     SAL_DLLPRIVATE void     ImplMakeUnique();
-    ImpBitmap*              ImplGetImpBitmap() const { return mpImpBmp;}
-    SAL_DLLPRIVATE void     ImplSetImpBitmap( ImpBitmap* pImpBmp );
+    std::shared_ptr<ImpBitmap> ImplGetImpBitmap() const { return mxImpBmp;}
+    SAL_DLLPRIVATE void     ImplSetImpBitmap( std::shared_ptr<ImpBitmap> xImpBmp );
     SAL_DLLPRIVATE void     ImplAssignWithSize( const Bitmap& rBitmap );
 
     SAL_DLLPRIVATE void     ImplAdaptBitCount(Bitmap& rNew) const;
@@ -787,7 +786,7 @@ public:
 
 private:
 
-    ImpBitmap*              mpImpBmp;
+    std::shared_ptr<ImpBitmap> mxImpBmp;
     MapMode                 maPrefMapMode;
     Size                    maPrefSize;
 
@@ -795,27 +794,27 @@ private:
 
 inline bool Bitmap::operator!() const
 {
-    return( mpImpBmp == nullptr );
+    return( mxImpBmp == nullptr );
 }
 
 inline bool Bitmap::operator==( const Bitmap& rBitmap ) const
 {
-    return( rBitmap.mpImpBmp == mpImpBmp );
+    return( rBitmap.mxImpBmp == mxImpBmp );
 }
 
 inline bool Bitmap::operator!=( const Bitmap& rBitmap ) const
 {
-    return( rBitmap.mpImpBmp != mpImpBmp );
+    return( rBitmap.mxImpBmp != mxImpBmp );
 }
 
 inline bool Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
 {
-    return( rBitmap.mpImpBmp == mpImpBmp );
+    return( rBitmap.mxImpBmp == mxImpBmp );
 }
 
 inline bool Bitmap::IsEmpty() const
 {
-    return( mpImpBmp == nullptr );
+    return( mxImpBmp == nullptr );
 }
 
 inline const MapMode& Bitmap::GetPrefMapMode() const

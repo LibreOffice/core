@@ -462,8 +462,8 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
                 if( pSalBmp )
                 {
-                    ImpBitmap* pImpBmp = new ImpBitmap(pSalBmp);
-                    aBmp.ImplSetImpBitmap( pImpBmp );
+                    std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap(pSalBmp));
+                    aBmp.ImplSetImpBitmap(xImpBmp);
                 }
             }
         }
@@ -516,11 +516,11 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                 rBitmapEx.Mirror(nMirrFlags);
 
             const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
-            const ImpBitmap* pMaskBmp = rBitmapEx.ImplGetMaskImpBitmap();
+            std::shared_ptr<ImpBitmap> xMaskBmp = rBitmapEx.ImplGetMaskImpBitmap();
 
-            if (pMaskBmp)
+            if (xMaskBmp)
             {
-                SalBitmap* pSalAlphaBmp = pMaskBmp->ImplGetSalBitmap();
+                SalBitmap* pSalAlphaBmp = xMaskBmp->ImplGetSalBitmap();
                 bool bTryDirectPaint(pSalSrcBmp && pSalAlphaBmp);
 
                 if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *pSalAlphaBmp, this))
@@ -587,7 +587,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                     }
 
                     mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp,
-                                           *pMaskBmp->ImplGetSalBitmap(),
+                                           *xMaskBmp->ImplGetSalBitmap(),
                                            this);
                 }
 
