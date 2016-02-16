@@ -77,3 +77,6 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
+
+# Calc conditional formatting group button
+cmd/lc_conditionalformatmenu.png cmd/lc_colorscaleformatdialog.png
