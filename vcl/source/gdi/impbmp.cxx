@@ -24,15 +24,13 @@
 #include <salbmp.hxx>
 #include <impbmp.hxx>
 
-ImpBitmap::ImpBitmap() :
-            mnRefCount  ( 1 ),
-            mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() )
+ImpBitmap::ImpBitmap()
+    : mpSalBitmap(ImplGetSVData()->mpDefInst->CreateSalBitmap())
 {
 }
 
-ImpBitmap::ImpBitmap(SalBitmap* pBitmap) :
-            mnRefCount  ( 1 ),
-            mpSalBitmap ( pBitmap )
+ImpBitmap::ImpBitmap(SalBitmap* pBitmap)
+    : mpSalBitmap(pBitmap)
 {
 }
 

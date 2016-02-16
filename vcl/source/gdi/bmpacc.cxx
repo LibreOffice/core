@@ -48,38 +48,35 @@ BitmapInfoAccess::~BitmapInfoAccess()
 
 void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
 {
-    ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
+    std::shared_ptr<ImpBitmap> xImpBmp = rBitmap.ImplGetImpBitmap();
 
-    DBG_ASSERT( pImpBmp, "Forbidden Access to empty bitmap!" );
+    DBG_ASSERT( xImpBmp, "Forbidden Access to empty bitmap!" );
 
-    if( pImpBmp )
+    if( xImpBmp )
     {
         if( mnAccessMode == BITMAP_WRITE_ACCESS && !maBitmap.ImplGetImpBitmap() )
         {
             rBitmap.ImplMakeUnique();
-            pImpBmp = rBitmap.ImplGetImpBitmap();
+            xImpBmp = rBitmap.ImplGetImpBitmap();
         }
         else
         {
             DBG_ASSERT( mnAccessMode != BITMAP_WRITE_ACCESS ||
-                        pImpBmp->ImplGetRefCount() == 2,
+                        xImpBmp.use_count() == 2,
                         "Unpredictable results: bitmap is referenced more than once!" );
         }
 
-        mpBuffer = pImpBmp->ImplAcquireBuffer( mnAccessMode );
+        mpBuffer = xImpBmp->ImplAcquireBuffer( mnAccessMode );
 
         if( !mpBuffer )
         {
-            ImpBitmap* pNewImpBmp = new ImpBitmap;
-
-            if( pNewImpBmp->ImplCreate( *pImpBmp, rBitmap.GetBitCount()  ) )
+            std::shared_ptr<ImpBitmap> xNewImpBmp(new ImpBitmap);
+            if (xNewImpBmp->ImplCreate(*xImpBmp, rBitmap.GetBitCount()))
             {
-                pImpBmp = pNewImpBmp;
-                rBitmap.ImplSetImpBitmap( pImpBmp );
-                mpBuffer = pImpBmp->ImplAcquireBuffer( mnAccessMode );
+                xImpBmp = xNewImpBmp;
+                rBitmap.ImplSetImpBitmap( xImpBmp );
+                mpBuffer = xImpBmp->ImplAcquireBuffer( mnAccessMode );
             }
-            else
-                delete pNewImpBmp;
         }
 
         maBitmap = rBitmap;
@@ -88,11 +85,11 @@ void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
 
 void BitmapInfoAccess::ImplDestroy()
 {
-    ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
+    std::shared_ptr<ImpBitmap> xImpBmp = maBitmap.ImplGetImpBitmap();
 
-    if( mpBuffer && pImpBmp )
+    if (mpBuffer && xImpBmp)
     {
-        pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+        xImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
 }
@@ -130,8 +127,8 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
     if (!mpBuffer)
         return;
 
-    ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
-    if (!pImpBmp)
+    std::shared_ptr<ImpBitmap> xImpBmp = rBitmap.ImplGetImpBitmap();
+    if (!xImpBmp)
         return;
 
     maColorMask = mpBuffer->maColorMask;
@@ -164,7 +161,7 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
         delete[] mpScanBuf;
         mpScanBuf = nullptr;
 
-        pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+        xImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
 }
