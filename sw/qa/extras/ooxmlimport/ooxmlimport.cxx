@@ -782,6 +782,14 @@ DECLARE_OOXMLIMPORT_TEST(testN777345, "n777345.docx")
 #endif
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf59699, "tdf59699.docx")
+{
+    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    // This was false: the referenced graphic data wasn't imported.
+    CPPUNIT_ASSERT(xGraphic.is());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN777337, "n777337.docx")
 {
     /*

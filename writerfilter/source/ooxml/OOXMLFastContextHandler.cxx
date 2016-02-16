@@ -1511,7 +1511,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
     uno::Reference<document::XDocumentPropertiesSupplier> xDocSupplier(getDocument()->getModel(), uno::UNO_QUERY_THROW);
     mrShapeContext->setDocumentProperties(xDocSupplier->getDocumentProperties());
     mrShapeContext->setDrawPage(getDocument()->getDrawPage());
-    mrShapeContext->setInputStream(getDocument()->getStorageStream());
+    mrShapeContext->setMediaDescriptor(getDocument()->getMediaDescriptor());
 
     mrShapeContext->setRelationFragmentPath
         (mpParserState->getTarget());

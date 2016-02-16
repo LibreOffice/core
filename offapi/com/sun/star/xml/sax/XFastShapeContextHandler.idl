@@ -40,11 +40,11 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
     [attribute, readonly] com::sun::star::drawing::XShape Shape;
     [attribute] com::sun::star::drawing::XDrawPage DrawPage;
     [attribute] com::sun::star::frame::XModel Model;
-    [attribute] com::sun::star::io::XInputStream InputStream;
     [attribute] string RelationFragmentPath;
     [attribute] long StartToken;
     [attribute] com::sun::star::awt::Point Position;
     [attribute] com::sun::star::document::XDocumentProperties DocumentProperties;
+    [attribute] sequence< com::sun::star::beans::PropertyValue > MediaDescriptor;
 };
 
 

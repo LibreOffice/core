@@ -254,7 +254,7 @@ public:
     static OOXMLDocument *
     createDocument(OOXMLStream::Pointer_t pStream,
                  const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
-                 bool bSkipImage, OUString const& rBaseURL);
+                 bool bSkipImage, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
 
 };
 

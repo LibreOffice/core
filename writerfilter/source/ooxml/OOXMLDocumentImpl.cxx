@@ -38,6 +38,7 @@
 #include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
 #include <comphelper/sequence.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <iostream>
 
@@ -49,7 +50,7 @@ namespace writerfilter {
 namespace ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, OUString const& rBaseURL)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
@@ -61,7 +62,8 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::
     , mnProgressLastPos(0)
     , mnProgressCurrentPos(0)
     , mnProgressEndPos(0)
-    , m_rBaseURL(rBaseURL)
+    , m_rBaseURL(utl::MediaDescriptor(rDescriptor).getUnpackedValueOrDefault("DocumentBaseURL", OUString()))
+    , maMediaDescriptor(rDescriptor)
 {
 }
 
@@ -266,7 +268,7 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 
     OOXMLDocumentImpl * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, m_rBaseURL));
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->setIsSubstream( true );
@@ -280,7 +282,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     // See above, no status indicator for the note stream, either.
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, m_rBaseURL);
+    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor);
     pDocument->setXNoteId(nId);
     pDocument->setXNoteType(rType);
     pDocument->setModel(getModel());
@@ -886,6 +888,11 @@ uno::Reference<io::XInputStream> OOXMLDocumentImpl::getStorageStream()
     return mpStream->getStorageStream();
 }
 
+const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor()
+{
+    return maMediaDescriptor;
+}
+
 void OOXMLDocumentImpl::setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext )
 {
     mxShapeContext = xContext;
@@ -930,9 +937,9 @@ OOXMLDocument *
 OOXMLDocumentFactory::createDocument
 (OOXMLStream::Pointer_t pStream,
  const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
- bool mbSkipImages, OUString const& rBaseURL)
+ bool mbSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rBaseURL);
+    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor);
 }
 
 }}
