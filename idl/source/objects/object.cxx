@@ -102,7 +102,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
 bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                  SvMetaAttribute & rAttr ) const
 {
-    if ( !rAttr.GetRef() && dynamic_cast<const SvMetaSlot *>(&rAttr) != nullptr )
+    if ( !rAttr.GetRef() && dynamic_cast<const SvMetaSlot *>(&rAttr) )
     {
         OSL_FAIL( "Neuer Slot : " );
         OSL_FAIL( rAttr.GetSlotId().getString().getStr() );

@@ -52,6 +52,7 @@ class SvIdentifier
     sal_uInt32  nValue;
 public:
                 SvIdentifier() : nValue( 0 ) {};
+                SvIdentifier(sal_uInt32 n) : nValue( n ) {};
 
     void        setString(const OString& rStr) { m_aStr = rStr; }
     const OString& getString() const { return m_aStr; }

@@ -29,6 +29,7 @@ class SvMetaModule;
 class SvMetaTypeEnum;
 class SvStringHashEntry;
 class SvMetaType;
+class SvMetaClass;
 
 class SvIdlParser
 {
@@ -42,6 +43,9 @@ public:
     void        ReadModuleElement( SvMetaModule& rModule );
     void        ReadInclude( SvMetaModule& rModule );
     void        ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );
+    void        ReadInterfaceOrShellEntry( SvMetaClass& rClass );
+    bool        ReadInterfaceOrShellSlot( SvMetaSlot& rSlot );
+    bool        ReadInterfaceOrShellAttribute( SvMetaAttribute& rAttr );
     void        ReadItem();
     void        ReadStruct();
     void        ReadEnum();

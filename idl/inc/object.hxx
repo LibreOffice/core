@@ -50,12 +50,12 @@ class SvMetaClass : public SvMetaType
 {
 public:
     tools::SvRef<SvMetaClass>           aSuperClass;
-private:
-    SvRefMemberList<SvMetaAttribute *>  aAttrList;
     std::vector<SvClassElement>         aClassElementList;
-
+    SvRefMemberList<SvMetaAttribute *>  aAttrList;
     bool                    TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
+private:
+
     static void             WriteSlotStubs( const OString& rShellName,
                                         SvSlotElementList & rSlotList,
                                         ByteStringList & rList,

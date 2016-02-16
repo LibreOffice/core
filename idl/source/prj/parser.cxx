@@ -292,7 +292,7 @@ void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMet
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
-            aClass->ReadContextSvIdl( rBase, rInStm );
+            ReadInterfaceOrShellEntry(*aClass);
             rInStm.ReadIfDelimiter();
         }
         ReadChar( '}' );
@@ -300,6 +300,122 @@ void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMet
     rModule.aClassList.push_back( aClass );
     // announce globally
     rBase.GetClassList().push_back( aClass );
+}
+
+void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
+{
+    sal_uInt32  nTokPos = rInStm.Tell();
+    SvToken&    rTok = rInStm.GetToken_Next();
+
+    if( rTok.Is( SvHash_import() ) )
+    {
+        SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
+        if( !pClass )
+            throw SvParseException( rInStm, "unknown imported interface" );
+        SvClassElement xEle;
+        xEle.SetClass( pClass );
+        rClass.aClassElementList.push_back( xEle );
+
+        rTok = rInStm.GetToken();
+        if( rTok.IsString() )
+        {
+            xEle.SetPrefix( rTok.GetString() );
+            rInStm.GetToken_Next();
+        }
+        return;
+    }
+    else
+    {
+        rInStm.Seek( nTokPos );
+        SvMetaType * pType = rBase.ReadKnownType( rInStm );
+        tools::SvRef<SvMetaAttribute> xAttr;
+        bool bOk = false;
+        if( !pType || pType->IsItem() )
+        {
+            xAttr = new SvMetaSlot( pType );
+            bOk = ReadInterfaceOrShellSlot(static_cast<SvMetaSlot&>(*xAttr));
+        }
+        else
+        {
+            xAttr = new SvMetaAttribute( pType );
+            bOk = ReadInterfaceOrShellAttribute(*xAttr);
+        }
+        if( bOk )
+            bOk = xAttr->Test( rInStm );
+        if( bOk )
+            bOk = rClass.TestAttribute( rBase, rInStm, *xAttr );
+        if( bOk )
+        {
+            if( !xAttr->GetSlotId().IsSet() )
+                xAttr->SetSlotId( SvIdentifier(rBase.GetUniqueId()) );
+            rClass.aAttrList.push_back( xAttr );
+            return;
+        }
+    }
+    rInStm.Seek( nTokPos );
+}
+
+bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
+{
+    sal_uInt32  nTokPos = rInStm.Tell();
+    bool        bOk     = true;
+
+    SvMetaAttribute * pAttr = rBase.ReadKnownAttr( rInStm, rSlot.GetType() );
+    if( pAttr )
+    {
+        SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr  );
+        if( !pKnownSlot )
+            throw SvParseException( rInStm, "attribute " + pAttr->GetName() + " is method or variable but not a slot" );
+        rSlot.SetRef( pKnownSlot );
+        rSlot.SetName( pKnownSlot->GetName() );
+        bOk = rSlot.SvMetaObject::ReadSvIdl( rBase, rInStm );
+    }
+    else
+    {
+        bOk = rSlot.SvMetaAttribute::ReadSvIdl( rBase, rInStm );
+        SvMetaAttribute *pAttr2 = rBase.SearchKnownAttr( rSlot.GetSlotId() );
+        if( pAttr2 )
+        {
+            SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr2  );
+            if( !pKnownSlot )
+                throw SvParseException( rInStm, "attribute " + pAttr2->GetName() + " is method or variable but not a slot" );
+            rSlot.SetRef( pKnownSlot );
+            // names may differ, because explicitly given
+            if ( pKnownSlot->GetName() != rSlot.GetName() )
+                throw SvParseException( rInStm, "Illegal definition!" );
+        }
+    }
+
+    if( !bOk )
+        rInStm.Seek( nTokPos );
+
+    return bOk;
+}
+
+bool SvIdlParser::ReadInterfaceOrShellAttribute( SvMetaAttribute& rAttr )
+{
+    sal_uInt32  nTokPos     = rInStm.Tell();
+    bool bOk = false;
+    rAttr.SetName( ReadIdentifier() );
+    rAttr.aSlotId.ReadSvIdl( rBase, rInStm );
+
+    bOk = true;
+    SvToken& rTok  = rInStm.GetToken();
+    if( rTok.IsChar() && rTok.GetChar() == '(' )
+    {
+        tools::SvRef<SvMetaType> xT(new SvMetaType() );
+        xT->SetRef(rAttr.GetType() );
+        rAttr.aType = xT;
+        bOk = rAttr.aType->ReadMethodArgs( rBase, rInStm );
+    }
+    if( bOk && rInStm.ReadIf( '[' ) )
+    {
+        ReadChar( ']' );
+    }
+
+    if( !bOk )
+        rInStm.Seek( nTokPos );
+    return bOk;
 }
 
 SvMetaType * SvIdlParser::ReadKnownType()

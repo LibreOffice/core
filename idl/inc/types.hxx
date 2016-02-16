@@ -30,10 +30,9 @@ typedef SvRefMemberList< SvMetaSlot* > SvSlotElementList;
 
 class SvMetaAttribute : public SvMetaReference
 {
-protected:
+public:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) override;
-public:
     tools::SvRef<SvMetaType> aType;
     SvIdentifier             aSlotId;
                         SvMetaAttribute();
