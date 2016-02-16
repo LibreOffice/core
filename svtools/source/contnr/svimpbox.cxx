@@ -27,8 +27,10 @@
 #include <stack>
 
 #include <svtools/treelistbox.hxx>
+#include <svtools/iconview.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svimpbox.hxx>
+#include <iconviewimpl.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/svtresid.hxx>
 #include <tools/wintypes.hxx>
@@ -39,25 +41,22 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
 
-#define NODE_BMP_TABDIST_NOTVALID   -2000000
-#define FIRST_ENTRY_TAB             1
-
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = nullptr;
 Image*  SvImpLBox::s_pDefExpanded       = nullptr;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
-    : aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
-    , aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
+    : aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
     , aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
-    , aOutputSize(0, 0)
-    , aSelEng(pLBView, nullptr)
     , aFctSet(this, &aSelEng, pLBView)
-    , nNextVerVisSize(0)
-    , nExtendedWinBits(0)
     , bAreChildrenTransient(true)
     , m_pStringSorter(nullptr)
+    , aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
+    , aOutputSize(0, 0)
+    , nExtendedWinBits(0)
+    , aSelEng(pLBView, nullptr)
+    , nNextVerVisSize(0)
 {
     osl_atomic_increment(&s_nImageRefCount);
     pView = pLBView;
