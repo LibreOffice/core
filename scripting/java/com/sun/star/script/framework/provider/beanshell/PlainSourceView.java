@@ -98,6 +98,7 @@ public class PlainSourceView extends JScrollPane implements
         ta.setColumns(40);
         ta.setLineWrap(false);
         ta.insert(model.getText(), 0);
+        ta.setFont(new Font(Font.MONOSPACED, ta.getFont().getStyle(), ta.getFont().getSize()));
         linecount = ta.getLineCount();
 
         gg = new GlyphGutter(this);
