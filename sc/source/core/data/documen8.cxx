@@ -392,7 +392,7 @@ ScMacroManager* ScDocument::GetMacroManager()
 }
 
 void ScDocument::FillMatrix(
-    ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+    ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
@@ -406,7 +406,7 @@ void ScDocument::FillMatrix(
     if (static_cast<SCROW>(nR) != nRow2 - nRow1 + 1 || static_cast<SCCOL>(nC) != nCol2 - nCol1 + 1)
         return;
 
-    pTab->FillMatrix(rMat, nCol1, nRow1, nCol2, nRow2);
+    pTab->FillMatrix(rMat, nCol1, nRow1, nCol2, nRow2, pPool);
 }
 
 void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen )
