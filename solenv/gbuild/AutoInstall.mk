@@ -9,6 +9,13 @@
 
 # AutoInstall class
 
+# this is pretty horrible because
+# a) make sucks
+# b) this is an abuse of make anyway
+# c) make 4.0 has $(file) but Apple prefers to ship 10 year old version instead
+# d) Win32 make has an 8k command line lengh limit so needs to use $(file)
+# maybe generation should be moved to some python script or something
+
 define gb_AutoInstall__escape
 $(subst .,_,$(subst -,_,$(subst /,_,$(1))))
 endef
@@ -31,6 +38,11 @@ endef
 
 define gb_AutoInstall__gen_lib
 $(SCP2LIBTEMPLATE)(auto_$*_lib_$(call gb_AutoInstall__escape,$(1)),$(call gb_Library_get_runtime_filename,$(1))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))
+
+endef
+
+define gb_AutoInstall__gen_pkg
+PACKAGE_FILELIST(auto_$*_pkg_$(call gb_AutoInstall__escape,$(1)),$(1).filelist)
 
 endef
 
@@ -67,8 +79,12 @@ endif
 		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(call gb_AutoInstall__escape,$(exe)),$(call gb_Executable_get_filename,$(exe))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))" >> $@;)
 	$(foreach jar,$(gb_Jar_MODULE_$*),\
 		echo '$(SCP2JARTEMPLATE)(auto_$*_jar_$(call gb_AutoInstall__escape,$(jar)),$(jar).jar)' >> $@;)
+ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	$(foreach pkg,$(gb_Package_MODULE_$*),\
 		echo 'PACKAGE_FILELIST(auto_$*_pkg_$(call gb_AutoInstall__escape,$(pkg)),$(pkg).filelist)' >> $@;)
+else
+	$(file >>$@,$(foreach pkg,$(gb_Package_MODULE_$*),$(call gb_AutoInstall__gen_pkg,$(pkg))))
+endif
 
 
 $(call gb_AutoInstall_get_clean_target,%) :
