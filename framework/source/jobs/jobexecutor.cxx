@@ -205,7 +205,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
 {
     SAL_INFO( "fwk", "JobExecutor::trigger()");
 
-    css::uno::Sequence< OUString > lJobs;
+    std::vector< OUString > lJobs;
 
     /* SAFE */ {
     osl::MutexGuard g(rBHelper.rMutex);
@@ -223,8 +223,8 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     } /* SAFE */
 
     // step over all enabled jobs and execute it
-    sal_Int32 c = lJobs.getLength();
-    for (sal_Int32 j=0; j<c; ++j)
+    size_t c = lJobs.size();
+    for (size_t j=0; j<c; ++j)
     {
         rtl::Reference<Job> pJob;
 

@@ -1104,7 +1104,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     if ( m_bDisposed )
         throw DisposedException();
 
-    Sequence< Sequence< PropertyValue > > aElementInfoSeq;
+    std::vector< Sequence< PropertyValue > > aElementInfoSeq;
     UIElementInfoHashMap aUIElementInfoCollection;
 
     if ( ElementType == css::ui::UIElementType::UNKNOWN )
@@ -1119,7 +1119,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     aUIElementInfo[0].Name = m_aPropResourceURL;
     aUIElementInfo[1].Name = m_aPropUIName;
 
-    aElementInfoSeq.realloc( aUIElementInfoCollection.size() );
+    aElementInfoSeq.resize( aUIElementInfoCollection.size() );
     UIElementInfoHashMap::const_iterator pIter = aUIElementInfoCollection.begin();
 
     sal_Int32 n = 0;
@@ -1131,7 +1131,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
         ++pIter;
     }
 
-    return aElementInfoSeq;
+    return comphelper::containerToSequence(aElementInfoSeq);
 }
 
 Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettings() throw (css::uno::RuntimeException, std::exception)

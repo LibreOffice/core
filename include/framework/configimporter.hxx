@@ -27,6 +27,7 @@
 
 #include <rtl/ustring.hxx>
 #include <framework/fwedllapi.h>
+#include <vector>
 
 namespace framework
 {
@@ -35,7 +36,7 @@ namespace framework
         public:
             static bool ImportCustomToolbars(
                         const css::uno::Reference< css::ui::XUIConfigurationManager2 >& rContainerFactory,
-                        css::uno::Sequence< css::uno::Reference< css::container::XIndexContainer > >& rSeqContainer,
+                        std::vector< css::uno::Reference< css::container::XIndexContainer > >& rSeqContainer,
                         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::embed::XStorage >& rToolbarStorage );
     };

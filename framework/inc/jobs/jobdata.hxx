@@ -163,7 +163,7 @@ class JobData
             job specific configuration items ... unknown for us!
             It's readed from the configuration. Don't set it from outside!
          */
-        css::uno::Sequence< css::beans::NamedValue > m_lArguments;
+        std::vector< css::beans::NamedValue > m_lArguments;
 
         /**
             after a job was successfully executed (by any outside code using our
@@ -190,7 +190,7 @@ class JobData
         OUString                              getService              () const;
         OUString                              getEvent                () const;
         css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
-        css::uno::Sequence< css::beans::NamedValue > getJobConfig            () const;
+        std::vector< css::beans::NamedValue >    getJobConfig            () const;
 
         bool                                     hasConfig               () const;
         bool                                     hasCorrectContext       ( const OUString& rModuleIdent ) const;
@@ -200,12 +200,12 @@ class JobData
         void                                         setService     ( const OUString&                              sService     );
         void                                         setEvent       ( const OUString&                              sEvent       ,
                                                                       const OUString&                              sAlias       );
-        void                                         setJobConfig   ( const css::uno::Sequence< css::beans::NamedValue >& lArguments   );
+        void                                         setJobConfig   ( const std::vector< css::beans::NamedValue >& lArguments   );
         void                                         setResult      ( const JobResult&                                    aResult      );
         void                                         disableJob     (                                                                  );
 
-        static css::uno::Sequence< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                             const OUString&                                    sEvent );
+        static std::vector< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                const OUString&                                    sEvent );
 
         static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                                const OUString&                                                 sEvent ,

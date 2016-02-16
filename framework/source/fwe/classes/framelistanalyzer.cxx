@@ -86,9 +86,9 @@ void FrameListAnalyzer::impl_analyze()
     sal_Int32 nModelStep   = 0;
     sal_Int32 nCount       = xFrameContainer->getCount();
 
-    m_lOtherVisibleFrames.realloc(nCount);
-    m_lOtherHiddenFrames.realloc(nCount);
-    m_lModelFrames.realloc(nCount);
+    m_lOtherVisibleFrames.resize(nCount);
+    m_lOtherHiddenFrames.resize(nCount);
+    m_lModelFrames.resize(nCount);
 
     // ask for the model of the given reference frame.
     // It must be compared with the model of every frame of the container
@@ -258,9 +258,9 @@ void FrameListAnalyzer::impl_analyze()
     // Pack both lists by using the actual step positions.
     // All empty or ignorable items should exist at the end of these lists
     // behind the position pointers. So they will be removed by a reallocation.
-    m_lOtherVisibleFrames.realloc(nVisibleStep);
-    m_lOtherHiddenFrames.realloc(nHiddenStep);
-    m_lModelFrames.realloc(nModelStep);
+    m_lOtherVisibleFrames.resize(nVisibleStep);
+    m_lOtherHiddenFrames.resize(nHiddenStep);
+    m_lModelFrames.resize(nModelStep);
 }
 
 } //  namespace framework
