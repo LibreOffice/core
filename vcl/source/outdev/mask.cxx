@@ -106,8 +106,8 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 {
     assert(!is_double_buffered_window());
 
-    const ImpBitmap* pImpBmp = rMask.ImplGetImpBitmap();
-    if ( pImpBmp )
+    std::shared_ptr<ImpBitmap> xImpBmp = rMask.ImplGetImpBitmap();
+    if (xImpBmp)
     {
         SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
@@ -115,7 +115,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                            ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
         // we don't want to mirror via coordinates
-        const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, pImpBmp->ImplGetSize() );
+        const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, xImpBmp->ImplGetSize() );
 
         // check if output is necessary
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
@@ -129,7 +129,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                                       ImplColorToSal( rMaskColor ) , this);
             }
             else
-                mpGraphics->DrawMask( aPosAry, *pImpBmp->ImplGetSalBitmap(),
+                mpGraphics->DrawMask( aPosAry, *xImpBmp->ImplGetSalBitmap(),
                                       ImplColorToSal( rMaskColor ), this );
 
         }

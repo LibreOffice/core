@@ -445,8 +445,8 @@ public:
                             const Size &rSize );
 public:
 
-    SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
-    SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE  std::shared_ptr<ImpBitmap>  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE  std::shared_ptr<ImpBitmap>  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
 
 
 private:
