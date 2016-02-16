@@ -2006,6 +2006,11 @@ void Desktop::OpenClients()
         }
     }
 
+#if HAVE_FEATURE_BREAKPAD
+    if (!rArgs.IsNoRestore() && crashReportInfoExists())
+        handleCrashReport();
+#endif
+
     // Disable AutoSave feature in case "--norestore" or a similar command line switch is set on the command line.
     // The reason behind: AutoSave/EmergencySave/AutoRecovery share the same data.
     // But the require that all documents, which are saved as backup should exists inside
