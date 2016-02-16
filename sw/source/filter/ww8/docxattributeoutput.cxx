@@ -8479,6 +8479,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
       m_nFieldsInHyperlink( 0 ),
+      m_bExportingOutline(false),
       m_nChartCount(0),
       m_postponedChart( nullptr ),
       pendingPlaceholder( nullptr ),
