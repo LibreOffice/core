@@ -86,6 +86,7 @@ public:
     void testWriterComments();
     void testModifiedStatus();
     void testSheetOperations();
+    void testSheetSelections();
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testContextMenuImpress();
@@ -111,6 +112,7 @@ public:
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testSheetOperations);
+    CPPUNIT_TEST(testSheetSelections);
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testContextMenuImpress);
@@ -767,7 +769,7 @@ void DesktopLOKTest::testModifiedStatus()
 
 void DesktopLOKTest::testSheetOperations()
 {
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
 
     // insert the last sheet
@@ -792,6 +794,116 @@ void DesktopLOKTest::testSheetOperations()
     for (int i = 0; i < 6; ++i)
     {
         CPPUNIT_ASSERT_EQUAL(pExpected[i], OString(pDocument->pClass->getPartName(pDocument, i)));
+    }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testSheetSelections()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    /*
+     * Check if selection data is correct
+     */
+    // Values in twips
+    int row5 = 1150;
+    int col1 = 1100;
+    int col2 = 2200;
+    int col3 = 3300;
+    int col4 = 4400;
+    int col5 = 5500;
+
+    // Select row 5 from column 1 through column 5
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col1, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col2, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col3, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col4, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col5, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col5, row5,
+                                      1, 1, 0);
+
+    // Copy the contents and check if matches expected data
+    {
+        char* pUsedMimeType = nullptr;
+        char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
+        std::vector<int> pExpected = {5, 6, 7, 8, 9};
+        std::istringstream iss(pCopiedContent);
+        for (uint i = 0; i < pExpected.size(); i++)
+        {
+            std::string token;
+            iss >> token;
+            CPPUNIT_ASSERT_EQUAL(pExpected[i], std::stoi(token));
+        }
+
+        free(pUsedMimeType);
+        free(pCopiedContent);
+    }
+
+    /*
+     * Check if clicking inside the selection deselects the whole selection
+     */
+    int row10 = 2400;
+    // Select starting from row5, col1 to row10, col5
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col1, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col5, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col5, row10,
+                                      1, 1, 0);
+
+    // Click at row5, col4
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col4, row5,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col4, row5,
+                                      1, 1, 0);
+
+    // Selected text should get deselected and copying should give us
+    // content of only one cell, now
+    {
+        char* pUsedMimeType  = nullptr;
+        char* pCopiedContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pUsedMimeType);
+        std::vector<int> pExpected = { 8 };
+        std::istringstream iss(pCopiedContent);
+        for (uint i = 0; i < pExpected.size(); i++)
+        {
+            std::string token;
+            iss >> token;
+            CPPUNIT_ASSERT_EQUAL(pExpected[i], std::stoi(token));
+        }
+
+        free(pUsedMimeType);
+        free(pCopiedContent);
     }
 
     comphelper::LibreOfficeKit::setActive(false);
