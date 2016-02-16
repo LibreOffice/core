@@ -37,25 +37,26 @@ class SvIdlParser
     SvTokenStream & rInStm;
 public:
     SvIdlParser( SvIdlDataBase& rBase_, SvTokenStream & rInStrm_) : rBase(rBase_), rInStm(rInStrm_) {}
-    void        ReadSvIdl( bool bImported, const OUString & rPath );
-    void        ReadModuleHeader(SvMetaModule& rModule);
-    void        ReadModuleBody(SvMetaModule& rModule);
-    void        ReadModuleElement( SvMetaModule& rModule );
-    void        ReadInclude( SvMetaModule& rModule );
-    void        ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );
-    void        ReadInterfaceOrShellEntry( SvMetaClass& rClass );
-    bool        ReadInterfaceOrShellSlot( SvMetaSlot& rSlot );
-    bool        ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr );
-    void        ReadItem();
-    void        ReadStruct();
-    void        ReadEnum();
-    void        ReadEnumValue( SvMetaTypeEnum& rEnum );
-    SvMetaType* ReadKnownType();
-    void        ReadChar(char cChar);
-    void        ReadDelimiter();
-    OString     ReadIdentifier();
-    OString     ReadString();
-    void        ReadToken(SvStringHashEntry*);
+    void         ReadSvIdl( bool bImported, const OUString & rPath );
+    void         ReadModuleHeader(SvMetaModule& rModule);
+    void         ReadModuleBody(SvMetaModule& rModule);
+    void         ReadModuleElement( SvMetaModule& rModule );
+    void         ReadInclude( SvMetaModule& rModule );
+    void         ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );
+    void         ReadInterfaceOrShellEntry( SvMetaClass& rClass );
+    bool         ReadInterfaceOrShellSlot( SvMetaSlot& rSlot );
+    bool         ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr );
+    void         ReadItem();
+    void         ReadStruct();
+    void         ReadEnum();
+    void         ReadEnumValue( SvMetaTypeEnum& rEnum );
+    SvMetaClass* ReadKnownClass();
+    SvMetaType*  ReadKnownType();
+    void         ReadChar(char cChar);
+    void         ReadDelimiter();
+    OString      ReadIdentifier();
+    OString      ReadString();
+    void         ReadToken(SvStringHashEntry*);
 };
 
 #endif // INCLUDED_IDL_INC_PARSER_HXX

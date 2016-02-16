@@ -33,6 +33,7 @@ class SvClassElement
     tools::SvRef<SvMetaClass> xClass;
 public:
             SvClassElement();
+            SvClassElement(SvMetaClass* pClass) { xClass = pClass; }
 
     void            SetPrefix( const OString& rPrefix )
                     { aPrefix = rPrefix; }

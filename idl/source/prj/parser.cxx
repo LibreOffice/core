@@ -282,9 +282,7 @@ void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMet
 
     if( rInStm.ReadIf( ':' ) )
     {
-        aClass->aSuperClass = rBase.ReadKnownClass( rInStm );
-        if( !aClass->aSuperClass.Is() )
-            throw SvParseException( rInStm, "unknown super class" );
+        aClass->aSuperClass = ReadKnownClass();
     }
     if( rInStm.ReadIf( '{' ) )
     {
@@ -309,19 +307,15 @@ void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
 
     if( rTok.Is( SvHash_import() ) )
     {
-        SvMetaClass * pClass = rBase.ReadKnownClass( rInStm );
-        if( !pClass )
-            throw SvParseException( rInStm, "unknown imported interface" );
-        SvClassElement xEle;
-        xEle.SetClass( pClass );
-        rClass.aClassElementList.push_back( xEle );
-
+        SvMetaClass * pClass = ReadKnownClass();
+        SvClassElement xEle(pClass);
         rTok = rInStm.GetToken();
         if( rTok.IsString() )
         {
             xEle.SetPrefix( rTok.GetString() );
             rInStm.GetToken_Next();
         }
+        rClass.aClassElementList.push_back( xEle );
         return;
     }
     else
@@ -363,12 +357,22 @@ bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
     SvMetaAttribute * pAttr = rBase.ReadKnownAttr( rInStm, rSlot.GetType() );
     if( pAttr )
     {
-        SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr  );
+        SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr );
         if( !pKnownSlot )
             throw SvParseException( rInStm, "attribute " + pAttr->GetName() + " is method or variable but not a slot" );
         rSlot.SetRef( pKnownSlot );
         rSlot.SetName( pKnownSlot->GetName() );
-        bOk = rSlot.SvMetaObject::ReadSvIdl( rBase, rInStm );
+        if( rInStm.ReadIf( '[' ) )
+        {
+            sal_uInt32 nBeginPos = 0; // can not happen with Tell
+            while( nBeginPos != rInStm.Tell() )
+            {
+                nBeginPos = rInStm.Tell();
+                rSlot.ReadAttributesSvIdl( rBase, rInStm );
+                rInStm.ReadIfDelimiter();
+            }
+            bOk = rInStm.ReadIf( ']' );
+        }
     }
     else
     {
@@ -376,7 +380,7 @@ bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
         SvMetaAttribute *pAttr2 = rBase.SearchKnownAttr( rSlot.GetSlotId() );
         if( pAttr2 )
         {
-            SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr2  );
+            SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr2 );
             if( !pKnownSlot )
                 throw SvParseException( rInStm, "attribute " + pAttr2->GetName() + " is method or variable but not a slot" );
             rSlot.SetRef( pKnownSlot );
@@ -433,6 +437,14 @@ bool SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
     if( !bOk )
         rInStm.Seek( nTokPos );
     return bOk;
+}
+
+SvMetaClass * SvIdlParser::ReadKnownClass()
+{
+    SvMetaClass* pClass = rBase.ReadKnownClass( rInStm );
+    if( !pClass )
+        throw SvParseException( rInStm, "unknown class" );
+    return pClass;
 }
 
 SvMetaType * SvIdlParser::ReadKnownType()
