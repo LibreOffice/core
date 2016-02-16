@@ -228,10 +228,10 @@ class SVT_DLLPUBLIC SvTreeListBox
                 ,public vcl::ISearchableStringList
 {
     friend class SvImpLBox;
+    friend class IconViewImpl;
     friend class TreeControlPeer;
 
     SvTreeListBoxImpl* mpImpl;
-    SvImpLBox*      pImp;
     Link<SvTreeListBox*,void>  aCheckButtonHdl;
     Link<SvTreeListBox*,void>  aScrolledHdl;
     Link<SvTreeListBox*,void>  aExpandedHdl;
@@ -245,7 +245,6 @@ class SVT_DLLPUBLIC SvTreeListBox
     Image           aCurInsertedColBmp;
 
     short           nContextBmpWidthMax;
-    short           nEntryHeight;
     short           nEntryHeightOffs;
     short           nIndent;
     short           nFocusWidth;
@@ -269,6 +268,11 @@ class SVT_DLLPUBLIC SvTreeListBox
     SvLBoxItem*             pEdItem;
 
 protected:
+    SvImpLBox*              pImp;
+    unsigned int            nColumns;
+    short                   nEntryHeight;
+    short                   nEntryWidth;
+
     Link<SvTreeListBox*,bool> aDoubleClickHdl;
     SvTreeListEntry*        pTargetEntry;
     SvLBoxButtonData*       pCheckButtonData;
@@ -710,8 +714,11 @@ public:
     void            ShowTargetEmphasis( SvTreeListEntry*, bool bShow );
     void            ScrollOutputArea( short nDeltaEntries );
 
+    unsigned int    GetColumnsCount() const { return nColumns; }
     short           GetEntryHeight() const  { return nEntryHeight; }
     void            SetEntryHeight( short nHeight, bool bAlways = false );
+    short           GetEntryWidth() const { return nEntryWidth; }
+    void            SetEntryWidth( short nWidth );
     Size            GetOutputSizePixel() const;
     short           GetIndent() const { return nIndent; }
     void            SetIndent( short nIndent );
