@@ -123,6 +123,10 @@ protected:
 public:
     enum Op { Add, Sub, Mul, Div };
 
+    typedef std::function<void(size_t, size_t, double)> DoubleOpFunction;
+    typedef std::function<void(size_t, size_t, bool)> BoolOpFunction;
+    typedef std::function<void(size_t, size_t, svl::SharedString)> StringOpFunction;
+
     /**
      * When adding all numerical matrix elements for a scalar result such as
      * summation, the interpreter wants to separate the first non-zero value
@@ -393,6 +397,9 @@ public:
 
     virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) = 0;
 
+    virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
+            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const = 0;
+
 #if DEBUG_MATRIX
     void Dump() const;
 #endif
@@ -598,6 +605,8 @@ public:
 
     virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
 
+    virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
+            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const;
     ScFullMatrix& operator+= ( const ScFullMatrix& r );
 
 #if DEBUG_MATRIX
@@ -805,6 +814,9 @@ public:
     virtual void PowOp(bool bFlag, double fVal, ScMatrix& rMat) override;
 
     virtual std::vector<ScMatrix::IterateResult> Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp) override;
+
+    virtual void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
+            DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const;
 
     ScVectorRefMatrix& operator+=(const ScVectorRefMatrix& r);
 };

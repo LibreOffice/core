@@ -791,35 +791,21 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             pTabData.reset(new Table);
 
         const ScMatrixRef& pMat = itrData->mpRangeData;
-        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        ScFullMatrix::DoubleOpFunction aDoubleFunc = [=](size_t row, size_t col, double val) -> void
         {
-            const SCSIZE nR = nRow - nRow1;
-            for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-            {
-                const SCSIZE nC = nCol - nCol1;
-
-                ScMatrixValue value = pMat->Get(nC, nR);
-
-                TokenRef pToken;
-
-                switch (value.nType) {
-                    case SC_MATVAL_VALUE:
-                    case SC_MATVAL_BOOLEAN:
-                        pToken.reset(new formula::FormulaDoubleToken(value.fVal));
-                        break;
-                    case SC_MATVAL_STRING:
-                        pToken.reset(new formula::FormulaStringToken(value.aStr));
-                        break;
-                    default:
-                        // Don't cache empty cells.
-                        break;
-                }
-
-                if (pToken)
-                    // Don't mark this cell 'cached' here, for better performance.
-                    pTabData->setCell(nCol, nRow, pToken, 0, false);
-            }
-        }
+            pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val), 0, false);
+        };
+        ScFullMatrix::BoolOpFunction aBoolFunc = [=](size_t row, size_t col, bool val) -> void
+        {
+            pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val), 0, false);
+        };
+        ScFullMatrix::StringOpFunction aStringFunc = [=](size_t row, size_t col, svl::SharedString val) -> void
+        {
+            pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
+        };
+        pMat->ExecuteOperation(std::pair<size_t, size_t>(0, 0),
+                std::pair<size_t, size_t>(nRow2-nRow1, nCol2-nCol1),
+                aDoubleFunc, aBoolFunc, aStringFunc);
         // Mark the whole range 'cached'.
         pTabData->setCachedCellRange(nCol1, nRow1, nCol2, nRow2);
     }
