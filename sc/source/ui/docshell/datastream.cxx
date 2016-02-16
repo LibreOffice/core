@@ -31,7 +31,7 @@
 
 
 #if ENABLE_ORCUS
-#if defined WNT
+#if defined(_WIN32)
 #define __ORCUS_STATIC_LIB
 #endif
 #include <orcus/csv_parser.hpp>

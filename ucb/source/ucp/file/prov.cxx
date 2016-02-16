@@ -222,7 +222,7 @@ FileProvider::compareContentIds(
             iComp = aStatus1.getFileURL().compareTo( aStatus2.getFileURL() );
 
 // Quick hack for Windows to threat all file systems as case insensitive
-#ifdef  WNT
+#ifdef _WIN32
             if ( 0 != iComp )
             {
                 error = osl::FileBase::getSystemPathFromFileURL( aStatus1.getFileURL(), aPath1 );

@@ -632,7 +632,7 @@ public:
                                     MiscSettings();
                                     ~MiscSettings();
 
-#ifdef WNT
+#ifdef _WIN32
     void                            SetEnableATToolSupport( bool bEnable );
 #endif
     bool                            GetEnableATToolSupport() const;

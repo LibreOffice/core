@@ -16,14 +16,14 @@ $(call gb_CustomTarget_get_target,odk/allheaders) : \
 
 define odk_genincludesheader
 // Generated list of sal includes
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
 endef
 
 define odk_geninclude
-$(if $(2),#ifdef WNT)
+$(if $(2),#ifdef _WIN32)
 #include <$(subst $(INSTDIR)/$(SDKDIRNAME)/include/,,$(1))>
 $(if $(2),#endif)
 
@@ -35,11 +35,11 @@ $(odk_allheaders_DIR)/allheaders.hxx : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	printf '// Generated list of sal includes\n' > $@ && \
-	printf '#ifdef WNT\n' >> $@ && \
+	printf '#ifdef _WIN32\n' >> $@ && \
 	printf '#include <windows.h>\n' >> $@ && \
 	printf '#endif\n' >> $@ \
 	$(foreach file,$(shell cat $^),\
-		$(if $(findstring /win32/,$(file)),&& printf '#ifdef WNT\n' >> $@) \
+		$(if $(findstring /win32/,$(file)),&& printf '#ifdef _WIN32\n' >> $@) \
 	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(SDKDIRNAME)/include/,,$(file)) >> $@ \
 		$(if $(findstring /win32/,$(file)),&& printf '#endif // WNT\n' >> $@) \
 	)

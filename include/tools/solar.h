@@ -106,7 +106,7 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = reinterpret_cast<s
 #endif
 #endif
 
-#if defined WNT
+#if defined(_WIN32)
 #define SVLIBRARY( Base ) Base "lo.dll"
 #elif defined MACOSX
 #define SVLIBRARY( Base ) "lib" Base "lo.dylib"

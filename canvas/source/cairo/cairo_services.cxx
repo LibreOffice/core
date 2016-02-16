@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-#if defined(WNT) || defined (MACOSX)
+#if defined(_WIN32) || defined (MACOSX)
 #  error "The cairo canvas should not be enabled on Windows or Mac cf fdo#46901"
 #endif
 

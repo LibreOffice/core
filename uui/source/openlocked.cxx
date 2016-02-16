@@ -36,7 +36,7 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, c
     SetButtonHelpText( RET_YES, OUString() );
     SetButtonHelpText( RET_NO, OUString() );
 
-#ifdef WNT
+#ifdef _WIN32
     // bnc#656566
     // Yes, it is silly to do this only for this dialog but not the
     // other similar ones. But hey, it was about this dialog that the

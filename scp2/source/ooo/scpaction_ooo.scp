@@ -26,7 +26,7 @@ ScpAction scp_Copy_Thirdpartylicense_Readme_Html
 End
 #endif
 
-#ifndef WNT
+#ifndef _WIN32
 ScpAction scp_Copy_Readme_Txt
   #ifdef UNX
     README_ALL_LANG(Copy, README);
@@ -44,7 +44,7 @@ ScpAction scp_Copy_Readme_Txt
 End
 #endif
 
-#if !defined(WNT) && !defined(MACOSX) && defined(WITH_RPM)
+#if !defined(_WIN32) && !defined(MACOSX) && defined(WITH_RPM)
 ScpAction scp_Copy_Install
     Copy = "scripts/install";
     Name = "install";
@@ -52,7 +52,7 @@ ScpAction scp_Copy_Install
 End
 #endif
 
-#if defined(WNT) && defined(_gcc3)
+#if defined(_WIN32) && defined(_gcc3)
 #if defined(MINGW_GCCDLL)
 ScpAction SCP_COPY_MINGW_GCCS
     Copy = MINGW_GCCDLL;

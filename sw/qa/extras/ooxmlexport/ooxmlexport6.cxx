@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
+#if !defined(_WIN32)
 
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>

@@ -489,7 +489,7 @@ public:
     OUString                    GetTitle( sal_uInt16 nMaxLen = 0 ) const;
     void                        InvalidateName();  // Re-set to unnamed
 
-#if defined WNT
+#if defined(_WIN32)
     // DDE-Interface
     long                        DdeExecute( const OUString& rCmd );
     virtual bool                DdeGetData( const OUString& rItem,

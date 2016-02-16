@@ -21,7 +21,7 @@
 #ifndef MACOSX
 Directory gid_Dir_Brand_Root
     ParentID = PREDEFINED_PROGDIR;
-  #ifdef WNT
+  #ifdef _WIN32
     HostName = "${WINDOWSBASISROOTNAME}";
   #else
     HostName = ".";
@@ -114,7 +114,7 @@ Directory gid_Dir_Classes
 #endif
 End
 
-#ifdef WNT
+#ifdef _WIN32
 
 Directory gid_Dir_Shellnew
     ParentID = gid_Dir_Template;
@@ -154,7 +154,7 @@ Directory gid_Dir_Fonts
     DosName = "fonts";
 End
 
-#ifdef WNT
+#ifdef _WIN32
 
 Directory gid_Dir_Winfonts
     ParentID = gid_Dir_Fonts;

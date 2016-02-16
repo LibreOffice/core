@@ -22,7 +22,7 @@
 
 #if EXTRA_ACL_CHECK
 
-#ifdef WNT
+#ifdef _WIN32
 
 // necessary to include system headers without warnings
 #ifdef _MSC_VER

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
 #include <shlobj.h>
@@ -807,7 +807,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         }
         break;
 
-#ifdef WNT
+#ifdef _WIN32
         case SotClipboardFormatId::FILEGRPDESCRIPTOR:
         {
             Sequence< sal_Int8 >    aSeq( sizeof( FILEGROUPDESCRIPTOR ) );
@@ -1879,7 +1879,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
         }
         break;
 
-#ifdef WNT
+#ifdef _WIN32
         case SotClipboardFormatId::FILEGRPDESCRIPTOR:
         {
             Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());

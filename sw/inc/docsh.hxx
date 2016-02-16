@@ -229,7 +229,7 @@ public:
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                             SwCursorShell* pCursorSh = nullptr, SwPaM* pPaM = nullptr);
 
-#if defined WNT
+#if defined(_WIN32)
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              css::uno::Any & rValue ) override;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,

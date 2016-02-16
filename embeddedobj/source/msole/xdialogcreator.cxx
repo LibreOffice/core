@@ -39,7 +39,7 @@
 #include <oleembobj.hxx>
 
 
-#ifdef WNT
+#ifdef _WIN32
 
 #include <oledlg.h>
 
@@ -138,7 +138,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     embed::InsertedObjectInfo aObjectInfo;
     uno::Sequence< beans::PropertyValue > aObjArgs( aInObjArgs );
 
-#ifdef WNT
+#ifdef _WIN32
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
@@ -289,7 +289,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 {
     embed::InsertedObjectInfo aObjectInfo;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),

@@ -20,7 +20,7 @@
 #include <osl/process.h>
 #include <stdio.h>
 
-#if defined WNT
+#if defined(_WIN32)
     #define MAIN _cdecl main
 #else
     #define MAIN main

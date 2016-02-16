@@ -28,7 +28,7 @@
 #define MAXFUNCPARAM    16
 #define MAXARRSIZE      0xfffe
 
-#ifndef WNT
+#ifndef _WIN32
 #define CALLTYPE
 #else
 #define CALLTYPE            __cdecl

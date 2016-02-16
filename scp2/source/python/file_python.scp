@@ -41,7 +41,7 @@ Directory gid_Dir_Py_PythonCore_Lib
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 Directory gid_Dir_Py_PythonCore_Bin
     ParentID = gid_Dir_Py_PythonCore;
     HostName = "bin";

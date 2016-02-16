@@ -8,7 +8,7 @@
 
 #include "macros.inc"
 
-#if defined(WNT) && defined( _gcc3 )
+#if defined(_WIN32) && defined( _gcc3 )
 
 File gid_Brand_File_Lib_Mingw_Dlls
     TXT_FILE_BODY;

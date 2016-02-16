@@ -22,11 +22,11 @@
 
 #include "commontypes.hxx"
 
-#if defined(WNT) || (defined (UNX) && !defined(ANDROID) && !defined(IOS))
+#if defined(_WIN32) || (defined (UNX) && !defined(ANDROID) && !defined(IOS))
 #define HAVE_ODBC_SUPPORT
 #endif
 
-#if defined(WNT) && defined(HAVE_ODBC_SUPPORT)
+#if defined(_WIN32) && defined(HAVE_ODBC_SUPPORT)
 #define HAVE_ODBC_ADMINISTRATION
 #endif
 

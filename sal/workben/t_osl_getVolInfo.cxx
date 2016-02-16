@@ -22,7 +22,7 @@
 #include <osl/file.h>
 #include <rtl/ustring.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #   define  TEST_PATH_1 "c:\\"
 #   define  TEST_PATH_2 "c:\\mnt\\MSDN"
 #   define  TEST_PATH_3 "c:\\Program Files"

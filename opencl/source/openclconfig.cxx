@@ -130,7 +130,7 @@ bool match(const OUString& rPattern, const OUString& rInput)
 
 bool match(const OpenCLConfig::ImplMatcher& rListEntry, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
 {
-#if defined WNT
+#if defined(_WIN32)
     if (!rListEntry.maOS.isEmpty() && rListEntry.maOS != "Windows")
         return false;
 #elif defined LINUX

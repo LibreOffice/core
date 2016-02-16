@@ -81,7 +81,7 @@ void VBATest::testMiscVBAFunctions()
 void VBATest::testMiscOLEStuff()
 {
 // not much point even trying to run except on windows
-#if defined(WNT)
+#if defined(_WIN32)
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;

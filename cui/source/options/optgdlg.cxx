@@ -214,7 +214,7 @@ namespace
                 return OUString();
                 #endif
             }
-            #if defined WNT
+            #if defined(_WIN32)
             return OUString("com.sun.star.ui.dialogs.SystemFilePicker");
             #elif defined MACOSX
             return OUString("com.sun.star.ui.dialogs.AquaFilePicker");

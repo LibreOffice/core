@@ -462,7 +462,7 @@ sub check_oxtfiles
         {
             if (( $onefile->{'Name'} =~ /\.oxt\s*$/ ) && ( $onefile->{'Dir'} eq $installer::globals::extensioninstalldir ))
             {
-                installer::exiter::exit_program("There is currently only for Linux (RPM) and Windows a reliable mechanism to register extensions during installation.\nPlease remove file \"$onefile->{'gid'}\" from your installation set!\nYou can use \"\#ifdef WNT\" and \"\#ifdef LINUX\" in scp.", "check_oxtfiles");
+                installer::exiter::exit_program("There is currently only for Linux (RPM) and Windows a reliable mechanism to register extensions during installation.\nPlease remove file \"$onefile->{'gid'}\" from your installation set!\nYou can use \"\#ifdef _WIN32\" and \"\#ifdef LINUX\" in scp.", "check_oxtfiles");
             }
         }
     }

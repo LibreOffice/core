@@ -8,7 +8,7 @@
 #include <map>
 #include <string>
 
-#if defined( WNT )
+#if defined(_WIN32)
 #include <windows.h>
 #include <algorithm>
 #else

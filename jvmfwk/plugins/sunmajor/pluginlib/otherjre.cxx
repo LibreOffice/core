@@ -36,7 +36,7 @@ Reference<VendorBase> OtherInfo::createInstance()
 char const* const* OtherInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#if defined(WNT)
+#if defined(_WIN32)
         "bin/java.exe",
         "jre/bin/java.exe"
 #elif defined UNX
@@ -51,7 +51,7 @@ char const* const* OtherInfo::getJavaExePaths(int * size)
 char const* const* OtherInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#if defined(WNT)
+#if defined(_WIN32)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",

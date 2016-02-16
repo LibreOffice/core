@@ -19,13 +19,13 @@
 
 #include "syspath.hxx"
 
-#if defined WNT
+#if defined(_WIN32)
 extern "C" bool GetUserTemplateLocation(sal_Unicode*, int nSize);
 #endif
 
 bool SystemPath::GetUserTemplateLocation(sal_Unicode* pFolder, int nSize )
 {
-#ifdef WNT
+#ifdef _WIN32
     return ::GetUserTemplateLocation( pFolder, nSize );
 #else
     (void)pFolder;

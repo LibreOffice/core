@@ -2415,7 +2415,7 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
     return nchars;
 }
 
-#if defined(WNT) || defined(MACOSX) || defined(IOS)
+#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
 sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
 {
     switch (ttf->cmapType) {

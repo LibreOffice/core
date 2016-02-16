@@ -18,7 +18,7 @@ enum LineEnd { LINEEND_CR, LINEEND_LF, LINEEND_CRLF };
 
 inline LineEnd GetSystemLineEnd()
 {
-#if defined WNT
+#if defined(_WIN32)
     return LINEEND_CRLF;
 #else
     return LINEEND_LF;

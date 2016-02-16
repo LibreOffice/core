@@ -926,7 +926,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 
         bNoStretching = (aSize1 == aSize2);
 
-#ifdef WNT
+#ifdef _WIN32
         // Windows zooms the font proportionally when using Size(100,500),
         // we don't like that.
         if(aSize2.Height() >= aSize1.Height() * 2)

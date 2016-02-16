@@ -179,7 +179,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 static OUString GetCrashConfigDir()
 {
 
-#if defined(WNT)
+#if defined(_WIN32)
     OUString    ustrValue = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}";
 #elif defined(MACOSX)
     OUString    ustrValue = "~";
@@ -188,14 +188,14 @@ static OUString GetCrashConfigDir()
 #endif
     rtl::Bootstrap::expandMacros( ustrValue );
 
-#if defined(WNT)
+#if defined(_WIN32)
     ustrValue += "/user/crashdata";
 #endif
     return ustrValue;
 }
 
 
-#if defined(WNT)
+#if defined(_WIN32)
 #define LCKFILE "crashdat.lck"
 #else
 #define LCKFILE ".crash_report_unsent"

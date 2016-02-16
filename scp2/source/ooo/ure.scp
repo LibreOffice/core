@@ -230,7 +230,7 @@ Unixlink gid_Unixlink_File_Dl_Libxml2
 End
 #endif
 
-#if defined(WNT) && defined( _gcc3 )
+#if defined(_WIN32) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
 

@@ -94,7 +94,7 @@ protected:
     }
 };
 
-#if !defined(WNT)
+#if !defined(_WIN32)
 
 DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
 {

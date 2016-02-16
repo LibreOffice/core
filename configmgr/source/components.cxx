@@ -69,7 +69,7 @@
 #include <dconf.hxx>
 #endif
 
-#if defined WNT
+#if defined(_WIN32)
 #include "winreg.hxx"
 #endif
 
@@ -546,7 +546,7 @@ Components::Components(
             }
             ++layer; //TODO: overflow
 #endif
-#if defined WNT
+#if defined(_WIN32)
         } else if (type == "winreg") {
             WinRegType eType;
             if (url == "LOCAL_MACHINE" || url.isEmpty()/*backwards comp.*/) {

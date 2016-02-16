@@ -139,13 +139,13 @@ public:
     static ResMgr*              GetSfxResManager();
 
     // DDE
-#if defined( WNT )
+#if defined(_WIN32)
     long                        DdeExecute( const OUString& rCmd );
 #endif
     bool                        InitializeDde();
     const DdeService*           GetDdeService() const;
     DdeService*                 GetDdeService();
-#if defined( WNT )
+#if defined(_WIN32)
     void                        AddDdeTopic( SfxObjectShell* );
 #endif
     void                        RemoveDdeTopic( SfxObjectShell* );

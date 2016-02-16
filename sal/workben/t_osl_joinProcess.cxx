@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-#ifdef WNT
+#ifdef _WIN32
     const rtl::OUString IMAGE_NAME("ojpx.exe");
 #else
     const rtl::OUString IMAGE_NAME("ojpx");

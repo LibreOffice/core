@@ -499,7 +499,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         {
             aIniName    = aIniName.copy( 0, lastIndex+1 );
             aIniName    += "perftune";
-    #if defined(WNT)
+    #if defined(_WIN32)
             aIniName    += ".ini";
     #else
             aIniName    += "rc";

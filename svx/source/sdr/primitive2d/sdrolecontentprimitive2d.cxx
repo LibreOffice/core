@@ -50,7 +50,7 @@ namespace drawinglayer
                     bScaleContent = pSource->IsEmptyPresObj();
                 }
             }
-#ifdef WNT // Little point in displaying the "broken OLE" graphic on OSes that don't have real OLE, maybe?
+#ifdef _WIN32 // Little point in displaying the "broken OLE" graphic on OSes that don't have real OLE, maybe?
             if(GRAPHIC_NONE == aGraphic.GetType())
             {
                 // no source, use fallback resource empty OLE graphic

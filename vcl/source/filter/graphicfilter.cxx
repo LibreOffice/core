@@ -1191,7 +1191,7 @@ OUString GraphicFilter::GetImportFormatTypeName( sal_uInt16 nFormat )
     return pConfig->GetImportFilterTypeName( nFormat );
 }
 
-#ifdef WNT
+#ifdef _WIN32
 OUString GraphicFilter::GetImportFormatMediaType( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFormatMediaType( nFormat );

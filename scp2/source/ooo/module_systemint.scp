@@ -19,14 +19,14 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Systemintegration
-  #ifdef WNT
+  #ifdef _WIN32
     ParentID = gid_Module_Root;
   #else
     ParentID = gid_Module_Optional;
   #endif
     Sortkey = "800";
     MOD_NAME_DESC(MODULE_OPTIONAL_SYSTEMINTEGRATION);
-  #ifdef WNT
+  #ifdef _WIN32
     Styles = (HIDDEN_ROOT);
   #else
     Styles = (SYSTEMMODULE,NOTRELOCATABLE,INSTALLCANFAIL,USEFORCE);

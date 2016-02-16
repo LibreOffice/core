@@ -2627,7 +2627,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     OUString sFilterXLS(SW_RES(STR_FILTER_XLS));
     OUString sFilterTXT(SW_RES(STR_FILTER_TXT));
     OUString sFilterCSV(SW_RES(STR_FILTER_CSV));
-#ifdef WNT
+#ifdef _WIN32
     OUString sFilterMDB(SW_RES(STR_FILTER_MDB));
     OUString sFilterACCDB(SW_RES(STR_FILTER_ACCDB));
 #endif
@@ -2640,7 +2640,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     xFltMgr->appendFilter( sFilterXLS, "*.xls" );
     xFltMgr->appendFilter( sFilterTXT, "*.txt" );
     xFltMgr->appendFilter( sFilterCSV, "*.csv" );
-#ifdef WNT
+#ifdef _WIN32
     xFltMgr->appendFilter( sFilterMDB, "*.mdb" );
     xFltMgr->appendFilter( sFilterACCDB, "*.accdb" );
 #endif
@@ -2704,7 +2704,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         aURLAny <<= sDBURL;
         type = DBCONN_FLAT;
     }
-#ifdef WNT
+#ifdef _WIN32
     else if(sExt.equalsIgnoreAsciiCase("mdb"))
     {
         OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");

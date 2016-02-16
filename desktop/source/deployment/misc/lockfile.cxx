@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <time.h>
-#ifndef WNT
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <windows.h>
@@ -41,7 +41,7 @@ using namespace ::utl;
 static OString impl_getHostname()
 {
     OString aHost;
-#ifdef WNT
+#ifdef _WIN32
     /*
        prevent windows from connecting to the net to get its own
        hostname by using the netbios name

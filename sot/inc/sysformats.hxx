@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SOT_SYSFORMATS_HXX
 #define INCLUDED_SOT_SYSFORMATS_HXX
 
-#ifdef WNT
+#ifdef _WIN32
 #ifdef _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)

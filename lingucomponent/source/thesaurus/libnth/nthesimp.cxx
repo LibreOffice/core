@@ -329,7 +329,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                 osl::FileBase::getSystemPathFromFileURL(datpath,ndat);
                 osl::FileBase::getSystemPathFromFileURL(idxpath,nidx);
 
-#if defined(WNT)
+#if defined(_WIN32)
                 // MyThes waits UTF-8 encoded paths with \\?\ long path prefix.
                 OString aTmpidx = Win_AddLongPathPrefix(OUStringToOString(nidx, RTL_TEXTENCODING_UTF8));
                 OString aTmpdat = Win_AddLongPathPrefix(OUStringToOString(ndat, RTL_TEXTENCODING_UTF8));

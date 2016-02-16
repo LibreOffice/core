@@ -172,7 +172,7 @@ File gid_File_Share_Registry_Main_Xcd
     Name = "main.xcd";
 End
 
-#ifdef WNT
+#ifdef _WIN32
 
 File gid_File_Share_Registry_Forcedefault_Xcd
     TXT_FILE_BODY;
@@ -323,7 +323,7 @@ UI_FILELIST_ALL_LANG(uui, uui)
 UI_FILELIST_ALL_LANG(vcl, vcl)
 UI_FILELIST_ALL_LANG(xmlsec, xmlsec)
 
-#ifdef WNT
+#ifdef _WIN32
 
 File gid_File_extras_newfiles
     TXT_FILE_BODY;

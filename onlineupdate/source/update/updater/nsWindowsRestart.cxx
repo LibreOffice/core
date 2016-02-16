@@ -11,7 +11,7 @@
 #define nsWindowsRestart_cxx
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 #include <stdint.h>

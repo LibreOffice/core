@@ -76,7 +76,7 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
 #else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
-#if defined WNT
+#if defined(_WIN32)
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
             // GDI Scanlines padded to DWORD multiples, it seems

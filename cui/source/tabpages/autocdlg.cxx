@@ -2411,7 +2411,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         OStringBuffer sData;
         const sal_Char aLineEnd[] =
-#if defined(WNT)
+#if defined(_WIN32)
                 "\015\012";
 #else
                 "\012";

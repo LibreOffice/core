@@ -24,7 +24,7 @@
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #if defined _MSC_VER
 #pragma warning (push, 1)
 #pragma warning (disable: 4005)
@@ -49,7 +49,7 @@ void PrivateProfileStringListener::Initialize( const OUString& rFileName, const 
     maGroupName = rGroupName;
     maKey = rKey;
 }
-#ifdef WNT
+#ifdef _WIN32
 void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKey )
 {
     sal_Int32 nBaseKeyIndex = sKeyInfo.indexOf('\\');
@@ -95,7 +95,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
     else
     {
         // get key/value from windows register
-#ifdef WNT
+#ifdef _WIN32
         HKEY hBaseKey = NULL;
         OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
@@ -140,7 +140,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
     else
     {
         //set value into windows register
-#ifdef WNT
+#ifdef _WIN32
         HKEY hBaseKey = NULL;
         OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );

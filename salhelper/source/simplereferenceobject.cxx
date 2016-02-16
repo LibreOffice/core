@@ -37,7 +37,7 @@ void * SimpleReferenceObject::operator new(std::size_t nSize)
 void * SimpleReferenceObject::operator new(std::size_t nSize,
                                            std::nothrow_t const &)
 {
-#if defined WNT
+#if defined(_WIN32)
     return ::operator new(nSize);
         // WNT lacks a global nothrow operator new...
 #else // WNT
@@ -52,7 +52,7 @@ void SimpleReferenceObject::operator delete(void * pPtr)
 
 void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
 {
-#if defined WNT
+#if defined(_WIN32)
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
 #else // WNT
     ::operator delete(pPtr, std::nothrow);

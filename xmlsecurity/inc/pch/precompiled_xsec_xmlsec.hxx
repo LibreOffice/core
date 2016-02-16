@@ -128,7 +128,7 @@
 #include <xmlsecurity/biginteger.hxx>
 
 // Cleanup windows header macro pollution.
-#if defined(WNT) && defined(WINAPI)
+#if defined(_WIN32) && defined(WINAPI)
 #   include <postwin.h>
 #   undef RGB
 #endif

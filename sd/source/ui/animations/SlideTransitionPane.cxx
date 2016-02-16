@@ -274,7 +274,7 @@ struct lcl_EqualsSoundFileName : public ::std::unary_function< OUString, bool >
     {
         // note: formerly this was a case insensitive search for all
         // platforms. It seems more sensible to do this platform-dependent
-#if defined( WNT )
+#if defined(_WIN32)
         return maStr.equalsIgnoreAsciiCase( rStr );
 #else
         return maStr == rStr;

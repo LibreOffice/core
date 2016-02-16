@@ -1365,7 +1365,7 @@ static bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxT
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::FILEGRPDESCRIPTOR, aFlavor ) &&
             (*pxTransferable)->isDataFlavorSupported( aFlavor ) )
         {
-#ifdef WNT
+#ifdef _WIN32
             switch( rEntry.nContextCheckId )
             {
                 case FILEGRPDSC_ONLY_URL:

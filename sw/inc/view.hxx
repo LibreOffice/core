@@ -411,7 +411,7 @@ public:
     inline       SwEditWin &GetEditWin()        { return *m_pEditWin; }
     inline const SwEditWin &GetEditWin () const { return *m_pEditWin; }
 
-#if defined WNT || defined UNX
+#if defined(_WIN32) || defined UNX
     void ScannerEventHdl( const css::lang::EventObject& rEventObject );
 #endif
 

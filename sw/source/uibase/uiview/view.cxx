@@ -1641,7 +1641,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SfxViewShell::Notify(rBC, rHint);
 }
 
-#if defined WNT || defined UNX
+#if defined(_WIN32) || defined UNX
 
 void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
 {

@@ -991,7 +991,7 @@ void SwView::Execute(SfxRequest &rReq)
             m_pShell->ExecuteSlot(rReq);
         }
         break;
-#if defined WNT || defined UNX
+#if defined(_WIN32) || defined UNX
         case SID_TWAIN_SELECT:
         case SID_TWAIN_TRANSFER:
             GetViewImpl()->ExecuteScan( rReq );

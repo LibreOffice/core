@@ -77,7 +77,7 @@
 #include "excform.hxx"
 #include "documentimport.hxx"
 
-#if defined( WNT )
+#if defined(_WIN32)
 #include <math.h>
 #else
 #include <stdlib.h>

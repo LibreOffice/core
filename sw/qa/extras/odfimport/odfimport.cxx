@@ -498,7 +498,7 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
         CPPUNIT_ASSERT(!pContentNode->FindTableNode());
     }
 }
-#if !defined(WNT)
+#if !defined(_WIN32)
 DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

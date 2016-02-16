@@ -31,7 +31,7 @@ namespace {
 void buildPath(
     wchar_t const * front, wchar_t const * back, wchar_t const * path)
 {
-#if defined WNT
+#if defined(_WIN32)
     wchar_t p[MAX_PATH];
     wchar_t * e = tools::buildPath(
         p, front, front + std::wcslen(front), back, std::wcslen(back));

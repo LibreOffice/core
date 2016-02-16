@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -222,7 +222,7 @@ LocaleBackend* LocaleBackend::createInstance()
 
 OUString LocaleBackend::getLocale()
 {
-#if defined WNT
+#if defined(_WIN32)
     return ImplGetLocale( GetUserDefaultLCID() );
 #elif defined (MACOSX)
     return ImplGetLocale("AppleLocale");
@@ -234,7 +234,7 @@ OUString LocaleBackend::getLocale()
 
 OUString LocaleBackend::getUILocale()
 {
-#if defined WNT
+#if defined(_WIN32)
     return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
 #elif defined(MACOSX)
     return ImplGetLocale("AppleLanguages");
@@ -247,7 +247,7 @@ OUString LocaleBackend::getUILocale()
 OUString LocaleBackend::getSystemLocale()
 {
 // note: the implementation differs from getLocale() only on Windows
-#if defined WNT
+#if defined(_WIN32)
     return ImplGetLocale( GetSystemDefaultLCID() );
 #else
     return getLocale();

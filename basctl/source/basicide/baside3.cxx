@@ -64,7 +64,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
-#ifdef WNT
+#ifdef _WIN32
 char const FilterMask_All[] = "*.*";
 #else
 char const FilterMask_All[] = "*";

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef WNT
+#ifdef _WIN32
 #   define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
 #else
@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 {
     printf("osl process test executable started:\n");
 
-#ifdef WNT
+#ifdef _WIN32
     Sleep(5000);
 #else
     sleep(5);

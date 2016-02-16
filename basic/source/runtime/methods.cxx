@@ -88,7 +88,7 @@ using namespace com::sun::star::uno;
 #include "sbobjmod.hxx"
 #include "sbxmod.hxx"
 
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <direct.h>
 #include <io.h>
@@ -392,7 +392,7 @@ RTLFUNC(CurDir)
     // there's no possibility to detect the current one in a way that a virtual URL
     // could be delivered.
 
-#if defined (WNT)
+#if defined(_WIN32)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
     {
@@ -3117,7 +3117,7 @@ RTLFUNC(GetAttr)
 
         // In Windows, we want to use Windows API to get the file attributes
         // for VBA interoperability.
-    #if defined( WNT )
+    #if defined(_WIN32)
         if( SbiRuntime::isVBAEnabled() )
         {
             OUString aPathURL = getFullPath( rPar.Get(1)->GetOUString() );

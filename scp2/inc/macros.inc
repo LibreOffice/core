@@ -202,7 +202,7 @@ End
     End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 #define STD_FONT_FILELIST(id,name) \
     File id \
         TXT_FILE_BODY; \
@@ -424,7 +424,7 @@ End
 
 
 #define SCP2_URE_DL_DIR GID_DIR_URE_LIB
-#if defined WNT
+#if defined(_WIN32)
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
 #define SCP2_URE_DL_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
@@ -450,7 +450,7 @@ End
 #define FILELIST_SDK_DIR PREDEFINED_PROGDIR
 #else
 #define FILELIST_DIR gid_Dir_Brand_Root
-#if defined WNT
+#if defined(_WIN32)
 #define FILELIST_SDK_DIR gid_Dir_Sdkoo_Root
 #else
 #define FILELIST_SDK_DIR PREDEFINED_PROGDIR

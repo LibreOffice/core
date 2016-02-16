@@ -26,7 +26,7 @@ File gid_Brand_File_Readme_Readme
   #ifdef UNX
     README_ALL_LANG(Name, README);
   #endif
-  #ifdef WNT
+  #ifdef _WIN32
     README_TXT_ALL_LANG(Name, readme, txt);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);

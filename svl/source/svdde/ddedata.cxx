@@ -125,7 +125,7 @@ sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
         return CF_METAFILEPICT;
     default:
         {
-#if defined(WNT)
+#if defined(_WIN32)
             OUString aName( SotExchange::GetFormatName( nFmt ) );
             if( !aName.isEmpty() )
                 return RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.getStr()) );
@@ -146,7 +146,7 @@ SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
     case CF_METAFILEPICT:
         return SotClipboardFormatId::GDIMETAFILE;
     default:
-#if defined(WNT)
+#if defined(_WIN32)
         if( nFmt >= CF_MAX )
         {
             TCHAR szName[ 256 ];

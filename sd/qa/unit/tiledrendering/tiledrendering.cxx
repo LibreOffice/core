@@ -36,7 +36,7 @@
 
 using namespace css;
 
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
 #endif
 
@@ -47,7 +47,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
     void testInsertPage();
     void testRegisterCallback();
     void testPostKeyEvent();
@@ -64,7 +64,7 @@ public:
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
     CPPUNIT_TEST(testInsertPage);
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
@@ -82,14 +82,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
     SdXImpressDocument* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
 #endif
 
     uno::Reference<lang::XComponent> mxComponent;
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
     Rectangle m_aInvalidation;
     std::vector<Rectangle> m_aSelection;
     bool m_bFound;
@@ -103,7 +103,7 @@ private:
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
     : m_bFound(true),
       m_nPart(0),
       m_nSelectionBeforeSearchResult(0),
@@ -127,7 +127,7 @@ void SdTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
 SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName)
 {
     if (mxComponent.is())

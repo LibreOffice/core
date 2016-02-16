@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#if defined (WNT )
+#if defined(_WIN32)
 #include <direct.h>
 #endif
 #include <string.h>

@@ -10,7 +10,7 @@
 #include "readstrings.h"
 #include "errors.h"
 
-#ifdef WNT
+#ifdef _WIN32
 # define NS_tfopen _wfopen
 # define OPEN_MODE L"rb"
 #else

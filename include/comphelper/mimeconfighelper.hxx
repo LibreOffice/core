@@ -112,7 +112,7 @@ public:
     OUString UpdateMediaDescriptorWithFilterName(
                         css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
                         css::uno::Sequence< css::beans::NamedValue >& aObject );
-#ifdef WNT
+#ifdef _WIN32
     SfxFilterFlags GetFilterFlags( const OUString& aFilterName );
 
     bool AddFilterNameCheckOwnFile(

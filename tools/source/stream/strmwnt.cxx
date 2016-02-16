@@ -22,7 +22,7 @@
 #include <string.h>
 #include <limits.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

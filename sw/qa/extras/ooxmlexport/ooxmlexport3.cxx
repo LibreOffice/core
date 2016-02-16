@@ -73,7 +73,7 @@ protected:
     }
 };
 
-#if !defined(WNT)
+#if !defined(_WIN32)
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {

@@ -3987,7 +3987,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
     int nMaxGroupLength = INT_MAX;
 
-#ifdef WNT
+#ifdef _WIN32
     // Heuristic: Certain old low-end OpenCL implementations don't
     // work for us with too large group lengths. 1000 was determined
     // empirically to be a good compromise. Looking at the preferred

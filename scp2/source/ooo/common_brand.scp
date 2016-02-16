@@ -491,7 +491,7 @@ End
 
 #endif
 
-#if !defined MACOSX && !defined WNT
+#if !defined MACOSX && !defined _WIN32
 
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
@@ -502,7 +502,7 @@ End
 
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 File gid_Brand_File_Desktophelper_Txt
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -512,7 +512,7 @@ File gid_Brand_File_Desktophelper_Txt
 End
 #endif
 
-#if !defined WNT
+#if !defined(_WIN32)
 File gid_Brand_File_Bin_Unoinfo
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -734,7 +734,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
     Section = "Bootstrap";
     Order = 3;
     Key = "UserInstallation";
-  #ifdef WNT
+  #ifdef _WIN32
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #elif defined MACOSX
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
@@ -841,7 +841,7 @@ ProfileItem gid_Brand_Profileitem_Version_Buildid
     Value = "<buildid>";
 End
 
-#ifdef WNT
+#ifdef _WIN32
 
 ProfileItem gid_Brand_Profileitem_Version_Productcode
     ProfileID = gid_Brand_Profile_Version_Ini;
@@ -854,7 +854,7 @@ End
 
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 
 ProfileItem gid_Brand_Profileitem_Version_Upgradecode
     ProfileID = gid_Brand_Profile_Version_Ini;
@@ -876,7 +876,7 @@ ProfileItem gid_Brand_Profileitem_Version_Alllanguages
     Value = "<alllanguages>";
 End
 
-#ifdef WNT
+#ifdef _WIN32
 
 ProfileItem gid_Brand_Profileitem_Version_Msiproductversion
     ProfileID = gid_Brand_Profile_Version_Ini;
@@ -896,7 +896,7 @@ ProfileItem gid_Brand_Profileitem_Version_Updateurl
     Order = 15;
     Key = "UpdateURL";
   #if defined(ENABLE_ONLINE_UPDATE)
-  #ifdef WNT
+  #ifdef _WIN32
     Value = "${UPDATEURL}";
   #else  // defined WNT
     Value = "${UPDATEURL}?pkgfmt=<pkgformat>";
@@ -1123,7 +1123,7 @@ End
 #else
 #define CONFIGURATION_LAYERS_DCONF
 #endif
-#if defined WNT
+#if defined(_WIN32)
 #define CONFIGURATION_LAYERS_WINREG " winreg:LOCAL_MACHINE"
 #define CONFIGURATION_LAYERS_WINUSERREG " winreg:CURRENT_USER"
 #else
@@ -1151,7 +1151,7 @@ ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Alluserset
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1165,7 +1165,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Alluserset
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Findproduct
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1179,7 +1179,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Findproduct
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Productcode
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1190,7 +1190,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Productcode
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Upgradecode
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1210,7 +1210,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Buildid
     Value = "<buildid>";
 End
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Ureinstall
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1224,7 +1224,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Ureinstall
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Basisinstall
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1238,7 +1238,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Basisinstall
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Officeinstall
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1252,7 +1252,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Officeinstall
 End
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 ProfileItem gid_Brand_Profileitem_Setup_Install
     ProfileID = gid_Brand_Profile_Setup_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1276,7 +1276,7 @@ File gid_License_Txt
   #ifdef UNX
     Name = "LICENSE";
   #endif
-  #ifdef WNT
+  #ifdef _WIN32
     Name = "license.txt";
   #endif
     Styles = (PACKED);

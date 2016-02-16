@@ -39,13 +39,13 @@
 #include <string.h>
 #include <limits.h>
 
-#if defined(WNT)
+#if defined(_WIN32)
 # include <io.h>
 #else
 # include <unistd.h>
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 # include <winsock2.h>
 #else
 # include <arpa/inet.h>

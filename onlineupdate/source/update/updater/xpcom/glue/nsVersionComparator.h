@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#if defined(WNT) && !defined(UPDATER_NO_STRING_GLUE_STL)
+#if defined(_WIN32) && !defined(UPDATER_NO_STRING_GLUE_STL)
 #include <wchar.h>
 #include <stdint.h>
 #include "mozilla/Char16.h"
@@ -46,7 +46,7 @@ namespace mozilla {
 
 int32_t CompareVersions(const char* aStrA, const char* aStrB);
 
-#ifdef WNT
+#ifdef _WIN32
 int32_t CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB);
 #endif
 
@@ -120,7 +120,7 @@ private:
   char* versionContent;
 };
 
-#ifdef WNT
+#ifdef _WIN32
 struct VersionW
 {
   explicit VersionW(const wchar_t* aVersionStringW)

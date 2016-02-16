@@ -60,7 +60,7 @@
 #ifdef GRLAYOUT_DEBUG
 static FILE * grLog()
 {
-#ifdef WNT
+#ifdef _WIN32
     static FILE * grLogFile = NULL;
     if (grLogFile == NULL)
     {

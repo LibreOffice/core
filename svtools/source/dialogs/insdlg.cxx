@@ -172,7 +172,7 @@ void SvObjectServerList::FillInsertObjects()
         }
 
 
-#ifdef WNT
+#ifdef _WIN32
         SvGlobalName aOleFact( SO3_OUT_CLASSID );
         OUString aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
         aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );

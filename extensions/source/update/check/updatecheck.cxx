@@ -42,7 +42,7 @@
 #include <osl/file.hxx>
 #include <sal/macros.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
 //#pragma warning(disable: 4917)
@@ -70,7 +70,7 @@ namespace uno = com::sun::star::uno ;
 #define PROPERTY_CLICK_HDL      "MenuClickHDL"
 #define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
 
-#if defined WNT
+#if defined(_WIN32)
 extern "C" bool SAL_CALL WNT_hasInternetConnection();
 #endif
 
@@ -124,7 +124,7 @@ inline bool isObsoleteUpdateInfo(const OUString& rBuildId)
 
 OUString getImageFromFileName(const OUString& aFile)
 {
-#ifndef WNT
+#ifndef _WIN32
     OUString aUnpackPath;
     if( osl_getExecutableFile(&aUnpackPath.pData) == osl_Process_E_None )
     {
@@ -247,7 +247,7 @@ private:
     /* Used to avoid dialup login windows (on platforms we know how to double this) */
     static inline bool hasInternetConnection()
     {
-#ifdef WNT
+#ifdef _WIN32
         return WNT_hasInternetConnection();
 #else
         return true;
@@ -604,7 +604,7 @@ DownloadThread::run()
 {
     osl_setThreadName("DownloadThread");
 
-#ifdef WNT
+#ifdef _WIN32
     CoUninitialize();
     CoInitialize( NULL );
 #endif
@@ -1461,7 +1461,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     sal_uInt64 nWritten = 0;
 
     OUString aURL( rURL );
-#ifdef WNT
+#ifdef _WIN32
     rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
     if ( rc != osl::FileBase::E_None ) return false;
     aURL = "URL=" + rURL;

@@ -1768,7 +1768,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             nPageId = (sal_uInt16)rInetArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
-#if defined WNT
+#if defined(_WIN32)
             // Disable E-mail tab-page on Windows
             if ( nPageId == RID_SVXPAGE_INET_MAIL )
                 continue;

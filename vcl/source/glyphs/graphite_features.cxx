@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <osl/endian.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

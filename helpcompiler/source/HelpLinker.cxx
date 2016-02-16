@@ -87,7 +87,7 @@ void IndexerPreProcessor::processDocument
         if( pResNodeCaption )
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
-#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
             FILE* pFile_docURL = _wfopen(
                 fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
 #else
@@ -110,7 +110,7 @@ void IndexerPreProcessor::processDocument
         if( pResNodeContent )
         {
             fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
             FILE* pFile_docURL = _wfopen(
                 fsContentPureTextFile_docURL.native_file_string_w(), L"w" );
 #else
@@ -186,7 +186,7 @@ public:
 
     void dump_DBHelp( const fs::path& rFileName )
     {
-#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
         FILE* pFile = _wfopen( rFileName.native_file_string_w(), L"wb" );
 #else
         FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
@@ -303,7 +303,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
         bUse_ = false;
 
     fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
-#ifdef WNT
+#ifdef _WIN32
     //We need _wfopen to support long file paths on Windows XP
     FILE* pFileHelpText_DBHelp = _wfopen
         ( helpTextFileName_DBHelp.native_file_string_w(), L"wb" );
@@ -314,7 +314,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
 #endif
 
     fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
-#ifdef WNT
+#ifdef _WIN32
     //We need _wfopen to support long file paths on Windows XP
     FILE* pFileDbBase_DBHelp = _wfopen
         ( dbBaseFileName_DBHelp.native_file_string_w(), L"wb" );
