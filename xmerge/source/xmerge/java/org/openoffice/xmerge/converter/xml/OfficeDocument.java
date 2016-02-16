@@ -315,6 +315,10 @@ public abstract class OfficeDocument
             }
         }
 
+        if (embeddedObjects == null) {
+            return null;
+        }
+
         return embeddedObjects.values().iterator();
     }
 
@@ -566,11 +570,13 @@ public abstract class OfficeDocument
 
         // The EmbeddedObjects come first.
         Iterator<EmbeddedObject> embObjs = getEmbeddedObjects();
-        while (embObjs.hasNext()) {
-            EmbeddedObject obj = embObjs.next();
-            obj.writeManifestData(manifestDoc);
+        if (embObjs != null) {
+            while (embObjs.hasNext()) {
+                EmbeddedObject obj = embObjs.next();
+                obj.writeManifestData(manifestDoc);
 
-            obj.write(zip);
+                obj.write(zip);
+            }
         }
 
         // Add in the entry for the Pictures directory.  Always present.
