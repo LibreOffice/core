@@ -78,23 +78,22 @@ public:
 #define F_ENDSCROLL_SET_VIS_SIZE        0x2000
 #define F_FILLING                       0x4000
 
+#define NODE_BMP_TABDIST_NOTVALID   -2000000
+#define FIRST_ENTRY_TAB             1
 
 class SvImpLBox
 {
 friend class ImpLBSelEng;
 friend class SvTreeListBox;
+friend class IconView;
 private:
-    VclPtr<SvTreeListBox>   pView;
     SvTreeList*     pTree;
-    SvTreeListEntry*        pCursor;
-    SvTreeListEntry*        pStartEntry;
     SvTreeListEntry*        pAnchor;
     SvTreeListEntry*        pMostRightEntry;
     SvLBoxButton*       pActiveButton;
     SvTreeListEntry*        pActiveEntry;
     SvLBoxTab*          pActiveTab;
 
-    VclPtr<ScrollBar>    aVerSBar;
     VclPtr<ScrollBar>    aHorSBar;
     VclPtr<ScrollBarBox> aScrBarBox;
 
@@ -120,28 +119,17 @@ private:
     // all our images
     Image               m_aNodeAndEntryImages[ IT_IMAGE_COUNT ];
 
-    Size                aOutputSize;
-    SelectionEngine     aSelEng;
     ImpLBSelEng         aFctSet;
     Idle                aAsyncBeginDragIdle;
     Point               aAsyncBeginDragPos;
 
     long                nYoffsNodeBmp;
-    long                nNodeBmpTabDistance; // typical smaller than 0
     long                nNodeBmpWidth;
-    long                nNextVerVisSize;
     long                nMostRight;
-    sal_uLong               nVisibleCount;  // Number of lines in control
-    ImplSVEvent *       nCurUserEvent;
     short               nHorSBarHeight, nVerSBarWidth;
-    sal_uInt16              nFlags;
     sal_uInt16              nCurTabPos;
 
-    WinBits             m_nStyle;
-    ExtendedWinBits     nExtendedWinBits;
-    bool                bSimpleTravel : 1; // ist true bei SINGLE_SELECTION
     bool                bUpdateMode : 1;
-    bool                bInVScrollHdl : 1;
     bool                bAsyncBeginDrag : 1;
     bool                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
     bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
@@ -160,24 +148,10 @@ private:
     DECL_LINK_TYPED(EditTimerCall, Idle *, void);
 
     DECL_LINK_TYPED( BeginDragHdl, Idle*, void );
-    DECL_LINK_TYPED( MyUserEvent,  void*, void);
-    void                StopUserEvent();
 
     void                InvalidateEntriesFrom( long nY ) const;
-    void                InvalidateEntry( long nY ) const;
-    void                ShowVerSBar();
-    // setzt Thumb auf FirstEntryToDraw
-    void                SyncVerThumb();
     bool                IsLineVisible( long nY ) const;
-    long                GetEntryLine( SvTreeListEntry* pEntry ) const;
-    void                FillView();
-    void                CursorDown();
-    void                CursorUp();
     void                KeyLeftRight( long nDiff );
-    void                PageDown( sal_uInt16 nDelta );
-    void                PageUp( sal_uInt16 nDelta );
-
-    void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
 
     void                DrawNet(vcl::RenderContext& rRenderContext);
 
@@ -200,18 +174,11 @@ private:
     bool ButtonUpCheckCtrl( const MouseEvent& rMEvt );
     bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry*,long nY );
 
-    void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
-    void                AdjustScrollBars( Size& rSize );
-
-    void                BeginScroll();
-    void                EndScroll();
-    Rectangle           GetVisibleArea() const;
     bool EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
     void                InitScrollBarBox();
     SvLBoxTab*          NextTab( SvLBoxTab* );
 
     bool SetMostRight( SvTreeListEntry* pEntry );
-    void                FindMostRight( SvTreeListEntry* EntryToIgnore );
     void                FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* EntryToIgnore );
     void                FindMostRight_Impl( SvTreeListEntry* pParent,SvTreeListEntry* EntryToIgnore  );
     void                NotifyTabsChanged();
@@ -235,9 +202,48 @@ private:
     bool AreChildrenTransient() const { return bAreChildrenTransient; }
     inline void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
 
+protected:
+    VclPtr<SvTreeListBox>   pView;
+    VclPtr<ScrollBar>       aVerSBar;
+    SvTreeListEntry*        pCursor;
+    SvTreeListEntry*        pStartEntry;
+    ImplSVEvent*            nCurUserEvent;
+    Size                    aOutputSize;
+    sal_uInt16              nFlags;
+    WinBits                 m_nStyle;
+    ExtendedWinBits         nExtendedWinBits;
+    SelectionEngine         aSelEng;
+    sal_uLong               nVisibleCount;  // Number of lines in control
+    bool                    bInVScrollHdl : 1;
+    bool                    bSimpleTravel : 1; // ist true bei SINGLE_SELECTION
+    long                    nNextVerVisSize;
+    long                    nNodeBmpTabDistance; // typical smaller than 0
+
+    virtual long        GetEntryLine( SvTreeListEntry* pEntry ) const;
+    virtual void        CursorDown();
+    virtual void        CursorUp();
+    virtual void        PageDown( sal_uInt16 nDelta );
+    virtual void        PageUp( sal_uInt16 nDelta );
+    // setzt Thumb auf FirstEntryToDraw
+    virtual void        SyncVerThumb();
+    virtual void        AdjustScrollBars( Size& rSize );
+    virtual void        InvalidateEntry( long nY ) const;
+
+    Rectangle           GetVisibleArea() const;
+    void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
+    void                BeginScroll();
+    void                EndScroll();
+    void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
+    void                FindMostRight( SvTreeListEntry* EntryToIgnore );
+    void                FillView();
+    void                ShowVerSBar();
+    void                StopUserEvent();
+
+    DECL_LINK_TYPED( MyUserEvent,  void*, void);
+
 public:
     SvImpLBox( SvTreeListBox* pView, SvTreeList*, WinBits nWinStyle );
-    ~SvImpLBox();
+    virtual ~SvImpLBox();
 
     void                Clear();
     void                SetStyle( WinBits i_nWinStyle );
@@ -256,31 +262,31 @@ public:
     void                CollapsingEntry( SvTreeListEntry* pEntry );
     void                EntrySelected( SvTreeListEntry* pEntry, bool bSelect );
 
-    void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);
-    bool                KeyInput( const KeyEvent& );
+    virtual bool        KeyInput( const KeyEvent& );
     void                Resize();
     void                GetFocus();
     void                LoseFocus();
-    void UpdateAll( bool bInvalidateCompleteView= true, bool bUpdateVerSBar = true );
+    virtual void        UpdateAll( bool bInvalidateCompleteView= true, bool bUpdateVerSBar = true );
     void                SetEntryHeight( short nHeight );
     void                InvalidateEntry( SvTreeListEntry* );
-    void                RecalcFocusRect();
+    virtual void        RecalcFocusRect();
 
     void SelectEntry( SvTreeListEntry* pEntry, bool bSelect );
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
 
     SvTreeListEntry*        GetCurrentEntry() const { return pCursor; }
-    bool IsEntryInView( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*        GetEntry( const Point& rPos ) const;
+    virtual bool                IsEntryInView( SvTreeListEntry* pEntry ) const;
+    virtual SvTreeListEntry*    GetEntry( const Point& rPos ) const;
     // returns last entry, if Pos below last entry
-    SvTreeListEntry*        GetClickedEntry( const Point& ) const;
+    virtual SvTreeListEntry*    GetClickedEntry( const Point& ) const;
     SvTreeListEntry*        GetCurEntry() const { return pCursor; }
     void                SetCurEntry( SvTreeListEntry* );
-    Point               GetEntryPosition( SvTreeListEntry* ) const;
+    virtual Point       GetEntryPosition( SvTreeListEntry* ) const;
     void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
     void                ScrollToAbsPos( long nPos );
 
@@ -305,8 +311,8 @@ public:
     static const Image& GetDefaultCollapsedNodeImage( );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
-    void                KeyUp( bool bPageUp );
-    void                KeyDown( bool bPageDown );
+    virtual void        KeyUp( bool bPageUp );
+    virtual void        KeyDown( bool bPageDown );
     void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();

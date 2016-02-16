@@ -153,7 +153,9 @@ private:
     VclPtr< MenuButton > m_pAddService_btn;
     VclPtr< ListBox > m_pServices_lb;
     VclPtr< Breadcrumb > m_pPath;
-    VclPtr<PushButton> m_pNewFolder;
+    VclPtr< PushButton > m_pNewFolder;
+    VclPtr< PushButton > m_pListView_btn;
+    VclPtr< PushButton > m_pIconView_btn;
     VclPtr< Splitter > m_pSplitter;
     VclPtr< FolderTree > m_pTreeView;
     VclPtr< SvtFileView > m_pFileView;
@@ -203,6 +205,8 @@ private:
     DECL_LINK_TYPED( SelectBreadcrumbHdl, Breadcrumb *, void );
 
     DECL_LINK_TYPED( NewFolderHdl, Button*, void );
+    DECL_LINK_TYPED( IconViewHdl, Button*, void );
+    DECL_LINK_TYPED( ListViewHdl, Button*, void );
 
     DECL_LINK_TYPED( OkHdl, Button*, void );
     DECL_LINK_TYPED( CancelHdl, Button*, void );
