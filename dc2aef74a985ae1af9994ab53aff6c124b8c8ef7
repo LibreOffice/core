@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_1899626f",
+        "filename": "sd/source/filter/xml/sdxmlwrp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-16T08:29:42Z",
+      "side": 1,
+      "message": "this is not the same logic ??? \nwas \u003e 1 \nis \u003c 1\n\nThis goes for most of the lines",
+      "revId": "dc2aef74a985ae1af9994ab53aff6c124b8c8ef7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
