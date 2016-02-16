@@ -186,6 +186,8 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     get( m_pServices_lb, "services_lb" );
     get( m_pFilter_lb, "filter_lb" );
     get( m_pNewFolder, "new_folder" );
+    get( m_pListView_btn, "list_view" );
+    get( m_pIconView_btn, "icon_view" );
 
     m_eMode = ( nBits & WB_SAVEAS ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = ( nBits & WB_PATH ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
@@ -215,6 +217,9 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
         m_pNewFolder->SetModeImage( m_aImages.GetImage( IMG_FILEDLG_CREATEFOLDER ) );
         m_pNewFolder->SetClickHdl( LINK( this, RemoteFilesDialog, NewFolderHdl ) );
     }
+
+    m_pIconView_btn->SetClickHdl( LINK( this, RemoteFilesDialog, IconViewHdl ) );
+    m_pListView_btn->SetClickHdl( LINK( this, RemoteFilesDialog, ListViewHdl ) );
 
     m_pOk_btn->Show();
     m_pOk_btn->Enable( false );
@@ -347,6 +352,8 @@ void RemoteFilesDialog::dispose()
     m_pFilter_lb.clear();
     m_pName_ed.disposeAndClear();
     m_pNewFolder.clear();
+    m_pIconView_btn.clear();
+    m_pListView_btn.clear();
 
     ModalDialog::dispose();
 }
@@ -718,6 +725,16 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
     }
     catch( const Exception& )
     {}
+}
+
+IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, IconViewHdl, Button*, void )
+{
+    m_pFileView->SetViewMode( eIcon );
+}
+
+IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, ListViewHdl, Button*, void )
+{
+    m_pFileView->SetViewMode( eDetailedList );
 }
 
 IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, AddServiceHdl, Button*, void )

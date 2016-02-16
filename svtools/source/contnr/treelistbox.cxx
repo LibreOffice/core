@@ -377,6 +377,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbContextBmpExpanded(false),
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
+    mbCenterAndClipText(false),
     eSelMode(NO_SELECTION),
     nMinWidthInChars(0)
 {
@@ -2288,6 +2289,10 @@ void SvTreeListBox::SetEntryHeight( short nHeight, bool bAlways )
     }
 }
 
+void SvTreeListBox::SetEntryWidth( short nWidth )
+{
+    nEntryWidth = nWidth;
+}
 
 void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
 {
