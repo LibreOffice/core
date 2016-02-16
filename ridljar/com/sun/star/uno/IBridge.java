@@ -85,6 +85,9 @@ public interface IBridge {
      *
      * <p>Sends involved threads an <code>InterruptedException</code>.  Releases
      * mapped objects.</p>
+     *
+     * @throws InterruptedException it's deprecated so who cares.
+     * @throws IOException it's deprecated so who cares.
      */
     void dispose() throws InterruptedException, IOException;
 }

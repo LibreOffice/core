@@ -45,6 +45,9 @@ public interface ITypeDescription {
      * Gets the <code>IMethodDescription</code> for the
      * method with index methodId, if it exists, otherwise
      * returns <code>null</code>.
+     *
+     * @param methodId the index.
+     *
      * @return  the <code>IMethodDescription</code>.
      */
     IMethodDescription getMethodDescription(int methodId);
@@ -53,6 +56,9 @@ public interface ITypeDescription {
      * Gets the <code>IMethodDescription</code> for the
      * method with the name <code>name</code>, if it exists,
      * otherwise returns <code>null</code>.
+     *
+     * @param name the name of the method.
+     *
      * @return  the <code>IMethodDescription</code>.
      */
     IMethodDescription getMethodDescription(String name);
@@ -69,6 +75,9 @@ public interface ITypeDescription {
      * Gets the <code>IFieldDescription</code> for the
      * field with the name <code>name</code>, if it exists,
      * otherwise returns <code>null</code>.
+     *
+     * @param name the name of the field.
+     *
      * @return  the <code>IFieldDescription</code>.
      */
       IFieldDescription getFieldDescription(String name);

@@ -160,6 +160,7 @@ public class UnoRuntime {
      * Queries the given UNO object for the given Java class (which must
      * represent a UNO interface type).
      *
+     * @param <T> the requested UNO interface type.
      * @param zInterface a Java class representing a UNO interface type
      * @param object a reference to any Java object representing (a facet of) a
      * UNO object; may be <code>null</code>
@@ -401,6 +402,8 @@ public class UnoRuntime {
      *
      * @param name the name of the environment
      * @param context the context of the environment
+     * @throws Exception if something goes awry.
+     * @return an environment.
      * @see com.sun.star.uno.IEnvironment
      *
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
@@ -440,6 +443,7 @@ public class UnoRuntime {
      * @param from the source environment
      * @param to the target environment
      * @param args the initial arguments for the bridge
+     * @throws Exception if something goes awry.
      * @return the requested bridge
      * @see #getBridgeByName
      * @see com.sun.star.uno.IBridge
@@ -496,6 +500,7 @@ public class UnoRuntime {
      * @param to the name of the target environment
      * @param toContext the context for the target environment
      * @param args the initial arguments for the bridge
+     * @throws Exception if something goes awry.
      * @return the requested bridge
      * @see #getBridge
      * @see #getEnvironment
@@ -546,6 +551,7 @@ public class UnoRuntime {
      *
      * @param from the source environment
      * @param to the target environment
+     * @throws Exception if something goes awry.
      * @return the requested mapping
      * @see com.sun.star.uno.IEnvironment
      * @see com.sun.star.uno.IMapping
@@ -575,6 +581,7 @@ public class UnoRuntime {
      *
      * @param from the name of the source environment
      * @param to the name of the target environment
+     * @throws Exception if something goes awry.
      * @return the requested mapping
      * @see #getEnvironment
      * @see #getMapping
@@ -593,6 +600,10 @@ public class UnoRuntime {
      * Resets this <code>UnoRuntime</code> to its initial state.
      *
      * <p>Releases all references to bridges and environments.</p>
+     *
+     * @return true if another thread didn't re-insert some bridge or
+     *         environment before the method returns.  Why that information
+     *         would be useful is anybody's guess.
      *
      * @deprecated As of UDK&nbsp;3.2.0, this method is deprecated, without
      * offering a replacement.
