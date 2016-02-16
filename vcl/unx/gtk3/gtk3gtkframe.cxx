@@ -3917,7 +3917,6 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
     {
         return GDK_WINDOW_XID(pWindow);
     }
-    else
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
     if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
