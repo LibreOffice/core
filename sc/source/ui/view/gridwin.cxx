@@ -2427,6 +2427,14 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 pEditView->MouseButtonUp( aEditEvt );
             }
         }
+
+        if (bIsTiledRendering)
+        {
+            ScTabView* pTabView = pViewData->GetView();
+            if (rMEvt.IsLeft() && pTabView->GetSelEngine()->SelMouseButtonUp( rMEvt ))
+                pTabView->SelectionChanged();
+        }
+
         return;
     }
 
