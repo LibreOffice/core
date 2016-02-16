@@ -88,17 +88,19 @@ public final class DocumentDeserializerImpl
         while (enumerate.hasNext()) {
             docOut = (DOMDocument) enumerate.next();
         }
-        try {
-            domDoc = docOut.getContentDOM();
-            baos = transform(domDoc);
-            sxwDoc.initContentDOM();
-            DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
-            dFactory.setNamespaceAware(true);
-            DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
-            sxwDoc.setContentDOM(dBuilder.parse(new ByteArrayInputStream(baos.toByteArray())));
+        if (docOut != null) {
+            try {
+                domDoc = docOut.getContentDOM();
+                baos = transform(domDoc);
+                sxwDoc.initContentDOM();
+                DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+                dFactory.setNamespaceAware(true);
+                DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
+                sxwDoc.setContentDOM(dBuilder.parse(new ByteArrayInputStream(baos.toByteArray())));
 
-        } catch (Exception e) {
-            System.out.println("The following error occurred:" + e);
+            } catch (Exception e) {
+                System.out.println("The following error occurred:" + e);
+            }
         }
         return sxwDoc;
     }
