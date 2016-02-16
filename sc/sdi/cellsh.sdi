@@ -19,9 +19,6 @@
 
 interface CellSelection
 {
-    SbxObject Movement
-    [
-    ]
     // Slot's die in der DrawShell disabled werden. {
     FID_DEFINE_NAME             [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_ADD_NAME                [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]

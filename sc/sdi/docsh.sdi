@@ -71,7 +71,6 @@ interface TableDocument
     SID_PIVOT_GET       [ StateMethod = GetSbxState; ]
     SID_SC_ACTIVEOBJECT [ StateMethod = GetDrawObjState; ]
     SID_ATTR_YEAR2000   [ StateMethod = GetState; ExecMethod = Execute; ]
-    SbxObject OLEObjects []
     SID_CHART_SOURCE    [ ExecMethod = Execute; ]
     SID_CHART_ADDSOURCE [ ExecMethod = Execute; ]
     FID_AUTO_CALC   [ ExecMethod = Execute; StateMethod = GetState; ]

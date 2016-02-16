@@ -338,7 +338,7 @@ void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
         else
         {
             xAttr = new SvMetaAttribute( pType );
-            bOk = ReadInterfaceOrShellAttribute(*xAttr);
+            bOk = ReadInterfaceOrShellMethodOrAttribute(*xAttr);
         }
         if( bOk )
             bOk = xAttr->Test( rInStm );
@@ -392,20 +392,21 @@ bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
     return bOk;
 }
 
-bool SvIdlParser::ReadInterfaceOrShellAttribute( SvMetaAttribute& rAttr )
+bool SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr )
 {
     sal_uInt32  nTokPos     = rInStm.Tell();
     bool bOk = false;
     rAttr.SetName( ReadIdentifier() );
-    rAttr.aSlotId.ReadSvIdl( rBase, rInStm );
+    rAttr.aSlotId.setString( ReadIdentifier() );
+    sal_uLong n;
+    if( !rBase.FindId( rAttr.aSlotId.getString(), &n ) )
+        throw SvParseException( rInStm, "no value for identifier <" + rAttr.aSlotId.getString() + "> " );
+    rAttr.aSlotId.SetValue(n);
 
     bOk = true;
     SvToken& rTok  = rInStm.GetToken();
     if( rTok.IsChar() && rTok.GetChar() == '(' )
     {
-        tools::SvRef<SvMetaType> xT(new SvMetaType() );
-        xT->SetRef(rAttr.GetType() );
-        rAttr.aType = xT;
         bOk = rAttr.aType->ReadMethodArgs( rBase, rInStm );
     }
     if( bOk && rInStm.ReadIf( '[' ) )
