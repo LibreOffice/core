@@ -527,7 +527,7 @@ void SdTiledRenderingTest::testInsertPage()
 
     uno::Reference<lang::XComponent> xComponent;
     xComponent = xLoader->loadComponentFromURL(
-        getURLFromSrc(DATA_DIRECTORY) + OUString("insert-delete.odp"),
+        getURLFromSrc(DATA_DIRECTORY) + "insert-delete.odp",
         "_blank",
         0,
         aFilterOptions);
