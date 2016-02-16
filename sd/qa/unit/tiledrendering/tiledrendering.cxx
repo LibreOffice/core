@@ -572,9 +572,9 @@ void SdTiledRenderingTest::testInsertPage()
         comphelper::dispatchCommand(".uno:InsertPage", aArgs);
 
     // Verify inserted slides
-    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    for(auto i: m_aPageList)
     {
-        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage);
     }
 
@@ -585,9 +585,9 @@ void SdTiledRenderingTest::testInsertPage()
         comphelper::dispatchCommand(".uno:DeletePage", aArgs);
 
     // Verify deleted slides
-    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    for(auto i: m_aPageList)
     {
-        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage == nullptr);
     }
 
@@ -598,9 +598,9 @@ void SdTiledRenderingTest::testInsertPage()
         comphelper::dispatchCommand(".uno:Undo", aArgs);
 
     // Verify inserted slides
-    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    for(auto i: m_aPageList)
     {
-        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage);
     }
 
@@ -611,9 +611,9 @@ void SdTiledRenderingTest::testInsertPage()
         comphelper::dispatchCommand(".uno:Redo", aArgs);
 
     // Verify deleted slides
-    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    for(auto i: m_aPageList)
     {
-        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage == nullptr);
     }
 
