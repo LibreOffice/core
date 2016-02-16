@@ -6229,6 +6229,11 @@ void ScGridWindow::UpdateSelectionOverlay()
             updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
         }
     }
+    else
+    {
+        ScDocument* pDoc = pViewData->GetDocument();
+        pDoc->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+    }
 
     if ( aOldMode != aDrawMode )
         SetMapMode( aOldMode );
