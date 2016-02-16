@@ -81,9 +81,6 @@ public class _XTreeControl extends MultiMethodTest {
     boolean mTreeCollapsed2 = false;
     boolean mTreeCollapsing2 = false;
 
-    boolean mTreeNodeEditing1 = false;
-    boolean mTreeNodeEdit1 = false;
-
     public interface XTreeDataModelListenerEvent{
         void fireEvent();
     }
@@ -152,12 +149,10 @@ public class _XTreeControl extends MultiMethodTest {
     public class TreeEditListenerImpl1 implements XTreeEditListener{
         public void nodeEditing(XTreeNode xTreeNode) throws VetoException {
             log.println("event at EditListener 1: nodeEditing");
-            mTreeNodeEditing1 = true;
         }
 
         public void nodeEdited(XTreeNode xTreeNode, String string) {
             log.println("event at EditListener 1: nodeEdited");
-            mTreeNodeEdit1 = true;
         }
 
         public void disposing(EventObject eventObject) {
@@ -188,11 +183,6 @@ public class _XTreeControl extends MultiMethodTest {
         mTreeExpanding2 = false;
         mTreeCollapsing1 = false;
         mTreeCollapsing2 = false;
-    }
-
-    private void resetEditListener(){
-        mTreeNodeEditing1 = false;
-        mTreeNodeEdit1 = false;
     }
 
     @Override
@@ -569,10 +559,7 @@ public class _XTreeControl extends MultiMethodTest {
         log.println("add EditListener 2....");
         oObj.addTreeEditListener(mTreeEditListener2);
 
-        resetEditListener();
-
         try {
-
             oObj.startEditingAtNode(mXNode);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             log.println("ERROR: could not start editing at node: " + ex.toString());
