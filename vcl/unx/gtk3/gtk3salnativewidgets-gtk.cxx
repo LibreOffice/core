@@ -607,14 +607,13 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     g_object_unref(pixbuf);
 }
 
-Rectangle GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
+void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      cairo_t *cr,
                                      const Rectangle& rControlRectangle,
                                      ControlType nType,
-                                     ControlPart /*nPart*/,
+                                     ControlPart nPart,
                                      const ImplControlValue& rValue )
 {
-    Rectangle            areaRect;
     const SpinbuttonValue *pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : nullptr;
     ControlPart upBtnPart = PART_BUTTON_UP;
     ControlState upBtnState = ControlState::NONE;
@@ -630,26 +629,20 @@ Rectangle GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
         downBtnState = pSpinVal->mnLowerState;
     }
 
-    areaRect = rControlRectangle;
-
-    gtk_render_background(context, cr,
-                          0, 0,
-                          areaRect.GetWidth(), areaRect.GetHeight() );
-    gtk_render_frame(context, cr,
-                     0, 0,
-                     areaRect.GetWidth(), areaRect.GetHeight() );
-
-    // CTRL_SPINBUTTONS pass their area in pSpinVal, not in rControlRectangle
-    if (pSpinVal)
+    if (nPart == PART_ENTIRE_CONTROL)
     {
-        areaRect = pSpinVal->maUpperRect;
-        areaRect.Union( pSpinVal->maLowerRect );
+        gtk_render_background(context, cr,
+                              0, 0,
+                              rControlRectangle.GetWidth(), rControlRectangle.GetHeight() );
+        gtk_render_frame(context, cr,
+                         0, 0,
+                         rControlRectangle.GetWidth(), rControlRectangle.GetHeight() );
     }
 
-    PaintOneSpinButton(mpSpinUpStyle, cr, nType, upBtnPart, areaRect, upBtnState );
-    PaintOneSpinButton(mpSpinDownStyle, cr, nType, downBtnPart, areaRect, downBtnState );
-
-    return areaRect;
+    cairo_translate(cr, -rControlRectangle.Left(), -rControlRectangle.Top());
+    PaintOneSpinButton(mpSpinUpStyle, cr, nType, upBtnPart, rControlRectangle, upBtnState );
+    PaintOneSpinButton(mpSpinDownStyle, cr, nType, downBtnPart, rControlRectangle, downBtnState );
+    cairo_translate(cr, rControlRectangle.Left(), rControlRectangle.Top());
 }
 
 #define ARROW_SIZE 11 * 0.85
@@ -1478,7 +1471,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RENDER_SPINBUTTON:
-        aDamageRect.Union(PaintSpinButton(context, cr, rControlRegion, nType, nPart, rValue));
+        PaintSpinButton(context, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RENDER_COMBOBOX:
         PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
