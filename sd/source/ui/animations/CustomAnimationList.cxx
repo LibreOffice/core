@@ -215,29 +215,43 @@ public:
 private:
     VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
+    OUString        effectName;
     CustomAnimationEffectPtr mpEffect;
+    const CustomAnimationPresets* mpCustomAnimationPresets;
+    const long nIconWidth = 19;
+    const long nItemMinHeight = 38;
 };
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
 : SvLBoxString( pEntry, nFlags, aDescription )
 , mpParent( pParent )
 , maDescription( aDescription )
+, effectName( OUString() )
 , mpEffect(pEffect)
+, mpCustomAnimationPresets(&CustomAnimationPresets::getCustomAnimationPresets())
 {
+    effectName = mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId());
 }
+
+
 
 CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
 {
 }
+
 
 void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    Size aSize(pView->GetTextWidth( maDescription ) + 2 * 19, pView->GetTextHeight() );
-    if( aSize.Height() < 19 )
-        aSize.Height() = 19;
+    long width = pView->GetTextWidth( maDescription ) + nIconWidth;
+    if( width < (pView->GetTextWidth( effectName ) + 2*nIconWidth))
+        width = pView->GetTextWidth( effectName ) + 2*nIconWidth;
+
+    Size aSize( width, pView->GetTextHeight() );
+    if( aSize.Height() < nItemMinHeight )
+        aSize.Height() = nItemMinHeight;
     pViewData->maSize = aSize;
 }
 
@@ -259,8 +273,17 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     {
         rRenderContext.DrawImage(aPos, mpParent->getImage(IMG_CUSTOMANIMATION_AFTER_PREVIOUS));
     }
+    else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
+    {
+        //FIXME With previous image not defined in CustomAnimation.src
+    }
 
-    aPos.X() += 19;
+    aPos.X() += nIconWidth;
+
+
+    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(maDescription, rDev.GetOutputSizePixel().Width() - aPos.X()));
+
+    aPos.Y() += nIconWidth;
 
     sal_uInt16 nImage;
     switch (mpEffect->getPresetClass())
@@ -295,14 +318,14 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     {
         const Image& rImage = mpParent->getImage(nImage);
         Point aImagePos(aPos);
-        aImagePos.Y() += (aSize.Height() - rImage.GetSizePixel().Height()) >> 1;
+        aImagePos.Y() += (aSize.Height()/2 - rImage.GetSizePixel().Height()) >> 1;
         rRenderContext.DrawImage(aImagePos, rImage);
     }
 
-    aPos.X() += 19;
-    aPos.Y() += (aSize.Height() - rDev.GetTextHeight()) >> 1;
+    aPos.X() += nIconWidth;
+    aPos.Y() += (aSize.Height()/2 - rDev.GetTextHeight()) >> 1;
 
-    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(maDescription, rDev.GetOutputSizePixel().Width() - aPos.X()));
+    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(effectName, rDev.GetOutputSizePixel().Width() - aPos.X()));
 }
 
 SvLBoxItem* CustomAnimationListEntryItem::Create() const
@@ -353,6 +376,7 @@ public:
 
 private:
     OUString        maDescription;
+    const long nIconWidth = 19;
 };
 
 CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription )
@@ -369,9 +393,9 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTree
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    Size aSize(pView->GetTextWidth( maDescription ) + 2 * 19, pView->GetTextHeight() );
-    if( aSize.Height() < 19 )
-        aSize.Height() = 19;
+    Size aSize(pView->GetTextWidth( maDescription ) + 2 * nIconWidth, pView->GetTextHeight() );
+    if( aSize.Height() < nIconWidth )
+        aSize.Height() = nIconWidth;
     pViewData->maSize = aSize;
 }
 
