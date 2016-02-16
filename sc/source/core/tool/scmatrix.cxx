@@ -300,6 +300,10 @@ public:
     template<typename T>
     void ApplyOperation(T aOp, ScMatrixImpl& rMat);
 
+    void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
+            const std::pair<size_t, size_t>& rEndPos, ScFullMatrix::DoubleOpFunction aDoubleFunc,
+            ScFullMatrix::BoolOpFunction aBoolFunc, ScFullMatrix::StringOpFunction aStringFunc) const;
+
     template<typename T>
     std::vector<ScMatrix::IterateResult> ApplyCollectOperation(bool bTextAsZero, const std::vector<std::unique_ptr<T>>& aOp);
 
@@ -2169,6 +2173,117 @@ std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(bool bT
     return aFunc.getResult();
 }
 
+namespace {
+
+class WalkElementBlockOperation
+{
+public:
+
+    WalkElementBlockOperation(size_t nRowSize, size_t /*nColSize*/,
+            ScFullMatrix::DoubleOpFunction aDoubleFunc,
+            ScFullMatrix::BoolOpFunction aBoolFunc,
+            ScFullMatrix::StringOpFunction aStringFunc):
+        mnRowSize(nRowSize),
+        mnRowPos(0),
+        mnColPos(0),
+        maDoubleFunc(aDoubleFunc),
+        maBoolFunc(aBoolFunc),
+        maStringFunc(aStringFunc)
+    {
+    }
+
+    void operator()(const MatrixImplType::element_block_node_type& node)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                std::advance(it, node.offset);
+                block_type::const_iterator itEnd = it;
+                std::advance(itEnd, node.size);
+                for (auto itr = it; itr != itEnd; ++itr)
+                {
+                    maDoubleFunc(mnRowPos, mnColPos, *itr);
+                    ++mnRowPos;
+                    if (mnRowPos >= mnRowSize)
+                    {
+                        mnRowPos = 0;
+                        ++mnColPos;
+                    }
+                }
+            }
+            break;
+            case mdds::mtm::element_string:
+            {
+                typedef MatrixImplType::string_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                std::advance(it, node.offset);
+                block_type::const_iterator itEnd = it;
+                std::advance(itEnd, node.size);
+                for (auto itr = it; itr != itEnd; ++itr)
+                {
+                    maStringFunc(mnRowPos, mnColPos, *itr);
+                    ++mnRowPos;
+                    if (mnRowPos >= mnRowSize)
+                    {
+                        mnRowPos = 0;
+                        ++mnColPos;
+                    }
+                }
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                std::advance(it, node.offset);
+                block_type::const_iterator itEnd = it;
+                std::advance(itEnd, node.size);
+                for (auto itr = it; itr != itEnd; ++itr)
+                {
+                    maBoolFunc(mnRowPos, mnColPos, *itr);
+                    ++mnRowPos;
+                    if (mnRowPos >= mnRowSize)
+                    {
+                        mnRowPos = 0;
+                        ++mnColPos;
+                    }
+                }
+            }
+            break;
+            case mdds::mtm::element_empty:
+            break;
+        }
+    }
+
+private:
+
+    size_t mnRowSize;
+    size_t mnRowPos;
+    size_t mnColPos;
+
+    ScFullMatrix::DoubleOpFunction maDoubleFunc;
+    ScFullMatrix::BoolOpFunction maBoolFunc;
+    ScFullMatrix::StringOpFunction maStringFunc;
+};
+
+}
+
+void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
+        const std::pair<size_t, size_t>& rEndPos, ScMatrix::DoubleOpFunction aDoubleFunc,
+        ScMatrix::BoolOpFunction aBoolFunc, ScMatrix::StringOpFunction aStringFunc) const
+{
+    WalkElementBlockOperation aFunc(maMat.size().row, maMat.size().column,
+            aDoubleFunc, aBoolFunc, aStringFunc);
+    maMat.walk(aFunc, MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
+            MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
+}
+
 #if DEBUG_MATRIX
 
 void ScMatrixImpl::Dump() const
@@ -2815,6 +2930,13 @@ void ScFullMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
         assert(pMatrix);
         pImpl->ApplyOperation(aOp, *pMatrix->pImpl);
     }
+}
+
+void ScFullMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
+        const std::pair<size_t, size_t>& rEndPos, DoubleOpFunction aDoubleFunc,
+        BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const
+{
+    pImpl->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc);
 }
 
 std::vector<ScMatrix::IterateResult> ScFullMatrix::Collect(bool bTextAsZero, const std::vector<std::unique_ptr<sc::op::Op>>& aOp)
@@ -3553,6 +3675,14 @@ std::vector<ScMatrix::IterateResult> ScVectorRefMatrix::Collect(bool bTextAsZero
 {
     ensureFullMatrix();
     return mpFullMatrix->Collect(bTextAsZero, aOp);
+}
+
+void ScVectorRefMatrix::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
+        const std::pair<size_t, size_t>& rEndPos, DoubleOpFunction aDoubleFunc,
+        BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const
+{
+    const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
+    mpFullMatrix->ExecuteOperation(rStartPos, rEndPos, aDoubleFunc, aBoolFunc, aStringFunc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
