@@ -3921,7 +3921,7 @@ void HwpReader::makePicture(Picture * hbox)
                      }
                      else{
                          if( hwpfile.oledata ){
-#ifdef WIN32
+#ifdef _WIN32
                              LPSTORAGE srcsto;
                              LPUNKNOWN pObj;
                              wchar_t pathname[200];

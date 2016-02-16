@@ -117,8 +117,15 @@ const struct FontEntry FontMapTab[] =
     {"\xbd\xc5\xb8\xed \xb1\xc3\xbc\xad",3, 0.97}
 };
 
-#ifndef WIN32
-#if defined(LINUX)
+#if defined(_WIN32)
+const char* RepFontTab[] =
+{
+    "\xb9\xd9\xc5\xc1",                                       /* 0 */
+    "\xb5\xb8\xbf\xf2",                                       /* 1 */
+    "\xb1\xbc\xb8\xb2",                                       /* 2 */
+    "\xb1\xc3\xbc\xad"                                        /* 3 */
+};
+#elif defined(LINUX)
 const char* RepFontTab[] =
 {
     "\xb9\xe9\xb9\xac \xb9\xd9\xc5\xc1",                                     /* 0 */
@@ -133,15 +140,6 @@ const char* RepFontTab[] =
     "Dotum",                                      /* 1 */
     "Gulim",                                      /* 2 */
     "Gungso"                                      /* 3 */
-};
-#endif
-#else
-const char* RepFontTab[] =
-{
-    "\xb9\xd9\xc5\xc1",                                       /* 0 */
-    "\xb5\xb8\xbf\xf2",                                       /* 1 */
-    "\xb1\xbc\xb8\xb2",                                       /* 2 */
-    "\xb1\xc3\xbc\xad"                                        /* 3 */
 };
 #endif
 

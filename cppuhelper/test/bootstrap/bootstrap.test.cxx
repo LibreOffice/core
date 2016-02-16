@@ -88,7 +88,7 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
     uno::Reference<uno::XInterface> xItf(
         cppu::loadSharedLibComponentFactory(
             rtl::OUString(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION),
-#ifdef WIN32
+#ifdef _WIN32
             "",
 #else
             "file://../lib/",

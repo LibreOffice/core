@@ -24,7 +24,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef WIN32
+#ifdef _WIN32
    /*
     * TerminateProcess and GetCurrentProcess are defined in <winbase.h>, which
     * further depends on <windef.h>.  We hardcode these few definitions manually

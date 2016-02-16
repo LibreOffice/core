@@ -147,7 +147,7 @@ catch (int sig)
     fatalerr ("got signal %d\n", sig);
 }
 
-#if (defined(i386) && defined(SYSV)) || defined(WIN32)
+#if (defined(i386) && defined(SYSV)) || defined(_WIN32)
 #define USGISH
 #endif
 

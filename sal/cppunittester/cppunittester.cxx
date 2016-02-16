@@ -247,7 +247,7 @@ public:
             manager.load(testlib, args);
         } catch (const CppUnit::DynamicLibraryManagerException &e) {
             std::cerr << "DynamicLibraryManagerException: \"" << e.what() << "\"\n";
-#ifdef WIN32
+#ifdef _WIN32
             const char *pPath = getenv ("PATH");
             if (pPath && strlen (pPath) > 256)
             {

@@ -80,7 +80,7 @@ public:
     static OUString                         getImplementationName_Static() throw();
     static Sequence< OUString >             getSupportedServiceNames_Static() throw();
 
-#ifdef WIN32
+#ifdef _WIN32
     void*                                   GetData() const { return mpData; }
 #endif
     void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }

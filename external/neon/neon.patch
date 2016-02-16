@@ -366,7 +366,7 @@
  #include <pthread.h>
  #endif
  
-+#ifdef WIN32
++#ifdef _WIN32
 +#define X509_NAME WIN32_X509_NAME
 +#include <windows.h>
 +#include <wincrypt.h>
@@ -380,7 +380,7 @@
      X509_STORE_load_locations(store, NE_SSL_CA_BUNDLE, NULL);
  #else
      X509_STORE_set_default_paths(store);
-+#ifdef WIN32
++#ifdef _WIN32
 +    {
 +	HCERTSTORE hStore;
 +	PCCERT_CONTEXT pContext = NULL;

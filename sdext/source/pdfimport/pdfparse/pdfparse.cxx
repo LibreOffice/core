@@ -540,7 +540,7 @@ public:
     }
 };
 
-#ifdef WIN32
+#ifdef _WIN32
 PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 {
     PDFGrammar<const char*> aGrammar( pBuffer );
@@ -588,7 +588,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
 PDFEntry* PDFReader::read( const char* pFileName )
 {
-#ifdef WIN32
+#ifdef _WIN32
     /* #i106583#
        since converting to boost 1.39 file_iterator does not work anymore on all Windows systems
        C++ stdlib istream_iterator does not allow "-" apparently

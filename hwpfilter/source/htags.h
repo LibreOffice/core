@@ -55,7 +55,7 @@ struct OlePicture
 {
     int   size;
     uint signature;
-#ifdef WIN32
+#ifdef _WIN32
     IStorage *pis;
 #else
     char *pis;

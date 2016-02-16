@@ -345,7 +345,7 @@ bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersion)
 {
     rNumericVersion = 0;
 
-#if defined(WIN32)
+#if defined(_WIN32)
     int a, b, c, d;
     char aStr[8], bStr[8], cStr[8], dStr[8];
     /* honestly, why do I even bother */

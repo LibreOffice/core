@@ -15,7 +15,7 @@
  int curl_win32_idn_to_ascii(const char *in, char **out);
  #endif  /* USE_LIBIDN */
  
-+#ifdef WIN32
++#ifdef _WIN32
 +#include <WinHttp.h>
 +#endif
 +
@@ -26,7 +26,7 @@
    return FALSE;
  }
  
-+#ifdef WIN32
++#ifdef _WIN32
 +static char* wstrToCstr( LPWSTR wStr )
 +{
 +  int bufSize;
@@ -57,7 +57,7 @@
     * checked if the lowercase versions don't exist.
     */
 -  char *no_proxy=NULL;
-+#ifdef WIN32
++#ifdef _WIN32
 +  WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *ieProxyConfig;
 +  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG*)
 +    malloc(sizeof(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG));

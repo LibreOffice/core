@@ -47,7 +47,7 @@ OUString getExePath()
 
     OSL_VERIFY( osl_getExecutableFile( &exe.pData) == osl_Process_E_None);
 
-#if defined(WIN32) || defined(WNT)
+#if defined(_WIN32)
     exe = exe.copy(0, exe.getLength() - 16);
 #else
     exe = exe.copy(0, exe.getLength() - 12);

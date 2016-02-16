@@ -20,10 +20,6 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_ZIPFILE_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_ZIPFILE_HXX
 
-#ifndef _WINDOWS
-#define _WINDOWS
-#endif
-
 #include <zlib.h>
 
 #include <string>

@@ -82,7 +82,7 @@ static const char* publicFunc =
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
  ;
 
-#ifdef WIN32
+#ifdef _WIN32
 #ifndef NAN
 namespace {
 

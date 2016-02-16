@@ -96,7 +96,7 @@ parse_number (IfParser *g, const char *cp, int *valp)
     if (!isdigit(*cp))
         return CALLFUNC(g, handle_error) (g, cp, "number");
 
-#ifdef WIN32
+#ifdef _WIN32
     {
         char *cp2;
         *valp = strtol(cp, &cp2, 0);
