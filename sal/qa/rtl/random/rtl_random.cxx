@@ -198,9 +198,8 @@ public:
     }
     ~Statistics(){}
 
-    void addValue(sal_Int16 _nIndex, sal_Int32 _nValue)
+    void addValue(sal_uInt8 _nIndex, sal_Int32 _nValue)
     {
-        OSL_ASSERT(_nIndex >= 0 && _nIndex < 256);
         m_nDispensation[_nIndex] += _nValue;
     }
 
