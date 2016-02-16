@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_38925e58",
+        "filename": "desktop/unx/source/start.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-16T07:59:09Z",
+      "side": 1,
+      "message": "Wat is the point of #if 0, it means you produce dead code ?\nIf the code is dead it should be removed",
+      "revId": "6111bc0f7693c122713b042f94b31a498b8b244c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
