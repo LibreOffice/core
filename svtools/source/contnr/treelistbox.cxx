@@ -378,7 +378,8 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
     eSelMode(NO_SELECTION),
-    nMinWidthInChars(0)
+    nMinWidthInChars(0),
+    mbCenterAndClipText(false)
 {
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = SvTreeListBoxFlags::NONE;
@@ -409,7 +410,8 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
     eSelMode(NO_SELECTION),
-    nMinWidthInChars(0)
+    nMinWidthInChars(0),
+    mbCenterAndClipText(false)
 {
     pTargetEntry = nullptr;
     nImpFlags = SvTreeListBoxFlags::NONE;
@@ -2287,6 +2289,10 @@ void SvTreeListBox::SetEntryHeight( short nHeight )
     }
 }
 
+void SvTreeListBox::SetEntryWidth( short nWidth )
+{
+    nEntryWidth = nWidth;
+}
 
 void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
 {

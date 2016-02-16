@@ -48,6 +48,12 @@ enum FileViewResult
     eStillRunning
 };
 
+enum FileViewMode
+{
+    eDetailedList,
+    eIcon
+};
+
 /// describes parameters for doing an action on the FileView asynchronously
 struct FileViewAsyncAction
 {
@@ -80,6 +86,8 @@ public:
     virtual void dispose() override;
 
     virtual Size GetOptimalSize() const override;
+
+    void                    SetViewMode( FileViewMode eMode );
 
     const OUString&         GetViewURL() const;
     static OUString         GetURL( SvTreeListEntry* pEntry );
