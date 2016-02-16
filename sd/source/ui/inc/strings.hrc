@@ -414,6 +414,9 @@
 #define STR_PHOTO_ALBUM_EMPTY_WARNING                   (RID_APP_START+729)
 #define STR_PHOTO_ALBUM_TEXTBOX                   (RID_APP_START+730)
 
+#define STR_INSERT_3D_MODEL_TITLE                       (RID_APP_START+731)
+#define STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS       (RID_APP_START+732)
+
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!
 ******************************************************************************/

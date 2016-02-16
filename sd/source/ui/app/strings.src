@@ -1247,4 +1247,14 @@ String STR_PHOTO_ALBUM_TEXTBOX
     Text [ en-US ] = "Text Slide";
 };
 
+String STR_INSERT_3D_MODEL_TITLE
+{
+    Text [ en-US ] = "Insert 3D Model";
+};
+
+String STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS
+{
+    Text [ en-US ] = "All supported formats";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
