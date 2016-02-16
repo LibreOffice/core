@@ -2086,7 +2086,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     rbFooter = static_cast<const SfxBoolItem&>(pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
-#if defined WNT
+#if defined(_WIN32)
 bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
                              css::uno::Any & rValue )

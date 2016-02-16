@@ -254,7 +254,7 @@ public:
     sal_uInt16      GetImportFormatNumberForTypeName( const OUString& rType );
     OUString        GetImportFormatName( sal_uInt16 nFormat );
     OUString        GetImportFormatTypeName( sal_uInt16 nFormat );
-#ifdef WNT
+#ifdef _WIN32
     OUString        GetImportFormatMediaType( sal_uInt16 nFormat );
 #endif
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );

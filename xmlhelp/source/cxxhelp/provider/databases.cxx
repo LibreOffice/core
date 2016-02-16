@@ -65,7 +65,7 @@
 #include "databases.hxx"
 #include "urlparameter.hxx"
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -982,7 +982,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
                     {
                         aCSS = "highcontrastblack";
-                        #ifdef WNT
+                        #ifdef _WIN32
                         HKEY hKey = NULL;
                         LONG lResult = RegOpenKeyExA( HKEY_CURRENT_USER, "Control Panel\\Accessibility\\HighContrast", 0, KEY_QUERY_VALUE, &hKey );
                         if ( ERROR_SUCCESS == lResult )

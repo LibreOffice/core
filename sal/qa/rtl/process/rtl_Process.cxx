@@ -82,7 +82,7 @@ public:
 
     void getAppCommandArg_001()
     {
-#if defined(WNT)
+#if defined(_WIN32)
     const rtl::OUString EXECUTABLE_NAME("child_process.exe");
 #else
     const rtl::OUString EXECUTABLE_NAME("child_process");
@@ -216,7 +216,7 @@ public:
     //different processes different pids
     void getGlobalProcessId_002()
     {
-#if defined(WNT)
+#if defined(_WIN32)
     const rtl::OUString EXEC_NAME("child_process_id.exe");
 #else
     const rtl::OUString EXEC_NAME("child_process_id");

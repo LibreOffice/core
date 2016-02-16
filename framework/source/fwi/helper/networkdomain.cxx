@@ -19,7 +19,7 @@
 
 #include <helper/networkdomain.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 
 //  Windows
 

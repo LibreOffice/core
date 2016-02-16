@@ -54,7 +54,7 @@ extern "C" {
    problems, the SAL_MATH_FPEXCEPTIONS_OFF macro can be used to explicitly
    switch off exceptions (on Windows).
  */
-#if defined WNT
+#if defined(_WIN32)
 #define SAL_MATH_FPEXCEPTIONS_OFF() _control87( _MCW_EM, _MCW_EM )
 #else /* WNT */
 #define SAL_MATH_FPEXCEPTIONS_OFF()

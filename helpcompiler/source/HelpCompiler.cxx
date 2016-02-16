@@ -87,7 +87,7 @@ xmlDocPtr HelpCompiler::compactXhpForJar( xmlDocPtr doc )
 void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
 {
     //save processed xhp document in ziptmp<module>_<lang>/text directory
-#ifdef WNT
+#ifdef _WIN32
     std::string pathSep = "\\";
 #else
     std::string pathSep = "/";

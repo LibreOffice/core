@@ -42,7 +42,7 @@ typedef const struct __CTFont * CTFontRef;
 typedef struct CGContext *CGContextRef;
 #endif
 
-#if defined( WNT )
+#if defined(_WIN32)
 #include <prewin.h>
 #include <windef.h>
 #include <postwin.h>
@@ -51,7 +51,7 @@ typedef struct CGContext *CGContextRef;
 struct SystemEnvData
 {
     unsigned long       nSize;          // size in bytes of this structure
-#if defined( WNT )
+#if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
     NSView*             mpNSView;       // the cocoa (NSView *) implementing this object
@@ -77,7 +77,7 @@ struct SystemEnvData
 
     SystemEnvData()
         : nSize(0)
-#if defined( WNT )
+#if defined(_WIN32)
         , hWnd(0)
 #elif defined( MACOSX )
         , mpNSView(nullptr)
@@ -105,7 +105,7 @@ struct SystemEnvData
 struct SystemParentData
 {
     unsigned long   nSize;            // size in bytes of this structure
-#if defined( WNT )
+#if defined(_WIN32)
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
@@ -122,7 +122,7 @@ struct SystemParentData
 
 struct SystemMenuData
 {
-#if defined( WNT )
+#if defined(_WIN32)
     HMENU           hMenu;          // the menu handle of the menu bar
 #else
     // Nothing
@@ -132,7 +132,7 @@ struct SystemMenuData
 struct SystemGraphicsData
 {
     unsigned long   nSize;          // size in bytes of this structure
-#if defined( WNT )
+#if defined(_WIN32)
     HDC             hDC;            // handle to a device context
     HWND            hWnd;           // optional handle to a window
 #elif defined( MACOSX )
@@ -152,7 +152,7 @@ struct SystemGraphicsData
 #endif
     SystemGraphicsData()
         : nSize( sizeof( SystemGraphicsData ) )
-#if defined( WNT )
+#if defined(_WIN32)
         , hDC( 0 )
         , hWnd( 0 )
 #elif defined( MACOSX )
@@ -176,7 +176,7 @@ struct SystemGraphicsData
 struct SystemWindowData
 {
     unsigned long   nSize;          // size in bytes of this structure
-#if defined( WNT )                  // meaningless on Windows
+#if defined(_WIN32)                  // meaningless on Windows
 #elif defined( MACOSX )
     bool            bOpenGL;        // create a OpenGL providing NSView
     bool            bLegacy;        // create a 2.1 legacy context, only valid if bOpenGL == true

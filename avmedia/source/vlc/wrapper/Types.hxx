@@ -12,7 +12,7 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 
-#if defined WNT
+#if defined(_WIN32)
         typedef __int64 libvlc_time_t;
 #else
         typedef int64_t libvlc_time_t;

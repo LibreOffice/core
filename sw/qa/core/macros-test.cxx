@@ -75,7 +75,7 @@ public:
     virtual void tearDown() override;
 
     //void testStarBasic();
-#if !defined MACOSX && !defined WNT
+#if !defined(MACOSX) && !defined(_WIN32)
     void testVba();
 #endif
     void testBookmarkDeleteAndJoin();
@@ -87,7 +87,7 @@ public:
     void testFdo68983();
     void testFindReplace();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(_WIN32)
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
     //CPPUNIT_TEST(testStarBasic);
@@ -147,7 +147,7 @@ void SwMacrosTest::testStarBasic()
 
 #endif
 
-#if !defined MACOSX && !defined WNT
+#if !defined(MACOSX) && !defined(_WIN32)
 void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {

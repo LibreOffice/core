@@ -30,7 +30,7 @@
 #include <comphelper/seqstream.hxx>
 #include <filter/msfilter/classids.hxx>
 
-#if defined WNT
+#if defined(_WIN32)
 #include <olecomponent.hxx>
 #endif
 
@@ -107,7 +107,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         throw embed::WrongStateException( "The object is not loaded!",
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
-#ifdef WNT
+#ifdef _WIN32
     // RECOMPOSE_ON_RESIZE misc flag means that the object has to be switched to running state on resize.
     // SetExtent() is called only for objects that require it,
     // it should not be called for MSWord documents to workaround problem i49369
@@ -186,7 +186,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
     awt::Size aResult;
 
-#ifdef WNT
+#ifdef _WIN32
     // TODO/LATER: Support different aspects
     if ( m_pOleComponent && !m_bHasSizeToSet && nAspect == embed::Aspects::MSOLE_CONTENT )
     {
@@ -347,7 +347,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     {
         return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
     }
-#ifdef WNT
+#ifdef _WIN32
     else if ( m_pOleComponent )
     {
         try

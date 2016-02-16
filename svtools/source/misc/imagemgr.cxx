@@ -89,7 +89,7 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "jpeg",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
     { "jpg",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
     { "lha",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-#ifdef WNT
+#ifdef _WIN32
     { "lnk",   false, 0,                                     0 },
 #endif
     { "log",   true,  STR_DESCRIPTION_LOGFILE,               0 },

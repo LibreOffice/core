@@ -31,7 +31,7 @@
 
 #ifdef HAVE_ODBC_SUPPORT
 
-#if defined WNT
+#if defined(_WIN32)
 #define ODBC_LIBRARY    "ODBC32.DLL"
 #endif
 #ifdef UNX

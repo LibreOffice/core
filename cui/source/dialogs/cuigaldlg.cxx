@@ -961,7 +961,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
      }
 
-#if defined(WNT)
+#if defined(_WIN32)
     if (aExtensions.getLength() > 240)
         aExtensions = "*.*";
 #endif

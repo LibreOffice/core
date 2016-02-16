@@ -286,7 +286,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
             | beans::PropertyAttribute::BOUND
-#if defined( WNT )
+#if defined(_WIN32)
         ));
 #else
     | beans::PropertyAttribute::READONLY)); // under unix/linux only readable

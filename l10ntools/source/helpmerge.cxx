@@ -35,7 +35,7 @@
 #include <iostream>
 #include <vector>
 #include <rtl/strbuf.hxx>
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #undef CopyFile
 #include <direct.h>

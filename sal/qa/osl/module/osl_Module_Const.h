@@ -29,10 +29,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#if ( defined UNX )                      //Unix
+#if   defined(UNX)                      // Unix
 #   include <unistd.h>
-#endif
-#if ( defined WNT )                     // Windows
+#elif defined(_WIN32)                   // Windows
 #   include <io.h>
 #endif
 

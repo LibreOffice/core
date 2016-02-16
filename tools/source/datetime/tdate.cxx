@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined( WNT )
+#if defined(_WIN32)
 #include <windows.h>
 #else
 #include <time.h>
@@ -144,7 +144,7 @@ static Date lcl_DaysToDate( long nDays )
 
 Date::Date( DateInitSystem )
 {
-#if defined WNT
+#if defined(_WIN32)
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 

@@ -26,7 +26,7 @@
 
 #include <osl/file.hxx>
 
-#if defined WNT
+#if defined(_WIN32)
 #define MY_PATH_IN "/c:/foo/bar"
 #define MY_PATH_OUT "c:\\foo\\bar"
 #define MY_PATH_OUT_CONT MY_PATH_OUT "\\"
@@ -91,7 +91,7 @@ void Test::testBadScheme() {
 }
 
 void Test::testNoScheme() {
-#if !defined WNT //TODO
+#if !defined(_WIN32) //TODO
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL("//" MY_PATH_IN, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
@@ -134,7 +134,7 @@ void Test::testLocalhost3Authority() {
 }
 
 void Test::testNoAuthority() {
-#if !defined WNT //TODO
+#if !defined(_WIN32) //TODO
     OUString p;
     auto e = osl::FileBase::getSystemPathFromFileURL("file:" MY_PATH_IN, p);
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);

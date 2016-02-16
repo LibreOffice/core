@@ -46,7 +46,7 @@ public:
 
     CPPUNIT_TEST_SUITE(DialogSaveTest);
 // Should we disable this test on MOX and WNT?
-// #if !defined(MACOSX) && !defined(WNT)
+// #if !defined(MACOSX) && !defined(_WIN32)
     CPPUNIT_TEST(test);
 // #endif
     CPPUNIT_TEST_SUITE_END();

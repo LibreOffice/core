@@ -36,7 +36,7 @@
 #include <queue>
 #include <string>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <direct.h>
 #else
 #include <unistd.h>

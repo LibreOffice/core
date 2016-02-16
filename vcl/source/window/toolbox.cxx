@@ -41,7 +41,7 @@
 #include <toolbox.h>
 #include <salframe.hxx>
 #include <spin.hxx>
-#if defined WNT
+#if defined(_WIN32)
 #include <svsys.h>
 #endif
 
@@ -5656,7 +5656,7 @@ void ToolBox::ImplHideFocus()
 
 void ToolBox::ImplDisableFlatButtons()
 {
-#ifdef WNT        // Check in the Windows registry if an AT tool wants no flat toolboxes
+#ifdef _WIN32        // Check in the Windows registry if an AT tool wants no flat toolboxes
     static bool bInit = false, bValue = false;
     if( ! bInit )
     {

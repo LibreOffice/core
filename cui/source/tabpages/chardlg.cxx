@@ -330,7 +330,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     //Family, Style
     //In Windows the standard dialogs name font-name, font-style as
     //Font, Style
-#ifdef WNT
+#ifdef _WIN32
     OUString sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FONT));
 #else
     OUString sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FAMILY));

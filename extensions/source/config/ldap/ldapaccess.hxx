@@ -24,7 +24,7 @@
 
 #include <map>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #include <winldap.h>
 #else // !defined WNT

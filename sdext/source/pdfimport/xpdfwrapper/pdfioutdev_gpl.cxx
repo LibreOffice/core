@@ -47,7 +47,7 @@
 #pragma warning(pop)
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 # define snprintf _snprintf
 
 #if defined __GNUC__

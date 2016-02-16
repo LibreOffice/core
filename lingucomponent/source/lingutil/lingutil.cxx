@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined(WNT)
+#if defined(_WIN32)
 #include <windows.h>
 #endif
 
@@ -45,7 +45,7 @@
 using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
 
-#if defined(WNT)
+#if defined(_WIN32)
 OString Win_AddLongPathPrefix( const OString &rPathName )
 {
 #define WIN32_LONG_PATH_PREFIX "\\\\?\\"

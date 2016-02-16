@@ -31,7 +31,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -62,7 +62,7 @@ namespace ThreadHelper
         //     printf("wait %d tenth seconds. ", _nTenthSec );
         //     fflush(stdout);
         // }
-#ifdef WNT      //Windows
+#ifdef _WIN32      //Windows
         Sleep(_nTenthSec * 100 );
 #endif
 #if ( defined UNX )

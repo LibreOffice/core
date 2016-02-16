@@ -18,7 +18,7 @@
  */
 
 
-#if defined WNT
+#if defined(_WIN32)
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -61,7 +61,7 @@ bool isAccessibilitySupportDesired()
         sValue == "1" )
         return false;
 
-#ifdef WNT
+#ifdef _WIN32
     bool retVal = false;
     HKEY    hKey = 0;
     if (RegOpenKeyEx(HKEY_CURRENT_USER,

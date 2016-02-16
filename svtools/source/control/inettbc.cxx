@@ -494,7 +494,7 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
             INetURLObject aObj( aBaseURL );
 
             // HRO: I suppose this hack should only be done for Windows !!!???
-#ifdef WNT
+#ifdef _WIN32
             // HRO: INetURLObject::smatRel2Abs does not recognize '\\' as a relative path
             //      but in case of "\\\\" INetURLObject is right - this is an absolute path !
 
@@ -1184,7 +1184,7 @@ OUString SvtURLBox::GetURL()
             return *j;
     }
 
-#ifdef WNT
+#ifdef _WIN32
     // erase trailing spaces on Windows since thay are invalid on this OS and
     // most of the time they are inserted by accident via copy / paste
     aText = comphelper::string::stripEnd(aText, ' ');

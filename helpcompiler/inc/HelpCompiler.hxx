@@ -87,7 +87,7 @@ namespace fs
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
-#ifdef WNT
+#ifdef _WIN32
         wchar_t const * native_file_string_w() const
         {
             OUString ustrSystemPath;

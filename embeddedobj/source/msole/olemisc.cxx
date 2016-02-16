@@ -33,7 +33,7 @@
 
 #include "ownview.hxx"
 
-#if defined WNT
+#if defined(_WIN32)
 #include <olecomponent.hxx>
 #endif
 
@@ -104,7 +104,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bTriedConversion( false )
 {
 }
-#ifdef WNT
+#ifdef _WIN32
 
 // this constructor let object be initialized from clipboard
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
@@ -183,7 +183,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
         }
     }
 }
-#ifdef WNT
+#ifdef _WIN32
 
 void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
 {
@@ -228,7 +228,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
 
 void OleEmbeddedObject::GetRidOfComponent()
 {
-#ifdef WNT
+#ifdef _WIN32
     if ( m_pOleComponent )
     {
         if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
@@ -385,7 +385,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
                                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
-#if defined WNT
+#if defined(_WIN32)
     if (m_pOleComponent != 0)
     {
         return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );

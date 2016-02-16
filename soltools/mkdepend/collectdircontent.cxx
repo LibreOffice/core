@@ -18,7 +18,7 @@ PathFilePair IncludesCollection::split_path(const string& filePath) {
 
 void IncludesCollection::add_to_collection(const string& dirPath) {
     DirContent dirContent;
-#if defined( WNT )
+#if defined(_WIN32)
     WIN32_FIND_DATA FindFileData;
     HANDLE hFind;
     hFind = FindFirstFile((dirPath + "\\*").c_str(), &FindFileData);
@@ -50,7 +50,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
 }
 
 bool IncludesCollection::exists(string filePath) {
-#if defined( WNT )
+#if defined(_WIN32)
     transform(filePath.begin(), filePath.end(), filePath.begin(), ::tolower);
 #endif // defined( WNT )
     PathFilePair dirFile = split_path(filePath);

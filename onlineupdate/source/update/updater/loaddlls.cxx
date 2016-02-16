@@ -4,7 +4,7 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-#ifdef WNT
+#ifdef _WIN32
 #ifndef UNICODE
 #define UNICODE
 #endif

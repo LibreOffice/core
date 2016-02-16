@@ -21,7 +21,7 @@
 
 #include <cerrno>
 
-#if defined( WNT )
+#if defined(_WIN32)
 #include <windows.h>
 #elif defined UNX
 #include <unistd.h>
@@ -92,7 +92,7 @@ namespace tools {
 
 Time::Time( TimeInitSystem )
 {
-#if defined( WNT )
+#if defined(_WIN32)
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
@@ -354,7 +354,7 @@ bool tools::Time::IsEqualIgnoreNanoSec( const tools::Time& rTime ) const
 
 Time tools::Time::GetUTCOffset()
 {
-#if defined( WNT )
+#if defined(_WIN32)
     TIME_ZONE_INFORMATION   aTimeZone;
     aTimeZone.Bias = 0;
     DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
@@ -411,7 +411,7 @@ Time tools::Time::GetUTCOffset()
 
 sal_uInt64 tools::Time::GetSystemTicks()
 {
-#if defined WNT
+#if defined(_WIN32)
     static LARGE_INTEGER nTicksPerSecond;
     static bool bTicksPerSecondInitialized = false;
     if (!bTicksPerSecondInitialized)

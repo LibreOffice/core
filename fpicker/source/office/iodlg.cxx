@@ -2322,7 +2322,7 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
         if ( nPathTokenPos == -1 )
         {
             OUString aDelim(
-#if defined(WNT)
+#if defined(_WIN32)
                     '\\'
 #else
                     '/'

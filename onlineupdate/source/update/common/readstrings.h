@@ -9,7 +9,7 @@
 
 #define MAX_TEXT_LEN 600
 
-#ifdef WNT
+#ifdef _WIN32
 # define UNICODE
 # include <windows.h>
   typedef WCHAR NS_tchar;

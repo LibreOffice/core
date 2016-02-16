@@ -124,7 +124,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             if ( pList != nullptr )
             {
                 pList->ProcessWindowEvent (rVclWindowEvent, m_bIsDropDownBox);
-#if defined WNT
+#if defined(_WIN32)
                 if (m_bIsDropDownBox)
                 {
                     NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
@@ -181,7 +181,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                     if ( sText.isEmpty() )
                         sText = xText->getText();
                     pList->UpdateSelection_Acc(sText, m_bIsDropDownBox);
-#if defined WNT
+#if defined(_WIN32)
                     if (m_bIsDropDownBox || m_aBoxType==COMBOBOX)
                         NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(), Any());
 #endif

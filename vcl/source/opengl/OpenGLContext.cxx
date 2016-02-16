@@ -28,7 +28,7 @@
 #include <postmac.h>
 #endif
 
-#if defined( WNT )
+#if defined(_WIN32)
 #include <win/saldata.hxx>
 #endif
 
@@ -1089,7 +1089,7 @@ void OpenGLContext::setWinSize(const Size& rSize)
 }
 
 
-#if defined( WNT )
+#if defined(_WIN32)
 
 bool OpenGLContext::initWindow()
 {
@@ -1252,7 +1252,7 @@ void OpenGLContext::reset()
     mbInitialized = false;
 
     // destroy the context itself
-#if defined( WNT )
+#if defined(_WIN32)
     if (m_aGLWin.hRC)
     {
         std::vector<HGLRC>::iterator itr = std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC);
@@ -1287,7 +1287,7 @@ void OpenGLContext::reset()
 #endif
 }
 
-#if defined( WNT ) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#if defined(_WIN32) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
 
 SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool bRequestLegacyContext)
 {
@@ -1350,7 +1350,7 @@ bool OpenGLContext::isCurrent()
 {
     OpenGLZone aZone;
 
-#if defined( WNT )
+#if defined(_WIN32)
     return wglGetCurrentContext() == m_aGLWin.hRC &&
            wglGetCurrentDC() == m_aGLWin.hDC;
 #elif defined( MACOSX )
@@ -1366,7 +1366,7 @@ bool OpenGLContext::isCurrent()
 
 bool OpenGLContext::hasCurrent()
 {
-#if defined( WNT )
+#if defined(_WIN32)
     return wglGetCurrentContext() != NULL;
 #elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     return false;
@@ -1414,7 +1414,7 @@ void OpenGLContext::makeCurrent()
 
     clearCurrent();
 
-#if defined( WNT )
+#if defined(_WIN32)
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
@@ -1509,7 +1509,7 @@ void OpenGLContext::resetCurrent()
 
     OpenGLZone aZone;
 
-#if defined( WNT )
+#if defined(_WIN32)
     wglMakeCurrent(NULL, NULL);
 #elif defined( MACOSX )
     (void) this; // loplugin:staticmethods
@@ -1526,7 +1526,7 @@ void OpenGLContext::swapBuffers()
 {
     OpenGLZone aZone;
 
-#if defined( WNT )
+#if defined(_WIN32)
     SwapBuffers(m_aGLWin.hDC);
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
@@ -1557,7 +1557,7 @@ void OpenGLContext::sync()
 {
     OpenGLZone aZone;
 
-#if defined( WNT )
+#if defined(_WIN32)
     // nothing
 #elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     (void) this; // loplugin:staticmethods

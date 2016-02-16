@@ -34,7 +34,7 @@ public:
     void testCharHighlightBody();
     void testMSCharBackgroundEditing();
     void testCharBackgroundToHighlighting();
-#if !defined(WNT)
+#if !defined(_WIN32)
     void testSkipImages();
 #endif
 
@@ -47,7 +47,7 @@ public:
     CPPUNIT_TEST(testCharHighlightODF);
     CPPUNIT_TEST(testMSCharBackgroundEditing);
     CPPUNIT_TEST(testCharBackgroundToHighlighting);
-#if !defined(WNT)
+#if !defined(_WIN32)
     CPPUNIT_TEST(testSkipImages);
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -739,7 +739,7 @@ void Test::testCharBackgroundToHighlighting()
     }
 }
 
-#if !defined(WNT)
+#if !defined(_WIN32)
 void Test::testSkipImages()
 {
     // Check how LO skips image loading (but not texts of textboxes and custom shapes)

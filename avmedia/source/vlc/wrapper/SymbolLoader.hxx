@@ -9,7 +9,7 @@
 
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_SYMBOLLOADER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_SYMBOLLOADER_HXX
-#if defined( WNT )
+#if defined(_WIN32)
 # include <windows.h>
 # include <winreg.h>
 #endif

@@ -204,7 +204,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
     sal_IntPtr nRet = 0;
 
     (void)bUseJava;
-#if defined WNT
+#if defined(_WIN32)
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
 #elif defined MACOSX
     // FIXME: this is wrong

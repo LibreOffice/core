@@ -27,7 +27,7 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#ifdef WNT
+#ifdef _WIN32
 #define SYSTEM_PATH INetURLObject::FSYS_DOS
 #else
 #define SYSTEM_PATH INetURLObject::FSYS_UNX

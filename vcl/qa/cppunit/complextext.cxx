@@ -22,13 +22,13 @@ public:
 
     /// Play with font measuring etc.
     void testArabic();
-#if defined(WNT)
+#if defined(_WIN32)
     void testTdf95650(); // Windows-only issue
 #endif
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
     CPPUNIT_TEST(testArabic);
-#if defined(WNT)
+#if defined(_WIN32)
     CPPUNIT_TEST(testTdf95650);
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -83,7 +83,7 @@ void VclComplexTextTest::testArabic()
 #endif
 }
 
-#if defined(WNT)
+#if defined(_WIN32)
 void VclComplexTextTest::testTdf95650()
 {
     const sal_Unicode pTxt[] = {

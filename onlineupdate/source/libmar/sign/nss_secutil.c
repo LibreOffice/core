@@ -8,7 +8,7 @@
 #include "nss_secutil.h"
 
 #include "prprf.h"
-#ifdef WNT
+#ifdef _WIN32
 #include <io.h>
 #else
 #include <unistd.h>

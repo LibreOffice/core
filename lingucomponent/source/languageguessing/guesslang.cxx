@@ -122,7 +122,7 @@ void LangGuess_Impl::EnsureInitialized()
         OUString aPhysPath;
         OUString aURL( SvtPathOptions().GetFingerprintPath() );
         osl::FileBase::getSystemPathFromFileURL( aURL, aPhysPath );
-#ifdef WNT
+#ifdef _WIN32
         aPhysPath += "\\";
 #else
         aPhysPath += "/";

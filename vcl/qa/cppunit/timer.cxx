@@ -127,7 +127,7 @@ void TimerTest::testIdle()
 // tdf#91727
 void TimerTest::testIdleMainloop()
 {
-#ifndef WNT
+#ifndef _WIN32
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
     // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone

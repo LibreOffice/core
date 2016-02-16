@@ -21,7 +21,7 @@
 # endif
 #endif
 
-#if defined(WNT)
+#if defined(_WIN32)
 # include <windows.h>
 # include <shlwapi.h>
 # include <direct.h>

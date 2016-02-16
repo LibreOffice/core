@@ -135,7 +135,7 @@ public:
 
     virtual ~GraphiteLayout() throw();
     void SetFont(gr_font * pFont) { mpFont = pFont; }
-#ifdef WNT
+#ifdef _WIN32
     gr_font * GetFont() { return mpFont; }
     void SetFontScale(float s) { mfScaling = s; };
 #endif

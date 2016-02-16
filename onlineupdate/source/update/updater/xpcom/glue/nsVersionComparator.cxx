@@ -9,13 +9,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#if defined(WNT) && !defined(UPDATER_NO_STRING_GLUE_STL)
+#if defined(_WIN32) && !defined(UPDATER_NO_STRING_GLUE_STL)
 #include <wchar.h>
 #include <stdint.h>
 #include "mozilla/Char16.h"
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 // from Mozilla's nsAlgorithm.h
 template <class T>
 inline const T&
@@ -37,7 +37,7 @@ struct VersionPart
   char*       extraD;  // null-terminated
 };
 
-#ifdef WNT
+#ifdef _WIN32
 struct VersionPartW
 {
   int32_t     numA;
@@ -126,7 +126,7 @@ ParseVP(char* aPart, VersionPart& aResult)
  *
  * @returns A pointer to the next versionpart, or null if none.
  */
-#ifdef WNT
+#ifdef _WIN32
 static wchar_t*
 ParseVP(wchar_t* aPart, VersionPartW& aResult)
 {
@@ -277,7 +277,7 @@ CompareVP(VersionPart& aVer1, VersionPart& aVer2)
 /**
  * Compares two VersionParts
  */
-#ifdef WNT
+#ifdef _WIN32
 static int32_t
 CompareVP(VersionPartW& aVer1, VersionPartW& aVer2)
 {
@@ -310,7 +310,7 @@ CompareVP(VersionPartW& aVer1, VersionPartW& aVer2)
 
 namespace mozilla {
 
-#ifdef WNT
+#ifdef _WIN32
 int32_t
 CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB)
 {

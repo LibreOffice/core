@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef WNT
+#ifdef _WIN32
 
 #include <windows.h>
 // property name to register own window procedure on hwnd
@@ -67,7 +67,7 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
     JAWT                          awt     ;
     JAWT_DrawingSurface*          ds      ;
     JAWT_DrawingSurfaceInfo*      dsi     ;
-#ifdef WNT
+#ifdef _WIN32
     JAWT_Win32DrawingSurfaceInfo* dsi_win ;
 #else
     // FIXME: Where is dsi_x11 defined?
@@ -94,7 +94,7 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
     dsi = ds->GetDrawingSurfaceInfo(ds);
 
     /* Get the platform-specific drawing info */
-#ifdef WNT
+#ifdef _WIN32
     dsi_win  = (JAWT_Win32DrawingSurfaceInfo*)dsi->platformInfo;
     drawable = (jlong)dsi_win->hwnd;
 #else

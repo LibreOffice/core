@@ -50,7 +50,7 @@ static OUString FilePicker_getSystemPickerServiceName()
     else
         return OUString ("com.sun.star.ui.dialogs.SystemFilePicker");
 #endif
-#ifdef WNT
+#ifdef _WIN32
     return OUString ("com.sun.star.ui.dialogs.Win32FilePicker");
 #endif
 }

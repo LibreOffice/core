@@ -29,7 +29,7 @@
 #include <osl/file.hxx>
 #include <sal/macros.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
 #pragma warning(disable: 4917)
@@ -164,7 +164,7 @@ OUString UpdateCheckConfig::getDesktopDirectory()
 {
     OUString aRet;
 
-#ifdef WNT
+#ifdef _WIN32
     WCHAR szPath[MAX_PATH];
 
     if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_DESKTOPDIRECTORY, true))
@@ -191,7 +191,7 @@ OUString UpdateCheckConfig::getAllUsersDirectory()
 {
     OUString aRet;
 
-#ifdef WNT
+#ifdef _WIN32
     WCHAR szPath[MAX_PATH];
 
     if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_COMMON_DOCUMENTS, true))

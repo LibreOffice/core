@@ -35,7 +35,7 @@ typedef unsigned char boolean;
 #ifdef JPEG_INTERNALS
 
 /* #undef RIGHT_SHIFT_IS_UNSIGNED */
-#ifdef WNT
+#ifdef _WIN32
 #define INLINE __inline
 #elif defined SOLARIS
 #define INLINE

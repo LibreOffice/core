@@ -243,7 +243,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     maEditSIGFileName.SetText( aNSSFolder + "demo-result.xml" );
     maEditTokenName.SetText( aNSSFolder );
 
-#ifdef WNT
+#ifdef _WIN32
     maEditTokenName.SetText( OUString() );
     maEditTokenName.Disable();
     maCryptoCheckBox.Disable();

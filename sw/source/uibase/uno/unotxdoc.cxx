@@ -3453,7 +3453,7 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
 {
     SystemGraphicsData aData;
     aData.nSize = sizeof(SystemGraphicsData);
-    #if defined WNT
+    #if defined(_WIN32)
     sal_Int64 nWindowHandle;
     Parent >>= nWindowHandle;
     aData.hWnd = (HWND) nWindowHandle;

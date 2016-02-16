@@ -14,7 +14,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #if !defined NOMINMAX
 #define NOMINMAX
 #endif

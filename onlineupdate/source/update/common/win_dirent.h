@@ -6,7 +6,7 @@
 
 #ifndef WINDIRENT_H__
 #define WINDIRENT_H__
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 
 struct DIR {

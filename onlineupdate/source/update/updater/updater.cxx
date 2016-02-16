@@ -64,7 +64,7 @@
 #define PROGRESS_FINISH_SIZE   5.0f
 
 // Amount of time in ms to wait for the parent process to close
-#ifdef WNT
+#ifdef _WIN32
 #define PARENT_WAIT 5000
 #endif
 
@@ -113,12 +113,12 @@ static bool sUseHardLinks = true;
 # define MAYBE_USE_HARD_LINKS 0
 #endif
 
-#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(WNT) && !defined(MACOSX)
+#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
 #include "nss.h"
 #include "prerror.h"
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 #include "updatehelper.h"
 
 // Closes the handle if valid and if the updater is elevated returns with the
@@ -208,7 +208,7 @@ struct MARChannelStringTable {
 
 typedef void (* ThreadFunc)(void *param);
 
-#ifdef WNT
+#ifdef _WIN32
 #include <process.h>
 
 class Thread
@@ -278,7 +278,7 @@ static bool sReplaceRequest = false;
 static bool sUsingService = false;
 static bool sIsOSUpdate = false;
 
-#ifdef WNT
+#ifdef _WIN32
 // The current working directory specified in the command line.
 static NS_tchar* gDestPath;
 static NS_tchar gCallbackRelPath[MAXPATHLEN];
@@ -343,7 +343,7 @@ EnvHasValue(const char *name)
   return (val && *val);
 }
 
-#ifdef WNT
+#ifdef _WIN32
 /**
  * Coverts a relative update path to a full path for Windows.
  *
@@ -397,7 +397,7 @@ get_valid_path(NS_tchar **line, bool isdir = false)
     return nullptr;
   }
 
-#ifdef WNT
+#ifdef _WIN32
   // All paths must be relative from the current working directory
   if (path[0] == NS_T('\\') || path[1] == NS_T(':')) {
     LOG(("get_valid_path: path must be relative: " LOG_S, path));
@@ -452,7 +452,7 @@ get_quoted_path(const NS_tchar *path)
 
 static void ensure_write_permissions(const NS_tchar *path)
 {
-#ifdef WNT
+#ifdef _WIN32
   (void) _wchmod(path, _S_IREAD | _S_IWRITE);
 #else
   struct stat fs;
@@ -639,7 +639,7 @@ create_hard_link(const NS_tchar *srcFilename, const NS_tchar *destFilename)
 // Copy the file named path onto a new file named dest.
 static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
 {
-#ifdef WNT
+#ifdef _WIN32
   // Fast path for Windows
   bool result = CopyFileW(path, dest, false);
   if (!result) {
@@ -850,7 +850,7 @@ static int rename_file(const NS_tchar *spath, const NS_tchar *dpath,
   return OK;
 }
 
-#ifdef WNT
+#ifdef _WIN32
 // Remove the directory pointed to by path and all of its files and
 // sub-directories. If a file is in use move it to the tobedeleted directory
 // and attempt to schedule removal of the file on reboot
@@ -958,7 +958,7 @@ static int backup_discard(const NS_tchar *path)
   }
 
   int rv = ensure_remove(backup);
-#if defined(WNT)
+#if defined(_WIN32)
   if (rv && !sStagedUpdate && !sReplaceRequest) {
     LOG(("backup_discard: unable to remove: " LOG_S, backup));
     NS_tchar path[MAXPATHLEN];
@@ -1302,7 +1302,7 @@ AddFile::Execute()
       return rv;
   }
 
-#ifdef WNT
+#ifdef _WIN32
   char sourcefile[MAXPATHLEN];
   if (!WideCharToMultiByte(CP_UTF8, 0, mFile, -1, sourcefile, MAXPATHLEN,
                            nullptr, nullptr)) {
@@ -1456,7 +1456,7 @@ PatchFile::Prepare()
   if (!fp)
     return WRITE_ERROR;
 
-#ifdef WNT
+#ifdef _WIN32
   char sourcefile[MAXPATHLEN];
   if (!WideCharToMultiByte(CP_UTF8, 0, mPatchFile, -1, sourcefile, MAXPATHLEN,
                            nullptr, nullptr)) {
@@ -1486,7 +1486,7 @@ PatchFile::Execute()
     return rv;
 
   FILE *origfile = nullptr;
-#ifdef WNT
+#ifdef _WIN32
   if (NS_tstrcmp(mFile, gCallbackRelPath) == 0) {
     // Read from the copy of the callback when patching since the callback can't
     // be opened for reading to prevent the application from being launched.
@@ -1580,7 +1580,7 @@ PatchFile::Execute()
     return WRITE_ERROR_OPEN_PATCH_FILE;
   }
 
-#ifdef WNT
+#ifdef _WIN32
   if (!shouldTruncate) {
     fseek(ofile, 0, SEEK_SET);
   }
@@ -1793,7 +1793,7 @@ PatchIfFile::Finish(int status)
 
 //-----------------------------------------------------------------------------
 
-#ifdef WNT
+#ifdef _WIN32
 #include "nsWindowsRestart.cxx"
 #include "nsWindowsHelpers.h"
 #include "uachelper.h"
@@ -1908,7 +1908,7 @@ IsUpdateStatusPendingService()
 }
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 /*
  * Read the update.status file and sets isSuccess to true if
  * the status is set to succeeded.
@@ -1949,7 +1949,7 @@ static int
 CopyInstallDirToDestDir()
 {
   // These files should not be copied over to the updated app
-#ifdef WNT
+#ifdef _WIN32
 #define SKIPLIST_COUNT 3
 #elif defined(MACOSX)
 #define SKIPLIST_COUNT 0
@@ -1960,7 +1960,7 @@ CopyInstallDirToDestDir()
 #ifndef MACOSX
   skiplist.append(0, gInstallDirPath, NS_T("updated"));
   skiplist.append(1, gInstallDirPath, NS_T("updates/0"));
-#ifdef WNT
+#ifdef _WIN32
   skiplist.append(2, gInstallDirPath, NS_T("updated.update_in_progress.lock"));
 #endif
 #endif
@@ -2023,7 +2023,7 @@ ProcessReplaceRequest()
   LOG(("Begin moving destDir (" LOG_S ") to tmpDir (" LOG_S ")",
        destDir, tmpDir));
   int rv = rename_file(destDir, tmpDir, true);
-#ifdef WNT
+#ifdef _WIN32
   // On Windows, if Firefox is launched using the shortcut, it will hold a handle
   // to its installation directory open, which might not get released in time.
   // Therefore we wait a little bit here to see if the handle is released.
@@ -2075,7 +2075,7 @@ ProcessReplaceRequest()
   rv = ensure_remove_recursive(tmpDir, true);
   if (rv) {
     LOG(("Removing tmpDir failed, err: %d", rv));
-#ifdef WNT
+#ifdef _WIN32
     NS_tchar deleteDir[MAXPATHLEN];
     NS_tsnprintf(deleteDir, sizeof(deleteDir)/sizeof(deleteDir[0]),
                  NS_T("%s\\%s"), destDir, DELETE_DIR);
@@ -2103,7 +2103,7 @@ ProcessReplaceRequest()
   return 0;
 }
 
-#ifdef WNT
+#ifdef _WIN32
 static void
 WaitForServiceFinishThread(void *param)
 {
@@ -2199,7 +2199,7 @@ UpdateThreadFunc(void * /*param*/)
 
 #ifdef MOZ_VERIFY_MAR_SIGNATURE
     if (rv == OK) {
-#ifdef WNT
+#ifdef _WIN32
       HKEY baseKey = nullptr;
       wchar_t valueName[] = L"Image Path";
       wchar_t rasenh[] = L"rsaenh.dll";
@@ -2225,7 +2225,7 @@ UpdateThreadFunc(void * /*param*/)
       }
 #endif
       rv = gArchiveReader.VerifySignature();
-#ifdef WNT
+#ifdef _WIN32
       if (baseKey) {
         if (reset) {
           RegSetValueExW(baseKey, valueName, 0, REG_SZ,
@@ -2342,7 +2342,7 @@ int NS_main(int argc, NS_tchar **argv)
   }
 #endif
 
-#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(WNT) && !defined(MACOSX)
+#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
   // On Windows and Mac we rely on native APIs to do verifications so we don't
   // need to initialize NSS at all there.
   // Otherwise, minimize the amount of NSS we depend on by avoiding all the NSS
@@ -2389,7 +2389,7 @@ int NS_main(int argc, NS_tchar **argv)
     *slash = NS_T('\0');
   }
 
-#ifdef WNT
+#ifdef _WIN32
   bool useService = false;
   bool testOnlyFallbackKeyExists = false;
   bool noServiceFallback = EnvHasValue("MOZ_NO_SERVICE_FALLBACK");
@@ -2425,13 +2425,13 @@ int NS_main(int argc, NS_tchar **argv)
 #endif
 
   // If there is a PID specified and it is not '0' then wait for the process to exit.
-#ifdef WNT
+#ifdef _WIN32
   __int64 pid = 0;
 #else
   int pid = 0;
 #endif
   if (argc > 4) {
-#ifdef WNT
+#ifdef _WIN32
     pid = _wtoi64(argv[4]);
 #else
     pid = atoi(argv[4]);
@@ -2466,7 +2466,7 @@ int NS_main(int argc, NS_tchar **argv)
   if (sReplaceRequest) {
     // If we're attempting to replace the application, try to append to the
     // log generated when staging the staged update.
-#ifdef WNT
+#ifdef _WIN32
     NS_tchar* logDir = gPatchDirPath;
 #else
 #ifdef MACOSX
@@ -2529,7 +2529,7 @@ int NS_main(int argc, NS_tchar **argv)
   }
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
   if (pid > 0) {
     HANDLE parent = OpenProcess(SYNCHRONIZE, false, (DWORD) pid);
     // May return nullptr if the parent process has already gone away.
@@ -2549,7 +2549,7 @@ int NS_main(int argc, NS_tchar **argv)
 #endif
 
   if (sReplaceRequest) {
-#ifdef WNT
+#ifdef _WIN32
     // On Windows, the current working directory of the process should be changed
     // so that it's not locked.
     NS_tchar sysDir[MAX_PATH + 1] = { L'\0' };
@@ -2564,7 +2564,7 @@ int NS_main(int argc, NS_tchar **argv)
   // argument prior to callbackIndex is the working directory.
   const int callbackIndex = 6;
 
-#if defined(WNT)
+#if defined(_WIN32)
   sUsingService = EnvHasValue("MOZ_USING_SERVICE");
   putenv(const_cast<char*>("MOZ_USING_SERVICE="));
   // lastFallbackError keeps track of the last error for the service not being
@@ -2907,7 +2907,7 @@ int NS_main(int argc, NS_tchar **argv)
     }
   }
 
-#ifdef WNT
+#ifdef _WIN32
   // For replace requests, we don't need to do any real updates, so this is not
   // necessary.
   if (!sReplaceRequest) {
@@ -3108,7 +3108,7 @@ int NS_main(int argc, NS_tchar **argv)
   }
   t.Join();
 
-#ifdef WNT
+#ifdef _WIN32
   if (argc > callbackIndex && !sReplaceRequest) {
     if (callbackFile != INVALID_HANDLE_VALUE) {
       CloseHandle(callbackFile);
@@ -3186,7 +3186,7 @@ int NS_main(int argc, NS_tchar **argv)
   LogFinish();
 
   if (argc > callbackIndex) {
-#if defined(WNT)
+#if defined(_WIN32)
     if (gSucceeded) {
       // The service update will only be executed if it is already installed.
       // For first time installs of the service, the install will happen from
@@ -3335,7 +3335,7 @@ ActionList::Finish(int status)
 }
 
 
-#ifdef WNT
+#ifdef _WIN32
 int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
 {
   int rv = OK;
@@ -3642,7 +3642,7 @@ GetManifestContents(const NS_tchar *manifest)
   mbuf[ms.st_size] = '\0';
   rb = mbuf;
 
-#ifndef WNT
+#ifndef _WIN32
   return rb;
 #else
   NS_tchar *wrb = (NS_tchar *) malloc((ms.st_size + 1) * sizeof(NS_tchar));

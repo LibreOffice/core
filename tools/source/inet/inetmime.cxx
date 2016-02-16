@@ -162,7 +162,7 @@ inline bool startsWithLineFolding(const sal_Unicode * pBegin,
 
 inline rtl_TextEncoding translateToMIME(rtl_TextEncoding eEncoding)
 {
-#if defined WNT
+#if defined(_WIN32)
     return eEncoding == RTL_TEXTENCODING_MS_1252 ?
                RTL_TEXTENCODING_ISO_8859_1 : eEncoding;
 #else // WNT
@@ -173,7 +173,7 @@ inline rtl_TextEncoding translateToMIME(rtl_TextEncoding eEncoding)
 inline rtl_TextEncoding translateFromMIME(rtl_TextEncoding
                                                         eEncoding)
 {
-#if defined WNT
+#if defined(_WIN32)
     return eEncoding == RTL_TEXTENCODING_ISO_8859_1 ?
                RTL_TEXTENCODING_MS_1252 : eEncoding;
 #else
@@ -830,7 +830,7 @@ createPreferredCharsetList(rtl_TextEncoding eEncoding)
         // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-R.TXT>
         // version 1.0 of 18 August 1999
 
-#if defined WNT
+#if defined(_WIN32)
     static const sal_uInt32 aWindows1252Ranges[]
         = { 0, 0x7F, 0xA0, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
             0x17D, 0x17E, 0x192, 0x192, 0x2C6, 0x2C6, 0x2DC, 0x2DC,
@@ -845,7 +845,7 @@ createPreferredCharsetList(rtl_TextEncoding eEncoding)
     switch (eEncoding)
     {
         case RTL_TEXTENCODING_MS_1252:
-#if defined WNT
+#if defined(_WIN32)
             pList->prepend(Charset(RTL_TEXTENCODING_MS_1252,
                                    aWindows1252Ranges));
 #endif // WNT

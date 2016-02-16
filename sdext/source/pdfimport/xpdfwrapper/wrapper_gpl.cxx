@@ -18,7 +18,7 @@
  */
 
 #include "pdfioutdev_gpl.hxx"
-#ifdef WNT
+#ifdef _WIN32
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
 #endif
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     if( outputFile[0] != '\001' )
         g_binary_out = fopen(outputFile,"wb");
 
-#ifdef WNT
+#ifdef _WIN32
     // Win actually modifies output for O_TEXT file mode, so need to
     // revert to binary here
     _setmode( _fileno( g_binary_out ), _O_BINARY );

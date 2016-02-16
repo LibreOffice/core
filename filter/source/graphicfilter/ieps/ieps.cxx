@@ -150,7 +150,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 {
     oslProcessError result;
     oslSecurity pSecurity = osl_getCurrentSecurity();
-#ifdef WNT
+#ifdef _WIN32
     /*
      * ooo#72096
      * On Window the underlying SearchPath searches in order of...
@@ -185,7 +185,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     return result;
 }
 
-#if defined(WNT)
+#if defined(_WIN32)
 #    define EXESUFFIX ".exe"
 #else
 #    define EXESUFFIX ""
@@ -382,7 +382,7 @@ static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         arg11.pData
     };
     return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
-#ifdef WNT
+#ifdef _WIN32
         "gswin32c" EXESUFFIX,
 #else
         "gs" EXESUFFIX,

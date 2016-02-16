@@ -25,7 +25,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 
-#if defined WNT
+#if defined(_WIN32)
 #include <intrin.h>
 #endif
 

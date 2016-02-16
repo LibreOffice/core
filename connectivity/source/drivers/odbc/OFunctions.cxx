@@ -90,7 +90,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 
     if (bLoaded)
         return true;
-#ifdef WNT
+#ifdef _WIN32
     _rPath = "ODBC32.DLL";
 #endif
 #ifdef UNX

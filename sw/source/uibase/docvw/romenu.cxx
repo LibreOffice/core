@@ -190,7 +190,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_SOURCEVIEW,      SID_SOURCEVIEW,     rDis );
     Check( MN_READONLY_BROWSE_BACKWARD, SID_BROWSE_BACKWARD,rDis );
     Check( MN_READONLY_BROWSE_FORWARD,  SID_BROWSE_FORWARD, rDis );
-#ifdef WNT
+#ifdef _WIN32
     Check( MN_READONLY_PLUGINOFF,       SID_PLUGINS_ACTIVE, rDis );
 #endif
     Check( MN_READONLY_OPENURL,         SID_OPENDOC,        rDis );
@@ -314,7 +314,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
                 break;
             }
         case MN_READONLY_GRAPHICOFF:        nExecId = FN_VIEW_GRAPHIC;    break;
-#ifdef WNT
+#ifdef _WIN32
         case MN_READONLY_PLUGINOFF:         nExecId = SID_PLUGINS_ACTIVE; break;
 #endif
         case MN_READONLY_TOGALLERYLINK:

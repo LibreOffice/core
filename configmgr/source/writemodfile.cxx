@@ -93,7 +93,7 @@ TempFile::~TempFile() {
     }
 }
 
-#ifdef WNT
+#ifdef _WIN32
 oslFileError TempFile::closeWithoutUnlink() {
     flush();
     oslFileError e = osl_closeFile(handle);

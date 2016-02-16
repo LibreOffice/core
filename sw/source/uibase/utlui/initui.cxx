@@ -291,7 +291,7 @@ ImpAutoFormatNameListLoader::ImpAutoFormatNameListLoader( std::vector<OUString>&
         OUString p(ResId(n + 1, *pSwResMgr));
         if(STR_AUTOFMTREDL_TYPO == n)
         {
-#ifdef WNT
+#ifdef _WIN32
             // For Windows, a special treatment is necessary because MS has
             // forgotten some characters in the dialog font here.
             p = p.replaceFirst("%1", ",,");

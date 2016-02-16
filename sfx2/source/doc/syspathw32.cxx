@@ -18,7 +18,7 @@
  */
 
 
-#ifdef WNT
+#ifdef _WIN32
 #ifdef _MSC_VER
 #pragma warning(disable:4917)
 #endif
@@ -67,7 +67,7 @@ typedef unsigned short sal_uInt16;
 
 extern "C" bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
 {
-#ifdef WNT
+#ifdef _WIN32
     return _SHGetSpecialFolderW32( CSIDL_TEMPLATES, reinterpret_cast<LPWSTR>(pFolder), nSize );
 #else
     (void)pFolder;

@@ -32,7 +32,7 @@
 #include <wchar.h>
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -1248,7 +1248,7 @@ void FileAttributesTest()
 }
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 void FileAttributesTest()
 {
     FileBase::RC    rc;
@@ -1385,7 +1385,7 @@ void FileTimeTest()
             // GetCreationTime
 
             aCreationTimeRead=rStatus.getCreationTime();
-#ifdef WNT
+#ifdef _WIN32
             if ( aCreationTime.Seconds == aCreationTimeRead.Seconds && aCreationTime.Nanosec == aCreationTimeRead.Nanosec )
                 printf( "GetCreationTime: ok : " );
             else
@@ -2447,7 +2447,7 @@ void print_error( const ::rtl::OString& str, FileBase::RC rc )
 
 // main
 
-#if defined WNT
+#if defined(_WIN32)
         #define MAIN _cdecl main
 #else
         #define MAIN main

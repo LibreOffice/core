@@ -1060,7 +1060,7 @@ JavaInfo * MergedSettings::createJavaInfo() const
 {
     return m_javaInfo.makeJavaInfo();
 }
-#ifdef WNT
+#ifdef _WIN32
 bool MergedSettings::getJavaInfoAttrAutoSelect() const
 {
     return m_javaInfo.bAutoSelect;

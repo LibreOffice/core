@@ -321,7 +321,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     OUString aff;
                     osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
                     osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-#if defined(WNT)
+#if defined(_WIN32)
                     // workaround for Windows specific problem that the
                     // path length in calls to 'fopen' is limited to somewhat
                     // about 120+ characters which will usually be exceed when

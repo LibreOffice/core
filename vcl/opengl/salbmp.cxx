@@ -54,7 +54,7 @@ inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nT
         nType = GL_UNSIGNED_BYTE;
         return true;
     case 16:
-#ifdef WNT
+#ifdef _WIN32
         nFormat = GL_BGR;
 #else
         nFormat = GL_RGB;
@@ -62,7 +62,7 @@ inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nT
         nType = GL_UNSIGNED_SHORT_5_6_5;
         return true;
     case 24:
-#ifdef WNT
+#ifdef _WIN32
         nFormat = GL_BGR;
 #else
         nFormat = GL_RGB;
@@ -70,7 +70,7 @@ inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nT
         nType = GL_UNSIGNED_BYTE;
         return true;
     case 32:
-#ifdef WNT
+#ifdef _WIN32
         nFormat = GL_BGRA;
 #else
         nFormat = GL_RGBA;
@@ -769,7 +769,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             break;
         case 16:
         {
-#ifdef WNT
+#ifdef _WIN32
             pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_LSB_MASK;
             ColorMaskElement aRedMask(0x00007c00);
             aRedMask.CalcMaskShift();
@@ -792,7 +792,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         }
         case 24:
         {
-#ifdef WNT
+#ifdef _WIN32
             pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
 #else
             pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_RGB;
@@ -801,7 +801,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         }
         case 32:
         {
-#ifdef WNT
+#ifdef _WIN32
             pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_BGRA;
             ColorMaskElement aRedMask(0x00ff0000);
             aRedMask.CalcMaskShift();
