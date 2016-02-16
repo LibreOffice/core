@@ -30,7 +30,7 @@ namespace framework
 
 bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
     const uno::Reference< ui::XUIConfigurationManager2 >& rContainerFactory,
-    uno::Sequence< uno::Reference< container::XIndexContainer > >& rSeqContainer,
+    std::vector< uno::Reference< container::XIndexContainer > >& rSeqContainer,
     const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< embed::XStorage >& rToolbarStorage )
 {
@@ -57,9 +57,7 @@ bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
                         uno::Reference< container::XIndexContainer > xContainer = rContainerFactory->createSettings();
                         if ( ToolBoxConfiguration::LoadToolBox( rxContext, xInputStream, xContainer ))
                         {
-                            sal_uInt32 nIndex = rSeqContainer.getLength();
-                            rSeqContainer.realloc( nIndex+1 );
-                            rSeqContainer[nIndex] = xContainer;
+                            rSeqContainer.push_back( xContainer );
                             bResult = true;
                         }
                     }

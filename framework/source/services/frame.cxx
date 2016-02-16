@@ -3170,7 +3170,7 @@ void Frame::impl_checkMenuCloser()
     // But we must check, if weself includes the help ...
     // Check aAnalyzer.m_bReferenceIsHelp!
     if (
-        (aAnalyzer.m_lOtherVisibleFrames.getLength()==1)   &&
+        (aAnalyzer.m_lOtherVisibleFrames.size()==1)   &&
         (
             (aAnalyzer.m_bReferenceIsHelp  ) ||
             (aAnalyzer.m_bReferenceIsHidden)
@@ -3186,7 +3186,7 @@ void Frame::impl_checkMenuCloser()
     // There is no other frame ... means no other document frame. The help module
     // will be handled separately and must(!) be ignored here ... excepting weself includes the help.
     else if (
-        (aAnalyzer.m_lOtherVisibleFrames.getLength()==0) &&
+        (aAnalyzer.m_lOtherVisibleFrames.empty()) &&
         (!aAnalyzer.m_bReferenceIsHelp                 ) &&
         (!aAnalyzer.m_bReferenceIsHidden               ) &&
         (!aAnalyzer.m_bReferenceIsBacking              )

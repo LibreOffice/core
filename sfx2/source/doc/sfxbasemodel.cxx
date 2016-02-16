@@ -3563,7 +3563,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
             if ( xOOo1ConfigStorage.is() )
             {
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                Sequence< Reference< container::XIndexContainer > > rToolbars;
+                std::vector< Reference< container::XIndexContainer > > rToolbars;
 
                 bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
                                         xNewUIConfMan, rToolbars, xContext, xOOo1ConfigStorage );
@@ -3573,7 +3573,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
 
                     OUString aNum( "private:resource/toolbar/custom_OOo1x_" );
                     OUString aTitle( "Toolbar " );
-                    for ( sal_Int32 i = 0; i < rToolbars.getLength(); i++ )
+                    for ( size_t i = 0; i < rToolbars.size(); i++ )
                     {
                         OUString aCustomTbxName = aNum + OUString::number( i + 1 );
                         OUString aCustomTbxTitle = aTitle + OUString::number( i + 1 );

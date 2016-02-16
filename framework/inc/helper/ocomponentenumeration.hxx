@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vector>
 
 namespace framework{
 
@@ -66,7 +67,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper< css::container::X
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OComponentEnumeration( const css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents );
+         OComponentEnumeration( const std::vector< css::uno::Reference< css::lang::XComponent > >& seqComponents );
 
         //  XEventListener
 
@@ -160,8 +161,8 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper< css::container::X
 
     private:
 
-        sal_uInt32                                                              m_nPosition;   /// current position in enumeration
-        css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >      m_seqComponents;   /// list of current components
+        sal_uInt32                                                       m_nPosition;   /// current position in enumeration
+        std::vector< css::uno::Reference< css::lang::XComponent > >      m_seqComponents;   /// list of current components
 
 };      //  class OComponentEnumeration
 
