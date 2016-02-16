@@ -215,6 +215,7 @@ public abstract class ScriptProvider implements
                         isPkgProvider = true;
 
                         if (!originalContextURL.equals(contextUrl)
+                            && extensionRepository != null
                             && !extensionRepository.equals("bundled")) {
 
                             contextUrl = PathUtils.make_url(contextUrl, "uno_packages");
