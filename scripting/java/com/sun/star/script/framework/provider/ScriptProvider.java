@@ -194,24 +194,20 @@ public abstract class ScriptProvider implements
                     m_container = new ParcelContainer(m_xContext, contextUrl, language);
                     m_xModel = getModelFromDocUrl(originalContextURL);
                 } else {
-                    String extensionDb = null;
+                    String extensionDb = "vnd.sun.star.expand:${$BRAND_INI_DIR/"
+                                   + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+
                     String extensionRepository = null;
 
                     if (originalContextURL.startsWith("bundled")) {
                         contextUrl = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
-                        extensionDb = "vnd.sun.star.expand:${$BRAND_INI_DIR/"
-                                      + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "bundled";
                     } else if (originalContextURL.startsWith("share")) {
                         contextUrl = "vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR";
-                        extensionDb = "vnd.sun.star.expand:${$BRAND_INI_DIR/"
-                                      + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "shared";
                     } else if (originalContextURL.startsWith("user")) {
                         contextUrl = "vnd.sun.star.expand:${$BRAND_INI_DIR/"
                                      + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
-                        extensionDb = "vnd.sun.star.expand:${$BRAND_INI_DIR/"
-                                      + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "user";
                     }
 
