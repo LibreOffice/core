@@ -1,0 +1,7 @@
+Code-Review+2: David Ostrovsky <david@ostrovsky.org>
+Verified+1: Jenkins <ci@libreoffice.org>
+Submitted-by: Michael Stahl <mstahl@redhat.com>
+Submitted-at: Tue, 16 Feb 2016 12:22:04 +0000
+Reviewed-on: https://gerrit.libreoffice.org/22392
+Project: core
+Branch: refs/heads/master
