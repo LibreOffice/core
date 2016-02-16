@@ -284,13 +284,13 @@ public class FieldLinker extends DBLimitedFieldSelection
 
     private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
-
         public void itemStateChanged(ItemEvent EventObject)
         {
-            if (EventObject != null) {
-                int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
-                enableNextControlRow(ikey);
+            if (EventObject == null) {
+                return;
             }
+            int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+            enableNextControlRow(ikey);
         }
 
         public void disposing(com.sun.star.lang.EventObject eventObject)

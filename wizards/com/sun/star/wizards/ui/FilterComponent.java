@@ -106,6 +106,10 @@ public class FilterComponent
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
+            if (EventObject == null) {
+                return;
+            }
+
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
             String sControlName = PropertyNames.EMPTY_STRING;
             switch (iKey)
