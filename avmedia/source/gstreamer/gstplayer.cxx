@@ -916,7 +916,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 {
                     mbUseGtkSink = true;
                     g_object_get(pVideosink, "widget", &mpGtkWidget, nullptr);
-                    GtkWidget *pParent = (GtkWidget*)(pEnvData->pWidget);
+                    GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
                     gtk_container_add (GTK_CONTAINER(pParent), mpGtkWidget);
 
                     g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pVideosink, nullptr);
