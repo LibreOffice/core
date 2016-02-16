@@ -142,13 +142,13 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     {
         SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
 
-        if( aDlg.Execute() == GRFILTER_OK )
-        {
-            nError = aDlg.GetGraphic(aGraphic);
-            bAsLink = aDlg.IsAsLink();
-            aFileName = aDlg.GetPath();
-            aFilterName = aDlg.GetCurrentFilter();
-        }
+        if( aDlg.Execute() != GRFILTER_OK )
+            return; // cancel dialog
+
+        nError = aDlg.GetGraphic(aGraphic);
+        bAsLink = aDlg.IsAsLink();
+        aFileName = aDlg.GetPath();
+        aFilterName = aDlg.GetCurrentFilter();
     }
 
     if( nError == GRFILTER_OK )
