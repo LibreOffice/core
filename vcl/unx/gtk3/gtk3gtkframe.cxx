@@ -3909,6 +3909,7 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
 
 sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
 {
+    (void) this;                // Silence loplugin:staticmethods
     GdkDisplay *pDisplay = getGdkDisplay();
     GdkWindow *pWindow = gtk_widget_get_window(pWidget);
 
