@@ -70,7 +70,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont
 
 
 // NOTE: this ctor is still used on Windows. Do not remove.
-#ifdef WNT
+#ifdef _WIN32
 FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
     : FontAttributes( rFontData )

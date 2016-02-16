@@ -107,7 +107,7 @@ void setincdirs()
  * verwendete knallte es in strcpy() !
  */
 
-#if !defined( WNT ) && ! defined UNX
+#if !defined(_WIN32) && !defined(UNX)
     extern char* getenv( char *pStr ); /* BP */
 #endif
     char* pIncGetEnv = NULL;    /* Pointer auf INCLUDE   */

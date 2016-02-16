@@ -41,7 +41,7 @@ struct lt_rtl_OUString
     }
 };
 
-#if defined(WNT)
+#if defined(_WIN32)
 
 // to be use to get a path name with long path prefix
 // under Windows for Hunspell, Hyphen and MyThes libraries

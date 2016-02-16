@@ -462,7 +462,7 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
     }
     else
     {
-#ifdef WNT
+#ifdef _WIN32
         sal_Unicode aBuffer[128];
 
         aBuffer[0] = 0;

@@ -32,7 +32,7 @@
 #include "markdata.hxx"
 #include <gridwin.hxx>
 
-#if defined WNT
+#if defined(_WIN32)
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
 #endif
 
@@ -124,7 +124,7 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
             nUpdateInterval = nTmp;
     }
 
-#ifdef WNT
+#ifdef _WIN32
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
     if (bRefMode && nUpdateInterval < SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN)

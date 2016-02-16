@@ -152,7 +152,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
             sDesktopName = "Base";
         else
             sDesktopName = "Startcenter";
-#if defined(WNT)
+#if defined(_WIN32)
         // We use a hardcoded product name matching the registry keys so applications can be associated with file types
         sApplicationID = "TheDocumentFoundation.LibreOffice.";
         sApplicationID += sDesktopName;

@@ -23,7 +23,7 @@
 
 #include "xolefactory.hxx"
 
-#if defined WNT
+#if defined(_WIN32)
 #include "xdialogcreator.hxx"
 #endif
 
@@ -50,7 +50,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL emboleobj_component_getFactory(
                                                 OleEmbeddedObjectFactory::impl_staticCreateSelfInstance,
                                                 OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
         }
-#ifdef WNT
+#ifdef _WIN32
         // the following service makes sense only on windows
         else if ( aImplName.equals( MSOLEDialogObjectCreator::impl_staticGetImplementationName() ) )
         {

@@ -27,7 +27,7 @@
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <cmath>
 #else
 #include <math.h>

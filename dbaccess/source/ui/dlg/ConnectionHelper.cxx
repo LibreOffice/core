@@ -60,7 +60,7 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
 
-#if defined(WNT)
+#if defined(_WIN32)
 #define _ADO_DATALINK_BROWSE_
 #endif
 

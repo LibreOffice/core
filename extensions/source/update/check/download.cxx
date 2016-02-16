@@ -18,7 +18,7 @@
  */
 
 
-#if defined WNT
+#if defined(_WIN32)
 #   ifdef _MSC_VER
 #       pragma warning(push, 1) /* disable warnings within system headers */
 #   endif

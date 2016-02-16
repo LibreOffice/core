@@ -112,7 +112,7 @@ public:
 
     virtual void    Closed();
 
-#if defined WNT
+#if defined(_WIN32)
                     SvBaseLink( const OUString& rNm, sal_uInt16 nObjectType,
                                  SvLinkSource* );
 #endif

@@ -18,7 +18,7 @@
  */
 
 #include <algorithm>
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -181,7 +181,7 @@ namespace ThreadHelper
 {
     void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
     {
-#ifdef WNT
+#ifdef _WIN32
         Sleep(_nTenthSec * 100 );
 #else
         TimeValue nTV;
@@ -421,7 +421,7 @@ namespace osl_Thread
         // Note: on UNX, after createSuspended, and then terminate the thread, it performs well;
         // while on Windows, after createSuspended, the thread can not terminate, wait endlessly,
         // so here call resume at first, then call terminate.
-#ifdef WNT
+#ifdef _WIN32
         t_print("resumeAndWaitThread\n");
         _pThread->resume();
         ThreadHelper::thread_sleep_tenth_sec(1);
@@ -436,7 +436,7 @@ namespace osl_Thread
         _pThread->terminate();
 
 // LLA: Windows feature???, a suspended thread can not terminated, so we have to weak it up
-#ifdef WNT
+#ifdef _WIN32
         _pThread->resume();
         ThreadHelper::thread_sleep_tenth_sec(1);
 #endif
@@ -1154,7 +1154,7 @@ namespace osl_Thread
                 t_print("nValue in AboveNormal Prio Thread is %d\n", (int) nValueAboveNormal);
                 t_print("nValue in Normal Prio Thread is %d\n", (int) nValueNormal);
 
-#ifndef WNT
+#ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
                     nValueHighest     > 0 &&
@@ -1237,7 +1237,7 @@ namespace osl_Thread
                 delete pBelowNormalThread;
                 delete pLowestThread;
 
-#ifndef WNT
+#ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
                     nValueHighest     > 0 &&
@@ -1321,7 +1321,7 @@ namespace osl_Thread
                 delete pBelowNormalThread;
                 delete pLowestThread;
 
-#ifndef WNT
+#ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
                     /* nValueHighest     > 0 &&  */
@@ -1401,7 +1401,7 @@ namespace osl_Thread
                 delete pBelowNormalThread;
                 delete pLowestThread;
 
-#ifndef WNT
+#ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
                     /* nValueHighest     > 0 &&  */
@@ -1454,7 +1454,7 @@ namespace osl_Thread
                 ThreadHelper::outputPriority(aPriority);
 
 // LLA: Priority settings may not work within some OS versions.
-#if ( defined WNT ) || ( defined SOLARIS )
+#if defined(_WIN32) || defined(SOLARIS)
                 CPPUNIT_ASSERT_MESSAGE(
                     "getPriority",
                     aPriority == osl_Thread_PriorityHighest
@@ -1683,7 +1683,7 @@ namespace osl_Thread
                 t_print("later value = %d\n", (int) nLaterValue);
 
                 //On windows, suspend works, so the values are same
-#ifdef WNT
+#ifdef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
                     "Schedule: don't schedule in thread run method, suspend works.",
                     nLaterValue == nValue

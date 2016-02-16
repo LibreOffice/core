@@ -40,7 +40,7 @@
 #include <algorithm>
 #include <map>
 
-#if defined WNT
+#if defined(_WIN32)
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -63,7 +63,7 @@ using namespace std;
 
 using ::rtl::Reference;
 
-#ifdef WNT
+#ifdef _WIN32
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
 #define HKEY_SUN_SDK L"Software\\JavaSoft\\Java Development Kit"
 #endif
@@ -119,7 +119,7 @@ namespace jfw_plugin
 {
 extern VendorSupportMapEntry gVendorMap[];
 
-#if defined WNT
+#if defined(_WIN32)
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
 #endif
@@ -573,7 +573,7 @@ bool decodeOutput(const OString& s, OUString* out)
 }
 
 
-#if defined WNT
+#if defined(_WIN32)
 void addJavaInfoFromWinReg(
     std::vector<rtl::Reference<VendorBase> > & allInfos,
     std::vector<rtl::Reference<VendorBase> > & addedInfos)
@@ -800,7 +800,7 @@ vector<Reference<VendorBase> > addAllJREInfos(
 {
     vector<Reference<VendorBase> > addedInfos;
 
-#if defined WNT
+#if defined(_WIN32)
     // Get Javas from the registry
     addJavaInfoFromWinReg(allInfos, addedInfos);
 #endif // WNT

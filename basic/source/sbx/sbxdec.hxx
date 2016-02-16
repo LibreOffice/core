@@ -21,7 +21,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
 #define INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
 
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
 

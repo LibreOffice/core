@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ( defined WNT )                     // Windows
+#if defined(_WIN32)                     // Windows
 #   define UNICODE
 #   define _UNICODE
 #   define WIN32_LEAN_AND_MEAN
@@ -42,7 +42,7 @@
 # endif
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 #   define SLEEP(t) (Sleep((t)*1000))
 #else
 #   define SLEEP(t) (sleep((t)))
@@ -53,7 +53,7 @@ void wait_for_seconds(char* time)
     SLEEP(atoi(time));
 }
 
-#ifdef WNT
+#ifdef _WIN32
 
 void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 {

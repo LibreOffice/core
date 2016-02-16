@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 #define FIXTODOUBLE( nFix )     ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )       ((long)floor(FIXTODOUBLE(nFix)+0.5))
 
-#if defined WNT
+#if defined(_WIN32)
 #define TWAIN_LIBNAME           "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME          "DSM_Entry"
 #endif

@@ -18,7 +18,7 @@
  */
 
 
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
 #endif
@@ -80,7 +80,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
     (void)pGDIMeta;  // unused
     void* pResult = nullptr;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( pGDIMeta )
     {
         OUString const aStr(".emf");
@@ -115,7 +115,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     (void)aMetaSize; // unused
     void* pResult = nullptr;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( pGDIMeta )
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );

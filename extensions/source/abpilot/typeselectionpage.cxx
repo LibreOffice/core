@@ -70,7 +70,7 @@ namespace abp
         bool bHaveKab = false;
         bool bHaveMacab = false;
 
-#if !defined WNT
+#if !defined(_WIN32)
 
         Reference< XDriverManager2 > xManager = DriverManager::create( _pParent->getORB() );
 

@@ -18,7 +18,7 @@
  */
 
 
-#if defined(WNT)
+#if defined(_WIN32)
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)

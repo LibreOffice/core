@@ -750,7 +750,7 @@ def generate(includes, libname, filename, module):
         # svx needs this (sendreportw32.cxx)
         if module == 'svx' and libname == 'svx':
             svx_define = """
-#ifdef WNT
+#ifdef _WIN32
 #   define UNICODE
 #   define _UNICODE
 #endif
@@ -767,7 +767,7 @@ def generate(includes, libname, filename, module):
            (module == 'xmlsecurity' and libname == 'xsec_xmlsec'):
             ado_define = """
 // Cleanup windows header macro pollution.
-#if defined(WNT) && defined(WINAPI)
+#if defined(_WIN32) && defined(WINAPI)
 #   include <postwin.h>
 #   undef RGB
 #endif

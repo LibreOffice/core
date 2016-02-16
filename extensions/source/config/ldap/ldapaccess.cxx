@@ -120,7 +120,7 @@ void  LdapConnection::connectSimple()
 #ifdef LDAP_X_OPT_CONNECT_TIMEOUT // OpenLDAP doesn't support this and the func
         /* timeout is specified in milliseconds -> 4 seconds*/
         int timeout = 4000;
-#ifdef WNT
+#ifdef _WIN32
         ldap_set_optionW( mConnection,
                         LDAP_X_OPT_CONNECT_TIMEOUT,
                         &timeout );
@@ -132,7 +132,7 @@ void  LdapConnection::connectSimple()
 #endif
 
         // Do the bind
-#ifdef WNT
+#ifdef _WIN32
         LdapErrCode retCode = ldap_simple_bind_sW(mConnection,
                                                (PWCHAR) mLdapDefinition.mAnonUser.getStr(),
                                                (PWCHAR) mLdapDefinition.mAnonCredentials.getStr() );
@@ -159,7 +159,7 @@ void LdapConnection::initConnection()
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
 
-#ifdef WNT
+#ifdef _WIN32
     mConnection = ldap_initW((PWCHAR) mLdapDefinition.mServer.getStr(),
                             mLdapDefinition.mPort) ;
 #else
@@ -189,7 +189,7 @@ void LdapConnection::initConnection()
     OUString aUserDn =findUserDn( aUser );
 
     LdapMessageHolder result;
-#ifdef WNT
+#ifdef _WIN32
     LdapErrCode retCode = ldap_search_sW(mConnection,
                                       (PWCHAR) aUserDn.getStr(),
                                       LDAP_SCOPE_BASE,
@@ -209,7 +209,7 @@ void LdapConnection::initConnection()
     checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
 
     BerElement * ptr;
-#ifdef WNT
+#ifdef _WIN32
     PWCHAR attr = ldap_first_attributeW(mConnection, result.msg, &ptr);
     while (attr) {
         PWCHAR * values = ldap_get_valuesW(mConnection, result.msg, attr);
@@ -257,7 +257,7 @@ void LdapConnection::initConnection()
     filter.append( mLdapDefinition.mUserUniqueAttr ).append("=").append(aUser).append("))") ;
 
     LdapMessageHolder result;
-#ifdef WNT
+#ifdef _WIN32
     PWCHAR attributes [2] = { const_cast<PWCHAR>( L"1.1" ), NULL };
     LdapErrCode retCode = ldap_search_sW(mConnection,
                                       (PWCHAR) mLdapDefinition.mBaseDN.getStr(),
@@ -276,7 +276,7 @@ void LdapConnection::initConnection()
 
     if (entry != nullptr)
     {
-#ifdef WNT
+#ifdef _WIN32
         PWCHAR charsDn = ldap_get_dnW(mConnection, entry) ;
 
         userDn = OUString( reinterpret_cast<const sal_Unicode*>( charsDn ) );

@@ -338,12 +338,12 @@ void Test::createInstance(
     } else if (name == "com.sun.star.datatransfer.clipboard.SystemClipboard") {
         // SystemClipboard is a wrapper returning either a platform-specific or
         // the generic VCLGenericClipboard:
-#if defined WNT
+#if defined(_WIN32)
         expImpl = "com.sun.star.datatransfer.clipboard.ClipboardW32";
 #else
         expImpl = "com.sun.star.datatransfer.VCLGenericClipboard";
 #endif
-#if !defined WNT
+#if !defined(_WIN32)
     } else if (name == "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
                || name == "com.sun.star.datatransfer.dnd.XdndSupport")
     {
@@ -358,7 +358,7 @@ void Test::createInstance(
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the
         // generic OfficeFolderPicker:
-#if defined WNT
+#if defined(_WIN32)
         expImpl = "com.sun.star.ui.dialogs.Win32FolderPicker";
         expServs = {"com.sun.star.ui.dialogs.SystemFolderPicker"};
 #else

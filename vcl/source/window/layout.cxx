@@ -324,7 +324,7 @@ bool VclBox::set_property(const OString &rKey, const OString &rValue)
 
 sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
-#if defined(WNT)
+#if defined(_WIN32)
     //fdo#74284 call Boxes Panels, keep then as "Filler" under
     //at least Linux seeing as that's what Gtk does for GtkBoxes
     return css::accessibility::AccessibleRole::PANEL;

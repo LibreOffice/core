@@ -18,7 +18,7 @@
  */
 
 #include <stdio.h>
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
 #endif
@@ -124,11 +124,11 @@
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
 
-#if (defined WNT)
+#if defined(_WIN32)
 #define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_WIN32
-#elif (defined MACOSX)
+#elif defined(MACOSX)
 #define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_MAC
-#elif (defined UNX)
+#elif defined(UNX)
 #define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_XWINDOW
 #endif
 

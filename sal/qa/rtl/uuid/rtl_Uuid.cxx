@@ -28,7 +28,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #elif defined UNX
 #include <unistd.h>

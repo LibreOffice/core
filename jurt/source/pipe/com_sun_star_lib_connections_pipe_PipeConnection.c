@@ -103,7 +103,7 @@ static rtl_uString * jstring2ustring(JNIEnv * env, jstring jstr)
  * Signature: (Lcom/sun/star/beans/NativeService;)V
  */
 SAL_DLLPUBLIC_EXPORT void
-#if defined WNT
+#if defined(_WIN32)
 PipeConnection_create
 #else
 JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
@@ -242,7 +242,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
  * Signature: ()V
  */
 SAL_DLLPUBLIC_EXPORT void
-#if defined WNT
+#if defined(_WIN32)
 PipeConnection_close
 #else
 JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
@@ -328,7 +328,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
  * Signature: ([[BI)I
  */
 SAL_DLLPUBLIC_EXPORT jint
-#if defined WNT
+#if defined(_WIN32)
 PipeConnection_read
 #else
 JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
@@ -449,7 +449,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
  * Signature: ([B)V
  */
 SAL_DLLPUBLIC_EXPORT void
-#if defined WNT
+#if defined(_WIN32)
 PipeConnection_write
 #else
 JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
@@ -546,7 +546,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
  * Signature: ()V
  */
 SAL_DLLPUBLIC_EXPORT void
-#if defined WNT
+#if defined(_WIN32)
 PipeConnection_flush
 #else
 JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_flushJNI

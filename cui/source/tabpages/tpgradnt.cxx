@@ -505,7 +505,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 
         m_pLbGradients->SelectEntryPos( m_pLbGradients->GetEntryCount() - 1 );
 
-#ifdef WNT
+#ifdef _WIN32
         // hack: #31355# W.P.
         Rectangle aRect( m_pLbGradients->GetPosPixel(), m_pLbGradients->GetSizePixel() );
         if( sal_True ) {                // ??? overlapped with pDlg

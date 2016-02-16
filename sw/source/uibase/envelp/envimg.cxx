@@ -34,7 +34,7 @@
 
 #include <unomid.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #define NEXTLINE  "\r\n"
 #else
 #define NEXTLINE  "\n"

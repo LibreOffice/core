@@ -233,7 +233,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
                 if (aInfo == nullptr)
                     return JFW_E_NO_SELECT;
 
-#ifdef WNT
+#ifdef _WIN32
                 //Because on Windows there is no system setting that we can use to determine
                 //if Assistive Technology Tool support is needed, we ship a .reg file that the
                 //user can use to create a registry setting. When the user forgets to set

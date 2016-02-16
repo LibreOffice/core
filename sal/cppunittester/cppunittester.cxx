@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -361,7 +361,7 @@ SAL_IMPLEMENT_MAIN()
     OUString path;
     try
     {
-#ifdef WNT
+#ifdef _WIN32
         //Disable Dr-Watson in order to crash simply without popup dialogs under
         //windows
         DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);

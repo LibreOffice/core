@@ -45,7 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
-#if defined WNT
+#if defined(_WIN32)
 
 OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {
@@ -197,7 +197,7 @@ bool ImplDdeService::SysTopicExecute( const OUString* pStr )
 
 class SfxDdeTriggerTopic_Impl : public DdeTopic
 {
-#if defined WNT
+#if defined(_WIN32)
 public:
     SfxDdeTriggerTopic_Impl()
         : DdeTopic( "TRIGGER" )
@@ -209,7 +209,7 @@ public:
 
 class SfxDdeDocTopic_Impl : public DdeTopic
 {
-#if defined WNT
+#if defined(_WIN32)
 public:
     SfxObjectShell* pSh;
     DdeData aData;
@@ -228,7 +228,7 @@ public:
 };
 
 
-#if defined WNT
+#if defined(_WIN32)
 
 namespace {
 
@@ -423,7 +423,7 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
 bool SfxApplication::InitializeDde()
 {
     int nError = 0;
-#if defined( WNT )
+#if defined(_WIN32)
     DBG_ASSERT( !pAppData_Impl->pDdeService,
                 "Dde can not be initialized multiple times" );
 
@@ -458,7 +458,7 @@ void SfxAppData_Impl::DeInitDDE()
     DELETEZ( pDdeService );
 }
 
-#if defined( WNT )
+#if defined(_WIN32)
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
     //OV: DDE is disconnected in server mode!
@@ -492,7 +492,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
-#if defined WNT
+#if defined(_WIN32)
     //OV: DDE is disconnected in server mode!
     if( !pAppData_Impl->pDocTopics )
         return;
@@ -522,7 +522,7 @@ DdeService* SfxApplication::GetDdeService()
     return pAppData_Impl->pDdeService;
 }
 
-#if defined WNT
+#if defined(_WIN32)
 
 DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 {

@@ -539,7 +539,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
         m_pLbHatchings->SelectEntryPos( m_pLbHatchings->GetEntryCount() - 1 );
 
-#ifdef WNT
+#ifdef _WIN32
         // hack: #31355# W.P.
         Rectangle aRect( m_pLbHatchings->GetPosPixel(), m_pLbHatchings->GetSizePixel() );
         if( sal_True ) {                // ??? overlapped with pDlg

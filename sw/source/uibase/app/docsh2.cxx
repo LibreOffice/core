@@ -1145,7 +1145,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
     }
 }
 
-#if defined WNT
+#if defined(_WIN32)
 bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              uno::Any & rValue )
 {

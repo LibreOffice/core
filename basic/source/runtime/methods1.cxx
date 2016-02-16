@@ -284,7 +284,7 @@ RTLFUNC(CDec)
     (void)pBasic;
     (void)bWrite;
 
-#ifdef WNT
+#ifdef _WIN32
     SbxDecimal* pDec = NULL;
     if ( rPar.Count() == 2 )
     {
@@ -525,9 +525,9 @@ RTLFUNC(GetGUIType)
     else
     {
         // 17.7.2000 Make simple solution for testtool / fat office
-#if defined (WNT)
+#if   defined(_WIN32)
         rPar.Get(0)->PutInteger( 1 );
-#elif defined UNX
+#elif defined(UNX)
         rPar.Get(0)->PutInteger( 4 );
 #else
         rPar.Get(0)->PutInteger( -1 );

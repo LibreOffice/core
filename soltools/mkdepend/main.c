@@ -695,7 +695,7 @@ void warning1(char *msg, ...)
 
 void convert_slashes(char *path)
 {
-#if defined (WNT)
+#if defined (_WIN32)
     /*
      * Convert backslashes to slashes
      */

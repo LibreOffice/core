@@ -159,7 +159,7 @@ public:
     }
 };
 
-#if !defined(WNT)
+#if !defined(_WIN32)
 
 DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
 {

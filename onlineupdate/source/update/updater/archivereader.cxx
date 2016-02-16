@@ -10,7 +10,7 @@
 #include "bzlib.h"
 #include "archivereader.h"
 #include "errors.h"
-#ifdef WNT
+#ifdef _WIN32
 #include "updatehelper.h"
 #endif
 
@@ -202,7 +202,7 @@ ArchiveReader::Open(const NS_tchar *path)
     }
   }
 
-#ifdef WNT
+#ifdef _WIN32
   mArchive = mar_wopen(path);
 #else
   mArchive = mar_open(path);
@@ -239,7 +239,7 @@ ArchiveReader::ExtractFile(const char *name, const NS_tchar *dest)
   if (!item)
     return READ_ERROR;
 
-#ifdef WNT
+#ifdef _WIN32
   FILE* fp = _wfopen(dest, L"wb+");
 #else
   int fd = creat(dest, item->flags);

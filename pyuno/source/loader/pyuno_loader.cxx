@@ -199,7 +199,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         if( !pythonPath.isEmpty() )
             prependPythonPath( pythonPath );
 
-#ifdef WNT
+#ifdef _WIN32
     //extend PATH under windows to include the branddir/program so ssl libs will be found
     //for use by terminal mailmerge dependency _ssl.pyd
     OUString sEnvName("PATH");

@@ -199,13 +199,13 @@ public:
     CPPUNIT_TEST(testCeilingFloorXLSX);
     CPPUNIT_TEST(testCeilingFloorXLS);
     CPPUNIT_TEST(testCeilingFloorODS);
-#if !defined(WNT)
+#if !defined(_WIN32)
     CPPUNIT_TEST(testRelativePaths);
 #endif
     CPPUNIT_TEST(testSheetProtection);
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
-#if !defined(WNT)
+#if !defined(_WIN32)
     CPPUNIT_TEST(testSupBookVirtualPath);
 #endif
     CPPUNIT_TEST(testSwappedOutImageExport);

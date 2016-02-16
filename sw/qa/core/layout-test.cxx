@@ -43,7 +43,7 @@ public:
     void test();
 
     CPPUNIT_TEST_SUITE(SwLayoutTest);
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(_WIN32)
     CPPUNIT_TEST(test);
 #endif
     CPPUNIT_TEST_SUITE_END();

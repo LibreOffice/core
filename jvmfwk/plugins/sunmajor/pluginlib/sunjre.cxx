@@ -36,7 +36,7 @@ rtl::Reference<VendorBase> SunInfo::createInstance()
 char const* const* SunInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#if defined(WNT)
+#if defined(_WIN32)
         "java.exe",
         "bin/java.exe",
         "jre/bin/java.exe"
@@ -53,7 +53,7 @@ char const* const* SunInfo::getJavaExePaths(int * size)
 char const* const* SunInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#if defined(WNT)
+#if defined(_WIN32)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",

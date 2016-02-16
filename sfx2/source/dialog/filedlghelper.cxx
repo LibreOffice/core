@@ -1180,7 +1180,7 @@ void FileDialogHelper_Impl::preExecute()
 
     implInitializeFileName( );
 
-#if !(defined(MACOSX) && defined(MACOSX)) && !defined(WNT)
+#if !(defined(MACOSX) && defined(MACOSX)) && !defined(_WIN32)
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
 
@@ -1252,7 +1252,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
     {
         try
         {
-#ifdef WNT
+#ifdef _WIN32
             if ( mbSystemPicker )
             {
                 SolarMutexReleaser aSolarMutex;
@@ -1815,7 +1815,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         }
     }
 
-#if defined(WNT)
+#if defined(_WIN32)
     if ( aExtensions.getLength() > 240 )
         aExtensions = FILEDIALOG_FILTER_ALL;
 #endif

@@ -238,7 +238,7 @@ namespace vcl
 
 struct BitmapSystemData
 {
-    #if defined( WNT )
+    #if defined(_WIN32)
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
     #elif defined( MACOSX ) || defined( IOS )

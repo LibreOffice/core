@@ -300,7 +300,7 @@ public:
      */
     OString const & getJavaInfoAttrVendorUpdate() const { return m_javaInfo.sAttrVendorUpdate;}
 
-#ifdef WNT
+#ifdef _WIN32
     /** returns the javaInfo@autoSelect attribute.
         Before calling this function loadFromSettings must be called.
         It uses the javaInfo@autoSelect attribute  to determine

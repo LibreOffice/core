@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SVSYS_H
 #define INCLUDED_VCL_INC_SVSYS_H
 
-#ifdef WNT
+#ifdef _WIN32
 #include "win/svsys.h"
 #elif defined MACOSX
 #include "osx/svsys.h"

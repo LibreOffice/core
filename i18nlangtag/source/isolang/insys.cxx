@@ -18,7 +18,7 @@
  */
 
 
-#if defined( WNT )
+#if defined(_WIN32)
 
 #include "inwnt.cxx"
 

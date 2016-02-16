@@ -101,7 +101,7 @@ namespace XmlSec
     which we use to retrieve, for example, the subject name. If double quotes appear in the value then
     they are escaped with a double quote. This function removes the escape characters.
 */
-#ifdef WNT
+#ifdef _WIN32
 vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 {
         vector< pair<OUString, OUString> > retVal;

@@ -82,7 +82,7 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_SEPARATOR       "/"
 #endif
 
-#if (defined WNT )                      // Windows
+#if defined(_WIN32)                      // Windows
 #       include <tchar.h>
 #       include <io.h>
 #       include <stdio.h>

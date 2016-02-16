@@ -1490,7 +1490,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_HIDE_LAST_LEVEL);
     }
 
-#if defined WNT || defined UNX
+#if defined(_WIN32) || defined UNX
     if( !mxScannerManager.is() )
     {
         rSet.DisableItem( SID_TWAIN_SELECT );

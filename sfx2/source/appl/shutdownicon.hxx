@@ -150,7 +150,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
-#ifdef WNT
+#ifdef _WIN32
         static void EnableAutostartW32( const OUString &aShortcutName );
         static OUString GetAutostartFolderNameW32();
 #endif

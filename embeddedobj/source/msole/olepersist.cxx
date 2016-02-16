@@ -47,7 +47,7 @@
 
 #include <closepreventer.hxx>
 
-#if defined WNT
+#if defined(_WIN32)
 #include <olecomponent.hxx>
 #endif
 
@@ -154,7 +154,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
 
     return aResult;
 }
-#ifdef WNT
+#ifdef _WIN32
 OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const OUString& aEntryName, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
     throw( io::IOException, uno::RuntimeException )
 {
@@ -207,7 +207,7 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
     xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                 uno::makeAny( true ) );
 }
-#ifdef WNT
+#ifdef _WIN32
 
 void VerbExecutionController::StartControlExecution()
 {
@@ -730,7 +730,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                         m_aTempURL.clear();
                                     }
 
-#ifdef WNT
+#ifdef _WIN32
                                     // retry to create the component after recovering
                                     GetRidOfComponent();
 
@@ -801,7 +801,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
     SwitchOwnPersistence( xNewParentStorage, xNewOwnStream, aNewName );
 }
 
-#ifdef WNT
+#ifdef _WIN32
 
 sal_Bool OleEmbeddedObject::SaveObject_Impl()
 {
@@ -1119,7 +1119,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     bool bStoreLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED
-#ifdef WNT
+#ifdef _WIN32
         // if the object was NOT modified after storing it can be just copied
         // as if it was in loaded state
       || ( m_pOleComponent && !m_pOleComponent->IsDirty() )
@@ -1159,7 +1159,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         bVisReplIsStored = HasVisReplInStream();
         bStoreLoaded = true;
     }
-#ifdef WNT
+#ifdef _WIN32
     else if ( m_pOleComponent )
     {
         xTargetStream =
@@ -1358,7 +1358,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
 
-#ifdef WNT
+#ifdef _WIN32
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 #endif
 
@@ -1368,7 +1368,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         if ( lObjArgs[nInd].Name == "StoreVisualReplacement" )
             lObjArgs[nInd].Value >>= m_bStoreVisRepl;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT )
     {
         if ( m_bFromClipboard )
@@ -1756,7 +1756,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     bool bStoreLoaded = true;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent && m_pOleComponent->IsDirty() )
     {
         bStoreLoaded = sal_False;
@@ -1956,7 +1956,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                     static_cast< ::cppu::OWeakObject* >(this) );
 
 
-#ifdef WNT
+#ifdef _WIN32
     if ( m_pOleComponent )
     {
         // TODO: create an object based on the link

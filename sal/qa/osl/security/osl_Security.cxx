@@ -18,7 +18,7 @@
  */
 
 #include <algorithm>
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #undef min
 #endif
@@ -152,7 +152,7 @@ namespace osl_Security
         void getUserName_001( )
         {
             ::osl::Security aSec;
-#ifdef WNT
+#ifdef _WIN32
             ::rtl::OUString strName( strUserName ), strGetName;
 #else
             ::rtl::OUString strName( strUserName ), strGetName;
@@ -350,7 +350,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         isAdmin = true;
 
 #endif
-#if defined ( WNT )
+#if defined(_WIN32)
     /// some initialization work for Windows OS
 
     /// Get the user name, computer name, user home directory.

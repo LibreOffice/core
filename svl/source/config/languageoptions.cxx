@@ -28,7 +28,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -224,7 +224,7 @@ LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage() const
 bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptType) const
 {
     bool isInstalled = false;
-#ifdef WNT
+#ifdef _WIN32
     int nLayouts = GetKeyboardLayoutList(0, NULL);
     if (nLayouts > 0)
     {

@@ -52,13 +52,13 @@
 
 #include "ownview.hxx"
 
-#if defined WNT
+#if defined(_WIN32)
 #include <olecomponent.hxx>
 #endif
 
 using namespace ::com::sun::star;
 
-#ifdef WNT
+#ifdef _WIN32
 
 void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
 {
@@ -465,7 +465,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
     if ( m_nObjectState == nNewState )
         return;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( m_pOleComponent )
     {
         if ( m_nTargetState != -1 )
@@ -615,7 +615,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw embed::WrongStateException( "The object has no persistence!",
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
-#ifdef WNT
+#ifdef _WIN32
     if ( m_pOleComponent )
     {
         if ( m_nObjectState == embed::EmbedStates::LOADED )
@@ -663,7 +663,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
 
 namespace
 {
-#ifndef WNT
+#ifndef _WIN32
     bool lcl_CopyStream(uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut)
     {
         const sal_Int32 nChunkSize = 4096;
@@ -689,7 +689,7 @@ namespace
         OUString sUrl;
 
         // the solution is only active for Unix systems
-#ifndef WNT
+#ifndef _WIN32
         uno::Reference <beans::XPropertySet> xNativeTempFile(
             io::TempFile::create(comphelper::getComponentContext(xFactory)),
             uno::UNO_QUERY_THROW);
@@ -775,7 +775,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw embed::WrongStateException( "The object has no persistence!",
                                         static_cast< ::cppu::OWeakObject* >(this) );
 
-#ifdef WNT
+#ifdef _WIN32
     if ( m_pOleComponent )
     {
         sal_Int32 nOldState = m_nObjectState;
@@ -907,7 +907,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
                                         static_cast< ::cppu::OWeakObject* >(this) );
-#ifdef WNT
+#ifdef _WIN32
     if ( m_pOleComponent )
     {
         // registry could be used in this case
@@ -1072,7 +1072,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
 
     sal_Int64 nResult = 0;
 
-#ifdef WNT
+#ifdef _WIN32
     if ( m_bGotStatus && m_nStatusAspect == nAspect )
         nResult = m_nStatus;
     else if ( m_pOleComponent )

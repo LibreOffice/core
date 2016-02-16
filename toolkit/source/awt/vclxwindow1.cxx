@@ -23,7 +23,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/window.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
 #elif defined ( MACOSX )
@@ -77,7 +77,7 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
     // create system parent data
     SystemParentData aSysParentData;
     aSysParentData.nSize = sizeof ( SystemParentData );
-#if defined( WNT )
+#if defined(_WIN32)
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( MACOSX )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);

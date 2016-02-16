@@ -70,7 +70,7 @@
 #include <connectivity/sdbcx/IRefreshable.hxx>
 
 // Cleanup windows header macro pollution.
-#ifdef WNT
+#ifdef _WIN32
 #   include <postwin.h>
 #   undef RGB
 #endif

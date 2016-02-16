@@ -119,7 +119,7 @@ namespace connectivity
         OUString StorageContainer::removeOldURLPrefix(const OUString& _sURL)
         {
             OUString sRet = _sURL;
-#if defined(WNT)
+#if defined(_WIN32)
             sal_Int32 nIndex = sRet.lastIndexOf('\\');
 #else
             sal_Int32 nIndex = sRet.lastIndexOf('/');

@@ -22,7 +22,7 @@
 #endif
 
 
-#ifdef WNT
+#ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
 #else
@@ -54,7 +54,7 @@ typedef unsigned short WORD;
 #include <algorithm>
 #include <string>
 
-#ifndef WNT
+#ifndef _WIN32
 #include <cstring>
 #endif
 
@@ -438,7 +438,7 @@ void start_language_section(
          ( subLangID == SUBLANG_SPANISH ) )
         subLangID = SUBLANG_NEUTRAL;
 
-#ifdef WNT
+#ifdef _WIN32
     _itoa(primLangID, buff, 16);
 #else
     sprintf(buff, "%x", primLangID);
@@ -447,7 +447,7 @@ void start_language_section(
 
     lang_section += std::string(" , ");
 
-#ifdef WNT
+#ifdef _WIN32
     _itoa(subLangID, buff, 16);
 #else
     sprintf(buff, "%x", subLangID);

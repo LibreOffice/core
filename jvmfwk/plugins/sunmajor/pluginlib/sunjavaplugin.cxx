@@ -18,7 +18,7 @@
  */
 
 
-#ifdef WNT
+#ifdef _WIN32
 # include <stdio.h>
 # include <sys/stat.h>
 # include <windows.h>
@@ -497,7 +497,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 }
 
 
-#if defined(WNT)
+#if defined(_WIN32)
 
 // Load msvcr71.dll using an explicit full path from where it is
 // present as bundled with the JRE. In case it is not found where we
@@ -677,7 +677,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #if defined(LINUX)
     if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))
 #else
-#if defined(WNT)
+#if defined(_WIN32)
     do_msvcr_magic(sRuntimeLib.pData);
 #endif
     if (!moduleRt.load(sRuntimeLib))

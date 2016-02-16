@@ -733,7 +733,7 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
                 {
                     Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                     OUString aDragSourceSN, aDropTargetSN;
-#if defined WNT
+#if defined(_WIN32)
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
                     aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) ) );

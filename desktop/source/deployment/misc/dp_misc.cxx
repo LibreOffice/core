@@ -46,7 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #define UNICODE
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -55,7 +55,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#if defined WNT
+#if defined(_WIN32)
 #define SOFFICE1 "soffice.exe"
 #define SBASE "sbase.exe"
 #define SCALC "scalc.exe"
@@ -467,7 +467,7 @@ Reference<XInterface> resolveUnoURL(
     return nullptr; // warning C4715
 }
 
-#ifdef WNT
+#ifdef _WIN32
 void writeConsoleWithStream(OUString const & sText, HANDLE stream)
 {
     DWORD nWrittenChars = 0;
@@ -485,7 +485,7 @@ void writeConsoleWithStream(OUString const & sText, FILE * stream)
 
 void writeConsole(OUString const & sText)
 {
-#ifdef WNT
+#ifdef _WIN32
     writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
 #else
     writeConsoleWithStream(sText, stdout);
@@ -494,7 +494,7 @@ void writeConsole(OUString const & sText)
 
 void writeConsoleError(OUString const & sText)
 {
-#ifdef WNT
+#ifdef _WIN32
     writeConsoleWithStream(sText, GetStdHandle(STD_ERROR_HANDLE));
 #else
     writeConsoleWithStream(sText, stderr);
@@ -503,7 +503,7 @@ void writeConsoleError(OUString const & sText)
 
 OUString readConsole()
 {
-#ifdef WNT
+#ifdef _WIN32
     sal_Unicode aBuffer[1024];
     DWORD   dwRead = 0;
     //unopkg.com feeds unopkg.exe with wchar_t|s

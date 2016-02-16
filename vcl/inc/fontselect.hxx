@@ -37,7 +37,7 @@ class FontSelectPatternAttributes : public FontAttributes
 public:
                     FontSelectPatternAttributes( const vcl::Font&, const OUString& rSearchName,
                                                  const Size&, float fExactHeight );
-#ifdef WNT
+#ifdef _WIN32
                     FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
                                                  float fExactHeight, int nOrientation, bool bVertical );
 #endif
@@ -70,7 +70,7 @@ class FontSelectPattern : public FontSelectPatternAttributes
 public:
                     FontSelectPattern( const vcl::Font&, const OUString& rSearchName,
                                        const Size&, float fExactHeight );
-#ifdef WNT
+#ifdef _WIN32
 // ifdeffed to prevent it going into unusedcode.easy
                     FontSelectPattern( const PhysicalFontFace&, const Size&,
                                        float fExactHeight, int nOrientation, bool bVertical );

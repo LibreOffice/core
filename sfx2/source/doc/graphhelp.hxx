@@ -41,7 +41,7 @@ public:
 
     static bool supportsMetaFileHandle_Impl()
     {
-#ifdef WNT
+#ifdef _WIN32
     return true;
 #else
     return false;

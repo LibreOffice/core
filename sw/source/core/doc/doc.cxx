@@ -625,7 +625,7 @@ static void lcl_FormatPostIt(
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#if defined( WNT )
+#if defined(_WIN32)
     // Throw out all CR in Windows
     aStr = comphelper::string::remove(aStr, '\r');
 #endif

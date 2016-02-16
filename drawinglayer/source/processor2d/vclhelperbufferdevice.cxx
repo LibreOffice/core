@@ -340,7 +340,7 @@ namespace drawinglayer
             if(bDoSaveForVisualControl)
             {
                 SvFileStream aNew(
-#ifdef WNT
+#ifdef _WIN32
                     "c:\\content.bmp",
 #else
                     "~/content.bmp",
@@ -363,7 +363,7 @@ namespace drawinglayer
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew(
-#ifdef WNT
+#ifdef _WIN32
                         "c:\\transparence.bmp",
 #else
                         "~/transparence.bmp",
@@ -384,7 +384,7 @@ namespace drawinglayer
                 if(bDoSaveForVisualControl)
                 {
                     SvFileStream aNew(
-#ifdef WNT
+#ifdef _WIN32
                         "c:\\mask.bmp",
 #else
                         "~/mask.bmp",

@@ -360,7 +360,7 @@ public:
                                                bool&             rbHeader,
                                                bool&             rbFooter );
 
-#if defined WNT
+#if defined(_WIN32)
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                                 css::uno::Any & rValue ) override;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,

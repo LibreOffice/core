@@ -99,7 +99,7 @@ class ImplDdeItem : public DdeGetPutItem
     bool bIsValidData : 1;
     bool bIsInDTOR : 1;
 public:
-#if defined WNT
+#if defined(_WIN32)
     ImplDdeItem( SvBaseLink& rLink, const OUString& rStr )
         : DdeGetPutItem( rStr ), pLink( &rLink ), bIsValidData( false ),
         bIsInDTOR( false )
@@ -147,7 +147,7 @@ SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nCon
     pImplData->ClientType.bIntrnlLnk = false;
 }
 
-#if defined WNT
+#if defined(_WIN32)
 
 static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
 {

@@ -484,7 +484,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
         }
     }
 
-#ifdef WNT
+#ifdef _WIN32
     // Destroy dialog to prevent problems with custom controls
     // This fix is dependent on the dialog settings. Destroying the dialog here will
     // crash the non-native dialog implementation! Therefore make this dependent on
@@ -675,7 +675,7 @@ void ShutdownIcon::LeaveModalMode()
     bModalMode = false;
 }
 
-#ifdef WNT
+#ifdef _WIN32
 // defined in shutdowniconw32.cxx
 #elif defined MACOSX
 // defined in shutdowniconaqua.cxx
@@ -739,7 +739,7 @@ OUString ShutdownIcon::getShortcutName()
         ::SolarMutexGuard aGuard;
         aShortcutName = SFX2_RESSTR(STR_QUICKSTART_LNKNAME);
     }
-#ifdef WNT
+#ifdef _WIN32
     aShortcutName += ".lnk";
 
     OUString aShortcut(GetAutostartFolderNameW32());
@@ -782,7 +782,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 
     if( bActivate && IsQuickstarterInstalled() )
     {
-#ifdef WNT
+#ifdef _WIN32
         EnableAutostartW32( aShortcut );
 #else // UNX
         getAutostartDir( true );

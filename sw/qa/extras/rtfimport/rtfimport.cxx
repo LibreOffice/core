@@ -118,7 +118,7 @@ protected:
     AllSettings m_aSavedSettings;
 };
 
-#if !defined(WNT)
+#if !defined(_WIN32)
 
 DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
 {

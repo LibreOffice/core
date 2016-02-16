@@ -43,7 +43,7 @@
 #define RUNNING_ON_VALGRIND false
 #endif
 
-#if ( defined WNT )                     // Windows
+#if defined(_WIN32)                     // Windows
 #   include <windows.h>
 #   include <tchar.h>
 #else
@@ -66,7 +66,7 @@
 # endif
 #endif
 
-#if defined(WNT)
+#if defined(_WIN32)
     const rtl::OUString EXECUTABLE_NAME ("osl_process_child.exe");
 #else
     const rtl::OUString EXECUTABLE_NAME ("osl_process_child");
@@ -154,7 +154,7 @@ namespace
     }
 }
 
-#ifdef WNT
+#ifdef _WIN32
     void read_parent_environment(string_container_t* env_container)
     {
         LPTSTR env = reinterpret_cast<LPTSTR>(GetEnvironmentStrings());
@@ -435,7 +435,7 @@ public:
     void osl_execProc_test_batch()
     {
         oslProcess process;
-#if defined(WNT)
+#if defined(_WIN32)
         rtl::OUString suBatch = suCWD + "/batch.bat";
 #else
         rtl::OUString suBatch = suCWD + "/batch.sh";
@@ -470,7 +470,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
     //TODO: Repair these (at least under Windows)
-#if !defined(WNT)
+#if !defined(_WIN32)
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
     CPPUNIT_TEST(osl_execProc_merged_child_environment);
 #endif

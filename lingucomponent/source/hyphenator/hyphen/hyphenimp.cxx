@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined(WNT)
+#if defined(_WIN32)
 #include <prewin.h>
 #include <postwin.h>
 #endif
@@ -290,7 +290,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
             osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
 
-#if defined(WNT)
+#if defined(_WIN32)
             // Hyphen waits UTF-8 encoded paths with \\?\ long path prefix.
             OString sTmp = Win_AddLongPathPrefix(OUStringToOString(dictpath, RTL_TEXTENCODING_UTF8));
 #else
@@ -511,7 +511,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
     return nullptr;
 }
 
-#if defined(WNT)
+#if defined(_WIN32)
 static OString Win_GetShortPathName( const OUString &rLongPathName )
 {
     OString aRes;
@@ -572,7 +572,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
-#if defined(WNT)
+#if defined(_WIN32)
             // workaround for Windows specific problem that the
             // path length in calls to 'fopen' is limited to somewhat
             // about 120+ characters which will usually be exceed when

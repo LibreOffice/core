@@ -19,7 +19,7 @@
 
 /* not protected, do only include once! */
 
-#if defined WNT
+#if defined(_WIN32)
 
 #define Rectangle    BLA_Rectangle
 #define Folder       WIN_Folder

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_WIN_SVSYS_H
 #define INCLUDED_VCL_INC_WIN_SVSYS_H
 
-#ifdef WNT
+#ifdef _WIN32
 #ifndef INCLUDED_PRE_POST_WIN_H
 #define INCLUDED_PRE_POST_WIN_H
 #include <prewin.h>

@@ -23,7 +23,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(_WIN32)
 
 class DBAccessTest : public UnoApiTest
 {

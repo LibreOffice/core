@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
 #define INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
 
-#if ( defined WNT )                     // Windows
+#if defined(_WIN32)                     // Windows
 #include <io.h>
 #endif
 

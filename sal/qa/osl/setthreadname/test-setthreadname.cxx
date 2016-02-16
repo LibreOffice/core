@@ -37,7 +37,7 @@ private:
 };
 
 void TestThread::run() {
-#if defined WNT
+#if defined(_WIN32)
     if (std::getenv("URE_TEST_SETTHREADNAME") != 0) {
         // On Windows, setting thread names appears to only take effect when the
         // process is being debugged, so attach a debugger now:

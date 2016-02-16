@@ -156,7 +156,7 @@ OUString Button::GetStandardText( StandardButtonType eButton )
     }
 
     sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
-#ifdef WNT
+#ifdef _WIN32
     // http://lists.freedesktop.org/archives/libreoffice/2013-January/044513.html
     // Under windows we don't want accelerators on ok/cancel but do on other
     // buttons

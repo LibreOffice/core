@@ -173,7 +173,7 @@ void GalApp::Init()
         if( !mbInBuildTree && getenv( "OOO_INSTALL_PREFIX" ) == nullptr ) {
             OUString fileName = GetAppFileName();
             int lastSlash = fileName.lastIndexOf( '/' );
-#ifdef WNT
+#ifdef _WIN32
         // Don't know which directory separators GetAppFileName() returns on Windows.
         // Be safe and take into consideration they might be backslashes.
             if( fileName.lastIndexOf( '\\' ) > lastSlash )

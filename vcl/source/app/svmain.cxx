@@ -44,7 +44,7 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/debugevent.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #include <svsys.h>
 #include <process.h>
 #include <ole2.h>
@@ -578,7 +578,7 @@ struct WorkerThreadData
     }
 };
 
-#ifdef WNT
+#ifdef _WIN32
 static HANDLE hThreadID = 0;
 static unsigned __stdcall _threadmain( void *pArgs )
 {
@@ -604,7 +604,7 @@ static void SAL_CALL MainWorkerFunction( void* pArgs )
 
 void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
 {
-#ifdef WNT
+#ifdef _WIN32
     // sal thread always call CoInitializeEx, so a system dependent implementation is necessary
 
     unsigned uThreadID;
@@ -624,7 +624,7 @@ void JoinMainLoopThread()
 {
     if( hThreadID )
     {
-#ifdef WNT
+#ifdef _WIN32
         WaitForSingleObject(hThreadID, INFINITE);
 #else
         osl_joinWithThread(hThreadID);

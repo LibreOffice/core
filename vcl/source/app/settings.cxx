@@ -21,7 +21,7 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#ifdef WNT
+#ifdef _WIN32
 #include "win/svsys.h"
 #endif
 
@@ -2472,7 +2472,7 @@ bool MiscSettings::GetDisablePrinting() const
 bool MiscSettings::GetEnableATToolSupport() const
 {
 
-#ifdef WNT
+#ifdef _WIN32
     if( mxData->mnEnableATT == TRISTATE_INDET )
     {
         // Check in the Windows registry if an AT tool wants Accessibility support to
@@ -2540,7 +2540,7 @@ bool MiscSettings::GetEnableATToolSupport() const
     return mxData->mnEnableATT != TRISTATE_FALSE;
 }
 
-#ifdef WNT
+#ifdef _WIN32
 void MiscSettings::SetEnableATToolSupport( bool bEnable )
 {
     if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mxData->mnEnableATT )

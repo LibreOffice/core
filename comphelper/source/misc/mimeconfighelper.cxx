@@ -664,7 +664,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
     return UpdateMediaDescriptorWithFilterName( aMediaDescr, true );
 }
 
-#ifdef WNT
+#ifdef _WIN32
 
 SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterName )
 {

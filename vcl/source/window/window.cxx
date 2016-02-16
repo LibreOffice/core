@@ -70,7 +70,7 @@
 #include <set>
 #include <typeinfo>
 
-#ifdef WNT // see #140456#
+#ifdef _WIN32 // see #140456#
 #include <win/salframe.h>
 #endif
 
@@ -3692,7 +3692,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
 
     if(xCanvasFactory.is())
     {
-#ifdef WNT
+#ifdef _WIN32
         // see #140456# - if we're running on a multiscreen setup,
         // request special, multi-screen safe sprite canvas
         // implementation (not DX5 canvas, as it cannot cope with
@@ -3721,7 +3721,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
                              xContext ),
                          UNO_QUERY );
 
-#ifdef WNT
+#ifdef _WIN32
         }
 #endif
         mpWindowImpl->mxCanvas = xCanvas;

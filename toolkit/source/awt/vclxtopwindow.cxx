@@ -86,23 +86,23 @@ css::uno::Any VCLXTopWindow_Base::getWindowHandle( const css::uno::Sequence< sal
         const SystemEnvData* pSysData = static_cast<SystemWindow *>(pWindow)->GetSystemData();
         if( pSysData )
         {
-#if (defined WNT)
+#if defined (_WIN32)
             if( SystemType == css::lang::SystemDependent::SYSTEM_WIN32 )
             {
                  aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->hWnd);
             }
-#elif (defined MACOSX)
+#elif defined(MACOSX)
             if( SystemType == css::lang::SystemDependent::SYSTEM_MAC )
             {
                  aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->mpNSView);
             }
-#elif (defined ANDROID)
+#elif defined(ANDROID)
             // Nothing
             (void) SystemType;
-#elif (defined IOS)
+#elif defined(IOS)
             // Nothing
             (void) SystemType;
-#elif (defined UNX)
+#elif defined(UNX)
             if( SystemType == css::lang::SystemDependent::SYSTEM_XWINDOW )
             {
                 css::awt::SystemDependentXWindow aSD;

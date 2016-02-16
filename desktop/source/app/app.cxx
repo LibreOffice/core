@@ -124,7 +124,7 @@
 #include <sys/wait.h>
 #endif
 
-#ifdef WNT
+#ifdef _WIN32
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #pragma warning (disable: 4005)
@@ -136,7 +136,7 @@
 #endif
 #endif //WNT
 
-#if defined WNT
+#if defined(_WIN32)
 #include <process.h>
 #define GETPID _getpid
 #else
@@ -1895,7 +1895,7 @@ IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
 
         CloseSplashScreen();
         CheckFirstRun( );
-#ifdef WNT
+#ifdef _WIN32
         // Registers a COM class factory of the service manager with the windows operating system.
         Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
         xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
@@ -2180,7 +2180,7 @@ void Desktop::OpenClients()
         {
             aIniName    = aIniName.copy( 0, lastIndex+1 );
             aIniName    += "perftune";
-#if defined(WNT)
+#if defined(_WIN32)
             aIniName    += ".ini";
 #else
             aIniName    += "rc";
@@ -2784,7 +2784,7 @@ void Desktop::CheckFirstRun( )
         m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
         m_firstRunTimer.Start();
 
-#ifdef WNT
+#ifdef _WIN32
         // Check if Quickstarter should be started (on Windows only)
         TCHAR szValue[8192];
         DWORD nValueSize = sizeof(szValue);

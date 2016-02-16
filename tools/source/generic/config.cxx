@@ -23,7 +23,7 @@
 #include <new>
 #include <string.h>
 
-#ifdef WNT
+#ifdef _WIN32
 #include "stdlib.h"
 #endif
 
@@ -183,7 +183,7 @@ OString makeOString(const sal_uInt8* p, sal_uInt64 n)
 {
     if (n > SAL_MAX_INT32)
     {
-        #ifdef WNT
+        #ifdef _WIN32
         abort();
         #else
         ::std::abort(); //TODO: handle this gracefully
