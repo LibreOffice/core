@@ -63,6 +63,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
         m_aSystemData.pAppContext   = nullptr;
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
+        m_aSystemData.pToolkit      = "gtk2";
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );
         g_signal_connect( G_OBJECT(m_pSocket), "button-release-event", G_CALLBACK(signalButton), this );

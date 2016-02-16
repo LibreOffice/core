@@ -288,6 +288,10 @@ void MissingPluginInstallerThread::execute() {
 Player::Player() :
     GstPlayer_BASE( m_aMutex ),
     mpPlaybin( nullptr ),
+#if defined(ENABLE_GTKSINK)
+    mpGtkWidget( nullptr ),
+#endif
+    mbUseGtkSink( false ),
     mbFakeVideo (false ),
     mnUnmutedVolume( 0 ),
     mbPlayPending ( false ),
@@ -343,6 +347,14 @@ void SAL_CALL Player::disposing()
     // Release the elements and pipeline
     if( mbInitialized )
     {
+#if defined(ENABLE_GTKSINK)
+        if (mpGtkWidget)
+        {
+            gtk_widget_destroy(mpGtkWidget);
+            mpGtkWidget = nullptr;
+        }
+#endif
+
         if( mpPlaybin )
         {
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
@@ -393,18 +405,20 @@ void Player::processMessage( GstMessage *message )
             start();
         break;
     case GST_MESSAGE_STATE_CHANGED:
-        if( message->src == GST_OBJECT( mpPlaybin ) ) {
+        if (message->src == GST_OBJECT(mpPlaybin))
+        {
             GstState newstate, pendingstate;
 
             gst_message_parse_state_changed (message, nullptr, &newstate, &pendingstate);
 
-            if( newstate == GST_STATE_PAUSED &&
-                pendingstate == GST_STATE_VOID_PENDING &&
-                mpXOverlay )
-                gst_video_overlay_expose( mpXOverlay );
+            if (!mbUseGtkSink && newstate == GST_STATE_PAUSED &&
+                pendingstate == GST_STATE_VOID_PENDING && mpXOverlay)
+            {
+                gst_video_overlay_expose(mpXOverlay);
+            }
 
-        if (mbPlayPending)
-            mbPlayPending = ((newstate == GST_STATE_READY) || (newstate == GST_STATE_PAUSED));
+            if (mbPlayPending)
+                mbPlayPending = ((newstate == GST_STATE_READY) || (newstate == GST_STATE_PAUSED));
         }
     default:
         break;
@@ -450,23 +464,26 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     }
 #endif
 
-#ifdef AVMEDIA_GST_0_10
-    if (message->structure &&
-        !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) )
-#else
-    if (gst_is_video_overlay_prepare_window_handle_message (message) )
-#endif
+    if (!mbUseGtkSink)
     {
-        SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " processSyncMessage prepare window id: " <<
-                  GST_MESSAGE_TYPE_NAME( message ) << " " << (int)mnWindowID );
-        if( mpXOverlay )
-            g_object_unref( G_OBJECT ( mpXOverlay ) );
-        g_object_set( GST_MESSAGE_SRC( message ), "force-aspect-ratio", FALSE, nullptr );
-        mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
-        g_object_ref( G_OBJECT ( mpXOverlay ) );
-        if ( mnWindowID != 0 )
-            gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
-        return GST_BUS_DROP;
+#ifdef AVMEDIA_GST_0_10
+        if (message->structure &&
+            !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) )
+#else
+        if (gst_is_video_overlay_prepare_window_handle_message (message) )
+#endif
+        {
+            SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " processSyncMessage prepare window id: " <<
+                      GST_MESSAGE_TYPE_NAME( message ) << " " << (int)mnWindowID );
+            if( mpXOverlay )
+                g_object_unref( G_OBJECT ( mpXOverlay ) );
+            g_object_set( GST_MESSAGE_SRC( message ), "force-aspect-ratio", FALSE, nullptr );
+            mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
+            g_object_ref( G_OBJECT ( mpXOverlay ) );
+            if ( mnWindowID != 0 )
+                gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+            return GST_BUS_DROP;
+        }
     }
 
 #ifdef AVMEDIA_GST_0_10
@@ -573,44 +590,50 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     return GST_BUS_PASS;
 }
 
-
 void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
 {
-        GstBus *pBus;
-
-        if( mpPlaybin != nullptr ) {
-            gst_element_set_state( mpPlaybin, GST_STATE_NULL );
-            mbPlayPending = false;
-            g_object_unref( mpPlaybin );
-        }
-
-        mpPlaybin = gst_element_factory_make( "playbin", nullptr );
-        if( pSink != nullptr ) // used for getting preferred size etc.
-        {
-            g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, nullptr );
-            mbFakeVideo = true;
-        }
-        else
-            mbFakeVideo = false;
-
-        OString ascURL = OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 );
-        g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , nullptr );
-
-        pBus = gst_element_get_bus( mpPlaybin );
-        if (mbWatchID)
-        {
-            g_source_remove(mnWatchID);
-            mbWatchID = false;
-        }
-        mnWatchID = gst_bus_add_watch( pBus, pipeline_bus_callback, this );
-        mbWatchID = true;
-        SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " set sync handler" );
-#ifdef AVMEDIA_GST_0_10
-        gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );
-#else
-        gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this, nullptr );
+#if defined(ENABLE_GTKSINK)
+    if (mpGtkWidget)
+    {
+        gtk_widget_destroy(mpGtkWidget);
+        mpGtkWidget = nullptr;
+    }
 #endif
-        g_object_unref( pBus );
+
+    if (mpPlaybin != nullptr)
+    {
+        gst_element_set_state( mpPlaybin, GST_STATE_NULL );
+        mbPlayPending = false;
+        g_object_unref( mpPlaybin );
+    }
+
+    mpPlaybin = gst_element_factory_make( "playbin", nullptr );
+    if( pSink != nullptr ) // used for getting preferred size etc.
+    {
+        g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, nullptr );
+        mbFakeVideo = true;
+    }
+    else
+        mbFakeVideo = false;
+
+    OString ascURL = OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 );
+    g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , nullptr );
+
+    GstBus *pBus = gst_element_get_bus( mpPlaybin );
+    if (mbWatchID)
+    {
+        g_source_remove(mnWatchID);
+        mbWatchID = false;
+    }
+    mnWatchID = gst_bus_add_watch( pBus, pipeline_bus_callback, this );
+    mbWatchID = true;
+    SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " set sync handler" );
+#ifdef AVMEDIA_GST_0_10
+    gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );
+#else
+    gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this, nullptr );
+#endif
+    g_object_unref( pBus );
 }
 
 
@@ -886,11 +909,32 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             OSL_ASSERT(pEnvData);
             if (pEnvData)
             {
-                mnWindowID = pEnvData->aWindow;
-                SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << (int)mnWindowID << " XOverlay " << mpXOverlay);
-                gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-                if ( mpXOverlay != nullptr )
-                    gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+#if defined(ENABLE_GTKSINK)
+                GstElement *pVideosink = g_strcmp0(pEnvData->pToolkit, "gtk3") == 0 ?
+                                           gst_element_factory_make("gtksink", "gtksink") : nullptr;
+                if (pVideosink)
+                {
+                    mbUseGtkSink = true;
+                    g_object_get(pVideosink, "widget", &mpGtkWidget, nullptr);
+                    GtkWidget *pParent = (GtkWidget*)(pEnvData->pWidget);
+                    gtk_container_add (GTK_CONTAINER(pParent), mpGtkWidget);
+
+                    g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pVideosink, nullptr);
+                    g_object_set( G_OBJECT( mpPlaybin ), "force-aspect-ratio", FALSE, nullptr);
+
+                    gtk_widget_show_all (pParent);
+                }
+                else
+#endif
+                {
+                    mbUseGtkSink = false;
+                    mnWindowID = pEnvData->aWindow;
+                    SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << (int)mnWindowID << " XOverlay " << mpXOverlay);
+                    gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+                    if ( mpXOverlay != nullptr )
+                        gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+                }
+
             }
         }
     }

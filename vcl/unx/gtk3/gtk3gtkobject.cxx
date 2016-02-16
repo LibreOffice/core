@@ -36,7 +36,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
     if( pParent )
     {
         // our plug window
-        m_pSocket = gtk_drawing_area_new();
+        m_pSocket = gtk_grid_new();
         Show( bShow );
         // insert into container
         gtk_fixed_put( pParent->getFixedContainer(),
@@ -44,10 +44,6 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
                        0, 0 );
         // realize so we can get a window id
         gtk_widget_realize( m_pSocket );
-
-        // make it transparent; some plugins may not insert
-        // their own window here but use the socket window itself
-        gtk_widget_set_app_paintable( m_pSocket, TRUE );
 
         // system data
         m_aSystemData.nSize         = sizeof( SystemEnvData );
@@ -58,6 +54,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
         m_aSystemData.pAppContext   = nullptr;
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
+        m_aSystemData.pToolkit      = "gtk3";
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );
         g_signal_connect( G_OBJECT(m_pSocket), "button-release-event", G_CALLBACK(signalButton), this );

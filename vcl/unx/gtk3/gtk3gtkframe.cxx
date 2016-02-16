@@ -1096,6 +1096,7 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pAppContext   = nullptr;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
+    m_aSystemData.pToolkit      = "gtk3";
 
     m_bGraphics = false;
     m_pGraphics = nullptr;
