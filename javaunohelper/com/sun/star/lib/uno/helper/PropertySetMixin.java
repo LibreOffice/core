@@ -193,6 +193,8 @@ public final class PropertySetMixin {
        (which has not been passed to this method before, and on which
        {@link BoundListeners#notifyListeners} has not yet been called); may only
        be null if the attribute that is going to be set is not bound
+
+       @throws PropertyVetoException if a vetoable listener throws it.
     */
     public void prepareSet(
         String propertyName, Object oldValue, Object newValue,
@@ -319,6 +321,7 @@ public final class PropertySetMixin {
     /**
        Implements
        <code>com.sun.star.beans.XPropertySet.getPropertySetInfo</code>.
+       @return See com.sun.star.beans.XPropertySet
     */
     public XPropertySetInfo getPropertySetInfo() {
         return new Info(properties);
@@ -326,6 +329,16 @@ public final class PropertySetMixin {
 
     /**
        Implements <code>com.sun.star.beans.XPropertySet.setPropertyValue</code>.
+       @param propertyName
+            See com.sun.star.beans.XPropertySet
+       @param value
+            See com.sun.star.beans.XPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertySet
+       @throws PropertyVetoException
+            See com.sun.star.beans.XPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertySet
     */
     public void setPropertyValue(String propertyName, Object value)
         throws UnknownPropertyException, PropertyVetoException,
@@ -336,6 +349,14 @@ public final class PropertySetMixin {
 
     /**
        Implements <code>com.sun.star.beans.XPropertySet.getPropertyValue</code>.
+       @param propertyName
+            See com.sun.star.beans.XPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertySet
+       @return
+            See com.sun.star.beans.XPropertySet
     */
     public Object getPropertyValue(String propertyName)
         throws UnknownPropertyException, WrappedTargetException
@@ -349,6 +370,15 @@ public final class PropertySetMixin {
 
        <p>If a listener is added more than once, it will receive all relevant
        notifications multiple times.</p>
+
+       @param propertyName
+            See com.sun.star.beans.XPropertySet
+       @param listener
+            See com.sun.star.beans.XPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertySet
     */
     public void addPropertyChangeListener(
         String propertyName, XPropertyChangeListener listener)
@@ -376,6 +406,15 @@ public final class PropertySetMixin {
     /**
        Implements <code>
        com.sun.star.beans.XPropertySet.removePropertyChangeListener</code>.
+
+       @param propertyName
+            See com.sun.star.beans.XPropertySet
+       @param listener
+            See com.sun.star.beans.XPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertySet
     */
     public void removePropertyChangeListener(
         String propertyName, XPropertyChangeListener listener)
@@ -399,6 +438,15 @@ public final class PropertySetMixin {
 
        <p>If a listener is added more than once, it will receive all relevant
        notifications multiple times.</p>
+
+       @param propertyName
+            See com.sun.star.beans.XPropertySet
+       @param listener
+            See com.sun.star.beans.XPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertySet
     */
     public void addVetoableChangeListener(
         String propertyName, XVetoableChangeListener listener)
@@ -426,6 +474,15 @@ public final class PropertySetMixin {
     /**
        Implements <code>
        com.sun.star.beans.XPropertySet.removeVetoableChangeListener</code>.
+
+       @param propertyName
+            See com.sun.star.beans.XPropertySet
+       @param listener
+            See com.sun.star.beans.XPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertySet
     */
     public void removeVetoableChangeListener(
         String propertyName, XVetoableChangeListener listener)
@@ -446,6 +503,17 @@ public final class PropertySetMixin {
     /**
        Implements
        <code>com.sun.star.beans.XFastPropertySet.setFastPropertyValue</code>.
+
+       @param handle
+            See com.sun.star.beans.XFastPropertySet
+       @param value
+            See com.sun.star.beans.XFastPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XFastPropertySet
+       @throws PropertyVetoException
+            See com.sun.star.beans.XFastPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XFastPropertySet
     */
     public void setFastPropertyValue(int handle, Object value)
         throws UnknownPropertyException, PropertyVetoException,
@@ -457,6 +525,15 @@ public final class PropertySetMixin {
     /**
        Implements
        <code>com.sun.star.beans.XFastPropertySet.getFastPropertyValue</code>.
+
+       @param handle
+            See com.sun.star.beans.XFastPropertySet
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XFastPropertySet
+       @throws WrappedTargetException
+            See com.sun.star.beans.XFastPropertySet
+       @return
+            See com.sun.star.beans.XFastPropertySet
     */
     public Object getFastPropertyValue(int handle)
         throws UnknownPropertyException, WrappedTargetException
@@ -467,6 +544,9 @@ public final class PropertySetMixin {
     /**
        Implements
        <code>com.sun.star.beans.XPropertyAccess.getPropertyValues</code>.
+
+       @return
+            See com.sun.star.beans.XPropertyAccess
     */
     public PropertyValue[] getPropertyValues() {
         PropertyValue[] s = new PropertyValue[handleMap.length];
@@ -495,6 +575,15 @@ public final class PropertySetMixin {
     /**
        Implements
        <code>com.sun.star.beans.XPropertyAccess.setPropertyValues</code>.
+
+       @param props
+            See com.sun.star.beans.XPropertyAccess
+       @throws UnknownPropertyException
+            See com.sun.star.beans.XPropertyAccess
+       @throws PropertyVetoException
+            See com.sun.star.beans.XPropertyAccess
+       @throws WrappedTargetException
+            See com.sun.star.beans.XPropertyAccess
     */
     public void setPropertyValues(PropertyValue[] props)
         throws UnknownPropertyException, PropertyVetoException,

@@ -31,6 +31,7 @@ public class MultiTypeInterfaceContainer
     /** only returns types which have at least one value in InterfaceContainer
      *  return value can contain an element null, if someone called
      *  addInterface (null, interf)
+     *  @return an array of types in this container.
      */
     synchronized public Type[] getContainedTypes()
     {
@@ -73,7 +74,10 @@ public class MultiTypeInterfaceContainer
         return retVal;
     }
 
-    /** param key can be null */
+    /** param key can be null
+     *  @param key the object for which the container should be retrieved.
+     *  @return the container that contains the object key, if any.
+     */
     synchronized public InterfaceContainer getContainer(Object key)
     {
         InterfaceContainer retVal= null;

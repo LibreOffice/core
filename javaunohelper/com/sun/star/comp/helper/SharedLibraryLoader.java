@@ -153,6 +153,9 @@ public class SharedLibraryLoader {
      * @param   libName name of the shared library
      * @param   smgr    the ServiceManager
      * @param   regKey  the root key under that the component should be registered
+     * @throws  com.sun.star.registry.InvalidRegistryException
+     *          if the registry is not valid.
+     *
      * @see     com.sun.star.loader.SharedLibrary
      */
     public static boolean writeRegistryServiceInfo(

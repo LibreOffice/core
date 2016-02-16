@@ -220,6 +220,7 @@ public class InterfaceContainer implements Cloneable
      * @param c the elements to be inserted into this list.
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
      *        &lt; 0 || index &gt; size())</tt>.
+     * @return true if an element was inserted.
      */
     synchronized public boolean addAll(Collection c)
     {
@@ -248,6 +249,7 @@ public class InterfaceContainer implements Cloneable
      * @param c elements to be inserted into this list.
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
      *        &lt; 0 || index &gt; size())</tt>.
+     * @return true if an element was inserted.
      */
     synchronized public boolean addAll(int index, Collection c)
     {
@@ -305,6 +307,7 @@ public class InterfaceContainer implements Cloneable
      * Returns <tt>true</tt> if this list contains the specified element.
      *
      * @param elem element whose presence in this List is to be tested.
+     * @return <tt>true</tt> if this list contains the specified element.
      */
     synchronized public boolean contains(Object elem)
     {
@@ -470,6 +473,8 @@ public class InterfaceContainer implements Cloneable
     /** The iterator keeps a copy of the list. Changes to InterfaceContainer do not
      *  affect the data of the iterator. Conversely, changes to the iterator are effect
      *  InterfaceContainer.
+     *  @param index the starting offset into the list.
+     *  @return a new iterator.
      */
     synchronized public ListIterator listIterator(int index)
     {
@@ -508,7 +513,11 @@ public class InterfaceContainer implements Cloneable
     }
 
 
-    /** Parameter obj may  */
+    /** Parameter obj may... or may not. What did the original author want
+     *  to tell us here?
+     *  @param obj the object to be removed.
+     *  @return true if obj was successfully removed from the list.
+     */
     synchronized public boolean remove(Object obj)
     {
         boolean ret= false;

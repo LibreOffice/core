@@ -120,7 +120,11 @@ public class Bootstrap {
     }
 
     /**
-     * backwards compatibility stub.
+       backwards compatibility stub.
+        @param context_entries the hash table contains mappings of entry names (type string) to
+        context entries (type class ComponentContextEntry).
+        @throws Exception if things go awry.
+        @return a new context.
      */
     public static XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
             throws Exception
@@ -131,6 +135,7 @@ public class Bootstrap {
         jurt components inserted.
         @param context_entries the hash table contains mappings of entry names (type string) to
         context entries (type class ComponentContextEntry).
+        @throws Exception if things go awry.
         @return a new context.
     */
     public static XComponentContext createInitialComponentContext( Map<String, Object> context_entries )
@@ -169,6 +174,7 @@ public class Bootstrap {
      *
      * See also UNOIDL <code>com.sun.star.lang.ServiceManager</code>.
      *
+     * @throws Exception if things go awry.
      * @return     a freshly boostrapped service manager
      */
     public static XMultiServiceFactory createSimpleServiceManager() throws Exception
@@ -180,6 +186,9 @@ public class Bootstrap {
 
     /** Bootstraps the initial component context from a native UNO installation.
 
+        @throws Exception if things go awry.
+        @return a freshly bootstrapped component context.
+
         See also
         <code>cppuhelper/defaultBootstrap_InitialComponentContext()</code>.
     */
@@ -190,6 +199,14 @@ public class Bootstrap {
     }
     /**
      * Backwards compatibility stub.
+     *
+     * @param ini_file
+     *        ini_file (may be null: uno.rc besides cppuhelper lib)
+     * @param bootstrap_parameters
+     *        bootstrap parameters (maybe null)
+     *
+     * @throws Exception if things go awry.
+     * @return a freshly bootstrapped component context.
      */
     public static final XComponentContext defaultBootstrap_InitialComponentContext(
             String ini_file, Hashtable<String,String> bootstrap_parameters )
@@ -207,6 +224,9 @@ public class Bootstrap {
                ini_file (may be null: uno.rc besides cppuhelper lib)
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
+
+        @throws Exception if things go awry.
+        @return a freshly bootstrapped component context.
     */
     public static final XComponentContext defaultBootstrap_InitialComponentContext(
         String ini_file, Map<String,String> bootstrap_parameters )
@@ -269,6 +289,8 @@ public class Bootstrap {
     /**
      * Bootstraps the component context from a UNO installation.
      *
+     * @throws BootstrapException if things go awry.
+     *
      * @return a bootstrapped component context.
      *
      * @since UDK 3.1.0
@@ -287,6 +309,9 @@ public class Bootstrap {
      *        an array of strings - commandline options to start instance of
      *        soffice with
      * @see #getDefaultOptions()
+     *
+     * @throws BootstrapException if things go awry.
+     *
      * @return a bootstrapped component context.
      *
      * @since LibreOffice 5.1

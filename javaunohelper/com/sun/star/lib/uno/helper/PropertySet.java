@@ -482,6 +482,13 @@ XMultiPropertySet
      *  new value can be set. It also causes the notification of listeners.
      *  @param prop The property whose value is to be set.
      *  @param value The new value for the property.
+     *
+     *  @throws UnknownPropertyException
+     *      See com.sun.star.beans.XPropertySet
+     *  @throws PropertyVetoException
+     *      See com.sun.star.beans.XPropertySet
+     *  @throws WrappedTargetException
+     *      See com.sun.star.beans.XPropertySet
      */
     protected void setPropertyValue(Property prop, Object value) throws UnknownPropertyException,
     PropertyVetoException, com.sun.star.lang.IllegalArgumentException, WrappedTargetException
@@ -606,6 +613,9 @@ XMultiPropertySet
      *  dataformat for that property.
      *  @return true - Conversion was successful. <em>newVal</em> contains a valid value for the property. false -
      *  conversion failed for some reason.
+     *
+     *  @throws UnknownPropertyException
+     *      See com.sun.star.beans.XPropertySet
      *  @throws com.sun.star.lang.IllegalArgumentException The value provided is unfit for the property.
      *  @throws com.sun.star.lang.WrappedTargetException - An exception occurred during the conversion, that is to be made known
      *  to the caller.
@@ -863,6 +873,9 @@ XMultiPropertySet
      * @param oldValues the old values of the properties.
      * @param bVetoable true means fire to VetoableChangeListener, false means fire to
      * XPropertyChangedListener and XMultiPropertyChangedListener.
+     *
+     * @throws PropertyVetoException
+     *      if a vetoable listener throws it.
      */
     protected void  fire(
     Property[]  properties,
