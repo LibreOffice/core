@@ -404,11 +404,27 @@ bool SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
     rAttr.aSlotId.SetValue(n);
 
     bOk = true;
-    SvToken& rTok  = rInStm.GetToken();
-    if( rTok.IsChar() && rTok.GetChar() == '(' )
+    if( rInStm.ReadIf( '(' ) )
     {
-        bOk = rAttr.aType->ReadMethodArgs( rBase, rInStm );
-    }
+        // read method arguments
+        tools::SvRef<SvMetaType> xT(new SvMetaType() );
+        xT->SetRef(rAttr.GetType() );
+        rAttr.aType = xT;
+        sal_uInt32 nBeginPos = 0; // can not happen with Tell
+        while( nBeginPos != rInStm.Tell() )
+        {
+            nBeginPos = rInStm.Tell();
+            tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
+            if( xAttr->ReadSvIdl( rBase, rInStm ) )
+            {
+                if( xAttr->Test( rInStm ) )
+                    rAttr.aType->GetAttrList().push_back( xAttr );
+            }
+            rInStm.ReadIfDelimiter();
+        }
+        ReadChar( ')' );
+        rAttr.aType->SetType( MetaTypeType::Method );
+   }
     if( bOk && rInStm.ReadIf( '[' ) )
     {
         ReadChar( ']' );

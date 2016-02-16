@@ -166,7 +166,7 @@ public:
         return *(*pRetToken).get();
     }
 
-    SvToken& GetToken_NextAll()
+    SvToken& GetToken_Next()
     {
         std::vector<std::unique_ptr<SvToken> >::iterator pRetToken = pCurToken++;
 
@@ -176,12 +176,6 @@ public:
         SetMax();
 
         return *(*pRetToken).get();
-    }
-
-    SvToken& GetToken_Next()
-    {
-        // comments get removed initially
-        return GetToken_NextAll();
     }
 
     SvToken& GetToken() const { return *(*pCurToken).get(); }

@@ -62,7 +62,6 @@ class SvMetaType : public SvMetaReference
                                       SvStream & rOutStm );
 protected:
     bool                ReadNamesSvIdl( SvTokenStream & rInStm );
-    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     bool                ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
@@ -70,6 +69,8 @@ public:
             SvMetaType( const OString& rTypeName );
 
     virtual ~SvMetaType();
+
+    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
     SvRefMemberList<SvMetaAttribute *>&
                         GetAttrList() { return aAttrList; }
