@@ -190,10 +190,16 @@ void SvLBoxString::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
+    Size aSize = GetSize(&rDev, &rEntry);
     DrawTextFlags nStyle = rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable;
     if (rDev.IsEntryMnemonicsEnabled())
         nStyle |= DrawTextFlags::Mnemonic;
-    rRenderContext.DrawText(Rectangle(rPos, GetSize(&rDev, &rEntry)), maText, nStyle);
+    if (rDev.TextCenterAndClipEnabled())
+    {
+        nStyle |= DrawTextFlags::PathEllipsis | DrawTextFlags::Center;
+        aSize.Width() = rDev.GetEntryWidth();
+    }
+    rRenderContext.DrawText(Rectangle(rPos, aSize), maText, nStyle);
 }
 
 SvLBoxItem* SvLBoxString::Create() const
