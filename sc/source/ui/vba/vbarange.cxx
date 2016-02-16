@@ -2632,7 +2632,7 @@ ScVbaRange::setWrapText( const uno::Any& aIsWrapped ) throw (script::BasicErrorE
 }
 
 uno::Any
-ScVbaRange::getWrapText() throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaRange::getWrapText() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {

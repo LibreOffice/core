@@ -167,7 +167,7 @@ public:
     virtual void SAL_CALL setMergeCells( const css::uno::Any& bMerge ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
     virtual css::uno::Any SAL_CALL getMergeCells() throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
     virtual void SAL_CALL setWrapText( const css::uno::Any& bIsWrapped ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
-    virtual css::uno::Any SAL_CALL getWrapText() throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
+    virtual css::uno::Any SAL_CALL getWrapText() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getEntireRow() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getEntireColumn() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL getComment() throw (css::uno::RuntimeException, std::exception) override;

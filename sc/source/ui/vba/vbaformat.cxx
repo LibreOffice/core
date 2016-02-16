@@ -323,7 +323,7 @@ ScVbaFormat< Ifc... >::setWrapText( const uno::Any& _aWrapText ) throw (script::
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getWrapText(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getWrapText(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Any aWrap = aNULL();
     try
@@ -552,7 +552,7 @@ ScVbaFormat< Ifc... >::setFormulaHidden( const uno::Any& FormulaHidden ) throw (
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getLocked(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getLocked(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Any aCellProtection = aNULL();
     try
@@ -586,7 +586,7 @@ ScVbaFormat< Ifc... >::getLocked(  ) throw (script::BasicErrorException, uno::Ru
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getFormulaHidden(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getFormulaHidden(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Any aBoolRet = aNULL();
     try
