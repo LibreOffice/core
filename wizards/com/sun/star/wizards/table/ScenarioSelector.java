@@ -235,7 +235,9 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             {
                 FieldDescription curfielddescription = CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
                 PropertyValue[] aProperties = curfielddescription.getPropertyValues();
-                this.curtabledescriptor.addColumn(aProperties);
+                if (aProperties != null {
+                    this.curtabledescriptor.addColumn(aProperties);
+                }
             }
             catch (RuntimeException e)
             {
