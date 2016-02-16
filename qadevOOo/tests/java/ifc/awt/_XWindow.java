@@ -559,16 +559,13 @@ public class _XWindow extends MultiMethodTest {
     * removePaintListener()
     */
     public static class TestPaintListener implements XPaintListener {
-        public boolean paint = false;
 
         public void windowPaint(PaintEvent e) {
-            paint = true;
         }
 
         public void disposing(EventObject e) {}
 
         public void init() {
-            paint = false;
         }
 
     }
