@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_d8a07aa8",
+        "filename": "basic/source/sbx/sbxdec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-16T07:26:23Z",
+      "side": 1,
+      "message": "we can actually just drop the bRet variable altogether here and make the if statement look like\n  if (hResult \u003d\u003d S_OK)",
+      "revId": "ef2f0b25921e4c0804082869d5b9af0ce16df6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_78c5065a",
+        "filename": "drawinglayer/source/tools/converters.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-16T07:26:23Z",
+      "side": 1,
+      "message": "this doesn\u0027t actually change anything useful",
+      "revId": "ef2f0b25921e4c0804082869d5b9af0ce16df6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_98c8b276",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-16T07:26:23Z",
+      "side": 1,
+      "message": "this can be moved down another level",
+      "revId": "ef2f0b25921e4c0804082869d5b9af0ce16df6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
