@@ -298,7 +298,7 @@ public:
     ~PDFReader() {}
 
     static PDFEntry* read( const char* pFileName );
-#ifdef WIN32
+#ifdef _WIN32
     static PDFEntry* read( const char* pBuffer, unsigned int nLen );
 #endif
 };

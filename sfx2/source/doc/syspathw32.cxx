@@ -59,7 +59,7 @@ static bool _SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
 // time to time to very nasty compilation errors. If someone finds a better
 // way to solve these probs please remove this copied part!
 typedef unsigned short sal_uInt16;
-#if ( defined(WIN32) && !defined(__MINGW32__) )
+#if defined(_WIN32) && !defined(__MINGW32__)
     typedef wchar_t             sal_Unicode;
 #else
     typedef sal_uInt16          sal_Unicode;

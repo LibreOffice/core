@@ -45,7 +45,7 @@ class SbxDecimal
 {
     friend void releaseDecimalPtr( SbxDecimal*& rpDecimal );
 
-#ifdef WIN32
+#ifdef _WIN32
     DECIMAL     maDec;
 #endif
     sal_Int32       mnRefCount;
@@ -75,7 +75,7 @@ public:
     bool setString( OUString* pOUString );
     void setDecimal( SbxDecimal* pDecimal )
     {
-#ifdef WIN32
+#ifdef _WIN32
         if( pDecimal )
             maDec = pDecimal->maDec;
 #else

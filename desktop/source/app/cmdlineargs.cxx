@@ -299,7 +299,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 exit(0);
             }
 #endif
-#ifdef WIN32
+#ifdef _WIN32
             /* fdo#57203 ignore -Embedding on Windows
                when LibreOffice is launched by COM+
             */

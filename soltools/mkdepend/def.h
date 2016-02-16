@@ -29,7 +29,7 @@ in this Software without prior written authorization from the X Consortium.
 
 #ifndef NO_X11
 #include <X11/Xosdefs.h>
-#ifdef WIN32
+#ifdef _WIN32
 #include <X11/Xw32defs.h>
 #endif
 #ifndef SUNOS4

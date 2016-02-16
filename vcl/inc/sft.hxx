@@ -252,7 +252,7 @@ namespace vcl
  * @ingroup sft
  */
     int VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf);
-#if !defined(WIN32)
+#if !defined(_WIN32)
 /**
  * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.

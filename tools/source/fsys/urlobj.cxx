@@ -1440,7 +1440,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     }
 #endif
 
-#ifdef WIN
+#ifdef _WIN32
     if (m_eScheme==INetProtocol::Smb) {
         // Change "smb://server/path" URIs to "file://server/path"
         // URIs on Windows, since Windows doesn't understand the

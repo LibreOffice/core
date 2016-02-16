@@ -11,7 +11,7 @@
 
 #include <algorithm>
 
-#ifdef WIN32
+#ifdef _WIN32
   // LO vs WinAPI conflict
   #undef WB_LEFT
   #undef WB_RIGHT
@@ -70,7 +70,7 @@ void BufferedStreamSocket::close()
 {
     if( usingCSocket && mSocket != -1 )
     {
-#ifdef WIN32
+#ifdef _WIN32
         ::closesocket( mSocket );
 #else
         ::close( mSocket );

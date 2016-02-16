@@ -29,7 +29,7 @@ typedef sal_uInt32 sal_GlyphId;
 #define GF_ISCHAR   0x00800000
 #define GF_ROTL     0x01000000
 
-#ifdef WIN32
+#ifdef _WIN32
 // caution !!!
 #define GF_VERT     0x02000000
 // GF_VERT is only for windows implementation

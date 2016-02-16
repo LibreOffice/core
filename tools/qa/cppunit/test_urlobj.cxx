@@ -62,7 +62,7 @@ namespace tools_urlobj
                             == "smb://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
 #endif
-#ifdef WIN
+#ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii
                             ( "file://10.10.1.1/sampledir/sample.file" ) );
@@ -89,7 +89,7 @@ namespace tools_urlobj
                             == "smb://137.65.170.24/c$/Img0001.jpg" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
 #endif
-#ifdef WIN
+#ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
@@ -115,7 +115,7 @@ namespace tools_urlobj
                             == "smb://hive-winxp-x86/pmladek/test2.odt" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
 #endif
-#ifdef WIN
+#ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
@@ -134,7 +134,7 @@ namespace tools_urlobj
                             == "smb://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
 #endif
-#ifdef WIN
+#ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii( "file://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
@@ -158,7 +158,7 @@ namespace tools_urlobj
                             == "smb://137.65.170.24/c$/Img0001.jpg" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
 #endif
-#ifdef WIN
+#ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );
@@ -183,7 +183,7 @@ namespace tools_urlobj
                             == "smb://hive-winxp-x86/pmladek/test2.odt" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::Smb );
 #endif
-#ifdef WIN
+#ifdef _WIN32
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INetProtocol::File );

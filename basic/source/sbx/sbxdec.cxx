@@ -34,7 +34,7 @@ SbxDecimal::SbxDecimal()
 
 SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
 {
-#ifdef WIN32
+#ifdef _WIN32
     maDec = rDec.maDec;
 #else
     (void)rDec;
@@ -45,7 +45,7 @@ SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
 SbxDecimal::SbxDecimal
     ( const css::bridge::oleautomation::Decimal& rAutomationDec )
 {
-#ifdef WIN32
+#ifdef _WIN32
     maDec.scale = rAutomationDec.Scale;
     maDec.sign  = rAutomationDec.Sign;
     maDec.Lo32 = rAutomationDec.LowValue;
@@ -60,7 +60,7 @@ SbxDecimal::SbxDecimal
 void SbxDecimal::fillAutomationDecimal
     ( css::bridge::oleautomation::Decimal& rAutomationDec )
 {
-#ifdef WIN32
+#ifdef _WIN32
     rAutomationDec.Scale = maDec.scale;
     rAutomationDec.Sign = maDec.sign;
     rAutomationDec.LowValue = maDec.Lo32;
@@ -88,7 +88,7 @@ void releaseDecimalPtr( SbxDecimal*& rpDecimal )
     }
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 bool SbxDecimal::operator -= ( const SbxDecimal &r )
 {
@@ -351,7 +351,7 @@ bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
 
 void SbxDecimal::getString( OUString& rString )
 {
-#ifdef WIN32
+#ifdef _WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
     bool bRet = false;

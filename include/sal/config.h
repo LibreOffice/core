@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_PATHSEPARATOR ';'

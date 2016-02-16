@@ -25,7 +25,7 @@
 
 /* Define to 1 if you have the declaration of `h_errno', and to 0 if you
    don't. */
-#ifdef WIN32
+#ifdef _WIN32
 #define HAVE_DECL_H_ERRNO 1
 #endif
 
@@ -239,7 +239,7 @@
 #define HAVE_SNPRINTF 1
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #if _MSC_VER >= 1900 // VS 2015
 #define HAVE_SNPRINTF 1
 #else
@@ -274,7 +274,7 @@
 #define HAVE_STRCASECMP 1
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #define strcasecmp strcmpi
 #endif
 
@@ -588,7 +588,7 @@
 char *stpcpy(char *, const char *);
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <io.h>
 

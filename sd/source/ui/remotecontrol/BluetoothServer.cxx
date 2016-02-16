@@ -29,7 +29,7 @@
   #include "BufferedStreamSocket.hxx"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
   // LO vs WinAPI conflict
   #undef WB_LEFT
   #undef WB_RIGHT

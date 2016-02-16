@@ -19,17 +19,7 @@
 
 #include "launcher.hxx"
 
-#ifndef _WINDOWS_
-#   define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#   include <windows.h>
-#   include <shellapi.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#endif
+#include <shellapi.h>
 
 #include <stdlib.h>
 #include <malloc.h>
