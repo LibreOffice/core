@@ -1351,7 +1351,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     OUString aBACName = aHelper.GetBACName();
                     OUString aImpactLevel = aHelper.GetImpactLevel();
                     if (!aBACName.isEmpty() && !aImpactLevel.isEmpty())
-                        AppendInfoBar("classification", aBACName);
+                    {
+                        OUString aMessage = SfxResId(STR_CLASSIFIED_DOCUMENT);
+                        aMessage = aMessage.replaceFirst("%1", aBACName);
+                        AppendInfoBar("classification", aMessage);
+                    }
                 }
 
                 break;
