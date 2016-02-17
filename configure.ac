@@ -2800,6 +2800,10 @@ if test "$with_export_validation" = yes; then
     if test -z "$OFFICEOTRON"; then
         AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
     fi
+    OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    if test 0"$OFFICEOTRON_VER" -lt 704; then
+        AC_MSG_ERROR([officeotron too old])
+    fi
     AC_SUBST(OFFICEOTRON)
 else
     AC_MSG_RESULT([no])
