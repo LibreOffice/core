@@ -46,6 +46,8 @@ namespace svgio
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
+            virtual double getCurrentFontSize() const override;
+
             /// access to SvgTextPositions
             const SvgTextPositions& getSvgTextPositions() const { return maSvgTextPositions; }
         };

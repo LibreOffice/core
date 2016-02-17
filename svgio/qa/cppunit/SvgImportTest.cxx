@@ -43,6 +43,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testFontsizeKeywords();
     void testFontsizePercentage();
     void testTdf45771();
+    void testTdf97941();
     void testTdf85770();
     void testTdf79163();
     void testTdf97542_1();
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testFontsizeKeywords);
     CPPUNIT_TEST(testFontsizePercentage);
     CPPUNIT_TEST(testTdf45771);
+    CPPUNIT_TEST(testTdf97941);
     CPPUNIT_TEST(testTdf85770);
     CPPUNIT_TEST(testTdf79163);
     CPPUNIT_TEST(testTdf97542_1);
@@ -208,6 +210,7 @@ void Test::testFontsizePercentage()
 
 void Test::testTdf45771()
 {
+    //Check text fontsize when using relative units
     Primitive2DSequence aSequenceTdf45771 = parseSvg("/svgio/qa/cppunit/data/tdf45771.svg");
     CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf45771.getLength());
 
@@ -217,6 +220,20 @@ void Test::testTdf45771()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "32");
+}
+
+void Test::testTdf97941()
+{
+    //Check tspan fontsize when using relative units
+    Primitive2DSequence aSequenceTdf97941 = parseSvg("/svgio/qa/cppunit/data/tdf97941.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf97941.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97941));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "48");
 }
 
 void Test::testTdf85770()
