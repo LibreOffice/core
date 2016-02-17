@@ -531,10 +531,10 @@ void SwAccessibleParagraph::_InvalidateFocus()
 }
 
 SwAccessibleParagraph::SwAccessibleParagraph(
-        SwAccessibleMap& rInitMap,
+        SwAccessibleMap* pInitMap,
         const SwTextFrame& rTextFrame )
     : SwClient( const_cast<SwTextNode*>(rTextFrame.GetTextNode()) ) // #i108125#
-    , SwAccessibleContext( &rInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
+    , SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
     , sDesc()
     , pPortionData( nullptr )
     , pHyperTextData( nullptr )

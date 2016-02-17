@@ -1887,7 +1887,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                 {
                 case FRM_TXT:
                     mnPara++;
-                    pAcc = new SwAccessibleParagraph( *this,
+                    pAcc = new SwAccessibleParagraph( this,
                                     static_cast< const SwTextFrame& >( *pFrame ) );
                     break;
                 case FRM_HEADER:
