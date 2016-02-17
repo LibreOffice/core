@@ -286,6 +286,12 @@ public:
             case CTRL_RADIOBUTTON:
             case CTRL_LISTNODE:
             case CTRL_SLIDER:
+            // FIXME: these guys have complex state hidden in ImplControlValue
+            // structs which affects rendering, needs to be a and needs to be
+            // part of the key to our cache.
+            case CTRL_SPINBOX:
+            case CTRL_SPINBUTTONS:
+            case CTRL_TAB_ITEM:
                 return false;
 
             case CTRL_MENUBAR:

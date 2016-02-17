@@ -143,8 +143,9 @@ bool ImplDrawNativeSpinbuttons(vcl::RenderContext& rRenderContext, const Spinbut
 
     if (rRenderContext.IsNativeControlSupported(CTRL_SPINBUTTONS, PART_ENTIRE_CONTROL))
     {
+        Rectangle aArea = rSpinbuttonValue.maUpperRect.GetUnion(rSpinbuttonValue.maLowerRect);
         // only paint the standalone spin buttons, all buttons are painted at once
-        bNativeOK = rRenderContext.DrawNativeControl(CTRL_SPINBUTTONS, PART_ALL_BUTTONS, Rectangle(),
+        bNativeOK = rRenderContext.DrawNativeControl(CTRL_SPINBUTTONS, PART_ALL_BUTTONS, aArea,
                                                      ControlState::ENABLED, rSpinbuttonValue, OUString());
     }
     return bNativeOK;
