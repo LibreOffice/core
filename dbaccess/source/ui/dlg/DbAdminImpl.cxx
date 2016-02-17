@@ -69,6 +69,7 @@
 #include <osl/mutex.hxx>
 
 #include <algorithm>
+#include <iterator>
 #include <functional>
 #include <o3tl/functional.hxx>
 
