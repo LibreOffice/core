@@ -651,9 +651,15 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
     sal_uInt32 nHeight  = readLE32( pData+8 );
 
     if( m_aPixmap != None )
-        XFreePixmap( m_pDisplay, m_aPixmap ), m_aPixmap = None;
+    {
+        XFreePixmap( m_pDisplay, m_aPixmap );
+        m_aPixmap = None;
+    }
     if( m_aBitmap != None )
-        XFreePixmap( m_pDisplay, m_aBitmap ), m_aBitmap = None;
+    {
+        XFreePixmap( m_pDisplay, m_aBitmap );
+        m_aBitmap = None;
+    }
 
     m_aPixmap = limitXCreatePixmap( m_pDisplay,
                                RootWindow( m_pDisplay, m_aInfo.screen ),

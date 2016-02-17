@@ -564,7 +564,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         {
                             if( !nShift )
                             {
-                                nShift = 8L,
+                                nShift = 8L;
                                 cTmp = *pTmp++;
                             }
 
@@ -590,7 +590,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         {
                             if( !nShift )
                             {
-                                nShift = 2UL,
+                                nShift = 2UL;
                                 cTmp = *pTmp++;
                             }
 

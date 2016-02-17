@@ -424,7 +424,10 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
     // release write access of the bitmaps
     if ( mpAcc )
-        Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
+    {
+        Bitmap::ReleaseAccess( mpAcc );
+        mpAcc = nullptr;
+    }
 
     if ( mpMaskAcc )
     {
@@ -1101,7 +1104,10 @@ void PNGReaderImpl::ImplApplyFilter()
                     npc =-npc;
 
                 if( npa > npb )
-                    na = nb, npa = npb;
+                {
+                    na = nb;
+                    npa = npb;
+                }
                 if( npa > npc )
                     na = nc;
 

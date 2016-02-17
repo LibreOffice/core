@@ -705,7 +705,8 @@ namespace sw { namespace mark
                            && pMark->GetOtherMarkPos().nNode == rEnd
                            && pMark->GetOtherMarkPos().nContent == *pEndIdx ) ) )
             {
-                bIsPosInRange = true, bIsOtherPosInRange = true;
+                bIsPosInRange = true;
+                bIsOtherPosInRange = true;
             }
 
             if ( bIsPosInRange

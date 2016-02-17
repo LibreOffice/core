@@ -979,7 +979,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
         Sequence< Any > aArgs(1);
         beans::PropertyValue aPath;
         aPath.Name = "nodepath";
-        aPath.Value <<= OUString("/org.openoffice.Office.Common/I18N"),
+        aPath.Value <<= OUString("/org.openoffice.Office.Common/I18N");
         aArgs[0] <<= aPath;
 
         Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(

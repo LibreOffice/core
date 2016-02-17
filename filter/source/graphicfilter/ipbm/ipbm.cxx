@@ -132,7 +132,8 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
 
     if ( mpAcc )
     {
-        Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
+        Bitmap::ReleaseAccess( mpAcc );
+        mpAcc = nullptr;
     }
     if ( mbStatus )
         rGraphic = maBmp;

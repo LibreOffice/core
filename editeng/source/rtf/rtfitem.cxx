@@ -1027,11 +1027,11 @@ ATTR_SETEMPHASIS:
                     sal_Unicode cStt, cEnd;
                     switch ( nTokenValue )
                     {
-                    case 1: cStt = '(', cEnd = ')'; break;
-                    case 2: cStt = '[', cEnd = ']'; break;
-                    case 3: cStt = '<', cEnd = '>'; break;
-                    case 4: cStt = '{', cEnd = '}'; break;
-                    default: cStt = 0, cEnd = 0; break;
+                    case 1: cStt = '('; cEnd = ')'; break;
+                    case 2: cStt = '['; cEnd = ']'; break;
+                    case 3: cStt = '<'; cEnd = '>'; break;
+                    case 4: cStt = '{'; cEnd = '}'; break;
+                    default: cStt = 0; cEnd = 0; break;
                     }
 
                     pSet->Put( SvxTwoLinesItem( true, cStt, cEnd,

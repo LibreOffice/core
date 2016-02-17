@@ -490,7 +490,8 @@ struct FileMapping
         {
             // Release mapping.
             unmapFile (rMapping.m_hFile, rMapping.m_pAddr, rMapping.m_nSize);
-            rMapping.m_pAddr = nullptr, rMapping.m_nSize = 0;
+            rMapping.m_pAddr = nullptr;
+            rMapping.m_nSize = 0;
         }
     };
     typedef UnmapFile destructor_type;
@@ -556,7 +557,10 @@ void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
     OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
     if ((ppPage != nullptr) && (pnSize != nullptr))
-        *ppPage = nullptr, *pnSize = m_nPageSize;
+    {
+        *ppPage = nullptr;
+        *pnSize = m_nPageSize;
+    }
 }
 
 void MappedLockBytes::deallocate_Impl (void * pPage)
@@ -778,7 +782,8 @@ storeError MemoryLockBytes::setSize_Impl (sal_uInt32 nSize)
             if (nSize != 0)
                 return store_E_OutOfMemory;
         }
-        m_pData = pData, m_nSize = nSize;
+        m_pData = pData;
+        m_nSize = nSize;
     }
     return store_E_None;
 }

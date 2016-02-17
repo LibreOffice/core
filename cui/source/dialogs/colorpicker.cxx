@@ -389,7 +389,10 @@ void ColorFieldControl::UpdateBitmap()
     const Size aSize(GetOutputSizePixel());
 
     if (mpBitmap && mpBitmap->GetSizePixel() != aSize)
-        delete mpBitmap, mpBitmap = nullptr;
+    {
+        delete mpBitmap;
+        mpBitmap = nullptr;
+    }
 
     const sal_Int32 nWidth = aSize.Width();
     const sal_Int32 nHeight = aSize.Height();
@@ -783,7 +786,10 @@ void ColorSliderControl::UpdateBitmap()
     Size aSize(1, GetOutputSizePixel().Height());
 
     if (mpBitmap && mpBitmap->GetSizePixel() != aSize)
-        delete mpBitmap, mpBitmap = nullptr;
+    {
+        delete mpBitmap;
+        mpBitmap = nullptr;
+    }
 
     if (!mpBitmap)
         mpBitmap = new Bitmap(aSize, 24);

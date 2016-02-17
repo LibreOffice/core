@@ -100,17 +100,32 @@ void ImplDeInitSVData()
 
     // delete global instance data
     if( pSVData->mpSettingsConfigItem )
-        delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = nullptr;
+    {
+        delete pSVData->mpSettingsConfigItem;
+        pSVData->mpSettingsConfigItem = nullptr;
+    }
 
     if( pSVData->mpDockingManager )
-        delete pSVData->mpDockingManager, pSVData->mpDockingManager = nullptr;
+    {
+        delete pSVData->mpDockingManager;
+        pSVData->mpDockingManager = nullptr;
+    }
 
     if( pSVData->maCtrlData.mpFieldUnitStrings )
-        delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = nullptr;
+    {
+        delete pSVData->maCtrlData.mpFieldUnitStrings;
+        pSVData->maCtrlData.mpFieldUnitStrings = nullptr;
+    }
     if( pSVData->maCtrlData.mpCleanUnitStrings )
-        delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = nullptr;
+    {
+        delete pSVData->maCtrlData.mpCleanUnitStrings;
+        pSVData->maCtrlData.mpCleanUnitStrings = nullptr;
+    }
     if( pSVData->mpPaperNames )
-        delete pSVData->mpPaperNames, pSVData->mpPaperNames = nullptr;
+    {
+        delete pSVData->mpPaperNames;
+        pSVData->mpPaperNames = nullptr;
+    }
 }
 
 /// Returns either the application window, or the default GL context window

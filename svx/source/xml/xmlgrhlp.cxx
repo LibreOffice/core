@@ -336,8 +336,10 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         maGrfObj = aGraphic;
         if( maGrfObj.GetType() != GRAPHIC_NONE )
         {
-            delete mpOStm, mpOStm = nullptr;
-            delete mpTmp, mpTmp = nullptr;
+            delete mpOStm;
+            mpOStm = nullptr;
+            delete mpTmp;
+            mpTmp = nullptr;
         }
     }
 

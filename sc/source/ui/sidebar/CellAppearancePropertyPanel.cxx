@@ -311,7 +311,10 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
             if(pBoxItem)
             {
-                mbLeft=false, mbRight=false, mbTop=false, mbBottom=false;
+                mbLeft=false;
+                mbRight=false;
+                mbTop=false;
+                mbBottom=false;
 
                 if(pBoxItem->GetLeft())
                     mbLeft = true;
@@ -348,7 +351,8 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
             {
                 bool bLeft(false), bRight(false), bTop(false), bBottom(false);
 
-                mbVer = false, mbHor = false;
+                mbVer = false;
+                mbHor = false;
 
                 if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::VERT )  || pBoxInfoItem->GetVert())
                     mbVer = true;

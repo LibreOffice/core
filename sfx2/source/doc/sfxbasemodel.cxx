@@ -521,7 +521,8 @@ SfxBaseModel::~SfxBaseModel()
 {
     //In SvxDrawingLayerImport when !xTargetDocument the fallback SvxUnoDrawingModel created there
     //never gets disposed called on it, so m_pData leaks.
-    delete m_pData, m_pData = nullptr;
+    delete m_pData;
+    m_pData = nullptr;
 }
 
 //  XInterface

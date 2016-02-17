@@ -2400,7 +2400,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( bRecord )
     {
-        itr = aFullMark.begin(), itrEnd = aFullMark.end();
+        itr = aFullMark.begin();
+        itrEnd = aFullMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
             pRefUndoDoc->DeleteAreaTab(nUndoStartCol,nUndoStartRow,nUndoEndCol,nUndoEndRow, *itr, InsertDeleteFlags::ALL);
 
@@ -2415,7 +2416,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         SCTAB* pScenarios = new SCTAB[nSelCount];
         SCTAB   nUndoPos  = 0;
 
-        itr = aMark.begin(), itrEnd = aMark.end();
+        itr = aMark.begin();
+        itrEnd = aMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
             SCTAB nCount = 0;
@@ -2504,7 +2506,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         rDoc.ApplyPatternArea( nExtendStartCol, nExtendStartRow, nMergeTestEndCol, nMergeTestEndRow, aMark, aPattern );
 
-        itr = aMark.begin(), itrEnd = aMark.end();
+        itr = aMark.begin();
+        itrEnd = aMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
             SCTAB nScenarioCount = 0;
@@ -2517,7 +2520,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
     }
 
-    itr = aMark.begin(), itrEnd = aMark.end();
+    itr = aMark.begin();
+    itrEnd = aMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
         rDoc.SetDrawPageSize(*itr);

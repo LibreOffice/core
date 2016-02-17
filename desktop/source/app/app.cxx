@@ -1661,7 +1661,8 @@ int Desktop::doShutdown()
         pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
     }
 
-    delete pResMgr, pResMgr = nullptr;
+    delete pResMgr;
+    pResMgr = nullptr;
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
@@ -1703,7 +1704,8 @@ int Desktop::doShutdown()
     pExecGlobals->pPathOptions.reset( nullptr );
 
     bool bRR = pExecGlobals->bRestartRequested;
-    delete pExecGlobals, pExecGlobals = nullptr;
+    delete pExecGlobals;
+    pExecGlobals = nullptr;
 
     if ( bRR )
     {

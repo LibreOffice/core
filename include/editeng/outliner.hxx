@@ -171,7 +171,7 @@ struct ParaRange
     sal_Int32  nStartPara;
     sal_Int32  nEndPara;
 
-            ParaRange( sal_Int32 nS, sal_Int32 nE ) { nStartPara = nS, nEndPara = nE; }
+            ParaRange( sal_Int32 nS, sal_Int32 nE ) : nStartPara(nS), nEndPara(nE) {}
 
     void    Adjust();
 };
@@ -180,9 +180,7 @@ inline void ParaRange::Adjust()
 {
     if ( nStartPara > nEndPara )
     {
-        sal_Int32 nTmp = nStartPara;
-        nStartPara = nEndPara;
-        nEndPara = nTmp;
+        std::swap(nStartPara, nEndPara);
     }
 }
 

@@ -395,7 +395,8 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nIt
     NbcInsertItem(nItemId, nItemBits, rStr, this, nPos, rIdent);
 
     vcl::Window* pWin = ImplGetWindow();
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
     if ( pWin )
     {
         ImplCalcSize( pWin );
@@ -522,7 +523,8 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         }
         IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
 }
 
 void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame,
@@ -559,7 +561,8 @@ void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
     if( ImplGetSalMenu() && pData && pData->pSalMenuItem )
         ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
 
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
 
     ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
 }
@@ -585,7 +588,8 @@ void Menu::RemoveItem( sal_uInt16 nPos )
         if ( pWin->IsVisible() )
             pWin->Invalidate();
     }
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
 
     if ( bRemove )
         ImplCallEventListeners( VCLEVENT_MENU_REMOVEITEM, nPos );
@@ -1045,7 +1049,8 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
             ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem, rStr );
 
         vcl::Window* pWin = ImplGetWindow();
-        delete mpLayoutData, mpLayoutData = nullptr;
+        delete mpLayoutData;
+        mpLayoutData = nullptr;
         if (pWin && IsMenuBar())
         {
             ImplCalcSize( pWin );
@@ -2288,7 +2293,8 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
         if ( pItem->eType == MenuItemType::SEPARATOR )
             RemoveItem( nLast );
     }
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
 }
 
 bool Menu::HasValidEntries( bool bCheckPopups )
@@ -2321,7 +2327,8 @@ void Menu::MenuBarKeyInput(const KeyEvent&)
 
 void Menu::ImplKillLayoutData() const
 {
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
 }
 
 void Menu::ImplFillLayoutData() const
@@ -2924,7 +2931,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
     if( pSFrom && pSFrom->IsMenuBar())
         ((static_cast<MenuBarWindow*>(pSFrom->pWindow.get())))->SetMBWHideAccel(!(static_cast<MenuBarWindow*>(pSFrom->pWindow.get())->GetMBWMenuKey()));
 
-    delete mpLayoutData, mpLayoutData = nullptr;
+    delete mpLayoutData;
+    mpLayoutData = nullptr;
 
     ImplSVData* pSVData = ImplGetSVData();
 

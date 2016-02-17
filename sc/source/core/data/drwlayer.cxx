@@ -343,8 +343,10 @@ ScDrawLayer::~ScDrawLayer()
     delete pUndoGroup;
     if( !--nInst )
     {
-        delete pFac, pFac = nullptr;
-        delete pF3d, pF3d = nullptr;
+        delete pFac;
+        pFac = nullptr;
+        delete pF3d;
+        pF3d = nullptr;
     }
 }
 

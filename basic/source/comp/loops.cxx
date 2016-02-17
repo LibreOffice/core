@@ -367,7 +367,10 @@ void SbiParser::Select()
         if( eTok == CASE )
         {
             if( nNextTarget )
-                aGen.BackChain( nNextTarget ), nNextTarget = 0;
+            {
+                aGen.BackChain( nNextTarget );
+                nNextTarget = 0;
+            }
             aGen.Statement();
 
             bool bDone = false;
@@ -416,7 +419,11 @@ void SbiParser::Select()
 
                 }
                 if( Peek() == COMMA ) Next();
-                else TestEoln(), bDone = true;
+                else
+                {
+                    TestEoln();
+                    bDone = true;
+                }
             }
 
             if( !bElse )

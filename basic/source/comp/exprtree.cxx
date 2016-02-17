@@ -781,7 +781,8 @@ SbiExprNode* SbiExpression::Like()
         while( pParser->Peek() == LIKE )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pNd, eTok, Comp() ), nCount++;
+            pNd = new SbiExprNode( pNd, eTok, Comp() );
+            nCount++;
         }
         // multiple operands in a row does not work
         if( nCount > 1 && !pParser->IsVBASupportOn() )
@@ -1107,7 +1108,8 @@ SbiExprListPtr SbiExprList::ParseDimList( SbiParser* pParser )
             if( eTok == TO )
             {
                 auto pExpr2 = o3tl::make_unique<SbiExpression>( pParser );
-                pExpr1->ConvertToIntConstIfPossible(), pExpr2->ConvertToIntConstIfPossible();
+                pExpr1->ConvertToIntConstIfPossible();
+                pExpr2->ConvertToIntConstIfPossible();
                 eTok = pParser->Next();
                 pExprList->bError = pExprList->bError || !pExpr1->IsValid() || !pExpr2->IsValid();
                 pExprList->aData.push_back(std::move(pExpr1));

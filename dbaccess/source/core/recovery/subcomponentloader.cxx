@@ -131,7 +131,8 @@ namespace dbaccess
 
     SubComponentLoader::~SubComponentLoader()
     {
-        delete m_pData, m_pData = nullptr;
+        delete m_pData;
+        m_pData = nullptr;
     }
 
     void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent ) throw (RuntimeException, std::exception)

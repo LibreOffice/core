@@ -620,7 +620,8 @@ SbError SbiStream::Open
     MapError();
     if( nError )
     {
-        delete pStrm, pStrm = nullptr;
+        delete pStrm;
+        pStrm = nullptr;
     }
     return nError;
 }
@@ -793,7 +794,8 @@ void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, SbiStr
         nError = pChan[ nCh ]->Open( nCh, rName, nMode, nFlags, nLen );
        if( nError )
        {
-            delete pChan[ nCh ], pChan[ nCh ] = nullptr;
+            delete pChan[ nCh ];
+            pChan[ nCh ] = nullptr;
        }
     }
     nChan = 0;

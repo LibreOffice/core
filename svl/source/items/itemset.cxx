@@ -637,7 +637,8 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     {
         if ( !*pOld && !*pNew )
             return;
-        ++pOld, ++pNew;
+        ++pOld;
+        ++pNew;
     }
 
     // create new item-array (by iterating through all new ranges)

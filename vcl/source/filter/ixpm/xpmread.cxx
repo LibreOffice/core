@@ -181,21 +181,32 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
         {
             if ( mpMaskAcc )
             {
-                Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = nullptr;
-                Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
+                Bitmap::ReleaseAccess ( mpMaskAcc);
+                mpMaskAcc = nullptr;
+                Bitmap::ReleaseAccess( mpAcc );
+                mpAcc = nullptr;
                 rGraphic = Graphic( BitmapEx( maBmp, maMaskBmp ) );
             }
             else
             {
-                Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
+                Bitmap::ReleaseAccess( mpAcc );
+                mpAcc = nullptr;
                 rGraphic = maBmp;
             }
             eReadState = XPMREAD_OK;
         }
         else
         {
-            if ( mpMaskAcc ) Bitmap::ReleaseAccess ( mpMaskAcc), mpMaskAcc = nullptr;
-            if ( mpAcc ) Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
+            if ( mpMaskAcc )
+            {
+                Bitmap::ReleaseAccess ( mpMaskAcc);
+                mpMaskAcc = nullptr;
+            }
+            if ( mpAcc )
+            {
+                Bitmap::ReleaseAccess( mpAcc );
+                mpAcc = nullptr;
+            }
             eReadState = XPMREAD_ERROR;
         }
     }

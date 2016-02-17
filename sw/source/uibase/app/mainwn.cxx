@@ -112,7 +112,10 @@ void EndProgress( SwDocShell *pDocShell )
             //#112337# it may happen that the container has been removed
             //while rescheduling
             if ( pProgressContainer && pProgressContainer->empty() )
-                delete pProgressContainer, pProgressContainer = nullptr;
+            {
+                delete pProgressContainer;
+                pProgressContainer = nullptr;
+            }
         }
     }
 }

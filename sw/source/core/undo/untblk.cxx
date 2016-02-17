@@ -126,7 +126,8 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                     pFrameFormats->erase( it );
             }
         }
-        delete pFrameFormats, pFrameFormats = nullptr;
+        delete pFrameFormats;
+        pFrameFormats = nullptr;
     }
 }
 

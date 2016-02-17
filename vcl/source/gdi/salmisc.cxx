@@ -431,7 +431,10 @@ BitmapBuffer* StretchAndConvert(
     Scanline pTmpScan;
     long nOffset;
     if( BMP_SCANLINE_ADJUSTMENT( rSrcBuffer.mnFormat ) == BMP_FORMAT_TOP_DOWN )
-        pTmpScan = rSrcBuffer.mpBits, nOffset = rSrcBuffer.mnScanlineSize;
+    {
+        pTmpScan = rSrcBuffer.mpBits;
+        nOffset = rSrcBuffer.mnScanlineSize;
+    }
     else
     {
         pTmpScan = rSrcBuffer.mpBits + ( rSrcBuffer.mnHeight - 1 ) * rSrcBuffer.mnScanlineSize;
@@ -443,7 +446,10 @@ BitmapBuffer* StretchAndConvert(
 
     // destination scanline buffer
     if( BMP_SCANLINE_ADJUSTMENT( pDstBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
-        pTmpScan = pDstBuffer->mpBits, nOffset = pDstBuffer->mnScanlineSize;
+    {
+        pTmpScan = pDstBuffer->mpBits;
+        nOffset = pDstBuffer->mnScanlineSize;
+    }
     else
     {
         pTmpScan = pDstBuffer->mpBits + ( pDstBuffer->mnHeight - 1 ) * pDstBuffer->mnScanlineSize;

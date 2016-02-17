@@ -2265,10 +2265,12 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
                     {
                         aMtf.Scale( fScaleX, fScaleY );
-                        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX ), aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
+                        aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
                     }
 
-                    nMoveX = rPos.X() - aSrcPt.X(), nMoveY = rPos.Y() - aSrcPt.Y();
+                    nMoveX = rPos.X() - aSrcPt.X();
+                    nMoveY = rPos.Y() - aSrcPt.Y();
 
                     if( nMoveX || nMoveY )
                         aMtf.Move( nMoveX, nMoveY );

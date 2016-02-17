@@ -126,8 +126,10 @@ void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
     {
-        delete pImpressOptions, pImpressOptions = nullptr;
-        delete pDrawOptions, pDrawOptions = nullptr;
+        delete pImpressOptions;
+        pImpressOptions = nullptr;
+        delete pDrawOptions;
+        pDrawOptions = nullptr;
     }
 }
 

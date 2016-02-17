@@ -133,10 +133,14 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeExc
 {
     aSrchPara = rOptions;
 
-    delete pRegexMatcher, pRegexMatcher = nullptr;
-    delete pWLD, pWLD = nullptr;
-    delete pJumpTable, pJumpTable = nullptr;
-    delete pJumpTable2, pJumpTable2 = nullptr;
+    delete pRegexMatcher;
+    pRegexMatcher = nullptr;
+    delete pWLD;
+    pWLD = nullptr;
+    delete pJumpTable;
+    pJumpTable = nullptr;
+    delete pJumpTable2;
+    pJumpTable2 = nullptr;
 
     // Create Transliteration class
     if( isSimpleTrans( aSrchPara.transliterateFlags) )

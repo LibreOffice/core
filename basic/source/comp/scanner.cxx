@@ -228,7 +228,10 @@ bool SbiScanner::NextSym()
     {
         bSpaces = true;
         while(nCol < aLine.getLength() && BasicCharClass::isWhitespace(aLine[nCol]))
-            ++pLine, ++nCol;
+        {
+            ++pLine;
+            ++nCol;
+        }
     }
 
     nCol1 = nCol;
@@ -314,7 +317,8 @@ bool SbiScanner::NextSym()
             if( (p-buf) == (BUF_SIZE-1) )
             {
                 bBufOverflow = true;
-                ++pLine, ++nCol;
+                ++pLine;
+                ++nCol;
                 continue;
             }
             // point or exponent?
@@ -334,7 +338,8 @@ bool SbiScanner::NextSym()
                     *p++ = 'E';
                     if (nCol + 1 < aLine.getLength() && (aLine[nCol+1] == '+' || aLine[nCol+1] == '-'))
                     {
-                        ++pLine, ++nCol;
+                        ++pLine;
+                        ++nCol;
                         if( (p-buf) == (BUF_SIZE-1) )
                         {
                             bBufOverflow = true;
@@ -348,7 +353,8 @@ bool SbiScanner::NextSym()
             {
                 *p++ = aLine[nCol];
             }
-            ++pLine, ++nCol;
+            ++pLine;
+            ++nCol;
         }
         *p = 0;
         aSym = p; bNumber = true;
@@ -357,7 +363,8 @@ bool SbiScanner::NextSym()
         SbError nError = 0;
         if (bScanError)
         {
-            --pLine, --nCol;
+            --pLine;
+            --nCol;
             aError = OUString( aLine[nCol]);
             nError = ERRCODE_BASIC_BAD_CHAR_IN_NUMBER;
         }
@@ -460,7 +467,11 @@ bool SbiScanner::NextSym()
                 GenError( ERRCODE_BASIC_BAD_CHAR_IN_NUMBER );
             }
         }
-        if(nCol < aLine.getLength() && aLine[nCol] == '&') ++pLine, ++nCol;
+        if(nCol < aLine.getLength() && aLine[nCol] == '&')
+        {
+            ++pLine;
+            ++nCol;
+        }
         sal_Int32 ls = static_cast<sal_Int32>(lu);
         nVal = (double) ls;
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
@@ -473,11 +484,18 @@ bool SbiScanner::NextSym()
     {
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
-            bSymbol = true, cSep = ']';
+        {
+            bSymbol = true;
+            cSep = ']';
+        }
         sal_Int32 n = nCol + 1;
         while( *pLine )
         {
-            do pLine++, nCol++;
+            do
+            {
+                pLine++;
+                nCol++;
+            }
             while( *pLine && ( *pLine != cSep ) );
             if( *pLine == cSep )
             {
@@ -502,7 +520,12 @@ bool SbiScanner::NextSym()
                         eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
                     break;
                 }
-            } else aError = OUString(cSep), GenError( ERRCODE_BASIC_EXPECTED );
+            }
+            else
+            {
+                aError = OUString(cSep);
+                GenError( ERRCODE_BASIC_EXPECTED );
+            }
         }
     }
     // invalid characters:

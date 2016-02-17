@@ -667,13 +667,15 @@ void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection 
     {
         OSL_ENSURE( g_pSpellIter, "where is my Iterator?" );
         g_pSpellIter->_End(bRestoreSelection);
-        delete g_pSpellIter, g_pSpellIter = nullptr;
+        delete g_pSpellIter;
+        g_pSpellIter = nullptr;
     }
     if (pConvArgs && g_pConvIter && g_pConvIter->GetSh() == this)
     {
         OSL_ENSURE( g_pConvIter, "where is my Iterator?" );
         g_pConvIter->_End();
-        delete g_pConvIter, g_pConvIter = nullptr;
+        delete g_pConvIter;
+        g_pConvIter = nullptr;
     }
 }
 
@@ -766,7 +768,8 @@ void SwEditShell::HyphEnd()
     {
         OSL_ENSURE( g_pHyphIter, "No Iterator" );
         g_pHyphIter->End();
-        delete g_pHyphIter, g_pHyphIter = nullptr;
+        delete g_pHyphIter;
+        g_pHyphIter = nullptr;
     }
 }
 

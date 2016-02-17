@@ -690,7 +690,10 @@ OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
         sal_Size nReallyRead = nLen;
         const sal_Char* pPtr = buf;
         while (nLen && *pPtr)
-            ++pPtr, --nLen;
+        {
+            ++pPtr;
+            --nLen;
+        }
 
         bEnd =  ( nReallyRead < sizeof(buf)-1 )         // read less than attempted to read
                 ||  (  ( nLen > 0 )                    // OR it is inside the block we read

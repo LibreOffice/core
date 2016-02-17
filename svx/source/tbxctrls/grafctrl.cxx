@@ -109,7 +109,8 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
 {
     Size aSize( GetTextWidth( "-100 %" ), GetTextHeight() );
 
-    aSize.Width() += 20, aSize.Height() += 6;
+    aSize.Width() += 20;
+    aSize.Height() += 6;
     SetSizePixel( aSize );
 
     if ( maCommand == ".uno:GrafGamma" )
@@ -274,9 +275,15 @@ ImplGrafControl::ImplGrafControl(
     SetBackground( Wallpaper( COL_TRANSPARENT ) );
 
     if( aImgSize.Height() > aFldSize.Height() )
-        nImgY = 0, nFldY = ( aImgSize.Height() - aFldSize.Height() ) >> 1;
+    {
+        nImgY = 0;
+        nFldY = ( aImgSize.Height() - aFldSize.Height() ) >> 1;
+    }
     else
-        nFldY = 0, nImgY = ( aFldSize.Height() - aImgSize.Height() ) >> 1;
+    {
+        nFldY = 0;
+        nImgY = ( aFldSize.Height() - aImgSize.Height() ) >> 1;
+    }
 
     long nOffset = SYMBOL_TO_FIELD_OFFSET / 2;
     maImage->SetPosPixel( Point( nOffset, nImgY ) );

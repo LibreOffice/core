@@ -1133,9 +1133,12 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
     nLen -= 2 * ( nCols + 1 );
     if( nCols != nOldCols ) // different column count
     {
-        delete[] pTCs, pTCs = nullptr;
-        delete[] pSHDs, pSHDs = nullptr;
-        delete[] pNewSHDs, pNewSHDs = nullptr;
+        delete[] pTCs;
+        pTCs = nullptr;
+        delete[] pSHDs;
+        pSHDs = nullptr;
+        delete[] pNewSHDs;
+        pNewSHDs = nullptr;
     }
 
     short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // really saved
@@ -2682,7 +2685,8 @@ void WW8TabDesc::FinishSwTable()
     pIo->m_pCtrlStck->SetAttr( *pIo->m_pPaM->GetPoint(), 0, false);
 
     MoveOutsideTable();
-    delete pTmpPos, pTmpPos = nullptr;
+    delete pTmpPos;
+    pTmpPos = nullptr;
 
     aDup.Insert(*pIo->m_pPaM->GetPoint());
 

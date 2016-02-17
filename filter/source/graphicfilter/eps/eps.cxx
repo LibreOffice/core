@@ -1208,10 +1208,12 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
                     aTmpMtf.Scale( fScaleX, fScaleY );
-                    aSrcPt.X() = FRound( aSrcPt.X() * fScaleX ), aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                    aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
+                    aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
                 }
 
-                nMoveX = aDestPt.X() - aSrcPt.X(), nMoveY = aDestPt.Y() - aSrcPt.Y();
+                nMoveX = aDestPt.X() - aSrcPt.X();
+                nMoveY = aDestPt.Y() - aSrcPt.Y();
 
                 if( nMoveX || nMoveY )
                     aTmpMtf.Move( nMoveX, nMoveY );

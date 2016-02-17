@@ -46,7 +46,8 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
         rSym = ++p;
         while( *p && *p != ']' )
         {
-            p++, nLen++;
+            p++;
+            nLen++;
         }
         p++;
     }
@@ -63,7 +64,8 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
             // The it can contain alphabetic characters, numbers or underlines
             while( *p && (rtl::isAsciiAlphanumeric( *p ) || *p == '_') )
             {
-                p++, nLen++;
+                p++;
+                nLen++;
             }
             // BASIC-Standard-Suffixes were ignored
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )

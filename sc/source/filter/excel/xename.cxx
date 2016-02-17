@@ -652,7 +652,8 @@ void XclExpNameManagerImpl::CreateUserNames()
     ScRangeName::TabNameCopyMap::iterator tabIt = rLocalNames.begin(), tabItEnd = rLocalNames.end();
     for (; tabIt != tabItEnd; ++tabIt)
     {
-        itr = tabIt->second->begin(), itrEnd = tabIt->second->end();
+        itr = tabIt->second->begin();
+        itrEnd = tabIt->second->end();
         for (; itr != itrEnd; ++itr)
         {
             // skip definitions of shared formulas

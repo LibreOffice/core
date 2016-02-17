@@ -478,8 +478,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                             if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
                                 ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
                             {
-                                nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
-                                nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+                                nTmpX = pMapIX[ nUnRotX ];
+                                nTmpFX = pMapFX[ nUnRotX ];
+                                nTmpY = pMapIY[ nUnRotY ];
+                                nTmpFY = pMapFY[ nUnRotY ];
 
                                 const BitmapColor& rCol0 = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( nTmpY, nTmpX ) );
                                 const BitmapColor& rCol1 = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( nTmpY, ++nTmpX ) );
@@ -518,8 +520,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                             if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
                                 ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
                             {
-                                nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
-                                nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+                                nTmpX = pMapIX[ nUnRotX ];
+                                nTmpFX = pMapFX[ nUnRotX ];
+                                nTmpY = pMapIY[ nUnRotY ];
+                                nTmpFY = pMapFY[ nUnRotY ];
 
                                 aCol0 = pReadAccess->GetPixel( nTmpY, nTmpX );
                                 aCol1 = pReadAccess->GetPixel( nTmpY, ++nTmpX );
@@ -643,7 +647,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                             for( long nY = 0; nY < aTargetHeight; nY++ )
                             {
-                                nSinY = pSinY[ nY ], nCosY = pCosY[ nY ];
+                                nSinY = pSinY[ nY ];
+                                nCosY = pCosY[ nY ];
                                 pLineW = pWriteAccess->GetScanline( nY );
 
                                 for( long nX = 0; nX < aTargetWidth; nX++ )
@@ -654,8 +659,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                                     if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
                                         ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
                                     {
-                                        nTmpX = pMapIX[ nUnRotX ], nTmpFX = pMapFX[ nUnRotX ];
-                                        nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+                                        nTmpX = pMapIX[ nUnRotX ];
+                                        nTmpFX = pMapFX[ nUnRotX ];
+                                        nTmpY = pMapIY[ nUnRotY ];
+                                        nTmpFY = pMapFY[ nUnRotY ];
 
                                         pLine0 = pReadAccess->GetScanline( nTmpY++ );
                                         pLine1 = pReadAccess->GetScanline( nTmpY );
@@ -740,7 +747,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                         for( long nY = 0; nY < aTargetHeight; nY++ )
                         {
-                            nSinY = pSinY[ nY ], nCosY = pCosY[ nY ];
+                            nSinY = pSinY[ nY ];
+                            nCosY = pCosY[ nY ];
 
                             for( long nX = 0; nX < aTargetWidth; nX++ )
                             {
@@ -750,8 +758,10 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                                 if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
                                     ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
                                 {
-                                    nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
-                                    nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
+                                    nTmpX = pMapIX[ nUnRotX ];
+                                    nTmpFX = pMapFX[ nUnRotX ];
+                                    nTmpY = pMapIY[ nUnRotY ];
+                                    nTmpFY = pMapFY[ nUnRotY ];
 
                                     const long  nAlpha0 = pReadAccess->GetPixel( nTmpY, nTmpX ).GetIndex();
                                     const long  nAlpha1 = pReadAccess->GetPixel( nTmpY, ++nTmpX ).GetIndex();

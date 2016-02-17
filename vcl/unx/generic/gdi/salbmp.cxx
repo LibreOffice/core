@@ -86,13 +86,19 @@ void X11SalBitmap::ImplDestroyCache()
     DBG_ASSERT( mnCacheInstCount, "X11SalBitmap::ImplDestroyCache(): underflow" );
 
     if( mnCacheInstCount && !--mnCacheInstCount )
-        delete mpCache, mpCache = nullptr;
+    {
+        delete mpCache;
+        mpCache = nullptr;
+    }
 }
 
 void X11SalBitmap::ImplRemovedFromCache()
 {
     if( mpDDB )
-        delete mpDDB, mpDDB = nullptr;
+    {
+        delete mpDDB;
+        mpDDB = nullptr;
+    }
 }
 
 #if defined HAVE_VALGRIND_HEADERS
@@ -607,7 +613,8 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
                                                                         mbGrey );
             }
 
-            delete mpDDB, const_cast<X11SalBitmap*>(this)->mpDDB = nullptr;
+            delete mpDDB;
+            const_cast<X11SalBitmap*>(this)->mpDDB = nullptr;
         }
 
         if( mpCache )
@@ -670,7 +677,8 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
         if( pImage )
         {
             const_cast<X11SalBitmap*>(this)->mpDDB = new ImplSalDDB( pImage, aDrawable, nXScreen, aTwoRect );
-            delete[] pImage->data, pImage->data = nullptr;
+            delete[] pImage->data;
+            pImage->data = nullptr;
             XDestroyImage( pImage );
 
             if( mpCache )
@@ -794,11 +802,15 @@ void X11SalBitmap::Destroy()
     if( mpDIB )
     {
         delete[] mpDIB->mpBits;
-        delete mpDIB, mpDIB = nullptr;
+        delete mpDIB;
+        mpDIB = nullptr;
     }
 
     if( mpDDB )
-        delete mpDDB, mpDDB = nullptr;
+    {
+        delete mpDDB;
+        mpDDB = nullptr;
+    }
 
     if( mpCache )
         mpCache->ImplRemove( this );
@@ -809,9 +821,15 @@ Size X11SalBitmap::GetSize() const
     Size aSize;
 
     if( mpDIB )
-        aSize.Width() = mpDIB->mnWidth, aSize.Height() = mpDIB->mnHeight;
+    {
+        aSize.Width() = mpDIB->mnWidth;
+        aSize.Height() = mpDIB->mnHeight;
+    }
     else if( mpDDB )
-        aSize.Width() = mpDDB->ImplGetWidth(), aSize.Height() = mpDDB->ImplGetHeight();
+    {
+        aSize.Width() = mpDDB->ImplGetWidth();
+        aSize.Height() = mpDDB->ImplGetHeight();
+    }
 
     return aSize;
 }
@@ -853,7 +871,10 @@ void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, BitmapAccessMode nMode )
     if( nMode == BITMAP_WRITE_ACCESS )
     {
         if( mpDDB )
-            delete mpDDB, mpDDB = nullptr;
+        {
+            delete mpDDB;
+            mpDDB = nullptr;
+        }
 
         if( mpCache )
             mpCache->ImplRemove( this );
@@ -908,7 +929,8 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
         if( 1 == mnDepth )
         {
             nValues |= ( GCForeground | GCBackground );
-            aValues.foreground = 1, aValues.background = 0;
+            aValues.foreground = 1;
+            aValues.background = 0;
         }
 
         aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
@@ -943,7 +965,8 @@ ImplSalDDB::ImplSalDDB(
         if( 1 == mnDepth )
         {
             nValues |= ( GCForeground | GCBackground );
-            aValues.foreground = 1, aValues.background = 0;
+            aValues.foreground = 1;
+            aValues.background = 0;
         }
 
         aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
@@ -1080,7 +1103,8 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uL
     if( bFound )
     {
         mnTotalSize -= pObj->mnMemSize;
-        pObj->mnMemSize = nMemSize, pObj->mnFlags = nFlags;
+        pObj->mnMemSize = nMemSize;
+        pObj->mnFlags = nFlags;
     }
     else
         maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, nFlags ) );

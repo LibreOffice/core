@@ -332,13 +332,15 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
         if( nComp < 0 )
         {
             // decompression failed, must be an uncompressed stream after all
-            delete mpMemStream, mpMemStream = nullptr;
+            delete mpMemStream;
+            mpMemStream = nullptr;
             mpFileStream->Seek( 0 );
         }
         else
         {
             // compression successful, can get rid of file stream
-            delete mpFileStream, mpFileStream = nullptr;
+            delete mpFileStream;
+            mpFileStream = nullptr;
             mpMemStream->Seek( 0 );
         }
     }
@@ -346,8 +348,10 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
 
 void PPDDecompressStream::Close()
 {
-    delete mpMemStream, mpMemStream = nullptr;
-    delete mpFileStream, mpFileStream = nullptr;
+    delete mpMemStream;
+    mpMemStream = nullptr;
+    delete mpFileStream;
+    mpFileStream = nullptr;
 }
 
 bool PPDDecompressStream::IsOpen() const

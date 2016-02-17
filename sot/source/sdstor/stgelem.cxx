@@ -221,39 +221,65 @@ void StgHeader::SetFATPage( short n, sal_Int32 nb )
     if( n >= 0 && n < cFATPagesInHeader )
     {
         if( m_nMasterFAT[ n ] != nb )
-            m_bDirty = sal_uInt8(true), m_nMasterFAT[ n ] = nb;
+        {
+            m_bDirty = sal_uInt8(true);
+            m_nMasterFAT[ n ] = nb;
+        }
     }
 }
 
 void StgHeader::SetTOCStart( sal_Int32 n )
 {
-    if( n != m_nTOCstrm ) m_bDirty = sal_uInt8(true), m_nTOCstrm = n;
+    if( n != m_nTOCstrm )
+    {
+        m_bDirty = sal_uInt8(true);
+        m_nTOCstrm = n;
+    }
 }
 
 void StgHeader::SetDataFATStart( sal_Int32 n )
 {
-    if( n != m_nDataFAT ) m_bDirty = sal_uInt8(true), m_nDataFAT = n;
+    if( n != m_nDataFAT )
+    {
+        m_bDirty = sal_uInt8(true);
+        m_nDataFAT = n;
+    }
 }
 
 void StgHeader::SetDataFATSize( sal_Int32 n )
 {
-    if( n != m_nDataFATSize ) m_bDirty = sal_uInt8(true), m_nDataFATSize = n;
+    if( n != m_nDataFATSize )
+    {
+        m_bDirty = sal_uInt8(true);
+        m_nDataFATSize = n;
+    }
 }
 
 void StgHeader::SetFATSize( sal_Int32 n )
 {
-    if( n != m_nFATSize ) m_bDirty = sal_uInt8(true), m_nFATSize = n;
+    if( n != m_nFATSize )
+    {
+        m_bDirty = sal_uInt8(true);
+        m_nFATSize = n;
+    }
 }
 
 void StgHeader::SetFATChain( sal_Int32 n )
 {
     if( n != m_nMasterChain )
-        m_bDirty = sal_uInt8(true), m_nMasterChain = n;
+    {
+        m_bDirty = sal_uInt8(true);
+        m_nMasterChain = n;
+    }
 }
 
 void StgHeader::SetMasters( sal_Int32 n )
 {
-    if( n != m_nMaster ) m_bDirty = sal_uInt8(true), m_nMaster = n;
+    if( n != m_nMaster )
+    {
+        m_bDirty = sal_uInt8(true);
+        m_nMaster = n;
+    }
 }
 
 ///////////////////////////// class StgEntry

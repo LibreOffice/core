@@ -73,7 +73,8 @@ Control::~Control()
 
 void Control::dispose()
 {
-    delete mpControlData, mpControlData = nullptr;
+    delete mpControlData;
+    mpControlData = nullptr;
     Window::dispose();
 }
 

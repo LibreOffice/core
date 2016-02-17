@@ -80,19 +80,24 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
     switch( rItem.Which() )
     {
     case RES_CHRATR_FONTSIZE:
-        nWhCJK = RES_CHRATR_CJK_FONTSIZE, nWhCTL = RES_CHRATR_CTL_FONTSIZE;
+        nWhCJK = RES_CHRATR_CJK_FONTSIZE;
+        nWhCTL = RES_CHRATR_CTL_FONTSIZE;
         break;
     case RES_CHRATR_FONT:
-        nWhCJK = RES_CHRATR_CJK_FONT, nWhCTL = RES_CHRATR_CTL_FONT;
+        nWhCJK = RES_CHRATR_CJK_FONT;
+        nWhCTL = RES_CHRATR_CTL_FONT;
         break;
     case RES_CHRATR_LANGUAGE:
-        nWhCJK = RES_CHRATR_CJK_LANGUAGE, nWhCTL = RES_CHRATR_CTL_LANGUAGE;
+        nWhCJK = RES_CHRATR_CJK_LANGUAGE;
+        nWhCTL = RES_CHRATR_CTL_LANGUAGE;
         break;
     case RES_CHRATR_POSTURE:
-        nWhCJK = RES_CHRATR_CJK_POSTURE, nWhCTL = RES_CHRATR_CTL_POSTURE;
+        nWhCJK = RES_CHRATR_CJK_POSTURE;
+        nWhCTL = RES_CHRATR_CTL_POSTURE;
         break;
     case RES_CHRATR_WEIGHT:
-        nWhCJK = RES_CHRATR_CJK_WEIGHT, nWhCTL = RES_CHRATR_CTL_WEIGHT;
+        nWhCJK = RES_CHRATR_CJK_WEIGHT;
+        nWhCTL = RES_CHRATR_CTL_WEIGHT;
         break;
     }
 

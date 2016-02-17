@@ -841,7 +841,10 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
     SCCOL nCol;
 
     if( *p == '$' )
-        *nFlags |= SCA_COL_ABSOLUTE, p++;
+    {
+        *nFlags |= SCA_COL_ABSOLUTE;
+        p++;
+    }
 
     if( !rtl::isAsciiAlpha( *p ) )
         return nullptr;
@@ -866,7 +869,10 @@ static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
     long int n;
 
     if( *p == '$' )
-        *nFlags |= SCA_ROW_ABSOLUTE, p++;
+    {
+        *nFlags |= SCA_ROW_ABSOLUTE;
+        p++;
+    }
 
     n = sal_Unicode_strtol( p, &pEnd ) - 1;
     if( nullptr == pEnd || p == pEnd || n < 0 || n > MAXROW )
@@ -1083,7 +1089,10 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
         if ( bExtDoc )
             nRes |= SCA_TAB_ABSOLUTE;
         if (*p == '$')
-            nRes |= SCA_TAB_ABSOLUTE, p++;
+        {
+            nRes |= SCA_TAB_ABSOLUTE;
+            p++;
+        }
 
         if (*p == '\'')
         {
@@ -1141,7 +1150,10 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     {
         nBits = SCA_VALID_COL;
         if (*p == '$')
-            nBits |= SCA_COL_ABSOLUTE, p++;
+        {
+            nBits |= SCA_COL_ABSOLUTE;
+            p++;
+        }
 
         if (rtl::isAsciiAlpha( *p ))
         {
@@ -1164,7 +1176,10 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     {
         nBits = SCA_VALID_ROW;
         if (*p == '$')
-            nBits |= SCA_ROW_ABSOLUTE, p++;
+        {
+            nBits |= SCA_ROW_ABSOLUTE;
+            p++;
+        }
         if( !rtl::isAsciiDigit( *p ) )
         {
             nBits = 0;

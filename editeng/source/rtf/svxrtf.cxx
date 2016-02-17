@@ -432,7 +432,9 @@ void SvxRTFParser::ReadColorTable()
                     sal_uInt8(-1) == nRed && sal_uInt8(-1) == nGreen && sal_uInt8(-1) == nBlue )
                     pColor->SetColor( COL_AUTO );
                 aColorTbl.push_back( pColor );
-                nRed = 0, nGreen = 0, nBlue = 0;
+                nRed = 0;
+                nGreen = 0;
+                nBlue = 0;
 
                 // Color has been completely read,
                 // so this is still a stable status

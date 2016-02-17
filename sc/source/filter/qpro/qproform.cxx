@@ -239,7 +239,12 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
     else
         return ConvErrCount;
 
-    i = 0, nIntCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0, nStringCount =0;
+    i = 0;
+    nIntCount = 0;
+    nFloatCount = 0;
+    nDLLCount = 0;
+    nArgCount = 0;
+    nStringCount = 0;
 
     while( i < nRef && ( nFmla[ i ] != 0x03 ) )
     {

@@ -39,9 +39,8 @@ using namespace com::sun::star;
 ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {
-    pParser     = pPrsrs,
+    pParser     = pPrsrs;
     eState      = eSt;
-
     nToken      = 0;
     nTokenValue = 0;
     pAttrs      = nullptr;

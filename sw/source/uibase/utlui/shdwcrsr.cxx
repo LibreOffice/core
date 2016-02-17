@@ -61,7 +61,8 @@ void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, bool bLeft )
     while( aPt1.Y() <= aPt2.Y() )
     {
         pWin->DrawLine( aPt1, aPt2 );
-        aPt1.Y()++, aPt2.Y()--;
+        aPt1.Y()++;
+        aPt2.Y()--;
         aPt2.X() = aPt1.X() += nDiff;
     }
 }

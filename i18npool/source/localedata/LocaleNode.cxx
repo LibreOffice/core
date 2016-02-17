@@ -452,11 +452,17 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         ++nSavErr;  // format codes not affected
     }
     if (aTimeSep == aTime100Sep)
-        ++nWarn, fprintf( stderr, "Warning: %s\n",
+    {
+        ++nWarn;
+        fprintf( stderr, "Warning: %s\n",
                 "Time100SecSeparator equals TimeSeparator, this is probably an error.");
+    }
     if (aDecSep != aTime100Sep)
-        ++nWarn, fprintf( stderr, "Warning: %s\n",
+    {
+        ++nWarn;
+        fprintf( stderr, "Warning: %s\n",
                 "Time100SecSeparator is different from DecimalSeparator, this may be correct or not. Intended?");
+    }
     if (nSavErr != nError || nWarn)
         fprintf( stderr, "Warning: %s\n",
                 "Don't forget to adapt corresponding FormatCode elements when changing separators.");

@@ -65,8 +65,11 @@ void SwUndRng::SetValues( const SwPaM& rPam )
         nEndContent = pEnd->nContent.GetIndex();
     }
     else
+    {
         // no selection !!
-        nEndNode = 0, nEndContent = COMPLETE_STRING;
+        nEndNode = 0;
+        nEndContent = COMPLETE_STRING;
+    }
 
     nSttNode = pStt->nNode.GetIndex();
     nSttContent = pStt->nContent.GetIndex();
@@ -825,7 +828,10 @@ void SwUndoSaveSection::SaveSection(
 
     pRedlSaveData = new SwRedlineSaveDatas;
     if( !SwUndo::FillSaveData( aPam, *pRedlSaveData ))
-        delete pRedlSaveData, pRedlSaveData = nullptr;
+    {
+        delete pRedlSaveData;
+        pRedlSaveData = nullptr;
+    }
 
     nStartPos = rRange.aStart.GetIndex();
 
@@ -879,7 +885,8 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
         if( pRedlSaveData )
         {
             SwUndo::SetSaveData( *pDoc, *pRedlSaveData );
-            delete pRedlSaveData, pRedlSaveData = nullptr;
+            delete pRedlSaveData;
+            pRedlSaveData = nullptr;
         }
     }
 }

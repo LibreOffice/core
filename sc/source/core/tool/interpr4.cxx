@@ -477,7 +477,10 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         nPos += 10 + nStrLen + 1;
                         sal_uInt8* q = ( pCellArr + nPos );
                         if( (nStrLen & 1) == 0 )
-                            *q++ = 0, nPos++;
+                        {
+                            *q++ = 0;
+                            nPos++;
+                        }
                         p = reinterpret_cast<sal_uInt16*>( pCellArr + nPos );
                         nCount++;
                     }
@@ -593,7 +596,10 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             nPos += 2 + nStrLen + 1;
                             sal_uInt8* q = ( pCellArr + nPos );
                             if( (nStrLen & 1) == 0 )
-                                *q++ = 0, nPos++;
+                            {
+                                *q++ = 0;
+                                nPos++;
+                            }
                         }
                         nCount++;
                         p = reinterpret_cast<sal_uInt16*>( pCellArr + nPos );
@@ -891,11 +897,20 @@ void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
         rTab = rRef.Tab();
 
     if( !ValidCol( rCol) || rRef.IsColDeleted() )
-        SetError( errNoRef ), rCol = 0;
+    {
+        SetError( errNoRef );
+        rCol = 0;
+    }
     if( !ValidRow( rRow) || rRef.IsRowDeleted() )
-        SetError( errNoRef ), rRow = 0;
+    {
+        SetError( errNoRef );
+        rRow = 0;
+    }
     if( !ValidTab( rTab, pDok->GetTableCount() - 1) || rRef.IsTabDeleted() )
-        SetError( errNoRef ), rTab = 0;
+    {
+        SetError( errNoRef );
+        rTab = 0;
+    }
 }
 
 void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
@@ -3198,7 +3213,10 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                         pVar->PutString(aCell.mpFormula->GetString().getString());
                 }
                 else
-                    SetError( nErr ), bOk = false;
+                {
+                    SetError( nErr );
+                    bOk = false;
+                }
                 break;
             default :
                 pVar->PutDouble( 0.0 );

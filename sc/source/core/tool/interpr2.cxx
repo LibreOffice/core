@@ -68,7 +68,11 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     // performance penalty.
     sal_Int16 nY, nM, nD;
     if (bStrict)
-        nY = nYear, nM = nMonth, nD = nDay;
+    {
+        nY = nYear;
+        nM = nMonth;
+        nD = nDay;
+    }
     else
     {
         if (nMonth > 0)
@@ -2154,7 +2158,8 @@ void ScInterpreter::ScIntersect()
                 xt[i]->GetRefList()->push_back( aRef);
             }
         }
-        x1 = xt[0], x2 = xt[1];
+        x1 = xt[0];
+        x2 = xt[1];
 
         ScTokenRef xRes = new ScRefListToken;
         ScRefList* pRefList = xRes->GetRefList();

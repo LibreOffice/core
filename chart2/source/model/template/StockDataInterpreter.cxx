@@ -146,7 +146,8 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-first");
-            ++nSourceIndex, ++nSeqIdx;
+            ++nSourceIndex;
+            ++nSeqIdx;
         }
         else
             aSequences[nCandleStickGroupIndex][nLabeledSeqIdx].realloc( 3 );
@@ -154,17 +155,20 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-min");
-        ++nSourceIndex, ++nSeqIdx;
+        ++nSourceIndex;
+        ++nSeqIdx;
 
         aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-max");
-        ++nSourceIndex, ++nSeqIdx;
+        ++nSourceIndex;
+        ++nSeqIdx;
 
         aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-last");
-        ++nSourceIndex, ++nSeqIdx;
+        ++nSourceIndex;
+        ++nSeqIdx;
     }
 
     // 3. create series with remaining sequences
@@ -194,7 +198,8 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-min");
-        ++nSourceIndex, ++nSeqIdx;
+        ++nSourceIndex;
+        ++nSeqIdx;
 
         // 2. high
         if( nSeqIdx < nRemaining )
@@ -202,7 +207,8 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-max");
-            ++nSourceIndex, ++nSeqIdx;
+            ++nSourceIndex;
+            ++nSeqIdx;
         }
 
         // 3. close
@@ -212,7 +218,8 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-last");
-            ++nSourceIndex, ++nSeqIdx;
+            ++nSourceIndex;
+            ++nSeqIdx;
         }
 
         // 4. open

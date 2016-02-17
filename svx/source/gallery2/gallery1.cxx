@@ -621,7 +621,8 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
                         if( pIStm->GetError() )
                         {
-                            delete pTheme, pTheme = nullptr;
+                            delete pTheme;
+                            pTheme = nullptr;
                         }
                     }
                     catch (const css::ucb::ContentCreationException&)

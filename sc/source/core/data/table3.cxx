@@ -1156,7 +1156,8 @@ void ScTable::SortReorderByRow(
 
         aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
 
-        it = aSpans.begin(), itEnd = aSpans.end();
+        it = aSpans.begin();
+        itEnd = aSpans.end();
         for (; it != itEnd; ++it)
             SetRowFiltered(it->mnRow1, it->mnRow2, true);
     }
@@ -1353,7 +1354,8 @@ void ScTable::SortReorderByRowRefUpdate(
 
         aSpans = sc::toSpanArray<SCROW,sc::RowSpan>(aRowFlags.maRowsFiltered, nRow1);
 
-        it = aSpans.begin(), itEnd = aSpans.end();
+        it = aSpans.begin();
+        itEnd = aSpans.end();
         for (; it != itEnd; ++it)
             SetRowFiltered(it->mnRow1, it->mnRow2, true);
     }

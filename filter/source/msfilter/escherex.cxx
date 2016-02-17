@@ -4453,7 +4453,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 rPicOutStrm.WriteUInt32( nPos - nAtomSize );
                 rPicOutStrm.Seek( nPos );
             }
-            nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = nullptr;
+            nBlibId = ImplInsertBlib( p_EscherBlibEntry );
+            p_EscherBlibEntry = nullptr;
         }
     }
     delete p_EscherBlibEntry;

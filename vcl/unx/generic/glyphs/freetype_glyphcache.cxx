@@ -950,7 +950,9 @@ void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
     if( aBbox.yMin > aBbox.yMax )   // circumvent freetype bug
     {
-        int t=aBbox.yMin; aBbox.yMin=aBbox.yMax, aBbox.yMax=t;
+        int t=aBbox.yMin;
+        aBbox.yMin=aBbox.yMax;
+        aBbox.yMax=t;
     }
 
     rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
@@ -1265,7 +1267,8 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     {
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
-        aMatrix.xy = 0x6000L, aMatrix.yx = 0;
+        aMatrix.xy = 0x6000L;
+        aMatrix.yx = 0;
         FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
     }
 

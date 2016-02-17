@@ -228,7 +228,11 @@ void SbiParser::Open()
             eTok = Next();
             if( eTok == READ )
             {
-                if( Peek() == WRITE ) Next(), nMode |= StreamMode::SHARE_DENYALL;
+                if( Peek() == WRITE )
+                {
+                    Next();
+                    nMode |= StreamMode::SHARE_DENYALL;
+                }
                 else nMode |= StreamMode::SHARE_DENYREAD;
             }
             else if( eTok == WRITE )

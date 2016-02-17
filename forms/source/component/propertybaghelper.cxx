@@ -80,7 +80,8 @@ namespace frm
 
     PropertyBagHelper::~PropertyBagHelper()
     {
-        delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = nullptr;
+        delete m_pPropertyArrayHelper;
+        m_pPropertyArrayHelper = nullptr;
     }
 
 
@@ -99,7 +100,8 @@ namespace frm
 
     void PropertyBagHelper::impl_nts_invalidatePropertySetInfo()
     {
-        delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = nullptr;
+        delete m_pPropertyArrayHelper;
+        m_pPropertyArrayHelper = nullptr;
     }
 
 

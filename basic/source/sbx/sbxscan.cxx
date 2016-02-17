@@ -326,8 +326,16 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     nExp = 0;
     if( nNum > 0.0 )
     {
-        while( nNum <   1.0 ) nNum *= 10.0, nExp--;
-        while( nNum >= 10.0 ) nNum /= 10.0, nExp++;
+        while( nNum <   1.0 )
+        {
+            nNum *= 10.0;
+            nExp--;
+        }
+        while( nNum >= 10.0 )
+        {
+            nNum /= 10.0;
+            nExp++;
+        }
     }
     if( !bFix && !nExpWidth )
         nDig = nDig + nExp;
@@ -393,7 +401,11 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         nExpWidth -= 2;
         *pBuf++ = 'E';
         *pBuf++ =( nExp < 0 ) ?( (nExp = -nExp ), '-' ) : '+';
-        while( nExpWidth > 3 ) *pBuf++ = '0', nExpWidth--;
+        while( nExpWidth > 3 )
+        {
+            *pBuf++ = '0';
+            nExpWidth--;
+        }
         if( nExp >= 100 || nExpWidth == 3 )
         {
             *pBuf++ = sal::static_int_cast< char >(nExp/100 + '0');
@@ -431,7 +443,11 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
     // remove trailing zeros
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
     q = p; p--;
-    while( nPrec && *p == '0' ) nPrec--, p--;
+    while( nPrec && *p == '0' )
+    {
+        nPrec--;
+        p--;
+    }
     if( *p == cDecimalSep ) p--;
     while( *q ) *++p = *q++;
     *++p = 0;

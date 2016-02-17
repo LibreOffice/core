@@ -563,10 +563,12 @@ char *get_line(struct filepointer *filep)
 
     for(bol = p--; ++p < eof; ) {
         if (*p == '/' && *(p+1) == '*') { /* consume comments */
-            *p++ = ' ', *p++ = ' ';
+            *p++ = ' ';
+            *p++ = ' ';
             while (*p) {
                 if (*p == '*' && *(p+1) == '/') {
-                    *p++ = ' ', *p = ' ';
+                    *p++ = ' ';
+                    *p = ' ';
                     break;
                 }
                 else if (*p == '\n')
@@ -576,7 +578,8 @@ char *get_line(struct filepointer *filep)
             continue;
         }
         else if (*p == '/' && *(p+1) == '/') { /* consume comments */
-            *p++ = ' ', *p++ = ' ';
+            *p++ = ' ';
+            *p++ = ' ';
             while (*p && *p != '\n')
                 *p++ = ' ';
             if ( *p == '\n' )

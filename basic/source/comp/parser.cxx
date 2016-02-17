@@ -437,7 +437,10 @@ bool SbiParser::Parse()
                 (this->*( p->Func ) )();
                 SbxError nSbxErr = SbxBase::GetError();
                 if( nSbxErr )
-                    SbxBase::ResetError(), Error( (SbError)nSbxErr );
+                {
+                    SbxBase::ResetError();
+                    Error( (SbError)nSbxErr );
+                }
             }
         }
         else
@@ -681,7 +684,11 @@ void SbiParser::DefXXX()
             else
             {
                 ch2 = rtl::toAsciiUpperCase(aSym[0]);
-                if( ch2 < ch1 ) Error( ERRCODE_BASIC_SYNTAX ), ch2 = 0;
+                if( ch2 < ch1 )
+                {
+                    Error( ERRCODE_BASIC_SYNTAX );
+                    ch2 = 0;
+                }
             }
         }
         if (!ch2) ch2 = ch1;

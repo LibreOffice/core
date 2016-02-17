@@ -169,11 +169,11 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 OUString sValue("0");
                 sValue += sComma;
                 sValue += pFilter->maType;
-                sValue += sComma,
+                sValue += sComma;
                 sValue += pFilter->maDocumentService;
-                sValue += sComma,
+                sValue += sComma;
                 sValue += sFilterAdaptorService;
-                sValue += sComma,
+                sValue += sComma;
                 sValue += OUString::number( pFilter->maFlags );
                 sValue += sComma;
                 sValue += sXSLTFilterService;

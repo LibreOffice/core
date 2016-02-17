@@ -1700,7 +1700,10 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         if( IsError( aReader.Read( *pRead )) )
             nResId = STR_ERROR_CLPBRD_READ;
         else
-            nResId = 0, bRet = true;
+        {
+            nResId = 0;
+            bRet = true;
+        }
 
         rSh.SetChgLnk( aOldLink );
         if( bRet )

@@ -35,7 +35,8 @@ FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
 FixedMemPool::~FixedMemPool()
 {
     SAL_INFO("tools.memtools","FixedMemPool::dtor(\"" << m_pTypeName << "\"): " << m_pImpl);
-    rtl_cache_destroy (reinterpret_cast<rtl_cache_type*>(m_pImpl)), m_pImpl = nullptr;
+    rtl_cache_destroy (reinterpret_cast<rtl_cache_type*>(m_pImpl));
+    m_pImpl = nullptr;
 }
 
 void* FixedMemPool::Alloc()

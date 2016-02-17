@@ -341,7 +341,8 @@ void SfxModule::DestroyModules_Impl()
             SfxModule* pMod = rModules[nPos];
             delete pMod;
         }
-        delete pModules, pModules = nullptr;
+        delete pModules;
+        pModules = nullptr;
     }
 }
 

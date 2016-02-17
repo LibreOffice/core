@@ -214,7 +214,10 @@ void ImpPutString( SbxValues* p, const OUString* n )
                     *p->pOUString = *n;
             }
             else
-                delete p->pOUString, p->pOUString = nullptr;
+            {
+                delete p->pOUString;
+                p->pOUString = nullptr;
+            }
             break;
         case SbxOBJECT:
         {

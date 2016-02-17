@@ -225,7 +225,10 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     if( eCurTok == _CONST_ )
         bConst = true;
     else if( Peek() == _CONST_ )
-        Next(), bConst = true;
+    {
+        Next();
+        bConst = true;
+    }
 
     // #110004 It can also be a sub/function
     if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ||
@@ -1225,7 +1228,8 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     }
     else
     {
-        aPublics.Add( pDef ), pProc = pDef;
+        aPublics.Add( pDef );
+        pProc = pDef;
     }
     if( !pProc )
     {

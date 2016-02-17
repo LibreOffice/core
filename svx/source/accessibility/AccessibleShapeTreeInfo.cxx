@@ -56,7 +56,7 @@ AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleSha
         mxDocumentWindow = rInfo.mxDocumentWindow;
         mxModelBroadcaster = rInfo.mxModelBroadcaster;
         mpView = rInfo.mpView;
-        mxController = rInfo.mxController,
+        mxController = rInfo.mxController;
         mpWindow = rInfo.mpWindow;
         mpViewForwarder = rInfo.mpViewForwarder;
     }

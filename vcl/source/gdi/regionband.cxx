@@ -490,7 +490,10 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
                 if ( nD < 0L )
                     nD += nDY2;
                 else
-                    nD += nDYX, nY += nYInc;
+                {
+                    nD += nDYX;
+                    nY += nYInc;
+                }
             }
         }
         else
@@ -506,7 +509,10 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
                 if ( nD < 0L )
                     nD += nDY2;
                 else
-                    nD += nDYX, nX += nXInc;
+                {
+                    nD += nDYX;
+                    nX += nXInc;
+                }
             }
         }
 

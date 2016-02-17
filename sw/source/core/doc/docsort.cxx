@@ -90,11 +90,16 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
 
 void SwSortElement::Finit()
 {
-    delete pOptions, pOptions = nullptr;
-    delete pLocale, pLocale = nullptr;
-    delete pLastAlgorithm, pLastAlgorithm = nullptr;
-    delete pSortCollator, pSortCollator = nullptr;
-    delete pLclData, pLclData = nullptr;
+    delete pOptions;
+    pOptions = nullptr;
+    delete pLocale;
+    pLocale = nullptr;
+    delete pLastAlgorithm;
+    pLastAlgorithm = nullptr;
+    delete pSortCollator;
+    pSortCollator = nullptr;
+    delete pLclData;
+    pLclData = nullptr;
     pDoc = nullptr;
     pBox = nullptr;
 }
@@ -128,9 +133,15 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
 
     const SwSortKey* pSrtKey = pOptions->aKeys[ nKey ];
     if( pSrtKey->eSortOrder == SRT_ASCENDING )
-        pOrig = this, pCmp = &rCmp;
+    {
+        pOrig = this;
+        pCmp = &rCmp;
+    }
     else
-        pOrig = &rCmp, pCmp = this;
+    {
+        pOrig = &rCmp;
+        pCmp = this;
+    }
 
     if( pSrtKey->bIsNumeric )
     {
@@ -364,7 +375,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         else
         {
             getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, USHRT_MAX );
-            delete pRedlPam, pRedlPam = nullptr;
+            delete pRedlPam;
+            pRedlPam = nullptr;
         }
     }
 
@@ -455,7 +467,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         if( pRedlUndo )
             pRedlUndo->SetOffset( aSttIdx );
 
-        delete pRedlPam, pRedlPam = nullptr;
+        delete pRedlPam;
+        pRedlPam = nullptr;
     }
     GetIDocumentUndoRedo().DoUndo( bUndo );
     if( bUndo )

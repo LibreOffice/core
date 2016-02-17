@@ -59,7 +59,7 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPa
     get(m_pEdFormulaCell, "formulaedit");
     m_pEdFormulaCell->SetReferences(this, m_pFtFormulaCell);
     get(m_pRBFormulaCell, "formulabutton");
-    m_pRBFormulaCell->SetReferences(this, m_pEdFormulaCell),
+    m_pRBFormulaCell->SetReferences(this, m_pEdFormulaCell);
     get(m_pEdTargetVal, "target");
     get(m_pFtVariableCell, "vartext");
     get(m_pEdVariableCell, "varedit");

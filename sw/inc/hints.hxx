@@ -237,7 +237,7 @@ public:
     const SwPageFrame *GetOrigPage()      { return m_pOrigPage;}
     const SwFrame *GetFrame()               { return m_pFrame; }
     void  SetInfo( const SwPageFrame *pPg,
-                   const SwFrame *pF )    { m_pFrame = pF, m_pPage = pPg; }
+                   const SwFrame *pF )    { m_pFrame = pF; m_pPage = pPg; }
 };
 
 class SwFindNearestNode : public SwMsgPoolItem
