@@ -12,14 +12,15 @@
 
 #include <sfx2/sidebar/UnoPanels.hxx>
 
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/DeckTitleBar.hxx>
-#include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/abstractbar/DeckTitleBar.hxx>
+#include <sfx2/abstractbar/Deck.hxx>
 
 #include <vcl/svapp.hxx>
 
 using namespace css;
+using namespace ::sfx2::abstractbar;
 using namespace ::sfx2::sidebar;
 
 SfxUnoDeck::SfxUnoDeck(const uno::Reference<frame::XFrame>& rFrame, const OUString& deckId):

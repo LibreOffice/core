@@ -35,7 +35,7 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 
 #define ScOleObjectShell
 #include "scslots.hxx"
@@ -56,7 +56,7 @@ ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_OLEOBEJCTSH);
     SetName("OleObject");
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OLE));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_OLE));
 }
 
 ScOleObjectShell::~ScOleObjectShell()

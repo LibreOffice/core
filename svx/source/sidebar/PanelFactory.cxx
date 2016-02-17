@@ -28,8 +28,8 @@
 #include "insert/InsertPropertyPanel.hxx"
 #include "GalleryControl.hxx"
 #include "EmptyPanel.hxx"
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/Tools.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/templdlg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -116,7 +116,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
-    ::sfx2::sidebar::EnumContext aContext (
+    ::sfx2::abstractbar::EnumContext aContext (
         aArguments.getOrDefault("ApplicationName", OUString()),
         aArguments.getOrDefault("ContextName", OUString()));
 
@@ -191,7 +191,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     if (pControl)
     {
-        return sfx2::sidebar::SidebarPanelBase::Create(
+        return sfx2::abstractbar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
             pControl,

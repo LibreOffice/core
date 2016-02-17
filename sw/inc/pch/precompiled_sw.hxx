@@ -416,7 +416,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

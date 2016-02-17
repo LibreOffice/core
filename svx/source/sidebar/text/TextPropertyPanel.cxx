@@ -65,7 +65,7 @@ VclPtr<vcl::Window> TextPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const ::sfx2::abstractbar::EnumContext& rContext)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to TextPropertyPanel::Create", nullptr, 0);
@@ -81,7 +81,7 @@ VclPtr<vcl::Window> TextPropertyPanel::Create (
                 rContext);
 }
 
-TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
+TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::abstractbar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
@@ -137,7 +137,7 @@ void TextPropertyPanel::dispose()
 }
 
 void TextPropertyPanel::HandleContextChange (
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const ::sfx2::abstractbar::EnumContext& rContext)
 {
     if (maContext == rContext)
         return;

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_ALIGNMENTPROPERTYPANEL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_ALIGNMENTPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -37,8 +37,8 @@ namespace sc { namespace sidebar {
 
 class AlignmentPropertyPanel
 :   public PanelLayout,
-    public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::IContextChangeReceiver,
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     static VclPtr<vcl::Window> Create(
@@ -50,7 +50,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -82,18 +82,18 @@ private:
     VclPtr<CheckBox>                                   mpCBStacked;
     VclPtr<VclHBox>                                    mpTextOrientBox;
 
-    ::sfx2::sidebar::ControllerItem             maAlignHorControl;
-    ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
-    ::sfx2::sidebar::ControllerItem             maMergeCellControl;
-    ::sfx2::sidebar::ControllerItem             maWrapTextControl;
-    ::sfx2::sidebar::ControllerItem             maAngleControl;
-    ::sfx2::sidebar::ControllerItem             maVrtStackControl;
-    ::sfx2::sidebar::ControllerItem             maRefEdgeControl;
+    ::sfx2::abstractbar::ControllerItem             maAlignHorControl;
+    ::sfx2::abstractbar::ControllerItem             maLeftIndentControl;
+    ::sfx2::abstractbar::ControllerItem             maMergeCellControl;
+    ::sfx2::abstractbar::ControllerItem             maWrapTextControl;
+    ::sfx2::abstractbar::ControllerItem             maAngleControl;
+    ::sfx2::abstractbar::ControllerItem             maVrtStackControl;
+    ::sfx2::abstractbar::ControllerItem             maRefEdgeControl;
 
     /// bitfield
     bool                                        mbMultiDisable : 1;
 
-    ::sfx2::sidebar::EnumContext                maContext;
+    ::sfx2::abstractbar::EnumContext                maContext;
     SfxBindings*                                mpBindings;
 
     DECL_LINK_TYPED( MFLeftIndentMdyHdl, Edit&, void );

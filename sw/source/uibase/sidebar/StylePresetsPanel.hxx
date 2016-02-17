@@ -17,7 +17,7 @@
 #include <svx/sidebar/Popup.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 
 #include <sfx2/objsh.hxx>
 
@@ -43,7 +43,7 @@
 namespace sw { namespace sidebar {
 
 class StylePresetsPanel : public PanelLayout,
-                       public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+                       public sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
     friend class VclPtr<StylePresetsPanel>;
 public:

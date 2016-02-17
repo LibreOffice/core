@@ -22,7 +22,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 
 /** get the decks
 */

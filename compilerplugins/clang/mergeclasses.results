@@ -301,8 +301,8 @@ merge sd::BroadcastHelperOwner with sd::DrawController
 merge sd::FuOutline with sd::FuOutlineText
 merge sd::IBluetoothSocket with sd::BufferedStreamSocket
 merge sd::ICustomAnimationListController with sd::CustomAnimationPane
-merge sd::sidebar::IDisposable with sd::sidebar::PanelBase
-merge sd::sidebar::ISidebarReceiver with sd::sidebar::PanelBase
+merge sd::sidebar::IDisposable with sd::abstractbar::PanelBase
+merge sd::sidebar::ISidebarReceiver with sd::abstractbar::PanelBase
 merge sd::sidebar::MasterPageContainerFiller::ContainerAdapter with sd::sidebar::MasterPageContainer::Implementation
 merge sd::sidebar::MasterPageContainerQueue::ContainerAdapter with sd::sidebar::MasterPageContainer::Implementation
 merge sd::sidebar::PreviewValueSet with sd::sidebar::MasterPagesSelector

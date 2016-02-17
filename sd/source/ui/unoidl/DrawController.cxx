@@ -45,7 +45,7 @@
 #include <svx/fmshell.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 
 #include <memory>
@@ -55,7 +55,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::sfx2::sidebar::EnumContext;
+using ::sfx2::abstractbar::EnumContext;
 
 namespace sd {
 

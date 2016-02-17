@@ -19,7 +19,7 @@
 #include <svx/unomid.hxx>
 
 #include <svx/tbcontrl.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/abstractbar/SidebarToolBox.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -28,7 +28,7 @@ namespace chart { namespace sidebar {
 
 namespace {
 
-SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pToolBoxColor)
+SvxColorToolBoxControl* getColorToolBoxControl(sfx2::abstractbar::SidebarToolBox* pToolBoxColor)
 {
     css::uno::Reference<css::frame::XToolbarController> xController = pToolBoxColor->GetFirstController();
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());

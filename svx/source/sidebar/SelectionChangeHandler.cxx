@@ -21,14 +21,14 @@
 #include "svx/sidebar/ContextChangeEventMultiplexer.hxx"
 #include "svx/svdmrkv.hxx"
 
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/shell.hxx>
 
 
 using namespace css;
 using namespace css::uno;
 
-using namespace sfx2::sidebar;
+using namespace sfx2::abstractbar;
 
 namespace svx { namespace sidebar {
 

@@ -21,7 +21,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objitem.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <helpid.h>
@@ -52,7 +52,7 @@ SwOleShell::SwOleShell(SwView &_rView) :
 {
     SetName("Object");
     SetHelpId(SW_OLESHELL);
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OLE));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_OLE));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

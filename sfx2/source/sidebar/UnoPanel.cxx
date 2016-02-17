@@ -10,16 +10,17 @@
 
 #include <sfx2/sidebar/UnoPanel.hxx>
 
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 
-#include <sfx2/sidebar/PanelTitleBar.hxx>
-#include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/abstractbar/PanelTitleBar.hxx>
+#include <sfx2/abstractbar/Panel.hxx>
+#include <sfx2/abstractbar/Deck.hxx>
 
 #include <vcl/svapp.hxx>
 
 using namespace css;
+using namespace ::sfx2::abstractbar;
 using namespace ::sfx2::sidebar;
 
 SfxUnoPanel::SfxUnoPanel(const uno::Reference<frame::XFrame>& rFrame, const OUString& panelId, const OUString& deckId):

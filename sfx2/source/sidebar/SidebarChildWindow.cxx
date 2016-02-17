@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/TabBar.hxx>
+#include <sfx2/abstractbar/TabBar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
@@ -25,6 +25,8 @@
 #include "helpid.hrc"
 #include <sfx2/dockwin.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
+
+using namespace sfx2::abstractbar;
 
 namespace sfx2 { namespace sidebar {
 

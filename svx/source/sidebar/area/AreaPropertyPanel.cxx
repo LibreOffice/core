@@ -20,7 +20,7 @@
 #include "AreaTransparencyGradientControl.hxx"
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include <AreaPropertyPanel.hxx>
 #include <AreaPropertyPanel.hrc>
 #include <svx/dialogs.hrc>

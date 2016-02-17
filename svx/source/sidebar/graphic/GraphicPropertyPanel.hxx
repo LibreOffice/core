@@ -20,8 +20,8 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_GRAPHIC_GRAPHICPROPERTYPANEL_HXX
 
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
 
@@ -35,7 +35,7 @@ namespace svx { namespace sidebar {
 
 class GraphicPropertyPanel
 :   public PanelLayout,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~GraphicPropertyPanel();
@@ -74,14 +74,14 @@ private:
     VclPtr<MetricField>                                        mpMtrBlue;
     VclPtr<MetricField>                                        mpMtrGamma;
 
-    ::sfx2::sidebar::ControllerItem                     maBrightControl;
-    ::sfx2::sidebar::ControllerItem                     maContrastControl;
-    ::sfx2::sidebar::ControllerItem                     maTransparenceControl;
-    ::sfx2::sidebar::ControllerItem                     maRedControl;
-    ::sfx2::sidebar::ControllerItem                     maGreenControl;
-    ::sfx2::sidebar::ControllerItem                     maBlueControl;
-    ::sfx2::sidebar::ControllerItem                     maGammaControl;
-    ::sfx2::sidebar::ControllerItem                     maModeControl;
+    ::sfx2::abstractbar::ControllerItem                     maBrightControl;
+    ::sfx2::abstractbar::ControllerItem                     maContrastControl;
+    ::sfx2::abstractbar::ControllerItem                     maTransparenceControl;
+    ::sfx2::abstractbar::ControllerItem                     maRedControl;
+    ::sfx2::abstractbar::ControllerItem                     maGreenControl;
+    ::sfx2::abstractbar::ControllerItem                     maBlueControl;
+    ::sfx2::abstractbar::ControllerItem                     maGammaControl;
+    ::sfx2::abstractbar::ControllerItem                     maModeControl;
 
     SfxBindings*                                        mpBindings;
 

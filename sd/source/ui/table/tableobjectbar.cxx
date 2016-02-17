@@ -25,7 +25,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
@@ -93,7 +93,7 @@ TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
     SetRepeatTarget( mpView );
     SetHelpId( SD_IF_SDDRAWTABLEOBJECTBAR );
     SetName( SD_RESSTR( RID_DRAW_TABLE_TOOLBOX ) );
-    SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
+    SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Table));
 }
 
 TableObjectBar::~TableObjectBar()

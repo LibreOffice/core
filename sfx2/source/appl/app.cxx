@@ -86,7 +86,7 @@
 #include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"
 #include "workwin.hxx"
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/stbitem.hxx>
@@ -616,11 +616,11 @@ ErrCode SfxApplication::CallBasic( const OUString& rCode, BasicManager* pMgr, Sb
 #endif
 }
 
-sfx2::sidebar::Theme & SfxApplication::GetSidebarTheme()
+sfx2::abstractbar::Theme & SfxApplication::GetSidebarTheme()
 {
     if (!pAppData_Impl->m_pSidebarTheme.is())
     {
-        pAppData_Impl->m_pSidebarTheme.set(new sfx2::sidebar::Theme);
+        pAppData_Impl->m_pSidebarTheme.set(new sfx2::abstractbar::Theme);
         pAppData_Impl->m_pSidebarTheme->InitializeTheme();
     }
     return *pAppData_Impl->m_pSidebarTheme;

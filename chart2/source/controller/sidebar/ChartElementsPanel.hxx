@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTELEMENTSPANEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTELEMENTSPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/sidebar/SidebarModelUpdate.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
@@ -40,8 +40,8 @@ class ChartController;
 namespace sidebar {
 
 class ChartElementsPanel : public PanelLayout,
-    public ::sfx2::sidebar::IContextChangeReceiver,
-    public sfx2::sidebar::SidebarModelUpdate,
+    public ::sfx2::abstractbar::IContextChangeReceiver,
+    public sfx2::abstractbar::SidebarModelUpdate,
     public ChartSidebarModifyListenerParent
 {
 public:
@@ -54,7 +54,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     // constructor/destuctor
     ChartElementsPanel(
@@ -98,7 +98,7 @@ private:
     VclPtr<ListBox> mpLBLegendPosition;
     VclPtr<VclHBox> mpBoxLegend;
 
-    ::sfx2::sidebar::EnumContext            maContext;
+    ::sfx2::abstractbar::EnumContext            maContext;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include <svx/sidebar/SidebarDialControl.hxx>
 #include <svx/dialogs.hrc>
@@ -41,7 +41,7 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
+using ::sfx2::abstractbar::Theme;
 
 const char UNO_FLIPHORIZONTAL[] = ".uno:FlipHorizontal";
 const char UNO_FLIPVERTICAL[]   = ".uno:FlipVertical";
@@ -255,7 +255,7 @@ void PosSizePropertyPanel::DataChanged(
 }
 
 void PosSizePropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const ::sfx2::abstractbar::EnumContext& rContext)
 {
     if (maContext == rContext)
     {

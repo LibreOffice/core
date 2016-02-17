@@ -24,7 +24,7 @@
 #include <unotools/viewoptions.hxx>
 #include <editeng/kernitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {
@@ -95,19 +95,19 @@ void TextCharacterSpacingControl::initial()
     {
         maVSSpacing->SetControlBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
         maVSSpacing->SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
         maVSSpacing->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
         maFTSpacing->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
         maFTBy->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
     }
     mpImg = new Image[5];
     mpImg[0] = Image(SVX_RES(IMG_VERY_TIGHT));

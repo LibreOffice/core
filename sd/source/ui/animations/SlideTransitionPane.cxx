@@ -48,7 +48,7 @@
 #include "sddll.hxx"
 #include "framework/FrameworkHelper.hxx"
 
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 
 #include <algorithm>
 
@@ -509,7 +509,7 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
 
 void SlideTransitionPane::UpdateLook()
 {
-    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(::sfx2::abstractbar::Theme::GetWallpaper(::sfx2::abstractbar::Theme::Paint_PanelBackground));
     mpFT_SPEED->SetBackground(Wallpaper());
     mpFT_SOUND->SetBackground(Wallpaper());
 }

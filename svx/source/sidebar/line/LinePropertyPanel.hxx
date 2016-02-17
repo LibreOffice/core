@@ -21,9 +21,9 @@
 
 #include <svx/xdash.hxx>
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
@@ -61,6 +61,8 @@ class LineWidthControl;
 class LinePropertyPanel : public LinePropertyPanelBase,
                           public sfx2::sidebar::IContextChangeReceiver,
                           public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+                          public sfx2::abstractbar::IContextChangeReceiver,
+                          public sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~LinePropertyPanel();
@@ -102,16 +104,16 @@ protected:
 
 private:
     //ControllerItem
-    sfx2::sidebar::ControllerItem maStyleControl;
-    sfx2::sidebar::ControllerItem maDashControl;
-    sfx2::sidebar::ControllerItem maWidthControl;
-    sfx2::sidebar::ControllerItem maStartControl;
-    sfx2::sidebar::ControllerItem maEndControl;
-    sfx2::sidebar::ControllerItem maLineEndListControl;
-    sfx2::sidebar::ControllerItem maLineStyleListControl;
-    sfx2::sidebar::ControllerItem maTransControl;
-    sfx2::sidebar::ControllerItem maEdgeStyle;
-    sfx2::sidebar::ControllerItem maCapStyle;
+    sfx2::abstractbar::ControllerItem maStyleControl;
+    sfx2::abstractbar::ControllerItem maDashControl;
+    sfx2::abstractbar::ControllerItem maWidthControl;
+    sfx2::abstractbar::ControllerItem maStartControl;
+    sfx2::abstractbar::ControllerItem maEndControl;
+    sfx2::abstractbar::ControllerItem maLineEndListControl;
+    sfx2::abstractbar::ControllerItem maLineStyleListControl;
+    sfx2::abstractbar::ControllerItem maTransControl;
+    sfx2::abstractbar::ControllerItem maEdgeStyle;
+    sfx2::abstractbar::ControllerItem maCapStyle;
 
     SfxBindings* mpBindings;
     sfx2::sidebar::EnumContext maContext;

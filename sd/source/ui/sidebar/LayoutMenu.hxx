@@ -22,7 +22,7 @@
 
 #include "IDisposable.hxx"
 #include "ISidebarReceiver.hxx"
-#include <sfx2/sidebar/ILayoutableWindow.hxx>
+#include <sfx2/abstractbar/ILayoutableWindow.hxx>
 
 #include <com/sun/star/frame/XStatusListener.hpp>
 
@@ -57,7 +57,7 @@ class LayoutMenu
     : public ValueSet,
       public DragSourceHelper,
       public DropTargetHelper,
-      public sfx2::sidebar::ILayoutableWindow
+      public sfx2::abstractbar::ILayoutableWindow
 {
 public:
     /** Create a new layout menu.  Depending on the given flag it

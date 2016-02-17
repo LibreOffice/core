@@ -52,7 +52,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 
 #include <svx/unoapi.hxx>
 #include <svx/svxids.hrc>
@@ -910,8 +910,8 @@ void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
 void CustomAnimationPane::UpdateLook()
 {
     const Wallpaper aBackground (
-        ::sfx2::sidebar::Theme::GetWallpaper(
-            ::sfx2::sidebar::Theme::Paint_PanelBackground));
+        ::sfx2::abstractbar::Theme::GetWallpaper(
+            ::sfx2::abstractbar::Theme::Paint_PanelBackground));
     SetBackground(aBackground);
     if (mpFTStart != nullptr)
         mpFTStart->SetBackground(aBackground);

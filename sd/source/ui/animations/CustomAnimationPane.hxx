@@ -25,7 +25,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "CustomAnimationList.hxx"
 #include "CategoryListBox.hxx"

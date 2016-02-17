@@ -19,7 +19,7 @@
 
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 
 using namespace css;
 
@@ -33,7 +33,7 @@ void Sidebar::ShowPanel (
     if (!pController)
         return;
 
-    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+    const abstractbar::PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
 
     if (!pPanelDescriptor)
         return;

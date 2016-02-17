@@ -25,7 +25,7 @@
 #include <svx/sidebar/Popup.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 
 namespace svx { namespace sidebar {
     class PopupControl;
@@ -51,7 +51,7 @@ namespace sw { namespace sidebar {
 
     class PagePropertyPanel
         : public PanelLayout,
-          public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+          public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
         static VclPtr<vcl::Window> Create(
@@ -59,7 +59,7 @@ namespace sw { namespace sidebar {
             const css::uno::Reference< css::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
 
-        // interface of ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+        // interface of ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
         virtual void NotifyItemUpdate(
             const sal_uInt16 nSId,
             const SfxItemState eState,
@@ -181,12 +181,12 @@ namespace sw { namespace sidebar {
         SfxMapUnit          meUnit;
 
         // controller items
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgULControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgLRControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgSizeControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPageColControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgMetricControl;
+        ::sfx2::abstractbar::ControllerItem m_aSwPagePgULControl;
+        ::sfx2::abstractbar::ControllerItem m_aSwPagePgLRControl;
+        ::sfx2::abstractbar::ControllerItem m_aSwPagePgSizeControl;
+        ::sfx2::abstractbar::ControllerItem m_aSwPagePgControl;
+        ::sfx2::abstractbar::ControllerItem m_aSwPageColControl;
+        ::sfx2::abstractbar::ControllerItem m_aSwPagePgMetricControl;
 
         // popups
         svx::sidebar::Popup maOrientationPopup;

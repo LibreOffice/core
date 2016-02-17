@@ -21,7 +21,7 @@
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <AreaPropertyPanel.hrc>
 #include <svx/dialogs.hrc>
