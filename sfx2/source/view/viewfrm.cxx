@@ -3260,7 +3260,11 @@ void SfxViewFrame::ActivateToolPanel_Impl( const OUString& i_rPanelURL )
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }
 
-SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId, const OUString& sMessage, const basegfx::BColor* pBackgroundColor, const basegfx::BColor* pForegroundColor )
+SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId,
+                                               const OUString& sMessage,
+                                               const basegfx::BColor* pBackgroundColor,
+                                               const basegfx::BColor* pForegroundColor,
+                                               const basegfx::BColor* pMessageColor )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3272,7 +3276,7 @@ SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId, const OUStri
     if (pChild)
     {
         SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor);
+        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor);
         ShowChildWindow(nId);
         return pInfoBar;
     }
