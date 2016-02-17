@@ -155,7 +155,8 @@ public:
     using Window::ImplInit;
 private:
     SAL_DLLPRIVATE void InvalidateItem(sal_uInt16 nPosition);
-    SAL_DLLPRIVATE void InvalidateSpin(bool bUpperIn, bool bLowerIn);
+    SAL_DLLPRIVATE void InvalidateSpin(bool bInvalidateUpper = true,
+                                       bool bInvalidateLower = true);
     SAL_DLLPRIVATE void InvalidateMenuButton();
 
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
