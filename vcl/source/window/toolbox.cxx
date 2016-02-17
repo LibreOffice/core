@@ -3455,7 +3455,8 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
-            InvalidateSpin(true, false);
+            Invalidate();
+            InvalidateSpin(mbIn, false);
         }
         return true;
     }
@@ -3466,7 +3467,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
-            InvalidateSpin(false, true);
+            InvalidateSpin(false, mbIn);
         }
         return true;
     }
@@ -3581,7 +3582,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         mbUpper = false;
         mbLower = false;
         mbIn    = false;
-        InvalidateSpin();
+        InvalidateSpin(false, false);
         return true;
     }
 
@@ -4483,7 +4484,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
                     ShowLine( false );
                 else if ( (mnCurLine+mnVisLines-1 < mnCurLines) && (pData->GetDelta() < 0) )
                     ShowLine( true );
-                InvalidateSpin();
+                InvalidateSpin(false, false);
                 return;
             }
         }
@@ -5192,7 +5193,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     mnCurLine = 1;
                 mbFormat = true;
                 ImplFormat();
-                InvalidateSpin();
+                InvalidateSpin(false, false);
                 ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
             }
         break;
@@ -5205,7 +5206,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     mnCurLine = mnCurLines;
                 mbFormat = true;
                 ImplFormat();
-                InvalidateSpin();
+                InvalidateSpin(false, false);
                 ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
             }
         break;
