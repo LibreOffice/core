@@ -65,7 +65,8 @@ namespace utl
 
     void OComponentResModuleImpl::freeResManager()
     {
-        delete m_pResources, m_pResources = nullptr;
+        delete m_pResources;
+        m_pResources = nullptr;
         m_bInitialized = false;
     }
 

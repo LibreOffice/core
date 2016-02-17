@@ -664,8 +664,16 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         aPt.Y() = (rRect.GetHeight() - pOut->GetTextHeight()) / 2;
 
         bool bTiny = false;
-        if( aPt.X() < 0 ) bTiny = true, aPt.X() = 0;
-        if( aPt.Y() < 0 ) bTiny = true, aPt.Y() = 0;
+        if( aPt.X() < 0 )
+        {
+            bTiny = true;
+            aPt.X() = 0;
+        }
+        if( aPt.Y() < 0 )
+        {
+            bTiny = true;
+            aPt.Y() = 0;
+        }
         if( bTiny )
         {
             // decrease for small images

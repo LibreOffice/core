@@ -1732,7 +1732,8 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
     p1->DecRef();
     p2->DecRef();
     *pCode1 = p.get();
-    --pCode, --pc;
+    --pCode;
+    --pc;
 
     return true;
 }

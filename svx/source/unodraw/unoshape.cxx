@@ -235,7 +235,8 @@ SvxShape::~SvxShape() throw()
         SdrObject::Free( pObject );
     }
 
-    delete mpImpl, mpImpl = nullptr;
+    delete mpImpl;
+    mpImpl = nullptr;
 
     EndListeningAll(); // call explictily within SolarMutexGuard
 }

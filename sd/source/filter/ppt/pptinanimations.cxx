@@ -1715,7 +1715,7 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
                 sal_Int32 nU1, nU2;
                 mrStCtrl.ReadInt32( nU1 ).ReadInt32( nU2 );
 
-                dump( " set_1=\"%ld\"", nU1 ),
+                dump( " set_1=\"%ld\"", nU1 );
                 dump( " set_2=\"%ld\"", nU2 );
             }
             break;

@@ -413,7 +413,8 @@ oslFileHandle FTPURL::open()
                     "osl_setFilePos failed");
         }
         else {
-            osl_closeFile(res),res = nullptr;
+            osl_closeFile(res);
+            res = nullptr;
             throw curl_exception(err);
         }
     }

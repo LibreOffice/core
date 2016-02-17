@@ -200,7 +200,8 @@ bool StgDirEntry::StoreStream( StgIo& rIo )
             if( !m_pStgStrm )
             {
                 OpenStream( rIo );
-                delete m_pStgStrm, m_pStgStrm = nullptr;
+                delete m_pStgStrm;
+                m_pStgStrm = nullptr;
             }
             else
                 m_pStgStrm->SetSize( 0 );
@@ -532,7 +533,11 @@ bool StgDirEntry::Commit()
     if( m_aEntry.GetType() == STG_STREAM )
     {
         if( m_pTmpStrm )
-            delete m_pCurStrm, m_pCurStrm = m_pTmpStrm, m_pTmpStrm = nullptr;
+        {
+            delete m_pCurStrm;
+            m_pCurStrm = m_pTmpStrm;
+            m_pTmpStrm = nullptr;
+        }
         if( m_bRemoved )
             // Delete the stream if needed
             if( m_pStgStrm )
@@ -616,7 +621,10 @@ bool StgDirEntry::Tmp2Strm()
 {
     // We did commit once, but have not written since then
     if( !m_pTmpStrm )
-        m_pTmpStrm = m_pCurStrm, m_pCurStrm = nullptr;
+    {
+        m_pTmpStrm = m_pCurStrm;
+        m_pCurStrm = nullptr;
+    }
     if( m_pTmpStrm )
     {
         OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );

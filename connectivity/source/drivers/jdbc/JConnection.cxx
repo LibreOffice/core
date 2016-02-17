@@ -845,7 +845,8 @@ bool java_sql_Connection::construct(const OUString& url,
             {
                 ContextClassLoaderScope ccl( t.env(), getDriverClassLoader(), getLogger(), *this );
                 out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
-                delete pProps, pProps = nullptr;
+                delete pProps;
+                pProps = nullptr;
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             }
 

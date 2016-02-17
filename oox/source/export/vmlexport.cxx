@@ -75,9 +75,12 @@ void VMLExport::SetFS( ::sax_fastparser::FSHelperPtr pSerializer )
 
 VMLExport::~VMLExport()
 {
-    delete mpOutStrm, mpOutStrm = nullptr;
-    delete m_pShapeStyle, m_pShapeStyle = nullptr;
-    delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = nullptr;
+    delete mpOutStrm;
+    mpOutStrm = nullptr;
+    delete m_pShapeStyle;
+    m_pShapeStyle = nullptr;
+    delete[] m_pShapeTypeWritten;
+    m_pShapeTypeWritten = nullptr;
 }
 
 void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )

@@ -249,21 +249,42 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     bOk |= aExport.ReadSvIdl( SvHash_Export(), rInStm );
 
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
-        SetToggle( aToggle ), bOk = true;
+    {
+        SetToggle( aToggle );
+        bOk = true;
+    }
     if( aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm ) )
-        SetAutoUpdate( aAutoUpdate ), bOk = true;
+    {
+        SetAutoUpdate( aAutoUpdate );
+        bOk = true;
+    }
 
     if( aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm ) )
-        SetAsynchron( aAsynchron ), bOk = true;
+    {
+        SetAsynchron( aAsynchron );
+        bOk = true;
+    }
 
     if( aRecordAbsolute.ReadSvIdl( SvHash_RecordAbsolute(), rInStm ) )
-        SetRecordAbsolute( aRecordAbsolute), bOk = true;
+    {
+        SetRecordAbsolute( aRecordAbsolute);
+        bOk = true;
+    }
     if( aRecordPerItem.ReadSvIdl( SvHash_RecordPerItem(), rInStm ) )
-        SetRecordPerItem( aRecordPerItem ), bOk = true;
+    {
+        SetRecordPerItem( aRecordPerItem );
+        bOk = true;
+    }
     if( aRecordPerSet.ReadSvIdl( SvHash_RecordPerSet(), rInStm ) )
-        SetRecordPerSet( aRecordPerSet ), bOk = true;
+    {
+        SetRecordPerSet( aRecordPerSet );
+        bOk = true;
+    }
     if( aNoRecord.ReadSvIdl( SvHash_NoRecord(), rInStm ) )
-        SetNoRecord( aNoRecord ), bOk = true;
+    {
+        SetNoRecord( aNoRecord );
+        bOk = true;
+    }
 
     bOk |= aPseudoPrefix.ReadSvIdl( SvHash_PseudoPrefix(), rInStm );
     bOk |= aMenuConfig.ReadSvIdl( SvHash_MenuConfig(), rInStm );

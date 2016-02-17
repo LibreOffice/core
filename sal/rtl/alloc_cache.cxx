@@ -189,7 +189,8 @@ rtl_cache_hash_remove (
     {
         if (bufctl->m_addr == addr)
         {
-            *ppHead = bufctl->m_next, bufctl->m_next = nullptr;
+            *ppHead = bufctl->m_next;
+            bufctl->m_next = nullptr;
             break;
         }
 
@@ -322,7 +323,8 @@ rtl_cache_slab_destroy (
             rtl_cache_bufctl_type * bufctl = slab->m_sp;
 
             /* pop from freelist */
-            slab->m_sp = bufctl->m_next, bufctl->m_next = nullptr;
+            slab->m_sp = bufctl->m_next;
+            bufctl->m_next = nullptr;
 
             /* return bufctl struct to bufctl cache */
             rtl_cache_free (gp_cache_bufctl_cache, bufctl);
@@ -914,7 +916,8 @@ rtl_cache_deactivate (
         rtl_cache_magazine_type * mag;
 
         /* prevent recursion */
-        mag_cache = cache->m_magazine_cache, cache->m_magazine_cache = nullptr;
+        mag_cache = cache->m_magazine_cache;
+        cache->m_magazine_cache = nullptr;
 
         /* cleanup cpu layer */
         if ((mag = cache->m_cpu_curr) != nullptr)
@@ -978,7 +981,8 @@ rtl_cache_deactivate (
                 while ((bufctl = cache->m_hash_table[i]) != nullptr)
                 {
                     /* pop from hash table */
-                    cache->m_hash_table[i] = bufctl->m_next, bufctl->m_next = nullptr;
+                    cache->m_hash_table[i] = bufctl->m_next;
+                    bufctl->m_next = nullptr;
 
                     /* return to bufctl cache */
                     rtl_cache_free (gp_cache_bufctl_cache, bufctl);
@@ -1137,7 +1141,8 @@ SAL_CALL rtl_cache_alloc (
             if (!((cache->m_constructor)(obj, cache->m_userarg)))
             {
                 /* construction failure */
-                rtl_freeMemory(obj), obj = nullptr;
+                rtl_freeMemory(obj);
+                obj = nullptr;
             }
         }
         return obj;
@@ -1194,7 +1199,8 @@ SAL_CALL rtl_cache_alloc (
         if (!((cache->m_constructor)(obj, cache->m_userarg)))
         {
             /* construction failure */
-            rtl_cache_slab_free (cache, obj), obj = nullptr;
+            rtl_cache_slab_free (cache, obj);
+            obj = nullptr;
         }
     }
     return (obj);
@@ -1643,19 +1649,22 @@ rtl_cache_fini()
 
         if (gp_cache_bufctl_cache != nullptr)
         {
-            cache = gp_cache_bufctl_cache, gp_cache_bufctl_cache = nullptr;
+            cache = gp_cache_bufctl_cache;
+            gp_cache_bufctl_cache = nullptr;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
         }
         if (gp_cache_slab_cache != nullptr)
         {
-            cache = gp_cache_slab_cache, gp_cache_slab_cache = nullptr;
+            cache = gp_cache_slab_cache;
+            gp_cache_slab_cache = nullptr;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
         }
         if (gp_cache_magazine_cache != nullptr)
         {
-            cache = gp_cache_magazine_cache, gp_cache_magazine_cache = nullptr;
+            cache = gp_cache_magazine_cache;
+            gp_cache_magazine_cache = nullptr;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
         }

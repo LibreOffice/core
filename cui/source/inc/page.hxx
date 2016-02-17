@@ -202,7 +202,7 @@ public:
 
     void                SetMode( SvxModeType eMType ) { eMode = eMType; }
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
-                            { ePaperStart = eStart, ePaperEnd = eEnd; }
+                            { ePaperStart = eStart; ePaperEnd = eEnd; }
 
     void                SetCollectionList(const std::vector<OUString> &aList);
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;

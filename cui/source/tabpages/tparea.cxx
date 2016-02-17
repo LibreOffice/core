@@ -270,7 +270,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     get(m_pMtrTrgrCenterX,"MTR_TRGR_CENTER_X");
     get(m_pFtTrgrCenterY,"FT_TRGR_CENTER_Y");
     get(m_pMtrTrgrCenterY,"MTR_TRGR_CENTER_Y");
-    get(m_pFtTrgrAngle,"FT_TRGR_ANGLE"),
+    get(m_pFtTrgrAngle,"FT_TRGR_ANGLE");
     get(m_pMtrTrgrAngle,"MTR_TRGR_ANGLE");
     get(m_pMtrTrgrBorder,"MTR_TRGR_BORDER");
     get(m_pMtrTrgrStartValue,"MTR_TRGR_START_VALUE");

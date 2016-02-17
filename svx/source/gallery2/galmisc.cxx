@@ -454,7 +454,10 @@ void GalleryTransferable::InitData( bool bLazy )
                 mpURL = new INetURLObject;
 
                 if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
-                    delete mpURL, mpURL = nullptr;
+                {
+                    delete mpURL;
+                    mpURL = nullptr;
+                }
             }
 
             if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
@@ -570,9 +573,12 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 void GalleryTransferable::ObjectReleased()
 {
     mxModelStream.Clear();
-    delete mpGraphicObject, mpGraphicObject = nullptr;
-    delete mpImageMap, mpImageMap = nullptr;
-    delete mpURL, mpURL = nullptr;
+    delete mpGraphicObject;
+    mpGraphicObject = nullptr;
+    delete mpImageMap;
+    mpImageMap = nullptr;
+    delete mpURL;
+    mpURL = nullptr;
 }
 
 void GalleryTransferable::CopyToClipboard( vcl::Window* pWindow )

@@ -213,18 +213,17 @@ BaseContent::dispose()
         aEvt.Source = static_cast< XContent* >( this );
 
 
-        pDisposeEventListeners =
-            m_pDisposeEventListeners, m_pDisposeEventListeners = nullptr;
+        pDisposeEventListeners = m_pDisposeEventListeners;
+        m_pDisposeEventListeners = nullptr;
 
-        pContentEventListeners =
-            m_pContentEventListeners, m_pContentEventListeners = nullptr;
+        pContentEventListeners = m_pContentEventListeners;
+        m_pContentEventListeners = nullptr;
 
-        pPropertySetInfoChangeListeners =
-            m_pPropertySetInfoChangeListeners,
-            m_pPropertySetInfoChangeListeners = nullptr;
+        pPropertySetInfoChangeListeners = m_pPropertySetInfoChangeListeners;
+        m_pPropertySetInfoChangeListeners = nullptr;
 
-        pPropertyListener =
-            m_pPropertyListener, m_pPropertyListener = nullptr;
+        pPropertyListener = m_pPropertyListener;
+        m_pPropertyListener = nullptr;
     }
 
     if ( pDisposeEventListeners && pDisposeEventListeners->getLength() )

@@ -538,7 +538,8 @@ IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)
 
 IcnGridMap_Impl::~IcnGridMap_Impl()
 {
-    delete[] _pGridMap, _pGridMap=nullptr;
+    delete[] _pGridMap;
+    _pGridMap = nullptr;
 }
 
 void IcnGridMap_Impl::Expand()
@@ -719,7 +720,8 @@ void IcnGridMap_Impl::Clear()
 {
     if( _pGridMap )
     {
-        delete[] _pGridMap, _pGridMap=nullptr;
+        delete[] _pGridMap;
+        _pGridMap = nullptr;
         _nGridRows = 0;
         _nGridCols = 0;
         _aLastOccupiedGrid.SetEmpty();

@@ -147,7 +147,8 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                                                 &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-    delete[] pOrgStr, pOrgStr = nullptr;
+    delete[] pOrgStr;
+    pOrgStr = nullptr;
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
     // factor of 6 is the maximum size of an UNICODE character as utf8
@@ -162,7 +163,8 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                             &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-    delete[] pUniCode, pUniCode = nullptr;
+    delete[] pUniCode;
+    pUniCode = nullptr;
 
     return pUtf8;
 };

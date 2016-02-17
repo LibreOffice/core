@@ -101,7 +101,8 @@ void SfxApplication::Deinitialize()
 
     DBG_ASSERT( pAppData_Impl->pViewFrame == nullptr, "active foreign ViewFrame" );
 
-    delete[] pAppData_Impl->pInterfaces, pAppData_Impl->pInterfaces = nullptr;
+    delete[] pAppData_Impl->pInterfaces;
+    pAppData_Impl->pInterfaces = nullptr;
 
     // free administration managers
     DELETEZ(pAppData_Impl->pAppDispat);

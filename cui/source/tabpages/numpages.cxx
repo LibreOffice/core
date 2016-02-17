@@ -385,7 +385,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
 {
     SetExchangeSupport();
     get(m_pExamplesVS, "valueset");
-    m_pExamplesVS->init(NumberingPageType::BULLET),
+    m_pExamplesVS->init(NumberingPageType::BULLET);
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
 }

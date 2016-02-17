@@ -336,7 +336,8 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             // fixed address and size for the header
             if( nPage == -1 )
             {
-                nPos = 0L, nBytes = 512;
+                nPos = 0L;
+                nBytes = 512;
                 nPg2 = nPg;
             }
             if( m_pStrm->Tell() != nPos )
@@ -365,7 +366,10 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
         // fixed address and size for the header
         // nPageSize must be >= 512, otherwise the header can not be written here, we check it on import
         if( nPage == -1 )
-            nPos = 0L, nBytes = 512;
+        {
+            nPos = 0L;
+            nBytes = 512;
+        }
         if( m_pStrm->Tell() != nPos )
         {
             m_pStrm->Seek(nPos);

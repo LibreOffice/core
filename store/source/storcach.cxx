@@ -107,7 +107,8 @@ EntryCache::EntryCache()
 
 EntryCache::~EntryCache()
 {
-    rtl_cache_destroy (m_entry_cache), m_entry_cache = nullptr;
+    rtl_cache_destroy (m_entry_cache);
+    m_entry_cache = nullptr;
 }
 
 Entry * EntryCache::create (PageHolder const & rxPage, sal_uInt32 nOffset)
@@ -142,16 +143,31 @@ static int highbit(sal_Size n)
         return 0;
 #if SAL_TYPES_SIZEOFLONG == 8
     if (n & 0xffffffff00000000ul)
-        k |= 32, n >>= 32;
+    {
+        k |= 32;
+        n >>= 32;
+    }
 #endif
     if (n & 0xffff0000)
-        k |= 16, n >>= 16;
+    {
+        k |= 16;
+        n >>= 16;
+    }
     if (n & 0xff00)
-        k |= 8, n >>= 8;
+    {
+        k |= 8;
+        n >>= 8;
+    }
     if (n & 0xf0)
-        k |= 4, n >>= 4;
+    {
+        k |= 4;
+        n >>= 4;
+    }
     if (n & 0x0c)
-        k |= 2, n >>= 2;
+    {
+        k |= 2;
+        n >>= 2;
+    }
     if (n & 0x02)
         k++;
 
@@ -183,7 +199,8 @@ PageCache::~PageCache()
         Entry * entry = m_hash_table[i];
         while (entry != nullptr)
         {
-            m_hash_table[i] = entry->m_pNext, entry->m_pNext = nullptr;
+            m_hash_table[i] = entry->m_pNext;
+            entry->m_pNext = nullptr;
             EntryCache::get().destroy (entry);
             entry = m_hash_table[i];
             x += 1;
@@ -234,7 +251,8 @@ void PageCache::rescale_Impl (sal_Size new_size)
             {
                 Entry * next = curr->m_pNext;
                 int index = hash_index_Impl(curr->m_nOffset);
-                curr->m_pNext = m_hash_table[index], m_hash_table[index] = curr;
+                curr->m_pNext = m_hash_table[index];
+                m_hash_table[index] = curr;
                 curr = next;
             }
             old_table[i] = nullptr;
@@ -314,7 +332,8 @@ storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffse
     {
         // Insert new entry.
         int index = hash_index_Impl(nOffset);
-        entry->m_pNext = m_hash_table[index], m_hash_table[index] = entry;
+        entry->m_pNext = m_hash_table[index];
+        m_hash_table[index] = entry;
 
         // Update stats and leave.
         m_hash_entries += 1;
@@ -368,7 +387,8 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
             Entry * entry = (*ppEntry);
 
             // Dequeue and destroy entry.
-            (*ppEntry) = entry->m_pNext, entry->m_pNext = nullptr;
+            (*ppEntry) = entry->m_pNext;
+            entry->m_pNext = nullptr;
             EntryCache::get().destroy (entry);
 
             // Update stats and leave.

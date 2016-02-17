@@ -1894,7 +1894,7 @@ static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, co
             }
         }
 
-        ++pStr,
+        ++pStr;
         ++i;
     }
 

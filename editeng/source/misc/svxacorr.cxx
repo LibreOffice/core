@@ -1936,11 +1936,20 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
             bRet = true;
             // then remove all the lists fast!
             if( CplSttLstLoad & nFlags && pCplStt_ExcptLst )
-                delete pCplStt_ExcptLst, pCplStt_ExcptLst = nullptr;
+            {
+                delete pCplStt_ExcptLst;
+                pCplStt_ExcptLst = nullptr;
+            }
             if( WrdSttLstLoad & nFlags && pWrdStt_ExcptLst )
-                delete pWrdStt_ExcptLst, pWrdStt_ExcptLst = nullptr;
+            {
+                delete pWrdStt_ExcptLst;
+                pWrdStt_ExcptLst = nullptr;
+            }
             if( ChgWordLstLoad & nFlags && pAutocorr_List )
-                delete pAutocorr_List, pAutocorr_List = nullptr;
+            {
+                delete pAutocorr_List;
+                pAutocorr_List = nullptr;
+            }
             nFlags &= ~(CplSttLstLoad | WrdSttLstLoad | ChgWordLstLoad );
         }
         aLastCheckTime = tools::Time( tools::Time::SYSTEM );

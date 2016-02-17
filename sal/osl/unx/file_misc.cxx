@@ -334,7 +334,8 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
     if (nullptr != pImpl)
     {
-        pImpl->release(), pImpl = nullptr;
+        pImpl->release();
+        pImpl = nullptr;
     }
 #ifdef _DIRENT_HAVE_D_TYPE
     pImpl = new DirectoryItem_Impl(ustrFilePath, pEntry->d_type);

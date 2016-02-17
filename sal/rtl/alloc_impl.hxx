@@ -74,16 +74,31 @@ highbit(sal_Size n)
     return 0;
 #if SAL_TYPES_SIZEOFLONG == 8
   if (n & 0xffffffff00000000ul)
-    k |= 32, n >>= 32;
+  {
+    k |= 32;
+    n >>= 32;
+  }
 #endif
   if (n & 0xffff0000)
-    k |= 16, n >>= 16;
+  {
+    k |= 16;
+    n >>= 16;
+  }
   if (n & 0xff00)
-    k |= 8, n >>= 8;
+  {
+    k |= 8;
+    n >>= 8;
+  }
   if (n & 0xf0)
-    k |= 4, n >>= 4;
+  {
+    k |= 4;
+    n >>= 4;
+  }
   if (n & 0x0c)
-    k |= 2, n >>= 2;
+  {
+    k |= 2;
+    n >>= 2;
+  }
   if (n & 0x02)
     k++;
 
@@ -102,16 +117,31 @@ lowbit(sal_Size n)
     return 0;
 #if SAL_TYPES_SIZEOFLONG == 8
   if (!(n & 0xffffffff))
-    k |= 32, n >>= 32;
+  {
+    k |= 32;
+    n >>= 32;
+  }
 #endif
   if (!(n & 0xffff))
-    k |= 16, n >>= 16;
+  {
+    k |= 16;
+    n >>= 16;
+  }
   if (!(n & 0xff))
-    k |= 8, n >>= 8;
+  {
+    k |= 8;
+    n >>= 8;
+  }
   if (!(n & 0xf))
-    k |= 4, n >>= 4;
+  {
+    k |= 4;
+    n >>= 4;
+  }
   if (!(n & 0x3))
-    k |= 2, n >>= 2;
+  {
+    k |= 2;
+    n >>= 2;
+  }
   if (!(n & 0x1))
     k++;
   return k;

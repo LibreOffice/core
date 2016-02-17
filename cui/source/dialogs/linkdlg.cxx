@@ -225,7 +225,10 @@ IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox,
             m_pRbManual->Check();
             m_pRbManual->Disable();
             if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
-                pLinkNm = nullptr, pFilter = &sLink;
+            {
+                pLinkNm = nullptr;
+                pFilter = &sLink;
+            }
         }
         else
         {

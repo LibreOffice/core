@@ -61,7 +61,8 @@ SharedCount::Allocator::Allocator()
 
 SharedCount::Allocator::~Allocator()
 {
-    rtl_cache_destroy (m_cache), m_cache = nullptr;
+    rtl_cache_destroy (m_cache);
+    m_cache = nullptr;
 }
 
 /*========================================================================
@@ -124,14 +125,18 @@ PageData::Allocator_Impl::initialize (sal_uInt16 nPageSize)
 
 PageData::Allocator_Impl::~Allocator_Impl()
 {
-    rtl_cache_destroy(m_page_cache), m_page_cache = nullptr;
+    rtl_cache_destroy(m_page_cache);
+    m_page_cache = nullptr;
 }
 
 void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
     OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
     if ((ppPage != nullptr) && (pnSize != nullptr))
-        *ppPage = rtl_cache_alloc(m_page_cache), *pnSize = m_page_size;
+    {
+        *ppPage = rtl_cache_alloc(m_page_cache);
+        *pnSize = m_page_size;
+    }
 }
 
 void PageData::Allocator_Impl::deallocate_Impl (void * pPage)

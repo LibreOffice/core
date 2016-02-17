@@ -550,8 +550,8 @@
                 // -> remove from the aggregate property sequence
                 ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - pAggProps );
                 // which means we have to adjust the pointers
-                pAggProps = aAggregateProps.getConstArray(),
-                pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength(),
+                pAggProps = aAggregateProps.getConstArray();
+                pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength();
 
                 // and additionally, remember the id of this property
                 rDuplicateIds.push_back( pProp->Handle );

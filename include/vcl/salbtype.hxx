@@ -391,7 +391,9 @@ inline sal_uInt8 BitmapColor::GetBlueOrIndex() const
 inline BitmapColor& BitmapColor::Invert()
 {
     DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
-    mcBlueOrIndex = ~mcBlueOrIndex, mcGreen = ~mcGreen, mcRed = ~mcRed;
+    mcBlueOrIndex = ~mcBlueOrIndex;
+    mcGreen = ~mcGreen;
+    mcRed = ~mcRed;
 
     return *this;
 }

@@ -717,7 +717,10 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
         }
     }
     else
-        *ppStream = nullptr, *pBytes = 0;
+    {
+        *ppStream = nullptr;
+        *pBytes = 0;
+    }
     return bIsDeflated;
 }
 

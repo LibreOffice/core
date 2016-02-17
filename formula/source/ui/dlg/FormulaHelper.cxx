@@ -146,7 +146,10 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
             if ( nEnd != nStart )
                 _rArgs.push_back(rFormula.copy( nStart, nEnd-1-nStart ));
             else
-                _rArgs.push_back(OUString()), bLast = true;
+            {
+                _rArgs.push_back(OUString());
+                bLast = true;
+            }
         }
         else
         {

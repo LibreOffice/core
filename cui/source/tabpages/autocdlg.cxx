@@ -1838,7 +1838,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pListContainer->set_width_request(aControlSize.Width());
     pListContainer->set_height_request(aControlSize.Height());
-    m_pSwCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pListContainer),
+    m_pSwCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pListContainer);
 
     get(m_pSingleTypoCB, "singlereplace");
     get(m_pSglStartQuotePB, "startsingle");

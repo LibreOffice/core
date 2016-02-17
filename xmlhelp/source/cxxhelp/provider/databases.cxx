@@ -947,7 +947,9 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
 void Databases::changeCSS(const OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();
-    delete[] m_pCustomCSSDoc, m_pCustomCSSDoc = nullptr,m_nCustomCSSDocLength = 0;
+    delete[] m_pCustomCSSDoc;
+    m_pCustomCSSDoc = nullptr;
+    m_nCustomCSSDocLength = 0;
 }
 
 void Databases::cascadingStylesheet( const OUString& Language,

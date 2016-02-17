@@ -126,7 +126,10 @@ GraphicObject::~GraphicObject()
         mpMgr->ImplUnregisterObj( *this );
 
         if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
-            delete mpGlobalMgr, mpGlobalMgr = nullptr;
+        {
+            delete mpGlobalMgr;
+            mpGlobalMgr = nullptr;
+        }
     }
 
     delete mpSwapOutTimer;
@@ -177,7 +180,10 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
                 mpMgr->ImplUnregisterObj( *this );
 
                 if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
-                    delete mpGlobalMgr, mpGlobalMgr = nullptr;
+                {
+                    delete mpGlobalMgr;
+                    mpGlobalMgr = nullptr;
+                }
             }
 
             if( !pMgr )
@@ -350,7 +356,8 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         mpMgr->ImplUnregisterObj( *this );
 
         maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
-        delete mpSimpleCache, mpSimpleCache = nullptr;
+        delete mpSimpleCache;
+        mpSimpleCache = nullptr;
 
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
@@ -400,7 +407,10 @@ void GraphicObject::SetAttr( const GraphicAttr& rAttr )
     maAttr = rAttr;
 
     if( mpSimpleCache && ( mpSimpleCache->maAttr != rAttr ) )
-        delete mpSimpleCache, mpSimpleCache = nullptr;
+    {
+        delete mpSimpleCache;
+        mpSimpleCache = nullptr;
+    }
 }
 
 void GraphicObject::SetLink()
@@ -454,7 +464,10 @@ void GraphicObject::SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>
         mpSwapOutTimer->Start();
     }
     else
-        delete mpSwapOutTimer, mpSwapOutTimer = nullptr;
+    {
+        delete mpSwapOutTimer;
+        mpSwapOutTimer = nullptr;
+    }
 }
 
 void GraphicObject::FireSwapInRequest()
@@ -684,7 +697,8 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     mbAutoSwapped = false;
     ImplAssignGraphicData();
     maLink.clear();
-    delete mpSimpleCache, mpSimpleCache = nullptr;
+    delete mpSimpleCache;
+    mpSimpleCache = nullptr;
 
     mpMgr->ImplRegisterObj( *this, maGraphic, nullptr, pCopyObj);
 

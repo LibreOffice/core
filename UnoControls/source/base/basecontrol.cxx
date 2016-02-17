@@ -397,22 +397,26 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
 
     if ( nFlags & PosSize::X )
     {
-        bChanged |= m_nX != nX, m_nX = nX;
+        bChanged |= m_nX != nX;
+        m_nX = nX;
     }
 
     if ( nFlags & PosSize::Y )
     {
-        bChanged |= m_nY != nY, m_nY = nY;
+        bChanged |= m_nY != nY;
+        m_nY = nY;
     }
 
     if ( nFlags & PosSize::WIDTH )
     {
-        bChanged |= m_nWidth != nWidth, m_nWidth  = nWidth;
+        bChanged |= m_nWidth != nWidth;
+        m_nWidth  = nWidth;
     }
 
     if ( nFlags & PosSize::HEIGHT )
     {
-        bChanged |= m_nHeight != nHeight, m_nHeight = nHeight;
+        bChanged |= m_nHeight != nHeight;
+        m_nHeight = nHeight;
     }
 
     if ( bChanged && m_xPeerWindow.is() )

@@ -365,7 +365,8 @@ rtl_arena_hash_remove (
     {
         if (segment->m_addr == addr)
         {
-            *segpp = segment->m_fnext, segment->m_fnext = segment->m_fprev = segment;
+            *segpp = segment->m_fnext;
+            segment->m_fnext = segment->m_fprev = segment;
             break;
         }
 
@@ -785,7 +786,8 @@ rtl_arena_deactivate (
             while ((segment = arena->m_hash_table[i]) != nullptr)
             {
                 /* pop from hash table */
-                arena->m_hash_table[i] = segment->m_fnext, segment->m_fnext = segment->m_fprev = segment;
+                arena->m_hash_table[i] = segment->m_fnext;
+                segment->m_fnext = segment->m_fprev = segment;
 
                 /* coalesce w/ adjacent free segment(s) */
                 rtl_arena_segment_coalesce (arena, segment);
@@ -1034,7 +1036,8 @@ SAL_CALL rtl_arena_free (
                 rtl_arena_segment_coalesce (arena, segment);
 
                 /* determine (new) next and prev segment */
-                next = segment->m_snext, prev = segment->m_sprev;
+                next = segment->m_snext;
+                prev = segment->m_sprev;
 
                 /* entire span free when prev is a span, and next is either a span or a list head */
                 if (((prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)) &&

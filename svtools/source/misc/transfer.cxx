@@ -1181,8 +1181,10 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
             StopClipboardListening();
 
         mxTransfer = rDataHelper.mxTransfer;
-        delete mpFormats, mpFormats = new DataFlavorExVector( *rDataHelper.mpFormats );
-        delete mpObjDesc, mpObjDesc = new TransferableObjectDescriptor( *rDataHelper.mpObjDesc );
+        delete mpFormats;
+        mpFormats = new DataFlavorExVector( *rDataHelper.mpFormats );
+        delete mpObjDesc;
+        mpObjDesc = new TransferableObjectDescriptor( *rDataHelper.mpObjDesc );
         mxClipboard = rDataHelper.mxClipboard;
 
         if ( bWasClipboardListening )
@@ -1198,8 +1200,10 @@ TransferableDataHelper::~TransferableDataHelper()
     StopClipboardListening( );
     {
         ::osl::MutexGuard aGuard( mpImpl->maMutex );
-        delete mpFormats, mpFormats = nullptr;
-        delete mpObjDesc, mpObjDesc = nullptr;
+        delete mpFormats;
+        mpFormats = nullptr;
+        delete mpObjDesc;
+        mpObjDesc = nullptr;
     }
 }
 
@@ -1303,7 +1307,8 @@ void TransferableDataHelper::InitFormats()
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
     mpFormats->clear();
-    delete mpObjDesc, mpObjDesc = new TransferableObjectDescriptor;
+    delete mpObjDesc;
+    mpObjDesc = new TransferableObjectDescriptor;
 
     if( mxTransfer.is() )
     {

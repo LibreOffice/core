@@ -34,7 +34,10 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
     bool bRet = false;
     if( pStrm )
-        delete pStrm, pStrm = nullptr;
+    {
+        delete pStrm;
+        pStrm = nullptr;
+    }
 
     OString sLine, sVersion;
     sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;

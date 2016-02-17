@@ -126,7 +126,8 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                     OUString sResult( sBuf.makeStringAndClear() );
                     SAL_INFO("sdext.minimizer", sResult );
                 }
-                delete mpOptimizerDialog, mpOptimizerDialog = nullptr;
+                delete mpOptimizerDialog;
+                mpOptimizerDialog = nullptr;
             }
             catch( ... )
             {

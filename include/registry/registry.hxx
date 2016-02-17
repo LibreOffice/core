@@ -828,7 +828,8 @@ inline void RegistryKey::releaseKey()
 {
     if (m_registry.isValid() && (m_hImpl != nullptr))
     {
-        m_registry.m_pApi->releaseKey(m_hImpl), m_hImpl = nullptr;
+        m_registry.m_pApi->releaseKey(m_hImpl);
+        m_hImpl = nullptr;
     }
 }
 

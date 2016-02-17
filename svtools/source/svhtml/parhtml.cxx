@@ -1502,12 +1502,16 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                                 if( bStripCRLF )
                                     aToken = aToken.replaceAt( nPos, 1, "" );
                                 else
-                                    nPos++, nLen++;
+                                {
+                                    nPos++;
+                                    nLen++;
+                                }
                                 break;
                             case '\\':
                                 if( bOldEscape )
                                 {
-                                    nPos++, nLen++;
+                                    nPos++;
+                                    nLen++;
                                 }
                                 else
                                 {
@@ -1519,10 +1523,14 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                             case '\'':
                                 bDone = !bOldEscape && cChar==cEnd;
                                 if( !bDone )
-                                    nPos++, nLen++;
+                                {
+                                    nPos++;
+                                    nLen++;
+                                }
                                 break;
                             default:
-                                nPos++, nLen++;
+                                nPos++;
+                                nLen++;
                                 break;
                             }
                         }
@@ -1544,7 +1552,10 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                             case ' ':
                                 bDone = !bOldEscape;
                                 if( !bDone )
-                                    nPos++, nLen++;
+                                {
+                                    nPos++;
+                                    nLen++;
+                                }
                                 break;
 
                             case '\t':
@@ -1556,7 +1567,8 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                             case '\\':
                                 if( bOldEscape )
                                 {
-                                    nPos++, nLen++;
+                                    nPos++;
+                                    nLen++;
                                 }
                                 else
                                 {
@@ -1567,7 +1579,10 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
                             default:
                                 if( HTML_ISPRINTABLE( c ) )
-                                    nPos++, nLen++;
+                                {
+                                    nPos++;
+                                    nLen++;
+                                }
                                 else
                                     bDone = true;
                                 break;

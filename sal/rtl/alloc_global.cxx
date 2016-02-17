@@ -173,7 +173,8 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
     }
     else if (p != nullptr)
     {
-        rtl_freeMemory (p), p = nullptr;
+        rtl_freeMemory (p);
+        p = nullptr;
     }
     return p;
 }

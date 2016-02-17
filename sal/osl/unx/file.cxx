@@ -202,14 +202,18 @@ FileHandle_Impl::Allocator::Allocator()
 }
 FileHandle_Impl::Allocator::~Allocator()
 {
-    rtl_cache_destroy (m_cache), m_cache = nullptr;
+    rtl_cache_destroy (m_cache);
+    m_cache = nullptr;
 }
 
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 ** ppBuffer, size_t * pnSize)
 {
     OSL_PRECOND((nullptr != ppBuffer) && (nullptr != pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
     if ((nullptr != ppBuffer) && (nullptr != pnSize))
-        *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache)), *pnSize = m_bufsiz;
+    {
+        *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
+        *pnSize = m_bufsiz;
+    }
 }
 void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 {
@@ -253,8 +257,12 @@ FileHandle_Impl::FileHandle_Impl (int fd, enum Kind kind, char const * path)
 FileHandle_Impl::~FileHandle_Impl()
 {
     if (m_kind == KIND_FD)
-        Allocator::get().deallocate (m_buffer), m_buffer = nullptr;
-    rtl_string_release (m_strFilePath), m_strFilePath = nullptr;
+    {
+        Allocator::get().deallocate (m_buffer);
+        m_buffer = nullptr;
+    }
+    rtl_string_release (m_strFilePath);
+    m_strFilePath = nullptr;
     (void) pthread_mutex_destroy(&m_mutex); // ignoring EBUSY ...
 }
 
@@ -441,7 +449,8 @@ oslFileError FileHandle_Impl::readFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = -1, m_buflen = 0;
+                m_bufptr = -1;
+                m_buflen = 0;
 
                 if (nBytesRequested >= m_bufsiz)
                 {
@@ -460,7 +469,8 @@ oslFileError FileHandle_Impl::readFileAt (
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr, m_buflen = uDone;
+                m_bufptr = bufptr;
+                m_buflen = uDone;
             }
             if (bufpos >= m_buflen)
             {
@@ -472,7 +482,9 @@ oslFileError FileHandle_Impl::readFileAt (
             SAL_INFO("sal.file", "FileHandle_Impl::readFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
 
             memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
-            nBytesRequested -= bytes, *pBytesRead += bytes, nOffset += bytes;
+            nBytesRequested -= bytes;
+            *pBytesRead += bytes;
+            nOffset += bytes;
         }
         return osl_File_E_None;
     }
@@ -511,7 +523,8 @@ oslFileError FileHandle_Impl::writeFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = -1, m_buflen = 0;
+                m_bufptr = -1;
+                m_buflen = 0;
 
                 if (nBytesToWrite >= m_bufsiz)
                 {
@@ -532,14 +545,17 @@ oslFileError FileHandle_Impl::writeFileAt (
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr, m_buflen = uDone;
+                m_bufptr = bufptr;
+                m_buflen = uDone;
             }
 
             size_t const bytes = std::min (m_bufsiz - bufpos, nBytesToWrite);
             SAL_INFO("sal.file", "FileHandle_Impl::writeFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
 
             memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
-            nBytesToWrite -= bytes, *pBytesWritten += bytes, nOffset += bytes;
+            nBytesToWrite -= bytes;
+            *pBytesWritten += bytes;
+            nOffset += bytes;
 
             m_buflen = std::max(m_buflen, bufpos + bytes);
             m_state |= STATE_MODIFIED;
@@ -569,7 +585,8 @@ oslFileError FileHandle_Impl::readLineAt (
         if (result != osl_File_E_None)
             return result;
 
-        m_bufptr = bufptr, m_buflen = uDone;
+        m_bufptr = bufptr;
+        m_buflen = uDone;
     }
 
     static int const LINE_STATE_BEGIN = 0;
@@ -591,7 +608,8 @@ oslFileError FileHandle_Impl::readLineAt (
                     ppSequence, &dstpos, &(m_buffer[bufpos]), curpos - bufpos);
                 if (result != osl_File_E_None)
                     return result;
-                *pBytesRead += curpos - bufpos, nOffset += curpos - bufpos;
+                *pBytesRead += curpos - bufpos;
+                nOffset += curpos - bufpos;
             }
 
             bufptr = nOffset / m_bufsiz * m_bufsiz;
@@ -602,10 +620,12 @@ oslFileError FileHandle_Impl::readLineAt (
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr, m_buflen = uDone;
+                m_bufptr = bufptr;
+                m_buflen = uDone;
             }
 
-            bufpos = nOffset - m_bufptr, curpos = bufpos;
+            bufpos = nOffset - m_bufptr;
+            curpos = bufpos;
             if (bufpos >= m_buflen)
                 break;
         }
@@ -648,7 +668,8 @@ oslFileError FileHandle_Impl::readLineAt (
                     ppSequence, &dstpos, &(m_buffer[bufpos]), curpos - bufpos - 1);
                 if (result != osl_File_E_None)
                     return result;
-                *pBytesRead += curpos - bufpos, nOffset += curpos - bufpos;
+                *pBytesRead += curpos - bufpos;
+                nOffset += curpos - bufpos;
             }
             break;
         }
@@ -684,7 +705,8 @@ oslFileError FileHandle_Impl::writeSequence_Impl (
     if (*ppSequence != nullptr && nBytes != 0)
     {
         /* fill sequence */
-        memcpy(&((*ppSequence)->elements[*pnOffset]), pBuffer, nBytes), *pnOffset += nBytes;
+        memcpy(&((*ppSequence)->elements[*pnOffset]), pBuffer, nBytes);
+        *pnOffset += nBytes;
     }
     return (*ppSequence != nullptr) ? osl_File_E_None : osl_File_E_NOMEM;
 }
@@ -1479,7 +1501,8 @@ SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize )
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return result;
-    pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
+    pImpl->m_bufptr = -1;
+    pImpl->m_buflen = 0;
 
     return pImpl->setSize (uSize);
 }

@@ -3281,7 +3281,8 @@ namespace xmloff { namespace token {
             {
                 assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
                     // "xmloff::GetXMLToken: inconsistency in the token list!"
-                ++pEntry, ++nPos;
+                ++pEntry;
+                ++nPos;
             }
             s_bChecked = true; // it's all static, checking once is enough
         }

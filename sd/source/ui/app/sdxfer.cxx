@@ -152,10 +152,14 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 {
     if( pObj )
     {
-        delete mpOLEDataHelper, mpOLEDataHelper = nullptr;
-        delete mpGraphic, mpGraphic = nullptr;
-        delete mpBookmark, mpBookmark = nullptr;
-        delete mpImageMap, mpImageMap = nullptr;
+        delete mpOLEDataHelper;
+        mpOLEDataHelper = nullptr;
+        delete mpGraphic;
+        mpGraphic = nullptr;
+        delete mpBookmark;
+        mpBookmark = nullptr;
+        delete mpImageMap;
+        mpImageMap = nullptr;
 
         if( nullptr!= dynamic_cast< const SdrOle2Obj* >( pObj ) )
         {

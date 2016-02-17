@@ -183,7 +183,8 @@ namespace extensions { namespace resource
 
         if ( !m_pResourceManager->IsValid() )
         {
-            delete m_pResourceManager, m_pResourceManager = nullptr;
+            delete m_pResourceManager;
+            m_pResourceManager = nullptr;
             throw MissingResourceException();
         }
 

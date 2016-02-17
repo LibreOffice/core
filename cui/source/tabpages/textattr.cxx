@@ -77,7 +77,7 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     get(m_pMtrFldBottom,"MTR_FLD_BOTTOM");
     get(m_pFlPosition,"FL_POSITION");
     get(m_pCtlPosition,"CTL_POSITION");
-    m_pCtlPosition->SetControlSettings(RP_MM, 240, 100),
+    m_pCtlPosition->SetControlSettings(RP_MM, 240, 100);
     get(m_pTsbFullWidth,"TSB_FULL_WIDTH");
 
 

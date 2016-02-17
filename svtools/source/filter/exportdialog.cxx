@@ -391,7 +391,8 @@ void ExportDialog::GetGraphicStream()
 {
     if ( !IsTempExportAvailable() )
     {
-        delete mpTempStream, mpTempStream = new SvMemoryStream();
+        delete mpTempStream;
+        mpTempStream = new SvMemoryStream();
         maBitmap = Bitmap();
         return;
     }
@@ -409,7 +410,8 @@ void ExportDialog::GetGraphicStream()
     {
         if ( bRecreateOutputStream )
         {
-            delete mpTempStream, mpTempStream = new SvMemoryStream();
+            delete mpTempStream;
+            mpTempStream = new SvMemoryStream();
             maBitmap = Bitmap();
 
             uno::Reference < io::XStream > xStream( new utl::OStreamWrapper( *mpTempStream ) );

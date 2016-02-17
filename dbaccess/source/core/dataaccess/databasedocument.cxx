@@ -198,7 +198,8 @@ ODatabaseDocument::~ODatabaseDocument()
         dispose();
     }
 
-    delete m_pEventContainer, m_pEventContainer = nullptr;
+    delete m_pEventContainer;
+    m_pEventContainer = nullptr;
 }
 
 Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)

@@ -3318,7 +3318,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         if ( pOut )
                         {
                             pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
-                            delete pOut, aTextRule.pOut = nullptr;
+                            delete pOut;
+                            aTextRule.pOut = nullptr;
                         }
                         if ( aExtBu.Tell() )
                         {
@@ -3381,7 +3382,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        .WriteUInt32( pClientData->Tell() );
 
                 mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
-                delete pClientData, pClientData = nullptr;
+                delete pClientData;
+                pClientData = nullptr;
             }
             if ( pClientTextBox )
             {
@@ -3389,7 +3391,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        .WriteUInt32( pClientTextBox->Tell() );
 
                 mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
-                delete pClientTextBox, pClientTextBox = nullptr;
+                delete pClientTextBox;
+                pClientTextBox = nullptr;
             }
             mpPptEscherEx->CloseContainer();      // ESCHER_SpContainer
         }
@@ -3454,7 +3457,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                    .WriteUInt32( pClientTextBox->Tell() );
 
             mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
-            delete pClientTextBox, pClientTextBox = nullptr;
+            delete pClientTextBox;
+            pClientTextBox = nullptr;
 
             mpPptEscherEx->CloseContainer();  // ESCHER_SpContainer
 
@@ -3701,7 +3705,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                .WriteUInt32( pClientData->Tell() );
 
                             mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
-                            delete pClientData, pClientData = nullptr;
+                            delete pClientData;
+                            pClientData = nullptr;
                         }
 
                         aPropOptSp.Commit( *mpStrm );

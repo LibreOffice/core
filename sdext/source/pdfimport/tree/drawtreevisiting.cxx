@@ -983,7 +983,10 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::co
     double page_width = convPx2mm( elem.w ), page_height = convPx2mm( elem.h );
 
     // calculate page margins out of the relevant children (paragraphs)
-    elem.TopMargin = elem.h, elem.BottomMargin = 0, elem.LeftMargin = elem.w, elem.RightMargin = 0;
+    elem.TopMargin = elem.h;
+    elem.BottomMargin = 0;
+    elem.LeftMargin = elem.w;
+    elem.RightMargin = 0;
 
     for( std::list< Element* >::const_iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
