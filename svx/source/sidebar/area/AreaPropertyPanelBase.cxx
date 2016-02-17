@@ -188,6 +188,7 @@ void AreaPropertyPanelBase::Initialize()
     mpBTNGradient->SetAccessibleRelationLabeledBy(mpBTNGradient);
 
     mpSidebarController = sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(mxFrame);
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
@@ -743,6 +744,7 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const
     mpToolBoxColor->Hide();
     meLastXFS = static_cast<sal_uInt16>(-1);
     mpStyleItem.reset();
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, const XFillGradientItem* pItem)
@@ -780,6 +782,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
             mpLbFillGradTo->SetNoSelection();
         }
     }
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const XFillHatchItem* pItem)
@@ -809,6 +812,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const
             mpLbFillAttr->SetNoSelection();
         }
     }
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem* pItem)
@@ -825,6 +829,7 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem*
 
         Update();
     }
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, const XFillBitmapItem* pItem)
@@ -854,6 +859,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, cons
             mpLbFillAttr->SetNoSelection();
         }
     }
+    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::NotifyItemUpdate(
@@ -972,7 +978,6 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
             break;
         }
     }
-    mpSidebarController->NotifyResize();
 }
 
 void AreaPropertyPanelBase::Update()
