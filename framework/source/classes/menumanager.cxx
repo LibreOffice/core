@@ -177,33 +177,33 @@ MenuManager::MenuManager(
         }
         else
         {
-            if ( nItemId == SID_NEWDOCDIRECT || aItemCommand == aSlotNewDocDirect )
+            bool isNewDoc = nItemId == SID_NEWDOCDIRECT || aItemCommand == aSlotNewDocDirect;
+            bool isAutoPilot = nItemId == SID_AUTOPILOTMENU || aItemCommand == aSlotAutoPilot;
+            if(isNewDoc || isAutoPilot)
             {
-                MenuConfiguration aMenuCfg( m_xContext );
-                BmkMenu* pSubMenu = static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU ));
-                pMenu->SetPopupMenu( nItemId, pSubMenu );
-
-                AddMenu(pSubMenu,OUString(),nItemId,true,false);
-                if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
+                Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+                URL aTargetURL;
+                aTargetURL.Complete = OUString::createFromAscii(isNewDoc ? aSlotNewDocDirect : aSlotAutoPilot);
+                m_xURLTransformer->parseStrict( aTargetURL );
+                Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch(
+                                                            aTargetURL, OUString(), 0 );
+                if(xMenuItemDispatch == nullptr)
                 {
-                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aItemCommand, false, rFrame );
-                    if ( !!aImage )
-                           pMenu->SetItemImage( nItemId, aImage );
+                    m_pVCLMenu->EnableItem( nItemId, false );
                 }
-            }
-            else if ( nItemId == SID_AUTOPILOTMENU || aItemCommand == aSlotAutoPilot )
-            {
-                MenuConfiguration aMenuCfg( m_xContext );
-                BmkMenu* pSubMenu = static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU ));
-                pMenu->SetPopupMenu( nItemId, pSubMenu );
-
-                AddMenu(pSubMenu,OUString(),nItemId,true,false);
-
-                if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
+                else
                 {
-                    Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aItemCommand, false, rFrame );
-                    if ( !!aImage )
-                           pMenu->SetItemImage( nItemId, aImage );
+                    MenuConfiguration aMenuCfg( m_xContext );
+                    BmkMenu* pSubMenu = static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( rFrame,
+                                OUString::createFromAscii(isNewDoc ? BOOKMARK_NEWMENU : BOOKMARK_WIZARDMENU)));
+                    pMenu->SetPopupMenu( nItemId, pSubMenu );
+                    AddMenu(pSubMenu,OUString(),nItemId,true,false);
+                    if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
+                    {
+                        Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aItemCommand, false, rFrame );
+                        if ( !!aImage )
+                                pMenu->SetItemImage( nItemId, aImage );
+                    }
                 }
             }
             else if ( pMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
