@@ -456,7 +456,8 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
                                             sal_uInt32* pLen)
 {
     assert((pValueList != nullptr) && (pLen != nullptr) && "registry::getLongListValue(): invalid parameter");
-    *pValueList = nullptr, *pLen = 0;
+    *pValueList = nullptr;
+    *pLen = 0;
 
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if (!pKey)
@@ -495,7 +496,8 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
                                               sal_uInt32* pLen)
 {
     OSL_PRECOND((pValueList != nullptr) && (pLen != nullptr), "registry::getStringListValue(): invalid parameter");
-    *pValueList = nullptr, *pLen = 0;
+    *pValueList = nullptr;
+    *pLen = 0;
 
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if (!pKey)
@@ -532,7 +534,8 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
                                                sal_uInt32* pLen)
 {
     assert((pValueList != nullptr) && (pLen != nullptr) && "registry::getUnicodeListValue(): invalid parameter");
-    *pValueList = nullptr, *pLen = 0;
+    *pValueList = nullptr;
+    *pLen = 0;
 
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
     if (!pKey)

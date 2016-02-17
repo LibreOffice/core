@@ -70,7 +70,10 @@ short StgAvlNode::Locate
         {
             // check for pPivot
             if( pCur->m_nBalance != 0 )
-                *pPivot = pCur, *pParent = *pPrev;
+            {
+                *pPivot = pCur;
+                *pParent = *pPrev;
+            }
             // save pPrev location and see what direction to go
             *pPrev = pCur;
             nRes = pCur->Compare( pFind );

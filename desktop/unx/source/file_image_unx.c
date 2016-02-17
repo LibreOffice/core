@@ -42,7 +42,8 @@ int file_image_open (file_image * image, const char * filename)
     if (image == NULL)
         return EINVAL;
 
-    image->m_base = MAP_FAILED, image->m_size = 0;
+    image->m_base = MAP_FAILED;
+    image->m_size = 0;
 
     if ((fd = open (filename, O_RDONLY)) == -1)
         return errno;
@@ -60,7 +61,8 @@ int file_image_open (file_image * image, const char * filename)
         goto cleanup_and_leave;
     }
 
-    image->m_base = p, image->m_size = st.st_size;
+    image->m_base = p;
+    image->m_size = st.st_size;
 
 cleanup_and_leave:
     close (fd);
@@ -118,7 +120,8 @@ int file_image_close (file_image * image)
     if (munmap (image->m_base, image->m_size) == -1)
         return errno;
 
-    image->m_base = NULL, image->m_size = 0;
+    image->m_base = NULL;
+    image->m_size = 0;
     return 0;
 }
 

@@ -1393,18 +1393,30 @@ void PrintDialog::updateNupFromPages()
         if( nPages == 2 )
         {
             if( bPortrait )
-                nRows = 1, nCols = 2;
+            {
+                nRows = 1;
+                nCols = 2;
+            }
             else
-                nRows = 2, nCols = 1;
+            {
+                nRows = 2;
+                nCols = 1;
+            }
         }
         else if( nPages == 4 )
             nRows = nCols = 2;
         else if( nPages == 6 )
         {
             if( bPortrait )
-                nRows = 2, nCols = 3;
+            {
+                nRows = 2;
+                nCols = 3;
+            }
             else
-                nRows = 3, nCols = 2;
+            {
+                nRows = 3;
+                nCols = 2;
+            }
         }
         else if( nPages == 9 )
             nRows = nCols = 3;

@@ -1902,9 +1902,15 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                     sal_uInt16 nNewPos = GetColumnPos(nColId);
                     bool bMoveAllowed = false;
                     if ( BROWSER_MOVECOLUMNLEFT == nId && nNewPos > 1 )
-                        --nNewPos,bMoveAllowed = true;
+                    {
+                        --nNewPos;
+                        bMoveAllowed = true;
+                    }
                     else if ( BROWSER_MOVECOLUMNRIGHT == nId && nNewPos < (ColCount()-1) )
-                        ++nNewPos,bMoveAllowed = true;
+                    {
+                        ++nNewPos;
+                        bMoveAllowed = true;
+                    }
 
                     if ( bMoveAllowed )
                     {

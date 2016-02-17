@@ -124,7 +124,10 @@ namespace ucbhelper
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(m_tmpfl)
-            osl_closeFile(m_tmpfl),m_tmpfl = nullptr;
+        {
+            osl_closeFile(m_tmpfl);
+            m_tmpfl = nullptr;
+        }
     }
 
 

@@ -392,7 +392,8 @@ OStorePageBIOS::Ace::Ace()
 
 OStorePageBIOS::Ace::~Ace()
 {
-  m_next->m_prev = m_prev, m_prev->m_next = m_next;
+  m_next->m_prev = m_prev;
+  m_prev->m_next = m_next;
 }
 
 int
@@ -485,7 +486,8 @@ OStorePageBIOS::AceCache::AceCache()
 
 OStorePageBIOS::AceCache::~AceCache()
 {
-  rtl_cache_destroy (m_ace_cache), m_ace_cache = nullptr;
+  rtl_cache_destroy (m_ace_cache);
+  m_ace_cache = nullptr;
 }
 
 OStorePageBIOS::Ace *
@@ -510,7 +512,8 @@ OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
   if (ace != nullptr)
   {
     // remove from queue (if any).
-    ace->m_next->m_prev = ace->m_prev, ace->m_prev->m_next = ace->m_next;
+    ace->m_next->m_prev = ace->m_prev;
+    ace->m_prev->m_next = ace->m_next;
 
     // restore invariant state.
     ace->m_next = ace->m_prev = ace;
@@ -667,7 +670,8 @@ void OStorePageBIOS::cleanup_Impl()
     }
 
     // Release SuperBlock page.
-    delete m_pSuper, m_pSuper = nullptr;
+    delete m_pSuper;
+    m_pSuper = nullptr;
 
     // Release PageCache.
     m_xCache.clear();

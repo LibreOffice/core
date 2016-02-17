@@ -1175,7 +1175,10 @@ static rtlCipherError rtl_cipherARCFOUR_init_Impl (
     for (x = 0, y = 0; x < CIPHER_CBLOCK_ARCFOUR; x++)
     {
         y = (y + S[x] + K[x]) % CIPHER_CBLOCK_ARCFOUR;
-        t = S[x], S[x] = S[y], S[y] = t; /* swap S[x] and S[y] */
+        /* swap S[x] and S[y] */
+        t = S[x];
+        S[x] = S[y];
+        S[y] = t;
     }
 
     /* Initialize counters X and Y. */
@@ -1217,7 +1220,9 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
         ctx->m_Y = y;
 
         /* Swap S[x] and S[y]. */
-        t = S[x], S[x] = S[y], S[y] = t;
+        t = S[x];
+        S[x] = S[y];
+        S[y] = t;
 
         /* Evaluate next key byte S[t]. */
         t = (S[x] + S[y]) % CIPHER_CBLOCK_ARCFOUR;

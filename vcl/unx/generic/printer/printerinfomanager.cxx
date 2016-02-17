@@ -840,7 +840,8 @@ const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::get
     {
         m_aSystemPrintCommand = m_pQueueInfo->getCommand();
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
-        delete m_pQueueInfo, m_pQueueInfo = nullptr;
+        delete m_pQueueInfo;
+        m_pQueueInfo = nullptr;
     }
 
     return m_aSystemPrintQueues;

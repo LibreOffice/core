@@ -692,14 +692,26 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
     bool        bRet;
 
     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
-        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1, fScaleX = -1.0;
+    {
+        nMoveX = SAL_ABS( aOldPrefSize.Width() ) - 1;
+        fScaleX = -1.0;
+    }
     else
-        nMoveX = 0, fScaleX = 1.0;
+    {
+        nMoveX = 0;
+        fScaleX = 1.0;
+    }
 
     if( nMirrorFlags & BmpMirrorFlags::Vertical )
-        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1, fScaleY = -1.0;
+    {
+        nMoveY = SAL_ABS( aOldPrefSize.Height() ) - 1;
+        fScaleY = -1.0;
+    }
     else
-        nMoveY = 0, fScaleY = 1.0;
+    {
+        nMoveY = 0;
+        fScaleY = 1.0;
+    }
 
     if( ( fScaleX != 1.0 ) || ( fScaleY != 1.0 ) )
     {

@@ -108,7 +108,8 @@ bool splitLastFromConfigurationPath(OUString const& _sInPath,
         }
         else // defined behavior for invalid paths
         {
-            nStart = 0, nEnd = _sInPath.getLength();
+            nStart = 0;
+            nEnd = _sInPath.getLength();
             nPos = -1;
         }
 

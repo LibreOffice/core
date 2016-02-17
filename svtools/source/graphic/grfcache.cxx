@@ -208,13 +208,22 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
         const Graphic& rGraphic = rObj.GetGraphic();
 
         if( mpBmpEx )
-            delete mpBmpEx, mpBmpEx = nullptr;
+        {
+            delete mpBmpEx;
+            mpBmpEx = nullptr;
+        }
 
         if( mpMtf )
-            delete mpMtf, mpMtf = nullptr;
+        {
+            delete mpMtf;
+            mpMtf = nullptr;
+        }
 
         if( mpAnimation )
-            delete mpAnimation, mpAnimation = nullptr;
+        {
+            delete mpAnimation;
+            mpAnimation = nullptr;
+        }
 
         switch( rGraphic.GetType() )
         {
@@ -361,9 +370,12 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
 
     if( mbSwappedAll )
     {
-        delete mpBmpEx, mpBmpEx = nullptr;
-        delete mpMtf, mpMtf = nullptr;
-        delete mpAnimation, mpAnimation = nullptr;
+        delete mpBmpEx;
+        mpBmpEx = nullptr;
+        delete mpMtf;
+        mpMtf = nullptr;
+        delete mpAnimation;
+        mpAnimation = nullptr;
 
         // #119176# also reset SvgData
         maSvgData.reset();

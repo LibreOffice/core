@@ -432,7 +432,7 @@ OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
                 break;
         }
 
-        ++pStr,
+        ++pStr;
         ++i;
     }
 

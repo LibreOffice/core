@@ -110,8 +110,10 @@ sal_Int32 StgFAT::FindBlock( sal_Int32& nPgs )
             if( nTmpLen )
                 nTmpLen++;
             else
-                nTmpStart = i,
+            {
+                nTmpStart = i;
                 nTmpLen   = 1;
+            }
             if( nTmpLen == nPgs
              // If we already did find a block, stop when reaching the limit
              || ( bFound && ( nEntry >= m_nLimit ) ) )
@@ -120,12 +122,17 @@ sal_Int32 StgFAT::FindBlock( sal_Int32& nPgs )
         else if( nTmpLen )
         {
             if( nTmpLen > nPgs && nTmpLen < nMaxLen )
+            {
                 // block > requested size
-                nMaxLen = nTmpLen, nMaxStart = nTmpStart, bFound = true;
+                nMaxLen = nTmpLen;
+                nMaxStart = nTmpStart;
+                bFound = true;
+            }
             else if( nTmpLen >= nMinLen )
             {
                 // block < requested size
-                nMinLen = nTmpLen, nMinStart = nTmpStart;
+                nMinLen = nTmpLen;
+                nMinStart = nTmpStart;
                 bFound = true;
                 if( nTmpLen == nPgs )
                     break;
@@ -138,11 +145,17 @@ sal_Int32 StgFAT::FindBlock( sal_Int32& nPgs )
     if( nTmpLen )
     {
         if( nTmpLen > nPgs  && nTmpLen < nMaxLen )
+        {
             // block > requested size
-            nMaxLen = nTmpLen, nMaxStart = nTmpStart;
+            nMaxLen = nTmpLen;
+            nMaxStart = nTmpStart;
+        }
         else if( nTmpLen >= nMinLen )
+        {
             // block < requested size
-            nMinLen = nTmpLen, nMinStart = nTmpStart;
+            nMinLen = nTmpLen;
+            nMinStart = nTmpStart;
+        }
     }
     if( nMinStart != STG_EOF && nMaxStart != STG_EOF )
     {

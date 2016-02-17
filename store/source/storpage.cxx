@@ -190,7 +190,8 @@ storeError OStorePageManager::remove_Impl (entry & rEntry)
         xNext.swap (xPage);
 
         // Check index.
-        i = xPage->find (rEntry), n = xPage->usageCount();
+        i = xPage->find (rEntry);
+        n = xPage->usageCount();
         if (!(i < n))
         {
             // Path to entry not exists (Must not happen(?)).
