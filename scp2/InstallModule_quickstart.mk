@@ -9,7 +9,7 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/quickstart))
 
-$(eval $(call gb_installmodule_use_auto_install_libs,scp2/quickstart,\
+$(eval $(call gb_Installmodule_use_auto_install_libs,scp2/quickstart,\
 	quickstart \
 ))
 
