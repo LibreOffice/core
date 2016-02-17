@@ -21,6 +21,7 @@
 #include <osl/file.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/classificationhelper.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorder.hpp>
@@ -1341,6 +1342,16 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
                         pInfoBar->addButton(pBtn);
                     }
+                }
+
+                if (SfxClassificationHelper::IsClassified(*xObjSh.get()))
+                {
+                    // Document has BAILS properties, display an infobar accordingly.
+                    SfxClassificationHelper aHelper(*xObjSh.get());
+                    OUString aBACName = aHelper.GetBACName();
+                    OUString aImpactLevel = aHelper.GetImpactLevel();
+                    if (!aBACName.isEmpty() && !aImpactLevel.isEmpty())
+                        AppendInfoBar("classification", aBACName);
                 }
 
                 break;
