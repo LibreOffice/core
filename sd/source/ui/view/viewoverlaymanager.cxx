@@ -139,7 +139,7 @@ public:
 
     int getHighlightId() const { return mnHighlightId; }
 
-    void HideTip();
+    static void HideTip();
 
 private:
     rtl::Reference< ChangePlaceholderTag > mxTag;
