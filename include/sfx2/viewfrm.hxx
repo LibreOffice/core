@@ -180,7 +180,7 @@ public:
         The buttons will be added from Right to Left at the right of the info bar. The parent, size
         and position of each button will be changed: only the width will remain unchanged.
       */
-    SfxInfoBarWindow* AppendInfoBar(const OUString& sId, const OUString& sMessage, const basegfx::BColor* pBackgroundColor = 0, const basegfx::BColor* pForegroundColor = 0);
+    SfxInfoBarWindow* AppendInfoBar(const OUString& sId, const OUString& sMessage, const basegfx::BColor* pBackgroundColor = nullptr, const basegfx::BColor* pForegroundColor = nullptr);
     void              RemoveInfoBar(const OUString& sId);
 
     SAL_DLLPRIVATE void SetDowning_Impl();
