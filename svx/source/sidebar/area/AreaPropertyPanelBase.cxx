@@ -1257,6 +1257,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransparentHdl_Impl, Edit&, v
 {
     const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
     mnLastTransSolid = nTrans;
+    SetTransparency(nTrans);
     const sal_Int32 nSelectType = mpLBTransType->GetSelectEntryPos();
 
     if(nTrans && !nSelectType)
