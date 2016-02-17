@@ -1028,6 +1028,7 @@ void Window::DecrementLockCount()
 
 WinBits Window::GetStyle() const
 {
+    return 0;
     return mpWindowImpl ? mpWindowImpl->mnStyle : 0;
 }
 

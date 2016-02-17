@@ -37,7 +37,7 @@
 #include "EventMultiplexer.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "ViewShellBase.hxx"
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
@@ -140,8 +140,8 @@ LayoutMenu::LayoutMenu (
 
     SetStyle(GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_TABSTOP);
 
-    SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
-    SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(sfx2::abstractbar::Theme::GetWallpaper(sfx2::abstractbar::Theme::Paint_PanelBackground));
+    SetColor(sfx2::abstractbar::Theme::GetColor(sfx2::abstractbar::Theme::Paint_PanelBackground));
 
 #ifdef DEBUG
     SetText(OUString("sd:LayoutMenu"));
@@ -752,8 +752,8 @@ void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
 {
     Fill();
     ValueSet::DataChanged(rEvent);
-    SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
-    SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(sfx2::abstractbar::Theme::GetWallpaper(sfx2::abstractbar::Theme::Paint_PanelBackground));
+    SetColor(sfx2::abstractbar::Theme::GetColor(sfx2::abstractbar::Theme::Paint_PanelBackground));
 }
 
 } } // end of namespace ::sd::sidebar

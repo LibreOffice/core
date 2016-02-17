@@ -20,9 +20,9 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
@@ -48,8 +48,8 @@ class SidebarDialControl;
 
 class PosSizePropertyPanel
 :   public PanelLayout,
-    public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::IContextChangeReceiver,
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~PosSizePropertyPanel();
@@ -65,7 +65,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -122,21 +122,21 @@ private:
     FieldUnit                               meDlgUnit;
 
     // Controller Items
-    ::sfx2::sidebar::ControllerItem         maTransfPosXControl;
-    ::sfx2::sidebar::ControllerItem         maTransfPosYControl;
-    ::sfx2::sidebar::ControllerItem         maTransfWidthControl;
-    ::sfx2::sidebar::ControllerItem         maTransfHeightControl;
+    ::sfx2::abstractbar::ControllerItem         maTransfPosXControl;
+    ::sfx2::abstractbar::ControllerItem         maTransfPosYControl;
+    ::sfx2::abstractbar::ControllerItem         maTransfWidthControl;
+    ::sfx2::abstractbar::ControllerItem         maTransfHeightControl;
 
-    ::sfx2::sidebar::ControllerItem         maSvxAngleControl;
-    ::sfx2::sidebar::ControllerItem         maRotXControl;
-    ::sfx2::sidebar::ControllerItem         maRotYControl;
-    ::sfx2::sidebar::ControllerItem         maProPosControl;
-    ::sfx2::sidebar::ControllerItem         maProSizeControl;
-    ::sfx2::sidebar::ControllerItem         maAutoWidthControl;
-    ::sfx2::sidebar::ControllerItem         maAutoHeightControl;
-    ::sfx2::sidebar::ControllerItem         m_aMetricCtl;
+    ::sfx2::abstractbar::ControllerItem         maSvxAngleControl;
+    ::sfx2::abstractbar::ControllerItem         maRotXControl;
+    ::sfx2::abstractbar::ControllerItem         maRotYControl;
+    ::sfx2::abstractbar::ControllerItem         maProPosControl;
+    ::sfx2::abstractbar::ControllerItem         maProSizeControl;
+    ::sfx2::abstractbar::ControllerItem         maAutoWidthControl;
+    ::sfx2::abstractbar::ControllerItem         maAutoHeightControl;
+    ::sfx2::abstractbar::ControllerItem         m_aMetricCtl;
 
-    ::sfx2::sidebar::EnumContext            maContext;
+    ::sfx2::abstractbar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
     /// bitfield

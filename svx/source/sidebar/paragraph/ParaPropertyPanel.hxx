@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARAPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARAPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
 #include <editeng/lspcitem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/relfld.hxx>
@@ -39,8 +39,8 @@ namespace svx { namespace sidebar {
 
 class ParaPropertyPanel
     : public PanelLayout,
-      public ::sfx2::sidebar::IContextChangeReceiver,
-      public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+      public ::sfx2::abstractbar::IContextChangeReceiver,
+      public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~ParaPropertyPanel();
@@ -56,7 +56,7 @@ public:
     SfxBindings* GetBindings() { return mpBindings;}
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -101,13 +101,13 @@ private:
     SfxMapUnit                      m_eLRSpaceUnit;
     SfxMapUnit                      m_eULSpaceUnit;
     // Control Items
-    ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
-    ::sfx2::sidebar::ControllerItem  maULSpaceControl;
-    ::sfx2::sidebar::ControllerItem  maDecIndentControl;
-    ::sfx2::sidebar::ControllerItem  maIncIndentControl;
-    ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
+    ::sfx2::abstractbar::ControllerItem  maLRSpaceControl;
+    ::sfx2::abstractbar::ControllerItem  maULSpaceControl;
+    ::sfx2::abstractbar::ControllerItem  maDecIndentControl;
+    ::sfx2::abstractbar::ControllerItem  maIncIndentControl;
+    ::sfx2::abstractbar::ControllerItem  m_aMetricCtl;
 
-    ::sfx2::sidebar::EnumContext maContext;
+    ::sfx2::abstractbar::EnumContext maContext;
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 

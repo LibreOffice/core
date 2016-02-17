@@ -39,7 +39,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include "app.hrc"
 #include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"

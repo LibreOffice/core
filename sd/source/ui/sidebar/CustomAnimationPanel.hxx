@@ -20,7 +20,7 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_CUSTOMANIMATIONPANEL_HXX
 
 #include "PanelBase.hxx"
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 
 namespace sd { namespace sidebar {
 

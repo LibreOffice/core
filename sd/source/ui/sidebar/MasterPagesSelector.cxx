@@ -58,7 +58,7 @@
 #include "unmovss.hxx"
 #include <sfx2/request.hxx>
 #include <svl/itempool.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::text;
@@ -94,8 +94,8 @@ MasterPagesSelector::MasterPagesSelector (
     PreviewValueSet::SetPreviewSize(mpContainer->GetPreviewSizePixel());
     PreviewValueSet::Show();
 
-    SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
-    SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
+    SetBackground(sfx2::abstractbar::Theme::GetWallpaper(sfx2::abstractbar::Theme::Paint_PanelBackground));
+    SetColor(sfx2::abstractbar::Theme::GetColor(sfx2::abstractbar::Theme::Paint_PanelBackground));
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);

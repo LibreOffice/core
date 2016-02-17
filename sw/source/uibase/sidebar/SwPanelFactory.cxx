@@ -26,7 +26,7 @@
 #include <navipi.hxx>
 #include <redlndlg.hxx>
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -121,7 +121,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     if (rsResourceURL.endsWith("/PagePropertyPanel"))
     {
         VclPtr<vcl::Window> pPanel = sw::sidebar::PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+        xElement = sfx2::abstractbar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
             pPanel,
@@ -130,7 +130,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/WrapPropertyPanel"))
     {
         VclPtr<vcl::Window> pPanel = sw::sidebar::WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+        xElement = sfx2::abstractbar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
             pPanel,
@@ -139,7 +139,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/NavigatorPanel"))
     {
         VclPtrInstance<SwNavigationPI> pPanel(pBindings, nullptr, pParentWindow);
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+        xElement = sfx2::abstractbar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
             pPanel,
@@ -148,7 +148,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
         VclPtrInstance<SwRedlineAcceptPanel> pPanel(pParentWindow, xFrame);
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+        xElement = sfx2::abstractbar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
             pPanel,
@@ -157,13 +157,13 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/StylePresetsPanel"))
     {
         VclPtr<vcl::Window> pPanel = sw::sidebar::StylePresetsPanel::Create(pParentWindow, xFrame);
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+        xElement = sfx2::abstractbar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/ThemePanel"))
     {
         VclPtr<vcl::Window> pPanel = sw::sidebar::ThemePanel::Create(pParentWindow, xFrame);
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+        xElement = sfx2::abstractbar::SidebarPanelBase::Create(
                         rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
     }
 

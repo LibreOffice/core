@@ -9,9 +9,9 @@
  */
 
 #include <sfx2/sidebar/UnoSidebar.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sfx2/abstractbar/Tools.hxx>
 
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 
 #include <sfx2/sidebar/UnoDecks.hxx>
 
@@ -21,6 +21,7 @@
 
 
 using namespace css;
+using namespace ::sfx2::abstractbar;
 using namespace ::sfx2::sidebar;
 
 using ::com::sun::star::uno::RuntimeException;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SIDEBAR_SELECTIONANALYZER_HXX
 #define INCLUDED_SVX_SIDEBAR_SELECTIONANALYZER_HXX
 
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svx/svxdllapi.h>
 
 class SdrMarkList;
@@ -36,7 +36,7 @@ namespace svx { namespace sidebar {
 class SVX_DLLPUBLIC SelectionAnalyzer
 {
 public:
-    static sfx2::sidebar::EnumContext::Context GetContextForSelection_SC (
+    static sfx2::abstractbar::EnumContext::Context GetContextForSelection_SC (
         const SdrMarkList& rMarkList);
 
     enum ViewType
@@ -47,14 +47,14 @@ public:
         VT_Notes,
         VT_Outline
     };
-    static sfx2::sidebar::EnumContext::Context GetContextForSelection_SD (
+    static sfx2::abstractbar::EnumContext::Context GetContextForSelection_SD (
         const SdrMarkList& rMarkList,
         const ViewType eViewType);
 
 private:
-    static sfx2::sidebar::EnumContext::Context GetContextForObjectId_SC (
+    static sfx2::abstractbar::EnumContext::Context GetContextForObjectId_SC (
         const sal_uInt16 nObjectId);
-    static sfx2::sidebar::EnumContext::Context GetContextForObjectId_SD (
+    static sfx2::abstractbar::EnumContext::Context GetContextForObjectId_SD (
         const sal_uInt16 nObjectId,
         const ViewType eViewType);
     static sal_uInt32 GetInventorTypeFromMark (

@@ -19,7 +19,7 @@
 #include "svx/sidebar/ValueSetWithTextControl.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 
 #include <limits.h>
 #include <i18nlangtag/mslangid.hxx>
@@ -167,7 +167,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
             Rectangle aBackRect = aRect;
             aBackRect.Top() += 3;
             aBackRect.Bottom() -= 2;
-            pDev->SetFillColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_Highlight ) );
+            pDev->SetFillColor( sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Color_Highlight ) );
             pDev->DrawRect(aBackRect);
         }
         else
@@ -180,7 +180,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         Image* pImage = nullptr;
         if ( GetSelectItemId() == nItemId )
         {
-            aFont.SetColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_HighlightText ) );
+            aFont.SetColor( sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Color_HighlightText ) );
             pImage = &maItems[nItemId-1].maSelectedItemImage;
         }
         else

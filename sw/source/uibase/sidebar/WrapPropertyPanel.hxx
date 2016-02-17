@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
 #include <vcl/fixed.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/lstbox.hxx>
 
@@ -31,7 +31,7 @@ namespace sw { namespace sidebar {
 
     class WrapPropertyPanel
         : public PanelLayout
-        , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+        , public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
         static VclPtr<vcl::Window> Create(
@@ -39,7 +39,7 @@ namespace sw { namespace sidebar {
             const css::uno::Reference< css::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
 
-        // interface of ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+        // interface of ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
         virtual void NotifyItemUpdate(
             const sal_uInt16 nSId,
             const SfxItemState eState,
@@ -81,15 +81,15 @@ namespace sw { namespace sidebar {
         ImageList aWrapIL;
 
         // Controller Items
-        ::sfx2::sidebar::ControllerItem maSwNoWrapControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapLeftControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapRightControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapParallelControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapThroughControl;
-        ::sfx2::sidebar::ControllerItem maSwWrapIdealControl;
-        ::sfx2::sidebar::ControllerItem maSwEnableContourControl;
-        ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;
-        ::sfx2::sidebar::ControllerItem maSwULSpacingControl;
+        ::sfx2::abstractbar::ControllerItem maSwNoWrapControl;
+        ::sfx2::abstractbar::ControllerItem maSwWrapLeftControl;
+        ::sfx2::abstractbar::ControllerItem maSwWrapRightControl;
+        ::sfx2::abstractbar::ControllerItem maSwWrapParallelControl;
+        ::sfx2::abstractbar::ControllerItem maSwWrapThroughControl;
+        ::sfx2::abstractbar::ControllerItem maSwWrapIdealControl;
+        ::sfx2::abstractbar::ControllerItem maSwEnableContourControl;
+        ::sfx2::abstractbar::ControllerItem maSwLRSpacingControl;
+        ::sfx2::abstractbar::ControllerItem maSwULSpacingControl;
 
         void Initialize();
         void UpdateEditContour();

@@ -20,7 +20,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 
 /** get the decks
 */
@@ -68,8 +68,8 @@ private:
 
     const OUString mDeckId;
 
-    sal_Int32 GetMaxOrderIndex(sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks);
-    sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks);
+    sal_Int32 GetMaxOrderIndex(sfx2::abstractbar::ResourceManager::DeckContextDescriptorContainer aDecks);
+    sal_Int32 GetMinOrderIndex(sfx2::abstractbar::ResourceManager::DeckContextDescriptorContainer aDecks);
 
 };
 

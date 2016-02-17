@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -77,16 +77,16 @@ public:
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) override;
 
 private:
-    ::sfx2::sidebar::ControllerItem maStyleControl;
-    ::sfx2::sidebar::ControllerItem maColorControl;
-    ::sfx2::sidebar::ControllerItem maGradientControl;
-    ::sfx2::sidebar::ControllerItem maHatchControl;
-    ::sfx2::sidebar::ControllerItem maBitmapControl;
-    ::sfx2::sidebar::ControllerItem maGradientListControl;
-    ::sfx2::sidebar::ControllerItem maHatchListControl;
-    ::sfx2::sidebar::ControllerItem maBitmapListControl;
-    ::sfx2::sidebar::ControllerItem maFillTransparenceController;
-    ::sfx2::sidebar::ControllerItem maFillFloatTransparenceController;
+    ::sfx2::abstractbar::ControllerItem maStyleControl;
+    ::sfx2::abstractbar::ControllerItem maColorControl;
+    ::sfx2::abstractbar::ControllerItem maGradientControl;
+    ::sfx2::abstractbar::ControllerItem maHatchControl;
+    ::sfx2::abstractbar::ControllerItem maBitmapControl;
+    ::sfx2::abstractbar::ControllerItem maGradientListControl;
+    ::sfx2::abstractbar::ControllerItem maHatchListControl;
+    ::sfx2::abstractbar::ControllerItem maBitmapListControl;
+    ::sfx2::abstractbar::ControllerItem maFillTransparenceController;
+    ::sfx2::abstractbar::ControllerItem maFillFloatTransparenceController;
 
     SfxBindings* mpBindings;
 };

@@ -21,10 +21,10 @@
 
 #include "AreaTransparencyGradientPopup.hxx"
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/abstractbar/SidebarToolBox.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -58,7 +58,7 @@ class AreaTransparencyGradientControl;
 
 class SVX_DLLPUBLIC AreaPropertyPanelBase
 :   public PanelLayout,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
 
@@ -128,7 +128,7 @@ protected:
     VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
     VclPtr<ColorLB>                                            mpLbFillGradFrom;
     VclPtr<ColorLB>                                            mpLbFillGradTo;
-    VclPtr<sfx2::sidebar::SidebarToolBox>                      mpToolBoxColor; // for new color picker
+    VclPtr<sfx2::abstractbar::SidebarToolBox>                      mpToolBoxColor; // for new color picker
     VclPtr<FixedText>                                          mpTrspTextFT;
     VclPtr<ListBox>                                            mpLBTransType;
     VclPtr<MetricField>                                        mpMTRTransparent;

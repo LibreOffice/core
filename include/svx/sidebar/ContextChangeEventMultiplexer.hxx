@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SIDEBAR_CONTEXTCHANGEEVENTMULTIPLEXER_HXX
 
 #include <svx/svxdllapi.h>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -41,7 +41,7 @@ public:
     */
     static void NotifyContextChange (
         const css::uno::Reference<css::frame::XController>& rxController,
-        const ::sfx2::sidebar::EnumContext::Context eContext);
+        const ::sfx2::abstractbar::EnumContext::Context eContext);
 
     /** Notify the activation of a context.
         @param pViewShell
@@ -53,7 +53,7 @@ public:
     */
     static void NotifyContextChange (
         SfxViewShell* pViewShell,
-        const ::sfx2::sidebar::EnumContext::Context eContext);
+        const ::sfx2::abstractbar::EnumContext::Context eContext);
 
 private:
     static ::rtl::OUString GetModuleName (

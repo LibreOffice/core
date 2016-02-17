@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SIDEBAR_SELECTIONCHANGEHANDLER_HXX
 
 #include <svx/svxdllapi.h>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
@@ -50,7 +50,7 @@ public:
     SelectionChangeHandler (
         const std::function<rtl::OUString ()>& rSelectionChangeCallback,
         const css::uno::Reference<css::frame::XController>& rxController,
-        const sfx2::sidebar::EnumContext::Context eDefaultContext);
+        const sfx2::abstractbar::EnumContext::Context eDefaultContext);
     virtual ~SelectionChangeHandler();
 
     virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent)
@@ -71,7 +71,7 @@ private:
 
     const std::function<rtl::OUString ()> maSelectionChangeCallback;
     css::uno::Reference<css::frame::XController> mxController;
-    const sfx2::sidebar::EnumContext::Context meDefaultContext;
+    const sfx2::abstractbar::EnumContext::Context meDefaultContext;
     bool mbIsConnected;
 };
 

@@ -22,7 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/abstractbar/SidebarToolBox.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
@@ -563,7 +563,7 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
 FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
     : Window(pParent,nStyle | WB_DIALOGCONTROL)
     , mpLbFillType(VclPtr<SvxFillTypeBox>::Create(this))
-    , mpToolBoxColor(VclPtr<sfx2::sidebar::SidebarToolBox>::Create(this))
+    , mpToolBoxColor(VclPtr<sfx2::abstractbar::SidebarToolBox>::Create(this))
     , mpLbFillAttr(VclPtr<SvxFillAttrBox>::Create(this))
 {
     SetOptimalSize();

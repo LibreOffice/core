@@ -20,7 +20,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdograf.hxx>
@@ -57,7 +57,7 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_GRAPHIC);
     SetName("GraphicObject");
-        SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Graphic));
+        SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Graphic));
 }
 
 ScGraphicShell::~ScGraphicShell()

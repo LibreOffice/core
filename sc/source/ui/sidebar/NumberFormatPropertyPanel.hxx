@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_NUMBERFORMATPROPERTYPANEL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_NUMBERFORMATPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 class FixedText;
@@ -32,8 +32,8 @@ namespace sc { namespace sidebar {
 
 class NumberFormatPropertyPanel
 :   public PanelLayout,
-    public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::IContextChangeReceiver,
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
 public:
@@ -46,7 +46,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -75,12 +75,12 @@ private:
     OUString                                maThousandSeparator;
     OUString                                maEngineeringNotation;
 
-    ::sfx2::sidebar::ControllerItem         maNumFormatControl;
-    ::sfx2::sidebar::ControllerItem         maFormatControl;
+    ::sfx2::abstractbar::ControllerItem         maNumFormatControl;
+    ::sfx2::abstractbar::ControllerItem         maFormatControl;
 
     sal_Int32                               mnCategorySelected;
 
-    ::sfx2::sidebar::EnumContext            maContext;
+    ::sfx2::abstractbar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
     DECL_LINK_TYPED(NumFormatSelectHdl, ListBox&, void);

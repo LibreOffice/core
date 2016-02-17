@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 
 #include <editeng/lspcitem.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>

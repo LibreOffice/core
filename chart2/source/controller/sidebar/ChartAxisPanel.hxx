@@ -11,9 +11,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAXISPANEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAXISPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/sidebar/SidebarModelUpdate.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 
@@ -34,9 +34,9 @@ class ChartController;
 namespace sidebar {
 
 class ChartAxisPanel : public PanelLayout,
-    public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface,
-    public sfx2::sidebar::SidebarModelUpdate,
+    public ::sfx2::abstractbar::IContextChangeReceiver,
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface,
+    public sfx2::abstractbar::SidebarModelUpdate,
     public ChartSidebarModifyListenerParent,
     public ChartSidebarSelectionListenerParent
 {
@@ -50,7 +50,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,

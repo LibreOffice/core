@@ -42,7 +42,7 @@
 #include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
-#include <sidebar/ContextChangeBroadcaster.hxx>
+#include <abstractbar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <memory>
@@ -71,7 +71,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     std::vector<std::unique_ptr<SfxSlot> >  aSlotArr;
 
     css::uno::Sequence < css::embed::VerbDescriptor > aVerbList;
-    ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
+    ::sfx2::abstractbar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
     SfxShell_Impl()
         : pViewSh(nullptr)

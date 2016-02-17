@@ -25,7 +25,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>

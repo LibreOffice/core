@@ -20,9 +20,9 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/Deck.hxx>
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/Panel.hxx>
+#include <sfx2/abstractbar/Deck.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 
 
 /** get the Panel
@@ -74,11 +74,11 @@ private:
     const OUString mPanelId;
     const OUString mDeckId;
 
-    VclPtr<sfx2::sidebar::Deck> mpDeck;
-    VclPtr<sfx2::sidebar::Panel> mpPanel;
+    VclPtr<sfx2::abstractbar::Deck> mpDeck;
+    VclPtr<sfx2::abstractbar::Panel> mpPanel;
 
-    sal_Int32 GetMaxOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
-    sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
+    sal_Int32 GetMaxOrderIndex(sfx2::abstractbar::ResourceManager::PanelContextDescriptorContainer aPanels);
+    sal_Int32 GetMinOrderIndex(sfx2::abstractbar::ResourceManager::PanelContextDescriptorContainer aPanels);
 };
 
 #endif

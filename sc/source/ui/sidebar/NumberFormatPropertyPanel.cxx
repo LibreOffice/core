@@ -18,8 +18,8 @@
  */
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include "NumberFormatPropertyPanel.hxx"
 #include <NumberFormatPropertyPanel.hrc>
 #include "sc.hrc"
@@ -36,7 +36,7 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
+using ::sfx2::abstractbar::Theme;
 
 namespace sc { namespace sidebar {
 
@@ -175,7 +175,7 @@ void NumberFormatPropertyPanel::DataChanged(
 }
 
 void NumberFormatPropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const ::sfx2::abstractbar::EnumContext& rContext)
 {
     if(maContext == rContext)
     {

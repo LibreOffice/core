@@ -358,10 +358,10 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/templdlg.hxx>
