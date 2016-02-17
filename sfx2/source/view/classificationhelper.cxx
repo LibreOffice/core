@@ -55,6 +55,9 @@ SfxClassificationHelper::SfxClassificationHelper(SfxObjectShell& rObjectShell)
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (const beans::Property& rProperty : aProperties)
     {
+        if (!rProperty.Name.startsWith("urn:bails:"))
+            continue;
+
         uno::Any aAny = xPropertySet->getPropertyValue(rProperty.Name);
         OUString aValue;
         if (aAny >>= aValue)
