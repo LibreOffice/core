@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
     using SvxNumberFormat::operator !=;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
     SwNumFormat();

@@ -71,10 +71,10 @@ public:
         m_aSavedSettings = Application::GetSettings();
         if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf")
         {
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [this] () {
-                    Application::SetSettings(this->m_aSavedSettings);
-                }));
+            std::unique_ptr<Resetter> pResetter(new Resetter([this]()
+            {
+                Application::SetSettings(this->m_aSavedSettings);
+            }));
             AllSettings aSettings(m_aSavedSettings);
             aSettings.SetLanguageTag(LanguageTag("ru"));
             Application::SetSettings(aSettings);
@@ -82,10 +82,10 @@ public:
         }
         else if (OString(filename) == "fdo44211.rtf")
         {
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [this] () {
-                    Application::SetSettings(this->m_aSavedSettings);
-                }));
+            std::unique_ptr<Resetter> pResetter(new Resetter([this]()
+            {
+                Application::SetSettings(this->m_aSavedSettings);
+            }));
             AllSettings aSettings(m_aSavedSettings);
             aSettings.SetLanguageTag(LanguageTag("lt"));
             Application::SetSettings(aSettings);
