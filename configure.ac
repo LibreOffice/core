@@ -3350,8 +3350,8 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2013
-        vsversions=12.0
+        # By default we prefer 2013/2015, in this order
+        vsversions="12.0 14.0"
     fi
 }
 
