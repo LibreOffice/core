@@ -48,6 +48,8 @@
 #include <memory>
 
 //  Defines
+#define aSlotNewDocDirect ".uno:AddDirect"
+#define aSlotAutoPilot ".uno:AutoPilotMenu"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -332,6 +334,13 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         MenuConfiguration aMenuCfg( m_xContext );
         std::unique_ptr<BmkMenu> pSubMenu;
 
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+        URL aTargetURL;
+        aTargetURL.Complete = rtl::OUString::createFromAscii(m_bNewMenu ? aSlotNewDocDirect : aSlotAutoPilot);
+        m_xURLTransformer->parseStrict( aTargetURL );
+        Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+        if(xMenuItemDispatch == nullptr)
+            return;
         if ( m_bNewMenu )
             pSubMenu.reset(static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU )));
         else
@@ -522,7 +531,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-            m_bNewMenu      = m_aCommandURL == ".uno:AddDirect";
+            m_bNewMenu      = m_aCommandURL == aSlotNewDocDirect;
         }
     }
 }
