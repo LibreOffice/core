@@ -43,7 +43,7 @@ enum class QuickHelpFlags
     CtrlText          = 0x0040,
 /// no delay when opening the quick help. Applies to ShowBallon and ShowQuickHelp
     NoDelay           = 0x0080,
-/// force balloon-style in ShowTip
+/// force balloon-style in ShowPopover
     TipStyleBalloon   = 0x0100,
     NoEvadePointer    = 0x0200,
     BiDiRtl           = 0x0400,
@@ -100,14 +100,15 @@ public:
 
     static void         HideBalloonAndQuickHelp();
 
-    static sal_uLong    ShowTip( vcl::Window* pParent,
-                                 const Rectangle& rScreenRect,
-                                 const OUString& rText, QuickHelpFlags nStyle = QuickHelpFlags::NONE );
-    static void         UpdateTip( sal_uLong nId,
-                                   vcl::Window* pParent,
-                                   const Rectangle& rScreenRect,
-                                   const OUString& rText );
-    static void         HideTip( sal_uLong nId );
+    static sal_uLong    ShowPopover(vcl::Window* pParent,
+                                    const Rectangle& rScreenRect,
+                                    const OUString& rText,
+                                    QuickHelpFlags nStyle = QuickHelpFlags::NONE);
+    static void         UpdatePopover(sal_uLong nId,
+                                      vcl::Window* pParent,
+                                      const Rectangle& rScreenRect,
+                                      const OUString& rText);
+    static void         HidePopover(vcl::Window* pParent, sal_uLong nId);
 };
 
 #endif // INCLUDED_VCL_HELP_HXX

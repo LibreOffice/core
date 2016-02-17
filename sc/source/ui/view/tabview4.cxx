@@ -37,7 +37,9 @@ void ScTabView::HideTip()
 {
     if ( nTipVisible )
     {
-        Help::HideTip( nTipVisible );
+        ScSplitPos eWhich = aViewData.GetActivePart();
+        vcl::Window* pWin = pGridWin[eWhich];
+        Help::HidePopover(pWin, nTipVisible);
         nTipVisible = 0;
     }
 }
@@ -90,7 +92,7 @@ void ScTabView::ShowRefTip()
                 //! Test, ob geaendert ??
 
                 HideTip();
-                nTipVisible = Help::ShowTip( pWin, aRect, aHelp, nFlags );
+                nTipVisible = Help::ShowPopover(pWin, aRect, aHelp, nFlags);
                 bDone = true;
             }
         }

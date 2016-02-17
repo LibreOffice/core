@@ -5916,9 +5916,9 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         Point aPt( rWin.OutputToScreenPixel( rWin.LogicToPixel(
                     rSh.GetCharRect().Pos() )));
         aPt.Y() -= 3;
-        nTipId = Help::ShowTip( &rWin, Rectangle( aPt, Size( 1, 1 )),
+        nTipId = Help::ShowPopover(&rWin, Rectangle( aPt, Size( 1, 1 )),
                         m_aHelpStrings[ nCurArrPos ],
-                        QuickHelpFlags::Left | QuickHelpFlags::Bottom );
+                        QuickHelpFlags::Left | QuickHelpFlags::Bottom);
     }
     else
     {
@@ -5951,7 +5951,10 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     if( !m_bIsTip )
         rSh.DeleteExtTextInput( nullptr, false );
     else if( nTipId )
-        Help::HideTip( nTipId );
+    {
+        vcl::Window& rWin = rSh.GetView().GetEditWin();
+        Help::HidePopover(&rWin, nTipId);
+    }
     ClearContent();
 }
 

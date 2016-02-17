@@ -178,7 +178,6 @@ protected:
 
 class BrowserScrollBar: public ScrollBar
 {
-    sal_uLong           _nTip;
     sal_uLong           _nLastPos;
     VclPtr<BrowserDataWin> _pDataWin;
 
@@ -186,7 +185,6 @@ public:
                     BrowserScrollBar( vcl::Window* pParent, WinBits nStyle,
                                       BrowserDataWin *pDataWin )
                     :   ScrollBar( pParent, nStyle ),
-                        _nTip( 0 ),
                         _nLastPos( ULONG_MAX ),
                         _pDataWin( pDataWin )
                     {}
