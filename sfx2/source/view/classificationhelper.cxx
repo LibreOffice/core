@@ -78,13 +78,67 @@ OUString SfxClassificationHelper::GetBACName()
     return OUString();
 }
 
-OUString SfxClassificationHelper::GetImpactLevel()
+bool SfxClassificationHelper::HasImpactLevel()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
-    if (it != m_pImpl->m_aLabels.end())
-        return it->second;
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
+    if (it == m_pImpl->m_aLabels.end())
+        return false;
 
-    return OUString();
+    it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    if (it == m_pImpl->m_aLabels.end())
+        return false;
+
+    return true;
+}
+
+basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
+{
+    basegfx::BColor aRet;
+
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Scale");
+    if (it == m_pImpl->m_aLabels.end())
+        return aRet;
+    OUString aScale = it->second;
+
+    it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    if (it == m_pImpl->m_aLabels.end())
+        return aRet;
+    OUString aLevel = it->second;
+
+    // The spec defines two valid scale values: FIPS-199 and UK-Cabinet.
+    if (aScale == "UK-Cabinet")
+    {
+        static std::map<OUString, basegfx::BColor> aColors;
+        if (aColors.empty())
+        {
+            // Green -> brown -> orange -> red.
+            aColors["0"] = basegfx::BColor(0.0, 0.5, 0.0);
+            aColors["1"] = basegfx::BColor(0.5, 0.5, 0.0);
+            aColors["2"] = basegfx::BColor(1.0, 0.5, 0.0);
+            aColors["3"] = basegfx::BColor(0.5, 0.0, 0.0);
+        }
+        std::map<OUString, basegfx::BColor>::iterator itColor = aColors.find(aLevel);
+        if (itColor == aColors.end())
+            return aRet;
+        aRet = itColor->second;
+    }
+    else if (aScale == "FIPS-199")
+    {
+        static std::map<OUString, basegfx::BColor> aColors;
+        if (aColors.empty())
+        {
+            // Green -> orange -> red.
+            aColors["Low"] = basegfx::BColor(0.0, 0.5, 0.0);
+            aColors["Moderate"] = basegfx::BColor(1.0, 0.5, 0.0);
+            aColors["High"] = basegfx::BColor(0.5, 0.0, 0.0);
+        }
+        std::map<OUString, basegfx::BColor>::iterator itColor = aColors.find(aLevel);
+        if (itColor == aColors.end())
+            return aRet;
+        aRet = itColor->second;
+    }
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
