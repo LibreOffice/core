@@ -21,8 +21,8 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchAlgorithms.hpp>
-#include <com/sun/star/util/XTextSearch.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/util/XTextSearch2.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
 #include <unotest/bootstrapfixturebase.hxx>
 
@@ -43,13 +43,16 @@ public:
 
     void testICU();
     void testSearches();
+    void testWildcardSearch();
 
     CPPUNIT_TEST_SUITE(TestTextSearch);
     CPPUNIT_TEST(testICU);
     CPPUNIT_TEST(testSearches);
+    CPPUNIT_TEST(testWildcardSearch);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<util::XTextSearch> m_xSearch;
+    uno::Reference<util::XTextSearch2> m_xSearch2;
 };
 
 // Sanity check our ICU first ...
@@ -135,15 +138,129 @@ void TestTextSearch::testSearches()
     CPPUNIT_ASSERT((aRes.startOffset[2] == 3) && (aRes.endOffset[2] == 5));
 }
 
+void TestTextSearch::testWildcardSearch()
+{
+    util::SearchOptions2 aOptions;
+    OUString aText;
+    util::SearchResult aRes;
+
+    aOptions.AlgorithmType2 = util::SearchAlgorithms2::WILDCARD ;
+    aOptions.transliterateFlags = ::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE;
+    aText = "abAca";
+
+    aOptions.searchString = "a";
+    m_xSearch2->setOptions2( aOptions );
+    // match first "a", [0,1)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 1));
+    // match last "a", (5,4]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 4));
+
+    aOptions.searchString = "a?";
+    m_xSearch2->setOptions2( aOptions );
+    // match "ab", [0,2)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 2));
+    // match "ac", (4,2]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 2));
+
+    aOptions.searchString = "a*c";
+    m_xSearch2->setOptions2( aOptions );
+    // match "abac", [0,4) XXX NOTE: first match forward
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 4));
+    // match "ac", (4,2] XXX NOTE: first match backward, not greedy
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 2));
+
+    aOptions.searchString = "b*a";
+    m_xSearch2->setOptions2( aOptions );
+    // match "ba", [1,3) XXX NOTE: first match forward, not greedy
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 1) && (aRes.endOffset[0] == 3));
+    // match "baca", (5,1] XXX NOTE: first match backward
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 1));
+
+    aText = "ab?ca";
+
+    aOptions.searchString = "?~??";
+    m_xSearch2->setOptions2( aOptions );
+    // match "b?c", [1,4)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 1) && (aRes.endOffset[0] == 4));
+    // match "b?c", (4,1]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 1));
+
+    aText = "ab*ca";
+
+    aOptions.searchString = "?~*?";
+    m_xSearch2->setOptions2( aOptions );
+    // match "b?c", [1,4)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 1) && (aRes.endOffset[0] == 4));
+    // match "b?c", (4,1]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 1));
+
+    aOptions.searchString = "ca?";
+    m_xSearch2->setOptions2( aOptions );
+    // no match
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 0);
+    // no match
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 0);
+
+    aOptions.searchString = "ca*";
+    m_xSearch2->setOptions2( aOptions );
+    // match "ca", [3,5)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 3) && (aRes.endOffset[0] == 5));
+    // match "ca", (5,3]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 3));
+
+    aOptions.searchString = "*ca*";
+    m_xSearch2->setOptions2( aOptions );
+    // match "abaca", [0,5)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 5));
+    // match "abaca", (5,0]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 0));
+}
+
 void TestTextSearch::setUp()
 {
     BootstrapFixtureBase::setUp();
     m_xSearch.set(m_xSFactory->createInstance("com.sun.star.util.TextSearch"), uno::UNO_QUERY_THROW);
+    m_xSearch2.set(m_xSFactory->createInstance("com.sun.star.util.TextSearch2"), uno::UNO_QUERY_THROW);
 }
 
 void TestTextSearch::tearDown()
 {
     m_xSearch.clear();
+    m_xSearch2.clear();
     BootstrapFixtureBase::tearDown();
 }
 
