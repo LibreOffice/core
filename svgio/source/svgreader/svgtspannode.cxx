@@ -68,6 +68,11 @@ namespace svgio
             }
         }
 
+        double SvgTspanNode::getCurrentFontSize() const
+        {
+            return getCurrentFontSizeInherited();
+        }
+
     } // end of namespace svgreader
 } // end of namespace svgio
 
