@@ -13,6 +13,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
@@ -45,10 +46,14 @@ class SfxInfoBarWindow : public vcl::Window
         VclPtr<FixedText>                  m_pMessage;
         VclPtr<Button>                     m_pCloseBtn;
         std::vector< VclPtr<PushButton> >  m_aActionBtns;
+        basegfx::BColor                    m_aBackgroundColor;
+        basegfx::BColor                    m_aForegroundColor;
 
     public:
         SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
-                          const OUString& sMessage );
+                          const OUString& sMessage,
+                          const basegfx::BColor* pBackgroundColor,
+                          const basegfx::BColor* pForegroundColor );
         virtual ~SfxInfoBarWindow( );
         virtual void dispose() override;
 
@@ -77,7 +82,7 @@ class SfxInfoBarContainerWindow : public vcl::Window
         virtual ~SfxInfoBarContainerWindow( );
         virtual void dispose() override;
 
-        SfxInfoBarWindow* appendInfoBar(const OUString& sId, const OUString& sMessage);
+        SfxInfoBarWindow* appendInfoBar(const OUString& sId, const OUString& sMessage, const basegfx::BColor* pBackgroundColor, const basegfx::BColor* pForegroundColor);
         SfxInfoBarWindow* getInfoBar(const OUString& sId);
         void removeInfoBar(SfxInfoBarWindow* pInfoBar);
 
