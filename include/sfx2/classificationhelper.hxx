@@ -16,6 +16,10 @@
 #include <sfx2/dllapi.h>
 
 class SfxObjectShell;
+namespace basegfx
+{
+class BColor;
+}
 
 /// Shared code to handle Business Authorization Identification and Labeling Scheme (BAILS) properties.
 class SFX2_DLLPUBLIC SfxClassificationHelper
@@ -30,8 +34,9 @@ public:
     SfxClassificationHelper(SfxObjectShell& rObjectShell);
     ~SfxClassificationHelper();
     OUString GetBACName();
-    /// Impact level is a string, as the scale can be integer-based, but can be also low/high.
-    OUString GetImpactLevel();
+    /// If GetImpactLevelColor() will return something meaningful.
+    bool HasImpactLevel();
+    basegfx::BColor GetImpactLevelColor();
 };
 
 #endif
