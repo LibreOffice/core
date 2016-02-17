@@ -131,7 +131,8 @@ void SfxCloseButton::setForegroundColor(const basegfx::BColor& rColor)
 SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        const OUString& sMessage,
        const basegfx::BColor* pBackgroundColor,
-       const basegfx::BColor* pForegroundColor ) :
+       const basegfx::BColor* pForegroundColor,
+       const basegfx::BColor* pMessageColor ) :
     Window(pParent, 0),
     m_sId(sId),
     m_pMessage(VclPtr<FixedText>::Create(this, 0)),
@@ -149,6 +150,8 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
         m_aForegroundColor = *pForegroundColor;
         static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setForegroundColor(m_aForegroundColor);
     }
+    if (pMessageColor)
+        m_pMessage->SetControlForeground(Color(*pMessageColor));
 
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
@@ -277,11 +280,15 @@ void SfxInfoBarContainerWindow::dispose()
     Window::dispose();
 }
 
-SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage, const basegfx::BColor* pBackgroundColor, const basegfx::BColor* pForegroundColor)
+SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
+                                                           const OUString& sMessage,
+                                                           const basegfx::BColor* pBackgroundColor,
+                                                           const basegfx::BColor* pForegroundColor,
+                                                           const basegfx::BColor* pMessageColor)
 {
     Size aSize = GetSizePixel();
 
-    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage, pBackgroundColor, pForegroundColor);
+    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor);
     pInfoBar->SetPosPixel(Point(0, aSize.getHeight()));
     pInfoBar->Show();
     m_pInfoBars.push_back(pInfoBar);
