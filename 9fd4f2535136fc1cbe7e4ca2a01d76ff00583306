@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_5e511362",
+        "filename": "solenv/gbuild/gen-autoinstall.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-02-17T15:49:52Z",
+      "side": 1,
+      "message": "Does this \"python3\" matter? It seems to me that $(call gb_ExternalExecutable_get_command,python) returns a python2 on OS X, a system python3 on Linux and a bundled python3 on Windows. I.e. writing python3 there may mislead somebody to believe that the code is OK to use python3-specific features.",
+      "revId": "9fd4f2535136fc1cbe7e4ca2a01d76ff00583306",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
