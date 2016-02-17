@@ -495,7 +495,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         else
         {
             bool const bTextChanged = rHelpText != pHelpWin->GetHelpText();
-            if ( bTextChanged || ( nStyle & QuickHelpFlags::ForceReposition ) )
+            if (bTextChanged)
             {
                 vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );

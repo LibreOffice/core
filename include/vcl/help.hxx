@@ -41,18 +41,16 @@ enum class QuickHelpFlags
     Bottom            = 0x0020,
     NoAutoPos         = Left | Center | Right | Top | VCenter | Bottom,
     CtrlText          = 0x0040,
-/// force the existent tip window to be re-positioned, even if the previous incarnation has the same text. Applies to ShowBallon and ShowQuickHelp.
-    ForceReposition   = 0x0080,
 /// no delay when opening the quick help. Applies to ShowBallon and ShowQuickHelp
-    NoDelay           = 0x0100,
+    NoDelay           = 0x0080,
 /// force balloon-style in ShowTip
-    TipStyleBalloon   = 0x0200,
-    NoEvadePointer    = 0x4000,
-    BiDiRtl           = 0x8000,
+    TipStyleBalloon   = 0x0100,
+    NoEvadePointer    = 0x0200,
+    BiDiRtl           = 0x0400,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<QuickHelpFlags> : is_typed_flags<QuickHelpFlags, 0xc3ff> {};
+    template<> struct typed_flags<QuickHelpFlags> : is_typed_flags<QuickHelpFlags, 0x7ff> {};
 }
 
 #define OOO_HELP_INDEX          ".help:index"
