@@ -847,8 +847,8 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
     if (!bLayout && (bNativeOK = rRenderContext.IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)))
     {
         TabitemValue tiValue(Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
-                                       pItem->maRect.Right() - TAB_TABOFFSET_X,
                                        pItem->maRect.Top() + TAB_TABOFFSET_Y,
+                                       pItem->maRect.Right() - TAB_TABOFFSET_X,
                                        pItem->maRect.Bottom() - TAB_TABOFFSET_Y));
         if (pItem->maRect.Left() < 5)
             tiValue.mnAlignment |= TabitemFlags::LeftAligned;
