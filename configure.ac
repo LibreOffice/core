@@ -3381,10 +3381,11 @@ find_msvs()
 
 find_ucrt()
 {
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
     if test -n "$regvalue"; then
         ucrttest=$regvalue
-        ucrtdir=10.0.10240.0
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
+        ucrtdir=$regvalue
     fi
 }
 
@@ -3438,7 +3439,6 @@ if test "$_os" = "WINNT"; then
         AC_MSG_CHECKING([Visual C++])
 
         find_msvc "$with_visual_studio"
-
         if test -z "$vctest"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
@@ -3605,7 +3605,7 @@ if test "$_os" = "WINNT"; then
                 ;;
             140)
                 COMEX=19
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 8.1A 8.1 8.0 7.1A"
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
                 ;;
             esac
 
@@ -5309,11 +5309,12 @@ find_winsdk_version()
             return
         fi
         ;;
-    10)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
+    10.0)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
-            winsdklibsubdir=10.0.10056.0
+            reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
+            winsdklibsubdir=$regvalue
             return
         fi
         ;;
@@ -8837,7 +8838,7 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
         save_CPPFLAGS=$CPPFLAGS
         find_winsdk
         PathFormat "$winsdktest"
-        CPPFLAGS="$CPPFLAGS -I$formatted_path/include/um -I$formatted_path/Include/$winsdklibsubdir/um -I$formatted_path/include -I$formatted_path/include/shared"
+        CPPFLAGS="$CPPFLAGS -I$formatted_path/include/um -I$formatted_path/Include/$winsdklibsubdir/um -I$formatted_path/include -I$formatted_path/include/shared -I$formatted_path/include/$winsdklibsubdir/shared"
         AC_CHECK_HEADER(sqlext.h, [],
             [AC_MSG_ERROR(odbc not found. install odbc)],
             [#include <windows.h>])
