@@ -20,12 +20,12 @@ in vec4 shadowCoordinate;
 void main() {
     vec3 lightVector = vec3(0.0, 0.0, 1.0);
     float light = max(dot(lightVector, v_normal), 0.0);
-    vec4 fragment = texture2D(slideTexture, v_texturePosition);
+    vec4 fragment = texture(slideTexture, v_texturePosition);
     float visibility = 1.0;
     const float epsilon = 0.0001;
-    if (texture2D(leavingShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
+    if (texture(leavingShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
         visibility *= 0.7;
-    if (texture2D(enteringShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
+    if (texture(enteringShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
         visibility *= 0.7;
     vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
     gl_FragColor = mix(black, fragment, visibility * light);
