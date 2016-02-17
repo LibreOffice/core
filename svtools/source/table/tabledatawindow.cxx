@@ -33,7 +33,6 @@ namespace svt { namespace table
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl( _rTableControl )
-        ,m_nTipWindowHandle( 0 )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -123,12 +122,7 @@ namespace svt { namespace table
                 GetOutputSizePixel()
             );
 
-            if ( m_nTipWindowHandle )
-            {
-                Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
-            }
-            else
-                m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
+            Help::ShowQuickHelp(this, aControlScreenRect, sHelpText, nHelpStyle);
         }
         else
         {
@@ -137,16 +131,10 @@ namespace svt { namespace table
         }
     }
 
-
     void TableDataWindow::impl_hideTipWindow()
     {
-        if ( m_nTipWindowHandle != 0 )
-        {
-            Help::HideTip( m_nTipWindowHandle );
-            m_nTipWindowHandle = 0;
-        }
+        Help::HideBalloonAndQuickHelp();
     }
-
 
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {

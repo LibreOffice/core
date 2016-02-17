@@ -868,9 +868,8 @@ void ScInputHandler::HideTip()
 {
     if ( nTipVisible )
     {
-        if (pTipVisibleParent)
-            pTipVisibleParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
-        Help::HideTip( nTipVisible );
+        pTipVisibleParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
+        Help::HidePopover(pTipVisibleParent, nTipVisible );
         nTipVisible = 0;
         pTipVisibleParent = nullptr;
     }
@@ -880,9 +879,8 @@ void ScInputHandler::HideTipBelow()
 {
     if ( nTipVisibleSec )
     {
-        if (pTipVisibleSecParent)
-            pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
-        Help::HideTip( nTipVisibleSec );
+        pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
+        Help::HidePopover(pTipVisibleSecParent, nTipVisibleSec);
         nTipVisibleSec = 0;
         pTipVisibleSecParent = nullptr;
     }
@@ -1082,7 +1080,7 @@ void ScInputHandler::ShowTip( const OUString& rText )
         Rectangle aRect( aPos, aPos );
 
         QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
-        nTipVisible = Help::ShowTip(pTipVisibleParent, aRect, rText, nAlign);
+        nTipVisible = Help::ShowPopover(pTipVisibleParent, aRect, rText, nAlign);
         pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
     }
 }
@@ -1106,7 +1104,7 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
         aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
         QuickHelpFlags nAlign = QuickHelpFlags::Left | QuickHelpFlags::Top | QuickHelpFlags::NoEvadePointer;
-        nTipVisibleSec = Help::ShowTip(pTipVisibleSecParent, aRect, rText, nAlign);
+        nTipVisibleSec = Help::ShowPopover(pTipVisibleSecParent, aRect, rText, nAlign);
         pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
     }
 }

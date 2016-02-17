@@ -23,6 +23,7 @@
 #include "salwtype.hxx"
 #include "salgeom.hxx"
 
+#include <vcl/help.hxx>
 #include <vcl/window.hxx>
 
 // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
@@ -231,7 +232,25 @@ public:
     }
 
     // return true to indicate tooltips are shown natively, false otherwise
-    virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/ )
+    virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/)
+    {
+        return false;
+    }
+
+    // return !0 to indicate popovers are shown natively, 0 otherwise
+    virtual sal_uIntPtr     ShowPopover(const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
+    {
+        return 0;
+    }
+
+    // return true to indicate popovers are shown natively, false otherwise
+    virtual bool            UpdatePopover(sal_uIntPtr /*nId*/, const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/)
+    {
+        return false;
+    }
+
+    // return true to indicate popovers are shown natively, false otherwise
+    virtual bool            HidePopover(sal_uIntPtr /*nId*/)
     {
         return false;
     }

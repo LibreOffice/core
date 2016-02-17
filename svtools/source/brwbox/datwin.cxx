@@ -713,24 +713,17 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
             aTip += OUString::number(GetRangeMax());
 
         Rectangle aRect(GetPointerPosPixel(), Size(GetTextWidth(aTip), GetTextHeight()));
-        if ( _nTip )
-            Help::UpdateTip( _nTip, this, aRect, aTip );
-        else
-            _nTip = Help::ShowTip( this, aRect, aTip );
+        Help::ShowQuickHelp(this, aRect, aTip);
         _nLastPos = nPos;
     }
 
     ScrollBar::Tracking( rTEvt );
 }
 
-
 void BrowserScrollBar::EndScroll()
 {
-    if ( _nTip )
-        Help::HideTip( _nTip );
-    _nTip = 0;
+    Help::HideBalloonAndQuickHelp();
     ScrollBar::EndScroll();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -191,23 +191,37 @@ void Help::HideBalloonAndQuickHelp()
     ImplDestroyHelpWindow( bIsVisible );
 }
 
-sal_uIntPtr Help::ShowTip( vcl::Window* pParent, const Rectangle& rScreenRect,
-                     const OUString& rText, QuickHelpFlags nStyle )
+sal_uIntPtr Help::ShowPopover(vcl::Window* pParent, const Rectangle& rScreenRect,
+                              const OUString& rText, QuickHelpFlags nStyle)
 {
+    sal_uIntPtr nId = pParent->ImplGetFrame()->ShowPopover(rText, rScreenRect, nStyle);
+    if (nId)
+    {
+        //popovers are handled natively, return early
+        return nId;
+    }
+
     sal_uInt16 nHelpWinStyle = ( nStyle & QuickHelpFlags::TipStyleBalloon ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
     VclPtrInstance<HelpTextWindow> pHelpWin( pParent, rText, nHelpWinStyle, nStyle );
 
-    sal_uIntPtr nId = reinterpret_cast< sal_uIntPtr >( pHelpWin.get() );
-    UpdateTip( nId, pParent, rScreenRect, rText );
+    nId = reinterpret_cast< sal_uIntPtr >( pHelpWin.get() );
+    UpdatePopover(nId, pParent, rScreenRect, rText);
 
     pHelpWin->ShowHelp( HELPDELAY_NONE );
     return nId;
 }
 
-void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
+void Help::UpdatePopover(sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rScreenRect,
+                         const OUString& rText)
 {
+    if (pParent->ImplGetFrame()->UpdatePopover(nId, rText, rScreenRect))
+    {
+        //popovers are handled natively, return early
+        return;
+    }
+
     HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
-    ENSURE_OR_RETURN_VOID( pHelpWin != nullptr, "Help::UpdateTip: invalid ID!" );
+    ENSURE_OR_RETURN_VOID( pHelpWin != nullptr, "Help::UpdatePopover: invalid ID!" );
 
     Size aSz = pHelpWin->CalcOutSize();
     pHelpWin->SetOutputSizePixel( aSz );
@@ -218,8 +232,14 @@ void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rS
     pHelpWin->Invalidate();
 }
 
-void Help::HideTip( sal_uLong nId )
+void Help::HidePopover(vcl::Window* pParent, sal_uLong nId)
 {
+    if (pParent->ImplGetFrame()->HidePopover(nId))
+    {
+        //popovers are handled natively, return early
+        return;
+    }
+
     VclPtr<HelpTextWindow> pHelpWin = reinterpret_cast<HelpTextWindow*>(nId);
     vcl::Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
     pHelpWin->Hide();

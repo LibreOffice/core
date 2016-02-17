@@ -2449,6 +2449,82 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpA
     return true;
 }
 
+sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags)
+{
+#if GTK_CHECK_VERSION(3,12,0)
+    GtkWidget *pWidget = gtk_popover_new(getMouseEventWidget());
+    OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
+    GtkWidget *pLabel =  gtk_label_new(sUTF.getStr());
+    gtk_container_add(GTK_CONTAINER(pWidget), pLabel);
+
+    GdkRectangle aRect;
+    aRect.x = rHelpArea.Left();
+    aRect.y = rHelpArea.Top();
+    aRect.width = rHelpArea.GetWidth();
+    aRect.height = rHelpArea.GetHeight();
+
+    gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &aRect);
+
+    if (nFlags & QuickHelpFlags::Top)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_BOTTOM);
+    else if (nFlags & QuickHelpFlags::Bottom)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_TOP);
+    else if (nFlags & QuickHelpFlags::Left)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_RIGHT);
+    else if (nFlags & QuickHelpFlags::Right)
+        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_LEFT);
+
+    gtk_popover_set_modal(GTK_POPOVER(pWidget), false);
+
+    gtk_widget_show_all(pWidget);
+
+    return reinterpret_cast<sal_uIntPtr>(pWidget);
+#else
+    (void)rHelpText;
+    (void)rHelpArea;
+    (void)nFlags;
+    return 0;
+#endif
+}
+
+bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const Rectangle& rHelpArea)
+{
+#if GTK_CHECK_VERSION(3,12,0)
+    GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
+
+    GdkRectangle aRect;
+    aRect.x = rHelpArea.Left();
+    aRect.y = rHelpArea.Top();
+    aRect.width = rHelpArea.GetWidth();
+    aRect.height = rHelpArea.GetHeight();
+
+    gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &aRect);
+
+    GtkWidget *pLabel = gtk_bin_get_child(GTK_BIN(pWidget));
+    OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
+    gtk_label_set_text(GTK_LABEL(pLabel), sUTF.getStr());
+
+    return true;
+#else
+    (void)nId;
+    (void)rHelpText;
+    (void)rHelpArea;
+    return false
+#endif
+}
+
+bool GtkSalFrame::HidePopover(sal_uIntPtr nId)
+{
+#if GTK_CHECK_VERSION(3,12,0)
+    GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
+    gtk_widget_destroy(pWidget);
+    return true;
+#else
+    (void)nId;
+    return false;
+#endif
+}
+
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);

@@ -517,6 +517,9 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     virtual void                SetModal(bool bModal) override;
     virtual bool                ShowTooltip(const OUString& rHelpText, const Rectangle& rHelpArea) override;
+    virtual sal_uIntPtr         ShowPopover(const OUString& rHelpText, const Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
+    virtual bool                UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const Rectangle& rHelpArea) override;
+    virtual bool                HidePopover(sal_uIntPtr nId) override;
 #endif
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );

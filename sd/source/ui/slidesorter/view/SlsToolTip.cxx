@@ -134,7 +134,7 @@ void ToolTip::DoShow()
         // the preview).  Therefore we use a little trick and place the tool
         // tip at the top of a rectangle that is placed below the preview.
         aBox.Move(aOffset.X(), aOffset.Y() + aBox.GetHeight() + 3);
-        mnHelpWindowHandle = Help::ShowTip(
+        mnHelpWindowHandle = Help::ShowPopover(
             pWindow,
             aBox,
             msCurrentHelpText,
@@ -146,7 +146,8 @@ bool ToolTip::Hide()
 {
     if (mnHelpWindowHandle>0)
     {
-        Help::HideTip(mnHelpWindowHandle);
+        sd::Window *pWindow (mrSlideSorter.GetContentWindow());
+        Help::HidePopover(pWindow, mnHelpWindowHandle);
         mnHelpWindowHandle = 0;
         return true;
     }

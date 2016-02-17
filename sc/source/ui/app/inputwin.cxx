@@ -2066,7 +2066,10 @@ void ScPosWnd::HideTip()
 {
     if ( nTipVisible )
     {
-        Help::HideTip( nTipVisible );
+        vcl::Window* pWin = GetSubEdit();
+        if (!pWin)
+            pWin = this;
+        Help::HidePopover(pWin, nTipVisible);
         nTipVisible = 0;
     }
 }
@@ -2174,7 +2177,7 @@ void ScPosWnd::Modify()
 
             OUString aText = ScGlobal::GetRscString( nStrId );
             QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
-            nTipVisible = Help::ShowTip(pWin, aRect, aText, nAlign);
+            nTipVisible = Help::ShowPopover(pWin, aRect, aText, nAlign);
         }
     }
 }
