@@ -5569,7 +5569,7 @@ void Test::testExternalRefFunctions()
     {
         m_pDoc->SetString(0, 0, 0, OUString::createFromAscii(aChecks[i].pFormula));
         m_pDoc->GetValue(0, 0, 0, val);
-        CPPUNIT_ASSERT_MESSAGE("unexpected result involving external ranges.", val == aChecks[i].fResult);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected result involving external ranges.", aChecks[i].fResult, val, 1e-15);
     }
 
     pRefMgr->clearCache(nFileId);
