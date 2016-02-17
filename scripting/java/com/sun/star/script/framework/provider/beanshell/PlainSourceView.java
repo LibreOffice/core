@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 
 public class PlainSourceView extends JScrollPane implements
@@ -93,6 +94,12 @@ public class PlainSourceView extends JScrollPane implements
     }
 
     private void initUI() {
+        try{
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch(Exception e){
+                // What to do here
+        }
         ta = new JTextArea();
         ta.setRows(15);
         ta.setColumns(40);
