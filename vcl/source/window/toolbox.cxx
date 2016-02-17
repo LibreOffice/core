@@ -3581,7 +3581,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         mbUpper = false;
         mbLower = false;
         mbIn    = false;
-        InvalidateSpin(false, false);
+        InvalidateSpin();
         return true;
     }
 
