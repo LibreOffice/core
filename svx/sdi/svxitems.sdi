@@ -314,7 +314,7 @@ item SvxLine SvxLineItem;
 struct SvxLRSpace
 {
     INT32       LeftMargin          MID_L_MARGIN;               // % or direct
-    INT32       TextLeftMargin      MID_TXT_LMARGIN
+    INT32       TextLeftMargin      MID_TXT_LMARGIN;
     INT32       RightMargin         MID_R_MARGIN;               // % or direct
     INT16       LeftRelMargin       MID_L_REL_MARGIN;
     INT16       RightRelMargin      MID_R_REL_MARGIN;

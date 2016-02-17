@@ -181,28 +181,38 @@ public:
     SvToken& GetToken() const { return *(*pCurToken).get(); }
 
     bool     ReadIf( char cChar )
-                    {
-                        if( (*pCurToken)->IsChar()
-                          && cChar == (*pCurToken)->GetChar() )
-                        {
-                            GetToken_Next();
-                            return true;
-                        }
-                        else
-                            return false;
-                    }
+    {
+        if( GetToken().IsChar() && cChar == GetToken().GetChar() )
+        {
+            GetToken_Next();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool     ReadIf( SvStringHashEntry* pEntry )
+    {
+        if( GetToken().Is( pEntry ) )
+        {
+            GetToken_Next();
+            return true;
+        }
+        else
+            return false;
+    }
 
     bool     ReadIfDelimiter()
-                    {
-                        if( (*pCurToken)->IsChar()
-                          && (';' == (*pCurToken)->GetChar()
-                                || ',' == (*pCurToken)->GetChar()) )
-                        {
-                            GetToken_Next();
-                            return true;
-                        }
-                        return false;
-                    }
+    {
+        if( GetToken().IsChar()
+            && (';' == GetToken().GetChar()
+                 || ',' == GetToken().GetChar()) )
+        {
+            GetToken_Next();
+            return true;
+        }
+        return false;
+    }
 
     sal_uInt32 Tell() const { return pCurToken-aTokList.begin(); }
 

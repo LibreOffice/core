@@ -52,11 +52,14 @@ public:
     void         ReadEnumValue( SvMetaTypeEnum& rEnum );
     SvMetaClass* ReadKnownClass();
     SvMetaType*  ReadKnownType();
-    void         ReadChar(char cChar);
+    void         Read(char cChar);
+    bool         ReadIf(char cChar);
     void         ReadDelimiter();
+    bool         ReadIfDelimiter();
     OString      ReadIdentifier();
     OString      ReadString();
-    void         ReadToken(SvStringHashEntry*);
+    void         Read(SvStringHashEntry*);
+    bool         ReadIf(SvStringHashEntry*);
 };
 
 #endif // INCLUDED_IDL_INC_PARSER_HXX
