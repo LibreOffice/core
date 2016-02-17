@@ -54,13 +54,21 @@ void lclDetermineLightDarkColor(BColor& rLightColor, BColor& rDarkColor)
 
 class SfxCloseButton : public PushButton
 {
+    basegfx::BColor m_aBackgroundColor;
+    basegfx::BColor m_aForegroundColor;
+
 public:
     explicit SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
-    {}
+    {
+        lclDetermineLightDarkColor(m_aBackgroundColor, m_aForegroundColor);
+    }
 
     virtual ~SfxCloseButton() {}
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+
+    void setBackgroundColor(const basegfx::BColor& rColor);
+    void setForegroundColor(const basegfx::BColor& rColor);
 };
 
 void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
@@ -73,10 +81,6 @@ void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
-    BColor aLightColor;
-    BColor aDarkColor;
-    lclDetermineLightDarkColor(aLightColor, aDarkColor);
-
     // Light background
     B2DPolygon aPolygon;
     aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
@@ -86,10 +90,10 @@ void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     aPolygon.setClosed(true);
 
     PolyPolygonColorPrimitive2D* pBack =
-        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aLightColor);
+        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
     aSeq[0] = pBack;
 
-    LineAttribute aLineAttribute(aDarkColor, 2.0);
+    LineAttribute aLineAttribute(m_aForegroundColor, 2.0);
 
     // Cross
     B2DPolyPolygon aCross;
@@ -112,16 +116,40 @@ void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     pProcessor->process(aSeq);
 }
 
+void SfxCloseButton::setBackgroundColor(const basegfx::BColor& rColor)
+{
+    m_aBackgroundColor = rColor;
+}
+
+void SfxCloseButton::setForegroundColor(const basegfx::BColor& rColor)
+{
+    m_aForegroundColor = rColor;
+}
+
 } // anonymous namespace
 
 SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
-       const OUString& sMessage) :
+       const OUString& sMessage,
+       const basegfx::BColor* pBackgroundColor,
+       const basegfx::BColor* pForegroundColor ) :
     Window(pParent, 0),
     m_sId(sId),
     m_pMessage(VclPtr<FixedText>::Create(this, 0)),
     m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
+    lclDetermineLightDarkColor(m_aBackgroundColor, m_aForegroundColor);
+    if (pBackgroundColor)
+    {
+        m_aBackgroundColor = *pBackgroundColor;
+        static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setBackgroundColor(m_aBackgroundColor);
+    }
+    if (pForegroundColor)
+    {
+        m_aForegroundColor = *pForegroundColor;
+        static_cast<SfxCloseButton*>(m_pCloseBtn.get())->setForegroundColor(m_aForegroundColor);
+    }
+
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
     SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * nScaleFactor));
@@ -170,10 +198,6 @@ void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
-    BColor aLightColor;
-    BColor aDarkColor;
-    lclDetermineLightDarkColor(aLightColor, aDarkColor);
-
     // Light background
     B2DPolygon aPolygon;
     aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
@@ -183,10 +207,10 @@ void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     aPolygon.setClosed(true);
 
     PolyPolygonColorPrimitive2D* pBack =
-        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aLightColor);
+        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
     aSeq[0] = pBack;
 
-    LineAttribute aLineAttribute(aDarkColor, 1.0);
+    LineAttribute aLineAttribute(m_aForegroundColor, 1.0);
 
     // Bottom dark line
     B2DPolygon aPolygonBottom;
@@ -253,11 +277,11 @@ void SfxInfoBarContainerWindow::dispose()
     Window::dispose();
 }
 
-SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage)
+SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage, const basegfx::BColor* pBackgroundColor, const basegfx::BColor* pForegroundColor)
 {
     Size aSize = GetSizePixel();
 
-    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage);
+    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage, pBackgroundColor, pForegroundColor);
     pInfoBar->SetPosPixel(Point(0, aSize.getHeight()));
     pInfoBar->Show();
     m_pInfoBars.push_back(pInfoBar);
