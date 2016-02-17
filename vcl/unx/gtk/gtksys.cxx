@@ -40,6 +40,13 @@ GtkSalSystem::GtkSalSystem() : SalGenericSystem()
 {
     mpDisplay = gdk_display_get_default();
     countScreenMonitors();
+#if GTK_CHECK_VERSION(3,0,0)
+    // rhbz#1285356, native look will be gtk2, which crashes
+    // when gtk3 is already loaded. Until there is a solution
+    // java-side force look and feel to something that doesn't
+    // crash when we are using gtk3
+    setenv("STOC_FORCE_SYSTEM_LAF", "true", 1);
+#endif
 }
 
 GtkSalSystem::~GtkSalSystem()
