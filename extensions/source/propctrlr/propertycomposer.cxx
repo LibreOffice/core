@@ -26,6 +26,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <iterator>
 #include <map>
 
 

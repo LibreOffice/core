@@ -26,6 +26,8 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
+#include <iterator>
+
 ParagraphData::ParagraphData()
 : nDepth( -1 )
 , mnNumberingStartValue( -1 )

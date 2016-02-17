@@ -68,6 +68,7 @@
 #include "dbexchange.hxx"
 #include "UITools.hxx"
 #include <algorithm>
+#include <iterator>
 #include <svtools/treelistbox.hxx>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
