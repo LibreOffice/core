@@ -56,7 +56,7 @@
 #define EVT_INIT_NONSIGNALED FALSE
 #define EVT_NONAME           ""
 
-//  namesapces
+//  namespaces
 
 using namespace ::std;
 using namespace ::cppu;

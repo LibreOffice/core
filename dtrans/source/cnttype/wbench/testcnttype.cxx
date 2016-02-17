@@ -37,7 +37,7 @@
 #define TEST_CLIPBOARD
 #define RDB_SYSPATH  "d:\\projects\\src621\\dtrans\\wntmsci7\\bin\\applicat.rdb"
 
-//  namesapces
+//  namespaces
 
 using namespace ::std;
 using namespace ::cppu;

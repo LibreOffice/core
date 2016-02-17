@@ -39,7 +39,7 @@
 #endif
 
 
-//  namesapces
+//  namespaces
 
 
 using namespace ::cppu                  ;

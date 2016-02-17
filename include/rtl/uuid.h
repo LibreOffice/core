@@ -127,7 +127,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
     Predefined Namespaces
     (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;
  */
-/** namesapce DNS
+/** namespace DNS
 
     <p>
     (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;

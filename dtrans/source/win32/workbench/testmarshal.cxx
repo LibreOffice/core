@@ -45,7 +45,7 @@
 #define WAIT_MSGLOOP
 #define RAW_MARSHALING
 
-//  namesapces
+//  namespaces
 
 using namespace ::std;
 

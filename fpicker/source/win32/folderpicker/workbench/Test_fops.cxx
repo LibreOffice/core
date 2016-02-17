@@ -40,7 +40,7 @@
 #include <windows.h>
 
 
-//  namesapces
+//  namespaces
 
 
 using namespace ::cppu                  ;
