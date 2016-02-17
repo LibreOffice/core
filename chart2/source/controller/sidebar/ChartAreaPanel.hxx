@@ -11,8 +11,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTAREAPANEL_HXX
 
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/SidebarModelUpdate.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/SidebarModelUpdate.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -46,7 +46,7 @@ class ChartController;
 namespace sidebar {
 
 class ChartAreaPanel : public svx::sidebar::AreaPropertyPanelBase,
-    public sfx2::sidebar::SidebarModelUpdate,
+    public sfx2::abstractbar::SidebarModelUpdate,
     public ChartSidebarModifyListenerParent,
     public ChartSidebarSelectionListenerParent
 {

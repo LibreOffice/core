@@ -122,7 +122,7 @@ public:
     SfxSlotPool*                pSlotPool;
     SfxDispatcher*              pAppDispat;     // Dispatcher if no document
     SfxInterface**              pInterfaces;
-    ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
+    ::rtl::Reference<sfx2::abstractbar::Theme> m_pSidebarTheme;
 
     sal_uInt16                  nInterfaces;
 

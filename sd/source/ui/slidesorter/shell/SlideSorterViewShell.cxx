@@ -60,7 +60,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <svx/svxids.hrc>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
@@ -77,7 +77,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
-using ::sfx2::sidebar::EnumContext;
+using ::sfx2::abstractbar::EnumContext;
 
 namespace sd { namespace slidesorter {
 

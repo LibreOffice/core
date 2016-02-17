@@ -18,10 +18,10 @@
  */
 #include "InsertPropertyPanel.hxx"
 
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/Tools.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/ControllerFactory.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
+#include <sfx2/abstractbar/Tools.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControllerFactory.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svtools/miscopt.hxx>
@@ -37,7 +37,7 @@
 using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;
-using ::sfx2::sidebar::SidebarToolBox;
+using ::sfx2::abstractbar::SidebarToolBox;
 
 namespace svx { namespace sidebar {
 
@@ -103,7 +103,7 @@ IMPL_LINK_TYPED(InsertPropertyPanel, WindowEventListener, VclWindowEvent&, rEven
     OUString sToolbarName (rtl::OStringToOUString(pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8));
     if (sToolbarName.getLength() == 0)
         return;
-    const util::URL aURL (sfx2::sidebar::Tools::GetURL(sToolbarName));
+    const util::URL aURL (sfx2::abstractbar::Tools::GetURL(sToolbarName));
     if (aURL.Path.getLength() == 0)
         return;
 

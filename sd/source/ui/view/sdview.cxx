@@ -46,7 +46,7 @@
 
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svx/svdopage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/xlndsit.hxx>

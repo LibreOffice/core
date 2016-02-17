@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdopath.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
@@ -63,7 +63,7 @@ SwBezierShell::SwBezierShell(SwView &_rView):
     SdrView*    pSdrView = pSh->GetDrawView();
     pSdrView->SetEliminatePolyPointLimitAngle(1500L);
 
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Draw));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Draw));
 }
 
 void SwBezierShell::Execute(SfxRequest &rReq)

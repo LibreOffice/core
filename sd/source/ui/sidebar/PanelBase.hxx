@@ -21,7 +21,7 @@
 
 #include "IDisposable.hxx"
 #include "ISidebarReceiver.hxx"
-#include <sfx2/sidebar/ILayoutableWindow.hxx>
+#include <sfx2/abstractbar/ILayoutableWindow.hxx>
 
 #include <vcl/ctrl.hxx>
 
@@ -36,7 +36,7 @@ namespace sd { namespace sidebar {
 
 class PanelBase
     : public Control,
-      public sfx2::sidebar::ILayoutableWindow,
+      public sfx2::abstractbar::ILayoutableWindow,
       public IDisposable,
       public ISidebarReceiver
 {

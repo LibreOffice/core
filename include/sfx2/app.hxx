@@ -86,7 +86,7 @@ class SbxValue;
 namespace sfx2
 {
     class SvLinkSource;
-    namespace sidebar {
+    namespace abstractbar {
         class Theme;
     }
 }
@@ -240,7 +240,7 @@ public:
     static BitmapEx GetApplicationLogo(long nWidth);
 
     /** this Theme contains Images so must be deleted before DeInitVCL */
-    sfx2::sidebar::Theme & GetSidebarTheme();
+    sfx2::abstractbar::Theme & GetSidebarTheme();
 };
 
 inline SfxApplication* SfxGetpApp()

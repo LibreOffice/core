@@ -82,6 +82,39 @@ $(eval $(call gb_Library_use_externals,sfx,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/abstractbar/AbstractbarController \
+    sfx2/source/abstractbar/Accessible \
+    sfx2/source/abstractbar/AccessibleTitleBar \
+    sfx2/source/abstractbar/AsynchronousCall \
+    sfx2/source/abstractbar/Context \
+    sfx2/source/abstractbar/ContextChangeBroadcaster \
+    sfx2/source/abstractbar/ContextList \
+    sfx2/source/abstractbar/ControlFactory \
+    sfx2/source/abstractbar/ControllerFactory \
+    sfx2/source/abstractbar/ControllerItem \
+    sfx2/source/abstractbar/Deck \
+    sfx2/source/abstractbar/DeckDescriptor \
+    sfx2/source/abstractbar/DeckLayouter \
+    sfx2/source/abstractbar/DeckTitleBar \
+    sfx2/source/abstractbar/DrawHelper \
+    sfx2/source/abstractbar/EnumContext \
+    sfx2/source/abstractbar/FocusManager \
+    sfx2/source/abstractbar/IContextChangeReceiver \
+    sfx2/source/abstractbar/ILayoutableWindow \
+    sfx2/source/abstractbar/MenuButton \
+    sfx2/source/abstractbar/Paint \
+    sfx2/source/abstractbar/Panel \
+    sfx2/source/abstractbar/PanelDescriptor \
+    sfx2/source/abstractbar/PanelTitleBar \
+    sfx2/source/abstractbar/ResourceManager \
+    sfx2/source/abstractbar/SidebarToolBox \
+    sfx2/source/abstractbar/SidebarModelUpdate \
+    sfx2/source/abstractbar/SidebarPanelBase \
+    sfx2/source/abstractbar/TabBar \
+    sfx2/source/abstractbar/TabItem \
+    sfx2/source/abstractbar/Theme \
+    sfx2/source/abstractbar/TitleBar \
+    sfx2/source/abstractbar/Tools \
     sfx2/source/appl/app \
     sfx2/source/appl/appbas \
     sfx2/source/appl/appbaslib \
@@ -247,40 +280,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/notify/stringhint \
     sfx2/source/sidebar/Sidebar \
     sfx2/source/sidebar/SidebarChildWindow \
-    sfx2/source/sidebar/SidebarDockingWindow \
     sfx2/source/sidebar/SidebarController \
-    sfx2/source/sidebar/SidebarModelUpdate \
-    sfx2/source/sidebar/SidebarPanelBase \
-    sfx2/source/sidebar/SidebarToolBox \
-    sfx2/source/sidebar/Accessible \
-    sfx2/source/sidebar/AccessibleTitleBar \
-    sfx2/source/sidebar/AsynchronousCall \
-    sfx2/source/sidebar/Context \
-    sfx2/source/sidebar/ContextChangeBroadcaster \
-    sfx2/source/sidebar/ContextList \
-    sfx2/source/sidebar/ControlFactory \
-    sfx2/source/sidebar/ControllerFactory \
-    sfx2/source/sidebar/ControllerItem \
-    sfx2/source/sidebar/Deck \
-    sfx2/source/sidebar/DeckDescriptor \
-    sfx2/source/sidebar/DeckLayouter \
-    sfx2/source/sidebar/DeckTitleBar \
-    sfx2/source/sidebar/DrawHelper \
-    sfx2/source/sidebar/EnumContext \
-    sfx2/source/sidebar/FocusManager \
-    sfx2/source/sidebar/MenuButton \
-    sfx2/source/sidebar/IContextChangeReceiver \
-    sfx2/source/sidebar/ILayoutableWindow \
-    sfx2/source/sidebar/Paint \
-    sfx2/source/sidebar/Panel \
-    sfx2/source/sidebar/PanelDescriptor \
-    sfx2/source/sidebar/PanelTitleBar \
-    sfx2/source/sidebar/ResourceManager \
-    sfx2/source/sidebar/TabBar \
-    sfx2/source/sidebar/TabItem \
-    sfx2/source/sidebar/TitleBar \
-    sfx2/source/sidebar/Theme \
-    sfx2/source/sidebar/Tools \
+    sfx2/source/sidebar/SidebarDockingWindow \
     sfx2/source/sidebar/UnoPanel \
     sfx2/source/sidebar/UnoPanels \
     sfx2/source/sidebar/UnoDeck \

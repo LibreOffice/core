@@ -19,7 +19,7 @@
 
 #include "Chart2PanelFactory.hxx"
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -104,7 +104,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
             pPanel = ChartLinePanel::Create(pParentWindow, xFrame, pController);
 
         if (pPanel)
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+            xElement = sfx2::abstractbar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,
                 pPanel,

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "svx/sidebar/PopupContainer.hxx"
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include <vcl/gradient.hxx>
 
 namespace svx { namespace sidebar {

@@ -25,7 +25,7 @@
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 
 #include "sc.hrc"
 #include "pivotsh.hxx"
@@ -65,7 +65,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     }
     SetHelpId( HID_SCSHELL_PIVOTSH );
     SetName("Pivot");
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Pivot));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Pivot));
 }
 
 ScPivotShell::~ScPivotShell()

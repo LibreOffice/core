@@ -18,8 +18,8 @@
  */
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include "CellAppearancePropertyPanel.hxx"
 #include <CellAppearancePropertyPanel.hrc>
 #include "sc.hrc"
@@ -248,7 +248,7 @@ void CellAppearancePropertyPanel::DataChanged(
     (void)rEvent;
 }
 
-void CellAppearancePropertyPanel::HandleContextChange(const ::sfx2::sidebar::EnumContext& rContext)
+void CellAppearancePropertyPanel::HandleContextChange(const ::sfx2::abstractbar::EnumContext& rContext)
 {
     if (maContext == rContext)
     {

@@ -32,7 +32,7 @@
 #include "TableDesignPanel.hxx"
 
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -136,7 +136,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     // Create a wrapper around the control that implements the
     // necessary UNO interfaces.
-    return sfx2::sidebar::SidebarPanelBase::Create(
+    return sfx2::abstractbar::SidebarPanelBase::Create(
         rsUIElementResourceURL,
         xFrame,
         pControl,

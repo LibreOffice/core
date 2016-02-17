@@ -74,7 +74,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using sfx2::sidebar::EnumContext;
+using sfx2::abstractbar::EnumContext;
 
 namespace sd {
 
@@ -116,7 +116,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
           ::boost::bind(&DrawViewShell::GetSidebarContextName, this),
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
-          sfx2::sidebar::EnumContext::Context_Default))
+          sfx2::abstractbar::EnumContext::Context_Default))
 {
     if (pFrameViewArgument != nullptr)
         mpFrameView = pFrameViewArgument;

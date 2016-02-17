@@ -27,7 +27,7 @@
 #include "GallerySplitter.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 
 namespace svx { namespace sidebar {
 
@@ -97,7 +97,7 @@ void GalleryControl::InitSettings()
     mpBrowser2->SetControlBackground( GALLERY_DLG_COLOR );
     mpBrowser2->SetControlForeground( GALLERY_DLG_COLOR );
 
-    const Wallpaper aBackground (sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
+    const Wallpaper aBackground (sfx2::abstractbar::Theme::GetWallpaper(sfx2::abstractbar::Theme::Paint_PanelBackground));
     mpSplitter->SetBackground(aBackground);
     SetBackground(aBackground);
     mpBrowser2->SetBackground(aBackground);

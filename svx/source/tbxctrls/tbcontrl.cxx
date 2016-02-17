@@ -60,7 +60,7 @@
 #include "helpid.hrc"
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/abstractbar/SidebarToolBox.hxx>
 #include <svx/xtable.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -2539,7 +2539,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     maColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
-    if ( dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) )
+    if ( dynamic_cast< sfx2::abstractbar::SidebarToolBox* >(&rTbx) )
         bSidebarType = true;
     else
         bSidebarType = false;

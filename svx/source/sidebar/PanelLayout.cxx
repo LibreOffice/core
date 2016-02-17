@@ -12,10 +12,11 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/TabBar.hxx>
+#include <sfx2/abstractbar/TabBar.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 
+using namespace sfx2::abstractbar;
 using namespace sfx2::sidebar;
 
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)

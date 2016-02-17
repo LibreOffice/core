@@ -22,7 +22,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/abstractbar/Theme.hxx>
 #include <editeng/udlnitem.hxx>
 #include <vcl/settings.hxx>
 
@@ -81,10 +81,10 @@ void TextUnderlineControl::initial()
 {
     maVSUnderline->SetColor(GetSettings().GetStyleSettings().GetHighContrastMode() ?
         GetSettings().GetStyleSettings().GetMenuColor() :
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
     maVSUnderline->SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode() ?
         GetSettings().GetStyleSettings().GetMenuColor() :
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+        sfx2::abstractbar::Theme::GetColor( sfx2::abstractbar::Theme::Paint_PanelBackground ));
 
     Link<Button*,void> aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
     maPBOptions->SetClickHdl(aLink);

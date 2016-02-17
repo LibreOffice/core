@@ -22,10 +22,10 @@
 #include <svx/graphichelper.hxx>
 
 #include <svl/srchitem.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -61,7 +61,7 @@ ScChartShell::ScChartShell(ScViewData* pData) :
 {
     SetHelpId( HID_SCSHELL_CHARTSH );
     SetName( "ChartObject" );
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Chart));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Chart));
 }
 
 ScChartShell::~ScChartShell()

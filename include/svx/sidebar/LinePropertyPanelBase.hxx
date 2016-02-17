@@ -21,8 +21,8 @@
 
 #include <svx/xdash.hxx>
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
@@ -54,7 +54,7 @@ namespace
 
 } //end of anonymous namespace
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2 { namespace abstractbar {
 
 class SidebarToolBox;
 
@@ -122,7 +122,7 @@ protected:
 
 protected:
 
-    VclPtr<sfx2::sidebar::SidebarToolBox> mpTBColor;
+    VclPtr<sfx2::abstractbar::SidebarToolBox> mpTBColor;
 
 private:
     //ui controls

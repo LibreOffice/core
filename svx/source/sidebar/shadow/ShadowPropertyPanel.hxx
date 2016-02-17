@@ -13,9 +13,9 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/vclptr.hxx>
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
 #include <vcl/ctrl.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/lstbox.hxx>
@@ -30,7 +30,7 @@ namespace svx { namespace sidebar {
 
 class ShadowPropertyPanel
 :   public PanelLayout,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~ShadowPropertyPanel();
@@ -71,11 +71,11 @@ private:
     VclPtr<Slider>        mpShadowTransSlider;
     VclPtr<MetricField>   mpShadowTransMetric;
 
-    ::sfx2::sidebar::ControllerItem maShadowController;
-    ::sfx2::sidebar::ControllerItem maShadowTransController;
-    ::sfx2::sidebar::ControllerItem maShadowColorController;
-    ::sfx2::sidebar::ControllerItem maShadowXDistanceController;
-    ::sfx2::sidebar::ControllerItem maShadowYDistanceController;
+    ::sfx2::abstractbar::ControllerItem maShadowController;
+    ::sfx2::abstractbar::ControllerItem maShadowTransController;
+    ::sfx2::abstractbar::ControllerItem maShadowColorController;
+    ::sfx2::abstractbar::ControllerItem maShadowXDistanceController;
+    ::sfx2::abstractbar::ControllerItem maShadowYDistanceController;
 
     SfxBindings* mpBindings;
     long nX,nY,nXY;

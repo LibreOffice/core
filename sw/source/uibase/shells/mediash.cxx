@@ -58,7 +58,7 @@
 #include <popup.hrc>
 
 #include <sfx2/objface.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediaitem.hxx>
@@ -192,7 +192,7 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
 {
     SetName("Media Playback");
     SetHelpId(SW_MEDIASHELL);
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Media));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Media));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

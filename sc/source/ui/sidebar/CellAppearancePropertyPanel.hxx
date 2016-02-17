@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLAPPEARANCEPROPERTYPANEL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLAPPEARANCEPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <memory>
 
@@ -42,8 +42,8 @@ namespace sc { namespace sidebar {
 
 class CellAppearancePropertyPanel
 :   public PanelLayout,
-    public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::abstractbar::IContextChangeReceiver,
+    public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 private:
     friend class CellLineStyleControl;
@@ -59,7 +59,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -85,12 +85,12 @@ private:
     VclPtr<ToolBox>                                mpTBLineColor;
     std::unique_ptr< CellBorderUpdater > mpCellBorderUpdater;
 
-    ::sfx2::sidebar::ControllerItem         maLineStyleControl;
-    ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
-    ::sfx2::sidebar::ControllerItem         maBorderInnerControl;
-    ::sfx2::sidebar::ControllerItem         maGridShowControl;
-    ::sfx2::sidebar::ControllerItem         maBorderTLBRControl;
-    ::sfx2::sidebar::ControllerItem         maBorderBLTRControl;
+    ::sfx2::abstractbar::ControllerItem         maLineStyleControl;
+    ::sfx2::abstractbar::ControllerItem         maBorderOuterControl;
+    ::sfx2::abstractbar::ControllerItem         maBorderInnerControl;
+    ::sfx2::abstractbar::ControllerItem         maGridShowControl;
+    ::sfx2::abstractbar::ControllerItem         maBorderTLBRControl;
+    ::sfx2::abstractbar::ControllerItem         maBorderBLTRControl;
 
     // images
     Image                                   maIMGCellBorder;
@@ -136,7 +136,7 @@ private:
     std::unique_ptr< CellLineStylePopup > mpCellLineStylePopup;
     std::unique_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
 
-    ::sfx2::sidebar::EnumContext            maContext;
+    ::sfx2::abstractbar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
     DECL_LINK_TYPED(TbxCellBorderSelectHdl, ToolBox*, void);

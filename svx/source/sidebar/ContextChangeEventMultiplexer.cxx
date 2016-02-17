@@ -33,14 +33,14 @@ using namespace css::uno;
 
 void ContextChangeEventMultiplexer::NotifyContextChange (
     const css::uno::Reference<css::frame::XController>& rxController,
-    const ::sfx2::sidebar::EnumContext::Context eContext)
+    const ::sfx2::abstractbar::EnumContext::Context eContext)
 {
     if (rxController.is() && rxController->getFrame().is())
     {
         const css::ui::ContextChangeEventObject aEvent(
             rxController,
             GetModuleName(rxController->getFrame()),
-            ::sfx2::sidebar::EnumContext::GetContextName(eContext));
+            ::sfx2::abstractbar::EnumContext::GetContextName(eContext));
 
         css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
             css::ui::ContextChangeEventMultiplexer::get(
@@ -53,7 +53,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 
 void ContextChangeEventMultiplexer::NotifyContextChange (
     SfxViewShell* pViewShell,
-    const ::sfx2::sidebar::EnumContext::Context eContext)
+    const ::sfx2::abstractbar::EnumContext::Context eContext)
 {
     if (pViewShell != nullptr)
         NotifyContextChange(pViewShell->GetController(), eContext);
@@ -75,8 +75,8 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
         // during initialization or destruction of a view.
         // Ignore it.
     }
-    return ::sfx2::sidebar::EnumContext::GetApplicationName(
-        ::sfx2::sidebar::EnumContext::Application_None);
+    return ::sfx2::abstractbar::EnumContext::GetApplicationName(
+        ::sfx2::abstractbar::EnumContext::Application_None);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

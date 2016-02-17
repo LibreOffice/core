@@ -26,7 +26,7 @@
 #include <dwfunctr.hxx>
 #include "sc.hrc"
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -103,7 +103,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         }
 
         if (pPanel)
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+            xElement = sfx2::abstractbar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,
                 pPanel,

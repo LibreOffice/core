@@ -24,7 +24,7 @@
 #include "SlideSorterViewShell.hxx"
 #include "PreviewValueSet.hxx"
 #include "ISidebarReceiver.hxx"
-#include <sfx2/sidebar/ILayoutableWindow.hxx>
+#include <sfx2/abstractbar/ILayoutableWindow.hxx>
 
 #include "pres.hxx"
 #include <sfx2/shell.hxx>
@@ -53,7 +53,7 @@ class PreviewValueSet;
 */
 class MasterPagesSelector
     : public PreviewValueSet,
-      public sfx2::sidebar::ILayoutableWindow
+      public sfx2::abstractbar::ILayoutableWindow
 {
 public:
     MasterPagesSelector (

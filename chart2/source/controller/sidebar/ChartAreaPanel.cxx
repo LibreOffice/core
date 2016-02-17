@@ -25,7 +25,7 @@ namespace chart { namespace sidebar {
 
 namespace {
 
-SvxColorToolBoxControl* getColorToolBoxControl(sfx2::sidebar::SidebarToolBox* pToolBoxColor)
+SvxColorToolBoxControl* getColorToolBoxControl(sfx2::abstractbar::SidebarToolBox* pToolBoxColor)
 {
     css::uno::Reference<css::frame::XToolbarController> xController = pToolBoxColor->GetFirstController();
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());

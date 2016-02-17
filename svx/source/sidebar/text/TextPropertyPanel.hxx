@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/SidebarPanelBase.hxx>
+#include <sfx2/abstractbar/ControllerItem.hxx>
+#include <sfx2/abstractbar/IContextChangeReceiver.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <editeng/fhgtitem.hxx>
 
@@ -42,8 +42,8 @@ class PopupContainer;
 
 class TextPropertyPanel
     : public PanelLayout,
-      public ::sfx2::sidebar::IContextChangeReceiver,
-      public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+      public ::sfx2::abstractbar::IContextChangeReceiver,
+      public ::sfx2::abstractbar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~TextPropertyPanel();
@@ -53,11 +53,11 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const ::sfx2::sidebar::EnumContext& rContext);
+        const ::sfx2::abstractbar::EnumContext& rContext);
 
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
-    ::sfx2::sidebar::ControllerItem& GetSpaceController() { return maSpacingControl;}
+    ::sfx2::abstractbar::ControllerItem& GetSpaceController() { return maSpacingControl;}
     long GetSelFontSize();
     void EndSpacingPopupMode();
     void EndUnderlinePopupMode();
@@ -65,7 +65,7 @@ public:
 
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const ::sfx2::abstractbar::EnumContext& rContext) override;
 
 
     virtual void NotifyItemUpdate(
@@ -78,7 +78,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const ::sfx2::sidebar::EnumContext& rContext);
+        const ::sfx2::abstractbar::EnumContext& rContext);
 
 private:
     //ui controls
@@ -90,9 +90,9 @@ private:
     VclPtr<ToolBox> mpToolBoxBackgroundColor;
 
     //control items
-    ::sfx2::sidebar::ControllerItem maFontSizeControl;
-    ::sfx2::sidebar::ControllerItem maUnderlineControl;
-    ::sfx2::sidebar::ControllerItem maSpacingControl;
+    ::sfx2::abstractbar::ControllerItem maFontSizeControl;
+    ::sfx2::abstractbar::ControllerItem maUnderlineControl;
+    ::sfx2::abstractbar::ControllerItem maSpacingControl;
 
     FontLineStyle               meUnderline;
     Color                       meUnderlineColor;
@@ -104,7 +104,7 @@ private:
     TextCharacterSpacingPopup maCharSpacePopup;
     TextUnderlinePopup maUnderlinePopup;
 
-    ::sfx2::sidebar::EnumContext maContext;
+    ::sfx2::abstractbar::EnumContext maContext;
     SfxBindings* mpBindings;
 
     VclPtr<PopupControl> CreateCharacterSpacingControl (PopupContainer* pParent);

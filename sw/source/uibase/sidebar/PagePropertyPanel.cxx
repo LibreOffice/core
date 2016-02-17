@@ -42,7 +42,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/abstractbar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>

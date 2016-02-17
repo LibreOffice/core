@@ -11,12 +11,13 @@
 #include <sfx2/sidebar/UnoDecks.hxx>
 #include <sfx2/sidebar/UnoDeck.hxx>
 
-#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/abstractbar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 
 #include <vcl/svapp.hxx>
 
 using namespace css;
+using namespace ::sfx2::abstractbar;
 using namespace ::sfx2::sidebar;
 
 SfxUnoDecks::SfxUnoDecks(const uno::Reference<frame::XFrame>& rFrame):

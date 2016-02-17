@@ -45,7 +45,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/abstractbar/EnumContext.hxx>
 
 #include <fmtornt.hxx>
 #include <fmtclds.hxx>
@@ -1377,7 +1377,7 @@ SwTableShell::SwTableShell(SwView &_rView) :
 {
     SetName("Table");
     SetHelpId(SW_TABSHELL);
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
+    SfxShell::SetContextName(sfx2::abstractbar::EnumContext::GetContextName(sfx2::abstractbar::EnumContext::Context_Table));
 }
 
 void SwTableShell::GetFrameBorderState(SfxItemSet &rSet)
