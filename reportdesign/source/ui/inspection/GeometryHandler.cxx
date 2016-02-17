@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <iterator>
 #include <map>
 
 #include "GeometryHandler.hxx"

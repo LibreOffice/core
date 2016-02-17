@@ -69,6 +69,7 @@
 
 #include <map>
 #include <algorithm>
+#include <iterator>
 #include <o3tl/functional.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()

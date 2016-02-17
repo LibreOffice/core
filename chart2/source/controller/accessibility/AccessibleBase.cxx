@@ -51,6 +51,7 @@
 #include <o3tl/functional.hxx>
 
 #include <algorithm>
+#include <iterator>
 
 #include "ChartElementFactory.hxx"
 

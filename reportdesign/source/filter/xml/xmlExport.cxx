@@ -58,6 +58,7 @@
 
 #include <boost/bind.hpp>
 
+#include <iterator>
 
 namespace rptxml
 {

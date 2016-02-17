@@ -30,6 +30,8 @@
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_texturecache.hxx"
 
+#include <iterator>
+
 using namespace ::com::sun::star;
 
 static void initContext()
