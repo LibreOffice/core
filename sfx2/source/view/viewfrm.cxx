@@ -3264,7 +3264,8 @@ SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId,
                                                const OUString& sMessage,
                                                const basegfx::BColor* pBackgroundColor,
                                                const basegfx::BColor* pForegroundColor,
-                                               const basegfx::BColor* pMessageColor )
+                                               const basegfx::BColor* pMessageColor,
+                                               WinBits nMessageStyle )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3276,7 +3277,7 @@ SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId,
     if (pChild)
     {
         SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor);
+        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
         ShowChildWindow(nId);
         return pInfoBar;
     }

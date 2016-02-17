@@ -132,10 +132,11 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        const OUString& sMessage,
        const basegfx::BColor* pBackgroundColor,
        const basegfx::BColor* pForegroundColor,
-       const basegfx::BColor* pMessageColor ) :
+       const basegfx::BColor* pMessageColor,
+       WinBits nMessageStyle ) :
     Window(pParent, 0),
     m_sId(sId),
-    m_pMessage(VclPtr<FixedText>::Create(this, 0)),
+    m_pMessage(VclPtr<FixedText>::Create(this, nMessageStyle)),
     m_pCloseBtn(VclPtr<SfxCloseButton>::Create(this)),
     m_aActionBtns()
 {
@@ -284,11 +285,12 @@ SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
                                                            const OUString& sMessage,
                                                            const basegfx::BColor* pBackgroundColor,
                                                            const basegfx::BColor* pForegroundColor,
-                                                           const basegfx::BColor* pMessageColor)
+                                                           const basegfx::BColor* pMessageColor,
+                                                           WinBits nMessageStyle)
 {
     Size aSize = GetSizePixel();
 
-    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor);
+    VclPtrInstance<SfxInfoBarWindow> pInfoBar(this, sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
     pInfoBar->SetPosPixel(Point(0, aSize.getHeight()));
     pInfoBar->Show();
     m_pInfoBars.push_back(pInfoBar);
