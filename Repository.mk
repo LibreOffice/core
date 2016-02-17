@@ -568,7 +568,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
 	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
 	$(if $(ENABLE_DIRECTX),avmediawin) \
-	$(if $(ENABLE_GLTF),avmediaogl) \
 	cached1 \
 	collator_data \
 	comphelper \
@@ -629,6 +628,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		) \
 	) \
 ))
+ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_GLTF),TRUE)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,avmediaogl, \
+    avmediaogl \
+))
+endif
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
