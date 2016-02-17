@@ -310,10 +310,13 @@
           <value>.uno:FreezePanesMenu</value>
         </prop>
         <prop oor:name="Module">
-          <value/>
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.FreezePanesMenuController</value>
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>freezepanes</value>
         </prop>
       </node>
     </node>
@@ -1070,7 +1073,7 @@
           <value>.uno:FreezePanes</value>
         </prop>
         <prop oor:name="Module">
-          <value/>
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
