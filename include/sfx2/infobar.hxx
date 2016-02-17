@@ -54,7 +54,8 @@ class SfxInfoBarWindow : public vcl::Window
                           const OUString& sMessage,
                           const basegfx::BColor* pBackgroundColor,
                           const basegfx::BColor* pForegroundColor,
-                          const basegfx::BColor* pMessageColor );
+                          const basegfx::BColor* pMessageColor,
+                          WinBits nMessageStyle );
         virtual ~SfxInfoBarWindow( );
         virtual void dispose() override;
 
@@ -87,7 +88,8 @@ class SfxInfoBarContainerWindow : public vcl::Window
                                         const OUString& sMessage,
                                         const basegfx::BColor* pBackgroundColor,
                                         const basegfx::BColor* pForegroundColor,
-                                        const basegfx::BColor* pMessageColor);
+                                        const basegfx::BColor* pMessageColor,
+                                        WinBits nMessageStyle);
         SfxInfoBarWindow* getInfoBar(const OUString& sId);
         void removeInfoBar(SfxInfoBarWindow* pInfoBar);
 

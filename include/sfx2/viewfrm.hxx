@@ -184,7 +184,8 @@ public:
                                     const OUString& sMessage,
                                     const basegfx::BColor* pBackgroundColor = nullptr,
                                     const basegfx::BColor* pForegroundColor = nullptr,
-                                    const basegfx::BColor* pMessageColor = nullptr);
+                                    const basegfx::BColor* pMessageColor = nullptr,
+                                    WinBits nMessageStyle = 0);
     void              RemoveInfoBar(const OUString& sId);
 
     SAL_DLLPRIVATE void SetDowning_Impl();
