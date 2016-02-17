@@ -60,7 +60,7 @@ namespace svt { namespace table
         void                SetBackground(const Wallpaper& rColor);
 
     private:
-        void    impl_hideTipWindow();
+        static void impl_hideTipWindow();
     };
 
 } } // namespace svt::table
