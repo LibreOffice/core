@@ -712,7 +712,6 @@ String RID_FONTXY_HELP
 {
     Text [ en-US ] = "Change Font" ;
 };
-String RID_COLORX           { Text = "color <?> {<?>} " ; };
 String RID_COLORX_BLACK     { Text = "color black {<?>} " ; };
 String RID_COLORX_BLACK_HELP
 {

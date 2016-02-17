@@ -380,7 +380,6 @@
 #define RID_ITALX                   (RID_APP_START + 1718)
 #define RID_SIZEXY                  (RID_APP_START + 1719)
 #define RID_FONTXY                  (RID_APP_START + 1720)
-#define RID_COLORX                  (RID_APP_START + 1721)
 #define RID_WIDEHATX                (RID_APP_START + 1722)
 #define RID_WIDETILDEX              (RID_APP_START + 1723)
 #define RID_WIDEVECX                (RID_APP_START + 1724)
