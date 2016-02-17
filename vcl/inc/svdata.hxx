@@ -113,6 +113,7 @@ struct ImplSVAppData
     OUString*               mpAppName;                      // Application name
     OUString*               mpAppFileName;                  // Abs. Application FileName
     OUString*               mpDisplayName;                  // Application Display Name
+    OUString*               mpToolkitName;                  // Toolkit Name
     Help*                   mpHelp;                         // Application help
     PopupMenu*              mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
     ImplIdleMgr*            mpIdleMgr;                      // Idle-Manager

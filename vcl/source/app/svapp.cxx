@@ -1399,6 +1399,15 @@ void Application::SetDialogScaleX( short nScale )
         pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*nScale)/100;
 }
 
+OUString Application::GetToolkitName()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maAppData.mpToolkitName )
+        return *(pSVData->maAppData.mpToolkitName);
+    else
+        return OUString();
+}
+
 void Application::SetDefDialogParent( vcl::Window* pWindow )
 {
     ImplGetSVData()->maWinData.mpDefDialogParent = pWindow;

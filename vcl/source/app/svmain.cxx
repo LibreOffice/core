@@ -504,6 +504,11 @@ void DeInitVCL()
         delete pSVData->maAppData.mpDisplayName;
         pSVData->maAppData.mpDisplayName = nullptr;
     }
+    if ( pSVData->maAppData.mpToolkitName )
+    {
+        delete pSVData->maAppData.mpToolkitName;
+        pSVData->maAppData.mpToolkitName = nullptr;
+    }
     if ( pSVData->maAppData.mpEventListeners )
     {
         delete pSVData->maAppData.mpEventListeners;

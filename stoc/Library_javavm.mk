@@ -11,7 +11,10 @@ $(eval $(call gb_Library_Library,javavm))
 
 $(eval $(call gb_Library_use_external,javavm,boost_headers))
 
-$(eval $(call gb_Library_use_udk_api,javavm))
+$(eval $(call gb_Library_use_api,javavm,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Library_use_libraries,javavm,\
     cppu \
@@ -20,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,javavm,\
     jvmfwk \
     sal \
     salhelper \
+    vcl \
 	$(gb_UWINAPI) \
 ))
 

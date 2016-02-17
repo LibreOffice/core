@@ -981,6 +981,12 @@ public:
     */
     static OUString             GetDisplayName();
 
+    /** Get the toolkit's name. e.g. gtk3
+
+     @returns The toolkit name.
+    */
+    static OUString             GetToolkitName();
+
     /** Get the number of screens available for the display.
 
      @returns The number of screens available.
