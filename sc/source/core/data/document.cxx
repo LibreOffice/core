@@ -1965,7 +1965,8 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
             nClipTab = (nClipTab+1) % (MAXTAB+1);
         }
     }
-    if ( pCBFCP->nInsFlag & IDF_CONTENTS )
+    if ( (pCBFCP->nInsFlag & IDF_CONTENTS) &&
+            (pCBFCP->pClipDoc->GetClipParam().getSourceDocID() == GetDocumentID()) ) // #118023# only update references for *intra-document* cut and paste
     {
         nClipTab = 0;
         for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd; i++)
