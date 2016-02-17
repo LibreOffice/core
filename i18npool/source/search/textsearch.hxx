@@ -106,6 +106,20 @@ class TextSearch: public cppu::WeakImplHelper
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(css::uno::RuntimeException);
 
+    // Members and methods for the wildcard search
+    OUString    maWildcardReversePattern;
+    OUString    maWildcardReversePattern2;
+    sal_uInt32  mcWildcardEscapeChar;
+    bool        mbWildcardAllowSubstring;
+    css::util::SearchResult SAL_CALL
+        WildcardSrchFrwrd( const OUString& searchStr,
+                                sal_Int32 startPos, sal_Int32 endPos )
+                            throw(css::uno::RuntimeException);
+    css::util::SearchResult SAL_CALL
+        WildcardSrchBkwrd( const OUString& searchStr,
+                                sal_Int32 startPos, sal_Int32 endPos )
+                            throw(css::uno::RuntimeException);
+
     bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
 
     bool checkCTLStart, checkCTLEnd;

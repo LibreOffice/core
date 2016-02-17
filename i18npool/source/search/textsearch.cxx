@@ -36,6 +36,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #ifdef _MSC_VER
@@ -112,6 +113,8 @@ TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         , pJumpTable2( nullptr )
         , pRegexMatcher( nullptr )
         , pWLD( nullptr )
+        , mcWildcardEscapeChar('~')         /* TODO: make this option available through API */
+        , mbWildcardAllowSubstring(true)    /* TODO: make this option available through API */
 {
     SearchOptions2 aOpt;
     aOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
@@ -137,6 +140,8 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeExc
     delete pWLD, pWLD = nullptr;
     delete pJumpTable, pJumpTable = nullptr;
     delete pJumpTable2, pJumpTable2 = nullptr;
+    maWildcardReversePattern.clear();
+    maWildcardReversePattern2.clear();
 
     // Create Transliteration class
     if( isSimpleTrans( aSrchPara.transliterateFlags) )
@@ -235,8 +240,12 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeExc
             nLimit = pWLD->GetLimit();
             break;
 
+        case SearchAlgorithms2::WILDCARD:
+            fnForward = &TextSearch::WildcardSrchFrwrd;
+            fnBackward = &TextSearch::WildcardSrchBkwrd;
+            break;
+
         default:
-        case SearchAlgorithms2::WILDCARD:   /* FIXME: temporary */
             SAL_WARN("i18npool","TextSearch::setOptions2 - default what?");
             // fallthru
         case SearchAlgorithms2::ABSOLUTE:
@@ -1115,6 +1124,396 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
                 WordType::ANYWORD_IGNOREWHITESPACES);
     } while( aWBnd.startPos != aWBnd.endPos || aWBnd.endPos != aWTemp.getLength() );
     return aRet;
+}
+
+
+namespace {
+void setWildcardMatch( css::util::SearchResult& rRes, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
+{
+    rRes.subRegExpressions = 1;
+    rRes.startOffset.realloc(1);
+    rRes.endOffset.realloc(1);
+    rRes.startOffset[0] = nStartOffset;
+    rRes.endOffset[0] = nEndOffset;
+}
+}
+
+SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
+        throw(RuntimeException)
+{
+    SearchResult aRes;
+    aRes.subRegExpressions = 0;     // no match
+    sal_Int32 nStartOffset = nStartPos;
+    sal_Int32 nEndOffset = nEndPos;
+
+    const sal_Int32 nStringLen = searchStr.getLength();
+
+    // Forward nStartPos inclusive, nEndPos exclusive, but allow for empty
+    // string match with [0,0).
+    if (nStartPos < 0 || nEndPos > nStringLen || nEndPos < nStartPos || nStartPos > nStringLen ||
+            (nStartPos == nStringLen && (nStringLen != 0 || nStartPos != nEndPos)))
+        return aRes;
+
+    const OUString& rPattern = (bUsePrimarySrchStr ? sSrchStr : sSrchStr2);
+    const sal_Int32 nPatternLen = rPattern.getLength();
+
+    // Handle special cases empty pattern and/or string outside of the loop to
+    // not add performance penalties there and simplify.
+    if (nStartPos == nEndPos)
+    {
+        sal_Int32 i = 0;
+        while (i < nPatternLen && rPattern[i] == '*')
+            ++i;
+        if (i == nPatternLen)
+            setWildcardMatch( aRes, nStartOffset, nEndOffset);
+        return aRes;
+    }
+
+    // Empty pattern does not match any non-empty string.
+    if (!nPatternLen)
+        return aRes;
+
+    bool bRewind = false;
+    sal_uInt32 cPattern = 0;
+    sal_Int32 nPattern = 0;
+    sal_Int32 nAfterFakePattern = nPattern;
+    if (mbWildcardAllowSubstring)
+    {
+        // Fake a leading '*' wildcard.
+        cPattern = '*';
+        bRewind = true;
+        // Assume a non-'*' pattern character follows. If it is a '*' instead
+        // that will be handled in the loop by setting nPat.
+        sal_uInt32 cu = rPattern.iterateCodePoints( &nAfterFakePattern);
+        if (cu == mcWildcardEscapeChar && mcWildcardEscapeChar && nAfterFakePattern < nPatternLen)
+            rPattern.iterateCodePoints( &nAfterFakePattern);
+    }
+
+    sal_Int32 nString = nStartPos, nPat = -1, nStr = -1;
+    sal_uInt32 cPatternAfterAsterisk = 0;
+    bool bEscaped = false, bEscapedAfterAsterisk = false;
+
+    // The loop code tries to avoid costly calls to iterateCodePoints() when
+    // possible.
+
+    do
+    {
+        if (bRewind)
+        {
+            // Reuse cPattern after '*', nPattern was correspondingly
+            // incremented to point behind cPattern.
+            bRewind = false;
+        }
+        else if (nPattern < nPatternLen)
+        {
+            // nPattern will be incremented by iterateCodePoints().
+            cPattern = rPattern.iterateCodePoints( &nPattern);
+            if (cPattern == mcWildcardEscapeChar && mcWildcardEscapeChar && nPattern < nPatternLen)
+            {
+                bEscaped = true;
+                cPattern = rPattern.iterateCodePoints( &nPattern);
+            }
+        }
+        else
+        {
+            // A trailing '*' is handled below. If the pattern is consumed and
+            // substring match allowed we're good.
+            if (mbWildcardAllowSubstring)
+                setWildcardMatch( aRes, nStartOffset, nString);
+            return aRes;
+        }
+
+        if (cPattern == '*' && !bEscaped)
+        {
+            // '*' is one code unit, so not using iterateCodePoints() is ok.
+            while (nPattern < nPatternLen && rPattern[nPattern] == '*')
+                ++nPattern;
+
+            if (nPattern >= nPatternLen)
+            {
+                // Last pattern is '*', remaining string matches.
+                setWildcardMatch( aRes, nStartOffset, nEndOffset);
+                return aRes;
+            }
+
+            // cPattern will be the next non-'*' character, nPattern
+            // incremented.
+            cPattern = rPattern.iterateCodePoints( &nPattern);
+            if (cPattern == mcWildcardEscapeChar && mcWildcardEscapeChar && nPattern < nPatternLen)
+            {
+                bEscaped = true;
+                cPattern = rPattern.iterateCodePoints( &nPattern);
+            }
+
+            cPatternAfterAsterisk = cPattern;
+            bEscapedAfterAsterisk = bEscaped;
+            nPat = nPattern;    // Remember position of pattern behind '*', already incremented.
+            nStr = nString;     // Remember the current string to be matched.
+        }
+
+        if (nString >= nEndPos)
+            // Whatever follows in pattern, string will not match.
+            return aRes;
+
+        // nString will be incremented by iterateCodePoints().
+        sal_uInt32 cString = searchStr.iterateCodePoints( &nString);
+
+        if ((cPattern != '?' || bEscaped) && cPattern != cString)
+        {
+            if (nPat == -1)
+                // Non-match already without any '*' pattern.
+                return aRes;
+
+            bRewind = true;
+            nPattern = nPat;                    // Rewind pattern to character behind '*', already incremented.
+            cPattern = cPatternAfterAsterisk;
+            bEscaped = bEscapedAfterAsterisk;
+            searchStr.iterateCodePoints( &nStr);
+            nString = nStr;                     // Restore incremented remembered string position.
+            if (nPat == nAfterFakePattern)
+            {
+                // Next start offset will be the next character.
+                nStartOffset = nString;
+            }
+        }
+        else
+        {
+            // An unescaped '?' pattern matched any character, or characters
+            // matched. Reset only escaped state.
+            bEscaped = false;
+        }
+    }
+    while (nString < nEndPos);
+
+    if (bRewind)
+        return aRes;
+
+    // Eat trailing '*' pattern that matches anything, including nothing.
+    // '*' is one code unit, so not using iterateCodePoints() is ok.
+    while (nPattern < nPatternLen && rPattern[nPattern] == '*')
+        ++nPattern;
+
+    if (nPattern == nPatternLen)
+        setWildcardMatch( aRes, nStartOffset, nEndOffset);
+    return aRes;
+}
+
+SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
+        throw(RuntimeException)
+{
+    SearchResult aRes;
+    aRes.subRegExpressions = 0;     // no match
+
+    sal_Int32 nStartOffset = nStartPos;
+    sal_Int32 nEndOffset = nEndPos;
+
+    const sal_Int32 nStringLen = searchStr.getLength();
+
+    // Backward nStartPos exclusive, nEndPos inclusive, but allow for empty
+    // string match with (0,0].
+    if (nStartPos > nStringLen || nEndPos < 0 || nStartPos < nEndPos || nEndPos > nStringLen ||
+            (nEndPos == nStringLen && (nStringLen != 0 || nStartPos != nEndPos)))
+        return aRes;
+
+    const OUString& rPattern = (bUsePrimarySrchStr ? sSrchStr : sSrchStr2);
+    sal_Int32 nPatternLen = rPattern.getLength();
+
+    // Handle special cases empty pattern and/or string outside of the loop to
+    // not add performance penalties there and simplify.
+    if (nStartPos == nEndPos)
+    {
+        sal_Int32 i = 0;
+        while (i < nPatternLen && rPattern[i] == '*')
+            ++i;
+        if (i == nPatternLen)
+            setWildcardMatch( aRes, nStartOffset, nEndOffset);
+        return aRes;
+    }
+
+    // Empty pattern does not match any non-empty string.
+    if (!nPatternLen)
+        return aRes;
+
+    // Reverse escaped patterns to ease the handling of escapes, keeping escape
+    // and following character as one sequence in backward direction.
+    if ((bUsePrimarySrchStr && maWildcardReversePattern.isEmpty()) ||
+            (!bUsePrimarySrchStr && maWildcardReversePattern2.isEmpty()))
+    {
+        OUStringBuffer aPatternBuf( rPattern);
+        sal_Int32 nIndex = 0;
+        while (nIndex < nPatternLen)
+        {
+            const sal_Int32 nOld = nIndex;
+            const sal_uInt32 cu = rPattern.iterateCodePoints( &nIndex);
+            if (cu == mcWildcardEscapeChar)
+            {
+                if (nIndex < nPatternLen)
+                {
+                    if (nIndex - nOld == 1)
+                    {
+                        // Simply move code units, we already memorized the one
+                        // in 'cu'.
+                        const sal_Int32 nOld2 = nIndex;
+                        rPattern.iterateCodePoints( &nIndex);
+                        for (sal_Int32 i=0; i < nIndex - nOld2; ++i)
+                            aPatternBuf[nOld+i] = rPattern[nOld2+i];
+                        aPatternBuf[nIndex-1] = static_cast<sal_Unicode>(cu);
+                    }
+                    else
+                    {
+                        // Copy the escape character code units first in the
+                        // unlikely case that it would not be of BMP.
+                        assert(nIndex - nOld == 2);  // it's UTF-16, so..
+                        sal_Unicode buf[2];
+                        buf[0] = rPattern[nOld];
+                        buf[1] = rPattern[nOld+1];
+                        const sal_Int32 nOld2 = nIndex;
+                        rPattern.iterateCodePoints( &nIndex);
+                        for (sal_Int32 i=0; i < nIndex - nOld2; ++i)
+                            aPatternBuf[nOld+i] = rPattern[nOld2+i];
+                        aPatternBuf[nIndex-2] = buf[0];
+                        aPatternBuf[nIndex-1] = buf[1];
+                    }
+                }
+                else
+                {
+                    // Trailing escape would become leading escape, do what?
+                    // Eliminate.
+                    aPatternBuf.remove( nOld, nIndex - nOld);
+                }
+            }
+        }
+        if (bUsePrimarySrchStr)
+            maWildcardReversePattern = aPatternBuf.makeStringAndClear();
+        else
+            maWildcardReversePattern2 = aPatternBuf.makeStringAndClear();
+    }
+    const OUString& rReversePattern = (bUsePrimarySrchStr ? maWildcardReversePattern : maWildcardReversePattern2);
+    nPatternLen = rReversePattern.getLength();
+
+    bool bRewind = false;
+    sal_uInt32 cPattern = 0;
+    sal_Int32 nPattern = nPatternLen;
+    sal_Int32 nAfterFakePattern = nPattern;
+    if (mbWildcardAllowSubstring)
+    {
+        // Fake a trailing '*' wildcard.
+        cPattern = '*';
+        bRewind = true;
+        // Assume a non-'*' pattern character follows. If it is a '*' instead
+        // that will be handled in the loop by setting nPat.
+        sal_uInt32 cu = rReversePattern.iterateCodePoints( &nAfterFakePattern, -1);
+        if (cu == mcWildcardEscapeChar && mcWildcardEscapeChar && nAfterFakePattern > 0)
+            rReversePattern.iterateCodePoints( &nAfterFakePattern, -1);
+    }
+
+    sal_Int32 nString = nStartPos, nPat = -1, nStr = -1;
+    sal_uInt32 cPatternAfterAsterisk = 0;
+    bool bEscaped = false, bEscapedAfterAsterisk = false;
+
+    // The loop code tries to avoid costly calls to iterateCodePoints() when
+    // possible.
+
+    do
+    {
+        if (bRewind)
+        {
+            // Reuse cPattern after '*', nPattern was correspondingly
+            // decremented to point before cPattern.
+            bRewind = false;
+        }
+        else if (nPattern > 0)
+        {
+            // nPattern will be decremented by iterateCodePoints().
+            cPattern = rReversePattern.iterateCodePoints( &nPattern, -1);
+            if (cPattern == mcWildcardEscapeChar && mcWildcardEscapeChar && nPattern > 0)
+            {
+                bEscaped = true;
+                cPattern = rReversePattern.iterateCodePoints( &nPattern, -1);
+            }
+        }
+        else
+        {
+            // A leading '*' is handled below. If the pattern is consumed and
+            // substring match allowed we're good.
+            if (mbWildcardAllowSubstring)
+                setWildcardMatch( aRes, nStartOffset, nString);
+            return aRes;
+        }
+
+        if (cPattern == '*' && !bEscaped)
+        {
+            // '*' is one code unit, so not using iterateCodePoints() is ok.
+            while (nPattern > 0 && rReversePattern[nPattern-1] == '*')
+                --nPattern;
+
+            if (nPattern <= 0)
+            {
+                // First pattern is '*', remaining string matches.
+                setWildcardMatch( aRes, nStartOffset, nEndOffset);
+                return aRes;
+            }
+
+            // cPattern will be the previous non-'*' character, nPattern
+            // decremented.
+            cPattern = rReversePattern.iterateCodePoints( &nPattern, -1);
+            if (cPattern == mcWildcardEscapeChar && mcWildcardEscapeChar && nPattern > 0)
+            {
+                bEscaped = true;
+                cPattern = rReversePattern.iterateCodePoints( &nPattern, -1);
+            }
+
+            cPatternAfterAsterisk = cPattern;
+            bEscapedAfterAsterisk = bEscaped;
+            nPat = nPattern;    // Remember position of pattern before '*', already decremented.
+            nStr = nString;     // Remember the current string to be matched.
+        }
+
+        if (nString <= nEndPos)
+            // Whatever leads in pattern, string will not match.
+            return aRes;
+
+        // nString will be decremented by iterateCodePoints().
+        sal_uInt32 cString = searchStr.iterateCodePoints( &nString, -1);
+
+        if ((cPattern != '?' || bEscaped) && cPattern != cString)
+        {
+            if (nPat == -1)
+                // Non-match already without any '*' pattern.
+                return aRes;
+
+            bRewind = true;
+            nPattern = nPat;                    // Rewind pattern to character before '*', already decremented.
+            cPattern = cPatternAfterAsterisk;
+            bEscaped = bEscapedAfterAsterisk;
+            searchStr.iterateCodePoints( &nStr, -1);
+            nString = nStr;                     // Restore decremented remembered string position.
+            if (nPat == nAfterFakePattern)
+            {
+                // Next start offset will be this character (exclusive).
+                nStartOffset = nString;
+            }
+        }
+        else
+        {
+            // An unescaped '?' pattern matched any character, or characters
+            // matched. Reset only escaped state.
+            bEscaped = false;
+        }
+    }
+    while (nString > nEndPos);
+
+    if (bRewind)
+        return aRes;
+
+    // Eat leading '*' pattern that matches anything, including nothing.
+    // '*' is one code unit, so not using iterateCodePoints() is ok.
+    while (nPattern > 0 && rReversePattern[nPattern-1] == '*')
+        --nPattern;
+
+    if (nPattern == 0)
+        setWildcardMatch( aRes, nStartOffset, nEndOffset);
+    return aRes;
 }
 
 
