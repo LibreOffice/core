@@ -534,8 +534,15 @@ void initVMConfiguration(
     }
 
     *pjvm= jvm;
-    setTimeZone(pjvm);
 
+    // rhbz#1285356, native look will be gtk2, which crashes
+    // when gtk3 is already loaded. Until there is a solution
+    // java-side force look and feel to something that doesn't
+    // crash when we are using gtk3
+    if (getenv("STOC_FORCE_SYSTEM_LAF"))
+        pjvm->pushProp(OUString("swing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel"));
+
+    setTimeZone(pjvm);
 }
 
 class DetachCurrentThread: private boost::noncopyable {
