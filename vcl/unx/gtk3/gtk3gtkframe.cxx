@@ -2509,7 +2509,7 @@ bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, cons
     (void)nId;
     (void)rHelpText;
     (void)rHelpArea;
-    return false
+    return false;
 #endif
 }
 
