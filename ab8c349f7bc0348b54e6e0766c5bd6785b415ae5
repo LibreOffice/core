@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_2117ca52",
+        "filename": "sysui/desktop/menus/draw.desktop",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-02-18T15:26:41Z",
+      "side": 1,
+      "message": "As the FreeDesktop specification specifies, keywords must end with semicolons (;)",
+      "revId": "ab8c349f7bc0348b54e6e0766c5bd6785b415ae5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
