@@ -86,6 +86,11 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
 
+        case SID_DRAWTBX_LINES:
+            if ( bWeb )
+                rSet.DisableItem(nWhich);
+            break;
+
         case SID_INSERT_GRAPHIC:
             if( m_pWrtShell->CursorInsideInputField() )
             {
