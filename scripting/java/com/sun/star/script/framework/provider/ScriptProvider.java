@@ -552,7 +552,7 @@ public abstract class ScriptProvider implements
 
         XPackage newPackage = UnoRuntime.queryInterface(XPackage.class, aElement);
 
-        if (aName.length() == 0) {
+        if (aName == null || aName.length() == 0) {
             throw new  com.sun.star.lang.IllegalArgumentException("Empty name");
         }
 
