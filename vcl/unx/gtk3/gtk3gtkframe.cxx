@@ -1620,7 +1620,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         if( m_pParent )
         {
             if( AllSettings::GetLayoutRTL() )
-                nX = m_pParent->maGeometry.nWidth-maGeometry.nWidth-1-nX;
+                nX = m_pParent->maGeometry.nWidth-m_nWidthRequest-1-nX;
             nX += m_pParent->maGeometry.nX;
             nY += m_pParent->maGeometry.nY;
         }
