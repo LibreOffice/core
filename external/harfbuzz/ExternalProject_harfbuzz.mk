@@ -33,6 +33,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--with-glib=no \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter LINUX,$(OS)),CXXFLAGS="$(CXXFLAGS) -fvisibility=hidden") \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
 	)
 
