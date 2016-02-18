@@ -631,9 +631,6 @@ void SpinField::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
         Rectangle aInnerRect = aView.DrawButton(maDropDownRect, nStyle);
 
         SymbolType eSymbol = SymbolType::SPIN_DOWN;
-        if (rRenderContext.GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown)
-            eSymbol = SymbolType::SPIN_UPDOWN;
-
         DrawSymbolFlags nSymbolStyle = IsEnabled() ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
         aView.DrawSymbol(aInnerRect, eSymbol, rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor(), nSymbolStyle);
     }
@@ -1034,9 +1031,6 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
             DrawButtonFlags nStyle = DrawButtonFlags::NoLightBorder;
             Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
             SymbolType eSymbol = SymbolType::SPIN_DOWN;
-            if (GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown)
-                eSymbol = SymbolType::SPIN_UPDOWN;
-
             DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & DrawFlags::NoDisable)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
             aView.DrawSymbol(aInnerRect, eSymbol, aButtonTextColor, nSymbolStyle);
         }

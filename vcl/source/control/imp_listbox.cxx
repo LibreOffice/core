@@ -49,10 +49,7 @@ using namespace ::com::sun::star;
 
 void ImplInitDropDownButton( PushButton* pButton )
 {
-    if ( pButton->GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown )
-        pButton->SetSymbol( SymbolType::SPIN_UPDOWN );
-    else
-        pButton->SetSymbol( SymbolType::SPIN_DOWN );
+    pButton->SetSymbol( SymbolType::SPIN_DOWN );
 
     if ( pButton->IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && ! pButton->IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
