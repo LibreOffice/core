@@ -174,20 +174,6 @@ bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
         return false;
 }
 
-void Scheduler::ProcessEventsToIdle()
-{
-    // FIXME: really we should process incoming OS events too ...
-    int nSanity = 1000;
-    while (Scheduler::ProcessTaskScheduling(false))
-    {
-        if (nSanity-- < 0)
-        {
-            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
-            break;
-        }
-    }
-}
-
 sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
 {
     // process all pending Tasks
