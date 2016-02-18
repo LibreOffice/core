@@ -21,8 +21,6 @@
 
 #include <set>
 
-#include <boost/signals2/connection.hpp>
-
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
@@ -61,7 +59,6 @@ struct ComboBox::Impl
     sal_Int32           m_nMaxWidthChars;
     Link<ComboBox&,void>               m_SelectHdl;
     Link<ComboBox&,void>               m_DoubleClickHdl;
-    boost::signals2::scoped_connection m_AutocompleteConnection;
 
     explicit Impl(ComboBox & rThis)
         : m_rThis(rThis)
@@ -82,13 +79,12 @@ struct ComboBox::Impl
     DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, LinkParamNone*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplCancelHdl, LinkParamNone*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplDoubleClickHdl, ImplListBoxWindow*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplClickBtnHdl, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplSelectionChangedHdl, sal_Int32, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplUserDrawHdl, UserDrawEvent*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplAutocompleteHdl, Edit&, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplListItemSelectHdl , LinkParamNone*, void );
-
-    void ImplClickButtonHandler( ImplBtn* );
-    void ImplUserDrawHandler( UserDrawEvent* );
-    void ImplAutocompleteHandler( Edit* );
 };
 
 
@@ -215,8 +211,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
         m_pImpl->m_pBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( m_pImpl->m_pBtn );
-        m_pImpl->m_pBtn->buttonDownSignal.connect( [this]( ImplBtn* pImplBtn )
-                                                   { this->m_pImpl->ImplClickButtonHandler( pImplBtn ); } );
+        m_pImpl->m_pBtn->SetMBDownHdl( LINK( m_pImpl.get(), ComboBox::Impl, ImplClickBtnHdl ) );
         m_pImpl->m_pBtn->Show();
 
         nEditStyle |= WB_NOBORDER;
@@ -248,8 +243,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     m_pImpl->m_pImplLB->SetSelectHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplSelectHdl) );
     m_pImpl->m_pImplLB->SetCancelHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplCancelHdl) );
     m_pImpl->m_pImplLB->SetDoubleClickHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplDoubleClickHdl) );
-    m_pImpl->m_pImplLB->userDrawSignal.connect( [this]( UserDrawEvent* pUserDrawEvent )
-                                                { this->m_pImpl->ImplUserDrawHandler( pUserDrawEvent ); } );
+    m_pImpl->m_pImplLB->SetUserDrawHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplUserDrawHdl) );
     m_pImpl->m_pImplLB->SetSelectionChangedHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplSelectionChangedHdl) );
     m_pImpl->m_pImplLB->SetListItemSelectHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplListItemSelectHdl) );
     m_pImpl->m_pImplLB->Show();
@@ -293,25 +287,17 @@ void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
     m_pImpl->m_isMatchCase = bMatchCase;
 
     if ( bEnable )
-    {
-        if( !m_pImpl->m_AutocompleteConnection.connected())
-        {
-            m_pImpl->m_pSubEdit->SignalConnectAutocomplete(
-                &m_pImpl->m_AutocompleteConnection,
-                [this] (Edit *const pEdit) { m_pImpl->ImplAutocompleteHandler(pEdit); }
-                );
-        }
-    }
+        m_pImpl->m_pSubEdit->SetAutocompleteHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplAutocompleteHdl) );
     else
-        m_pImpl->m_AutocompleteConnection.disconnect();
+        m_pImpl->m_pSubEdit->SetAutocompleteHdl( Link<Edit&,void>() );
 }
 
 bool ComboBox::IsAutocompleteEnabled() const
 {
-    return m_pImpl->m_AutocompleteConnection.connected();
+    return m_pImpl->m_pSubEdit->GetAutocompleteHdl().IsSet();
 }
 
-void ComboBox::Impl::ImplClickButtonHandler( ImplBtn* )
+IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplClickBtnHdl, void*, void)
 {
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     m_pSubEdit->GrabFocus();
@@ -352,10 +338,10 @@ IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
 }
 
-void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )
+IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
 {
-    Selection           aSel = pEdit->GetSelection();
-    AutocompleteAction  eAction = pEdit->GetAutocompleteAction();
+    Selection           aSel = rEdit.GetSelection();
+    AutocompleteAction  eAction = rEdit.GetAutocompleteAction();
 
     /* If there is no current selection do not auto complete on
        Tab/Shift-Tab since then we would not cycle to the next field.
@@ -363,7 +349,7 @@ void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )
     if ( aSel.Len() ||
          ((eAction != AUTOCOMPLETE_TABFORWARD) && (eAction != AUTOCOMPLETE_TABBACKWARD)) )
     {
-        OUString    aFullText = pEdit->GetText();
+        OUString    aFullText = rEdit.GetText();
         OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
         sal_Int32   nStart = m_pImplLB->GetCurrentPos();
 
@@ -407,7 +393,7 @@ void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )
         {
             OUString aText = m_pImplLB->GetEntryList()->GetEntryText( nPos );
             Selection aSelection( aText.getLength(), aStartText.getLength() );
-            pEdit->SetText( aText, aSelection );
+            rEdit.SetText( aText, aSelection );
         }
     }
 }
@@ -1319,7 +1305,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
 }
 
-void ComboBox::Impl::ImplUserDrawHandler( UserDrawEvent* pEvent )
+IMPL_LINK_TYPED(ComboBox::Impl, ImplUserDrawHdl, UserDrawEvent*, pEvent, void)
 {
     m_rThis.UserDraw(*pEvent);
 }

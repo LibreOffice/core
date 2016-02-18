@@ -883,8 +883,7 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
     SetText( OUString() );
 
-    GetSubEdit()->SignalConnectAutocomplete(nullptr,
-        [this] (Edit *const pEdit) { this->AutoCompleteHandler(pEdit); } );
+    GetSubEdit()->SetAutocompleteHdl(LINK(this, SvtURLBox, AutoCompleteHdl_Impl));
     UpdatePicklistForSmartProtocol_Impl();
 
     EnableAutoSize(GetStyle() & WB_AUTOSIZE);
@@ -1114,13 +1113,11 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-
-void SvtURLBox::AutoCompleteHandler( Edit* )
+IMPL_LINK_NOARG_TYPED(SvtURLBox, AutoCompleteHdl_Impl, Edit&, void)
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
         TryAutoComplete();
 }
-
 
 bool SvtURLBox::Notify( NotifyEvent &rEvt )
 {

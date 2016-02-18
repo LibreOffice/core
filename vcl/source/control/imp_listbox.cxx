@@ -1745,7 +1745,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         nCurr = sal::static_int_cast<sal_Int32>(nCurr - GetEntryList()->GetMRUCount());
 
         UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos, nCurr);
-        userDrawSignal(&aUDEvt);
+        maUserDrawHdl.Call( &aUDEvt );
         mbInUserDraw = false;
     }
     else
@@ -2136,8 +2136,6 @@ ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     maLBWindow(VclPtr<ImplListBoxWindow>::Create( this, nWinStyle&(~WB_BORDER) ))
 {
-    maLBWindow->userDrawSignal.connect( userDrawSignal );
-
     // for native widget rendering we must be able to detect this window type
     SetType( WINDOW_LISTBOXWINDOW );
 
@@ -2611,8 +2609,8 @@ ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void ImplWin::MBDown()
 {
-    if( IsEnabled() )
-        buttonDownSignal( this );
+    if (IsEnabled())
+        maMBDownHdl.Call(this);
 }
 
 void ImplWin::MouseButtonDown( const MouseEvent& )
@@ -2751,7 +2749,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
     {
         mbInUserDraw = true;
         UserDrawEvent aUDEvt(this, &rRenderContext, maFocusRect, mnItemPos, 0);
-        userDrawSignal( &aUDEvt );
+        maUserDrawHdl.Call( &aUDEvt );
         mbInUserDraw = false;
     }
     else
@@ -2921,8 +2919,8 @@ ImplBtn::ImplBtn( vcl::Window* pParent, WinBits nWinStyle ) :
 
 void ImplBtn::MBDown()
 {
-    if( IsEnabled() )
-       buttonDownSignal( this );
+    if (IsEnabled())
+        maMBDownHdl.Call(this);
 }
 
 void ImplBtn::MouseButtonDown( const MouseEvent& )

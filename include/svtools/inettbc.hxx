@@ -48,9 +48,8 @@ friend class SvtURLBox_Impl;
     SVT_DLLPRIVATE bool             ProcessKey( const vcl::KeyCode& rCode );
     SVT_DLLPRIVATE void             TryAutoComplete();
     SVT_DLLPRIVATE void             UpdatePicklistForSmartProtocol_Impl();
+    DECL_DLLPRIVATE_LINK_TYPED(     AutoCompleteHdl_Impl, Edit&, void );
     SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
-
-    SAL_DLLPRIVATE void AutoCompleteHandler( Edit* );
 
 protected:
     virtual bool                    Notify( NotifyEvent& rNEvt ) override;

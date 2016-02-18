@@ -24,8 +24,6 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
 
-#include <boost/signals2/signal.hpp>
-
 #include <vector>
 #include <memory>
 
@@ -231,6 +229,7 @@ private:
     Link<LinkParamNone*,void>      maSelectHdl;
     Link<LinkParamNone*,void>      maCancelHdl;
     Link<ImplListBoxWindow*,void>  maDoubleClickHdl;
+    Link<UserDrawEvent*, void>     maUserDrawHdl;
     Link<LinkParamNone*,void>      maMRUChangedHdl;
     Link<sal_Int32,void>           maFocusHdl;
     Link<LinkParamNone*,void>      maListItemSelectHdl;
@@ -332,10 +331,9 @@ public:
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maSelectHdl = rLink; }
     void            SetCancelHdl( const Link<LinkParamNone*,void>& rLink ) { maCancelHdl = rLink; }
     void            SetDoubleClickHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maDoubleClickHdl = rLink; }
+    void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maUserDrawHdl = rLink; }
     void            SetMRUChangedHdl( const Link<LinkParamNone*,void>& rLink ) { maMRUChangedHdl = rLink; }
     void            SetFocusHdl( const Link<sal_Int32,void>& rLink )  { maFocusHdl = rLink ; }
-
-    boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetListItemSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maListItemSelectHdl = rLink ; }
     bool            IsSelectionChanged() const { return mbSelectionChanged; }
@@ -460,9 +458,7 @@ public:
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
     void            SetCancelHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetCancelHdl( rLink ); }
     void            SetDoubleClickHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maLBWindow->SetDoubleClickHdl( rLink ); }
-
-    boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
-
+    void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maLBWindow->SetUserDrawHdl( rLink ); }
     void            SetFocusHdl( const Link<sal_Int32,void>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
     void            SetListItemSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
     void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
@@ -535,6 +531,9 @@ private:
     Rectangle       maFocusRect;
     Size            maUserItemSize;
 
+    Link<void*,void> maMBDownHdl;
+    Link<UserDrawEvent*, void> maUserDrawHdl;
+
     /// bitfield
     bool            mbUserDrawEnabled : 1;
     bool            mbInUserDraw : 1;
@@ -563,8 +562,8 @@ public:
 
     void            MBDown();
 
-    boost::signals2::signal< void ( ImplWin* ) > buttonDownSignal;
-    boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
+    void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
+    void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maUserDrawHdl = rLink; }
 
     void            SetUserItemSize( const Size& rSz )  { maUserItemSize = rSz; }
 
@@ -588,14 +587,14 @@ class ImplBtn : public PushButton
 {
 private:
     bool            mbDown;
+    Link<void*,void> maMBDownHdl;
 
 public:
                     ImplBtn( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     void    MBDown();
-
-    boost::signals2::signal< void ( ImplBtn* ) > buttonDownSignal;
+    void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
 };
 
 void ImplInitDropDownButton( PushButton* pButton );

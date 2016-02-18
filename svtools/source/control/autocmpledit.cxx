@@ -14,8 +14,7 @@ AutocompleteEdit::AutocompleteEdit( vcl::Window* pParent )
     : Edit( pParent )
     , m_nCurrent( 0 )
 {
-    SignalConnectAutocomplete( nullptr,
-            [this] ( Edit *const pEdit ) { this->AutoCompleteHandler( pEdit ); } );
+    SetAutocompleteHdl(LINK(this, AutocompleteEdit, AutoCompleteHdl_Impl));
 }
 
 void AutocompleteEdit::AddEntry( const OUString& rEntry )
@@ -29,7 +28,7 @@ void AutocompleteEdit::ClearEntries()
     m_aMatching.clear();
 }
 
-void AutocompleteEdit::AutoCompleteHandler( Edit* )
+IMPL_LINK_NOARG_TYPED(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
 {
     if( GetAutocompleteAction() != AUTOCOMPLETE_KEYINPUT )
         return;

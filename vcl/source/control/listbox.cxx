@@ -137,18 +137,15 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mpFloatWin->GetDropTarget()->addDropTargetListener(xDrop);
 
         mpImplWin = VclPtr<ImplWin>::Create( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
-        mpImplWin->buttonDownSignal.connect( [this]( Control* pControl )
-                                             { this->ImplClickButtonHandler( pControl ); } );
-        mpImplWin->userDrawSignal.connect( [this]( UserDrawEvent* pUserDrawEvent )
-                                           { this->ImplUserDrawHandler( pUserDrawEvent ); } );
+        mpImplWin->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
+        mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
         mpImplWin->SetEdgeBlending(GetEdgeBlending());
 
         mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
-        mpBtn->buttonDownSignal.connect( [this]( Control* pControl )
-                                         { this->ImplClickButtonHandler( pControl ); } );
+        mpBtn->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
         mpBtn->Show();
         mpBtn->GetDropTarget()->addDropTargetListener(xDrop);
     }
@@ -161,8 +158,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpImplLB->SetScrollHdl( LINK( this, ListBox, ImplScrollHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
-    mpImplLB->userDrawSignal.connect( [this]( UserDrawEvent* pUserDrawEvent )
-                                      { this->ImplUserDrawHandler( pUserDrawEvent ); } );
+    mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
     mpImplLB->SetFocusHdl( LINK( this, ListBox, ImplFocusHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ListBox, ImplListItemSelectHdl ) );
     mpImplLB->SetPosPixel( Point() );
@@ -294,7 +290,7 @@ IMPL_LINK_NOARG_TYPED(ListBox, ImplDoubleClickHdl, ImplListBoxWindow*, void)
     DoubleClick();
 }
 
-void ListBox::ImplClickButtonHandler( Control* )
+IMPL_LINK_NOARG_TYPED(ListBox, ImplClickBtnHdl, void*, void)
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
@@ -1381,7 +1377,7 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
     }
 }
 
-void ListBox::ImplUserDrawHandler( UserDrawEvent* pEvent )
+IMPL_LINK_TYPED( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent, void )
 {
     UserDraw( *pEvent );
 }

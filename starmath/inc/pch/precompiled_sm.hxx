@@ -41,7 +41,6 @@
 #include <boost/checked_delete.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional/optional.hpp>
-#include <boost/signals2/signal.hpp>
 #include <osl/diagnose.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>

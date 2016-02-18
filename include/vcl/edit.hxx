@@ -32,9 +32,6 @@
 #include <vcl/vclptr.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-// forward declare signals stuff - those headers are staggeringly expensive
-namespace boost { namespace signals2 { class connection; } }
-
 namespace com {
 namespace sun {
 namespace star {
@@ -72,9 +69,6 @@ class Timer;
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
 {
 private:
-    struct Impl;
-    ::std::unique_ptr<Impl> m_pImpl;
-
     VclPtr<Edit>        mpSubEdit;
     Timer*              mpUpdateDataTimer;
     TextFilter*         mpFilterText;
@@ -102,6 +96,7 @@ private:
                         mbActivePopup:1;
     Link<Edit&,void>    maModifyHdl;
     Link<Edit&,void>    maUpdateDataHdl;
+    Link<Edit&,void>    maAutocompleteHdl;
 
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
 
@@ -253,8 +248,8 @@ public:
     void                SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }
 
-    void SignalConnectAutocomplete(::boost::signals2::connection * pConnection,
-            ::std::function<void (Edit *)>);
+    void                SetAutocompleteHdl( const Link<Edit&,void>& rLink ) { maAutocompleteHdl = rLink; }
+    const Link<Edit&,void>& GetAutocompleteHdl() const { return maAutocompleteHdl; }
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
     virtual Size        CalcMinimumSize() const;

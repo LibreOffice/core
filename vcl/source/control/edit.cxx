@@ -66,8 +66,6 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#include <boost/signals2/signal.hpp>
-
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -157,21 +155,14 @@ void Impl_IMEInfos::DestroyAttribs()
     nLen = 0;
 }
 
-struct Edit::Impl
-{
-    boost::signals2::signal< void (Edit *) > m_AutocompleteSignal;
-};
-
 Edit::Edit( WindowType nType )
     : Control( nType )
-    , m_pImpl(new Impl)
 {
     ImplInitEditData();
 }
 
 Edit::Edit( vcl::Window* pParent, WinBits nStyle )
     : Control( WINDOW_EDIT )
-    , m_pImpl(new Impl)
 {
     ImplInitEditData();
     ImplInit( pParent, nStyle );
@@ -179,7 +170,6 @@ Edit::Edit( vcl::Window* pParent, WinBits nStyle )
 
 Edit::Edit( vcl::Window* pParent, const ResId& rResId )
     : Control( WINDOW_EDIT )
-    , m_pImpl(new Impl)
 {
     rResId.SetRT( RSC_EDIT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -1659,12 +1649,12 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         ImplCopyToSelectionClipboard();
                     }
 
-                    if (bGoEnd && !m_pImpl->m_AutocompleteSignal.empty() && !rKEvt.GetKeyCode().GetModifier())
+                    if (bGoEnd && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier())
                     {
                         if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                         {
                             meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
-                            m_pImpl->m_AutocompleteSignal( this );
+                            maAutocompleteHdl.Call(*this);
                         }
                     }
 
@@ -1759,12 +1749,12 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     if ( !mbReadOnly )
                     {
                         ImplInsertText(OUString(rKEvt.GetCharCode()), nullptr, true);
-                        if (!m_pImpl->m_AutocompleteSignal.empty())
+                        if (maAutocompleteHdl.IsSet())
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                             {
                                 meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
-                                m_pImpl->m_AutocompleteSignal( this );
+                                maAutocompleteHdl.Call(*this);
                             }
                         }
                     }
@@ -2125,12 +2115,12 @@ void Edit::Command( const CommandEvent& rCEvt )
         Invalidate();
 
         // #i25161# call auto complete handler for ext text commit also
-        if (m_pImpl->m_AutocompleteSignal.empty())
+        if (maAutocompleteHdl.IsSet())
         {
             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
             {
                 meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
-                m_pImpl->m_AutocompleteSignal( this );
+                maAutocompleteHdl.Call(*this);
             }
         }
     }
@@ -2752,7 +2742,7 @@ void Edit::SetSubEdit(Edit* pEdit)
         mpSubEdit->mbIsSubEdit = true;
 
         mpSubEdit->SetReadOnly(mbReadOnly);
-        mpSubEdit->m_pImpl->m_AutocompleteSignal.connect(m_pImpl->m_AutocompleteSignal);
+        mpSubEdit->maAutocompleteHdl = maAutocompleteHdl;
     }
 }
 
@@ -3077,16 +3067,6 @@ OUString Edit::GetSurroundingText() const
 Selection Edit::GetSurroundingTextSelection() const
 {
   return GetSelection();
-}
-
-void Edit::SignalConnectAutocomplete(
-        boost::signals2::connection *const pConnection,
-        std::function<void (Edit *)> slot)
-{
-    boost::signals2::connection const& rConnection(
-            m_pImpl->m_AutocompleteSignal.connect(slot));
-    if (pConnection)
-        *pConnection = rConnection;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

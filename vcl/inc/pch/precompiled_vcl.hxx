@@ -59,8 +59,6 @@
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/signals2/connection.hpp>
-#include <boost/signals2/signal.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>

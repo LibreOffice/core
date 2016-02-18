@@ -463,7 +463,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     GrabFocus();
 
-    if (rMouseEvent.IsLeft() && Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
+    if (rMouseEvent.IsLeft() && Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
         for (size_t i = 0; i < maElementList.size() ; i++)
         {
@@ -471,7 +471,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
-                selectedSignal(element);
+                maSelectHdlLink.Call(*element);
                 return;
             }
         }
@@ -720,7 +720,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     mpElementsControl->SetBackground( Color( COL_WHITE ) );
     mpElementsControl->SetTextColor( Color( COL_BLACK ) );
     mpElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
-    mpElementsControl->selectedSignal.connect( boost::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
+    mpElementsControl->SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHandler));
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
@@ -752,7 +752,7 @@ void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFl
     mpElementsControl->setVerticalMode(bVertical);
 }
 
-void SmElementsDockingWindow::SelectClickHandler( SmElement* pElement )
+IMPL_LINK_TYPED(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, void)
 {
     SmViewShell* pViewSh = GetView();
 
@@ -760,7 +760,7 @@ void SmElementsDockingWindow::SelectClickHandler( SmElement* pElement )
     {
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-            new SfxStringItem(SID_INSERTCOMMANDTEXT, pElement->getText()), 0L);
+            new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()), 0L);
     }
 }
 
