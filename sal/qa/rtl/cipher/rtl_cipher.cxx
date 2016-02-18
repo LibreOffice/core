@@ -33,14 +33,6 @@ namespace rtl_cipher
 class create : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void create_001()
         {
@@ -105,14 +97,6 @@ public:
 class createBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void createBF_001()
         {
@@ -153,14 +137,6 @@ public:
 class decode : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void test_encode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
         {
@@ -290,14 +266,6 @@ public:
 class decodeBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void decodeBF_001()
         {
@@ -314,14 +282,6 @@ public:
 class destroy : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void destroy_001()
         {
@@ -341,14 +301,6 @@ public:
 class destroyBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void destroyBF_001()
         {
@@ -370,14 +322,6 @@ public:
 class encode : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void test_encode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, sal_uInt8 _nDataValue)
         {
@@ -443,14 +387,6 @@ public:
 class encodeBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void encodeBF_001()
         {
@@ -467,14 +403,6 @@ public:
 class init : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void init_001()
         {
@@ -580,14 +508,6 @@ public:
 class initBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     void initBF_001()
         {

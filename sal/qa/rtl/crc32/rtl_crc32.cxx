@@ -30,14 +30,6 @@ namespace rtl_CRC32
 class test : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     // insert your test code here.
     void rtl_crc32_001()

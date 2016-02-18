@@ -89,7 +89,6 @@ void TestVbaEncryption::testProjKey1()
 void TestVbaEncryption::setUp()
 {
 }
-
 void TestVbaEncryption::tearDown()
 {
 }
