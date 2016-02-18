@@ -349,10 +349,12 @@ public class StyleApplier
         String sFilePath = getStylePath() + "/" + _filename;
         int[] oStylePropList = new int[6];
         String[] sData = FileAccess.getDataFromTextFile(xMSF, sFilePath);
-        oStylePropList[SOBACKGROUNDCOLOR] = getStyleColor(sData, ".toctitle {", "background-color:");
-        oStylePropList[SODBTEXTCOLOR] = getStyleColor(sData, ".doctitle {", "color:");
-        oStylePropList[SOLABELTEXTCOLOR] = getStyleColor(sData, ".toctitle {", "color:");
-        oStylePropList[SOBORDERCOLOR] = getStyleColor(sData, ".tcolor {", "border-color:");
+        if (sData != null) {
+            oStylePropList[SOBACKGROUNDCOLOR] = getStyleColor(sData, ".toctitle {", "background-color:");
+            oStylePropList[SODBTEXTCOLOR] = getStyleColor(sData, ".doctitle {", "color:");
+            oStylePropList[SOLABELTEXTCOLOR] = getStyleColor(sData, ".toctitle {", "color:");
+            oStylePropList[SOBORDERCOLOR] = getStyleColor(sData, ".tcolor {", "border-color:");
+        }
         return oStylePropList;
     }
 
