@@ -49,6 +49,8 @@
 #include <list>
 #include <vector>
 
+#include <config_vclplug.h>
+
 class GtkSalGraphics;
 class GtkSalDisplay;
 
@@ -222,7 +224,7 @@ class GtkSalFrame : public SalFrame
 
     SalMenu*                        m_pSalMenu;
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined(ENABLE_DBUS) && ENABLE_GIO
     public:
     void EnsureDbusMenuSynced();
     private:

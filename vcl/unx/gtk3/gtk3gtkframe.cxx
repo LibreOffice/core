@@ -38,7 +38,9 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#include <config_vclplug.h>
+
+#if defined(ENABLE_DBUS) && ENABLE_GIO
 #  include <unx/gtk/gtksalmenu.hxx>
 #endif
 #if defined ENABLE_GMENU_INTEGRATION // defined in gtksalmenu.hxx above
@@ -479,7 +481,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SalFrameStyleFlags::SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined(ENABLE_DBUS) && ENABLE_GIO
     m_pLastSyncedDbusMenu = nullptr;
 #endif
     Init( pParent, nStyle );
@@ -495,20 +497,13 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined(ENABLE_DBUS) && ENABLE_GIO
     m_pLastSyncedDbusMenu = nullptr;
 #endif
     Init( pSysData );
 }
 
 #ifdef ENABLE_GMENU_INTEGRATION
-
-static void
-gdk_x11_window_set_utf8_property  (GdkWindow * /*window*/,
-                                   const gchar * /*name*/,
-                                   const gchar * /*value*/)
-{
-}
 
 // AppMenu watch functions.
 
@@ -519,7 +514,7 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+#if defined(ENABLE_DBUS) && ENABLE_GIO
 void GtkSalFrame::EnsureDbusMenuSynced()
 {
     GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(GetMenu());
@@ -628,7 +623,7 @@ gboolean ensure_dbus_setup( gpointer data )
         GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new( static_cast< gpointer >( pSalFrame ) ));
 
         // Generate menu paths.
-        ::Window windowId = GDK_WINDOW_XID( gdkWindow );
+        sal_uIntPtr windowId = pSalFrame->GetNativeWindowHandle(pSalFrame->getWindow());
         gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
@@ -636,24 +631,38 @@ gboolean ensure_dbus_setup( gpointer data )
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice" );
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
-        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
-
+        GdkDisplay *pDisplay = pSalFrame->getGdkDisplay();
+        // fdo#70885 we don't want app menu under Unity
+        const bool bDesktopIsUnity = (SalGetDesktopEnvironment() == "UNITY");
+#if defined(GDK_WINDOWING_X11)
+        if (GDK_IS_X11_DISPLAY(pDisplay))
+        {
+            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice" );
+            if (!bDesktopIsUnity)
+                gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
+            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
+            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
+            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
+            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
+        }
+#endif
+#if defined(GDK_WINDOWING_WAYLAND)
+        if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        {
+            gdk_wayland_window_set_dbus_properties_libgtk_only(gdkWindow, "org.libreoffice",
+                                                               "/org/libreoffice/menus/appmenu",
+                                                               !bDesktopIsUnity ? aDBusMenubarPath : nullptr,
+                                                               aDBusWindowPath,
+                                                               "/org/libreoffice",
+                                                               g_dbus_connection_get_unique_name( pSessionBus ));
+        }
+#endif
         // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, nullptr);
         SAL_INFO("vcl.unity", "exporting action group at " << pActionGroup << " for window " << windowId);
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusWindowPath, pActionGroup, nullptr);
         pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, nullptr, nullptr );
-
-        // fdo#70885 we don't want app menu under Unity
-        bool bDesktopIsUnity = (SalGetDesktopEnvironment() == "UNITY");
-
-        if (!bDesktopIsUnity)
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu" );
 
         //app menu, to-do translations, block normal menus when active, honor use appmenu settings
         ResMgr* pMgr = ImplGetResMgr();
