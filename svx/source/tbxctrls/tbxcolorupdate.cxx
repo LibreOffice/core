@@ -158,7 +158,8 @@ namespace svx
                 }
 
                 if (maBmpSize.Width() == maBmpSize.Height())
-                    maUpdRect = Rectangle(Point( 0, maBmpSize.Height() * 3 / 4), Size(maBmpSize.Width(), maBmpSize.Height() / 4));
+                    // tdf#84985 align color bar with icon bottom edge; integer arithmetic e.g. 26 - 26/4 <> 26 * 3/4
+                    maUpdRect = Rectangle(Point( 0, maBmpSize.Height() - maBmpSize.Height() / 4), Size(maBmpSize.Width(), maBmpSize.Height() / 4));
                 else
                     maUpdRect = Rectangle(Point( maBmpSize.Height() + 2, 2), Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
 
