@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_e4be70d3",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-18T21:58:42Z",
+      "side": 1,
+      "message": "eek - please don\u0027t obfuscate by nesting assignments inside other expressions",
+      "revId": "69b962ca3d853ded763957a52746d365b462cebb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
