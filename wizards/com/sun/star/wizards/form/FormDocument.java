@@ -274,7 +274,7 @@ public class FormDocument extends TextDocument
                 return curControlForm;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Searching for control " + _sname + " failed");
     }
 
     public boolean finalizeForms(DataEntrySetter _curDataEntrySetter, FieldLinker _curFieldLinker, FormConfiguration _curFormConfiguration)
