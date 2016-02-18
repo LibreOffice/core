@@ -1478,9 +1478,6 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() override {}
-
-        void tearDown() override {}
 
         void getIdentifier_001()
         {
@@ -1497,9 +1494,6 @@ namespace osl_Thread
     class getCurrentIdentifier : public CppUnit::TestFixture
     {
     public:
-        void setUp() override {}
-        void tearDown() override {}
-
         void getCurrentIdentifier_001()
         {
             oslThreadIdentifier oId;
@@ -1604,8 +1598,6 @@ namespace osl_Thread
     class schedule : public CppUnit::TestFixture
     {
     public:
-        void setUp() override {}
-        void tearDown() override {}
 
         /** The requested thread will get terminate the next time schedule() is called.
 
@@ -1814,14 +1806,6 @@ namespace osl_ThreadData
     class ctors : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() override
-            {
-            }
-
-        void tearDown() override
-            {
-            }
 
         // insert your test code here.
         void ctor_001()
@@ -1837,14 +1821,6 @@ namespace osl_ThreadData
     class setData : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() override
-            {
-            }
-
-        void tearDown() override
-            {
-            }
 
         /** the same instance of the class can have different values in different threads
          */
@@ -1948,14 +1924,6 @@ namespace osl_ThreadData
     class getData : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() override
-            {
-            }
-
-        void tearDown() override
-            {
-            }
 
         // After setData in child threads, get Data in the main thread, should be independent
         void getData_001()

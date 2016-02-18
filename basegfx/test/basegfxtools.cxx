@@ -48,11 +48,6 @@ public:
         maKeyStops(getTestVector())
     {}
 
-    void setUp() override
-    {}
-
-    void tearDown() override
-    {}
 
     void test()
     {

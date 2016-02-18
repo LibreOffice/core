@@ -28,14 +28,6 @@ namespace basegfx3d
 class b3dhommatrix : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     // insert your test code here.
     // this is only demonstration code
@@ -56,14 +48,6 @@ public:
 class b3dpoint : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     // insert your test code here.
     // this is only demonstration code
@@ -84,14 +68,6 @@ public:
 class b3drange : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     // insert your test code here.
     void EmptyMethod()
@@ -110,14 +86,6 @@ public:
 class b3dtuple : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     // insert your test code here.
     // this is only demonstration code
@@ -138,14 +106,6 @@ public:
 class b3dvector : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
-    void setUp() override
-    {
-    }
-
-    void tearDown() override
-    {
-    }
 
     // insert your test code here.
     void EmptyMethod()

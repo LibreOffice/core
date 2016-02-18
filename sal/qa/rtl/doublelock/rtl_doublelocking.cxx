@@ -147,15 +147,6 @@ namespace rtl_DoubleLocking
     {
     public:
 
-        // initialise your test code values here.
-        void setUp() override
-            {
-            }
-
-        void tearDown() override
-            {
-            }
-
         void getValue_001()
             {
                 rtl::OUString aStr = Gregorian::get();

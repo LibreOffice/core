@@ -63,8 +63,6 @@ public:
             B2DRange(0,90,20,150));
     }
 
-    void tearDown() override
-    {}
 
     void validate(const char* pName,
                   const char* pValidSvgD,
