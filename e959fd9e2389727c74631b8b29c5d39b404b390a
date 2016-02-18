@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a41748ec",
+        "filename": "svx/source/sdr/properties/emptyproperties.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-18T20:43:44Z",
+      "side": 1,
+      "message": "oh, forgot to mention this: mpEmptyItemSet is unconditionally dereferenced 2 lines later, so this is clearly a case when assert() should be used.",
+      "revId": "e959fd9e2389727c74631b8b29c5d39b404b390a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
