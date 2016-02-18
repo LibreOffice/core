@@ -1491,59 +1491,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         ScMatrixRef xMat = new ScFullMatrix(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
-        ColumnBatch<svl::SharedString> aStringBatch(pHostDoc, pSrcDoc, CELLTYPE_STRING, CELLTYPE_EDIT);
-        ColumnBatch<double> aDoubleBatch(pHostDoc, pSrcDoc, CELLTYPE_VALUE, CELLTYPE_VALUE);
-
-        for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
-        {
-            const SCSIZE nC = nCol - nCol1;
-            for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
-            {
-                const SCSIZE nR = nRow - nRow1;
-
-                ScRefCellValue aCell(*pSrcDoc, ScAddress(nCol, nRow, nTab));
-
-                aStringBatch.update(aCell, nC, nR, xMat);
-                aDoubleBatch.update(aCell, nC, nR, xMat);
-
-                if (aCell.hasEmptyValue())
-                    // Skip empty cells.  Matrix's default values are empty elements.
-                    continue;
-
-                switch (aCell.meType)
-                {
-                    case CELLTYPE_FORMULA:
-                    {
-                        ScFormulaCell* pFCell = aCell.mpFormula;
-                        sal_uInt16 nError = pFCell->GetErrCode();
-                        if (nError)
-                            xMat->PutDouble( CreateDoubleError( nError), nC, nR);
-                        else if (pFCell->IsValue())
-                        {
-                            double fVal = pFCell->GetValue();
-                            xMat->PutDouble(fVal, nC, nR);
-                        }
-                        else
-                        {
-                            svl::SharedString aStr = pFCell->GetString();
-                            aStr = pHostDoc->GetSharedStringPool().intern(aStr.getString());
-                            xMat->PutString(aStr, nC, nR);
-                        }
-                    }
-                    break;
-                    // These are handled in batch:
-                    case CELLTYPE_VALUE:
-                    case CELLTYPE_STRING:
-                    case CELLTYPE_EDIT:
-                    break;
-                    default:
-                        OSL_FAIL("attempted to convert an unknown cell type.");
-                }
-            }
-
-            aStringBatch.flush(nC, xMat);
-            aDoubleBatch.flush(nC, xMat);
-        }
+        pSrcDoc->FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &pHostDoc->GetSharedStringPool());
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 

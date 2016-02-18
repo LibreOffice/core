@@ -2150,10 +2150,12 @@ class FillMatrixHandler
     SCTAB mnTab;
     ScDocument* mpDoc;
     svl::SharedStringPool& mrPool;
+    svl::SharedStringPool* mpPool; // if matrix is not in the same document
 
 public:
-    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, ScDocument* pDoc) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab), mpDoc(pDoc), mrPool(pDoc->GetSharedStringPool()) {}
+    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, ScDocument* pDoc, svl::SharedStringPool* pPool) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab),
+        mpDoc(pDoc), mrPool(pDoc->GetSharedStringPool()), mpPool(pPool) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -2169,8 +2171,22 @@ public:
             break;
             case sc::element_type_string:
             {
-                const svl::SharedString* p = &sc::string_block::at(*node.data, nOffset);
-                mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
+                if (!mpPool)
+                {
+                    const svl::SharedString* p = &sc::string_block::at(*node.data, nOffset);
+                    mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
+                }
+                else
+                {
+                    std::vector<svl::SharedString> aStrings;
+                    aStrings.reserve(nDataSize);
+                    const svl::SharedString* p = &sc::string_block::at(*node.data, nOffset);
+                    for (size_t i = 0; i < nDataSize; ++i)
+                    {
+                        aStrings.push_back(mpPool->intern(p[i].getString()));
+                    }
+                    mrMat.PutString(aStrings.data(), aStrings.size(), mnMatCol, nMatRow);
+                }
             }
             break;
             case sc::element_type_edittext:
@@ -2184,7 +2200,10 @@ public:
                 for (; it != itEnd; ++it)
                 {
                     OUString aStr = ScEditUtil::GetString(**it, mpDoc);
-                    aSSs.push_back(mrPool.intern(aStr));
+                    if (!mpPool)
+                        aSSs.push_back(mrPool.intern(aStr));
+                    else
+                        aSSs.push_back(mpPool->intern(aStr));
                 }
 
                 const svl::SharedString* p = &aSSs[0];
@@ -2246,6 +2265,8 @@ public:
                     }
 
                     svl::SharedString aStr = rCell.GetString();
+                    if (mpPool)
+                        aStr = mpPool->intern(aStr.getString());
                     if (!aBucket.maStrVals.empty() && nThisRow == nPrevRow + 1)
                     {
                         // Secondary strings.
@@ -2271,9 +2292,9 @@ public:
 
 }
 
-void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2 ) const
+void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
-    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, nCol, nTab, pDocument);
+    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, nCol, nTab, pDocument, pPool);
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 

@@ -1847,7 +1847,7 @@ public:
 
     SC_DLLPUBLIC ScMacroManager* GetMacroManager();
 
-    void FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+    void FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool = nullptr) const;
 
     /**
      * Set an array of numerical formula results to a group of contiguous
