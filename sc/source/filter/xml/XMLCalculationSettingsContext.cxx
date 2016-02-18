@@ -40,12 +40,12 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
+    eSearchType(utl::SearchParam::SRCH_REGEXP),
     bIsIterationEnabled(false),
     bCalcAsShown(false),
     bIgnoreCase(false),
     bLookUpLabels(true),
-    bMatchWholeCell(true),
-    bUseRegularExpressions(true)
+    bMatchWholeCell(true)
 {
     aNullDate.Day = 30;
     aNullDate.Month = 12;
@@ -90,7 +90,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bUseRegularExpressions = false;
+                    eSearchType = utl::SearchParam::SRCH_NORMAL;
             }
         }
     }
@@ -131,7 +131,8 @@ void ScXMLCalculationSettingsContext::EndElement()
             xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, uno::makeAny(bIgnoreCase) );
             xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, uno::makeAny(bLookUpLabels) );
             xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, uno::makeAny(bMatchWholeCell) );
-            xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, uno::makeAny(bUseRegularExpressions) );
+            xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED,
+                    uno::makeAny(eSearchType == utl::SearchParam::SRCH_REGEXP) );
             xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, uno::makeAny(bIsIterationEnabled) );
             xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::makeAny(nIterationCount) );
             xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::makeAny(fIterationEpsilon) );

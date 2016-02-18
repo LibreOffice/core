@@ -194,10 +194,10 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     ScQueryParam    aFilterFields;
     ScAddress       aOutputPosition;
     ScRange         aConditionSourceRangeAddress;
+    utl::SearchParam::SearchType eSearchType;
     sal_uInt8   nFilterFieldCount;
     bool        bSkipDuplicates:1;
     bool        bCopyOutputData:1;
-    bool        bUseRegularExpressions:1;
     bool        bIsCaseSensitive:1;
     bool        bConnectionOr:1;
     bool        bNextConnectionOr:1;
@@ -223,7 +223,11 @@ public:
     virtual void EndElement() override;
 
     void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
-    void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
+    void SetSearchType(const utl::SearchParam::SearchType eTemp)
+    {
+        if (eSearchType == utl::SearchParam::SRCH_NORMAL)
+            eSearchType = eTemp;
+    }
 
     void OpenConnection(const bool bVal)
     {
@@ -324,7 +328,7 @@ public:
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     static void getOperatorXML(
-        const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions);
+        const OUString& sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType);
     virtual void EndElement() override;
 };
 

@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include "global.hxx"
 #include <xmloff/xmltoken.hxx>
+#include <unotools/textsearch.hxx>
 
 class ScXMLExport;
 class ScDocument;
@@ -41,8 +42,9 @@ class ScXMLExportDataPilot
     ScXMLExport&        rExport;
     ScDocument*         pDoc;
 
-    static OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions);
-    void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions);
+    static OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const utl::SearchParam::SearchType eSearchType);
+    void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive,
+            utl::SearchParam::SearchType eSearchType);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
 
     void WriteFieldReference(ScDPSaveDimension* pDim);

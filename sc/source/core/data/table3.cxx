@@ -2213,7 +2213,7 @@ class QueryEvaluator
 
     bool isRealRegExp(const ScQueryEntry& rEntry) const
     {
-        if (!mrParam.bRegExp)
+        if (mrParam.eSearchType != utl::SearchParam::SRCH_REGEXP)
             return false;
 
         return isTextMatchOp(rEntry);
@@ -2224,7 +2224,7 @@ class QueryEvaluator
         if (!mpTestEqualCondition)
             return false;
 
-        if (!mrParam.bRegExp)
+        if (mrParam.eSearchType != utl::SearchParam::SRCH_REGEXP)
             return false;
 
         return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);

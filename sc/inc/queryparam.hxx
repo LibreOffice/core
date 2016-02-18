@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_QUERYPARAM_HXX
 #define INCLUDED_SC_INC_QUERYPARAM_HXX
 
+#include <unotools/textsearch.hxx>
 #include "global.hxx"
 #include "types.hxx"
 
@@ -39,11 +40,11 @@ class SharedStringPool;
 
 struct ScQueryParamBase
 {
+    utl::SearchParam::SearchType eSearchType;
     bool            bHasHeader;
     bool            bByRow;
     bool            bInplace;
     bool            bCaseSens;
-    bool            bRegExp;
     bool            bDuplicate;
     bool            mbRangeLookup;      ///< for spreadsheet functions like MATCH, LOOKUP, HLOOKUP, VLOOKUP
 

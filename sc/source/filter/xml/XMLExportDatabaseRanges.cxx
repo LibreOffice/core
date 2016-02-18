@@ -368,7 +368,7 @@ private:
         }
     }
 
-    static OUString getOperatorXML(const ScQueryEntry& rEntry, bool bRegExp)
+    static OUString getOperatorXML(const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSearchType)
     {
         switch (rEntry.eOp)
         {
@@ -395,7 +395,7 @@ private:
                 else if (rEntry.IsQueryByNonEmpty())
                     return GetXMLToken(XML_NOEMPTY);
 
-                if (bRegExp)
+                if (eSearchType == utl::SearchParam::SRCH_REGEXP)
                     return GetXMLToken(XML_MATCH);
                 else
                     return OUString("=");
@@ -409,7 +409,7 @@ private:
             case SC_LESS_EQUAL:
                 return OUString("<=");
             case SC_NOT_EQUAL:
-                if (bRegExp)
+                if (eSearchType == utl::SearchParam::SRCH_REGEXP)
                     return GetXMLToken(XML_NOMATCH);
                 else
                     return OUString("!=");
@@ -435,7 +435,8 @@ private:
         }
     };
 
-    void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
+    void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens,
+            utl::SearchParam::SearchType eSearchType)
     {
         const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
         if (rItems.empty())
@@ -462,7 +463,7 @@ private:
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
             }
 
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, bRegExp));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, eSearchType));
             SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
         }
         else
@@ -539,17 +540,17 @@ private:
         {
             SvXMLElementExport aElemOr(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
             for (size_t i = 0; i < nCount; ++i)
-                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
         }
         else if (bAnd && !bOr)
         {
             SvXMLElementExport aElemAnd(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
             for (size_t i = 0; i < nCount; ++i)
-                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                writeCondition(aParam.GetEntry(i), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
         }
         else if (nCount == 1)
         {
-            writeCondition(aParam.GetEntry(0), nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+            writeCondition(aParam.GetEntry(0), nFieldStart, aParam.bCaseSens, aParam.eSearchType);
         }
         else
         {
@@ -577,18 +578,18 @@ private:
                     {
                         mrExport.StartElement(aName, true );
                         bOpenAndElement = true;
-                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
                         aPrevEntry = rEntry;
                         if (i == nCount - 1)
                         {
-                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
                             mrExport.EndElement(aName, true);
                             bOpenAndElement = false;
                         }
                     }
                     else
                     {
-                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
                         aPrevEntry = rEntry;
                         if (bOpenAndElement)
                         {
@@ -596,15 +597,15 @@ private:
                             bOpenAndElement = false;
                         }
                         if (i == nCount - 1)
-                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                            writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
                     }
                 }
                 else
                 {
-                    writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                    writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
                     aPrevEntry = rEntry;
                     if (i == nCount - 1)
-                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.bRegExp);
+                        writeCondition(aPrevEntry, nFieldStart, aParam.bCaseSens, aParam.eSearchType);
                 }
             }
             if(bOpenAndElement)

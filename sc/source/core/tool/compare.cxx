@@ -32,12 +32,16 @@ Compare::Cell::Cell() :
 Compare::Compare() :
     meOp(SC_EQUAL), mbIgnoreCase(true) {}
 
-CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg ) :
+CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp ) :
     aQueryEntry(rEntry),
-    bRegEx(bReg),
+    eSearchType(eSrchTyp),
     bMatchWholeCell(pDoc->GetDocOptions().IsMatchWholeCell())
 {
-    bRegEx = (bRegEx && (aQueryEntry.eOp == SC_EQUAL || aQueryEntry.eOp == SC_NOT_EQUAL));
+    // Wildcard and Regex search work only with equal or not equal.
+    if (eSearchType != utl::SearchParam::SRCH_NORMAL &&
+            !(aQueryEntry.eOp == SC_EQUAL || aQueryEntry.eOp == SC_NOT_EQUAL))
+        eSearchType = utl::SearchParam::SRCH_NORMAL;
+
     // Interpreter functions usually are case insensitive, except the simple
     // comparison operators, for which these options aren't used. Override in
     // struct if needed.
@@ -132,7 +136,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
             OSL_ENSURE(rEntry.GetQueryItem().maString == rCell2.maStr, "ScInterpreter::CompareFunc: broken options");
-            if (pOptions->bRegEx)
+            if (pOptions->eSearchType == utl::SearchParam::SRCH_REGEXP)
             {
                 sal_Int32 nStart = 0;
                 sal_Int32 nStop  = rCell1.maStr.getLength();

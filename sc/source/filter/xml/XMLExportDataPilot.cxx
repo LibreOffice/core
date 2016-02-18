@@ -66,20 +66,20 @@ ScXMLExportDataPilot::~ScXMLExportDataPilot()
 }
 
 OUString ScXMLExportDataPilot::getDPOperatorXML(
-    const ScQueryOp aFilterOperator, const bool bUseRegularExpressions)
+    const ScQueryOp aFilterOperator, const utl::SearchParam::SearchType eSearchType)
 {
     switch (aFilterOperator)
     {
         case SC_EQUAL :
         {
-            if (bUseRegularExpressions)
+            if (eSearchType == utl::SearchParam::SRCH_REGEXP)
                 return GetXMLToken(XML_MATCH);
             else
                 return OUString("=");
         }
         case SC_NOT_EQUAL :
         {
-            if (bUseRegularExpressions)
+            if (eSearchType == utl::SearchParam::SRCH_REGEXP)
                 return GetXMLToken(XML_NOMATCH);
             else
                 return OUString("!=");
@@ -106,7 +106,8 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
     return OUString("=");
 }
 
-void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions)
+void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive,
+        utl::SearchParam::SearchType eSearchType)
 {
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(aQueryEntry.nField));
     if (bIsCaseSensitive)
@@ -134,7 +135,7 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
     else
         rExport.AddAttribute(
             XML_NAMESPACE_TABLE, XML_OPERATOR,
-            getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions));
+            getDPOperatorXML(aQueryEntry.eOp, eSearchType));
 
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 }
@@ -187,14 +188,14 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             rExport.CheckAttrList();
             if (nQueryEntryCount  == 1)
             {
-                    WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                    WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.eSearchType);
             }
             else if (bOr && !bAnd)
             {
                 SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, true, true);
                 for (j = 0; j < nQueryEntryCount; ++j)
                 {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.eSearchType);
                 }
             }
             else if (bAnd && !bOr)
@@ -202,7 +203,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, true, true);
                 for (j = 0; j < nQueryEntryCount; ++j)
                 {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.eSearchType);
                 }
             }
             else
@@ -228,18 +229,18 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                         {
                             rExport.StartElement( aName, true );
                             bOpenAndElement = true;
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
                             aPrevFilterField = aQueryParam.GetEntry(j);
                             if (j == nQueryEntryCount - 1)
                             {
-                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
                                 rExport.EndElement(aName, true);
                                 bOpenAndElement = false;
                             }
                         }
                         else
                         {
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
                             aPrevFilterField = aQueryParam.GetEntry(j);
                             if (bOpenAndElement)
                             {
@@ -248,16 +249,16 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                             }
                             if (j == nQueryEntryCount - 1)
                             {
-                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
                             }
                         }
                     }
                     else
                     {
-                        WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                        WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
                         aPrevFilterField = aQueryParam.GetEntry(j);
                         if (j == nQueryEntryCount - 1)
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.eSearchType);
                     }
                 }
             }

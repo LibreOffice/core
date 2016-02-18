@@ -64,11 +64,11 @@ ScQueryParamBase::const_iterator ScQueryParamBase::end() const
 }
 
 ScQueryParamBase::ScQueryParamBase() :
+    eSearchType(utl::SearchParam::SRCH_NORMAL),
     bHasHeader(true),
     bByRow(true),
     bInplace(true),
     bCaseSens(false),
-    bRegExp(false),
     bDuplicate(false),
     mbRangeLookup(false)
 {
@@ -76,9 +76,9 @@ ScQueryParamBase::ScQueryParamBase() :
         m_Entries.push_back(o3tl::make_unique<ScQueryEntry>());
 }
 
-ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r)
-    : bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens)
-    , bRegExp(r.bRegExp), bDuplicate(r.bDuplicate), mbRangeLookup(r.mbRangeLookup)
+ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
+    eSearchType(r.eSearchType), bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace),
+    bCaseSens(r.bCaseSens), bDuplicate(r.bDuplicate), mbRangeLookup(r.mbRangeLookup)
 {
     for (auto const& it : r.m_Entries)
     {
@@ -300,7 +300,8 @@ void ScQueryParam::Clear()
     nCol1=nCol2 = 0;
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
-    bHasHeader = bCaseSens = bRegExp = false;
+    eSearchType = utl::SearchParam::SRCH_NORMAL;
+    bHasHeader = bCaseSens = false;
     bInplace = bByRow = bDuplicate = true;
 
     for (auto & itr : m_Entries)
@@ -332,7 +333,7 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bHasHeader  = r.bHasHeader;
     bInplace    = r.bInplace;
     bCaseSens   = r.bCaseSens;
-    bRegExp     = r.bRegExp;
+    eSearchType = r.eSearchType;
     bDuplicate  = r.bDuplicate;
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
@@ -370,7 +371,7 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (bByRow      == rOther.bByRow)
         && (bInplace    == rOther.bInplace)
         && (bCaseSens   == rOther.bCaseSens)
-        && (bRegExp     == rOther.bRegExp)
+        && (eSearchType == rOther.eSearchType)
         && (bDuplicate  == rOther.bDuplicate)
         && (bDestPers   == rOther.bDestPers)
         && (nDestTab    == rOther.nDestTab)

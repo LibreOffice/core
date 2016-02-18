@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCALCULATIONSETTINGSCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
+#include <unotools/textsearch.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include "xmlimprt.hxx"
 
@@ -31,12 +32,12 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
     double fIterationEpsilon;
     sal_Int32 nIterationCount;
     sal_uInt16 nYear2000;
+    utl::SearchParam::SearchType eSearchType;
     bool bIsIterationEnabled;
     bool bCalcAsShown;
     bool bIgnoreCase;
     bool bLookUpLabels;
     bool bMatchWholeCell;
-    bool bUseRegularExpressions;
 
     const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }

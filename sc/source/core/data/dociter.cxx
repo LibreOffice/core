@@ -1296,7 +1296,8 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     SetStopOnMismatch( true ); // assume sorted keys
     SetTestEqualCondition( true );
     bIgnoreMismatchOnLeadingStrings = bIgnoreMismatchOnLeadingStringsP;
-    bool bRegExp = mpParam->bRegExp && mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
+    bool bRegExp = mpParam->eSearchType == utl::SearchParam::SRCH_REGEXP &&
+        mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
     bool bBinary = !bRegExp && mpParam->bByRow && (mpParam->GetEntry(0).eOp ==
             SC_LESS_EQUAL || mpParam->GetEntry(0).eOp == SC_GREATER_EQUAL);
     bool bFound = false;
@@ -1412,7 +1413,7 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         maCurPos = aPosSave;
         return true;
     }
-    if ( (bSearchForEqualAfterMismatch || mpParam->bRegExp) &&
+    if ( (bSearchForEqualAfterMismatch || mpParam->eSearchType == utl::SearchParam::SRCH_REGEXP) &&
             StoppedOnMismatch() )
     {
         // Assume found entry to be the last value less than respectively

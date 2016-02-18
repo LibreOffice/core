@@ -363,7 +363,8 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 theOutParam.bHasHeader = pBtnHeader->IsChecked();
                 theOutParam.bByRow     = true;
                 theOutParam.bCaseSens  = pBtnCase->IsChecked();
-                theOutParam.bRegExp    = pBtnRegExp->IsChecked();
+                theOutParam.eSearchType = pBtnRegExp->IsChecked() ? utl::SearchParam::SRCH_REGEXP :
+                    utl::SearchParam::SRCH_NORMAL;
                 theOutParam.bDuplicate = !pBtnUnique->IsChecked();
                 theOutParam.bDestPers  = pBtnDestPers->IsChecked();
 

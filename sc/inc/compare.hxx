@@ -22,6 +22,7 @@
 
 #include "queryentry.hxx"
 
+#include <unotools/textsearch.hxx>
 #include <svl/sharedstring.hxx>
 
 class ScDocument;
@@ -50,11 +51,11 @@ struct Compare
 
 struct CompareOptions
 {
-    ScQueryEntry        aQueryEntry;
-    bool                bRegEx;
-    bool                bMatchWholeCell;
+    ScQueryEntry                    aQueryEntry;
+    utl::SearchParam::SearchType    eSearchType;
+    bool                            bMatchWholeCell;
 
-    CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
+    CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp );
 private:
     CompareOptions( const CompareOptions & ) = delete;
     CompareOptions& operator=( const CompareOptions & ) = delete;

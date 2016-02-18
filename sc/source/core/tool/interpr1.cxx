@@ -4384,11 +4384,10 @@ void ScInterpreter::ScMatch()
             {
                 bool bIsVBAMode = pDok->IsInVBAMode();
 
-                // #TODO handle MSO wildcards
                 if ( bIsVBAMode )
-                    rParam.bRegExp = false;
+                    rParam.eSearchType = utl::SearchParam::SRCH_WILDCARD;
                 else
-                    rParam.bRegExp = MayBeRegExp(rEntry.GetQueryItem().maString.getString(), pDok);
+                    rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), pDok);
             }
 
             if (pMatSrc) // The source data is matrix array.
@@ -4885,7 +4884,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             {
                 rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
             }
             ScAddress aAdr;
             aAdr.SetTab( nTab3 );
@@ -4897,7 +4896,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
-                sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError || !pResultMatrix)
                 {
@@ -5177,7 +5176,7 @@ void ScInterpreter::ScCountIf()
                 {
                     rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
                     if (rItem.meType == ScQueryEntry::ByString)
-                        rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
+                        rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
                 }
                 rParam.nCol1  = nCol1;
                 rParam.nCol2  = nCol2;
@@ -5185,7 +5184,7 @@ void ScInterpreter::ScCountIf()
                 if (pQueryMatrix)
                 {
                     // Never case-sensitive.
-                    sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                    sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
                     ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                     if (nGlobalError || !pResultMatrix)
                     {
@@ -5430,7 +5429,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             {
                 rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
             }
             ScAddress aAdr;
             aAdr.SetTab( nTab1 );
@@ -5442,7 +5441,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
-                sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError || !pResultMatrix)
                 {
@@ -6085,7 +6084,7 @@ void ScInterpreter::ScLookup()
     rEntry.nField = nCol1;
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (rItem.meType == ScQueryEntry::ByString)
-        aParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
+        aParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
 
     ScQueryCellIterator aCellIter(pDok, nTab1, aParam, false);
     SCCOL nC;
@@ -6316,7 +6315,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
 
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (rItem.meType == ScQueryEntry::ByString)
-        aParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
+        aParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
     if (pMat)
     {
         SCSIZE nMatCount = bHLookup ? nC : nR;
@@ -6786,8 +6785,8 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
                     aQueryStr, nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
 
-                if (!bNumber && !pParam->bRegExp)
-                    pParam->bRegExp = MayBeRegExp(aQueryStr, pDok);
+                if (!bNumber && pParam->eSearchType == utl::SearchParam::SRCH_NORMAL)
+                    pParam->eSearchType = DetectSearchType(aQueryStr, pDok);
             }
             return pParam;
         }

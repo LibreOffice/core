@@ -380,15 +380,15 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
 void ScXMLConditionContext::GetOperator(
     const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry)
 {
-    rParam.bRegExp = false;
+    rParam.eSearchType = utl::SearchParam::SRCH_NORMAL;
     if (IsXMLToken(aOpStr, XML_MATCH))
     {
-        rParam.bRegExp = true;
+        rParam.eSearchType = utl::SearchParam::SRCH_REGEXP;
         rEntry.eOp = SC_EQUAL;
     }
     else if (IsXMLToken(aOpStr, XML_NOMATCH))
     {
-        rParam.bRegExp = true;
+        rParam.eSearchType = utl::SearchParam::SRCH_REGEXP;
         rEntry.eOp = SC_NOT_EQUAL;
     }
     else if (aOpStr == "=")
@@ -532,10 +532,10 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotTable(pTempDataPilotTableContext),
     aFilterFields(),
+    eSearchType(utl::SearchParam::SRCH_NORMAL),
     nFilterFieldCount(0),
     bSkipDuplicates(false),
     bCopyOutputData(false),
-    bUseRegularExpressions(false),
     bIsCaseSensitive(false),
     bConnectionOr(true),
     bNextConnectionOr(true),
@@ -628,7 +628,7 @@ SvXMLImportContext *ScXMLDPFilterContext::CreateChildContext( sal_uInt16 nPrefix
 
 void ScXMLDPFilterContext::EndElement()
 {
-    aFilterFields.bRegExp = bUseRegularExpressions;
+    aFilterFields.eSearchType = eSearchType;
     aFilterFields.bCaseSens = bIsCaseSensitive;
     aFilterFields.bDuplicate = !bSkipDuplicates;
     if (bCopyOutputData)
@@ -810,17 +810,17 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
 }
 
 void ScXMLDPConditionContext::getOperatorXML(
-    const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions)
+    const OUString& sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType)
 {
-    bUseRegularExpressions = false;
+    rSearchType = utl::SearchParam::SRCH_NORMAL;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
-        bUseRegularExpressions = true;
+        rSearchType = utl::SearchParam::SRCH_REGEXP;
         aFilterOperator = SC_EQUAL;
     }
     else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
-        bUseRegularExpressions = true;
+        rSearchType = utl::SearchParam::SRCH_REGEXP;
         aFilterOperator = SC_NOT_EQUAL;
     }
     else if (sTempOperator == "=")
@@ -859,9 +859,9 @@ void ScXMLDPConditionContext::EndElement()
         aFilterField.SetQueryByNonEmpty();
     else
     {
-        bool bUseRegularExpressions = false;
-        getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions);
-        pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
+        utl::SearchParam::SearchType eSearchType = utl::SearchParam::SRCH_NORMAL;
+        getOperatorXML(sOperator, aFilterField.eOp, eSearchType);
+        pFilterContext->SetSearchType(eSearchType);
         aFilterField.nField = nField;
         ScQueryEntry::Item& rItem = aFilterField.GetQueryItem();
         svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
