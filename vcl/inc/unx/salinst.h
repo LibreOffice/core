@@ -45,7 +45,7 @@ protected:
     SalXLib *mpXLib;
 
 public:
-    X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ), mpXLib(NULL) {}
+    explicit X11SalInstance(SalYieldMutex* pMutex);
     virtual ~X11SalInstance();
 
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;

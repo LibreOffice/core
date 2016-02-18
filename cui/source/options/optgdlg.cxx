@@ -629,6 +629,14 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pMousePosLB, "mousepos");
     get(m_pMouseMiddleLB, "mousemiddle");
 
+    if (Application::GetToolkitName() == "gtk3")
+    {
+        m_pUseOpenGL->Hide();
+        m_pForceOpenGL->Hide();
+        m_pOpenGLStatusEnabled->Hide();
+        m_pOpenGLStatusDisabled->Hide();
+    }
+
 #if defined( UNX )
     m_pFontAntiAliasing->SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 #else
@@ -969,6 +977,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
 void OfaViewTabPage::UpdateOGLStatus()
 {
+    if (Application::GetToolkitName() == "gtk3")
+        return;
     // Easier than a custom translation string.
     bool bEnabled = OpenGLWrapper::isVCLOpenGLEnabled();
     m_pOpenGLStatusEnabled->Show(bEnabled);
