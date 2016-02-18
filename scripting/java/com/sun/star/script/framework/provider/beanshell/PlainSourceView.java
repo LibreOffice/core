@@ -101,6 +101,7 @@ public class PlainSourceView extends JScrollPane implements
                 // What to do here
         }
         ta = new JTextArea();
+        ta.setTabSize(4);
         ta.setRows(15);
         ta.setColumns(40);
         ta.setLineWrap(false);
