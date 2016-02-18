@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_84e7ac11",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2454,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-18T21:06:35Z",
+      "side": 1,
+      "message": "there are 2 problems with this:\n\n1) there is no guarantee that m_pActiveShell is a valid pointer here, it could be null\n\n2) UpdateCrsrPos will move the view cursor out of a frame (if it is in a hidden frame), otherwise it will do nothing, and so i can\u0027t see how calling it would accomplish anything related to updating the navigator window\u0027s content",
+      "revId": "8ab8fc69c8395b2ce75c314da54b12aae6fc440e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
