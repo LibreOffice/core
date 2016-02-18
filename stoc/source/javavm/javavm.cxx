@@ -540,7 +540,7 @@ void initVMConfiguration(
     // java-side force look and feel to something that doesn't
     // crash when we are using gtk3
     if (getenv("STOC_FORCE_SYSTEM_LAF"))
-        pjvm->pushProp(OUString("swing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel"));
+        pjvm->pushProp("swing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel");
 
     setTimeZone(pjvm);
 }
