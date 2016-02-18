@@ -473,7 +473,7 @@ void Application::Execute()
     pSVData->maAppData.mbInAppExecute = false;
 }
 
-inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased)
+inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -523,11 +523,27 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
         vcl::LazyDelete::flush();
 
     SAL_INFO("vcl.schedule", "Leave ImplYield");
+
+    return bHasActiveIdles || eResult == SalYieldResult::EVENT;
 }
 
 void Application::Reschedule( bool i_bAllEvents )
 {
     ImplYield(false, i_bAllEvents, 0);
+}
+
+void Scheduler::ProcessEventsToIdle()
+{
+    int nSanity = 1000;
+    while(Scheduler::ProcessTaskScheduling(false) ||
+          ImplYield(false, false, 0))
+    {
+        if (nSanity-- < 0)
+        {
+            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
+            break;
+        }
+    }
 }
 
 void Application::Yield()
