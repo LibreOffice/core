@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a4b6283b",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-18T17:07:16Z",
+      "side": 1,
+      "message": "Can you try to reduce number of temporary strings created here? You can concatenate multiple strings in one go like this: \n\nOUString foo( str1 + str2 + str3 + ... )",
+      "revId": "f45fb86242f4639c0ecbba46ef01a7666c6690ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_413bf6eb",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-18T17:07:16Z",
+      "side": 1,
+      "message": "You can initialize mpCustomAnimationPresets directly in the constructor (instead of doing it in a separate func)",
+      "revId": "f45fb86242f4639c0ecbba46ef01a7666c6690ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
