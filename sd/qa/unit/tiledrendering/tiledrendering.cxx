@@ -31,10 +31,14 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
 
+#include <ImpressViewShellBase.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <SlideSorter.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <drawdoc.hxx>
 #include <comphelper/lok.hxx>
 
 using namespace css;
@@ -51,6 +55,7 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
 #if !defined(WNT) && !defined(MACOSX)
+    void testInsertPage();
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -67,6 +72,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(WNT) && !defined(MACOSX)
+    CPPUNIT_TEST(testInsertPage);
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
@@ -97,6 +103,7 @@ private:
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
+    std::vector<unsigned> m_aPageList;
     int m_nSelectionBeforeSearchResult;
     int m_nSelectionAfterSearchResult;
 #endif
@@ -220,6 +227,19 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         {
             m_aSearchResultSelection.push_back(rValue.second.get<std::string>("rectangles").c_str());
             m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
+        }
+    }
+    break;
+    case LOK_CALLBACK_PARTS_COUNT_CHANGED:
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        auto aAction = aTree.get<std::string>("action", "");
+        auto aPart = aTree.get<std::string>("part", "");
+        if (!aAction.empty() && !aPart.empty())
+        {
+            m_aPageList.push_back(std::atoi(aPart.data()));
         }
     }
     break;
@@ -496,6 +516,108 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+}
+
+void SdTiledRenderingTest::testInsertPage()
+{
+    uno::Sequence<beans::PropertyValue> aFilterOptions;
+    uno::Reference<frame::XDesktop2> xLoader(mxDesktop, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLoader.is());
+
+    uno::Reference<lang::XComponent> xComponent;
+    xComponent = xLoader->loadComponentFromURL(
+        getURLFromSrc(DATA_DIRECTORY) + OUString("insert-delete.odp"),
+        "_blank",
+        0,
+        aFilterOptions);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT(pFoundShell);
+
+    ::sd::DrawDocShell* xDocSh = dynamic_cast<sd::DrawDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh);
+
+    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    Application::Reschedule(true);
+    Scheduler::ProcessTaskScheduling(true);
+    sd::slidesorter::SlideSorterViewShell* pSSVS =
+        sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
+    CPPUNIT_ASSERT(pSSVS);
+
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = SdXImpressDocument::getImplementation(xDocSh->GetModel());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument *pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // the document has 1 slide
+    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    // Insert slides
+    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+        comphelper::dispatchCommand(".uno:InsertPage", aArgs);
+
+    // Verify inserted slides
+    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    {
+        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        CPPUNIT_ASSERT(pPage);
+    }
+
+    m_aPageList.clear();
+
+    // Delete slides
+    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+        comphelper::dispatchCommand(".uno:DeletePage", aArgs);
+
+    // Verify deleted slides
+    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    {
+        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        CPPUNIT_ASSERT(pPage == nullptr);
+    }
+
+    m_aPageList.clear();
+
+    // Undo deleted slides
+    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+        comphelper::dispatchCommand(".uno:Undo", aArgs);
+
+    // Verify inserted slides
+    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    {
+        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        CPPUNIT_ASSERT(pPage);
+    }
+
+    m_aPageList.clear();
+
+    // Redo deleted slides
+    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+        comphelper::dispatchCommand(".uno:Redo", aArgs);
+
+    // Verify deleted slides
+    for(unsigned nIterator=0; nIterator < m_aPageList.size(); nIterator++)
+    {
+        SdPage* pPage = pDoc->GetSdPage(m_aPageList[nIterator], PK_STANDARD);
+        CPPUNIT_ASSERT(pPage == nullptr);
+    }
+
+    // the document has 1 slide
+    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+
+    comphelper::LibreOfficeKit::setActive(false);
+
+    uno::Reference<util::XCloseable> xClose(xComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xClose.is());
+    xClose->close(false);
 }
 
 #endif
