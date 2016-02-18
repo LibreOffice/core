@@ -39,6 +39,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
+#include <config_vclplug.h>
+
 #include <unx/x11/xlimits.hxx>
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
 #  include <unx/gtk/gtksalmenu.hxx>

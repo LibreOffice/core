@@ -10,6 +10,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKSALMENU_HXX
 
+#include <config_vclplug.h>
+
 #include <vector>
 #ifdef ENABLE_GIO
 #include <gio/gio.h>
