@@ -515,7 +515,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                 return oDBColumn;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Searching for column " + _FieldName + " failed");
     }
 
     private static FieldColumn[] removeFieldColumnByFieldName(String _FieldName, FieldColumn[] _FieldColumns)
