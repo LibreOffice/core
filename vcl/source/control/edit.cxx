@@ -2114,7 +2114,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         Invalidate();
 
         // #i25161# call auto complete handler for ext text commit also
-        if ( autocompleteSignal.empty() )
+        if (!autocompleteSignal.empty())
         {
             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
             {
