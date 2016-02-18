@@ -2056,6 +2056,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "enable",                          XML_ENABLE ),
         TOKEN( "use-regular-expressions",         XML_USE_REGULAR_EXPRESSIONS ),
+        TOKEN( "use-wildcards",                   XML_USE_WILDCARDS ),
         TOKEN( "data-source-has-labels",          XML_DATA_SOURCE_HAS_LABELS ),
         TOKEN( "link-data-style-to-source",       XML_LINK_DATA_STYLE_TO_SOURCE ),
         TOKEN( "sort-algorithm",                  XML_SORT_ALGORITHM ),

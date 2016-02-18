@@ -2053,6 +2053,7 @@ namespace xmloff { namespace token {
 
         XML_ENABLE,
         XML_USE_REGULAR_EXPRESSIONS,
+        XML_USE_WILDCARDS,
         XML_DATA_SOURCE_HAS_LABELS,
         XML_LINK_DATA_STYLE_TO_SOURCE,
         XML_SORT_ALGORITHM,
