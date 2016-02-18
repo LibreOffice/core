@@ -261,19 +261,19 @@ bool Bitmap::Convert( BmpConversion eConversion )
 
     switch( eConversion )
     {
-        case( BMP_CONVERSION_1BIT_THRESHOLD ):
+        case BMP_CONVERSION_1BIT_THRESHOLD:
             bRet = ImplMakeMono( 128 );
         break;
 
-        case( BMP_CONVERSION_1BIT_MATRIX ):
+        case BMP_CONVERSION_1BIT_MATRIX:
             bRet = ImplMakeMonoDither();
         break;
 
-        case( BMP_CONVERSION_4BIT_GREYS ):
+        case BMP_CONVERSION_4BIT_GREYS:
             bRet = ImplMakeGreyscales( 16 );
         break;
 
-        case( BMP_CONVERSION_4BIT_COLORS ):
+        case BMP_CONVERSION_4BIT_COLORS:
         {
             if( nBitCount < 4 )
                 bRet = ImplConvertUp( 4 );
@@ -284,7 +284,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case( BMP_CONVERSION_4BIT_TRANS ):
+        case BMP_CONVERSION_4BIT_TRANS:
         {
             Color aTrans( BMP_COL_TRANS );
 
@@ -295,11 +295,11 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case( BMP_CONVERSION_8BIT_GREYS ):
+        case BMP_CONVERSION_8BIT_GREYS:
             bRet = ImplMakeGreyscales( 256 );
         break;
 
-        case( BMP_CONVERSION_8BIT_COLORS ):
+        case BMP_CONVERSION_8BIT_COLORS:
         {
             if( nBitCount < 8 )
                 bRet = ImplConvertUp( 8 );
@@ -310,7 +310,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case( BMP_CONVERSION_8BIT_TRANS ):
+        case BMP_CONVERSION_8BIT_TRANS:
         {
             Color aTrans( BMP_COL_TRANS );
 
@@ -321,7 +321,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case( BMP_CONVERSION_24BIT ):
+        case BMP_CONVERSION_24BIT:
         {
             if( nBitCount < 24 )
                 bRet = ImplConvertUp( 24 );
@@ -330,7 +330,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case( BMP_CONVERSION_GHOSTED ):
+        case BMP_CONVERSION_GHOSTED:
             bRet = ImplConvertGhosted();
         break;
 

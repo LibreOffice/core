@@ -451,37 +451,37 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 
         switch( nThemeId )
         {
-            case( GALLERY_THEME_3D ):
+            case GALLERY_THEME_3D:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_3D);
                 break;
-            case( GALLERY_THEME_BULLETS ):
+            case GALLERY_THEME_BULLETS:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_BULLETS);
                 break;
-            case( GALLERY_THEME_HOMEPAGE ):
+            case GALLERY_THEME_HOMEPAGE:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_HOMEPAGE);
                 break;
-            case( GALLERY_THEME_POWERPOINT ):
+            case GALLERY_THEME_POWERPOINT:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_POWERPOINT);
                 break;
-            case( GALLERY_THEME_FONTWORK ):
+            case GALLERY_THEME_FONTWORK:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_FONTWORK);
                 break;
-            case( GALLERY_THEME_FONTWORK_VERTICAL ):
+            case GALLERY_THEME_FONTWORK_VERTICAL:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_FONTWORK_VERTICAL);
                 break;
-            case( GALLERY_THEME_SOUNDS ):
+            case GALLERY_THEME_SOUNDS:
                 aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_SOUNDS);
                 break;
-            case( RID_GALLERYSTR_THEME_ARROWS ):
-            case( RID_GALLERYSTR_THEME_COMPUTERS ):
-            case( RID_GALLERYSTR_THEME_DIAGRAMS ):
-            case( RID_GALLERYSTR_THEME_EDUCATION ):
-            case( RID_GALLERYSTR_THEME_ENVIRONMENT ):
-            case( RID_GALLERYSTR_THEME_FINANCE ):
-            case( RID_GALLERYSTR_THEME_PEOPLE ):
-            case( RID_GALLERYSTR_THEME_SYMBOLS ):
-            case( RID_GALLERYSTR_THEME_TRANSPORT ):
-            case( RID_GALLERYSTR_THEME_TXTSHAPES ):
+            case RID_GALLERYSTR_THEME_ARROWS:
+            case RID_GALLERYSTR_THEME_COMPUTERS:
+            case RID_GALLERYSTR_THEME_DIAGRAMS:
+            case RID_GALLERYSTR_THEME_EDUCATION:
+            case RID_GALLERYSTR_THEME_ENVIRONMENT:
+            case RID_GALLERYSTR_THEME_FINANCE:
+            case RID_GALLERYSTR_THEME_PEOPLE:
+            case RID_GALLERYSTR_THEME_SYMBOLS:
+            case RID_GALLERYSTR_THEME_TRANSPORT:
+            case RID_GALLERYSTR_THEME_TXTSHAPES:
                 aFallback = GAL_RESSTR(static_cast<sal_uInt32>(nThemeId));
                 break;
             default:

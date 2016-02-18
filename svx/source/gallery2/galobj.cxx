@@ -343,13 +343,13 @@ BitmapEx SgaObjectSound::GetThumbBmp() const
 
     switch( eSoundType )
     {
-        case( SOUND_COMPUTER ): nId = RID_SVXBMP_GALLERY_SOUND_1; break;
-        case( SOUND_MISC ): nId = RID_SVXBMP_GALLERY_SOUND_2; break;
-        case( SOUND_MUSIC ): nId = RID_SVXBMP_GALLERY_SOUND_3; break;
-        case( SOUND_NATURE ): nId = RID_SVXBMP_GALLERY_SOUND_4; break;
-        case( SOUND_SPEECH ): nId = RID_SVXBMP_GALLERY_SOUND_5; break;
-        case( SOUND_TECHNIC ): nId = RID_SVXBMP_GALLERY_SOUND_6; break;
-        case( SOUND_ANIMAL ): nId = RID_SVXBMP_GALLERY_SOUND_7; break;
+        case SOUND_COMPUTER: nId = RID_SVXBMP_GALLERY_SOUND_1; break;
+        case SOUND_MISC: nId = RID_SVXBMP_GALLERY_SOUND_2; break;
+        case SOUND_MUSIC: nId = RID_SVXBMP_GALLERY_SOUND_3; break;
+        case SOUND_NATURE: nId = RID_SVXBMP_GALLERY_SOUND_4; break;
+        case SOUND_SPEECH: nId = RID_SVXBMP_GALLERY_SOUND_5; break;
+        case SOUND_TECHNIC: nId = RID_SVXBMP_GALLERY_SOUND_6; break;
+        case SOUND_ANIMAL: nId = RID_SVXBMP_GALLERY_SOUND_7; break;
 
         // standard
         default:

@@ -107,7 +107,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
             }
             break;
 
-            case( SID_AVMEDIA_TOOLBOX ):
+            case SID_AVMEDIA_TOOLBOX:
             {
                 if( pSh->IsObjSelected() )
                 {

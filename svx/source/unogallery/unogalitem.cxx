@@ -182,12 +182,12 @@ sal_Int8 SAL_CALL GalleryItem::getType()
     {
         switch( implGetObject()->eObjKind )
         {
-            case( SGA_OBJ_SOUND ):
-            case( SGA_OBJ_VIDEO ):
+            case SGA_OBJ_SOUND:
+            case SGA_OBJ_VIDEO:
                 nRet = gallery::GalleryItemType::MEDIA;
             break;
 
-            case( SGA_OBJ_SVDRAW ):
+            case SGA_OBJ_SVDRAW:
                 nRet = gallery::GalleryItemType::DRAWING;
             break;
 
@@ -292,13 +292,13 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
     {
         switch( (*ppEntries)->mnHandle )
         {
-            case( UNOGALLERY_GALLERYITEMTYPE ):
+            case UNOGALLERY_GALLERYITEMTYPE:
             {
                 *pValue <<= sal_Int8( getType() );
             }
             break;
 
-            case( UNOGALLERY_URL ):
+            case UNOGALLERY_URL:
             {
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
 
@@ -307,7 +307,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
             }
             break;
 
-            case( UNOGALLERY_TITLE ):
+            case UNOGALLERY_TITLE:
             {
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
 
@@ -324,7 +324,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
             }
             break;
 
-            case( UNOGALLERY_THUMBNAIL ):
+            case UNOGALLERY_THUMBNAIL:
             {
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
 
@@ -348,7 +348,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
             }
             break;
 
-            case( UNOGALLERY_GRAPHIC ):
+            case UNOGALLERY_GRAPHIC:
             {
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
                 Graphic         aGraphic;
@@ -358,7 +358,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
             }
             break;
 
-            case( UNOGALLERY_DRAWING ):
+            case UNOGALLERY_DRAWING:
             {
                 if( gallery::GalleryItemType::DRAWING == getType() )
                 {

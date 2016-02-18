@@ -262,12 +262,12 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     switch( nTrans )
     {
-        case( 25 ): nMove = nBaseExtent * 3; break;
-        case( 50 ): nMove = nBaseExtent * 4; break;
-        case( 75 ): nMove = nBaseExtent * 6; break;
+        case 25: nMove = nBaseExtent * 3; break;
+        case 50: nMove = nBaseExtent * 4; break;
+        case 75: nMove = nBaseExtent * 6; break;
 
             // #i112959#  very transparent (88 < nTransparencePercent <= 99)
-        case( 100 ): nMove = nBaseExtent * 8; break;
+        case 100: nMove = nBaseExtent * 8; break;
 
             // #i112959# not transparent (nTransparencePercent < 13)
         default:    nMove = 0; break;

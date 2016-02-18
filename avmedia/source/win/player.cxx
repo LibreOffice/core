@@ -54,7 +54,7 @@ LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM
     {
         switch( nMsg )
         {
-            case( WM_GRAPHNOTIFY ):
+            case WM_GRAPHNOTIFY:
                 pPlayer->processEvent();
             break;
             default:

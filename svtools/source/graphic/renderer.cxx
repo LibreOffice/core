@@ -177,7 +177,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
     {
         switch( (*ppEntries)->mnHandle )
         {
-            case( UNOGRAPHIC_DEVICE ):
+            case UNOGRAPHIC_DEVICE:
             {
                 uno::Reference< awt::XDevice > xDevice;
 
@@ -194,7 +194,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
             }
             break;
 
-            case( UNOGRAPHIC_DESTINATIONRECT ):
+            case UNOGRAPHIC_DESTINATIONRECT:
             {
                 awt::Rectangle aAWTRect;
 
@@ -206,7 +206,7 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
             }
             break;
 
-            case( UNOGRAPHIC_RENDERDATA ):
+            case UNOGRAPHIC_RENDERDATA:
             {
                 *pValues >>= maRenderData;
             }
@@ -228,14 +228,14 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
     {
         switch( (*ppEntries)->mnHandle )
         {
-            case( UNOGRAPHIC_DEVICE ):
+            case UNOGRAPHIC_DEVICE:
             {
                 if( mxDevice.is() )
                     *pValues <<= mxDevice;
             }
             break;
 
-            case( UNOGRAPHIC_DESTINATIONRECT ):
+            case UNOGRAPHIC_DESTINATIONRECT:
             {
                 const awt::Rectangle aAWTRect( maDestRect.Left(), maDestRect.Top(),
                                                maDestRect.GetWidth(), maDestRect.GetHeight() );
@@ -244,7 +244,7 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
             }
             break;
 
-            case( UNOGRAPHIC_RENDERDATA ):
+            case UNOGRAPHIC_RENDERDATA:
             {
                 *pValues <<= maRenderData;
             }

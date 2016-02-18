@@ -381,11 +381,11 @@ void ImpTwain::ImplXfer()
 
         switch( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGENATIVEXFER, MSG_GET, &hDIB ) )
         {
-            case( TWRC_CANCEL ):
+            case TWRC_CANCEL:
                 nCurState = 7;
             break;
 
-            case( TWRC_XFERDONE ):
+            case TWRC_XFERDONE:
             {
                 if( hDIB )
                 {
@@ -428,8 +428,8 @@ IMPL_LINK_TYPED( ImpTwain, ImplFallbackHdl, void*, pData, void )
 
     switch( nCurState )
     {
-        case( 7 ):
-        case( 6 ):
+        case 7:
+        case 6:
         {
             TW_PENDINGXFERS aXfers;
 
@@ -443,7 +443,7 @@ IMPL_LINK_TYPED( ImpTwain, ImplFallbackHdl, void*, pData, void )
         }
         break;
 
-        case( 5 ):
+        case 5:
         {
             TW_USERINTERFACE aUI = { true, true, hTwainWnd };
 
@@ -455,21 +455,21 @@ IMPL_LINK_TYPED( ImpTwain, ImplFallbackHdl, void*, pData, void )
         }
         break;
 
-        case( 4 ):
+        case 4:
         {
             PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_IDENTITY, MSG_CLOSEDS, &aSrcIdent );
             nCurState = 3;
         }
         break;
 
-        case( 3 ):
+        case 3:
         {
             PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_PARENT, MSG_CLOSEDSM, &hTwainWnd );
             nCurState = 2;
         }
         break;
 
-        case( 2 ):
+        case 2:
         {
             delete pMod;
             pMod = NULL;
@@ -708,11 +708,11 @@ IMPL_LINK_TYPED( Twain, ImpNotifyHdl, unsigned long, nEvent, void )
 {
     switch( nEvent )
     {
-        case( TWAIN_EVENT_SCANNING ):
+        case TWAIN_EVENT_SCANNING:
             meState = TWAIN_STATE_SCANNING;
         break;
 
-        case( TWAIN_EVENT_QUIT ):
+        case TWAIN_EVENT_QUIT:
         {
             if( meState != TWAIN_STATE_DONE )
                 meState = TWAIN_STATE_CANCELED;
@@ -731,7 +731,7 @@ IMPL_LINK_TYPED( Twain, ImpNotifyHdl, unsigned long, nEvent, void )
         }
         break;
 
-        case( TWAIN_EVENT_XFER ):
+        case TWAIN_EVENT_XFER:
         {
             if( mpImpTwain )
             {
@@ -810,18 +810,18 @@ uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw(std::exception)
 
             switch( pBIH->biBitCount )
             {
-                case( 1 ):
-                case( 4 ):
-                case( 8 ):
+                case 1:
+                case 4:
+                case 8:
                     nColEntries = pBIH->biClrUsed ? pBIH->biClrUsed : ( 1 << pBIH->biBitCount );
                 break;
 
-                case( 24 ):
+                case 24:
                     nColEntries = pBIH->biClrUsed ? pBIH->biClrUsed : 0;
                 break;
 
-                case( 16 ):
-                case( 32 ):
+                case 16:
+                case 32:
                 {
                     nColEntries = pBIH->biClrUsed;
 

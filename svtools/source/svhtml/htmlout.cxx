@@ -639,7 +639,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             OString aCoords;
             switch( pObj->GetType() )
             {
-            case( IMAP_OBJ_RECTANGLE ):
+            case IMAP_OBJ_RECTANGLE:
                 {
                     const IMapRectangleObject* pRectObj =
                         static_cast<const IMapRectangleObject *>(pObj);
@@ -657,7 +657,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         .makeStringAndClear();
                 }
                 break;
-            case( IMAP_OBJ_CIRCLE ):
+            case IMAP_OBJ_CIRCLE:
                 {
                     const IMapCircleObject* pCirc =
                         static_cast<const IMapCircleObject *>(pObj);
@@ -674,7 +674,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         .makeStringAndClear();
                 }
                 break;
-            case( IMAP_OBJ_POLYGON ):
+            case IMAP_OBJ_POLYGON:
                 {
                     const IMapPolygonObject* pPolyObj =
                         static_cast<const IMapPolygonObject *>(pObj);

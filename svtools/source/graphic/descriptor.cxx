@@ -106,32 +106,32 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 
         switch( aDescriptor.GetFileFormat() )
         {
-            case( GraphicFileFormat::BMP ): pMimeType = MIMETYPE_BMP; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::GIF ): pMimeType = MIMETYPE_GIF; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::JPG ): pMimeType = MIMETYPE_JPG; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PCD ): pMimeType = MIMETYPE_PCD; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PCX ): pMimeType = MIMETYPE_PCX; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PNG ): pMimeType = MIMETYPE_PNG; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::TIF ): pMimeType = MIMETYPE_TIF; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::XBM ): pMimeType = MIMETYPE_XBM; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::XPM ): pMimeType = MIMETYPE_XPM; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PBM ): pMimeType = MIMETYPE_PBM; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PGM ): pMimeType = MIMETYPE_PGM; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PPM ): pMimeType = MIMETYPE_PPM; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::RAS ): pMimeType = MIMETYPE_RAS; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::TGA ): pMimeType = MIMETYPE_TGA; cType = graphic::GraphicType::PIXEL; break;
-            case( GraphicFileFormat::PSD ): pMimeType = MIMETYPE_PSD; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::BMP: pMimeType = MIMETYPE_BMP; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::GIF: pMimeType = MIMETYPE_GIF; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::JPG: pMimeType = MIMETYPE_JPG; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PCD: pMimeType = MIMETYPE_PCD; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PCX: pMimeType = MIMETYPE_PCX; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PNG: pMimeType = MIMETYPE_PNG; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::TIF: pMimeType = MIMETYPE_TIF; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::XBM: pMimeType = MIMETYPE_XBM; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::XPM: pMimeType = MIMETYPE_XPM; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PBM: pMimeType = MIMETYPE_PBM; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PGM: pMimeType = MIMETYPE_PGM; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PPM: pMimeType = MIMETYPE_PPM; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::RAS: pMimeType = MIMETYPE_RAS; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::TGA: pMimeType = MIMETYPE_TGA; cType = graphic::GraphicType::PIXEL; break;
+            case GraphicFileFormat::PSD: pMimeType = MIMETYPE_PSD; cType = graphic::GraphicType::PIXEL; break;
 
-            case( GraphicFileFormat::EPS ): pMimeType = MIMETYPE_EPS; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::DXF ): pMimeType = MIMETYPE_DXF; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::MET ): pMimeType = MIMETYPE_MET; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::PCT ): pMimeType = MIMETYPE_PCT; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::SGF ): pMimeType = MIMETYPE_SGF; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::SVM ): pMimeType = MIMETYPE_SVM; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::WMF ): pMimeType = MIMETYPE_WMF; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::SGV ): pMimeType = MIMETYPE_SGV; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::EMF ): pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
-            case( GraphicFileFormat::SVG ): pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::EPS: pMimeType = MIMETYPE_EPS; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::DXF: pMimeType = MIMETYPE_DXF; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::MET: pMimeType = MIMETYPE_MET; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::PCT: pMimeType = MIMETYPE_PCT; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::SGF: pMimeType = MIMETYPE_SGF; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::SVM: pMimeType = MIMETYPE_SVM; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::WMF: pMimeType = MIMETYPE_WMF; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::SGV: pMimeType = MIMETYPE_SGV; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::EMF: pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
+            case GraphicFileFormat::SVG: pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
 
             default:
             break;
@@ -296,7 +296,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
     {
         switch( (*ppEntries)->mnHandle )
         {
-            case( UNOGRAPHIC_GRAPHICTYPE ):
+            case UNOGRAPHIC_GRAPHICTYPE:
             {
                 const GraphicType eType( mpGraphic ? mpGraphic->GetType() : meType );
 
@@ -306,7 +306,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case( UNOGRAPHIC_MIMETYPE ):
+            case UNOGRAPHIC_MIMETYPE:
             {
                 OUString aMimeType;
 
@@ -318,19 +318,19 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
                         switch( mpGraphic->GetLink().GetType() )
                         {
-                            case( GFX_LINK_TYPE_NATIVE_GIF ): pMimeType = MIMETYPE_GIF; break;
+                            case GFX_LINK_TYPE_NATIVE_GIF: pMimeType = MIMETYPE_GIF; break;
 
                             // #i15508# added BMP type for better exports (checked, works)
-                            case( GFX_LINK_TYPE_NATIVE_BMP ): pMimeType = MIMETYPE_BMP; break;
+                            case GFX_LINK_TYPE_NATIVE_BMP: pMimeType = MIMETYPE_BMP; break;
 
-                            case( GFX_LINK_TYPE_NATIVE_JPG ): pMimeType = MIMETYPE_JPG; break;
-                            case( GFX_LINK_TYPE_NATIVE_PNG ): pMimeType = MIMETYPE_PNG; break;
-                            case( GFX_LINK_TYPE_NATIVE_WMF ): pMimeType = MIMETYPE_WMF; break;
-                            case( GFX_LINK_TYPE_NATIVE_MET ): pMimeType = MIMETYPE_MET; break;
-                            case( GFX_LINK_TYPE_NATIVE_PCT ): pMimeType = MIMETYPE_PCT; break;
+                            case GFX_LINK_TYPE_NATIVE_JPG: pMimeType = MIMETYPE_JPG; break;
+                            case GFX_LINK_TYPE_NATIVE_PNG: pMimeType = MIMETYPE_PNG; break;
+                            case GFX_LINK_TYPE_NATIVE_WMF: pMimeType = MIMETYPE_WMF; break;
+                            case GFX_LINK_TYPE_NATIVE_MET: pMimeType = MIMETYPE_MET; break;
+                            case GFX_LINK_TYPE_NATIVE_PCT: pMimeType = MIMETYPE_PCT; break;
 
                             // added Svg mimetype support
-                            case( GFX_LINK_TYPE_NATIVE_SVG ): pMimeType = MIMETYPE_SVG; break;
+                            case GFX_LINK_TYPE_NATIVE_SVG: pMimeType = MIMETYPE_SVG; break;
 
                             default:
                                 pMimeType = nullptr;
@@ -351,7 +351,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case( UNOGRAPHIC_SIZEPIXEL ):
+            case UNOGRAPHIC_SIZEPIXEL:
             {
                 awt::Size aAWTSize( 0, 0 );
 
@@ -370,7 +370,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case( UNOGRAPHIC_SIZE100THMM ):
+            case UNOGRAPHIC_SIZE100THMM:
             {
                 awt::Size aAWTSize( 0, 0 );
 
@@ -389,7 +389,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case( UNOGRAPHIC_BITSPERPIXEL ):
+            case UNOGRAPHIC_BITSPERPIXEL:
             {
                 sal_uInt16 nBitsPerPixel = 0;
 
@@ -405,19 +405,19 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             }
             break;
 
-            case( UNOGRAPHIC_TRANSPARENT ):
+            case UNOGRAPHIC_TRANSPARENT:
             {
                 *pValues <<= mpGraphic ? mpGraphic->IsTransparent() : mbTransparent;
             }
             break;
 
-            case( UNOGRAPHIC_ALPHA ):
+            case UNOGRAPHIC_ALPHA:
             {
                 *pValues <<= mpGraphic ? mpGraphic->IsAlpha() : mbAlpha;
             }
             break;
 
-            case( UNOGRAPHIC_ANIMATED ):
+            case UNOGRAPHIC_ANIMATED:
             {
                 *pValues <<= mpGraphic ? mpGraphic->IsAnimated() : mbAnimated;
             }

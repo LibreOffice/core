@@ -345,7 +345,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 {
     switch( nId )
     {
-        case( MN_ACTUALIZE ):
+        case MN_ACTUALIZE:
         {
             GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
@@ -362,14 +362,14 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         }
         break;
 
-        case( MN_DELETE  ):
+        case MN_DELETE:
         {
             if( ScopedVclPtrInstance<MessageDialog>::Create( nullptr, "QueryDeleteThemeDialog","svx/ui/querydeletethemedialog.ui")->Execute() == RET_YES )
                 mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
         }
         break;
 
-        case( MN_RENAME ):
+        case MN_RENAME:
         {
             GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
             const OUString  aOldName( pTheme->GetName() );
@@ -402,7 +402,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         }
         break;
 
-        case( MN_ASSIGN_ID ):
+        case MN_ASSIGN_ID:
         {
             GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
@@ -424,7 +424,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         }
         break;
 
-        case( MN_PROPERTIES ):
+        case MN_PROPERTIES:
         {
             ImplGalleryThemeProperties( GetSelectedTheme(), false );
         }
@@ -521,43 +521,43 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
-            case( KEY_INSERT ):
+            case KEY_INSERT:
                 ClickNewThemeHdl( nullptr );
             break;
 
-            case( KEY_I ):
+            case KEY_I:
             {
                 if( bMod1 )
                    ClickNewThemeHdl( nullptr );
             }
             break;
 
-            case( KEY_U ):
+            case KEY_U:
             {
                 if( bMod1 )
                     nExecuteId = MN_ACTUALIZE;
             }
             break;
 
-            case( KEY_DELETE ):
+            case KEY_DELETE:
                 nExecuteId = MN_DELETE;
             break;
 
-            case( KEY_D ):
+            case KEY_D:
             {
                 if( bMod1 )
                     nExecuteId = MN_DELETE;
             }
             break;
 
-            case( KEY_R ):
+            case KEY_R:
             {
                 if( bMod1 )
                     nExecuteId = MN_RENAME;
             }
             break;
 
-            case( KEY_RETURN ):
+            case KEY_RETURN:
             {
                 if( bMod1 )
                     nExecuteId = MN_PROPERTIES;

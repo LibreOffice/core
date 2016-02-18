@@ -446,22 +446,22 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
 
             switch( nFormat )
             {
-                case( BMP_FORMAT_1BIT_MSB_PAL ):    pFncGetPixel = GetPixelFor_1BIT_MSB_PAL; break;
-                case( BMP_FORMAT_1BIT_LSB_PAL ):    pFncGetPixel = GetPixelFor_1BIT_LSB_PAL; break;
-                case( BMP_FORMAT_4BIT_MSN_PAL ):    pFncGetPixel = GetPixelFor_4BIT_MSN_PAL; break;
-                case( BMP_FORMAT_4BIT_LSN_PAL ):    pFncGetPixel = GetPixelFor_4BIT_LSN_PAL; break;
-                case( BMP_FORMAT_8BIT_PAL ):        pFncGetPixel = GetPixelFor_8BIT_PAL; break;
-                case( BMP_FORMAT_8BIT_TC_MASK ):    pFncGetPixel = GetPixelFor_8BIT_TC_MASK; break;
-                case( BMP_FORMAT_16BIT_TC_MSB_MASK ):   pFncGetPixel = GetPixelFor_16BIT_TC_MSB_MASK; break;
-                case( BMP_FORMAT_16BIT_TC_LSB_MASK ):   pFncGetPixel = GetPixelFor_16BIT_TC_LSB_MASK; break;
-                case( BMP_FORMAT_24BIT_TC_BGR ):    pFncGetPixel = GetPixelFor_24BIT_TC_BGR; break;
-                case( BMP_FORMAT_24BIT_TC_RGB ):    pFncGetPixel = GetPixelFor_24BIT_TC_RGB; break;
-                case( BMP_FORMAT_24BIT_TC_MASK ):   pFncGetPixel = GetPixelFor_24BIT_TC_MASK; break;
-                case( BMP_FORMAT_32BIT_TC_ABGR ):   pFncGetPixel = GetPixelFor_32BIT_TC_ABGR; break;
-                case( BMP_FORMAT_32BIT_TC_ARGB ):   pFncGetPixel = GetPixelFor_32BIT_TC_ARGB; break;
-                case( BMP_FORMAT_32BIT_TC_BGRA ):   pFncGetPixel = GetPixelFor_32BIT_TC_BGRA; break;
-                case( BMP_FORMAT_32BIT_TC_RGBA ):   pFncGetPixel = GetPixelFor_32BIT_TC_RGBA; break;
-                case( BMP_FORMAT_32BIT_TC_MASK ):   pFncGetPixel = GetPixelFor_32BIT_TC_MASK; break;
+                case BMP_FORMAT_1BIT_MSB_PAL:    pFncGetPixel = GetPixelFor_1BIT_MSB_PAL; break;
+                case BMP_FORMAT_1BIT_LSB_PAL:    pFncGetPixel = GetPixelFor_1BIT_LSB_PAL; break;
+                case BMP_FORMAT_4BIT_MSN_PAL:    pFncGetPixel = GetPixelFor_4BIT_MSN_PAL; break;
+                case BMP_FORMAT_4BIT_LSN_PAL:    pFncGetPixel = GetPixelFor_4BIT_LSN_PAL; break;
+                case BMP_FORMAT_8BIT_PAL:        pFncGetPixel = GetPixelFor_8BIT_PAL; break;
+                case BMP_FORMAT_8BIT_TC_MASK:    pFncGetPixel = GetPixelFor_8BIT_TC_MASK; break;
+                case BMP_FORMAT_16BIT_TC_MSB_MASK:   pFncGetPixel = GetPixelFor_16BIT_TC_MSB_MASK; break;
+                case BMP_FORMAT_16BIT_TC_LSB_MASK:   pFncGetPixel = GetPixelFor_16BIT_TC_LSB_MASK; break;
+                case BMP_FORMAT_24BIT_TC_BGR:    pFncGetPixel = GetPixelFor_24BIT_TC_BGR; break;
+                case BMP_FORMAT_24BIT_TC_RGB:    pFncGetPixel = GetPixelFor_24BIT_TC_RGB; break;
+                case BMP_FORMAT_24BIT_TC_MASK:   pFncGetPixel = GetPixelFor_24BIT_TC_MASK; break;
+                case BMP_FORMAT_32BIT_TC_ABGR:   pFncGetPixel = GetPixelFor_32BIT_TC_ABGR; break;
+                case BMP_FORMAT_32BIT_TC_ARGB:   pFncGetPixel = GetPixelFor_32BIT_TC_ARGB; break;
+                case BMP_FORMAT_32BIT_TC_BGRA:   pFncGetPixel = GetPixelFor_32BIT_TC_BGRA; break;
+                case BMP_FORMAT_32BIT_TC_RGBA:   pFncGetPixel = GetPixelFor_32BIT_TC_RGBA; break;
+                case BMP_FORMAT_32BIT_TC_MASK:   pFncGetPixel = GetPixelFor_32BIT_TC_MASK; break;
 
                 default:
                     pFncGetPixel = nullptr;

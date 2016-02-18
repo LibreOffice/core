@@ -539,31 +539,31 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         }
         switch( CHOOSE_DEVMODE(dmPaperSize) )
         {
-            case( DMPAPER_LETTER ):
+            case DMPAPER_LETTER:
                 pSetupData->mePaperFormat = PAPER_LETTER;
                 break;
-            case( DMPAPER_TABLOID ):
+            case DMPAPER_TABLOID:
                 pSetupData->mePaperFormat = PAPER_TABLOID;
                 break;
-            case( DMPAPER_LEDGER ):
+            case DMPAPER_LEDGER:
                 pSetupData->mePaperFormat = PAPER_LEDGER;
                 break;
-            case( DMPAPER_LEGAL ):
+            case DMPAPER_LEGAL:
                 pSetupData->mePaperFormat = PAPER_LEGAL;
                 break;
-            case( DMPAPER_STATEMENT ):
+            case DMPAPER_STATEMENT:
                 pSetupData->mePaperFormat = PAPER_STATEMENT;
                 break;
-            case( DMPAPER_EXECUTIVE ):
+            case DMPAPER_EXECUTIVE:
                 pSetupData->mePaperFormat = PAPER_EXECUTIVE;
                 break;
-            case( DMPAPER_A3 ):
+            case DMPAPER_A3:
                 pSetupData->mePaperFormat = PAPER_A3;
                 break;
-            case( DMPAPER_A4 ):
+            case DMPAPER_A4:
                 pSetupData->mePaperFormat = PAPER_A4;
                 break;
-            case( DMPAPER_A5 ):
+            case DMPAPER_A5:
                 pSetupData->mePaperFormat = PAPER_A5;
                 break;
             //See http://wiki.openoffice.org/wiki/DefaultPaperSize
@@ -579,124 +579,124 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             ////"DMPAPER_B4     12  B4 (JIS) 250 x 354"
             //which is bogus as it's either JIS 257 x 364 or ISO 250 x 353
             //(cmc)
-            case( DMPAPER_B4 ):
+            case DMPAPER_B4:
                 pSetupData->mePaperFormat = PAPER_B4_JIS;
                 break;
-            case( DMPAPER_B5 ):
+            case DMPAPER_B5:
                 pSetupData->mePaperFormat = PAPER_B5_JIS;
                 break;
-            case( DMPAPER_QUARTO ):
+            case DMPAPER_QUARTO:
                 pSetupData->mePaperFormat = PAPER_QUARTO;
                 break;
-            case( DMPAPER_10X14 ):
+            case DMPAPER_10X14:
                 pSetupData->mePaperFormat = PAPER_10x14;
                 break;
-            case( DMPAPER_NOTE ):
+            case DMPAPER_NOTE:
                 pSetupData->mePaperFormat = PAPER_LETTER;
                 break;
-            case( DMPAPER_ENV_9 ):
+            case DMPAPER_ENV_9:
                 pSetupData->mePaperFormat = PAPER_ENV_9;
                 break;
-            case( DMPAPER_ENV_10 ):
+            case DMPAPER_ENV_10:
                 pSetupData->mePaperFormat = PAPER_ENV_10;
                 break;
-            case( DMPAPER_ENV_11 ):
+            case DMPAPER_ENV_11:
                 pSetupData->mePaperFormat = PAPER_ENV_11;
                 break;
-            case( DMPAPER_ENV_12 ):
+            case DMPAPER_ENV_12:
                 pSetupData->mePaperFormat = PAPER_ENV_12;
                 break;
-            case( DMPAPER_ENV_14 ):
+            case DMPAPER_ENV_14:
                 pSetupData->mePaperFormat = PAPER_ENV_14;
                 break;
-            case( DMPAPER_CSHEET ):
+            case DMPAPER_CSHEET:
                 pSetupData->mePaperFormat = PAPER_C;
                 break;
-            case( DMPAPER_DSHEET ):
+            case DMPAPER_DSHEET:
                 pSetupData->mePaperFormat = PAPER_D;
                 break;
-            case( DMPAPER_ESHEET ):
+            case DMPAPER_ESHEET:
                 pSetupData->mePaperFormat = PAPER_E;
                 break;
-            case( DMPAPER_ENV_DL):
+            case DMPAPER_ENV_DL:
                 pSetupData->mePaperFormat = PAPER_ENV_DL;
                 break;
-            case( DMPAPER_ENV_C5):
+            case DMPAPER_ENV_C5:
                 pSetupData->mePaperFormat = PAPER_ENV_C5;
                 break;
-            case( DMPAPER_ENV_C3):
+            case DMPAPER_ENV_C3:
                 pSetupData->mePaperFormat = PAPER_ENV_C3;
                 break;
-            case( DMPAPER_ENV_C4):
+            case DMPAPER_ENV_C4:
                 pSetupData->mePaperFormat = PAPER_ENV_C4;
                 break;
-            case( DMPAPER_ENV_C6):
+            case DMPAPER_ENV_C6:
                 pSetupData->mePaperFormat = PAPER_ENV_C6;
                 break;
-            case( DMPAPER_ENV_C65):
+            case DMPAPER_ENV_C65:
                 pSetupData->mePaperFormat = PAPER_ENV_C65;
                 break;
-            case( DMPAPER_ENV_ITALY ):
+            case DMPAPER_ENV_ITALY:
                 pSetupData->mePaperFormat = PAPER_ENV_ITALY;
                 break;
-            case( DMPAPER_ENV_MONARCH ):
+            case DMPAPER_ENV_MONARCH:
                 pSetupData->mePaperFormat = PAPER_ENV_MONARCH;
                 break;
-            case( DMPAPER_ENV_PERSONAL ):
+            case DMPAPER_ENV_PERSONAL:
                 pSetupData->mePaperFormat = PAPER_ENV_PERSONAL;
                 break;
-            case( DMPAPER_FANFOLD_US ):
+            case DMPAPER_FANFOLD_US:
                 pSetupData->mePaperFormat = PAPER_FANFOLD_US;
                 break;
-            case( DMPAPER_FANFOLD_STD_GERMAN ):
+            case DMPAPER_FANFOLD_STD_GERMAN:
                 pSetupData->mePaperFormat = PAPER_FANFOLD_DE;
                 break;
-            case( DMPAPER_FANFOLD_LGL_GERMAN ):
+            case DMPAPER_FANFOLD_LGL_GERMAN:
                 pSetupData->mePaperFormat = PAPER_FANFOLD_LEGAL_DE;
                 break;
-            case( DMPAPER_ISO_B4 ):
+            case DMPAPER_ISO_B4:
                 pSetupData->mePaperFormat = PAPER_B4_ISO;
                 break;
-            case( DMPAPER_JAPANESE_POSTCARD ):
+            case DMPAPER_JAPANESE_POSTCARD:
                 pSetupData->mePaperFormat = PAPER_POSTCARD_JP;
                 break;
-            case( DMPAPER_9X11 ):
+            case DMPAPER_9X11:
                 pSetupData->mePaperFormat = PAPER_9x11;
                 break;
-            case( DMPAPER_10X11 ):
+            case DMPAPER_10X11:
                 pSetupData->mePaperFormat = PAPER_10x11;
                 break;
-            case( DMPAPER_15X11 ):
+            case DMPAPER_15X11:
                 pSetupData->mePaperFormat = PAPER_15x11;
                 break;
-            case( DMPAPER_ENV_INVITE ):
+            case DMPAPER_ENV_INVITE:
                 pSetupData->mePaperFormat = PAPER_ENV_INVITE;
                 break;
-            case( DMPAPER_A_PLUS ):
+            case DMPAPER_A_PLUS:
                 pSetupData->mePaperFormat = PAPER_A_PLUS;
                 break;
-            case( DMPAPER_B_PLUS ):
+            case DMPAPER_B_PLUS:
                 pSetupData->mePaperFormat = PAPER_B_PLUS;
                 break;
-            case( DMPAPER_LETTER_PLUS ):
+            case DMPAPER_LETTER_PLUS:
                 pSetupData->mePaperFormat = PAPER_LETTER_PLUS;
                 break;
-            case( DMPAPER_A4_PLUS ):
+            case DMPAPER_A4_PLUS:
                 pSetupData->mePaperFormat = PAPER_A4_PLUS;
                 break;
-            case( DMPAPER_A2 ):
+            case DMPAPER_A2:
                 pSetupData->mePaperFormat = PAPER_A2;
                 break;
-            case( DMPAPER_DBL_JAPANESE_POSTCARD ):
+            case DMPAPER_DBL_JAPANESE_POSTCARD:
                 pSetupData->mePaperFormat = PAPER_DOUBLEPOSTCARD_JP;
                 break;
-            case( DMPAPER_A6 ):
+            case DMPAPER_A6:
                 pSetupData->mePaperFormat = PAPER_A6;
                 break;
-            case( DMPAPER_B6_JIS ):
+            case DMPAPER_B6_JIS:
                 pSetupData->mePaperFormat = PAPER_B6_JIS;
                 break;
-            case( DMPAPER_12X11 ):
+            case DMPAPER_12X11:
                 pSetupData->mePaperFormat = PAPER_12x11;
                 break;
             default:
@@ -762,28 +762,28 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 
         switch( pSetupData->mePaperFormat )
         {
-            case( PAPER_A2 ):
+            case PAPER_A2:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A2;
                 break;
-            case( PAPER_A3 ):
+            case PAPER_A3:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A3;
                 break;
-            case( PAPER_A4 ):
+            case PAPER_A4:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A4;
                 break;
-            case( PAPER_A5 ):
+            case PAPER_A5:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A5;
                 break;
-            case( PAPER_B4_ISO):
+            case PAPER_B4_ISO:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ISO_B4;
                 break;
-            case( PAPER_LETTER ):
+            case PAPER_LETTER:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LETTER;
                 break;
-            case( PAPER_LEGAL ):
+            case PAPER_LEGAL:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LEGAL;
                 break;
-            case( PAPER_TABLOID ):
+            case PAPER_TABLOID:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_TABLOID;
                 break;
 #if 0
@@ -794,126 +794,126 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             //compare DMPAPER_ENV_B4 and DMPAPER_ENV_B4 as
             //DMPAPER_ENV_B4    33  Envelope B4 250 x 353 mm
             //DMPAPER_ENV_B5    34  Envelope B5 176 x 250 mm
-            case( PAPER_B6_ISO ):
+            case PAPER_B6_ISO:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_B6;
                 break;
 #endif
-            case( PAPER_ENV_C4 ):
+            case PAPER_ENV_C4:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C4;
                 break;
-            case( PAPER_ENV_C5 ):
+            case PAPER_ENV_C5:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C5;
                 break;
-            case( PAPER_ENV_C6 ):
+            case PAPER_ENV_C6:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C6;
                 break;
-            case( PAPER_ENV_C65 ):
+            case PAPER_ENV_C65:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C65;
                 break;
-            case( PAPER_ENV_DL ):
+            case PAPER_ENV_DL:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_DL;
                 break;
-            case( PAPER_C ):
+            case PAPER_C:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_CSHEET;
                 break;
-            case( PAPER_D ):
+            case PAPER_D:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_DSHEET;
                 break;
-            case( PAPER_E ):
+            case PAPER_E:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ESHEET;
                 break;
-            case( PAPER_EXECUTIVE ):
+            case PAPER_EXECUTIVE:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_EXECUTIVE;
                 break;
-            case( PAPER_FANFOLD_LEGAL_DE ):
+            case PAPER_FANFOLD_LEGAL_DE:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_FANFOLD_LGL_GERMAN;
                 break;
-            case( PAPER_ENV_MONARCH ):
+            case PAPER_ENV_MONARCH:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_MONARCH;
                 break;
-            case( PAPER_ENV_PERSONAL ):
+            case PAPER_ENV_PERSONAL:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_PERSONAL;
                 break;
-            case( PAPER_ENV_9 ):
+            case PAPER_ENV_9:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_9;
                 break;
-            case( PAPER_ENV_10 ):
+            case PAPER_ENV_10:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_10;
                 break;
-            case( PAPER_ENV_11 ):
+            case PAPER_ENV_11:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_11;
                 break;
-            case( PAPER_ENV_12 ):
+            case PAPER_ENV_12:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_12;
                 break;
             //See the comments on DMPAPER_B4 above
-            case( PAPER_B4_JIS ):
+            case PAPER_B4_JIS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B4;
                 break;
-            case( PAPER_B5_JIS ):
+            case PAPER_B5_JIS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B5;
                 break;
-            case( PAPER_B6_JIS ):
+            case PAPER_B6_JIS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B6_JIS;
                 break;
-            case( PAPER_LEDGER ):
+            case PAPER_LEDGER:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LEDGER;
                 break;
-            case( PAPER_STATEMENT ):
+            case PAPER_STATEMENT:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_STATEMENT;
                 break;
-            case( PAPER_10x14 ):
+            case PAPER_10x14:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_10X14;
                 break;
-            case( PAPER_ENV_14 ):
+            case PAPER_ENV_14:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_14;
                 break;
-            case( PAPER_ENV_C3 ):
+            case PAPER_ENV_C3:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_C3;
                 break;
-            case( PAPER_ENV_ITALY ):
+            case PAPER_ENV_ITALY:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_ITALY;
                 break;
-            case( PAPER_FANFOLD_US ):
+            case PAPER_FANFOLD_US:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_FANFOLD_US;
                 break;
-            case( PAPER_FANFOLD_DE ):
+            case PAPER_FANFOLD_DE:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_FANFOLD_STD_GERMAN;
                 break;
-            case( PAPER_POSTCARD_JP ):
+            case PAPER_POSTCARD_JP:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_JAPANESE_POSTCARD;
                 break;
-            case( PAPER_9x11 ):
+            case PAPER_9x11:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_9X11;
                 break;
-            case( PAPER_10x11 ):
+            case PAPER_10x11:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_10X11;
                 break;
-            case( PAPER_15x11 ):
+            case PAPER_15x11:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_15X11;
                 break;
-            case( PAPER_ENV_INVITE ):
+            case PAPER_ENV_INVITE:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_INVITE;
                 break;
-            case( PAPER_A_PLUS ):
+            case PAPER_A_PLUS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A_PLUS;
                 break;
-            case( PAPER_B_PLUS ):
+            case PAPER_B_PLUS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B_PLUS;
                 break;
-            case( PAPER_LETTER_PLUS ):
+            case PAPER_LETTER_PLUS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_LETTER_PLUS;
                 break;
-            case( PAPER_A4_PLUS ):
+            case PAPER_A4_PLUS:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A4_PLUS;
                 break;
-            case( PAPER_DOUBLEPOSTCARD_JP ):
+            case PAPER_DOUBLEPOSTCARD_JP:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_DBL_JAPANESE_POSTCARD;
                 break;
-            case( PAPER_A6 ):
+            case PAPER_A6:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_A6;
                 break;
-            case( PAPER_12x11 ):
+            case PAPER_12x11:
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_12X11;
                 break;
             default:

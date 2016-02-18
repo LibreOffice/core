@@ -349,7 +349,7 @@ IMPL_LINK_TYPED( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )
     sal_uInt16 nId( pMenu->GetCurItemId() );
     switch ( nId )
     {
-        case( MN_ADD ):
+        case MN_ADD:
         {
             const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_FORMATS );
             if ( it != m_aCommandInfo.end() )
@@ -541,9 +541,9 @@ void GalleryBrowser2::Resize()
 
     switch( GetMode() )
     {
-        case( GALLERYBROWSERMODE_ICON ): mpIconView->Show(); break;
-        case( GALLERYBROWSERMODE_LIST ): mpListView->Show(); break;
-        case( GALLERYBROWSERMODE_PREVIEW ): mpPreview->Show(); break;
+        case GALLERYBROWSERMODE_ICON: mpIconView->Show(); break;
+        case GALLERYBROWSERMODE_LIST: mpListView->Show(); break;
+        case GALLERYBROWSERMODE_PREVIEW: mpPreview->Show(); break;
 
         default:
         break;
@@ -685,9 +685,9 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
-            case( KEY_SPACE ):
-            case( KEY_RETURN ):
-            case( KEY_P ):
+            case KEY_SPACE:
+            case KEY_RETURN:
+            case KEY_P:
             {
                 if( bPreview )
                 {
@@ -697,8 +697,8 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
             }
             break;
 
-            case( KEY_INSERT ):
-            case( KEY_I ):
+            case KEY_INSERT:
+            case KEY_I:
             {
                 // Inserting a gallery item in the document must be dispatched
                 if( bValidURL )
@@ -709,15 +709,15 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
             }
             break;
 
-            case( KEY_DELETE ):
-            case( KEY_D ):
+            case KEY_DELETE:
+            case KEY_D:
             {
                 if( bDelete )
                     nExecuteId = MN_DELETE;
             }
             break;
 
-            case( KEY_T ):
+            case KEY_T:
             {
                 if( bTitle )
                     nExecuteId = MN_TITLE;
@@ -785,7 +785,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
         switch( eMode )
         {
-            case( GALLERYBROWSERMODE_ICON ):
+            case GALLERYBROWSERMODE_ICON:
             {
                 mpListView->Hide();
 
@@ -803,7 +803,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
             }
             break;
 
-            case( GALLERYBROWSERMODE_LIST ):
+            case GALLERYBROWSERMODE_LIST:
             {
                 mpIconView->Hide();
 
@@ -821,7 +821,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
             }
             break;
 
-            case( GALLERYBROWSERMODE_PREVIEW ):
+            case GALLERYBROWSERMODE_PREVIEW:
             {
                 Graphic     aGraphic;
                 Point       aSelPos;
@@ -863,8 +863,8 @@ vcl::Window* GalleryBrowser2::GetViewWindow() const
 
     switch( GetMode() )
     {
-        case( GALLERYBROWSERMODE_LIST ): pRet = mpListView; break;
-        case( GALLERYBROWSERMODE_PREVIEW ): pRet = mpPreview; break;
+        case GALLERYBROWSERMODE_LIST: pRet = mpListView; break;
+        case GALLERYBROWSERMODE_PREVIEW: pRet = mpPreview; break;
 
         default:
             pRet = mpIconView;
@@ -887,10 +887,10 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 
             switch( eTravel )
             {
-                case( GALLERYBROWSERTRAVEL_FIRST ):     nNewItemId = 1; break;
-                case( GALLERYBROWSERTRAVEL_LAST ):      nNewItemId = mpCurTheme->GetObjectCount(); break;
-                case( GALLERYBROWSERTRAVEL_PREVIOUS ):  nNewItemId--; break;
-                case( GALLERYBROWSERTRAVEL_NEXT ):      nNewItemId++; break;
+                case GALLERYBROWSERTRAVEL_FIRST:     nNewItemId = 1; break;
+                case GALLERYBROWSERTRAVEL_LAST:      nNewItemId = mpCurTheme->GetObjectCount(); break;
+                case GALLERYBROWSERTRAVEL_PREVIOUS:  nNewItemId--; break;
+                case GALLERYBROWSERTRAVEL_NEXT:      nNewItemId++; break;
                 default:
                     break;
             }
@@ -945,9 +945,9 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
     switch( GetMode() )
     {
-        case( GALLERYBROWSERMODE_ICON ): mpIconView->Show(); break;
-        case( GALLERYBROWSERMODE_LIST ): mpListView->Show(); break;
-        case( GALLERYBROWSERMODE_PREVIEW ): mpPreview->Show(); break;
+        case GALLERYBROWSERMODE_ICON: mpIconView->Show(); break;
+        case GALLERYBROWSERMODE_LIST: mpListView->Show(); break;
+        case GALLERYBROWSERMODE_PREVIEW: mpPreview->Show(); break;
 
         default:
         break;
@@ -1053,7 +1053,7 @@ void GalleryBrowser2::Dispatch(
 
     switch( nId )
     {
-        case( MN_ADD ):
+        case MN_ADD:
         {
             css::uno::Reference< css::frame::XDispatch > xDispatch( rxDispatch );
             css::util::URL aURL = rURL;
@@ -1085,15 +1085,15 @@ void GalleryBrowser2::Dispatch(
 
             switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
             {
-                case( SGA_OBJ_BMP ):
-                case( SGA_OBJ_ANIM ):
-                case( SGA_OBJ_INET ):
+                case SGA_OBJ_BMP:
+                case SGA_OBJ_ANIM:
+                case SGA_OBJ_INET:
                 // TODO drawing objects are inserted as drawings only via drag&drop
-                case( SGA_OBJ_SVDRAW ):
+                case SGA_OBJ_SVDRAW:
                     nType = css::gallery::GalleryItemType::GRAPHIC;
                 break;
 
-                case ( SGA_OBJ_SOUND ) :
+                case SGA_OBJ_SOUND :
                     nType = css::gallery::GalleryItemType::MEDIA;
                 break;
 
@@ -1152,11 +1152,11 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
 
         switch( nId )
         {
-            case( MN_PREVIEW ):
+            case MN_PREVIEW:
                 SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
             break;
 
-            case( MN_DELETE ):
+            case MN_DELETE:
             {
                 if( !mpCurTheme->IsReadOnly() &&
                     ScopedVclPtrInstance<MessageDialog>::Create(nullptr, "QueryDeleteObjectDialog","svx/ui/querydeleteobjectdialog.ui")->Execute() == RET_YES )
@@ -1166,7 +1166,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
             }
             break;
 
-            case( MN_TITLE ):
+            case MN_TITLE:
             {
                 SgaObject* pObj = mpCurTheme->AcquireObject( mnCurActionPos );
 
@@ -1199,15 +1199,15 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
             }
             break;
 
-            case( MN_COPYCLIPBOARD ):
+            case MN_COPYCLIPBOARD:
             {
                 vcl::Window* pWindow;
 
                 switch( GetMode() )
                 {
-                    case( GALLERYBROWSERMODE_ICON ): pWindow = static_cast<vcl::Window*>(mpIconView); break;
-                    case( GALLERYBROWSERMODE_LIST ): pWindow = static_cast<vcl::Window*>(mpListView); break;
-                    case( GALLERYBROWSERMODE_PREVIEW ): pWindow = static_cast<vcl::Window*>(mpPreview); break;
+                    case GALLERYBROWSERMODE_ICON: pWindow = static_cast<vcl::Window*>(mpIconView); break;
+                    case GALLERYBROWSERMODE_LIST: pWindow = static_cast<vcl::Window*>(mpListView); break;
+                    case GALLERYBROWSERMODE_PREVIEW: pWindow = static_cast<vcl::Window*>(mpPreview); break;
 
                     default:
                         pWindow = nullptr;
@@ -1218,7 +1218,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
             }
             break;
 
-            case( MN_PASTECLIPBOARD ):
+            case MN_PASTECLIPBOARD:
             {
                 if( !mpCurTheme->IsReadOnly() )
                 {

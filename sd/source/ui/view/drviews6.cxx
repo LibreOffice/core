@@ -273,14 +273,14 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
     switch ( rReq.GetSlot() )
     {
-        case ( SID_BMPMASK_PIPETTE ) :
+        case SID_BMPMASK_PIPETTE :
         {
             mbPipette = static_cast<const SfxBoolItem&>( rReq.GetArgs()->
                        Get( SID_BMPMASK_PIPETTE ) ).GetValue();
         }
         break;
 
-        case ( SID_BMPMASK_EXEC ) :
+        case SID_BMPMASK_EXEC :
         {
             SdrGrafObj* pObj = nullptr;
             if( mpDrawView && mpDrawView->GetMarkedObjectList().GetMarkCount() )

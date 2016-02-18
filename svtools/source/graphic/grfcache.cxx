@@ -69,7 +69,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
 
     switch( rGraphic.GetType() )
     {
-        case( GRAPHIC_BITMAP ):
+        case GRAPHIC_BITMAP:
         {
             if(rGraphic.getSvgData().get())
             {
@@ -102,7 +102,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
         }
         break;
 
-        case( GRAPHIC_GDIMETAFILE ):
+        case GRAPHIC_GDIMETAFILE:
         {
             const GDIMetaFile& rMtf = rGraphic.GetGDIMetaFile();
 
@@ -227,7 +227,7 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
 
         switch( rGraphic.GetType() )
         {
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(rGraphic.getSvgData().get())
                 {
@@ -244,7 +244,7 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
             }
             break;
 
-            case( GRAPHIC_GDIMETAFILE ):
+            case GRAPHIC_GDIMETAFILE:
             {
                 mpMtf = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
             }

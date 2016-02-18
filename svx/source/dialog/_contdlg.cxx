@@ -637,8 +637,8 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
 
         switch( pWnd->GetPolyEditMode() )
         {
-            case( SID_BEZIER_MOVE ): nId = mnPolyMoveId; break;
-            case( SID_BEZIER_INSERT ): nId = mnPolyInsertId; break;
+            case SID_BEZIER_MOVE: nId = mnPolyMoveId; break;
+            case SID_BEZIER_INSERT: nId = mnPolyInsertId; break;
 
             default:
             break;

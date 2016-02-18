@@ -40,12 +40,12 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
 {
     switch( eType )
     {
-        case( SDRUSERCALL_MOVEONLY ):
-        case( SDRUSERCALL_RESIZE ):
+        case SDRUSERCALL_MOVEONLY:
+        case SDRUSERCALL_RESIZE:
             rWin.SdrObjChanged( rObj );
         break;
 
-        case( SDRUSERCALL_INSERTED ):
+        case SDRUSERCALL_INSERTED:
             rWin.SdrObjCreated( rObj );
         break;
 

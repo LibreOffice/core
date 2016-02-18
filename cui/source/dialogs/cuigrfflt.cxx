@@ -573,15 +573,15 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double
     {
         default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
                        /* Fall through */
-        case( RP_LT ): nAzim = 4500;    nElev = 4500; break;
-        case( RP_MT ): nAzim = 9000;    nElev = 4500; break;
-        case( RP_RT ): nAzim = 13500;   nElev = 4500; break;
-        case( RP_LM ): nAzim = 0;       nElev = 4500; break;
-        case( RP_MM ): nAzim = 0;       nElev = 9000; break;
-        case( RP_RM ): nAzim = 18000;   nElev = 4500; break;
-        case( RP_LB ): nAzim = 31500;   nElev = 4500; break;
-        case( RP_MB ): nAzim = 27000;   nElev = 4500; break;
-        case( RP_RB ): nAzim = 22500;   nElev = 4500; break;
+        case RP_LT: nAzim = 4500;    nElev = 4500; break;
+        case RP_MT: nAzim = 9000;    nElev = 4500; break;
+        case RP_RT: nAzim = 13500;   nElev = 4500; break;
+        case RP_LM: nAzim = 0;       nElev = 4500; break;
+        case RP_MM: nAzim = 0;       nElev = 9000; break;
+        case RP_RM: nAzim = 18000;   nElev = 4500; break;
+        case RP_LB: nAzim = 31500;   nElev = 4500; break;
+        case RP_MB: nAzim = 27000;   nElev = 4500; break;
+        case RP_RB: nAzim = 22500;   nElev = 4500; break;
     }
 
     BmpFilterParam aParam( nAzim, nElev );

@@ -1410,15 +1410,15 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
     {
         switch( aAttr.GetDrawMode() )
         {
-            case( GRAPHICDRAWMODE_MONO ):
+            case GRAPHICDRAWMODE_MONO:
                 rBmpEx.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
             break;
 
-            case( GRAPHICDRAWMODE_GREYS ):
+            case GRAPHICDRAWMODE_GREYS:
                 rBmpEx.Convert( BMP_CONVERSION_8BIT_GREYS );
             break;
 
-            case( GRAPHICDRAWMODE_WATERMARK ):
+            case GRAPHICDRAWMODE_WATERMARK:
             {
                 aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
                 aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
@@ -1513,15 +1513,15 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, Gr
     {
         switch( aAttr.GetDrawMode() )
         {
-            case( GRAPHICDRAWMODE_MONO ):
+            case GRAPHICDRAWMODE_MONO:
                 rMtf.Convert( MTF_CONVERSION_1BIT_THRESHOLD );
             break;
 
-            case( GRAPHICDRAWMODE_GREYS ):
+            case GRAPHICDRAWMODE_GREYS:
                 rMtf.Convert( MTF_CONVERSION_8BIT_GREYS );
             break;
 
-            case( GRAPHICDRAWMODE_WATERMARK ):
+            case GRAPHICDRAWMODE_WATERMARK:
             {
                 aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
                 aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
@@ -1564,15 +1564,15 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
     {
         switch( aAttr.GetDrawMode() )
         {
-            case( GRAPHICDRAWMODE_MONO ):
+            case GRAPHICDRAWMODE_MONO:
                 rAnimation.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
             break;
 
-            case( GRAPHICDRAWMODE_GREYS ):
+            case GRAPHICDRAWMODE_GREYS:
                 rAnimation.Convert( BMP_CONVERSION_8BIT_GREYS );
             break;
 
-            case( GRAPHICDRAWMODE_WATERMARK ):
+            case GRAPHICDRAWMODE_WATERMARK:
             {
                 aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
                 aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );

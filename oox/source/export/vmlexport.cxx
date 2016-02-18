@@ -888,7 +888,7 @@ void VMLExport::AddFlipXY( )
     {
         case SHAPEFLAG_FLIPH:   m_pShapeStyle->append( ";flip:x" );  break;
         case SHAPEFLAG_FLIPV:   m_pShapeStyle->append( ";flip:y" );  break;
-        case (nFlipHandV):      m_pShapeStyle->append( ";flip:xy" ); break;
+        case nFlipHandV:        m_pShapeStyle->append( ";flip:xy" ); break;
     }
 }
 

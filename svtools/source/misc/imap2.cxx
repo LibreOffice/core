@@ -144,9 +144,9 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseU
 {
     switch( nFormat )
     {
-        case( IMAP_FORMAT_BIN ) : Write( rOStm, rBaseURL ); break;
-        case( IMAP_FORMAT_CERN ) : ImpWriteCERN( rOStm, rBaseURL ); break;
-        case( IMAP_FORMAT_NCSA ) : ImpWriteNCSA( rOStm, rBaseURL ); break;
+        case IMAP_FORMAT_BIN : Write( rOStm, rBaseURL ); break;
+        case IMAP_FORMAT_CERN : ImpWriteCERN( rOStm, rBaseURL ); break;
+        case IMAP_FORMAT_NCSA : ImpWriteNCSA( rOStm, rBaseURL ); break;
 
         default:
         break;
@@ -163,15 +163,15 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 
         switch( pObj->GetType() )
         {
-            case( IMAP_OBJ_RECTANGLE ):
+            case IMAP_OBJ_RECTANGLE:
                 static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
-            case( IMAP_OBJ_CIRCLE ):
+            case IMAP_OBJ_CIRCLE:
                 static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
-            case( IMAP_OBJ_POLYGON ):
+            case IMAP_OBJ_POLYGON:
                 static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
             break;
 
@@ -191,15 +191,15 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
 
         switch( pObj->GetType() )
         {
-            case( IMAP_OBJ_RECTANGLE ):
+            case IMAP_OBJ_RECTANGLE:
                 static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
-            case( IMAP_OBJ_CIRCLE ):
+            case IMAP_OBJ_CIRCLE:
                 static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
-            case( IMAP_OBJ_POLYGON ):
+            case IMAP_OBJ_POLYGON:
                 static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
             break;
 
@@ -218,9 +218,9 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rB
 
     switch ( nFormat )
     {
-        case ( IMAP_FORMAT_BIN )    : Read( rIStm, rBaseURL ); break;
-        case ( IMAP_FORMAT_CERN )   : nRet = ImpReadCERN( rIStm, rBaseURL ); break;
-        case ( IMAP_FORMAT_NCSA )   : nRet = ImpReadNCSA( rIStm, rBaseURL ); break;
+        case IMAP_FORMAT_BIN    : Read( rIStm, rBaseURL ); break;
+        case IMAP_FORMAT_CERN   : nRet = ImpReadCERN( rIStm, rBaseURL ); break;
+        case IMAP_FORMAT_NCSA   : nRet = ImpReadNCSA( rIStm, rBaseURL ); break;
 
         default:
         break;

@@ -68,21 +68,21 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
     {
         switch( nMsg )
         {
-            case( WM_SETCURSOR ):
+            case WM_SETCURSOR:
                 pWindow->updatePointer();
             break;
 
-            case( WM_GRAPHNOTIFY ):
+            case WM_GRAPHNOTIFY:
                 pWindow->processGraphEvent();
             break;
 
-            case( WM_MOUSEMOVE ):
-            case( WM_LBUTTONDOWN ):
-            case( WM_MBUTTONDOWN ):
-            case( WM_RBUTTONDOWN ):
-            case( WM_LBUTTONUP ):
-            case( WM_MBUTTONUP ):
-            case( WM_RBUTTONUP ):
+            case WM_MOUSEMOVE:
+            case WM_LBUTTONDOWN:
+            case WM_MBUTTONDOWN:
+            case WM_RBUTTONDOWN:
+            case WM_LBUTTONUP:
+            case WM_MBUTTONUP:
+            case WM_RBUTTONUP:
             {
                 awt::MouseEvent aUNOEvt;
                 POINT           aWinPoint;
@@ -139,7 +139,7 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
             }
             break;
 
-            case( WM_SETFOCUS ):
+            case WM_SETFOCUS:
             {
                 const awt::FocusEvent aUNOEvt;
                 pWindow->fireSetFocusEvent( aUNOEvt );
@@ -331,9 +331,9 @@ void Window::updatePointer()
 
     switch( mnPointerType )
     {
-        case( awt::SystemPointer::CROSS ): pCursorName = IDC_CROSS; break;
-        case( awt::SystemPointer::MOVE ): pCursorName = IDC_SIZEALL; break;
-        case( awt::SystemPointer::WAIT ): pCursorName = IDC_WAIT; break;
+        case awt::SystemPointer::CROSS: pCursorName = IDC_CROSS; break;
+        case awt::SystemPointer::MOVE: pCursorName = IDC_SIZEALL; break;
+        case awt::SystemPointer::WAIT: pCursorName = IDC_WAIT; break;
 
         default:
             pCursorName = IDC_ARROW;

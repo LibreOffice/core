@@ -825,7 +825,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         }
         break;
 
-        case( OWN_ATTR_MEDIA_LOOP ):
+        case OWN_ATTR_MEDIA_LOOP:
         {
             bool bLoop;
 
@@ -837,7 +837,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         }
         break;
 
-        case( OWN_ATTR_MEDIA_MUTE ):
+        case OWN_ATTR_MEDIA_MUTE:
         {
             bool bMute;
 
@@ -849,7 +849,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         }
         break;
 
-        case( OWN_ATTR_MEDIA_VOLUMEDB ):
+        case OWN_ATTR_MEDIA_VOLUMEDB:
         {
             sal_Int16 nVolumeDB = sal_Int16();
 
@@ -861,7 +861,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
         }
         break;
 
-        case( OWN_ATTR_MEDIA_ZOOM ):
+        case OWN_ATTR_MEDIA_ZOOM:
         {
             css::media::ZoomLevel eLevel;
 
@@ -946,19 +946,19 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 rValue <<= aItem.getURL();
                 break;
 
-            case( OWN_ATTR_MEDIA_LOOP ):
+            case OWN_ATTR_MEDIA_LOOP:
                 rValue <<= aItem.isLoop();
                 break;
 
-            case( OWN_ATTR_MEDIA_MUTE ):
+            case OWN_ATTR_MEDIA_MUTE:
                 rValue <<= aItem.isMute();
                 break;
 
-            case( OWN_ATTR_MEDIA_VOLUMEDB ):
+            case OWN_ATTR_MEDIA_VOLUMEDB:
                 rValue <<= (sal_Int16) aItem.getVolumeDB();
                 break;
 
-            case( OWN_ATTR_MEDIA_ZOOM ):
+            case OWN_ATTR_MEDIA_ZOOM:
                 rValue <<= aItem.getZoom();
                 break;
 
