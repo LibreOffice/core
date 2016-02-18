@@ -348,11 +348,11 @@ public:
     /// Gets the LOK data registered by registerLibreOfficeKitCallback().
     void*                getLibreOfficeKitData() const;
     /// Invokes the registered callback, if there are any.
-    void                 libreOfficeKitCallback(int nType, const char* pPayload) const;
+    void                 libreOfficeKitCallback(int nType, const char* pPayload) const override;
     /// Set if we are doing tiled searching.
     void                 setTiledSearching(bool bTiledSearching);
     /// Are we doing tiled searching?
-    bool                 isTiledSearching() const override;
+    bool                 isTiledSearching() const;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font height in logical units

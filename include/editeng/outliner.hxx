@@ -378,13 +378,13 @@ public:
     void        SetEndCutPasteLinkHdl(const Link<LinkParamNone*,void> &rLink) { aEndCutPasteLink = rLink; }
 };
 
-/// Interface class to know if we do tiled searching.
+/// Interface class to not depend on SdrModel in editeng.
 class EDITENG_DLLPUBLIC OutlinerSearchable
 {
 public:
     virtual ~OutlinerSearchable();
 
-    virtual bool isTiledSearching() const = 0;
+    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const = 0;
 };
 
 // some thesaurus functionality to avoid code duplication in different projects...

@@ -139,20 +139,8 @@ void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
 
 void ImpEditView::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
-    if (mpLibreOfficeKitSearchable && mpLibreOfficeKitSearchable->isTiledSearching())
-    {
-        switch (nType)
-        {
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-            return;
-        }
-    }
-
-    if (mpLibreOfficeKitCallback)
-        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
+    if (mpLibreOfficeKitSearchable)
+        mpLibreOfficeKitSearchable->libreOfficeKitCallback(nType, pPayload);
 }
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
