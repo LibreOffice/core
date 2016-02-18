@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_a190daed",
+        "filename": "sdext/source/pdfimport/filterdet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-18T13:53:11Z",
+      "side": 1,
+      "message": "that won\u0027t compile.\n\n(and you need \"make dbglevel\u003d2\" to see that because of the \"#if OSL_DEBUG_LEVEL \u003e 1\")\n\nSAL_INFO does not work with printf format specifiers like %s but instead uses std::ostream like operator\u003c\u003c, so you need to convert that.\n\nalso, it\u0027s best to remove the \"#if OSL_DEBUG_LEVEL \u003e 1\" as well, having a SAL_INFO inside that doesn\u0027t really make sense.\n\nso you need to eliminate the \"aVal\" variable, that should be easy if you use uno::Any\u0027s \"has\u003cOUString\u003e()\" to check that it contains a string, and \"get\u003cOUString\u003e()\" to retrieve it.",
+      "revId": "8b976fe4f44bd0b128555372e1a99d2d12a35e7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_01bc4e6b",
+        "filename": "sdext/source/pdfimport/filterdet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-18T13:53:11Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "8b976fe4f44bd0b128555372e1a99d2d12a35e7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_21bb4a74",
+        "filename": "sdext/source/pdfimport/filterdet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-18T13:53:11Z",
+      "side": 1,
+      "message": "this very much looks like an unexpected value (returned from the queryDocumentTypeDialog() call that is commented out, above) would be unambiguously a bug in the code.\n\nso in this case assert() is more appropriate than SAL_WARN(), which is more for \"merely suspicious\" cases where it may or may not be a bug in the code.",
+      "revId": "8b976fe4f44bd0b128555372e1a99d2d12a35e7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
