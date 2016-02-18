@@ -77,8 +77,8 @@ public final class Loader {
                     JarURLConnection jarConnection =
                         (JarURLConnection) jarurl.openConnection();
                     Manifest mf = jarConnection.getManifest();
-                    Attributes attrs = mf.getAttributes(
-                        "com/sun/star/lib/loader/Loader.class" );
+                    Attributes attrs = (mf != null) ? mf.getAttributes(
+                        "com/sun/star/lib/loader/Loader.class") : null;
                     if ( attrs != null ) {
                         className = attrs.getValue( "Application-Class" );
                         if ( className != null )
