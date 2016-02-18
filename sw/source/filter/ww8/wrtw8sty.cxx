@@ -290,8 +290,8 @@ void MSWordStyles::BuildStylesTable()
     for( size_t n = 1; n < rArr2.size(); n++ )
     {
         SwTextFormatColl* pFormat = rArr2[n];
-        sal_uInt16 nId ;
-        m_pFormatA[ nId = BuildGetSlot( *pFormat ) ] = pFormat;
+        sal_uInt16 nId = BuildGetSlot( *pFormat ) ;
+        m_pFormatA[ nId ] = pFormat;
         if ( pFormat->IsAssignedToListLevelOfOutlineStyle() )
         {
             int nLvl = pFormat->GetAssignedOutlineStyleLevel() ;
