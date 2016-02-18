@@ -155,8 +155,11 @@ public final class socketAcceptor implements XAcceptor {
             if (tcpNoDelay != null) {
                 socket.setTcpNoDelay(tcpNoDelay.booleanValue());
             }
-            else if (((InetSocketAddress)socket.getRemoteSocketAddress()).getAddress().isLoopbackAddress()) {
-                socket.setTcpNoDelay(true);
+            else {
+                InetSocketAddress address = (InetSocketAddress)socket.getRemoteSocketAddress();
+                if (address != null && address.getAddress().isLoopbackAddress()) {
+                    socket.setTcpNoDelay(true);
+                }
             }
             return new SocketConnection(acceptingDescription, socket);
         }
