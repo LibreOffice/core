@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <rtl/ustring.hxx>
-#include <osl/module.h>
+#include <osl/module.hxx>
 #define  DECLARE_FN_POINTERS 1
 #include "EApi.h"
 static const char *eBookLibNames[] = {
@@ -109,12 +109,12 @@ static const ApiMap aClientApiMap38[] =
 #undef SYM_MAP
 
 template<size_t N> static bool
-tryLink( oslModule &aModule, const char *pName, const ApiMap (&pMap)[N])
+tryLink( osl::Module &rModule, const char *pName, const ApiMap (&pMap)[N])
 {
     for (size_t i = 0; i < N; ++i)
     {
-        SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(osl_getFunctionSymbol
-            (aModule, OUString::createFromAscii ( pMap[ i ].sym_name ).pData));
+        SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(
+            rModule.getFunctionSymbol(OUString::createFromAscii(pMap[i].sym_name)));
         if( !aMethod )
         {
             fprintf( stderr, "Warning: missing symbol '%s' in '%s'\n",
@@ -128,15 +128,11 @@ tryLink( oslModule &aModule, const char *pName, const ApiMap (&pMap)[N])
 
 bool EApiInit()
 {
-    oslModule aModule;
-
     for( guint j = 0; j < G_N_ELEMENTS( eBookLibNames ); j++ )
     {
-        aModule = osl_loadModule( OUString::createFromAscii
-                                  ( eBookLibNames[ j ] ).pData,
-                                  SAL_LOADMODULE_DEFAULT );
+        osl::Module aModule(OUString::createFromAscii(eBookLibNames[j]), SAL_LOADMODULE_DEFAULT);
 
-        if( aModule == nullptr)
+        if (!aModule.is())
             continue;
 
         if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap))
@@ -144,24 +140,31 @@ bool EApiInit()
             if (eds_check_version( 3, 6, 0 ) != nullptr)
             {
                 if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap))
+                {
+                    aModule.release();
                     return true;
+                }
             }
             else if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
             {
                 if (eds_check_version( 3, 7, 6 ) != nullptr)
                 {
                     if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap36))
+                    {
+                        aModule.release();
                         return true;
+                    }
                 }
                 else
                 {
                     if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap38))
+                    {
+                        aModule.release();
                         return true;
+                    }
                 }
             }
         }
-
-        osl_unloadModule( aModule );
     }
     fprintf( stderr, "Can find no compliant libebook client libraries\n" );
     return false;
