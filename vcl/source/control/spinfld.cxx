@@ -201,33 +201,15 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
 
     SymbolType eType1, eType2;
 
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    if ( rStyleSettings.GetOptions() & StyleSettingsOptions::SpinArrow )
+    if ( bHorz )
     {
-        // arrows are only use in OS/2 look
-        if ( bHorz )
-        {
-            eType1 = bMirrorHorz ? SymbolType::ARROW_RIGHT : SymbolType::ARROW_LEFT;
-            eType2 = bMirrorHorz ? SymbolType::ARROW_LEFT : SymbolType::ARROW_RIGHT;
-        }
-        else
-        {
-            eType1 = SymbolType::ARROW_UP;
-            eType2 = SymbolType::ARROW_DOWN;
-        }
+        eType1 = bMirrorHorz ? SymbolType::SPIN_RIGHT : SymbolType::SPIN_LEFT;
+        eType2 = bMirrorHorz ? SymbolType::SPIN_LEFT : SymbolType::SPIN_RIGHT;
     }
     else
     {
-        if ( bHorz )
-        {
-            eType1 = bMirrorHorz ? SymbolType::SPIN_RIGHT : SymbolType::SPIN_LEFT;
-            eType2 = bMirrorHorz ? SymbolType::SPIN_LEFT : SymbolType::SPIN_RIGHT;
-        }
-        else
-        {
-            eType1 = SymbolType::SPIN_UP;
-            eType2 = SymbolType::SPIN_DOWN;
-        }
+        eType1 = SymbolType::SPIN_UP;
+        eType2 = SymbolType::SPIN_DOWN;
     }
 
     DrawButtonFlags nStyle = DrawButtonFlags::NoLeftLightBorder;
@@ -282,6 +264,8 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
         else
             aLowRect.Top()++;
     }
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     DrawSymbolFlags nSymStyle = DrawSymbolFlags::NONE;
     if (!bUpperEnabled)
