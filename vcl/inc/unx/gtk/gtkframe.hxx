@@ -47,6 +47,8 @@
 #include <list>
 #include <vector>
 
+#include <config_vclplug.h>
+
 #include "headless/svpgdi.hxx"
 
 class GtkSalGraphics;
