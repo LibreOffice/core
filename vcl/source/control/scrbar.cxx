@@ -642,20 +642,10 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
         if ((mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) || !bEnabled)
             nSymbolStyle |= DrawSymbolFlags::Disable;
-        if (rStyleSettings.GetOptions() & StyleSettingsOptions::ScrollArrow)
-        {
-            if (GetStyle() & WB_HORZ)
-                eSymbolType = SymbolType::ARROW_LEFT;
-            else
-                eSymbolType = SymbolType::ARROW_UP;
-        }
+        if (GetStyle() & WB_HORZ)
+            eSymbolType = SymbolType::SPIN_LEFT;
         else
-        {
-            if (GetStyle() & WB_HORZ)
-                eSymbolType = SymbolType::SPIN_LEFT;
-            else
-                eSymbolType = SymbolType::SPIN_UP;
-        }
+            eSymbolType = SymbolType::SPIN_UP;
         aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nSymbolStyle);
     }
 
@@ -669,20 +659,10 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
         if ((mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) || !bEnabled)
             nSymbolStyle |= DrawSymbolFlags::Disable;
-        if (rStyleSettings.GetOptions() & StyleSettingsOptions::ScrollArrow)
-        {
-            if (GetStyle() & WB_HORZ)
-                eSymbolType = SymbolType::ARROW_RIGHT;
-            else
-                eSymbolType = SymbolType::ARROW_DOWN;
-        }
+        if (GetStyle() & WB_HORZ)
+            eSymbolType = SymbolType::SPIN_RIGHT;
         else
-        {
-            if (GetStyle() & WB_HORZ)
-                eSymbolType = SymbolType::SPIN_RIGHT;
-            else
-                eSymbolType = SymbolType::SPIN_DOWN;
-        }
+            eSymbolType = SymbolType::SPIN_DOWN;
         aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nSymbolStyle);
     }
 

@@ -179,17 +179,11 @@ enum class StyleSettingsOptions
 {
     NONE           = 0x0000,
     Mono           = 0x0001,
-    Color          = 0x0002,
-    Flat           = 0x0004,
-    Great          = 0x0008,
-    Highlight      = 0x0010,
-    AdvancedUser   = 0x0020,
-    ScrollArrow    = 0x0040,
-    NoMnemonics    = 0x0080,
+    NoMnemonics    = 0x0002,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<StyleSettingsOptions> : is_typed_flags<StyleSettingsOptions, 0x00ff> {};
+    template<> struct typed_flags<StyleSettingsOptions> : is_typed_flags<StyleSettingsOptions, 0x0003> {};
 }
 
 enum class DragFullOptions
