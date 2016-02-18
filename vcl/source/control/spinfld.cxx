@@ -197,6 +197,17 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
     if (bNativeOK)
         return;
 
+    ImplDrawUpDownButtons(rRenderContext,
+                          rUpperRect, rLowerRect,
+                          bUpperIn, bLowerIn, bUpperEnabled, bLowerEnabled,
+                          bHorz, bMirrorHorz);
+}
+
+void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
+                           const Rectangle& rUpperRect, const Rectangle& rLowerRect,
+                           bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled,
+                           bool bHorz, bool bMirrorHorz)
+{
     DecorationView aDecoView(&rRenderContext);
 
     SymbolType eType1, eType2;

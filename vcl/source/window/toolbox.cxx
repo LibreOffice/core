@@ -2906,8 +2906,8 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bo
         bTmpLower = false;
     }
 
-    ImplDrawSpinButton(rRenderContext, this, maUpperRect, maLowerRect,
-                       bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz);
+    ImplDrawUpDownButtons(rRenderContext, maUpperRect, maLowerRect,
+                          bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz);
 }
 
 void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect)
