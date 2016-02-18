@@ -1330,7 +1330,7 @@ void SmShowSymbolSetWindow::SetScrollBarRange()
 
 void SmShowSymbolSetWindow::SelectSymbol(sal_uInt16 nSymbol)
 {
-    int v = (int) (m_pVScrollBar->GetThumbPos() * nColumns);
+    int v = static_cast<int>(m_pVScrollBar->GetThumbPos() * nColumns);
 
     if (nSelectSymbol != SYMBOL_NONE)
         Invalidate(Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,

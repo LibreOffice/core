@@ -1051,10 +1051,10 @@ void SAL_CALL SmModel::render(
                 {
                     aPrtPaperSize = lcl_GuessPaperSize();
                     // factors from Windows DIN A4
-                    aOutputSize    = Size( (long)(aPrtPaperSize.Width()  * 0.941),
-                                           (long)(aPrtPaperSize.Height() * 0.961));
-                    aPrtPageOffset = Point( (long)(aPrtPaperSize.Width()  * 0.0250),
-                                            (long)(aPrtPaperSize.Height() * 0.0214));
+                    aOutputSize    = Size( static_cast<long>(aPrtPaperSize.Width()  * 0.941),
+                                           static_cast<long>(aPrtPaperSize.Height() * 0.961));
+                    aPrtPageOffset = Point( static_cast<long>(aPrtPaperSize.Width()  * 0.0250),
+                                            static_cast<long>(aPrtPaperSize.Height() * 0.0214));
                 }
                 Point   aZeroPoint;
                 Rectangle OutputRect( aZeroPoint, aOutputSize );

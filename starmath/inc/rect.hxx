@@ -39,7 +39,7 @@ bool SmIsMathAlpha(const OUString &rText);
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
 {
-    return nFrom + (long) (fRelDist * (nTo - nFrom));
+    return nFrom + static_cast<long>(fRelDist * (nTo - nFrom));
 }
 
 
