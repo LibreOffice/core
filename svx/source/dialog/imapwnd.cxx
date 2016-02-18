@@ -190,7 +190,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
     switch( pIMapObj->GetType() )
     {
-        case( IMAP_OBJ_RECTANGLE ):
+        case IMAP_OBJ_RECTANGLE:
         {
             const IMapRectangleObject* pIMapRectObj = static_cast<const IMapRectangleObject*>(pIMapObj);
             Rectangle               aDrawRect( pIMapRectObj->GetRectangle( false ) );
@@ -203,7 +203,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         }
         break;
 
-        case( IMAP_OBJ_CIRCLE ):
+        case IMAP_OBJ_CIRCLE:
         {
             const IMapCircleObject*   pIMapCircleObj = static_cast<const IMapCircleObject*>(pIMapObj);
             const Point         aCenter( pIMapCircleObj->GetCenter( false ) );
@@ -219,7 +219,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         }
         break;
 
-        case( IMAP_OBJ_POLYGON ):
+        case IMAP_OBJ_POLYGON:
         {
             const IMapPolygonObject*  pIMapPolyObj = static_cast<const IMapPolygonObject*>(pIMapObj);
 
@@ -297,7 +297,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 {
     switch( rObj.GetObjIdentifier() )
     {
-        case( OBJ_RECT ):
+        case OBJ_RECT:
         {
             SdrRectObj*    pRectObj = const_cast<SdrRectObj*>(static_cast<const SdrRectObj*>(&rObj));
             IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(), "", "", "", "", "", true, false );
@@ -306,7 +306,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         }
         break;
 
-        case( OBJ_CIRC ):
+        case OBJ_CIRC:
         {
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ) );
@@ -319,10 +319,10 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         }
         break;
 
-        case( OBJ_POLY ):
-        case( OBJ_FREEFILL ):
-        case( OBJ_PATHPOLY ):
-        case( OBJ_PATHFILL ):
+        case OBJ_POLY:
+        case OBJ_FREEFILL:
+        case OBJ_PATHPOLY:
+        case OBJ_PATHFILL:
         {
             SdrPathObj* pPathObj = const_cast<SdrPathObj*>( static_cast<const SdrPathObj*>(&rObj) );
             const basegfx::B2DPolyPolygon& rXPolyPoly = pPathObj->GetPathPoly();
@@ -365,14 +365,14 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 
         switch( rObj.GetObjIdentifier() )
         {
-            case( OBJ_RECT ):
+            case OBJ_RECT:
             {
                 pUserData->ReplaceObject( IMapObjectPtr(new IMapRectangleObject( static_cast<const SdrRectObj&>(rObj).GetLogicRect(),
                           aURL, aAltText, aDesc, aTarget, "", bActive, false ) ) );
             }
             break;
 
-            case( OBJ_CIRC ):
+            case OBJ_CIRC:
             {
                 const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
                 SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ) );
@@ -387,10 +387,10 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             }
             break;
 
-            case( OBJ_POLY ):
-            case( OBJ_FREEFILL ):
-            case( OBJ_PATHPOLY ):
-            case( OBJ_PATHFILL ):
+            case OBJ_POLY:
+            case OBJ_FREEFILL:
+            case OBJ_PATHPOLY:
+            case OBJ_PATHFILL:
             {
                 const SdrPathObj& rPathObj = static_cast<const SdrPathObj&>(rObj);
                 const basegfx::B2DPolyPolygon& rXPolyPoly = rPathObj.GetPathPoly();
@@ -713,15 +713,15 @@ IMPL_LINK_TYPED( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
 
     switch(nId)
     {
-        case( MN_URL ):
+        case MN_URL:
             DoPropertyDialog();
         break;
 
-        case( MN_MACRO ):
+        case MN_MACRO:
             DoMacroAssign();
         break;
 
-        case( MN_ACTIVATE ):
+        case MN_ACTIVATE:
         {
             const bool bNewState = !pMenu->IsItemChecked( MN_ACTIVATE );
 
@@ -731,27 +731,27 @@ IMPL_LINK_TYPED( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
         }
         break;
 
-        case( MN_FRAME_TO_TOP ):
+        case MN_FRAME_TO_TOP:
             pView->PutMarkedToTop();
         break;
 
-        case( MN_MOREFRONT ):
+        case MN_MOREFRONT:
             pView->MovMarkedToTop();
         break;
 
-        case( MN_MOREBACK ):
+        case MN_MOREBACK:
             pView->MovMarkedToBtm();
         break;
 
-        case( MN_FRAME_TO_BOTTOM ):
+        case MN_FRAME_TO_BOTTOM:
             pView->PutMarkedToBtm();
         break;
 
-        case( MN_MARK_ALL ):
+        case MN_MARK_ALL:
             pView->MarkAll();
         break;
 
-        case( MN_DELETE1 ):
+        case MN_DELETE1:
             pView->DeleteMarked();
 
         default :

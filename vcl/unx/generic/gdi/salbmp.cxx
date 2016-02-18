@@ -154,11 +154,11 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
             switch( nBitCount )
             {
-                case( 1 ): pDIB->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL; break;
-                case( 4 ): pDIB->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL; break;
-                case( 8 ): pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
+                case 1: pDIB->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL; break;
+                case 4: pDIB->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL; break;
+                case 8: pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
 #ifdef OSL_BIGENDIAN
-                case(16 ):
+                case 16:
                 {
                     pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_MSB_MASK;
                     ColorMaskElement aRedMask(0xf800);
@@ -171,7 +171,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                     break;
                 }
 #else
-                case(16 ):
+                case 16:
                 {
                     pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_LSB_MASK;
                     ColorMaskElement aRedMask(0xf800);
@@ -269,7 +269,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
             switch( aSrcBuf.mnBitCount )
             {
-                case( 1 ):
+                case 1:
                 {
                     aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
                                             ? BMP_FORMAT_1BIT_LSB_PAL
@@ -278,7 +278,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 }
                 break;
 
-                case( 4 ):
+                case 4:
                 {
                     aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
                                             ? BMP_FORMAT_4BIT_LSN_PAL
@@ -287,13 +287,13 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 }
                 break;
 
-                case( 8 ):
+                case 8:
                 {
                     aSrcBuf.mnFormat |= BMP_FORMAT_8BIT_PAL;
                 }
                 break;
 
-                case( 16 ):
+                case 16:
                 {
                     ColorMaskElement aRedMask(pImage->red_mask);
                     aRedMask.CalcMaskShift();
@@ -314,7 +314,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 }
                 break;
 
-                case( 24 ):
+                case 24:
                 {
                     if( ( LSBFirst == pImage->byte_order ) && ( pImage->red_mask == 0xFF ) )
                         aSrcBuf.mnFormat |= BMP_FORMAT_24BIT_TC_RGB;
@@ -323,7 +323,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 }
                 break;
 
-                case( 32 ):
+                case 32:
                 {
                     if( LSBFirst == pImage->byte_order )
                         aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF
@@ -436,25 +436,25 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
             switch( pImage->bits_per_pixel )
             {
-                case( 1 ):
+                case 1:
                     nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
                                         ? BMP_FORMAT_1BIT_LSB_PAL
                                         : BMP_FORMAT_1BIT_MSB_PAL
                                     );
                 break;
 
-                case( 4 ):
+                case 4:
                     nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
                                         ? BMP_FORMAT_4BIT_LSN_PAL
                                         : BMP_FORMAT_4BIT_MSN_PAL
                                     );
                 break;
 
-                case( 8 ):
+                case 8:
                     nDstFormat |= BMP_FORMAT_8BIT_PAL;
                 break;
 
-                case( 16 ):
+                case 16:
                 {
                     #ifdef OSL_BIGENDIAN
 
@@ -481,7 +481,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 }
                 break;
 
-                case( 24 ):
+                case 24:
                 {
                     if( ( LSBFirst == pImage->byte_order ) && ( pImage->red_mask == 0xFF ) )
                         nDstFormat |= BMP_FORMAT_24BIT_TC_RGB;
@@ -490,7 +490,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 }
                 break;
 
-                case( 32 ):
+                case 32:
                 {
                     if( LSBFirst == pImage->byte_order )
                         nDstFormat |=   ( pImage->red_mask == 0xFF

@@ -2460,7 +2460,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
 
         switch ( n )
         {
-            case ( 0 ) :
+            case 0 :
             {
                 // Left SplitWindow
                 // Get the width of the Window yourself, if no DummyWindow
@@ -2474,7 +2474,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                     aArea.Left() = nLeft;
                 break;
             }
-            case ( 1 ) :
+            case 1 :
             {
                 // Right SplitWindow
                 // Position to correct the difference of the widths
@@ -2501,7 +2501,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                     aArea.Right() = nRight;
                 break;
             }
-            case ( 2 ) :
+            case 2 :
             {
                 // Top SplitWindow
                 // Get the height of the Window yourself, if no DummyWindow
@@ -2521,7 +2521,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                     aArea.Top() = nTop;
                 break;
             }
-            case ( 3 ) :
+            case 3 :
             {
                 // The bottom SplitWindow
                 // Position to correct the difference of the heights
@@ -2573,16 +2573,16 @@ Rectangle SfxWorkWindow::GetFreeArea( bool bAutoHide ) const
             Size aSize = pSplit[n]->GetSizePixel();
             switch ( n )
             {
-                case ( 0 ) :
+                case 0 :
                     aArea.Left() += aSize.Width();
                     break;
-                case ( 1 ) :
+                case 1 :
                     aArea.Right() -= aSize.Width();
                     break;
-                case ( 2 ) :
+                case 2 :
                     aArea.Top() += aSize.Height();
                     break;
-                case ( 3 ) :
+                case 3 :
                     aArea.Bottom() -= aSize.Height();
                     break;
             }

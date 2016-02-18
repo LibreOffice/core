@@ -551,11 +551,11 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         // always adjust text position to match baseline alignment
         switch( aOldFont.GetAlignment() )
         {
-            case( ALIGN_TOP ):
+            case ALIGN_TOP:
                 aBaseLinePos.Y() += aMetric.GetAscent();
             break;
 
-            case( ALIGN_BOTTOM ):
+            case ALIGN_BOTTOM:
                 aBaseLinePos.Y() -= aMetric.GetDescent();
             break;
 
@@ -1359,7 +1359,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
         switch( nType )
         {
-            case( MetaActionType::PIXEL ):
+            case MetaActionType::PIXEL:
             {
                 const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
@@ -1367,7 +1367,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::POINT ):
+            case MetaActionType::POINT:
             {
                 const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
@@ -1375,7 +1375,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::LINE ):
+            case MetaActionType::LINE:
             {
                 const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
@@ -1394,13 +1394,13 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::RECT ):
+            case MetaActionType::RECT:
             {
                 Impl_writeRect( static_cast<const MetaRectAction*>(pAction)->GetRect(), 0, 0 );
             }
             break;
 
-            case( MetaActionType::ROUNDRECT ):
+            case MetaActionType::ROUNDRECT:
             {
                 const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
 
@@ -1408,7 +1408,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::ELLIPSE ):
+            case MetaActionType::ELLIPSE:
             {
                 const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pAction);
                 const Rectangle&            rRect = pA->GetRect();
@@ -1417,37 +1417,37 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::ARC ):
-            case( MetaActionType::PIE ):
-            case( MetaActionType::CHORD ):
-            case( MetaActionType::POLYGON ):
+            case MetaActionType::ARC:
+            case MetaActionType::PIE:
+            case MetaActionType::CHORD:
+            case MetaActionType::POLYGON:
             {
                 tools::Polygon aPoly;
 
                 switch( nType )
                 {
-                    case( MetaActionType::ARC ):
+                    case MetaActionType::ARC:
                     {
                         const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                         aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                     }
                     break;
 
-                    case( MetaActionType::PIE ):
+                    case MetaActionType::PIE:
                     {
                         const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
                         aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                     }
                     break;
 
-                    case( MetaActionType::CHORD ):
+                    case MetaActionType::CHORD:
                     {
                         const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                         aPoly = tools::Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                     }
                     break;
 
-                    case( MetaActionType::POLYGON ):
+                    case MetaActionType::POLYGON:
                         aPoly = static_cast<const MetaPolygonAction*>(pAction)->GetPolygon();
                     break;
                     default: break;
@@ -1460,7 +1460,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::POLYLINE ):
+            case MetaActionType::POLYLINE:
             {
                 const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pAction);
                 const tools::Polygon& rPoly = pA->GetPolygon();
@@ -1480,7 +1480,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::POLYPOLYGON ):
+            case MetaActionType::POLYPOLYGON:
             {
                 const MetaPolyPolygonAction*    pA = static_cast<const MetaPolyPolygonAction*>(pAction);
                 const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
@@ -1490,7 +1490,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::GRADIENT ):
+            case MetaActionType::GRADIENT:
             {
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
 
@@ -1499,7 +1499,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::GRADIENTEX ):
+            case MetaActionType::GRADIENTEX:
             {
                 const MetaGradientExAction* pA = static_cast<const MetaGradientExAction*>(pAction);
                 Impl_writeGradientEx( pA->GetPolyPolygon(), pA->GetGradient() );
@@ -1516,7 +1516,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::Transparent ):
+            case MetaActionType::Transparent:
             {
                 const MetaTransparentAction*    pA = static_cast<const MetaTransparentAction*>(pAction);
                 const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
@@ -1530,7 +1530,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::FLOATTRANSPARENT ):
+            case MetaActionType::FLOATTRANSPARENT:
             {
                 const MetaFloatTransparentAction*   pA = static_cast<const MetaFloatTransparentAction*>(pAction);
                 GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
@@ -1569,7 +1569,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::EPS ):
+            case MetaActionType::EPS:
             {
                 const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
@@ -1591,7 +1591,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::COMMENT ):
+            case MetaActionType::COMMENT:
             {
                 const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
                 const sal_uInt8*                pData = pA->GetData();
@@ -1680,7 +1680,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::BMPSCALE ):
+            case MetaActionType::BMPSCALE:
             {
                 const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
 
@@ -1690,7 +1690,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::BMP ):
+            case MetaActionType::BMP:
             {
                 const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
                 Impl_writeImage( pA->GetBitmap(),
@@ -1699,7 +1699,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::BMPSCALEPART ):
+            case MetaActionType::BMPSCALEPART:
             {
                 const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                 Impl_writeImage( pA->GetBitmap(),
@@ -1708,7 +1708,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::BMPEX ):
+            case MetaActionType::BMPEX:
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
                 Impl_writeImage( pA->GetBitmapEx(),
@@ -1717,7 +1717,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::BMPEXSCALE ):
+            case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                 Impl_writeImage( pA->GetBitmapEx(),
@@ -1726,7 +1726,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::BMPEXSCALEPART ):
+            case MetaActionType::BMPEXSCALEPART:
             {
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                 Impl_writeImage( pA->GetBitmapEx(),
@@ -1735,75 +1735,75 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::TEXT ):
+            case MetaActionType::TEXT:
             {
                 const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                 Impl_writeText( pA->GetPoint(),  pA->GetText().copy( pA->GetIndex(), pA->GetLen() ), nullptr, 0);
             }
             break;
 
-            case( MetaActionType::TEXTRECT ):
+            case MetaActionType::TEXTRECT:
             {
                 const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                 Impl_writeText( pA->GetRect().TopLeft(), pA->GetText(), nullptr, 0  );
             }
             break;
 
-            case( MetaActionType::TEXTARRAY ):
+            case MetaActionType::TEXTARRAY:
             {
                 const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
                 Impl_writeText( pA->GetPoint(), pA->GetText().copy( pA->GetIndex(), pA->GetLen() ), pA->GetDXArray(), 0 );
             }
             break;
 
-            case( MetaActionType::STRETCHTEXT ):
+            case MetaActionType::STRETCHTEXT:
             {
                 const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                 Impl_writeText( pA->GetPoint(), pA->GetText().copy( pA->GetIndex(), pA->GetLen() ), nullptr, pA->GetWidth() );
             }
             break;
 
-            case( MetaActionType::ISECTRECTCLIPREGION ):
+            case MetaActionType::ISECTRECTCLIPREGION:
             {
                 const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
                 clipRect = pA->GetRect();
             }
             // fall-through
-            case( MetaActionType::CLIPREGION ):
-            case( MetaActionType::ISECTREGIONCLIPREGION ):
-            case( MetaActionType::MOVECLIPREGION ):
+            case MetaActionType::CLIPREGION:
+            case MetaActionType::ISECTREGIONCLIPREGION:
+            case MetaActionType::MOVECLIPREGION:
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
-            case( MetaActionType::MAPMODE ):
+            case MetaActionType::MAPMODE:
             {
                 bMap++;
             }
             // fall-through
-            case( MetaActionType::REFPOINT ):
-            case( MetaActionType::LINECOLOR ):
-            case( MetaActionType::FILLCOLOR ):
-            case( MetaActionType::TEXTLINECOLOR ):
-            case( MetaActionType::TEXTFILLCOLOR ):
-            case( MetaActionType::TEXTCOLOR ):
-            case( MetaActionType::TEXTALIGN ):
-            case( MetaActionType::FONT ):
-            case( MetaActionType::PUSH ):
-            case( MetaActionType::POP ):
-            case( MetaActionType::LAYOUTMODE ):
+            case MetaActionType::REFPOINT:
+            case MetaActionType::LINECOLOR:
+            case MetaActionType::FILLCOLOR:
+            case MetaActionType::TEXTLINECOLOR:
+            case MetaActionType::TEXTFILLCOLOR:
+            case MetaActionType::TEXTCOLOR:
+            case MetaActionType::TEXTALIGN:
+            case MetaActionType::FONT:
+            case MetaActionType::PUSH:
+            case MetaActionType::POP:
+            case MetaActionType::LAYOUTMODE:
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
-            case( MetaActionType::RASTEROP ):
-            case( MetaActionType::MASK ):
-            case( MetaActionType::MASKSCALE ):
-            case( MetaActionType::MASKSCALEPART ):
-            case( MetaActionType::WALLPAPER ):
-            case( MetaActionType::TEXTLINE ):
+            case MetaActionType::RASTEROP:
+            case MetaActionType::MASK:
+            case MetaActionType::MASKSCALE:
+            case MetaActionType::MASKSCALEPART:
+            case MetaActionType::WALLPAPER:
+            case MetaActionType::TEXTLINE:
             {
                 // !!! >>> we don't want to support these actions
             }

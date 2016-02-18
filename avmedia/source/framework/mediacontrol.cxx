@@ -464,7 +464,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 
         switch( p->GetCurItemId() )
         {
-            case( AVMEDIA_TOOLBOXITEM_OPEN ):
+            case AVMEDIA_TOOLBOXITEM_OPEN:
             {
                 OUString aURL;
 
@@ -482,7 +482,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
             }
             break;
 
-            case( AVMEDIA_TOOLBOXITEM_INSERT ):
+            case AVMEDIA_TOOLBOXITEM_INSERT:
             {
                 MediaFloater* pFloater = avmedia::getMediaFloater();
 
@@ -491,7 +491,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
             }
             break;
 
-            case( AVMEDIA_TOOLBOXITEM_PLAY ):
+            case AVMEDIA_TOOLBOXITEM_PLAY:
             {
                 aExecItem.setState( MediaState::Play );
 
@@ -502,26 +502,26 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
             }
             break;
 
-            case( AVMEDIA_TOOLBOXITEM_PAUSE ):
+            case AVMEDIA_TOOLBOXITEM_PAUSE:
             {
                 aExecItem.setState( MediaState::Pause );
             }
             break;
 
-            case( AVMEDIA_TOOLBOXITEM_STOP ):
+            case AVMEDIA_TOOLBOXITEM_STOP:
             {
                 aExecItem.setState( MediaState::Stop );
                 aExecItem.setTime( 0.0 );
             }
             break;
 
-            case( AVMEDIA_TOOLBOXITEM_MUTE ):
+            case AVMEDIA_TOOLBOXITEM_MUTE:
             {
                 aExecItem.setMute( !maMuteToolBox->IsItemChecked( AVMEDIA_TOOLBOXITEM_MUTE ) );
             }
             break;
 
-            case( AVMEDIA_TOOLBOXITEM_LOOP ):
+            case AVMEDIA_TOOLBOXITEM_LOOP:
             {
                 aExecItem.setLoop( !maPlayToolBox->IsItemChecked( AVMEDIA_TOOLBOXITEM_LOOP ) );
             }
@@ -550,11 +550,11 @@ IMPL_LINK_TYPED( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 
     switch( p.GetSelectEntryPos() )
     {
-        case( AVMEDIA_ZOOMLEVEL_50 ): eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
-        case( AVMEDIA_ZOOMLEVEL_100 ): eLevel = css::media::ZoomLevel_ORIGINAL; break;
-        case( AVMEDIA_ZOOMLEVEL_200 ): eLevel = css::media::ZoomLevel_ZOOM_2_TO_1; break;
-        case( AVMEDIA_ZOOMLEVEL_FIT ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT; break;
-        case( AVMEDIA_ZOOMLEVEL_SCALED ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW; break;
+        case AVMEDIA_ZOOMLEVEL_50: eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
+        case AVMEDIA_ZOOMLEVEL_100: eLevel = css::media::ZoomLevel_ORIGINAL; break;
+        case AVMEDIA_ZOOMLEVEL_200: eLevel = css::media::ZoomLevel_ZOOM_2_TO_1; break;
+        case AVMEDIA_ZOOMLEVEL_FIT: eLevel = css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT; break;
+        case AVMEDIA_ZOOMLEVEL_SCALED: eLevel = css::media::ZoomLevel_FIT_TO_WINDOW; break;
 
         default: eLevel = css::media::ZoomLevel_NOT_AVAILABLE; break;
     }

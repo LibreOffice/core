@@ -595,7 +595,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
 
     switch( nObjectType )
     {
-        case( SDTRANSFER_OBJECTTYPE_DRAWMODEL ):
+        case SDTRANSFER_OBJECTTYPE_DRAWMODEL:
         {
             try
             {
@@ -625,7 +625,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
         }
         break;
 
-        case( SDTRANSFER_OBJECTTYPE_DRAWOLE ):
+        case SDTRANSFER_OBJECTTYPE_DRAWOLE:
         {
             SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pObject);
             ::utl::TempFile     aTempFile;

@@ -1721,7 +1721,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 
         switch( eCombine )
         {
-            case( BMP_COMBINE_COPY ):
+            case BMP_COMBINE_COPY:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1733,7 +1733,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_INVERT ):
+            case BMP_COMBINE_INVERT:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1745,7 +1745,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_AND ):
+            case BMP_COMBINE_AND:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1757,7 +1757,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_NAND ):
+            case BMP_COMBINE_NAND:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1769,7 +1769,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_OR ):
+            case BMP_COMBINE_OR:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1781,7 +1781,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_NOR ):
+            case BMP_COMBINE_NOR:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1793,7 +1793,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_XOR ):
+            case BMP_COMBINE_XOR:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1811,7 +1811,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case( BMP_COMBINE_NXOR ):
+            case BMP_COMBINE_NXOR:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {

@@ -172,25 +172,25 @@ void GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
-            case( KEY_BACKSPACE ):
+            case KEY_BACKSPACE:
                 pBrowser->TogglePreview( this );
             break;
 
-            case( KEY_HOME ):
+            case KEY_HOME:
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_FIRST );
             break;
 
-            case( KEY_END ):
+            case KEY_END:
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_LAST );
             break;
 
-            case( KEY_LEFT ):
-            case( KEY_UP ):
+            case KEY_LEFT:
+            case KEY_UP:
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_PREVIOUS );
             break;
 
-            case( KEY_RIGHT ):
-            case( KEY_DOWN ):
+            case KEY_RIGHT:
+            case KEY_DOWN:
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_NEXT );
             break;
 

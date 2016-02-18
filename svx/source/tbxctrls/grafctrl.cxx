@@ -664,7 +664,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
         }
         break;
 
-        case( SID_ATTR_GRAF_CROP ):
+        case SID_ATTR_GRAF_CROP:
         {
             const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
 
@@ -869,7 +869,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
         switch( nSlotId )
         {
-            case( SID_ATTR_GRAF_MODE ):
+            case SID_ATTR_GRAF_MODE:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
                 {
@@ -886,7 +886,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_RED ):
+            case SID_ATTR_GRAF_RED:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFRED ) )
                 {
@@ -903,7 +903,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_GREEN ):
+            case SID_ATTR_GRAF_GREEN:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFGREEN ) )
                 {
@@ -920,7 +920,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_BLUE ):
+            case SID_ATTR_GRAF_BLUE:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFBLUE ) )
                 {
@@ -937,7 +937,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_LUMINANCE ):
+            case SID_ATTR_GRAF_LUMINANCE:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFLUMINANCE ) )
                 {
@@ -954,7 +954,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_CONTRAST ):
+            case SID_ATTR_GRAF_CONTRAST:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFCONTRAST ) )
                 {
@@ -971,7 +971,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_GAMMA ):
+            case SID_ATTR_GRAF_GAMMA:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFGAMMA ) )
                 {
@@ -988,7 +988,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_TRANSPARENCE ):
+            case SID_ATTR_GRAF_TRANSPARENCE:
             {
                 if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
                 {
@@ -1005,7 +1005,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
             }
             break;
 
-            case( SID_ATTR_GRAF_CROP ):
+            case SID_ATTR_GRAF_CROP:
             {
                 if( !bEnableCrop )
                     rSet.DisableItem( nSlotId );

@@ -230,7 +230,7 @@ bool GIFReader::ReadExtension()
         switch( cFunction )
         {
             // 'Graphic Control Extension'
-            case( 0xf9 ) :
+            case 0xf9 :
             {
                 sal_uInt8 cFlags(0);
                 rIStm.ReadUChar(cFlags);
@@ -250,7 +250,7 @@ bool GIFReader::ReadExtension()
             break;
 
             // Application extension
-            case ( 0xff ) :
+            case 0xff :
             {
                 if ( NO_PENDING( rIStm ) )
                 {
@@ -617,7 +617,7 @@ bool GIFReader::ProcessGIF()
     switch( eActAction )
     {
         // read next marker
-        case( MARKER_READING ):
+        case MARKER_READING:
         {
             sal_uInt8 cByte;
 
@@ -642,7 +642,7 @@ bool GIFReader::ProcessGIF()
         break;
 
         // read ScreenDescriptor
-        case( GLOBAL_HEADER_READING ):
+        case GLOBAL_HEADER_READING:
         {
             if( ( bRead = ReadGlobalHeader() ) )
             {
@@ -653,7 +653,7 @@ bool GIFReader::ProcessGIF()
         break;
 
         // read extension
-        case( EXTENSION_READING ):
+        case EXTENSION_READING:
         {
             if( ( bRead = ReadExtension() ) )
                 eActAction = MARKER_READING;
@@ -661,7 +661,7 @@ bool GIFReader::ProcessGIF()
         break;
 
         // read Image-Descriptor
-        case( LOCAL_HEADER_READING ):
+        case LOCAL_HEADER_READING:
         {
             if( ( bRead = ReadLocalHeader() ) )
             {
@@ -672,7 +672,7 @@ bool GIFReader::ProcessGIF()
         break;
 
         // read first data block
-        case( FIRST_BLOCK_READING ):
+        case FIRST_BLOCK_READING:
         {
             sal_uInt8 cDataSize;
 
@@ -695,7 +695,7 @@ bool GIFReader::ProcessGIF()
         break;
 
         // read next data block
-        case( NEXT_BLOCK_READING ):
+        case NEXT_BLOCK_READING:
         {
             sal_uInt16  nLastX = nImageX;
             sal_uInt16  nLastY = nImageY;
@@ -744,7 +744,7 @@ bool GIFReader::ProcessGIF()
         break;
 
         // an error occurred
-        case( ABORT_READING ):
+        case ABORT_READING:
         {
             bEnd = true;
             eActAction = END_READING;

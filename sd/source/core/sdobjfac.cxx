@@ -41,11 +41,11 @@ IMPL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFact
     {
         switch( pObjFactory->nIdentifier )
         {
-            case( SD_ANIMATIONINFO_ID ):
+            case SD_ANIMATIONINFO_ID:
                 pObjFactory->pNewData = new SdAnimationInfo( *pObjFactory->pObj );
             break;
 
-            case( SD_IMAPINFO_ID ):
+            case SD_IMAPINFO_ID:
                 pObjFactory->pNewData = new SdIMapInfo;
             break;
 

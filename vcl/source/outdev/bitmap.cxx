@@ -107,15 +107,15 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     {
         switch( nAction )
         {
-            case( MetaActionType::BMP ):
+            case MetaActionType::BMP:
                 mpMetaFile->AddAction( new MetaBmpAction( rDestPt, aBmp ) );
             break;
 
-            case( MetaActionType::BMPSCALE ):
+            case MetaActionType::BMPSCALE:
                 mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
             break;
 
-            case( MetaActionType::BMPSCALEPART ):
+            case MetaActionType::BMPSCALEPART:
                 mpMetaFile->AddAction( new MetaBmpScalePartAction(
                     rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp ) );
             break;
@@ -344,15 +344,15 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         {
             switch( nAction )
             {
-                case( MetaActionType::BMPEX ):
+                case MetaActionType::BMPEX:
                     mpMetaFile->AddAction( new MetaBmpExAction( rDestPt, aBmpEx ) );
                 break;
 
-                case( MetaActionType::BMPEXSCALE ):
+                case MetaActionType::BMPEXSCALE:
                     mpMetaFile->AddAction( new MetaBmpExScaleAction( rDestPt, rDestSize, aBmpEx ) );
                 break;
 
-                case( MetaActionType::BMPEXSCALEPART ):
+                case MetaActionType::BMPEXSCALEPART:
                     mpMetaFile->AddAction( new MetaBmpExScalePartAction( rDestPt, rDestSize,
                                                                          rSrcPtPixel, rSrcSizePixel, aBmpEx ) );
                 break;
@@ -1557,7 +1557,7 @@ Bitmap OutputDevice::BlendBitmap(
         {
             switch( pP->GetScanlineFormat() )
             {
-                case( BMP_FORMAT_8BIT_PAL ):
+                case BMP_FORMAT_8BIT_PAL:
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {

@@ -271,18 +271,18 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
     {
         switch( meType )
         {
-            case( GRAPHIC_NONE ):
+            case GRAPHIC_NONE:
                 bRet = true;
             break;
 
-            case( GRAPHIC_GDIMETAFILE ):
+            case GRAPHIC_GDIMETAFILE:
             {
                 if( rImpGraphic.maMetaFile == maMetaFile )
                     bRet = true;
             }
             break;
 
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(maSvgData.get())
                 {
@@ -650,11 +650,11 @@ Size ImpGraphic::ImplGetPrefSize() const
     {
         switch( meType )
         {
-            case( GRAPHIC_NONE ):
-            case( GRAPHIC_DEFAULT ):
+            case GRAPHIC_NONE:
+            case GRAPHIC_DEFAULT:
             break;
 
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -691,11 +691,11 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 {
     switch( meType )
     {
-        case( GRAPHIC_NONE ):
-        case( GRAPHIC_DEFAULT ):
+        case GRAPHIC_NONE:
+        case GRAPHIC_DEFAULT:
         break;
 
-        case( GRAPHIC_BITMAP ):
+        case GRAPHIC_BITMAP:
         {
             //UUUU used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
@@ -735,11 +735,11 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
     {
         switch( meType )
         {
-            case( GRAPHIC_NONE ):
-            case( GRAPHIC_DEFAULT ):
+            case GRAPHIC_NONE:
+            case GRAPHIC_DEFAULT:
             break;
 
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -772,11 +772,11 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 {
     switch( meType )
     {
-        case( GRAPHIC_NONE ):
-        case( GRAPHIC_DEFAULT ):
+        case GRAPHIC_NONE:
+        case GRAPHIC_DEFAULT:
         break;
 
-        case( GRAPHIC_BITMAP ):
+        case GRAPHIC_BITMAP:
         {
             if(maSvgData.get())
             {
@@ -836,10 +836,10 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
     {
         switch( meType )
         {
-            case( GRAPHIC_DEFAULT ):
+            case GRAPHIC_DEFAULT:
             break;
 
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(maSvgData.get() && !maEx)
                 {
@@ -872,10 +872,10 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
     {
         switch( meType )
         {
-            case( GRAPHIC_DEFAULT ):
+            case GRAPHIC_DEFAULT:
             break;
 
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -1048,10 +1048,10 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 
             switch( sal::static_int_cast<sal_uLong>(meType) )
             {
-                case( SYS_WINMETAFILE ):
-                case( SYS_WNTMETAFILE ): nCvtType = ConvertDataFormat::WMF; break;
-                case( SYS_OS2METAFILE ): nCvtType = ConvertDataFormat::MET; break;
-                case( SYS_MACMETAFILE ): nCvtType = ConvertDataFormat::PCT; break;
+                case SYS_WINMETAFILE:
+                case SYS_WNTMETAFILE: nCvtType = ConvertDataFormat::WMF; break;
+                case SYS_OS2METAFILE: nCvtType = ConvertDataFormat::MET; break;
+                case SYS_MACMETAFILE: nCvtType = ConvertDataFormat::PCT; break;
 
                 default:
                     nCvtType = ConvertDataFormat::Unknown;
@@ -1373,10 +1373,10 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
     {
         switch( meType )
         {
-            case( GRAPHIC_DEFAULT ):
+            case GRAPHIC_DEFAULT:
             break;
 
-            case( GRAPHIC_BITMAP ):
+            case GRAPHIC_BITMAP:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -1607,8 +1607,8 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                 switch( rImpGraphic.ImplGetType() )
                 {
-                    case( GRAPHIC_NONE ):
-                    case( GRAPHIC_DEFAULT ):
+                    case GRAPHIC_NONE:
+                    case GRAPHIC_DEFAULT:
                     break;
 
                     case GRAPHIC_BITMAP:

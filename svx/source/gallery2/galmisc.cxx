@@ -418,7 +418,7 @@ void GalleryTransferable::InitData( bool bLazy )
 {
     switch( meObjectKind )
     {
-        case( SGA_OBJ_SVDRAW ):
+        case SGA_OBJ_SVDRAW:
         {
             if( !bLazy )
             {
@@ -444,10 +444,10 @@ void GalleryTransferable::InitData( bool bLazy )
         }
         break;
 
-        case( SGA_OBJ_ANIM ):
-        case( SGA_OBJ_BMP ):
-        case( SGA_OBJ_INET ):
-        case( SGA_OBJ_SOUND ):
+        case SGA_OBJ_ANIM:
+        case SGA_OBJ_BMP:
+        case SGA_OBJ_INET:
+        case SGA_OBJ_SOUND:
         {
             if( !mpURL )
             {

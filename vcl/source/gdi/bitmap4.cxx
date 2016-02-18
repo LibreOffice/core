@@ -44,7 +44,7 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 
     switch( eFilter )
     {
-        case( BMP_FILTER_SMOOTH ):
+        case BMP_FILTER_SMOOTH:
         {
             // Blur for positive values of mnRadius
             if (pFilterParam->mnRadius > 0.0)
@@ -63,42 +63,42 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
         }
         break;
 
-        case( BMP_FILTER_SHARPEN ):
+        case BMP_FILTER_SHARPEN:
         {
             const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
             bRet = ImplConvolute3( &pSharpenMatrix[ 0 ], 8 );
         }
         break;
 
-        case( BMP_FILTER_REMOVENOISE ):
+        case BMP_FILTER_REMOVENOISE:
             bRet = ImplMedianFilter();
         break;
 
-        case( BMP_FILTER_SOBEL_GREY ):
+        case BMP_FILTER_SOBEL_GREY:
             bRet = ImplSobelGrey();
         break;
 
-        case( BMP_FILTER_SOLARIZE ):
+        case BMP_FILTER_SOLARIZE:
             bRet = ImplSolarize( pFilterParam );
         break;
 
-        case( BMP_FILTER_SEPIA ):
+        case BMP_FILTER_SEPIA:
             bRet = ImplSepia( pFilterParam );
         break;
 
-        case( BMP_FILTER_MOSAIC ):
+        case BMP_FILTER_MOSAIC:
             bRet = ImplMosaic( pFilterParam );
         break;
 
-        case( BMP_FILTER_EMBOSS_GREY ):
+        case BMP_FILTER_EMBOSS_GREY:
             bRet = ImplEmbossGrey( pFilterParam );
         break;
 
-        case( BMP_FILTER_POPART ):
+        case BMP_FILTER_POPART:
             bRet = ImplPopArt();
         break;
 
-        case( BMP_FILTER_DUOTONE ):
+        case BMP_FILTER_DUOTONE:
             bRet = ImplDuotoneFilter( pFilterParam->mnProgressStart, pFilterParam->mnProgressEnd );
         break;
 

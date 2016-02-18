@@ -1242,9 +1242,9 @@ css::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
     {
         switch( static_cast<const SvxFrameDirectionItem&>( *pItem ).GetValue() )
         {
-            case( FRMDIR_HORI_LEFT_TOP ): eRet = css::text::WritingMode_LR_TB; break;
-            case( FRMDIR_HORI_RIGHT_TOP ): eRet = css::text::WritingMode_RL_TB; break;
-            case( FRMDIR_VERT_TOP_RIGHT ): eRet = css::text::WritingMode_TB_RL; break;
+            case FRMDIR_HORI_LEFT_TOP: eRet = css::text::WritingMode_LR_TB; break;
+            case FRMDIR_HORI_RIGHT_TOP: eRet = css::text::WritingMode_RL_TB; break;
+            case FRMDIR_VERT_TOP_RIGHT: eRet = css::text::WritingMode_TB_RL; break;
 
             default:
                 OSL_FAIL( "Frame direction not supported yet" );

@@ -480,10 +480,10 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     // Is native format?
     switch(rAcc.GetScanlineFormat())
     {
-        case( BMP_FORMAT_1BIT_MSB_PAL ):
-        case( BMP_FORMAT_4BIT_MSN_PAL ):
-        case( BMP_FORMAT_8BIT_PAL ):
-        case( BMP_FORMAT_24BIT_TC_BGR ):
+        case BMP_FORMAT_1BIT_MSB_PAL:
+        case BMP_FORMAT_4BIT_MSN_PAL:
+        case BMP_FORMAT_8BIT_PAL:
+        case BMP_FORMAT_24BIT_TC_BGR:
         {
             bNative = ( ( static_cast< bool >(rAcc.IsBottomUp()) != bTopDown ) && !bRLE && !bTCMask && ( rAcc.GetScanlineSize() == nAlignedWidth ) );
             break;
@@ -548,7 +548,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
             switch(rHeader.nBitCount)
             {
-                case( 1 ):
+                case 1:
                 {
                     for( ; nCount--; nY += nI )
                     {
@@ -574,7 +574,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 }
                 break;
 
-                case( 4 ):
+                case 4:
                 {
                     for( ; nCount--; nY += nI )
                     {
@@ -600,7 +600,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 }
                 break;
 
-                case( 8 ):
+                case 8:
                 {
                     for( ; nCount--; nY += nI )
                     {
@@ -617,7 +617,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 }
                 break;
 
-                case( 16 ):
+                case 16:
                 {
                     ColorMaskElement aRedMask(nRMask);
                     if (!aRedMask.CalcMaskShift())
@@ -650,7 +650,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 }
                 break;
 
-                case( 24 ):
+                case 24:
                 {
                     BitmapColor aPixelColor;
 
@@ -674,7 +674,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 }
                 break;
 
-                case( 32 ):
+                case 32:
                 {
                     ColorMaskElement aRedMask(nRMask);
                     if (!aRedMask.CalcMaskShift())
@@ -1180,10 +1180,10 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
         switch(rAcc.GetScanlineFormat())
         {
-            case( BMP_FORMAT_1BIT_MSB_PAL ):
-            case( BMP_FORMAT_4BIT_MSN_PAL ):
-            case( BMP_FORMAT_8BIT_PAL ):
-            case( BMP_FORMAT_24BIT_TC_BGR ):
+            case BMP_FORMAT_1BIT_MSB_PAL:
+            case BMP_FORMAT_4BIT_MSN_PAL:
+            case BMP_FORMAT_8BIT_PAL:
+            case BMP_FORMAT_24BIT_TC_BGR:
             {
                 if(!pAccAlpha && rAcc.IsBottomUp() && (rAcc.GetScanlineSize() == nAlignedWidth))
                 {
@@ -1212,7 +1212,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nAlignedWidth ]);
             switch( nBitCount )
             {
-                case( 1 ):
+                case 1:
                 {
                     //valgrind, zero out the trailing unused alignment bytes
                     size_t nUnusedBytes = nAlignedWidth - ((nWidth+7) / 8);
@@ -1241,7 +1241,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
                 }
                 break;
 
-                case( 4 ):
+                case 4:
                 {
                     //valgrind, zero out the trailing unused alignment bytes
                     size_t nUnusedBytes = nAlignedWidth - ((nWidth+1) / 2);
@@ -1269,7 +1269,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
                 }
                 break;
 
-                case( 8 ):
+                case 8:
                 {
                     for( long nY = nHeight - 1; nY >= 0L; nY-- )
                     {
@@ -1286,7 +1286,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
                 // #i59239# fallback to 24 bit format, if bitcount is non-default
                 default:
                     // FALLTHROUGH intended
-                case( 24 ):
+                case 24:
                 {
                     BitmapColor aPixelColor;
                     const bool bWriteAlpha(32 == nBitCount && pAccAlpha);

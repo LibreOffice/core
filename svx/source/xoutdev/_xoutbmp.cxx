@@ -184,13 +184,13 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
                 switch( aGfxLink.GetType() )
                 {
-                    case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = FORMAT_GIF; break;
+                    case GFX_LINK_TYPE_NATIVE_GIF: aExt = FORMAT_GIF; break;
 
                     // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
-                    case( GFX_LINK_TYPE_NATIVE_BMP ): aExt = FORMAT_BMP; break;
+                    case GFX_LINK_TYPE_NATIVE_BMP: aExt = FORMAT_BMP; break;
 
-                    case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = FORMAT_JPG; break;
-                    case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = FORMAT_PNG; break;
+                    case GFX_LINK_TYPE_NATIVE_JPG: aExt = FORMAT_JPG; break;
+                    case GFX_LINK_TYPE_NATIVE_PNG: aExt = FORMAT_PNG; break;
 
                     default:
                     break;
@@ -336,15 +336,15 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     ConvertDataFormat aCvtType;
     switch(  aLink.GetType() )
     {
-        case( GFX_LINK_TYPE_NATIVE_JPG ):
+        case GFX_LINK_TYPE_NATIVE_JPG:
             aCvtType = ConvertDataFormat::JPG;
             aMimeType = "image/jpeg";
             break;
-        case( GFX_LINK_TYPE_NATIVE_PNG ):
+        case GFX_LINK_TYPE_NATIVE_PNG:
             aCvtType = ConvertDataFormat::PNG;
             aMimeType = "image/png";
             break;
-        case( GFX_LINK_TYPE_NATIVE_SVG ):
+        case GFX_LINK_TYPE_NATIVE_SVG:
             aCvtType = ConvertDataFormat::SVG;
             aMimeType = "image/svg+xml";
             break;

@@ -167,11 +167,11 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
                 switch( pEntry->eObjKind )
                 {
-                    case( SGA_OBJ_BMP ):    pSgaObj = new SgaObjectBmp(); break;
-                    case( SGA_OBJ_ANIM ):   pSgaObj = new SgaObjectAnim(); break;
-                    case( SGA_OBJ_INET ):   pSgaObj = new SgaObjectINet(); break;
-                    case( SGA_OBJ_SVDRAW ): pSgaObj = new SgaObjectSvDraw(); break;
-                    case( SGA_OBJ_SOUND ):  pSgaObj = new SgaObjectSound(); break;
+                    case SGA_OBJ_BMP:    pSgaObj = new SgaObjectBmp(); break;
+                    case SGA_OBJ_ANIM:   pSgaObj = new SgaObjectAnim(); break;
+                    case SGA_OBJ_INET:   pSgaObj = new SgaObjectINet(); break;
+                    case SGA_OBJ_SVDRAW: pSgaObj = new SgaObjectSvDraw(); break;
+                    case SGA_OBJ_SOUND:  pSgaObj = new SgaObjectSound(); break;
 
                     default:
                     break;
@@ -267,16 +267,16 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     {
         switch( nFormat )
         {
-            case( ConvertDataFormat::BMP ): pExt = ".bmp"; break;
-            case( ConvertDataFormat::GIF ): pExt = ".gif"; break;
-            case( ConvertDataFormat::JPG ): pExt = ".jpg"; break;
-            case( ConvertDataFormat::MET ): pExt = ".met"; break;
-            case( ConvertDataFormat::PCT ): pExt = ".pct"; break;
-            case( ConvertDataFormat::PNG ): pExt = ".png"; break;
-            case( ConvertDataFormat::SVM ): pExt = ".svm"; break;
-            case( ConvertDataFormat::TIF ): pExt = ".tif"; break;
-            case( ConvertDataFormat::WMF ): pExt = ".wmf"; break;
-            case( ConvertDataFormat::EMF ): pExt = ".emf"; break;
+            case ConvertDataFormat::BMP: pExt = ".bmp"; break;
+            case ConvertDataFormat::GIF: pExt = ".gif"; break;
+            case ConvertDataFormat::JPG: pExt = ".jpg"; break;
+            case ConvertDataFormat::MET: pExt = ".met"; break;
+            case ConvertDataFormat::PCT: pExt = ".pct"; break;
+            case ConvertDataFormat::PNG: pExt = ".png"; break;
+            case ConvertDataFormat::SVM: pExt = ".svm"; break;
+            case ConvertDataFormat::TIF: pExt = ".tif"; break;
+            case ConvertDataFormat::WMF: pExt = ".wmf"; break;
+            case ConvertDataFormat::EMF: pExt = ".emf"; break;
 
             default:
                 pExt = ".grf";
@@ -626,11 +626,11 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
                 switch( pEntry->eObjKind )
                 {
-                case( SGA_OBJ_BMP ):    pObj.reset(new SgaObjectBmp());      break;
-                case( SGA_OBJ_ANIM ):   pObj.reset(new SgaObjectAnim());     break;
-                case( SGA_OBJ_INET ):   pObj.reset(new SgaObjectINet());     break;
-                case( SGA_OBJ_SVDRAW ): pObj.reset(new SgaObjectSvDraw());   break;
-                case (SGA_OBJ_SOUND):   pObj.reset(new SgaObjectSound());    break;
+                case SGA_OBJ_BMP:    pObj.reset(new SgaObjectBmp());      break;
+                case SGA_OBJ_ANIM:   pObj.reset(new SgaObjectAnim());     break;
+                case SGA_OBJ_INET:   pObj.reset(new SgaObjectINet());     break;
+                case SGA_OBJ_SVDRAW: pObj.reset(new SgaObjectSvDraw());   break;
+                case SGA_OBJ_SOUND:   pObj.reset(new SgaObjectSound());    break;
 
                     default:
                     break;
@@ -782,16 +782,16 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
 
         switch( pObject->eObjKind )
         {
-            case( SGA_OBJ_BMP ):
-            case( SGA_OBJ_ANIM ):
-            case( SGA_OBJ_INET ):
+            case SGA_OBJ_BMP:
+            case SGA_OBJ_ANIM:
+            case SGA_OBJ_INET:
             {
                 OUString aFilterDummy;
                 bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != GalleryGraphicImportRet::IMPORT_NONE );
             }
             break;
 
-            case( SGA_OBJ_SVDRAW ):
+            case SGA_OBJ_SVDRAW:
             {
                 SvxGalleryDrawModel aModel;
 
@@ -820,7 +820,7 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
             }
             break;
 
-            case( SGA_OBJ_SOUND ):
+            case SGA_OBJ_SOUND:
             {
                 SgaObject* pObj = AcquireObject( nPos );
 
@@ -857,20 +857,20 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         {
             switch( aGfxLink.GetType() )
             {
-                case( GFX_LINK_TYPE_EPS_BUFFER ): nExportFormat = ConvertDataFormat::SVM; break;
-                case( GFX_LINK_TYPE_NATIVE_GIF ): nExportFormat = ConvertDataFormat::GIF; break;
+                case GFX_LINK_TYPE_EPS_BUFFER: nExportFormat = ConvertDataFormat::SVM; break;
+                case GFX_LINK_TYPE_NATIVE_GIF: nExportFormat = ConvertDataFormat::GIF; break;
 
                 // #i15508# added BMP type
                 // could not find/trigger a call to this, but should do no harm
-                case( GFX_LINK_TYPE_NATIVE_BMP ): nExportFormat = ConvertDataFormat::BMP; break;
+                case GFX_LINK_TYPE_NATIVE_BMP: nExportFormat = ConvertDataFormat::BMP; break;
 
-                case( GFX_LINK_TYPE_NATIVE_JPG ): nExportFormat = ConvertDataFormat::JPG; break;
-                case( GFX_LINK_TYPE_NATIVE_PNG ): nExportFormat = ConvertDataFormat::PNG; break;
-                case( GFX_LINK_TYPE_NATIVE_TIF ): nExportFormat = ConvertDataFormat::TIF; break;
-                case( GFX_LINK_TYPE_NATIVE_WMF ): nExportFormat = ConvertDataFormat::WMF; break;
-                case( GFX_LINK_TYPE_NATIVE_MET ): nExportFormat = ConvertDataFormat::MET; break;
-                case( GFX_LINK_TYPE_NATIVE_PCT ): nExportFormat = ConvertDataFormat::PCT; break;
-                case( GFX_LINK_TYPE_NATIVE_SVG ): nExportFormat = ConvertDataFormat::SVG; break;
+                case GFX_LINK_TYPE_NATIVE_JPG: nExportFormat = ConvertDataFormat::JPG; break;
+                case GFX_LINK_TYPE_NATIVE_PNG: nExportFormat = ConvertDataFormat::PNG; break;
+                case GFX_LINK_TYPE_NATIVE_TIF: nExportFormat = ConvertDataFormat::TIF; break;
+                case GFX_LINK_TYPE_NATIVE_WMF: nExportFormat = ConvertDataFormat::WMF; break;
+                case GFX_LINK_TYPE_NATIVE_MET: nExportFormat = ConvertDataFormat::MET; break;
+                case GFX_LINK_TYPE_NATIVE_PCT: nExportFormat = ConvertDataFormat::PCT; break;
+                case GFX_LINK_TYPE_NATIVE_SVG: nExportFormat = ConvertDataFormat::SVG; break;
                 default:
                     break;
             }
