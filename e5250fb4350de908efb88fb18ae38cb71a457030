@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_2481984b",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-18T17:20:29Z",
+      "side": 1,
+      "message": "Please don\u0027t do this. This way, the string is not translatable, it\u0027s English and it\u0027ll stay English independent of user\u0027s locale. \n\nYou have two options how to make a string visible in UI translatable (include it as a hidden string in .ui file) or append it to .rsc file. Ask me about details if you don\u0027t know how to proceed",
+      "revId": "e5250fb4350de908efb88fb18ae38cb71a457030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_84968c92",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-18T17:20:29Z",
+      "side": 1,
+      "message": "Hm? Isn\u0027t this the same \u0027else if\u0027 as the previous one?",
+      "revId": "e5250fb4350de908efb88fb18ae38cb71a457030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
