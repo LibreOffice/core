@@ -65,6 +65,15 @@ extern "C"
     }
 }
 
+X11SalInstance::X11SalInstance(SalYieldMutex* pMutex)
+    : SalGenericInstance(pMutex)
+    , mpXLib(nullptr)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    delete pSVData->maAppData.mpToolkitName;
+    pSVData->maAppData.mpToolkitName = new OUString("x11");
+}
+
 X11SalInstance::~X11SalInstance()
 {
     // close session management

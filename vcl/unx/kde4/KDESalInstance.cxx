@@ -26,6 +26,14 @@
 
 using namespace com::sun::star;
 
+KDESalInstance::KDESalInstance(SalYieldMutex* pMutex)
+    : X11SalInstance(pMutex)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    delete pSVData->maAppData.mpToolkitName;
+    pSVData->maAppData.mpToolkitName = new OUString("kde4");
+}
+
 SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
 {
     return new KDESalFrame( pParent, nState );
