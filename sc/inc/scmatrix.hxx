@@ -401,7 +401,7 @@ public:
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const = 0;
 
 #if DEBUG_MATRIX
-    void Dump() const;
+    virtual void Dump() const = 0;
 #endif
 };
 
@@ -610,7 +610,7 @@ public:
     ScFullMatrix& operator+= ( const ScFullMatrix& r );
 
 #if DEBUG_MATRIX
-    void Dump() const;
+    virtual void Dump() const override;
 #endif
 };
 
@@ -819,6 +819,12 @@ public:
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc) const override;
 
     ScVectorRefMatrix& operator+=(const ScVectorRefMatrix& r);
+
+#if DEBUG_MATRIX
+    virtual void Dump() const override
+    {
+    }
+#endif
 };
 
 inline void intrusive_ptr_add_ref(const ScMatrix* p)
