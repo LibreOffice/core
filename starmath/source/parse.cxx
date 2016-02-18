@@ -1243,14 +1243,14 @@ void SmParser::DoSubSup(sal_uLong nActiveGroup)
 
         switch (eType)
         {
-            case TRSUB :    nIndex = (int) RSUB;    break;
-            case TRSUP :    nIndex = (int) RSUP;    break;
+            case TRSUB :    nIndex = static_cast<int>(RSUB);    break;
+            case TRSUP :    nIndex = static_cast<int>(RSUP);    break;
             case TFROM :
-            case TCSUB :    nIndex = (int) CSUB;    break;
+            case TCSUB :    nIndex = static_cast<int>(CSUB);    break;
             case TTO :
-            case TCSUP :    nIndex = (int) CSUP;    break;
-            case TLSUB :    nIndex = (int) LSUB;    break;
-            case TLSUP :    nIndex = (int) LSUP;    break;
+            case TCSUP :    nIndex = static_cast<int>(CSUP);    break;
+            case TLSUB :    nIndex = static_cast<int>(LSUB);    break;
+            case TLSUP :    nIndex = static_cast<int>(LSUP);    break;
             default :
                 SAL_WARN( "starmath", "unknown case");
         }
@@ -2459,10 +2459,10 @@ const SmErrorDesc *SmParser::NextError()
 const SmErrorDesc *SmParser::PrevError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError < (int) (m_aErrDescList.size() - 1)) return m_aErrDescList[ ++m_nCurError ].get();
+        if (m_nCurError < static_cast<int>(m_aErrDescList.size() - 1)) return m_aErrDescList[ ++m_nCurError ].get();
         else
         {
-            m_nCurError = (int) (m_aErrDescList.size() - 1);
+            m_nCurError = static_cast<int>(m_aErrDescList.size() - 1);
             return m_aErrDescList[ m_nCurError ].get();
         }
     else return nullptr;
@@ -2474,7 +2474,7 @@ const SmErrorDesc *SmParser::GetError(size_t i)
     if ( i < m_aErrDescList.size() )
         return m_aErrDescList[ i ].get();
 
-    if ( (size_t)m_nCurError < m_aErrDescList.size() )
+    if ( static_cast<size_t>(m_nCurError) < m_aErrDescList.size() )
         return m_aErrDescList[ m_nCurError ].get();
 
     return nullptr;

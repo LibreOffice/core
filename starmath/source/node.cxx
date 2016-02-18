@@ -170,7 +170,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
     {
         Fraction  aVal (SmPtsTo100th_mm(rSize.GetNumerator()),
                         rSize.GetDenominator());
-        long      nHeight = (long)aVal;
+        long      nHeight = static_cast<long>(aVal);
 
         aFntSize = GetFont().GetFontSize();
         aFntSize.Width() = 0;
@@ -189,12 +189,12 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
                 break;
 
             case FontSizeType::MULTIPLY:
-                aFntSize.Height()   = (long) (Fraction(aFntSize.Height()) * rSize);
+                aFntSize.Height()   = static_cast<long>(Fraction(aFntSize.Height()) * rSize);
                 break;
 
             case FontSizeType::DIVIDE:
                 if (rSize != Fraction(0L))
-                    aFntSize.Height()   = (long) (Fraction(aFntSize.Height()) / rSize);
+                    aFntSize.Height()   = static_cast<long>(Fraction(aFntSize.Height()) / rSize);
                 break;
             default:
                 break;
@@ -1195,8 +1195,8 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
         double fLambda = (    (rPoint1.Y() - rPoint2.Y()) * rHeading2.X()
                             - (rPoint1.X() - rPoint2.X()) * rHeading2.Y())
                          / fDet;
-        rResult = Point(rPoint1.X() + (long) (fLambda * rHeading1.X()),
-                        rPoint1.Y() + (long) (fLambda * rHeading1.Y()));
+        rResult = Point(rPoint1.X() + static_cast<long>(fLambda * rHeading1.X()),
+                        rPoint1.Y() + static_cast<long>(fLambda * rHeading1.Y()));
     }
 
     return nRes;
@@ -1227,8 +1227,8 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
             nRectBottom = GetBottom();
     Point   aRightHdg     (100, 0),
             aDownHdg      (0, 100),
-            aDiagHdg      ( (long)(100.0 * cos(fAngleRad)),
-                            (long)(-100.0 * sin(fAngleRad)) );
+            aDiagHdg      ( static_cast<long>(100.0 * cos(fAngleRad)),
+                            static_cast<long>(-100.0 * sin(fAngleRad)) );
 
     long  nLeft, nRight, nTop, nBottom;     // margins of the rectangle for the diagonal
     Point aPoint;
@@ -1645,7 +1645,7 @@ void SmBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         Size  aTmpSize (pLeft->GetFont().GetFontSize());
         OSL_ENSURE(pRight->GetFont().GetFontSize() == aTmpSize,
                     "Sm : different font sizes");
-        aTmpSize.Width() = std::min((long) nBraceHeight * 60L / 100L,
+        aTmpSize.Width() = std::min(nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
         // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
