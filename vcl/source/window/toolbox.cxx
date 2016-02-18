@@ -3468,7 +3468,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
-            InvalidateSpin(false, true);
+            InvalidateSpin(false);
         }
         return true;
     }
@@ -3988,7 +3988,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 StartTracking();
                 mbLower = true;
                 mbIn    = true;
-                InvalidateSpin(false, true);
+                InvalidateSpin(false);
             }
             return;
         }
