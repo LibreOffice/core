@@ -910,6 +910,16 @@ AC_SUBST(WITH_MINGW)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
+dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
+dnl Needs to precede the AC_SEARCH_LIBS call below, which apparently calls
+dnl AC_PROG_CC internally.
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
+    save_CFLAGS=$CFLAGS
+    AC_PROG_CC
+    CFLAGS=$save_CFLAGS
+fi
+
 if test $_os != "WINNT"; then
     save_LIBS="$LIBS"
     AC_SEARCH_LIBS([dlsym], [dl],
@@ -2744,14 +2754,6 @@ if test "$_os" != "WINNT" -a "$WITH_MINGW" != "yes"; then
             CXX="$GCC_HOME/bin/g++"
         fi
     fi
-fi
-
-dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
-    save_CFLAGS=$CFLAGS
-    AC_PROG_CC
-    CFLAGS=$save_CFLAGS
 fi
 
 COMPATH=`dirname "$CC"`
