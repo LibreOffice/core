@@ -410,7 +410,7 @@ public final class ConverterInfoMgr {
                 } else {
                     ConverterInfo[] foundInfo = ConverterInfoMgr.findConverterInfoChain(findMimeOne,
                         findMimeTwo);
-                    if (foundInfo[0] != null && foundInfo[1] != null ) {
+                    if (foundInfo != null && foundInfo[0] != null && foundInfo[1] != null ) {
                         System.out.println("    Found ConverterInfo Chain");
                         System.out.println("    DisplayName  : " + foundInfo[0].getDisplayName());
                         System.out.println("    DisplayName  : " + foundInfo[1].getDisplayName());
