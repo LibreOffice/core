@@ -8488,18 +8488,20 @@ void ScInterpreter::ScErrorType_ODF()
         PushNA();
 }
 
-bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )
+bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc, bool bIgnoreWildcards )
 {
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
         return false;
     if ( rStr.isEmpty() || (rStr.getLength() == 1 && !rStr.startsWith(".")) )
         return false;   // single meta characters can not be a regexp
-    static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','<','>','(',')','|', 0 };
+    // First two characters are wildcard '?' and '*' characters.
+    static const sal_Unicode cre[] = { '?','*','+','.','[',']','^','$','\\','<','>','(',')','|', 0 };
+    const sal_Unicode* const pre = bIgnoreWildcards ? cre + 2 : cre;
     const sal_Unicode* p1 = rStr.getStr();
     sal_Unicode c1;
     while ( ( c1 = *p1++ ) != 0 )
     {
-        const sal_Unicode* p2 = cre;
+        const sal_Unicode* p2 = pre;
         while ( *p2 )
         {
             if ( c1 == *p2++ )
@@ -8507,6 +8509,50 @@ bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )
         }
     }
     return false;
+}
+
+bool ScInterpreter::MayBeWildcard( const OUString& rStr, const ScDocument* pDoc )
+{
+    /* TODO: doc options will need a new enum (or a second bool that takes
+     * precedence over regex?) */
+    (void)pDoc;
+
+    // Wildcards without '~' escape, if there are no wildcards then an escaped
+    // character does not make sense.
+    static const sal_Unicode cw[] = { '*','?', 0 };
+    const sal_Unicode* p1 = rStr.getStr();
+    sal_Unicode c1;
+    while ( ( c1 = *p1++ ) != 0 )
+    {
+        const sal_Unicode* p2 = cw;
+        while ( *p2 )
+        {
+            if ( c1 == *p2++ )
+                return true;
+        }
+    }
+    return false;
+}
+
+utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rStr, const ScDocument* pDoc )
+{
+    if (pDoc)
+    {
+        bool bWildcardEnabled = false;  /* TODO: obtain doc option */
+        if (bWildcardEnabled)
+            return MayBeWildcard( rStr, nullptr) ? utl::SearchParam::SRCH_WILDCARD : utl::SearchParam::SRCH_NORMAL;
+        if (pDoc->GetDocOptions().IsFormulaRegexEnabled())
+            return MayBeRegExp( rStr, nullptr) ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
+    }
+    else
+    {
+        /* TODO: obtain the global config for this rare case? */
+        if (MayBeRegExp( rStr, nullptr, true))
+            return utl::SearchParam::SRCH_REGEXP;
+        if (MayBeWildcard( rStr, nullptr))
+            return utl::SearchParam::SRCH_WILDCARD;
+    }
+    return utl::SearchParam::SRCH_NORMAL;
 }
 
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc,

@@ -23,6 +23,7 @@
 #include <math.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/textsearch.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
 #include "scdll.hxx"
@@ -130,7 +131,19 @@ public:
     /// If pDoc!=NULL the document options are taken into account and if
     /// RegularExpressions are disabled the function returns false regardless
     /// of the string content.
-    static bool MayBeRegExp( const OUString& rStr, const ScDocument* pDoc );
+    static bool MayBeRegExp( const OUString& rStr, const ScDocument* pDoc, bool bIgnoreWildcards = false );
+
+    /** Could string be a wildcard (*,?,~) expression?
+        If pDoc!=NULL the document options are taken into account and if
+        Wildcards are disabled the function returns false regardless of the
+        string content.
+     */
+    static bool MayBeWildcard( const OUString& rStr, const ScDocument* pDoc );
+
+    /** Detect if string should be used as regular expression or wildcard
+        expression or literal string.
+     */
+    static utl::SearchParam::SearchType DetectSearchType( const OUString& rStr, const ScDocument* pDoc );
 
     /// Fail safe division, returning an errDivisionByZero coded into a double
     /// if denominator is 0.0
