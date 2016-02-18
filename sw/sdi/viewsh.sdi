@@ -38,6 +38,11 @@ interface ListInText
 interface TextEditView : BaseTextEditView
 {
      // Slots, which are not needed in the WebDocShell
+    SID_DRAWTBX_LINES
+    [
+        StateMethod = GetState ;
+    ]
+
     FN_INSERT_OBJ_CTRL
     [
         StateMethod = GetState ;

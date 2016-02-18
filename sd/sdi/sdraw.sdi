@@ -2600,24 +2600,6 @@ SfxVoidItem LineTo SID_LINETO
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem LineToolbox SID_DRAWTBX_LINES
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
 SfxVoidItem ManageLinks SID_MANAGE_LINKS
 ()
 [

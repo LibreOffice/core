@@ -1131,14 +1131,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:LineToolbox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Curve</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ConnectorLineArrows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Straight Connector with Arrows</value>
