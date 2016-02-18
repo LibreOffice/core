@@ -26,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--disable-shared \
 			--with-pic \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter LINUX,$(OS)),CXXFLAGS="$(CXXFLAGS) -fvisibility=hidden") \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) libharfbuzz.la) \
 	)
 
