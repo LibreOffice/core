@@ -13,7 +13,9 @@
 #include <memory>
 #include <vector>
 
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+#include <config_dbus.h>
+
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && ENABLE_DBUS
 #  define LINUX_BLUETOOTH
 #endif
 
