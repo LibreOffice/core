@@ -583,9 +583,9 @@ Color EditView::GetBackgroundColor() const
     return pImpEditView->GetBackgroundColor();
 }
 
-void EditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable *pSearchable)
+void EditView::registerLibreOfficeKitCallback(OutlinerSearchable *pSearchable)
 {
-    pImpEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData, pSearchable);
+    pImpEditView->registerLibreOfficeKitCallback(pSearchable);
 }
 
 void EditView::SetControlWord( EVControlBits nWord )

@@ -274,7 +274,7 @@ public:
     Color       GetBackgroundColor();
 
     /// @see vcl::ITiledRenderable::registerCallback().
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable* pSearchable);
+    void registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable);
 
     SfxItemSet  GetAttribs();
 

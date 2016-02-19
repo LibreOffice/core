@@ -222,8 +222,6 @@ private:
     EditView*           pEditView;
     vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
-    LibreOfficeKitCallback mpLibreOfficeKitCallback;
-    void* mpLibreOfficeKitData;
     OutlinerSearchable* mpLibreOfficeKitSearchable;
     EditEngine*         pEditEngine;
     VclPtr<vcl::Window> pOutWin;
@@ -370,7 +368,7 @@ public:
                         return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
 
     /// @see vcl::ITiledRenderable::registerCallback().
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable* pSearchable);
+    void registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
 

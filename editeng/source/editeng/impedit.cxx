@@ -79,8 +79,6 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pOutWin             = pWindow;
     pPointer            = nullptr;
     pBackgroundColor    = nullptr;
-    mpLibreOfficeKitCallback = nullptr;
-    mpLibreOfficeKitData = nullptr;
     mpLibreOfficeKitSearchable = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
@@ -119,10 +117,8 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
     pBackgroundColor = new Color( rColor );
 }
 
-void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData, OutlinerSearchable* pSearchable)
+void ImpEditView::registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable)
 {
-    mpLibreOfficeKitCallback = pCallback;
-    mpLibreOfficeKitData = pData;
     mpLibreOfficeKitSearchable = pSearchable;
 }
 

@@ -119,7 +119,7 @@ void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
 {
     getIDocumentDrawModelAccess().GetDrawModel()->registerLibreOfficeKitCallback(pCallback, pData);
     if (SwPostItMgr* pPostItMgr = GetPostItMgr())
-        pPostItMgr->registerLibreOfficeKitCallback(pCallback, pData, getIDocumentDrawModelAccess().GetDrawModel());
+        pPostItMgr->registerLibreOfficeKitCallback(getIDocumentDrawModelAccess().GetDrawModel());
 }
 
 void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
