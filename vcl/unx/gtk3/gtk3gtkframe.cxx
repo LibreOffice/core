@@ -38,7 +38,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 
-#include <config_vclplug.h>
+#include <config_gio.h>
 
 #if defined(ENABLE_DBUS) && ENABLE_GIO
 #  include <unx/gtk/gtksalmenu.hxx>

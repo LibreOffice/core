@@ -23,7 +23,7 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#include <config_vclplug.h>
+#include <config_gio.h>
 
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

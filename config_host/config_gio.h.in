@@ -1,0 +1,12 @@
+/*
+
+Settings for gio header file dection
+
+*/
+
+#ifndef CONFIG_GIO_H
+#define CONFIG_GIO_H
+
+#define ENABLE_GIO 0
+
+#endif

@@ -39,7 +39,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include <config_vclplug.h>
+#include <config_gio.h>
 
 #include <unx/x11/xlimits.hxx>
 #if defined(ENABLE_DBUS) && ENABLE_GIO

@@ -47,7 +47,7 @@
 #include <list>
 #include <vector>
 
-#include <config_vclplug.h>
+#include <config_gio.h>
 
 #include "headless/svpgdi.hxx"
 

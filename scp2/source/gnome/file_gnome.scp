@@ -16,8 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "macros.inc"
+#include "config_gio.h"
 
-#if defined ENABLE_GIO
+#if ENABLE_GIO
 File gid_File_Share_Registry_Gnome_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
