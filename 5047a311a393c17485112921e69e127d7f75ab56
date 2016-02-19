@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aaa91ec_04dd7c14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-02-19T09:02:32Z",
+      "side": 1,
+      "message": "Makes sense to re-add \"tdf#89646\" here.",
+      "revId": "5047a311a393c17485112921e69e127d7f75ab56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_a4c10831",
+        "filename": "sw/UIConfig_swriter.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-02-19T09:02:32Z",
+      "side": 1,
+      "message": "Please use tab indentation as other items here.",
+      "revId": "5047a311a393c17485112921e69e127d7f75ab56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
