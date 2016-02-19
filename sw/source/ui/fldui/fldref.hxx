@@ -71,7 +71,7 @@ class SwFieldRefPage : public SwFieldPage
 
     void                UpdateSubType(const OUString& filterString = OUString());
 
-    bool                MatchSubstring( const OUString& list_string, const OUString& substr );
+    static bool                MatchSubstring( const OUString& list_string, const OUString& substr );
 
     sal_Int32               FillFormatLB(sal_uInt16 nTypeId);
 
