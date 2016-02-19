@@ -1308,6 +1308,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="Wildcards" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable wildcards in formulas -->
+          <info>
+            <desc>Specifies whether the calculation uses wildcards in formulas, e.g. for functions which look up sheet contents.</desc>
+            <label>Enable wildcards in formulas</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="FormulaSyntax" oor:type="xs:int">
           <!-- UIHints: Tools - Options  Spreadsheet  Calculate -->
           <!-- This node is deprecated, but we still need to keep it for migration purposes. -->
