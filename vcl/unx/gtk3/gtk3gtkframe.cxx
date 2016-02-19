@@ -538,7 +538,7 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
         return;
 
     gchar *strval = nullptr;
-    g_object_get(action, "name", &strval, NULL);
+    g_object_get(action, "name", &strval, nullptr);
     if (!strval)
         return;
 
