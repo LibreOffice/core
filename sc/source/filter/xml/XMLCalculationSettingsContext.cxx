@@ -131,8 +131,10 @@ void ScXMLCalculationSettingsContext::EndElement()
             xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, uno::makeAny(bIgnoreCase) );
             xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, uno::makeAny(bLookUpLabels) );
             xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, uno::makeAny(bMatchWholeCell) );
-            xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED,
-                    uno::makeAny(eSearchType == utl::SearchParam::SRCH_REGEXP) );
+            bool bWildcards, bRegex;
+            utl::SearchParam::ConvertToBool( eSearchType, bWildcards, bRegex);
+            xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, uno::makeAny(bRegex) );
+            xPropertySet->setPropertyValue( SC_UNO_WILDCARDSENABLED, uno::makeAny(bWildcards) );
             xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, uno::makeAny(bIsIterationEnabled) );
             xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::makeAny(nIterationCount) );
             xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::makeAny(fIterationEpsilon) );
