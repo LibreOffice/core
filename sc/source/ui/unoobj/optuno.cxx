@@ -44,6 +44,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
         {OUString(SC_UNO_SPELLONLINE),  PROP_UNO_SPELLONLINE ,  cppu::UnoType<bool>::get(),          0, 0},
         {OUString(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {OUString(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
+        {OUString(SC_UNO_WILDCARDSENABLED), PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aMap;
@@ -116,6 +117,9 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         case PROP_UNO_REGEXENABLED:
             rOptions.SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
+        case PROP_UNO_WILDCARDSENABLED:
+            rOptions.SetFormulaWildcardsEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
         default:;
     }
     return true;
@@ -172,6 +176,9 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         break;
         case PROP_UNO_REGEXENABLED:
             ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsFormulaRegexEnabled() );
+        break;
+        case PROP_UNO_WILDCARDSENABLED:
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsFormulaWildcardsEnabled() );
         break;
         default:;
     }

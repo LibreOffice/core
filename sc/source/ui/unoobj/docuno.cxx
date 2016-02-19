@@ -158,6 +158,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_SPELLONLINE),             PROP_UNO_SPELLONLINE, cppu::UnoType<bool>::get(),                          0, 0},
         {OUString(SC_UNO_STANDARDDEC),             PROP_UNO_STANDARDDEC, cppu::UnoType<sal_Int16>::get(),                    0, 0},
         {OUString(SC_UNO_REGEXENABLED),            PROP_UNO_REGEXENABLED, cppu::UnoType<bool>::get(),                         0, 0},
+        {OUString(SC_UNO_WILDCARDSENABLED),        PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),                         0, 0},
         {OUString(SC_UNO_RUNTIMEUID),              0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_HASVALIDSIGNATURES),      0, cppu::UnoType<bool>::get(),                                             beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_ISLOADED),                0, cppu::UnoType<bool>::get(),                                             0, 0},
@@ -2102,6 +2103,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
             // done...
             if ( aString == SC_UNO_IGNORECASE ||
                  aString == SC_UNONAME_REGEXP ||
+                 aString == SC_UNONAME_WILDCARDS ||
                  aString == SC_UNO_LOOKUPLABELS )
                 bHardRecalc = false;
         }

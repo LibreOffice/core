@@ -35,6 +35,7 @@
 #define PROP_UNO_SPELLONLINE    10
 #define PROP_UNO_STANDARDDEC    11
 #define PROP_UNO_REGEXENABLED   12
+#define PROP_UNO_WILDCARDSENABLED 13
 
 class ScDocOptionsHelper
 {
