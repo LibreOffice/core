@@ -613,7 +613,7 @@ gboolean ensure_dbus_setup( gpointer data )
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
         g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
-        GdkDisplay *pDisplay = pSalFrame->getGdkDisplay();
+        GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
         // fdo#70885 we don't want app menu under Unity
         const bool bDesktopIsUnity = (SalGetDesktopEnvironment() == "UNITY");
 #if defined(GDK_WINDOWING_X11)
