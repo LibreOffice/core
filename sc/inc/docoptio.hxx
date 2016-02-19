@@ -46,6 +46,7 @@ class SC_DLLPUBLIC ScDocOptions
     bool       bDoAutoSpell;            ///< auto-spelling
     bool       bLookUpColRowNames;      ///< determine column-/row titles automagically
     bool       bFormulaRegexEnabled;    ///< regular expressions in formulas enabled
+    bool       bFormulaWildcardsEnabled;///< wildcards in formulas enabled
     bool       bWriteCalcConfig;        ///< (subset of) Calc config will be written to user's profile
 public:
                 ScDocOptions();
@@ -92,6 +93,9 @@ public:
     void    SetFormulaRegexEnabled( bool bVal ) { bFormulaRegexEnabled = bVal; }
     bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
 
+    void    SetFormulaWildcardsEnabled( bool bVal ) { bFormulaWildcardsEnabled = bVal; }
+    bool    IsFormulaWildcardsEnabled() const       { return bFormulaWildcardsEnabled; }
+
     void    SetWriteCalcConfig( bool bVal ) { bWriteCalcConfig = bVal; }
     bool    IsWriteCalcConfig() const       { return bWriteCalcConfig; }
 };
@@ -113,6 +117,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
+    bFormulaWildcardsEnabled = rCpy.bFormulaWildcardsEnabled;
     bWriteCalcConfig    = rCpy.bWriteCalcConfig;
 
     return *this;
@@ -136,6 +141,7 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
+            &&  rOpt.bFormulaWildcardsEnabled == bFormulaWildcardsEnabled
             &&  rOpt.bWriteCalcConfig       == bWriteCalcConfig
             );
 }

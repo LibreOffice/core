@@ -71,6 +71,7 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
             bDoAutoSpell( rCpy.bDoAutoSpell ),
             bLookUpColRowNames( rCpy.bLookUpColRowNames ),
             bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled ),
+            bFormulaWildcardsEnabled( rCpy.bFormulaWildcardsEnabled ),
             bWriteCalcConfig( rCpy.bWriteCalcConfig )
 {
 }
@@ -96,6 +97,7 @@ void ScDocOptions::ResetDocOptions()
     bDoAutoSpell        = false;
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= true;
+    bFormulaWildcardsEnabled= false;
     bWriteCalcConfig    = true;
 }
 
@@ -147,7 +149,8 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCALCOPT_SEARCHCRIT        9
 #define SCCALCOPT_FINDLABEL         10
 #define SCCALCOPT_REGEX             11
-#define SCCALCOPT_COUNT             12
+#define SCCALCOPT_WILDCARDS         12
+#define SCCALCOPT_COUNT             13
 
 #define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
 
@@ -170,6 +173,7 @@ Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
         "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
         "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
         "Other/RegularExpressions",         // SCCALCOPT_REGEX
+        "Other/Wildcards",                  // SCCALCOPT_WILDCARDS
     };
     Sequence<OUString> aNames(SCCALCOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -262,6 +266,9 @@ ScDocCfg::ScDocCfg() :
                     case SCCALCOPT_REGEX :
                         SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCCALCOPT_WILDCARDS :
+                        SetFormulaWildcardsEnabled( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -345,6 +352,10 @@ IMPL_LINK_NOARG_TYPED(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCCALCOPT_REGEX :
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsFormulaRegexEnabled() );
+                break;
+            case SCCALCOPT_WILDCARDS :
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsFormulaWildcardsEnabled() );
+                break;
         }
     }
     aCalcItem.PutProperties(aNames, aValues);
