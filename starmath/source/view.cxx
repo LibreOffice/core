@@ -146,7 +146,7 @@ void SmGraphicWindow::ApplyColorConfigValues(const svtools::ColorConfig &rColorC
 #if OSL_DEBUG_LEVEL > 1
 //   ColorData nVal = rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor;
 #endif
-    SetBackground(Color( (ColorData) rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor));
+    SetBackground(Color(static_cast<ColorData>(rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor)));
 }
 
 

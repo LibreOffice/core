@@ -265,7 +265,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
 
     if (!pWin)
         throw RuntimeException();
-    return (sal_Int32) pWin->GetTextColor().GetColor();
+    return static_cast<sal_Int32>(pWin->GetTextColor().GetColor());
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
         nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     else
         nCol = aWall.GetColor().GetColor();
-    return (sal_Int32) nCol;
+    return static_cast<sal_Int32>(nCol);
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
@@ -1743,7 +1743,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getForeground()
 
     if (!pWin)
         throw RuntimeException();
-    return (sal_Int32) pWin->GetTextColor().GetColor();
+    return static_cast<sal_Int32>(pWin->GetTextColor().GetColor());
 }
 
 sal_Int32 SAL_CALL SmEditAccessible::getBackground()
@@ -1759,7 +1759,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
         nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     else
         nCol = aWall.GetColor().GetColor();
-    return (sal_Int32) nCol;
+    return static_cast<sal_Int32>(nCol);
 }
 
 // XAccessibleContext
