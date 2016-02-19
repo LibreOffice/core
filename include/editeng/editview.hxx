@@ -183,7 +183,7 @@ public:
     Color           GetBackgroundColor() const;
 
     /// @see vcl::ITiledRenderable::registerCallback().
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData, OutlinerSearchable *pSearchable);
+    void registerLibreOfficeKitCallback(OutlinerSearchable *pSearchable);
 
     void            SetControlWord( EVControlBits nWord );
     EVControlBits   GetControlWord() const;

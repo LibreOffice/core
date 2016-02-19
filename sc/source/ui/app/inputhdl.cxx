@@ -1882,7 +1882,7 @@ void ScInputHandler::UpdateActiveView()
         if (comphelper::LibreOfficeKit::isActive())
         {
             ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
-            pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData(), pDrawLayer);
+            pTableView->registerLibreOfficeKitCallback(pDrawLayer);
         }
     }
 
