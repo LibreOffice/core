@@ -49,6 +49,36 @@ class UNOTOOLS_DLLPUBLIC SearchParam
 public:
     enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST, SRCH_WILDCARD };
 
+    /** Convert configuration and document boolean settings to SearchType.
+        If bWildcard is true it takes precedence over bRegExp.
+     */
+    static SearchType ConvertToSearchType( bool bWildcard, bool bRegExp )
+    {
+        return bWildcard ? SRCH_WILDCARD : (bRegExp ? SRCH_REGEXP : SRCH_NORMAL);
+    }
+
+    /** Convert SearchType to configuration and document boolean settings.
+     */
+    static void ConvertToBool( const SearchType eSearchType, bool& rbWildcard, bool& rbRegExp )
+    {
+        switch (eSearchType)
+        {
+            case SRCH_WILDCARD:
+                rbWildcard = true;
+                rbRegExp = false;
+                break;
+            case SRCH_REGEXP:
+                rbWildcard = false;
+                rbRegExp = true;
+                break;
+            default:
+                // SRCH_LEVDIST is not a persistent setting.
+                rbWildcard = false;
+                rbRegExp = false;
+                break;
+        }
+    }
+
 private:
     OUString sSrchStr;            // the search string
     OUString sReplaceStr;         // the replace string
