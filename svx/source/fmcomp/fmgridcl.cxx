@@ -1030,7 +1030,7 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
                 ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                 Point aRelativePos( pMyHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
-                pMyHeader->triggerColumnContextMenu( aRelativePos, FmGridHeader::AccessControl() );
+                pMyHeader->triggerColumnContextMenu(aRelativePos);
 
                 // handled
                 return;

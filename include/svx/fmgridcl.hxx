@@ -37,21 +37,14 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmGridHeader
 protected:
     FmGridHeaderData*       m_pImpl;
 
-    // trigger context menu execution
-    void    triggerColumnContextMenu( const ::Point& _rPreferredPos );
-
 public:
     FmGridHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );
     virtual ~FmGridHeader();
     virtual void dispose() override;
 
 public:
-    struct AccessControl { friend class FmGridControl; private: AccessControl() { } };
-
-    inline  void    triggerColumnContextMenu( const ::Point& _rPreferredPos, const AccessControl& )
-    {
-        triggerColumnContextMenu( _rPreferredPos );
-    }
+    // trigger context menu execution
+    void    triggerColumnContextMenu( const ::Point& _rPreferredPos );
 
 protected:
     virtual void Command( const CommandEvent& rCEvt ) override;
