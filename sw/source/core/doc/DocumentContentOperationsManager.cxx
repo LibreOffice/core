@@ -4264,18 +4264,16 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         rPam.Move( fnMoveBackward, fnGoContent );
                         if( bChg )
                             rPam.Exchange();
-
-                        aRg.aEnd = pEnd->nNode;
-                        pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
                     }
                     else if( rPos == *pEnd )
                     {
                         // The end was also moved
                         pEnd->nNode--;
                         pEnd->nContent.Assign( pDestTextNd, nContentEnd );
-                        aRg.aEnd = pEnd->nNode;
-                        pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
                     }
+                    // tdf#63022 always reset pEndTextNd after SplitNode
+                    aRg.aEnd = pEnd->nNode;
+                    pEndTextNd = pEnd->nNode.GetNode().GetTextNode();
                 }
 
                 NUMRULE_STATE
