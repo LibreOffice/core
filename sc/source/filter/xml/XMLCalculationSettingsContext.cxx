@@ -89,8 +89,14 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             }
             else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
             {
-                if (IsXMLToken(sValue, XML_FALSE))
+                // Overwrite only the default (regex true) value, not wildcard.
+                if (eSearchType == utl::SearchParam::SRCH_REGEXP && IsXMLToken(sValue, XML_FALSE))
                     eSearchType = utl::SearchParam::SRCH_NORMAL;
+            }
+            else if (IsXMLToken(aLocalName, XML_USE_WILDCARDS))
+            {
+                if (IsXMLToken(sValue, XML_TRUE))
+                    eSearchType = utl::SearchParam::SRCH_WILDCARD;
             }
         }
     }
