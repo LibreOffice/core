@@ -347,14 +347,12 @@ class StylePoolImpl
 {
 private:
     std::map< const SfxItemSet*, Node > maRoot;
-    sal_Int32 mnCount;
     // #i86923#
     SfxItemSet* mpIgnorableItems;
 public:
     // #i86923#
     explicit StylePoolImpl( SfxItemSet* pIgnorableItems = nullptr )
         : maRoot(),
-          mnCount(0),
           mpIgnorableItems( pIgnorableItems != nullptr
                             ? pIgnorableItems->Clone( false )
                             : nullptr )
@@ -422,7 +420,6 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     {
         pCurNode->setItemSet( rSet );
         bNonPoolable = false; // to avoid a double insertion
-        ++mnCount;
     }
     // If rSet contains at least one non poolable item, a new itemset has to be inserted
     if( bNonPoolable )

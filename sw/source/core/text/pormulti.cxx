@@ -59,7 +59,6 @@ using namespace ::com::sun::star;
 // and by another SwLineLayout via pNext to realize a doubleline portion.
 SwMultiPortion::~SwMultiPortion()
 {
-    delete pFieldRest;
 }
 
 void SwMultiPortion::Paint( const SwTextPaintInfo & ) const

@@ -170,25 +170,19 @@ namespace slideshow
         }
 
         HSLColor::HSLColor() :
-            maHSLTriple( 0.0, 0.0, 0.0 ),
-            mnMagicValue( getMagic( maHSLTriple.mnLuminance,
-                                    maHSLTriple.mnSaturation ) )
+            maHSLTriple( 0.0, 0.0, 0.0 )
         {
         }
 
         HSLColor::HSLColor( double nHue, double nSaturation, double nLuminance ) :
-            maHSLTriple( nHue, nSaturation, nLuminance ),
-            mnMagicValue( getMagic( maHSLTriple.mnLuminance,
-                                    maHSLTriple.mnSaturation ) )
+            maHSLTriple( nHue, nSaturation, nLuminance )
         {
         }
 
         HSLColor::HSLColor( const RGBColor& rColor ) :
             maHSLTriple( rgb2hsl( truncateRangeStd( rColor.getRed() ),
                                   truncateRangeStd( rColor.getGreen() ),
-                                  truncateRangeStd( rColor.getBlue() ) ) ),
-            mnMagicValue( getMagic( maHSLTriple.mnLuminance,
-                                    maHSLTriple.mnSaturation ) )
+                                  truncateRangeStd( rColor.getBlue() ) ) )
         {
         }
 

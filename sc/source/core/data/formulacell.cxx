@@ -567,7 +567,6 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mpImpl(new Impl),
     mnRefCount(0),
     mpCode(nullptr),
-    mpCompiledFormula(nullptr),
     mpTopCell(nullptr),
     mnLength(0),
     mnFormatType(css::util::NumberFormat::NUMBER),
@@ -582,7 +581,6 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup dtor this " << this);
     delete mpCode;
-    delete mpCompiledFormula;
 }
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )

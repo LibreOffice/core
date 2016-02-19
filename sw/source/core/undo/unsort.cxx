@@ -45,7 +45,6 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     : SwUndo(UNDO_SORT_TXT)
     , SwUndRng(rRg)
     , pUndoTableAttr(nullptr)
-    , pRedlData(nullptr)
     , nTableNd(0)
 {
     pSortOpt = new SwSortOptions(rOpt);
@@ -53,7 +52,7 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
 
 SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTableNd,
                         const SwSortOptions& rOpt, bool bSaveTable )
-    : SwUndo(UNDO_SORT_TBL), pUndoTableAttr( nullptr ), pRedlData( nullptr )
+    : SwUndo(UNDO_SORT_TBL), pUndoTableAttr( nullptr )
 {
     nSttNode = nStt;
     nEndNode = nEnd;
@@ -68,7 +67,6 @@ SwUndoSort::~SwUndoSort()
 {
     delete pSortOpt;
     delete pUndoTableAttr;
-    delete pRedlData;
 }
 
 void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)

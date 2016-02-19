@@ -64,8 +64,7 @@ ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
                     const OUString& rChartName ) :
         aName( rChartName ),
         pDocument( pDoc ),
-        aPositioner(pDoc, nTab, nStartColP, nStartRowP, nEndColP, nEndRowP),
-        bValid( true )
+        aPositioner(pDoc, nTab, nStartColP, nStartRowP, nEndColP, nEndRowP)
 {
 }
 
@@ -73,14 +72,12 @@ ScChartArray::ScChartArray(
     ScDocument* pDoc, const ScRangeListRef& rRangeList, const OUString& rChartName ) :
     aName( rChartName ),
     pDocument( pDoc ),
-    aPositioner(pDoc, rRangeList),
-    bValid( true ) {}
+    aPositioner(pDoc, rRangeList) {}
 
 ScChartArray::ScChartArray( const ScChartArray& rArr ) :
     aName(rArr.aName),
     pDocument(rArr.pDocument),
-    aPositioner(rArr.aPositioner),
-    bValid(rArr.bValid) {}
+    aPositioner(rArr.aPositioner) {}
 
 ScChartArray::~ScChartArray() {}
 

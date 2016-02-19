@@ -64,7 +64,6 @@ public:
     mutable size_t mnRefCount;
 
     ScTokenArray* mpCode;
-    sc::CompiledFormula* mpCompiledFormula;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
     short mnFormatType;

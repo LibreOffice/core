@@ -55,7 +55,6 @@ namespace fileaccess
             bool m_bAbort,m_bHandled;
             sal_Int32 m_nErrorCode,m_nMinorCode;
             css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
-            css::uno::Reference< css::ucb::XProgressHandler >     m_xProgressHandler;
             css::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
 
@@ -69,7 +68,6 @@ namespace fileaccess
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR ),
                   m_xInteractionHandler( nullptr ),
-                  m_xProgressHandler( nullptr ),
                   m_xCommandEnvironment( xCommandEnv )
             {
             }

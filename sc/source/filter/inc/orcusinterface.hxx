@@ -161,8 +161,6 @@ public:
     virtual void commit() override;
 
 private:
-    ScDocument& mrDoc;
-
     ScRange maRange;
 };
 

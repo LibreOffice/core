@@ -38,7 +38,6 @@ class SwUndoDelete
 {
     SwNodeIndex* m_pMvStt;            // Position of Nodes in UndoNodes-Array
     OUString *m_pSttStr, *m_pEndStr;
-    SwRedlineData* m_pRedlData;
     SwRedlineSaveDatas* m_pRedlSaveData;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;

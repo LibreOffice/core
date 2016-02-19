@@ -700,7 +700,6 @@ private:
         Color                            m_aOverlineColor;
         basegfx::B2DPolyPolygon          m_aClipRegion;
         bool                             m_bClipRegion;
-        sal_Int32                        m_nAntiAlias;
         ComplexTextLayoutMode            m_nLayoutMode;
         LanguageType                     m_aDigitLanguage;
         sal_Int32                        m_nTransparentPercent;
@@ -725,7 +724,6 @@ private:
                 m_aTextLineColor( COL_TRANSPARENT ),
                 m_aOverlineColor( COL_TRANSPARENT ),
                 m_bClipRegion( false ),
-                m_nAntiAlias( 1 ),
                 m_nLayoutMode( TEXT_LAYOUT_DEFAULT ),
                 m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),

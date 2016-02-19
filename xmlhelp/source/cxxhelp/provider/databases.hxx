@@ -242,7 +242,6 @@ namespace chelp {
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
 
         bool   m_bShowBasic;
-        char*  m_pErrorDoc;
 
         int    m_nCustomCSSDocLength;
         char*  m_pCustomCSSDoc;

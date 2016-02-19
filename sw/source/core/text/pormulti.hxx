@@ -73,7 +73,6 @@ struct SwBracket
 class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
-    SwFieldPortion *pFieldRest; // Field rest from the previous line
     bool bTab1      :1;     // First line tabulator
     bool bTab2      :1;     // Second line includes tabulator
     bool bDouble    :1;     // Double line
@@ -86,8 +85,7 @@ class SwMultiPortion : public SwLinePortion
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
     explicit SwMultiPortion(sal_Int32 nEnd)
-        : pFieldRest(nullptr)
-        , bTab1(false)
+        : bTab1(false)
         , bTab2(false)
         , bDouble(false)
         , bRuby(false)

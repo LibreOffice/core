@@ -94,7 +94,7 @@ void SwInsertBookmarkDlg::Apply()
     }
 
     // insert text mark
-    SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText(), 0 );
+    SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText() );
 
     if (!m_pBookmarkBox->GetText().isEmpty() &&
         (m_pBookmarkBox->GetSwEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND))
@@ -129,7 +129,6 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
 
     // fill Combobox with existing bookmarks
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-    sal_Int32 nId = 0;
     for( IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
         ppBookmark != pMarkAccess->getBookmarksEnd();
         ++ppBookmark)
@@ -137,7 +136,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
         if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
             m_pBookmarkBox->InsertSwEntry(
-                    SwBoxEntry(ppBookmark->get()->GetName(), nId++));
+                    SwBoxEntry(ppBookmark->get()->GetName()));
         }
     }
 

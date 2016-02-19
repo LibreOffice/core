@@ -69,7 +69,6 @@ private:
     Bitmap maMarkedPreview;
     std::shared_ptr<BitmapReplacement> mpReplacement;
     std::shared_ptr<BitmapCompressor> mpCompressor;
-    Size maBitmapSize;
     bool mbIsUpToDate;
     sal_Int32 mnLastAccessTime;
     // When this flag is set then the bitmap is not modified by a cache

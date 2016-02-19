@@ -75,7 +75,6 @@ private:
 
     ScDocument*     pDoc;
     ScViewData*     pViewData;
-    ScRangeUtil*    pRangeUtil;
     OUString        aStrSelectedArea;
 
     bool            bModifyMode;

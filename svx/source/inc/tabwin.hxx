@@ -60,12 +60,6 @@ protected:
 
 
 class FmFormShell;
-class FmFieldWinData
-{
-public:
-    FmFieldWinData();
-    ~FmFieldWinData();
-};
 
 
 class FmFieldWin :public SfxFloatingWindow
@@ -74,7 +68,6 @@ class FmFieldWin :public SfxFloatingWindow
 {
     ::osl::Mutex        m_aMutex;
     VclPtr<FmFieldWinListBox> pListBox;
-    FmFieldWinData*    pData;
     ::dbtools::SharedConnection
                        m_aConnection;
     OUString    m_aDatabaseName,

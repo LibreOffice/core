@@ -1304,7 +1304,6 @@ namespace svgio
             {
                 sal_Int32 nPos(0);
                 SvgAlign aSvgAlign(Align_xMidYMid);
-                bool bDefer(false);
                 bool bMeetOrSlice(true);
                 bool bChanged(false);
 
@@ -1321,7 +1320,6 @@ namespace svgio
                         {
                             case SVGTokenDefer:
                             {
-                                bDefer = true;
                                 bChanged = true;
                                 break;
                             }
@@ -1413,7 +1411,7 @@ namespace svgio
 
                 if(bChanged)
                 {
-                    return SvgAspectRatio(aSvgAlign, bDefer, bMeetOrSlice);
+                    return SvgAspectRatio(aSvgAlign, bMeetOrSlice);
                 }
             }
 
