@@ -96,7 +96,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             aBitmapEx.Mirror( nMirrorFlags );
         }
 
-        bool bIsJpeg = (i_Graphic.GetType() != GRAPHIC_NONE) && (i_Graphic.GetBitmapEx() == aBitmapEx);
+        bool bIsJpeg = false, bIsPng = false;
+        if( i_Graphic.GetType() != GRAPHIC_NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
+        {
+            GfxLinkType eType = i_Graphic.GetLink().GetType();
+            bIsJpeg = (eType == GFX_LINK_TYPE_NATIVE_JPG);
+            bIsPng = (eType == GFX_LINK_TYPE_NATIVE_PNG);
+        }
 
         if( i_rContext.m_nMaxImageResolution > 50 )
         {
@@ -154,7 +160,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     aBitmapEx.Convert( eConv );
             }
             bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
-            if ( ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
+            if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
                 bUseJPGCompression = false;
 
             SvMemoryStream  aStrm;
