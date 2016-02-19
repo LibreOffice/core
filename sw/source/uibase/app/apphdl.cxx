@@ -619,6 +619,33 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
     }
 }
 
+SwMailMergeConfigItem* PerformMailMerge(SwView* pView)
+{
+    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    if (!pConfigItem)
+        return nullptr;
+
+    svx::ODataAccessDescriptor aDescriptor;
+    aDescriptor.setDataSource(pConfigItem->GetCurrentDBData().sDataSource);
+    aDescriptor[ svx::daConnection ]  <<= pConfigItem->GetConnection().getTyped();
+    aDescriptor[ svx::daCursor ]      <<= pConfigItem->GetResultSet();
+    aDescriptor[ svx::daCommand ]     <<= pConfigItem->GetCurrentDBData().sCommand;
+    aDescriptor[ svx::daCommandType ] <<= pConfigItem->GetCurrentDBData().nCommandType;
+    aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
+
+    SwWrtShell& rSh = pView->GetWrtShell();
+    pConfigItem->SetTargetView(nullptr);
+
+    SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
+    aMergeDesc.pMailMergeConfigItem = pConfigItem;
+    aMergeDesc.bCreateSingleFile = true;
+    rSh.GetDBManager()->MergeNew(aMergeDesc);
+
+    pConfigItem->SetMergeDone();
+
+    return pConfigItem;
+}
+
 } // namespace
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
@@ -735,6 +762,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             }
 
             // now the record has to be merged into the source document
+            // TODO can we re-use PerformMailMerge() here somehow?
             const SwDBData& rDBData = pConfigItem->GetCurrentDBData();
             uno::Sequence<uno::Any> vSelection({ uno::makeAny(pConfigItem->GetResultSetPosition()) });
             svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
@@ -764,48 +792,18 @@ void SwModule::ExecOther(SfxRequest& rReq)
         break;
         case FN_MAILMERGE_CREATE_DOCUMENTS:
         {
-            SwView* pView = ::GetActiveView();
-            SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
-            if (!pConfigItem)
-                return;
+            SwMailMergeConfigItem* pConfigItem = PerformMailMerge(GetActiveView());
 
-            // TODO share this code somehow with the above FN_MAILMERGE_*_ENTRY
-            // TODO kill SwMailMergeWizard::CreateTargetDocument()
-            svx::ODataAccessDescriptor aDescriptor;
-            aDescriptor.setDataSource(pConfigItem->GetCurrentDBData().sDataSource);
-            aDescriptor[ svx::daConnection ]  <<= pConfigItem->GetConnection().getTyped();
-            aDescriptor[ svx::daCursor ]      <<= pConfigItem->GetResultSet();
-            aDescriptor[ svx::daCommand ]     <<= pConfigItem->GetCurrentDBData().sCommand;
-            aDescriptor[ svx::daCommandType ] <<= pConfigItem->GetCurrentDBData().nCommandType;
-            aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
-
-            SwWrtShell& rSh = pView->GetWrtShell();
-            pConfigItem->SetTargetView(nullptr);
-
-            SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
-            aMergeDesc.pMailMergeConfigItem = pConfigItem;
-            aMergeDesc.bCreateSingleFile = true;
-            rSh.GetDBManager()->MergeNew(aMergeDesc);
-
-            pConfigItem->SetMergeDone();
-            if (pConfigItem->GetTargetView())
+            if (pConfigItem && pConfigItem->GetTargetView())
                 pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
         }
         case FN_MAILMERGE_SAVE_DOCUMENTS:
         case FN_MAILMERGE_PRINT_DOCUMENTS:
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
         {
-            SwView* pView = ::GetActiveView();
-            SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+            SwMailMergeConfigItem* pConfigItem = PerformMailMerge(GetActiveView());
             if (!pConfigItem)
                 return;
-
-            if (!pConfigItem->GetTargetView())
-            {
-                SwView* pSourceView = pConfigItem->GetSourceView();
-                assert(pSourceView);
-                pConfigItem->SetTargetView(SwDBManager::CreateTargetDocShell(true, &pSourceView->GetEditWin(), pSourceView->GetWrtShellPtr(), pSourceView->GetDocShell()));
-            }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             switch (nWhich)
