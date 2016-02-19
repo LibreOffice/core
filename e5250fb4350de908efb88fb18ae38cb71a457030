@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3aaa91ec_a4d8e81e",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-02-19T10:05:57Z",
+      "side": 1,
+      "message": "Thanks for suggestion. Modified it in new patch.",
+      "parentUuid": "3aaa91ec_2481984b",
+      "revId": "e5250fb4350de908efb88fb18ae38cb71a457030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aaa91ec_84968c92",
         "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-18T17:20:29Z",
       "side": 1,
       "message": "Hm? Isn\u0027t this the same \u0027else if\u0027 as the previous one?",
+      "revId": "e5250fb4350de908efb88fb18ae38cb71a457030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aaa91ec_c4db741a",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-02-19T10:05:57Z",
+      "side": 1,
+      "message": "My mistake. I will change this to WITH_PREVIOUS.",
+      "parentUuid": "3aaa91ec_84968c92",
       "revId": "e5250fb4350de908efb88fb18ae38cb71a457030",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
