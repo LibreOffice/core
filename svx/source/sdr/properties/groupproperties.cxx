@@ -61,7 +61,7 @@ namespace sdr
 
         const SfxItemSet& GroupProperties::GetObjectItemSet() const
         {
-            SAL_WARN("svx.sdr", "GroupProperties::GetObjectItemSet() should never be called (!)");
+            assert(!"GroupProperties::GetObjectItemSet() should never be called");
             return DefaultProperties::GetObjectItemSet();
         }
 
@@ -133,22 +133,22 @@ namespace sdr
 
         void GroupProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::SetObjectItem() should never be called (!)");
+            assert(!"GroupProperties::SetObjectItem() should never be called");
         }
 
         void GroupProperties::SetObjectItemDirect(const SfxPoolItem& /*rItem*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::SetObjectItemDirect() should never be called (!)");
+            assert(!"GroupProperties::SetObjectItemDirect() should never be called");
         }
 
         void GroupProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::ClearObjectItem() should never be called (!)");
+            assert(!"GroupProperties::ClearObjectItem() should never be called");
         }
 
         void GroupProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::ClearObjectItemDirect() should never be called (!)");
+            assert(!"GroupProperties::ClearObjectItemDirect() should never be called");
         }
 
         void GroupProperties::SetMergedItem(const SfxPoolItem& rItem)
@@ -175,28 +175,28 @@ namespace sdr
 
         void GroupProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::SetObjectItemSet() should never be called (!)");
+            assert(!"GroupProperties::SetObjectItemSet() should never be called");
         }
 
         void GroupProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::ItemSetChanged() should never be called (!)");
+            assert(!"GroupProperties::ItemSetChanged() should never be called");
         }
 
         bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
-            SAL_WARN("svx.sdr", "GroupProperties::AllowItemChange() should never be called (!)");
+            assert(!"GroupProperties::AllowItemChange() should never be called");
             return false;
         }
 
         void GroupProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::ItemChange() should never be called (!)");
+            assert(!"GroupProperties::ItemChange() should never be called");
         }
 
         void GroupProperties::PostItemChange(const sal_uInt16 /*nWhich*/)
         {
-            SAL_WARN("svx.sdr", "GroupProperties::PostItemChange() should never be called (!)");
+            assert(!"GroupProperties::PostItemChange() should never be called");
         }
 
         SfxStyleSheet* GroupProperties::GetStyleSheet() const
