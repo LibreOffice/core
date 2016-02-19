@@ -27,8 +27,6 @@ Viewport3D::Viewport3D() :
     aVUV(0, 1, 1),
     aPRP(0, 0, 2),
     fVPD(-3),
-    fNearClipDist (0.0),
-    fFarClipDist (0.0),
     eProjection(PR_PERSPECTIVE),
     eAspectMapping(AS_NO_MAPPING),
     aDeviceRect(Point(0,0), Size(-1,-1)),

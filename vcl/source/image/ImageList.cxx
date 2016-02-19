@@ -37,17 +37,13 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
-    mpImplData( nullptr ),
-    mnInitSize( nInit ),
-    mnGrowSize( nGrow )
+ImageList::ImageList() :
+    mpImplData( nullptr )
 {
 }
 
 ImageList::ImageList( const ResId& rResId ) :
-    mpImplData( nullptr ),
-    mnInitSize( 1 ),
-    mnGrowSize( 4 )
+    mpImplData( nullptr )
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList( const ResId& rResId )" );
 
@@ -92,9 +88,7 @@ ImageList::ImageList( const ResId& rResId ) :
 
 ImageList::ImageList( const std::vector< OUString >& rNameVector,
                       const OUString& rPrefix) :
-    mpImplData( nullptr ),
-    mnInitSize( 1 ),
-    mnGrowSize( 4 )
+    mpImplData( nullptr )
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
 
@@ -108,9 +102,7 @@ ImageList::ImageList( const std::vector< OUString >& rNameVector,
 }
 
 ImageList::ImageList( const ImageList& rImageList ) :
-    mpImplData( rImageList.mpImplData ),
-    mnInitSize( rImageList.mnInitSize ),
-    mnGrowSize( rImageList.mnGrowSize )
+    mpImplData( rImageList.mpImplData )
 {
 
     if( mpImplData )

@@ -65,7 +65,6 @@ class VCL_DLLPUBLIC PrinterPage
 
 public:
 
-                    PrinterPage() : mpMtf( new GDIMetaFile() ) {}
                     PrinterPage( GDIMetaFile* pMtf ) : mpMtf( pMtf ) {}
                     ~PrinterPage() { delete mpMtf; }
 };

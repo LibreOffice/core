@@ -1822,7 +1822,7 @@ void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext, bool bInP
                 if (pResMgr)
                 {
                     Color aNonAlphaMask( 0x00, 0x00, 0xFF );
-                    pSVData->maCtrlData.mpSplitHPinImgList = new ImageList(4);
+                    pSVData->maCtrlData.mpSplitHPinImgList = new ImageList;
                     pSVData->maCtrlData.mpSplitHPinImgList->InsertFromHorizontalBitmap
                         ( ResId( SV_RESID_BITMAP_SPLITHPIN, *pResMgr ), 4, &aNonAlphaMask );
                 }
@@ -1834,7 +1834,7 @@ void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext, bool bInP
             if (!pSVData->maCtrlData.mpSplitVPinImgList)
             {
                 ResMgr* pResMgr = ImplGetResMgr();
-                pSVData->maCtrlData.mpSplitVPinImgList = new ImageList(4);
+                pSVData->maCtrlData.mpSplitVPinImgList = new ImageList;
                 if (pResMgr)
                 {
                     Color aNonAlphaMask( 0x00, 0x00, 0xFF );

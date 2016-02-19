@@ -41,7 +41,7 @@ static void ImplInitMsgBoxImageList()
     if ( !pSVData->maWinData.mpMsgBoxImgList )
     {
         ResMgr* pResMgr = ImplGetResMgr();
-        pSVData->maWinData.mpMsgBoxImgList = new ImageList(4);
+        pSVData->maWinData.mpMsgBoxImgList = new ImageList();
         if( pResMgr )
         {
             Color aNonAlphaMask( 0xC0, 0xC0, 0xC0 );

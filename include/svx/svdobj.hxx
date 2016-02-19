@@ -187,7 +187,6 @@ class SVX_DLLPUBLIC SdrObjUserData
 protected:
     sal_uInt32                      nInventor;
     sal_uInt16                      nIdentifier;
-    sal_uInt16                      nVersion;
 
 private:
     void operator=(const SdrObjUserData& rData) = delete;
@@ -195,7 +194,7 @@ private:
     bool operator!=(const SdrObjUserData& rData) const = delete;
 
 public:
-    SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer);
+    SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId);
     SdrObjUserData(const SdrObjUserData& rData);
     virtual ~SdrObjUserData();
 

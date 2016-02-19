@@ -85,7 +85,6 @@ SdrTextObj::SdrTextObj()
 :   SdrAttrObj(),
     mpText(nullptr),
     pEdtOutl(nullptr),
-    pFormTextBoundRect(nullptr),
     eTextKind(OBJ_TEXT)
 {
     bTextSizeDirty=false;
@@ -114,7 +113,6 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     maRect(rNewRect),
     mpText(nullptr),
     pEdtOutl(nullptr),
-    pFormTextBoundRect(nullptr),
     eTextKind(OBJ_TEXT)
 {
     bTextSizeDirty=false;
@@ -143,7 +141,6 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
 :   SdrAttrObj(),
     mpText(nullptr),
     pEdtOutl(nullptr),
-    pFormTextBoundRect(nullptr),
     eTextKind(eNewTextKind)
 {
     bTextSizeDirty=false;
@@ -172,7 +169,6 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     maRect(rNewRect),
     mpText(nullptr),
     pEdtOutl(nullptr),
-    pFormTextBoundRect(nullptr),
     eTextKind(eNewTextKind)
 {
     bTextSizeDirty=false;
@@ -207,8 +203,6 @@ SdrTextObj::~SdrTextObj()
     }
 
     delete mpText;
-
-    delete pFormTextBoundRect;
 
     ImpLinkAbmeldung();
 }

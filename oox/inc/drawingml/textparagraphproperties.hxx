@@ -72,7 +72,6 @@ public:
     css::uno::Any               mnFontSize;
     css::uno::Any               maStyleName;
     css::uno::Any               maGraphic;
-    boost::optional< float >    maFollowFontSize;
 };
 
 class TextParagraphProperties

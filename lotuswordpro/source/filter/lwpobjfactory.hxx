@@ -86,7 +86,6 @@ public:
 
 //For object Factory and object manager
 private:
-    sal_uInt32 m_nNumObjs;
     LwpSvStream* m_pSvStream;
     std::vector<LwpObjectID> m_aObjsIDInCreation;
     struct hashFunc

@@ -238,7 +238,6 @@ protected:
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     css::awt::Size   maChSize;                 // only used for group shapes
     css::awt::Point  maChPosition;             // only used for group shapes
-    bool                        mbIsChild;
 
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;

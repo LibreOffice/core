@@ -375,9 +375,8 @@ namespace sdr
 
         OverlayManagerBuffered::OverlayManagerBuffered(
             OutputDevice& rOutputDevice,
-            const SdrModel* pModel,
             bool bRefreshWithPreRendering)
-        :   OverlayManager(rOutputDevice, pModel),
+        :   OverlayManager(rOutputDevice),
             mpBufferDevice(VclPtr<VirtualDevice>::Create()),
             mpOutputBufferDevice(VclPtr<VirtualDevice>::Create()),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
@@ -389,11 +388,9 @@ namespace sdr
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
             OutputDevice& rOutputDevice,
-            const SdrModel* pModel,
             bool bRefreshWithPreRendering)
         {
             return rtl::Reference<OverlayManager>(new OverlayManagerBuffered(rOutputDevice,
-                pModel,
                 bRefreshWithPreRendering));
         }
 

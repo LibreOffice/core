@@ -172,7 +172,6 @@ private:
     // Model, Page, View etc. for favourites
     FmFormModel*        pModel;
     VclPtr<VirtualDevice> pVDev;
-    E3dView*            p3DView;
 
     SfxBindings*                pBindings;
     Svx3DCtrlItem*              pControllerItem;

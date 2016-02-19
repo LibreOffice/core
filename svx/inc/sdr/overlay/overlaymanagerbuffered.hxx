@@ -63,13 +63,11 @@ namespace sdr
 
             OverlayManagerBuffered(
                 OutputDevice& rOutputDevice,
-                const SdrModel* pModel,
                 bool bRefreshWithPreRendering = false);
             virtual ~OverlayManagerBuffered();
 
         public:
             static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,
-                const SdrModel* pModel,
                 bool bRefreshWithPreRendering = false);
 
             // complete redraw

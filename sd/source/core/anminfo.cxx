@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 
 SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
-               : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
+               : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID),
                  mePresObjKind              (PRESOBJ_NONE),
                  meEffect                   (presentation::AnimationEffect_NONE),
                  meTextEffect               (presentation::AnimationEffect_NONE),

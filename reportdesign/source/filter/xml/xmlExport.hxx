@@ -64,29 +64,21 @@ class ORptExport : public SvXMLExport
 public:
     struct TCell
     {
-        sal_Int32 nWidth;
-        sal_Int32 nHeight;
         sal_Int32 nColSpan;
         sal_Int32 nRowSpan;
         Reference<XReportComponent> xElement;
         bool      bSet;
-        TCell(  sal_Int32 _nWidth,
-                sal_Int32 _nHeight,
-                sal_Int32 _nColSpan,
+        TCell(  sal_Int32 _nColSpan,
                 sal_Int32 _nRowSpan,
                 Reference<XReportComponent> _xElement = Reference<XReportComponent>()) :
-        nWidth(_nWidth)
-        ,nHeight(_nHeight)
-        ,nColSpan(_nColSpan)
+        nColSpan(_nColSpan)
         ,nRowSpan(_nRowSpan)
         ,xElement(_xElement)
         ,bSet(xElement.is())
         {}
 
         TCell( ) :
-        nWidth(0)
-        ,nHeight(0)
-        ,nColSpan(1)
+        nColSpan(1)
         ,nRowSpan(1)
         ,bSet(true)
         {}

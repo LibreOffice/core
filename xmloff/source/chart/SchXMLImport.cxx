@@ -94,7 +94,6 @@ SchXMLImportHelper::SchXMLImportHelper() :
 
         mpChartAttrTokenMap( nullptr ),
         mpPlotAreaAttrTokenMap( nullptr ),
-        mpAutoStyleAttrTokenMap( nullptr ),
         mpCellAttrTokenMap( nullptr ),
         mpSeriesAttrTokenMap( nullptr ),
         mpPropMappingAttrTokenMap( nullptr ),
@@ -113,7 +112,6 @@ SchXMLImportHelper::~SchXMLImportHelper()
 
     delete mpChartAttrTokenMap;
     delete mpPlotAreaAttrTokenMap;
-    delete mpAutoStyleAttrTokenMap;
     delete mpCellAttrTokenMap;
     delete mpSeriesAttrTokenMap;
     delete mpPropMappingAttrTokenMap;

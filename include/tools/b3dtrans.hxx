@@ -63,16 +63,6 @@ private:
     // Texture Matrices
     basegfx::B2DHomMatrix maTexture;
 
-    // Special transformation set for converting Object -> Device
-    basegfx::B3DHomMatrix maObjectToDevice;
-
-    // Transposed and inversed matrix for vector transformations
-    basegfx::B3DHomMatrix maInvTransObjectToEye;
-
-    // Transformation for World->View
-    basegfx::B3DHomMatrix maMatFromWorldToView;
-    basegfx::B3DHomMatrix maInvMatFromWorldToView;
-
     // Parameters for ViewportTransformation
     basegfx::B3DVector    maScale;
     basegfx::B3DVector    maTranslate;

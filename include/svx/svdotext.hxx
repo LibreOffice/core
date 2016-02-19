@@ -199,10 +199,6 @@ protected:
     // werden kann
     SdrOutliner*                pEdtOutl;
 
-    // Bei Fontwork muss soviel auf's BoundRect draufgerechnet werden
-    // damit es ausreichend gross ist.
-    Rectangle*                  pFormTextBoundRect;
-
     // Moegliche Werte fuer eTextKind sind:
     //     OBJ_TEXT         normaler Textrahmen
     //     OBJ_TEXTEXT      Textfortsetzungsrahmen

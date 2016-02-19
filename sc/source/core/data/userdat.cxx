@@ -50,7 +50,7 @@ IMPL_STATIC_LINK_TYPED(
 }
 
 ScDrawObjData::ScDrawObjData() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA ),
     maStart( ScAddress::INITIALIZE_INVALID ),
     maEnd( ScAddress::INITIALIZE_INVALID ),
     meType( DrawingObject )
@@ -63,12 +63,12 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
 }
 
 ScIMapInfo::ScIMapInfo() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 )
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA )
 {
 }
 
 ScIMapInfo::ScIMapInfo( const ImageMap& rImageMap ) :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 ),
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA ),
     aImageMap( rImageMap )
 {
 }
@@ -89,7 +89,7 @@ SdrObjUserData* ScIMapInfo::Clone( SdrObject* ) const
 }
 
 ScMacroInfo::ScMacroInfo() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA, 0 )
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA )
 {
 }
 

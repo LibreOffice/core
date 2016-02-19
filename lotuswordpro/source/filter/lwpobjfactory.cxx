@@ -98,7 +98,7 @@
 //LwpObjectFactory* LwpObjectFactory::m_pMgr = NULL;
 
 LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
-    : m_nNumObjs(0), m_pSvStream(pSvStream)
+    : m_pSvStream(pSvStream)
 {
     m_IdToObjList.clear();
 }
@@ -130,7 +130,6 @@ void LwpObjectFactory::ReadIndex(LwpSvStream* pStrm)
 rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr)
 {
     rtl::Reference<LwpObject> newObj;
-    m_nNumObjs++;
     SAL_WARN_IF(type>=300, "lwp", "invalid type: " << type);
     switch(type)
     {

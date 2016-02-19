@@ -59,7 +59,6 @@ namespace sdr
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
             OutputDevice&                               mrOutputDevice;
-            const SdrModel*                             mpModel;
 
             // the vector of registered OverlayObjects
             OverlayObjectVector                         maOverlayObjects;
@@ -89,11 +88,11 @@ namespace sdr
             // ViewTransformation and evtl. correct mfDiscreteOne
             double getDiscreteOne() const;
 
-            OverlayManager(OutputDevice& rOutputDevice, const SdrModel* pModel);
+            OverlayManager(OutputDevice& rOutputDevice);
             virtual ~OverlayManager();
 
         public:
-            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice, const SdrModel* pModel);
+            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice);
 
             // access to current ViewInformation2D; this call checks and evtl. updates ViewInformation2D
             const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;

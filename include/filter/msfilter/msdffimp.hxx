@@ -386,7 +386,6 @@ public:
 */
 class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 {
-    FmFormModel*            pFormModel;
     SvxMSDffBLIPInfos*      m_pBLIPInfos;
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;

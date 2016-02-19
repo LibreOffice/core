@@ -1170,7 +1170,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pSectionExport( nullptr ),
     pIndexMarkExport( nullptr ),
     pRedlineExport( nullptr ),
-    pHeadingStyles( nullptr ),
     bProgress( false ),
     bBlock( false ),
     bOpenRuby( false ),
@@ -1320,7 +1319,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
 {
-    delete pHeadingStyles;
     delete pRedlineExport;
     delete pIndexMarkExport;
     delete pSectionExport;

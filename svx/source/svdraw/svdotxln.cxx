@@ -101,7 +101,7 @@ void ImpSdrObjTextLink::Closed()
 
 
 ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData():
-    SdrObjUserData(SdrInventor,SDRUSERDATA_OBJTEXTLINK,0),
+    SdrObjUserData(SdrInventor,SDRUSERDATA_OBJTEXTLINK),
     aFileDate0( DateTime::EMPTY ),
     pLink(nullptr),
     eCharSet(RTL_TEXTENCODING_DONTKNOW)

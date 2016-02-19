@@ -232,9 +232,8 @@ public:
     double   nTan;      // tan(nShearAngle)
     double   nSin;      // sin(nRotationAngle)
     double   nCos;      // cos(nRotationAngle)
-    bool     bMirrored; // Horizontally mirrored? (ni)
-public:
-    GeoStat(): nRotationAngle(0),nShearAngle(0),nTan(0.0),nSin(0.0),nCos(1.0),bMirrored(false) {}
+
+    GeoStat(): nRotationAngle(0),nShearAngle(0),nTan(0.0),nSin(0.0),nCos(1.0) {}
     void RecalcSinCos();
     void RecalcTan();
 };

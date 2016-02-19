@@ -208,7 +208,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
     mpVirDev( VclPtr<VirtualDevice>::Create() ),
-    maILArrows( 16 ),
+    maILArrows(),
     maLeft( FRAMEBORDER_LEFT ),
     maRight( FRAMEBORDER_RIGHT ),
     maTop( FRAMEBORDER_TOP ),

@@ -93,7 +93,6 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     /// may be NULL (if no redlines should be exported; e.g. in block mode)
     XMLRedlineExport            *pRedlineExport;
-    std::vector<OUString>       *pHeadingStyles;
 
     bool                        bProgress;
 

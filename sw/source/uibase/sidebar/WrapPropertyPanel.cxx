@@ -77,7 +77,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     , nRight(0)
     // resources
     , aCustomEntry()
-    , aWrapIL(6,2)
+    , aWrapIL()
     // controller items
     , maSwNoWrapControl(FN_FRAME_NOWRAP, *pBindings, *this)
     , maSwWrapLeftControl(FN_FRAME_WRAP, *pBindings, *this)

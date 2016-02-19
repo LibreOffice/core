@@ -490,7 +490,7 @@ void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sa
         if ( nHeight )
             for (sal_Int32 i = 0; i < nCountX ; ++i)
             {
-                _rColumns[j].second[i] = ORptExport::TCell(_aPosX[i+1] - _aPosX[i],nHeight,1,1);
+                _rColumns[j].second[i] = ORptExport::TCell(1,1);
                 _rColumns[j].second[i].bSet = true;
             }
     }
@@ -649,8 +649,6 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
                 sal_Int32 nRowSpan = y2 - y1;
                 aInsert->second[y1].second[x1] =
                     TCell(
-                        aElementSize.Width , // -1 why?
-                        aElementSize.Height, // -1 why?
                         nColSpan,
                         nRowSpan,
                         xReportElement

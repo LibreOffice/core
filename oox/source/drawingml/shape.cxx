@@ -99,8 +99,7 @@ namespace oox { namespace drawingml {
     aProperties[nPos].Value = Any( aPropValue );
 
 Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
-: mbIsChild( false )
-, mpLinePropertiesPtr( new LineProperties )
+: mpLinePropertiesPtr( new LineProperties )
 , mpShapeRefLinePropPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
 , mpShapeRefFillPropPtr( new FillProperties )
@@ -130,7 +129,6 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 
 Shape::Shape( const ShapePtr& pSourceShape )
 : maChildren()
-, mbIsChild( pSourceShape->mbIsChild )
 , mpTextBody(pSourceShape->mpTextBody)
 , mpLinePropertiesPtr( pSourceShape->mpLinePropertiesPtr )
 , mpShapeRefLinePropPtr( pSourceShape->mpShapeRefLinePropPtr )

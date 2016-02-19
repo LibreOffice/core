@@ -55,8 +55,6 @@ class SVX_DLLPUBLIC Viewport3D
     basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-coordinates)
                                     // up to now only the z-coordinate is considered
     double          fVPD;           // View Plane Distance
-    double          fNearClipDist;  // distance of the near Clipping level
-    double          fFarClipDist;   // distance of the far Clipping level
 
     ProjectionType  eProjection;    // kind of the projection
     AspectMapType   eAspectMapping; // flag for the acclimatization of the aspect ratio

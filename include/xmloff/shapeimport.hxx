@@ -286,10 +286,7 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     SvXMLTokenMap*              mp3DPolygonBasedAttrTokenMap;
     SvXMLTokenMap*              mp3DCubeObjectAttrTokenMap;
     SvXMLTokenMap*              mp3DSphereObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DSceneShapeAttrTokenMap;
     SvXMLTokenMap*              mp3DLightAttrTokenMap;
-    SvXMLTokenMap*              mpPathShapeAttrTokenMap;
-    SvXMLTokenMap*              mpPolygonShapeAttrTokenMap;
 
     const OUString       msStartShape;
     const OUString       msEndShape;

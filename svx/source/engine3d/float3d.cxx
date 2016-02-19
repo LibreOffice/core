@@ -92,7 +92,6 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , eViewType(VIEWTYPE_GEO)
     , pModel(nullptr)
     , pVDev(nullptr)
-    , p3DView(nullptr)
     , pBindings(pInBindings)
     , pControllerItem(nullptr)
     , pConvertTo3DItem(nullptr)
@@ -328,7 +327,6 @@ Svx3DWin::~Svx3DWin()
 
 void Svx3DWin::dispose()
 {
-    delete p3DView;
     pVDev.disposeAndClear();
     delete pModel;
 

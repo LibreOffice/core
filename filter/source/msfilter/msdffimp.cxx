@@ -5543,7 +5543,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  SvStream* pStData2_,
                                  bool bSkipImages )
     :DffPropertyReader( *this ),
-     pFormModel( nullptr ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      m_pShapeOrders( new SvxMSDffShapeOrders ),
@@ -5591,7 +5590,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 
 SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
     :DffPropertyReader( *this ),
-     pFormModel( nullptr ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      m_pShapeOrders( new SvxMSDffShapeOrders ),
@@ -5619,7 +5617,6 @@ SvxMSDffManager::~SvxMSDffManager()
     delete pSecPropSet;
     delete m_pBLIPInfos;
     delete m_pShapeOrders;
-    delete pFormModel;
 }
 
 void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )

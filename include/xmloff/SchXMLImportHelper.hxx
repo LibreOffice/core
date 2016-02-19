@@ -74,7 +74,6 @@ private:
 
     SvXMLTokenMap* mpChartAttrTokenMap;
     SvXMLTokenMap* mpPlotAreaAttrTokenMap;
-    SvXMLTokenMap* mpAutoStyleAttrTokenMap;
     SvXMLTokenMap* mpCellAttrTokenMap;
     SvXMLTokenMap* mpSeriesAttrTokenMap;
     SvXMLTokenMap* mpPropMappingAttrTokenMap;

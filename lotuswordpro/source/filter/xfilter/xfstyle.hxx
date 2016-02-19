@@ -107,7 +107,6 @@ public:
 protected:
     OUString   m_strStyleName;
     OUString   m_strParentStyleName;
-    enumXFStyle     m_enumFamily;
 };
 
 #endif

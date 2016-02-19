@@ -61,15 +61,15 @@ class IMapUserData : public SdrObjUserData
 public:
 
                             IMapUserData() :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( ) {}
 
                    explicit IMapUserData( const IMapObjectPtr& rIMapObj ) :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapObj ) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
                             virtual ~IMapUserData() { }

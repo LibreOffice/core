@@ -122,10 +122,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mp3DPolygonBasedAttrTokenMap(nullptr),
     mp3DCubeObjectAttrTokenMap(nullptr),
     mp3DSphereObjectAttrTokenMap(nullptr),
-    mp3DSceneShapeAttrTokenMap(nullptr),
     mp3DLightAttrTokenMap(nullptr),
-    mpPathShapeAttrTokenMap(nullptr),
-    mpPolygonShapeAttrTokenMap(nullptr),
     msStartShape("StartShape"),
     msEndShape("EndShape"),
     msStartGluePointIndex("StartGluePointIndex"),
@@ -198,14 +195,11 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     delete mpGroupShapeElemTokenMap;
     delete mpFrameShapeElemTokenMap;
 
-    delete mpPolygonShapeAttrTokenMap;
-    delete mpPathShapeAttrTokenMap;
     delete mp3DSceneShapeElemTokenMap;
     delete mp3DObjectAttrTokenMap;
     delete mp3DPolygonBasedAttrTokenMap;
     delete mp3DCubeObjectAttrTokenMap;
     delete mp3DSphereObjectAttrTokenMap;
-    delete mp3DSceneShapeAttrTokenMap;
     delete mp3DLightAttrTokenMap;
 
     // Styles or AutoStyles context?
