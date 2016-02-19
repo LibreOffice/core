@@ -37,6 +37,7 @@ public:
     /// If GetImpactLevelColor() will return something meaningful.
     bool HasImpactLevel();
     basegfx::BColor GetImpactLevelColor();
+    OUString GetDocumentWatermark();
 };
 
 #endif
