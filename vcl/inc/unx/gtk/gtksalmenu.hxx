@@ -13,14 +13,14 @@
 #include <config_vclplug.h>
 
 #include <vector>
-#ifdef ENABLE_GIO
+#if ENABLE_GIO
 #include <gio/gio.h>
 #endif
 
 #include <unx/salmenu.h>
 #include <unx/gtk/gtkframe.hxx>
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_GIO) && \
+#if defined(ENABLE_DBUS) && ENABLE_GIO && \
     (GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 36)
 #  define ENABLE_GMENU_INTEGRATION
 #  include <unx/gtk/glomenu.h>
