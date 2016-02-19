@@ -1073,7 +1073,8 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     // determine size and type
     OUString aSizeText( m_aUnknownSize );
-    if ( aURL.GetProtocol() == INetProtocol::File )
+    if ( aURL.GetProtocol() == INetProtocol::File ||
+         aURL.isAnyKnownWebDAVScheme() )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
     m_pShowSizeFT->SetText( aSizeText );
 
