@@ -35,6 +35,8 @@
 
 #include <vector>
 
+#include "config_dbus.h"
+
 #define ATOM_FAMILYNAME                     2
 #define ATOM_PSNAME                         3
 
@@ -315,12 +317,12 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     static bool addFontconfigDir(const OString& rDirectory);
 
     std::set<OString> m_aPreviousLangSupportRequests;
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if ENABLE_DBUS && defined(ENABLE_PACKAGEKIT)
     std::vector<OString> m_aCurrentRequests;
 #endif
     Timer m_aFontInstallerTimer;
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if ENABLE_DBUS && defined(ENABLE_PACKAGEKIT)
     DECL_LINK_TYPED( autoInstallFontLangSupport, Timer*, void );
 #endif
     PrintFontManager();

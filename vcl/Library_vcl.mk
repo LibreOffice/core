@@ -44,12 +44,6 @@ $(eval $(call gb_Library_set_include,vcl,\
 	$(if $(filter WNT,$(OS)),-I$(SRCDIR)/vcl/inc/glyphy/demo) \
 ))
 
-ifeq ($(ENABLE_DBUS),TRUE)
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-	-DENABLE_DBUS \
-))
-endif
-
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
 	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \

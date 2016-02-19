@@ -42,7 +42,7 @@
 #include <config_gio.h>
 
 #include <unx/x11/xlimits.hxx>
-#if defined(ENABLE_DBUS) && ENABLE_GIO
+#if ENABLE_DBUS && ENABLE_GIO
 #  include <unx/gtk/gtksalmenu.hxx>
 #endif
 #if defined ENABLE_GMENU_INTEGRATION // defined in gtksalmenu.hxx above
@@ -437,7 +437,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SalFrameStyleFlags::SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
-#if defined(ENABLE_DBUS) && ENABLE_GIO
+#if ENABLE_DBUS && ENABLE_GIO
     m_pLastSyncedDbusMenu = nullptr;
 #endif
     Init( pParent, nStyle );
@@ -453,7 +453,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
-#if defined(ENABLE_DBUS) && ENABLE_GIO
+#if ENABLE_DBUS && ENABLE_GIO
     m_pLastSyncedDbusMenu = nullptr;
 #endif
     Init( pSysData );
@@ -493,7 +493,7 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
-#if defined(ENABLE_DBUS) && ENABLE_GIO
+#if ENABLE_DBUS && ENABLE_GIO
 void GtkSalFrame::EnsureDbusMenuSynced()
 {
     GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(GetMenu());
