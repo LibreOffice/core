@@ -3749,6 +3749,9 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
         bool bLookUpLabels (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_LOOKUPLABELS) ));
         bool bMatchWholeCell (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_MATCHWHOLE) ));
         bool bUseRegularExpressions (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_REGEXENABLED) ));
+        bool bUseWildcards (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_WILDCARDSENABLED) ));
+        if (bUseWildcards && bUseRegularExpressions)
+            bUseRegularExpressions = false;     // mutually exclusive, wildcards take precedence
         bool bIsIterationEnabled (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_ITERENABLED) ));
         sal_uInt16 nYear2000 (pDoc ? pDoc->GetDocOptions().GetYear2000() : 0);
         sal_Int32 nIterationCount(100);
@@ -3758,8 +3761,9 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
         util::Date aNullDate;
         xPropertySet->getPropertyValue( SC_UNO_NULLDATE ) >>= aNullDate;
         if (bCalcAsShown || bIgnoreCase || !bLookUpLabels || !bMatchWholeCell || !bUseRegularExpressions ||
-            bIsIterationEnabled || nIterationCount != 100 || !::rtl::math::approxEqual(fIterationEpsilon, 0.001) ||
-            aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 || nYear2000 != 1930)
+                bUseWildcards ||
+                bIsIterationEnabled || nIterationCount != 100 || !::rtl::math::approxEqual(fIterationEpsilon, 0.001) ||
+                aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 || nYear2000 != 1930)
         {
             if (bIgnoreCase)
                 AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_FALSE);
@@ -3771,6 +3775,8 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                 AddAttribute(XML_NAMESPACE_TABLE, XML_AUTOMATIC_FIND_LABELS, XML_FALSE);
             if (!bUseRegularExpressions)
                 AddAttribute(XML_NAMESPACE_TABLE, XML_USE_REGULAR_EXPRESSIONS, XML_FALSE);
+            if (bUseWildcards)
+                AddAttribute(XML_NAMESPACE_TABLE, XML_USE_WILDCARDS, XML_TRUE);
             if (nYear2000 != 1930)
             {
                 OUStringBuffer sBuffer;
