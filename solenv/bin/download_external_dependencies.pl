@@ -551,7 +551,7 @@ sub DownloadFile ($$$)
     }
     else
     {
-        print "download from $URL failed\n";
+        print "download from $URL failed (" . $response->status_line . ")\n";
     }
     close($out);
 
