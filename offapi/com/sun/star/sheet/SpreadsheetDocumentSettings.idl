@@ -124,6 +124,10 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether regular expressions in formulas are enabled,
         e.g., for functions which look up spreadsheet contents.
+
+        <p>RegularExpressions and Wildcards are mutually exclusive, only
+        one can have the value `TRUE`. Internally, if both are true then
+        Wildcards takes precedence over RegularExpressions.</p>
      */
     [property] boolean RegularExpressions;
 
@@ -207,6 +211,18 @@ published service SpreadsheetDocumentSettings
         @since LibreOffice 5.0
      */
     [readonly,optional, property] boolean IsRecordChangesProtected;
+
+
+    /** specifies whether wildcards in formulas are enabled,
+        e.g., for functions which look up spreadsheet contents.
+
+        <p>Wildcards and RegularExpressions are mutually exclusive, only
+        one can have the value `TRUE`. Internally, if both are true then
+        Wildcards takes precedence over RegularExpressions.</p>
+
+        @since LibreOffice 5.2
+     */
+    [optional, property] boolean Wildcards;
 
 };
 
