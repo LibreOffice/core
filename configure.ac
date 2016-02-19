@@ -1216,14 +1216,8 @@ AC_ARG_ENABLE(cairo-canvas,
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
         [Determines whether to enable features that depend on dbus.
-         e.g. Presentation mode screensaver control, bluetooth presentation control]),
+         e.g. Presentation mode screensaver control, bluetooth presentation control, automatic font install]),
 ,enable_dbus=yes)
-
-AC_ARG_ENABLE(packagekit,
-    AS_HELP_STRING([--enable-packagekit],
-        [Determines whether to enable features using packagekit.
-         Right now that is auto font install]),
-,)
 
 AC_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
@@ -10051,20 +10045,6 @@ fi
 AC_SUBST(ENABLE_DBUS)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
-
-AC_MSG_CHECKING([whether to enable font install via packagekit])
-if test "$ENABLE_DBUS" = "TRUE"; then
-    if test -n "$enable_packagekit" -a "$enable_packagekit" != "no"; then
-        ENABLE_PACKAGEKIT=TRUE
-        AC_MSG_RESULT([yes])
-    else
-        ENABLE_PACKAGEKIT=
-        AC_MSG_RESULT([no])
-    fi
-else
-    AC_MSG_RESULT([no, dbus disabled.])
-fi
-AC_SUBST(ENABLE_PACKAGEKIT)
 
 AC_MSG_CHECKING([whether to enable Impress remote control])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
