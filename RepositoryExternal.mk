@@ -2446,10 +2446,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(GIO_CFLAGS) \
 )
 
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DENABLE_GIO \
-)
-
 $(call gb_LinkTarget_add_libs,$(1),$(GIO_LIBS))
 
 endef

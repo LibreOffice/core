@@ -32,7 +32,9 @@
 #include "app.hrc"
 #include "shutdownicon.hxx"
 
-#ifdef ENABLE_GIO
+#include <config_gio.h>
+
+#if ENABLE_GIO
 #include <gio/gio.h>
 #endif
 
@@ -59,7 +61,7 @@ static GtkStatusIcon* pTrayIcon;
 static GtkWidget *pExitMenuItem = nullptr;
 static GtkWidget *pOpenMenuItem = nullptr;
 static GtkWidget *pDisableMenuItem = nullptr;
-#ifdef ENABLE_GIO
+#if ENABLE_GIO
 GFileMonitor* pMonitor = nullptr;
 #endif
 
@@ -293,7 +295,7 @@ static gboolean display_menu_cb( GtkWidget *,
     return sal_True;
 }
 
-#ifdef ENABLE_GIO
+#if ENABLE_GIO
 /*
  * If the quickstarter is running, then LibreOffice is
  * upgraded, then the old quickstarter is still running, but is now unreliable
@@ -353,7 +355,7 @@ void plugin_init_sys_tray()
     pShutdownIcon->SetVeto( true );
     ShutdownIcon::addTerminateListener();
 
-#ifdef ENABLE_GIO
+#if ENABLE_GIO
     GFile* pFile = nullptr;
     OUString sLibraryFileUrl;
     if (osl::Module::getUrlFromAddress(plugin_init_sys_tray, sLibraryFileUrl))
@@ -374,7 +376,7 @@ void plugin_shutdown_sys_tray()
     if( !pTrayIcon )
         return;
 
-#ifdef ENABLE_GIO
+#if ENABLE_GIO
     if (pMonitor)
     {
         g_signal_handlers_disconnect_by_func(pMonitor,
