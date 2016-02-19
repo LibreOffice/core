@@ -1786,7 +1786,7 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
         pState->mnWidth             = m_aRestorePosSize.GetWidth();
         pState->mnHeight            = m_aRestorePosSize.GetHeight();
         GetPosAndSize(GTK_WINDOW(m_pWindow), pState->mnMaximizedX, pState->mnMaximizedY,
-                                             pState->mnMaximizedWidth, pState->mnMaximizedWidth);
+                                             pState->mnMaximizedWidth, pState->mnMaximizedHeight);
         pState->mnMask  |= WINDOWSTATE_MASK_MAXIMIZED_X          |
                            WINDOWSTATE_MASK_MAXIMIZED_Y          |
                            WINDOWSTATE_MASK_MAXIMIZED_WIDTH      |
