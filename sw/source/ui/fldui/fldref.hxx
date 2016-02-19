@@ -69,9 +69,9 @@ class SwFieldRefPage : public SwFieldPage
 
     void SubTypeHdl();
 
-    void                UpdateSubType(OUString filterString = OUString());
+    void                UpdateSubType(const OUString& filterString = OUString());
 
-    bool                MatchSubstring( OUString list_string, OUString substr );
+    bool                MatchSubstring( const OUString& list_string, const OUString& substr );
 
     sal_Int32               FillFormatLB(sal_uInt16 nTypeId);
 

@@ -491,7 +491,7 @@ void SwFieldRefPage::SubTypeHdl()
 }
 
 // renew types in SelectionLB after filtering
-void SwFieldRefPage::UpdateSubType(OUString filterString)
+void SwFieldRefPage::UpdateSubType(const OUString& filterString)
 {
     SwWrtShell *pSh = GetWrtShell();
     if(!pSh)
@@ -731,13 +731,13 @@ void SwFieldRefPage::UpdateSubType(OUString filterString)
     }
 }
 
-bool SwFieldRefPage::MatchSubstring( OUString list_string, OUString substr )
+bool SwFieldRefPage::MatchSubstring( const OUString& rListString, const OUString& rSubstr )
 {
-    if(substr.isEmpty())
+    if(rSubstr.isEmpty())
         return true;
-    list_string = list_string.toAsciiLowerCase();
-    substr = substr.toAsciiLowerCase();
-    if(list_string.indexOf(substr) >= 0)
+    OUString aListString = rListString.toAsciiLowerCase();
+    OUString aSubstr = rSubstr.toAsciiLowerCase();
+    if(aListString.indexOf(aSubstr) >= 0)
         return true;
     return false;
 }
