@@ -21,7 +21,7 @@
 #include <iostream>
 #include <rtl/instance.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
-
+//Test comment
 namespace
 {
     class theCodeCompleteOptions: public ::rtl::Static< CodeCompleteOptions, theCodeCompleteOptions >{};
