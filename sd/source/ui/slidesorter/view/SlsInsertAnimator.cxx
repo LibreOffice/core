@@ -27,7 +27,6 @@
 
 #include <memory>
 #include <set>
-#include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -258,10 +257,8 @@ InsertAnimator::Implementation::RunContainer::const_iterator
     return std::find_if(
         maRuns.begin(),
         maRuns.end(),
-        ::boost::bind(
-            ::std::equal_to<sal_Int32>(),
-            ::boost::bind(&PageObjectRun::mnRunIndex, _1),
-            nRunIndex));
+        [nRunIndex] (std::shared_ptr<PageObjectRun> const& rRun)
+            { return rRun->mnRunIndex == nRunIndex; });
 }
 
 void InsertAnimator::Implementation::AddRun (const std::shared_ptr<PageObjectRun>& rRun)

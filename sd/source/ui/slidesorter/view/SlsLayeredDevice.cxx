@@ -25,7 +25,6 @@
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <functional>
@@ -260,12 +259,13 @@ void LayeredDevice::RemovePainter (
 void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
 {
     // Validate the contents of all layers (that have their own devices.)
-    ::std::for_each(
-        mpLayers->begin(),
-        mpLayers->end(),
-        ::boost::bind(&Layer::Validate, _1, mpTargetWindow->GetMapMode()));
+    for (auto const& it : *mpLayers)
+    {
+        it->Validate(mpTargetWindow->GetMapMode());
+    }
 
-    ForAllRectangles(rRepaintRegion, ::boost::bind(&LayeredDevice::RepaintRectangle, this, _1));
+    ForAllRectangles(rRepaintRegion,
+            [this] (Rectangle const& r) { this->RepaintRectangle(r); });
 }
 
 void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
@@ -283,11 +283,10 @@ void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
         // due to synchronous paints) and then copy that into the target
         // device.
         mpBackBuffer->SetMapMode(mpTargetWindow->GetMapMode());
-        ::std::for_each(
-            mpLayers->begin(),
-            mpLayers->end(),
-            ::boost::bind(&Layer::Repaint, _1, ::boost::ref(*mpBackBuffer), rRepaintRectangle));
-
+        for (auto const& it : *mpLayers)
+        {
+            it->Repaint(*mpBackBuffer, rRepaintRectangle);
+        }
         DeviceCopy(*mpTargetWindow, *mpBackBuffer, rRepaintRectangle);
     }
 }
@@ -296,12 +295,18 @@ void LayeredDevice::Resize()
 {
     const Size aSize (mpTargetWindow->GetSizePixel());
     mpBackBuffer->SetOutputSizePixel(aSize);
-    ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Resize, _1, aSize));
+    for (auto const& it : *mpLayers)
+    {
+        it->Resize(aSize);
+    }
 }
 
 void LayeredDevice::Dispose()
 {
-    ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Dispose, _1));
+    for (auto const& it : *mpLayers)
+    {
+        it->Dispose();
+    }
     mpLayers->clear();
 }
 
@@ -414,7 +419,7 @@ void Layer::Validate (const MapMode& rMapMode)
         mpLayerDevice->SetMapMode(rMapMode);
         ForAllRectangles(
             aRegion,
-            ::boost::bind(&Layer::ValidateRectangle, this, _1));
+            [this] (Rectangle const& r) { return this->ValidateRectangle(r); });
     }
 }
 
@@ -447,13 +452,10 @@ void Layer::Repaint (
     }
     else
     {
-        ::std::for_each(
-            maPainters.begin(),
-            maPainters.end(),
-            ::boost::bind(&ILayerPainter::Paint,
-                _1,
-                ::boost::ref(rTargetDevice),
-                rRepaintRectangle));
+        for (auto const& it : maPainters)
+        {
+            it->Paint(rTargetDevice, rRepaintRectangle);
+        }
     }
 }
 
