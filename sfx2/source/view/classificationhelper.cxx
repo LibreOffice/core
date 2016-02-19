@@ -141,4 +141,13 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
     return aRet;
 }
 
+OUString SfxClassificationHelper::GetDocumentWatermark()
+{
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Marking:document-watermark");
+    if (it != m_pImpl->m_aLabels.end())
+        return it->second;
+
+    return OUString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
