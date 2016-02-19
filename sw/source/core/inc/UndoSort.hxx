@@ -64,7 +64,6 @@ class SwUndoSort : public SwUndo, private SwUndRng
     SwSortOptions*    pSortOpt;
     std::vector<std::unique_ptr<SwSortUndoElement>> m_SortList;
     SwUndoAttrTable*  pUndoTableAttr;
-    SwRedlineData*    pRedlData;
     sal_uLong         nTableNd;
 
 public:

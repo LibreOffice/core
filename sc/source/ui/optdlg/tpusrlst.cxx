@@ -56,7 +56,6 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
         pUserLists      ( nullptr ),
         pDoc            ( nullptr ),
         pViewData       ( nullptr ),
-        pRangeUtil      ( new ScRangeUtil ),
         bModifyMode     ( false ),
         bCancelMode     ( false ),
         bCopyDone       ( false ),
@@ -88,7 +87,6 @@ ScTpUserLists::~ScTpUserLists()
 void ScTpUserLists::dispose()
 {
     delete pUserLists;
-    delete pRangeUtil;
     mpFtLists.clear();
     mpLbLists.clear();
     mpFtEntries.clear();

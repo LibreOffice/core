@@ -417,7 +417,7 @@ namespace svgio
                                 // create mapping
                                 // #i122610 SVG 1.1 defines in section 5.1.2 that if the attribute perserveAspectRatio is not specified,
                                 // then the effect is as if a value of 'xMidYMid meet' were specified.
-                                SvgAspectRatio aRatioDefault(Align_xMidYMid,false,true);
+                                SvgAspectRatio aRatioDefault(Align_xMidYMid,true);
                                 const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
 
                                 // let mapping be created from SvgAspectRatio
@@ -527,7 +527,7 @@ namespace svgio
                                 // create mapping
                                 // SVG 1.1 defines in section 5.1.2 that if the attribute perserveAspectRatio is not specified,
                                 // then the effect is as if a value of 'xMidYMid meet' were specified.
-                                SvgAspectRatio aRatioDefault(Align_xMidYMid,false,true);
+                                SvgAspectRatio aRatioDefault(Align_xMidYMid,true);
                                 const SvgAspectRatio& rRatio = getSvgAspectRatio().isSet()? getSvgAspectRatio() : aRatioDefault;
 
                                 basegfx::B2DHomMatrix aViewBoxMapping;

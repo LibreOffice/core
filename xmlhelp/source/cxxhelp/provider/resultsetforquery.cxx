@@ -50,7 +50,6 @@
 
 #include <algorithm>
 #include <set>
-#include <qe/Query.hxx>
 #include <qe/DocGenerator.hxx>
 #include "resultsetforquery.hxx"
 #include "databases.hxx"

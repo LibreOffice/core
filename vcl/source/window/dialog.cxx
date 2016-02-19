@@ -659,7 +659,6 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
             // have re-enabled input for our parent
             if( mbInExecute && mbModalMode )
             {
-                // do not change modal counter (pSVData->maAppData.mnModalDialog)
                 SetModalInputMode( false );
                 SetModalInputMode( true );
 
@@ -1009,12 +1008,9 @@ void Dialog::SetModalInputMode( bool bModal )
     if ( bModal == mbModalMode )
         return;
 
-    ImplSVData* pSVData = ImplGetSVData();
     mbModalMode = bModal;
     if ( bModal )
     {
-        pSVData->maAppData.mnModalDialog++;
-
         // Disable the prev Modal Dialog, because our dialog must close at first,
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
@@ -1034,8 +1030,6 @@ void Dialog::SetModalInputMode( bool bModal )
     }
     else
     {
-        pSVData->maAppData.mnModalDialog--;
-
         if ( mpDialogParent )
         {
             // #115933# re-enable the whole frame hierarchy again (see above)

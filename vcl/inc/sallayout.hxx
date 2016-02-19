@@ -282,8 +282,6 @@ struct GlyphItem
     int     mnNewWidth;     // width after adjustments
     int     mnXOffset;
 
-    int     mnYOffset;
-
     sal_GlyphId maGlyphId;
     Point   maLinearPos;    // absolute position of non rotated string
 
@@ -294,7 +292,6 @@ public:
                 , mnOrigWidth(0)
                 , mnNewWidth(0)
                 , mnXOffset(0)
-                , mnYOffset(0)
                 , maGlyphId(0)
             {}
 
@@ -303,16 +300,14 @@ public:
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(0),
-                mnYOffset(0),
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth, int nXOffset, int nYOffset )
+                long nFlags, int nOrigWidth, int nXOffset )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(nXOffset),
-                mnYOffset(nYOffset),
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 

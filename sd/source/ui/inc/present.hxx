@@ -52,7 +52,6 @@ private:
     VclPtr<CheckBox>           aCbxManuel;
     VclPtr<CheckBox>           aCbxMousepointer;
     VclPtr<CheckBox>           aCbxPen;
-    VclPtr<CheckBox>           aCbxNavigator;
     VclPtr<CheckBox>           aCbxAnimationAllowed;
     VclPtr<CheckBox>           aCbxChangePage;
     VclPtr<CheckBox>           aCbxAlwaysOnTop;

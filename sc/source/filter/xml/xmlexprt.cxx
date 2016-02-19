@@ -353,7 +353,6 @@ ScXMLExport::ScXMLExport(
     pGroupColumns (nullptr),
     pGroupRows (nullptr),
     pDefaults(nullptr),
-    pChartListener(nullptr),
     pCurrentCell(nullptr),
     pMergedRangesContainer(nullptr),
     pValidationsContainer(nullptr),
@@ -435,7 +434,6 @@ ScXMLExport::~ScXMLExport()
         delete pMergedRangesContainer;
         delete pValidationsContainer;
         delete pChangeTrackingExportHelper;
-        delete pChartListener;
         delete pDefaults;
         delete pNumberFormatAttributesExportHelper;
 }

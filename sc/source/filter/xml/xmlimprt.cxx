@@ -1986,9 +1986,6 @@ ScXMLImport::ScXMLImport(
     sLocale(SC_LOCALE),
     sCellStyle(SC_UNONAME_CELLSTYL),
     pDocElemTokenMap( nullptr ),
-    pStylesElemTokenMap( nullptr ),
-    pStylesAttrTokenMap( nullptr ),
-    pStyleElemTokenMap( nullptr ),
     pBodyElemTokenMap( nullptr ),
     pContentValidationsElemTokenMap( nullptr ),
     pContentValidationElemTokenMap( nullptr ),
@@ -2131,9 +2128,6 @@ ScXMLImport::~ScXMLImport() throw()
 {
     //  delete pI18NMap;
     delete pDocElemTokenMap;
-    delete pStylesElemTokenMap;
-    delete pStylesAttrTokenMap;
-    delete pStyleElemTokenMap;
     delete pBodyElemTokenMap;
     delete pContentValidationsElemTokenMap;
     delete pContentValidationElemTokenMap;

@@ -3303,7 +3303,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     const SwPosition* pPos = m_pPaM->GetPoint();
 
-    SwFltTOX aFltTOX( pBase, nIndexCols );
+    SwFltTOX aFltTOX( pBase );
 
     // test if there is already a break item on this node
     if(SwContentNode* pNd = pPos->nNode.GetNode().GetContentNode())

@@ -249,7 +249,6 @@ namespace xmloff
             OUString                 sAttributeName;         // the attribute name
             OUString                 sPropertyName;          // the property name
             css::uno::Type           aPropertyType;          // the property type
-            OUString                 sAttributeDefault;      // the default if the attribute is not present
 
             // entries which are special to some value types
             const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable

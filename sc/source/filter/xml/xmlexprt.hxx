@@ -104,7 +104,6 @@ class ScXMLExport : public SvXMLExport
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyDefaultStyles*                  pDefaults;
-    ScChartListener*                    pChartListener;
     const ScMyCell*                     pCurrentCell;
 
     ScMyMergedRangesContainer*  pMergedRangesContainer;

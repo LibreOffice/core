@@ -82,7 +82,6 @@ class _HTMLAttr
     bool bValid : 1;    // ist das Attribut gueltig?
 
     SfxPoolItem* pItem;
-    sal_uInt16 nCount;      // Anzahl noch zu schliessender Attrs mit einem Wert
     _HTMLAttr *pNext;   // noch zu schliessene Attrs mit unterschiedl. Werten
     _HTMLAttr *pPrev;   // bereits geschlossene aber noch nicht gesetze Attrs
     _HTMLAttr **ppHead; // der Listenkopf

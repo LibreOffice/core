@@ -154,8 +154,7 @@ public:
 
             inline  ScRangeItem( const sal_uInt16 nWhich );
             inline  ScRangeItem( const sal_uInt16   nWhich,
-                                 const ScRange& rRange,
-                                 const sal_uInt16   nNewFlags = 0 );
+                                 const ScRange& rRange );
             inline  ScRangeItem( const ScRangeItem& rCpy );
 
     inline ScRangeItem& operator=( const ScRangeItem &rCpy );
@@ -171,23 +170,21 @@ public:
 
 private:
     ScRange aRange;
-    sal_uInt16  nFlags;
 };
 
 inline ScRangeItem::ScRangeItem( const sal_uInt16 nWhichP )
-    :   SfxPoolItem( nWhichP ), nFlags( SCR_INVALID ) // == invalid area
+    :   SfxPoolItem( nWhichP )
 {
 }
 
 inline ScRangeItem::ScRangeItem( const sal_uInt16   nWhichP,
-                                 const ScRange& rRange,
-                                 const sal_uInt16   nNew )
-    : SfxPoolItem( nWhichP ), aRange( rRange ), nFlags( nNew )
+                                 const ScRange& rRange )
+    : SfxPoolItem( nWhichP ), aRange( rRange )
 {
 }
 
 inline ScRangeItem::ScRangeItem( const ScRangeItem& rCpy )
-    : SfxPoolItem( rCpy.Which() ), aRange( rCpy.aRange ), nFlags( rCpy.nFlags )
+    : SfxPoolItem( rCpy.Which() ), aRange( rCpy.aRange )
 {}
 
 inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )

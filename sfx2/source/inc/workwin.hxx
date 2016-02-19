@@ -43,13 +43,12 @@ class SfxSplitWindow;
 class SfxWorkWindow;
 
 
-// This struct makes all relevant Informationen available of Toolboxes
+// This struct makes all relevant Information available of Toolboxes
 struct SfxObjectBar_Impl
 {
     sal_uInt16        nId;   // Resource - and ConfigId of Toolbox
     sal_uInt16        nMode; // special visibility flags
     sal_uInt16        nPos;
-    sal_uInt16        nIndex;
     bool              bDestroy;
     SfxInterface*     pIFace;
 
@@ -57,7 +56,6 @@ struct SfxObjectBar_Impl
         nId(0),
         nMode(0),
         nPos(0),
-        nIndex(0),
         bDestroy(false),
         pIFace(nullptr)
     {}

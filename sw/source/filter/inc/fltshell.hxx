@@ -308,11 +308,10 @@ public:
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 {
     SwTOXBase* pTOXBase;
-    sal_uInt16 nCols;
     bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
     bool bHadPageDescItem;
 public:
-    SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
+    SwFltTOX(SwTOXBase* pBase);
     SwFltTOX(const SwFltTOX&);
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;

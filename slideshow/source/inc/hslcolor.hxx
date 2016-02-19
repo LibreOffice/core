@@ -75,8 +75,6 @@ namespace slideshow
 
             HSLTriple   maHSLTriple;
 
-            /// Pre-calculated value, needed for conversion back to RGB
-            double      mnMagicValue;
         };
 
         bool operator==( const HSLColor& rLHS, const HSLColor& rRHS );

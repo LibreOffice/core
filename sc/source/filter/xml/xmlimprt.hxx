@@ -847,9 +847,6 @@ class ScXMLImport: public SvXMLImport, private boost::noncopyable
     rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
     SvXMLTokenMap           *pDocElemTokenMap;
-    SvXMLTokenMap           *pStylesElemTokenMap;
-    SvXMLTokenMap           *pStylesAttrTokenMap;
-    SvXMLTokenMap           *pStyleElemTokenMap;
     SvXMLTokenMap           *pBodyElemTokenMap;
     SvXMLTokenMap           *pContentValidationsElemTokenMap;
     SvXMLTokenMap           *pContentValidationElemTokenMap;

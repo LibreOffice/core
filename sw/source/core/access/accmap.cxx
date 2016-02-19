@@ -1656,7 +1656,6 @@ SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpSelectedParas( nullptr ),
     mpVSh( pSh ),
     mpPreview( nullptr ),
-    mnPara( 1 ),
     mbShapeSelected( false ),
     mpSeletedFrameMap(nullptr)
 {
@@ -1886,7 +1885,6 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                 switch( pFrame->GetType() )
                 {
                 case FRM_TXT:
-                    mnPara++;
                     pAcc = new SwAccessibleParagraph( this,
                                     static_cast< const SwTextFrame& >( *pFrame ) );
                     break;
