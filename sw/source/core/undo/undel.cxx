@@ -102,7 +102,6 @@ SwUndoDelete::SwUndoDelete(
     m_pMvStt( nullptr ),
     m_pSttStr(nullptr),
     m_pEndStr(nullptr),
-    m_pRedlData(nullptr),
     m_pRedlSaveData(nullptr),
     m_nNode(0),
     m_nNdDiff(0),
@@ -524,7 +523,6 @@ SwUndoDelete::~SwUndoDelete()
         m_pMvStt->GetNode().GetNodes().Delete( *m_pMvStt, m_nNode );
         delete m_pMvStt;
     }
-    delete m_pRedlData;
     delete m_pRedlSaveData;
 }
 

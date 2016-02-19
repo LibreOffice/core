@@ -18,7 +18,6 @@
  */
 
 #include <qe/DocGenerator.hxx>
-#include <qe/Query.hxx>
 
 
 using namespace xmlsearch;

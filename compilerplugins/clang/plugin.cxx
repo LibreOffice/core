@@ -104,6 +104,7 @@ class ParentBuilder
         bool VisitFunctionDecl( const FunctionDecl* function );
         bool VisitObjCMethodDecl( const ObjCMethodDecl* method );
         void walk( const Stmt* stmt );
+        bool shouldVisitTemplateInstantiations () const { return true; }
         unordered_map< const Stmt*, const Stmt* >* parents;
     };
 

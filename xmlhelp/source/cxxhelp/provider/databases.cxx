@@ -126,7 +126,6 @@ Databases::Databases( bool showBasic,
                       Reference< uno::XComponentContext > xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
-      m_pErrorDoc( nullptr ),
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( nullptr ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
@@ -164,10 +163,6 @@ Databases::~Databases()
     // release stylesheet
 
     delete[] m_pCustomCSSDoc;
-
-    // release errorDocument
-
-    delete[] m_pErrorDoc;
 
     // unload the databases
 

@@ -24,25 +24,19 @@
 
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
-    bModified(false),
-    bNew(false),
-    nId(COMBOBOX_APPEND)
+    bNew(false)
 {
 }
 
-SwBoxEntry::SwBoxEntry(const OUString& aNam, sal_Int32 nIdx) :
-    bModified(false),
+SwBoxEntry::SwBoxEntry(const OUString& aNam) :
     bNew(false),
-    aName(aNam),
-    nId(nIdx)
+    aName(aNam)
 {
 }
 
 SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
-    bModified(rOld.bModified),
     bNew(rOld.bNew),
-    aName(rOld.aName),
-    nId(rOld.nId)
+    aName(rOld.aName)
 {
 }
 
@@ -58,7 +52,7 @@ void SwComboBox::Init()
     sal_Int32 nSize = GetEntryCount();
     for( sal_Int32 i=0; i < nSize; ++i )
     {
-        m_EntryList.push_back(SwBoxEntry(ComboBox::GetEntry(i), i));
+        m_EntryList.push_back(SwBoxEntry(ComboBox::GetEntry(i)));
     }
 }
 

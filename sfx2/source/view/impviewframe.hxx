@@ -34,7 +34,6 @@ struct SfxViewFrame_Impl
     Size                aSize;
     OUString            aActualURL;
     SfxFrame&           rFrame;
-    svtools::AsynchronLink* pReloader;
     VclPtr<vcl::Window> pWindow;
     SfxViewFrame*       pActiveChild;
     VclPtr<vcl::Window> pFocusWin;
@@ -53,7 +52,6 @@ struct SfxViewFrame_Impl
 
     explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
         : rFrame(i_rFrame)
-        , pReloader(nullptr)
         , pWindow(nullptr)
         , pActiveChild(nullptr)
         , pFocusWin(nullptr)
@@ -73,7 +71,6 @@ struct SfxViewFrame_Impl
 
     ~SfxViewFrame_Impl()
     {
-        delete pReloader;
     }
 };
 

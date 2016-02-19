@@ -123,7 +123,6 @@ struct ImplSVAppData
     sal_uInt64              mnLastInputTime;                // GetLastInputTime()
     sal_uInt16              mnDispatchLevel;                // DispatchLevel
     sal_uInt16              mnModalMode;                    // ModalMode Count
-    sal_uInt16              mnModalDialog;                  // ModalDialog Count
     SystemWindowFlags       mnSysWinMode;                   // Mode, when SystemWindows should be created
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
     bool                    mbInAppMain;                    // is Application::Main() on stack

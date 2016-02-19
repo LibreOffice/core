@@ -1207,10 +1207,8 @@ size_t ScOrcusStyles::commit_cell_style()
 
 // auto filter import
 
-ScOrcusAutoFilter::ScOrcusAutoFilter(ScDocument& rDoc):
-    mrDoc(rDoc)
+ScOrcusAutoFilter::ScOrcusAutoFilter(ScDocument&)
 {
-    (void)mrDoc;
 }
 
 ScOrcusAutoFilter::~ScOrcusAutoFilter()

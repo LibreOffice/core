@@ -34,14 +34,11 @@ class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
 
-    bool    bModified : 1;
     bool    bNew : 1;
-
     OUString    aName;
-    sal_Int32   nId;
 
 public:
-    SwBoxEntry(const OUString& aName, sal_Int32 nId=0);
+    SwBoxEntry(const OUString& aName);
     SwBoxEntry(const SwBoxEntry& rOrg);
     SwBoxEntry();
 

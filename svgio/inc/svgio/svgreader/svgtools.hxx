@@ -157,22 +157,19 @@ namespace svgio
             SvgAlign    maSvgAlign;
 
             /// bitfield
-            bool        mbDefer : 1; // default is false
             bool        mbMeetOrSlice : 1; // true = meet (default), false = slice
             bool        mbSet : 1;
 
         public:
             SvgAspectRatio()
             :   maSvgAlign(Align_xMidYMid),
-                mbDefer(false),
                 mbMeetOrSlice(true),
                 mbSet(false)
             {
             }
 
-            SvgAspectRatio(SvgAlign aSvgAlign, bool bDefer, bool bMeetOrSlice)
+            SvgAspectRatio(SvgAlign aSvgAlign, bool bMeetOrSlice)
             :   maSvgAlign(aSvgAlign),
-                mbDefer(bDefer),
                 mbMeetOrSlice(bMeetOrSlice),
                 mbSet(true)
             {

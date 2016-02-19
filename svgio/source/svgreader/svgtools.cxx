@@ -1413,7 +1413,7 @@ namespace svgio
 
                 if(bChanged)
                 {
-                    return SvgAspectRatio(aSvgAlign, bDefer, bMeetOrSlice);
+                    return SvgAspectRatio(aSvgAlign, bMeetOrSlice);
                 }
             }
 

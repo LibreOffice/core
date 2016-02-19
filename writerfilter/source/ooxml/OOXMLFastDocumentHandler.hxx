@@ -91,9 +91,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     Stream * mpStream;
-#ifdef DEBUG_WRITERFILTER
-    Stream::Pointer_t mpTmpStream;
-#endif
     OOXMLDocumentImpl* mpDocument;
     sal_Int32 mnXNoteId;
     mutable css::uno::Reference<OOXMLFastContextHandler> mxContextHandler;

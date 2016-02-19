@@ -94,8 +94,6 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
     css::uno::WeakReference < css::accessibility::XAccessible > mxCursorContext;
 
-    sal_Int32 mnPara;
-
     bool mbShapeSelected;
 
     void FireEvent( const SwAccessibleEvent_Impl& rEvent );

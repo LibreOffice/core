@@ -497,11 +497,10 @@ private:
     ScPreviewShell*                     mpViewShell;
     ScAccessibleDocumentPagePreview*    mpAccDoc;
     MapMode                             maMapMode;
-    bool                            mbValid;
 };
 
 ScIAccessibleViewForwarder::ScIAccessibleViewForwarder()
-    : mpViewShell(nullptr), mpAccDoc(nullptr), mbValid(false)
+    : mpViewShell(nullptr), mpAccDoc(nullptr)
 {
 }
 
@@ -510,8 +509,7 @@ ScIAccessibleViewForwarder::ScIAccessibleViewForwarder(ScPreviewShell* pViewShel
                                 const MapMode& aMapMode)
     : mpViewShell(pViewShell),
     mpAccDoc(pAccDoc),
-    maMapMode(aMapMode),
-    mbValid(true)
+    maMapMode(aMapMode)
 {
 }
 

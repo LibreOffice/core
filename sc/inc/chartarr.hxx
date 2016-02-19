@@ -61,7 +61,6 @@ class SC_DLLPUBLIC ScChartArray             // only parameter-struct
     OUString aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
-    bool        bValid;             // for creation out of SchMemChart
 
 private:
     ScMemChart* CreateMemChartSingle();

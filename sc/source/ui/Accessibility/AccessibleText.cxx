@@ -244,7 +244,6 @@ class ScPreviewViewForwarder : public SvxViewForwarder
 {
 protected:
     ScPreviewShell*     mpViewShell;
-    mutable ScPreviewTableInfo* mpTableInfo;
 public:
     explicit            ScPreviewViewForwarder(ScPreviewShell* pViewShell);
     virtual             ~ScPreviewViewForwarder();
@@ -263,15 +262,12 @@ public:
 };
 
 ScPreviewViewForwarder::ScPreviewViewForwarder(ScPreviewShell* pViewShell)
-    :
-    mpViewShell(pViewShell),
-    mpTableInfo(nullptr)
+    : mpViewShell(pViewShell)
 {
 }
 
 ScPreviewViewForwarder::~ScPreviewViewForwarder()
 {
-    delete mpTableInfo;
 }
 
 bool ScPreviewViewForwarder::IsValid() const

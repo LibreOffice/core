@@ -1047,14 +1047,14 @@ const std::vector< std::pair<OUString, OUString> >& SwFltRDFMark::GetAttributes(
 }
 
 // methods of SwFltTOX follow
-SwFltTOX::SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols)
-    : SfxPoolItem(RES_FLTR_TOX), pTOXBase(pBase), nCols( _nCols ),
+SwFltTOX::SwFltTOX(SwTOXBase* pBase)
+    : SfxPoolItem(RES_FLTR_TOX), pTOXBase(pBase),
       bHadBreakItem( false ), bHadPageDescItem( false )
 {
 }
 
 SwFltTOX::SwFltTOX(const SwFltTOX& rCpy)
-    : SfxPoolItem(RES_FLTR_TOX), pTOXBase(rCpy.pTOXBase), nCols( rCpy.nCols ),
+    : SfxPoolItem(RES_FLTR_TOX), pTOXBase(rCpy.pTOXBase),
       bHadBreakItem( rCpy.bHadBreakItem ), bHadPageDescItem( rCpy.bHadPageDescItem )
 {
 }
