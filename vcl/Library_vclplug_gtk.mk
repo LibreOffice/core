@@ -30,12 +30,6 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
 ))
 
-ifeq ($(ENABLE_DBUS),TRUE)
-$(eval $(call gb_Library_add_defs,vclplug_gtk,\
-	-DENABLE_DBUS \
-))
-endif
-
 $(eval $(call gb_Library_use_custom_headers,vclplug_gtk,\
 	officecfg/registry \
 ))

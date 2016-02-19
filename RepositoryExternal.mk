@@ -2537,10 +2537,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(DBUS_CFLAGS) \
 )
 
-$(call gb_LinkTarget_add_defs,$(1),\
-    -DENABLE_DBUS \
-)
-
 ifeq ($(ENABLE_PACKAGEKIT),TRUE)
 $(call gb_LinkTarget_add_defs,$(1),\
     -DENABLE_PACKAGEKIT \

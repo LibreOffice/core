@@ -47,6 +47,7 @@
 #include <list>
 #include <vector>
 
+#include <config_dbus.h>
 #include <config_gio.h>
 
 #include "headless/svpgdi.hxx"
@@ -224,7 +225,7 @@ class GtkSalFrame : public SalFrame
 
     SalMenu*                        m_pSalMenu;
 
-#if defined(ENABLE_DBUS) && ENABLE_GIO
+#if ENABLE_DBUS && ENABLE_GIO
     public:
     void EnsureDbusMenuSynced();
     private:

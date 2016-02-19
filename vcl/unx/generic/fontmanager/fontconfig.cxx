@@ -37,7 +37,7 @@ using namespace psp;
 #include <ft2build.h>
 #include <fontconfig/fcfreetype.h>
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if ENABLE_DBUS && defined(ENABLE_PACKAGEKIT)
 #include <dbus/dbus-glib.h>
 #endif
 
@@ -877,7 +877,7 @@ namespace
         return LanguageTag(OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
     }
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if ENABLE_DBUS && defined(ENABLE_PACKAGEKIT)
     guint get_xid_for_dbus()
     {
         const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? nullptr : Application::GetActiveTopWindow();
@@ -887,7 +887,7 @@ namespace
 #endif
 }
 
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if ENABLE_DBUS && defined(ENABLE_PACKAGEKIT)
 IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
     guint xid = get_xid_for_dbus();
@@ -1098,7 +1098,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                     }
                 }
                 OUString sStillMissing(pRemainingCodes.get(), nRemainingLen);
-#if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
+#if ENABLE_DBUS && defined(ENABLE_PACKAGEKIT)
                 if (get_xid_for_dbus())
                 {
                     if (sStillMissing == rMissingCodes) //replaced nothing

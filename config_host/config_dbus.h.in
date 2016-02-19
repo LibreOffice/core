@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONFIG_GIO_H
-#define INCLUDED_CONFIG_GIO_H
+#ifndef INCLUDED_CONFIG_DBUS_H
+#define INCLUDED_CONFIG_DBUS_H
 
-#define ENABLE_GIO 0
+#define ENABLE_DBUS 0
 
 #endif
 
