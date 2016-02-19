@@ -133,7 +133,6 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/galleryitem.hxx,svx/galleryite
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/galmisc.hxx,svx/galmisc.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/galtheme.hxx,svx/galtheme.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/globl3d.hxx,svx/globl3d.hxx))
-$(eval $(call gb_Package_add_file,svx_inc,inc/svx/globlmn.hrc,globlmn_tmpl.hrc))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/grafctrl.hxx,svx/grafctrl.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/graphctl.hxx,svx/graphctl.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/grfcrop.hxx,svx/grfcrop.hxx))
