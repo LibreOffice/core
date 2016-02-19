@@ -62,7 +62,6 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
-#include <boost/bind.hpp>
 #include <boost/optional.hpp>
 
 namespace {
@@ -1386,11 +1385,7 @@ void MultiSelectionModeHandler::UpdatePosition (
 
     bool bDoAutoScroll = bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(
         rMousePosition,
-        ::boost::bind(
-            &MultiSelectionModeHandler::UpdatePosition,
-            this,
-            rMousePosition,
-            false));
+        [this, &rMousePosition] () { return this->UpdatePosition(rMousePosition, false); });
 
     if (!bDoAutoScroll)
         UpdateModelPosition(aMouseModelPosition);

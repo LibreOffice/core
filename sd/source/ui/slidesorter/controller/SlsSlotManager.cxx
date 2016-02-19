@@ -87,7 +87,6 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
 
-#include <boost/bind.hpp>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -1137,13 +1136,10 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     // Set the selection to the pages in aPagesToSelect.
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
     rSelector.DeselectAllPages();
-    ::std::for_each (
-        aPagesToSelect.begin(),
-        aPagesToSelect.end(),
-        ::boost::bind(
-            static_cast<void (PageSelector::*)(const SdPage*)>(&PageSelector::SelectPage),
-            ::boost::ref(rSelector),
-            _1));
+    for (auto const& it: aPagesToSelect)
+    {
+        rSelector.SelectPage(it);
+    }
 }
 
 void SlotManager::ChangeSlideExclusionState (

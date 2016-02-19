@@ -36,7 +36,6 @@
 #include "app.hrc"
 #include "sdtreelb.hxx"
 #include <sfx2/bindings.hxx>
-#include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -95,8 +94,9 @@ void DragAndDropContext::UpdatePosition (
     bool bDoAutoScroll = bAllowAutoScroll
             && mpTargetSlideSorter->GetController().GetScrollBarManager().AutoScroll(
                 rMousePosition,
-                ::boost::bind(
-                    &DragAndDropContext::UpdatePosition, this, rMousePosition, eMode, false));
+                [this, eMode, &rMousePosition] () {
+                    return this->UpdatePosition(rMousePosition, eMode, false);
+                });
 
     if (!bDoAutoScroll)
     {
