@@ -1158,12 +1158,12 @@ bool IsPointInLine(const Point &rPoint1,
     double fLambda;
     if (labs(rHeading2.X()) > labs(rHeading2.Y()))
     {
-        fLambda = (rPoint1.X() - rPoint2.X()) / (double) rHeading2.X();
+        fLambda = (rPoint1.X() - rPoint2.X()) / static_cast<double>(rHeading2.X());
         bRes = fabs(rPoint1.Y() - (rPoint2.Y() + fLambda * rHeading2.Y())) < eps;
     }
     else
     {
-        fLambda = (rPoint1.Y() - rPoint2.Y()) / (double) rHeading2.Y();
+        fLambda = (rPoint1.Y() - rPoint2.Y()) / static_cast<double>(rHeading2.Y());
         bRes = fabs(rPoint1.X() - (rPoint2.X() + fLambda * rHeading2.X())) < eps;
     }
 
@@ -2595,7 +2595,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 :   SmSpecialNode(NMATH, rNodeToken, FNT_MATH)
 {
     sal_Unicode cChar = GetToken().cMathChar;
-    if ((sal_Unicode) '\0' != cChar)
+    if (sal_Unicode('\0') != cChar)
         SetText(OUString(cChar));
 }
 
@@ -2815,7 +2815,7 @@ static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
     bool bRes = false;
 
     // valid symbol name needs to have a '%' at pos 0 and at least an additional char
-    if (rTokenText.getLength() > 2 && rTokenText[0] == (sal_Unicode)'%')
+    if (rTokenText.getLength() > 2 && rTokenText[0] == sal_Unicode('%'))
     {
         OUString aName( rTokenText.copy(1) );
         SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );

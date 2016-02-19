@@ -387,9 +387,9 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
     sal_Int16 nRet = 0;
     if( eType == uno::TypeClass_DOUBLE )
-        nRet = (sal_Int16)*static_cast<double const *>(rAny.getValue());
+        nRet = static_cast<sal_Int16>(*static_cast<double const *>(rAny.getValue()));
     else if( eType == uno::TypeClass_FLOAT )
-        nRet = (sal_Int16)*static_cast<float const *>(rAny.getValue());
+        nRet = static_cast<sal_Int16>(*static_cast<float const *>(rAny.getValue()));
     else
         rAny >>= nRet;
     return nRet;
@@ -768,7 +768,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
             case HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     :
             case HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        :
-                *pValue <<= (sal_Int16) aFormat.GetRelSize((*ppEntries)->mnMemberId);
+                *pValue <<= static_cast<sal_Int16>(aFormat.GetRelSize((*ppEntries)->mnMemberId));
             break;
 
             case HANDLE_IS_TEXT_MODE                       :
@@ -779,12 +779,12 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             break;
 
             case HANDLE_GREEK_CHAR_STYLE                    :
-                *pValue <<= (sal_Int16)aFormat.GetGreekCharStyle();
+                *pValue <<= static_cast<sal_Int16>(aFormat.GetGreekCharStyle());
             break;
 
             case HANDLE_ALIGNMENT                          :
                 // SmHorAlign uses the same values as HorizontalAlignment
-                *pValue <<= (sal_Int16)aFormat.GetHorAlign();
+                *pValue <<= static_cast<sal_Int16>(aFormat.GetHorAlign());
             break;
 
             case HANDLE_RELATIVE_SPACING                   :
@@ -811,7 +811,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_RIGHT_MARGIN              :
             case HANDLE_TOP_MARGIN                :
             case HANDLE_BOTTOM_MARGIN             :
-                *pValue <<= (sal_Int16)aFormat.GetDistance((*ppEntries)->mnMemberId);
+                *pValue <<= static_cast<sal_Int16>(aFormat.GetDistance((*ppEntries)->mnMemberId));
             break;
             case HANDLE_IS_SCALE_ALL_BRACKETS              :
             {
