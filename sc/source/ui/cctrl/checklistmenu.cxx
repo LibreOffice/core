@@ -1132,7 +1132,8 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     OUString aLabel;
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i)
+    {
         aLabel = maMembers[i].maName;
         if (aLabel.isEmpty())
             aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
