@@ -12010,9 +12010,9 @@ if test "$enable_fetch_external" != "no"; then
 CURL=`which curl 2>/dev/null`
 
 for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
-    eval "$i --version" > /dev/null 2>&1
-    ret=$?
-    if test $ret -eq 0; then
+    # wget new enough?
+    $i --help 2> /dev/null | $GREP no-use-server-timestamps 2>&1 > /dev/null
+    if test $? -eq 0; then
         WGET=$i
         break
     fi
