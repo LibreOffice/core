@@ -335,7 +335,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
                     // Could be the right method, type has to be checked
                     iHashResult = (*aIt).second;
 
-                    const Reference<XIdlMethod> xMethod = maAllMethodSeq[ iHashResult ];
+                    const Reference<XIdlMethod> xMethod = maAllMethodSeq.at(iHashResult);
 
                     Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
                     if( xClass->equals( xMethClass ) )
@@ -348,8 +348,8 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
 
                         // Could also be another method with the same name
                         // Iterate over all methods
-                        sal_Int32 nLen = (sal_Int32)maAllMethodSeq.size();
-                        for( int i = 0 ; i < nLen ; ++i )
+                        size_t nLen = maAllMethodSeq.size();
+                        for (size_t i = 0; i < nLen; ++i)
                         {
                             const Reference<XIdlMethod> xMethod2 = maAllMethodSeq[ i ];
                             if( xMethod2->getName() == aPureMethodName )
@@ -2380,7 +2380,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             {
                                 sal_Int32 iHashResult = (*aIt).second;
 
-                                Reference<XIdlMethod> xExistingMethod = pAccess->maAllMethodSeq[ iHashResult ];
+                                Reference<XIdlMethod> xExistingMethod = pAccess->maAllMethodSeq.at(iHashResult);
 
                                 Reference< XIdlClass > xExistingMethClass =
                                     xExistingMethod->getDeclaringClass();
@@ -2389,7 +2389,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                     continue;
                             }
 
-                            pAccess->maAllMethodSeq[ iAllExportedMethod ] = rxMethod;
+                            pAccess->maAllMethodSeq.at(iAllExportedMethod) = rxMethod;
 
                             // If a concept has been set, is the method "normal"?
                             sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
