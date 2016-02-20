@@ -2873,7 +2873,9 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_reset_view(LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    priv->m_pTileBuffer->resetAllTiles();
+
+    if (priv->m_pTileBuffer != nullptr)
+        priv->m_pTileBuffer->resetAllTiles();
     priv->m_nLoadProgress = 0.0;
 
     memset(&priv->m_aVisibleCursor, 0, sizeof(priv->m_aVisibleCursor));
