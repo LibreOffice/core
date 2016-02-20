@@ -8,6 +8,8 @@
  */
 #define _CRT_RAND_S
 
+#include <sal/types.h>
+
 #include <stdlib.h>
 #include <memory.h>
 
@@ -16,7 +18,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
     unsigned int val;
 
     /* if unaligned fill to alignment */
-    if((int)buffer & 3)
+    if((sal_uIntPtr)buffer & 3)
     {
         size_t len = 4 - ((size_t)(buffer) & 3);
 
