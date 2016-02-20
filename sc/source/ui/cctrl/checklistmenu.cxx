@@ -1131,13 +1131,30 @@ void ScCheckListMenuWindow::packWindow()
 void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
-    OUString aLabel;
+    std::set<SvTreeListEntry*> maParents;
     for (size_t i = 0; i < n; ++i)
     {
-        aLabel = maMembers[i].maName;
-        if (aLabel.isEmpty())
-            aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-        maChecks->ShowCheckEntry( aLabel, maMembers[i].mpParent, true, bSet);
+        maParents.insert(maMembers[i].mpParent);
+    }
+    for (auto itr = maParents.begin(), itrEnd = maParents.end(); itr != itrEnd; ++itr)
+    {
+        if (!(*itr))
+        {
+            sal_uInt16 nCount = maChecks->GetEntryCount();
+            for( sal_uInt16 i = 0; i < nCount; ++i)
+            {
+                SvTreeListEntry* pEntry = maChecks->GetEntry(i);
+                maChecks->CheckEntry(pEntry, bSet);
+            }
+        }
+        else
+        {
+            SvTreeListEntries& rEntries = (*itr)->GetChildEntries();
+            for (auto it = rEntries.begin(), itEnd = rEntries.end(); it != itEnd; ++ it)
+            {
+                maChecks->CheckEntry(*itr, bSet);
+            }
+        }
     }
 
     if (!maConfig.mbAllowEmptySet)
