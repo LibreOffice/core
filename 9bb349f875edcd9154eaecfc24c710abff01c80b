@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_abcf29b2",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-20T19:09:04Z",
+      "side": 1,
+      "message": "undoKey and redoKey can be declared\n   \"private static final\"\nsince they are constants for the purposes of this class.",
+      "revId": "9bb349f875edcd9154eaecfc24c710abff01c80b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
