@@ -156,6 +156,12 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
     if( pValue.vt != VT_BSTR || pValue.bstrVal == NULL )
         return E_FAIL;
 
+    // TODO(davido):
+    // SODispatchInterceptor.cxx(185): warning C4456: declaration of '_convert' hides previous local declaration
+    // SODispatchInterceptor.cxx(159): note: see declaration of '_convert'
+#pragma warning(push, 1)
+#pragma warning(disable: 4456)
+
     USES_CONVERSION;
     if( !strncmp( OLE2T( pValue.bstrVal ), ".uno:OpenHyperlink", 18 ) )
     {
@@ -199,6 +205,8 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
             }
         }
     }
+
+#pragma warning(pop)
 
     return S_OK;
 }

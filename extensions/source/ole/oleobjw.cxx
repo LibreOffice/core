@@ -1019,7 +1019,8 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     CComVariant     varResult;
     ExcepInfo       excepinfo;
     unsigned int    uArgErr;
-    DISPPARAMS dispparams= { pVarParams, NULL, parameterCount, 0};
+    DISPPARAMS dispparams= { pVarParams, NULL, static_cast<UINT>(parameterCount), 0};
+
     // Get the DISPID
     FuncDesc aDesc(getTypeInfo());
     getFuncDesc(sFunctionName, & aDesc);
@@ -1583,9 +1584,9 @@ TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall(const 
         {
             typelib_InterfaceMemberTypeDescription* pMember= NULL;
             //find the member description of the current call
-            for( int i=0; i < pInterface->nAllMembers; i++)
+            for( int j=0; j < pInterface->nAllMembers; j++)
             {
-                typelib_TypeDescriptionReference* pTypeRefMember = pInterface->ppAllMembers[i];
+                typelib_TypeDescriptionReference* pTypeRefMember = pInterface->ppAllMembers[j];
                 typelib_TypeDescription* pDescMember= NULL;
                 TYPELIB_DANGER_GET( &pDescMember, pTypeRefMember);
 
@@ -2004,9 +2005,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
 
         // allocate space for the out param Sequence and indices Sequence
         int outParamsCount= 0; // includes in/out parameter
-        for (int i = 0; i < aFuncDesc->cParams; i++)
+        for (int j = 0; j < aFuncDesc->cParams; j++)
         {
-            if (aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags &
+            if (aFuncDesc->lprgelemdescParam[j].paramdesc.wParamFlags &
                 PARAMFLAG_FOUT)
                 outParamsCount++;
         }
@@ -2172,9 +2173,9 @@ void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
         {
             // Fallback: DISPATCH_PROPERTYGET can mostly be called as
             // DISPATCH_METHOD
-            ITypeInfo * pInfo = getTypeInfo();
-            FuncDesc aDescPut(pInfo);
-            VarDesc aVarDesc(pInfo);
+            ITypeInfo * pTypeInfo = getTypeInfo();
+            FuncDesc aDescPut(pTypeInfo);
+            VarDesc aVarDesc(pTypeInfo);
             getPropDesc(sFuncName, & aFuncDesc, & aDescPut, & aVarDesc);
             if ( ! aFuncDesc )
             {
