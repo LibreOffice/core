@@ -254,14 +254,9 @@ gb_LinkTarget_LDFLAGS += \
 	/ignore:4217
 
 
-gb_DEBUGINFO_FLAGS := -Zi
-
-ifeq ($(VCVER),120)
-# Use -FS with VS2013: "Force Synchronous PDB Writes. Forces writes to
-# the program database (PDB) file--created by /Zi or /ZI--to be
-# serialized through MSPDBSRV.EXE"
-gb_DEBUGINFO_FLAGS+=-FS
-endif
+gb_DEBUGINFO_FLAGS := \
+	-FS \
+	-Zi \
 
 gb_DEBUG_CFLAGS := $(gb_DEBUGINFO_FLAGS)
 
