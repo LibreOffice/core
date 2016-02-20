@@ -3478,13 +3478,14 @@ if test "$_os" = "WINNT"; then
             if test -n "$ucrttest"; then
                 AC_MSG_RESULT([found])
                 PathFormat "$ucrttest"
-                ucrtincpath_formatted="$formatted_path/Include/$ucrtdir/ucrt"
+                ucrtincpath_formatted="${formatted_path}Include/$ucrtdir/ucrt"
                 # SOLARINC is used for external modules and must be set too.
                 # And no, it's not sufficient to set SOLARINC only, as configure
                 # itself doesn't honour it.
                 SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
                 CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
-                CXXFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
+                CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
+                CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
             else
                 AC_MSG_ERROR([not found])
             fi
@@ -12603,7 +12604,7 @@ if test "$build_os" = "cygwin"; then
         fi
         if test $VCVER = 140; then
             PathFormat "$ucrttest"
-            ucrtlibpath_formatted="$formatted_path/lib/$ucrtdir/ucrt/x64"
+            ucrtlibpath_formatted="${formatted_path}lib/$ucrtdir/ucrt/x64"
             ILIB="$ILIB;$ucrtlibpath_formatted"
         fi
     else
@@ -12617,7 +12618,7 @@ if test "$build_os" = "cygwin"; then
         fi
         if test $VCVER = 140; then
             PathFormat "$ucrttest"
-            ucrtlibpath_formatted="$formatted_path/lib/$ucrtdir/ucrt/x86"
+            ucrtlibpath_formatted="${formatted_path}lib/$ucrtdir/ucrt/x86"
             ILIB="$ILIB;$ucrtlibpath_formatted"
         fi
     fi
