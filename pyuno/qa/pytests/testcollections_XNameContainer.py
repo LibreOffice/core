@@ -29,7 +29,7 @@ class TestXNameContainer(CollectionsTestBase):
         # Given
         spr = self.createBlankSpreadsheet()
         ranges = spr.createInstance("com.sun.star.sheet.SheetCellRanges")
-        newRange = spr.Sheets.getByIndex(0).getCellRangeByPosition( 1, 2, 1, 2 )
+        newRange = spr.Sheets.getByIndex(0).getCellRangeByPosition(1, 2, 1, 2)
 
         # When
         ranges['foo'] = newRange
@@ -45,7 +45,7 @@ class TestXNameContainer(CollectionsTestBase):
         # Given
         spr = self.createBlankSpreadsheet()
         ranges = spr.createInstance("com.sun.star.sheet.SheetCellRanges")
-        newRange = spr.Sheets.getByIndex(0).getCellRangeByPosition( 1, 2, 1, 2 )
+        newRange = spr.Sheets.getByIndex(0).getCellRangeByPosition(1, 2, 1, 2)
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -57,8 +57,8 @@ class TestXNameContainer(CollectionsTestBase):
         # Given
         spr = self.createBlankSpreadsheet()
         ranges = spr.createInstance("com.sun.star.sheet.SheetCellRanges")
-        newRange1 = spr.Sheets.getByIndex(0).getCellRangeByPosition( 1, 2, 1, 2 )
-        newRange2 = spr.Sheets.getByIndex(0).getCellRangeByPosition( 6, 6, 6, 6 )
+        newRange1 = spr.Sheets.getByIndex(0).getCellRangeByPosition(1, 2, 1, 2)
+        newRange2 = spr.Sheets.getByIndex(0).getCellRangeByPosition(6, 6, 6, 6)
 
         # When
         ranges['foo'] = newRange1

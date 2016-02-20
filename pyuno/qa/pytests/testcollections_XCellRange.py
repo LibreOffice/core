@@ -33,7 +33,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        cell = sht[0,0]
+        cell = sht[0, 0]
 
         # Then
         self.assertEqual(0, cell.CellAddress.Sheet)
@@ -49,13 +49,13 @@ class TestXCellRange(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10,10)
+        textTable.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
         tbl = doc.TextTables.getByIndex(0)
 
         # When
-        cell = tbl[0,0]
+        cell = tbl[0, 0]
 
         # Then
         self.assertEqual('A1', cell.CellName)
@@ -71,7 +71,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        rng = sht[3,7]
+        rng = sht[3, 7]
 
         # Then
         self.assertEqual(0, rng.CellAddress.Sheet)
@@ -87,13 +87,13 @@ class TestXCellRange(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10,10)
+        textTable.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
         tbl = doc.TextTables.getByIndex(0)
 
         # When
-        cell = tbl[3,7]
+        cell = tbl[3, 7]
 
         # Then
         self.assertEqual('H4', cell.CellName)
@@ -108,7 +108,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        rng = sht[0,1:3]
+        rng = sht[0, 1:3]
 
         # Then
         self.assertEqual(0, rng.RangeAddress.Sheet)
@@ -125,16 +125,16 @@ class TestXCellRange(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10,10)
+        textTable.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
-        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x,10*x + 10)) for x in range(10))
+        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
 
         # When
-        rng = tbl[0,1:3]
+        rng = tbl[0, 1:3]
 
         # Then
         self.assertEqual((('101', '102'),), rng.DataArray)
@@ -149,7 +149,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        rng = sht[1:3,0]
+        rng = sht[1:3, 0]
 
         # Then
         self.assertEqual(0, rng.RangeAddress.Sheet)
@@ -166,16 +166,16 @@ class TestXCellRange(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10,10)
+        textTable.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
-        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x,10*x + 10)) for x in range(10))
+        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
 
         # When
-        rng = tbl[1:3,0]
+        rng = tbl[1:3, 0]
 
         # Then
         self.assertEqual((('110',), ('120',)), rng.DataArray)
@@ -190,7 +190,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        rng = sht[1:3,3:5]
+        rng = sht[1:3, 3:5]
 
         # Then
         self.assertEqual(0, rng.RangeAddress.Sheet)
@@ -211,9 +211,9 @@ class TestXCellRange(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(KeyError):
-            rng = sht[1:1,3:5]
+            rng = sht[1:1, 3:5]
         with self.assertRaises(KeyError):
-            rng = sht[1:3,3:3]
+            rng = sht[1:3, 3:3]
 
     # Tests syntax:
     #    rng = cellrange[0:1,2:3]    # Access cell range by slices
@@ -223,20 +223,19 @@ class TestXCellRange(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10,10)
+        textTable.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
-        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x,10*x + 10)) for x in range(10))
+        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
 
         # When
-        rng = tbl[1:3,3:5]
+        rng = tbl[1:3, 3:5]
 
         # Then
         self.assertEqual((('113', '114'), ('123', '124')), rng.DataArray)
-
 
     # Tests syntax:
     #    rng = cellrange['A1:B2']    # Access cell range by descriptor
@@ -265,12 +264,12 @@ class TestXCellRange(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance('com.sun.star.text.TextTable')
-        textTable.initialize(10,10)
+        textTable.initialize(10, 10)
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
         tbl = doc.TextTables.getByIndex(0)
         doc.lockControllers()
-        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x,10*x + 10)) for x in range(10))
+        tbl.DataArray = tuple(tuple(str(100 + y) for y in range(10*x, 10*x + 10)) for x in range(10))
         doc.unlockControllers()
 
         # When
@@ -288,7 +287,7 @@ class TestXCellRange(CollectionsTestBase):
         spr = self.createBlankSpreadsheet()
         sht = spr.Sheets.getByIndex(0)
         expr = '$' + sht.Name + '.$C2:F10'
-        addr = CellAddress(Sheet=0,Row=1,Column=2)
+        addr = CellAddress(Sheet=0, Row=1, Column=2)
         sht.NamedRanges.addNewByName('foo', expr, addr, 0)
 
         # When
@@ -330,7 +329,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        rng = sht[0,:]
+        rng = sht[0, :]
 
         # Then
         self.assertEqual(0, rng.RangeAddress.Sheet)
@@ -349,7 +348,7 @@ class TestXCellRange(CollectionsTestBase):
         sht = spr.Sheets.getByIndex(0)
 
         # When
-        rng = sht[:,0]
+        rng = sht[:, 0]
 
         # Then
         self.assertEqual(0, rng.RangeAddress.Sheet)

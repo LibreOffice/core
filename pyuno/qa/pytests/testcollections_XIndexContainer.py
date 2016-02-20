@@ -26,7 +26,7 @@ class TestXIndexContainer(CollectionsTestBase):
         values = sm.createInstanceWithContext("com.sun.star.document.IndexedPropertyValues", self.context)
         for i in range(count):
             properties = (PropertyValue(Name='n'+str(i), Value='v'+str(i)),)
-            uno.invoke (values, "insertByIndex", (i, uno.Any("[]com.sun.star.beans.PropertyValue", properties)))
+            uno.invoke(values, "insertByIndex", (i, uno.Any("[]com.sun.star.beans.PropertyValue", properties)))
         return values
 
     def generateTestTuple(self, values):
@@ -89,7 +89,6 @@ class TestXIndexContainer(CollectionsTestBase):
             for i in range(propertyValues.getCount()):
                 self.assertEqual(toCompare[i][0].Name, propertyValues.getByIndex(i)[0].Name)
 
-
     # Tests syntax:
     #    obj[2:4] = val1,val2        # Replace by slice
     #    obj[2:3] = val1,val2        # Insert/replace by slice
@@ -102,9 +101,9 @@ class TestXIndexContainer(CollectionsTestBase):
         baseMax = 5
         assignMax = 5
         for i in range(baseMax):
-            for j in [x for x in range(-baseMax-2,baseMax+3)] + [None]:
-                for k in [x for x in range(-baseMax-2,baseMax+3)] + [None]:
-                    key = slice(j,k)
+            for j in [x for x in range(-baseMax-2, baseMax+3)] + [None]:
+                for k in [x for x in range(-baseMax-2, baseMax+3)] + [None]:
+                    key = slice(j, k)
                     for l in range(assignMax):
                         assign = [y+100 for y in range(l)]
                         expected = list(range(i))
@@ -119,12 +118,12 @@ class TestXIndexContainer(CollectionsTestBase):
     #    Cases not requiring sequence type coercion
     #    Invalid values
     def test_XIndexContainer_AssignSlice_Invalid(self):
-        self.assignValuesTestFixture(2, slice(0,2), None, TypeError())
-        self.assignValuesTestFixture(2, slice(0,2), 'foo', TypeError())
-        self.assignValuesTestFixture(2, slice(0,2), 12.34, TypeError())
-        self.assignValuesTestFixture(2, slice(0,2), {'a':'b'}, TypeError())
-        self.assignValuesTestFixture(2, slice(0,2), ('foo',), TypeError())
-        self.assignValuesTestFixture(2, slice(0,2), ('foo','foo'), TypeError())
+        self.assignValuesTestFixture(2, slice(0, 2), None, TypeError())
+        self.assignValuesTestFixture(2, slice(0, 2), 'foo', TypeError())
+        self.assignValuesTestFixture(2, slice(0, 2), 12.34, TypeError())
+        self.assignValuesTestFixture(2, slice(0, 2), {'a': 'b'}, TypeError())
+        self.assignValuesTestFixture(2, slice(0, 2), ('foo',), TypeError())
+        self.assignValuesTestFixture(2, slice(0, 2), ('foo', 'foo'), TypeError())
 
     # Tests syntax:
     #    obj[2:2] = (val,)           # Insert by slice
@@ -150,10 +149,10 @@ class TestXIndexContainer(CollectionsTestBase):
         baseMax = 5
         assignMax = 5
         for i in range(baseMax):
-            for j in [x for x in range(-baseMax-2,baseMax+3)] + [None]:
-                for k in [x for x in range(-baseMax-2,baseMax+3)] + [None]:
-                    for l in [-2,-1,1,2]:
-                        key = slice(j,k,l)
+            for j in [x for x in range(-baseMax-2, baseMax+3)] + [None]:
+                for k in [x for x in range(-baseMax-2, baseMax+3)] + [None]:
+                    for l in [-2, -1, 1, 2]:
+                        key = slice(j, k, l)
                         for m in range(assignMax):
                             assign = [y+100 for y in range(m)]
                             expected = list(range(i))
@@ -161,6 +160,7 @@ class TestXIndexContainer(CollectionsTestBase):
                                 expected[key] = assign
                             except Exception as e:
                                 expected = e
+
                             self.assignValuesTestFixture(i, key, assign, expected)
 
     # Tests syntax:
@@ -168,7 +168,7 @@ class TestXIndexContainer(CollectionsTestBase):
     def test_XIndexContainer_DelIndex(self):
         baseMax = 5
         for i in range(baseMax):
-            for j in [x for x in range(-baseMax-2,baseMax+3)]:
+            for j in [x for x in range(-baseMax-2, baseMax+3)]:
                 expected = list(range(i))
                 try:
                     del expected[j]
@@ -181,9 +181,9 @@ class TestXIndexContainer(CollectionsTestBase):
     def test_XIndexContainer_DelSlice(self):
         baseMax = 5
         for i in range(baseMax):
-            for j in [x for x in range(-baseMax-2,baseMax+3)] + [None]:
-                for k in [x for x in range(-baseMax-2,baseMax+3)] + [None]:
-                    key = slice(j,k)
+            for j in [x for x in range(-baseMax-2, baseMax+3)] + [None]:
+                for k in [x for x in range(-baseMax-2, baseMax+3)] + [None]:
+                    key = slice(j, k)
                     expected = list(range(i))
                     try:
                         del expected[key]
