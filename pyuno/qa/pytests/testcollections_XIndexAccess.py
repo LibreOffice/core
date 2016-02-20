@@ -120,8 +120,8 @@ class TestXIndexAccess(CollectionsTestBase):
         self.readValuesTestFixture(doc, 0, None,       TypeError)
         self.readValuesTestFixture(doc, 0, 'foo',      TypeError)
         self.readValuesTestFixture(doc, 0, 12.34,      TypeError)
-        self.readValuesTestFixture(doc, 0, (0,1),      TypeError)
-        self.readValuesTestFixture(doc, 0, [0,1],      TypeError)
+        self.readValuesTestFixture(doc, 0, (0, 1),     TypeError)
+        self.readValuesTestFixture(doc, 0, [0, 1],     TypeError)
         self.readValuesTestFixture(doc, 0, {'a': 'b'}, TypeError)
 
     # Tests syntax:
@@ -131,9 +131,9 @@ class TestXIndexAccess(CollectionsTestBase):
         testMax = 4
         for i in range(testMax):
             t = tuple(range(i))
-            for j in [x for x in range(-testMax-2,testMax+3)] + [None]:
-                for k in [x for x in range(-testMax-2,testMax+3)] + [None]:
-                    key = slice(j,k)
+            for j in [x for x in range(-testMax-2, testMax+3)] + [None]:
+                for k in [x for x in range(-testMax-2, testMax+3)] + [None]:
+                    key = slice(j, k)
                     expected = t[key]
                     self.readValuesTestFixture(doc, i, key, expected)
 
@@ -144,10 +144,10 @@ class TestXIndexAccess(CollectionsTestBase):
         testMax = 4
         for i in range(testMax):
             t = tuple(range(i))
-            for j in [x for x in range(-testMax-2,testMax+3)] + [None]:
-                for k in [x for x in range(-testMax-2,testMax+3)] + [None]:
-                    for l in [-2,-1,2]:
-                        key = slice(j,k,l)
+            for j in [x for x in range(-testMax-2, testMax+3)] + [None]:
+                for k in [x for x in range(-testMax-2, testMax+3)] + [None]:
+                    for l in [-2, -1, 2]:
+                        key = slice(j, k, l)
                         expected = t[key]
                         self.readValuesTestFixture(doc, i, key, expected)
 
@@ -162,7 +162,7 @@ class TestXIndexAccess(CollectionsTestBase):
         footnote = doc.createInstance("com.sun.star.text.Footnote")
         footnote.setLabel('foo')
         doc.Text.insertTextContent(cursor, footnote, 0)
-        footnote = doc.Footnotes.getByIndex(0);
+        footnote = doc.Footnotes.getByIndex(0)
 
         # When
         present = footnote in doc.Footnotes

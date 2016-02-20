@@ -9,16 +9,13 @@ except ImportError:
 
 from org.libreoffice.unotest import pyuno, mkPropertyValue
 
+
 class InsertRemoveCells(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.xContext = pyuno.getComponentContext()
         pyuno.private_initTestEnvironment()
-
-
-    # no need for a tearDown(cls) method.
-
 
     def test_fdo74824_load(self):
         ctxt = self.xContext
@@ -35,12 +32,12 @@ class InsertRemoveCells(unittest.TestCase):
         doc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
 
         sheet = doc.Sheets.Sheet1
-        area = sheet.getCellRangeByName( 'A2:B4' )
+        area = sheet.getCellRangeByName('A2:B4')
         addr = area.getRangeAddress()
 
         # 2 = intended to shift cells right, but I don't know where to find
         # the ENUM to put in its place.  Corrections welcome.
-        sheet.insertCells( addr, 2 )
+        sheet.insertCells(addr, 2)
 
         # basically, the insertCells call is the test: it should not crash
         # LibreOffice.  However, for completeness, we should test the cell
@@ -65,21 +62,22 @@ class InsertRemoveCells(unittest.TestCase):
         )
         for pos in empty_cells:
             cell = sheet.getCellByPosition(*pos)
-            self.assertEqual( 'EMPTY', cell.Type.value )
+            self.assertEqual('EMPTY', cell.Type.value)
+
         for x, y, f, s, val in formula_cells:
             cell = sheet.getCellByPosition(x, y)
-            self.assertEqual( 'FORMULA', cell.Type.value )
-            self.assertEqual( f, cell.getFormula() )
-            self.assertEqual( s, cell.String )
-            self.assertEqual( val, cell.Value )
+            self.assertEqual('FORMULA', cell.Type.value)
+            self.assertEqual(f, cell.getFormula())
+            self.assertEqual(s, cell.String)
+            self.assertEqual(val, cell.Value)
+
         for x, y, s, val in value_cells:
             cell = sheet.getCellByPosition(x, y)
-            self.assertEqual( s, cell.String )
-            self.assertEqual( val, cell.Value )
+            self.assertEqual(s, cell.String)
+            self.assertEqual(val, cell.Value)
 
-        doc.close( True )
+        doc.close(True)
 
 
 if __name__ == '__main__':
     unittest.main()
-

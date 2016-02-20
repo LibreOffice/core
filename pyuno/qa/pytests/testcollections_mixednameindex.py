@@ -27,7 +27,7 @@ class TestMixedNameIndex(CollectionsTestBase):
         # Given
         doc = self.createBlankTextDocument()
         textTable = doc.createInstance("com.sun.star.text.TextTable")
-        textTable.initialize(2,2)
+        textTable.initialize(2, 2)
         textTable.Name = 'foo'
         cursor = doc.Text.createTextCursor()
         doc.Text.insertTextContent(cursor, textTable, False)
@@ -39,7 +39,7 @@ class TestMixedNameIndex(CollectionsTestBase):
         # Then
         self.assertEqual('foo', tableByName.Name)
         self.assertEqual('foo', tableByIndex.Name)
-        self.assertEqual(tableByName,tableByIndex)
+        self.assertEqual(tableByName, tableByIndex)
 
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ class TestXNameAccess(CollectionsTestBase):
         drw = self.createBlankDrawing()
 
         # When
-        length = len (drw.Links)
+        length = len(drw.Links)
 
         # Then
         self.assertEqual(2, length)
@@ -96,7 +96,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[(1,2)]
+            link = drw.Links[(1, 2)]
 
     # Tests syntax:
     #    val = obj[key]              # Access by key
@@ -108,7 +108,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[[1,2]]
+            link = drw.Links[[1, 2]]
 
     # Tests syntax:
     #    val = obj[key]              # Access by key
@@ -120,7 +120,7 @@ class TestXNameAccess(CollectionsTestBase):
 
         # When / Then
         with self.assertRaises(TypeError):
-            link = drw.Links[{'a':'b'}]
+            link = drw.Links[{'a': 'b'}]
 
     # Tests syntax:
     #    if key in obj: ...          # Test key presence
@@ -136,7 +136,6 @@ class TestXNameAccess(CollectionsTestBase):
 
         # Then
         self.assertTrue(present)
-
 
     # Tests syntax:
     #    for key in obj: ...         # Implicit iterator (keys)
@@ -156,7 +155,7 @@ class TestXNameAccess(CollectionsTestBase):
             readLinks.append(link)
 
         # Then
-        self.assertEqual(['foo0','foo1'], readLinks)
+        self.assertEqual(['foo0', 'foo1'], readLinks)
 
     # Tests syntax:
     #    itr = iter(obj)             # Named iterator (keys)
