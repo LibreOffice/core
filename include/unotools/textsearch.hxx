@@ -50,11 +50,20 @@ public:
     enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST, SRCH_WILDCARD };
 
     /** Convert configuration and document boolean settings to SearchType.
-        If bWildcard is true it takes precedence over bRegExp.
+        If bWildcard is true it takes precedence over rbRegExp.
+        @param  rbRegExp
+                If true and bWildcard is also true, rbRegExp is set to false to
+                adapt the caller's settings.
      */
-    static SearchType ConvertToSearchType( bool bWildcard, bool bRegExp )
+    static SearchType ConvertToSearchType( bool bWildcard, bool & rbRegExp )
     {
-        return bWildcard ? SRCH_WILDCARD : (bRegExp ? SRCH_REGEXP : SRCH_NORMAL);
+        if (bWildcard)
+        {
+            if (rbRegExp)
+                rbRegExp = false;
+            return SRCH_WILDCARD;
+        }
+        return rbRegExp ? SRCH_REGEXP : SRCH_NORMAL;
     }
 
     /** Convert SearchType to configuration and document boolean settings.

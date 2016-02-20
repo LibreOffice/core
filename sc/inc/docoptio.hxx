@@ -98,12 +98,7 @@ public:
     utl::SearchParam::SearchType GetFormulaSearchType() const
     {
         if (eFormulaSearchType == eSearchTypeUnknown)
-        {
             eFormulaSearchType = utl::SearchParam::ConvertToSearchType( bFormulaWildcardsEnabled, bFormulaRegexEnabled);
-            if (bFormulaWildcardsEnabled && bFormulaRegexEnabled)
-                // Mutually exclusive, straighten out.
-                bFormulaRegexEnabled = false;
-        }
         return eFormulaSearchType;
     }
 
