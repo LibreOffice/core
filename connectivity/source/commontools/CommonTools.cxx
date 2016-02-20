@@ -134,6 +134,13 @@ namespace connectivity
                 throw Exception(); // -5
             else
             {
+// TODO(davido): FixMe
+// 'reinterpret_cast': conversion from 'sal_Int32' to 'jvmaccess::VirtualMachine *' of greater size
+#if defined _MSC_VER
+#pragma warning(push,1)
+#pragma warning(disable: 4312)
+#endif
+
                 sal_Int32 nValue = 0;
                 jvmaccess::VirtualMachine* pJVM = nullptr;
                 if ( uaJVM >>= nValue )
@@ -146,6 +153,9 @@ namespace connectivity
                 }
                 aRet = pJVM;
             }
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
         }
         catch (Exception&)
         {
