@@ -22,10 +22,10 @@ from com.sun.star.beans import PropertyValue
 class TestXIndexReplace(CollectionsTestBase):
 
     def generateTestContentIndex(self, doc):
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
         for i in range(10):
             styles = ('n'+str(i),)
-            uno.invoke (index.LevelParagraphStyles, "replaceByIndex", (i, uno.Any("[]string", styles)))
+            uno.invoke(index.LevelParagraphStyles, "replaceByIndex", (i, uno.Any("[]string", styles)))
         return index
 
     def generateTestTuple(self, values):
@@ -59,7 +59,6 @@ class TestXIndexReplace(CollectionsTestBase):
             for i in range(10):
                 self.assertEqual(toCompare[i][0], index.LevelParagraphStyles.getByIndex(i)[0])
 
-
     # Tests syntax:
     #    obj[0] = val                # Replace by index
     # For:
@@ -67,7 +66,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When
         index.LevelParagraphStyles[0] = ('Caption',)
@@ -82,7 +81,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex_Invalid_None(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -95,7 +94,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex_Invalid_String(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -108,7 +107,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex_Invalid_Float(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -121,11 +120,11 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex_Invalid_List(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
-            index.LevelParagraphStyles[0] = [0,1]
+            index.LevelParagraphStyles[0] = [0, 1]
 
     # Tests syntax:
     #    obj[0] = val                # Replace by index
@@ -134,7 +133,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex_Invalid_Dict(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -147,7 +146,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceIndex_Invalid_InconsistentTuple(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -161,9 +160,9 @@ class TestXIndexReplace(CollectionsTestBase):
         assignMax = 12
         doc = self.createBlankTextDocument()
         t = tuple(range(10))
-        for j in [x for x in range(-12,13)] + [None]:
-            for k in [x for x in range(-12,13)] + [None]:
-                key = slice(j,k)
+        for j in [x for x in range(-12, 13)] + [None]:
+            for k in [x for x in range(-12, 13)] + [None]:
+                key = slice(j, k)
                 for l in range(assignMax):
                     assign = [y+100 for y in range(l)]
                     expected = list(range(10))
@@ -182,7 +181,7 @@ class TestXIndexReplace(CollectionsTestBase):
     def test_XIndexReplace_ReplaceSlice_Invalid_InconsistentTuple(self):
         # Given
         doc = self.createBlankTextDocument()
-        index = doc.createInstance("com.sun.star.text.ContentIndex");
+        index = doc.createInstance("com.sun.star.text.ContentIndex")
 
         # When / Then
         with self.assertRaises(TypeError):
@@ -199,10 +198,10 @@ class TestXIndexReplace(CollectionsTestBase):
         assignMax = 12
         doc = self.createBlankTextDocument()
         t = tuple(range(10))
-        for j in [x for x in range(-12,13)] + [None]:
-            for k in [x for x in range(-12,13)] + [None]:
-                for l in [-2,-1,2]:
-                    key = slice(j,k,l)
+        for j in [x for x in range(-12, 13)] + [None]:
+            for k in [x for x in range(-12, 13)] + [None]:
+                for l in [-2, -1, 2]:
+                    key = slice(j, k, l)
                     for m in range(assignMax):
                         assign = [y+100 for y in range(m)]
                         expected = list(range(10))
