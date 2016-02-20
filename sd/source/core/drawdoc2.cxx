@@ -46,6 +46,9 @@
 #include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svtools/imapobj.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <comphelper/lok.hxx>
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -374,6 +377,17 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (!bLast)
         UpdatePageRelativeURLs(static_cast<SdPage*>( pPage ), nPos, 1);
 
+    if (comphelper::LibreOfficeKit::isActive() &&
+        static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream;
+        aTree.put("action", "PartInserted");
+        aTree.put("part", OUString::number(nPos / 2).toUtf8().getStr());
+        boost::property_tree::write_json(aStream, aTree);
+        const OString aPayload = aStream.str().c_str();
+        libreOfficeKitCallback(LOK_CALLBACK_PARTS_COUNT_CHANGED, aPayload.getStr());
+    }
 }
 
 // Delete page
@@ -397,6 +411,18 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     if (!bLast)
         UpdatePageRelativeURLs(static_cast<SdPage*>(pPage), nPgNum, -1);
+
+    if (comphelper::LibreOfficeKit::isActive() &&
+        static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream;
+        aTree.put("action", "PartDeleted");
+        aTree.put("part", OUString::number(nPgNum / 2).toUtf8().getStr());
+        boost::property_tree::write_json(aStream, aTree);
+        const OString aPayload = aStream.str().c_str();
+        libreOfficeKitCallback(LOK_CALLBACK_PARTS_COUNT_CHANGED, aPayload.getStr());
+    }
 
     return pPage;
 }

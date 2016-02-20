@@ -70,8 +70,7 @@ public:
         pane is returned.  When no slidesorter is visible then NULL is
         returned.
     */
-    // Exported for unit test
-    SD_DLLPUBLIC static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
+    static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
 
     virtual SdPage* GetActualPage() SAL_OVERRIDE;
 
