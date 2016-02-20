@@ -13,6 +13,7 @@ import uno
 from org.libreoffice.unotest import pyuno
 from com.sun.star.beans import PropertyValue
 
+
 class CollectionsTestBase(unittest.TestCase):
 
     @classmethod
