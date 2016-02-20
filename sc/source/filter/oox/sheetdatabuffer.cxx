@@ -87,6 +87,14 @@ bool CellFormulaModel::isValidArrayRef( const CellAddress& rCellAddr )
         (maFormulaRef.StartRow == rCellAddr.Row);
 }
 
+bool CellFormulaModel::isValidArrayRef( const ScAddress& rCellAddr )
+{
+    return
+        (maFormulaRef.Sheet == rCellAddr.Tab() ) &&
+        (maFormulaRef.StartColumn == rCellAddr.Col() ) &&
+        (maFormulaRef.StartRow == rCellAddr.Row() );
+}
+
 bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
 {
     return
@@ -232,6 +240,14 @@ void SheetDataBuffer::createSharedFormula(const CellAddress& rAddr, const ApiTok
         setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
 }
 
+void SheetDataBuffer::createSharedFormula(const ScAddress& rAddr, const ApiTokenSequence& rTokens)
+{
+    BinAddress aAddr(rAddr);
+    maSharedFormulas[aAddr] = rTokens;
+    if( mbPendingSharedFmla )
+        setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
+}
+
 void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSequence& rTokens )
 {
     mbPendingSharedFmla = false;
@@ -260,12 +276,13 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
                 array formula. In this case, the cell will be remembered. After
                 reading the formula definition it will be retried to insert the
                 formula via retryPendingSharedFormulaCell(). */
-            BinAddress aBaseAddr( aTokenInfo.First );
-            aTokens = resolveSharedFormula( aTokenInfo.First );
+            ScAddress aTokenAddr = ScAddress ( aTokenInfo.First.Column, aTokenInfo.First.Row, aTokenInfo.First.Sheet );
+            BinAddress aBaseAddr( aTokenAddr );
+            aTokens = resolveSharedFormula( aTokenAddr );
             if( !aTokens.hasElements() )
             {
-                maSharedFmlaAddr = ( CellAddress( rModel.maCellAddr.Tab(), rModel.maCellAddr.Col(), rModel.maCellAddr.Row() ) );    //should change this later
-                maSharedBaseAddr = aTokenInfo.First;
+                maSharedFmlaAddr = rModel.maCellAddr;
+                maSharedBaseAddr = aTokenAddr;
                 mbPendingSharedFmla = true;
             }
         }
@@ -473,7 +490,7 @@ void SheetDataBuffer::finalizeImport()
         {
             if ( it->first == -1 ) // it's a dud skip it
                 continue;
-            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
+            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Col(), rangeIter->mnLast );
 
             addColXfStyle( it->first, -1, aRange, true );
         }
@@ -619,6 +636,13 @@ ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const CellAddress& rAddr
     return aTokens;
 }
 
+ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const ScAddress& rAddr ) const
+{
+    BinAddress aAddr(rAddr);
+    ApiTokenSequence aTokens = ContainerHelper::getMapElement( maSharedFormulas, aAddr, ApiTokenSequence() );
+    return aTokens;
+}
+
 void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens ) const
 {
     Reference< XArrayFormulaTokens > xTokens( getCellRange( rRange ), UNO_QUERY );
@@ -640,7 +664,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
 
     sal_Int16 nSheet = getSheetIndex();
 
-    CellAddress aRef1;
+    ScAddress aRef1( 0, 0, 0 );
     if (!getAddressConverter().convertToCellAddress(aRef1, rModel.maRef1, nSheet, true))
         return;
 
@@ -659,7 +683,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
         if (rModel.maRef2.isEmpty())
             return;
 
-        CellAddress aRef2;
+        ScAddress aRef2( 0, 0, 0 );
         if (!getAddressConverter().convertToCellAddress(aRef2, rModel.maRef2, nSheet, true))
             return;
 
@@ -672,8 +696,8 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
         aScRange.aStart.IncCol(-1);
 
         // Ref1 is row input cell and Ref2 is column input cell.
-        aParam.aRefRowCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
-        aParam.aRefColCell.Set(aRef2.Column, aRef2.Row, aRef2.Sheet, false, false, false);
+        aParam.aRefRowCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
+        aParam.aRefColCell.Set(aRef2.Col(), aRef2.Row(), aRef2.Tab(), false, false, false);
         rDoc.setTableOpCells(aScRange, aParam);
 
         return;
@@ -685,7 +709,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     {
         // One-variable row input cell (horizontal).
         aParam.meMode = ScTabOpParam::Row;
-        aParam.aRefRowCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
+        aParam.aRefRowCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
         aParam.aRefFormulaCell.Set(rRange.StartColumn-1, rRange.StartRow, nSheet, false, true, false);
         aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
         aScRange.aStart.IncRow(-1);
@@ -695,7 +719,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     {
         // One-variable column input cell (vertical).
         aParam.meMode = ScTabOpParam::Column;
-        aParam.aRefColCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
+        aParam.aRefColCell.Set(aRef1.Col(), aRef1.Row(), aRef1.Tab(), false, false, false);
         aParam.aRefFormulaCell.Set(rRange.StartColumn, rRange.StartRow-1, nSheet, true, false, false);
         aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
         aScRange.aStart.IncCol(-1);

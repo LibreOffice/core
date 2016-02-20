@@ -311,7 +311,7 @@ bool AddressConverter::parseOoxRange2d(
 
 bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )
 {
-    bool bValid = (0 <= nCol) && (nCol <= maMaxPos.Column);
+    bool bValid = (0 <= nCol) && ( nCol <= maMaxPos.Col() );
     if( !bValid && bTrackOverflow )
         mbColOverflow = true;
     return bValid;
@@ -319,7 +319,7 @@ bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )
 
 bool AddressConverter::checkRow( sal_Int32 nRow, bool bTrackOverflow )
 {
-    bool bValid = (0 <= nRow) && (nRow <= maMaxPos.Row);
+    bool bValid = (0 <= nRow) && ( nRow <= maMaxPos.Row() );
     if( !bValid && bTrackOverflow )
         mbRowOverflow = true;
     return bValid;
@@ -327,9 +327,9 @@ bool AddressConverter::checkRow( sal_Int32 nRow, bool bTrackOverflow )
 
 bool AddressConverter::checkTab( sal_Int16 nSheet, bool bTrackOverflow )
 {
-    bool bValid = (0 <= nSheet) && (nSheet <= maMaxPos.Sheet);
+    bool bValid = (0 <= nSheet) && ( nSheet <= maMaxPos.Tab() );
     if( !bValid && bTrackOverflow )
-        mbTabOverflow |= (nSheet > maMaxPos.Sheet);  // do not warn for deleted refs (-1)
+        mbTabOverflow |= ( nSheet > maMaxPos.Tab() );  // do not warn for deleted refs (-1)
     return bValid;
 }
 
@@ -425,15 +425,15 @@ bool AddressConverter::convertToCellAddress(
     return checkCellAddress(rAddress, bTrackOverflow);
 }
 
-CellAddress AddressConverter::createValidCellAddress(
+ScAddress AddressConverter::createValidCellAddress(
         const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
 {
-    CellAddress aAddress;
+    ScAddress aAddress( 0, 0, 0 );
     if( !convertToCellAddress( aAddress, rString, nSheet, bTrackOverflow ) )
     {
-        aAddress.Sheet  = getLimitedValue< sal_Int16, sal_Int16 >( nSheet, 0, maMaxPos.Sheet );
-        aAddress.Column = ::std::min( aAddress.Column, maMaxPos.Column );
-        aAddress.Row    = ::std::min( aAddress.Row, maMaxPos.Row );
+        aAddress.SetTab( getLimitedValue< sal_Int16, sal_Int16 >( nSheet, 0, maMaxPos.Tab() ) );
+        aAddress.SetCol( ::std::min( aAddress.Col(), maMaxPos.Col() ) );
+        aAddress.SetRow( ::std::min( aAddress.Row(), maMaxPos.Row() ) );
     }
     return aAddress;
 }
@@ -468,15 +468,15 @@ bool AddressConverter::convertToCellAddress( ScAddress& orAddress,
     return checkCellAddress( orAddress, bTrackOverflow );
 }
 
-CellAddress AddressConverter::createValidCellAddress(
+ScAddress AddressConverter::createValidCellAddress(
         const BinAddress& rBinAddress, sal_Int16 nSheet, bool bTrackOverflow )
 {
-    CellAddress aAddress;
+    ScAddress aAddress ( 0, 0, 0 );
     if( !convertToCellAddress( aAddress, rBinAddress, nSheet, bTrackOverflow ) )
     {
-        aAddress.Sheet  = getLimitedValue< sal_Int16, sal_Int16 >( nSheet, 0, maMaxPos.Sheet );
-        aAddress.Column = getLimitedValue< sal_Int32, sal_Int32 >( rBinAddress.mnCol, 0, maMaxPos.Column );
-        aAddress.Row    = getLimitedValue< sal_Int32, sal_Int32 >( rBinAddress.mnRow, 0, maMaxPos.Row );
+        aAddress.SetTab( getLimitedValue< sal_Int16, sal_Int16 >( nSheet, 0, maMaxPos.Tab() ) );
+        aAddress.SetCol( getLimitedValue< sal_Int32, sal_Int32 >( rBinAddress.mnCol, 0, sal_Int32( maMaxPos.Col() ) ) );
+        aAddress.SetRow( getLimitedValue< sal_Int32, sal_Int32 >( rBinAddress.mnRow, 0, sal_Int32( maMaxPos.Row() ) ) );
     }
     return aAddress;
 }
@@ -499,10 +499,10 @@ bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bAllow
         ::std::swap( orRange.StartRow, orRange.EndRow );
     if( !checkCellRange( orRange, bAllowOverflow, bTrackOverflow ) )
         return false;
-    if( orRange.EndColumn > maMaxPos.Column )
-        orRange.EndColumn = maMaxPos.Column;
-    if( orRange.EndRow > maMaxPos.Row )
-        orRange.EndRow = maMaxPos.Row;
+    if( orRange.EndColumn > maMaxPos.Col() )
+        orRange.EndColumn = maMaxPos.Col();
+    if( orRange.EndRow > maMaxPos.Row() )
+        orRange.EndRow = maMaxPos.Row();
     return true;
 }
 
@@ -584,9 +584,7 @@ void AddressConverter::ControlCharacters::set(
 void AddressConverter::initializeMaxPos(
         sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow )
 {
-    maMaxXlsPos.Sheet  = nMaxXlsTab;
-    maMaxXlsPos.Column = nMaxXlsCol;
-    maMaxXlsPos.Row    = nMaxXlsRow;
+    maMaxXlsPos.Set( nMaxXlsCol, nMaxXlsRow, nMaxXlsTab);
 
     // maximum cell position in Calc
     try
@@ -594,7 +592,7 @@ void AddressConverter::initializeMaxPos(
         Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
         Reference< XCellRangeAddressable > xAddressable( xSheetsIA->getByIndex( 0 ), UNO_QUERY_THROW );
         CellRangeAddress aRange = xAddressable->getRangeAddress();
-        maMaxApiPos = CellAddress( API_MAXTAB, aRange.EndColumn, aRange.EndRow );
+        maMaxApiPos = ScAddress( aRange.EndColumn, aRange.EndRow, API_MAXTAB );
         maMaxPos = getBaseFilter().isImportFilter() ? maMaxApiPos : maMaxXlsPos;
     }
     catch( Exception& )

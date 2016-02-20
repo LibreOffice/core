@@ -334,7 +334,7 @@ void SheetViewSettings::finalizeImport()
     if( getSheetType() == SHEETTYPE_CHARTSHEET )
     {
         xModel->maPaneSelMap.clear();
-        xModel->maFirstPos = xModel->maSecondPos = CellAddress( getSheetIndex(), 0, 0 );
+        xModel->maFirstPos = xModel->maSecondPos = ScAddress( SCCOL ( 0 ), SCROW ( 0 ), SCTAB (getSheetIndex() ) );
         xModel->mnViewType = XML_normal;
         xModel->mnActivePaneId = XML_topLeft;
         xModel->mnPaneState = XML_split;
@@ -358,9 +358,9 @@ void SheetViewSettings::finalizeImport()
         aPropSet.setProperty( PROP_IsVisible, sal_True );
     }
     // visible area and current cursor position (selection not supported via API)
-    CellAddress aFirstPos = xModel->maFirstPos;
+    ScAddress aFirstPos = xModel->maFirstPos;
     const PaneSelectionModel* pPaneSel = xModel->getActiveSelection();
-    CellAddress aCursor = pPaneSel ? pPaneSel->maActiveCell : aFirstPos;
+    ScAddress aCursor = pPaneSel ? pPaneSel->maActiveCell : aFirstPos;
 
     // freeze/split position default
     sal_Int16 nHSplitMode = API_SPLITMODE_NONE;
@@ -377,12 +377,12 @@ void SheetViewSettings::finalizeImport()
             #i35812# Excel uses number of visible rows/columns in the
                 frozen area (rows/columns scolled outside are not included),
                 Calc uses absolute position of first unfrozen row/column. */
-        const CellAddress& rMaxApiPos = getAddressConverter().getMaxApiAddress();
-        if( (xModel->mfSplitX >= 1.0) && (xModel->maFirstPos.Column + xModel->mfSplitX <= rMaxApiPos.Column) )
-            nHSplitPos = static_cast< sal_Int32 >( xModel->maFirstPos.Column + xModel->mfSplitX );
+        const ScAddress& rMaxApiPos = getAddressConverter().getMaxApiAddress();
+        if( (xModel->mfSplitX >= 1.0) && ( xModel->maFirstPos.Col() + xModel->mfSplitX <= rMaxApiPos.Col() ) )
+            nHSplitPos = static_cast< sal_Int32 >( xModel->maFirstPos.Col() + xModel->mfSplitX );
         nHSplitMode = (nHSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
-        if( (xModel->mfSplitY >= 1.0) && (xModel->maFirstPos.Row + xModel->mfSplitY <= rMaxApiPos.Row) )
-            nVSplitPos = static_cast< sal_Int32 >( xModel->maFirstPos.Row + xModel->mfSplitY );
+        if( (xModel->mfSplitY >= 1.0) && ( xModel->maFirstPos.Row() + xModel->mfSplitY <= rMaxApiPos.Row() ) )
+            nVSplitPos = static_cast< sal_Int32 >( xModel->maFirstPos.Row() + xModel->mfSplitY );
         nVSplitMode = (nVSplitPos > 0) ? API_SPLITMODE_FREEZE : API_SPLITMODE_NONE;
     }
     else if( xModel->mnPaneState == XML_split )
@@ -418,17 +418,17 @@ void SheetViewSettings::finalizeImport()
     // write the sheet view settings into the property sequence
     PropertyMap aPropMap;
     aPropMap.setProperty( PROP_TableSelected, bSelected);
-    aPropMap.setProperty( PROP_CursorPositionX, aCursor.Column);
-    aPropMap.setProperty( PROP_CursorPositionY, aCursor.Row);
+    aPropMap.setProperty( PROP_CursorPositionX, aCursor.Col() );
+    aPropMap.setProperty( PROP_CursorPositionY, aCursor.Row() );
     aPropMap.setProperty( PROP_HorizontalSplitMode, nHSplitMode);
     aPropMap.setProperty( PROP_VerticalSplitMode, nVSplitMode);
     aPropMap.setProperty( PROP_HorizontalSplitPositionTwips, nHSplitPos);
     aPropMap.setProperty( PROP_VerticalSplitPositionTwips, nVSplitPos);
     aPropMap.setProperty( PROP_ActiveSplitRange, nActivePane);
-    aPropMap.setProperty( PROP_PositionLeft, aFirstPos.Column);
-    aPropMap.setProperty( PROP_PositionTop, aFirstPos.Row);
-    aPropMap.setProperty( PROP_PositionRight, xModel->maSecondPos.Column);
-    aPropMap.setProperty( PROP_PositionBottom, ((nVSplitPos > 0) ? xModel->maSecondPos.Row : xModel->maFirstPos.Row));
+    aPropMap.setProperty( PROP_PositionLeft, aFirstPos.Col() );
+    aPropMap.setProperty( PROP_PositionTop, aFirstPos.Row() );
+    aPropMap.setProperty( PROP_PositionRight, xModel->maSecondPos.Col() );
+    aPropMap.setProperty( PROP_PositionBottom, ((nVSplitPos > 0) ? xModel->maSecondPos.Row() : xModel->maFirstPos.Row() ) );
     aPropMap.setProperty( PROP_ZoomType, API_ZOOMTYPE_PERCENT);
     aPropMap.setProperty( PROP_ZoomValue, static_cast< sal_Int16 >( xModel->getNormalZoom() ));
     aPropMap.setProperty( PROP_PageViewZoomValue, static_cast< sal_Int16 >( xModel->getPageBreakZoom() ));

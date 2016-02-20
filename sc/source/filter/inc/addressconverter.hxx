@@ -237,17 +237,17 @@ public:
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
     /** Returns the biggest valid cell address in the own Calc document. */
-    inline const css::table::CellAddress&
+    inline const ScAddress&
                         getMaxApiAddress() const { return maMaxApiPos; }
 
     /** Returns the biggest valid cell address in the imported/exported
         Excel document. */
-    inline const css::table::CellAddress&
+    inline const ScAddress&
                         getMaxXlsAddress() const { return maMaxXlsPos; }
 
     /** Returns the biggest valid cell address in both Calc and the
         imported/exported Excel document. */
-    inline const css::table::CellAddress&
+    inline const ScAddress&
                         getMaxAddress() const { return maMaxPos; }
 
     /** Checks if the passed column index is valid.
@@ -376,8 +376,7 @@ public:
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the address is outside of the supported sheet limits.
         @return  A valid API cell address struct. */
-    css::table::CellAddress
-                        createValidCellAddress(
+    ScAddress           createValidCellAddress(
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
@@ -443,8 +442,7 @@ public:
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the address is outside of the supported sheet limits.
         @return  A valid API cell address struct. */
-    css::table::CellAddress
-                        createValidCellAddress(
+    ScAddress           createValidCellAddress(
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
@@ -653,9 +651,9 @@ private:
                                 sal_Unicode cSameSheet );
     };
 
-    css::table::CellAddress maMaxApiPos;     /// Maximum valid cell address in Calc.
-    css::table::CellAddress maMaxXlsPos;     /// Maximum valid cell address in Excel.
-    css::table::CellAddress maMaxPos;        /// Maximum valid cell address in Calc/Excel.
+    ScAddress maMaxApiPos;     /// Maximum valid cell address in Calc.
+    ScAddress maMaxXlsPos;     /// Maximum valid cell address in Excel.
+    ScAddress maMaxPos;        /// Maximum valid cell address in Calc/Excel.
     ControlCharacters       maLinkChars;     /// Control characters for external link import (BIFF).
     ControlCharacters       maDConChars;     /// Control characters for DCON* record import (BIFF).
     bool                    mbColOverflow;   /// Flag for "columns overflow".

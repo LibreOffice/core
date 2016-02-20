@@ -544,7 +544,7 @@ protected:
     const sal_Int32     mnMaxXlsCol;                /// Maximum column index in imported document.
     const sal_Int32     mnMaxXlsRow;                /// Maximum row index in imported document.
 
-    CellAddress         maBaseAddr;                 /// Base address for relative references.
+    ScAddress           maBaseAddr;                 /// Base address for relative references.
     bool                mbRelativeAsOffset;         /// True = relative row/column index is (signed) offset, false = explicit index.
     bool                mb2dRefsAs3dRefs;           /// True = convert all 2D references to 3D references in sheet specified by base address.
     bool                mbSpecialTokens;            /// True = special handling for tExp and tTbl tokens, false = exit with error.
@@ -564,10 +564,10 @@ private:
 FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     FormulaFinalizer( rParent ),
     WorkbookHelper( rParent ),
-    mnMaxApiCol( rParent.getAddressConverter().getMaxApiAddress().Column ),
-    mnMaxApiRow( rParent.getAddressConverter().getMaxApiAddress().Row ),
-    mnMaxXlsCol( rParent.getAddressConverter().getMaxXlsAddress().Column ),
-    mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row ),
+    mnMaxApiCol( rParent.getAddressConverter().getMaxApiAddress().Col() ),
+    mnMaxApiRow( rParent.getAddressConverter().getMaxApiAddress().Row() ),
+    mnMaxXlsCol( rParent.getAddressConverter().getMaxXlsAddress().Col() ),
+    mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row() ),
     mbRelativeAsOffset( false ),
     mb2dRefsAs3dRefs( false ),
     mbSpecialTokens( false ),
@@ -618,7 +618,7 @@ OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefShee
 
 void FormulaParserImpl::initializeImport( const CellAddress& rBaseAddr, FormulaType eType )
 {
-    maBaseAddr = rBaseAddr;
+    maBaseAddr = ScAddress( rBaseAddr.Column, rBaseAddr.Row, rBaseAddr.Sheet );
     mbRelativeAsOffset = mb2dRefsAs3dRefs = mbSpecialTokens = mbAllowNulChars = false;
     switch( eType )
     {
@@ -1057,7 +1057,7 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
 
 bool FormulaParserImpl::pushSpecialTokenOperand( const BinAddress& rBaseAddr, bool bTable )
 {
-    CellAddress aBaseAddr( maBaseAddr.Sheet, rBaseAddr.mnCol, rBaseAddr.mnRow );
+    CellAddress aBaseAddr( maBaseAddr.Tab(), rBaseAddr.mnCol, rBaseAddr.mnRow );
     ApiSpecialTokenInfo aTokenInfo( aBaseAddr, bTable );
     return mbSpecialTokens && (getFormulaSize() == 0) && pushValueOperand( aTokenInfo, OPCODE_BAD );
 }
@@ -1098,13 +1098,13 @@ void FormulaParserImpl::initReference2d( SingleReference& orApiRef ) const
 {
     if( mb2dRefsAs3dRefs )
     {
-        initReference3d( orApiRef, maBaseAddr.Sheet, false );
+        initReference3d( orApiRef, sal_Int32 (maBaseAddr.Tab() ), false );
     }
     else
     {
         orApiRef.Flags = SHEET_RELATIVE;
         // #i10184# absolute sheet index needed for relative references in shared formulas
-        orApiRef.Sheet = maBaseAddr.Sheet;
+        orApiRef.Sheet = sal_Int32( maBaseAddr.Tab() );
         orApiRef.RelativeSheet = 0;
     }
 }
@@ -1149,9 +1149,9 @@ void FormulaParserImpl::convertReference( SingleReference& orApiRef, const BinSi
         if( !bRelativeAsOffset )
         {
             if( rRef.mbColRel )
-                orApiRef.RelativeColumn -= maBaseAddr.Column;
+                orApiRef.RelativeColumn -= sal_Int32( maBaseAddr.Col() );
             if( rRef.mbRowRel )
-                orApiRef.RelativeRow -= maBaseAddr.Row;
+                orApiRef.RelativeRow -= maBaseAddr.Row();
         }
     }
 }
@@ -1572,7 +1572,7 @@ bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
                 }
                 else if( bThisRow )
                 {
-                    nStartRow = nEndRow = maBaseAddr.Row - xTable->getRange().StartRow;
+                    nStartRow = nEndRow = maBaseAddr.Row() - xTable->getRange().StartRow;
                     bFixedHeight = true;
                 }
                 else

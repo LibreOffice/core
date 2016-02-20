@@ -32,7 +32,7 @@ namespace xls {
 /** Contains all settings for a selection in a single pane of a sheet. */
 struct PaneSelectionModel
 {
-    css::table::CellAddress maActiveCell;  /// Position of active cell (cursor).
+    ScAddress maActiveCell;  /// Position of active cell (cursor).
     ApiCellRangeList    maSelection;                    /// Selected cell ranges.
     sal_Int32           mnActiveCellId;                 /// Index of active cell in selection list.
 
@@ -46,8 +46,8 @@ struct SheetViewModel
 
     PaneSelectionModelMap maPaneSelMap;                 /// Selections of all panes.
     Color               maGridColor;                    /// Grid color.
-    css::table::CellAddress maFirstPos;    /// First visible cell.
-    css::table::CellAddress maSecondPos;   /// First visible cell in additional panes.
+    ScAddress           maFirstPos;    /// First visible cell.
+    ScAddress           maSecondPos;   /// First visible cell in additional panes.
     sal_Int32           mnWorkbookViewId;               /// Index into list of workbookView elements.
     sal_Int32           mnViewType;                     /// View type (normal, page break, layout).
     sal_Int32           mnActivePaneId;                 /// Active pane (with cell cursor).

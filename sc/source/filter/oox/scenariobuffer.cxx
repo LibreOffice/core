@@ -105,7 +105,7 @@ void Scenario::finalizeImport()
     ::std::vector< CellRangeAddress > aRanges;
     for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
         if( !aIt->mbDeleted && rAddrConv.checkCellAddress( aIt->maPos, true ) )
-            aRanges.push_back( CellRangeAddress( aIt->maPos.Sheet, aIt->maPos.Column, aIt->maPos.Row, aIt->maPos.Column, aIt->maPos.Row ) );
+            aRanges.push_back( CellRangeAddress( aIt->maPos.Tab(), aIt->maPos.Col(), aIt->maPos.Row(), aIt->maPos.Col(), aIt->maPos.Row() ) );
 
     if( !aRanges.empty() && !maModel.maName.isEmpty() ) try
     {
@@ -126,7 +126,7 @@ void Scenario::finalizeImport()
             if( !aIt->mbDeleted ) try
             {
                 // use XCell::setFormula to auto-detect values and strings
-                Reference< XCell > xCell( xSheet->getCellByPosition( aIt->maPos.Column, aIt->maPos.Row ), UNO_SET_THROW );
+                Reference< XCell > xCell( xSheet->getCellByPosition( aIt->maPos.Col(), aIt->maPos.Row() ), UNO_SET_THROW );
                 xCell->setFormula( aIt->maValue );
             }
             catch( Exception& )

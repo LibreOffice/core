@@ -82,6 +82,7 @@ public:
     const OUString& getUpcaseModelName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
     css::uno::Any getReference( const css::table::CellAddress& rBaseAddr ) const;
+    css::uno::Any getReference( const ScAddress& rBaseAddr ) const;
 
 protected:
     DefinedNameModel    maModel;        /// Model data for this defined name.

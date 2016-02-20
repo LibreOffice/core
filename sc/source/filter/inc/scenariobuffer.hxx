@@ -30,7 +30,7 @@ namespace xls {
 
 struct ScenarioCellModel
 {
-    css::table::CellAddress maPos;
+    ScAddress maPos;
     OUString            maValue;
     sal_Int32           mnNumFmtId;
     bool                mbDeleted;
