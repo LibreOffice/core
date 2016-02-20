@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_2b969994",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-20T18:23:02Z",
+      "side": 1,
+      "message": "why is this static?",
+      "revId": "a8428f86847ca82542b600bc0ed9fa4c8a547c5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_cb80b549",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-20T18:23:02Z",
+      "side": 1,
+      "message": "no need for serialVersionUID",
+      "revId": "a8428f86847ca82542b600bc0ed9fa4c8a547c5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_eb7bf179",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-02-20T18:23:02Z",
+      "side": 1,
+      "message": "no need for serialversionUID",
+      "revId": "a8428f86847ca82542b600bc0ed9fa4c8a547c5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
