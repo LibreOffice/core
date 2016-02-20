@@ -269,8 +269,8 @@ namespace dxcanvas
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
                                          ::basegfx::B2DRange( rDestRect ) );
-        for( const auto& rUpdateArea : aUncoveredAreas )
-            repaintBackground( rUpdateArea, maScrapRect, mpBackBuffer );
+        for( const auto& rUncoveredArea : aUncoveredAreas )
+            repaintBackground( rUncoveredArea, maScrapRect, mpBackBuffer );
 
         // TODO(E1): Use numeric_cast to catch overflow here
         ::basegfx::B2IRange aActualArea( 0, 0,
