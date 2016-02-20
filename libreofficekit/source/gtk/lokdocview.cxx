@@ -1802,6 +1802,8 @@ setPartInThread(gpointer data)
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
+
+    lok_doc_view_reset_view(pDocView);
 }
 
 static void
