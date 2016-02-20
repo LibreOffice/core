@@ -67,6 +67,8 @@ struct LOKDocViewPrivateImpl
     gboolean m_bEdit;
     /// LOK Features
     guint64 m_nLOKFeatures;
+    /// Number of parts in currently loaded document
+    gint m_nParts;
     /// Position and size of the visible cursor.
     GdkRectangle m_aVisibleCursor;
     /// Cursor overlay is visible or hidden (for blinking).
@@ -782,6 +784,7 @@ static gboolean postDocumentLoad(gpointer pData)
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+    priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
     g_timeout_add(600, handleTimeout, pLOKDocView);
 
     float zoom = priv->m_fZoom;
@@ -2742,6 +2745,12 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     if (!priv->m_pDocument)
         return;
+
+    if (nPart < 0 || nPart >= priv->m_nParts)
+    {
+        g_warning("Invalid part request : %d", nPart);
+        return;
+    }
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
