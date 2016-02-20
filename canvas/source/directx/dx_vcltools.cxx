@@ -201,8 +201,6 @@ namespace dxcanvas
                                       "Unsupported alpha scanline format" );
 
                     BitmapColor     aCol;
-                    const sal_Int32 nWidth( aBmpSize.Width() );
-                    const sal_Int32 nHeight( aBmpSize.Height() );
                     sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
                     int             x, y;
 
