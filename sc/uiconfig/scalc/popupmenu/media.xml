@@ -47,8 +47,8 @@
   </menu:menu>
   <menu:menu menu:id=".uno:AnchorMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SetAnchorToPage"/>
-      <menu:menuitem menu:id=".uno:SetAnchorToCell"/>
+      <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:SetAnchorToCell" menu:style="radio"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
