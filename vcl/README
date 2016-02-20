@@ -8,9 +8,6 @@ source/
 inc/
 	+ cross-platform abstraction headers
 
-generic/
-	+ shared helper code for *some* of the backends, actually built into vcl.
-
 headless/
 	+ a backend renderer that draws to bitmaps
 
