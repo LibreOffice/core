@@ -940,6 +940,7 @@ extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
 
 bool Bitmap::ImplPopArt()
 {
+    /* note: GetBitCount() after that is no more than 8 */
     bool bRet = ( GetBitCount() <= 8 ) || Convert( BMP_CONVERSION_8BIT_COLORS );
 
     if( bRet )
@@ -952,8 +953,8 @@ bool Bitmap::ImplPopArt()
         {
             const long      nWidth = pWriteAcc->Width();
             const long      nHeight = pWriteAcc->Height();
-            const sal_uLong nEntryCount = 1UL << pWriteAcc->GetBitCount();
-            sal_uLong       n;
+            const int       nEntryCount = 1 << pWriteAcc->GetBitCount();
+            int n;
             PopArtEntry*    pPopArtTable = new PopArtEntry[ nEntryCount ];
 
             for( n = 0; n < nEntryCount; n++ )
