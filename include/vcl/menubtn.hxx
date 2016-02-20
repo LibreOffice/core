@@ -66,7 +66,7 @@ public:
 
     void            ExecuteMenu();
 
-    void            SetMenuMode( sal_uInt16 nMode );
+    void            SetMenuMode(sal_uInt16 nMode) { mnMenuMode = nMode; }
 
     void            SetPopupMenu( PopupMenu* pNewMenu );
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
