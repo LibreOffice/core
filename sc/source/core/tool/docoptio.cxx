@@ -64,6 +64,7 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
             nYear( rCpy.nYear ),
             nYear2000( rCpy.nYear2000 ),
             nTabDistance( rCpy.nTabDistance ),
+            eFormulaSearchType( rCpy.eFormulaSearchType ),
             bIsIgnoreCase( rCpy.bIsIgnoreCase ),
             bIsIter( rCpy.bIsIter ),
             bCalcAsShown( rCpy.bCalcAsShown ),
@@ -98,6 +99,7 @@ void ScDocOptions::ResetDocOptions()
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= true;
     bFormulaWildcardsEnabled= false;
+    eFormulaSearchType  = eSearchTypeUnknown;
     bWriteCalcConfig    = true;
 }
 
