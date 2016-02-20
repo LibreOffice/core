@@ -184,7 +184,6 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
 
                 if( pValues[0].vt == VT_BSTR && pValues[1].vt == VT_BSTR )
                 {
-                    USES_CONVERSION;
                     if( !strncmp( OLE2T( pValues[0].bstrVal ), "URL", 3 ) )
                     {
                         EnterCriticalSection( &mMutex );

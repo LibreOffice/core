@@ -374,10 +374,10 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
                 IDispatch* pdisp= pdispparams->rgvarg[i].pdispVal;
 
                 OLECHAR const * sindex= L"0";
-                DISPID id;
+                DISPID id2;
                 DISPPARAMS noParams= {0,0,0,0};
-                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sindex), 1, LOCALE_USER_DEFAULT, &id)))
-                    hr= pdisp->Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
+                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, const_cast<OLECHAR **>(&sindex), 1, LOCALE_USER_DEFAULT, &id2)))
+                    hr= pdisp->Invoke( id2, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
                                        & noParams, & varParam, NULL, NULL);
                 if( FAILED( hr))
                 {
@@ -488,7 +488,7 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
                     pVar->pdispVal= static_cast<IDispatch*>( this);
                     AddRef();
 
-                    retAny<<= reinterpret_cast< sal_uInt32 >( pVar);
+                    retAny<<= reinterpret_cast< sal_uIntPtr >( pVar);
                 }
             }
         }

@@ -980,8 +980,8 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
                 CComVariant dummyResult;
                 CComVariant aPropVar;
                 aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_FALSE;
-                HRESULT hr = ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult );
-                (void)hr;
+                HRESULT hres = ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult );
+                (void)hres;
                 mpDispFrame = CComPtr<IDispatch>();
             }
 
