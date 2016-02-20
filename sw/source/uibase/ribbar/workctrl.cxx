@@ -65,7 +65,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxVoidItem );
-SFX_IMPL_TOOLBOX_CONTROL( SwTbxFieldCtrl, SfxBoolItem );
 
 SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     sal_uInt16 nSlotId,
@@ -175,66 +174,6 @@ void SwTbxAutoTextCtrl::DelPopup()
         pPopup = nullptr;
     }
 }
-
-SwTbxFieldCtrl::SwTbxFieldCtrl(
-    sal_uInt16 nSlotId,
-    sal_uInt16 nId,
-    ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-SwTbxFieldCtrl::~SwTbxFieldCtrl()
-{
-}
-
-VclPtr<SfxPopupWindow> SwTbxFieldCtrl::CreatePopupWindow()
-{
-    SwView* pView = ::GetActiveView();
-    if(pView && !pView->GetDocShell()->IsReadOnly() &&
-       !pView->GetWrtShell().HasReadonlySel() )
-    {
-        PopupMenu* pPopup = new PopupMenu(SW_RES(RID_INSERT_FIELD_CTRL));
-
-        if (::GetHtmlMode(pView->GetDocShell()) & HTMLMODE_ON)
-        {
-            pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_PGCOUNT));
-            pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_TOPIC));
-        }
-
-        ToolBox*      pToolBox = &GetToolBox();
-        sal_uInt16    nId      = GetId();
-        SfxDispatcher *rDispat = pView->GetViewFrame()->GetDispatcher();
-
-        // set the icons in the Popup-Menu, delete the pPopup
-        SfxPopupMenuManager aPop( pPopup, rDispat->GetFrame()->GetBindings() );
-
-        pToolBox->SetItemDown( nId, true );
-
-        pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
-                (pToolBox->GetAlign() == WindowAlign::Top || pToolBox->GetAlign() == WindowAlign::Bottom) ?
-                 PopupMenuFlags::ExecuteDown : PopupMenuFlags::ExecuteRight );
-
-        pToolBox->SetItemDown( nId, false );
-    }
-
-    GetToolBox().EndSelection();
-
-    return nullptr;
-}
-
-void SwTbxFieldCtrl::StateChanged( sal_uInt16,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState )
-{
-    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
-    if (eState >= SfxItemState::DEFAULT)
-    {
-        GetToolBox().CheckItem( GetId(), static_cast<const SfxBoolItem*>(pState)->GetValue() );
-    }
-}
-
 
 // Navigation-Popup
 // determine the order of the toolbox items

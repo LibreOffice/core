@@ -18,6 +18,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sweb,\
 	sw/uiconfig/sweb/popupmenu/form \
 	sw/uiconfig/sweb/popupmenu/frame \
 	sw/uiconfig/sweb/popupmenu/graphic \
+	sw/uiconfig/sweb/popupmenu/insertfield \
 	sw/uiconfig/sweb/popupmenu/oleobject \
 	sw/uiconfig/sweb/popupmenu/preview \
 	sw/uiconfig/sweb/popupmenu/source \

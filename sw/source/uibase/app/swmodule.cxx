@@ -287,7 +287,6 @@ void SwDLL::RegisterControls()
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_TRACK_CHANGES_BAR, pMod );
     SwTbxAnchor::RegisterControl(FN_TOOL_ANCHOR, pMod );
-    SwTbxFieldCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
 

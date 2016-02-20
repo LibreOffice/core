@@ -71,20 +71,6 @@ public:
     DECL_STATIC_LINK_TYPED(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
 };
 
-class SwTbxFieldCtrl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SwTbxFieldCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SwTbxFieldCtrl();
-
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-    virtual void                StateChanged( sal_uInt16 nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState ) override;
-};
-
 class SwScrollNaviPopup;
 
 class SwScrollNaviToolBox : public ToolBox

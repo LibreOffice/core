@@ -319,6 +319,20 @@
           <value>freezepanes</value>
         </prop>
       </node>
+      <node oor:name="c27" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFieldCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertfield</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">
@@ -1080,6 +1094,17 @@
         </prop>
         <prop oor:name="Value">
           <value>.uno:FreezePanesMenu</value>
+        </prop>
+      </node>
+      <node oor:name="InsertFieldController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertFieldCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
         </prop>
       </node>
       <node oor:name="org.apache.openoffice.comp.framework.NewToolbarController" oor:op="replace">

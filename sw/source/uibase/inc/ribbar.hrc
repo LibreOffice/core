@@ -32,7 +32,6 @@
 //Resourcen fuer Inputwin (Rechenleiste)
 #define MN_CALC_POPUP               (RC_RIBBAR_BEGIN + 12)
 
-#define RID_INSERT_FIELD_CTRL       (RC_RIBBAR_BEGIN + 13)
 #define ST_TBL                      (RC_RIBBAR_BEGIN + 14)
 #define ST_FRM                      (RC_RIBBAR_BEGIN + 15)
 #define ST_PGE                      (RC_RIBBAR_BEGIN + 16)

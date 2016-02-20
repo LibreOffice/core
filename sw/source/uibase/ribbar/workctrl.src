@@ -24,64 +24,6 @@
 #include "helpid.h"
 #include "cmdid.h"
 
-Menu RID_INSERT_FIELD_CTRL
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_PGNUMBER ;
-            HelpId = CMD_FN_INSERT_FLD_PGNUMBER ;
-            Text [ en-US ] = "Page Number" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_PGCOUNT ;
-            HelpId = CMD_FN_INSERT_FLD_PGCOUNT ;
-            Text [ en-US ] = "Page Count" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_DATE ;
-            HelpId = CMD_FN_INSERT_FLD_DATE ;
-            Text [ en-US ] = "Date" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_TIME ;
-            HelpId = CMD_FN_INSERT_FLD_TIME ;
-            Text [ en-US ] = "Time" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_TITLE ;
-            HelpId = CMD_FN_INSERT_FLD_TITLE ;
-            Text [ en-US ] = "Title" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_AUTHOR ;
-            HelpId = CMD_FN_INSERT_FLD_AUTHOR ;
-            Text [ en-US ] = "Author" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FLD_TOPIC ;
-            HelpId = CMD_FN_INSERT_FLD_TOPIC ;
-            Text [ en-US ] = "Subject" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = FN_INSERT_FIELD ;
-            HelpId = CMD_FN_INSERT_FIELD ;
-            Text [ en-US ] = "More Fields..." ;
-        };
-    };
-};
 #define SCROLL_IMAGE_IDLIST \
         IdList =                        \
         {                               \

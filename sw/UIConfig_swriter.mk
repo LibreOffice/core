@@ -20,6 +20,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swriter,\
 	sw/uiconfig/swriter/popupmenu/form \
 	sw/uiconfig/swriter/popupmenu/frame \
 	sw/uiconfig/swriter/popupmenu/graphic \
+	sw/uiconfig/swriter/popupmenu/insertfield \
 	sw/uiconfig/swriter/popupmenu/media \
 	sw/uiconfig/swriter/popupmenu/oleobject \
 	sw/uiconfig/swriter/popupmenu/preview \

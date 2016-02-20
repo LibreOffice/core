@@ -20,6 +20,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sglobal,\
 	sw/uiconfig/sglobal/popupmenu/form \
 	sw/uiconfig/sglobal/popupmenu/frame \
 	sw/uiconfig/sglobal/popupmenu/graphic \
+	sw/uiconfig/sglobal/popupmenu/insertfield \
 	sw/uiconfig/sglobal/popupmenu/media \
 	sw/uiconfig/sglobal/popupmenu/oleobject \
 	sw/uiconfig/sglobal/popupmenu/preview \

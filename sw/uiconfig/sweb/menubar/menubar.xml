@@ -134,17 +134,7 @@
   </menu:menu>
   <menu:menu menu:id=".uno:InsertMenu">
     <menu:menupopup>
-      <menu:menu menu:id=".uno:FieldMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertDateField"/>
-          <menu:menuitem menu:id=".uno:InsertTimeField"/>
-          <menu:menuitem menu:id=".uno:InsertTitleField"/>
-          <menu:menuitem menu:id=".uno:InsertAuthorField"/>
-          <menu:menuitem menu:id=".uno:InsertTopicField"/>
-          <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:InsertField"/>
-        </menu:menupopup>
-      </menu:menu>
+      <menu:menuitem menu:id=".uno:InsertFieldCtrl"/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
       <menu:menu menu:id=".uno:FormattingMarkMenu">
         <menu:menupopup>
