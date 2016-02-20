@@ -288,6 +288,8 @@ public:
 
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const CellAddress& rAddress );
+    void                extendUsedArea( const ScAddress& rAddress );
+
     /** Extends the used area of this sheet by the passed cell range. */
     void                extendUsedArea( const CellRangeAddress& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle. */
@@ -376,7 +378,7 @@ private:
     typedef ::std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
-    const CellAddress&  mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
+    const ScAddress&    mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
     CellRangeAddress    maUsedArea;         /// Used area of the sheet, and sheet index of the sheet.
     ColumnModel         maDefColModel;      /// Default column formatting.
     ColumnModelRangeMap maColModels;        /// Ranges of columns sorted by first column index.
@@ -664,8 +666,8 @@ CellAddress WorksheetGlobals::getCellAddressFromPosition( const awt::Point& rPos
     awt::Point aBegPos( 0, 0 );
 
     // end cell address and its position in drawing layer (bottom-right edge)
-    sal_Int32 nEndCol = mrMaxApiPos.Column + 1;
-    sal_Int32 nEndRow = mrMaxApiPos.Row + 1;
+    sal_Int32 nEndCol = mrMaxApiPos.Col() + 1;
+    sal_Int32 nEndRow = mrMaxApiPos.Row() + 1;
     awt::Point aEndPos( maDrawPageSize.Width, maDrawPageSize.Height );
 
     // starting point for interval search
@@ -749,6 +751,14 @@ void WorksheetGlobals::extendUsedArea( const CellAddress& rAddress )
     maUsedArea.EndRow      = ::std::max( maUsedArea.EndRow,      rAddress.Row );
 }
 
+void WorksheetGlobals::extendUsedArea( const ScAddress& rAddress )
+{
+    maUsedArea.StartColumn = ::std::min( maUsedArea.StartColumn, sal_Int32( rAddress.Col() ) );
+    maUsedArea.StartRow    = ::std::min( maUsedArea.StartRow,    sal_Int32( rAddress.Row() ) );
+    maUsedArea.EndColumn   = ::std::max( maUsedArea.EndColumn,   sal_Int32( rAddress.Col() ) );
+    maUsedArea.EndRow      = ::std::max( maUsedArea.EndRow,      sal_Int32( rAddress.Row() ) );
+}
+
 void WorksheetGlobals::extendUsedArea( const CellRangeAddress& rRange )
 {
     extendUsedArea( CellAddress( rRange.Sheet, rRange.StartColumn, rRange.StartRow ) );
@@ -804,7 +814,7 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
     {
         // validate last column index
         if( !getAddressConverter().checkCol( nLastCol, true ) )
-            nLastCol = mrMaxApiPos.Column;
+            nLastCol = mrMaxApiPos.Col();
         // try to find entry in column model map that is able to merge with the passed model
         bool bInsertModel = true;
         if( !maColModels.empty() )
@@ -845,7 +855,7 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
 
 void WorksheetGlobals::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId )
 {
-    CellRangeAddress aRange( getSheetIndex(), nFirstCol, 0, nLastCol, mrMaxApiPos.Row );
+    CellRangeAddress aRange( getSheetIndex(), nFirstCol, 0, nLastCol, mrMaxApiPos.Row() );
     if( getAddressConverter().validateCellRange( aRange, true, false ) )
     {
         const StylesBuffer& rStyles = getStyles();
@@ -1165,7 +1175,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
 void WorksheetGlobals::convertColumns()
 {
     sal_Int32 nNextCol = 0;
-    sal_Int32 nMaxCol = mrMaxApiPos.Column;
+    sal_Int32 nMaxCol = mrMaxApiPos.Col();
     // stores first grouped column index for each level
     OutlineLevelVec aColLevels;
 
@@ -1243,7 +1253,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
 void WorksheetGlobals::convertRows()
 {
     sal_Int32 nNextRow = 0;
-    sal_Int32 nMaxRow = mrMaxApiPos.Row;
+    sal_Int32 nMaxRow = mrMaxApiPos.Row();
     // stores first grouped row index for each level
     OutlineLevelVec aRowLevels;
 
@@ -1352,7 +1362,7 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
 void WorksheetGlobals::finalizeDrawings()
 {
     // calculate the current drawing page size (after rows/columns are imported)
-    PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Column, mrMaxApiPos.Row ) ) );
+    PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Col(), mrMaxApiPos.Row() ) ) );
     aRangeProp.getProperty( maDrawPageSize, PROP_Size );
 
     switch( getFilterType() )
@@ -1553,6 +1563,11 @@ void WorksheetHelper::extendUsedArea( const CellAddress& rAddress )
     mrSheetGlob.extendUsedArea( rAddress );
 }
 
+void WorksheetHelper::extendUsedArea( const ScAddress& rAddress )
+{
+    mrSheetGlob.extendUsedArea( rAddress );
+}
+
 void WorksheetHelper::extendUsedArea( const CellRangeAddress& rRange )
 {
     mrSheetGlob.extendUsedArea( rRange );
@@ -1702,6 +1717,11 @@ void WorksheetHelper::setCellFormula(
 }
 
 void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const css::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
+{
+    getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
+}
+
+void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
 }

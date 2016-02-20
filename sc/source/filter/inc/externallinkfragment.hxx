@@ -67,7 +67,7 @@ private:
 private:
     css::uno::Reference< css::sheet::XExternalSheetCache >
                         mxSheetCache;               /// The sheet cache used to store external cell values.
-    css::table::CellAddress maCurrPos; /// Position of current cell.
+    ScAddress           maCurrPos; /// Position of current cell.
     sal_Int32           mnCurrType;                 /// Data type of current cell.
 };
 
