@@ -219,8 +219,8 @@ private:
     void AdaptSize();
 
     SdPage* GetPage (const sal_Int32 nCoreIndex) const;
-    sal_Int32 InsertSlide (SdPage* pPage);
-    sal_Int32 DeleteSlide (const SdPage* pPage);
+    void InsertSlide (SdPage* pPage);
+    void DeleteSlide (const SdPage* pPage);
     void UpdateIndices (const sal_Int32 nFirstIndex);
 };
 
