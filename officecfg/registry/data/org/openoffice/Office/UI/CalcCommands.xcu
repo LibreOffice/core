@@ -65,6 +65,14 @@
           <value xml:lang="en-US">Remove ~Dependents</value>
         </prop>
       </node>
+      <node oor:name=".uno:FreezeCellsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Freeze ~Cells</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FreezePanes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Freeze ~Rows and Columns</value>
