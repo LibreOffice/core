@@ -1115,6 +1115,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                          || rOldOpt.IsMatchWholeCell() != rNewOpt.IsMatchWholeCell()
                          || rOldOpt.GetYear2000()   != rNewOpt.GetYear2000()
                          || rOldOpt.IsFormulaRegexEnabled() != rNewOpt.IsFormulaRegexEnabled()
+                         || rOldOpt.IsFormulaWildcardsEnabled() != rNewOpt.IsFormulaWildcardsEnabled()
                          );
             pDoc->SetDocOptions( rNewOpt );
             pDocSh->SetDocumentModified();

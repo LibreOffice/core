@@ -8512,9 +8512,8 @@ bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc, b
 
 bool ScInterpreter::MayBeWildcard( const OUString& rStr, const ScDocument* pDoc )
 {
-    /* TODO: doc options will need a new enum (or a second bool that takes
-     * precedence over regex?) */
-    (void)pDoc;
+    if ( pDoc && !pDoc->GetDocOptions().IsFormulaWildcardsEnabled() )
+        return false;
 
     // Wildcards without '~' escape, if there are no wildcards then an escaped
     // character does not make sense.
@@ -8537,8 +8536,7 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rS
 {
     if (pDoc)
     {
-        bool bWildcardEnabled = false;  /* TODO: obtain doc option */
-        if (bWildcardEnabled)
+        if (pDoc->GetDocOptions().IsFormulaWildcardsEnabled())
             return MayBeWildcard( rStr, nullptr) ? utl::SearchParam::SRCH_WILDCARD : utl::SearchParam::SRCH_NORMAL;
         if (pDoc->GetDocOptions().IsFormulaRegexEnabled())
             return MayBeRegExp( rStr, nullptr) ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
