@@ -2150,9 +2150,9 @@ void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlide
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUniform1f(mnShadowLocation, 1.0);
     glUniform1f(maSelectedTextureLocation, 1.0);
-    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    glUniform1f(maHexagonSizeLocation, 1.0f - borderSize);
     displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
-    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    glUniform1f(maHexagonSizeLocation, 1.0f + borderSize);
     displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
 
     // The back (entering) slide needs to be drawn before the front (leaving) one in order for blending to work.
@@ -2160,14 +2160,14 @@ void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlide
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glUniform1f(mnShadowLocation, 0.0);
     glUniform1f(maSelectedTextureLocation, 0.0);
-    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    glUniform1f(maHexagonSizeLocation, 1.0f - borderSize);
     displaySlide(nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale);
-    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    glUniform1f(maHexagonSizeLocation, 1.0f + borderSize);
     displaySlide(nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale);
     glUniform1f(maSelectedTextureLocation, 1.0);
-    glUniform1f(maHexagonSizeLocation, 1.0 - borderSize);
+    glUniform1f(maHexagonSizeLocation, 1.0f - borderSize);
     displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
-    glUniform1f(maHexagonSizeLocation, 1.0 + borderSize);
+    glUniform1f(maHexagonSizeLocation, 1.0f + borderSize);
     displaySlide(nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
 }
