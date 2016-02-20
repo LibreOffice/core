@@ -25,9 +25,6 @@
 #include <svl/srchitem.hxx>
 #include <comphelper/lok.hxx>
 
-#include <ImpressViewShellBase.hxx>
-#include <SlideSorterViewShell.hxx>
-#include <SlideSorter.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
@@ -48,7 +45,7 @@ public:
     virtual void tearDown() override;
 
 #if !defined(_WIN32) && !defined(MACOSX)
-    void testInsertPage();
+    void testInsertDeletePage();
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -65,7 +62,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
 #if !defined(_WIN32) && !defined(MACOSX)
-    CPPUNIT_TEST(testInsertPage);
+    CPPUNIT_TEST(testInsertDeletePage);
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
@@ -519,56 +516,22 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
 }
 
-void SdTiledRenderingTest::testInsertPage()
+void SdTiledRenderingTest::testInsertDeletePage()
 {
-    uno::Sequence<beans::PropertyValue> aFilterOptions;
-    uno::Reference<frame::XDesktop2> xLoader(mxDesktop, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xLoader.is());
-
-    uno::Reference<lang::XComponent> xComponent;
-    xComponent = xLoader->loadComponentFromURL(
-        getURLFromSrc(DATA_DIRECTORY) + "insert-delete.odp",
-        "_blank",
-        0,
-        aFilterOptions);
-    CPPUNIT_ASSERT(xComponent.is());
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT(pFoundShell);
-
-    ::sd::DrawDocShell* xDocSh = dynamic_cast<sd::DrawDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh);
-
-    sd::ViewShell* pViewShell = xDocSh->GetViewShell();
-    CPPUNIT_ASSERT(pViewShell);
-
-    sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
-    for (int i = 0; i < 1000; i++)
-    {
-        // Process all Tasks - slide sorter is created here
-        while (Scheduler::ProcessTaskScheduling(true));
-        if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
-            break;
-        TimeValue aSleep(0, 100 * 1000000); // 100 msec
-        osl::Thread::wait(aSleep);
-    }
-    CPPUNIT_ASSERT(pSSVS);
-
     comphelper::LibreOfficeKit::setActive();
-    SdXImpressDocument* pXImpressDocument = SdXImpressDocument::getImplementation(xDocSh->GetModel());
-    CPPUNIT_ASSERT(pXImpressDocument);
+    SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
     SdDrawDocument *pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // the document has 1 slide
     CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
 
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
-
     uno::Sequence<beans::PropertyValue> aArgs;
 
     // Insert slides
-    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+    for(unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:InsertPage", aArgs);
 
     // Verify inserted slides
@@ -581,7 +544,7 @@ void SdTiledRenderingTest::testInsertPage()
     m_aPageList.clear();
 
     // Delete slides
-    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+    for(unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:DeletePage", aArgs);
 
     // Verify deleted slides
@@ -594,7 +557,7 @@ void SdTiledRenderingTest::testInsertPage()
     m_aPageList.clear();
 
     // Undo deleted slides
-    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+    for(unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Undo", aArgs);
 
     // Verify inserted slides
@@ -607,7 +570,7 @@ void SdTiledRenderingTest::testInsertPage()
     m_aPageList.clear();
 
     // Redo deleted slides
-    for(unsigned nIterator=1; nIterator <= 10; nIterator++)
+    for(unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Redo", aArgs);
 
     // Verify deleted slides
@@ -621,12 +584,7 @@ void SdTiledRenderingTest::testInsertPage()
     CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
 
     comphelper::LibreOfficeKit::setActive(false);
-
-    uno::Reference<util::XCloseable> xClose(xComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xClose.is());
-    xClose->close(false);
 }
-
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
