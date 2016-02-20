@@ -360,7 +360,11 @@ public class java_fat implements TestBase {
 
         try {
             tCase.initializeTestCase(param);
-            return tCase.getTestEnvironment(param);
+            TestEnvironment tEnv = tCase.getTestEnvironment(param);
+            if (tEnv == null) {
+                throw new Exception("Could not get env for '" + entry.entryName + "'");
+            }
+            return tEnv;
         } catch (com.sun.star.lang.DisposedException de) {
             System.out.println("Office disposed");
             closeExistingOffice();
