@@ -17,7 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #ifdef _MSC_VER
-#pragma warning(disable : 4917 4555)
+// TODO(davido): FixMe
+// docholder.cxx(294): warning C4311: '<function-style-cast>': pointer truncation from 'HWND' to 'sal_Int32'
+// docholder.cxx(523): warning C4311: 'type cast': pointer truncation from 'HMENU' to 'UINT'
+// docholder.cxx(523): warning C4302: 'type cast': truncation from 'HMENU' to 'UINT'
+// docholder.cxx(1235): warning C4311: '<function-style-cast>': pointer truncation from 'HWND' to 'sal_Int32'
+// docholder.cxx(1235): warning C4302: '<function-style-cast>': truncation from 'HWND' to 'sal_Int32'
+#pragma warning(disable : 4302 4311 4917 4555)
 #endif
 
 
@@ -555,8 +561,8 @@ BOOL DocumentHolder::InPlaceMenuCreate()
 
     // insert object menu here
     pos = ((WORD)(mgw.width[0] + mgw.width[1] + mgw.width[2]));
-    for(WORD i = 2; i < help-1; ++i,++pos)
-        CopyToOLEMenu(m_nMenuHandle,i,hMenu,pos);
+    for(WORD j = 2; j < help-1; ++j,++pos)
+        CopyToOLEMenu(m_nMenuHandle,j,hMenu,pos);
     mgw.width[3] = help - 3;
 
     // insert help menu

@@ -768,11 +768,11 @@ int Tracker::HitTestHandles(POINT point) const
     // last of all, check for non-hit outside of object, between resize handles
     if ((m_nStyle & hatchedBorder) == 0)
     {
-        RECT rect = m_rect;
-        NormalizeRect(&rect);
+        RECT rect2 = m_rect;
+        NormalizeRect(&rect2);
         if ((m_nStyle & (dottedLine|solidLine)) != 0)
-            InflateRect(&rect,+1, +1);
-        if (!PtInRect(&rect,point))
+            InflateRect(&rect2,+1, +1);
+        if (!PtInRect(&rect2,point))
             return hitNothing;  // must have been between resize handles
     }
     return hitMiddle;   // no handle hit, but hit object (or object border)

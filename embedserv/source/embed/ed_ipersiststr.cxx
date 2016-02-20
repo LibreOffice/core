@@ -153,8 +153,8 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
         }
 
         sal_uInt32 nWritten = 0;
-        HRESULT hr = pStream->Write( (void*)aBuffer.getArray(), nReadBytes, &nWritten );
-        if ( !SUCCEEDED( hr ) || nWritten != nReadBytes )
+        HRESULT hres = pStream->Write( (void*)aBuffer.getArray(), nReadBytes, &nWritten );
+        if ( !SUCCEEDED( hres ) || nWritten != nReadBytes )
             return E_FAIL;
 
     } while( nReadBytes == nConstBufferSize );
@@ -807,11 +807,11 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
         if ( hr == S_OK )
         {
-            OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
-            CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
+            OUString aCurType2 = getServiceNameFromGUID_Impl( &m_guid ); // ???
+            CLIPFORMAT cf2 = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
-                                    cf,                         // ???
-                                    reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
+                                    cf2,                         // ???
+                                    reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType2.getStr()) );
 
             if ( SUCCEEDED( hr ) )
             {
