@@ -967,11 +967,11 @@ Assembly ^ TypeEmitter::type_resolve(
             {
                 array< ::System::Type^>^ arCtorOneway = gcnew array< ::System::Type^>(0);
                 array< ::System::Object^>^ arArgs = gcnew array< ::System::Object^>(0);
-                Emit::CustomAttributeBuilder ^ attrBuilder =
+                Emit::CustomAttributeBuilder ^ attrBuilder2 =
                     gcnew Emit::CustomAttributeBuilder(
                         ::uno::OnewayAttribute::typeid->GetConstructor( arCtorOneway),
                         arArgs);
-                method_builder->SetCustomAttribute(attrBuilder);
+                method_builder->SetCustomAttribute(attrBuilder2);
             }
         }
         else // attribute
@@ -1008,40 +1008,40 @@ Assembly ^ TypeEmitter::type_resolve(
             }
 
             // getter
-            Emit::MethodBuilder ^ method_builder =
+            Emit::MethodBuilder ^ method_builder2 =
                 type_builder->DefineMethod(
                     ustring_to_String( "get_" +
                                        xAttribute->getMemberName() ),
                     c_property_method_attr, attribute_type, parameters );
 
            //define UNO exception attribute (exceptions)--------------------------------------
-            Emit::CustomAttributeBuilder^ attrBuilder =
+            Emit::CustomAttributeBuilder^ attrBuilder2 =
                 get_exception_attribute(xAttribute->getGetExceptions());
-            if (attrBuilder != nullptr)
-                method_builder->SetCustomAttribute(attrBuilder);
+            if (attrBuilder2 != nullptr)
+                method_builder2->SetCustomAttribute(attrBuilder2);
 
-            property_builder->SetGetMethod( method_builder );
+            property_builder->SetGetMethod( method_builder2 );
 
             if (! xAttribute->isReadOnly())
             {
                 // setter
                 parameters = gcnew array< ::System::Type^> ( 1 );
                 parameters[ 0 ] = attribute_type;
-                method_builder =
+                method_builder2 =
                     type_builder->DefineMethod(
                         ustring_to_String( "set_" +
                                            xAttribute->getMemberName() ),
                         c_property_method_attr, nullptr, parameters );
                 // define parameter info
-                method_builder->DefineParameter(
+                method_builder2->DefineParameter(
                     1 /* starts with 1 */, ParameterAttributes::In, "value" );
                 //define UNO exception attribute (exceptions)--------------------------------------
-                Emit::CustomAttributeBuilder^ attrBuilder =
+                Emit::CustomAttributeBuilder^ attrBuilder3 =
                     get_exception_attribute(xAttribute->getSetExceptions());
-                if (attrBuilder != nullptr)
-                    method_builder->SetCustomAttribute(attrBuilder);
+                if (attrBuilder3 != nullptr)
+                    method_builder2->SetCustomAttribute(attrBuilder3);
 
-                property_builder->SetSetMethod( method_builder );
+                property_builder->SetSetMethod( method_builder2 );
             }
         }
     }
@@ -1162,10 +1162,10 @@ Assembly ^ TypeEmitter::type_resolve(
     array< ::System::Type^>^ all_param_types =
         gcnew array< ::System::Type^> (all_members_length + members_length );
     member_pos = 0;
-    for ( sal_Int32 pos = base_types_list->Count; pos--; )
+    for ( sal_Int32 pos2 = base_types_list->Count; pos2--; )
     {
         ::System::Type ^ base_type = safe_cast< ::System::Type ^ >(
-            base_types_list[pos] );
+            base_types_list[pos2] );
         if (base_type->Equals( ::System::Exception::typeid ))
         {
             all_member_names[ member_pos ] = "Message";
@@ -1177,10 +1177,10 @@ Assembly ^ TypeEmitter::type_resolve(
             ::System::String ^ base_type_name = base_type->FullName;
 
             //ToDo m_generated_structs?
-            struct_entry ^ entry =
+            struct_entry ^ entry2 =
                 dynamic_cast< struct_entry ^ >(
                 m_generated_structs[base_type_name] );
-            if (nullptr == entry)
+            if (nullptr == entry2)
             {
                 // complete type
                 array<FieldInfo^>^ fields =
@@ -1200,13 +1200,13 @@ Assembly ^ TypeEmitter::type_resolve(
             else // generated during this session:
                 // members may be incomplete ifaces
             {
-                sal_Int32 len = entry->m_member_names->Length;
+                sal_Int32 len = entry2->m_member_names->Length;
                 for ( sal_Int32 pos = 0; pos < len; ++pos )
                 {
                     all_member_names[ member_pos ] =
-                        entry->m_member_names[ pos ];
+                        entry2->m_member_names[ pos ];
                     all_param_types[ member_pos ] =
-                        entry->m_param_types[ pos ];
+                        entry2->m_param_types[ pos ];
                     ++member_pos;
                 }
             }
@@ -1532,13 +1532,13 @@ Assembly ^ TypeEmitter::type_resolve(
         //we pass on to DefineMethod.
         array< ::System::Type^>^ arParamTypes = gcnew array< ::System::Type^> (cParams + 1);
 //        arParamTypes[0] = get_type("unoidl.com.sun.star.uno.XComponentContext", true);
-        for (int i = 0; i < cParams + 1; i++)
+        for (int j = 0; j < cParams + j; i++)
         {
-            ::uno::PolymorphicType ^ pT = dynamic_cast< ::uno::PolymorphicType ^ >(arTypeParameters[i]);
+            ::uno::PolymorphicType ^ pT = dynamic_cast< ::uno::PolymorphicType ^ >(arTypeParameters[j]);
             if (pT)
-                arParamTypes[i] = pT->OriginalType;
+                arParamTypes[j] = pT->OriginalType;
             else
-                arParamTypes[i] = arTypeParameters[i];
+                arParamTypes[j] = arTypeParameters[j];
         }
         //define method
         System::String ^ ctorName;
@@ -1591,40 +1591,40 @@ Assembly ^ TypeEmitter::type_resolve(
             }
         }
 
-        Emit::ILGenerator ^ ilGen = method_builder->GetILGenerator();
+        Emit::ILGenerator ^ ilGen2 = method_builder->GetILGenerator();
 
         //Define locals ---------------------------------
         //XMultiComponentFactory
         Emit::LocalBuilder^ local_factory =
-            ilGen->DeclareLocal(
+            ilGen2->DeclareLocal(
                 get_type("unoidl.com.sun.star.lang.XMultiComponentFactory", true));
 
         //The return type
         Emit::LocalBuilder^ local_return_val =
-            ilGen->DeclareLocal(retType);
+            ilGen2->DeclareLocal(retType);
 
         //Obtain the XMultiComponentFactory and throw an exception if we do not get one
-        ilGen->Emit(Emit::OpCodes::Ldarg_0);
+        ilGen2->Emit(Emit::OpCodes::Ldarg_0);
 
         ::System::Reflection::MethodInfo ^ methodGetServiceManager = get_type(
             "unoidl.com.sun.star.uno.XComponentContext", true)
                 ->GetMethod("getServiceManager");
-        ilGen->Emit(Emit::OpCodes::Callvirt, methodGetServiceManager);
-        ilGen->Emit(Emit::OpCodes::Stloc, local_factory);
-        ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-        Emit::Label label1 = ilGen->DefineLabel();
-        ilGen->Emit(Emit::OpCodes::Brtrue, label1);
+        ilGen2->Emit(Emit::OpCodes::Callvirt, methodGetServiceManager);
+        ilGen2->Emit(Emit::OpCodes::Stloc, local_factory);
+        ilGen2->Emit(Emit::OpCodes::Ldloc, local_factory);
+        Emit::Label label1 = ilGen2->DefineLabel();
+        ilGen2->Emit(Emit::OpCodes::Brtrue, label1);
         //The string for the exception
         ::System::Text::StringBuilder ^ strbuilder = gcnew ::System::Text::StringBuilder(256);
         strbuilder->Append("The service ");
         strbuilder->Append(to_cts_name(xServiceType->getName()));
         strbuilder->Append(" could not be created. The context failed to supply the service manager.");
 
-        ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
-        ilGen->Emit(Emit::OpCodes::Ldarg_0);
-        ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
-        ilGen->Emit(Emit::OpCodes::Throw);
-        ilGen->MarkLabel(label1);
+        ilGen2->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
+        ilGen2->Emit(Emit::OpCodes::Ldarg_0);
+        ilGen2->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
+        ilGen2->Emit(Emit::OpCodes::Throw);
+        ilGen2->MarkLabel(label1);
 
         //We create a try/ catch around the createInstanceWithContext, etc. functions
         //There are 3 cases
@@ -1641,28 +1641,28 @@ Assembly ^ TypeEmitter::type_resolve(
         if (arExceptionTypes->Contains(
                 type_uno_exception) == false)
         {
-            ilGen->BeginExceptionBlock();
+            ilGen2->BeginExceptionBlock();
         }
         if (cParams == 0)
         {
-            ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-            ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
-            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+            ilGen2->Emit(Emit::OpCodes::Ldloc, local_factory);
+            ilGen2->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
+            ilGen2->Emit(Emit::OpCodes::Ldarg_0);
 
             ::System::Reflection::MethodInfo ^ methodCreate =
                     local_factory->LocalType->GetMethod("createInstanceWithContext");
-            ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
+            ilGen2->Emit(Emit::OpCodes::Callvirt, methodCreate);
         }
         else if(bParameterArray)
         {
             //Service constructor with parameter array
-            ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-            ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
-            ilGen->Emit(Emit::OpCodes::Ldarg_1);
-            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+            ilGen2->Emit(Emit::OpCodes::Ldloc, local_factory);
+            ilGen2->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
+            ilGen2->Emit(Emit::OpCodes::Ldarg_1);
+            ilGen2->Emit(Emit::OpCodes::Ldarg_0);
             ::System::Reflection::MethodInfo ^ methodCreate =
                     local_factory->LocalType->GetMethod("createInstanceWithArgumentsAndContext");
-            ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
+            ilGen2->Emit(Emit::OpCodes::Callvirt, methodCreate);
         }
         else
         {
@@ -1673,13 +1673,13 @@ Assembly ^ TypeEmitter::type_resolve(
 
             for (int iParam = 0; iParam < cParams; iParam ++)
             {
-                arLocalAny[iParam] = ilGen->DeclareLocal(typeAny);
+                arLocalAny[iParam] = ilGen2->DeclareLocal(typeAny);
             }
 
             //Any[]. This array is filled with the created Anys which contain the parameters
             //and the values contained in the parameter array
             Emit::LocalBuilder ^ local_anyParams =
-                ilGen->DeclareLocal(array< ::uno::Any>::typeid);
+                ilGen2->DeclareLocal(array< ::uno::Any>::typeid);
 
             //Create the Any for every argument, except for the parameter array
             //arLocalAny contains the LocalBuilder for all these parameters.
@@ -1693,118 +1693,118 @@ Assembly ^ TypeEmitter::type_resolve(
                 typeAny->GetProperty("Type")->GetGetMethod();
             ::System::Reflection::MethodInfo ^ methodAnyGetValue =
                 typeAny->GetProperty("Value")->GetGetMethod();
-            for (int i = 0; i < arLocalAny->Length; i ++)
+            for (int j = 0; j < arLocalAny->Length; j ++)
             {
                 //check if the parameter is a polymorphic struct
-                ::uno::PolymorphicType ^polyType = dynamic_cast< ::uno::PolymorphicType^ >(arTypeParameters[i+1]);
-                //arTypeParameters[i+1] = polyType->OriginalType;
+                ::uno::PolymorphicType ^polyType = dynamic_cast< ::uno::PolymorphicType^ >(arTypeParameters[j+1]);
+                //arTypeParameters[j+1] = polyType->OriginalType;
                 if (polyType)
                 {
                     //It is a polymorphic struct
                     //Load the uninitialized local Any on which we will call the ctor
-                    ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
+                    ilGen2->Emit(Emit::OpCodes::Ldloca, arLocalAny[j]);
                     // Call PolymorphicType PolymorphicType::GetType(Type t, String polyName)
                     // Prepare the first parameter
-                    ilGen->Emit(Emit::OpCodes::Ldtoken, polyType->OriginalType);
+                    ilGen2->Emit(Emit::OpCodes::Ldtoken, polyType->OriginalType);
                     array< ::System::Type^>^ arTypeParams = {::System::RuntimeTypeHandle::typeid};
-                    ilGen->Emit(Emit::OpCodes::Call,
+                    ilGen2->Emit(Emit::OpCodes::Call,
                                 ::System::Type::typeid->GetMethod(
                                     "GetTypeFromHandle", arTypeParams));
                     // Prepare the second parameter
-                    ilGen->Emit(Emit::OpCodes::Ldstr, polyType->PolymorphicName);
+                    ilGen2->Emit(Emit::OpCodes::Ldstr, polyType->PolymorphicName);
                     // Make the actual call
                     array< ::System::Type^>^ arTypeParam_GetType = {
                         ::System::Type::typeid, ::System::String::typeid };
-                    ilGen->Emit(Emit::OpCodes::Call,
+                    ilGen2->Emit(Emit::OpCodes::Call,
                     ::uno::PolymorphicType::typeid->GetMethod(gcnew System::String("GetType"),
                         arTypeParam_GetType));
 
                     //Stack is: localAny, PolymorphicType
                     //Call Any::Any(Type, Object)
                     //Prepare the second parameter for the any ctor
-                    ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
+                    ilGen2->Emit(Emit::OpCodes::Ldarg, j + 1);
                     // if the parameter is a value type then we need to box it, because
                     // the Any ctor takes an Object
-                    if (arTypeParameters[i+1]->IsValueType)
-                        ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
-                    ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                    if (arTypeParameters[j+1]->IsValueType)
+                        ilGen2->Emit(Emit::OpCodes::Box, arTypeParameters[j+1]);
+                    ilGen2->Emit(Emit::OpCodes::Call, ctorAny);
                 }
-                else if (arTypeParameters[i+1] == typeAny)
+                else if (arTypeParameters[j+1] == typeAny)
                 {
                     //Create the call new Any(param.Type,param,Value)
                     //Stack must be Any,Type,Value
                     //First load the Any which is to be constructed
-                    ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
+                    ilGen2->Emit(Emit::OpCodes::Ldloca, arLocalAny[j]);
                     //Load the Type, which is obtained by calling param.Type
-                    ilGen->Emit(Emit::OpCodes::Ldarga, i + 1);
-                    ilGen->Emit(Emit::OpCodes::Call, methodAnyGetType);
+                    ilGen2->Emit(Emit::OpCodes::Ldarga, j + 1);
+                    ilGen2->Emit(Emit::OpCodes::Call, methodAnyGetType);
                     //Load the Value, which is obtained by calling param.Value
-                    ilGen->Emit(Emit::OpCodes::Ldarga, i + 1);
-                    ilGen->Emit(Emit::OpCodes::Call, methodAnyGetValue);
+                    ilGen2->Emit(Emit::OpCodes::Ldarga, j + 1);
+                    ilGen2->Emit(Emit::OpCodes::Call, methodAnyGetValue);
                     //Call the Any ctor.
-                    ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                    ilGen2->Emit(Emit::OpCodes::Call, ctorAny);
                 }
                 else
                 {
-                    ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
-                    ilGen->Emit(Emit::OpCodes::Ldtoken, arTypeParameters[i+1]);
+                    ilGen2->Emit(Emit::OpCodes::Ldloca, arLocalAny[j]);
+                    ilGen2->Emit(Emit::OpCodes::Ldtoken, arTypeParameters[j+1]);
 
                     array< ::System::Type^>^ arTypeParams = {::System::RuntimeTypeHandle::typeid};
-                    ilGen->Emit(Emit::OpCodes::Call,
+                    ilGen2->Emit(Emit::OpCodes::Call,
                                 ::System::Type::typeid->GetMethod(
                                     "GetTypeFromHandle", arTypeParams));
-                    ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
+                    ilGen2->Emit(Emit::OpCodes::Ldarg, j + 1);
                     // if the parameter is a value type then we need to box it, because
                     // the Any ctor takes an Object
-                    if (arTypeParameters[i+1]->IsValueType)
-                        ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
-                    ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+                    if (arTypeParameters[j+1]->IsValueType)
+                        ilGen2->Emit(Emit::OpCodes::Box, arTypeParameters[j+1]);
+                    ilGen2->Emit(Emit::OpCodes::Call, ctorAny);
                 }
             }
 
             //Create the Any[] that is passed to the
             //createInstanceWithContext[AndArguments] function
-            ilGen->Emit(Emit::OpCodes::Ldc_I4, arLocalAny->Length);
-            ilGen->Emit(Emit::OpCodes::Newarr, typeAny);
-            ilGen->Emit(Emit::OpCodes::Stloc, local_anyParams);
+            ilGen2->Emit(Emit::OpCodes::Ldc_I4, arLocalAny->Length);
+            ilGen2->Emit(Emit::OpCodes::Newarr, typeAny);
+            ilGen2->Emit(Emit::OpCodes::Stloc, local_anyParams);
 
             //Assign all anys created from the parameters
             //array to the Any[]
-            for (int i = 0; i < arLocalAny->Length; i++)
+            for (int j = 0; j < arLocalAny->Length; j++)
             {
-                ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
-                ilGen->Emit(Emit::OpCodes::Ldc_I4, i);
-                ilGen->Emit(Emit::OpCodes::Ldelema, typeAny);
-                ilGen->Emit(Emit::OpCodes::Ldloc, arLocalAny[i]);
-                ilGen->Emit(Emit::OpCodes::Stobj, typeAny);
+                ilGen2->Emit(Emit::OpCodes::Ldloc, local_anyParams);
+                ilGen2->Emit(Emit::OpCodes::Ldc_I4, j);
+                ilGen2->Emit(Emit::OpCodes::Ldelema, typeAny);
+                ilGen2->Emit(Emit::OpCodes::Ldloc, arLocalAny[j]);
+                ilGen2->Emit(Emit::OpCodes::Stobj, typeAny);
             }
             // call createInstanceWithContextAndArguments
-            ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
-            ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
-            ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
-            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+            ilGen2->Emit(Emit::OpCodes::Ldloc, local_factory);
+            ilGen2->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
+            ilGen2->Emit(Emit::OpCodes::Ldloc, local_anyParams);
+            ilGen2->Emit(Emit::OpCodes::Ldarg_0);
             ::System::Reflection::MethodInfo ^ methodCreate =
                     local_factory->LocalType->GetMethod("createInstanceWithArgumentsAndContext");
-            ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
+            ilGen2->Emit(Emit::OpCodes::Callvirt, methodCreate);
         }
         //cast the object returned by the functions createInstanceWithContext or
         //createInstanceWithArgumentsAndContext to the interface type
-        ilGen->Emit(Emit::OpCodes::Castclass, retType);
-        ilGen->Emit(Emit::OpCodes::Stloc, local_return_val);
+        ilGen2->Emit(Emit::OpCodes::Castclass, retType);
+        ilGen2->Emit(Emit::OpCodes::Stloc, local_return_val);
 
         //catch exceptions thrown by createInstanceWithArgumentsAndContext and createInstanceWithContext
         if (arExceptionTypes->Contains(type_uno_exception) == false)
         {
             // catch (unoidl.com.sun.star.uno.RuntimeException) {throw;}
-            ilGen->BeginCatchBlock(get_type("unoidl.com.sun.star.uno.RuntimeException", true));
-            ilGen->Emit(Emit::OpCodes::Pop);
-            ilGen->Emit(Emit::OpCodes::Rethrow);
+            ilGen2->BeginCatchBlock(get_type("unoidl.com.sun.star.uno.RuntimeException", true));
+            ilGen2->Emit(Emit::OpCodes::Pop);
+            ilGen2->Emit(Emit::OpCodes::Rethrow);
 
             //catch and rethrow all other defined Exceptions
-            for (int i = 0; i < arExceptionTypes->Count; i++)
+            for (int j = 0; j < arExceptionTypes->Count; j++)
             {
                 ::System::Type ^ excType = safe_cast< ::System::Type^ >(
-                    arExceptionTypes[i]);
+                    arExceptionTypes[j]);
                 if (excType->IsInstanceOfType(
                         get_type("unoidl.com.sun.star.uno.RuntimeException", true)))
                 {// we have a catch for RuntimeException already defined
@@ -1812,19 +1812,19 @@ Assembly ^ TypeEmitter::type_resolve(
                 }
 
                 //catch Exception and rethrow
-                ilGen->BeginCatchBlock(excType);
-                ilGen->Emit(Emit::OpCodes::Pop);
-                ilGen->Emit(Emit::OpCodes::Rethrow);
+                ilGen2->BeginCatchBlock(excType);
+                ilGen2->Emit(Emit::OpCodes::Pop);
+                ilGen2->Emit(Emit::OpCodes::Rethrow);
             }
             //catch (unoidl.com.sun.star.uno.Exception) {throw DeploymentException...}
-            ilGen->BeginCatchBlock(type_uno_exception);
+            ilGen2->BeginCatchBlock(type_uno_exception);
 
             //Define the local variable that keeps the exception
-             Emit::LocalBuilder ^ local_exception = ilGen->DeclareLocal(
+             Emit::LocalBuilder ^ local_exception = ilGen2->DeclareLocal(
                  type_uno_exception);
 
              //Store the exception
-             ilGen->Emit(Emit::OpCodes::Stloc, local_exception);
+             ilGen2->Emit(Emit::OpCodes::Stloc, local_exception);
 
             //prepare the construction of the exception
              strbuilder = gcnew ::System::Text::StringBuilder(256);
@@ -1832,42 +1832,42 @@ Assembly ^ TypeEmitter::type_resolve(
              strbuilder->Append(to_cts_name(xServiceType->getName()));
              strbuilder->Append(": ");
 
-             ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
+             ilGen2->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
 
             //add to the string the Exception.Message
-            ilGen->Emit(Emit::OpCodes::Ldloc, local_exception);
-            ilGen->Emit(Emit::OpCodes::Callvirt,
+            ilGen2->Emit(Emit::OpCodes::Ldloc, local_exception);
+            ilGen2->Emit(Emit::OpCodes::Callvirt,
                         type_uno_exception->GetProperty("Message")->GetGetMethod());
             array< ::System::Type^>^ arConcatParams = {System::String::typeid,
                                                   System::String::typeid};
-            ilGen->Emit(Emit::OpCodes::Call,
+            ilGen2->Emit(Emit::OpCodes::Call,
                         System::String::typeid->GetMethod("Concat", arConcatParams));
             //load contex argument
-            ilGen->Emit(Emit::OpCodes::Ldarg_0);
-            ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
-            ilGen->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
+            ilGen2->Emit(Emit::OpCodes::Ldarg_0);
+            ilGen2->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
+            ilGen2->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
 
-            ilGen->EndExceptionBlock();
+            ilGen2->EndExceptionBlock();
         }
 
 
         //Check if the service instance was create and throw a exception if not.
-        Emit::Label label_service_created = ilGen->DefineLabel();
-        ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
-        ilGen->Emit(Emit::OpCodes::Brtrue_S, label_service_created);
+        Emit::Label label_service_created = ilGen2->DefineLabel();
+        ilGen2->Emit(Emit::OpCodes::Ldloc, local_return_val);
+        ilGen2->Emit(Emit::OpCodes::Brtrue_S, label_service_created);
 
         strbuilder = gcnew ::System::Text::StringBuilder(256);
         strbuilder->Append("The context (com.sun.star.uno.XComponentContext) failed to supply the service ");
         strbuilder->Append(to_cts_name(xServiceType->getName()));
         strbuilder->Append(".");
-        ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
-        ilGen->Emit(Emit::OpCodes::Ldarg_0);
-        ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
-        ilGen->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
+        ilGen2->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
+        ilGen2->Emit(Emit::OpCodes::Ldarg_0);
+        ilGen2->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
+        ilGen2->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
 
-        ilGen->MarkLabel(label_service_created);
-        ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
-        ilGen->Emit(Emit::OpCodes::Ret);
+        ilGen2->MarkLabel(label_service_created);
+        ilGen2->Emit(Emit::OpCodes::Ldloc, local_return_val);
+        ilGen2->Emit(Emit::OpCodes::Ret);
 
     }
     // remove from incomplete types map

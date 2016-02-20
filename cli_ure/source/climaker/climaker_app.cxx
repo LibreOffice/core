@@ -596,13 +596,13 @@ SAL_IMPLEMENT_MAIN()
             {
                 css::uno::Reference< reflection::XTypeDescription > td(
                     xTD_enum->nextTypeDescription());
-                OUString name(td->getName());
+                OUString name2(td->getName());
                 bool bEmit = false;
                 for (std::vector< rtl::Reference< unoidl::Provider > >::iterator
                          i(unoidlMandatoryProvs.begin());
                      i != unoidlMandatoryProvs.end(); ++i)
                 {
-                    if ((*i)->findEntity(name).is()) {
+                    if ((*i)->findEntity(name2).is()) {
                         bEmit = true;
                         break;
                     }
