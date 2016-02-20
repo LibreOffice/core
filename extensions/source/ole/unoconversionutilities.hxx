@@ -1409,8 +1409,8 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
         {
             Sequence<Any> params(1);
             params.getArray()[0] = rObj;
-            Reference<XInterface> xInt = xInvFactory->createInstanceWithArguments(params);
-            xInv.set(xInt, UNO_QUERY);
+            Reference<XInterface> xInt2 = xInvFactory->createInstanceWithArguments(params);
+            xInv.set(xInt2, UNO_QUERY);
         }
     }
 
@@ -1675,12 +1675,12 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     }
     else if (pVar->vt == VT_DISPATCH && pVar->pdispVal != NULL)
     {
-        CComPtr<IDispatch> spDispatch(pVar->pdispVal);
-        if (spDispatch)
+        CComPtr<IDispatch> spDispatch2(pVar->pdispVal);
+        if (spDispatch2)
 #ifdef __MINGW32__
-            spDispatch->QueryInterface( IID_IUnknown, reinterpret_cast<LPVOID*>( & spUnknown.p));
+            spDispatch2->QueryInterface( IID_IUnknown, reinterpret_cast<LPVOID*>( & spUnknown.p));
 #else
-            spDispatch.QueryInterface( & spUnknown.p);
+            spDispatch2.QueryInterface( & spUnknown.p);
 #endif
     }
 
