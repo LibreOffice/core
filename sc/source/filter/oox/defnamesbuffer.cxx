@@ -155,7 +155,38 @@ void lclConvertSingleRefFlags( SingleReference& orApiRef, const CellAddress& rBa
         rBaseAddr.Row, ROW_RELATIVE, bRowRel );
 }
 
+void lclConvertSingleRefFlags( SingleReference& orApiRef, const ScAddress& rBaseAddr, bool bColRel, bool bRowRel )
+{
+    using namespace ::com::sun::star::sheet::ReferenceFlags;
+    lclConvertRefFlags(
+        orApiRef.Flags, orApiRef.Column, orApiRef.RelativeColumn,
+        sal_Int32( rBaseAddr.Col() ), COLUMN_RELATIVE, bColRel );
+    lclConvertRefFlags(
+        orApiRef.Flags, orApiRef.Row, orApiRef.RelativeRow,
+        rBaseAddr.Row(), ROW_RELATIVE, bRowRel );
+}
+
 Any lclConvertReference( const Any& rRefAny, const CellAddress& rBaseAddr, sal_uInt16 nRelFlags )
+{
+    if( rRefAny.has< SingleReference >() && !getFlag( nRelFlags, BIFF_REFFLAG_COL2REL ) && !getFlag( nRelFlags, BIFF_REFFLAG_ROW2REL ) )
+    {
+        SingleReference aApiRef;
+        rRefAny >>= aApiRef;
+        lclConvertSingleRefFlags( aApiRef, rBaseAddr, getFlag( nRelFlags, BIFF_REFFLAG_COL1REL ), getFlag( nRelFlags, BIFF_REFFLAG_ROW1REL ) );
+        return Any( aApiRef );
+    }
+    if( rRefAny.has< ComplexReference >() )
+    {
+        ComplexReference aApiRef;
+        rRefAny >>= aApiRef;
+        lclConvertSingleRefFlags( aApiRef.Reference1, rBaseAddr, getFlag( nRelFlags, BIFF_REFFLAG_COL1REL ), getFlag( nRelFlags, BIFF_REFFLAG_ROW1REL ) );
+        lclConvertSingleRefFlags( aApiRef.Reference2, rBaseAddr, getFlag( nRelFlags, BIFF_REFFLAG_COL2REL ), getFlag( nRelFlags, BIFF_REFFLAG_ROW2REL ) );
+        return Any( aApiRef );
+    }
+    return Any();
+}
+
+Any lclConvertReference( const Any& rRefAny, const ScAddress& rBaseAddr, sal_uInt16 nRelFlags )
 {
     if( rRefAny.has< SingleReference >() && !getFlag( nRelFlags, BIFF_REFFLAG_COL2REL ) && !getFlag( nRelFlags, BIFF_REFFLAG_ROW2REL ) )
     {
@@ -200,6 +231,34 @@ const OUString& DefinedNameBase::getUpcaseModelName() const
 }
 
 Any DefinedNameBase::getReference( const CellAddress& rBaseAddr ) const
+{
+    if( maRefAny.hasValue() && (maModel.maName.getLength() >= 2) && (maModel.maName[ 0 ] == '\x01') )
+    {
+        sal_Unicode cFlagsChar = getUpcaseModelName()[ 1 ];
+        if( ('A' <= cFlagsChar) && (cFlagsChar <= 'P') )
+        {
+            sal_uInt16 nRelFlags = static_cast< sal_uInt16 >( cFlagsChar - 'A' );
+            if( maRefAny.has< ExternalReference >() )
+            {
+                ExternalReference aApiExtRef;
+                maRefAny >>= aApiExtRef;
+                Any aRefAny = lclConvertReference( aApiExtRef.Reference, rBaseAddr, nRelFlags );
+                if( aRefAny.hasValue() )
+                {
+                    aApiExtRef.Reference <<= aRefAny;
+                    return Any( aApiExtRef );
+                }
+            }
+            else
+            {
+                return lclConvertReference( maRefAny, rBaseAddr, nRelFlags );
+            }
+        }
+    }
+    return Any();
+}
+
+Any DefinedNameBase::getReference( const ScAddress& rBaseAddr ) const
 {
     if( maRefAny.hasValue() && (maModel.maName.getLength() >= 2) && (maModel.maName[ 0 ] == '\x01') )
     {
@@ -379,11 +438,11 @@ void DefinedName::convertFormula()
             {
                 bool bHasRowTitles = false;
                 bool bHasColTitles = false;
-                const CellAddress& rMaxPos = getAddressConverter().getMaxAddress();
+                const ScAddress& rMaxPos = getAddressConverter().getMaxAddress();
                 for( ::std::vector< CellRangeAddress >::const_iterator aIt = aTitleRanges.begin(), aEnd = aTitleRanges.end(); (aIt != aEnd) && (!bHasRowTitles || !bHasColTitles); ++aIt )
                 {
-                    bool bFullRow = (aIt->StartColumn == 0) && (aIt->EndColumn >= rMaxPos.Column);
-                    bool bFullCol = (aIt->StartRow == 0) && (aIt->EndRow >= rMaxPos.Row);
+                    bool bFullRow = (aIt->StartColumn == 0) && ( aIt->EndColumn >= rMaxPos.Col() );
+                    bool bFullCol = (aIt->StartRow == 0) && ( aIt->EndRow >= rMaxPos.Row() );
                     if( !bHasRowTitles && bFullRow && !bFullCol )
                     {
                         xPrintAreas->setTitleRows( *aIt );

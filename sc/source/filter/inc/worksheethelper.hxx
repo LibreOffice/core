@@ -251,6 +251,7 @@ public:
 
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const css::table::CellAddress& rAddress );
+    void                extendUsedArea( const ScAddress& rAddress );
     /** Extends the used area of this sheet by the passed cell range. */
     void                extendUsedArea( const css::table::CellRangeAddress& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle (in 1/100 mm). */
@@ -317,6 +318,7 @@ public:
         const OUString& rCellValue, sal_Int32 nValueType );
 
     void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const css::table::CellAddress& rTokenAddress, const OUString&  );
+    void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const ScAddress& rTokenAddress, const OUString&  );
 
     void createSharedFormulaMapEntry(
         const css::table::CellAddress& rAddress,

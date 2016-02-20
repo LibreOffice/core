@@ -1262,7 +1262,7 @@ void PivotCache::writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const
     OSL_ENSURE( static_cast< size_t >( maSheetSrcModel.maRange.EndColumn - maSheetSrcModel.maRange.StartColumn + 1 ) == maDatabaseFields.size(),
         "PivotCache::writeSourceHeaderCells - source cell range width does not match number of source fields" );
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
-    sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Column;
+    sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Col();
     sal_Int32 nRow = maSheetSrcModel.maRange.StartRow;
     mnCurrRow = -1;
     updateSourceDataRow( rSheetHelper, nRow );
@@ -1286,7 +1286,7 @@ void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper& rS
     sal_Int32 nRow = maSheetSrcModel.maRange.StartRow + nRowIdx;
     OSL_ENSURE( (maSheetSrcModel.maRange.StartRow < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow), "PivotCache::importPCRecord - invalid row index" );
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
-    sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Column;
+    sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Col();
     for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); !rStrm.isEof() && (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
         (*aIt)->importPCRecordItem( rStrm, rSheetHelper, nCol, nRow );
 }
@@ -1296,7 +1296,7 @@ void PivotCache::importPCItemIndexList( BiffInputStream& rStrm, WorksheetHelper&
     sal_Int32 nRow = maSheetSrcModel.maRange.StartRow + nRowIdx;
     OSL_ENSURE( (maSheetSrcModel.maRange.StartRow < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow), "PivotCache::importPCItemIndexList - invalid row index" );
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
-    sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Column;
+    sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Col();
     for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); !rStrm.isEof() && (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
         if( (*aIt)->hasSharedItems() )
             (*aIt)->importPCItemIndex( rStrm, rSheetHelper, nCol, nRow );

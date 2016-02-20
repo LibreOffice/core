@@ -257,8 +257,8 @@ void ExternalName::setResultSize( sal_Int32 nColumns, sal_Int32 nRows )
     OSL_ENSURE( (mrParentLink.getLinkType() == LINKTYPE_DDE) || (mrParentLink.getLinkType() == LINKTYPE_OLE) ||
         (mrParentLink.getLinkType() == LINKTYPE_MAYBE_DDE_OLE), "ExternalName::setResultSize - wrong link type" );
     OSL_ENSURE( (nRows > 0) && (nColumns > 0), "ExternalName::setResultSize - invalid matrix size" );
-    const CellAddress& rMaxPos = getAddressConverter().getMaxApiAddress();
-    if( (0 < nRows) && (nRows <= rMaxPos.Row + 1) && (0 < nColumns) && (nColumns <= rMaxPos.Column + 1) )
+    const ScAddress& rMaxPos = getAddressConverter().getMaxApiAddress();
+    if( (0 < nRows) && (nRows <= rMaxPos.Row() + 1) && (0 < nColumns) && (nColumns <= rMaxPos.Col() + 1) )
         maResults.resize( static_cast< size_t >( nColumns ), static_cast< size_t >( nRows ), Any( BiffHelper::calcDoubleFromError( BIFF_ERR_NA ) ) );
     else
         maResults.clear();

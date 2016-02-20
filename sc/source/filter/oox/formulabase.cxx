@@ -1531,6 +1531,14 @@ bool lclConvertToCellAddress( CellAddress& orAddress, const SingleReference& rSi
         ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet));
 }
 
+bool lclConvertToCellAddress( ScAddress& orAddress, const SingleReference& rSingleRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
+{
+    orAddress = ScAddress( rSingleRef.Column, rSingleRef.Row, rSingleRef.Sheet );
+    return
+        !getFlag( rSingleRef.Flags, nForbiddenFlags ) &&
+        ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet));
+}
+
 bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
 {
     orRange = CellRangeAddress( static_cast< sal_Int16 >( rComplexRef.Reference1.Sheet ),
@@ -1555,10 +1563,10 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     SingleReference aSingleRef;
     if( rData >>= aSingleRef )
     {
-        CellAddress aAddress;
+        ScAddress aAddress;
         // ignore invalid addresses (with #REF! errors), but do not stop parsing
         if( lclConvertToCellAddress( aAddress, aSingleRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.push_back( CellRangeAddress( aAddress.Sheet, aAddress.Column, aAddress.Row, aAddress.Column, aAddress.Row ) );
+            orRanges.push_back( CellRangeAddress( aAddress.Tab(), aAddress.Col(), aAddress.Row(), aAddress.Col(), aAddress.Row() ) );
         return STATE_REF;
     }
     ComplexReference aComplexRef;
