@@ -249,7 +249,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             }
         }
 
-        SwFlyFrameAttrMgr aFrameManager( true, GetWrtShellPtr(), FRMMGR_TYPE_GRF );
+        SwFlyFrameAttrMgr aFrameManager( true, GetWrtShellPtr(), Frmmgr_Type::GRF );
         SwWrtShell& rShell = GetWrtShell();
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
@@ -1881,7 +1881,7 @@ void SwView::InsFrameMode(sal_uInt16 nCols)
 {
     if ( m_pWrtShell->HasWholeTabSelection() )
     {
-        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell, FRMMGR_TYPE_TEXT );
+        SwFlyFrameAttrMgr aMgr( true, m_pWrtShell, Frmmgr_Type::TEXT );
 
         const SwFrameFormat &rPageFormat =
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();
