@@ -2902,7 +2902,7 @@ void SwUiWriterTest::testTdf88986()
 
     // Create the item set that is normally passed to the insert frame dialog.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwFlyFrameAttrMgr aMgr(true, pWrtShell, FRMMGR_TYPE_TEXT);
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT);
     SfxItemSet aSet = aShell.CreateInsertFrameItemSet(aMgr);
 
     // This was missing along with the gradient and other tables.

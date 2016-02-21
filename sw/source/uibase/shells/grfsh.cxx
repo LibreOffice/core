@@ -214,7 +214,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case FN_DRAW_WRAP_DLG:
         {
             SwFlyFrameAttrMgr aMgr( false, &rSh, rSh.IsFrameSelected() ?
-                                               FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
+                                               Frmmgr_Type::NONE : Frmmgr_Type::GRF);
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
 
@@ -859,7 +859,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     aTransform.rotate(aRotation);
     rShell.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aGraphic));
 
-    SwFlyFrameAttrMgr aManager(false, &rShell, rShell.IsFrameSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
+    SwFlyFrameAttrMgr aManager(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF);
     const long nRotatedWidth = aManager.GetSize().Height();
     const long nRotatedHeight = aManager.GetSize().Width();
     Size aSize(nRotatedWidth, nRotatedHeight);
