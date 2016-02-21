@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <cassert>
 #include <tools/toolsdllapi.h>
+#include <utility>
 
 /**
    This implements similar functionality to boost::intrusive_ptr
@@ -32,7 +33,13 @@ namespace tools {
 /** T must be a class that extends SvRefBase */
 template<typename T> class SAL_DLLPUBLIC_RTTI SvRef {
 public:
-    SvRef(): pObj(0) {}
+    SvRef(): pObj(nullptr) {}
+
+    SvRef(SvRef&& rObj)
+    {
+        pObj = rObj.pObj;
+        rObj.pObj = nullptr;
+    }
 
     SvRef(SvRef const & rObj): pObj(rObj.pObj)
     {
@@ -86,6 +93,15 @@ public:
 protected:
     T * pObj;
 };
+
+/**
+ * This implements similar functionality to std::make_shared.
+ */
+template<typename T, typename... Args>
+SvRef<T> make_ref(Args&& ... args)
+{
+    return SvRef<T>(new T(std::forward<Args>(args)...));
+}
 
 }
 

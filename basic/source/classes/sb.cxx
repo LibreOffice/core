@@ -2198,7 +2198,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             }
         }
 
-        SbxVariableRef pNewItem = new SbxVariable( *pItem );
+        auto pNewItem = tools::make_ref<SbxVariable>( *pItem );
         if( nCount >= 3 )
         {
             SbxVariable* pKey = pPar_->Get(2);
