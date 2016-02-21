@@ -125,6 +125,7 @@ private:
     DECL_LINK_TYPED( lateInitCallback, Timer *, void );
     DECL_LINK_TYPED( UpdateAnimationLB, ListBox&, void );
     DECL_LINK_TYPED( AnimationSelectHdl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeStartDelay, Edit&, void );
     void implControlHdl(Control*);
 
 private:
@@ -152,6 +153,8 @@ private:
     VclPtr<ListBox>    mpLBCategory;
     VclPtr<FixedText> mpFTAnimation;
     VclPtr<CategoryListBox> mpLBAnimation;
+    VclPtr<FixedText> mpFTStartDelay;
+    VclPtr<MetricField> mpMFStartDelay;
 
     OUString    maStrModify;
     OUString    maStrProperty;
