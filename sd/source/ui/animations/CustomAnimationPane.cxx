@@ -1766,7 +1766,7 @@ void CustomAnimationPane::animationChange()
 
             pEffectSequence->replace( pEffect, pDescriptor, fDuration );
         }
-        onPreview(true);
+        onPreview(false);
     }
 
 }
