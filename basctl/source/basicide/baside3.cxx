@@ -195,7 +195,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        if (SfxDispatcher* pDispatcher = GetDispatcher())
+        if (GetDispatcher())
         {
             SdrView& rView = GetView();
             if( !rCEvt.IsMouseEvent() && rView.AreObjectsMarked() )
@@ -203,11 +203,11 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
                 Rectangle aMarkedRect( rView.GetMarkedRect() );
                 Point MarkedCenter( aMarkedRect.Center() );
                 Point PosPixel( LogicToPixel( MarkedCenter ) );
-                pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED), this, &PosPixel );
+                SfxDispatcher::ExecutePopup( this, &PosPixel );
             }
             else
             {
-                pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED) );
+                SfxDispatcher::ExecutePopup();
             }
 
         }

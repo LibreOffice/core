@@ -104,7 +104,6 @@
 #define CMD_SID_FRAME_TO_BOTTOM                     ".uno:SendToBack"
 #define CMD_SID_SET_DEFAULT                         ".uno:SetDefault"
 #define CMD_SID_ATTR_CHAR_SHADOWED                  ".uno:Shadowed"
-#define CMD_SID_SHOW_PROPERTYBROWSER                ".uno:ShowPropBrowser"
 #define CMD_SID_FM_SHOW_PROPERTY_BROWSER            ".uno:ShowPropertyBrowser"
 #define CMD_SID_ATTR_PARA_LINESPACE_10              ".uno:SpacePara1"
 #define CMD_SID_ATTR_PARA_LINESPACE_15              ".uno:SpacePara15"

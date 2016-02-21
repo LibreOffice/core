@@ -30,7 +30,6 @@
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
-#define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 #define RID_PRINTDLG_STRLIST            ( RID_BASICIDE_START + 78 )
 
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )

@@ -139,7 +139,7 @@ void basctl_Shell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_SHOW_PROPERTYBROWSER, false, BASICIDE_UI_FEATURE_SHOW_BROWSER);
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
-    GetStaticInterface()->RegisterPopupMenu(IDEResId(RID_POPUP_DLGED));
+    GetStaticInterface()->RegisterPopupMenu("dialog");
 }
 
 unsigned Shell::nShellCount = 0;

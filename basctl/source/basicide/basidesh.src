@@ -444,20 +444,6 @@ Menu RID_POPUP_TABBAR
     };
 };
 
-Menu RID_POPUP_DLGED
-{
-    DefaultItemId = SID_SHOW_PROPERTYBROWSER ;
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_SHOW_PROPERTYBROWSER ;
-            HelpId = CMD_SID_SHOW_PROPERTYBROWSER ;
-            Text [ en-US ] = "Properties...";
-        };
-    };
-};
-
 ImageList RID_IMGLST_LAYOUT
 {
     Prefix = "im";
