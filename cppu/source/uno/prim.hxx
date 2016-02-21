@@ -133,7 +133,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
 inline void CONSTRUCT_EMPTY_ANY(uno_Any * pAny) {
     pAny->pType = _getVoidType();
 #if OSL_DEBUG_LEVEL > 0
-    pAny->pData = reinterpret_cast<void *>(0xdeadbeef);
+    pAny->pData = reinterpret_cast<void *>((uintptr_t)0xdeadbeef);
 #else
     pAny->pData = pAny;
 #endif
