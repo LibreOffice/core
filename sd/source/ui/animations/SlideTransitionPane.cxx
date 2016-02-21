@@ -874,7 +874,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     return aResult;
 }
 
-void SlideTransitionPane::applyToSelectedPages()
+void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
 {
     if( ! mbUpdatingControls )
     {
@@ -889,7 +889,7 @@ void SlideTransitionPane::applyToSelectedPages()
             mrBase.GetDocShell()->SetModified();
         }
         if( mpCB_AUTO_PREVIEW->IsEnabled() &&
-            mpCB_AUTO_PREVIEW->IsChecked())
+            mpCB_AUTO_PREVIEW->IsChecked() && bPreview)
         {
             if (aEffect.mnType) // mnType = 0 denotes no transition
                 playCurrentEffect();
@@ -1068,12 +1068,12 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceSlideRadioButtonToggled, RadioButton&, void)
 {
     updateControlState();
-    applyToSelectedPages();
+    applyToSelectedPages(false);
 }
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceTimeModified, Edit&, void)
 {
-    applyToSelectedPages();
+    applyToSelectedPages(false);
 }
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, VariantListBoxSelected, ListBox&, void)

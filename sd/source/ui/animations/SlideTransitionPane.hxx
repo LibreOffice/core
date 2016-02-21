@@ -77,7 +77,7 @@ private:
 
     impl::TransitionEffect getTransitionEffectFromControls() const;
 
-    void applyToSelectedPages();
+    void applyToSelectedPages(bool bPreview);
     void playCurrentEffect();
     void stopEffects();
 
