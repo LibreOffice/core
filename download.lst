@@ -131,15 +131,8 @@ export POPPLER_TARBALL := poppler-0.26.4.tar.gz
 export POSTGRESQL_TARBALL := c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2
 export PREBUILT_OPENSSL_MD5SUM=b91f5c21ab18e8ad993b94092479c39a
 export PREBUILT_OPENSSL_TARBALL=prebuilt-openssl.tar.bz2
-
-ifeq ($(PYTHON_VERSION_MINOR),3)
-export PYTHON_MD5SUM := 803a75927f8f241ca78633890c798021
-export PYTHON_TARBALL := Python-3.3.5.tgz
-else
 export PYTHON_MD5SUM := a56c0c0b45d75a0ec9c6dee933c41c36
 export PYTHON_TARBALL := Python-3.5.0.tgz
-endif
-
 export RAPTOR_TARBALL := 4ceb9316488b0ea01acf011023cf7fff-raptor2-2.0.9.tar.gz
 export RASQAL_TARBALL := b12c5f9cfdb6b04efce5a4a186b8416b-rasqal-0.9.30.tar.gz
 export REDLAND_TARBALL := 32f8e1417a64d3c6f2c727f9053f55ea-redland-1.0.16.tar.gz
