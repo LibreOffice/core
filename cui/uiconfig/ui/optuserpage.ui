@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkFrame" id="OptUserPage">
@@ -24,7 +24,7 @@
               <object class="GtkLabel" id="companyft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Company:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">company</property>
@@ -38,7 +38,7 @@
               <object class="GtkLabel" id="nameft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">First/last _name/initials:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">firstname</property>
@@ -52,7 +52,7 @@
               <object class="GtkLabel" id="streetft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Street:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">street</property>
@@ -66,7 +66,7 @@
               <object class="GtkLabel" id="cityft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">City/state/_zip:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">city</property>
@@ -80,7 +80,7 @@
               <object class="GtkLabel" id="countryft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Country/re_gion:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">country</property>
@@ -94,7 +94,7 @@
               <object class="GtkLabel" id="titleft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Title/position:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">title</property>
@@ -108,7 +108,7 @@
               <object class="GtkLabel" id="phoneft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Telephone (home/_work):</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">home</property>
@@ -127,7 +127,7 @@
               <object class="GtkLabel" id="faxft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Fa_x/e-mail:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">fax</property>
@@ -141,7 +141,7 @@
               <object class="GtkGrid" id="grid2">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="firstname">
                     <property name="can_focus">True</property>
@@ -206,7 +206,7 @@
               <object class="GtkGrid" id="grid3">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="city">
                     <property name="can_focus">True</property>
@@ -272,7 +272,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="title">
                     <property name="can_focus">True</property>
@@ -319,7 +319,7 @@
               <object class="GtkGrid" id="grid6">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="home">
                     <property name="can_focus">True</property>
@@ -367,7 +367,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="fax">
                     <property name="can_focus">True</property>
@@ -429,7 +429,7 @@
               <object class="GtkLabel" id="rusnameft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Last name/first _name/father’s name/initials:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ruslastname</property>
@@ -443,7 +443,7 @@
               <object class="GtkGrid" id="grid8">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="ruslastname">
                     <property name="can_focus">True</property>
@@ -526,7 +526,7 @@
               <object class="GtkLabel" id="eastnameft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">Last/first _name/initials:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">eastlastname</property>
@@ -540,7 +540,7 @@
               <object class="GtkGrid" id="grid9">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="eastlastname">
                     <property name="can_focus">True</property>
@@ -605,7 +605,7 @@
               <object class="GtkLabel" id="russtreetft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Street/apartment number:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">russtreet</property>
@@ -619,7 +619,7 @@
               <object class="GtkGrid" id="grid10">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="russtreet">
                     <property name="can_focus">True</property>
@@ -666,7 +666,7 @@
               <object class="GtkLabel" id="icityft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="halign">end</property>
                 <property name="label" translatable="yes">_Zip/city:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">izip</property>
@@ -680,7 +680,7 @@
               <object class="GtkGrid" id="grid11">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="icity">
                     <property name="can_focus">True</property>

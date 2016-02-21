@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -13,13 +13,6 @@
     <property name="lower">1</property>
     <property name="upper">10000</property>
     <property name="value">8</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment3">
-    <property name="lower">10</property>
-    <property name="upper">90</property>
-    <property name="value">75</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -65,8 +58,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -82,8 +73,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -98,8 +87,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -109,42 +96,37 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">Enabling this may expose driver bugs</property>
+                        <property name="margin_left">12</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="openglenabled">
-                        <property name="visible">Galse</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">12</property>
+                        <property name="label" translatable="yes">GL is currently enabled.</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Current GL status: Enabled</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">4</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="opengldisabled">
-                        <property name="visible">False</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">12</property>
+                        <property name="label" translatable="yes">GL is currently disabled.</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Current GL status: Disabled</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">5</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -165,8 +147,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -197,8 +177,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -214,8 +192,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -236,8 +212,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -270,8 +244,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -292,16 +264,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -341,7 +309,7 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">Sc_aling:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">windowsize:0%</property>
@@ -349,8 +317,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -364,41 +330,20 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Icon _size and style:</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">Icon _size:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">iconsize</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">2</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="iconsize">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <items>
-                              <item translatable="yes">Automatic</item>
-                              <item translatable="yes">Small</item>
-                              <item translatable="yes">Large</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -423,80 +368,85 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="aafont">
-                        <property name="label" translatable="yes">Screen font antialiasin_g</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="fromft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">12</property>
-                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkComboBoxText" id="iconsize">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <items>
+                              <item translatable="yes">Automatic</item>
+                              <item translatable="yes">Small</item>
+                              <item translatable="yes">Large</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label6">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">Icon s_tyle:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">iconstyle</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="aafont">
+                            <property name="label" translatable="yes">Screen font antialiasin_g</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
                         <child>
                           <object class="GtkLabel" id="aafrom">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <property name="label" translatable="yes">fro_m:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">aanf:0pixels</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
+                            <property name="top_attach">4</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkSpinButton" id="aanf:0pixels">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
+                            <property name="top_attach">4</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -516,8 +466,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -544,7 +492,7 @@
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Mouse _positioning:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">mousepos</property>
@@ -552,15 +500,13 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes">Middle mouse _button:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">mousemiddle</property>
@@ -568,8 +514,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -587,8 +531,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -606,8 +548,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -628,16 +568,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
@@ -647,5 +583,12 @@
       <widget name="mousepos"/>
       <widget name="mousemiddle"/>
     </widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">10</property>
+    <property name="upper">90</property>
+    <property name="value">75</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>

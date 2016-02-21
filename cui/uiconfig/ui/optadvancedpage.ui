@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -39,8 +39,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -68,7 +68,7 @@
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
+                            <property name="halign">start</property>
                             <property name="label" translatable="yes">_Java runtime environments (JRE) already installed:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">javas</property>
@@ -91,7 +91,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
-                                <property name="spacing">12</property>
+                                <property name="spacing">6</property>
                                 <property name="layout_style">start</property>
                                 <child>
                                   <object class="GtkButton" id="add">
@@ -156,8 +156,8 @@
                                       <object class="GtkLabel" id="vendor">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Vendor</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -168,8 +168,8 @@
                                       <object class="GtkLabel" id="version">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Version</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -180,8 +180,8 @@
                                       <object class="GtkLabel" id="features">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Features</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -251,8 +251,8 @@
                           <object class="GtkLabel" id="javapath">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Location: </property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -316,8 +316,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="halign">start</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -331,7 +331,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -341,11 +341,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="expertconfig">
-                    <property name="label" translatable="yes">Expert Configuration</property>
+                    <property name="label" translatable="yes">Open Expert Configuration</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="halign">center</property>
+                    <property name="halign">end</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -361,7 +361,7 @@
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Optional Features:</property>
+            <property name="label" translatable="yes">Optional Features</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
