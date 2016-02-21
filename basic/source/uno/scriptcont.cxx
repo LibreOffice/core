@@ -334,10 +334,10 @@ SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl()
 void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 {
     // TODO: move loading from old storage to binary filters?
-    tools::SvRef<SotStorage> xStorage = new SotStorage( false, aFile );
-    if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
+    auto xStorage = tools::make_ref<SotStorage>( false, aFile );
+    if( xStorage->GetError() == ERRCODE_NONE )
     {
-        BasicManager* pBasicManager = new BasicManager( *static_cast<SotStorage*>(xStorage), aFile );
+        BasicManager* pBasicManager = new BasicManager( *(xStorage.get()), aFile );
 
         // Set info
         LibraryContainerInfo aInfo( this, nullptr, static_cast< OldBasicPassword* >( this ) );

@@ -209,11 +209,11 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
         // Build a SbUnoObject and return it
         Any aAny;
         aAny <<= xInterface;
-        SbUnoObjectRef xUnoObj = new SbUnoObject( "stardiv.uno.beans.PropertySet", aAny );
+        auto xUnoObj = tools::make_ref<SbUnoObject>( "stardiv.uno.beans.PropertySet", aAny );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
             // Return object
-            refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
+            refVar->PutObject( xUnoObj.get() );
             return;
         }
     }

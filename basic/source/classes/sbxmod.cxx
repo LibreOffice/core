@@ -755,7 +755,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     sal_uInt16 nVarParCount = (pArg != nullptr) ? pArg->Count() : 0;
                     if( nVarParCount > 1 )
                     {
-                        SbxArrayRef xMethParameters = new SbxArray;
+                        auto xMethParameters = tools::make_ref<SbxArray>();
                         xMethParameters->Put( pMethVar, 0 );    // Method as parameter 0
                         for( sal_uInt16 i = 1 ; i < nVarParCount ; ++i )
                         {
@@ -2086,12 +2086,9 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
         mCaller = pCaller;
     }
     // RefCount vom Modul hochzaehlen
-    SbModule* pMod_ = static_cast<SbModule*>(GetParent());
-    pMod_->AddFirstRef();
+    tools::SvRef<SbModule> pMod_ = static_cast<SbModule*>(GetParent());
 
-    // Increment the RefCount of the Basic
-    StarBASIC* pBasic = static_cast<StarBASIC*>(pMod_->GetParent());
-    pBasic->AddFirstRef();
+    tools::SvRef<StarBASIC> pBasic = static_cast<StarBASIC*>(pMod_->GetParent());
 
     // Establish the values to get the return value
     SbxValues aVals;
@@ -2109,9 +2106,6 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
     ErrCode nErr = SbxBase::GetError();
     SbxBase::ResetError();
 
-    // Release objects
-    pMod_->ReleaseRef();
-    pBasic->ReleaseRef();
     mCaller = nullptr;
     return nErr;
 }
@@ -2476,12 +2470,12 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
     {
         if ( aArguments.getLength() > 0 )   // Setup parameters
         {
-            SbxArrayRef xArray = new SbxArray;
+            auto xArray = tools::make_ref<SbxArray>();
             xArray->Put( pMeth, 0 );    // Method as parameter 0
 
             for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
             {
-                SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
+                auto xSbxVar = tools::make_ref<SbxVariable>( SbxVARIANT );
                 unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), aArguments[i] );
                 xArray->Put( xSbxVar, static_cast< sal_uInt16 >( i ) + 1 );
 
