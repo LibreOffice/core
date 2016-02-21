@@ -144,7 +144,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
             lpAddress = (LPBYTE)lpAddress + Info.RegionSize;
         }
-        while (lpAddress < (void *)0x80000000); // 2GB address space
+        while ((uintptr_t)lpAddress <= (uintptr_t)0x7FFFFFFF); // 2GB address space
 
         pInfo->Fields |= osl_Process_HEAPUSAGE;
     }
