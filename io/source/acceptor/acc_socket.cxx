@@ -198,13 +198,12 @@ namespace io_acceptor {
         {
             notifyListeners(this, &_started, callStarted);
 
-            if( aReadBytes.getLength() != nBytesToRead )
+            if( aReadBytes.getLength() < nBytesToRead )
             {
                 aReadBytes.realloc( nBytesToRead );
             }
 
-            sal_Int32 i = 0;
-            i = m_socket.read( aReadBytes.getArray()  , aReadBytes.getLength() );
+            sal_Int32 i = m_socket.read( aReadBytes.getArray()  , aReadBytes.getLength() );
 
             if(i != nBytesToRead)
             {
@@ -220,7 +219,10 @@ namespace io_acceptor {
 
                 throw ioException;
             }
-
+            if( i < aReadBytes.getLength() )
+            {
+                aReadBytes.realloc( i );
+            }
             return i;
         }
         else
