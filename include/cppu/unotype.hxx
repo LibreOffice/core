@@ -150,7 +150,7 @@ cppu_detail_getUnoType(
 }
 
 #if LIBO_INTERNAL_ONLY \
-    && (!defined SAL_W32 || defined __MINGW32__ || defined __clang__)
+    && (defined __MINGW32__ || defined __clang__)
     // cf. sal/types.h sal_Unicode
 inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_uInt16 const *) {
@@ -196,7 +196,7 @@ cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::cppu::UnoCharType const *) {
 }
 
 #if LIBO_INTERNAL_ONLY \
-    && (!defined SAL_W32 || defined __MINGW32__ || defined __clang__)
+    && (defined __MINGW32__ || defined __clang__)
     // cf. sal/types.h sal_Unicode
 inline css::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_Unicode const *) {

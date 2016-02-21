@@ -639,7 +639,7 @@ public:
     }
 
 #if LIBO_INTERNAL_ONLY && \
-    (!defined SAL_W32 || defined __MINGW32__ || defined __clang__)
+    (defined __MINGW32__ || defined __clang__)
         // cf. sal/types.h sal_Unicode
     void append(sal_uInt16) = delete;
 #endif
