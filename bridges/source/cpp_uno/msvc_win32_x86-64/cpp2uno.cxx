@@ -305,38 +305,38 @@ extern "C" typelib_TypeClass cpp_vtable_call(
                     break;
                 case 0: // queryInterface() opt
                 {
-                    typelib_TypeDescription * pTD = NULL;
+                    typelib_TypeDescription * pTD2 = NULL;
 
                     // the incoming C++ parameters are: The this
                     // pointer, the hidden return value pointer, and
                     // then the actual queryInterface() only
                     // parameter. Thus pStack[4]..
 
-                    TYPELIB_DANGER_GET( &pTD, reinterpret_cast<Type *>( pStack[4] )->getTypeLibType() );
+                    TYPELIB_DANGER_GET( &pTD2, reinterpret_cast<Type *>( pStack[4] )->getTypeLibType() );
 
-                    if ( pTD )
+                    if ( pTD2 )
                     {
                         XInterface * pInterface = NULL;
                         (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)
                             ( pCppI->getBridge()->getCppEnv(),
                               (void **)&pInterface,
                               pCppI->getOid().pData,
-                              reinterpret_cast<typelib_InterfaceTypeDescription *>( pTD ) );
+                              reinterpret_cast<typelib_InterfaceTypeDescription *>( pTD2 ) );
 
                         if ( pInterface )
                         {
                             // pStack[3] = hidden return value pointer
                             ::uno_any_construct( reinterpret_cast<uno_Any *>( pStack[3] ),
-                                                 &pInterface, pTD, cpp_acquire );
+                                                 &pInterface, pTD2, cpp_acquire );
 
                             pInterface->release();
-                            TYPELIB_DANGER_RELEASE( pTD );
+                            TYPELIB_DANGER_RELEASE( pTD2 );
 
                             pStack[0] = pStack[3];
                             eRet = typelib_TypeClass_ANY;
                             break;
                         }
-                        TYPELIB_DANGER_RELEASE( pTD );
+                        TYPELIB_DANGER_RELEASE( pTD2 );
                     }
                 } // Fall through!
                 default:
