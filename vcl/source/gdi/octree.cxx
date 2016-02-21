@@ -233,10 +233,10 @@ void Octree::GetPalIndex( NODE* pNode )
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
 {
-    const sal_uLong     nColorMax = 1 << OCTREE_BITS;
-    const sal_uLong     xsqr = 1 << ( nBits << 1 );
-    const sal_uLong     xsqr2 = xsqr << 1;
-    const sal_uLong     nColors = rPal.GetEntryCount();
+    const int     nColorMax = 1 << OCTREE_BITS;
+    const long     xsqr = 1L << ( nBits << 1 );
+    const long     xsqr2 = xsqr << 1;
+    const int     nColors = rPal.GetEntryCount();
     const long      x = 1L << nBits;
     const long      x2 = x >> 1L;
     sal_uLong           r, g, b;
@@ -244,7 +244,7 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
 
     ImplCreateBuffers( nColorMax );
 
-    for( sal_uLong nIndex = 0; nIndex < nColors; nIndex++ )
+    for( int nIndex = 0; nIndex < nColors; nIndex++ )
     {
         const BitmapColor&  rColor = rPal[ (sal_uInt16) nIndex ];
         const long          cRed = rColor.GetRed();
