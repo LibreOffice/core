@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -67,7 +68,7 @@ public:
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
-                css::uno::Sequence< sal_Int32 >& offset  )
+                std::vector< sal_Int32 >& offset  )
                 throw (css::uno::RuntimeException);
         sal_Unicode SAL_CALL getNativeNumberChar( const sal_Unicode inChar,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )

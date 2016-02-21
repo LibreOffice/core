@@ -22,6 +22,7 @@
 #include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -60,7 +61,7 @@ throw(RuntimeException, std::exception)
 
 OUString SAL_CALL
 transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset ) throw(RuntimeException)
+        std::vector< sal_Int32 >& offset ) throw(RuntimeException)
 {
     sal_Int32 number = -1, j = 0, endPos = startPos + nCount;
 
@@ -71,7 +72,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
     sal_Unicode* out = pStr->buffer;
 
     if (useOffset)
-        offset.realloc(nCount);
+        offset.resize(nCount);
 
     for (sal_Int32 i = startPos; i < endPos; i++) {
         if (i < endPos && isNumber(inStr[i])) {
@@ -107,7 +108,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
     out[j] = 0;
 
     if (useOffset)
-        offset.realloc(j);
+        offset.resize(j);
 
     return OUString( pStr, SAL_NO_ACQUIRE );
 }
@@ -116,10 +117,15 @@ OUString SAL_CALL
 transliteration_Numeric::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset ) throw(RuntimeException, std::exception)
 {
+    std::vector< sal_Int32 > aTmp;
+    comphelper::sequenceToContainer(aTmp, offset);
+    OUString ret;
     if (tableSize)
-        return transliterateBullet( inStr, startPos, nCount, offset);
+        ret = transliterateBullet( inStr, startPos, nCount, aTmp);
     else
-        return NativeNumberSupplierService(useOffset).getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, offset );
+        ret = NativeNumberSupplierService(useOffset).getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, aTmp );
+    offset = comphelper::containerToSequence(aTmp);
+    return ret;
 }
 
 sal_Unicode SAL_CALL

@@ -62,12 +62,12 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, boo
 OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString);
 
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number ) throw(RuntimeException)
+        std::vector< sal_Int32 >& offset, bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
     const sal_Unicode *src = inStr.getStr() + startPos;
     rtl_uString *newStr = rtl_uString_alloc(nCount);
     if (useOffset)
-        offset.realloc(nCount);
+        offset.resize(nCount);
 
     for (sal_Int32 i = 0; i < nCount; i++)
     {
@@ -90,7 +90,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
 }
 
 bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
-        sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 startPos,
+        sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, std::vector< sal_Int32 >& offset, bool useOffset, sal_Int32 startPos,
  const Number *number, const sal_Unicode* numberChar)
 {
     sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
@@ -162,7 +162,7 @@ bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin,
 }
 
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, bool useOffset, const Number* number ) throw(RuntimeException)
+        std::vector< sal_Int32 >& offset, bool useOffset, const Number* number ) throw(RuntimeException)
 {
     OUString aRet;
 
@@ -180,7 +180,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
         sal_Int32 i, len = 0, count = 0;
 
         if (useOffset)
-            offset.realloc( nCount * 2 );
+            offset.resize( nCount * 2 );
         bool bDoDecimal = false;
 
         for (i = 0; i <= nCount; i++)
@@ -243,13 +243,13 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
         }
 
         if (useOffset)
-            offset.realloc(count);
+            offset.resize(count);
         aRet = OUString(newStr.get(), count);
     }
     return aRet;
 }
 static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str,
-        sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset, bool useOffset,
+        sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, std::vector< sal_Int32 >& offset, bool useOffset,
         OUString& numberChar, OUString& multiplierChar)
 {
     sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
@@ -298,7 +298,7 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
 }
 
 static OUString SAL_CALL NativeToAscii(const OUString& inStr,
-        sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset ) throw(RuntimeException)
+        sal_Int32 startPos, sal_Int32 nCount, std::vector< sal_Int32 >& offset, bool useOffset ) throw(RuntimeException)
 {
     OUString aRet;
 
@@ -311,7 +311,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         const sal_Unicode *str = inStr.getStr() + startPos;
         std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2]);
         if (useOffset)
-            offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
+            offset.resize( nCount * MultiplierExponent_7_CJK[0] + 1 );
         sal_Int32 count = 0, index;
         sal_Int32 i;
 
@@ -364,7 +364,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         }
 
         if (useOffset) {
-            offset.realloc(count);
+            offset.resize(count);
             for (i = 0; i < count; i++)
                 offset[i] += startPos;
         }
@@ -521,7 +521,7 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 }
 
 OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
-                sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset) throw (RuntimeException)
+                sal_Int16 nNativeNumberMode, std::vector< sal_Int32 >& offset) throw (RuntimeException)
 {
     if (!isValidNatNum(rLocale, nNativeNumberMode))
         return aNumberString;
@@ -608,7 +608,7 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
 OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode) throw (RuntimeException, std::exception)
 {
-    Sequence< sal_Int32 > offset;
+    std::vector< sal_Int32 > offset;
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, offset);
 }
 

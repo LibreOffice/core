@@ -20,6 +20,7 @@
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATION_NUMERIC_HXX
 
 #include <transliteration_commonclass.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -56,7 +57,7 @@ protected:
 private:
         OUString SAL_CALL
         transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-                             css::uno::Sequence< sal_Int32 >& offset )
+                             std::vector< sal_Int32 >& offset )
             throw(css::uno::RuntimeException);
 };
 
