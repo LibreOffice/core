@@ -82,6 +82,7 @@ public:
     void preview( const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
     void remove( CustomAnimationEffectPtr& pEffect );
 
+    PathKind getCreatePathKind() const;
     // Control
     virtual void StateChanged( StateChangedType nStateChange ) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
@@ -110,6 +111,8 @@ private:
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
 
+    void createPath( PathKind eKind, std::vector< css::uno::Any >& rTargets, double fDuration );
+
     STLPropertySet* createSelectionSet();
     void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
 
@@ -125,6 +128,7 @@ private:
     DECL_LINK_TYPED( lateInitCallback, Timer *, void );
     DECL_LINK_TYPED( UpdateAnimationLB, ListBox&, void );
     DECL_LINK_TYPED( AnimationSelectHdl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeStartDelay, Edit&, void );
     void implControlHdl(Control*);
 
 private:
@@ -152,6 +156,8 @@ private:
     VclPtr<ListBox>    mpLBCategory;
     VclPtr<FixedText> mpFTAnimation;
     VclPtr<CategoryListBox> mpLBAnimation;
+    VclPtr<FixedText> mpFTStartDelay;
+    VclPtr<MetricField> mpMFStartDelay;
 
     OUString    maStrModify;
     OUString    maStrProperty;
