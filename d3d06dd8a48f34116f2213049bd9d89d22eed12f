@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_eea49f09",
+        "filename": "tools/source/inet/inetmsg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-21T22:13:13Z",
+      "side": 1,
+      "message": "Nit: Unneeded blank.",
+      "range": {
+        "startLine": 209,
+        "startChar": 16,
+        "endLine": 209,
+        "endChar": 17
+      },
+      "revId": "d3d06dd8a48f34116f2213049bd9d89d22eed12f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
