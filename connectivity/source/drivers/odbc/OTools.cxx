@@ -253,7 +253,9 @@ void OTools::bindValue( OConnection* _pConnection,
                     }   break;
                 case SQL_LONGVARBINARY:
                 {
-                    _pData = reinterpret_cast<void*>(columnIndex);
+                    /* see https://msdn.microsoft.com/en-us/library/ms716238%28v=vs.85%29.aspx
+                     * for an explanation of that apparently weird cast */
+                    _pData = reinterpret_cast<void*>((uintptr_t)columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
@@ -261,7 +263,9 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_LONGVARCHAR:
                 {
-                    _pData = reinterpret_cast<void*>(columnIndex);
+                    /* see https://msdn.microsoft.com/en-us/library/ms716238%28v=vs.85%29.aspx
+                     * for an explanation of that apparently weird cast */
+                    _pData = reinterpret_cast<void*>((uintptr_t)columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = static_cast<OUString const *>(_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
