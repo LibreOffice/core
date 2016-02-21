@@ -26,8 +26,6 @@
 #include <svtools/ehdl.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/fntszctl.hxx>
-#include <svx/fntctl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
@@ -320,9 +318,6 @@ void SwDLL::RegisterControls()
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_REGION, pMod );
     SvxTableToolBoxControl::RegisterControl(FN_INSERT_TABLE, pMod );
     SvxTableToolBoxControl::RegisterControl(FN_SHOW_MULTIPLE_PAGES, pMod );
-
-    SvxFontMenuControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
-    SvxFontSizeMenuControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod );
 
     SwZoomControl::RegisterControl(SID_ATTR_ZOOM, pMod );
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);

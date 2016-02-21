@@ -58,9 +58,6 @@
 #define HID_FM_NEW_FORM                                       "SVX_HID_FM_NEW_FORM"
 #define HID_FM_NEW_HIDDEN                                     "SVX_HID_FM_NEW_HIDDEN"
 #define HID_FM_RENAME_OBJECT                                  "SVX_HID_FM_RENAME_OBJECT"
-#define HID_MENU_FM_TEXTATTRIBUTES_STYLE                      "SVX_HID_MENU_FM_TEXTATTRIBUTES_STYLE"
-#define HID_MENU_FM_TEXTATTRIBUTES_ALIGNMENT                  "SVX_HID_MENU_FM_TEXTATTRIBUTES_ALIGNMENT"
-#define HID_MENU_FM_TEXTATTRIBUTES_SPACING                    "SVX_HID_MENU_FM_TEXTATTRIBUTES_SPACING"
 
 #endif
 

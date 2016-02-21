@@ -18,6 +18,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swriter,\
 	sw/uiconfig/swriter/popupmenu/draw \
 	sw/uiconfig/swriter/popupmenu/drawtext \
 	sw/uiconfig/swriter/popupmenu/form \
+	sw/uiconfig/swriter/popupmenu/formrichtext \
 	sw/uiconfig/swriter/popupmenu/frame \
 	sw/uiconfig/swriter/popupmenu/graphic \
 	sw/uiconfig/swriter/popupmenu/insertfield \

@@ -98,31 +98,6 @@
         Command = ".uno:Overline" ; \
     Text [ en-US ] = "Overline" ;\
 
-#define ITEM_FORMAT_ATTR_CHAR_STRIKEOUT \
-    Identifier = SID_ATTR_CHAR_STRIKEOUT ; \
-    Command = ".uno:Strikeout" ; \
-    Text [ en-US ] = "Strikethrough" ;\
-
-#define ITEM_FORMAT_ATTR_CHAR_SHADOWED \
-    Identifier = SID_ATTR_CHAR_SHADOWED ; \
-    Command = ".uno:Shadowed" ; \
-    Text [ en-US ] = "Shadow" ;\
-
-#define ITEM_FORMAT_ATTR_CHAR_CONTOUR \
-    Identifier = SID_ATTR_CHAR_CONTOUR ; \
-    Command = ".uno:OutlineFont" ; \
-    Text [ en-US ] = "Outline" ;\
-
-#define ITEM_FORMAT_SET_SUPER_SCRIPT \
-    Identifier = SID_SET_SUPER_SCRIPT; \
-    Command = CMD_SID_SET_SUPER_SCRIPT; \
-    Text [ en-US  ] = "Su~perscript"; \
-
-#define ITEM_FORMAT_SET_SUB_SCRIPT \
-    Identifier = SID_SET_SUB_SCRIPT; \
-    Command = CMD_SID_SET_SUB_SCRIPT; \
-    Text [ en-US ] = "Su~bscript"; \
-
 #define ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT \
     Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
     Command = ".uno:LeftPara" ; \

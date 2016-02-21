@@ -215,6 +215,10 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
         switch ( nSlotId )
         {
+            case SID_ATTR_CHAR_FONTLIST:
+                rSet.Put( SvxFontListItem( mpFontList, nSlotId ) );
+            break;
+
             case SID_SEARCH_ITEM:
             {
                 rSet.Put( *SD_MOD()->GetSearchItem() );

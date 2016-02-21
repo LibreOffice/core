@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/simpress,\
 	sd/uiconfig/simpress/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/simpress,\
+	sd/uiconfig/simpress/popupmenu/formrichtext \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/simpress,\
 	sd/uiconfig/simpress/statusbar/statusbar \
 ))

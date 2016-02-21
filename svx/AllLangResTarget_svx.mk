@@ -61,7 +61,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/form/filtnav.src \
     svx/source/form/fmexpl.src \
     svx/source/form/fmstring.src \
-    svx/source/form/formshell.src \
     svx/source/items/svxerr.src \
     svx/source/items/svxitems.src \
     svx/source/sidebar/EmptyPanel.src \

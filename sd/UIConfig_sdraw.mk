@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/sdraw,\
 	sd/uiconfig/sdraw/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/sdraw,\
+	sd/uiconfig/sdraw/popupmenu/formrichtext \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/sdraw,\
 	sd/uiconfig/sdraw/statusbar/statusbar \
 ))

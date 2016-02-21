@@ -17,6 +17,10 @@
  */
 interface DrawDocument
 {
+    SID_ATTR_CHAR_FONTLIST
+    [
+        StateMethod = GetState ;
+    ]
     SID_PACKNGO // ole : ?, status : ?
     [
         ExecMethod = Execute ;

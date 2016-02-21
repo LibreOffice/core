@@ -109,8 +109,6 @@
 #define CMD_SID_ATTR_PARA_LINESPACE_15              ".uno:SpacePara15"
 #define CMD_SID_ATTR_PARA_LINESPACE_20              ".uno:SpacePara2"
 #define CMD_SID_ATTR_CHAR_STRIKEOUT                 ".uno:Strikeout"
-#define CMD_SID_SET_SUB_SCRIPT                      ".uno:SubScript"
-#define CMD_SID_SET_SUPER_SCRIPT                    ".uno:SuperScript"
 #define CMD_SID_FM_TAB_DIALOG                       ".uno:TabDialog"
 #define CMD_SID_FM_TIMEFIELD                        ".uno:TimeField"
 #define CMD_SID_BEZIER_EDIT                         ".uno:ToggleObjectBezierMode"

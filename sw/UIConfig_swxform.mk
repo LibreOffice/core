@@ -18,6 +18,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/swxform,\
 	sw/uiconfig/swxform/popupmenu/draw \
 	sw/uiconfig/swxform/popupmenu/drawtext \
 	sw/uiconfig/swxform/popupmenu/form \
+	sw/uiconfig/swxform/popupmenu/formrichtext \
 	sw/uiconfig/swxform/popupmenu/frame \
 	sw/uiconfig/swxform/popupmenu/graphic \
 	sw/uiconfig/swxform/popupmenu/insertfield \

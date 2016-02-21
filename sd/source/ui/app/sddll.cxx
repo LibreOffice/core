@@ -66,8 +66,6 @@
 #include <svx/clipboardctl.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/fillctrl.hxx>
-#include <svx/fntctl.hxx>
-#include <svx/fntszctl.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
@@ -91,6 +89,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/mnuitem.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <comphelper/processfactory.hxx>
@@ -217,10 +216,6 @@ void SdDLL::RegisterControllers()
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
-
-    // MenuControls for PopupMenu
-    SvxFontMenuControl::RegisterControl( SID_ATTR_CHAR_FONT, pMod );
-    SvxFontSizeMenuControl::RegisterControl( SID_ATTR_CHAR_FONTHEIGHT, pMod );
 
     SfxMenuControl::RegisterControl( SID_SET_SNAPITEM, pMod );
     SfxMenuControl::RegisterControl( SID_DELETE_SNAPITEM, pMod );

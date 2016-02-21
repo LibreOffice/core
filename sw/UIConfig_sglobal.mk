@@ -18,6 +18,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sglobal,\
 	sw/uiconfig/sglobal/popupmenu/draw \
 	sw/uiconfig/sglobal/popupmenu/drawtext \
 	sw/uiconfig/sglobal/popupmenu/form \
+	sw/uiconfig/sglobal/popupmenu/formrichtext \
 	sw/uiconfig/sglobal/popupmenu/frame \
 	sw/uiconfig/sglobal/popupmenu/graphic \
 	sw/uiconfig/sglobal/popupmenu/insertfield \

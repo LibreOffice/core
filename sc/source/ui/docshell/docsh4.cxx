@@ -28,6 +28,7 @@ using namespace ::com::sun::star;
 #include <math.h>
 
 #include "scitems.hxx"
+#include <editeng/flstitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
@@ -1847,6 +1848,10 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                         rSet.DisableItem( nWhich );
                     }
                 }
+                break;
+
+            case SID_ATTR_CHAR_FONTLIST:
+                rSet.Put( SvxFontListItem( pImpl->pFontList, nWhich ) );
                 break;
 
             default:

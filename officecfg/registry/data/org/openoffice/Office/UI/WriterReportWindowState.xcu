@@ -40,6 +40,11 @@
           <value xml:lang="en-US">Form Control</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/formrichtext" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Text Box Formatting</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/frame" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Text Frame</value>

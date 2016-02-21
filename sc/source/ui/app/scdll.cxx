@@ -75,8 +75,6 @@
 #include <editeng/flditem.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
-#include <svx/fntctl.hxx>
-#include <svx/fntszctl.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
@@ -203,10 +201,6 @@ void ScDLL::Init()
     XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
 
     SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
-
-    // SvxMenu Controller
-    SvxFontMenuControl              ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
-    SvxFontSizeMenuControl          ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
 
     // CustomShape extrusion controller
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );

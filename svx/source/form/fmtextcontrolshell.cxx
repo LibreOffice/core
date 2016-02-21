@@ -1355,7 +1355,7 @@ namespace svx
 
     void FmTextControlShell::contextMenuRequested( const css::awt::MouseEvent& /*_rEvent*/ )
     {
-        m_rBindings.GetDispatcher()->ExecutePopup( SVX_RES( RID_FM_TEXTATTRIBUTE_MENU ) );
+        m_rBindings.GetDispatcher()->ExecutePopup( "formrichtext" );
     }
 
 
