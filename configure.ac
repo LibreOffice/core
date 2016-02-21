@@ -1465,8 +1465,9 @@ AC_ARG_ENABLE(lotuswordpro,
 
 AC_ARG_ENABLE(firebird-sdbc,
     AS_HELP_STRING([--disable-firebird-sdbc],
-        [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
-,enable_firebird_sdbc=yes)
+        [Enable the build of the Firebird-SDBC driver if it compiles for you.
+         Warning: Firebird-SDBC driver can't be built on Windows and Macintosh]),
+,enable_firebird_sdbc=no)
 
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
@@ -2094,16 +2095,6 @@ AC_ARG_WITH(
                           Usage:     --with-doxygen=<absolute path to doxygen executable>
     ],,
     [with_doxygen=yes])
-
-AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2013/2015>],
-        [Specify which Visual Studio version to use in case several are
-         installed. If not specified, only 2013 is detected automatically
-         because 2015 support is currently experimental.])
-    [
-                          Usage:     --with-visual-studio=<2013/2015>
-    ],
-,)
 
 AC_ARG_WITH(windows-sdk,
     AS_HELP_STRING([--with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)/10>],
@@ -3337,8 +3328,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2013)
-        vsversion=12.0;;
     2015)
         vsversion=14.0;;
     *)
@@ -3357,14 +3346,13 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2013/2015, in this order
-        vsversions="12.0 14.0"
+        vsversions=14.0
     fi
 }
 
 find_msvs()
 {
-    # Find Visual Studio 2013/2015
+    # Find Visual Studio 2015
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -3398,7 +3386,7 @@ find_ucrt()
 
 find_msvc()
 {
-    # Find Visual C++ 2013/2015
+    # Find Visual C++ 2015
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3421,10 +3409,6 @@ find_msvc()
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
-        12.0)
-            vcyear=2013
-            vcnum=120
-            ;;
         14.0)
             vcyear=2015
             vcnum=140
@@ -3450,7 +3434,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2013/2015 installation found])
+                AC_MSG_ERROR([No Visual Studio 2015 installation found])
             fi
         fi
 
@@ -3482,27 +3466,23 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([No])
         fi
 
-        AC_MSG_CHECKING([whether UCRT is needed for this compiler version])
-        if test "$vcnum" = "120"; then
-            AC_MSG_RESULT([No])
+        AC_MSG_CHECKING([whether UCRT is installed])
+        AC_MSG_RESULT([Yes])
+        AC_MSG_CHECKING([for UCRT location])
+        find_ucrt
+        if test -n "$ucrttest"; then
+            AC_MSG_RESULT([found])
+            PathFormat "$ucrttest"
+            ucrtincpath_formatted="$formatted_path/Include/$ucrtdir/ucrt"
+            # SOLARINC is used for external modules and must be set too.
+            # And no, it's not sufficient to set SOLARINC only, as configure
+            # itself doesn't honour it.
+            SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
+            CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
+            CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
+            CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"            
         else
-            AC_MSG_RESULT([Yes])
-            AC_MSG_CHECKING([for UCRT location])
-            find_ucrt
-            if test -n "$ucrttest"; then
-                AC_MSG_RESULT([found])
-                PathFormat "$ucrttest"
-                ucrtincpath_formatted="${formatted_path}Include/$ucrtdir/ucrt"
-                # SOLARINC is used for external modules and must be set too.
-                # And no, it's not sufficient to set SOLARINC only, as configure
-                # itself doesn't honour it.
-                SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
-                CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
-                CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
-                CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
-            else
-                AC_MSG_ERROR([not found])
-            fi
+            AC_MSG_ERROR([not found])
         fi
 
         # Find the proper version of MSBuild.exe to use based on the VS version
@@ -3514,7 +3494,7 @@ if test "$_os" = "WINNT"; then
         # Find the version of devenv.exe
         DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
         if test ! -e "$DEVENV" -a "$vcnum" = "120"; then
-            # for Visual Studio 2013 Express, fall back
+            # for Visual Studio 2015 Express, fall back
             DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/WDExpress.exe"
         fi
         if test ! -e "$DEVENV"; then
@@ -3528,11 +3508,7 @@ if test "$_os" = "WINNT"; then
         MSPDB_PATH=
 
         if test "$BITNESS_OVERRIDE" = ""; then
-            if test "$vcnum" = "120"; then
-                MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
-            else
-                MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
-            fi
+            MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
         else
             if test "$vcexpress" = "Express"; then
                 MSPDB_PATH="$VC_PRODUCT_DIR/bin"
@@ -3607,10 +3583,6 @@ if test "$_os" = "WINNT"; then
             # are always "better", we list them in reverse chronological order.
 
             case $vcnum in
-            120)
-                COMEX=15
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
-                ;;
             140)
                 COMEX=19
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
@@ -5358,7 +5330,7 @@ find_msms()
     my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
     AC_MSG_CHECKING([for $my_msm_file])
     msmdir=
-    for ver in 12.0 14.0; do
+    for ver in 14.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/$my_msm_file"; then
@@ -8258,14 +8230,7 @@ int main(int argc, char **argv) {
 internal)
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
-    # On windows we are supporting two different python versions: 3.3 and 3.5.
-    # We msut do it as long as we support MSVC 2013. Python 3.3 can be removed
-    # when MSVC 2013 support was dropped.
-    if test "$COM" = "MSC" -a "$VCVER" = "120"; then
-        PYTHON_VERSION_MINOR=3
-    else
-        PYTHON_VERSION_MINOR=5
-    fi
+    PYTHON_VERSION_MINOR=5
     PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.0
     AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
@@ -13014,7 +12979,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, click "All Programs", click "Visual Studio 2013", click "Visual Studio Tools", double-click "VS2013 x86 Native Tools Command Prompt" or "VS2013 x64 Native Tools Command Prompt"]
+ [go to Start menu, click "All Programs", click "Visual Studio 2015", click "Visual Studio Tools", double-click "VS2015 x86 Native Tools Command Prompt" or "VS2015 x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above
