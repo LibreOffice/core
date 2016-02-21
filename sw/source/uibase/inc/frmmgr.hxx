@@ -38,12 +38,14 @@ class   SwFormatCol;
 const SwTwips   DFLT_WIDTH      = MM50 * 4;
 const SwTwips   DFLT_HEIGHT     = MM50;
 
-
-#define FRMMGR_TYPE_NONE    0x00
-#define FRMMGR_TYPE_TEXT    0x01
-#define FRMMGR_TYPE_GRF     0x02
-#define FRMMGR_TYPE_OLE     0x04
-#define FRMMGR_TYPE_ENVELP  0x10
+enum class Frmmgr_Type
+{
+    NONE    = 0x00,
+    TEXT    = 0x01,
+    GRF     = 0x02,
+    OLE     = 0x04,
+    ENVELP  = 0x10
+};
 
 class SW_DLLPUBLIC SwFlyFrameAttrMgr
 {
@@ -66,7 +68,7 @@ class SW_DLLPUBLIC SwFlyFrameAttrMgr
     SAL_DLLPRIVATE void _UpdateFlyFrame(); // post-treatment after insert or update
 
 public:
-    SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType );
+    SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType );
 
     //CopyCtor for dialogs to check the metrics
     SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );

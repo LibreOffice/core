@@ -408,7 +408,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(16 * MM50, 8 * MM50);
             GetShell().LockPaint();
             GetShell().StartAllAction();
-            SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
+            SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), Frmmgr_Type::TEXT );
             if(nCols > 1)
             {
                 SwFormatCol aCol;
@@ -439,7 +439,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         }
         // Create new border
-        SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
+        SwFlyFrameAttrMgr aMgr( true, GetShellPtr(), Frmmgr_Type::TEXT );
         if(pArgs)
         {
             Size aSize(aMgr.GetSize());

@@ -1171,7 +1171,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else if ( rSh.IsFrameSelected() )
             {
                 // Set border attributes via Frame-Manager.
-                SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
                 aMgr.SetAttrSet( *pArgs );
                 aMgr.UpdateFlyFrame();
             }
@@ -1203,7 +1203,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else if ( rSh.IsFrameSelected() )
             {
                 // Set border attributes via Frame-Manager.
-                SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
                 aMgr.SetAttrSet(*pArgs);
                 aMgr.UpdateFlyFrame();
             }
@@ -1390,7 +1390,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 }
                 else if( rSh.IsFrameSelected() )
                 {
-                    SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                    SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
                     aSet.Put( aMgr.GetAttrSet() );
                 }
                 else
@@ -2332,7 +2332,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     }
     else if ( rSh.IsFrameSelected() )
     {
-        SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+        SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
         rSet.Put( aMgr.GetAttrSet() );
         bPrepare = false;
     }
@@ -2425,7 +2425,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             else if ( rSh.IsFrameSelected() )
             {
                 // Set border attributes via Frame-Manager
-                SwFlyFrameAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
+                SwFlyFrameAttrMgr aMgr( false, &rSh, Frmmgr_Type::NONE );
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
