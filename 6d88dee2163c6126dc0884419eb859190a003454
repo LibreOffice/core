@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_ab2a89e5",
+        "filename": "sc/source/filter/oox/addressconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "Please note that the default constructor for CellAddress and ScAddress work differently.\n\nFor CellAddress it creates a reference to A1 in the first sheet, for ScAddress it creates an invalid address. So this needs to be changed.",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_8b2fcdf5",
+        "filename": "sc/source/filter/oox/addressconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2b3fb926",
+        "filename": "sc/source/filter/oox/formulabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "would be good to still use const ScAddress\u0026 rPos",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_0b3c7d2e",
+        "filename": "sc/source/filter/oox/formulabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_6b49c1d0",
+        "filename": "sc/source/filter/oox/formulabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_4b4685c0",
+        "filename": "sc/source/filter/oox/formulabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ab11e9b1",
+        "filename": "sc/source/filter/oox/formulabuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-21T04:21:13Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "6d88dee2163c6126dc0884419eb859190a003454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
