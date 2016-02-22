@@ -321,7 +321,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CPPU_UNO
 
 namespace cppu {
 
