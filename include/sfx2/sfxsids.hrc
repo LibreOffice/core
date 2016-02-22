@@ -353,6 +353,7 @@
 #define SID_INSERT_VIDEO                    (SID_SFX_START + 677)
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
+#define SID_CLASSIFICATION_APPLY            (SID_SFX_START + 686)
 
 #define SID_DEFAULTFILEPATH                 (SID_SFX_START + 571)
 #define SID_OBJECT                          (SID_SFX_START + 575)

@@ -1140,6 +1140,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, &aApp, &aTarget, 0L);
         }
         break;
+        case SID_CLASSIFICATION_APPLY:
+        {
+            if (pArgs && pArgs->GetItemState(nWhich, false, &pItem) == SfxItemState::SET)
+            {
+                SwWrtShell* pSh = GetWrtShell();
+                const OUString& rValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                pSh->SetClassification(rValue);
+            }
+            else
+                SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
+        }
+        break;
 
         default: OSL_FAIL("wrong Dispatcher");
     }
