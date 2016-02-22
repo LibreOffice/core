@@ -55,6 +55,7 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
     get(m_pBtnCase, "case");
     get(m_pBtnCalc, "calc");
     get(m_pBtnMatch, "match");
+    get(m_pBtnWildcards, "wildcards");
     get(m_pBtnRegex, "regex");
     get(m_pBtnLookUp, "lookup");
     get(m_pBtnGeneralPrec, "generalprec");
@@ -84,6 +85,7 @@ void ScTpCalcOptions::dispose()
     m_pBtnCase.clear();
     m_pBtnCalc.clear();
     m_pBtnMatch.clear();
+    m_pBtnWildcards.clear();
     m_pBtnRegex.clear();
     m_pBtnLookUp.clear();
     m_pBtnGeneralPrec.clear();
@@ -99,6 +101,8 @@ void ScTpCalcOptions::Init()
     m_pBtnDateStd->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_pBtnDateSc10->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_pBtnWildcards->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+    m_pBtnRegex->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
 }
 
 VclPtr<SfxTabPage> ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
@@ -115,7 +119,12 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
     m_pBtnCase->Check( !pLocalOptions->IsIgnoreCase() );
     m_pBtnCalc->Check( pLocalOptions->IsCalcAsShown() );
     m_pBtnMatch->Check( pLocalOptions->IsMatchWholeCell() );
-    m_pBtnRegex->Check( pLocalOptions->IsFormulaRegexEnabled() );
+    bool bWildcards = pLocalOptions->IsFormulaWildcardsEnabled();
+    bool bRegex = pLocalOptions->IsFormulaRegexEnabled();
+    if (bWildcards && bRegex)
+        bRegex = false;
+    m_pBtnWildcards->Check( bWildcards );
+    m_pBtnRegex->Check( bRegex );
     m_pBtnLookUp->Check( pLocalOptions->IsLookUpColRowNames() );
     m_pBtnIterate->Check( pLocalOptions->IsIter() );
     m_pEdSteps->SetValue( pLocalOptions->GetIterCount() );
@@ -161,6 +170,7 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
     pLocalOptions->SetIgnoreCase( !m_pBtnCase->IsChecked() );
     pLocalOptions->SetCalcAsShown( m_pBtnCalc->IsChecked() );
     pLocalOptions->SetMatchWholeCell( m_pBtnMatch->IsChecked() );
+    pLocalOptions->SetFormulaWildcardsEnabled( m_pBtnWildcards->IsChecked() );
     pLocalOptions->SetFormulaRegexEnabled( m_pBtnRegex->IsChecked() );
     pLocalOptions->SetLookUpColRowNames( m_pBtnLookUp->IsChecked() );
 
@@ -252,6 +262,16 @@ IMPL_LINK_TYPED( ScTpCalcOptions, CheckClickHdl, Button*, p, void )
             m_pFtSteps->Disable(); m_pEdSteps->Disable();
             m_pFtEps->Disable(); m_pEdEps->Disable();
         }
+    }
+    else if (pBtn == m_pBtnWildcards)
+    {
+        if ( pBtn->IsChecked() )
+            m_pBtnRegex->Check( false );
+    }
+    else if (pBtn == m_pBtnRegex)
+    {
+        if ( pBtn->IsChecked() )
+            m_pBtnWildcards->Check( false );
     }
 }
 
