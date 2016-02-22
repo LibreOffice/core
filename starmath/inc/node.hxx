@@ -186,16 +186,6 @@ public:
     bool IsSelected() const {return mbIsSelected;}
     void SetSelected(bool Selected = true) {mbIsSelected = Selected;}
 
-#ifdef DEBUG_ENABLE_DUMPASDOT
-    /** The tree as dot graph for graphviz, usable for debugging
-     * Convert the output to a image using $ dot graph.gv -Tpng > graph.png
-     */
-    inline void DumpAsDot(std::ostream &out, OUString* label = NULL) const{
-        int id = 0;
-        DumpAsDot(out, label, -1, id, -1);
-    }
-#endif /* DEBUG_ENABLE_DUMPASDOT */
-
     /** Get the parent node of this node */
     SmStructureNode* GetParent(){ return mpParentNode; }
     const SmStructureNode* GetParent() const { return mpParentNode; }
