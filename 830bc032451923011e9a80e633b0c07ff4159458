@@ -73,6 +73,29 @@
       "revId": "830bc032451923011e9a80e633b0c07ff4159458",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_d10d0439",
+        "filename": "cppu/source/uno/lbenv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T19:53:27Z",
+      "side": 1,
+      "message": "No need for __PRETTY_FUNCTION__ here. We don\u0027t do that elsewhere. SAL_INFO outputs file name and line number already.",
+      "range": {
+        "startLine": 1042,
+        "startChar": 16,
+        "endLine": 1042,
+        "endChar": 18
+      },
+      "revId": "830bc032451923011e9a80e633b0c07ff4159458",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
