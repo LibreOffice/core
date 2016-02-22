@@ -226,10 +226,11 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
     TableStyle* pTableStyle = nullptr;
     if ( mpTableStyle )
         pTableStyle = &*mpTableStyle;
-    else if ( rBase.getTableStyles() )
+    else if ( !getStyleId().isEmpty() && rBase.getTableStyles() )
     {
         const std::vector< TableStyle >& rTableStyles( rBase.getTableStyles()->getTableStyles() );
-        const OUString aStyleId( getStyleId().isEmpty() ? rBase.getTableStyles()->getDefaultStyleId() : getStyleId() );
+        const OUString aStyleId( getStyleId() );
+
         std::vector< TableStyle >::const_iterator aIter( rTableStyles.begin() );
         while( aIter != rTableStyles.end() )
         {
