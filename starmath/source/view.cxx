@@ -467,15 +467,6 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
         {
             if(!rKEvt.GetKeyCode().IsShift())
                 rCursor.InsertRow();
-#ifdef DEBUG_ENABLE_DUMPASDOT
-            else {
-                SmNode *pTree = (SmNode*)pViewShell->GetDoc()->GetFormulaTree();
-                std::fstream file("/tmp/smath-dump.gv", std::fstream::out);
-                OUString label(pViewShell->GetDoc()->GetText());
-                pTree->DumpAsDot(file, &label);
-                file.close();
-            }
-#endif /* DEBUG_ENABLE_DUMPASDOT */
         }break;
         case KEY_DELETE:
         {
