@@ -173,86 +173,6 @@ namespace {
     }
 }
 
-
-#ifdef DBG_UTIL
-
-#include <vector>
-#include <rtl/string.h>
-
-namespace tracing
-{
-    struct AllocationType
-    {
-        const sal_Char* pName;
-
-        AllocationType( ) : pName( nullptr ) { }
-    };
-
-
-    class AllocationTracer
-    {
-    public:
-        typedef ::std::vector< AllocationType > AllocationState;
-        static AllocationState                  s_aAllocated;
-        static ::osl::Mutex                     s_aMutex;
-
-    public:
-        static void registerUnit( const sal_Char* _pName );
-        static void revokeUnit( const sal_Char* _pName );
-
-    private:
-        static AllocationState::iterator    getLocation( const sal_Char* _pName );
-    };
-
-
-    AllocationTracer::AllocationState::iterator AllocationTracer::getLocation( const sal_Char* _pName )
-    {
-        AllocationState::iterator aLookFor = s_aAllocated.begin();
-        for (   ;
-                aLookFor != s_aAllocated.end();
-                ++aLookFor
-            )
-        {
-            if ( 0 == rtl_str_compare( aLookFor->pName, _pName ) )
-                // found
-                return aLookFor;
-        }
-        // not found
-        s_aAllocated.push_back( AllocationType() );
-        aLookFor = s_aAllocated.end(); --aLookFor;
-        aLookFor->pName = _pName;   // note that this assumes that _pName is a constant string ....
-        return aLookFor;
-    }
-
-
-    AllocationTracer::AllocationState           AllocationTracer::s_aAllocated;
-    ::osl::Mutex                                AllocationTracer::s_aMutex;
-
-
-    void AllocationTracer::registerUnit( const sal_Char* _pName )
-    {
-        ::osl::MutexGuard aGuard( s_aMutex );
-
-        AllocationState::iterator aPos = getLocation( _pName );
-    }
-
-
-    void AllocationTracer::revokeUnit( const sal_Char* _pName )
-    {
-        ::osl::MutexGuard aGuard( s_aMutex );
-
-        AllocationState::iterator aPos = getLocation( _pName );
-    }
-
-#define TRACE_ALLOC( type ) tracing::AllocationTracer::registerUnit( #type );
-#define TRACE_FREE( type )  tracing::AllocationTracer::revokeUnit( #type );
-}
-#else
-#define TRACE_ALLOC( type )
-#define TRACE_FREE( type )
-#endif
-
-
 void ORowSetValue::setTypeKind(sal_Int32 _eType)
 {
     if ( !m_bNull && !isStorageCompatible(_eType, m_eTypeKind) )
@@ -351,31 +271,26 @@ void ORowSetValue::free()
                 break;
             case DataType::DATE:
                 delete static_cast<css::util::Date*>(m_aValue.m_pValue);
-                TRACE_FREE( Date )
                 m_aValue.m_pValue = nullptr;
                 break;
             case DataType::TIME:
                 delete static_cast<css::util::Time*>(m_aValue.m_pValue);
-                TRACE_FREE( tools::Time )
                 m_aValue.m_pValue = nullptr;
                 break;
             case DataType::TIMESTAMP:
                 delete static_cast<css::util::DateTime*>(m_aValue.m_pValue);
-                TRACE_FREE( DateTime )
                 m_aValue.m_pValue = nullptr;
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 delete static_cast<Sequence<sal_Int8>*>(m_aValue.m_pValue);
-                TRACE_FREE( Sequence_sal_Int8 )
                 m_aValue.m_pValue = nullptr;
                 break;
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::OBJECT:
                 delete static_cast<Any*>(m_aValue.m_pValue);
-                TRACE_FREE( Any )
                 m_aValue.m_pValue = nullptr;
                 break;
             case DataType::BIT:
@@ -392,7 +307,6 @@ void ORowSetValue::free()
                 if ( m_aValue.m_pValue )
                 {
                     delete static_cast<Any*>(m_aValue.m_pValue);
-                    TRACE_FREE( Any )
                     m_aValue.m_pValue = nullptr;
                 }
                 break;
@@ -428,21 +342,17 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             case DataType::DATE:
                 m_aValue.m_pValue   = new Date(*static_cast<Date*>(_rRH.m_aValue.m_pValue));
-                TRACE_ALLOC( Date )
                 break;
             case DataType::TIME:
                 m_aValue.m_pValue   = new Time(*static_cast<Time*>(_rRH.m_aValue.m_pValue));
-                TRACE_ALLOC( tools::Time )
                 break;
             case DataType::TIMESTAMP:
                 m_aValue.m_pValue   = new DateTime(*static_cast<DateTime*>(_rRH.m_aValue.m_pValue));
-                TRACE_ALLOC( DateTime )
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 m_aValue.m_pValue   = new Sequence<sal_Int8>(*static_cast<Sequence<sal_Int8>*>(_rRH.m_aValue.m_pValue));
-                TRACE_ALLOC( Sequence_sal_Int8 )
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -481,7 +391,6 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             default:
                 m_aValue.m_pValue   = new Any(*static_cast<Any*>(_rRH.m_aValue.m_pValue));
-                TRACE_ALLOC( Any )
         }
     }
     else if(!_rRH.m_bNull)
@@ -565,7 +474,6 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new Date(_rRH);
-        TRACE_ALLOC( Date )
         m_eTypeKind = DataType::DATE;
         m_bNull = false;
     }
@@ -583,7 +491,6 @@ ORowSetValue& ORowSetValue::operator=(const css::util::Time& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new Time(_rRH);
-        TRACE_ALLOC( tools::Time )
         m_eTypeKind = DataType::TIME;
         m_bNull = false;
     }
@@ -600,7 +507,6 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new DateTime(_rRH);
-        TRACE_ALLOC( DateTime )
         m_eTypeKind = DataType::TIMESTAMP;
         m_bNull = false;
     }
@@ -782,7 +688,6 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
     if (m_bNull)
     {
         m_aValue.m_pValue = new Sequence<sal_Int8>(_rRH);
-        TRACE_ALLOC( Sequence_sal_Int8 )
     }
     else
         *static_cast< Sequence< sal_Int8 >* >(m_aValue.m_pValue) = _rRH;
@@ -801,7 +706,6 @@ ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
     if ( m_bNull )
     {
         m_aValue.m_pValue = new Any(_rAny);
-        TRACE_ALLOC( Any )
     }
     else
         *static_cast<Any*>(m_aValue.m_pValue) = _rAny;
