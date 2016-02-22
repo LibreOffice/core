@@ -2213,20 +2213,20 @@ class QueryEvaluator
         return false;
     }
 
-    bool isRealRegExp(const ScQueryEntry& rEntry) const
+    bool isRealWildOrRegExp(const ScQueryEntry& rEntry) const
     {
-        if (mrParam.eSearchType != utl::SearchParam::SRCH_REGEXP)
+        if (mrParam.eSearchType == utl::SearchParam::SRCH_NORMAL)
             return false;
 
         return isTextMatchOp(rEntry);
     }
 
-    bool isTestRegExp(const ScQueryEntry& rEntry) const
+    bool isTestWildOrRegExp(const ScQueryEntry& rEntry) const
     {
         if (!mpTestEqualCondition)
             return false;
 
-        if (mrParam.eSearchType != utl::SearchParam::SRCH_REGEXP)
+        if (mrParam.eSearchType == utl::SearchParam::SRCH_NORMAL)
             return false;
 
         return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
@@ -2409,10 +2409,10 @@ public:
             aCellStr = mrStrPool.intern(aStr);
         }
 
-        bool bRealRegExp = isRealRegExp(rEntry);
-        bool bTestRegExp = isTestRegExp(rEntry);
+        bool bRealWildOrRegExp = isRealWildOrRegExp(rEntry);
+        bool bTestWildOrRegExp = isTestWildOrRegExp(rEntry);
 
-        if ( bRealRegExp || bTestRegExp )
+        if ( bRealWildOrRegExp || bTestWildOrRegExp )
         {
             sal_Int32 nStart = 0;
             sal_Int32 nEnd   = aCellStr.getLength();
@@ -2434,7 +2434,7 @@ public:
             if ( bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()) )
                 bMatch = false;    // RegExp must match entire cell string
-            if ( bRealRegExp )
+            if ( bRealWildOrRegExp )
                 switch (rEntry.eOp)
             {
                 case SC_EQUAL:
@@ -2465,7 +2465,7 @@ public:
             else
                 bTestEqual = bMatch;
         }
-        if ( !bRealRegExp )
+        if ( !bRealWildOrRegExp )
         {
             // Simple string matching i.e. no regexp match.
             if (isTextMatchOp(rEntry))

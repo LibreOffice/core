@@ -136,7 +136,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
             OSL_ENSURE(rEntry.GetQueryItem().maString == rCell2.maStr, "ScInterpreter::CompareFunc: broken options");
-            if (pOptions->eSearchType == utl::SearchParam::SRCH_REGEXP)
+            if (pOptions->eSearchType != utl::SearchParam::SRCH_NORMAL)
             {
                 sal_Int32 nStart = 0;
                 sal_Int32 nStop  = rCell1.maStr.getLength();

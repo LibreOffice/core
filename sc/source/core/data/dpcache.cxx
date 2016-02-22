@@ -529,10 +529,10 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         {   // by String
             OUString  aCellStr = pCellData->GetString();
 
-            bool bRealRegExp = (rParam.eSearchType == utl::SearchParam::SRCH_REGEXP &&
+            bool bRealWildOrRegExp = (rParam.eSearchType != utl::SearchParam::SRCH_NORMAL &&
                     ((rEntry.eOp == SC_EQUAL) || (rEntry.eOp == SC_NOT_EQUAL)));
-            bool bTestRegExp = false;
-            if (bRealRegExp || bTestRegExp)
+            bool bTestWildOrRegExp = false;
+            if (bRealWildOrRegExp || bTestWildOrRegExp)
             {
                 sal_Int32 nStart = 0;
                 sal_Int32 nEnd   = aCellStr.getLength();
@@ -543,10 +543,10 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 if (bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()))
                     bMatch = false;    // RegExp must match entire cell string
-                if (bRealRegExp)
+                if (bRealWildOrRegExp)
                     bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
             }
-            if (!bRealRegExp)
+            if (!bRealWildOrRegExp)
             {
                 if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
                 {
