@@ -221,11 +221,17 @@ void SwIndexMarkPane::InitControls()
 
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_PRV );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_NXT ), bShow = true;
+        {
+            pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
+            bShow = true;
+        }
         m_pPrevBT->Enable( pMoveMark != pMark );
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_NXT );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_PRV ), bShow = true;
+        {
+            pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
+            bShow = true;
+        }
         m_pNextBT->Enable( pMoveMark != pMark );
         if( bShow )
         {
@@ -236,11 +242,17 @@ void SwIndexMarkPane::InitControls()
 
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT ), bShow = true;
+        {
+            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
+            bShow = true;
+        }
         m_pPrevSameBT->Enable( pMoveMark != pMark );
         pMoveMark = &pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
         if( pMoveMark != pMark )
-            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV ), bShow = true;
+        {
+            pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
+            bShow = true;
+        }
         m_pNextSameBT->Enable( pMoveMark != pMark );
         if( bShow )
         {

@@ -271,7 +271,10 @@ void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
             rToFill = new SwTableAutoFormat( (*pTableTable)[ nIndex ] );
     }
     else
-        delete rToFill, rToFill = nullptr;
+    {
+        delete rToFill;
+        rToFill = nullptr;
+    }
 }
 
 // Handler:

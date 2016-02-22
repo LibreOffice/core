@@ -2276,7 +2276,10 @@ WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
     pRet->ApplyTabPos(pTabPos);
 
     if (pRet->IsEmpty())
-        delete pRet, pRet = nullptr;
+    {
+        delete pRet;
+        pRet = nullptr;
+    }
     return pRet;
 }
 
@@ -2582,7 +2585,8 @@ void SwWW8ImplReader::StopApo()
             m_pSFlyPara->pFlyFormat->SetFormatAttr(aSize);
         }
 
-        delete m_pSFlyPara->pMainTextPos, m_pSFlyPara->pMainTextPos = nullptr;
+        delete m_pSFlyPara->pMainTextPos;
+        m_pSFlyPara->pMainTextPos = nullptr;
 // To create the SwFrames when inserting into an existing document, fltshell.cxx
 // will call pFlyFrame->MakeFrames() when setting the FltAnchor attribute
 
@@ -3329,10 +3333,10 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
                 sal_Unicode cStt = 0, cEnd = 0;
                 switch( SVBT16ToShort( pData+1 ) )
                 {
-                case 1: cStt = '(', cEnd = ')'; break;
-                case 2: cStt = '[', cEnd = ']'; break;
-                case 3: cStt = '<', cEnd = '>'; break;
-                case 4: cStt = '{', cEnd = '}'; break;
+                case 1: cStt = '('; cEnd = ')'; break;
+                case 2: cStt = '['; cEnd = ']'; break;
+                case 3: cStt = '<'; cEnd = '>'; break;
+                case 4: cStt = '{'; cEnd = '}'; break;
                 }
                 NewAttr( SvxTwoLinesItem( true, cStt, cEnd, RES_CHRATR_TWO_LINES ));
             }
@@ -4976,7 +4980,10 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
         m_vColl[m_nAktColl].m_pWWFly = pFly;
         pFly->Read(*pData, m_pStyles);
         if (pFly->IsEmpty())
-            delete m_vColl[m_nAktColl].m_pWWFly, m_vColl[m_nAktColl].m_pWWFly = nullptr;
+        {
+            delete m_vColl[m_nAktColl].m_pWWFly;
+            m_vColl[m_nAktColl].m_pWWFly = nullptr;
+        }
     }
 }
 

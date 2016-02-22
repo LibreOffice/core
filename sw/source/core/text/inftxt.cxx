@@ -486,7 +486,7 @@ bool SwTextSizeInfo::_HasHint( const SwTextNode* pTextNode, sal_Int32 nPos )
 void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint )
 {
     CtorInitTextSizeInfo( pRenderContext, pFrame );
-    aTextFly.CtorInitTextFly( pFrame ),
+    aTextFly.CtorInitTextFly( pFrame );
     aPaintRect = rPaint;
     nSpaceIdx = 0;
     pSpaceAdd = nullptr;

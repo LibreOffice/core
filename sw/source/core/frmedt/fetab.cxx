@@ -2204,7 +2204,8 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
                     *const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()),
                     eType, nDiff, nLogDiff );
 
-    delete pLastCols, pLastCols = nullptr;
+    delete pLastCols;
+    pLastCols = nullptr;
     EndAllActionAndCall();
 
     if( bRet && (eType & (nsTableChgWidthHeightType::WH_FLAG_BIGGER | nsTableChgWidthHeightType::WH_FLAG_INSDEL)) == nsTableChgWidthHeightType::WH_FLAG_INSDEL )

@@ -309,7 +309,8 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
                                                             *pDDEFieldType));
         SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(), pNewType );
         pTableNode->SetNewTable( pDDETable );
-        delete pDDEFieldType, pDDEFieldType = nullptr;
+        delete pDDEFieldType;
+        pDDEFieldType = nullptr;
     }
 
     if( (pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
@@ -371,7 +372,10 @@ SwTableToTextSave::SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEnd
             m_pHstry->CopyFormatAttr( *pNd->GetpSwAttrSet(), nNd );
 
         if( !m_pHstry->Count() )
-            delete m_pHstry, m_pHstry = nullptr;
+        {
+            delete m_pHstry;
+            m_pHstry = nullptr;
+        }
 
         // METADATA: store
         m_pMetadataUndoStart = pNd->CreateUndo();
@@ -427,7 +431,10 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
     }
 
     if( !pHistory->Count() )
-        delete pHistory, pHistory = nullptr;
+    {
+        delete pHistory;
+        pHistory = nullptr;
+    }
 }
 
 SwUndoTableToText::~SwUndoTableToText()
@@ -471,7 +478,8 @@ void SwUndoTableToText::UndoImpl(::sw::UndoRedoContext & rContext)
                                                             *pDDEFieldType));
         SwDDETable* pDDETable = new SwDDETable( pTableNd->GetTable(), pNewType );
         pTableNd->SetNewTable( pDDETable, false );
-        delete pDDEFieldType, pDDEFieldType = nullptr;
+        delete pDDEFieldType;
+        pDDEFieldType = nullptr;
     }
 
     if( bCheckNumFormat )
@@ -2560,7 +2568,8 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pEntry->pBoxNumAttr )
         {
             rBox.ClaimFrameFormat()->SetFormatAttr( *pEntry->pBoxNumAttr );
-            delete pEntry->pBoxNumAttr, pEntry->pBoxNumAttr = nullptr;
+            delete pEntry->pBoxNumAttr;
+            pEntry->pBoxNumAttr = nullptr;
         }
 
         if( aTmpSet.Count() )
@@ -2651,7 +2660,8 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         if( pEntry->pBoxNumAttr )
         {
             rBox.ClaimFrameFormat()->SetFormatAttr( *pEntry->pBoxNumAttr );
-            delete pEntry->pBoxNumAttr, pEntry->pBoxNumAttr = nullptr;
+            delete pEntry->pBoxNumAttr;
+            pEntry->pBoxNumAttr = nullptr;
         }
 
         if( aTmpSet.Count() )
@@ -2692,7 +2702,10 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
                                     RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
     pEntry->pBoxNumAttr->Put( rBox.GetFrameFormat()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
-        delete pEntry->pBoxNumAttr, pEntry->pBoxNumAttr = nullptr;
+    {
+        delete pEntry->pBoxNumAttr;
+        pEntry->pBoxNumAttr = nullptr;
+    }
     _DEBUG_REDLINE( pDoc )
 }
 
@@ -2811,7 +2824,10 @@ bool SwUndoTableCpyTable::InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes,
     if( bRet )
         pInsRowUndo->SaveNewBoxes( *pTableNd, aTmpLst );
     else
-        delete pInsRowUndo, pInsRowUndo = nullptr;
+    {
+        delete pInsRowUndo;
+        pInsRowUndo = nullptr;
+    }
     return bRet;
 }
 
@@ -2858,7 +2874,8 @@ void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     pDel->UndoImpl(rContext);
-    delete pDel, pDel = nullptr;
+    delete pDel;
+    pDel = nullptr;
 }
 
 SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,

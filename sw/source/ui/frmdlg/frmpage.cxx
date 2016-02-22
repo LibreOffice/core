@@ -2280,7 +2280,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
         const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT));
         m_nOldH    = rHori.GetHoriOrient();
         m_nOldHRel = rHori.GetRelationOrient();
-        m_nOldV    = rVert.GetVertOrient(),
+        m_nOldV    = rVert.GetVertOrient();
         m_nOldVRel = rVert.GetRelationOrient();
 
         if (eAnchorId == FLY_AT_PAGE)

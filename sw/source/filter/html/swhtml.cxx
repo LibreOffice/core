@@ -856,7 +856,10 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
     }
 
     if( SVPAR_PENDING != GetStatus() )
-        delete m_pSttNdIdx, m_pSttNdIdx = nullptr;
+    {
+        delete m_pSttNdIdx;
+        m_pSttNdIdx = nullptr;
+    }
 
     // sollte der Parser der Letzte sein, der das Doc haelt, dann braucht
     // man hier auch nichts mehr tun, Doc wird gleich zerstoert!

@@ -430,7 +430,8 @@ bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsP
         } while( aNewStt < *pEnd );
 
     delete pNew;
-    delete p, p = nullptr;
+    delete p;
+    p = nullptr;
     return bAnyIns;
 }
 
@@ -1457,7 +1458,8 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         {
             pDoc->getIDocumentContentOperations().DeleteSection( &pContentSect->GetNode() );
         }
-        delete pContentSect, pContentSect = nullptr;
+        delete pContentSect;
+        pContentSect = nullptr;
 
         // adjustment of redline table positions must take start and
         // end into account, not point and mark.
@@ -1480,7 +1482,8 @@ void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
     }
     else if( !pIdx && pContentSect )
     {
-        delete pContentSect, pContentSect = nullptr;
+        delete pContentSect;
+        pContentSect = nullptr;
         bIsVisible = false;
     }
     else

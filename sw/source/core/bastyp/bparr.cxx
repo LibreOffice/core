@@ -439,9 +439,9 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
             for( sal_uInt16 nCount = n, nOff = pLast->nElem;
                             nCount; --nCount, ++pElem )
             {
-                *pElem = *pFrom++,
-                    (*pElem)->pBlock = pLast,
-                    (*pElem)->nOffset = nOff++;
+                *pElem = *pFrom++;
+                (*pElem)->pBlock = pLast;
+                (*pElem)->nOffset = nOff++;
             }
 
             // adjustment
@@ -454,12 +454,14 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
             {
                 // than remove
                 delete[] p->pData;
-                delete   p, p = nullptr;
+                delete   p;
+                p = nullptr;
                 ++nBlkdel;
             }
             else
             {
-                pElem = p->pData, pFrom = pElem + n;
+                pElem = p->pData;
+                pFrom = pElem + n;
                 int nCount = p->nElem;
                 while( nCount-- )
                 {

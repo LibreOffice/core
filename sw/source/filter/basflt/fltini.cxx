@@ -130,7 +130,10 @@ Filters::~Filters()
     {
         SwReaderWriterEntry& rEntry = aReaderWriter[n];
         if( rEntry.bDelReader && rEntry.pReader )
-            delete rEntry.pReader, rEntry.pReader = nullptr;
+        {
+            delete rEntry.pReader;
+            rEntry.pReader = nullptr;
+        }
     }
 }
 

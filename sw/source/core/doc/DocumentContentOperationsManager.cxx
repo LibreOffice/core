@@ -1615,10 +1615,16 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
                 nDiff = nEnd - nStt +1;
         SwNode* pNd = m_rDoc.GetNodes()[ nStt ];
         if( pNd->IsContentNode() && pStt->nContent.GetIndex() )
-            ++nStt, --nDiff;
+        {
+            ++nStt;
+            --nDiff;
+        }
         if( (pNd = m_rDoc.GetNodes()[ nEnd ])->IsContentNode() &&
             static_cast<SwContentNode*>(pNd)->Len() != pEnd->nContent.GetIndex() )
-            --nEnd, --nDiff;
+        {
+            --nEnd;
+            --nDiff;
+        }
         if( nDiff &&
             lcl_ChkFlyFly( pDoc, nStt, nEnd, rPos.nNode.GetIndex() ) )
         {
@@ -2249,7 +2255,8 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     else
     {
         aIdx = rRange.aStart;
-        delete pUndo, pUndo = nullptr;
+        delete pUndo;
+        pUndo = nullptr;
     }
 
     // move the Flys to the new position

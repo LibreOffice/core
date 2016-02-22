@@ -633,7 +633,10 @@ ASK_ADJUST:
                     aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
 
                 if( !pAdjust || IsInvalidItem( pAdjust ))
-                    rSet.InvalidateItem( nSlotId ), nSlotId = 0;
+                {
+                    rSet.InvalidateItem( nSlotId );
+                    nSlotId = 0;
+                }
                 else
                     bFlag = eAdjust == static_cast<const SvxAdjustItem*>(pAdjust)->GetAdjust();
             }
@@ -703,7 +706,10 @@ ASK_LINESPACE:
                     aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
 
                 if( !pLSpace || IsInvalidItem( pLSpace ))
-                    rSet.InvalidateItem( nSlotId ), nSlotId = 0;
+                {
+                    rSet.InvalidateItem( nSlotId );
+                    nSlotId = 0;
+                }
                 else if( nLSpace == static_cast<const SvxLineSpacingItem*>(pLSpace)->
                                                 GetPropLineSpace() )
                     bFlag = true;

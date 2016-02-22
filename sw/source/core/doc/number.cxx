@@ -619,9 +619,16 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat* pNumFormat )
         }
     }
     else if( !pNumFormat )
-        delete pOld, maFormats[ i ] = nullptr, mbInvalidRuleFlag = true;
+    {
+        delete pOld;
+        maFormats[ i ] = nullptr;
+        mbInvalidRuleFlag = true;
+    }
     else if( *pOld != *pNumFormat )
-        *pOld = *pNumFormat, mbInvalidRuleFlag = true;
+    {
+        *pOld = *pNumFormat;
+        mbInvalidRuleFlag = true;
+    }
 }
 
 OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings,

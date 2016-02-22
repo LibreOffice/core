@@ -1526,7 +1526,8 @@ void WW8Export::WriteEscher()
 
         pFib->fcDggInfo = nStart;
         pFib->lcbDggInfo = pTableStrm->Tell() - nStart;
-        delete m_pEscher, m_pEscher = nullptr;
+        delete m_pEscher;
+        m_pEscher = nullptr;
     }
 }
 
@@ -2424,7 +2425,8 @@ void SwEscherEx::FinishEscher()
 {
     pEscherStrm->Seek(0);
     rWrt.pTableStrm->WriteStream( *pEscherStrm );
-    delete pEscherStrm, pEscherStrm = nullptr;
+    delete pEscherStrm;
+    pEscherStrm = nullptr;
 }
 
 /** method to perform conversion of positioning attributes with the help

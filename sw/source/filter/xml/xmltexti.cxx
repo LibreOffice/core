@@ -941,7 +941,8 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
                 aCommandSequence[nIndex].Handle = -1;
                 aCommandSequence[nIndex].Value = makeAny( OUString((*aIter).second) );
                 aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-                ++aIter, ++nIndex;
+                ++aIter;
+                ++nIndex;
             }
 
             // unfortunately the names of the properties are depending on the object

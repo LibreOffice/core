@@ -445,9 +445,15 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
     bool aFlags[ static_cast< sal_uInt16 >(RES_FRMATR_END) - RES_CHRATR_BEGIN ];
     sal_uInt16 nStt, nEnd, n;
     if( bPap )
-       nStt = RES_PARATR_BEGIN, nEnd = RES_FRMATR_END;
+    {
+       nStt = RES_PARATR_BEGIN;
+       nEnd = RES_FRMATR_END;
+    }
     else
-       nStt = RES_CHRATR_BEGIN, nEnd = RES_TXTATR_END;
+    {
+       nStt = RES_CHRATR_BEGIN;
+       nEnd = RES_TXTATR_END;
+    }
 
     // dynamic defaults
     const SfxItemPool& rPool = *rFormat.GetAttrSet().GetPool();
@@ -1803,7 +1809,10 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
         rWrt.pFib->ccpHdr = nCpEnd - nCpStart;
     }
     else
-        delete pTextPos, pTextPos = nullptr;
+    {
+        delete pTextPos;
+        pTextPos = nullptr;
+    }
 
     return rWrt.pFib->ccpHdr != 0;
 }

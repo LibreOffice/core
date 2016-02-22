@@ -1261,7 +1261,10 @@ IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
                             lcl_UpdateIMapDlg( rSh );
 
                     if( !bProtect && SID_IMAP == nSlot )
-                        bSetState = true, bState = nullptr != pDlg;
+                    {
+                        bSetState = true;
+                        bState = nullptr != pDlg;
+                    }
                 }
                 break;
 

@@ -51,7 +51,10 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
         pRedlSaveData = new SwRedlineSaveDatas;
         if( !FillSaveData( aPam, *pRedlSaveData, false ))
-            delete pRedlSaveData, pRedlSaveData = nullptr;
+        {
+            delete pRedlSaveData;
+            pRedlSaveData = nullptr;
+        }
     }
 
     nSttNode = rPos.nNode.GetIndex();

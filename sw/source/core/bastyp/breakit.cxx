@@ -38,12 +38,14 @@ SwBreakIt* g_pBreakIt = nullptr;
 
 void SwBreakIt::_Create( const uno::Reference<uno::XComponentContext> & rxContext )
 {
-    delete g_pBreakIt, g_pBreakIt = new SwBreakIt( rxContext );
+    delete g_pBreakIt;
+    g_pBreakIt = new SwBreakIt( rxContext );
 }
 
 void SwBreakIt::_Delete()
 {
-    delete g_pBreakIt, g_pBreakIt = nullptr;
+    delete g_pBreakIt;
+    g_pBreakIt = nullptr;
 }
 
 SwBreakIt * SwBreakIt::Get()

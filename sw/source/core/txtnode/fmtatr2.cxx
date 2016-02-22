@@ -249,7 +249,10 @@ void SwFormatINetFormat::SetMacroTable( const SvxMacroTableDtor* pNewTable )
             mpMacroTable = new SvxMacroTableDtor( *pNewTable );
     }
     else
-        delete mpMacroTable, mpMacroTable = nullptr;
+    {
+        delete mpMacroTable;
+        mpMacroTable = nullptr;
+    }
 }
 
 void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )

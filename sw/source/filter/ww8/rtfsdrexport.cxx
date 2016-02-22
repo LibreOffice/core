@@ -48,8 +48,10 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
 
 RtfSdrExport::~RtfSdrExport()
 {
-    delete mpOutStrm, mpOutStrm = nullptr;
-    delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = nullptr;
+    delete mpOutStrm;
+    mpOutStrm = nullptr;
+    delete[] m_pShapeTypeWritten;
+    m_pShapeTypeWritten = nullptr;
 }
 
 void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)

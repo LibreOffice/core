@@ -1328,7 +1328,10 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, sal_uInt16 nDefStrId, RE
             // so determine the number
             nNum = n * 8;
             while( nTmp & 1 )
-                ++nNum, nTmp >>= 1;
+            {
+                ++nNum;
+                nTmp >>= 1;
+            }
             break;
         }
     }

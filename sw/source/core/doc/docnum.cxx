@@ -1441,9 +1441,15 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
 
     const SwTextNode* pLast;
     if( bNext )
-        ++aIdx, pLast = pNd;
+    {
+        ++aIdx;
+        pLast = pNd;
+    }
     else
-        --aIdx, pLast = nullptr;
+    {
+        --aIdx;
+        pLast = nullptr;
+    }
 
     while( bNext ? ( aIdx.GetIndex() < aIdx.GetNodes().Count() - 1 )
                  : aIdx.GetIndex() != 0 )
@@ -2265,7 +2271,10 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
                 // identify the Number
                 nNum = n * 8;
                 while( nTmp & 1 )
-                    ++nNum, nTmp >>= 1;
+                {
+                    ++nNum;
+                    nTmp >>= 1;
+                }
                 break;
             }
     }

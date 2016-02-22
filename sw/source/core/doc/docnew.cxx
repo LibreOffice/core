@@ -733,7 +733,8 @@ void SwDoc::ClearDoc()
 
     GetDocumentFieldsManager().ClearFieldTypes();
 
-    delete mpNumberFormatter, mpNumberFormatter = nullptr;
+    delete mpNumberFormatter;
+    mpNumberFormatter = nullptr;
 
     getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));

@@ -756,7 +756,10 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
 
                     if( !pAdjust || IsInvalidItem( pAdjust ))
-                        rSet.InvalidateItem( nSlotId ), nSlotId = 0;
+                    {
+                        rSet.InvalidateItem( nSlotId );
+                        nSlotId = 0;
+                    }
                     else
                     {
                         if ( eAdjust == static_cast<const SvxAdjustItem*>(pAdjust)->GetAdjust())
@@ -784,7 +787,10 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
 
                     if( !pLSpace || IsInvalidItem( pLSpace ))
-                        rSet.InvalidateItem( nSlotId ), nSlotId = 0;
+                    {
+                        rSet.InvalidateItem( nSlotId );
+                        nSlotId = 0;
+                    }
                     else
                     {
                         if( nLSpace == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace() )

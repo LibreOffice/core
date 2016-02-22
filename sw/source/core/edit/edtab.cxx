@@ -482,13 +482,19 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
                 bNew == pChkNd->GetTable().IsNewModel() &&
                 // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTableNd->GetIndex() - 1 )
-                *pChkNxtPrv = true, bRet = true;        // using Prev is possible
+            {
+                *pChkNxtPrv = true;
+                bRet = true;        // using Prev is possible
+            }
             else
             {
                 pChkNd = rNds[ pTableNd->EndOfSectionIndex() + 1 ]->GetTableNode();
                 if( pChkNd && dynamic_cast< const SwDDETable* >(&pChkNd->GetTable()) ==  nullptr &&
                     bNew == pChkNd->GetTable().IsNewModel() )
-                    *pChkNxtPrv = false, bRet = true;   // using Next is possible
+                {
+                    *pChkNxtPrv = false;
+                    bRet = true;   // using Next is possible
+                }
             }
         }
         else

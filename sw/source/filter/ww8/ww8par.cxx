@@ -2478,7 +2478,10 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
 
         // cache current paragraph
         if(m_pPreviousNumPaM)
-            delete m_pPreviousNumPaM, m_pPreviousNumPaM = nullptr;
+        {
+            delete m_pPreviousNumPaM;
+            m_pPreviousNumPaM = nullptr;
+        }
 
         m_pPreviousNumPaM = new SwPaM(*m_pPaM, m_pPaM);
         m_pPrevNumRule = pRule;
@@ -2488,14 +2491,18 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
         // If the previous paragraph has numbering but the current one does not
         // we need to add a space after the previous paragraph
         SetLowerSpacing(*m_pPreviousNumPaM, GetParagraphAutoSpace(m_pWDop->fDontUseHTMLAutoSpacing));
-        delete m_pPreviousNumPaM, m_pPreviousNumPaM = nullptr;
+        delete m_pPreviousNumPaM;
+        m_pPreviousNumPaM = nullptr;
         m_pPrevNumRule = nullptr;
     }
     else
     {
         // clear paragraph cache
         if(m_pPreviousNumPaM)
-            delete m_pPreviousNumPaM, m_pPreviousNumPaM = nullptr;
+        {
+            delete m_pPreviousNumPaM;
+            m_pPreviousNumPaM = nullptr;
+        }
         m_pPrevNumRule = pRule;
     }
 
@@ -4136,7 +4143,8 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
     CloseAttrEnds();
 
-    delete m_pPlcxMan, m_pPlcxMan = nullptr;
+    delete m_pPlcxMan;
+    m_pPlcxMan = nullptr;
     return bJoined;
 }
 

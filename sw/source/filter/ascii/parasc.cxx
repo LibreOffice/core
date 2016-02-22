@@ -234,7 +234,8 @@ sal_uLong SwASCIIParser::CallParser()
                 pDoc->getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet );
             }
         }
-        delete pItemSet, pItemSet = nullptr;
+        delete pItemSet;
+        pItemSet = nullptr;
     }
 
     delete pInsPam;

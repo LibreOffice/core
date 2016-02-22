@@ -120,7 +120,8 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
         const SwFrame* pTmpFrame = aArr[ nCnt ];
         bVert = pTmpFrame->IsVertical();
         bR2L = pTmpFrame->IsRightToLeft();
-        --nCnt, --nRefCnt;
+        --nCnt;
+        --nRefCnt;
     }
 
     // If a counter overflows?

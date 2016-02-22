@@ -331,7 +331,8 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     //TurboMode? Hands-off during idle-format
     if ( IsPaint() && !IsIdle() && TurboAction() )
     {
-        delete m_pWait, m_pWait = nullptr;
+        delete m_pWait;
+        m_pWait = nullptr;
         m_pRoot->ResetTurboFlag();
         m_bActionInProgress = false;
         m_pRoot->DeleteEmptySct();
@@ -359,7 +360,8 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
     }
     m_pRoot->DeleteEmptySct();
 
-    delete m_pWait, m_pWait = nullptr;
+    delete m_pWait;
+    m_pWait = nullptr;
 
     //Turbo-Action permitted again for all cases.
     m_pRoot->ResetTurboFlag();

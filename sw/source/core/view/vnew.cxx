@@ -344,7 +344,10 @@ SwViewShell::~SwViewShell()
         if ( mpDoc )
         {
             if( !mpDoc->release() )
-                delete mpDoc, mpDoc = nullptr;
+            {
+                delete mpDoc;
+                mpDoc = nullptr;
+            }
             else
                 GetLayout()->ResetNewLayout();
         }

@@ -927,10 +927,16 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                 {
                     OutputDevice* pVout;
                     if( pOut == pShell->GetOut() && SwRootFrame::FlushVout() )
-                        pVout = pOut, pOut = pShell->GetOut();
+                    {
+                        pVout = pOut;
+                        pOut = pShell->GetOut();
+                    }
                     else if( pShell->GetWin() &&
                              OUTDEV_VIRDEV == pOut->GetOutDevType() )
-                        pVout = pOut, pOut = pShell->GetWin();
+                    {
+                        pVout = pOut;
+                        pOut = pShell->GetWin();
+                    }
                     else
                         pVout = nullptr;
 

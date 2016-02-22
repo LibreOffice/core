@@ -697,7 +697,8 @@ void SwEditWin::LeaveArea(const Point &rPos)
     JustifyAreaTimer();
     if( !m_aTimer.IsActive() )
         m_aTimer.Start();
-    delete m_pShadCursor, m_pShadCursor = nullptr;
+    delete m_pShadCursor;
+    m_pShadCursor = nullptr;
 }
 
 inline void SwEditWin::EnterArea()
@@ -1387,7 +1388,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // running on a document, no order is being taken
         return;
 
-    delete m_pShadCursor, m_pShadCursor = nullptr;
+    delete m_pShadCursor;
+    m_pShadCursor = nullptr;
     m_aKeyInputFlushTimer.Stop();
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
@@ -1924,17 +1926,25 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                  !rSh.GetNumRuleAtCurrCursorPos()->IsOutlineRule() &&
                                  !rSh.HasSelection() &&
                                 rSh.IsSttPara() && rSh.IsEndPara() )
-                            eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
-
+                        {
+                            eKeyState = KS_NumOff;
+                            eNextKeyState = KS_OutlineLvOff;
+                        }
                         //RETURN for new paragraph with AutoFormatting
                         else if( pACfg && pACfg->IsAutoFormatByInput() &&
                                 !(nSelectionType & (nsSelectionType::SEL_GRF |
                                     nsSelectionType::SEL_OLE | nsSelectionType::SEL_FRM |
                                     nsSelectionType::SEL_TBL_CELLS | nsSelectionType::SEL_DRW |
                                     nsSelectionType::SEL_DRW_TXT)) )
-                            eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_AutoFormatByInput;
+                        {
+                            eKeyState = KS_CheckAutoCorrect;
+                            eNextKeyState = KS_AutoFormatByInput;
+                        }
                         else
-                            eNextKeyState = eKeyState, eKeyState = KS_CheckAutoCorrect;
+                        {
+                            eNextKeyState = eKeyState;
+                            eKeyState = KS_CheckAutoCorrect;
+                        }
                     }
                 }
                 break;
@@ -2079,7 +2089,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
                             eKeyState = KS_NextCell;
                         else
-                            eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_NextCell;
+                        {
+                            eKeyState = KS_CheckAutoCorrect;
+                            eNextKeyState = KS_NextCell;
+                        }
                     }
                     else if ( rSh.GetSelectionType() &
                                 (nsSelectionType::SEL_GRF |
@@ -2131,7 +2144,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
                             eKeyState = KS_PrevCell;
                         else
-                            eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_PrevCell;
+                        {
+                            eKeyState = KS_CheckAutoCorrect;
+                            eNextKeyState = KS_PrevCell;
+                        }
                     }
                     else if ( rSh.GetSelectionType() &
                                 (nsSelectionType::SEL_GRF |
@@ -2305,7 +2321,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     FlushInBuffer();
 
                 if( m_rView.KeyInput( aKeyEvent ) )
-                    bFlushBuffer = true, bNormalChar = false;
+                {
+                    bFlushBuffer = true;
+                    bNormalChar = false;
+                }
                 else
                 {
                     // Because Sfx accelerators are only called when they were
@@ -2826,7 +2845,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     }
 
     m_bWasShdwCursor = nullptr != m_pShadCursor;
-    delete m_pShadCursor, m_pShadCursor = nullptr;
+    delete m_pShadCursor;
+    m_pShadCursor = nullptr;
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
@@ -2980,7 +3000,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     m_bIsInMove = false;
     m_aStartPos = rMEvt.GetPosPixel();
-    m_aRszMvHdlPt.X() = 0, m_aRszMvHdlPt.Y() = 0;
+    m_aRszMvHdlPt.X() = 0;
+    m_aRszMvHdlPt.Y() = 0;
 
     SwTab nMouseTabCol = SwTab::COL_NONE;
     const bool bTmp = !rSh.IsDrawCreate() && !m_pApplyTempl && !rSh.IsInSelect() &&
@@ -3786,7 +3807,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         return ;
 
     if( m_pShadCursor && 0 != (rMEvt.GetModifier() + rMEvt.GetButtons() ) )
-        delete m_pShadCursor, m_pShadCursor = nullptr;
+    {
+        delete m_pShadCursor;
+        m_pShadCursor = nullptr;
+    }
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly();
 
@@ -3818,7 +3842,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
 
     if( m_pShadCursor && !bInsWin )
-        delete m_pShadCursor, m_pShadCursor = nullptr;
+    {
+        delete m_pShadCursor;
+        m_pShadCursor = nullptr;
+    }
 
     if( bInsWin && m_pRowColumnSelectionStart )
     {
@@ -4266,7 +4293,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     if( bDelShadCursor && m_pShadCursor )
-        delete m_pShadCursor, m_pShadCursor = nullptr;
+    {
+        delete m_pShadCursor;
+        m_pShadCursor = nullptr;
+    }
     m_bWasShdwCursor = false;
 }
 
@@ -4289,7 +4319,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     bool bCallShadowCursor = m_bWasShdwCursor;
     m_bWasShdwCursor = false;
     if( m_pShadCursor )
-        delete m_pShadCursor, m_pShadCursor = nullptr;
+    {
+        delete m_pShadCursor;
+        m_pShadCursor = nullptr;
+    }
 
     if( m_pRowColumnSelectionStart )
         DELETEZ( m_pRowColumnSelectionStart );
@@ -5310,7 +5343,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     case CommandEventId::StartAutoScroll:
     case CommandEventId::AutoScroll:
             if( m_pShadCursor )
-                delete m_pShadCursor, m_pShadCursor = nullptr;
+            {
+                delete m_pShadCursor;
+                m_pShadCursor = nullptr;
+            }
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
 

@@ -871,7 +871,8 @@ void SwCursorShell::SaveTableBoxContent( const SwPosition* pPos )
 
 void SwCursorShell::ClearTableBoxContent()
 {
-    delete m_pBoxIdx, m_pBoxIdx = nullptr;
+    delete m_pBoxIdx;
+    m_pBoxIdx = nullptr;
     m_pBoxPtr = nullptr;
 }
 

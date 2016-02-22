@@ -639,7 +639,10 @@ SwUndoReplace::Impl::Impl(
     }
 
     if( !pHistory->Count() )
-        delete pHistory, pHistory = nullptr;
+    {
+        delete pHistory;
+        pHistory = nullptr;
+    }
 
     const sal_Int32 nECnt = m_bSplitNext ? pNd->GetText().getLength()
         : pEnd->nContent.GetIndex();
@@ -766,7 +769,10 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
         m_nSetPos = pHistory->Count();
         if( !m_nSetPos )
-            delete pHistory, pHistory = nullptr;
+        {
+            delete pHistory;
+            pHistory = nullptr;
+        }
     }
 
     rDoc.getIDocumentContentOperations().ReplaceRange( rPam, m_sIns, m_bRegExp );
@@ -965,7 +971,8 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
                 pNd->GetTable().GetFrameFormat()->SetFormatAttr( SvxFormatKeepItem(true, RES_KEEP) );
         }
         NODE.pUndoInsNd->UndoImpl(rContext);
-        delete NODE.pUndoInsNd, NODE.pUndoInsNd = nullptr;
+        delete NODE.pUndoInsNd;
+        NODE.pUndoInsNd = nullptr;
     }
 }
 

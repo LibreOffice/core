@@ -183,7 +183,10 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
             case 0x0c:
             case 0x0d:
                 if( bAllowCr )
-                    aVal = aVal.replaceAt( nI, 1, "\n" ), bSetAsHex = false;
+                {
+                    aVal = aVal.replaceAt( nI, 1, "\n" );
+                    bSetAsHex = false;
+                }
                 else
                     bSetAsHex = true;
                 break;

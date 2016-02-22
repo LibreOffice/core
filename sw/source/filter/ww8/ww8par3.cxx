@@ -313,7 +313,8 @@ eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, OUString&)
 
 void SwWW8ImplReader::DeleteFormImpl()
 {
-    delete m_pFormImpl, m_pFormImpl = nullptr;
+    delete m_pFormImpl;
+    m_pFormImpl = nullptr;
 }
 
 // Hilfs-Deklarationen

@@ -1565,7 +1565,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                             pSet->Put( *pItem );
                             if ( pFormat->GetDoc()->GetEditShell() != nullptr
                                  && !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
-                                delete pSet, pSet = nullptr;
+                            {
+                                delete pSet;
+                                pSet = nullptr;
+                            }
                         }
                     }
                 }

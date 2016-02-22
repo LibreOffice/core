@@ -476,8 +476,10 @@ void DocxExport::ExportDocument_Impl()
     WriteEmbeddings();
 
     m_aLinkedTextboxesHelper.clear();   //final cleanup
-    delete m_pStyles, m_pStyles = nullptr;
-    delete m_pSections, m_pSections = nullptr;
+    delete m_pStyles;
+    m_pStyles = nullptr;
+    delete m_pSections;
+    m_pSections = nullptr;
 }
 
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
@@ -1478,10 +1480,14 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
 
 DocxExport::~DocxExport()
 {
-    delete m_pSdrExport, m_pSdrExport = nullptr;
-    delete m_pVMLExport, m_pVMLExport = nullptr;
-    delete m_pAttrOutput, m_pAttrOutput = nullptr;
-    delete m_pDrawingML, m_pDrawingML = nullptr;
+    delete m_pSdrExport;
+    m_pSdrExport = nullptr;
+    delete m_pVMLExport;
+    m_pVMLExport = nullptr;
+    delete m_pAttrOutput;
+    m_pAttrOutput = nullptr;
+    delete m_pDrawingML;
+    m_pDrawingML = nullptr;
 }
 
 DocxSettingsData::DocxSettingsData()

@@ -243,10 +243,12 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
                 nLeft = nRight = nLR / 2;
                 break;
             case text::HoriOrientation::LEFT:
-                nRight = nLR; nLeft = 0;
+                nRight = nLR;
+                nLeft = 0;
                 break;
             case text::HoriOrientation::RIGHT:
-                nLeft = nLR, nRight = 0;
+                nLeft = nLR;
+                nRight = 0;
                 break;
             case text::HoriOrientation::LEFT_AND_WIDTH:
                 nRight = nLR - nLeft;
@@ -524,17 +526,35 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             bool bLine = false;
             if( aBox.GetTop() != nullptr )
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::TOP), bLine |= true;
+            {
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
+                bLine |= true;
+            }
             if( aBox.GetBottom() != nullptr )
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM), bLine |= true;
+            {
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
+                bLine |= true;
+            }
             if( aBox.GetLeft() != nullptr )
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::LEFT), bLine |= true;
+            {
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
+                bLine |= true;
+            }
             if( aBox.GetRight() != nullptr )
-                aBox.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT), bLine |= true;
+            {
+                aBox.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
+                bLine |= true;
+            }
             if( aInfo.GetHori() != nullptr )
-                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::HORI), bLine |= true;
+            {
+                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::HORI);
+                bLine |= true;
+            }
             if( aInfo.GetVert() != nullptr )
-                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::VERT), bLine |= true;
+            {
+                aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::VERT);
+                bLine |= true;
+            }
 
             aCoreSet.Put( aBox  );
             aCoreSet.Put( aInfo );

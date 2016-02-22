@@ -457,9 +457,13 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTextNode& rNd, sal_uInt16 *pDigitLvl
         switch (rText[n])
         {
         case ' ':   if( 3 == ++nBlnk )
-                        ++nLvl, nBlnk = 0;
+                    {
+                        ++nLvl;
+                        nBlnk = 0;
+                    }
                     break;
-        case '\t':  ++nLvl, nBlnk = 0;
+        case '\t':  ++nLvl;
+                    nBlnk = 0;
                     break;
         default:
             if( pDigitLvl )
@@ -798,14 +802,26 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
 #endif
             {
                 if( bIsUpper )
-                    cNumTyp = '0' + SVX_NUM_ROMAN_UPPER, eTmpScan = UPPER_ROMAN;
+                {
+                    cNumTyp = '0' + SVX_NUM_ROMAN_UPPER;
+                    eTmpScan = UPPER_ROMAN;
+                }
                 else
-                    cNumTyp = '0' + SVX_NUM_ROMAN_LOWER, eTmpScan = LOWER_ROMAN;
+                {
+                    cNumTyp = '0' + SVX_NUM_ROMAN_LOWER;
+                    eTmpScan = LOWER_ROMAN;
+                }
             }
             else if( bIsUpper )
-                cNumTyp = '0' + SVX_NUM_CHARS_UPPER_LETTER, eTmpScan = UPPER_ALPHA;
+            {
+                cNumTyp = '0' + SVX_NUM_CHARS_UPPER_LETTER;
+                eTmpScan = UPPER_ALPHA;
+            }
             else
-                cNumTyp = '0' + SVX_NUM_CHARS_LOWER_LETTER, eTmpScan = LOWER_ALPHA;
+            {
+                cNumTyp = '0' + SVX_NUM_CHARS_LOWER_LETTER;
+                eTmpScan = LOWER_ALPHA;
+            }
 
             // Switch to roman numbers (only for c/d!)
             if( 1 == nDigitCnt && ( eScan & (UPPER_ALPHA|LOWER_ALPHA) ) &&
@@ -817,9 +833,15 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
                 sal_Unicode c = '0';
                 nStart = 3 == nStart ? 100 : 500;
                 if( UPPER_ALPHA == eTmpScan )
-                    eTmpScan = UPPER_ROMAN, c += SVX_NUM_ROMAN_UPPER;
+                {
+                    eTmpScan = UPPER_ROMAN;
+                    c += SVX_NUM_ROMAN_UPPER;
+                }
                 else
-                    eTmpScan = LOWER_ROMAN, c += SVX_NUM_ROMAN_LOWER;
+                {
+                    eTmpScan = LOWER_ROMAN;
+                    c += SVX_NUM_ROMAN_LOWER;
+                }
 
                 ( eScan &= ~(UPPER_ALPHA|LOWER_ALPHA)) |= eTmpScan;
                 if( pNumTypes )

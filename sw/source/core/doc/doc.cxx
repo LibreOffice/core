@@ -968,7 +968,8 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     else if ( !bPrintRightPages )
     {
         ++nStep;
-        ++nSPg, --nEPg;
+        ++nSPg;
+        --nEPg;
     }
 
     // the number of 'virtual' pages to be printed

@@ -284,8 +284,8 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
     m_pPrintNowPB->SetClickHdl(LINK(this, SwMailMergeOutputPage, PrintHdl_Impl));
     m_pPrinterSettingsPB->SetClickHdl(LINK(this, SwMailMergeOutputPage, PrinterSetupHdl_Impl));
 
-    m_pSendAsPB->SetClickHdl(LINK(this, SwMailMergeOutputPage, SendAsHdl_Impl)),
-    m_pSendDocumentsPB->SetClickHdl(LINK(this, SwMailMergeOutputPage, SendDocumentsHdl_Impl)),
+    m_pSendAsPB->SetClickHdl(LINK(this, SwMailMergeOutputPage, SendAsHdl_Impl));
+    m_pSendDocumentsPB->SetClickHdl(LINK(this, SwMailMergeOutputPage, SendDocumentsHdl_Impl));
     m_pSendAsLB->SetSelectHdl(LINK(this, SwMailMergeOutputPage, SendTypeHdl_Impl));
 
     OutputTypeHdl_Impl(m_pSaveStartDocRB);

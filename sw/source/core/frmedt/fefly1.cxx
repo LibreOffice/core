@@ -1189,7 +1189,10 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
             pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrameFormatSetRange );
             pSet->Put( *pItem );
             if( !sw_ChkAndSetNewAnchor( *pFly, *pSet ))
-                delete pSet, pSet = nullptr;
+            {
+                delete pSet;
+                pSet = nullptr;
+            }
         }
 
         if( GetDoc()->SetFrameFormatToFly( *pFlyFormat, *pNewFormat, pSet, bKeepOrient ))

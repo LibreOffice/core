@@ -452,8 +452,11 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
         Rectangle aRect( m_pShadCursor->GetRect());
         // fully resides inside?
         if( rRect.IsInside( aRect ) )
+        {
             // dann aufheben
-            delete m_pShadCursor, m_pShadCursor = nullptr;
+            delete m_pShadCursor;
+            m_pShadCursor = nullptr;
+        }
         else if( rRect.IsOver( aRect ))
         {
             // resides somewhat above, then everything is clipped outside

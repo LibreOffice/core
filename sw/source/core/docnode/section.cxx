@@ -1337,7 +1337,10 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     }
                     if( pCpyRg && pSrcDoc == pDoc &&
                         pCpyRg->aStart < rInsPos && rInsPos < pCpyRg->aEnd )
-                        delete pCpyRg, pCpyRg = nullptr;
+                    {
+                        delete pCpyRg;
+                        pCpyRg = nullptr;
+                    }
                 }
                 else if( pSrcDoc != pDoc )
                     pCpyRg = new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), 2,

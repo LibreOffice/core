@@ -260,7 +260,8 @@ void SwServerObject::SetNoServer()
         ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(CNTNT_TYPE.pBkmk);
         if(pDdeBookmark)
         {
-            CNTNT_TYPE.pBkmk = nullptr, eType = NONE_SERVER;
+            CNTNT_TYPE.pBkmk = nullptr;
+            eType = NONE_SERVER;
             pDdeBookmark->SetRefObject(nullptr);
         }
     }

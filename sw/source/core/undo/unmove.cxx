@@ -341,7 +341,10 @@ void SwUndoMove::DelFootnote( const SwPaM& rRange )
                             nsDelContentType::DELCNT_FTN );
 
         if( pHistory && !pHistory->Count() )
-            delete pHistory, pHistory = nullptr;
+        {
+            delete pHistory;
+            pHistory = nullptr;
+        }
     }
 }
 

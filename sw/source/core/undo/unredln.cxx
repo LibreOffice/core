@@ -58,7 +58,10 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
 
     mpRedlSaveData = new SwRedlineSaveDatas;
     if( !FillSaveData( rRange, *mpRedlSaveData, false, UNDO_REJECT_REDLINE != mnUserId ))
-        delete mpRedlSaveData, mpRedlSaveData = nullptr;
+    {
+        delete mpRedlSaveData;
+        mpRedlSaveData = nullptr;
+    }
     else
     {
         mbHiddenRedlines = HasHiddenRedlines( *mpRedlSaveData );
@@ -379,7 +382,10 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
 
     pRedlSaveData = new SwRedlineSaveDatas;
     if( !FillSaveData( rRedl, *pRedlSaveData, false ))
-        delete pRedlSaveData, pRedlSaveData = nullptr;
+    {
+        delete pRedlSaveData;
+        pRedlSaveData = nullptr;
+    }
 }
 
 SwUndoCompDoc::~SwUndoCompDoc()
@@ -476,10 +482,12 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         if( pUnDel2 )
         {
             pUnDel2->UndoImpl(rContext);
-            delete pUnDel2, pUnDel2 = nullptr;
+            delete pUnDel2;
+            pUnDel2 = nullptr;
         }
         pUnDel->UndoImpl(rContext);
-        delete pUnDel, pUnDel = nullptr;
+        delete pUnDel;
+        pUnDel = nullptr;
 
         SetPaM(rPam);
 

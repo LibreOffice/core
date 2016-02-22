@@ -893,7 +893,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                         if( bDelete )
                         {
-                            delete pNewRedl, pNewRedl = nullptr;
+                            delete pNewRedl;
+                            pNewRedl = nullptr;
                             bCompress = true;
                         }
                     }
@@ -1093,7 +1094,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                     case POS_INSIDE:
                     case POS_EQUAL:
-                        delete pNewRedl, pNewRedl = nullptr;
+                        delete pNewRedl;
+                        pNewRedl = nullptr;
                         bCompress = true;
                         break;
 
@@ -1211,7 +1213,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                                 bCompress = true;
                             }
-                            delete pNewRedl, pNewRedl = nullptr;
+                            delete pNewRedl;
+                            pNewRedl = nullptr;
                             break;
 
                         case POS_OUTSIDE:
@@ -1303,7 +1306,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         case POS_EQUAL:
                             {
                                 pRedl->PushData( *pNewRedl );
-                                delete pNewRedl, pNewRedl = nullptr;
+                                delete pNewRedl;
+                                pNewRedl = nullptr;
                                 if( IsHideChanges( meRedlineMode ))
                                 {
                                     pRedl->Hide(0, mpRedlineTable->GetPos(pRedl));
@@ -1511,7 +1515,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                     case POS_EQUAL:
                     case POS_INSIDE:
-                        delete pNewRedl, pNewRedl = nullptr;
+                        delete pNewRedl;
+                        pNewRedl = nullptr;
                         break;
 
                     case POS_OUTSIDE:
@@ -1552,9 +1557,11 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                     case POS_INSIDE:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ))
+                        {
                             // own one can be ignored completely
-                            delete pNewRedl, pNewRedl = nullptr;
-
+                            delete pNewRedl;
+                            pNewRedl = nullptr;
+                        }
                         else if( *pREnd == *pEnd )
                             // or else only shorten the current one
                             pRedl->SetEnd( *pStt, pREnd );
@@ -1669,7 +1676,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
             m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
             meRedlineMode = eOld;
         }
-        delete pNewRedl, pNewRedl = nullptr;
+        delete pNewRedl;
+        pNewRedl = nullptr;
     }
     _CHECK_REDLINE( *this )
 
@@ -2643,7 +2651,10 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
             *mpAutoFormatRedlnComment = *pText;
     }
     else
-        delete mpAutoFormatRedlnComment, mpAutoFormatRedlnComment = nullptr;
+    {
+        delete mpAutoFormatRedlnComment;
+        mpAutoFormatRedlnComment = nullptr;
+    }
 
     mnAutoFormatRedlnCommentNo = nSeqNo;
 }
