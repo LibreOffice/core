@@ -108,6 +108,7 @@ public:
     void testRowHeight();
     void testTdf93830();
     void testTdf93097();
+    void testTdf62255();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -150,6 +151,7 @@ public:
     CPPUNIT_TEST(testRowHeight);
     CPPUNIT_TEST(testTdf93830);
     CPPUNIT_TEST(testTdf93097);
+    CPPUNIT_TEST(testTdf62255);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1164,6 +1166,30 @@ void SdImportTest::testTdf93097()
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     CPPUNIT_ASSERT_EQUAL(OUString("ss"), xDocumentProperties->getTitle());
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf62255()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf62255.pptx"), PPTX);
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    sdr::table::SdrTableObj *pTableObj;
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    css::uno::Any aAny;
+    uno::Reference< table::XCellRange > xTable;
+    uno::Reference< beans::XPropertySet > xCell;
+    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    aAny = xCell->getPropertyValue("FillStyle");
+
+    if (aAny.hasValue())
+    {
+        drawing::FillStyle aFillStyle;
+        aAny >>= aFillStyle;
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, aFillStyle);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
