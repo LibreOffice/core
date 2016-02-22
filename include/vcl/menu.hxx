@@ -404,8 +404,11 @@ public:
 
     void HighlightItem( sal_uInt16 nItemPos );
     void DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
-};
 
+    bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    bool HandleMenuActivateEvent(Menu *pMenu) const;
+    bool HandleMenuDeActivateEvent(Menu *pMenu) const;
+};
 
 namespace vcl { namespace MenuInvalidator {
 
@@ -463,10 +466,7 @@ public:
     void ShowButtons( bool bClose, bool bFloat, bool bHide );
 
     virtual void SelectItem(sal_uInt16 nId) override;
-    bool HandleMenuActivateEvent(Menu *pMenu) const;
-    bool HandleMenuDeActivateEvent(Menu *pMenu) const;
     bool HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
-    bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId);
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
