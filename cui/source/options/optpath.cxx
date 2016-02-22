@@ -115,9 +115,7 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
     { SvtPathOptions::PATH_TEMPLATE,    "Template" },
     { SvtPathOptions::PATH_WORK,        "Work" },
     { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
-#if OSL_DEBUG_LEVEL > 1
     { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
-#endif
     { USHRT_MAX, nullptr }
 };
 
@@ -167,13 +165,6 @@ static OUString Convert_Impl( const OUString& rValue )
 
 bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 {
-#if OSL_DEBUG_LEVEL > 1
-    return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
-             SvtPathOptions::PATH_AUTOTEXT == nIndex ||
-             SvtPathOptions::PATH_BASIC == nIndex ||
-             SvtPathOptions::PATH_GALLERY == nIndex ||
-             SvtPathOptions::PATH_TEMPLATE == nIndex );
-#else
     return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
              SvtPathOptions::PATH_AUTOTEXT == nIndex ||
              SvtPathOptions::PATH_BASIC == nIndex ||
@@ -181,7 +172,6 @@ bool IsMultiPath_Impl( const sal_uInt16 nIndex )
              SvtPathOptions::PATH_TEMPLATE == nIndex ||
              SvtPathOptions::PATH_LINGUISTIC == nIndex ||
              SvtPathOptions::PATH_DICTIONARY == nIndex  );
-#endif
 }
 
 // class SvxPathTabPage --------------------------------------------------
@@ -299,9 +289,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             case SvtPathOptions::PATH_TEMP:
             case SvtPathOptions::PATH_TEMPLATE:
             case SvtPathOptions::PATH_DICTIONARY:
-#if OSL_DEBUG_LEVEL > 1
             case SvtPathOptions::PATH_LINGUISTIC:
-#endif
             case SvtPathOptions::PATH_WORK:
             {
                 OUString aStr( CUI_RES( RID_SVXSTR_PATH_NAME_START + i ) );
