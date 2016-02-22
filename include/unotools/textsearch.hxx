@@ -47,7 +47,9 @@ namespace utl
 class UNOTOOLS_DLLPUBLIC SearchParam
 {
 public:
-    enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST, SRCH_WILDCARD };
+    enum SearchType: int { SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST, SRCH_WILDCARD };
+        // fix underlying type (as int, arbitrarily), so that
+        // ScDocOptions::eSearchTypeUnknown = -1 does not cause -fsanitize=enum
 
     /** Convert configuration and document boolean settings to SearchType.
         If bWildcard is true it takes precedence over rbRegExp.
