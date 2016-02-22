@@ -2442,6 +2442,18 @@ IMPL_LINK_NOARG_TYPED(SwContentTree, TimerUpdate, Timer *, void)
     if (IsDisposed())
         return;
 
+    // Updating the Currently selected entry depending upon current position
+    const sal_uInt16 currPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
+    SvTreeListEntry *ppp = First();
+    while(nullptr != (ppp=Next(ppp)))
+    {
+        if(static_cast<SwOutlineContent *>(ppp->GetUserData())->GetPos() == currPos)
+        {
+            MakeVisible(ppp);
+            Select(ppp);
+            break;
+        }
+    }
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
