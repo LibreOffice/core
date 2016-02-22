@@ -148,6 +148,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     ScDocOptions aDocOpt( pD->GetDocOptions() );
     aDocOpt.SetIgnoreCase( true );              // always in Excel
     aDocOpt.SetFormulaRegexEnabled( false );    // regular expressions? what's that?
+    aDocOpt.SetFormulaWildcardsEnabled( true ); // Excel uses wildcard expressions
     aDocOpt.SetLookUpColRowNames( false );      // default: no natural language refs
     pD->SetDocOptions( aDocOpt );
 }
