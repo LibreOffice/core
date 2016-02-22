@@ -38,7 +38,6 @@ struct DockedData
                    m_bLocked( false ) {}
 
     css::awt::Point m_aPos;
-    css::awt::Size m_aSize;
     sal_Int16 m_nDockedArea;
     bool      m_bLocked;
 };

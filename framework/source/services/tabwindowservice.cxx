@@ -53,14 +53,12 @@ struct TTabPageInfo
         TTabPageInfo()
             : m_nIndex      ( -1      )
             , m_bCreated    (false)
-            , m_pPage       ( nullptr    )
             , m_lProperties (         )
         {}
 
         explicit TTabPageInfo(::sal_Int32 nID)
             : m_nIndex      ( nID     )
             , m_bCreated    (false)
-            , m_pPage       ( nullptr    )
             , m_lProperties (         )
         {}
 
@@ -68,7 +66,6 @@ struct TTabPageInfo
 
         ::sal_Int32                                   m_nIndex;
         bool                                          m_bCreated;
-        VclPtr<FwkTabPage>                            m_pPage;
         css::uno::Sequence< css::beans::NamedValue >  m_lProperties;
 };
 

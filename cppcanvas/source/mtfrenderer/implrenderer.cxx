@@ -2448,7 +2448,6 @@ namespace cppcanvas
                             internal::TransparencyGroupActionFactory::createTransparencyGroupAction(
                                 std::move(pMtf),
                                 std::move(pGradient),
-                                rParms,
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *

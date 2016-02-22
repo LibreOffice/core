@@ -77,7 +77,6 @@ class SvIdlDataBase
     SvRefMemberList<SvMetaClass *>     aClassList;
     SvRefMemberList<SvMetaModule *>    aModuleList;
     SvRefMemberList<SvMetaSlot *>      aSlotList;
-    SvRefMemberList<SvMetaType *>      aTmpTypeList; // not persistent
     SvRefMemberList<SvMetaObject *>    aContextStack;
 
 protected:

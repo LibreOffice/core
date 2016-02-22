@@ -40,7 +40,6 @@ namespace cppcanvas
                                 const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
             mxGraphicDevice(),
             mxSprite( rSprite ),
-            mxAnimatedSprite(),
             mpTransformArbiter( rTransformArbiter )
         {
             // Avoiding ternary operator in initializer list (Solaris

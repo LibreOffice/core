@@ -88,7 +88,6 @@ private:
     SVGExport&                 mrExport;
     SVGFontExport&             mrFontExport;
     SvXMLElementExport*        mpElemFont;
-    SvXMLElementExport*        mpElemPaint;
 
                              SVGAttributeWriter();
 

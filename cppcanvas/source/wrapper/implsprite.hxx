@@ -62,7 +62,6 @@ namespace cppcanvas
 
             css::uno::Reference< css::rendering::XGraphicDevice >         mxGraphicDevice;
             const css::uno::Reference< css::rendering::XSprite >          mxSprite;
-            const css::uno::Reference< css::rendering::XAnimatedSprite >  mxAnimatedSprite;
             ImplSpriteCanvas::TransformationArbiterSharedPtr              mpTransformArbiter;
         };
     }

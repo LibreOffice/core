@@ -29,8 +29,6 @@ struct SvGlobalHashNames
 {
     SvStringHashEntryRef MM_module;
     SvStringHashEntryRef MM_interface;
-    SvStringHashEntryRef MM_String;
-    SvStringHashEntryRef MM_void;
     SvStringHashEntryRef MM_shell;
     SvStringHashEntryRef MM_Toggle;
     SvStringHashEntryRef MM_AutoUpdate;

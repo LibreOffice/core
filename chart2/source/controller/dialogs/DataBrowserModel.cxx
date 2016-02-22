@@ -217,24 +217,21 @@ bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagr
 struct DataBrowserModel::tDataColumn
 {
     uno::Reference<chart2::XDataSeries>  m_xDataSeries;
-    sal_Int32                            m_nIndexInDataSeries;
     OUString                             m_aUIRoleName;
     uno::Reference<chart2::data::XLabeledDataSequence> m_xLabeledDataSequence;
     eCellType                                          m_eCellType;
     sal_Int32                                          m_nNumberFormatKey;
 
     // default CTOR
-    tDataColumn() : m_nIndexInDataSeries( -1 ), m_eCellType( TEXT ), m_nNumberFormatKey( 0 ) {}
+    tDataColumn() : m_eCellType( TEXT ), m_nNumberFormatKey( 0 ) {}
     // "full" CTOR
     tDataColumn(
         const uno::Reference<chart2::XDataSeries> & xDataSeries,
-        sal_Int32 nIndexInDataSeries,
         const OUString& aUIRoleName,
         const uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledDataSequence,
         eCellType aCellType,
         sal_Int32 nNumberFormatKey ) :
             m_xDataSeries( xDataSeries ),
-            m_nIndexInDataSeries( nIndexInDataSeries ),
             m_aUIRoleName( aUIRoleName ),
             m_xLabeledDataSequence( xLabeledDataSequence ),
             m_eCellType( aCellType ),
@@ -893,7 +890,6 @@ void DataBrowserModel::updateFromModel()
                                 m_aColumns.push_back(
                                     tDataColumn(
                                         aSeries[nSeriesIdx],
-                                        nSeqIdx,
                                         lcl_getUIRoleName( aLSeqs[nSeqIdx] ),
                                         aLSeqs[nSeqIdx],
                                         NUMBER,
@@ -973,7 +969,6 @@ void DataBrowserModel::addErrorBarRanges(
             m_aColumns.push_back(
                 tDataColumn(
                     xDataSeries,
-                    rInOutSequenceIndex,
                     lcl_getUIRoleName( *aIt ),
                     *aIt,
                     NUMBER,
