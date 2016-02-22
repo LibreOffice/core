@@ -3382,6 +3382,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     if ( !pFrame )
         return 0;
 
+    bool GermanKey = (pFrame->GetInputLanguage() & LANGUAGE_GERMAN) == LANGUAGE_GERMAN;
+
     // reset the background mode for each text input,
     // as some tools such as RichWin may have changed it
     if ( pFrame->mpGraphics &&
@@ -3395,8 +3397,14 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         nModCode |= KEY_MOD1;
     if ( GetKeyState( VK_LMENU ) & 0x8000 )
         nModCode |= KEY_MOD2;
-    if ( GetKeyState( VK_RMENU ) & 0x8000 )  // this is the ALTGR-Key in this case
-        nModCode &= ~KEY_MOD1;               // remove the Control flag
+    if ( (GetKeyState( VK_RMENU ) & 0x8000) )  // this is the ALTGR-Key
+    {
+        if (GermanKey)                         // German Key board, in this case
+            nModCode &= ~KEY_MOD1;             // remove the Control flag
+        else
+            nModCode |= KEY_MOD2;
+    }
+
 
     if ( (nMsg == WM_CHAR) || (nMsg == WM_SYSCHAR) )
     {
