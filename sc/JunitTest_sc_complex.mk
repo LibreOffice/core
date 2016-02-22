@@ -13,7 +13,6 @@ $(eval $(call gb_JunitTest_JunitTest,sc_complex))
 # any key after resizing" etc.)
 
 $(eval $(call gb_JunitTest_add_classes,sc_complex, \
-    complex.dataPilot.CheckDataPilot \
     complex.sc.CalcRTL \
 ))
 
@@ -26,7 +25,6 @@ $(eval $(call gb_JunitTest_use_jars,sc_complex, \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sc_complex, \
-    sc/qa/complex/dataPilot/CheckDataPilot \
     sc/qa/complex/dataPilot/_XDataPilotDescriptor \
     sc/qa/complex/dataPilot/_XDataPilotTable \
     sc/qa/complex/dataPilot/_XNamed \

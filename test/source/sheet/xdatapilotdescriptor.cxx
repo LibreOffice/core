@@ -178,7 +178,6 @@ void XDataPilotDescriptor::testGetDataFields()
 
 void XDataPilotDescriptor::testGetHiddenFields()
 {
-    std::cout << "testGetHiddenFields" <<std::endl;
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(),UNO_QUERY_THROW);
     testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getHiddenFields(), UNO_QUERY_THROW);

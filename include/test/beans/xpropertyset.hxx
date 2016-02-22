@@ -34,6 +34,8 @@ public:
 protected:
     bool isPropertyValueChangeable(const OUString& rName);
 
+    virtual bool isPropertyIgnored(const OUString& rName);
+
 private:
     void fillPropsToTest(const css::uno::Reference<css::beans::XPropertySetInfo>& xPropInfo);
     static bool getSinglePropertyValue(
