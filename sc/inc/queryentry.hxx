@@ -23,13 +23,9 @@
 #include "address.hxx"
 #include "global.hxx"
 #include <svl/sharedstring.hxx>
+#include <unotools/textsearch.hxx>
 
 #include <vector>
-
-namespace utl {
-    class SearchParam;
-    class TextSearch;
-}
 
 /**
  * Each instance of this struct represents a single filtering criteria.
@@ -55,15 +51,15 @@ struct SC_DLLPUBLIC ScQueryEntry
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;
-    mutable utl::SearchParam* pSearchParam;       ///< if RegExp, not saved
-    mutable utl::TextSearch*  pSearchText;        ///< if RegExp, not saved
+    mutable utl::SearchParam* pSearchParam;       ///< if Wildcard or RegExp, not saved
+    mutable utl::TextSearch*  pSearchText;        ///< if Wildcard or RegExp, not saved
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
     ~ScQueryEntry();
 
-    /// creates pSearchParam and pSearchText if necessary, always RegExp!
-    utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
+    /// creates pSearchParam and pSearchText if necessary
+    utl::TextSearch* GetSearchTextPtr( utl::SearchParam::SearchType eSearchType, bool bCaseSens ) const;
 
     QueryItemsType& GetQueryItems() { return maQueryItems;}
     const QueryItemsType& GetQueryItems() const { return maQueryItems;}

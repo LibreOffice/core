@@ -2423,12 +2423,12 @@ public:
             {
                 nEnd = 0;
                 nStart = aCellStr.getLength();
-                bMatch = rEntry.GetSearchTextPtr( mrParam.bCaseSens )
+                bMatch = rEntry.GetSearchTextPtr( mrParam.eSearchType, mrParam.bCaseSens )
                     ->SearchBackward(aCellStr.getString(), &nStart, &nEnd);
             }
             else
             {
-                bMatch = rEntry.GetSearchTextPtr( mrParam.bCaseSens )
+                bMatch = rEntry.GetSearchTextPtr( mrParam.eSearchType, mrParam.bCaseSens )
                     ->SearchForward(aCellStr.getString(), &nStart, &nEnd);
             }
             if ( bMatch && bMatchWholeCell

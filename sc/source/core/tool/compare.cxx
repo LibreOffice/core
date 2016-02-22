@@ -140,7 +140,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             {
                 sal_Int32 nStart = 0;
                 sal_Int32 nStop  = rCell1.maStr.getLength();
-                bool bMatch = rEntry.GetSearchTextPtr(
+                bool bMatch = rEntry.GetSearchTextPtr( pOptions->eSearchType,
                         !rComp.mbIgnoreCase)->SearchForward(
                             rCell1.maStr.getString(), &nStart, &nStop);
                 if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rCell1.maStr.getLength()))
