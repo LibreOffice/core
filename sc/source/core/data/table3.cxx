@@ -1260,14 +1260,6 @@ void ScTable::SortReorderByRowRefUpdate(
         }
     }
 
-    // Split formula groups at the sort range boundaries (if applicable).
-    std::vector<SCROW> aRowBounds;
-    aRowBounds.reserve(2);
-    aRowBounds.push_back(nRow1);
-    aRowBounds.push_back(nRow2+1);
-    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        SplitFormulaGroups(nCol, aRowBounds);
-
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
@@ -1702,7 +1694,16 @@ void ScTable::Sort(
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
-
+            // Split formula groups at the sort range boundaries (if applicable).
+            if (bUpdateRefs)
+            {
+                std::vector<SCROW> aRowBounds;
+                aRowBounds.reserve(2);
+                aRowBounds.push_back(aSortParam.nRow1);
+                aRowBounds.push_back(aSortParam.nRow2+1);
+                for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; ++nCol)
+                    SplitFormulaGroups(nCol, aRowBounds);
+            }
             std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
 
             if ( nLastRow - nRow1 > 255 )
@@ -1750,6 +1751,15 @@ void ScTable::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
     if (rParam.maOrderIndices.empty())
         return;
 
+    if (rParam.mbUpdateRefs)
+    {
+        std::vector<SCROW> aRowBounds;
+        aRowBounds.reserve(2);
+        aRowBounds.push_back(rParam.maSortRange.aStart.Row());
+        aRowBounds.push_back(rParam.maSortRange.aEnd.Row()+1);
+        for (SCCOL nCol = rParam.maSortRange.aStart.Col(); nCol <= rParam.maSortRange.aEnd.Col(); ++nCol)
+            SplitFormulaGroups(nCol, aRowBounds);
+    }
     std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(rParam));
     if (!pArray)
         return;
