@@ -123,7 +123,7 @@ public:
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     bool                    FindId( const OString& rIdName, sal_uLong * pVal );
     bool                    InsertId( const OString& rIdName, sal_uLong nVal );
-    bool                    ReadIdFile( const OUString & rFileName );
+    bool                    ReadIdFile( const OString& rFileName );
 
     SvMetaType *            FindType( const OString& rName );
     static SvMetaType *     FindType( const SvMetaType *, SvRefMemberList<SvMetaType *>& );
@@ -131,8 +131,9 @@ public:
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
     SvMetaAttribute *       ReadKnownAttr( SvTokenStream & rInStm,
                                             SvMetaType * pType = nullptr );
-    SvMetaAttribute *       SearchKnownAttr( const SvIdentifier& );
+    SvMetaAttribute *       FindKnownAttr( const SvIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
+    SvMetaClass *           FindKnownClass( const OString& aName );
     void AddDepFile(OUString const& rFileName);
     void WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
 };

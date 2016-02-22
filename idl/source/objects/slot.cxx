@@ -377,7 +377,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     {
         bOk = SvMetaAttribute::ReadSvIdl( rBase, rInStm );
 
-        SvMetaAttribute *pAttr2 = rBase.SearchKnownAttr( GetSlotId() );
+        SvMetaAttribute *pAttr2 = rBase.FindKnownAttr( GetSlotId() );
         if( pAttr2 )
         {
             // for testing purposes: reference in case of complete definition

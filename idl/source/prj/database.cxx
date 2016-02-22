@@ -139,8 +139,9 @@ bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
     return false;
 }
 
-bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
+bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
 {
+    OUString rFileName = OStringToOUString(rOFileName, RTL_TEXTENCODING_ASCII_US);
     OUString aFullName;
     osl::File::searchFileURL( rFileName, GetPath(), aFullName);
     osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
@@ -236,8 +237,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                             throw SvParseException("unexpected eof in #include", rTok);
                         }
                     }
-                    if (!ReadIdFile(OStringToOUString(aName.toString(),
-                        RTL_TEXTENCODING_ASCII_US)))
+                    if (!ReadIdFile(aName.toString()))
                     {
                         throw SvParseException("cannot read file: " + aName, rTok);
                     }
@@ -328,10 +328,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
     return nullptr;
 }
 
-SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
-(
-    const SvIdentifier& rId
-)
+SvMetaAttribute* SvIdlDataBase::FindKnownAttr( const SvIdentifier& rId )
 {
     sal_uLong n;
     if( FindId( rId.getString(), &n ) )
@@ -353,17 +350,26 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
     SvToken& rTok = rInStm.GetToken_Next();
 
     if( rTok.IsIdentifier() )
-        for( sal_uLong n = 0; n < aClassList.size(); n++ )
-        {
-            SvMetaClass * pClass = aClassList[n];
-            if( pClass->GetName().equals(rTok.GetString()) )
-                return pClass;
-        }
+    {
+        SvMetaClass* p = FindKnownClass(rTok.GetString());
+        if (p)
+            return p;
+    }
 
     rInStm.Seek( nTokPos );
     return nullptr;
 }
 
+SvMetaClass * SvIdlDataBase::FindKnownClass( const OString& aName )
+{
+    for( sal_uLong n = 0; n < aClassList.size(); n++ )
+    {
+        SvMetaClass * pClass = aClassList[n];
+        if( pClass->GetName() == aName )
+            return pClass;
+    }
+    return nullptr;
+}
 void SvIdlDataBase::Write(const OString& rText)
 {
     if( nVerbosity != 0 )

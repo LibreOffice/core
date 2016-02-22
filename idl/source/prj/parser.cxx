@@ -47,8 +47,8 @@ void SvIdlParser::ReadSvIdl( bool bImported, const OUString & rPath )
 void SvIdlParser::ReadModuleHeader(SvMetaModule& rModule)
 {
     OString aName = ReadIdentifier();
-    rBase.Push( &rModule ); // onto the context stack
     rModule.SetName( aName );
+    rBase.Push( &rModule ); // onto the context stack
     ReadModuleBody(rModule);
     rBase.GetStack().pop_back(); // remove from stack
 }
@@ -62,7 +62,7 @@ void SvIdlParser::ReadModuleBody(SvMetaModule& rModule)
             OString aSlotIdFile;
             if( !ReadStringSvIdl( SvHash_SlotIdFile(), rInStm, aSlotIdFile ) )
                 break;
-            if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile, RTL_TEXTENCODING_ASCII_US)) )
+            if( !rBase.ReadIdFile( aSlotIdFile ) )
             {
                 throw SvParseException( rInStm, "cannot read file: " + aSlotIdFile );
             }
@@ -368,7 +368,7 @@ bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
     else
     {
         bOk = rSlot.SvMetaAttribute::ReadSvIdl( rBase, rInStm );
-        SvMetaAttribute *pAttr2 = rBase.SearchKnownAttr( rSlot.GetSlotId() );
+        SvMetaAttribute *pAttr2 = rBase.FindKnownAttr( rSlot.GetSlotId() );
         if( pAttr2 )
         {
             SvMetaSlot * pKnownSlot = dynamic_cast<SvMetaSlot*>( pAttr2 );
@@ -419,7 +419,7 @@ bool SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
         }
         Read( ')' );
         rAttr.aType->SetType( MetaTypeType::Method );
-   }
+    }
     if( bOk && ReadIf( '[' ) )
     {
         Read( ']' );
@@ -432,7 +432,8 @@ bool SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
 
 SvMetaClass * SvIdlParser::ReadKnownClass()
 {
-    SvMetaClass* pClass = rBase.ReadKnownClass( rInStm );
+    OString aName(ReadIdentifier());
+    SvMetaClass* pClass = rBase.FindKnownClass( aName );
     if( !pClass )
         throw SvParseException( rInStm, "unknown class" );
     return pClass;
@@ -443,7 +444,7 @@ SvMetaType * SvIdlParser::ReadKnownType()
     OString aName = ReadIdentifier();
     for( const auto& aType : rBase.GetTypeList() )
     {
-        if( aType->GetName().equals(aName) )
+        if( aType->GetName() == aName )
         {
             return aType;
         }
