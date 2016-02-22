@@ -408,6 +408,8 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
         aFillProperties.maFillColor.setSrgbClr(aResult.GetRGBColor());
         aFillProperties.moFillType.set(XML_solidFill);
     }
+    if (!aFillProperties.moFillType.has())
+        aFillProperties.moFillType.set(XML_noFill);
 
     // TODO: phClr?
     aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );
