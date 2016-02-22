@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_aeed7790",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T14:42:37Z",
+      "side": 0,
+      "message": "Removing commented-out code is not really what the commit message says that the change does... Please do that in a separate commit.",
+      "range": {
+        "startLine": 924,
+        "startChar": 70,
+        "endLine": 924,
+        "endChar": 73
+      },
+      "revId": "104c178a0c86b758288d9dbf6e5bd0db11fbb046",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
