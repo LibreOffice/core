@@ -67,7 +67,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
                 p++;
                 nLen++;
             }
-            // BASIC-Standard-Suffixes were ignored
+            // Standard BASIC suffixes are ignored
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
             {
                 p++;
