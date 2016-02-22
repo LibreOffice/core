@@ -2435,32 +2435,34 @@ public:
                     && (nStart != 0 || nEnd != aCellStr.getLength()) )
                 bMatch = false;    // RegExp must match entire cell string
             if ( bRealWildOrRegExp )
-                switch (rEntry.eOp)
             {
-                case SC_EQUAL:
-                case SC_CONTAINS:
-                    bOk = bMatch;
-                    break;
-                case SC_NOT_EQUAL:
-                case SC_DOES_NOT_CONTAIN:
-                    bOk = !bMatch;
-                    break;
-                case SC_BEGINS_WITH:
-                    bOk = ( bMatch && (nStart == 0) );
-                    break;
-                case SC_DOES_NOT_BEGIN_WITH:
-                    bOk = !( bMatch && (nStart == 0) );
-                    break;
-                case SC_ENDS_WITH:
-                    bOk = ( bMatch && (nEnd == aCellStr.getLength()) );
-                    break;
-                case SC_DOES_NOT_END_WITH:
-                    bOk = !( bMatch && (nEnd == aCellStr.getLength()) );
-                    break;
-                default:
-                    {
-                        // added to avoid warnings
-                    }
+                switch (rEntry.eOp)
+                {
+                    case SC_EQUAL:
+                    case SC_CONTAINS:
+                        bOk = bMatch;
+                        break;
+                    case SC_NOT_EQUAL:
+                    case SC_DOES_NOT_CONTAIN:
+                        bOk = !bMatch;
+                        break;
+                    case SC_BEGINS_WITH:
+                        bOk = ( bMatch && (nStart == 0) );
+                        break;
+                    case SC_DOES_NOT_BEGIN_WITH:
+                        bOk = !( bMatch && (nStart == 0) );
+                        break;
+                    case SC_ENDS_WITH:
+                        bOk = ( bMatch && (nEnd == aCellStr.getLength()) );
+                        break;
+                    case SC_DOES_NOT_END_WITH:
+                        bOk = !( bMatch && (nEnd == aCellStr.getLength()) );
+                        break;
+                    default:
+                        {
+                            // added to avoid warnings
+                        }
+                }
             }
             else
                 bTestEqual = bMatch;
