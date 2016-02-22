@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="urn:oasis:names:tc:ciq:xnl:3" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:oasis:names:tc:ciq:xnl:3" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation> 
+		Specification Name: OASIS CIQ TC - extensible Name Language Types (xNL-types)
+		Description: Defines the W3C schema that provides enumeration lists to support xNL v3.0
+		(Using XML Schema based standard code list/enumeration mechanism - OPTION 1 AND DEFAULT)
+		Produced by: OASIS Customer Information Quality Technical Committee
+		URL: http://www.oasis-open.org/committees/ciq
+		Version: 3.0  
+		Status: Committee Specification
+		Copyright: 2006-07, OASIS, http://www.oasis-open.org
+		Last Modified: 18 September 2007
+		Last Modified by: Ram Kumar, Chair, OASIS CIQ TC 
+		
+		NOTE: This is the schema that users can customise the enumeration lists to meet their
+		exchange requirements. The enumeration values provided are ONLY SAMPLES and 
+		is not complete. It is upto the application to decide what the values should be.  To achieve 
+		interoperability between applications using this specification, it is recommended that an
+		SLA/agreement is in place as to what the enumeration values will be used in this file 
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="JointNameConnectorList">
+		<xs:annotation>
+			<xs:documentation>A list of possible values for joint name connector</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="NameLineTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of possible values for types of name lines</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PartyNameIDTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of all types of Party Name IDs</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PartyNameUsageList">
+		<xs:annotation>
+			<xs:documentation>A list of usage types of party name</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="PersonNameElementList">
+		<xs:annotation>
+			<xs:documentation>A list of person name element types, e.g. First Name, Last Name, Title, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="PrecedingTitle">
+				<xs:annotation>
+					<xs:documentation>His Excellency, Honorable, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Title">
+				<xs:annotation>
+					<xs:documentation>A title signifies some sort of status, such as Mr, Miss, Ms (marriage status), or education such as Professor, PhD, Dr, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FirstName">
+				<xs:annotation>
+					<xs:documentation>The most important name element by which this particular individual is identified in the group. E.g. John, Sam, Brian for Anglo-Saxon cultures.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MiddleName">
+				<xs:annotation>
+					<xs:documentation>Name elements related to additional identification of the individual, such as names are parents or places.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LastName">
+				<xs:annotation>
+					<xs:documentation>Name element that identifies the group the individual belongs to and is identified by, such as Last Name, Surname, Family Name, etc. </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherName">
+				<xs:annotation>
+					<xs:documentation>Any other additional names that are not directly used to identify or call the individual, such as names of ancestors, saints, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Alias">
+				<xs:annotation>
+					<xs:documentation>A simple nick name that is commonly used as part of the name. E.g. a fancy kick-boxer can be commonly known as Bill "Storm" Bababoons, where "Storm" is obviously an alias.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="GenerationIdentifier">
+				<xs:annotation>
+					<xs:documentation>Junior, Senior, The Second, IV,  etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Degree"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PersonNameUsageList">
+		<xs:annotation>
+			<xs:documentation>A list of usage types of person name</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PersonIDTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of all types of person name IDs</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="OrganisationIDTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of all types of organisation name IDs</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="OrganisationNameElementList">
+		<xs:annotation>
+			<xs:documentation>A list of organisation name element types, e.g. Name, propriety type, liability type, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="NameOnly">
+				<xs:annotation>
+					<xs:documentation>"Sakthisoft" in "Sakthisoft Pty. Ltd". "Pty.Ltd" is the legal entity for the organisation name "Sakthisoft"</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TypeOnly">
+				<xs:annotation>
+					<xs:documentation>"Pty. Ltd" in Sakthisoft Pty.Ltd, where "Sakthisoft" is the name of the organisation.
+
+""Inc" in ABC Inc, where "ABC" is organisation name</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FullName">
+				<xs:annotation>
+					<xs:documentation>Full Name of the organisation. e.g. Sakthisoft Pty. Ltd</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrganisationNameUsageList">
+		<xs:annotation>
+			<xs:documentation>A list of usage types for organisation name</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PersonNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of common types for person names</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Alias"/>
+			<xs:enumeration value="LegalName"/>
+			<xs:enumeration value="KnownAs"/>
+			<xs:enumeration value="MaidenName">
+				<xs:annotation>
+					<xs:documentation>Name of an individual before marriage.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FormerName">
+				<xs:annotation>
+					<xs:documentation>Former name of the person</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CommonUse">
+				<xs:annotation>
+					<xs:documentation>Name that is commonly used by others, e.g. a simplified form of the official name.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NameAtBirth">
+				<xs:annotation>
+					<xs:documentation>A name given to an individual at birth, but later changed (common in some cultures)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PreferredName">
+				<xs:annotation>
+					<xs:documentation>Indicates that the party prefers to be called by this name</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OfficialName">
+				<xs:annotation>
+					<xs:documentation>An official name of the person, e.g. as in the passport. incorporation certificate, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UnofficialName"/>
+			<xs:enumeration value="NickName"/>
+			<xs:enumeration value="PetName"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrganisationNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of common types for organisation names</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="LegalName"/>
+			<xs:enumeration value="FormerName">
+				<xs:annotation>
+					<xs:documentation>Former name of the organisation</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CommonUse"/>
+			<xs:enumeration value="PublishingName"/>
+			<xs:enumeration value="OfficialName"/>
+			<xs:enumeration value="UnofficialName"/>
+			<xs:enumeration value="Undefined">
+				<xs:annotation>
+					<xs:documentation>unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SubDivisionTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of common types for subdivisions</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Department"/>
+			<xs:enumeration value="Division"/>
+			<xs:enumeration value="Branch"/>
+			<xs:enumeration value="BusinessUnit"/>
+			<xs:enumeration value="School"/>
+			<xs:enumeration value="Section"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

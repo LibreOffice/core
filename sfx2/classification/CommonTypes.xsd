@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:oasis:names:tc:ciq:ct:3" targetNamespace="urn:oasis:names:tc:ciq:ct:3" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation> 
+		Specification Name: OASIS CIQ TC - CIQ V3.0
+		Description: Defines the W3C schema with commonly used types in the name, address and party schemas
+		(Using XML Schema based standard code list/enumeration mechanism - OPTION 1 AND DEFAULT)
+		Produced by: OASIS Customer Information Quality Technical Committee
+		URL: http://www.oasis-open.org/committees/ciq
+		Version: 3.0  
+		Status: Committee Specification
+		Copyright: 2006-07, OASIS, http://www.oasis-open.org
+		Last Modified: 18 September 2007
+		Last Modified by: Ram Kumar, Chair, OASIS CIQ TC 
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="String">
+		<xs:annotation>
+			<xs:documentation>Normalized and Collapsed String</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DataQualityTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of values to indicate the level of reliability of the data</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Valid">
+				<xs:annotation>
+					<xs:documentation>The data was validated and is considered to be true and correct.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Invalid">
+				<xs:annotation>
+					<xs:documentation>Indicates that at least some part of the content is known to be incorrect.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StatusList">
+		<xs:annotation>
+			<xs:documentation>A list of values to indicate the status of the entity</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:attributeGroup name="grValidityDate">
+		<xs:annotation>
+			<xs:documentation>Date Valid from to Date Valid to</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="DateValidFrom" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>Could be start date, issue date, validity start date, etc</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DateValidTo" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>Could be end date, expiry date, validity end date, etc</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="grAbbreviation">
+		<xs:annotation>
+			<xs:documentation>A group of commonly used attributes for internal reuse</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Abbreviation" type="xs:boolean">
+			<xs:annotation>
+				<xs:documentation>If set to true then indicates that the value is an abbreviation or initial. If set to false then the value is definitely not an abbreviation. If omitted then it is not known if the value is an abbreviation or not.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="grDataQuality">
+		<xs:annotation>
+			<xs:documentation>A group of commonly used attributes for internal reuse</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="DataQualityType" type="DataQualityTypeList">
+			<xs:annotation>
+				<xs:documentation>This attribute indicates what level of trust can be given to the parent element. Omit this attribute if the data quality is unknown. If the data quality is known, the value is "Valid, else "InValid"</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ValidFrom" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>Date the data quality is valid from </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ValidTo" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>Date the data quality is valid to</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="grLanguageCode">
+		<xs:annotation>
+			<xs:documentation>The language used (name of human language, e.g. en, en-US)</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="LanguageCode" type="xs:language">
+			<xs:annotation>
+				<xs:documentation>Human Language used. e.g. "en", "en-US", "en-AUS", etc</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+</xs:schema>
