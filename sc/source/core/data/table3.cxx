@@ -227,11 +227,10 @@ public:
     {
         ScRefCellValue maCell;
         const sc::CellTextAttr* mpAttr;
-        const SvtBroadcaster* mpBroadcaster;
         const ScPostIt* mpNote;
         const ScPatternAttr* mpPattern;
 
-        Cell() : mpAttr(nullptr), mpBroadcaster(nullptr), mpNote(nullptr), mpPattern(nullptr) {}
+        Cell() : mpAttr(nullptr), mpNote(nullptr), mpPattern(nullptr) {}
     };
 
     struct Row
@@ -434,10 +433,8 @@ void initDataRows(
         {
             ScSortInfoArray::Row& rRow = *rRows[nRow-nRow1];
             ScSortInfoArray::Cell& rCell = rRow.maCells[nCol-nCol1];
-
             rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
             rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
-            rCell.mpBroadcaster = rCol.GetBroadcaster(aBlockPos, nRow);
             rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
 
             if (!bUniformPattern && bPattern)
@@ -705,10 +702,11 @@ void fillSortedColumnArray(
     std::vector<std::unique_ptr<SortedColumn>>& rSortedCols,
     SortedRowFlags& rRowFlags,
     std::vector<SvtListener*>& rCellListeners,
-    ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress )
+    ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress, const ScTable* pTable )
 {
     SCROW nRow1 = pArray->GetStart();
     ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
+    std::vector<SCCOLROW> aOrderIndices = pArray->GetOrderIndices();
 
     size_t nColCount = nCol2 - nCol1 + 1;
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
@@ -791,10 +789,11 @@ void fillSortedColumnArray(
                 // At this point each broadcaster instance is managed by 2
                 // containers. We will release those in the original storage
                 // below before transferring them to the document.
+                const SvtBroadcaster* pBroadcaster = pTable->GetBroadcaster( nCol1 + j, aOrderIndices[i]);
                 sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).get()->maBroadcasters;
-                if (rCell.mpBroadcaster)
+                if (pBroadcaster)
                     // A const pointer would be implicitly converted to a bool type.
-                    rBCStore.push_back(const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
+                    rBCStore.push_back(const_cast<SvtBroadcaster*>(pBroadcaster));
                 else
                     rBCStore.push_back_empty();
             }
@@ -1087,7 +1086,7 @@ void ScTable::SortReorderByRow(
     // a copy before updating the document.
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
-    fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2, pProgress);
+    fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2, pProgress, this);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
@@ -1274,7 +1273,7 @@ void ScTable::SortReorderByRowRefUpdate(
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
     std::vector<SvtListener*> aListenersDummy;
-    fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress);
+    fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress, this);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
