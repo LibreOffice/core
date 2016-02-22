@@ -266,7 +266,7 @@ void RtfExport::WriteRevTab()
         const OUString* pAuthor = GetRedline(i);
         Strm().WriteChar('{');
         if (pAuthor)
-            Strm().WriteCharPtr(msfilter::rtfutil::OutString(*pAuthor, eDefaultEncoding).getStr());
+            Strm().WriteCharPtr(msfilter::rtfutil::OutString(*pAuthor, m_eDefaultEncoding).getStr());
         Strm().WriteCharPtr(";}");
     }
     Strm().WriteChar('}').WriteCharPtr(SAL_NEWLINE_STRING);
@@ -335,14 +335,14 @@ void RtfExport::DoFormText(const SwInputField* pField)
     m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0");
 
     if (!sName.isEmpty())
-        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append(msfilter::rtfutil::OutString(sName, eDefaultEncoding)).append("}");
+        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append(msfilter::rtfutil::OutString(sName, m_eDefaultEncoding)).append("}");
     if (!sHelp.isEmpty())
-        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append(msfilter::rtfutil::OutString(sHelp, eDefaultEncoding)).append("}");
-    m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append(msfilter::rtfutil::OutString(sResult, eDefaultEncoding)).append("}");
+        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append(msfilter::rtfutil::OutString(sHelp, m_eDefaultEncoding)).append("}");
+    m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding)).append("}");
     if (!sStatus.isEmpty())
-        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append(msfilter::rtfutil::OutString(sStatus, eDefaultEncoding)).append("}");
+        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append(msfilter::rtfutil::OutString(sStatus, m_eDefaultEncoding)).append("}");
     m_pAttrOutput->RunText().append("}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-    m_pAttrOutput->RunText().append(msfilter::rtfutil::OutString(sResult, eDefaultEncoding)).append("}}");
+    m_pAttrOutput->RunText().append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding)).append("}}");
 }
 
 sal_uLong RtfExport::ReplaceCr(sal_uInt8)
@@ -501,7 +501,7 @@ void RtfExport::WritePageDescTable()
                 break;
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCNXT);
         OutULong(i).WriteChar(' ');
-        Strm().WriteCharPtr(msfilter::rtfutil::OutString(rPageDesc.GetName(), eDefaultEncoding).getStr()).WriteCharPtr(";}");
+        Strm().WriteCharPtr(msfilter::rtfutil::OutString(rPageDesc.GetName(), m_eDefaultEncoding).getStr()).WriteCharPtr(";}");
     }
     Strm().WriteChar('}').WriteCharPtr(SAL_NEWLINE_STRING);
     m_bOutPageDescs = false;
@@ -851,9 +851,9 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
       m_pSections(nullptr),
       m_pSdrExport(),
       m_bOutOutlineOnly(bOutOutlineOnly),
-      eDefaultEncoding(rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
-      eCurrentEncoding(eDefaultEncoding),
-      bRTFFlySyntax(false),
+      m_eDefaultEncoding(rtl_getTextEncodingFromWindowsCharset(sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
+      m_eCurrentEncoding(m_eDefaultEncoding),
+      m_bRTFFlySyntax(false),
       m_nCurrentNodeIndex(0)
 {
     m_bExportModeRTF = true;
@@ -919,11 +919,11 @@ void RtfExport::OutUnicode(const sal_Char* pToken, const OUString& rContent, boo
         if (!bUpr)
         {
             Strm().WriteChar('{').WriteCharPtr(pToken).WriteChar(' ');
-            Strm().WriteCharPtr(msfilter::rtfutil::OutString(rContent, eCurrentEncoding).getStr());
+            Strm().WriteCharPtr(msfilter::rtfutil::OutString(rContent, m_eCurrentEncoding).getStr());
             Strm().WriteChar('}');
         }
         else
-            Strm().WriteCharPtr(msfilter::rtfutil::OutStringUpr(pToken, rContent, eCurrentEncoding).getStr());
+            Strm().WriteCharPtr(msfilter::rtfutil::OutStringUpr(pToken, rContent, m_eCurrentEncoding).getStr());
     }
 }
 

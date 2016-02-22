@@ -164,10 +164,10 @@ public:
     /// Destructor.
     virtual ~RtfExport();
 
-    rtl_TextEncoding eDefaultEncoding;
-    rtl_TextEncoding eCurrentEncoding;
+    rtl_TextEncoding m_eDefaultEncoding;
+    rtl_TextEncoding m_eCurrentEncoding;
     /// This is used by OutputFlyFrame_Impl() to control the written syntax
-    bool bRTFFlySyntax;
+    bool m_bRTFFlySyntax;
     /// Index of the current SwTextNode, if any.
     sal_uLong m_nCurrentNodeIndex;
 

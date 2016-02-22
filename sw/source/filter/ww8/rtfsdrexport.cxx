@@ -505,8 +505,8 @@ sal_Int32 RtfSdrExport::StartShape()
     for (std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); ++i)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*i).first.getStr(), (*i).second);
 
-    lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", msfilter::rtfutil::OutString(m_pSdrObject->GetDescription(), m_rExport.eCurrentEncoding));
-    lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetTitle(), m_rExport.eCurrentEncoding));
+    lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", msfilter::rtfutil::OutString(m_pSdrObject->GetDescription(), m_rExport.m_eCurrentEncoding));
+    lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetTitle(), m_rExport.m_eCurrentEncoding));
 
     // now check if we have some text
     const SwFrameFormat* pShape = FindFrameFormat(m_pSdrObject);
