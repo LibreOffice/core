@@ -23,6 +23,7 @@ import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.provider.XScriptContext;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -267,7 +268,7 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
         }
         );
 
-        String[] labels = {"Run", "Clear", "Save", "Close"};
+        String[] labels = {"Run", "Clear", "Save", "Close","Undo","Redo"};
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout());
 
@@ -281,8 +282,8 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
             }
         }
 
-        frame.getContentPane().add((JComponent)view, "Center");
-        frame.getContentPane().add(p, "South");
+        frame.getContentPane().add((JComponent)view, BorderLayout.CENTER);
+        frame.add(p, BorderLayout.NORTH);
         frame.pack();
         frame.setSize(590, 480);
         frame.setLocation(300, 200);
@@ -358,18 +359,23 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Run")) {
+        String actionCommand = e.getActionCommand();
+        if (actionCommand.equals("Run")) {
             try {
                 execute();
             } catch (Exception invokeException) {
                 showErrorMessage(invokeException.getMessage());
             }
-        } else if (e.getActionCommand().equals("Close")) {
+        } else if (actionCommand.equals("Close")) {
             doClose();
-        } else if (e.getActionCommand().equals("Save")) {
+        } else if (actionCommand.equals("Save")) {
             saveTextArea();
-        } else if (e.getActionCommand().equals("Clear")) {
+        } else if (actionCommand.equals("Clear")) {
             view.clear();
+        } else if(actionCommand.equals("Undo")){
+            view.undo();
+        } else if(actionCommand.equals("Redo")){
+            view.redo();
         }
     }
 }

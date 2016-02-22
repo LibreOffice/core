@@ -23,4 +23,6 @@ public interface ScriptSourceView {
     boolean isModified();
     void setModified(boolean value);
     String getText();
+    void undo();
+    void redo();
 }

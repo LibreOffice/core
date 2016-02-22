@@ -52,10 +52,11 @@ public class PlainSourceView extends JScrollPane implements
     private GlyphGutter gg;
     private int linecount;
     private boolean isModified = false;
-    private UndoManager undoManager;
     private static final String undoKey = "Undo";
     private static final String redoKey = "Redo";
     private CompoundEdit compoundEdit = null;
+    private final int noLimit = -1;
+    UndoManager undoManager;
 
     public PlainSourceView(ScriptSourceModel model) {
         this.model = model;
@@ -63,6 +64,21 @@ public class PlainSourceView extends JScrollPane implements
         model.setView(this);
     }
 
+    public void undo(){
+        if(compoundEdit!=null){
+            compoundEdit.end();
+            undoManager.addEdit(compoundEdit);
+            compoundEdit = null;
+        }
+        if(undoManager.canUndo()){
+            undoManager.undo();
+        }
+    }
+    public void redo(){
+        if(undoManager.canRedo()){
+            undoManager.redo();
+        }
+    }
     public void clear() {
         ta.setText("");
     }
@@ -123,7 +139,7 @@ public class PlainSourceView extends JScrollPane implements
         ta.insert(model.getText(), 0);
         ta.setFont(new Font(Font.MONOSPACED, ta.getFont().getStyle(), ta.getFont().getSize()));
         undoManager = new UndoManager();
-
+        undoManager.setLimit(noLimit);
         ta.getDocument().addUndoableEditListener(new UndoableEditListener(){
             @Override
             public void undoableEditHappened(UndoableEditEvent editEvent) {
@@ -151,23 +167,14 @@ public class PlainSourceView extends JScrollPane implements
         ta.getActionMap().put(undoKey, new AbstractAction(undoKey){
             @Override
             public void actionPerformed(ActionEvent event) {
-                if(compoundEdit!=null){
-                    compoundEdit.end();
-                    undoManager.addEdit(compoundEdit);
-                    compoundEdit = null;
-                }
-                if(undoManager.canUndo()){
-                    undoManager.undo();
-                }
+                undo();
             }
         });
 
         ta.getActionMap().put(redoKey, new AbstractAction(redoKey){
             @Override
             public void actionPerformed(ActionEvent event) {
-                if(undoManager.canRedo()){
-                    undoManager.redo();
-                }
+                redo();
             }
         });
 
