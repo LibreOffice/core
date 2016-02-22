@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_ced563ba",
+        "filename": "cli_ure/source/climaker/climaker_app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T14:38:45Z",
+      "side": 1,
+      "message": "It is pointless to have __FILE__ in the SAL_INFO as SAL_INFO (etc) automatically add the source file name to the output anyway.",
+      "range": {
+        "startLine": 164,
+        "startChar": 34,
+        "endLine": 164,
+        "endChar": 36
+      },
+      "revId": "389dd5ceca0ec8b695457c7909c8a99010b61d3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2edb47ef",
+        "filename": "cli_ure/source/climaker/climaker_app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T14:38:45Z",
+      "side": 1,
+      "message": "But actually, I think this debugging output is fairly pointless. If there suddenly pops up a bug here, one needs to debug the code to find out what is going wrong. Some fairly arbitrary existing debugging output is not going to be enough.",
+      "range": {
+        "startLine": 171,
+        "startChar": 26,
+        "endLine": 171,
+        "endChar": 34
+      },
+      "revId": "389dd5ceca0ec8b695457c7909c8a99010b61d3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
