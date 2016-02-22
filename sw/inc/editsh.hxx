@@ -359,6 +359,8 @@ public:
     SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId )
         { return static_cast<SwCharFormat*>(SwEditShell::GetFormatFromPool( nId )); }
 
+    void SetClassification(const OUString& rName);
+
     void Insert2(SwField&, const bool bForceExpandHints = false);
 
     void UpdateFields( SwField & );   ///< One single field.

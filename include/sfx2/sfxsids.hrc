@@ -348,7 +348,7 @@
 
 #define SID_INSERT_OBJECT                   (SID_SFX_START + 561)
 #define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
-// FREE                                     (SID_SFX_START + 672)
+#define SID_CLASSIFICATION_APPLY            (SID_SFX_START + 672)
 // FREE                                     (SID_SFX_START + 676)
 // FREE                                     (SID_SFX_START + 677)
 

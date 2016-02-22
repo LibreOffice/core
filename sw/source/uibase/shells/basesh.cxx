@@ -911,6 +911,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case SID_CLASSIFICATION_APPLY:
+        {
+            GetView().GetDocShell()->Execute(rReq);
+        }
+        break;
         case FN_ESCAPE:
             GetView().ExecuteSlot(rReq);
         break;

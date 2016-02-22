@@ -47,6 +47,10 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl( sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
+void SwEditShell::SetClassification(const OUString& /*rName*/)
+{
+}
+
 // #i62675#
 void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                                 const bool bResetListAttrs)
