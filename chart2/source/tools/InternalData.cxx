@@ -22,10 +22,6 @@
 #include "Strings.hrc"
 
 #include <rtl/math.hxx>
-#if OSL_DEBUG_LEVEL > 1
-#define DEBUG_INTERNAL_DATA 1
-#endif
-
 #ifdef DEBUG_INTERNAL_DATA
 #include <svl/gridprinter.hxx>
 #endif

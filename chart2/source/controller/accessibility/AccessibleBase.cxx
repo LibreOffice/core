@@ -126,13 +126,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
             case OBJECT_CHANGE:
                 {
                     BroadcastAccEvent( AccessibleEventId::VISIBLE_DATA_CHANGED, aEmpty, aEmpty );
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_TRACE(
-                        OUStringToOString(
-                            OUString( "Visible data event sent by: " ) +
-                            getAccessibleName(),
-                            RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+                    SAL_WARN("chart2.accessibility", OUStringToOString(OUString("Visible data event sent by: ") +
+                        getAccessibleName(), RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 break;
 
@@ -144,13 +139,9 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                     AddState( AccessibleStateType::FOCUSED );
                     aSelected <<= AccessibleStateType::FOCUSED;
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty, true );
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_TRACE(
-                        OUStringToOString(
-                            OUString( "Selection acquired by: " ) +
-                            getAccessibleName(),
-                            RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+
+                    SAL_WARN("chart2.accessibility", OUStringToOString(OUString("Selection acquired by: ") +
+                        getAccessibleName(), RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 break;
 
@@ -162,13 +153,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                     AddState( AccessibleStateType::FOCUSED );
                     aSelected <<= AccessibleStateType::FOCUSED;
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected, true );
-#if OSL_DEBUG_LEVEL > 1
-                    OSL_TRACE(
-                        OUStringToOString(
-                            OUString( "Selection lost by: " ) +
-                            getAccessibleName(),
-                            RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+                    SAL_WARN("chart2.accessibility", OUStringToOString(OUString("Selection lost by: ") +
+                        getAccessibleName(), RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 break;
 
