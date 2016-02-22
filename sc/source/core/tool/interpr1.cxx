@@ -8147,9 +8147,7 @@ void ScInterpreter::ScSearch()
             PushNoValue();
         else
         {
-            utl::SearchParam::SearchType eSearchType =
-                (MayBeRegExp( SearchStr, pDok ) ?
-                utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL);
+            utl::SearchParam::SearchType eSearchType = DetectSearchType( SearchStr, pDok );
             utl::SearchParam sPar(SearchStr, eSearchType, false, false, false);
             utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
             bool bBool = sT.SearchForward(sStr, &nPos, &nEndPos);
