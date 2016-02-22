@@ -253,12 +253,6 @@ public:
     }
 };
 
-
-#ifndef SFX_DECL_DOCTEMPLATES_DEFINED
-#define SFX_DECL_DOCTEMPLATES_DEFINED
-typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
-#endif
-
 SfxDocTemplate_Impl *gpTemplateData = nullptr;
 
 

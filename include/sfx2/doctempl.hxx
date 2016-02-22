@@ -31,17 +31,12 @@ class SfxObjectShell;
 
 class SfxDocTemplate_Impl;
 
-#ifndef SFX_DECL_DOCTEMPLATES_DEFINED
-#define SFX_DECL_DOCTEMPLATES_DEFINED
-typedef tools::SvRef<SfxDocTemplate_Impl> SfxDocTemplate_ImplRef;
-#endif
-
 // class SfxDocumentTemplates --------------------------------------------
 
 class SFX2_DLLPUBLIC SfxDocumentTemplates
 {
 private:
-    SfxDocTemplate_ImplRef  pImp;
+    tools::SvRef<SfxDocTemplate_Impl> pImp;
 
     SAL_DLLPRIVATE bool CopyOrMove( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx,
                                     sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx, bool bMove );
