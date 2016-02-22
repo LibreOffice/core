@@ -256,9 +256,9 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
         long bdist = cBlue - x2;
         rdist = rdist*rdist + gdist*gdist + bdist*bdist;
 
-        const long crinc = ( xsqr - ( cRed << nBits ) ) << 1L;
-        const long cginc = ( xsqr - ( cGreen << nBits ) ) << 1L;
-        const long cbinc = ( xsqr - ( cBlue << nBits ) ) << 1L;
+        const long crinc = static_cast<unsigned long>( xsqr - ( cRed << nBits ) ) << 1L;
+        const long cginc = static_cast<unsigned long>( xsqr - ( cGreen << nBits ) ) << 1L;
+        const long cbinc = static_cast<unsigned long>( xsqr - ( cBlue << nBits ) ) << 1L;
 
         sal_uLong* cdp = reinterpret_cast<sal_uLong*>(pBuffer);
         sal_uInt8* crgbp = pMap;
