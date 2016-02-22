@@ -596,7 +596,10 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     {
         sal_Int16 ls, ts, rs, bs;
         rSt.ReadInt16( ts ).ReadInt16( ls ).ReadInt16( rs ).ReadInt16( bs ); // the order of coordinates is a bit strange...
-        l = ls, t = ts, r = rs, b = bs;
+        l = ls;
+        t = ts;
+        r = rs;
+        b = bs;
     }
     Scale( l );
     Scale( t );
@@ -1972,7 +1975,10 @@ SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, 
                 aZCodec.BeginCompression();
                 aZCodec.Decompress( rStCtrl, *pRet );
                 if ( !aZCodec.EndCompression() )
-                    delete pRet, pRet = nullptr;
+                {
+                    delete pRet;
+                    pRet = nullptr;
+                }
             }
         }
         rStCtrl.Seek( nOldPos );
@@ -6963,7 +6969,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             if ( aString[nCount] == 0x2a )
                                             {
                                                 sal_uInt32 nBehind = aString.getLength() - ( nCount + 1 );
-                                                (pSet->maString).clear();
+                                                pSet->maString.clear();
                                                 if ( nBehind )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
@@ -6973,7 +6979,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 if ( (*FE)->pField2 )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->mpFieldItem = (*FE)->pField2, (*FE)->pField2 = nullptr;
+                                                    pNewCPS->mpFieldItem = (*FE)->pField2;
+                                                    (*FE)->pField2 = nullptr;
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
 
                                                     pNewCPS = new PPTCharPropSet( *pSet );
@@ -6988,7 +6995,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 }
                                                 if ( (*FE)->pField1 )
                                                 {
-                                                    pSet->mpFieldItem = (*FE)->pField1, (*FE)->pField1 = nullptr;
+                                                    pSet->mpFieldItem = (*FE)->pField1;
+                                                    (*FE)->pField1 = nullptr;
                                                 }
                                                 else if ( (*FE)->pString )
                                                     pSet->maString = *(*FE)->pString;
@@ -7067,7 +7075,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                             nIdx++;
                                                         }
-                                                        delete (*FE)->pField1, (*FE)->pField1 = nullptr;
+                                                        delete (*FE)->pField1;
+                                                        (*FE)->pField1 = nullptr;
 
                                                         if ( pBefCPS )
                                                         {

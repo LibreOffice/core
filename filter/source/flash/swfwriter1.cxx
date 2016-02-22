@@ -1549,7 +1549,8 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
                 }
 
-                nMoveX = aDestPt.X() - aSrcPt.X(), nMoveY = aDestPt.Y() - aSrcPt.Y();
+                nMoveX = aDestPt.X() - aSrcPt.X();
+                nMoveY = aDestPt.Y() - aSrcPt.Y();
 
                 if( nMoveX || nMoveY )
                     aTmpMtf.Move( nMoveX, nMoveY );

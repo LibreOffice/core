@@ -2349,10 +2349,12 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
     if( fScaleX != 1.0 || fScaleY != 1.0 )
     {
         rMtf.Scale( fScaleX, fScaleY );
-        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX ), aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX );
+        aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
     }
 
-    nMoveX = rDestPt.X() - aSrcPt.X(), nMoveY = rDestPt.Y() - aSrcPt.Y();
+    nMoveX = rDestPt.X() - aSrcPt.X();
+    nMoveY = rDestPt.Y() - aSrcPt.Y();
 
     if( nMoveX || nMoveY )
         rMtf.Move( nMoveX, nMoveY );

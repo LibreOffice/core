@@ -414,7 +414,8 @@ ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentatio
     if (this == &rPresentation)
         return *this;
     mxObject = rPresentation.mxObject;
-    delete mpMtf, ( mpMtf = rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : nullptr );
+    delete mpMtf;
+    mpMtf = rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : nullptr;
 
     return *this;
 }
@@ -604,7 +605,8 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 }
                 catch( ... )
                 {
-                    delete mpSVGDoc, mpSVGDoc = nullptr;
+                    delete mpSVGDoc;
+                    mpSVGDoc = nullptr;
                     OSL_FAIL( "Exception caught" );
                 }
 
@@ -624,10 +626,13 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     }
                 }
 
-                delete mpSVGWriter, mpSVGWriter = nullptr;
+                delete mpSVGWriter;
+                mpSVGWriter = nullptr;
                 mpSVGExport = nullptr; // pointed object is released by xSVGExport dtor at the end of this scope
-                delete mpSVGFontExport, mpSVGFontExport = nullptr;
-                delete mpObjects, mpObjects = nullptr;
+                delete mpSVGFontExport;
+                mpSVGFontExport = nullptr;
+                delete mpObjects;
+                mpObjects = nullptr;
                 mbPresentation = false;
             }
         }
@@ -887,7 +892,8 @@ bool SVGFilter::implExportDocument()
                 implGenerateScript();
             }
 
-            delete mpSVGDoc, mpSVGDoc = nullptr;
+            delete mpSVGDoc;
+            mpSVGDoc = nullptr;
             bRet = true;
         }
     }

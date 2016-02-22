@@ -1135,16 +1135,28 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                         if ( fY < fFocusY )
                         {
                             if ( fX > fY )
-                                fDist = fY, fD = fFocusY;
+                            {
+                                fDist = fY;
+                                fD = fFocusY;
+                            }
                             else
-                                fDist = fX, fD = fFocusX;
+                            {
+                                fDist = fX;
+                                fD = fFocusX;
+                            }
                         }
                         else
                         {
                             if ( fX > ( 1 - fY ) )
-                                fDist = ( 1 - fY ), fD = 1 - fFocusY;
+                            {
+                                fDist = 1 - fY;
+                                fD = 1 - fFocusY;
+                            }
                             else
-                                fDist = fX, fD = fFocusX;
+                            {
+                                fDist = fX;
+                                fD = fFocusX;
+                            }
                         }
                     }
                     else
@@ -1152,16 +1164,28 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                         if ( fY < fFocusY )
                         {
                             if ( ( 1 - fX ) > fY )
-                                fDist = fY, fD = fFocusY;
+                            {
+                                fDist = fY;
+                                fD = fFocusY;
+                            }
                             else
-                                fDist = ( 1 - fX ), fD = 1 - fFocusX;
+                            {
+                                fDist = 1 - fX;
+                                fD = 1 - fFocusX;
+                            }
                         }
                         else
                         {
                             if ( ( 1 - fX ) > ( 1 - fY ) )
-                                fDist = ( 1 - fY ), fD = 1 - fFocusY;
+                            {
+                                fDist = 1 - fY;
+                                fD = 1 - fFocusY;
+                            }
                             else
-                                fDist = ( 1 - fX ), fD = 1 - fFocusX;
+                            {
+                                fDist = 1 - fX;
+                                fD = 1 - fFocusX;
+                            }
                         }
                     }
                     if ( fD != 0.0 )
@@ -2940,7 +2964,8 @@ void DffRecordManager::Consume( SvStream& rIn, bool bAppend, sal_uInt32 nStOfs )
 void DffRecordManager::Clear()
 {
     pCList = static_cast<DffRecordList*>(this);
-    delete pNext, pNext = nullptr;
+    delete pNext;
+    pNext = nullptr;
     nCurrent = 0;
     nCount = 0;
 }
@@ -4842,7 +4867,10 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                         {
                             sal_Int16 ls, ts, rs, bs;
                             rSt.ReadInt16( ts ).ReadInt16( ls ).ReadInt16( rs ).ReadInt16( bs ); // the order of coordinates is a bit strange...
-                            l = ls, t = ts, r = rs, b = bs;
+                            l = ls;
+                            t = ts;
+                            r = rs;
+                            b = bs;
                         }
                         Scale( l );
                         Scale( t );
@@ -6320,7 +6348,8 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
                 aMtfSize100.Height() = height;
 
                 // scale to 1/100mm
-                aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
+                aMtfSize100.Width() /= 360;
+                aMtfSize100.Height() /= 360;
 
                 if ( pVisArea )     // seem that we currently are skipping the visarea position
                     *pVisArea = Rectangle( Point(), aMtfSize100 );

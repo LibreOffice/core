@@ -161,7 +161,8 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 
         ReadImage();
 
-        Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
+        Bitmap::ReleaseAccess( mpAcc );
+        mpAcc = nullptr;
         rGraphic = aBmp;
     }
     return bStatus;
