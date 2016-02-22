@@ -710,9 +710,15 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         Point aPoint;
         Rectangle aVis( aPoint,GetOutputSizePixel() );
         if (bVertical)
-            aVis.Left() = LONG_MIN, aVis.Right() = LONG_MAX;
+        {
+            aVis.Left() = LONG_MIN;
+            aVis.Right() = LONG_MAX;
+        }
         else
-            aVis.Top() = LONG_MIN, aVis.Bottom() = LONG_MAX;
+        {
+            aVis.Top() = LONG_MIN;
+            aVis.Bottom() = LONG_MAX;
+        }
         pSelEngine->SetVisibleArea( aVis );
 
         SetMarking( true );     //  must precede SelMouseButtonDown

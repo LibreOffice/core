@@ -401,7 +401,10 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         SCROW nTestRow = rParam.nRow1 + 1;      // below the title row
         while ( nTestCol <= MAXCOL &&
                 rDoc.GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
-            ++nTestCol, ++nFormulaCols;
+        {
+            ++nTestCol;
+            ++nFormulaCols;
+        }
     }
 
     if (bSuccess)

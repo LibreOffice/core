@@ -365,7 +365,8 @@ ScDocument::~ScDocument()
     {   // To be sure there isn't anything running do it with a protector,
         // this ensures also that nothing needs the control anymore.
         ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
-        delete pRefreshTimerControl, pRefreshTimerControl = nullptr;
+        delete pRefreshTimerControl;
+        pRefreshTimerControl = nullptr;
     }
 
     mxFormulaParserPool.reset();

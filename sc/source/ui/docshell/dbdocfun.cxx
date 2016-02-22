@@ -694,7 +694,10 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                     ( aLocalParam.bHasHeader ? 1 : 0 );
                 while ( nTestCol <= MAXCOL &&
                         rDoc.GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
-                    ++nTestCol, ++nFormulaCols;
+                {
+                    ++nTestCol;
+                    ++nFormulaCols;
+                }
             }
 
             bKeepFmt = pDestData->IsKeepFmt();

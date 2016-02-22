@@ -1683,8 +1683,8 @@ static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString&
         // Abort on the first unmatching char
         if ( *pStr1 != *pStr2 )
             return i;
-        ++pStr1,
-        ++pStr2,
+        ++pStr1;
+        ++pStr2;
         ++i;
     }
 

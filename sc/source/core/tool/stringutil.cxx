@@ -386,7 +386,7 @@ sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString&
                 ++nTokCount;
         }
 
-        ++pStr,
+        ++pStr;
         ++nIndex;
     }
 
@@ -449,7 +449,7 @@ OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, con
             }
         }
 
-        ++pStr,
+        ++pStr;
         ++i;
     }
 

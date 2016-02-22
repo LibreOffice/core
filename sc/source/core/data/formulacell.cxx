@@ -350,7 +350,8 @@ lcl_checkIfAdjacent(
     Iter aBegin(rReferences.begin());
     Iter aEnd(rReferences.end());
     Iter aBegin1(aBegin);
-    ++aBegin1, --aEnd;
+    ++aBegin1;
+    --aEnd;
     return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rPos, aWhich));
 }
 

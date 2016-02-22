@@ -286,7 +286,8 @@ void ScTpContentOptions::InitGridOpt()
 
     if ( bGrid || bGridOnTop )
     {
-        pColorFT->Enable(), pColorLB->Enable();
+        pColorFT->Enable();
+        pColorLB->Enable();
         if ( !bGridOnTop )
             nSelPos = 0;
         else
@@ -294,7 +295,8 @@ void ScTpContentOptions::InitGridOpt()
     }
     else
     {
-        pColorFT->Disable(), pColorLB->Disable();
+        pColorFT->Disable();
+        pColorLB->Disable();
         nSelPos = 2;
     }
 

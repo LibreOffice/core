@@ -917,13 +917,25 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     PutInOrder( rStartCol, rEndCol);
     PutInOrder( rStartRow, rEndRow);
     if (rStartCol < 0)
-        rStartCol = 0, o_bShrunk = true;
+    {
+        rStartCol = 0;
+        o_bShrunk = true;
+    }
     if (rStartRow < 0)
-        rStartRow = 0, o_bShrunk = true;
+    {
+        rStartRow = 0;
+        o_bShrunk = true;
+    }
     if (rEndCol > MAXCOL)
-        rEndCol = MAXCOL, o_bShrunk = true;
+    {
+        rEndCol = MAXCOL;
+        o_bShrunk = true;
+    }
     if (rEndRow > MAXROW)
-        rEndRow = MAXROW, o_bShrunk = true;
+    {
+        rEndRow = MAXROW;
+        o_bShrunk = true;
+    }
 
     while (rStartCol < rEndCol)
     {

@@ -1303,7 +1303,10 @@ void ScUndoRepeatDB::Undo()
             SCROW nRow = aOldQuery.aStart.Row() + 1;        // test the header
             while ( nCol <= MAXCOL &&
                     rDoc.GetCellType(ScAddress( nCol, nRow, nTab )) == CELLTYPE_FORMULA )
-                ++nCol, ++nFormulaCols;
+            {
+                ++nCol;
+                ++nFormulaCols;
+            }
 
             if ( nFormulaCols > 0 )
             {
