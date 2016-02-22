@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_6e06ef21",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T19:52:16Z",
+      "side": 1,
+      "message": "Here it is enough to have just the actual expression. No extra information is given in the string. Also, clearer to explicitly check against zero than to use the logical negation operator. That is, this should be just:\n\nassert(nTypeDescriptionCount \u003d\u003d 0);\n\nYou do know how assert() works, right? If that expression is false, the message printed is something like:\nAssertion failed: nTypeDescriptionCount \u003d\u003d 0",
+      "revId": "830bc032451923011e9a80e633b0c07ff4159458",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_0e092b32",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T19:52:16Z",
+      "side": 1,
+      "message": "Typo;) You need to make sure you actually compile the code you put inside #ifdefs before you submit to gerrit...",
+      "revId": "830bc032451923011e9a80e633b0c07ff4159458",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_b1fe7803",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T19:52:16Z",
+      "side": 1,
+      "message": "I don\u0027t think extra ASCII decorations like ### here have much usefulness. There is no agreed consensus on what such mean anyway, and they are not used consistently in the codebase. Just drop any ####, **** etc you see in warnings and errors.",
+      "revId": "830bc032451923011e9a80e633b0c07ff4159458",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_91037c0d",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-22T19:52:16Z",
+      "side": 1,
+      "message": "Here there is no need for the initial newline. We don\u0027t do that in general, and there is no reason why in this specific case it would be necessary.",
+      "range": {
+        "startLine": 536,
+        "startChar": 23,
+        "endLine": 536,
+        "endChar": 27
+      },
+      "revId": "830bc032451923011e9a80e633b0c07ff4159458",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
