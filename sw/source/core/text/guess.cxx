@@ -381,6 +381,14 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
              ! rInf.IsFootnoteInside() )
             nBreakPos = rInf.GetLineStart();
 
+        const CharClass& rCC = GetAppCharClass();
+        if(!rCC.isLetterNumeric(rInf.GetText(), nBreakPos -1) &&
+                (rSI.ScriptType(nBreakPos) != rSI.ScriptType( nBreakPos -1 )))
+        {
+            nBreakPos = nBreakPos-1;
+//            nCutPos = nBreakPos;
+        }
+
         nBreakStart = nBreakPos;
 
         bHyph = BreakType::HYPHENATION == aResult.breakType;
