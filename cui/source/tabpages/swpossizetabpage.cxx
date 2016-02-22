@@ -1915,7 +1915,6 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
     // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
     if( rMarkList.GetMarkCount() != 1 )
         m_bIsMultiSelection = true;
-#if OSL_DEBUG_LEVEL > 1
     else
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -1924,10 +1923,9 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
             pObj->HasText() )
         {
-            OSL_FAIL("AutoWidth/AutoHeight should be enabled");
+            SAL_WARN("cui.tabpages", "AutoWidth/AutoHeight should be enabled");
         }
     }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

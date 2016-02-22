@@ -905,7 +905,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                         default:
                             nCmpId = pTemp->GetObjIdentifier();
                         }
-                        if(nCmpId == OBJ_GRUP /*dynamic_cast< const SdrObjGroup *>( pTemp ) !=  nullptr*/ && pTemp->GetName() == pCnt->GetName())
+                        if(nCmpId == OBJ_GRUP && pTemp->GetName() == pCnt->GetName())
                         {
                             return pTemp->GetTitle();
                         }
@@ -920,13 +920,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                 {
                     const SwFlyFrameFormat* pFrameFormat = m_pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName());
                     if( pFrameFormat )
-                    {
-//                        SwNodeIndex aIdx( *(pFrameFormat->GetContent().GetContentIdx()), 1 );
-//                        const SwGrfNode* pGrfNd = aIdx.GetNode().GetGrfNode();
-//                        if( pGrfNd )
-//                            return pGrfNd->GetAlternateText();
                         return pFrameFormat->GetObjTitle();
-                    }
                 }
             }
             break;
@@ -1378,7 +1372,6 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                 bool Marked = pDrawView->IsObjMarked(pObj);
                                 if(Marked)
                                 {
-                                    //sEntry += String::CreateFromAscii(" *");
                                     pChild->SetMarked(true);
                                 }
                             }
@@ -2767,7 +2760,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                 vcl::KeyCode tempKeycode( KEY_ESCAPE );
                                 KeyEvent rKEvt( 0 , tempKeycode );
                                 static_cast<vcl::Window*>(&pEditWindow)->KeyInput( rKEvt );
-                                //rView.GetEditWin().GrabFocus();
                             }
                         }
                     }
@@ -3491,26 +3483,10 @@ void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
         rRenderContext.DrawText(rPos, GetText());
         rRenderContext.SetFont(aOldFont);
     }
-    // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
-    /*
-    else if (rEntry.IsMarked())
-    {
-            rDev.DrawText( rPos, GetText() );
-            XubString str;
-            str = XubString::CreateFromAscii("*");
-            Point rPosStar(rPos.X()-6,rPos.Y());
-            Font aOldFont( rDev.GetFont());
-            Font aFont(aOldFont);
-            Color aCol( aOldFont.GetColor() );
-            aCol.DecreaseLuminance( 200 );
-            aFont.SetColor( aCol );
-            rDev.SetFont( aFont );
-            rDev.DrawText( rPosStar, str);
-            rDev.SetFont( aOldFont );
-    }
-    */
     else
+    {
         SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
+    }
 }
 
 void SwContentTree::DataChanged(const DataChangedEvent& rDCEvt)
@@ -3523,6 +3499,7 @@ void SwContentTree::DataChanged(const DataChangedEvent& rDCEvt)
         m_bIsImageListInitialized = false;
         Display(true);
     }
+
     SvTreeListBox::DataChanged( rDCEvt );
 }
 
