@@ -188,6 +188,54 @@
     MenuItem\
     {\
         Identifier = DUMMY + 8 ; \
+        Command = ".uno:SlideLayoutMenu" ; \
+        Text [ en-US ] = "Slide ~Layout" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ASSIGN_LAYOUT ; \
+                    Command = ".uno:AssignLayout?WhatLayout:long=20" ; \
+                    Text [ en-US ] = "Blank" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ASSIGN_LAYOUT ; \
+                    Command = ".uno:AssignLayout?WhatLayout:long=19" ; \
+                    Text [ en-US ] = "Title" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ASSIGN_LAYOUT ; \
+                    Command = ".uno:AssignLayout?WhatLayout:long=0" ; \
+                    Text [ en-US ] = "Title, Text" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ASSIGN_LAYOUT ; \
+                    Command = ".uno:AssignLayout?WhatLayout:long=1" ; \
+                    Text [ en-US ] = "Title, Content" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ASSIGN_LAYOUT ; \
+                    Command = ".uno:AssignLayout?WhatLayout:long=32" ; \
+                    Text [ en-US ] = "Centered Text" ; \
+                };\
+                SEPARATOR\
+                MenuItem\
+                {\
+                    Identifier = SID_ASSIGN_LAYOUT ; \
+                    Command = ".uno:AssignLayout?WhatLayout:long=3" ; \
+                    Text [ en-US ] = "Title, 2 Content" ; \
+                };\
+            };\
+        };\
+    MenuItem\
+    {\
+        Identifier = DUMMY + 9 ; \
         Command = ".uno:PageMenu" ; \
         Text [ en-US ] = "Slid~e Features" ; \
         SubMenu = Menu\
