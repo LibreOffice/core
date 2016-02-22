@@ -40,7 +40,7 @@ class GtkSalMenu : public SalMenu
 private:
     std::vector< GtkSalMenuItem* >  maItems;
 
-    bool                        mbMenuBar;
+    bool                            mbMenuBar;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;
@@ -51,7 +51,7 @@ private:
 
     GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
     void                        ImplUpdate( gboolean bRecurse );
-    void                        ActivateAllSubmenus(MenuBar* pMenuBar);
+    void                        ActivateAllSubmenus(Menu* pMenuBar);
 
 public:
     GtkSalMenu( bool bMenuBar );
