@@ -547,8 +547,7 @@ static void lcl_removeListenerFromNode( Reference<XNode> xNode,
 
         // create proper evaluation context for this MIP
         aVector.push_back( EvaluationContext( *aIter, getModel(),
-                                              getBindingNamespaces(),
-                                              nCount, aNodes.size() ) );
+                                              getBindingNamespaces() ) );
     }
     return aVector;
 }

@@ -97,14 +97,12 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
     : mrExport( rExport )
     , mrFontExport( rFontExport )
     , mpElemFont( nullptr )
-    , mpElemPaint( nullptr )
 {
 }
 
 
 SVGAttributeWriter::~SVGAttributeWriter()
 {
-    delete mpElemPaint;
     delete mpElemFont;
 }
 

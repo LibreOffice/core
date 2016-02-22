@@ -15,9 +15,9 @@
 
 using namespace ::com::sun::star;
 
-static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
+static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& /*rxFact*/ )
 {
-    return uno::Reference< uno::XInterface >( *new ::avmedia::ogl::OGLManager( rxFact ) );
+    return uno::Reference< uno::XInterface >( *new ::avmedia::ogl::OGLManager );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaogl_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* )

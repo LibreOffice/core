@@ -17,10 +17,8 @@ using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
 
-OGLManager::OGLManager( const uno::Reference< lang::XMultiServiceFactory >& rMgr )
-    : m_xMgr( rMgr )
+OGLManager::OGLManager()
 {
-    (void) m_xMgr;
 }
 
 OGLManager::~OGLManager()

@@ -29,7 +29,6 @@ class Impl_OlePres
 {
     SotClipboardFormatId nFormat;
     sal_uInt16      nAspect;
-    Bitmap *        pBmp;
     GDIMetaFile *   pMtf;
 
     sal_uInt32      nAdvFlags;
@@ -40,7 +39,6 @@ public:
     explicit Impl_OlePres( SotClipboardFormatId nF )
         : nFormat( nF )
         , nAspect( ASPECT_CONTENT )
-        , pBmp( nullptr )
         , pMtf( nullptr )
         , nAdvFlags( 0x2 )  // in Dokument gefunden
         , nJobLen( 0 )
@@ -49,7 +47,6 @@ public:
     ~Impl_OlePres()
     {
         delete pJob;
-        delete pBmp;
         delete pMtf;
     }
     void    SetMtf( const GDIMetaFile & rMtf )

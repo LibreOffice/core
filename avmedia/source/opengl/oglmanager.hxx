@@ -21,7 +21,7 @@ class OGLManager : public ::cppu::WeakImplHelper< css::media::XManager, css::lan
 {
 public:
 
-    explicit OGLManager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rMgr );
+    explicit OGLManager();
     virtual ~OGLManager();
 
     // XManager
@@ -33,7 +33,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 private:
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xMgr;
 };
 
 } // namespace ogl

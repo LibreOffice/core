@@ -78,9 +78,6 @@ namespace cppcanvas
                     VCL gradient, to be rendered into the action's alpha
                     channel.
 
-                    @param rParms
-                    Render parameters
-
                     @param rDstPoint
                     Left, top edge of destination, in current state
                     coordinate system
@@ -91,7 +88,6 @@ namespace cppcanvas
                 */
                 TransparencyGroupAction( MtfAutoPtr&&                   rGroupMtf,
                                          GradientAutoPtr&&              rAlphaGradient,
-                                         const Renderer::Parameters&    rParms,
                                          const ::basegfx::B2DPoint&     rDstPoint,
                                          const ::basegfx::B2DVector&    rDstSize,
                                          const CanvasSharedPtr&         rCanvas,
@@ -110,8 +106,6 @@ namespace cppcanvas
             private:
                 MtfAutoPtr                                          mpGroupMtf;
                 GradientAutoPtr                                     mpAlphaGradient;
-
-                const Renderer::Parameters                          maParms;
 
                 const ::basegfx::B2DSize                            maDstSize;
 
@@ -144,14 +138,12 @@ namespace cppcanvas
 
             TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
                                                               GradientAutoPtr&&             rAlphaGradient,
-                                                              const Renderer::Parameters&   rParms,
                                                               const ::basegfx::B2DPoint&    rDstPoint,
                                                               const ::basegfx::B2DVector&   rDstSize,
                                                               const CanvasSharedPtr&        rCanvas,
                                                               const OutDevState&            rState ) :
                 mpGroupMtf( std::move(rGroupMtf) ),
                 mpAlphaGradient( std::move(rAlphaGradient) ),
-                maParms( rParms ),
                 maDstSize( rDstSize ),
                 mxBufferBitmap(),
                 maLastTransformation(),
@@ -476,7 +468,6 @@ namespace cppcanvas
 
         ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&&                 rGroupMtf,
                                                                                        GradientAutoPtr&&            rAlphaGradient,
-                                                                                       const Renderer::Parameters&  rParms,
                                                                                        const ::basegfx::B2DPoint&   rDstPoint,
                                                                                        const ::basegfx::B2DVector&  rDstSize,
                                                                                        const CanvasSharedPtr&       rCanvas,
@@ -484,7 +475,6 @@ namespace cppcanvas
         {
             return ActionSharedPtr( new TransparencyGroupAction(std::move(rGroupMtf),
                                                                 std::move(rAlphaGradient),
-                                                                rParms,
                                                                 rDstPoint,
                                                                 rDstSize,
                                                                 rCanvas,

@@ -104,7 +104,6 @@ class DLLEXPORT HWPPara
         unsigned char     pstyno;
         CharShape     cshape;                     /* When characters are all the same shape */
         ParaShape     pshape;                     /* if reuse flag is 0, */
-        int           pno;                        /* then run-time only */
 
         LineInfo      *linfo;
         CharShape     *cshapep;
