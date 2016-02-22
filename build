@@ -86,11 +86,16 @@ do_configure()
       --with-junit="${JUNIT_HOME}"
     )
   else
-    if [ -f /usr/lib/j2sdk1.5-sun/bin/javac ]; then
-      JDK_HOME="/usr/lib/j2sdk1.5-sun"
-    else
-      JDK_HOME="/usr/lib/jvm/java-6-sun"
-    fi
+    for JDK_DIR in \
+        /usr/lib/j2sdk1.5-sun \
+        /usr/lib/jvm/java-6-sun \
+        /usr/lib/jvm/j2sdk1.6-oracle \
+    ; do
+      if [ -x "${JDK_DIR}"/bin/javac ]; then
+        JDK_HOME="${JDK_DIR}"
+        break
+      fi
+    done
     OPTIONS_PLATFORM=(
       --disable-"${disable_kde}"
       --disable-gconf
