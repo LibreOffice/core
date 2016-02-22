@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <baf:BusinessAuthorization xmlns:baf="urn:tscp:names:baf:1.1">
+    <baf:PolicyAuthorityName>TSCP Example Policy Authority</baf:PolicyAuthorityName>
+    <baf:PolicyName>TSCP Example Policy</baf:PolicyName>
     <baf:AdministrativeData>
         <baf:ProgramID>urn:example:tscp:1</baf:ProgramID>
     </baf:AdministrativeData>
