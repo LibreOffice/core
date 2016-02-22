@@ -35,30 +35,21 @@ public:
     EvaluationContext()
         : mxContextNode(),
           mxModel(),
-          mxNamespaces(),
-          mnContextPosition( 0 ),
-          mnContextSize( 0 )
+          mxNamespaces()
     { }
 
     EvaluationContext(
         const css::uno::Reference<css::xml::dom::XNode>& xContextNode,
         const css::uno::Reference<css::xforms::XModel>& xModel,
-        const css::uno::Reference<css::container::XNameContainer>& xNamespaces,
-        sal_Int32 nPosition,
-        sal_Int32 nSize )
+        const css::uno::Reference<css::container::XNameContainer>& xNamespaces )
         : mxContextNode( xContextNode ),
           mxModel( xModel ),
-          mxNamespaces( xNamespaces ),
-          mnContextPosition( nPosition ),
-          mnContextSize( nSize )
+          mxNamespaces( xNamespaces )
     { }
 
     css::uno::Reference<css::xml::dom::XNode> mxContextNode;
     css::uno::Reference<css::xforms::XModel> mxModel;
     css::uno::Reference<css::container::XNameContainer> mxNamespaces;
-
-    sal_Int32 mnContextPosition;
-    sal_Int32 mnContextSize;
 };
 
 

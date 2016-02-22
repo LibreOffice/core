@@ -71,9 +71,6 @@ namespace cppcanvas
                 VCL gradient, to be rendered into the action's alpha
                 channel.
 
-                @param rParms
-                Render parameters
-
                 @param rDstPoint
                 Left, top edge of destination, in current state
                 coordinate system
@@ -84,7 +81,6 @@ namespace cppcanvas
              */
             ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
                                                                   GradientAutoPtr&&             rAlphaGradient,
-                                                                  const Renderer::Parameters&   rParms,
                                                                   const ::basegfx::B2DPoint&    rDstPoint,
                                                                   const ::basegfx::B2DVector&   rDstSize,
                                                                   const CanvasSharedPtr&        rCanvas,

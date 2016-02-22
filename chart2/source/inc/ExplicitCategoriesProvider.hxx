@@ -47,24 +47,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
-struct DatePlusIndex
-{
-    DatePlusIndex()
-        : fValue(1.0)
-        , nIndex( -1 )
-    {
-    }
-
-    DatePlusIndex( const double& _fValue, sal_Int32 _nIndex )
-        : fValue(_fValue)
-        , nIndex( _nIndex )
-    {
-    }
-
-    double fValue;
-    sal_Int32 nIndex;
-};
-
 class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
 public:
@@ -102,7 +84,7 @@ public:
         ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() { return m_aSplitCategoriesList;}
 
     bool isDateAxis();
-    const std::vector< DatePlusIndex >&  getDateCategories();
+    const std::vector< double >&  getDateCategories();
 
 private: //member
     bool volatile m_bDirty;
@@ -120,7 +102,7 @@ private: //member
 
     bool m_bIsDateAxis;
     bool m_bIsAutoDate;
-    std::vector< DatePlusIndex >  m_aDateCategories;
+    std::vector< double >  m_aDateCategories;
 };
 
 } //  namespace chart

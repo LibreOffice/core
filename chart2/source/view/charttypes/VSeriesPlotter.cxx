@@ -1352,18 +1352,18 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
     long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
     if( m_pExplicitCategoriesProvider )
     {
-        const std::vector< DatePlusIndex >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
-        std::vector< DatePlusIndex >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
+        const std::vector< double >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
+        std::vector< double >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
         Date aNullDate(30,12,1899);
         if( m_apNumberFormatterWrapper.get() )
             aNullDate = m_apNumberFormatterWrapper->getNullDate();
         if( aIt!=aEnd )
         {
-            Date aPrevious(aNullDate); aPrevious+=static_cast<long>(rtl::math::approxFloor(aIt->fValue));
+            Date aPrevious(aNullDate); aPrevious+=static_cast<long>(rtl::math::approxFloor(*aIt));
             ++aIt;
             for(;aIt!=aEnd;++aIt)
             {
-                Date aCurrent(aNullDate); aCurrent+=static_cast<long>(rtl::math::approxFloor(aIt->fValue));
+                Date aCurrent(aNullDate); aCurrent+=static_cast<long>(rtl::math::approxFloor(*aIt));
                 if( ::com::sun::star::chart::TimeUnit::YEAR == nRet )
                 {
                     if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )

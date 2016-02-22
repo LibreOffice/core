@@ -162,7 +162,7 @@ EvaluationContext Model::getEvaluationContext()
                 xElement->getNodeType() == NodeType_ELEMENT_NODE,
                 "no element in evaluation context" );
 
-    return EvaluationContext( xElement, this, mxNamespaces, 0, 1 );
+    return EvaluationContext( xElement, this, mxNamespaces );
 }
 
 

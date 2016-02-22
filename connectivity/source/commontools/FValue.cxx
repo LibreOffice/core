@@ -184,9 +184,8 @@ namespace tracing
     struct AllocationType
     {
         const sal_Char* pName;
-        sal_Int32       nAllocatedUnits;
 
-        AllocationType( ) : pName( nullptr ), nAllocatedUnits( 0 ) { }
+        AllocationType( ) : pName( nullptr ) { }
     };
 
 
@@ -235,7 +234,6 @@ namespace tracing
         ::osl::MutexGuard aGuard( s_aMutex );
 
         AllocationState::iterator aPos = getLocation( _pName );
-        ++aPos->nAllocatedUnits;
     }
 
 
@@ -244,7 +242,6 @@ namespace tracing
         ::osl::MutexGuard aGuard( s_aMutex );
 
         AllocationState::iterator aPos = getLocation( _pName );
-        --aPos->nAllocatedUnits;
     }
 
 #define TRACE_ALLOC( type ) tracing::AllocationTracer::registerUnit( #type );

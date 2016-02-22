@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHEDATA_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHEDATA_HXX
 
-#include <classes/checkediterator.hxx>
 #include <classes/wildcard.hxx>
 #include <classes/converter.hxx>
 #include <macros/xinterface.hxx>
