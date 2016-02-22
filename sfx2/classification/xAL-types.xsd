@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="urn:oasis:names:tc:ciq:xal:3" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:oasis:names:tc:ciq:xal:3" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation> 
+		Specification Name: OASIS CIQ TC - extensible AddressLanguage Types (xAL-types)
+		Description: Defines the W3C schema that provides enumeration lists to support xNL v3.0
+		(Using XML Schema based standard code list/enumeration mechanism - OPTION 1 AND DEFAULT)
+		Produced by: OASIS Customer Information Quality Technical Committee
+		URL: http://www.oasis-open.org/committees/ciq
+		Version: 3.0  
+		Status: Committee Specification
+		Copyright: 2006-07, OASIS, http://www.oasis-open.org
+		Last Modified: 18 September 2007
+		Last Modified by: Ram Kumar, Chair, OASIS CIQ TC 
+		
+		NOTE: This is the schema that users can customise the enumeration lists to meet their
+		exchange requirements. The enumeration values provided are ONLY SAMPLES and 
+		is not complete. It is upto the application to decide what the values should be.  To achieve 
+		interoperability between applications using this specification, it is recommended that an
+		SLA/agreement is in place as to what the enumeration values will be used in this file 
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="AddressTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of types of addresses</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Airport"/>
+			<xs:enumeration value="Business"/>
+			<xs:enumeration value="CaravanPark"/>
+			<xs:enumeration value="CommercialPark"/>
+			<xs:enumeration value="CommunityDevelopment"/>
+			<xs:enumeration value="EducationalInstitution"/>
+			<xs:enumeration value="Entertainment"/>
+			<xs:enumeration value="Hospital"/>
+			<xs:enumeration value="Location"/>
+			<xs:enumeration value="Marina"/>
+			<xs:enumeration value="MilitaryBase"/>
+			<xs:enumeration value="OverseasMilitary"/>
+			<xs:enumeration value="Port"/>
+			<xs:enumeration value="Primary"/>
+			<xs:enumeration value="RecreationalPark"/>
+			<xs:enumeration value="Resort"/>
+			<xs:enumeration value="RetirementVillage"/>
+			<xs:enumeration value="Rural"/>
+			<xs:enumeration value="Secondary"/>
+			<xs:enumeration value="ShoppingCentre"/>
+			<xs:enumeration value="SportingCentre"/>
+			<xs:enumeration value="Urban"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AddressIDTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of types of address identiifers </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="AddressLineTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of ypes of address line., e.g. street details, locality details</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="AddressUsageList">
+		<xs:annotation>
+			<xs:documentation>A list of types of usage of the address</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Business"/>
+			<xs:enumeration value="Billing"/>
+			<xs:enumeration value="Communication"/>
+			<xs:enumeration value="Contact"/>
+			<xs:enumeration value="Mailing"/>
+			<xs:enumeration value="Personal"/>
+			<xs:enumeration value="Postal"/>
+			<xs:enumeration value="Residential"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AdministrativeAreaTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of administrative area types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="City">
+				<xs:annotation>
+					<xs:documentation>Only name of the administrative area without its type, e.g. NSW, CA, Quebec</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="State">
+				<xs:annotation>
+					<xs:documentation>The type of the area, e.g. state, district, province, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Territory"/>
+			<xs:enumeration value="Province"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AdministrativeAreaNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of administrative area name element types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name">
+				<xs:annotation>
+					<xs:documentation>Name of the administrative area</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Number"/>
+			<xs:enumeration value="ReferenceLocation">
+				<xs:annotation>
+					<xs:documentation>Reference location information in support of the administrative area. e.g. Territory of France</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>Other supporting information </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AdministrativeAreaNameCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for name of administrative area</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="CountryNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of country name element types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name">
+				<xs:annotation>
+					<xs:documentation>Name of the country  e.g. AUSTRALIA</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>Although a Country, could be classified as a territory of a country. For example, "NOUVELLE CALEDONIE" is a territory of "FRANCE".</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CountryNameCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for name of country</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="DatumCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for datum</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="DeliveryModeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for mode of delivery of address</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="DirectionTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of directions for geo-coordinates</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="East"/>
+			<xs:enumeration value="West"/>
+			<xs:enumeration value="North"/>
+			<xs:enumeration value="South"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdentifierElementTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of name types for commonly used Number type</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name">
+				<xs:annotation>
+					<xs:documentation>Applicable to mail box office names such as PO BOX, GPO BOX, MAIL BAG NO., etc. </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RangeFrom">
+				<xs:annotation>
+					<xs:documentation>Indicates that the element contains the lower value of a range, e.g. 25 in 25-37</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Range">
+				<xs:annotation>
+					<xs:documentation>Indicates that the value is a range, e.g. 25-37</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RangeTo">
+				<xs:annotation>
+					<xs:documentation>Indicates that the element contains the top value of a range, e.g. 25 in 25-37</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Prefix">
+				<xs:annotation>
+					<xs:documentation>Indocates that the element contains some value that is important, but not exactly the number itself. E.g. PoBox can be a prefix in PoBox 2020, street no. A-15, where A is the prefix and 15 is the number</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Suffix">
+				<xs:annotation>
+					<xs:documentation>Indicates that the element contains some value that is important, but not exactly the number itself. E.g. 'bis' in '45 bis'</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Number">
+				<xs:annotation>
+					<xs:documentation>Indicates that the value is number, e.g. 2020 in PoBox 2020. The actual value can be alpha-numeric. </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Separator">
+				<xs:annotation>
+					<xs:documentation>Indicates that the value is a separator that is expected to be preserved. Examples are / - #, as in 15-A where "-" is the separator</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Extension">
+				<xs:annotation>
+					<xs:documentation>Indicates that the value is an extension number of some identifier, e.g. 01 in Private Bag 2330-01, where the main number of the private bag is 2330, 12345-1223 in post code where 1223 is the extension</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LocalityNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of locality name element types such as name of locality, reference data in support of locality</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name">
+				<xs:annotation>
+					<xs:documentation>Name of the locality</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Number"/>
+			<xs:enumeration value="ReferenceLocation">
+				<xs:annotation>
+					<xs:documentation>Any reference locality data in support of the locality. e.g. Next town north of Town A, via-town name</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>Other supporting information </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LocalityNameCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for name of locality</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="LocalityTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of locality name types such as Municipality, Village, Area, etc</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Municipality"/>
+			<xs:enumeration value="PostTown"/>
+			<xs:enumeration value="Place"/>
+			<xs:enumeration value="Suburb"/>
+			<xs:enumeration value="Town"/>
+			<xs:enumeration value="Village"/>
+			<xs:enumeration value="Area"/>
+			<xs:enumeration value="Zone"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MeridianCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of meridian codes</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PostOfficeTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of types of postal delivery offices</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PostalDeliveryPointTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of postal delivery point types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="GPOBox"/>
+			<xs:enumeration value="POBox"/>
+			<xs:enumeration value="LockedBag"/>
+			<xs:enumeration value="MailStop"/>
+			<xs:enumeration value="PigeonHole"/>
+			<xs:enumeration value="PrivateBag"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProjectionCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for projection</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="PremisesElementTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of name types for premises</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name">
+				<xs:annotation>
+					<xs:documentation>Names of Premises such as airport, hospital, university, military base, etc. Can also be the name of the building or house or apartment</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Location">
+				<xs:annotation>
+					<xs:documentation>Where in the building/landmark the premises is located, e.g. lobby, ground floor, penthouse, or where in a larger complex (e.g. airport) the address is located.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SubPremisesConnector">
+				<xs:annotation>
+					<xs:documentation>Free text description that is required to logically connect the 2 premises</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="InternalThoroughfare">
+				<xs:annotation>
+					<xs:documentation>Roads and streets within boundaries of larger complexes/premises such as hospitals, airports, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ReferenceLocation">
+				<xs:annotation>
+					<xs:documentation>Free text description of some other location and how this premises relates to it, e.g. 300m from water station, new the police station, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>additional supporting information</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PremisesTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of premises type</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Airport"/>
+			<xs:enumeration value="Area"/>
+			<xs:enumeration value="Building"/>
+			<xs:enumeration value="Farm"/>
+			<xs:enumeration value="Hospital"/>
+			<xs:enumeration value="House"/>
+			<xs:enumeration value="LandMark"/>
+			<xs:enumeration value="LargeMailUser"/>
+			<xs:enumeration value="Lot"/>
+			<xs:enumeration value="RailwayStation"/>
+			<xs:enumeration value="ShoppingComplex"/>
+			<xs:enumeration value="University"/>
+			<xs:enumeration value="Unit"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RuralDeliveryTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of rural delivery types such as road, air, water</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="SubAdministrativeAreaNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of sub administrative area name element types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name">
+				<xs:annotation>
+					<xs:documentation>Name of the sub administrative area</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Number"/>
+			<xs:enumeration value="ReferenceLocation">
+				<xs:annotation>
+					<xs:documentation>Reference location information in support of the sub administrative area.  </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>Other supporting information </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SubAdministrativeAreaNameCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for name of sub adiministrative area</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="SubAdministrativeAreaTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of sub administrative area name types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="County"/>
+			<xs:enumeration value="District"/>
+			<xs:enumeration value="Province"/>
+			<xs:enumeration value="Region"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SubLocalityNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of sub locality name element types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Name"/>
+			<xs:enumeration value="Number"/>
+			<xs:enumeration value="ReferenceLocation"/>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>Other supporting information </xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SubLocalityNameCodeList">
+		<xs:annotation>
+			<xs:documentation>A list of codes for names of sub locality</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+	<xs:simpleType name="SubLocalityTypeList">
+		<xs:annotation>
+			<xs:documentation>A ist of sublocality types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Municipality"/>
+			<xs:enumeration value="Village"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SubPremisesTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of sub premises types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="Room"/>
+			<xs:enumeration value="Suite"/>
+			<xs:enumeration value="Apartment"/>
+			<xs:enumeration value="Shop"/>
+			<xs:enumeration value="Office"/>
+			<xs:enumeration value="Unit"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ThoroughfareNameTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of name element types for thoroughfare</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:enumeration value="NameOnly">
+				<xs:annotation>
+					<xs:documentation>Just the name part, such as Baker in Baker Street.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PreDirection">
+				<xs:annotation>
+					<xs:documentation>North Archer Street, where "North" is PreDirection</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PostDirection">
+				<xs:annotation>
+					<xs:documentation>Archer Street North, where "North" is PostDirection</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NameAndNumber">
+				<xs:annotation>
+					<xs:documentation>This value indicates that the element contains the street name and street number. E.g. 39 Baker Street. Use this when you do not want to break the thoroughfare into atomic types</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NameAndType">
+				<xs:annotation>
+					<xs:documentation>Baker Street, where Baker is Name and Street is Type</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NameNumberAndType">
+				<xs:annotation>
+					<xs:documentation>21 Archer Street (Full thoroughfare details)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unstructured">
+				<xs:annotation>
+					<xs:documentation>Full details of a thorughfare in a single line (unstructured)
+e.g. 39 Baker Street North</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SubThoroughfareConnector">
+				<xs:annotation>
+					<xs:documentation>When more than one street name is required to identify the location this type can be used to connect them with values such as CORNER OF or VIA.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ReferenceLocation">
+				<xs:annotation>
+					<xs:documentation>Free text description of some other location and how this thoroughfare relates to it, e.g. 300m from water station, new the police station, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Type">
+				<xs:annotation>
+					<xs:documentation>Additional description like intersection, cross streets, etc</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ThoroughfareTypeList">
+		<xs:annotation>
+			<xs:documentation>A list of types for thoroughfare (e.g. STREET, ROAD, CRT)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString"/>
+	</xs:simpleType>
+</xs:schema>
