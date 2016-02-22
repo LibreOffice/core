@@ -8515,9 +8515,10 @@ bool ScInterpreter::MayBeWildcard( const OUString& rStr, const ScDocument* pDoc 
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaWildcardsEnabled() )
         return false;
 
-    // Wildcards without '~' escape, if there are no wildcards then an escaped
-    // character does not make sense.
-    static const sal_Unicode cw[] = { '*','?', 0 };
+    // Wildcards with '~' escape, if there are no wildcards then an escaped
+    // character does not make sense, but it modifies the search pattern in an
+    // Excel compatible wildcard search..
+    static const sal_Unicode cw[] = { '*','?','~', 0 };
     const sal_Unicode* p1 = rStr.getStr();
     sal_Unicode c1;
     while ( ( c1 = *p1++ ) != 0 )
