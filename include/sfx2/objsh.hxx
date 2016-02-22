@@ -754,10 +754,7 @@ public:
     };
 
 
-#ifndef SFX_DECL_OBJECTSHELL_DEFINED
-#define SFX_DECL_OBJECTSHELL_DEFINED
 typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
-#endif
 
 class SfxObjectShellLock
 {

@@ -29,11 +29,6 @@
 
 class SfxObjectShell;
 
-#ifndef SFX_DECL_OBJECTSHELL_DEFINED
-#define SFX_DECL_OBJECTSHELL_DEFINED
-typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
-#endif
-
 class SfxDocTemplate_Impl;
 
 #ifndef SFX_DECL_DOCTEMPLATES_DEFINED

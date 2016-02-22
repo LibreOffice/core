@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <sfx2/objsh.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/inettbc.hxx>
 

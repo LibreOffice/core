@@ -26,7 +26,6 @@
 #include <svl/smplhint.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
-#include <tools/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -105,11 +104,6 @@ public:
     const Link<SfxPoolItem*, void>&
                              GetValue() const { return aLink; }
 };
-
-#ifndef SFX_DECL_OBJECTSHELL_DEFINED
-#define SFX_DECL_OBJECTSHELL_DEFINED
-typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
-#endif
 
 class SfxObjectShellLock;
 

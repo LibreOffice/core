@@ -25,6 +25,7 @@
 #include <svl/lstner.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/poolitem.hxx>
@@ -37,7 +38,6 @@
 
 class SvBorder;
 class SfxDispatcher;
-class SfxObjectShell;
 class SfxBindings;
 class SfxProgress;
 class SvData;
@@ -61,11 +61,6 @@ namespace basegfx
 {
     class BColor;
 }
-
-#ifndef SFX_DECL_OBJECTSHELL_DEFINED
-#define SFX_DECL_OBJECTSHELL_DEFINED
-typedef tools::SvRef<SfxObjectShell> SfxObjectShellRef;
-#endif
 
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
