@@ -206,7 +206,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     {
         OUString aVal( "<no string>" );
         pAttribs[i].Value >>= aVal;
-        SAL_INFO( "sdext.pdfimport", "doDetection: Attrib: " + pAttribs[i].Name + " = " + aVal + "\n");
+        SAL_INFO( "sdext.pdfimport", "doDetection: Attrib: " + pAttribs[i].Name + " = " + aVal);
 
         if ( pAttribs[i].Name == "InputStream" )
             pAttribs[i].Value >>= xInput;
@@ -261,7 +261,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 }
                 else
                 {
-                    SAL_INFO( "sdext.pdfimport", "created temp file " + aURL + "\n" );
+                    SAL_INFO( "sdext.pdfimport", "created temp file " + aURL );
 
                     osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
 
@@ -551,13 +551,13 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                     pdfparse::PDFName* pMimeType = dynamic_cast<pdfparse::PDFName*>(pStreams->m_aSubElements[0]);
                     pdfparse::PDFObjectRef* pStreamRef = dynamic_cast<pdfparse::PDFObjectRef*>(pStreams->m_aSubElements[1]);
 
-                    SAL_WARN_IF( !pMimeType, "sdext.pdfimport", "error: no mimetype element\n" );
-                    SAL_WARN_IF( !pStreamRef, "sdext.pdfimport", "error: no stream ref element\n" );
+                    SAL_WARN_IF( !pMimeType, "sdext.pdfimport", "error: no mimetype element" );
+                    SAL_WARN_IF( !pStreamRef, "sdext.pdfimport", "error: no stream ref element" );
 
                     if( pMimeType && pStreamRef )
                     {
                         pdfparse::PDFObject* pObject = pPDFFile->findObject( pStreamRef->m_nNumber, pStreamRef->m_nGeneration );
-                        SAL_WARN_IF( !pObject, "sdext.pdfimport", "object not found\n" );
+                        SAL_WARN_IF( !pObject, "sdext.pdfimport", "object not found" );
                         if( pObject )
                         {
                             if( pPDFFile->isEncrypted() )
