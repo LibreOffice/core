@@ -622,11 +622,10 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aCommand), FALSE );
     Menu* pSubMenu = ( pSalSubMenu != nullptr ) ? pSalSubMenu->GetMenu() : nullptr;
 
-    MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
-    pMenuBar->HandleMenuCommandEvent( pSubMenu, itemId );
+    mpVCLMenu->HandleMenuCommandEvent( pSubMenu, itemId );
 }
 
-void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
+void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
 {
     pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
     pMenuBar->HandleMenuDeActivateEvent(mpVCLMenu);
@@ -647,15 +646,14 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
         return;
 
     if ( !aMenuCommand ) {
-        ActivateAllSubmenus( static_cast< MenuBar* >( mpVCLMenu ) );
+        ActivateAllSubmenus(mpVCLMenu);
         return;
     }
 
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aMenuCommand), TRUE );
 
     if ( pSalSubMenu != nullptr ) {
-        MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
-        pMenuBar->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
+        mpVCLMenu->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
         pSalSubMenu->Update();
     }
 }
@@ -668,8 +666,7 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aMenuCommand), TRUE );
 
     if ( pSalSubMenu != nullptr ) {
-        MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
-        pMenuBar->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
+        mpVCLMenu->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
     }
 }
 
