@@ -7,6 +7,8 @@ Business Authorization
 -->
   <xs:complexType name="BusinessAuthorization">
     <xs:sequence>
+      <xs:element ref="PolicyAuthorityName"/>
+      <xs:element ref="PolicyName"/>
       <xs:element ref="AdministrativeData"/>
       <xs:element ref="Scope" minOccurs="0" maxOccurs="1"/>
       <xs:element ref="Included"/>
@@ -184,6 +186,8 @@ Others
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="PolicyAuthorityName" type="xs:string"/>
+  <xs:element name="PolicyName" type="xs:string"/>
   <xs:element name="ProgramID" type="xs:string"/>
   <xs:element name="OrganizationsScope">
     <xs:complexType>
