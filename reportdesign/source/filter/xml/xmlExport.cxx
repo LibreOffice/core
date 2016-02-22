@@ -641,10 +641,6 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 
             if (x2 - x1 != 0 && y2 - y1 != 0)
             {
-                awt::Size aElementSize = xReportElement->getSize();
-                if ( xFixedLine.is() && xFixedLine->getOrientation() == 1 ) // vertical
-                    aElementSize.Width = static_cast<sal_Int32>(xFixedLine->getWidth()*0.5);
-
                 sal_Int32 nColSpan = x2 - x1;
                 sal_Int32 nRowSpan = y2 - y1;
                 aInsert->second[y1].second[x1] =
