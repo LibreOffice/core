@@ -26,12 +26,11 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
-#include <sfx2/mnuitem.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfx.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <svl/intitem.hxx>
 #include <tools/diagnose_ex.h>
@@ -86,7 +85,6 @@ public:
     SfxSlotPool*                pSlotPool;
     SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
     SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
-    SfxMenuCtrlFactArr_Impl*    pMenuCtrlFac;
     SfxChildWinFactArr_Impl*    pFactArr;
     ImageList*                  pImgListSmall;
     ImageList*                  pImgListBig;
@@ -97,7 +95,7 @@ public:
 };
 
 SfxModule_Impl::SfxModule_Impl()
- : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pMenuCtrlFac(nullptr), pFactArr(nullptr), pImgListSmall(nullptr), pImgListBig(nullptr)
+ : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pFactArr(nullptr), pImgListSmall(nullptr), pImgListBig(nullptr)
 {
 }
 
@@ -106,7 +104,6 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pSlotPool;
     delete pTbxCtrlFac;
     delete pStbCtrlFac;
-    delete pMenuCtrlFac;
     delete pFactArr;
     delete pImgListSmall;
     delete pImgListBig;
@@ -165,7 +162,6 @@ void SfxModule::Construct_Impl()
 
         pImpl->pTbxCtrlFac=nullptr;
         pImpl->pStbCtrlFac=nullptr;
-        pImpl->pMenuCtrlFac=nullptr;
         pImpl->pFactArr=nullptr;
         pImpl->pImgListSmall=nullptr;
         pImpl->pImgListBig=nullptr;
@@ -270,27 +266,6 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 }
 
 
-void SfxModule::RegisterMenuControl( const SfxMenuCtrlFactory& rFact )
-{
-    if (!pImpl->pMenuCtrlFac)
-        pImpl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
-
-#ifdef DBG_UTIL
-    for ( size_t n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
-    {
-        SfxMenuCtrlFactory *pF = &(*pImpl->pMenuCtrlFac)[n];
-        if ( pF->nTypeId == rFact.nTypeId &&
-            (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
-        {
-            SAL_INFO("sfx.appl", "MenuController-Registering is not clearly defined!");
-        }
-    }
-#endif
-
-    pImpl->pMenuCtrlFac->push_back( rFact );
-}
-
-
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
     return pImpl->pTbxCtrlFac;
@@ -301,13 +276,6 @@ SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 {
     return pImpl->pStbCtrlFac;
 }
-
-
-SfxMenuCtrlFactArr_Impl* SfxModule::GetMenuCtrlFactories_Impl() const
-{
-    return pImpl->pMenuCtrlFac;
-}
-
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 {

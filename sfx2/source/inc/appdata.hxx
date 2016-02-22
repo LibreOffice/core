@@ -111,7 +111,6 @@ public:
 
     SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
     SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
-    SfxMenuCtrlFactArr_Impl*    pMenuCtrlFac;
     SfxViewFrameArr_Impl*       pViewFrames;
     SfxViewShellArr_Impl*       pViewShells;
     SfxObjectShellArr_Impl*     pObjShells;

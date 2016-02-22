@@ -55,7 +55,6 @@
 #include "appdata.hxx"
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
-#include <sfx2/mnuitem.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

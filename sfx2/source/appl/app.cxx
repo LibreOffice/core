@@ -81,7 +81,6 @@
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
-#include "virtmenu.hxx"
 #include <sfx2/module.hxx>
 #include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"
@@ -93,10 +92,6 @@
 #include "eventsupplier.hxx"
 #include <sfx2/dockwin.hxx>
 #include "shellimpl.hxx"
-
-#ifdef DBG_UTIL
-#include <sfx2/mnuitem.hxx>
-#endif
 
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
@@ -430,11 +425,6 @@ SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
 SfxStbCtrlFactArr_Impl&     SfxApplication::GetStbCtrlFactories_Impl() const
 {
     return *pAppData_Impl->pStbCtrlFac;
-}
-
-SfxMenuCtrlFactArr_Impl&    SfxApplication::GetMenuCtrlFactories_Impl() const
-{
-    return *pAppData_Impl->pMenuCtrlFac;
 }
 
 SfxViewFrameArr_Impl&       SfxApplication::GetViewFrames_Impl() const

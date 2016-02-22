@@ -468,8 +468,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/minfitem.hxx>
-#include <sfx2/mnuitem.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>

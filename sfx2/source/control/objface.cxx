@@ -77,14 +77,12 @@ struct SfxInterface_Impl
 {
     SfxObjectUIArr_Impl     aObjectBars;    // registered ObjectBars
     SfxObjectUIArr_Impl     aChildWindows;  // registered ChildWindows
-    OUString                aPopupName;     // registered xml-based PopupMenu
-    ResId                   aPopupRes;      // registered PopupMenu
+    OUString                aPopupName;     // registered PopupMenu
     ResId                   aStatBarRes;    // registered StatusBar
     SfxModule*              pModule;
     bool                    bRegistered;
 
     SfxInterface_Impl() :
-        aPopupRes(nullptr, *SfxApplication::GetSfxResManager()),
         aStatBarRes(nullptr, *SfxApplication::GetSfxResManager())
     , pModule(nullptr)
     , bRegistered(false)
@@ -363,12 +361,6 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
     return pSlot->pLinkedSlot;
 }
 
-void SfxInterface::RegisterPopupMenu( const ResId& rResId )
-{
-
-    pImpData->aPopupRes = rResId;
-}
-
 void SfxInterface::RegisterPopupMenu( const OUString& rResourceName )
 {
     pImpData->aPopupName = rResourceName;
@@ -503,11 +495,6 @@ sal_uInt16 SfxInterface::GetChildWindowCount() const
         return pImpData->aChildWindows.size() + pGenoType->GetChildWindowCount();
     else
         return pImpData->aChildWindows.size();
-}
-
-const ResId& SfxInterface::GetPopupMenuResId() const
-{
-    return pImpData->aPopupRes;
 }
 
 const OUString& SfxInterface::GetPopupMenuName() const

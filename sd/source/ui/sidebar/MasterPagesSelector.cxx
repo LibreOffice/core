@@ -47,7 +47,6 @@
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <svx/dlgutil.hxx>

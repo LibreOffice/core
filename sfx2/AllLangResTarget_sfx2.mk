@@ -51,7 +51,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/doc/doc.src \
     sfx2/source/doc/doctempl.src \
     sfx2/source/doc/templatelocnames.src \
-    sfx2/source/menu/menu.src \
     sfx2/source/sidebar/Sidebar.src \
     sfx2/source/view/view.src \
 ))

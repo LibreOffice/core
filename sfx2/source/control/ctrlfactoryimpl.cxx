@@ -19,26 +19,6 @@
 
 #include <ctrlfactoryimpl.hxx>
 
-const SfxMenuCtrlFactory& SfxMenuCtrlFactArr_Impl::operator []( size_t i ) const
-{
-    return maData[i];
-}
-
-SfxMenuCtrlFactory& SfxMenuCtrlFactArr_Impl::operator []( size_t i )
-{
-    return maData[i];
-}
-
-void SfxMenuCtrlFactArr_Impl::push_back( const SfxMenuCtrlFactory& p )
-{
-    maData.push_back(p);
-}
-
-size_t SfxMenuCtrlFactArr_Impl::size() const
-{
-    return maData.size();
-}
-
 const SfxStbCtrlFactory& SfxStbCtrlFactArr_Impl::operator []( size_t i ) const
 {
     return maData[i];

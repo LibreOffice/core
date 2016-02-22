@@ -46,7 +46,6 @@
 #include <svx/svxids.hrc>
 #include <svl/lstner.hxx>
 
-#include <sfx2/mnuitem.hxx>
 #include "svx/fmtools.hxx"
 #include "svx/fmsrccfg.hxx"
 #include <osl/mutex.hxx>
@@ -565,25 +564,6 @@ public:
     virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& rElement) override;
     virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& xContainer) const override;
     virtual void Invalidate() override { IndexAccessIterator::Invalidate(); m_sCurrentValue.clear(); }
-};
-
-
-class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
-{
-    ControlConversionMenuController( const ControlConversionMenuController&) = delete;
-    ControlConversionMenuController& operator =( const ControlConversionMenuController&) = delete;
-
-protected:
-    std::vector<std::unique_ptr<SfxStatusForwarder> > m_aStatusForwarders;
-    Menu*                   m_pMainMenu;
-    PopupMenu*              m_pConversionMenu;
-
-public:
-    SVX_DLLPRIVATE ControlConversionMenuController(sal_uInt16 nId, Menu& rMenu, SfxBindings& rBindings);
-    SVX_DLLPRIVATE virtual ~ControlConversionMenuController();
-    SFX_DECL_MENU_CONTROL();
-
-    SVX_DLLPRIVATE virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX

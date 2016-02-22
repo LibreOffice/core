@@ -56,7 +56,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/mnumgr.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <vcl/edit.hxx>

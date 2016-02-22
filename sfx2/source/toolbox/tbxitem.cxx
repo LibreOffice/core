@@ -71,7 +71,6 @@
 #include <svtools/miscopt.hxx>
 
 #include <sfx2/tbxctrl.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -89,7 +88,6 @@
 #include "helpid.hrc"
 #include "workwin.hxx"
 #include <sfx2/imgmgr.hxx>
-#include "virtmenu.hxx"
 #include <sfx2/imagemgr.hxx>
 #include <ctrlfactoryimpl.hxx>
 

@@ -24,7 +24,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
-#include <sfx2/mnumgr.hxx>
 
 #include "cmdid.h"
 #include "docsh.hxx"

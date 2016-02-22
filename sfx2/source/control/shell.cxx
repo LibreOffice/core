@@ -39,7 +39,6 @@
 #include <sfx2/viewsh.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/request.hxx>
-#include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>

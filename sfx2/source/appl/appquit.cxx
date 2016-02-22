@@ -40,7 +40,6 @@
 #include "arrdecl.hxx"
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/docfile.hxx>
@@ -117,7 +116,6 @@ void SfxApplication::Deinitialize()
 
     DELETEX(SfxTbxCtrlFactArr_Impl, pAppData_Impl->pTbxCtrlFac);
     DELETEX(SfxStbCtrlFactArr_Impl, pAppData_Impl->pStbCtrlFac);
-    DELETEX(SfxMenuCtrlFactArr_Impl, pAppData_Impl->pMenuCtrlFac);
     DELETEX(SfxViewFrameArr_Impl, pAppData_Impl->pViewFrames);
     DELETEX(SfxViewShellArr_Impl, pAppData_Impl->pViewShells);
     DELETEX(SfxObjectShellArr_Impl, pAppData_Impl->pObjShells);

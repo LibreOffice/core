@@ -41,7 +41,6 @@ class SfxModule_Impl;
 class SfxSlotPool;
 struct SfxChildWinContextFactory;
 struct SfxChildWinFactory;
-struct SfxMenuCtrlFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SfxTabPage;
@@ -80,7 +79,6 @@ public:
     void                        RegisterToolBoxControl(const SfxTbxCtrlFactory&);
     void                        RegisterChildWindow(SfxChildWinFactory*);
     void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
-    void                        RegisterMenuControl(const SfxMenuCtrlFactory&);
 
     virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
                                                vcl::Window* pParent,

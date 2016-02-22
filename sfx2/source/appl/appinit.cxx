@@ -57,7 +57,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/sfxhelp.hxx>
@@ -250,7 +249,6 @@ void SfxApplication::Initialize_Impl()
     pAppData_Impl->pSlotPool = new SfxSlotPool;
     pAppData_Impl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
     pAppData_Impl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
-    pAppData_Impl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
     pAppData_Impl->pViewFrames = new SfxViewFrameArr_Impl;
     pAppData_Impl->pViewShells = new SfxViewShellArr_Impl;
     pAppData_Impl->pObjShells = new SfxObjectShellArr_Impl;

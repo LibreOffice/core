@@ -43,7 +43,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/hintpost.hxx>
 #include <sfx2/ipclient.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -1860,25 +1859,13 @@ void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
 
     for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
-        const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
         const OUString& rResName = pSh->GetInterface()->GetPopupMenuName();
-        if ( rResId.GetId() )
-        {
-            rDisp.ExecutePopup( rResId, pWin, pPos );
-            return;
-        }
-        else if ( !rResName.isEmpty() )
+        if ( !rResName.isEmpty() )
         {
             rDisp.ExecutePopup( rResName, pWin, pPos );
             return;
         }
     }
-}
-
-void SfxDispatcher::ExecutePopup( const ResId &rId, vcl::Window *pWin, const Point *pPos )
-{
-    vcl::Window *pWindow = pWin ? pWin : xImp->pFrame->GetFrame().GetWorkWindow_Impl()->GetWindow();
-    SfxPopupMenuManager::ExecutePopup( rId, GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
 }
 
 void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window *pWin, const Point* pPos )

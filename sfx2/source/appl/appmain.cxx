@@ -37,7 +37,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/mnumgr.hxx>
 #include "app.hrc"
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"

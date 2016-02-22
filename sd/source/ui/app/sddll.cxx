@@ -89,7 +89,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/mnuitem.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <comphelper/processfactory.hxx>
@@ -216,10 +215,6 @@ void SdDLL::RegisterControllers()
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
-
-    SfxMenuControl::RegisterControl( SID_SET_SNAPITEM, pMod );
-    SfxMenuControl::RegisterControl( SID_DELETE_SNAPITEM, pMod );
-    SfxMenuControl::RegisterControl( SID_BEZIER_CLOSE, pMod );
 
     // #UndoRedo#
     SvxUndoRedoControl::RegisterControl( SID_UNDO , pMod );

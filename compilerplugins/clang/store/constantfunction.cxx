@@ -433,7 +433,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
     // LINK callback which supplies a return value which means something
-    if (aFunctionName == "SfxVirtualMenu::Highlight" || aFunctionName == "framework::MenuManager::Highlight"
+    if (aFunctionName == "framework::MenuManager::Highlight"
         || aFunctionName == "framework::MenuBarManager::Highlight") {
         return true;
     }

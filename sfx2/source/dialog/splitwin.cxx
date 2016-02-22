@@ -26,6 +26,7 @@
 #include <vcl/wrkwin.hxx>
 #include <unotools/viewoptions.hxx>
 
+#include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 
 #include "splitwin.hxx"
@@ -34,8 +35,6 @@
 #include <sfx2/app.hxx>
 #include "dialog.hrc"
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/mnumgr.hxx>
-#include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
 

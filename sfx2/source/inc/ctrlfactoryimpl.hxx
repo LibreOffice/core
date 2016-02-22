@@ -20,25 +20,10 @@
 #ifndef INCLUDED_SFX2_CTRLFACTORYIMPL_HXX
 #define INCLUDED_SFX2_CTRLFACTORYIMPL_HXX
 
-#include <sfx2/mnuitem.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 #include <vector>
-
-class SfxMenuCtrlFactArr_Impl
-{
-    typedef std::vector<SfxMenuCtrlFactory> DataType;
-    DataType maData;
-
-public:
-    const SfxMenuCtrlFactory& operator []( size_t i ) const;
-    SfxMenuCtrlFactory& operator []( size_t i );
-
-    void push_back( const SfxMenuCtrlFactory& );
-
-    size_t size() const;
-};
 
 class SfxStbCtrlFactArr_Impl
 {

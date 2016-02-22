@@ -25,7 +25,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <sfx2/mnumgr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
