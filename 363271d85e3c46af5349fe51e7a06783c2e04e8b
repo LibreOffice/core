@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_4e73334e",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-22T08:59:28Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of sprinkling magic constants over the code like this, but I see it\u0027s been inherited from the old code\n\nconst int nIconWidth \u003d 19;\nlong width \u003d $foo-\u003ebar() + nIconWidth;\n\nThat\u0027s what I\u0027d do",
+      "revId": "363271d85e3c46af5349fe51e7a06783c2e04e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_6e76ef3f",
+        "filename": "sd/source/ui/animations/CustomAnimationList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-02-22T08:59:28Z",
+      "side": 1,
+      "message": "Let\u0027s not include this branch then, until the image is available, some paranoid code purity checks might remove it anyway. \n\nPerhaps just drop some FIXME: comment in the code",
+      "revId": "363271d85e3c46af5349fe51e7a06783c2e04e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
