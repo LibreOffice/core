@@ -1364,49 +1364,24 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         {
             for (const OUString& rStyle: aWriterStyles)
             {
-                uno::Reference< beans::XPropertySet > xStyle;
-                xStyleFamily->getByName(rStyle) >>= xStyle;
-                OUString sName;
-                xStyle->getPropertyValue("DisplayName") >>= sName;
-                if( !sName.isEmpty() )
-                {
-                    aDefaultStyleNames.insert( sName );
+                aDefaultStyleNames.insert( rStyle );
 
-                    boost::property_tree::ptree aChild;
-                    aChild.put("", sName.toUtf8());
-                    aChildren.push_back(std::make_pair("", aChild));
-                }
+                boost::property_tree::ptree aChild;
+                aChild.put("", rStyle.toUtf8());
+                aChildren.push_back(std::make_pair("", aChild));
             }
         }
 
         uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
         for (const OUString& rStyle: aStyles )
         {
-            uno::Reference< beans::XPropertySet > xStyle (xStyleFamily->getByName(rStyle), uno::UNO_QUERY);
-            bool bStyleInserted = false;
-            // Its possible that the style does not implement XPropertySet.
-            // For example, TableDesignFamily doesn't yet.
-            if (xStyle.is())
-            {
-                // Filter out the default styles - they are already at the top
-                // of the list
-                OUString sName;
-                xStyle->getPropertyValue("DisplayName") >>= sName;
-                if (!sName.isEmpty() && aDefaultStyleNames.find(sName) == aDefaultStyleNames.end())
-                {
-                    boost::property_tree::ptree aChild;
-                    aChild.put("", sName.toUtf8());
-                    aChildren.push_back(std::make_pair("", aChild));
-                    bStyleInserted = true;
-                }
-            }
-
-            // If XPropertySet is not implemented or DisplayName is empty string,
-            // fallback to LO internal names
-            if (!bStyleInserted)
+            // Filter out the default styles - they are already at the top
+            // of the list
+            if (aDefaultStyleNames.find(rStyle) == aDefaultStyleNames.end() ||
+                (sStyleFam != "ParagraphStyles" || doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT) )
             {
                 boost::property_tree::ptree aChild;
-                aChild.put("", rStyle);
+                aChild.put("", rStyle.toUtf8());
                 aChildren.push_back(std::make_pair("", aChild));
             }
         }
