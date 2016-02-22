@@ -325,14 +325,14 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     {
         switch( eActStyle )
         {
-            case( PointerStyle::AutoScrollN ):   mnActDeltaX = +0L, mnActDeltaY = +1L; break;
-            case( PointerStyle::AutoScrollS ):   mnActDeltaX = +0L, mnActDeltaY = -1L; break;
-            case( PointerStyle::AutoScrollW ):   mnActDeltaX = +1L, mnActDeltaY = +0L; break;
-            case( PointerStyle::AutoScrollE ):   mnActDeltaX = -1L, mnActDeltaY = +0L; break;
-            case( PointerStyle::AutoScrollNW ):  mnActDeltaX = +1L, mnActDeltaY = +1L; break;
-            case( PointerStyle::AutoScrollNE ):  mnActDeltaX = -1L, mnActDeltaY = +1L; break;
-            case( PointerStyle::AutoScrollSW ):  mnActDeltaX = +1L, mnActDeltaY = -1L; break;
-            case( PointerStyle::AutoScrollSE ):  mnActDeltaX = -1L, mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollN ):   mnActDeltaX = +0L; mnActDeltaY = +1L; break;
+            case( PointerStyle::AutoScrollS ):   mnActDeltaX = +0L; mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollW ):   mnActDeltaX = +1L; mnActDeltaY = +0L; break;
+            case( PointerStyle::AutoScrollE ):   mnActDeltaX = -1L; mnActDeltaY = +0L; break;
+            case( PointerStyle::AutoScrollNW ):  mnActDeltaX = +1L; mnActDeltaY = +1L; break;
+            case( PointerStyle::AutoScrollNE ):  mnActDeltaX = -1L; mnActDeltaY = +1L; break;
+            case( PointerStyle::AutoScrollSW ):  mnActDeltaX = +1L; mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollSE ):  mnActDeltaX = -1L; mnActDeltaY = -1L; break;
 
             default:
             break;

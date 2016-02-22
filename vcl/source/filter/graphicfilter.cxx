@@ -1119,7 +1119,8 @@ GraphicFilter::~GraphicFilter()
         }
         if( pFilterHdlList->empty() )
         {
-            delete pFilterHdlList, pFilterHdlList = nullptr;
+            delete pFilterHdlList;
+            pFilterHdlList = nullptr;
             delete pConfig;
         }
     }

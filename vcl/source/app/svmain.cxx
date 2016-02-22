@@ -383,10 +383,16 @@ void DeInitVCL()
     delete pSVData->maGDIData.mpGrfConverter;
 
     if( pSVData->mpSettingsConfigItem )
-        delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = nullptr;
+    {
+        delete pSVData->mpSettingsConfigItem;
+        pSVData->mpSettingsConfigItem = nullptr;
+    }
 
     if ( pSVData->maAppData.mpIdleMgr )
-        delete pSVData->maAppData.mpIdleMgr, pSVData->maAppData.mpIdleMgr = nullptr;
+    {
+        delete pSVData->maAppData.mpIdleMgr;
+        pSVData->maAppData.mpIdleMgr = nullptr;
+    }
     Scheduler::ImplDeInitScheduler();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )
@@ -526,7 +532,10 @@ void DeInitVCL()
         ImplFreeEventHookData();
 
     if (pSVData->mpBlendFrameCache)
-        delete pSVData->mpBlendFrameCache, pSVData->mpBlendFrameCache = nullptr;
+    {
+        delete pSVData->mpBlendFrameCache;
+        pSVData->mpBlendFrameCache = nullptr;
+    }
 
     if (pSVData->mpCommandInfoProvider)
     {

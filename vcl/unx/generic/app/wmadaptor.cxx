@@ -181,7 +181,10 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     // try a NetWM
     pAdaptor = new NetWMAdaptor( pSalDisplay );
     if( ! pAdaptor->isValid() )
-        delete pAdaptor, pAdaptor = nullptr;
+    {
+        delete pAdaptor;
+        pAdaptor = nullptr;
+    }
 #if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "WM supports extended WM hints\n" );
@@ -192,7 +195,10 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     {
         pAdaptor = new GnomeWMAdaptor( pSalDisplay );
         if( ! pAdaptor->isValid() )
-            delete pAdaptor, pAdaptor = nullptr;
+        {
+            delete pAdaptor;
+            pAdaptor = nullptr;
+        }
 #if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "WM supports GNOME WM hints\n" );
@@ -1305,7 +1311,10 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
 
         // evaluate decoration flags
         if( nDecorationFlags & decoration_All )
-            aHint.deco = 1, aHint.func = 1;
+        {
+            aHint.deco = 1;
+            aHint.func = 1;
+        }
         else
         {
             if( nDecorationFlags & decoration_Title )
@@ -1313,13 +1322,25 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
             if( nDecorationFlags & decoration_Border )
                 aHint.deco |= 1L << 1;
             if( nDecorationFlags & decoration_Resize )
-                aHint.deco |= 1L << 2, aHint.func |= 1L << 1;
+            {
+                aHint.deco |= 1L << 2;
+                aHint.func |= 1L << 1;
+            }
             if( nDecorationFlags & decoration_MinimizeBtn )
-                aHint.deco |= 1L << 5, aHint.func |= 1L << 3;
+            {
+                aHint.deco |= 1L << 5;
+                aHint.func |= 1L << 3;
+            }
             if( nDecorationFlags & decoration_MaximizeBtn )
-                aHint.deco |= 1L << 6, aHint.func |= 1L << 4;
+            {
+                aHint.deco |= 1L << 6;
+                aHint.func |= 1L << 4;
+            }
             if( nDecorationFlags & decoration_CloseBtn )
-                aHint.deco |= 1L << 4, aHint.func |= 1L << 5;
+            {
+                aHint.deco |= 1L << 4;
+                aHint.func |= 1L << 5;
+            }
         }
         // evaluate window type
         switch( eType )

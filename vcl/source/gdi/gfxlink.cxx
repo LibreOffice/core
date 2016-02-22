@@ -361,7 +361,10 @@ sal_uInt8* ImpSwap::GetData() const
             xIStm.reset();
 
             if( bError )
-                delete[] pData, pData = nullptr;
+            {
+                delete[] pData;
+                pData = nullptr;
+            }
         }
         else
             pData = nullptr;

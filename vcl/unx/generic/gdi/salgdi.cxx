@@ -112,17 +112,34 @@ void X11SalGraphics::freeResources()
     Display *pDisplay = GetXDisplay();
 
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
-    if( mpClipRegion ) XDestroyRegion( mpClipRegion ), mpClipRegion = None;
+    if( mpClipRegion )
+    {
+        XDestroyRegion( mpClipRegion );
+        mpClipRegion = None;
+    }
 
     mxImpl->freeResources();
 
-    if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
-    if( pFontGC_ ) XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
+    if( hBrush_ )
+    {
+        XFreePixmap( pDisplay, hBrush_ );
+        hBrush_ = None;
+    }
+    if( pFontGC_ )
+    {
+        XFreeGC( pDisplay, pFontGC_ );
+        pFontGC_ = None;
+    }
     if( m_pDeleteColormap )
-        delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = nullptr;
-
+    {
+        delete m_pDeleteColormap;
+        m_pColormap = m_pDeleteColormap = nullptr;
+    }
     if( m_aXRenderPicture )
-        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture ), m_aXRenderPicture = 0;
+    {
+        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
+        m_aXRenderPicture = 0;
+    }
 
     bFontGC_ = false;
 }

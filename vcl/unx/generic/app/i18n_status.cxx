@@ -510,7 +510,10 @@ bool I18NStatus::exists()
 void I18NStatus::free()
 {
     if (g_pI18NStatusInstance)
-        delete g_pI18NStatusInstance, g_pI18NStatusInstance = nullptr;
+    {
+        delete g_pI18NStatusInstance;
+        g_pI18NStatusInstance = nullptr;
+    }
 }
 
 I18NStatus::I18NStatus() :

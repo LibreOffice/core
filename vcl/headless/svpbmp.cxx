@@ -203,7 +203,8 @@ void SvpSalBitmap::Destroy()
     if (mpDIB)
     {
         delete[] mpDIB->mpBits;
-        delete mpDIB, mpDIB = nullptr;
+        delete mpDIB;
+        mpDIB = nullptr;
     }
 }
 
@@ -212,7 +213,10 @@ Size SvpSalBitmap::GetSize() const
     Size aSize;
 
     if (mpDIB)
-        aSize.Width() = mpDIB->mnWidth, aSize.Height() = mpDIB->mnHeight;
+    {
+        aSize.Width() = mpDIB->mnWidth;
+        aSize.Height() = mpDIB->mnHeight;
+    }
 
     return aSize;
 }

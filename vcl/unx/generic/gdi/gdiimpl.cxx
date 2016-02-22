@@ -248,19 +248,28 @@ XID X11SalGraphicsImpl::GetXRenderPicture()
     return mrParent.m_aXRenderPicture;
 }
 
+static void freeGC(Display *pDisplay, GC& rGC)
+{
+    if( rGC )
+    {
+        XFreeGC( pDisplay, rGC );
+        rGC = None;
+    }
+}
+
 void X11SalGraphicsImpl::freeResources()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    if( mpPenGC ) XFreeGC( pDisplay, mpPenGC ), mpPenGC = None;
-    if( mpBrushGC ) XFreeGC( pDisplay, mpBrushGC ), mpBrushGC = None;
-    if( mpMonoGC ) XFreeGC( pDisplay, mpMonoGC ), mpMonoGC = None;
-    if( mpTrackingGC ) XFreeGC( pDisplay, mpTrackingGC ), mpTrackingGC = None;
-    if( mpCopyGC ) XFreeGC( pDisplay, mpCopyGC ), mpCopyGC = None;
-    if( mpMaskGC ) XFreeGC( pDisplay, mpMaskGC ), mpMaskGC = None;
-    if( mpInvertGC ) XFreeGC( pDisplay, mpInvertGC ), mpInvertGC = None;
-    if( mpInvert50GC ) XFreeGC( pDisplay, mpInvert50GC ), mpInvert50GC = None;
-    if( mpStippleGC ) XFreeGC( pDisplay, mpStippleGC ), mpStippleGC = None;
+    freeGC( pDisplay, mpPenGC );
+    freeGC( pDisplay, mpBrushGC );
+    freeGC( pDisplay, mpMonoGC );
+    freeGC( pDisplay, mpTrackingGC );
+    freeGC( pDisplay, mpCopyGC );
+    freeGC( pDisplay, mpMaskGC );
+    freeGC( pDisplay, mpInvertGC );
+    freeGC( pDisplay, mpInvert50GC );
+    freeGC( pDisplay, mpStippleGC );
     mbTrackingGC = mbPenGC = mbBrushGC = mbMonoGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
 }
 
@@ -609,7 +618,8 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
 
         SalTwoRect aPosAry( rPosAry );
 
-        aPosAry.mnSrcX = 0, aPosAry.mnSrcY = 0;
+        aPosAry.mnSrcX = 0;
+        aPosAry.mnSrcY = 0;
         drawBitmap( aPosAry, *xDDB );
     }
     else {
@@ -713,7 +723,9 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         DBG_TESTTRANS( aBG );
 
         // mask out paint bitmap in pixmap #1 (transparent areas 0)
-        aValues.function = GXand, aValues.foreground = 0x00000000, aValues.background = 0xffffffff;
+        aValues.function = GXand;
+        aValues.foreground = 0x00000000;
+        aValues.background = 0xffffffff;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
         static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, mrParent.m_nXScreen, 1, aTmpRect, aTmpGC );
 
@@ -723,7 +735,9 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         if( !mbXORMode )
         {
             // mask out background in pixmap #2 (nontransparent areas 0)
-            aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
+            aValues.function = GXand;
+            aValues.foreground = 0xffffffff;
+            aValues.background = 0x00000000;
             XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
             static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, mrParent.m_nXScreen, 1, aTmpRect, aTmpGC );
 
@@ -731,7 +745,9 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         }
 
         // merge pixmap #1 and pixmap #2 in pixmap #2
-        aValues.function = GXxor, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
+        aValues.function = GXxor;
+        aValues.foreground = 0xffffffff;
+        aValues.background = 0x00000000;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
         XCopyArea( pXDisp, aFG, aBG, aTmpGC,
                    0, 0,
@@ -965,7 +981,8 @@ void X11SalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
 
         // create a stipple bitmap first (set bits are changed to unset bits and vice versa)
         aValues.function = GXcopyInverted;
-        aValues.foreground = 1, aValues.background = 0;
+        aValues.foreground = 1;
+        aValues.background = 0;
         aTmpGC = XCreateGC( pXDisp, aStipple, GCFunction | GCForeground | GCBackground, &aValues );
         static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, mrParent.m_nXScreen, 1, aTwoRect, aTmpGC );
 

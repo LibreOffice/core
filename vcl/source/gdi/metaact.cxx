@@ -1233,7 +1233,8 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         if ( mnIndex + mnLen > maStr.getLength() )
         {
             mnIndex = 0;
-            delete[] mpDXAry, mpDXAry = nullptr;
+            delete[] mpDXAry;
+            mpDXAry = nullptr;
         }
     }
 }
@@ -3196,7 +3197,8 @@ void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 
 {
     if ( nDataSize && pData )
     {
-        mnDataSize = nDataSize, mpData = new sal_uInt8[ mnDataSize ];
+        mnDataSize = nDataSize;
+        mpData = new sal_uInt8[ mnDataSize ];
         memcpy( mpData, pData, mnDataSize );
     }
     else

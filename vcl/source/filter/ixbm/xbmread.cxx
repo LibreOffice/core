@@ -233,7 +233,10 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
                         pAcc1->SetPixel( nRow, nCol++, ( nValue & ( 1 << nBit++ ) ) ? aBlack : aWhite );
 
                     if( nCol == nWidth )
-                        nCol = 0, nRow++;
+                    {
+                        nCol = 0;
+                        nRow++;
+                    }
                 }
             }
         }
@@ -319,7 +322,8 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
         {
             Bitmap aBlackBmp( Size( pAcc1->Width(), pAcc1->Height() ), 1 );
 
-            Bitmap::ReleaseAccess( pAcc1 ), pAcc1 = nullptr;
+            Bitmap::ReleaseAccess( pAcc1 );
+            pAcc1 = nullptr;
             aBlackBmp.Erase( Color( COL_BLACK ) );
             rGraphic = BitmapEx( aBlackBmp, aBmp1 );
             eReadState = XBMREAD_OK;

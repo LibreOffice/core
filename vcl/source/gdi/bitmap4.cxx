@@ -215,11 +215,23 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor )
                 if( ++nY < nHeight )
                 {
                     if( pRowTmp1 == pColRow1 )
-                        pRowTmp1 = pColRow2, pRowTmp2 = pColRow3, pRowTmp3 = pColRow1;
+                    {
+                        pRowTmp1 = pColRow2;
+                        pRowTmp2 = pColRow3;
+                        pRowTmp3 = pColRow1;
+                    }
                     else if( pRowTmp1 == pColRow2 )
-                        pRowTmp1 = pColRow3, pRowTmp2 = pColRow1, pRowTmp3 = pColRow2;
+                    {
+                        pRowTmp1 = pColRow3;
+                        pRowTmp2 = pColRow1;
+                        pRowTmp3 = pColRow2;
+                    }
                     else
-                        pRowTmp1 = pColRow1, pRowTmp2 = pColRow2, pRowTmp3 = pColRow3;
+                    {
+                        pRowTmp1 = pColRow1;
+                        pRowTmp2 = pColRow2;
+                        pRowTmp3 = pColRow3;
+                    }
 
                     for( i = 0; i < nWidth2; i++ )
                         pRowTmp3[ i ] = pReadAcc->GetColor( pRows[ nY + 2 ], pColm[ i ] );
@@ -311,17 +323,35 @@ bool Bitmap::ImplMedianFilter()
             {
                 for( nX = 0; nX < nWidth; nX++ )
                 {
-                    nR1 = ( pColor = pRowTmp1 + nX )->GetRed(), nG1 = pColor->GetGreen(), nB1 = pColor->GetBlue();
-                    nR2 = ( ++pColor )->GetRed(), nG2 = pColor->GetGreen(), nB2 = pColor->GetBlue();
-                    nR3 = ( ++pColor )->GetRed(), nG3 = pColor->GetGreen(), nB3 = pColor->GetBlue();
+                    nR1 = ( pColor = pRowTmp1 + nX )->GetRed();
+                    nG1 = pColor->GetGreen();
+                    nB1 = pColor->GetBlue();
+                    nR2 = ( ++pColor )->GetRed();
+                    nG2 = pColor->GetGreen();
+                    nB2 = pColor->GetBlue();
+                    nR3 = ( ++pColor )->GetRed();
+                    nG3 = pColor->GetGreen();
+                    nB3 = pColor->GetBlue();
 
-                    nR4 = ( pColor = pRowTmp2 + nX )->GetRed(), nG4 = pColor->GetGreen(), nB4 = pColor->GetBlue();
-                    nR5 = ( ++pColor )->GetRed(), nG5 = pColor->GetGreen(), nB5 = pColor->GetBlue();
-                    nR6 = ( ++pColor )->GetRed(), nG6 = pColor->GetGreen(), nB6 = pColor->GetBlue();
+                    nR4 = ( pColor = pRowTmp2 + nX )->GetRed();
+                    nG4 = pColor->GetGreen();
+                    nB4 = pColor->GetBlue();
+                    nR5 = ( ++pColor )->GetRed();
+                    nG5 = pColor->GetGreen();
+                    nB5 = pColor->GetBlue();
+                    nR6 = ( ++pColor )->GetRed();
+                    nG6 = pColor->GetGreen();
+                    nB6 = pColor->GetBlue();
 
-                    nR7 = ( pColor = pRowTmp3 + nX )->GetRed(), nG7 = pColor->GetGreen(), nB7 = pColor->GetBlue();
-                    nR8 = ( ++pColor )->GetRed(), nG8 = pColor->GetGreen(), nB8 = pColor->GetBlue();
-                    nR9 = ( ++pColor )->GetRed(), nG9 = pColor->GetGreen(), nB9 = pColor->GetBlue();
+                    nR7 = ( pColor = pRowTmp3 + nX )->GetRed();
+                    nG7 = pColor->GetGreen();
+                    nB7 = pColor->GetBlue();
+                    nR8 = ( ++pColor )->GetRed();
+                    nG8 = pColor->GetGreen();
+                    nB8 = pColor->GetBlue();
+                    nR9 = ( ++pColor )->GetRed();
+                    nG9 = pColor->GetGreen();
+                    nB9 = pColor->GetBlue();
 
                     MNMX6( nR1, nR2, nR3, nR4, nR5, nR6 );
                     MNMX5( nR7, nR2, nR3, nR4, nR5 );
@@ -345,11 +375,23 @@ bool Bitmap::ImplMedianFilter()
                 if( ++nY < nHeight )
                 {
                     if( pRowTmp1 == pColRow1 )
-                        pRowTmp1 = pColRow2, pRowTmp2 = pColRow3, pRowTmp3 = pColRow1;
+                    {
+                        pRowTmp1 = pColRow2;
+                        pRowTmp2 = pColRow3;
+                        pRowTmp3 = pColRow1;
+                    }
                     else if( pRowTmp1 == pColRow2 )
-                        pRowTmp1 = pColRow3, pRowTmp2 = pColRow1, pRowTmp3 = pColRow2;
+                    {
+                        pRowTmp1 = pColRow3;
+                        pRowTmp2 = pColRow1;
+                        pRowTmp3 = pColRow2;
+                    }
                     else
-                        pRowTmp1 = pColRow1, pRowTmp2 = pColRow2, pRowTmp3 = pColRow3;
+                    {
+                        pRowTmp1 = pColRow1;
+                        pRowTmp2 = pColRow2;
+                        pRowTmp3 = pColRow3;
+                    }
 
                     for( i = 0; i < nWidth2; i++ )
                         pRowTmp3[ i ] = pReadAcc->GetColor( pRows[ nY + 2 ], pColm[ i ] );

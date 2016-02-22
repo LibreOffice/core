@@ -313,8 +313,10 @@ void SalDisplay::doDestruct()
 
     if( IsDisplay() )
     {
-        delete mpInputMethod, mpInputMethod = nullptr;
-        delete mpKbdExtension, mpKbdExtension = nullptr;
+        delete mpInputMethod;
+        mpInputMethod = nullptr;
+        delete mpKbdExtension;
+        mpKbdExtension = nullptr;
 
         for( size_t i = 0; i < m_aScreens.size(); i++ )
         {
