@@ -139,7 +139,11 @@ if [ "x" = "x$VER_APPEND" ]; then
 	usage "Version append string not given" 5
 fi
 
-DEBVER=$(ls "$DIR_IN"/main/libreoffice*base*.deb | awk -F '-' '{ print $3; }')
+if [ "$(uname -i)" = "i386" ]; then
+	DEBVER=$(ls "$DIR_IN"/main/libreoffice*base*.deb | awk -F '-' '{ print $3; }')
+else
+	DEBVER=$(ls "$DIR_IN"/main/libreoffice*base*.deb | awk -F '_' '{ print $2; }')
+fi
 if [ "x" = "x${DEBVER}" ]; then
 	echo "Couldn't extract debian version from .deb file"
 	exit 1
