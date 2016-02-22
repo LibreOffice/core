@@ -1092,7 +1092,8 @@ void SbiRuntime::ClearGosubStack()
     SbiGosubStack* p;
     while(( p = pGosubStk ) != nullptr )
     {
-        pGosubStk = p->pNext, delete p;
+        pGosubStk = p->pNext;
+        delete p;
     }
     nGosubLvl = 0;
 }
@@ -2168,7 +2169,8 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
                 sal_Int32 ub = pDims->Get( i++ )->GetLong();
                 if( ub < lb )
                 {
-                    Error( ERRCODE_BASIC_OUT_OF_RANGE ), ub = lb;
+                    Error( ERRCODE_BASIC_OUT_OF_RANGE );
+                    ub = lb;
                 }
                 pArray->AddDim32( lb, ub );
                 if ( lb != ub )
@@ -3542,7 +3544,8 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 if( t != SbxVARIANT && t != t2 &&
                     t >= SbxINTEGER && t <= SbxSTRING )
                 {
-                    pElem->SetType( t ), bSet = true;
+                    pElem->SetType( t );
+                    bSet = true;
                 }
             }
             // assign pElem to a Ref, to delete a temp-var if applicable

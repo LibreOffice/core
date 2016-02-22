@@ -1508,7 +1508,10 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 r.ReadUChar( n );
                 // Match the Int on this system?
                 if( n > SAL_TYPES_SIZEOFINT )
-                    r.ReadInt32( aData.nLong ), aData.eType = SbxLONG;
+                {
+                    r.ReadInt32( aData.nLong );
+                    aData.eType = SbxLONG;
+                }
                 else {
                     sal_Int32 nInt;
                     r.ReadInt32( nInt );
@@ -1522,7 +1525,10 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 r.ReadUChar( n );
                 // Match the UInt on this system?
                 if( n > SAL_TYPES_SIZEOFINT )
-                    r.ReadUInt32( aData.nULong ), aData.eType = SbxULONG;
+                {
+                    r.ReadUInt32( aData.nULong );
+                    aData.eType = SbxULONG;
+                }
                 else {
                     sal_uInt32 nUInt;
                     r.ReadUInt32( nUInt );

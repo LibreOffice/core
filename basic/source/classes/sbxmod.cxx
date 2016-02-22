@@ -1202,7 +1202,9 @@ void SbModule::Run( SbMethod* pMeth )
                 clearNativeObjectWrapperVector();
 
                 SAL_WARN_IF(GetSbData()->pInst->nCallLvl != 0,"basic","BASIC-Call-Level > 0");
-                delete GetSbData()->pInst, GetSbData()->pInst = nullptr, bDelInst = false;
+                delete GetSbData()->pInst;
+                GetSbData()->pInst = nullptr;
+                bDelInst = false;
 
                 // #i30690
                 SolarMutexGuard aSolarGuard;
@@ -1486,7 +1488,10 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             p = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
         }
         else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
-            p += 4, nPC += 4;
+        {
+            p += 4;
+            nPC += 4;
+        }
         else if( eOp == _STMNT )
         {
             sal_uInt32 nl, nc;
@@ -1498,7 +1503,10 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             return p;
         }
         else if( eOp >= SbOP2_START && eOp <= SbOP2_END )
-            p += 8, nPC += 8;
+        {
+            p += 8;
+            nPC += 8;
+        }
         else if( !( eOp >= SbOP0_START && eOp <= SbOP0_END ) )
         {
             StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
@@ -1580,7 +1588,10 @@ bool SbModule::ClearBP( sal_uInt16 nLine )
                 break;
         }
         if( pBreaks->empty() )
-            delete pBreaks, pBreaks = nullptr;
+        {
+            delete pBreaks;
+            pBreaks = nullptr;
+        }
     }
     return bRes;
 }

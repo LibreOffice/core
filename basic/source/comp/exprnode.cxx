@@ -315,10 +315,26 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
             {
                 // Integer operations
                 bool bErr = false;
-                if( nl > SbxMAXLNG ) bErr = true, nl = SbxMAXLNG;
-                else if( nl < SbxMINLNG ) bErr = true, nl = SbxMINLNG;
-                if( nr > SbxMAXLNG ) bErr = true, nr = SbxMAXLNG;
-                else if( nr < SbxMINLNG ) bErr = true, nr = SbxMINLNG;
+                if( nl > SbxMAXLNG )
+                {
+                    bErr = true;
+                    nl = SbxMAXLNG;
+                }
+                else if( nl < SbxMINLNG )
+                {
+                    bErr = true;
+                    nl = SbxMINLNG;
+                }
+                if( nr > SbxMAXLNG )
+                {
+                    bErr = true;
+                    nr = SbxMAXLNG;
+                }
+                else if( nr < SbxMINLNG )
+                {
+                    bErr = true;
+                    nr = SbxMINLNG;
+                }
                 ll = static_cast<long>(nl); lr = static_cast<long>(nr);
                 llMod = static_cast<long>(nl);
                 lrMod = static_cast<long>(nr);
@@ -434,8 +450,16 @@ void SbiExprNode::FoldConstantsUnaryNode(SbiParser* pParser)
             case NOT: {
                 // Integer operation!
                 bool bErr = false;
-                if( nVal > SbxMAXLNG ) bErr = true, nVal = SbxMAXLNG;
-                else if( nVal < SbxMINLNG ) bErr = true, nVal = SbxMINLNG;
+                if( nVal > SbxMAXLNG )
+                {
+                    bErr = true;
+                    nVal = SbxMAXLNG;
+                }
+                else if( nVal < SbxMINLNG )
+                {
+                    bErr = true;
+                    nVal = SbxMINLNG;
+                }
                 if( bErr )
                 {
                     pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
