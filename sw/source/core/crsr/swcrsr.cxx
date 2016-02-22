@@ -2114,8 +2114,10 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
 {
     m_bParked = false;
     m_bChanged = false;
-    m_nTablePtNd = 0, m_nTableMkNd = 0;
-    m_nTablePtCnt = 0, m_nTableMkCnt = 0;
+    m_nTablePtNd = 0;
+    m_nTableMkNd = 0;
+    m_nTablePtCnt = 0;
+    m_nTableMkCnt = 0;
 }
 
 SwTableCursor::~SwTableCursor() {}

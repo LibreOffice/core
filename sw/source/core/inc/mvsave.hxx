@@ -157,7 +157,9 @@ public:
                 sal_uInt32 nArrOrdNum );
     _ZSortFly& operator=( const _ZSortFly& rCpy )
     {
-        pFormat = rCpy.pFormat, pAnchor = rCpy.pAnchor, nOrdNum = rCpy.nOrdNum;
+        pFormat = rCpy.pFormat;
+        pAnchor = rCpy.pAnchor;
+        nOrdNum = rCpy.nOrdNum;
         return *this;
     }
 

@@ -127,7 +127,10 @@ SwUndoDelete::SwUndoDelete(
     {
         m_pRedlSaveData = new SwRedlineSaveDatas;
         if( !FillSaveData( rPam, *m_pRedlSaveData ))
-            delete m_pRedlSaveData, m_pRedlSaveData = nullptr;
+        {
+            delete m_pRedlSaveData;
+            m_pRedlSaveData = nullptr;
+        }
     }
 
     if( !pHistory )
@@ -962,7 +965,8 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             "SwUndoDelete::Redo: used to have redline data, but now none?");
         if (!bSuccess)
         {
-            delete m_pRedlSaveData, m_pRedlSaveData = nullptr;
+            delete m_pRedlSaveData;
+            m_pRedlSaveData = nullptr;
         }
     }
 

@@ -769,8 +769,10 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
         pTableSet->Put( *pDlg->GetOutputItemSet() );
     else if( bNewSet )
     {
-        delete pTableSet, pTableSet = nullptr;
-        delete pRep, pRep = nullptr;
+        delete pTableSet;
+        pTableSet = nullptr;
+        delete pRep;
+        pRep = nullptr;
     }
 }
 
@@ -1753,7 +1755,8 @@ void SwInsertDBColAutoPilot::Load()
             else
                 m_pLbDbParaColl->SelectEntryPos( 0 );
 
-            delete pTAutoFormat, pTAutoFormat = nullptr;
+            delete pTAutoFormat;
+            pTAutoFormat = nullptr;
             sTmp = pNewData->sTAutoFormatNm;
             if( !sTmp.isEmpty() )
             {

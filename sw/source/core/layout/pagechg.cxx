@@ -171,7 +171,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     else
         m_bHasGrid = false;
     SetMaxFootnoteHeight( pPgDsc->GetFootnoteInfo().GetHeight() ?
-                     pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX ),
+                     pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX );
     mnFrameType = FRM_PAGE;
     m_bInvalidLayout = m_bInvalidContent = m_bInvalidSpelling = m_bInvalidSmartTags = m_bInvalidAutoCmplWrds = m_bInvalidWordCount = true;
     m_bInvalidFlyLayout = m_bInvalidFlyContent = m_bInvalidFlyInCnt = m_bFootnotePage = m_bEndNotePage = false;

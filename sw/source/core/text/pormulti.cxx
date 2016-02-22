@@ -537,7 +537,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     nRubyOffset( rRuby.GetRubyOffset() ),
     nAdjustment( rRuby.GetAdjustment() )
 {
-    SetDirection( rRuby.GetDirection() ),
+    SetDirection( rRuby.GetDirection() );
     SetTop( rRuby.OnTop() );
     SetRuby();
 }

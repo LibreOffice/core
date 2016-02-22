@@ -2978,7 +2978,10 @@ static void Replace0xFF(
                     }
                 }
                 else
-                    ++nPos, ++nEndPos;
+                {
+                    ++nPos;
+                    ++nEndPos;
+                }
                 nPos = rText.indexOf(cSrchChr, nPos);
             }
         }

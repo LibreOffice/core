@@ -868,7 +868,8 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
 void SwCursorShell::TableCursorToCursor()
 {
     OSL_ENSURE( m_pTableCursor, "TableCursorToCursor: Why?" );
-    delete m_pTableCursor, m_pTableCursor = nullptr;
+    delete m_pTableCursor;
+    m_pTableCursor = nullptr;
 }
 
 void SwCursorShell::BlockCursorToCursor()
@@ -884,7 +885,8 @@ void SwCursorShell::BlockCursorToCursor()
         else
             m_pCurrentCursor->DeleteMark();
     }
-    delete m_pBlockCursor, m_pBlockCursor = nullptr;
+    delete m_pBlockCursor;
+    m_pBlockCursor = nullptr;
 }
 
 void SwCursorShell::CursorToBlockCursor()
@@ -923,7 +925,8 @@ void SwCursorShell::ClearMark()
 
         *m_pCurrentCursor->GetPoint() = *m_pTableCursor->GetPoint();
         m_pCurrentCursor->GetPtPos() = m_pTableCursor->GetPtPos();
-        delete m_pTableCursor, m_pTableCursor = nullptr;
+        delete m_pTableCursor;
+        m_pTableCursor = nullptr;
         m_pCurrentCursor->SwSelPaintRects::Show();
     }
     else
@@ -1605,7 +1608,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         m_pCurrentCursor->DeleteMark();
         *m_pCurrentCursor->GetPoint() = *m_pTableCursor->GetPoint();
         m_pCurrentCursor->GetPtPos() = m_pTableCursor->GetPtPos();
-        delete m_pTableCursor, m_pTableCursor = nullptr;
+        delete m_pTableCursor;
+        m_pTableCursor = nullptr;
     }
 
     m_pVisibleCursor->Hide(); // always hide visible Cursor
@@ -3170,7 +3174,8 @@ sal_uLong SwCursorShell::Find( const SearchOptions& rSearchOpt,
 {
     if( m_pTableCursor )
         GetCursor();
-    delete m_pTableCursor, m_pTableCursor = nullptr;
+    delete m_pTableCursor;
+    m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     sal_uLong nRet = m_pCurrentCursor->Find( rSearchOpt, bSearchInNotes, eStart, eEnd,
                                      bCancel, eRng, bReplace );
@@ -3187,7 +3192,8 @@ sal_uLong SwCursorShell::Find( const SwTextFormatColl& rFormatColl,
 {
     if( m_pTableCursor )
         GetCursor();
-    delete m_pTableCursor, m_pTableCursor = nullptr;
+    delete m_pTableCursor;
+    m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     sal_uLong nRet = m_pCurrentCursor->Find( rFormatColl, eStart, eEnd, bCancel, eRng,
                                      pReplFormat );
@@ -3206,7 +3212,8 @@ sal_uLong SwCursorShell::Find( const SfxItemSet& rSet,
 {
     if( m_pTableCursor )
         GetCursor();
-    delete m_pTableCursor, m_pTableCursor = nullptr;
+    delete m_pTableCursor;
+    m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     sal_uLong nRet = m_pCurrentCursor->Find( rSet, bNoCollections, eStart, eEnd,
                                      bCancel, eRng, pSearchOpt, rReplSet );

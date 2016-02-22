@@ -470,7 +470,8 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
 
             ++nCnt;
         }
-        ++nStt1, ++nStt2;
+        ++nStt1;
+        ++nStt2;
     }
     return nCnt;
 }
@@ -488,7 +489,8 @@ bool CompareData::HasDiffs( const CompareData& rData ) const
             bRet = true;
             break;
         }
-        ++nStt1, ++nStt2;
+        ++nStt1;
+        ++nStt2;
     }
     return bRet;
 }
@@ -528,7 +530,7 @@ static const sal_uLong primes[] =
 
     pDataArr = new _HashData[ nSize ];
     pDataArr[0].nNext = 0;
-    pDataArr[0].nHash = 0,
+    pDataArr[0].nHash = 0;
     pDataArr[0].pLine = nullptr;
     nPrime = primes[0];
 
@@ -683,7 +685,10 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
 
             /* Cancel provisional discards at end, and shrink the run.  */
             while( j > n && 2 == pDiscard[j - 1] )
-                pDiscard[ --j ] = 0, --provisional;
+            {
+                pDiscard[ --j ] = 0;
+                --provisional;
+            }
 
             /* Now we have the length of a run of discardable lines
                whose first and last are not provisional.  */
@@ -731,7 +736,10 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
                     if (j >= 8 && pDiscard[n + j] == 1)
                         break;
                     if (pDiscard[n + j] == 2)
-                        consec = 0, pDiscard[n + j] = 0;
+                    {
+                        consec = 0;
+                        pDiscard[n + j] = 0;
+                    }
                     else if (pDiscard[n + j] == 0)
                         consec = 0;
                     else
@@ -749,7 +757,10 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
                     if (j >= 8 && pDiscard[n - j] == 1)
                         break;
                     if (pDiscard[n - j] == 2)
-                        consec = 0, pDiscard[n - j] = 0;
+                    {
+                        consec = 0;
+                        pDiscard[n - j] = 0;
+                    }
                     else if (pDiscard[n - j] == 0)
                         consec = 0;
                     else
@@ -819,12 +830,18 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
     /* Slide down the bottom initial diagonal. */
     while( nStt1 < nEnd1 && nStt2 < nEnd2 &&
         rMoved1.GetIndex( nStt1 ) == rMoved2.GetIndex( nStt2 ))
-        ++nStt1, ++nStt2;
+    {
+        ++nStt1;
+        ++nStt2;
+    }
 
     /* Slide up the top initial diagonal. */
     while( nEnd1 > nStt1 && nEnd2 > nStt2 &&
         rMoved1.GetIndex( nEnd1 - 1 ) == rMoved2.GetIndex( nEnd2 - 1 ))
-        --nEnd1, --nEnd2;
+    {
+        --nEnd1;
+        --nEnd2;
+    }
 
     /* Handle simple cases. */
     if( nStt1 == nEnd1 )
@@ -893,7 +910,10 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             y = x - d;
             while( sal_uLong(x) < nEnd1 && sal_uLong(y) < nEnd2 &&
                 rMoved1.GetIndex( x ) == rMoved2.GetIndex( y ))
-                ++x, ++y;
+            {
+                ++x;
+                ++y;
+            }
             pFDiag[d] = x;
             if( odd && bmin <= d && d <= bmax && pBDiag[d] <= pFDiag[d] )
             {
@@ -916,7 +936,10 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             y = x - d;
             while( sal_uLong(x) > nStt1 && sal_uLong(y) > nStt2 &&
                 rMoved1.GetIndex( x - 1 ) == rMoved2.GetIndex( y - 1 ))
-                --x, --y;
+            {
+                --x;
+                --y;
+            }
             pBDiag[d] = x;
             if (!odd && fmin <= d && d <= fmax && pBDiag[d] <= pFDiag[d])
             {
@@ -1954,7 +1977,8 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
                 case POS_INSIDE:
                 case POS_EQUAL:
-                    delete pDestRedl, pDestRedl = nullptr;
+                    delete pDestRedl;
+                    pDestRedl = nullptr;
                     // break; -> no break !!!!
 
                 case POS_COLLIDE_END:
@@ -2335,7 +2359,8 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
                 nIdx2--;
             else
             {
-                nIdx1--, nIdx2--;
+                nIdx1--;
+                nIdx2--;
                 pLcs1[ nIdx ] = nIdx1 + nStt1;
                 pLcs2[ nIdx ] = nIdx2 + nStt2;
                 nIdx--;

@@ -328,7 +328,8 @@ void SwHTMLWriter::OutFootEndNotes()
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nFootnote = m_nFootNote, nEn = m_nEndNote;
 #endif
-    m_nFootNote = 0, m_nEndNote = 0;
+    m_nFootNote = 0;
+    m_nEndNote = 0;
 
     for( auto *pTextFootnote : *m_pFootEndNotes )
     {

@@ -470,7 +470,10 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
         const sal_Int32 n = rPos.nContent.GetIndex();
         if( !pTextNd->GetAttr( *pDontExpItems, n, n,
                                 n != pTextNd->GetText().getLength() ))
-            delete pDontExpItems, pDontExpItems = nullptr;
+        {
+            delete pDontExpItems;
+            pDontExpItems = nullptr;
+        }
     }
 }
 

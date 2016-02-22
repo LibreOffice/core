@@ -758,9 +758,15 @@ SwCalcOper SwCalc::GetToken()
                     {
                         SwCalcOper eTmp2;
                         if( '=' == ch )
-                            eCurrOper = SwCalcOper('='), eTmp2 = CALC_EQ;
+                        {
+                            eCurrOper = SwCalcOper('=');
+                            eTmp2 = CALC_EQ;
+                        }
                         else
-                            eCurrOper = CALC_NOT, eTmp2 = CALC_NEQ;
+                        {
+                            eCurrOper = CALC_NOT;
+                            eTmp2 = CALC_NEQ;
+                        }
 
                         if( aRes.EndPos < sCommand.getLength() &&
                             '=' == sCommand[aRes.EndPos] )
@@ -1200,9 +1206,15 @@ SwSbxValue SwCalc::Term()
                 if( fNum > 0 )
                 {
                     while( fNum < 1.0 )
-                        fNum *= 10.0, --nExp;
+                    {
+                        fNum *= 10.0;
+                        --nExp;
+                    }
                     while( fNum >= 10.0 )
-                        fNum /= 10.0, ++nExp;
+                    {
+                        fNum /= 10.0;
+                        ++nExp;
+                    }
                 }
                 nExp = 15 - nExp;
                 if( nExp > 15 )

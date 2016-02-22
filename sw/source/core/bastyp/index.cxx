@@ -288,7 +288,8 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
             pIdx->Assign( &rArr, pIdx->GetIndex() );
             pIdx = pNext;
         }
-        m_pFirst = nullptr, m_pLast = nullptr;
+        m_pFirst = nullptr;
+        m_pLast = nullptr;
     }
 }
 

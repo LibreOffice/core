@@ -3150,7 +3150,10 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                 ::lcl_DeleteBox_Recursive(rParam, *pBox, bCheck);
 
                 if( !rParam.bLeft )
-                    --n, --nCntEnd;
+                {
+                    --n;
+                    --nCntEnd;
+                }
             }
         }
         else if( bChgLowers )
@@ -3204,7 +3207,10 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                 {
                     // Then change the loop variable when deleting to the right
                     if( !rParam.bLeft )
-                        --n, --nCntEnd;
+                    {
+                        --n;
+                        --nCntEnd;
+                    }
                 }
                 else
                 {
@@ -4216,9 +4222,15 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 SwTableLines::size_type nStt;
                 SwTableLines::size_type nEnd;
                 if( bTop )
-                    nStt = 0, nEnd = nBaseLinePos;
+                {
+                    nStt = 0;
+                    nEnd = nBaseLinePos;
+                }
                 else
-                    nStt = nBaseLinePos + 1, nEnd = pLines->size();
+                {
+                    nStt = nBaseLinePos + 1;
+                    nEnd = pLines->size();
+                }
 
                 // Get the current Lines' height
                 if( TBLFIX_CHGPROP == m_eTableChgMode )
