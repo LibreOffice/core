@@ -289,7 +289,7 @@ EmbeddedObjectContainer::GetEmbeddedObject(
     uno::Reference < embed::XEmbeddedObject > xObj;
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_COMPHELPER_CONTAINER
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Sequence< OUString> aSeq = xAccess->getElementNames();
     const OUString* pIter = aSeq.getConstArray();
@@ -415,7 +415,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
 void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, const OUString& rName )
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_COMPHELPER_CONTAINER
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Added object doesn't have a name!");
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XEmbedPersist > xEmb( xObj, uno::UNO_QUERY );
@@ -483,7 +483,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
     if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_COMPHELPER_CONTAINER
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     OSL_ENSURE( !xPersist.is() || !xAccess->hasByName(rName), "Inserting element already present in storage!" );
     OSL_ENSURE( xPersist.is() || xObj->getCurrentState() == embed::EmbedStates::RUNNING, "Non persistent object inserted!");
@@ -969,7 +969,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     if ( xPersist.is() )
         aName = xPersist->getEntryName();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_COMPHELPER_CONTAINER
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
     sal_Bool bIsNotEmbedded = !xPersist.is() || ( xLink.is() && xLink->isLink() );
@@ -1087,7 +1087,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
         // now it's time to remove the storage from the container storage
         try
         {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_COMPHELPER_CONTAINER
             // if the object has a persistence and the object is not a link than it must have persistence entry in storage
             OSL_ENSURE( bIsNotEmbedded || pImpl->mxStorage->hasByName( aName ), "The object has no persistence entry in the storage!" );
 #endif
