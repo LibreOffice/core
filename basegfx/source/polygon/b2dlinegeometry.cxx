@@ -779,6 +779,35 @@ namespace basegfx
 
     namespace tools
     {
+        B2DPolygon polygonSubdivide(const B2DPolygon& rCandidate, double fMaxAllowedAngle, double fMaxPartOfEdge)
+        {
+            if(fMaxAllowedAngle > F_PI2)
+            {
+                fMaxAllowedAngle = F_PI2;
+            }
+            else if(fMaxAllowedAngle < 0.01 * F_PI2)
+            {
+                fMaxAllowedAngle = 0.01 * F_PI2;
+            }
+
+            if(fMaxPartOfEdge > 1.0)
+            {
+                fMaxPartOfEdge = 1.0;
+            }
+            else if(fMaxPartOfEdge < 0.01)
+            {
+                fMaxPartOfEdge = 0.01;
+            }
+
+            B2DPolygon aCandidate(rCandidate);
+            const double fMaxCos(cos(fMaxAllowedAngle));
+
+            aCandidate.removeDoublePoints();
+            aCandidate = subdivideToSimple(aCandidate, fMaxCos * fMaxCos, fMaxPartOfEdge * fMaxPartOfEdge);
+
+            return aCandidate;
+        }
+
         B2DPolyPolygon createAreaGeometry(
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,

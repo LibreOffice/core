@@ -137,6 +137,12 @@ namespace basegfx
             double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,
             double fMiterMinimumAngle = (15.0 * F_PI180));
+
+        BASEGFX_DLLPUBLIC B2DPolygon polygonSubdivide(
+            const B2DPolygon& rCandidate,
+            double fMaxAllowedAngle = (12.5 * F_PI180),
+            double fMaxPartOfEdge = 0.4);
+
     } // end of namespace tools
 } // end of namespace basegfx
 

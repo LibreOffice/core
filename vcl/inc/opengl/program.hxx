@@ -37,6 +37,7 @@ private:
     GLuint          mnTexCoordAttrib;
     GLuint          mnAlphaCoordAttrib;
     GLuint          mnMaskCoordAttrib;
+    GLuint          mnNormalAttrib;
     TextureList     maTextures;
     bool            mbBlending;
 
@@ -59,6 +60,7 @@ public:
     void SetTextureCoord( const GLvoid* pData );
     void SetAlphaCoord( const GLvoid* pData );
     void SetMaskCoord(const GLvoid* pData);
+    void SetExtrusionVectors(const GLvoid* pData);
 
     void SetUniform1f( const OString& rName, GLfloat v1 );
     void SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 );
@@ -80,7 +82,7 @@ public:
     bool DrawTexture( const OpenGLTexture& rTexture );
 
 protected:
-    void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData );
+    void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize = 2 );
     GLuint GetUniformLocation( const OString& rName );
 };
 
