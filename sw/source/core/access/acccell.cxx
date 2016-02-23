@@ -118,7 +118,7 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     SAL_WARN_IF(
         (!xContextTable.is()
          || xContextTable->getAccessibleRole() != AccessibleRole::TABLE),
-        "sw.core", "bad accessible context");
+        "sw.a11y", "bad accessible context");
     m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
 }
 

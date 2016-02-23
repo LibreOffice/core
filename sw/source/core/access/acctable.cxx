@@ -1434,8 +1434,8 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
     if( HasTableData() )
     {
         SAL_WARN_IF( HasTableData() &&
-                GetFrame()->Frame().Pos() != GetTableData().GetTablePos(), "sw.core",
-                "table has invalid position" );
+                GetFrame()->Frame().Pos() != GetTableData().GetTablePos(),
+                "sw.a11y", "table has invalid position" );
         if( HasTableData() )
         {
             SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData(); // #i77106#

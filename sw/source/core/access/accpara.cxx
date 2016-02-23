@@ -3708,7 +3708,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                                 SAL_WARN_IF(
                                     GetPortionData().IsValidCorePosition(
                                                                   nCoreStart),
-                                    "sw.core",
+                                    "sw.a11y",
                                     "problem determining valid core position");
 
                                 nLocalStart =
@@ -3747,7 +3747,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                                 SAL_WARN_IF(
                                     GetPortionData().IsValidCorePosition(
                                                                   nCoreEnd),
-                                    "sw.core",
+                                    "sw.a11y",
                                     "problem determining valid core position");
 
                                 nLocalEnd = GetPortionData().GetAccessiblePosition(
