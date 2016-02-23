@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_115b0c56",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 3371,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-23T13:54:14Z",
+      "side": 0,
+      "message": "the position of this is wrong - the callgrind tinderbox just failed because of this\n\nneeds to be outside the gb_LinkTarget__use_breakpad otherwise it will be invoked multiple times",
+      "revId": "6dfadc078b8549aff9e6ab999244220e222ead05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
