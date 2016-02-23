@@ -145,7 +145,7 @@ SpecialType translateUnoTypeToDescriptor(
     assert(
         arguments.empty()
         == (sort
-            != codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE));
+            != codemaker::UnoType::Sort::InstantiatedPolymorphicStruct));
     if (rank > 0xFF - (array ? 1 : 0)) {
         throw CannotDumpException(
             "Too many array dimensions for Java class file format");
@@ -163,7 +163,7 @@ SpecialType translateUnoTypeToDescriptor(
     }
     if (polymorphicUnoType != nullptr) {
         if (sort
-            == codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE)
+            == codemaker::UnoType::Sort::InstantiatedPolymorphicStruct)
         {
             polymorphicUnoType->kind = rank == 0
                 ? PolymorphicUnoType::KIND_STRUCT
@@ -175,24 +175,24 @@ SpecialType translateUnoTypeToDescriptor(
         }
     }
     switch (sort) {
-    case codemaker::UnoType::SORT_VOID:
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
-    case codemaker::UnoType::SORT_CHAR:
-    case codemaker::UnoType::SORT_STRING:
-    case codemaker::UnoType::SORT_TYPE:
-    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::Sort::Void:
+    case codemaker::UnoType::Sort::Boolean:
+    case codemaker::UnoType::Sort::Byte:
+    case codemaker::UnoType::Sort::Short:
+    case codemaker::UnoType::Sort::UnsignedShort:
+    case codemaker::UnoType::Sort::Long:
+    case codemaker::UnoType::Sort::UnsignedLong:
+    case codemaker::UnoType::Sort::Hyper:
+    case codemaker::UnoType::Sort::UnsignedHyper:
+    case codemaker::UnoType::Sort::Float:
+    case codemaker::UnoType::Sort::Double:
+    case codemaker::UnoType::Sort::Char:
+    case codemaker::UnoType::Sort::String:
+    case codemaker::UnoType::Sort::Type:
+    case codemaker::UnoType::Sort::Any:
         {
             static char const * const
-                simpleTypeDescriptors[codemaker::UnoType::SORT_ANY + 1][2] = {
+                simpleTypeDescriptors[static_cast<int>(codemaker::UnoType::Sort::Any) + 1][2] = {
                 { "V", "Ljava/lang/Void;" },
                 { "Z", "Ljava/lang/Boolean;" },
                 { "B", "Ljava/lang/Byte;" },
@@ -209,7 +209,7 @@ SpecialType translateUnoTypeToDescriptor(
                 { "Lcom/sun/star/uno/Type;", "Lcom/sun/star/uno/Type;" },
                 { "Ljava/lang/Object;", "Ljava/lang/Object;" } };
             char const * s
-                = simpleTypeDescriptors[sort][rank == 0 && classType];
+                = simpleTypeDescriptors[static_cast<int>(sort)][rank == 0 && classType];
             if (descriptor != nullptr) {
                 descriptor->append(s);
             }
@@ -217,15 +217,15 @@ SpecialType translateUnoTypeToDescriptor(
                 signature->append(s);
             }
             static SpecialType const
-                simpleTypeSpecials[codemaker::UnoType::SORT_ANY + 1] = {
+                simpleTypeSpecials[static_cast<int>(codemaker::UnoType::Sort::Any) + 1] = {
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE,
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_UNSIGNED, SPECIAL_TYPE_NONE,
                 SPECIAL_TYPE_UNSIGNED, SPECIAL_TYPE_NONE, SPECIAL_TYPE_UNSIGNED,
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE,
                 SPECIAL_TYPE_NONE, SPECIAL_TYPE_NONE, SPECIAL_TYPE_ANY };
-            return simpleTypeSpecials[sort];
+            return simpleTypeSpecials[static_cast<int>(sort)];
         }
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         if (nucleus == "com.sun.star.uno.XInterface") {
             if (descriptor != nullptr) {
                 descriptor->append("Ljava/lang/Object;");
@@ -236,10 +236,10 @@ SpecialType translateUnoTypeToDescriptor(
             return SPECIAL_TYPE_INTERFACE;
         }
         // fall through
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::Sequence:
+    case codemaker::UnoType::Sort::Enum:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         if (dependencies != nullptr) {
             dependencies->insert(nucleus);
         }
@@ -871,37 +871,37 @@ sal_uInt16 addFieldInit(
         fieldType, true, &nucleus, &rank, &args, &ent);
     if (rank == 0) {
         switch (sort) {
-        case codemaker::UnoType::SORT_BOOLEAN:
-        case codemaker::UnoType::SORT_BYTE:
-        case codemaker::UnoType::SORT_SHORT:
-        case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-        case codemaker::UnoType::SORT_LONG:
-        case codemaker::UnoType::SORT_UNSIGNED_LONG:
-        case codemaker::UnoType::SORT_HYPER:
-        case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-        case codemaker::UnoType::SORT_FLOAT:
-        case codemaker::UnoType::SORT_DOUBLE:
-        case codemaker::UnoType::SORT_CHAR:
-        case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        case codemaker::UnoType::Sort::Boolean:
+        case codemaker::UnoType::Sort::Byte:
+        case codemaker::UnoType::Sort::Short:
+        case codemaker::UnoType::Sort::UnsignedShort:
+        case codemaker::UnoType::Sort::Long:
+        case codemaker::UnoType::Sort::UnsignedLong:
+        case codemaker::UnoType::Sort::Hyper:
+        case codemaker::UnoType::Sort::UnsignedHyper:
+        case codemaker::UnoType::Sort::Float:
+        case codemaker::UnoType::Sort::Double:
+        case codemaker::UnoType::Sort::Char:
+        case codemaker::UnoType::Sort::Interface:
             return 0;
-        case codemaker::UnoType::SORT_STRING:
+        case codemaker::UnoType::Sort::String:
             code->loadLocalReference(0);
             code->loadStringConstant(OString());
             code->instrPutfield(className, name, "Ljava/lang/String;");
             return 2;
-        case codemaker::UnoType::SORT_TYPE:
+        case codemaker::UnoType::Sort::Type:
             code->loadLocalReference(0);
             code->instrGetstatic(
                 "com/sun/star/uno/Type", "VOID", "Lcom/sun/star/uno/Type;");
             code->instrPutfield(className, name, "Lcom/sun/star/uno/Type;");
             return 2;
-        case codemaker::UnoType::SORT_ANY:
+        case codemaker::UnoType::Sort::Any:
             code->loadLocalReference(0);
             code->instrGetstatic(
                 "com/sun/star/uno/Any", "VOID", "Lcom/sun/star/uno/Any;");
             code->instrPutfield(className, name, "Ljava/lang/Object;");
             return 2;
-        case codemaker::UnoType::SORT_ENUM_TYPE:
+        case codemaker::UnoType::Sort::Enum:
             {
                 rtl::Reference< unoidl::EnumTypeEntity > ent2(
                     dynamic_cast< unoidl::EnumTypeEntity * >(ent.get()));
@@ -918,8 +918,8 @@ sal_uInt16 addFieldInit(
                 code->instrPutfield(className, name, desc);
                 return 2;
             }
-        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-        case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+        case codemaker::UnoType::Sort::PlainStruct:
+        case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
             {
                 code->loadLocalReference(0);
                 code->instrNew(
@@ -935,8 +935,8 @@ sal_uInt16 addFieldInit(
                 code->instrPutfield(className, name, desc.makeStringAndClear());
                 return 3;
             }
-        case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-        case codemaker::UnoType::SORT_TYPEDEF:
+        case codemaker::UnoType::Sort::Sequence:
+        case codemaker::UnoType::Sort::Typedef:
             assert(false); // this cannot happen
             // fall through
         default:
@@ -948,8 +948,8 @@ sal_uInt16 addFieldInit(
     code->loadLocalReference(0);
     code->loadIntegerConstant(0);
     if (rank == 1) {
-        if (sort >= codemaker::UnoType::SORT_BOOLEAN
-            && sort <= codemaker::UnoType::SORT_CHAR)
+        if (sort >= codemaker::UnoType::Sort::Boolean
+            && sort <= codemaker::UnoType::Sort::Char)
         {
             code->instrNewarray(sort);
         } else {
@@ -996,7 +996,7 @@ sal_uInt16 addLoadLocal(
             type, true, &nucleus, &rank, &args, nullptr);
         if (rank == 0) {
             switch (sort) {
-            case codemaker::UnoType::SORT_BOOLEAN:
+            case codemaker::UnoType::Sort::Boolean:
                 if (any) {
                     code->instrNew("java/lang/Boolean");
                     code->instrDup();
@@ -1010,7 +1010,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_BYTE:
+            case codemaker::UnoType::Sort::Byte:
                 if (any) {
                     code->instrNew("java/lang/Byte");
                     code->instrDup();
@@ -1024,7 +1024,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_SHORT:
+            case codemaker::UnoType::Sort::Short:
                 if (any) {
                     code->instrNew("java/lang/Short");
                     code->instrDup();
@@ -1038,7 +1038,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+            case codemaker::UnoType::Sort::UnsignedShort:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
@@ -1060,7 +1060,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_LONG:
+            case codemaker::UnoType::Sort::Long:
                 if (any) {
                     code->instrNew("java/lang/Integer");
                     code->instrDup();
@@ -1074,7 +1074,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_UNSIGNED_LONG:
+            case codemaker::UnoType::Sort::UnsignedLong:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
@@ -1096,7 +1096,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_HYPER:
+            case codemaker::UnoType::Sort::Hyper:
                 if (any) {
                     code->instrNew("java/lang/Long");
                     code->instrDup();
@@ -1110,7 +1110,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 2;
                 break;
-            case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+            case codemaker::UnoType::Sort::UnsignedHyper:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
@@ -1132,7 +1132,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 2;
                 break;
-            case codemaker::UnoType::SORT_FLOAT:
+            case codemaker::UnoType::Sort::Float:
                 if (any) {
                     code->instrNew("java/lang/Float");
                     code->instrDup();
@@ -1146,7 +1146,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_DOUBLE:
+            case codemaker::UnoType::Sort::Double:
                 if (any) {
                     code->instrNew("java/lang/Double");
                     code->instrDup();
@@ -1160,7 +1160,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 2;
                 break;
-            case codemaker::UnoType::SORT_CHAR:
+            case codemaker::UnoType::Sort::Char:
                 if (any) {
                     code->instrNew("java/lang/Character");
                     code->instrDup();
@@ -1174,20 +1174,20 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_STRING:
-            case codemaker::UnoType::SORT_TYPE:
-            case codemaker::UnoType::SORT_ANY:
+            case codemaker::UnoType::Sort::String:
+            case codemaker::UnoType::Sort::Type:
+            case codemaker::UnoType::Sort::Any:
                 code->loadLocalReference(*index);
                 stack = size = 1;
                 break;
-            case codemaker::UnoType::SORT_ENUM_TYPE:
+            case codemaker::UnoType::Sort::Enum:
                 // Assuming that no Java types are derived from Java types that
                 // are directly derived from com.sun.star.uno.Enum:
                 code->loadLocalReference(*index);
                 stack = size = 1;
                 break;
-            case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-            case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+            case codemaker::UnoType::Sort::PlainStruct:
+            case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
@@ -1214,7 +1214,7 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            case codemaker::UnoType::Sort::Interface:
                 if (any && nucleus != "com.sun.star.uno.XInterface") {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
@@ -1239,8 +1239,8 @@ sal_uInt16 addLoadLocal(
                 }
                 size = 1;
                 break;
-            case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-            case codemaker::UnoType::SORT_TYPEDEF:
+            case codemaker::UnoType::Sort::Sequence:
+            case codemaker::UnoType::Sort::Typedef:
                 assert(false); // this cannot happen
                 // fall through
             default:
@@ -1252,35 +1252,34 @@ sal_uInt16 addLoadLocal(
             bool bWrap = false;
             if (any) {
                 switch (sort) {
-                case codemaker::UnoType::SORT_BOOLEAN:
-                case codemaker::UnoType::SORT_BYTE:
-                case codemaker::UnoType::SORT_SHORT:
-                case codemaker::UnoType::SORT_LONG:
-                case codemaker::UnoType::SORT_HYPER:
-                case codemaker::UnoType::SORT_FLOAT:
-                case codemaker::UnoType::SORT_DOUBLE:
-                case codemaker::UnoType::SORT_CHAR:
-                case codemaker::UnoType::SORT_STRING:
-                case codemaker::UnoType::SORT_TYPE:
+                case codemaker::UnoType::Sort::Boolean:
+                case codemaker::UnoType::Sort::Byte:
+                case codemaker::UnoType::Sort::Short:
+                case codemaker::UnoType::Sort::Long:
+                case codemaker::UnoType::Sort::Hyper:
+                case codemaker::UnoType::Sort::Float:
+                case codemaker::UnoType::Sort::Double:
+                case codemaker::UnoType::Sort::Char:
+                case codemaker::UnoType::Sort::String:
+                case codemaker::UnoType::Sort::Type:
                         // assuming that no Java types are derived from
                         // com.sun.star.uno.Type
-                case codemaker::UnoType::SORT_ENUM_TYPE:
+                case codemaker::UnoType::Sort::Enum:
                         // assuming that no Java types are derived from Java
                         // types that are directly derived from
                         // com.sun.star.uno.Enum
                     break;
-                case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-                case codemaker::UnoType::SORT_UNSIGNED_LONG:
-                case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-                case codemaker::UnoType::SORT_ANY:
-                case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-                case codemaker::UnoType::
-                    SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
-                case codemaker::UnoType::SORT_INTERFACE_TYPE:
+                case codemaker::UnoType::Sort::UnsignedShort:
+                case codemaker::UnoType::Sort::UnsignedLong:
+                case codemaker::UnoType::Sort::UnsignedHyper:
+                case codemaker::UnoType::Sort::Any:
+                case codemaker::UnoType::Sort::PlainStruct:
+                case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+                case codemaker::UnoType::Sort::Interface:
                     bWrap = true;
                     break;
-                case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-                case codemaker::UnoType::SORT_TYPEDEF:
+                case codemaker::UnoType::Sort::Sequence:
+                case codemaker::UnoType::Sort::Typedef:
                     assert(false); // this cannot happen
                     // fall through
                 default:
@@ -1351,7 +1350,7 @@ void addPlainStructBaseArguments(
     assert(methodDescriptor != nullptr);
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(base, &ent)
-        != codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE)
+        != codemaker::UnoType::Sort::PlainStruct)
     {
         throw CannotDumpException(
             "unexpected entity \"" + base
@@ -1541,7 +1540,7 @@ void addExceptionBaseArguments(
     assert(manager.is());
     assert(methodDescriptor != nullptr);
     rtl::Reference< unoidl::Entity > ent;
-    if (manager->getSort(base, &ent) != codemaker::UnoType::SORT_EXCEPTION_TYPE)
+    if (manager->getSort(base, &ent) != codemaker::UnoType::Sort::Exception)
     {
         throw CannotDumpException(
             "unexpected entity \"" + base
@@ -1981,25 +1980,25 @@ void handleTypedef(
     OUString nucleus;
     switch (manager->decompose(entity->getType(), false, &nucleus, nullptr, nullptr, nullptr))
     {
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
-    case codemaker::UnoType::SORT_CHAR:
-    case codemaker::UnoType::SORT_STRING:
-    case codemaker::UnoType::SORT_TYPE:
-    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::Sort::Boolean:
+    case codemaker::UnoType::Sort::Byte:
+    case codemaker::UnoType::Sort::Short:
+    case codemaker::UnoType::Sort::UnsignedShort:
+    case codemaker::UnoType::Sort::Long:
+    case codemaker::UnoType::Sort::UnsignedLong:
+    case codemaker::UnoType::Sort::Hyper:
+    case codemaker::UnoType::Sort::UnsignedHyper:
+    case codemaker::UnoType::Sort::Float:
+    case codemaker::UnoType::Sort::Double:
+    case codemaker::UnoType::Sort::Char:
+    case codemaker::UnoType::Sort::String:
+    case codemaker::UnoType::Sort::Type:
+    case codemaker::UnoType::Sort::Any:
         break;
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
-    case codemaker::UnoType::SORT_TYPEDEF:
+    case codemaker::UnoType::Sort::Enum:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::Interface:
+    case codemaker::UnoType::Sort::Typedef:
         dependencies->insert(nucleus);
         break;
     default:
@@ -2474,7 +2473,7 @@ void produce(
     rtl::Reference< unoidl::Entity > ent;
     rtl::Reference< unoidl::MapCursor > cur;
     switch (manager->getSort(name, &ent, &cur)) {
-    case codemaker::UnoType::SORT_MODULE:
+    case codemaker::UnoType::Sort::Module:
         {
             OUString prefix;
             if (!name.isEmpty()) {
@@ -2489,56 +2488,56 @@ void produce(
             }
             return;
         }
-    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::Sort::Enum:
         handleEnumType(
             name, dynamic_cast< unoidl::EnumTypeEntity * >(ent.get()), options);
         break;
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::PlainStruct:
         handlePlainStructType(
             name, dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case codemaker::UnoType::Sort::PolymorphicStructTemplate:
         handlePolyStructType(
             name,
             dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
                 ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+    case codemaker::UnoType::Sort::Exception:
         handleExceptionType(
             name, dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         handleInterfaceType(
             name, dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_TYPEDEF:
+    case codemaker::UnoType::Sort::Typedef:
         handleTypedef(
             dynamic_cast< unoidl::TypedefEntity * >(ent.get()), manager, &deps);
         break;
-    case codemaker::UnoType::SORT_CONSTANT_GROUP:
+    case codemaker::UnoType::Sort::ConstantGroup:
         handleConstantGroup(
             name, dynamic_cast< unoidl::ConstantGroupEntity * >(ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+    case codemaker::UnoType::Sort::SingleInterfaceBasedService:
         handleService(
             name,
             dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
                 ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+    case codemaker::UnoType::Sort::InterfaceBasedSingleton:
         handleSingleton(
             name,
             dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(ent.get()),
             manager, options, &deps);
         break;
-    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
-    case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+    case codemaker::UnoType::Sort::AccumulationBasedService:
+    case codemaker::UnoType::Sort::ServiceBasedSingleton:
         break;
     default:
         throw CannotDumpException(

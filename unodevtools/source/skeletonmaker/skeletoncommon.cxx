@@ -116,7 +116,7 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
     }
     rtl::Reference< unoidl::Entity > ent;
     switch (manager->getSort(name, &ent)) {
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         {
             rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                 dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
@@ -149,7 +149,7 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
             }
             break;
         }
-    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+    case codemaker::UnoType::Sort::AccumulationBasedService:
         {
             rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
                 dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
@@ -193,7 +193,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
 {
     rtl::Reference< unoidl::Entity > ent;
     switch (manager->getSort(name, &ent)) {
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         // com.sun.star.lang.XComponent should be also not in the list
         // but it will be used for checking the impl helper and will be
         // removed later if necessary.
@@ -204,7 +204,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
             interfaceTypes.insert(name);
         }
         break;
-    case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+    case codemaker::UnoType::Sort::SingleInterfaceBasedService:
         if (serviceTypes.find(name) == serviceTypes.end()) {
             serviceTypes.insert(name);
             rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
@@ -228,7 +228,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
             }
         }
         break;
-    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+    case codemaker::UnoType::Sort::AccumulationBasedService:
         if ( serviceTypes.find(name) == serviceTypes.end() ) {
             serviceTypes.insert(name);
             rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
@@ -289,7 +289,7 @@ bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
 {
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(name, &ent)
-        == codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE)
+        == codemaker::UnoType::Sort::AccumulationBasedService)
     {
         rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
             dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
@@ -337,7 +337,7 @@ OUString checkPropertyHelper(
         if ( !services.empty() ) {
             if (options.supportpropertysetmixin
                 && (sort
-                    == codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE))
+                    == codemaker::UnoType::Sort::SingleInterfaceBasedService))
             {
                 rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity >
                     ent2(
@@ -374,7 +374,7 @@ bool checkXComponentSupport(
     }
     rtl::Reference< unoidl::Entity > ent;
     codemaker::UnoType::Sort sort = manager->getSort(name, &ent);
-    if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE) {
+    if (sort != codemaker::UnoType::Sort::Interface) {
         throw CannotDumpException(
             "unexpected entity \"" + name
             + "\" in call to skeletonmaker::checkXComponentSupport");
@@ -459,14 +459,14 @@ bool checkAddinType(rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort = manager->decompose(
         type, true, nullptr, &rank, nullptr, nullptr);
 
-    if ( sort == codemaker::UnoType::SORT_LONG ||
-         sort == codemaker::UnoType::SORT_DOUBLE ||
-         sort == codemaker::UnoType::SORT_STRING )
+    if ( sort == codemaker::UnoType::Sort::Long ||
+         sort == codemaker::UnoType::Sort::Double ||
+         sort == codemaker::UnoType::Sort::String )
     {
         if ( rank == 0 || rank ==2 )
             return true;
     }
-    if ( sort == codemaker::UnoType::SORT_ANY )
+    if ( sort == codemaker::UnoType::Sort::Any )
     {
         if ( rank <= 2 ) {
             if ( rank ==1 ) {
@@ -478,7 +478,7 @@ bool checkAddinType(rtl::Reference< TypeManager > const & manager,
             return true;
         }
     }
-    if ( sort == codemaker::UnoType::SORT_INTERFACE_TYPE )
+    if ( sort == codemaker::UnoType::Sort::Interface )
     {
         if ( bIsReturn && type == "com.sun.star.sheet.XVolatileResult" )
             return true;
@@ -566,7 +566,7 @@ void generateFunctionParameterMap(std::ostream& o,
 
     rtl::Reference< unoidl::Entity > ent;
     codemaker::UnoType::Sort sort = manager->getSort(name, &ent);
-    if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE) {
+    if (sort != codemaker::UnoType::Sort::Interface) {
         throw CannotDumpException(
             "unexpected entity \"" + name
             + "\" in call to skeletonmaker::generateFunctionParameterMap");

@@ -76,41 +76,41 @@ void Includes::add(OString const & entityName) {
         m_includeSequence = true;
     }
     switch (m_manager->getSort(n)) {
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::Sort::Boolean:
+    case codemaker::UnoType::Sort::Byte:
+    case codemaker::UnoType::Sort::Short:
+    case codemaker::UnoType::Sort::UnsignedShort:
+    case codemaker::UnoType::Sort::Long:
+    case codemaker::UnoType::Sort::UnsignedLong:
+    case codemaker::UnoType::Sort::Hyper:
+    case codemaker::UnoType::Sort::UnsignedHyper:
+    case codemaker::UnoType::Sort::Char:
         m_includeSalTypesH = true;
         break;
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
+    case codemaker::UnoType::Sort::Float:
+    case codemaker::UnoType::Sort::Double:
         break;
-    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::Sort::String:
         m_includeRtlUstringHxx = true;
         break;
-    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::Sort::Type:
         m_includeType = true;
         break;
-    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::Sort::Any:
         m_includeAny = true;
         break;
-    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case codemaker::UnoType::Sort::PolymorphicStructTemplate:
         for (const OString& arg : args)
         {
             add(arg);
         }
         // fall through
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
-    case codemaker::UnoType::SORT_TYPEDEF:
+    case codemaker::UnoType::Sort::Sequence:
+    case codemaker::UnoType::Sort::Enum:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::Exception:
+    case codemaker::UnoType::Sort::Interface:
+    case codemaker::UnoType::Sort::Typedef:
         m_map.insert(
             Dependencies::Map::value_type(n, Dependencies::KIND_NO_BASE));
         break;
@@ -268,7 +268,7 @@ void Includes::dumpInclude(
 }
 
 bool Includes::isInterfaceType(OString const & entityName) const {
-    return m_manager->getSort(b2u(entityName)) == UnoType::SORT_INTERFACE_TYPE;
+    return m_manager->getSort(b2u(entityName)) == UnoType::Sort::Interface;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

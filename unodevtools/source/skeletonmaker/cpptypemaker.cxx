@@ -38,21 +38,21 @@ void printType(
     rtl::Reference< unoidl::Entity > const & entity, short referenceType,
     bool defaultvalue)
 {
-    if (defaultvalue && rank == 0 && sort <= codemaker::UnoType::SORT_CHAR) {
+    if (defaultvalue && rank == 0 && sort <= codemaker::UnoType::Sort::Char) {
         switch (sort) {
-        case codemaker::UnoType::SORT_BOOLEAN:
+        case codemaker::UnoType::Sort::Boolean:
             o << "sal_False";
             return;
-        case codemaker::UnoType::SORT_CHAR:
-        case codemaker::UnoType::SORT_BYTE:
-        case codemaker::UnoType::SORT_SHORT:
-        case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-        case codemaker::UnoType::SORT_LONG:
-        case codemaker::UnoType::SORT_UNSIGNED_LONG:
-        case codemaker::UnoType::SORT_HYPER:
-        case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-        case codemaker::UnoType::SORT_FLOAT:
-        case codemaker::UnoType::SORT_DOUBLE:
+        case codemaker::UnoType::Sort::Char:
+        case codemaker::UnoType::Sort::Byte:
+        case codemaker::UnoType::Sort::Short:
+        case codemaker::UnoType::Sort::UnsignedShort:
+        case codemaker::UnoType::Sort::Long:
+        case codemaker::UnoType::Sort::UnsignedLong:
+        case codemaker::UnoType::Sort::Hyper:
+        case codemaker::UnoType::Sort::UnsignedHyper:
+        case codemaker::UnoType::Sort::Float:
+        case codemaker::UnoType::Sort::Double:
             o << "0";
             return;
         default:
@@ -61,7 +61,7 @@ void printType(
     }
 
     if (defaultvalue && referenceType == 16) {
-        if (sort == codemaker::UnoType::SORT_ENUM_TYPE) {
+        if (sort == codemaker::UnoType::Sort::Enum) {
             o << nucleus.copy(nucleus.lastIndexOf('.') + 1) << "_"
               << dynamic_cast< unoidl::EnumTypeEntity * >(entity.get())->
                 getMembers()[0].name;
@@ -69,10 +69,10 @@ void printType(
         return;
     }
     bool bReference = false;
-    if (((sort > codemaker::UnoType::SORT_CHAR ||
+    if (((sort > codemaker::UnoType::Sort::Char ||
           rank > 0) && referenceType != 8 &&
-         !(sort == codemaker::UnoType::SORT_ENUM_TYPE && referenceType == 4 && rank == 0)) ||
-        (sort <= codemaker::UnoType::SORT_CHAR && referenceType == 2))
+         !(sort == codemaker::UnoType::Sort::Enum && referenceType == 4 && rank == 0)) ||
+        (sort <= codemaker::UnoType::Sort::Char && referenceType == 2))
     {
         bReference = true;
     }
@@ -84,7 +84,7 @@ void printType(
         o << ((options.shortnames) ? "css::uno::Sequence< " :
               "::com::sun::star::uno::Sequence< ");
     }
-    if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE && referenceType > 0) {
+    if (sort == codemaker::UnoType::Sort::Interface && referenceType > 0) {
         o << ((options.shortnames) ? "css::uno::Reference< " :
               "::com::sun::star::uno::Reference< ");
     }
@@ -92,7 +92,7 @@ void printType(
     o << scopedCppName(codemaker::cpp::translateUnoToCppType(sort, nucleus),
                        options.shortnames && referenceType > 0);
 
-    if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE && referenceType > 0)
+    if (sort == codemaker::UnoType::Sort::Interface && referenceType > 0)
         o << " >";
 
     if (!arguments.empty()) {
@@ -114,7 +114,7 @@ void printType(
     if (bReference && referenceType > 1)
         o << " &";
 
-    if (referenceType == 8 && (sort > codemaker::UnoType::SORT_CHAR || rank > 0))
+    if (referenceType == 8 && (sort > codemaker::UnoType::Sort::Char || rank > 0))
         o << "()";
 }
 
@@ -143,7 +143,7 @@ bool printConstructorParameters(
 {
     bool previous = false;
     switch (sort) {
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::PlainStruct:
         {
             rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
                 dynamic_cast< unoidl::PlainStructTypeEntity * >(entity.get()));
@@ -171,7 +171,7 @@ bool printConstructorParameters(
             }
             break;
         }
-    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case codemaker::UnoType::Sort::PolymorphicStructTemplate:
         {
             rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
                 dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
@@ -197,7 +197,7 @@ bool printConstructorParameters(
             }
             break;
         }
-    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         {
             rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
                 dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
@@ -232,7 +232,7 @@ bool printConstructorParameters(
             }
             break;
         }
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+    case codemaker::UnoType::Sort::Exception:
         {
             rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
                 dynamic_cast< unoidl::ExceptionTypeEntity * >(entity.get()));
@@ -498,7 +498,7 @@ void printMethods(std::ostream & o,
 
     generated.add(u2b(name));
     rtl::Reference< unoidl::Entity > ent;
-    if (manager->getSort(name, &ent) != codemaker::UnoType::SORT_INTERFACE_TYPE)
+    if (manager->getSort(name, &ent) != codemaker::UnoType::Sort::Interface)
     {
         throw CannotDumpException(
             "unexpected entity \"" + name
@@ -658,7 +658,7 @@ void printConstructors(
 {
     rtl::Reference< unoidl::Entity > ent;
     if (manager->getSort(name, &ent)
-        != codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE)
+        != codemaker::UnoType::Sort::SingleInterfaceBasedService)
     {
         throw CannotDumpException(
             "unexpected entity \"" + name
@@ -772,9 +772,9 @@ void generateDocumentation(std::ostream & o,
 
     bool comment = true;
     if (!delegate.isEmpty()) {
-        if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE &&
-            sort != codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE &&
-            sort != codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE )
+        if (sort != codemaker::UnoType::Sort::Interface &&
+            sort != codemaker::UnoType::Sort::SingleInterfaceBasedService &&
+            sort != codemaker::UnoType::Sort::AccumulationBasedService )
         {
             return;
         }
@@ -785,59 +785,59 @@ void generateDocumentation(std::ostream & o,
         o << "\n// UNO";
         if (rank != 0) {
             o << " sequence type";
-        } else if (sort <= codemaker::UnoType::SORT_ANY) {
+        } else if (sort <= codemaker::UnoType::Sort::Any) {
             o << " simple type";
         } else {
             switch (sort) {
-            case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            case codemaker::UnoType::Sort::Interface:
                 o << " interface type";
                 break;
 
-            case codemaker::UnoType::SORT_MODULE:
+            case codemaker::UnoType::Sort::Module:
                 o << "IDL module";
                 break;
 
-            case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+            case codemaker::UnoType::Sort::PlainStruct:
                 o << " simple struct type";
                 break;
 
-            case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+            case codemaker::UnoType::Sort::PolymorphicStructTemplate:
                 o << " polymorphic struct type template";
                 break;
 
-            case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+            case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
                 o << " instantiated polymorphic struct type";
                 break;
 
-            case codemaker::UnoType::SORT_ENUM_TYPE:
+            case codemaker::UnoType::Sort::Enum:
                 o << " enum type";
                 break;
 
-            case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+            case codemaker::UnoType::Sort::Exception:
                 o << " exception type";
                 break;
 
-            case codemaker::UnoType::SORT_TYPEDEF:
+            case codemaker::UnoType::Sort::Typedef:
                 o << "IDL typedef";
                 break;
 
-            case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+            case codemaker::UnoType::Sort::SingleInterfaceBasedService:
                 o << " single-inheritance--based service";
                 break;
 
-            case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+            case codemaker::UnoType::Sort::AccumulationBasedService:
                 o << "IDL accumulation-based service";
                 break;
 
-            case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+            case codemaker::UnoType::Sort::InterfaceBasedSingleton:
                 o << " inheritance-based singleton";
                 break;
 
-            case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+            case codemaker::UnoType::Sort::ServiceBasedSingleton:
                 o << "IDL service-based singleton";
                 break;
 
-            case codemaker::UnoType::SORT_CONSTANT_GROUP:
+            case codemaker::UnoType::Sort::ConstantGroup:
                 o << "IDL constant group";
                 break;
 
@@ -859,7 +859,7 @@ void generateDocumentation(std::ostream & o,
                 "array");
             o << '\n';
         }
-    } else if (sort <= codemaker::UnoType::SORT_ANY) {
+    } else if (sort <= codemaker::UnoType::Sort::Any) {
         if (comment) {
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity, nullptr);
@@ -867,7 +867,7 @@ void generateDocumentation(std::ostream & o,
         }
     } else {
         switch (sort) {
-        case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        case codemaker::UnoType::Sort::Interface:
             if (comment)
                 printMapsToCppType(
                     o, options, manager, sort, nucleus, rank, arguments, entity,
@@ -886,70 +886,70 @@ void generateDocumentation(std::ostream & o,
             }
             break;
 
-        case codemaker::UnoType::SORT_MODULE:
+        case codemaker::UnoType::Sort::Module:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "namespace");
             o << '\n';
             break;
 
-        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+        case codemaker::UnoType::Sort::PlainStruct:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "class");
             o << "; full constructor:\n";
             printConstructor(
-                o, options, manager, codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE,
+                o, options, manager, codemaker::UnoType::Sort::PlainStruct,
                 entity, nucleus, arguments);
             break;
 
-        case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        case codemaker::UnoType::Sort::PolymorphicStructTemplate:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "class template");
             o << "; full constructor:\n";
             printConstructor(
                 o, options, manager,
-                codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE,
+                codemaker::UnoType::Sort::PolymorphicStructTemplate,
                 entity, nucleus, arguments);
             break;
 
-        case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+        case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "class template instantiation");
             o << "; full constructor:\n";
             printConstructor(
                 o, options, manager,
-                codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE,
+                codemaker::UnoType::Sort::InstantiatedPolymorphicStruct,
                 entity, nucleus, arguments);
             break;
 
-        case codemaker::UnoType::SORT_ENUM_TYPE:
+        case codemaker::UnoType::Sort::Enum:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "enum");
             o << '\n';
             break;
 
-        case codemaker::UnoType::SORT_CONSTANT_GROUP:
+        case codemaker::UnoType::Sort::ConstantGroup:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "namespace");
             o << '\n';
             break;
 
-        case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+        case codemaker::UnoType::Sort::Exception:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "exception class");
             o << "; full constructor:\n";
             printConstructor(
-                o, options, manager, codemaker::UnoType::SORT_EXCEPTION_TYPE,
+                o, options, manager, codemaker::UnoType::Sort::Exception,
                 entity, nucleus, arguments);
             break;
 
-        case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+        case codemaker::UnoType::Sort::SingleInterfaceBasedService:
             if (comment) {
                 printMapsToCppType(
                     o, options, manager, sort, nucleus, rank, arguments, entity,
@@ -964,7 +964,7 @@ void generateDocumentation(std::ostream & o,
                 delegate);
             break;
 
-        case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
+        case codemaker::UnoType::Sort::AccumulationBasedService:
             if (comment)
                 o << ("does not map to C++\n"
                       "// the service members are generated instead\n");
@@ -975,7 +975,7 @@ void generateDocumentation(std::ostream & o,
                 delegate);
             break;
 
-        case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+        case codemaker::UnoType::Sort::InterfaceBasedSingleton:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
                 "class");
@@ -988,7 +988,7 @@ void generateDocumentation(std::ostream & o,
             o << " get(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);\n";
             break;
 
-        case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+        case codemaker::UnoType::Sort::ServiceBasedSingleton:
             o << "does not map to C++\n";
             break;
 

@@ -585,7 +585,7 @@ void generateMemberInitialization(std::ostream& o,
         {
             sal_Int32 rank;
             if ((manager->decompose(i->type, true, nullptr, &rank, nullptr, nullptr)
-                 <= codemaker::UnoType::SORT_CHAR)
+                 <= codemaker::UnoType::Sort::Char)
                 && rank == 0)
             {
                 o << ",\n    m_" << i->name << "(";

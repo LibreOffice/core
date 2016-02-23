@@ -52,9 +52,9 @@ Dependencies::Dependencies(
     assert(manager.is());
     rtl::Reference< unoidl::Entity > ent;
     switch (m_manager->getSort(name, &ent)) {
-    case UnoType::SORT_ENUM_TYPE:
+    case UnoType::Sort::Enum:
         break;
-    case UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case UnoType::Sort::PlainStruct:
         {
             rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
                 static_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
@@ -67,7 +67,7 @@ Dependencies::Dependencies(
             }
             break;
         }
-    case UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case UnoType::Sort::PolymorphicStructTemplate:
         {
             rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > ent2(
                 static_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
@@ -80,7 +80,7 @@ Dependencies::Dependencies(
             }
             break;
         }
-    case UnoType::SORT_EXCEPTION_TYPE:
+    case UnoType::Sort::Exception:
         {
             rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
                 static_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
@@ -93,7 +93,7 @@ Dependencies::Dependencies(
             }
             break;
         }
-    case UnoType::SORT_INTERFACE_TYPE:
+    case UnoType::Sort::Interface:
         {
             rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                 static_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
@@ -132,10 +132,10 @@ Dependencies::Dependencies(
             }
             break;
         }
-    case UnoType::SORT_TYPEDEF:
+    case UnoType::Sort::Typedef:
         insert(static_cast< unoidl::TypedefEntity * >(ent.get())->getType());
         break;
-    case UnoType::SORT_CONSTANT_GROUP:
+    case UnoType::Sort::ConstantGroup:
         {
             rtl::Reference< unoidl::ConstantGroupEntity > ent2(
                 static_cast< unoidl::ConstantGroupEntity * >(ent.get()));
@@ -176,7 +176,7 @@ Dependencies::Dependencies(
             }
             break;
         }
-    case UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+    case UnoType::Sort::SingleInterfaceBasedService:
         {
             rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
                 static_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
@@ -201,7 +201,7 @@ Dependencies::Dependencies(
             }
             break;
         }
-    case UnoType::SORT_INTERFACE_BASED_SINGLETON:
+    case UnoType::Sort::InterfaceBasedSingleton:
         insert(
             static_cast< unoidl::InterfaceBasedSingletonEntity * >(ent.get())->
             getBase());
@@ -221,63 +221,63 @@ void Dependencies::insert(OUString const & name, bool base) {
         m_sequenceDependency = true;
     }
     switch (m_manager->getSort(n)) {
-    case UnoType::SORT_VOID:
+    case UnoType::Sort::Void:
         m_voidDependency = true;
         break;
-    case UnoType::SORT_BOOLEAN:
+    case UnoType::Sort::Boolean:
         m_booleanDependency = true;
         break;
-    case UnoType::SORT_BYTE:
+    case UnoType::Sort::Byte:
         m_byteDependency = true;
         break;
-    case UnoType::SORT_SHORT:
+    case UnoType::Sort::Short:
         m_shortDependency = true;
         break;
-    case UnoType::SORT_UNSIGNED_SHORT:
+    case UnoType::Sort::UnsignedShort:
         m_unsignedShortDependency = true;
         break;
-    case UnoType::SORT_LONG:
+    case UnoType::Sort::Long:
         m_longDependency = true;
         break;
-    case UnoType::SORT_UNSIGNED_LONG:
+    case UnoType::Sort::UnsignedLong:
         m_unsignedLongDependency = true;
         break;
-    case UnoType::SORT_HYPER:
+    case UnoType::Sort::Hyper:
         m_hyperDependency = true;
         break;
-    case UnoType::SORT_UNSIGNED_HYPER:
+    case UnoType::Sort::UnsignedHyper:
         m_unsignedHyperDependency = true;
         break;
-    case UnoType::SORT_FLOAT:
+    case UnoType::Sort::Float:
         m_floatDependency = true;
         break;
-    case UnoType::SORT_DOUBLE:
+    case UnoType::Sort::Double:
         m_doubleDependency = true;
         break;
-    case UnoType::SORT_CHAR:
+    case UnoType::Sort::Char:
         m_charDependency = true;
         break;
-    case UnoType::SORT_STRING:
+    case UnoType::Sort::String:
         m_stringDependency = true;
         break;
-    case UnoType::SORT_TYPE:
+    case UnoType::Sort::Type:
         m_typeDependency = true;
         break;
-    case UnoType::SORT_ANY:
+    case UnoType::Sort::Any:
         m_anyDependency = true;
         break;
-    case UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case UnoType::Sort::PolymorphicStructTemplate:
         for (const OString& arg : args)
         {
             insert(b2u(arg));
         }
         // fall through
-    case UnoType::SORT_SEQUENCE_TYPE:
-    case UnoType::SORT_ENUM_TYPE:
-    case UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case UnoType::SORT_EXCEPTION_TYPE:
-    case UnoType::SORT_INTERFACE_TYPE:
-    case UnoType::SORT_TYPEDEF:
+    case UnoType::Sort::Sequence:
+    case UnoType::Sort::Enum:
+    case UnoType::Sort::PlainStruct:
+    case UnoType::Sort::Exception:
+    case UnoType::Sort::Interface:
+    case UnoType::Sort::Typedef:
         {
             std::pair< Map::iterator, bool > i(
                 m_map.insert(
