@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <editeng/formatbreakitem.hxx>
+#include <sfx2/classificationhelper.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -31,6 +32,7 @@
 #include <numrule.hxx>
 #include <swundo.hxx>
 #include <docary.hxx>
+#include <docsh.hxx>
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
 {
@@ -47,9 +49,14 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl( sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-void SwEditShell::SetClassification(const OUString& /*rName*/)
+void SwEditShell::SetClassification(const OUString& rName)
 {
-    (void)this;//TODO
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return;
+
+    SfxClassificationHelper aHelper(*pDocShell);
+    aHelper.SetBACName(rName);
 }
 
 // #i62675#

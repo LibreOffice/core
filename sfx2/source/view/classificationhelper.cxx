@@ -150,4 +150,8 @@ OUString SfxClassificationHelper::GetDocumentWatermark()
     return OUString();
 }
 
+void SfxClassificationHelper::SetBACName(const OUString& /*rName*/)
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
