@@ -117,6 +117,10 @@ final class Unmarshal {
                 "Reading TYPE with bad type class " + (b & 0x7F));
         }
         if (TypeDescription.isTypeClassSimple(typeClass)) {
+            if ((b & 0x80) != 0) {
+                throw new RuntimeException(
+                    "Reading TYPE with bad type class/cache flag " + b);
+            }
             return TypeDescription.getTypeDescription(typeClass);
         } else {
             int index = read16Bit();
