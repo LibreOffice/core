@@ -19,10 +19,19 @@
 
 using namespace com::sun::star;
 
+/// Represents one category of a classification policy.
+class SfxClassificationCategory
+{
+public:
+    std::map<OUString, OUString> m_aLabels;
+};
+
 /// Implementation details of SfxClassificationHelper.
 struct SfxClassificationHelper::Impl
 {
     std::map<OUString, OUString> m_aLabels;
+    /// Possible categories of a policy to choose from.
+    std::map<OUString, SfxClassificationCategory> m_aCategories;
 };
 
 bool SfxClassificationHelper::IsClassified(SfxObjectShell& rObjectShell)
