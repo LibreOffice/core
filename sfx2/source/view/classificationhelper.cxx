@@ -431,10 +431,19 @@ OUString SfxClassificationHelper::GetDocumentWatermark()
     return OUString();
 }
 
-void SfxClassificationHelper::SetBACName(const OUString& /*rName*/)
+void SfxClassificationHelper::SetBACName(const OUString& rName)
 {
     if (m_pImpl->m_aCategories.empty())
         m_pImpl->parsePolicy();
+
+    std::map<OUString, SfxClassificationCategory>::iterator it = m_pImpl->m_aCategories.find(rName);
+    if (it == m_pImpl->m_aCategories.end())
+    {
+        SAL_WARN("sfx.view", "'" << rName << "' is not a recognized category name");
+        return;
+    }
+
+    m_pImpl->m_aLabels = it->second.m_aLabels;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
