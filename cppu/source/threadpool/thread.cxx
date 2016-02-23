@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <cstdlib>
@@ -38,12 +39,10 @@ namespace cppu_threadpool {
 
     ThreadAdmin::~ThreadAdmin()
     {
-#if OSL_DEBUG_LEVEL > 1
         if( m_lst.size() )
         {
-            fprintf( stderr, "%lu Threads left\n" , static_cast<unsigned long>(m_lst.size()) );
+            SAL_WARN("cppu.threadpool", static_cast<unsigned long>(m_lst.size()) << " Threads left");
         }
-#endif
     }
 
     bool ThreadAdmin::add( rtl::Reference< ORequestThread > const & p )
