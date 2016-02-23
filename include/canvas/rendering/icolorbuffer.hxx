@@ -33,13 +33,13 @@ namespace canvas
     struct IColorBuffer
     {
         /// The underlying pixel format for this buffer
-        enum Format
+        enum class Format
         {
             // 32-bit ARGB pixel format with alpha, 8 bits per channel.
-            FMT_A8R8G8B8,
+            A8R8G8B8,
 
             // 32-bit RGB pixel format, 8 bits per channel.
-            FMT_X8R8G8B8
+            X8R8G8B8
         };
 
         virtual ~IColorBuffer() {}

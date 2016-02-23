@@ -381,7 +381,7 @@ namespace dxcanvas
                 {
                     switch( rSource.getFormat() )
                     {
-                        case ::canvas::IColorBuffer::FMT_A8R8G8B8:
+                        case ::canvas::IColorBuffer::Format::A8R8G8B8:
                         {
                             const std::size_t nSourceBytesPerPixel(4);
                             const std::size_t nSourcePitchInBytes(rSource.getStride());
@@ -422,7 +422,7 @@ namespace dxcanvas
                         }
                         break;
 
-                        case ::canvas::IColorBuffer::FMT_X8R8G8B8:
+                        case ::canvas::IColorBuffer::Format::X8R8G8B8:
                         {
                             const std::size_t nSourceBytesPerPixel(4);
                             const std::size_t nSourcePitchInBytes(rSource.getStride());

@@ -98,7 +98,7 @@ namespace dxcanvas
 
         canvas::IColorBuffer::Format DXColorBuffer::getFormat() const
         {
-            return canvas::IColorBuffer::FMT_X8R8G8B8;
+            return canvas::IColorBuffer::Format::X8R8G8B8;
         }
 
 
@@ -174,7 +174,7 @@ namespace dxcanvas
 
         canvas::IColorBuffer::Format GDIColorBuffer::getFormat() const
         {
-            return canvas::IColorBuffer::FMT_A8R8G8B8;
+            return canvas::IColorBuffer::Format::A8R8G8B8;
         }
     }
 
