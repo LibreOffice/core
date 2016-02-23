@@ -50,6 +50,7 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
+#include <com/sun/star/text/AuthorDisplayFormat.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -146,6 +147,7 @@ const sal_Char sAPI_content[]           = "Content";
 const sal_Char sAPI_author[]            = "Author";
 const sal_Char sAPI_initials[]          = "Initials";
 const sal_Char sAPI_full_name[]         = "FullName";
+const sal_Char sAPI_author_format[]     = "AuthorFormat";
 const sal_Char sAPI_place_holder_type[] = "PlaceHolderType";
 const sal_Char sAPI_place_holder[]      = "PlaceHolder";
 const sal_Char sAPI_hint[]              = "Hint";
@@ -281,7 +283,6 @@ bool XMLTextFieldImportContext::CreateField(
 {
     // instantiate new XTextField:
     // ask import for model, model is factory, ask factory to create service
-
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
     if( xFactory.is() )
     {
@@ -743,7 +744,14 @@ void XMLSenderFieldImportContext::PrepareField(
 
 // XMLAuthorFieldImportContext
 
-
+static const SvXMLEnumMapEntry aAuthorFieldDisplayMap[] =
+{
+    { XML_FULL,                 AuthorDisplayFormat::FULL },
+    { XML_SENDER_LASTNAME,      AuthorDisplayFormat::LAST_NAME },
+    { XML_SENDER_FIRSTNAME,     AuthorDisplayFormat::FIRST_NAME },
+    { XML_SENDER_INITIALS,      AuthorDisplayFormat::INITIALS },
+    { XML_TOKEN_INVALID, 0 }
+};
 
 XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -751,8 +759,10 @@ XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     sal_uInt16 nToken)
 :   XMLSenderFieldImportContext(rImport, rHlp, nPrfx, sLocalName, nToken)
 ,   bAuthorFullName(true)
+,   nFormat(AuthorDisplayFormat::FULL)
 ,   sServiceAuthor(sAPI_author)
 ,   sPropertyAuthorFullName(sAPI_full_name)
+,   sPropertyAuthorFormat(sAPI_author_format)
 ,   sPropertyFixed(sAPI_is_fixed)
 ,   sPropertyContent(sAPI_content)
 {
@@ -763,11 +773,37 @@ XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
 void XMLAuthorFieldImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList) {
 
-    bAuthorFullName = (XML_TOK_TEXT_AUTHOR_INITIALS != nElementToken);
+    //bAuthorFullName = (XML_TOK_TEXT_AUTHOR_INITIALS != nElementToken);
+    //nAuthorFormat = bAuthorFullName ? 0 : 3;
     bValid = true;
-
     // process Attributes
     XMLTextFieldImportContext::StartElement(xAttrList);
+}
+
+void XMLAuthorFieldImportContext::ProcessAttribute(sal_uInt16 nAttrToken, const OUString& sAttrValue)
+{
+    switch(nAttrToken)
+    {
+        case XML_TOK_TEXTFIELD_FIXED:
+        {
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sAttrValue))
+            {
+                 bFixed = bTmp;
+            }
+            break;
+        }
+        case XML_TOK_TEXTFIELD_DISPLAY:
+        {
+            sal_uInt16 nTmp;
+            if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
+                                                aAuthorFieldDisplayMap))
+            {
+                nFormat = (sal_uInt16)nTmp;
+            }
+            break;
+        }
+    }
 }
 
 void XMLAuthorFieldImportContext::PrepareField(
@@ -775,11 +811,15 @@ void XMLAuthorFieldImportContext::PrepareField(
 {
     // set members
     Any aAny;
+
     aAny.setValue( &bAuthorFullName, cppu::UnoType<bool>::get() );
     rPropSet->setPropertyValue(sPropertyAuthorFullName, aAny);
 
     aAny.setValue( &bFixed, cppu::UnoType<bool>::get() );
     rPropSet->setPropertyValue(sPropertyFixed, aAny);
+
+    aAny <<= nFormat;
+    rPropSet->setPropertyValue(sPropertyAuthorFormat, aAny);
 
     // set content if fixed
     if (bFixed)
@@ -794,6 +834,8 @@ void XMLAuthorFieldImportContext::PrepareField(
         {
             aAny <<= GetContent();
             rPropSet->setPropertyValue(sPropertyContent, aAny);
+            rPropSet->setPropertyValue(sPropertyAuthorFormat, makeAny<sal_Int16>(0));
+            // trying to format already formatted fixed content would give empty content
         }
     }
 }

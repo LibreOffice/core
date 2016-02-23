@@ -55,6 +55,7 @@
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
+#include <com/sun/star/text/AuthorDisplayFormat.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -283,6 +284,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
 
     sPropertyAdjust("Adjust"),
     sPropertyAuthor("Author"),
+    sPropertyAuthorFormat("AuthorFormat"),
     sPropertyChapterFormat("ChapterFormat"),
     sPropertyChapterNumberingLevel("ChapterNumberingLevel"),
     sPropertyCharStyleNames("CharStyleNames"),
@@ -1069,13 +1071,22 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     // process each field type
     switch (nToken) {
-    case FIELD_ID_AUTHOR:
+    case FIELD_ID_AUTHOR:{
         // author field: fixed, field (sub-)type
-        ProcessBoolean(XML_FIXED,
-                       GetBoolProperty(sPropertyIsFixed, rPropSet), true);
+        if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FIXED,
+                                 (GetBoolProperty(sPropertyIsFixed, rPropSet) ? XML_TRUE : XML_FALSE) );
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyAuthorFormat))
+        {
+            ProcessString(XML_DISPLAY,
+                          MapAuthorDisplayFormat(
+                             GetInt16Property(sPropertyAuthorFormat, rPropSet)));
+        }
         ExportElement(MapAuthorFieldName(rPropSet), sPresentation);
         break;
-
+    }
     case FIELD_ID_SENDER:
         // sender field: fixed, field (sub-)type
         ProcessBoolean(XML_FIXED,
@@ -1442,7 +1453,6 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
     }
 
-    case FIELD_ID_DOCINFO_REVISION:
         ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), false);
         ExportElement(MapDocInfoFieldName(nToken), sPresentation);
@@ -1518,7 +1528,6 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
         ExportElement(MapCountFieldName(nToken), sPresentation);
         break;
-
     case FIELD_ID_CONDITIONAL_TEXT:
         ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
@@ -3143,6 +3152,31 @@ enum XMLTokenEnum XMLTextFieldExport::MapFilenameDisplayFormat(sal_Int16 nFormat
     return eName;
 }
 
+/// map AuthorDisplayFormat to XML attribute names
+enum XMLTokenEnum XMLTextFieldExport::MapAuthorDisplayFormat(sal_Int16 nFormat)
+{
+    enum XMLTokenEnum eName = XML_TOKEN_INVALID;
+
+    switch (nFormat)
+    {
+        case AuthorDisplayFormat::FULL:
+            eName = XML_FULL;
+            break;
+        case AuthorDisplayFormat::LAST_NAME:
+            eName = XML_SENDER_LASTNAME;
+            break;
+        case AuthorDisplayFormat::FIRST_NAME:
+            eName = XML_SENDER_FIRSTNAME;
+            break;
+        case AuthorDisplayFormat::INITIALS:
+            eName = XML_SENDER_INITIALS;
+            break;
+        default:
+            OSL_FAIL("unknown author display format");
+    }
+
+    return eName;
+}
 
 /// map ReferenceFieldPart to XML string
 enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
