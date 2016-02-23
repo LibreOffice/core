@@ -60,7 +60,7 @@ namespace canvas
                 {
                     switch( rSpriteRecord.meChangeType )
                     {
-                        case SpriteRedrawManager::SpriteChangeRecord::move:
+                        case SpriteRedrawManager::SpriteChangeRecord::ChangeType::move:
                             if( !mbIsMove )
                             {
                                 // no move yet - this must be the first one
@@ -73,7 +73,7 @@ namespace canvas
                             maMoveEndArea   = rSpriteRecord.maUpdateArea;
                             break;
 
-                        case SpriteRedrawManager::SpriteChangeRecord::update:
+                        case SpriteRedrawManager::SpriteChangeRecord::ChangeType::update:
                             // update end update area of the
                             // sprite. Thus, every update() action
                             // _after_ the last move will correctly
