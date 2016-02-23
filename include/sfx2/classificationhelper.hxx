@@ -34,6 +34,8 @@ public:
     SfxClassificationHelper(SfxObjectShell& rObjectShell);
     ~SfxClassificationHelper();
     OUString GetBACName();
+    /// Setting this sets all the other properties, based on the policy.
+    void SetBACName(const OUString& rName);
     /// If GetImpactLevelColor() will return something meaningful.
     bool HasImpactLevel();
     basegfx::BColor GetImpactLevelColor();
