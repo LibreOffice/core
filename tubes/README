@@ -1,4 +1,4 @@
-* Interface to Telepathy Tubes.
+Interface to Telepathy Tubes.
 
 The idea is to provide 1-1 collaboration between contacts and many-many
 collaboration via MUCs, using Telepathy DBus Tubes over Jabber/XMPP.
