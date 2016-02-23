@@ -203,11 +203,8 @@ void ChartController::TheModel::tryTermination()
                 //since we have indicated to give up the ownership with parameter true in close call
                 //the one who has thrown the CloseVetoException is the new owner
 
-#if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( !m_bOwnership,
-                    "INFO: a well known owner has caught a CloseVetoException after calling close(true)" );
-#endif
-
+                if(!m_bOwnership)
+                    SAL_WARN("chart2.main", "INFO: a well known owner has caught a CloseVetoException after calling close(true)");
                 m_bOwnership                = false;
                 return;
             }
