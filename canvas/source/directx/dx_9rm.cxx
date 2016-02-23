@@ -501,7 +501,7 @@ namespace dxcanvas
             mnBeginSceneCount(0),
             mbCanUseDynamicTextures(false),
             mbError( false ),
-            meType( PRIMITIVE_TYPE_UNKNOWN ),
+            meType( PrimitiveType::Unknown ),
             maPageSize(),
             mad3dpp(),
             maNumVertices( VERTEX_BUFFER_SIZE ),
@@ -1038,8 +1038,8 @@ namespace dxcanvas
                 return;
 
             --mnBeginSceneCount;
-            meType=PRIMITIVE_TYPE_UNKNOWN;
-            mnCount=0;
+            meType = PrimitiveType::Unknown;
+            mnCount = 0;
         }
 
 
@@ -1056,7 +1056,7 @@ namespace dxcanvas
 
             switch(meType)
             {
-                case PRIMITIVE_TYPE_TRIANGLE:
+                case PrimitiveType::Triangle:
                 {
                     maVertexCache.push_back(vertex);
                     ++mnCount;
@@ -1064,7 +1064,7 @@ namespace dxcanvas
                     break;
                 }
 
-                case PRIMITIVE_TYPE_QUAD:
+                case PrimitiveType::Quad:
                 {
                     if(mnCount == 3)
                     {

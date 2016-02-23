@@ -158,7 +158,7 @@ namespace canvas
         vertex.z = 0.0f;
 
         {
-            pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_QUAD );
+            pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Quad );
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
@@ -279,7 +279,7 @@ namespace canvas
         vertex.z = 0.0f;
 
         {
-            pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_QUAD );
+            pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Quad );
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
@@ -385,7 +385,7 @@ namespace canvas
                         nVertexCount/3 );
 #endif
 
-            pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_TRIANGLE );
+            pRenderModule->beginPrimitive( canvas::IRenderModule::PrimitiveType::Triangle );
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
