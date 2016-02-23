@@ -120,14 +120,14 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
 {
     switch( eType )
     {
-        case DocPasswordRequestType_STANDARD:
+        case DocPasswordRequestType::Standard:
         {
             DocumentPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
                 InteractionClassification_QUERY, eMode, rDocumentUrl, bPasswordToModify );
             maRequest <<= aRequest;
         }
         break;
-        case DocPasswordRequestType_MS:
+        case DocPasswordRequestType::MS:
         {
             DocumentMSPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
                 InteractionClassification_QUERY, eMode, rDocumentUrl, bPasswordToModify );

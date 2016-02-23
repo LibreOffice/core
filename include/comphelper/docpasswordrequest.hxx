@@ -32,10 +32,10 @@ class PasswordContinuation;
 
 
 /** Selects which UNO document password request type to use. */
-enum DocPasswordRequestType
+enum class DocPasswordRequestType
 {
-    DocPasswordRequestType_STANDARD,    /// Uses the standard com.sun.star.task.DocumentPasswordRequest request.
-    DocPasswordRequestType_MS           /// Uses the com.sun.star.task.DocumentMSPasswordRequest request.
+    Standard,    /// Uses the standard com.sun.star.task.DocumentPasswordRequest request.
+    MS           /// Uses the com.sun.star.task.DocumentMSPasswordRequest request.
 };
 
 

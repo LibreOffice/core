@@ -334,7 +334,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 Sequence<NamedValue> aEncryptionData;
                 aEncryptionData = rMediaDescriptor.requestAndVerifyDocPassword(
                                                 aVerifier,
-                                                comphelper::DocPasswordRequestType_MS,
+                                                comphelper::DocPasswordRequestType::MS,
                                                 &aDefaultPasswords );
 
                 if( aEncryptionData.getLength() == 0 )

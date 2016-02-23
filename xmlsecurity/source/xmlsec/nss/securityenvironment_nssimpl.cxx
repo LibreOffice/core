@@ -85,7 +85,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 
     task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
     ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
-        ::comphelper::DocPasswordRequestType_STANDARD, eMode, OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
+        ::comphelper::DocPasswordRequestType::Standard, eMode, OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
 
     uno::Reference< task::XInteractionRequest > xRequest( pPasswordRequest );
     xInteractionHandler->handle( xRequest );

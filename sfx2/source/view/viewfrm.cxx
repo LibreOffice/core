@@ -172,7 +172,7 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
 
             ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest(
                  new ::comphelper::DocPasswordRequest(
-                 bMSType ? ::comphelper::DocPasswordRequestType_MS : ::comphelper::DocPasswordRequestType_STANDARD,
+                 bMSType ? ::comphelper::DocPasswordRequestType::MS : ::comphelper::DocPasswordRequestType::Standard,
                  bFirstTime ? css::task::PasswordRequestMode_PASSWORD_ENTER : css::task::PasswordRequestMode_PASSWORD_REENTER,
                  aPath,
                  true ) );

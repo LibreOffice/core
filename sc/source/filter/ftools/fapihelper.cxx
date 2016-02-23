@@ -117,7 +117,7 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
     bool bIsDefaultPassword = false;
     aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
         rVerifier, aEncryptionData, aPassword, rMedium.GetInteractionHandler(), rMedium.GetOrigURL(),
-        ::comphelper::DocPasswordRequestType_MS, pDefaultPasswords, &bIsDefaultPassword );
+        ::comphelper::DocPasswordRequestType::MS, pDefaultPasswords, &bIsDefaultPassword );
 
     rMedium.GetItemSet()->ClearItem( SID_PASSWORD );
     rMedium.GetItemSet()->ClearItem( SID_ENCRYPTIONDATA );

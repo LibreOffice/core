@@ -5530,7 +5530,7 @@ namespace
                 if( xHandler.is() )
                 {
                     ::comphelper::DocPasswordRequest* pRequest = new ::comphelper::DocPasswordRequest(
-                        ::comphelper::DocPasswordRequestType_MS, task::PasswordRequestMode_PASSWORD_ENTER,
+                        ::comphelper::DocPasswordRequestType::MS, task::PasswordRequestMode_PASSWORD_ENTER,
                         INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
                     uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 

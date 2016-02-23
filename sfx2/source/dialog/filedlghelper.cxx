@@ -2607,8 +2607,8 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
     // for now MS-filters are the only alien filters that support encryption
     bool bMSType = !pCurrentFilter->IsOwnFormat();
     ::comphelper::DocPasswordRequestType eType = bMSType ?
-        ::comphelper::DocPasswordRequestType_MS :
-        ::comphelper::DocPasswordRequestType_STANDARD;
+        ::comphelper::DocPasswordRequestType::MS :
+        ::comphelper::DocPasswordRequestType::Standard;
 
     ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, css::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
 
