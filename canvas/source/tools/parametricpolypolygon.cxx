@@ -126,7 +126,7 @@ namespace canvas
     {
         // TODO(P2): hold gradient brush statically, and only setup
         // the colors
-        return new ParametricPolyPolygon( rDevice, GRADIENT_LINEAR, colors, stops );
+        return new ParametricPolyPolygon( rDevice, GradientType::Linear, colors, stops );
     }
 
     ParametricPolyPolygon* ParametricPolyPolygon::createEllipticalGradient(
@@ -141,7 +141,7 @@ namespace canvas
             rDevice,
             ::basegfx::tools::createPolygonFromCircle(
                 ::basegfx::B2DPoint(0,0), 1 ),
-            GRADIENT_ELLIPTICAL,
+            GradientType::Elliptical,
             colors, stops, fAspectRatio );
     }
 
@@ -156,7 +156,7 @@ namespace canvas
             rDevice,
             ::basegfx::tools::createPolygonFromRect(
                 ::basegfx::B2DRectangle( -1, -1, 1, 1 ) ),
-            GRADIENT_RECTANGULAR,
+            GradientType::Rectangular,
             colors, stops, fAspectRatio );
     }
 
