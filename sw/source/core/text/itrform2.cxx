@@ -2686,7 +2686,7 @@ namespace {
                          const sal_Int32 nOldLineEnd,
                          const std::vector<long> &rFlyStarts )
     {
-        SwTextFormatInfo txtFormatInfo = rThis.GetInfo();
+        SwTextFormatInfo& txtFormatInfo = rThis.GetInfo();
         if ( txtFormatInfo.GetIdx() < txtFormatInfo.GetReformatStart() )
         // the reformat position is behind our new line, that means
         // something of our text has moved to the next line
@@ -2733,7 +2733,11 @@ namespace {
                 if ( nReformat > txtFormatInfo.GetLineStart() + nMaxContext )
                     nReformat = nReformat - nMaxContext;
                 else
+                {
                     nReformat = txtFormatInfo.GetLineStart();
+                    //reset the margin flag - prevent loops
+                    SwTextCursor::SetRightMargin(false);
+                }
             }
 
             // Weird situation: Our line used to end with a hole portion
