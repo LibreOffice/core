@@ -45,7 +45,7 @@ public:
     void         ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType );
     void         ReadInterfaceOrShellEntry( SvMetaClass& rClass );
     bool         ReadInterfaceOrShellSlot( SvMetaSlot& rSlot );
-    bool         ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr );
+    void         ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr );
     void         ReadItem();
     void         ReadStruct();
     void         ReadEnum();
