@@ -24,7 +24,7 @@ class BColor;
 /// Shared code to handle Business Authorization Identification and Labeling Scheme (BAILS) properties.
 class SFX2_DLLPUBLIC SfxClassificationHelper
 {
-    struct Impl;
+    class Impl;
     std::unique_ptr<Impl> m_pImpl;
 
 public:
