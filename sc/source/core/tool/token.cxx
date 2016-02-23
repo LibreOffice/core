@@ -372,11 +372,7 @@ bool ScRawToken::IsValidReference() const
 
 FormulaToken* ScRawToken::CreateToken() const
 {
-#if OSL_DEBUG_LEVEL > 1
-#define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) OSL_TRACE( #c "::ctor: OpCode %d lost, converted to " #o "; maybe inherit from FormulaToken instead!", int(eOp))
-#else
-#define IF_NOT_OPCODE_ERROR(o,c)
-#endif
+#define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) SAL_INFO( "sc.tool", #c "::ctor: OpCode " << int(eOp) << "%d lost, converted to " #o "; maybe inherit from FormulaToken instead!")
     switch ( GetType() )
     {
         case svByte :

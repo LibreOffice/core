@@ -21,10 +21,6 @@
 #include <string.h>
 #include <math.h>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <unotools/bootstrap.hxx>
 #include <svl/zforlist.hxx>
 
@@ -716,19 +712,17 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
                             fNum * mA->GetDouble( j, k) ) / fDen, j, i);
         }
     }
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): LU");
+    SAL_WARN("sc.tool", "lcl_LUP_decompose(): LU");
     for (SCSIZE i=0; i < n; ++i)
     {
         for (SCSIZE j=0; j < n; ++j)
-            fprintf( stderr, "%8.2g  ", mA->GetDouble( j, i));
-        fprintf( stderr, "\n%s\n", "");
+            SAL_WARN("sc.tool", mA->GetDouble(j, i));
+        SAL_WARN("sc.tool", "");
     }
-    fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): P");
+    SAL_WARN("sc.tool", "lcl_LUP_decompose(): P");
     for (SCSIZE j=0; j < n; ++j)
-        fprintf( stderr, "%5u ", (unsigned)P[j]);
-    fprintf( stderr, "\n%s\n", "");
-#endif
+        SAL_WARN("sc.tool", (unsigned)P[j]);
+    SAL_WARN("sc.tool", "");
 
     bool bSingular=false;
     for (SCSIZE i=0; i<n && !bSingular; i++)
@@ -953,7 +947,6 @@ void ScInterpreter::ScMatInv()
                         for (SCSIZE i=0; i < nR; ++i)
                             xY->PutDouble( X[i], j, i);
                     }
-#if OSL_DEBUG_LEVEL > 1
                     /* Possible checks for ill-condition:
                      * 1. Scale matrix, invert scaled matrix. If there are
                      *    elements of the inverted matrix that are several
@@ -977,20 +970,19 @@ void ScInterpreter::ScMatInv()
                     {
                         ScMatrix* pR = xR.get();
                         lcl_MFastMult( pMat, xY.get(), pR, nR, nR, nR);
-                        fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
+                        SAL_WARN("sc.tool", "ScMatInv(): mult-identity");
                         for (SCSIZE i=0; i < nR; ++i)
                         {
                             for (SCSIZE j=0; j < nR; ++j)
                             {
                                 double fTmp = pR->GetDouble( j, i);
-                                fprintf( stderr, "%8.2g  ", fTmp);
+                                SAL_WARN("sc.tool", fTmp);
                                 if (fabs( fTmp - (i == j)) > fInvEpsilon)
                                     SetError( errIllegalArgument);
                             }
-                        fprintf( stderr, "\n%s\n", "");
+                        SAL_WARN("sc.tool", "");
                         }
                     }
-#endif
                     if (nGlobalError)
                         PushError( nGlobalError);
                     else

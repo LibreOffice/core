@@ -429,14 +429,6 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr (
 void SAL_CALL osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize);
 
-#if OSL_DEBUG_LEVEL > 1
-static sal_uInt32 g_nSocketImpl = 0;
-static sal_uInt32 g_nSocketAddr = 0;
-
-/* sorry, must be implemented otherwise */
-
-#endif /* OSL_DEBUG_LEVEL */
-
 oslSocket __osl_createSocketImpl(int Socket)
 {
     oslSocket pSocket;
@@ -451,9 +443,6 @@ oslSocket __osl_createSocketImpl(int Socket)
     pSocket->m_bIsAccepting = false;
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-    g_nSocketImpl ++;
-#endif
     return pSocket;
 }
 
@@ -461,17 +450,11 @@ void __osl_destroySocketImpl(oslSocket Socket)
 {
     if ( Socket != nullptr)
         free(Socket);
-#if OSL_DEBUG_LEVEL > 1
-    g_nSocketImpl --;
-#endif
 }
 
 static oslSocketAddr __osl_createSocketAddr()
 {
     oslSocketAddr pAddr = static_cast<oslSocketAddr>(rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl )));
-#if OSL_DEBUG_LEVEL > 1
-    g_nSocketAddr ++;
-#endif
     return pAddr;
 }
 
@@ -509,9 +492,6 @@ static oslSocketAddr __osl_createSocketAddrFromSystem( struct sockaddr *pSystemS
 
 static void __osl_destroySocketAddr( oslSocketAddr addr )
 {
-#if OSL_DEBUG_LEVEL > 1
-    g_nSocketAddr --;
-#endif
     rtl_freeMemory( addr );
 }
 

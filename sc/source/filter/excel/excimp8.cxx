@@ -381,9 +381,6 @@ void ImportExcel8::ReadBasic()
                 ScCTBWrapper wrapper;
                 if ( wrapper.Read( *xXCB ) )
                 {
-#if OSL_DEBUG_LEVEL > 1
-                    wrapper.Print( stderr );
-#endif
                     wrapper.ImportCustomToolBar( *pShell );
                 }
             }

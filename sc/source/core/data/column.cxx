@@ -2792,20 +2792,16 @@ struct CalcAllHandler
 {
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-#if OSL_DEBUG_LEVEL > 1
         // after F9 ctrl-F9: check the calculation for each FormulaTree
         double nOldVal, nNewVal;
         nOldVal = pCell->GetValue();
-#endif
         pCell->Interpret();
-#if OSL_DEBUG_LEVEL > 1
         if (pCell->GetCode()->IsRecalcModeNormal())
             nNewVal = pCell->GetValue();
         else
             nNewVal = nOldVal;  // random(), jetzt() etc.
 
-        OSL_ENSURE(nOldVal == nNewVal, "CalcAll: nOldVal != nNewVal");
-#endif
+        assert(nOldVal == nNewVal);
     }
 };
 
