@@ -43,7 +43,8 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
-    if ( aStoragePair.storage.is() )
+    auto storage = aStoragePair.mapStorage();
+    if ( storage.is() )
     {
         try
         {
@@ -51,11 +52,11 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
             try
             {
                 OUString sOldName = StorageContainer::removeOldURLPrefix(sName);
-                if ( aStoragePair.storage->isStreamElement(sOldName) )
+                if ( storage->isStreamElement(sOldName) )
                 {
                     try
                     {
-                        aStoragePair.storage->renameElement(sOldName,StorageContainer::removeURLPrefix(sName,aStoragePair.url));
+                        storage->renameElement(sOldName,StorageContainer::removeURLPrefix(sName,aStoragePair.url));
                     }
                     catch(const Exception&)
                     {
@@ -68,7 +69,7 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
             catch(const IllegalArgumentException&)
             {
             }
-            return aStoragePair.storage->isStreamElement(StorageContainer::removeURLPrefix(sName,aStoragePair.url));
+            return storage->isStreamElement(StorageContainer::removeURLPrefix(sName,aStoragePair.url));
         }
         catch(const NoSuchElementException&)
         {
@@ -101,11 +102,12 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     }
 #endif
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
-    if ( aStoragePair.storage.is() )
+    auto storage = aStoragePair.mapStorage();
+    if ( storage.is() )
     {
         try
         {
-            aStoragePair.storage->removeElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name),aStoragePair.url));
+            storage->removeElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name),aStoragePair.url));
         }
         catch(const NoSuchElementException&)
         {
@@ -137,11 +139,12 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     }
 #endif
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
-    if ( aStoragePair.storage.is() )
+    auto storage = aStoragePair.mapStorage();
+    if ( storage.is() )
     {
         try
         {
-            aStoragePair.storage->renameElement(
+            storage->renameElement(
                 StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.url),
                 StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.url)
             );

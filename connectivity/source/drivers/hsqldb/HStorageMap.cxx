@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <uno/mapping.hxx>
 #include <algorithm>
 
 namespace connectivity
@@ -99,6 +100,28 @@ namespace connectivity
             return m_xSeek;
         }
 
+        css::uno::Reference<css::embed::XStorage> StorageData::mapStorage()
+            const
+        {
+            css::uno::Environment env(css::uno::Environment::getCurrent());
+            if (!(env.is() && storageEnvironment.is())) {
+                throw css::uno::RuntimeException("cannot get environments");
+            }
+            if (env.get() == storageEnvironment.get()) {
+                return storage;
+            } else {
+                css::uno::Mapping map(storageEnvironment, env);
+                if (!map.is()) {
+                    throw css::uno::RuntimeException("cannot get mapping");
+                }
+                css::uno::Reference<css::embed::XStorage> mapped;
+                map.mapInterface(
+                    reinterpret_cast<void **>(&mapped), storage.get(),
+                    cppu::UnoType<css::embed::XStorage>::get());
+                return mapped;
+            }
+        }
+
         TStorages& lcl_getStorageMap()
         {
             static TStorages s_aMap;
@@ -170,12 +193,12 @@ namespace connectivity
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                 [&_xStorage] (const TStorages::value_type& storage) {
-                    return storage.second.storage == _xStorage;
+                    return storage.second.mapStorage() == _xStorage;
                 });
 
             if ( aFind == rMap.end() )
             {
-                aFind = rMap.insert(TStorages::value_type(lcl_getNextCount(), {_xStorage, _sURL, TStreamMap()})).first;
+                aFind = rMap.insert(TStorages::value_type(lcl_getNextCount(), {_xStorage, css::uno::Environment::getCurrent(), _sURL, TStreamMap()})).first;
             }
 
             return aFind->first;
@@ -201,7 +224,7 @@ namespace connectivity
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                 [&_xStorage] (const TStorages::value_type& storage) {
-                    return storage.second.storage == _xStorage;
+                    return storage.second.mapStorage() == _xStorage;
                 });
 
             if ( aFind != rMap.end() )
@@ -219,10 +242,10 @@ namespace connectivity
                 {
                     if ( _xListener.is() )
                     {
-                        Reference<XTransactionBroadcaster> xBroad(aFind->second.storage,UNO_QUERY);
+                        Reference<XTransactionBroadcaster> xBroad(aFind->second.mapStorage(),UNO_QUERY);
                         if ( xBroad.is() )
                             xBroad->removeTransactionListener(_xListener);
-                        Reference<XTransactedObject> xTrans(aFind->second.storage,UNO_QUERY);
+                        Reference<XTransactedObject> xTrans(aFind->second.mapStorage(),UNO_QUERY);
                         if ( xTrans.is() )
                             xTrans->commit();
                     }
@@ -244,8 +267,9 @@ namespace connectivity
             if ( aFind != rMap.end() )
             {
                 TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(sKey);
-                OSL_ENSURE(aStoragePair.storage.is(),"No Storage available!");
-                if ( aStoragePair.storage.is() )
+                auto storage = aStoragePair.mapStorage();
+                OSL_ENSURE(storage.is(),"No Storage available!");
+                if ( storage.is() )
                 {
                     OUString sOrgName = StorageContainer::jstring2ustring(env,name);
                     OUString sName = removeURLPrefix(sOrgName,aStoragePair.url);
@@ -261,7 +285,7 @@ namespace connectivity
                         {
                             try
                             {
-                                pHelper.reset(new StreamHelper(aStoragePair.storage->openStreamElement(sName,_nMode)));
+                                pHelper.reset(new StreamHelper(storage->openStreamElement(sName,_nMode)));
                             }
                             catch(const Exception&)
                             {
@@ -272,7 +296,7 @@ namespace connectivity
                                     bool bIsStream = true;
                                     try
                                     {
-                                       bIsStream = aStoragePair.storage->isStreamElement(sStrippedName);
+                                       bIsStream = storage->isStreamElement(sStrippedName);
                                     }
                                     catch(const Exception&)
                                     {
@@ -281,7 +305,7 @@ namespace connectivity
                                     if ( !bIsStream )
                                         return pHelper; // readonly file without data stream
                                 }
-                                pHelper.reset( new StreamHelper(aStoragePair.storage->openStreamElement( sStrippedName, _nMode ) ) );
+                                pHelper.reset( new StreamHelper(storage->openStreamElement( sStrippedName, _nMode ) ) );
                             }
                             aFind->second.streams.insert(TStreamMap::value_type(sName,pHelper));
                         }
