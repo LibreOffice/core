@@ -112,6 +112,10 @@ final class Unmarshal {
     public TypeDescription readType() {
         int b = read8Bit();
         TypeClass typeClass = TypeClass.fromInt(b & 0x7F);
+        if (typeClass == null) {
+            throw new RuntimeException(
+                "Reading TYPE with bad type class " + (b & 0x7F));
+        }
         if (TypeDescription.isTypeClassSimple(typeClass)) {
             return TypeDescription.getTypeDescription(typeClass);
         } else {
