@@ -59,7 +59,8 @@ struct SC_DLLPUBLIC ScQueryEntry
     ~ScQueryEntry();
 
     /// creates pSearchParam and pSearchText if necessary
-    utl::TextSearch* GetSearchTextPtr( utl::SearchParam::SearchType eSearchType, bool bCaseSens ) const;
+    utl::TextSearch* GetSearchTextPtr( utl::SearchParam::SearchType eSearchType, bool bCaseSens,
+            bool bWildMatchSel ) const;
 
     QueryItemsType& GetQueryItems() { return maQueryItems;}
     const QueryItemsType& GetQueryItems() const { return maQueryItems;}

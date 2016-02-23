@@ -164,13 +164,14 @@ bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
     // do not compare pSearchParam and pSearchText!
 }
 
-utl::TextSearch* ScQueryEntry::GetSearchTextPtr( utl::SearchParam::SearchType eSearchType, bool bCaseSens ) const
+utl::TextSearch* ScQueryEntry::GetSearchTextPtr( utl::SearchParam::SearchType eSearchType, bool bCaseSens,
+        bool bWildMatchSel ) const
 {
     if ( !pSearchParam )
     {
         OUString aStr = maQueryItems[0].maString.getString();
         pSearchParam = new utl::SearchParam(
-            aStr, eSearchType, bCaseSens, false, false);
+            aStr, eSearchType, bCaseSens, false, false, '~', bWildMatchSel);
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;

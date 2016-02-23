@@ -145,6 +145,9 @@ void TestTextSearch::testWildcardSearch()
     util::SearchResult aRes;
 
     aOptions.AlgorithmType2 = util::SearchAlgorithms2::WILDCARD ;
+    aOptions.WildcardEscapeCharacter = '~';
+    // aOptions.searchFlag = ::css::util::SearchFlags::WILD_MATCH_SELECTION;
+    // is not set, so substring match is allowed.
     aOptions.transliterateFlags = ::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE;
     aText = "abAca";
 

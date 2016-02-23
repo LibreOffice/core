@@ -41,14 +41,19 @@ SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
                                 bool bCaseSensitive,
                                 bool bWrdOnly,
-                                bool bSearchInSel )
+                                bool bSearchInSel,
+                                sal_uInt32 cWildEscChar,
+                                bool bWildMatchSel )
 {
     sSrchStr        = rText;
     m_eSrchType     = eType;
 
+    m_cWildEscChar  = cWildEscChar;
+
     m_bWordOnly     = bWrdOnly;
     m_bSrchInSel    = bSearchInSel;
     m_bCaseSense    = bCaseSensitive;
+    m_bWildMatchSel = bWildMatchSel;
 
     nTransliterationFlags = 0;
 
@@ -65,9 +70,12 @@ SearchParam::SearchParam( const SearchParam& rParam )
     sReplaceStr     = rParam.sReplaceStr;
     m_eSrchType     = rParam.m_eSrchType;
 
+    m_cWildEscChar  = rParam.m_cWildEscChar;
+
     m_bWordOnly     = rParam.m_bWordOnly;
     m_bSrchInSel    = rParam.m_bSrchInSel;
     m_bCaseSense    = rParam.m_bCaseSense;
+    m_bWildMatchSel = rParam.m_bWildMatchSel;
 
     bLEV_Relaxed    = rParam.bLEV_Relaxed;
     nLEV_OtherX     = rParam.nLEV_OtherX;
@@ -83,6 +91,7 @@ static bool lcl_Equals( const SearchOptions2& rSO1, const SearchOptions2& rSO2 )
 {
     return
         rSO1.AlgorithmType2 == rSO2.AlgorithmType2 &&
+        rSO1.WildcardEscapeCharacter == rSO2.WildcardEscapeCharacter &&
         rSO1.algorithmType == rSO2.algorithmType &&
         rSO1.searchFlag == rSO2.searchFlag &&
         rSO1.searchString.equals(rSO2.searchString) &&
@@ -175,7 +184,8 @@ css::util::SearchOptions2 TextSearch::UpgradeToSearchOptions2( const css::util::
             rOptions.deletedChars,
             rOptions.insertedChars,
             rOptions.transliterateFlags,
-            nAlgorithmType2
+            nAlgorithmType2,
+            0       // no wildcard search, no escape character..
             );
     return aOptions2;
 }
@@ -190,6 +200,9 @@ void TextSearch::Init( const SearchParam & rParam,
     {
     case SearchParam::SRCH_WILDCARD:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
+        aSOpt.WildcardEscapeCharacter = rParam.GetWildEscChar();
+        if (rParam.IsWildMatchSel())
+            aSOpt.searchFlag |= SearchFlags::WILD_MATCH_SELECTION;
         aSOpt.algorithmType = static_cast<SearchAlgorithms>(-1);    // no old enum for that
         break;
 
@@ -237,7 +250,6 @@ void TextSearch::Init( const SearchParam & rParam,
 void TextSearch::SetLocale( const css::util::SearchOptions2& rOptions,
                             const css::lang::Locale& rLocale )
 {
-    // convert SearchParam to the UNO SearchOptions2
     SearchOptions2 aSOpt( rOptions );
     aSOpt.Locale = rLocale;
 

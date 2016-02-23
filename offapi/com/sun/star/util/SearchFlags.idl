@@ -121,6 +121,20 @@ published constants SearchFlags
         positives, but meets user expectation better. </p>
     */
     const long  LEV_RELAXED     = 0x00010000;
+
+    /** Flag for wildcards search if entire selection must match the
+        pattern.
+
+        <p> If com::sun::star::util::SearchOptions2::AlgorithmType2 is
+        com::sun::star::util::SearchAlgorithms2::WILDCARD specifies
+        whether a wildcard pattern must match the entire selected range
+        of the string from start position to end position or a substring
+        match is allowed. </p>
+
+        <p> If set, the entire selection must match. If not set, a
+        substring match is allowed. </p>
+     */
+    const long  WILD_MATCH_SELECTION = 0x00100000;
 };
 
 }; }; }; };

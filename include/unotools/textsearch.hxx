@@ -96,9 +96,12 @@ private:
 
     SearchType m_eSrchType;       // search normal/regular/LevDist
 
+    sal_uInt32 m_cWildEscChar;      // wildcard escape character
+
     bool m_bWordOnly   : 1;        // used by normal search
     bool m_bSrchInSel  : 1;        // search only in the selection
     bool m_bCaseSense  : 1;
+    bool m_bWildMatchSel : 1;       // wildcard pattern must match entire selection
 
     // values for the "weight Levenshtein-Distance"
     bool bLEV_Relaxed : 1;
@@ -114,7 +117,9 @@ public:
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
                     bool bCaseSensitive = true,
                     bool bWordOnly = false,
-                    bool bSearchInSelection = false );
+                    bool bSearchInSelection = false,
+                    sal_uInt32 cWildEscChar = '\\',
+                    bool bWildMatchSel = false );
 
     SearchParam( const SearchParam& );
 
@@ -127,6 +132,10 @@ public:
     bool            IsCaseSensitive() const     { return m_bCaseSense; }
     bool            IsSrchInSelection() const   { return m_bSrchInSel; }
     bool            IsSrchWordOnly() const      { return m_bWordOnly; }
+    bool            IsWildMatchSel() const      { return m_bWildMatchSel; }
+
+    // signed return for API use
+    sal_Int32       GetWildEscChar() const      { return static_cast<sal_Int32>(m_cWildEscChar); }
 
     bool            IsSrchRelaxed() const       { return bLEV_Relaxed; }
     int             GetLEVOther() const         { return nLEV_OtherX; }

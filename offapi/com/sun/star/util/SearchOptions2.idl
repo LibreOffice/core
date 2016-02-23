@@ -29,6 +29,20 @@ published struct SearchOptions2 : com::sun::star::util::SearchOptions {
         SearchAlgorithms SearchOptions::algorithmType enum field.
      */
     short   AlgorithmType2;
+
+    /** The escape character to be used with a
+        com::sun::star::util::SearchAlgorithms2::WILDCARD search.
+
+        <p> A Unicode character, if not 0 escapes the special meaning of
+        a question mark, asterisk or escape character that follows
+        immediately after the escape character. If 0 defines no escape
+        character is used. </p>
+
+        <p> Common values are '\' (U+005C REVERSE SOLIDUS) aka backslash
+        in text processing context, or '~' (U+007E TILDE) in spreadsheet
+        processing context. </p>
+     */
+    long    WildcardEscapeCharacter;
 };
 
 }; }; }; };

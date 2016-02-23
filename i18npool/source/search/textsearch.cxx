@@ -113,8 +113,6 @@ TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         , pJumpTable2( nullptr )
         , pRegexMatcher( nullptr )
         , pWLD( nullptr )
-        , mcWildcardEscapeChar('~')         /* TODO: make this option available through API */
-        , mbWildcardAllowSubstring(true)    /* TODO: make this option available through API */
 {
     SearchOptions2 aOpt;
     aOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
@@ -245,6 +243,8 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeExc
             break;
 
         case SearchAlgorithms2::WILDCARD:
+            mcWildcardEscapeChar = static_cast<sal_uInt32>(aSrchPara.WildcardEscapeCharacter);
+            mbWildcardAllowSubstring = ((aSrchPara.searchFlag & SearchFlags::WILD_MATCH_SELECTION) == 0);
             fnForward = &TextSearch::WildcardSrchFrwrd;
             fnBackward = &TextSearch::WildcardSrchBkwrd;
             break;
@@ -289,7 +289,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
             rOptions.deletedChars,
             rOptions.insertedChars,
             rOptions.transliterateFlags,
-            nAlgorithmType2
+            nAlgorithmType2,
+            0   // no wildcard search, no escape character..
             );
     setOptions2( aOptions2);
 }
