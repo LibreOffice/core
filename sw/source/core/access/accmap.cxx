@@ -1700,8 +1700,8 @@ SwAccessibleMap::~SwAccessibleMap()
     {
         osl::MutexGuard aGuard( maMutex );
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( !mpFrameMap || mpFrameMap->empty(),
-                "Frame map should be empty after disposing the root frame" );
+        assert((!mpFrameMap || mpFrameMap->empty()) &&
+                "Frame map should be empty after disposing the root frame");
         if( mpFrameMap )
         {
             SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->begin();
@@ -1717,8 +1717,8 @@ SwAccessibleMap::~SwAccessibleMap()
                 ++aIter;
             }
         }
-        OSL_ENSURE( !mpShapeMap || mpShapeMap->empty(),
-                "Object map should be empty after disposing the root frame" );
+        assert((!mpShapeMap || mpShapeMap->empty()) &&
+                "Object map should be empty after disposing the root frame");
         if( mpShapeMap )
         {
             SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
@@ -1751,7 +1751,7 @@ SwAccessibleMap::~SwAccessibleMap()
     {
         osl::MutexGuard aGuard( maEventMutex );
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( !(mpEvents || mpEventMap), "pending events" );
+        assert(!(mpEvents || mpEventMap));
         if( mpEvents )
         {
             SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
