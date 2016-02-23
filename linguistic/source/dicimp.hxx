@@ -43,13 +43,12 @@ class DictionaryNeo :
     >
 {
 
-    ::comphelper::OInterfaceContainerHelper2                          aDicEvtListeners;
-    css::uno::Sequence< css::uno::Reference<  css::linguistic2::XDictionaryEntry > >
+    ::comphelper::OInterfaceContainerHelper2                    aDicEvtListeners;
+    std::vector< css::uno::Reference< css::linguistic2::XDictionaryEntry > >
                                                                 aEntries;
     OUString                                                    aDicName;
     OUString                                                    aMainURL;
     css::linguistic2::DictionaryType                            eDicType;
-    sal_Int16                                                   nCount;
     sal_Int16                                                   nLanguage;
     sal_Int16                                                   nDicVersion;
     bool                                                        bNeedEntries;

@@ -46,15 +46,14 @@ namespace linguistic
 #define MAX_PROPOSALS   40
 
 bool SeqHasEntry(
-        const Sequence< OUString > &rSeq,
+        const std::vector< OUString > &rSeq,
         const OUString &rTxt)
 {
     bool bRes = false;
-    sal_Int32 nLen = rSeq.getLength();
-    const OUString *pEntry = rSeq.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen  &&  !bRes;  ++i)
+    sal_Int32 nLen = rSeq.size();
+    for (sal_Int32 i = 0;  i < nLen && !bRes;  ++i)
     {
-        if (rTxt == pEntry[i])
+        if (rTxt == rSeq[i])
             bRes = true;
     }
     return bRes;
@@ -107,26 +106,25 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
 }
 
 
-void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
+void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
         Reference< XSearchableDictionaryList > &rxDicList,
         sal_Int16 nLanguage )
 {
     bool bSthRemoved = false;
-    sal_Int32 nLen = rSeq.getLength();
-    OUString *pEntries = rSeq.getArray();
+    sal_Int32 nLen = rSeq.size();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList,
-                    pEntries[i], nLanguage, false, true ) );
+                    rSeq[i], nLanguage, false, true ) );
         if (xNegEntry.is())
         {
-            pEntries[i].clear();
+            rSeq[i].clear();
             bSthRemoved = true;
         }
     }
     if (bSthRemoved)
     {
-        Sequence< OUString > aNew;
+        std::vector< OUString > aNew;
         // merge sequence without duplicates and empty strings in new empty sequence
         aNew = MergeProposalSeqs( aNew, rSeq, false );
         rSeq = aNew;
@@ -134,42 +132,39 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
 }
 
 
-Sequence< OUString > MergeProposalSeqs(
-            Sequence< OUString > &rAlt1,
-            Sequence< OUString > &rAlt2,
+std::vector< OUString > MergeProposalSeqs(
+            std::vector< OUString > &rAlt1,
+            std::vector< OUString > &rAlt2,
             bool bAllowDuplicates )
 {
-    Sequence< OUString > aMerged;
+    std::vector< OUString > aMerged;
 
-    if (0 == rAlt1.getLength() && bAllowDuplicates)
+    if (rAlt1.empty() && bAllowDuplicates)
         aMerged = rAlt2;
-    else if (0 == rAlt2.getLength() && bAllowDuplicates)
+    else if (rAlt2.empty() && bAllowDuplicates)
         aMerged = rAlt1;
     else
     {
-        sal_Int32 nAltCount1 = rAlt1.getLength();
-        const OUString *pAlt1 = rAlt1.getConstArray();
-        sal_Int32 nAltCount2 = rAlt2.getLength();
-        const OUString *pAlt2 = rAlt2.getConstArray();
+        size_t nAltCount1 = rAlt1.size();
+        size_t nAltCount2 = rAlt2.size();
 
-        sal_Int32 nCountNew = std::min( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
-        aMerged.realloc( nCountNew );
-        OUString *pMerged = aMerged.getArray();
+        sal_Int32 nCountNew = std::min<sal_Int32>( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
+        aMerged.resize( nCountNew );
 
         sal_Int32 nIndex = 0;
         sal_Int32 i = 0;
         for (int j = 0;  j < 2;  j++)
         {
-            sal_Int32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
-            const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
+            sal_Int32        nCount  = j == 0 ? nAltCount1 : nAltCount2;
+            std::vector< OUString >& rAlt   = j == 0 ? rAlt1 : rAlt2;
             for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
             {
-                if (!pAlt[i].isEmpty() &&
-                    (bAllowDuplicates || !SeqHasEntry(aMerged, pAlt[i] )))
-                    pMerged[ nIndex++ ] = pAlt[ i ];
+                if (!rAlt[i].isEmpty() &&
+                    (bAllowDuplicates || !SeqHasEntry(aMerged, rAlt[i] )))
+                    aMerged[ nIndex++ ] = rAlt[ i ];
             }
         }
-        aMerged.realloc( nIndex );
+        aMerged.resize( nIndex );
     }
 
     return aMerged;

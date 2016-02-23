@@ -1613,7 +1613,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 }
 
 static bool IsEqSvcList( const uno::Sequence< OUString > &rList1,
-                        const uno::Sequence< OUString > &rList2 )
+                         const uno::Sequence< OUString > &rList2 )
 {
     // returns true iff both sequences are equal
 
