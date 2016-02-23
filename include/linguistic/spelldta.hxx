@@ -37,14 +37,14 @@ namespace com { namespace sun { namespace star {
 namespace linguistic
 {
 
-css::uno::Sequence< OUString >
+std::vector< OUString >
         MergeProposalSeqs(
-                css::uno::Sequence< OUString > &rAlt1,
-                css::uno::Sequence< OUString > &rAlt2,
+                std::vector< OUString > &rAlt1,
+                std::vector< OUString > &rAlt2,
                 bool bAllowDuplicates );
 
 void    SeqRemoveNegEntries(
-                css::uno::Sequence< OUString > &rSeq,
+                std::vector< OUString > &rSeq,
                 css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &rxDicList,
                 sal_Int16 nLanguage );
 

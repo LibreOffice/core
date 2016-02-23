@@ -74,11 +74,11 @@ bool FileExists( const OUString &rMainURL )
     return bExists;
 }
 
-static uno::Sequence< OUString > GetMultiPaths_Impl(
+static std::vector< OUString > GetMultiPaths_Impl(
     const OUString &rPathPrefix,
     DictionaryPathFlags nPathFlags )
 {
-    uno::Sequence< OUString >   aRes;
+    std::vector< OUString >     aRes;
     uno::Sequence< OUString >   aInternalPaths;
     uno::Sequence< OUString >   aUserPaths;
     OUString                    aWritablePath;
@@ -110,11 +110,10 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
         sal_Int32 nMaxEntries = aInternalPaths.getLength() + aUserPaths.getLength();
         if (!aWritablePath.isEmpty())
             ++nMaxEntries;
-        aRes.realloc( nMaxEntries );
-        OUString *pRes = aRes.getArray();
+        aRes.resize( nMaxEntries );
         sal_Int32 nCount = 0;   // number of actually added entries
         if ((nPathFlags & DictionaryPathFlags::WRITABLE) && !aWritablePath.isEmpty())
-            pRes[ nCount++ ] = aWritablePath;
+            aRes[ nCount++ ] = aWritablePath;
         for (int i = 0;  i < 2;  ++i)
         {
             const uno::Sequence< OUString > &rPathSeq = i == 0 ? aUserPaths : aInternalPaths;
@@ -124,10 +123,10 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
                 const bool bAddUser     = &rPathSeq == &aUserPaths     && (nPathFlags & DictionaryPathFlags::USER);
                 const bool bAddInternal = &rPathSeq == &aInternalPaths && (nPathFlags & DictionaryPathFlags::INTERNAL);
                 if ((bAddUser || bAddInternal) && !pPathSeq[k].isEmpty())
-                    pRes[ nCount++ ] = pPathSeq[k];
+                    aRes[ nCount++ ] = pPathSeq[k];
             }
         }
-        aRes.realloc( nCount );
+        aRes.resize( nCount );
     }
 
     return aRes;
@@ -135,15 +134,15 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
 
 OUString GetDictionaryWriteablePath()
 {
-    uno::Sequence< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::WRITABLE ) );
-    DBG_ASSERT( aPaths.getLength() == 1, "Dictionary_writable path corrupted?" );
+    std::vector< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::WRITABLE ) );
+    DBG_ASSERT( aPaths.size() == 1, "Dictionary_writable path corrupted?" );
     OUString aRes;
-    if (aPaths.getLength() > 0)
+    if (aPaths.size() > 0)
         aRes = aPaths[0];
     return aRes;
 }
 
-uno::Sequence< OUString > GetDictionaryPaths()
+std::vector< OUString > GetDictionaryPaths()
 {
     return GetMultiPaths_Impl( "Dictionary", PATH_FLAG_ALL );
 }
