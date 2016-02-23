@@ -45,14 +45,6 @@ typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 
 // FileStream
 
-enum FileAccessMode
-{
-    FAM_READ,                   // "r"
-    FAM_WRITE,                  // "w"
-    FAM_READWRITE_EXIST,        // "r+"
-    FAM_READWRITE               // "w+"
-};
-
 class FileStream
 {
 public:
