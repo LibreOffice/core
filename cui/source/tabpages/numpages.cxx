@@ -2869,7 +2869,7 @@ void SvxNumPositionTabPage::dispose()
 
 /*-------------------------------------------------------*/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CUI_TABPAGES
 void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
 {
     OUString const sHash( " # " );
