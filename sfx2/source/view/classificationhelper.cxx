@@ -289,8 +289,6 @@ public:
     void parsePolicy();
     /// Synchronize m_aLabels back to the object shell.
     void pushToObjectShell();
-    /// Updates infobar if necessary for an already loaded document.
-    void updateViewFrame();
 };
 
 SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
