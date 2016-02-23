@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_d186a412",
+        "filename": "chart2/source/controller/accessibility/AccessibleBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-23T07:32:46Z",
+      "side": 1,
+      "message": "RTL_TEXTENCODING_ASCII_US was a parameter to that OUStringToOString() call, not something you need to output.",
+      "revId": "e056abe634968204b329b8b50d5aa43ce96a83f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_317c4820",
+        "filename": "chart2/source/controller/accessibility/AccessibleBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-23T07:32:46Z",
+      "side": 1,
+      "message": "Obviously I meant that you need to get rid of the OUStringToOString() in all places where used in a SAL_WARN",
+      "revId": "e056abe634968204b329b8b50d5aa43ce96a83f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_11794c30",
+        "filename": "chart2/source/controller/accessibility/AccessibleBase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-02-23T07:32:46Z",
+      "side": 1,
+      "message": "I.e., here too.",
+      "revId": "e056abe634968204b329b8b50d5aa43ce96a83f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
