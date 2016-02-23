@@ -62,14 +62,14 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
 {
     o_rEncryptionData = OnVerifyPassword( rPassword );
     mnError = o_rEncryptionData.getLength() ? ERRCODE_NONE : ERRCODE_ABORT;
-    return o_rEncryptionData.getLength() ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    return o_rEncryptionData.getLength() ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
 ::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     bool bValid = OnVerifyEncryptionData( rEncryptionData );
     mnError = bValid ? ERRCODE_NONE : ERRCODE_ABORT;
-    return bValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    return bValid ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
 void XclImpDecrypter::Update( SvStream& rStrm, sal_uInt16 nRecSize )

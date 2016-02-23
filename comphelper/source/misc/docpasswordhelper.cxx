@@ -356,48 +356,48 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         bool* pbIsDefaultPassword )
 {
     css::uno::Sequence< css::beans::NamedValue > aEncData;
-    DocPasswordVerifierResult eResult = DocPasswordVerifierResult_WRONG_PASSWORD;
+    DocPasswordVerifierResult eResult = DocPasswordVerifierResult::WrongPassword;
 
     // first, try provided default passwords
     if( pbIsDefaultPassword )
         *pbIsDefaultPassword = false;
     if( pDefaultPasswords )
     {
-        for( ::std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult_WRONG_PASSWORD) && (aIt != aEnd); ++aIt )
+        for( ::std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult::WrongPassword) && (aIt != aEnd); ++aIt )
         {
             OSL_ENSURE( !aIt->isEmpty(), "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
             if( !aIt->isEmpty() )
             {
                 eResult = rVerifier.verifyPassword( *aIt, aEncData );
                 if( pbIsDefaultPassword )
-                    *pbIsDefaultPassword = eResult == DocPasswordVerifierResult_OK;
+                    *pbIsDefaultPassword = eResult == DocPasswordVerifierResult::OK;
             }
         }
     }
 
     // try media encryption data (skip, if result is OK or ABORT)
-    if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
+    if( eResult == DocPasswordVerifierResult::WrongPassword )
     {
         if( rMediaEncData.getLength() > 0 )
         {
             eResult = rVerifier.verifyEncryptionData( rMediaEncData );
-            if( eResult == DocPasswordVerifierResult_OK )
+            if( eResult == DocPasswordVerifierResult::OK )
                 aEncData = rMediaEncData;
         }
     }
 
     // try media password (skip, if result is OK or ABORT)
-    if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
+    if( eResult == DocPasswordVerifierResult::WrongPassword )
     {
         if( !rMediaPassword.isEmpty() )
             eResult = rVerifier.verifyPassword( rMediaPassword, aEncData );
     }
 
     // request a password (skip, if result is OK or ABORT)
-    if( (eResult == DocPasswordVerifierResult_WRONG_PASSWORD) && rxInteractHandler.is() ) try
+    if( (eResult == DocPasswordVerifierResult::WrongPassword) && rxInteractHandler.is() ) try
     {
         PasswordRequestMode eRequestMode = PasswordRequestMode_PASSWORD_ENTER;
-        while( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
+        while( eResult == DocPasswordVerifierResult::WrongPassword )
         {
             DocPasswordRequest* pRequest = new DocPasswordRequest( eRequestType, eRequestMode, rDocumentUrl );
             Reference< XInteractionRequest > xRequest( pRequest );
@@ -409,7 +409,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
             }
             else
             {
-                eResult = DocPasswordVerifierResult_ABORT;
+                eResult = DocPasswordVerifierResult::Abort;
             }
             eRequestMode = PasswordRequestMode_PASSWORD_REENTER;
         }
@@ -418,7 +418,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     {
     }
 
-    return (eResult == DocPasswordVerifierResult_OK) ? aEncData : uno::Sequence< beans::NamedValue >();
+    return (eResult == DocPasswordVerifierResult::OK) ? aEncData : uno::Sequence< beans::NamedValue >();
 }
 
 } // namespace comphelper

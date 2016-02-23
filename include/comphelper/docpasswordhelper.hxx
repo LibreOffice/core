@@ -30,11 +30,11 @@ namespace com { namespace sun { namespace star { namespace beans { struct Proper
 
 namespace comphelper {
 
-enum DocPasswordVerifierResult
+enum class DocPasswordVerifierResult
 {
-    DocPasswordVerifierResult_OK,
-    DocPasswordVerifierResult_WRONG_PASSWORD,
-    DocPasswordVerifierResult_ABORT
+    OK,
+    WrongPassword,
+    Abort
 };
 
 

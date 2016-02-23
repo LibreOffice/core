@@ -283,12 +283,12 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OU
     if(mDecryptor.generateEncryptionKey(rPassword))
         rEncryptionData = mDecryptor.createEncryptionData(rPassword);
 
-    return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult_OK : comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult::OK : comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
 comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const Sequence<NamedValue>&  )
 {
-    return comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    return comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
 } // namespace

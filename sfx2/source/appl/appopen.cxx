@@ -147,7 +147,7 @@ private:
 
 ::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
-    ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult::WrongPassword;
     try
     {
         // check the encryption data
@@ -160,17 +160,17 @@ private:
                 embed::ElementModes::READ | embed::ElementModes::NOCREATE );
 
         // no exception -> success
-        eResult = ::comphelper::DocPasswordVerifierResult_OK;
+        eResult = ::comphelper::DocPasswordVerifierResult::OK;
     }
     catch( const packages::WrongPasswordException& )
     {
-        eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+        eResult = ::comphelper::DocPasswordVerifierResult::WrongPassword;
     }
     catch( const uno::Exception& )
     {
         // unknown error, report it as wrong password
         // TODO/LATER: we need an additional way to report unknown problems in this case
-        eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+        eResult = ::comphelper::DocPasswordVerifierResult::WrongPassword;
     }
     return eResult;
 }
