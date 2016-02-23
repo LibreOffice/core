@@ -321,7 +321,7 @@ namespace comphelper
 
     void SAL_CALL EnumerableMap::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException, std::exception)
     {
-        ComponentMethodGuard aGuard( *this, ComponentMethodGuard::WithoutInit );
+        ComponentMethodGuard aGuard( *this, ComponentMethodGuard::MethodType::WithoutInit );
         if ( impl_isInitialized_nothrow() )
             throw AlreadyInitializedException();
 
