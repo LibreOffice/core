@@ -51,24 +51,34 @@ diff -ru a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
  endif
  endif
  
-diff -ru a/nss/coreconf/arch.mk b/nss/coreconf/arch.mk
---- a/a/nss/coreconf/arch.mk	2014-09-29 16:46:38.175421471 +0100
-+++ b/b/nss/coreconf/arch.mk	2014-09-29 16:47:42.986012244 +0100
-@@ -280,10 +280,15 @@
+diff -ru nss.orig/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
+--- a/nss.orig/nss/coreconf/arch.mk	2016-02-12 15:36:18.000000000 +0100
++++ b/nss/nss/coreconf/arch.mk	2016-02-23 20:48:31.595941079 +0100
+@@ -280,15 +280,21 @@
  # IMPL_STRATEGY may be defined too.
  #
  
+-ifdef CROSS_COMPILE
+-OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
+-else
 -OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
+-endif
 +# OBJDIR_NAME is used to build the directory containing the built objects, for 
 +# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
 +# We need to deliver the contents of that folder into instdir. To make that 
 +# easier in the makefile we rename this directory to "out". 
++#ifdef CROSS_COMPILE
++#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++#else
 +#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++#endif
 +OBJDIR_NAME = out
+ 
  
  ifeq (,$(filter-out WIN%,$(OS_TARGET)))
 -ifndef BUILD_OPT
 +ifdef THIS_HAS_BEEN_DISABLED_TO_GET_out
++
  #
  # Define USE_DEBUG_RTL if you want to use the debug runtime library
  # (RTL) in the debug build
@@ -162,3 +172,16 @@ diff -ru a/nss/Makefile b/nss/Makefile
  #! gmake
  #
  # This Source Code Form is subject to the terms of the Mozilla Public
+diff -ru nss.orig/nss/coreconf/Werror.mk nss/nss/coreconf/Werror.mk
+--- a/nss.orig/nss/coreconf/Werror.mk	2016-02-12 15:36:18.000000000 +0100
++++ b/nss/nss/coreconf/Werror.mk	2016-02-23 23:58:15.119584046 +0100
+@@ -60,7 +60,8 @@
+   endif #ndef NSS_ENABLE_WERROR
+ 
+   ifeq ($(NSS_ENABLE_WERROR),1)
+-    WARNING_CFLAGS += -Werror
++# We do not treat warnings as errors.
++#    WARNING_CFLAGS += -Werror
+   else
+     # Old versions of gcc (< 4.8) don't support #pragma diagnostic in functions.
+     # Use this to disable use of that #pragma and the warnings it suppresses.
