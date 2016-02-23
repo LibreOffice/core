@@ -26,32 +26,32 @@
 // Because it is non-critical resources (BASIC-Keywords),
 // we can work with dummies.
 
-#define STRING_TYPES        0
-#define STRING_ANY          13
-#define STRING_AS           32
-#define STRING_OPTIONAL     33
-#define STRING_BYREF        34
+enum class String {
+    TYPES      =   0,
+    ANY        =  13,
+    AS         =  32,
+    OPTIONAL   =  33,
+    BYREF      =  34,
+    NAMEPROP   =  35,
+    PARENTPROP =  36,
+    COUNTPROP  =  38,
+    ADDMETH    =  39,
+    ITEMMETH   =  40,
+    REMOVEMETH =  41,
+    ERRORMSG   =  42,
+    FALSE      =  43,
+    TRUE       =  44,
 
-#define STRING_NAMEPROP     35
-#define STRING_PARENTPROP   36
-#define STRING_COUNTPROP    38
-#define STRING_ADDMETH      39
-#define STRING_ITEMMETH     40
-#define STRING_REMOVEMETH   41
-
-#define STRING_ERRORMSG     42
-#define STRING_FALSE        43
-#define STRING_TRUE         44
-
-#define SBXRES_MAX          44
+    LAST_VALUE = TRUE
+};
 
 class SbxRes : public OUString
 {
 public:
-    explicit SbxRes( sal_uInt16 );
+    explicit SbxRes( String );
 };
 
-const char* GetSbxRes( sal_uInt16 );
+const char* GetSbxRes( String );
 
 
 #endif

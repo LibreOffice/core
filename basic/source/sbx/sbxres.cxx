@@ -72,12 +72,14 @@ static const char* pSbxRes[] = {
     "True"
 };
 
-const char* GetSbxRes( sal_uInt16 nId )
+const char* GetSbxRes( String nId )
 {
-    return ( ( nId > SBXRES_MAX ) ? "???" : pSbxRes[ nId ] );
+    return ( ( nId > String::LAST_VALUE ) ?
+                              "???"
+                              : pSbxRes[ static_cast<int>( nId ) ] );
 }
 
-SbxRes::SbxRes( sal_uInt16 nId )
+SbxRes::SbxRes( String nId )
     : OUString( OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 

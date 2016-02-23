@@ -258,11 +258,11 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         if( i->nFlags & SbxFlagBits::Optional )
         {
-            aTmp += OUString( SbxRes( STRING_OPTIONAL ) );
+            aTmp += OUString( SbxRes( String::OPTIONAL ) );
         }
         if( i->eType & SbxBYREF )
         {
-            aTmp += OUString( SbxRes( STRING_BYREF ) );
+            aTmp += OUString( SbxRes( String::BYREF ) );
         }
         aTmp += i->aName;
         cType = ' ';
@@ -291,14 +291,14 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
             // long type?
             if( t != SbxNAME_SHORT )
             {
-                aTmp += OUString( SbxRes( STRING_AS ) );
+                aTmp += OUString( SbxRes( String::AS ) );
                 if( nt < 32 )
                 {
-                    aTmp += OUString( SbxRes( sal::static_int_cast< sal_uInt16 >( STRING_TYPES + nt ) ) );
+                    aTmp += OUString( SbxRes( static_cast< enum String >( static_cast<int>( String ::TYPES ) + nt ) ) );
                 }
                 else
                 {
-                    aTmp += OUString( SbxRes( STRING_ANY ) );
+                    aTmp += OUString( SbxRes( String::ANY ) );
                 }
             }
         }
@@ -307,14 +307,14 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     // Long type? Then fetch it
     if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
     {
-        aTmp += OUString( SbxRes( STRING_AS ) );
+        aTmp += OUString( SbxRes( String::AS ) );
         if( et < 32 )
         {
-            aTmp += OUString( SbxRes( sal::static_int_cast< sal_uInt16 >( STRING_TYPES + et ) ) );
+            aTmp += OUString( SbxRes( static_cast< enum String >( static_cast<int>( String ::TYPES ) + et ) ) );
         }
         else
         {
-            aTmp += OUString( SbxRes( STRING_ANY ) );
+            aTmp += OUString( SbxRes( String::ANY ) );
         }
     }
     const_cast<SbxVariable*>(this)->aToolString = aTmp;
