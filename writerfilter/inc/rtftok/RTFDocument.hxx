@@ -15,6 +15,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <unotools/mediadescriptor.hxx>
 
 namespace writerfilter
 {
@@ -44,7 +45,7 @@ public:
                    css::uno::Reference<css::lang::XComponent> const& xDstDoc,
                    css::uno::Reference<css::frame::XFrame> const& xFrame,
                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
-                   bool bIsNewDoc);
+                   const utl::MediaDescriptor& rMediaDescriptor);
 };
 } // namespace rtftok
 } // namespace writerfilter
