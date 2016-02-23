@@ -280,17 +280,34 @@ void DumpGlyphBitmap(HDC hDC, const OpenGLGlyphCacheChunk& rChunk)
     SAL_INFO("vcl.gdi.opengl", "Bitmap " << hBitmap << ": " << aBitmap.bmWidth << "x" << aBitmap.bmHeight << ":");
 
     std::ostringstream sLine("\n", std::ios_base::ate);
+    std::ostringstream sScale;
+    long nPrintWidth = std::min(125l, aBitmap.bmWidth);
     for (long y = 0; y < aBitmap.bmHeight; y++)
     {
         if (y == rChunk.mnBaselineOffset + rChunk.getExtraOffset())
-            sLine << "-";
-        else
-            sLine << ColorFor(GetPixel(hDC, 0, y));
-        for (long x = 1; x < std::min(75l, aBitmap.bmWidth); x++)
+            sLine << "--------------------------\n";
+        long n = 0;
+        for (long x = 0; x < nPrintWidth; x++)
+        {
+            // delimit.
+            for (size_t i = 0; i < rChunk.maLocation.size(); ++i)
+            {
+                if (x == rChunk.maLocation[i].Right())
+                {
+                    n = 0;
+                    sLine << '|';
+                    if (y == 0)
+                        sScale << ' ';
+                    break;
+                }
+            }
             sLine << ColorFor(GetPixel(hDC, x, y));
-        if (y < aBitmap.bmHeight - 1)
-            sLine << "\n";
+            if (y == 0)
+                sScale << (n++ % 10);
+        }
+        sLine << "\n";
     }
+    sLine << sScale.str();
     SAL_INFO("vcl.gdi.opengl", sLine.str());
 }
 
@@ -562,7 +579,6 @@ bool WinFontInstance::AddChunkOfGlyphs(bool bRealGlyphIndices, int nGlyphIndex, 
 #ifdef SAL_LOG_INFO
     SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache);
     DumpGlyphBitmap(aDC.getCompatibleHDC(), aChunk);
-
     {
         std::ostringstream sLine;
         for (int i = 0; i < nCount; i++)
