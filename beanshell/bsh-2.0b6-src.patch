@@ -1,5 +1,5 @@
---- misc/BeanShell-2.0b5/build.xml	Fri Dec 19 17:14:27 2003
-+++ misc/build/BeanShell-2.0b5/build.xml	Fri Mar 28 15:55:04 2008
+--- misc/BeanShell-2.0b6/build.xml	Fri Dec 19 17:14:27 2003
++++ misc/build/BeanShell-2.0b6/build.xml	Fri Mar 28 15:55:04 2008
 @@ -10,7 +10,7 @@
  		- Why can't I nest filesets?  This seems like it would be so easy and
  		useful...
@@ -29,8 +29,8 @@
  	<!-- Legacy excludes.  Comment this *out* to build these legacy items -->
  	<property name="excludes-legacy" 
  		value="bsh/JThis.java"/>
---- misc/BeanShell-2.0b5/makefile.mk	Fri Mar 28 15:56:40 2008
-+++ misc/build/BeanShell-2.0b5/makefile.mk	Fri Mar 28 15:56:06 2008
+--- misc/BeanShell-2.0b6/makefile.mk	Fri Mar 28 15:56:40 2008
++++ misc/build/BeanShell-2.0b6/makefile.mk	Fri Mar 28 15:56:06 2008
 @@ -1 +1,29 @@
 -dummy
 +#**************************************************************

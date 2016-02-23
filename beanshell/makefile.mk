@@ -44,10 +44,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=bsh-2.0b5-src
-TARFILE_MD5=ec1941a74d3ef513c4ce57a9092b74e1
-TARFILE_ROOTDIR=BeanShell-2.0b5
-PATCH_FILES=bsh-2.0b5-src.patch
+TARFILE_NAME=bsh-2.0b6-src
+TARFILE_MD5=beeca87be45ec87d241ddd0e1bad80c1
+TARFILE_ROOTDIR=BeanShell-2.0b6
+PATCH_FILES=bsh-2.0b6-src.patch
 
 ADDITIONAL_FILES=makefile.mk
 
