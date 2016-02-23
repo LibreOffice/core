@@ -17,8 +17,6 @@ class InsertRemoveCells(unittest.TestCase):
         cls.xContext = pyuno.getComponentContext()
         pyuno.private_initTestEnvironment()
 
-    # no need for a tearDown(cls) method.
-
     def test_fdo74824_load(self):
         ctxt = self.xContext
         assert(ctxt)
