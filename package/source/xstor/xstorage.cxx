@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
@@ -44,7 +48,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/instance.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 
@@ -207,6 +210,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 {
     // all the checks done below by assertion statements must be done by factory
     SAL_WARN_IF( !xInputStream.is(), "package.xstor", "No input stream is provided!" );
+    assert(xContext.is());
 
     m_pSwitchStream = new SwitchablePersistenceStream(xContext, xInputStream);
     m_xInputStream = m_pSwitchStream->getInputStream();
@@ -247,6 +251,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 {
     // all the checks done below by assertion statements must be done by factory
     SAL_WARN_IF( !xStream.is(), "package.xstor", "No stream is provided!" );
+    assert(xContext.is());
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
@@ -289,6 +294,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 {
     SAL_WARN_IF( !xPackageFolder.is(), "package.xstor", "No package folder!" );
+    assert(xContext.is());
 }
 
 OStorage_Impl::~OStorage_Impl()
@@ -388,8 +394,7 @@ void OStorage_Impl::AddLog( const OUString& aMessage )
     {
         try
         {
-            uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            m_xLogRing = logging::DocumentIOLogRing::get(xContext);
+            m_xLogRing = logging::DocumentIOLogRing::get(m_xContext);
         }
         catch( const uno::Exception& )
         {
@@ -495,8 +500,8 @@ void OStorage_Impl::OpenOwnPackage()
                 aArguments[nArgNum-1] <<= aNamedValue;
             }
 
-            m_xPackage.set( GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                               "com.sun.star.packages.comp.ZipPackage", aArguments, GetComponentContext()),
+            m_xPackage.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                               "com.sun.star.packages.comp.ZipPackage", aArguments, m_xContext),
                             uno::UNO_QUERY );
         }
 
@@ -513,14 +518,6 @@ void OStorage_Impl::OpenOwnPackage()
     SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "The package root folder can not be opened!" );
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( THROW_WHERE );
-}
-
-uno::Reference< uno::XComponentContext > OStorage_Impl::GetComponentContext()
-{
-    if ( m_xContext.is() )
-        return m_xContext;
-
-    return ::comphelper::getProcessComponentContext();
 }
 
 SotElementList_Impl& OStorage_Impl::GetChildrenList()
@@ -1421,7 +1418,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
 
     uno::Reference< io::XSeekable > xSeek( xInStream, uno::UNO_QUERY );
     uno::Reference< io::XInputStream > xInStrToInsert = xSeek.is() ? xInStream :
-                                                                     GetSeekableTempCopy( xInStream, GetComponentContext() );
+                                                                     GetSeekableTempCopy( xInStream, m_xContext );
 
     uno::Sequence< uno::Any > aSeq( 1 );
     aSeq[0] <<= sal_False;
@@ -3650,7 +3647,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
-        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create( m_pImpl->GetComponentContext() );
+        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create( m_pImpl->m_xContext );
         uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
         xTempIn = xTempFile->getInputStream();
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );
@@ -3758,7 +3755,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
-        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_pImpl->GetComponentContext());
+        uno::Reference < io::XTempFile > xTempFile = io::TempFile::create(m_pImpl->m_xContext);
         uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
         xTempIn = xTempFile->getInputStream();
         uno::Reference < io::XSeekable > xSeek( xTempOut, uno::UNO_QUERY );

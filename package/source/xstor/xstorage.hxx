@@ -208,7 +208,6 @@ struct OStorage_Impl
     void ReadContents();
     void ReadRelInfoIfNecessary();
 
-    css::uno::Reference< css::uno::XComponentContext > GetComponentContext();
     SotElementList_Impl& GetChildrenList();
     void GetStorageProperties();
 
