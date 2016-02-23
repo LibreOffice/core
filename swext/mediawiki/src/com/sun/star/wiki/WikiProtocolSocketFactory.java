@@ -175,11 +175,11 @@ class LoggingProtocolSocketFactory extends SSLSocketFactory
 
     private static class LogSocket extends SSLSocket
     {
-        private SSLSocket m_Socket;
+        private final SSLSocket m_Socket;
 
-        public LogSocket(Socket socket)
+        public LogSocket(SSLSocket socket)
         {
-            m_Socket = (SSLSocket) socket;
+            m_Socket = socket;
         }
 
         private static class LogStream extends java.io.FilterOutputStream
@@ -272,35 +272,35 @@ class LoggingProtocolSocketFactory extends SSLSocketFactory
     public Socket createSocket(InetAddress address, int port)
         throws IOException
     {
-        return new LogSocket(((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(address, port));
+        return new LogSocket((SSLSocket) SSLSocketFactory.getDefault().createSocket(address, port));
     }
 
     @Override
     public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
         throws IOException
     {
-        return new LogSocket(((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(address, port, localAddress, localPort));
+        return new LogSocket((SSLSocket) SSLSocketFactory.getDefault().createSocket(address, port, localAddress, localPort));
     }
 
     @Override
     public Socket createSocket( String sHost, int nPort, InetAddress clientHost, int clientPort )
         throws IOException, UnknownHostException
     {
-        return new LogSocket(((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(sHost, nPort, clientHost, clientPort));
+        return new LogSocket((SSLSocket) SSLSocketFactory.getDefault().createSocket(sHost, nPort, clientHost, clientPort));
     }
 
     @Override
     public Socket createSocket( String sHost, int nPort )
         throws IOException, UnknownHostException
     {
-        return new LogSocket(((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(sHost, nPort));
+        return new LogSocket((SSLSocket) SSLSocketFactory.getDefault().createSocket(sHost, nPort));
     }
 
     @Override
     public Socket createSocket( Socket aSocket, String sHost, int nPort, boolean bAutoClose )
         throws IOException
     {
-        return new LogSocket(((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(aSocket, sHost, nPort, bAutoClose));
+        return new LogSocket((SSLSocket) ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(aSocket, sHost, nPort, bAutoClose));
     }
 
     @Override
