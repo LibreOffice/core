@@ -509,6 +509,7 @@ private:
 
 protected:
     SAL_DLLPRIVATE sal_uInt16 ImplExecute( const VclPtr<vcl::Window>& xWindow, const Rectangle& rRect, FloatWinPopupFlags nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
+    SAL_DLLPRIVATE void ImplFlushPendingSelect();
     SAL_DLLPRIVATE long ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = nullptr ) const;
 

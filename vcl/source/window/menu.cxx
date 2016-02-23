@@ -2921,6 +2921,19 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Rectangle& rRect,
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, nullptr, false );
 }
 
+void PopupMenu::ImplFlushPendingSelect()
+{
+    // is there still Select?
+    Menu* pSelect = ImplFindSelectMenu();
+    if (pSelect)
+    {
+        // Select should be called prior to leaving execute in a popup menu!
+        Application::RemoveUserEvent( pSelect->nEventId );
+        pSelect->nEventId = nullptr;
+        pSelect->Select();
+    }
+}
+
 sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
 {
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
@@ -3081,6 +3094,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         SalMenu* pMenu = ImplGetSalMenu();
         if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus ) )
         {
+            ImplFlushPendingSelect();
             pWin->StopExecute();
             pWin->doShutdown();
             pWindow->doLazyDelete();
@@ -3158,15 +3172,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         pWindow->doLazyDelete();
         pWindow = nullptr;
 
-        // is there still Select?
-        Menu* pSelect = ImplFindSelectMenu();
-        if ( pSelect )
-        {
-            // Select should be called prior to leaving execute in a popup menu!
-            Application::RemoveUserEvent( pSelect->nEventId );
-            pSelect->nEventId = nullptr;
-            pSelect->Select();
-        }
+        ImplFlushPendingSelect();
     }
 
     return bRealExecute ? nSelectedId : 0;
