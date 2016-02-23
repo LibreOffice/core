@@ -146,6 +146,7 @@ public:
     void testUnoParagraph();
     void testTdf60967();
     void testSearchWithTransliterate();
+    void testTdf73660();
     void testNewDocModifiedState();
     void testTdf77342();
     void testTdf74230();
@@ -234,6 +235,7 @@ public:
     CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf73660);
     CPPUNIT_TEST(testNewDocModifiedState);
     CPPUNIT_TEST(testTdf77342);
     CPPUNIT_TEST(testTdf74230);
@@ -1843,6 +1845,43 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCursor = pWrtShell->getShellCursor(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCursor->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf73660()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    OUString aData1 = "First" + OUString(CHAR_SOFTHYPHEN) + "Word";
+    OUString aData2 = "Seco" + OUString(CHAR_SOFTHYPHEN) + "nd";
+    OUString aData3 = OUString(CHAR_SOFTHYPHEN) + "Third";
+    OUString aData4 = "Fourth" + OUString(CHAR_SOFTHYPHEN);
+    OUString aData5 = "Fifth";
+    pWrtShell->Insert("We are inserting some text in the document to check the search feature ");
+    pWrtShell->Insert(aData1 + " ");
+    pWrtShell->Insert(aData2 + " ");
+    pWrtShell->Insert(aData3 + " ");
+    pWrtShell->Insert(aData4 + " ");
+    pWrtShell->Insert(aData5 + " ");
+    pWrtShell->Insert("Now we have enough text let's test search for all the cases");
+    //searching for all 5 strings entered with soft-hyphen, search string contains no soft-hyphen
+    css::util::SearchOptions2 searchOpt;
+    searchOpt.algorithmType = css::util::SearchAlgorithms_REGEXP;
+    searchOpt.searchFlag = css::util::SearchFlags::NORM_WORD_ONLY;
+    //case 1
+    searchOpt.searchString = OUString("First");
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
+    //case 2
+    searchOpt.searchString = OUString("Second");
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
+    //case 3
+    searchOpt.searchString = OUString("Third");
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
+    //case 4
+    searchOpt.searchString = OUString("Fourth");
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
+    //case 5
+    searchOpt.searchString = OUString("Fifth");
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
 }
 
 void SwUiWriterTest::testNewDocModifiedState()
