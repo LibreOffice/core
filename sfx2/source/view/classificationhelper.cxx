@@ -317,19 +317,32 @@ void SfxClassificationHelper::Impl::parsePolicy()
     m_aCategories = xClassificationParser->m_aCategories;
 }
 
+bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
+{
+    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
+    {
+        return rProperty.Name == rName;
+    }) != rProperties.end();
+}
+
 void SfxClassificationHelper::Impl::pushToObjectShell()
 {
     uno::Reference<document::XDocumentProperties> xDocumentProperties = m_rObjectShell.getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+    uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
+    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (const std::pair<OUString, OUString>& rLabel : m_aLabels)
     {
         try
         {
-            xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rLabel.second));
+            if (lcl_containsProperty(aProperties, rLabel.first))
+                xPropertySet->setPropertyValue(rLabel.first, uno::makeAny(rLabel.second));
+            else
+                xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rLabel.second));
         }
         catch (const uno::Exception& rException)
         {
-            SAL_WARN("sfx.view", "pushToObjectShell() failed to add property " << rLabel.first << ": " << rException.Message);
+            SAL_WARN("sfx.view", "pushToObjectShell() failed for property " << rLabel.first << ": " << rException.Message);
         }
     }
 }
