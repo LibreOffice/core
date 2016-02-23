@@ -127,7 +127,6 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
     }
     else if (rName == "baf:BusinessAuthorizationCategory")
     {
-        OUString aIdentifier = xAttribs->getValueByName("Identifier");
         OUString aName = xAttribs->getValueByName("Name");
         if (!m_pCategory && !aName.isEmpty())
         {
