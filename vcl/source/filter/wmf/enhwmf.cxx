@@ -998,20 +998,38 @@ bool EnhWMFReader::ReadEnhWMF()
                             aLineInfo.SetWidth( nWidth );
 
                         bool bTransparent = false;
-                        sal_uInt16 nDashCount = 0;
-                        sal_uInt16 nDotCount = 0;
 
                         switch( nStyle & PS_STYLE_MASK )
                         {
                             case PS_DASHDOTDOT :
-                                nDotCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 1 );
+                                aLineInfo.SetDotCount( 2 );
+                                aLineInfo.SetDashLen( 150 );
+                                aLineInfo.SetDotLen( 30 );
+                                aLineInfo.SetDistance( 50 );
+                            break;
                             case PS_DASHDOT :
-                                nDashCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 1 );
+                                aLineInfo.SetDotCount( 1 );
+                                aLineInfo.SetDashLen( 150 );
+                                aLineInfo.SetDotLen( 30 );
+                                aLineInfo.SetDistance( 90 );
+                            break;
                             case PS_DOT :
-                                nDotCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 0 );
+                                aLineInfo.SetDotCount( 1 );
+                                aLineInfo.SetDotLen( 30 );
+                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASH :
-                                nDashCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 1 );
+                                aLineInfo.SetDotCount( 0 );
+                                aLineInfo.SetDashLen( 225 );
+                                aLineInfo.SetDistance( 100 );
                             break;
                             case PS_NULL :
                                 bTransparent = true;
@@ -1022,12 +1040,6 @@ bool EnhWMFReader::ReadEnhWMF()
                             case PS_SOLID :
                             default :
                                 aLineInfo.SetStyle( LINE_SOLID );
-                        }
-                        if ( nDashCount | nDotCount )
-                        {
-                            aLineInfo.SetStyle( LINE_DASH );
-                            aLineInfo.SetDashCount( nDashCount );
-                            aLineInfo.SetDotCount( nDotCount );
                         }
                         pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( aColorRef, aLineInfo, bTransparent ) );
                     }
