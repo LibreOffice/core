@@ -157,7 +157,7 @@ class WikiProtocolSocketFactory extends SSLSocketFactory
     @Override
     public boolean equals(Object obj)
     {
-        return ((obj != null) && obj.getClass().equals(WikiProtocolSocketFactory.class));
+        return (obj != null) && (obj instanceof WikiProtocolSocketFactory);
     }
 
     @Override
