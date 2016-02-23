@@ -320,7 +320,7 @@ class LoggingProtocolSocketFactory extends SSLSocketFactory
     @Override
     public boolean equals(Object obj)
     {
-        return ((obj != null) && obj.getClass().equals(LoggingProtocolSocketFactory.class));
+        return (obj != null) && (obj instanceof LoggingProtocolSocketFactory);
     }
 
     @Override
