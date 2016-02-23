@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss-chromium-nss-static.patch \
         external/nss/nss-more-static.patch \
         external/nss/nss-ios.patch) \
+	external/nss/cmd.modutil.install.werror.patch \
 ))
 
 # nss-pem is only needed for internal curl to read the NSS CA database

@@ -1,0 +1,14 @@
+See discussion about this WaE breakage
+https://groups.google.com/d/topic/mozilla.dev.tech.crypto/TgnF3tIMxJ0/discussion
+diff -ru nss.orig/nss/cmd/modutil/install-ds.h nss/nss/cmd/modutil/install-ds.h
+--- a/nss.orig/nss/cmd/modutil/install-ds.h	2016-02-12 15:36:18.000000000 +0100
++++ a/nss/nss/cmd/modutil/install-ds.h	2016-02-23 22:11:44.459784483 +0100
+@@ -243,7 +243,7 @@
+ Pk11Install_Info*
+ Pk11Install_Info_new();
+ void
+-Pk11Install_Info_init();
++Pk11Install_Info_init(Pk11Install_Info* _this);
+ void
+ Pk11Install_Info_delete(Pk11Install_Info* _this);
+ /*// Returns NULL for success, error message if parse error.*/
