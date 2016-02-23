@@ -258,11 +258,11 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         if( i->nFlags & SbxFlagBits::Optional )
         {
-            aTmp += OUString( SbxRes( String::OPTIONAL ) );
+            aTmp += OUString( SbxRes( StringId::OPTIONAL ) );
         }
         if( i->eType & SbxBYREF )
         {
-            aTmp += OUString( SbxRes( String::BYREF ) );
+            aTmp += OUString( SbxRes( StringId::BYREF ) );
         }
         aTmp += i->aName;
         cType = ' ';
@@ -291,14 +291,14 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
             // long type?
             if( t != SbxNAME_SHORT )
             {
-                aTmp += OUString( SbxRes( String::AS ) );
+                aTmp += OUString( SbxRes( StringId::AS ) );
                 if( nt < 32 )
                 {
-                    aTmp += OUString( SbxRes( static_cast< enum String >( static_cast<int>( String ::TYPES ) + nt ) ) );
+                    aTmp += OUString( SbxRes( static_cast< StringId >( static_cast<int>( StringId::TYPES ) + nt ) ) );
                 }
                 else
                 {
-                    aTmp += OUString( SbxRes( String::ANY ) );
+                    aTmp += OUString( SbxRes( StringId::ANY ) );
                 }
             }
         }
@@ -307,14 +307,14 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     // Long type? Then fetch it
     if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
     {
-        aTmp += OUString( SbxRes( String::AS ) );
+        aTmp += OUString( SbxRes( StringId::AS ) );
         if( et < 32 )
         {
-            aTmp += OUString( SbxRes( static_cast< enum String >( static_cast<int>( String ::TYPES ) + et ) ) );
+            aTmp += OUString( SbxRes( static_cast< StringId >( static_cast<int>( StringId::TYPES ) + et ) ) );
         }
         else
         {
-            aTmp += OUString( SbxRes( String::ANY ) );
+            aTmp += OUString( SbxRes( StringId::ANY ) );
         }
     }
     const_cast<SbxVariable*>(this)->aToolString = aTmp;

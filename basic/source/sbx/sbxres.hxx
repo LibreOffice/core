@@ -26,7 +26,7 @@
 // Because it is non-critical resources (BASIC-Keywords),
 // we can work with dummies.
 
-enum class String {
+enum class StringId {
     TYPES      =   0,
     ANY        =  13,
     AS         =  32,
@@ -48,10 +48,10 @@ enum class String {
 class SbxRes : public OUString
 {
 public:
-    explicit SbxRes( String );
+    explicit SbxRes( StringId );
 };
 
-const char* GetSbxRes( String );
+const char* GetSbxRes( StringId );
 
 
 #endif
