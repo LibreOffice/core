@@ -49,6 +49,7 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl( sal_uInt16 nFormatColl) const
 
 void SwEditShell::SetClassification(const OUString& /*rName*/)
 {
+    (void)this;//TODO
 }
 
 // #i62675#
