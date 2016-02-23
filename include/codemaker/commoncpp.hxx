@@ -45,15 +45,15 @@ rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias=true);
 rtl::OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, rtl::OUString const & nucleus);
 
-enum IdentifierTranslationMode {
-    ITM_GLOBAL,
-    ITM_NONGLOBAL,
-    ITM_KEYWORDSONLY
+enum class IdentifierTranslationMode {
+    Global,
+    NonGlobal,
+    KeywordsOnly
 };
 
 rtl::OString translateUnoToCppIdentifier(
     rtl::OString const & identifier, rtl::OString const & prefix,
-    IdentifierTranslationMode transmode = ITM_GLOBAL,
+    IdentifierTranslationMode transmode = IdentifierTranslationMode::Global,
     rtl::OString const * forbidden = nullptr);
 
 } }
