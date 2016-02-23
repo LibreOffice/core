@@ -221,7 +221,7 @@ endef
 else # !SYSTEM_CPPUNIT
 
 define gb_LinkTarget__use_cppunit
-$(call gb_LinkTarget_use_external_project,$(1),cppunit)
+$(call gb_LinkTarget_use_external_project,$(1),cppunit, full)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cppunit/include)\
