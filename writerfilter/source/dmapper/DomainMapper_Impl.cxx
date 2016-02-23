@@ -2807,7 +2807,7 @@ if(!bFilled)
             {OUString("HYPERLINK"),     "",                         FIELD_HYPERLINK    },
             {OUString("IF"),            "ConditionalText",          FIELD_IF           },
 //            {OUString("INFO"),      "",FIELD_INFO         },
-//            {OUString("INCLUDEPICTURE"), "",                        FIELD_INCLUDEPICTURE},
+            {OUString("INCLUDEPICTURE"), "",                        FIELD_INCLUDEPICTURE},
             {OUString("KEYWORDS"),      "DocInfo.KeyWords",         FIELD_KEYWORDS     },
             {OUString("LASTSAVEDBY"),   "DocInfo.ChangeAuthor",                         FIELD_LASTSAVEDBY  },
             {OUString("MACROBUTTON"),   "Macro",                         FIELD_MACROBUTTON  },
@@ -3572,6 +3572,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_CITATION:
                 case FIELD_TC:
                 case FIELD_EQ:
+                case FIELD_INCLUDEPICTURE:
                         bCreateField = false;
                         break;
                 case FIELD_FORMCHECKBOX :
