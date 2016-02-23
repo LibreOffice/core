@@ -32,17 +32,17 @@
  #include <stdlib.h>
  #pragma intrinsic(_rotl, _rotr)
  #define PR_ROTATE_LEFT32(a, bits) _rotl(a, bits)
---- nss/lib/certdb/certdb.h
-+++ nss/lib/certdb/certdb.h
-@@ -31,7 +31,7 @@
+--- nss/lib/certdb/certdb.h	2016-02-12 15:36:18.000000000 +0100
++++ nss/lib/certdb/certdb.h	2016-02-23 21:08:34.607903348 +0100
+@@ -30,7 +30,7 @@
  #endif
- #define CERTDB_VALID_PEER  ((__CERTDB_VALID_PEER) CERTDB_TERMINAL_RECORD)
+ #define CERTDB_VALID_PEER ((__CERTDB_VALID_PEER)CERTDB_TERMINAL_RECORD)
  #else
 -#ifdef _WIN32
 +#if defined _WIN32 && !defined __clang__
  #pragma deprecated(CERTDB_VALID_PEER)
  #endif
- #define CERTDB_VALID_PEER  CERTDB_TERMINAL_RECORD 
+ #define CERTDB_VALID_PEER CERTDB_TERMINAL_RECORD
 --- nss/lib/util/pkcs11n.h
 +++ nss/lib/util/pkcs11n.h
 @@ -390,7 +390,7 @@
