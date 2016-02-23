@@ -40,7 +40,7 @@ namespace basegfx
 
     /** Descriptor for the mathematical continuity of two 2D Vectors
     */
-    enum B2VectorContinuity
+    enum class B2VectorContinuity
     {
         /// none
         NONE = 0,
