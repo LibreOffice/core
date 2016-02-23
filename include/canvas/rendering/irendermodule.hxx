@@ -54,11 +54,11 @@ namespace canvas
         /** Type of primitive passed to the render module via
             pushVertex()
          */
-        enum PrimitiveType
+        enum class PrimitiveType
         {
-            PRIMITIVE_TYPE_UNKNOWN,
-            PRIMITIVE_TYPE_TRIANGLE,
-            PRIMITIVE_TYPE_QUAD
+            Unknown,
+            Triangle,
+            Quad
         };
 
         virtual ~IRenderModule() {}
