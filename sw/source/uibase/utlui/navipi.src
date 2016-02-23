@@ -140,7 +140,7 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_SHOW_ROOT ;
                 HelpID = HID_NAVI_TBX8 ;
-                Text [ en-US ] = "Content View" ;
+                Text [ en-US ] = "Content Navigation View" ;
             };
             ToolBoxItem
             {
@@ -343,7 +343,7 @@ String STR_ACCESS_TL_GLOBAL
 };
 String STR_ACCESS_TL_CONTENT
 {
-    Text [ en-US ] = "Content View";
+    Text [ en-US ] = "Content Navigation View";
 };
 String STR_OUTLINE_LEVEL
 {
