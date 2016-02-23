@@ -44,16 +44,17 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
 
     bool                            mbMenuBar;
+    bool                            mbMenuVisibility;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
-    const GtkSalFrame*              mpFrame;
+    GtkSalFrame*                    mpFrame;
 
     // GMenuModel and GActionGroup attributes
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
 
     GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
-    void                        ImplUpdate( gboolean bRecurse );
+    void                        ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries);
     void                        ActivateAllSubmenus(Menu* pMenuBar);
 
 public:
@@ -78,7 +79,7 @@ public:
 
     void                        SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
     Menu*                       GetMenu() { return mpVCLMenu; }
-    void                        SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
+    void                        SetMenuModel(GMenuModel* pMenuModel);
     unsigned                    GetItemCount() { return maItems.size(); }
     GtkSalMenuItem*             GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     void                        SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
@@ -103,6 +104,8 @@ public:
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     void                        UpdateFull();       // Update full menu hierarchy from this menu.
+
+    virtual bool                ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
 };
 
 class GtkSalMenuItem : public SalMenuItem

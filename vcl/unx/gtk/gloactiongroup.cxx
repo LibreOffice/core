@@ -100,8 +100,9 @@ g_lo_action_class_init (GLOActionClass *klass)
 
 struct _GLOActionGroupPrivate
 {
-    GHashTable  *table;  /* string -> GLOAction */
-    GtkSalFrame *frame;  /* Frame to which GActionGroup is associated. */
+    GHashTable  *table;    /* string -> GLOAction */
+    GtkSalFrame *frame;    /* Frame to which GActionGroup is associated. */
+    GtkSalMenu  *topmenu;  /* TopLevel Menu to which GActionGroup is associated. */
 };
 
 static void g_lo_action_group_iface_init (GActionGroupInterface *);
@@ -187,13 +188,7 @@ g_lo_action_group_perform_submenu_action (GLOActionGroup *group,
                                           GVariant       *state)
 {
 
-    GtkSalFrame* pFrame = group->priv->frame;
-    SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " for frame " << pFrame);
-
-    if (pFrame == nullptr)
-        return;
-
-    GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*> (pFrame->GetMenu());
+    GtkSalMenu* pSalMenu = group->priv->topmenu;
     SAL_INFO("vcl.unity", "g_lo_action_group_perform_submenu_action on " << group << " for menu " << pSalMenu);
 
     if (pSalMenu != nullptr) {
@@ -263,23 +258,18 @@ g_lo_action_group_activate (GActionGroup *group,
                             GVariant     *parameter)
 {
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
-    GtkSalFrame *pFrame = lo_group->priv->frame;
-    SAL_INFO("vcl.unity", "g_lo_action_group_activate on group " << group << " for frame " << pFrame << " with parameter " << parameter);
+    GtkSalMenu* pSalMenu = lo_group->priv->topmenu;
 
     if ( parameter != nullptr )
         g_action_group_change_action_state( group, action_name, parameter );
 
-    if ( pFrame != nullptr )
-    {
-        GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pFrame->GetMenu() );
-        SAL_INFO("vcl.unity", "g_lo_action_group_activate for menu " << pSalMenu);
+    SAL_INFO("vcl.unity", "g_lo_action_group_activate for menu " << pSalMenu);
 
-        if ( pSalMenu != nullptr )
-        {
-            GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
-            SAL_INFO("vcl.unity", "g_lo_action_group_activate dispatching action " << action << " named " << action_name << " on menu " << pSalMenu);
-            pSalMenu->DispatchCommand( action->item_id, action_name );
-        }
+    if ( pSalMenu != nullptr )
+    {
+        GLOAction* action = G_LO_ACTION (g_hash_table_lookup (lo_group->priv->table, action_name));
+        SAL_INFO("vcl.unity", "g_lo_action_group_activate dispatching action " << action << " named " << action_name << " on menu " << pSalMenu);
+        pSalMenu->DispatchCommand( action->item_id, action_name );
     }
 }
 
@@ -355,6 +345,17 @@ g_lo_action_group_init (GLOActionGroup *group)
     group->priv->table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
     group->priv->frame = nullptr;
+    group->priv->topmenu = nullptr;
+}
+
+void
+g_lo_action_group_set_top_menu (GLOActionGroup *group,
+                                gpointer top_menu)
+{
+    group->priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
+                                                 G_TYPE_LO_ACTION_GROUP,
+                                                 GLOActionGroupPrivate);
+    group->priv->topmenu = static_cast<GtkSalMenu*>(top_menu);
 }
 
 static void
