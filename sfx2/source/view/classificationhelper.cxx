@@ -16,6 +16,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <o3tl/make_unique.hxx>
@@ -277,9 +278,18 @@ public:
     std::map<OUString, OUString> m_aLabels;
     /// Possible categories of a policy to choose from.
     std::map<OUString, SfxClassificationCategory> m_aCategories;
+    SfxObjectShell& m_rObjectShell;
 
+    Impl(SfxObjectShell& rObjectShell);
     void parsePolicy();
+    /// Synchronize m_aLabels back to the object shell.
+    void pushToObjectShell();
 };
+
+SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
+    : m_rObjectShell(rObjectShell)
+{
+}
 
 void SfxClassificationHelper::Impl::parsePolicy()
 {
@@ -305,6 +315,23 @@ void SfxClassificationHelper::Impl::parsePolicy()
     m_aCategories = xClassificationParser->m_aCategories;
 }
 
+void SfxClassificationHelper::Impl::pushToObjectShell()
+{
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = m_rObjectShell.getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+    for (const std::pair<OUString, OUString>& rLabel : m_aLabels)
+    {
+        try
+        {
+            xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rLabel.second));
+        }
+        catch (const uno::Exception& rException)
+        {
+            SAL_WARN("sfx.view", "pushToObjectShell() failed to add property " << rLabel.first << ": " << rException.Message);
+        }
+    }
+}
+
 bool SfxClassificationHelper::IsClassified(SfxObjectShell& rObjectShell)
 {
     uno::Reference<document::XDocumentProperties> xDocumentProperties = rObjectShell.getDocProperties();
@@ -324,7 +351,7 @@ bool SfxClassificationHelper::IsClassified(SfxObjectShell& rObjectShell)
 }
 
 SfxClassificationHelper::SfxClassificationHelper(SfxObjectShell& rObjectShell)
-    : m_pImpl(o3tl::make_unique<Impl>())
+    : m_pImpl(o3tl::make_unique<Impl>(rObjectShell))
 {
     uno::Reference<document::XDocumentProperties> xDocumentProperties = rObjectShell.getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
@@ -443,6 +470,7 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
     }
 
     m_pImpl->m_aLabels = it->second.m_aLabels;
+    m_pImpl->pushToObjectShell();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
