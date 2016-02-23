@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_eee77faa",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-23T07:40:27Z",
+      "side": 1,
+      "message": "Why do you need an additional format? SwField already stores the same format.",
+      "revId": "27bfdeba07dc5ab91117c7695d3322c9e7310c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ceec4392",
+        "filename": "sw/inc/usrfld.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-23T07:40:27Z",
+      "side": 1,
+      "message": "all integer types use an \u0027n\u0027, so it should be nFormat",
+      "revId": "27bfdeba07dc5ab91117c7695d3322c9e7310c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_2e02273f",
+        "filename": "sw/inc/usrfld.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-23T07:40:27Z",
+      "side": 1,
+      "message": "Why \u0027s\u0027Format? \u0027s\u0027 is used for strings",
+      "revId": "27bfdeba07dc5ab91117c7695d3322c9e7310c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_6efc2f3f",
+        "filename": "sw/source/ui/fldui/fldvar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-23T07:40:27Z",
+      "side": 1,
+      "message": "//?",
+      "revId": "27bfdeba07dc5ab91117c7695d3322c9e7310c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_0eff6b35",
+        "filename": "sw/source/uibase/fldui/fldmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-23T07:40:27Z",
+      "side": 1,
+      "message": "No java style, please.",
+      "revId": "27bfdeba07dc5ab91117c7695d3322c9e7310c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_4ef9734d",
+        "filename": "sw/source/uibase/fldui/fldmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-02-23T07:40:27Z",
+      "side": 1,
+      "message": "isn\u0027t it a SetFormat(sal_uInt32)",
+      "revId": "27bfdeba07dc5ab91117c7695d3322c9e7310c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
