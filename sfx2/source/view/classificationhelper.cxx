@@ -131,20 +131,22 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         OUString aName = xAttribs->getValueByName("Name");
         if (!m_pCategory && !aName.isEmpty())
         {
+            OUString aIdentifier = xAttribs->getValueByName("Identifier");
+
             // Create a new category and initialize it with the data that's true for all categories.
             SfxClassificationCategory& rCategory = m_aCategories[aName];
             rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Name"] = m_aPolicyAuthorityName;
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Name"] = m_aPolicyName;
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Identifier"] = m_aProgramID;
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"] = aIdentifier;
+            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name"] = aName;
 
             // Also initialize defaults.
             rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Identifier"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Country"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Identifier"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Name"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Identifier"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name"] = "None";
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier:OID"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Locator"] = "None";
             rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = "None";
