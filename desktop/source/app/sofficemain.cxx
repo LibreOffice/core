@@ -74,11 +74,11 @@ OString getLibDir()
 static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* /*context*/, bool succeeded)
 {
     // send the minidump to the server (not yet implemented)
-    SAL_WARN("crashreport", "minidump generated: " << descriptor.path());
+    SAL_WARN("destkop.crashreport", "minidump generated: " << descriptor.path());
     OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"5.1.0.0\" ";
-    aCommand = aCommand + descriptor.path() + " " + "http://libreofficecrash.org/submit";
+    aCommand = aCommand + descriptor.path() + " http://libreofficecrash.org/submit";
     int retVal = std::system(aCommand.getStr());
-    SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
+    SAL_WARN_IF(retVal != 0, "destkop.crashreport", "Failed to upload minidump. Error Code: " << retVal);
     return succeeded;
 }
 #endif
@@ -91,7 +91,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor("/tmp");
-    google_breakpad::ExceptionHandler eh(descriptor, NULL, dumpCallback, NULL, true, -1);
+    google_breakpad::ExceptionHandler eh(descriptor, nullptr, dumpCallback, nullptr, true, -1);
 #else
 
 #endif

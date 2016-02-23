@@ -131,6 +131,7 @@ certain functionality.
 
 @li @c desktop
 @li @c desktop.app
+@li @c destkop.crashreport
 @li @c desktop.deployment
 @li @c desktop.lib
 @li @c desktop.migration
