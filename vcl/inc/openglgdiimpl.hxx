@@ -113,6 +113,7 @@ public:
     bool UseSolid( SalColor nColor );
     bool UseSolidAA( SalColor nColor, double fTransparency );
     bool UseSolidAA( SalColor nColor );
+    bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
     bool UseInvert50();
     bool UseInvert(SalInvert nFlags);
 
@@ -127,6 +128,9 @@ public:
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    void DrawLineSegment(float x1, float y1, float x2, float y2);
+    void DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth);
+    void DrawPolyLine( const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap);
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
     void DrawRegionBand( const RegionBand& rRegion );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );

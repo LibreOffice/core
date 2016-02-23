@@ -22,6 +22,7 @@ OpenGLProgram::OpenGLProgram() :
     mnTexCoordAttrib( SAL_MAX_UINT32 ),
     mnAlphaCoordAttrib( SAL_MAX_UINT32 ),
     mnMaskCoordAttrib( SAL_MAX_UINT32 ),
+    mnNormalAttrib( SAL_MAX_UINT32 ),
     mbBlending( false ),
     mfLastWidth(0.0),
     mfLastHeight(0.0),
@@ -100,7 +101,7 @@ bool OpenGLProgram::Clean()
     return true;
 }
 
-void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData )
+void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize )
 {
     if( rAttrib == SAL_MAX_UINT32 )
     {
@@ -113,7 +114,7 @@ void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, cons
         CHECK_GL_ERROR();
         mnEnabledAttribs |= ( 1 << rAttrib );
     }
-    glVertexAttribPointer( rAttrib, 2, GL_FLOAT, GL_FALSE, 0, pData );
+    glVertexAttribPointer( rAttrib, nSize, GL_FLOAT, GL_FALSE, 0, pData );
     CHECK_GL_ERROR();
 }
 
@@ -135,6 +136,11 @@ void OpenGLProgram::SetAlphaCoord( const GLvoid* pData )
 void OpenGLProgram::SetMaskCoord(const GLvoid* pData)
 {
     SetVertexAttrib(mnMaskCoordAttrib, "mask_coord_in", pData);
+}
+
+void OpenGLProgram::SetExtrusionVectors(const GLvoid* pData)
+{
+    SetVertexAttrib(mnNormalAttrib, "extrusion_vectors", pData, 3);
 }
 
 GLuint OpenGLProgram::GetUniformLocation( const OString& rName )

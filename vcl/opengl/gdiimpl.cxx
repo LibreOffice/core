@@ -37,6 +37,9 @@
 
 #include <vector>
 
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/norm.hpp>
+
 #include <stdlib.h>
 
 class OpenGLFlushIdle : public Idle
@@ -623,6 +626,311 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
     mpProgram->SetVertices( pPoints );
     glDrawArrays( GL_LINES, 0, 2 );
     CHECK_GL_ERROR();
+}
+
+namespace
+{
+
+inline void addVertex(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, glm::vec2 point, glm::vec2 extrusionVector, float length)
+{
+    rVertices.push_back(point.x);
+    rVertices.push_back(point.y);
+
+    rExtrusionVectors.push_back(extrusionVector.x);
+    rExtrusionVectors.push_back(extrusionVector.y);
+    rExtrusionVectors.push_back(length);
+}
+
+inline void addVertexPair(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, glm::vec2 point, glm::vec2 extrusionVector, float length)
+{
+    addVertex(rVertices, rExtrusionVectors, point, -extrusionVector, -length);
+    addVertex(rVertices, rExtrusionVectors, point,  extrusionVector,  length);
+}
+
+inline glm::vec2 normalize(const glm::vec2& vector)
+{
+    if (glm::length(vector) > 0.0)
+        return glm::normalize(vector);
+    return vector;
+}
+
+} // end anonymous namespace
+
+void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth)
+{
+    if (eLineCap != css::drawing::LineCap_ROUND && eLineCap != css::drawing::LineCap_SQUARE)
+        return;
+
+    OpenGLZone aZone;
+
+    const int nRoundCapIteration = 12;
+
+    std::vector<GLfloat> aVertices;
+    std::vector<GLfloat> aExtrusionVectors;
+
+    glm::vec2 p1(x1, y1);
+    glm::vec2 p2(x2, y2);
+    glm::vec2 lineVector = normalize(p2 - p1);
+    glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
+
+    if (eLineCap == css::drawing::LineCap_ROUND)
+    {
+        for (int nFactor = 0; nFactor <= nRoundCapIteration; nFactor++)
+        {
+            float angle = float(nFactor) * (M_PI / float(nRoundCapIteration));
+            glm::vec2 roundNormal(normal.x * glm::cos(angle) - normal.y * glm::sin(angle),
+                                  normal.x * glm::sin(angle) + normal.y * glm::cos(angle));
+
+            addVertexPair(aVertices, aExtrusionVectors, p1, roundNormal, 1.0f);
+        }
+    }
+    else if (eLineCap == css::drawing::LineCap_SQUARE)
+    {
+        glm::vec2 extrudedPoint = p1 + -lineVector * (fLineWidth / 2.0f);
+
+        addVertexPair(aVertices, aExtrusionVectors, extrudedPoint, normal, 1.0f);
+        addVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+    }
+
+    ApplyProgramMatrices(0.0f);
+    mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
+    mpProgram->SetVertices(aVertices.data());
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, aVertices.size() / 2);
+
+    CHECK_GL_ERROR();
+}
+
+void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float y2)
+{
+    glm::vec2 p1(x1, y1);
+    glm::vec2 p2(x2, y2);
+
+    if (p1.x == p2.x && p1.y == p2.y)
+        return;
+
+    std::vector<GLfloat> aPoints;
+    std::vector<GLfloat> aExtrusionVectors;
+
+    OpenGLZone aZone;
+
+    glm::vec2 lineVector = normalize(p2 - p1);
+    glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
+
+    addVertexPair(aPoints, aExtrusionVectors, p1, normal, 1.0f);
+    addVertexPair(aPoints, aExtrusionVectors, p2, normal, 1.0f);
+
+    ApplyProgramMatrices(0.0f);
+    mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
+    mpProgram->SetVertices(aPoints.data());
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, aPoints.size() / 2);
+
+    CHECK_GL_ERROR();
+}
+
+/** Draw a simple (non bezier) polyline
+ *
+ * OpenGL polyline drawing algorithm inspired by:
+ * - http://mattdesl.svbtle.com/drawing-lines-is-hard
+ * - https://www.mapbox.com/blog/drawing-antialiased-lines/
+ * - https://cesiumjs.org/2013/04/22/Robust-Polyline-Rendering-with-WebGL/
+ * - http://artgrammer.blogspot.si/2011/05/drawing-nearly-perfect-2d-line-segments.html
+ * - http://artgrammer.blogspot.si/2011/07/drawing-polylines-by-tessellation.html
+ *
+ */
+void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap)
+{
+    sal_uInt32 nPoints = rPolygon.count();
+    bool bClosed = rPolygon.isClosed();
+
+    if (!bClosed && nPoints >= 2)
+    {
+        // draw begin cap
+        {
+            glm::vec2 p1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
+            glm::vec2 p2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
+            DrawLineCap(p1.x, p1.y, p2.x, p2.y, eLineCap, fLineWidth);
+        }
+
+        // draw end cap
+        {
+            glm::vec2 p1(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
+            glm::vec2 p2(rPolygon.getB2DPoint(nPoints - 2).getX(), rPolygon.getB2DPoint(nPoints - 2).getY());
+            DrawLineCap(p1.x, p1.y, p2.x, p2.y, eLineCap, fLineWidth);
+        }
+    }
+
+    if (nPoints == 2 || eLineJoin == basegfx::B2DLineJoin::NONE)
+    {
+        // If line joint is NONE or a simple line with 2 points, draw the polyline
+        // each line segment separatly.
+        for (int i = 0; i < int(nPoints) - 1; ++i)
+        {
+            glm::vec2 p1(rPolygon.getB2DPoint(i+0).getX(), rPolygon.getB2DPoint(i+0).getY());
+            glm::vec2 p2(rPolygon.getB2DPoint(i+1).getX(), rPolygon.getB2DPoint(i+1).getY());
+            DrawLineSegment(p1.x, p1.y, p2.x, p2.y);
+        }
+        if (bClosed)
+        {
+            glm::vec2 p1(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
+            glm::vec2 p2(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
+            DrawLineSegment(p1.x, p1.y, p2.x, p2.y);
+        }
+    }
+    else if (nPoints > 2)
+    {
+        OpenGLZone aZone;
+
+        int i = 0;
+        int lastPoint = int(nPoints);
+
+        std::vector<GLfloat> aVertices;
+        std::vector<GLfloat> aExtrusionVectors;
+
+        // First guess on the size, but we could know relatively exactly
+        // how much vertices we need.
+        aVertices.reserve(nPoints * 4);
+        aExtrusionVectors.reserve(nPoints * 6);
+
+        // Handle first point
+
+        glm::vec2 nextLineVector;
+        glm::vec2 previousLineVector;
+        glm::vec2 normal; // perpendicular to the line vector
+
+        glm::vec2 p0(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
+        glm::vec2 p1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
+        glm::vec2 p2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
+
+        nextLineVector = normalize(p2 - p1);
+
+        if (!bClosed)
+        {
+            normal = glm::vec2(-nextLineVector.y, nextLineVector.x); // make perpendicular
+            addVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+
+            i++; // first point done already
+            lastPoint--; // last point will be calculated separatly from the loop
+
+            p0 = p1;
+            previousLineVector = nextLineVector;
+        }
+        else
+        {
+            lastPoint++; // we need to connect last point to first point so one more line segment to calculate
+
+            previousLineVector = normalize(p1 - p0);
+        }
+
+        for (; i < lastPoint; ++i)
+        {
+            int index1 = (i + 0) % nPoints; // loop indices - important when polyline is closed
+            int index2 = (i + 1) % nPoints;
+
+            p1 = glm::vec2(rPolygon.getB2DPoint(index1).getX(), rPolygon.getB2DPoint(index1).getY());
+            p2 = glm::vec2(rPolygon.getB2DPoint(index2).getX(), rPolygon.getB2DPoint(index2).getY());
+
+            if (p1 == p2) // skip equal points, normals could div-by-0
+                continue;
+
+            nextLineVector = normalize(p2 - p1);
+
+            if (eLineJoin == basegfx::B2DLineJoin::Miter)
+            {
+                // With miter join we calculate the extrusion vector by adding normals of
+                // previous and next line segment. The vector shows the way but we also
+                // need the length (otherwise the line will be deformed). Length factor is
+                // calculated as dot product of extrusion vector and one of the normals.
+                // The value we get is the inverse length (used in the shader):
+                // length = line_width / dot(extrusionVector, normal)
+
+                normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
+
+                glm::vec2 tangent = normalize(nextLineVector + previousLineVector);
+                glm::vec2 extrusionVector(-tangent.y, tangent.x);
+                GLfloat length = glm::dot(extrusionVector, normal);
+
+                addVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
+            }
+            else if (eLineJoin == basegfx::B2DLineJoin::Bevel)
+            {
+                // For bevel join we just add 2 additional vertices and use previous
+                // line segment normal and next line segment normal as extrusion vector.
+                // All the magic is done by the fact that we draw triangle strips, so we
+                // cover the joins correctly.
+
+                glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
+                glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
+
+                addVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
+                addVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
+            }
+            else if (eLineJoin == basegfx::B2DLineJoin::Round)
+            {
+                // For round join we do a similar thing as in bevel, we add more intermediate
+                // vertices and add normals to get extrusion vectors in the between the
+                // both normals.
+
+                // 3 additional extrusion vectors + normals are enough to make most
+                // line joins look round. Ideally the number of vectors could be
+                // calculated.
+
+                glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
+                glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
+
+                glm::vec2 middle = normalize(previousNormal + nextNormal);
+                glm::vec2 middleLeft  = normalize(previousNormal + middle);
+                glm::vec2 middleRight = normalize(middle + nextNormal);
+
+                addVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
+                addVertexPair(aVertices, aExtrusionVectors, p1, middleLeft, 1.0f);
+                addVertexPair(aVertices, aExtrusionVectors, p1, middle, 1.0f);
+                addVertexPair(aVertices, aExtrusionVectors, p1, middleRight, 1.0f);
+                addVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
+            }
+            p0 = p1;
+            previousLineVector = nextLineVector;
+        }
+
+        if (!bClosed)
+        {
+            // Create vertices for the last point. There is no line join so just
+            // use the last line segment normal as the extrusion vector.
+
+            p1 = glm::vec2(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
+
+            normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
+
+            addVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+        }
+
+        ApplyProgramMatrices(0.0f);
+        mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
+        mpProgram->SetVertices(aVertices.data());
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, aVertices.size() / 2);
+
+        CHECK_GL_ERROR();
+    }
+}
+
+bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA)
+{
+    if( nColor == SALCOLOR_NONE )
+        return false;
+    if( !UseProgram( "lineVertexShader", "lineFragmentShader" ) )
+        return false;
+    mpProgram->SetColorf("color", nColor, fTransparency);
+    mpProgram->SetUniform1f("line_width", fLineWidth);
+    // The width of the feather - area we make lineary transparent in VS.
+    // Good AA value is 0.5, 0.0 means the no AA will be done.
+    mpProgram->SetUniform1f("feather", bUseAA ? 0.5f : 0.0f);
+    // We need blending or AA won't work correctly
+    mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+#ifdef DBG_UTIL
+    mProgramIsSolidColor = true;
+#endif
+    mProgramSolidColor = nColor;
+    mProgramSolidTransparency = fTransparency;
+    return true;
 }
 
 void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, double nY2 )
@@ -1540,58 +1848,20 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         return true;
 
     const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
+    const float fLineWidth = bIsHairline ? 1.0f : rLineWidth.getX();
 
-    // #i101491#
-    if( !bIsHairline && (rPolygon.count() > 1000) )
+    PreDraw(XOROption::IMPLEMENT_XOR);
+
+    if (UseLine(mnLineColor, 0.0f, fLineWidth, true))
     {
-        // the used basegfx::tools::createAreaGeometry is simply too
-        // expensive with very big polygons; fallback to caller (who
-        // should use ImplLineConverter normally)
-        // AW: ImplLineConverter had to be removed since it does not even
-        // know LineJoins, so the fallback will now prepare the line geometry
-        // the same way.
-        return false;
-    }
+        basegfx::B2DPolygon aPolygon(rPolygon);
 
-    // shortcut for hairline drawing to improve performance
-    if (bIsHairline)
-    {
-        // Let's just leave it to OutputDevice to do the bezier subdivision,
-        // drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry) will be
-        // called with the result.
-        return false;
-    }
+        if (aPolygon.areControlPointsUsed())
+            aPolygon = basegfx::tools::polygonSubdivide(aPolygon, 7.5 * F_PI180);
+        else
+            aPolygon.removeDoublePoints();
 
-    // #i11575#desc5#b adjust B2D tesselation result to raster positions
-    basegfx::B2DPolygon aPolygon = rPolygon;
-    const double fHalfWidth = 0.5 * rLineWidth.getX();
-
-    // get the area polygon for the line polygon
-    if( (rLineWidth.getX() != rLineWidth.getY())
-    && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
-    {
-        // prepare for createAreaGeometry() with anisotropic linewidth
-        aPolygon.transform( basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
-    }
-
-    // create the area-polygon for the line
-    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap) );
-
-    if( (rLineWidth.getX() != rLineWidth.getY())
-    && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
-    {
-        // postprocess createAreaGeometry() for anisotropic linewidth
-        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
-    }
-
-    PreDraw( XOROption::IMPLEMENT_XOR );
-    if( UseSolid( mnLineColor, fTransparency ) )
-    {
-        for( sal_uInt32 i = 0; i < aAreaPolyPoly.count(); i++ )
-        {
-            const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( i ) );
-            DrawPolyPolygon( aOnePoly );
-        }
+        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap);
     }
     PostDraw();
 
