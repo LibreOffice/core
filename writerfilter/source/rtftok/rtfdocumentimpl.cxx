@@ -34,6 +34,8 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <rtl/uri.hxx>
+#include <dmapper/DomainMapper_Impl.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtflookahead.hxx>
 #include <rtfcharsets.hxx>
@@ -211,7 +213,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
                                  uno::Reference<lang::XComponent> const& xDstDoc,
                                  uno::Reference<frame::XFrame> const& xFrame,
                                  uno::Reference<task::XStatusIndicator> const& xStatusIndicator,
-                                 bool bIsNewDoc)
+                                 const utl::MediaDescriptor& rMediaDescriptor)
     : m_xContext(xContext),
       m_xInputStream(xInputStream),
       m_xDstDoc(xDstDoc),
@@ -270,7 +272,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_bHadSect(false),
       m_nCellxMax(0),
       m_nListPictureId(0),
-      m_bIsNewDoc(bIsNewDoc)
+      m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault("InsertMode", false)),
+      m_rMediaDescriptor(rMediaDescriptor)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));
@@ -341,7 +344,7 @@ void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreF
 {
     sal_Size nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
-    auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator, m_bIsNewDoc);
+    auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator, m_rMediaDescriptor);
     pImpl->setSuperstream(this);
     pImpl->setStreamType(nId);
     pImpl->setIgnoreFirst(rIgnoreFirst);
@@ -1550,6 +1553,24 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (!aBuf.isEmpty() && !isalnum(ch))
                     bFoundCode = true;
             }
+
+            if (aBuf.toString() == "INCLUDEPICTURE")
+            {
+                // Extract the field argument of INCLUDEPICTURE: we handle that
+                // at a tokenizer level, as DOCX has no such field.
+                aBuf.append(ch);
+                while (true)
+                {
+                    Strm().ReadChar(ch);
+                    if (ch == '}')
+                        break;
+                    aBuf.append(ch);
+                }
+                OUString aFieldCommand = OStringToOUString(aBuf.toString(), RTL_TEXTENCODING_UTF8);
+                boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> > aResult = writerfilter::dmapper::lcl_SplitFieldCommand(aFieldCommand);
+                m_aPicturePath = boost::get<1>(aResult).empty() ? OUString() : boost::get<1>(aResult).front();
+            }
+
             Strm().Seek(nPos);
 
             // Form data should be handled only for form fields if any
@@ -5145,6 +5166,46 @@ RTFError RTFDocumentImpl::popState()
     break;
     case Destination::FIELDRESULT:
         singleChar(cFieldEnd);
+
+        if (!m_aPicturePath.isEmpty())
+        {
+            // Read the picture into m_aStates.top().aDestinationText.
+            pushState();
+            dispatchDestination(RTF_PICT);
+            if (m_aPicturePath.endsWith(".png"))
+                dispatchFlag(RTF_PNGBLIP);
+            OUString aFileURL = m_rMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
+            OUString aPictureURL;
+            try
+            {
+                aPictureURL = rtl::Uri::convertRelToAbs(aFileURL, m_aPicturePath);
+            }
+            catch(const rtl::MalformedUriException& rException)
+            {
+                SAL_WARN("writerfilter", "rtl::Uri::convertRelToAbs() failed: " << rException.getMessage());
+            }
+
+            if (!aPictureURL.isEmpty())
+            {
+                SvFileStream aStream(aPictureURL, StreamMode::READ);
+                if (aStream.IsOpen())
+                {
+                    OUStringBuffer aBuf;
+                    while (aStream.good())
+                    {
+                        unsigned char ch = 0;
+                        aStream.ReadUChar(ch);
+                        if (ch < 16)
+                            aBuf.append("0");
+                        aBuf.append(OUString::number(ch, 16));
+                    }
+                    m_aStates.top().aDestinationText = aBuf;
+                }
+            }
+            popState();
+            m_aPicturePath.clear();
+        }
+
         break;
     case Destination::LEVELTEXT:
     {

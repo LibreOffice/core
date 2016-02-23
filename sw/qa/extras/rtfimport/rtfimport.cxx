@@ -48,6 +48,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
@@ -631,6 +632,14 @@ DECLARE_RTFIMPORT_TEST(testFdo49659, "fdo49659.rtf")
     // The graphic was also empty
     uno::Reference<beans::XPropertySet> xGraphic(getProperty< uno::Reference<beans::XPropertySet> >(getShape(1), "Graphic"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, getProperty<sal_Int8>(xGraphic, "GraphicType"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf59699, "tdf59699.rtf")
+{
+    // This resulted in a lang.IndexOutOfBoundsException: the referenced graphic data wasn't imported.
+    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo46966, "fdo46966.rtf")

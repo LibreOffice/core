@@ -21,6 +21,7 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
     -I$(SRCDIR)/writerfilter/inc \
     -I$(SRCDIR)/writerfilter/source \
+    -I$(SRCDIR)/writerfilter/source/dmapper \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,writerfilter))
