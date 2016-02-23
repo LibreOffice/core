@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_7149b0d0",
+        "filename": "chart2/source/controller/accessibility/AccessibleBase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-23T10:09:55Z",
+      "side": 1,
+      "message": "All messages in here should be SAL_INFO",
+      "revId": "ec3c6f33a12b27e2edb3ce931b91911ebdb752ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_514634c0",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-23T10:09:55Z",
+      "side": 1,
+      "message": "use SAL_WARN_IF",
+      "revId": "ec3c6f33a12b27e2edb3ce931b91911ebdb752ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9116dca5",
+        "filename": "chart2/source/model/template/XYDataInterpreter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-23T10:09:55Z",
+      "side": 1,
+      "message": "Please put that code into a #ifdef DBG_UTIL check",
+      "revId": "ec3c6f33a12b27e2edb3ce931b91911ebdb752ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
