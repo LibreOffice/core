@@ -332,7 +332,7 @@ public:
                     css::uno::Reference<css::lang::XComponent> const& xDstDoc,
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
                     css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
-                    bool bIsNewDoc);
+                    const utl::MediaDescriptor& rMediaDescriptor);
     virtual ~RTFDocumentImpl();
 
     // RTFDocument
@@ -564,6 +564,8 @@ private:
     RTFReferenceTable::Entries_t m_aStyleTableEntries;
     int m_nCurrentStyleIndex;
     bool m_bFormField;
+    /// For the INCLUDEPICTURE field's argument.
+    OUString m_aPicturePath;
     // Unicode characters are collected here so we don't have to send them one by one.
     OUStringBuffer m_aUnicodeBuffer;
     /// Same for hex characters.
@@ -592,6 +594,8 @@ private:
 
     /// New document means not pasting into an existing one.
     bool m_bIsNewDoc;
+    /// The media descriptor contains e.g. the base URL of the document.
+    const utl::MediaDescriptor& m_rMediaDescriptor;
 };
 } // namespace rtftok
 } // namespace writerfilter

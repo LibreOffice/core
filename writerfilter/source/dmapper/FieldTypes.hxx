@@ -120,7 +120,6 @@ enum FieldId
     ,FIELD_INFO
     /* INCLUDEPICTURE path \* MERGEFORMAT->
      old filter imports an embedded picture
-     todo: not yet supported
      */
     ,FIELD_INCLUDEPICTURE
     /* KEYWORDS keyword \* defaultswitch \* Numberingswitch \* MERGEFORMAT ->
