@@ -94,12 +94,6 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            mpTBxVertAlign->Hide();
-            mpTBxBackColor->Hide();
-            mpTBxNumBullet->Show();
-            ReSize(true);
-            break;
-
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
         case CombinedEnumContext(Application_DrawImpress, Context_Table):
             mpTBxVertAlign->Show();
