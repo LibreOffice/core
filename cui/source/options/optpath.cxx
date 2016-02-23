@@ -115,7 +115,7 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
     { SvtPathOptions::PATH_TEMPLATE,    "Template" },
     { SvtPathOptions::PATH_WORK,        "Work" },
     { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CUI_OPTIONS
     { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
 #endif
     { USHRT_MAX, nullptr }
@@ -167,7 +167,7 @@ static OUString Convert_Impl( const OUString& rValue )
 
 bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CUI_OPTIONS
     return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
              SvtPathOptions::PATH_AUTOTEXT == nIndex ||
              SvtPathOptions::PATH_BASIC == nIndex ||
@@ -299,7 +299,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             case SvtPathOptions::PATH_TEMP:
             case SvtPathOptions::PATH_TEMPLATE:
             case SvtPathOptions::PATH_DICTIONARY:
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CUI_OPTIONS
             case SvtPathOptions::PATH_LINGUISTIC:
 #endif
             case SvtPathOptions::PATH_WORK:

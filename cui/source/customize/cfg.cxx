@@ -126,7 +126,7 @@ namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
 namespace graphic = com::sun::star::graphic;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CUI_CUSTOMIZE
 
 void printPropertySet(
     const OUString& prefix,
