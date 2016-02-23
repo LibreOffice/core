@@ -83,7 +83,7 @@ void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int3
 
     PropertyDescription aNewProp;
     aNewProp.aProperty = Property( _rName, _nHandle, _rMemberType, (sal_Int16)_nAttributes );
-    aNewProp.eLocated = PropertyDescription::ltDerivedClassRealType;
+    aNewProp.eLocated = PropertyDescription::LocationType::DerivedClassRealType;
     aNewProp.aLocation.pDerivedClassMember = _pPointerToMember;
 
     implPushBackProperty(aNewProp);
@@ -113,7 +113,7 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
 
     PropertyDescription aNewProp;
     aNewProp.aProperty = Property( _rName, _nHandle, _rExpectedType, (sal_Int16)_nAttributes );
-    aNewProp.eLocated = PropertyDescription::ltDerivedClassAnyType;
+    aNewProp.eLocated = PropertyDescription::LocationType::DerivedClassAnyType;
     aNewProp.aLocation.pDerivedClassMember = _pPointerToMember;
 
     implPushBackProperty(aNewProp);
@@ -130,7 +130,7 @@ void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, 
 
     PropertyDescription aNewProp;
     aNewProp.aProperty = Property( _rName, _nHandle, _rType, (sal_Int16)_nAttributes );
-    aNewProp.eLocated = PropertyDescription::ltHoldMyself;
+    aNewProp.eLocated = PropertyDescription::LocationType::HoldMyself;
     aNewProp.aLocation.nOwnClassVectorIndex = m_aHoldProperties.size();
     if (_pInitialValue)
         m_aHoldProperties.push_back(Any(_pInitialValue, _rType));
@@ -232,8 +232,8 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
     switch (aPos->eLocated)
     {
         // similar handling for the two cases where the value is stored in an any
-        case PropertyDescription::ltHoldMyself:
-        case PropertyDescription::ltDerivedClassAnyType:
+        case PropertyDescription::LocationType::HoldMyself:
+        case PropertyDescription::LocationType::DerivedClassAnyType:
         {
             bool bMayBeVoid = ((aPos->aProperty.Attributes & PropertyAttribute::MAYBEVOID) != 0);
 
@@ -275,7 +275,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
                 // the pointer to the any which holds the property value, no matter if located in the derived class
                 // or in out vector
 
-            if (PropertyDescription::ltHoldMyself == aPos->eLocated)
+            if (PropertyDescription::LocationType::HoldMyself == aPos->eLocated)
             {
                 OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
                     "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
@@ -303,7 +303,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
             }
         }
         break;
-        case PropertyDescription::ltDerivedClassRealType:
+        case PropertyDescription::LocationType::DerivedClassRealType:
             // let the UNO runtime library do any possible conversion
             // this may include a change of the type - for instance, if a LONG is required,
             // but a short is given, then this is valid, as it can be converted without any potential
@@ -376,15 +376,15 @@ bool OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
 
     switch (aPos->eLocated)
     {
-        case PropertyDescription::ltHoldMyself:
+        case PropertyDescription::LocationType::HoldMyself:
             m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex] = _rValue;
             break;
 
-        case PropertyDescription::ltDerivedClassAnyType:
+        case PropertyDescription::LocationType::DerivedClassAnyType:
             *static_cast< Any* >(aPos->aLocation.pDerivedClassMember) = _rValue;
             break;
 
-        case PropertyDescription::ltDerivedClassRealType:
+        case PropertyDescription::LocationType::DerivedClassRealType:
             // copy the data from the to-be-set value
             bSuccess = uno_type_assignData(
                 aPos->aLocation.pDerivedClassMember,        aPos->aProperty.Type.getTypeLibType(),
@@ -416,15 +416,15 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
 
     switch (aPos->eLocated)
     {
-        case PropertyDescription::ltHoldMyself:
+        case PropertyDescription::LocationType::HoldMyself:
             OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < (sal_Int32)m_aHoldProperties.size(),
                 "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
             _rValue = m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex];
             break;
-        case PropertyDescription::ltDerivedClassAnyType:
+        case PropertyDescription::LocationType::DerivedClassAnyType:
             _rValue = *static_cast<Any*>(aPos->aLocation.pDerivedClassMember);
             break;
-        case PropertyDescription::ltDerivedClassRealType:
+        case PropertyDescription::LocationType::DerivedClassRealType:
             _rValue.setValue(aPos->aLocation.pDerivedClassMember, aPos->aProperty.Type);
             break;
     }

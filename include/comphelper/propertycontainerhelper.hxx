@@ -35,11 +35,11 @@ namespace comphelper
 struct COMPHELPER_DLLPUBLIC PropertyDescription
 {
     // the possibilities where a property holding object may be located
-    enum LocationType
+    enum class LocationType
     {
-        ltDerivedClassRealType,     // within the derived class, it's a "real" (non-Any) type
-        ltDerivedClassAnyType,      // within the derived class, it's a com.sun.star.uno::Any
-        ltHoldMyself                // within m_aHoldProperties
+        DerivedClassRealType,     // within the derived class, it's a "real" (non-Any) type
+        DerivedClassAnyType,      // within the derived class, it's a com.sun.star.uno::Any
+        HoldMyself                // within m_aHoldProperties
     };
     // the location of an object holding a property value :
     union LocationAccess
@@ -54,7 +54,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
 
     PropertyDescription()
         :aProperty( OUString(), -1, css::uno::Type(), 0 )
-        ,eLocated( ltHoldMyself )
+        ,eLocated( LocationType::HoldMyself )
     {
         aLocation.nOwnClassVectorIndex = -1;
     }
