@@ -70,9 +70,8 @@ public:
     ConfigurationListener(const OUString &rPath,
                           css::uno::Reference< css::uno::XComponentContext >
                           const & xContext = comphelper::getProcessComponentContext())
-        : mxConfig( ConfigurationHelper::openConfig( xContext, rPath,
-                        ConfigurationHelper::EConfigurationModes::E_READONLY ),
-                  css::uno::UNO_QUERY_THROW )
+        : mxConfig( ConfigurationHelper::openConfig( xContext, rPath, EConfigurationModes::ReadOnly ),
+                    css::uno::UNO_QUERY_THROW )
     { }
 
     virtual ~ConfigurationListener()

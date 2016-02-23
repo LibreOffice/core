@@ -85,7 +85,7 @@ VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContex
     {
         OSL_ENSURE( !rConfigCompName.isEmpty(), "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
         OUString aConfigPackage = "org.openoffice.Office." + rConfigCompName;
-        mxConfigAccess = ConfigurationHelper::openConfig( rxContext, aConfigPackage, ConfigurationHelper::E_READONLY );
+        mxConfigAccess = ConfigurationHelper::openConfig( rxContext, aConfigPackage, comphelper::EConfigurationModes::ReadOnly );
     }
     catch(const Exception& )
     {

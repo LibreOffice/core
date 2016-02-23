@@ -522,7 +522,7 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
 {
     const OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
     m_xCfg.set(
-             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_ACCELERATORS, ::comphelper::EConfigurationModes::AllLocales ),
              css::uno::UNO_QUERY );
 }
 
@@ -972,14 +972,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     if ( sConfig == "Global" )
     {
         m_xCfg.set(
-            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_GLOBAL, ::comphelper::EConfigurationModes::AllLocales ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig == "Modules" )
     {
         m_xCfg.set(
-            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_MODULES, ::comphelper::EConfigurationModes::AllLocales ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }

@@ -110,14 +110,14 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
             ::comphelper::ConfigurationHelper::openConfig(
                 ::comphelper::getProcessComponentContext(),
                 s_sHistories,
-                ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::EConfigurationModes::Standard),
             uno::UNO_QUERY);
 
         m_xCommonXCU.set(
             ::comphelper::ConfigurationHelper::openConfig(
                 ::comphelper::getProcessComponentContext(),
                 s_sCommonHistory,
-                ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::EConfigurationModes::Standard),
             uno::UNO_QUERY);
     }
     catch(const uno::Exception& ex)

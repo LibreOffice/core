@@ -1761,7 +1761,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     OUString sCFG_PACKAGE_RECOVERY(CFG_PACKAGE_RECOVERY);
     // throws a RuntimeException if an error occurs!
     css::uno::Reference< css::container::XNameAccess > xCFG(
-        ::comphelper::ConfigurationHelper::openConfig(m_xContext, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
+        ::comphelper::ConfigurationHelper::openConfig(m_xContext, sCFG_PACKAGE_RECOVERY, ::comphelper::EConfigurationModes::Standard),
         css::uno::UNO_QUERY);
 
     sal_Int32 nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
@@ -1774,13 +1774,13 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
                                                          CFG_ENTRY_MINSPACE_DOCSAVE,
-                                                         ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceDocSave;
+                                                         ::comphelper::EConfigurationModes::Standard) >>= nMinSpaceDocSave;
 
         ::comphelper::ConfigurationHelper::readDirectKey(m_xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
                                                          CFG_ENTRY_MINSPACE_CONFIGSAVE,
-                                                         ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
+                                                         ::comphelper::EConfigurationModes::Standard) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
     {
@@ -1952,7 +1952,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         {
             // open module config on demand and cache the update access
             xCFG.set( ::comphelper::ConfigurationHelper::openConfig(m_xContext, CFG_PACKAGE_MODULES,
-                           ::comphelper::ConfigurationHelper::E_STANDARD),
+                           ::comphelper::EConfigurationModes::Standard),
                       css::uno::UNO_QUERY_THROW);
 
             /* SAFE */ {
@@ -3717,7 +3717,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_CRASHED,
         css::uno::makeAny(sal_True),
-        ::comphelper::ConfigurationHelper::E_STANDARD);
+        ::comphelper::EConfigurationModes::Standard);
 
     // for all docs, store their current view/names in the configurtion
     implts_persistAllActiveViewNames();
@@ -3777,7 +3777,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_CRASHED,
         css::uno::makeAny(sal_False),
-        ::comphelper::ConfigurationHelper::E_STANDARD);
+        ::comphelper::EConfigurationModes::Standard);
 }
 
 void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
@@ -3842,7 +3842,7 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_SESSIONDATA,
         css::uno::makeAny(sal_True),
-        ::comphelper::ConfigurationHelper::E_STANDARD);
+        ::comphelper::EConfigurationModes::Standard);
 
     // flush config cached back to disc.
     impl_flushALLConfigChanges();
@@ -3877,7 +3877,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
         CFG_PATH_RECOVERYINFO,
         CFG_ENTRY_SESSIONDATA,
         css::uno::makeAny(sal_False),
-        ::comphelper::ConfigurationHelper::E_STANDARD);
+        ::comphelper::EConfigurationModes::Standard);
 
     SAL_INFO("fwk.autorecovery", "... AutoRecovery::implts_doSessionRestore()");
 }
@@ -4009,7 +4009,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                                                     CFG_PACKAGE_RECOVERY,
                                                     CFG_PATH_RECOVERYINFO,
                                                     CFG_ENTRY_SESSIONDATA,
-                                                    ::comphelper::ConfigurationHelper::E_READONLY) >>= bSessionData;
+                                                    ::comphelper::EConfigurationModes::ReadOnly) >>= bSessionData;
 
                     bool bRecoveryData = m_lDocCache.size() > 0;
 
@@ -4028,7 +4028,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                             CFG_PACKAGE_RECOVERY,
                             CFG_PATH_RECOVERYINFO,
                             CFG_ENTRY_CRASHED,
-                            ::comphelper::ConfigurationHelper::E_READONLY);
+                            ::comphelper::EConfigurationModes::ReadOnly);
                 break;
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
@@ -4037,7 +4037,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                             CFG_PACKAGE_RECOVERY,
                             CFG_PATH_RECOVERYINFO,
                             CFG_ENTRY_SESSIONDATA,
-                            ::comphelper::ConfigurationHelper::E_READONLY);
+                            ::comphelper::EConfigurationModes::ReadOnly);
                 break;
     }
 }

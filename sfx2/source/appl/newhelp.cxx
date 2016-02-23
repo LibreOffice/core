@@ -2020,7 +2020,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     try
     {
         xConfiguration = ConfigurationHelper::openConfig(
-            xContext, PACKAGE_SETUP, ConfigurationHelper::E_STANDARD );
+            xContext, PACKAGE_SETUP, EConfigurationModes::Standard );
         if ( xConfiguration.is() )
         {
             Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );
