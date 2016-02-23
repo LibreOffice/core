@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_b11158b2",
+        "filename": "sw/source/core/text/guess.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2016-02-23T10:09:18Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce commented out code into patches",
+      "revId": "f997115988917feae2601fc8543c358aa2590a04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
