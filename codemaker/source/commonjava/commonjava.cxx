@@ -41,8 +41,8 @@ OString translateUnoToJavaType(
     codemaker::UnoType::Sort sort, OString const & nucleus, bool referenceType)
 {
     OStringBuffer buf;
-    if (sort <= codemaker::UnoType::SORT_ANY) {
-        OString const javaTypes[codemaker::UnoType::SORT_ANY + 1][2] = {
+    if (sort <= codemaker::UnoType::Sort::Any) {
+        OString const javaTypes[static_cast<int>(codemaker::UnoType::Sort::Any) + 1][2] = {
             { "void", "java/lang/Void" },
             { "boolean", "java/lang/Boolean" },
             { "byte", "java/lang/Byte" },
@@ -58,7 +58,7 @@ OString translateUnoToJavaType(
             { "java/lang/String", "java/lang/String" },
             { "com/sun/star/uno/Type", "com/sun/star/uno/Type" },
             { "java/lang/Object", "java/lang/Object" } };
-        buf.append(javaTypes[sort][referenceType]);
+        buf.append(javaTypes[static_cast<int>(sort)][referenceType]);
     } else {
         if (nucleus == "com/sun/star/uno/XInterface") {
             buf.append("java/lang/Object");

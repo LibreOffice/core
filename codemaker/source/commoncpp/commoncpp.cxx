@@ -68,15 +68,15 @@ OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, OUString const & nucleus)
 {
     OStringBuffer buf;
-    if (sort <= codemaker::UnoType::SORT_ANY) {
-        static char const * const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
+    if (sort <= codemaker::UnoType::Sort::Any) {
+        static char const * const cppTypes[static_cast<int>(codemaker::UnoType::Sort::Any) + 1] = {
             "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
             "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
             "float", "double", "::sal_Unicode", "rtl::OUString",
             "::css::uno::Type", "::css::uno::Any" };
-        buf.append(cppTypes[sort]);
+        buf.append(cppTypes[static_cast<int>(sort)]);
     } else {
-        if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE
+        if (sort == codemaker::UnoType::Sort::Interface
             && nucleus == "com.sun.star.uno.XInterface")
         {
             buf.append("::css::uno::XInterface");

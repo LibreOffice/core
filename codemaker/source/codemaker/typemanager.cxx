@@ -64,58 +64,58 @@ codemaker::UnoType::Sort TypeManager::getSort(
         if (cursor != nullptr) {
             *cursor = manager_->createCursor("");
         }
-        return codemaker::UnoType::SORT_MODULE;
+        return codemaker::UnoType::Sort::Module;
     }
     if (name == "void") {
-        return codemaker::UnoType::SORT_VOID;
+        return codemaker::UnoType::Sort::Void;
     }
     if (name == "boolean") {
-        return codemaker::UnoType::SORT_BOOLEAN;
+        return codemaker::UnoType::Sort::Boolean;
     }
     if (name == "byte") {
-        return codemaker::UnoType::SORT_BYTE;
+        return codemaker::UnoType::Sort::Byte;
     }
     if (name == "short") {
-        return codemaker::UnoType::SORT_SHORT;
+        return codemaker::UnoType::Sort::Short;
     }
     if (name == "unsigned short") {
-        return codemaker::UnoType::SORT_UNSIGNED_SHORT;
+        return codemaker::UnoType::Sort::UnsignedShort;
     }
     if (name == "long") {
-        return codemaker::UnoType::SORT_LONG;
+        return codemaker::UnoType::Sort::Long;
     }
     if (name == "unsigned long") {
-        return codemaker::UnoType::SORT_UNSIGNED_LONG;
+        return codemaker::UnoType::Sort::UnsignedLong;
     }
     if (name == "hyper") {
-        return codemaker::UnoType::SORT_HYPER;
+        return codemaker::UnoType::Sort::Hyper;
     }
     if (name == "unsigned hyper") {
-        return codemaker::UnoType::SORT_UNSIGNED_HYPER;
+        return codemaker::UnoType::Sort::UnsignedHyper;
     }
     if (name == "float") {
-        return codemaker::UnoType::SORT_FLOAT;
+        return codemaker::UnoType::Sort::Float;
     }
     if (name == "double") {
-        return codemaker::UnoType::SORT_DOUBLE;
+        return codemaker::UnoType::Sort::Double;
     }
     if (name == "char") {
-        return codemaker::UnoType::SORT_CHAR;
+        return codemaker::UnoType::Sort::Char;
     }
     if (name == "string") {
-        return codemaker::UnoType::SORT_STRING;
+        return codemaker::UnoType::Sort::String;
     }
     if (name == "type") {
-        return codemaker::UnoType::SORT_TYPE;
+        return codemaker::UnoType::Sort::Type;
     }
     if (name == "any") {
-        return codemaker::UnoType::SORT_ANY;
+        return codemaker::UnoType::Sort::Any;
     }
     if (name.startsWith("[")) {
-        return codemaker::UnoType::SORT_SEQUENCE_TYPE;
+        return codemaker::UnoType::Sort::Sequence;
     }
     if (name.indexOf('<') != -1) {
-        return codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE;
+        return codemaker::UnoType::Sort::InstantiatedPolymorphicStruct;
     }
     rtl::Reference< unoidl::Entity > ent(manager_->findEntity(name));
     if (!ent.is()) {
@@ -129,29 +129,29 @@ codemaker::UnoType::Sort TypeManager::getSort(
         if (cursor != nullptr) {
             *cursor = manager_->createCursor(name);
         }
-        return codemaker::UnoType::SORT_MODULE;
+        return codemaker::UnoType::Sort::Module;
     case unoidl::Entity::SORT_ENUM_TYPE:
-        return codemaker::UnoType::SORT_ENUM_TYPE;
+        return codemaker::UnoType::Sort::Enum;
     case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
-        return codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE;
+        return codemaker::UnoType::Sort::PlainStruct;
     case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-        return codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE;
+        return codemaker::UnoType::Sort::PolymorphicStructTemplate;
     case unoidl::Entity::SORT_EXCEPTION_TYPE:
-        return codemaker::UnoType::SORT_EXCEPTION_TYPE;
+        return codemaker::UnoType::Sort::Exception;
     case unoidl::Entity::SORT_INTERFACE_TYPE:
-        return codemaker::UnoType::SORT_INTERFACE_TYPE;
+        return codemaker::UnoType::Sort::Interface;
     case unoidl::Entity::SORT_TYPEDEF:
-        return codemaker::UnoType::SORT_TYPEDEF;
+        return codemaker::UnoType::Sort::Typedef;
     case unoidl::Entity::SORT_CONSTANT_GROUP:
-        return codemaker::UnoType::SORT_CONSTANT_GROUP;
+        return codemaker::UnoType::Sort::ConstantGroup;
     case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
-        return codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE;
+        return codemaker::UnoType::Sort::SingleInterfaceBasedService;
     case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
-        return codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE;
+        return codemaker::UnoType::Sort::AccumulationBasedService;
     case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
-        return codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON;
+        return codemaker::UnoType::Sort::InterfaceBasedSingleton;
     case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
-        return codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON;
+        return codemaker::UnoType::Sort::ServiceBasedSingleton;
     default:
         for (;;) { std::abort(); } // this cannot happen
     }
@@ -169,14 +169,14 @@ codemaker::UnoType::Sort TypeManager::decompose(
         rtl::Reference< unoidl::Entity > ent;
         codemaker::UnoType::Sort s = getSort(n, &ent);
         if (args.empty()
-            != (s != codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE))
+            != (s != codemaker::UnoType::Sort::PolymorphicStructTemplate))
         {
             throw CannotDumpException(
                 "template arguments mismatch for \"" + n
                 + "\" resolved from \"" + name + "\"");
         }
         switch (s) {
-        case codemaker::UnoType::SORT_TYPEDEF:
+        case codemaker::UnoType::Sort::Typedef:
             if (resolveTypedefs) {
                 n = dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).
                     getType();
@@ -187,25 +187,25 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 break;
             }
             // fall through
-        case codemaker::UnoType::SORT_VOID:
-        case codemaker::UnoType::SORT_BOOLEAN:
-        case codemaker::UnoType::SORT_BYTE:
-        case codemaker::UnoType::SORT_SHORT:
-        case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-        case codemaker::UnoType::SORT_LONG:
-        case codemaker::UnoType::SORT_UNSIGNED_LONG:
-        case codemaker::UnoType::SORT_HYPER:
-        case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-        case codemaker::UnoType::SORT_FLOAT:
-        case codemaker::UnoType::SORT_DOUBLE:
-        case codemaker::UnoType::SORT_CHAR:
-        case codemaker::UnoType::SORT_STRING:
-        case codemaker::UnoType::SORT_TYPE:
-        case codemaker::UnoType::SORT_ANY:
-        case codemaker::UnoType::SORT_ENUM_TYPE:
-        case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-        case codemaker::UnoType::SORT_EXCEPTION_TYPE:
-        case codemaker::UnoType::SORT_INTERFACE_TYPE:
+        case codemaker::UnoType::Sort::Void:
+        case codemaker::UnoType::Sort::Boolean:
+        case codemaker::UnoType::Sort::Byte:
+        case codemaker::UnoType::Sort::Short:
+        case codemaker::UnoType::Sort::UnsignedShort:
+        case codemaker::UnoType::Sort::Long:
+        case codemaker::UnoType::Sort::UnsignedLong:
+        case codemaker::UnoType::Sort::Hyper:
+        case codemaker::UnoType::Sort::UnsignedHyper:
+        case codemaker::UnoType::Sort::Float:
+        case codemaker::UnoType::Sort::Double:
+        case codemaker::UnoType::Sort::Char:
+        case codemaker::UnoType::Sort::String:
+        case codemaker::UnoType::Sort::Type:
+        case codemaker::UnoType::Sort::Any:
+        case codemaker::UnoType::Sort::Enum:
+        case codemaker::UnoType::Sort::PlainStruct:
+        case codemaker::UnoType::Sort::Exception:
+        case codemaker::UnoType::Sort::Interface:
             if (nucleus != nullptr) {
                 *nucleus = n;
             }
@@ -219,7 +219,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 *entity = ent;
             }
             return s;
-        case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        case codemaker::UnoType::Sort::PolymorphicStructTemplate:
             if (args.size()
                 != (dynamic_cast<
                     unoidl::PolymorphicStructTypeTemplateEntity * >(ent.get())->
@@ -246,8 +246,8 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 *entity = ent;
             }
             return
-                codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE;
-        case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+                codemaker::UnoType::Sort::InstantiatedPolymorphicStruct;
+        case codemaker::UnoType::Sort::Sequence:
             assert(false); // this cannot happen
             // fall through
         default:

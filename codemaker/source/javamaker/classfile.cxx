@@ -268,13 +268,13 @@ void ClassFile::Code::instrNew(OString const & type) {
 
 void ClassFile::Code::instrNewarray(codemaker::UnoType::Sort sort) {
     OSL_ASSERT(
-        sort >= codemaker::UnoType::SORT_BOOLEAN
-        && sort <= codemaker::UnoType::SORT_CHAR);
+        sort >= codemaker::UnoType::Sort::Boolean
+        && sort <= codemaker::UnoType::Sort::Char);
     // newarray <atype>:
     appendU1(m_code, 0xBC);
-    static sal_uInt8 const atypes[codemaker::UnoType::SORT_CHAR] = {
+    static sal_uInt8 const atypes[static_cast<int>(codemaker::UnoType::Sort::Char)] = {
         0x04, 0x08, 0x09, 0x09, 0x0A, 0x0A, 0x0B, 0x0B, 0x06, 0x07, 0x05 };
-    appendU1(m_code, atypes[sort - 1]);
+    appendU1(m_code, atypes[static_cast<int>(sort) - 1]);
 }
 
 void ClassFile::Code::instrPop() {

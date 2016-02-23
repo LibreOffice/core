@@ -463,7 +463,7 @@ void CppuType::addDefaultHIncludes(codemaker::cppumaker::Includes & includes)
     //TODO: Only include what is really needed
     includes.addCppuMacrosHxx();
     if (m_typeMgr->getSort(name_)
-        == codemaker::UnoType::SORT_INTERFACE_TYPE)
+        == codemaker::UnoType::Sort::Interface)
     {
         includes.addException();
         includes.addReference();
@@ -476,7 +476,7 @@ void CppuType::addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes)
     //TODO: Only include what is really needed
     includes.addType();
     if (m_typeMgr->getSort(name_)
-        == codemaker::UnoType::SORT_INTERFACE_TYPE)
+        == codemaker::UnoType::Sort::Interface)
     {
         includes.addException();
         includes.addReference();
@@ -496,32 +496,32 @@ void CppuType::dumpInitializer(
         if (k == 0) {
             rtl::Reference< unoidl::Entity > ent;
             switch (m_typeMgr->getSort(n, &ent)) {
-            case codemaker::UnoType::SORT_BOOLEAN:
+            case codemaker::UnoType::Sort::Boolean:
                 out << "false";
                 break;
-            case codemaker::UnoType::SORT_BYTE:
-            case codemaker::UnoType::SORT_SHORT:
-            case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-            case codemaker::UnoType::SORT_LONG:
-            case codemaker::UnoType::SORT_UNSIGNED_LONG:
-            case codemaker::UnoType::SORT_HYPER:
-            case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-            case codemaker::UnoType::SORT_FLOAT:
-            case codemaker::UnoType::SORT_DOUBLE:
-            case codemaker::UnoType::SORT_CHAR:
+            case codemaker::UnoType::Sort::Byte:
+            case codemaker::UnoType::Sort::Short:
+            case codemaker::UnoType::Sort::UnsignedShort:
+            case codemaker::UnoType::Sort::Long:
+            case codemaker::UnoType::Sort::UnsignedLong:
+            case codemaker::UnoType::Sort::Hyper:
+            case codemaker::UnoType::Sort::UnsignedHyper:
+            case codemaker::UnoType::Sort::Float:
+            case codemaker::UnoType::Sort::Double:
+            case codemaker::UnoType::Sort::Char:
                 out << "0";
                 break;
-            case codemaker::UnoType::SORT_ENUM_TYPE:
+            case codemaker::UnoType::Sort::Enum:
                 out << codemaker::cpp::scopedCppName(u2b(n)) << "_"
                     << (dynamic_cast< unoidl::EnumTypeEntity * >(ent.get())->
                         getMembers()[0].name);
                 break;
-            case codemaker::UnoType::SORT_STRING:
-            case codemaker::UnoType::SORT_TYPE:
-            case codemaker::UnoType::SORT_ANY:
-            case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-            case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-            case codemaker::UnoType::SORT_INTERFACE_TYPE:
+            case codemaker::UnoType::Sort::String:
+            case codemaker::UnoType::Sort::Type:
+            case codemaker::UnoType::Sort::Any:
+            case codemaker::UnoType::Sort::PlainStruct:
+            case codemaker::UnoType::Sort::PolymorphicStructTemplate:
+            case codemaker::UnoType::Sort::Interface:
                 break;
             default:
                 throw CannotDumpException(
@@ -634,89 +634,89 @@ sal_uInt32 CppuType::getInheritedMemberCount()
 OUString CppuType::getTypeClass(OUString const & name, bool cStyle) {
     rtl::Reference< unoidl::Entity > ent;
     switch (m_typeMgr->getSort(name, &ent)) {
-    case codemaker::UnoType::SORT_VOID:
+    case codemaker::UnoType::Sort::Void:
         return cStyle
             ? OUString("typelib_TypeClass_VOID")
             : OUString("::css::uno::TypeClass_VOID");
-    case codemaker::UnoType::SORT_BOOLEAN:
+    case codemaker::UnoType::Sort::Boolean:
         return cStyle
             ? OUString("typelib_TypeClass_BOOLEAN")
             : OUString("::css::uno::TypeClass_BOOLEAN");
-    case codemaker::UnoType::SORT_BYTE:
+    case codemaker::UnoType::Sort::Byte:
         return cStyle
             ? OUString("typelib_TypeClass_BYTE")
             : OUString("::css::uno::TypeClass_BYTE");
-    case codemaker::UnoType::SORT_SHORT:
+    case codemaker::UnoType::Sort::Short:
         return cStyle
             ? OUString("typelib_TypeClass_SHORT")
             : OUString("::css::uno::TypeClass_SHORT");
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+    case codemaker::UnoType::Sort::UnsignedShort:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_SHORT")
             : OUString("::css::uno::TypeClass_UNSIGNED_SHORT");
-    case codemaker::UnoType::SORT_LONG:
+    case codemaker::UnoType::Sort::Long:
         return cStyle
             ? OUString("typelib_TypeClass_LONG")
             : OUString("::css::uno::TypeClass_LONG");
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
+    case codemaker::UnoType::Sort::UnsignedLong:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_LONG")
             : OUString("::css::uno::TypeClass_UNSIGNED_LONG");
-    case codemaker::UnoType::SORT_HYPER:
+    case codemaker::UnoType::Sort::Hyper:
         return cStyle
             ? OUString("typelib_TypeClass_HYPER")
             : OUString("::css::uno::TypeClass_HYPER");
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+    case codemaker::UnoType::Sort::UnsignedHyper:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_HYPER")
             : OUString("::css::uno::TypeClass_UNSIGNED_HYPER");
-    case codemaker::UnoType::SORT_FLOAT:
+    case codemaker::UnoType::Sort::Float:
         return cStyle
             ? OUString("typelib_TypeClass_FLOAT")
             : OUString("::css::uno::TypeClass_FLOAT");
-    case codemaker::UnoType::SORT_DOUBLE:
+    case codemaker::UnoType::Sort::Double:
         return cStyle
             ? OUString("typelib_TypeClass_DOUBLE")
             : OUString("::css::uno::TypeClass_DOUBLE");
-    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::Sort::Char:
         return cStyle
             ? OUString("typelib_TypeClass_CHAR")
             : OUString("::css::uno::TypeClass_CHAR");
-    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::Sort::String:
         return cStyle
             ? OUString("typelib_TypeClass_STRING")
             : OUString("::css::uno::TypeClass_STRING");
-    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::Sort::Type:
         return cStyle
             ? OUString("typelib_TypeClass_TYPE")
             : OUString("::css::uno::TypeClass_TYPE");
-    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::Sort::Any:
         return cStyle
             ? OUString("typelib_TypeClass_ANY")
             : OUString("::css::uno::TypeClass_ANY");
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+    case codemaker::UnoType::Sort::Sequence:
         return cStyle
             ? OUString("typelib_TypeClass_SEQUENCE")
             : OUString("::css::uno::TypeClass_SEQUENCE");
-    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::Sort::Enum:
         return cStyle
             ? OUString("typelib_TypeClass_ENUM")
             : OUString("::css::uno::TypeClass_ENUM");
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::PolymorphicStructTemplate:
+    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         return cStyle
             ? OUString("typelib_TypeClass_STRUCT")
             : OUString("::css::uno::TypeClass_STRUCT");
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+    case codemaker::UnoType::Sort::Exception:
         return cStyle
             ? OUString("typelib_TypeClass_EXCEPTION")
             : OUString("::css::uno::TypeClass_EXCEPTION");
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         return cStyle
             ? OUString("typelib_TypeClass_INTERFACE")
             : OUString("::css::uno::TypeClass_INTERFACE");
-    case codemaker::UnoType::SORT_TYPEDEF:
+    case codemaker::UnoType::Sort::Typedef:
         return getTypeClass(
             dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).getType(),
             cStyle);
@@ -743,57 +743,57 @@ void CppuType::dumpType(
             << "< ";
     }
     switch (m_typeMgr->getSort(n)) {
-    case codemaker::UnoType::SORT_VOID:
+    case codemaker::UnoType::Sort::Void:
         out << "void";
         break;
-    case codemaker::UnoType::SORT_BOOLEAN:
+    case codemaker::UnoType::Sort::Boolean:
         out << "::sal_Bool";
         break;
-    case codemaker::UnoType::SORT_BYTE:
+    case codemaker::UnoType::Sort::Byte:
         out << "::sal_Int8";
         break;
-    case codemaker::UnoType::SORT_SHORT:
+    case codemaker::UnoType::Sort::Short:
         out << "::sal_Int16";
         break;
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
+    case codemaker::UnoType::Sort::UnsignedShort:
         out << (cppuUnoType ? "::cppu::UnoUnsignedShortType" : "::sal_uInt16");
         break;
-    case codemaker::UnoType::SORT_LONG:
+    case codemaker::UnoType::Sort::Long:
         out << "::sal_Int32";
         break;
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
+    case codemaker::UnoType::Sort::UnsignedLong:
         out << "::sal_uInt32";
         break;
-    case codemaker::UnoType::SORT_HYPER:
+    case codemaker::UnoType::Sort::Hyper:
         out << "::sal_Int64";
         break;
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
+    case codemaker::UnoType::Sort::UnsignedHyper:
         out << "::sal_uInt64";
         break;
-    case codemaker::UnoType::SORT_FLOAT:
+    case codemaker::UnoType::Sort::Float:
         out << "float";
         break;
-    case codemaker::UnoType::SORT_DOUBLE:
+    case codemaker::UnoType::Sort::Double:
         out << "double";
         break;
-    case codemaker::UnoType::SORT_CHAR:
+    case codemaker::UnoType::Sort::Char:
         out << (cppuUnoType ? "::cppu::UnoCharType" : "::sal_Unicode");
         break;
-    case codemaker::UnoType::SORT_STRING:
+    case codemaker::UnoType::Sort::String:
         out << "::rtl::OUString";
         break;
-    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::Sort::Type:
         out << "::css::uno::Type";
         break;
-    case codemaker::UnoType::SORT_ANY:
+    case codemaker::UnoType::Sort::Any:
         out << "::css::uno::Any";
         break;
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+    case codemaker::UnoType::Sort::Enum:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::Exception:
         out << codemaker::cpp::scopedCppName(u2b(n));
         break;
-    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case codemaker::UnoType::Sort::PolymorphicStructTemplate:
         out << codemaker::cpp::scopedCppName(u2b(n));
         if (!args.empty()) {
             out << "< ";
@@ -808,7 +808,7 @@ void CppuType::dumpType(
             out << " >";
         }
         break;
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         if (!native) {
             out << "::css::uno::Reference< ";
         }
@@ -837,29 +837,29 @@ void CppuType::dumpCppuGetType(
     sal_Int32 rank;
     codemaker::UnoType::Sort sort = m_typeMgr->decompose(
         name, true, &nucleus, &rank, nullptr, nullptr);
-    switch (rank == 0 ? sort : codemaker::UnoType::SORT_SEQUENCE_TYPE) {
-    case codemaker::UnoType::SORT_VOID:
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
-    case codemaker::UnoType::SORT_CHAR:
-    case codemaker::UnoType::SORT_STRING:
-    case codemaker::UnoType::SORT_TYPE:
-    case codemaker::UnoType::SORT_ANY:
+    switch (rank == 0 ? sort : codemaker::UnoType::Sort::Sequence) {
+    case codemaker::UnoType::Sort::Void:
+    case codemaker::UnoType::Sort::Boolean:
+    case codemaker::UnoType::Sort::Byte:
+    case codemaker::UnoType::Sort::Short:
+    case codemaker::UnoType::Sort::UnsignedShort:
+    case codemaker::UnoType::Sort::Long:
+    case codemaker::UnoType::Sort::UnsignedLong:
+    case codemaker::UnoType::Sort::Hyper:
+    case codemaker::UnoType::Sort::UnsignedHyper:
+    case codemaker::UnoType::Sort::Float:
+    case codemaker::UnoType::Sort::Double:
+    case codemaker::UnoType::Sort::Char:
+    case codemaker::UnoType::Sort::String:
+    case codemaker::UnoType::Sort::Type:
+    case codemaker::UnoType::Sort::Any:
         break;
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Sequence:
+    case codemaker::UnoType::Sort::Enum:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+    case codemaker::UnoType::Sort::Exception:
+    case codemaker::UnoType::Sort::Interface:
         // Take care of recursion like struct S { sequence<S> x; }:
         if (ownName == nullptr || nucleus != *ownName) {
             out << indent() << "::cppu::UnoType< ";
@@ -867,7 +867,7 @@ void CppuType::dumpCppuGetType(
             out << " >::get();\n";
         }
         break;
-    case codemaker::UnoType::SORT_TYPEDEF:
+    case codemaker::UnoType::Sort::Typedef:
         assert(false); // this cannot happen
         // fall through
     default:
@@ -879,26 +879,26 @@ void CppuType::dumpCppuGetType(
 
 bool CppuType::passByReference(OUString const & name) const {
     switch (m_typeMgr->getSort(resolveOuterTypedefs(name))) {
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
-    case codemaker::UnoType::SORT_CHAR:
-    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::Sort::Boolean:
+    case codemaker::UnoType::Sort::Byte:
+    case codemaker::UnoType::Sort::Short:
+    case codemaker::UnoType::Sort::UnsignedShort:
+    case codemaker::UnoType::Sort::Long:
+    case codemaker::UnoType::Sort::UnsignedLong:
+    case codemaker::UnoType::Sort::Hyper:
+    case codemaker::UnoType::Sort::UnsignedHyper:
+    case codemaker::UnoType::Sort::Float:
+    case codemaker::UnoType::Sort::Double:
+    case codemaker::UnoType::Sort::Char:
+    case codemaker::UnoType::Sort::Enum:
         return false;
-    case codemaker::UnoType::SORT_STRING:
-    case codemaker::UnoType::SORT_TYPE:
-    case codemaker::UnoType::SORT_ANY:
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::String:
+    case codemaker::UnoType::Sort::Type:
+    case codemaker::UnoType::Sort::Any:
+    case codemaker::UnoType::Sort::Sequence:
+    case codemaker::UnoType::Sort::PlainStruct:
+    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+    case codemaker::UnoType::Sort::Interface:
         return true;
     default:
         throw CannotDumpException(
@@ -916,22 +916,22 @@ bool CppuType::canBeWarnUnused(OUString const & name, int depth) const {
         return false;
     OUString aResolvedName = resolveOuterTypedefs(name);
     switch (m_typeMgr->getSort(aResolvedName)) {
-    case codemaker::UnoType::SORT_BOOLEAN:
-    case codemaker::UnoType::SORT_BYTE:
-    case codemaker::UnoType::SORT_SHORT:
-    case codemaker::UnoType::SORT_UNSIGNED_SHORT:
-    case codemaker::UnoType::SORT_LONG:
-    case codemaker::UnoType::SORT_UNSIGNED_LONG:
-    case codemaker::UnoType::SORT_HYPER:
-    case codemaker::UnoType::SORT_UNSIGNED_HYPER:
-    case codemaker::UnoType::SORT_FLOAT:
-    case codemaker::UnoType::SORT_DOUBLE:
-    case codemaker::UnoType::SORT_CHAR:
-    case codemaker::UnoType::SORT_ENUM_TYPE:
-    case codemaker::UnoType::SORT_STRING:
-    case codemaker::UnoType::SORT_TYPE:
+    case codemaker::UnoType::Sort::Boolean:
+    case codemaker::UnoType::Sort::Byte:
+    case codemaker::UnoType::Sort::Short:
+    case codemaker::UnoType::Sort::UnsignedShort:
+    case codemaker::UnoType::Sort::Long:
+    case codemaker::UnoType::Sort::UnsignedLong:
+    case codemaker::UnoType::Sort::Hyper:
+    case codemaker::UnoType::Sort::UnsignedHyper:
+    case codemaker::UnoType::Sort::Float:
+    case codemaker::UnoType::Sort::Double:
+    case codemaker::UnoType::Sort::Char:
+    case codemaker::UnoType::Sort::Enum:
+    case codemaker::UnoType::Sort::String:
+    case codemaker::UnoType::Sort::Type:
         return true;
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::PlainStruct:
     {
         rtl::Reference< unoidl::Entity > ent;
         m_typeMgr->getSort(aResolvedName, &ent);
@@ -946,14 +946,14 @@ bool CppuType::canBeWarnUnused(OUString const & name, int depth) const {
         }
         return true;
     }
-    case codemaker::UnoType::SORT_SEQUENCE_TYPE:
+    case codemaker::UnoType::Sort::Sequence:
     {
         OUString aInnerType = aResolvedName.copy(2);
         return canBeWarnUnused(aInnerType, depth+1);
     }
-    case codemaker::UnoType::SORT_ANY:
-    case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Any:
+    case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
+    case codemaker::UnoType::Sort::Interface:
         return false;
     default:
         throw CannotDumpException(
@@ -965,7 +965,7 @@ bool CppuType::canBeWarnUnused(OUString const & name, int depth) const {
 OUString CppuType::resolveOuterTypedefs(OUString const & name) const {
     for (OUString n(name);;) {
         rtl::Reference< unoidl::Entity > ent;
-        if (m_typeMgr->getSort(n, &ent) != codemaker::UnoType::SORT_TYPEDEF) {
+        if (m_typeMgr->getSort(n, &ent) != codemaker::UnoType::Sort::Typedef) {
             return n;
         }
         n = dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).getType();
@@ -977,7 +977,7 @@ OUString CppuType::resolveAllTypedefs(OUString const & name) const {
     OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k1)));
     for (;;) {
         rtl::Reference< unoidl::Entity > ent;
-        if (m_typeMgr->getSort(n, &ent) != codemaker::UnoType::SORT_TYPEDEF) {
+        if (m_typeMgr->getSort(n, &ent) != codemaker::UnoType::Sort::Typedef) {
             break;
         }
         sal_Int32 k2;
@@ -1057,7 +1057,7 @@ void BaseOffset::calculateBases(
         if (set_.insert(ar.name).second) {
             rtl::Reference< unoidl::Entity > ent;
             codemaker::UnoType::Sort sort = manager_->getSort(ar.name, &ent);
-            if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE) {
+            if (sort != codemaker::UnoType::Sort::Interface) {
                 throw CannotDumpException(
                     "interface type base " + ar.name
                     + " is not an interface type");
@@ -2116,7 +2116,7 @@ bool PlainStructType::dumpBaseMembers(
     if (!base.isEmpty()) {
         rtl::Reference< unoidl::Entity > ent;
         codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
-        if (sort != codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE) {
+        if (sort != codemaker::UnoType::Sort::PlainStruct) {
             throw CannotDumpException(
                 "plain struct type base " + base
                 + " is not a plain struct type");
@@ -2183,7 +2183,7 @@ sal_uInt32 PlainStructType::getTotalMemberCount(OUString const & base) const {
     }
     rtl::Reference< unoidl::Entity > ent;
     codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
-    if (sort != codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE) {
+    if (sort != codemaker::UnoType::Sort::PlainStruct) {
         throw CannotDumpException(
             "plain struct type base " + base + " is not a plain struct type");
     }
@@ -3093,7 +3093,7 @@ bool ExceptionType::dumpBaseMembers(
     if (!base.isEmpty()) {
         rtl::Reference< unoidl::Entity > ent;
         codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
-        if (sort != codemaker::UnoType::SORT_EXCEPTION_TYPE) {
+        if (sort != codemaker::UnoType::Sort::Exception) {
             throw CannotDumpException(
                 "exception type base " + base + " is not an exception type");
         }
@@ -3139,7 +3139,7 @@ sal_uInt32 ExceptionType::getTotalMemberCount(OUString const & base) const {
     }
     rtl::Reference< unoidl::Entity > ent;
     codemaker::UnoType::Sort sort = m_typeMgr->getSort(base, &ent);
-    if (sort != codemaker::UnoType::SORT_EXCEPTION_TYPE) {
+    if (sort != codemaker::UnoType::Sort::Exception) {
         throw CannotDumpException(
             "exception type base " + base + " is not an exception type");
     }
@@ -3461,7 +3461,7 @@ void ServiceType::dumpHppFile(
                         if (m_typeMgr->getSort(
                                 b2u(codemaker::UnoType::decompose(
                                         u2b(param.type))))
-                            == codemaker::UnoType::SORT_CHAR)
+                            == codemaker::UnoType::Sort::Char)
                         {
                             includes.addCppuUnotypeHxx();
                             break;
@@ -3619,7 +3619,7 @@ void ServiceType::dumpHppFile(
                         if (m_typeMgr->getSort(
                                 b2u(codemaker::UnoType::decompose(
                                         u2b(j.type), &rank)))
-                            == codemaker::UnoType::SORT_CHAR)
+                            == codemaker::UnoType::Sort::Char)
                         {
                             o << "= ::css::uno::Any(&" << param
                               << ", ::cppu::UnoType< ";
@@ -3880,7 +3880,7 @@ void produce(
     rtl::Reference< unoidl::Entity > ent;
     rtl::Reference< unoidl::MapCursor > cur;
     switch (manager->getSort(name, &ent, &cur)) {
-    case codemaker::UnoType::SORT_MODULE:
+    case codemaker::UnoType::Sort::Module:
         {
             OUString prefix;
             if (!name.isEmpty()) {
@@ -3895,7 +3895,7 @@ void produce(
             }
             break;
         }
-    case codemaker::UnoType::SORT_ENUM_TYPE:
+    case codemaker::UnoType::Sort::Enum:
         {
             EnumType t(
                 dynamic_cast< unoidl::EnumTypeEntity * >(ent.get()), name,
@@ -3904,7 +3904,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
+    case codemaker::UnoType::Sort::PlainStruct:
         {
             PlainStructType t(
                 dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()),
@@ -3913,7 +3913,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+    case codemaker::UnoType::Sort::PolymorphicStructTemplate:
         {
             PolyStructType t(
                 dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
@@ -3923,7 +3923,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_EXCEPTION_TYPE:
+    case codemaker::UnoType::Sort::Exception:
         {
             ExceptionType t(
                 dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()), name,
@@ -3932,7 +3932,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_INTERFACE_TYPE:
+    case codemaker::UnoType::Sort::Interface:
         {
             InterfaceType t(
                 dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()), name,
@@ -3941,7 +3941,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_TYPEDEF:
+    case codemaker::UnoType::Sort::Typedef:
         {
             Typedef t(
                 dynamic_cast< unoidl::TypedefEntity * >(ent.get()), name,
@@ -3950,7 +3950,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_CONSTANT_GROUP:
+    case codemaker::UnoType::Sort::ConstantGroup:
         {
             ConstantGroup t(
                 dynamic_cast< unoidl::ConstantGroupEntity * >(ent.get()), name,
@@ -3960,7 +3960,7 @@ void produce(
             }
             break;
         }
-    case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+    case codemaker::UnoType::Sort::SingleInterfaceBasedService:
         {
             ServiceType t(
                 dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
@@ -3970,7 +3970,7 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_INTERFACE_BASED_SINGLETON:
+    case codemaker::UnoType::Sort::InterfaceBasedSingleton:
         {
             SingletonType t(
                 dynamic_cast< unoidl::InterfaceBasedSingletonEntity * >(
@@ -3980,8 +3980,8 @@ void produce(
             t.dumpDependedTypes(generated, options);
             break;
         }
-    case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
-    case codemaker::UnoType::SORT_SERVICE_BASED_SINGLETON:
+    case codemaker::UnoType::Sort::AccumulationBasedService:
+    case codemaker::UnoType::Sort::ServiceBasedSingleton:
         break;
     default:
         throw CannotDumpException(
