@@ -16,6 +16,7 @@
 #include <sfx2/dllapi.h>
 
 class SfxObjectShell;
+class SfxViewFrame;
 namespace basegfx
 {
 class BColor;
@@ -40,6 +41,7 @@ public:
     bool HasImpactLevel();
     basegfx::BColor GetImpactLevelColor();
     OUString GetDocumentWatermark();
+    void UpdateInfobar(SfxViewFrame& rViewFrame);
 };
 
 #endif

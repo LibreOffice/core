@@ -25,6 +25,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <config_folders.h>
 
 using namespace com::sun::star;
@@ -286,6 +289,8 @@ public:
     void parsePolicy();
     /// Synchronize m_aLabels back to the object shell.
     void pushToObjectShell();
+    /// Updates infobar if necessary for an already loaded document.
+    void updateViewFrame();
 };
 
 SfxClassificationHelper::Impl::Impl(SfxObjectShell& rObjectShell)
@@ -486,6 +491,27 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
 
     m_pImpl->m_aLabels = it->second.m_aLabels;
     m_pImpl->pushToObjectShell();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return;
+
+    UpdateInfobar(*pViewFrame);
+}
+
+void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
+{
+    OUString aBACName = GetBACName();
+    bool bImpactLevel = HasImpactLevel();
+    if (!aBACName.isEmpty() && bImpactLevel)
+    {
+        OUString aMessage = SfxResId(STR_CLASSIFIED_DOCUMENT);
+        aMessage = aMessage.replaceFirst("%1", aBACName);
+        basegfx::BColor aBackgroundColor = GetImpactLevelColor();
+        basegfx::BColor aForegroundColor(1.0, 1.0, 1.0);
+
+        rViewFrame.RemoveInfoBar("classification");
+        rViewFrame.AppendInfoBar("classification", aMessage, &aBackgroundColor, &aForegroundColor, &aForegroundColor, WB_CENTER);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

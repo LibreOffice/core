@@ -1348,16 +1348,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     // Document has BAILS properties, display an infobar accordingly.
                     SfxClassificationHelper aHelper(*xObjSh.get());
-                    OUString aBACName = aHelper.GetBACName();
-                    bool bImpactLevel = aHelper.HasImpactLevel();
-                    if (!aBACName.isEmpty() && bImpactLevel)
-                    {
-                        OUString aMessage = SfxResId(STR_CLASSIFIED_DOCUMENT);
-                        aMessage = aMessage.replaceFirst("%1", aBACName);
-                        basegfx::BColor aBackgroundColor = aHelper.GetImpactLevelColor();
-                        basegfx::BColor aForegroundColor(1.0, 1.0, 1.0);
-                        AppendInfoBar("classification", aMessage, &aBackgroundColor, &aForegroundColor, &aForegroundColor, WB_CENTER);
-                    }
+                    aHelper.UpdateInfobar(*this);
                 }
 
                 break;
