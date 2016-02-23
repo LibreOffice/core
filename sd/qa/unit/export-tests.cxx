@@ -144,6 +144,7 @@ public:
     void testSlideNameField();
     void testExtFileField();
     void testAuthorField();
+    void testAuthorInitialsField();
 
     void testFdo90607();
     void testTdf91378();
@@ -203,6 +204,7 @@ public:
     CPPUNIT_TEST(testSlideNameField);
     CPPUNIT_TEST(testExtFileField);
     CPPUNIT_TEST(testAuthorField);
+    CPPUNIT_TEST(testAuthorInitialsField);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1662,6 +1664,18 @@ void SdExportTest::testAuthorField()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/author_field.odp"), ODP);
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testAuthorInitialsField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/initials.odp"), ODP);
+
+    //xDocShRef = saveAndReload( xDocShRef, ODP );
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );

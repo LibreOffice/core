@@ -199,6 +199,7 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapTemplateDisplayFormat(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapChapterDisplayFormat(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapFilenameDisplayFormat(sal_Int16 nType);
+    static enum ::xmloff::token::XMLTokenEnum MapAuthorDisplayFormat(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapDocInfoFieldName(enum FieldIdEnum nToken);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceSource(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceType(sal_Int16 nType);
@@ -422,6 +423,7 @@ private:
     // property names
     const OUString sPropertyAdjust;
     const OUString sPropertyAuthor;
+    const OUString sPropertyAuthorFormat;
     const OUString sPropertyChapterFormat;
     const OUString sPropertyChapterNumberingLevel;
     const OUString sPropertyCharStyleNames;
