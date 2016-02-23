@@ -2736,7 +2736,7 @@ namespace {
                 {
                     nReformat = txtFormatInfo.GetLineStart();
                     //reset the margin flag - prevent loops
-                    rThis.SetRightMargin(false);
+                    SwTextCursor::SetRightMargin(false);
                 }
             }
 
