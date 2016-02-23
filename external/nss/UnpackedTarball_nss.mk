@@ -16,6 +16,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/nss.aix.patch \
 	external/nss/nss-3.13.5-zlib-werror.patch \
 	$(if $(filter WNTMSC,$(OS)$(COM)),external/nss/nss.windows.patch) \
+	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
+		external/nss/nss.cygwin64.in32bit.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
