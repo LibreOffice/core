@@ -59,7 +59,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             ::comphelper::ConfigurationHelper::openConfig(
                                 m_xContext,
                                 "/org.openoffice.Setup/Office/Factories",
-                                ::comphelper::ConfigurationHelper::E_READONLY),
+                                ::comphelper::EConfigurationModes::ReadOnly),
                             css::uno::UNO_QUERY_THROW);
 
                         // ask for office locale
@@ -68,7 +68,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             "/org.openoffice.Setup",
                             "L10N",
                             "ooLocale",
-                            ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sLocale;
+                            ::comphelper::EConfigurationModes::ReadOnly) >>= m_sLocale;
 
                         // detect system
                         ::comphelper::ConfigurationHelper::readDirectKey(
@@ -76,7 +76,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             "/org.openoffice.Office.Common",
                             "Help",
                             "System",
-                            ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sSystem;
+                            ::comphelper::EConfigurationModes::ReadOnly) >>= m_sSystem;
 
                         // Start listening for disposing events of these services,
                         // so we can react e.g. for an office shutdown

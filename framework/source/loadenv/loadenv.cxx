@@ -923,7 +923,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
                                 "org.openoffice.Office.Common/",
                                 "Misc",
                                 "MaxOpenDocuments",
-                                ::comphelper::ConfigurationHelper::E_READONLY);
+                                ::comphelper::EConfigurationModes::ReadOnly);
 
         // NIL means: count of allowed documents = infinite !
         //     => return sal_True
@@ -1641,7 +1641,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
                   "org.openoffice.Office.Common/View",
                   "NewDocumentHandling",
                   "ForceFocusAndToFront",
-                  ::comphelper::ConfigurationHelper::E_READONLY);
+                  ::comphelper::EConfigurationModes::ReadOnly);
             a >>= bForceFrontAndFocus;
         }
 
@@ -1718,7 +1718,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
                                                                         xContext,
                                                                         PACKAGE_SETUP_MODULES,
-                                                                        ::comphelper::ConfigurationHelper::E_READONLY),
+                                                                        ::comphelper::EConfigurationModes::ReadOnly),
                                                                       css::uno::UNO_QUERY_THROW);
 
         // read window state from the configuration

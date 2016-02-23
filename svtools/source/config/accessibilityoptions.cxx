@@ -117,7 +117,7 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
             ::comphelper::ConfigurationHelper::openConfig(
                 comphelper::getProcessComponentContext(),
                 s_sAccessibility,
-                ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::EConfigurationModes::Standard ),
             css::uno::UNO_QUERY);
 
         bIsModified = false;

@@ -29,37 +29,43 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 
-// namespaces
-
-namespace comphelper{
-
-
-class COMPHELPER_DLLPUBLIC ConfigurationHelper
+namespace comphelper
 {
-    public:
-
-
     /** specify all possible modes, which can be used to open a configuration access.
      *
      *  @see    openConfig()
      *  @see    readDirectKey()
      *  @see    writeDirectKey()
      */
-    enum EConfigurationModes
+    enum class EConfigurationModes
     {
         /// opens configuration in read/write mode (without LAZY writing!)
-        E_STANDARD = 0,
+        Standard = 0,
         /// configuration will be opened readonly
-        E_READONLY = 1,
+        ReadOnly = 1,
         /// all localized nodes will be interpreted as XInterface instead of interpreting it as atomic value nodes
-        E_ALL_LOCALES = 2,
+        AllLocales = 2,
         /// enable lazy writing
-        E_LAZY_WRITE = 4
+        LazyWrite = 4
     };
 
 
+}
+
+namespace o3tl
+{
+    template<> struct typed_flags<comphelper::EConfigurationModes> : is_typed_flags<comphelper::EConfigurationModes, 0x7> {};
+}
+
+namespace comphelper
+{
+
+class COMPHELPER_DLLPUBLIC ConfigurationHelper
+{
+public:
     /** returns access to the specified configuration package.
      *
      *  This method should be used, if e.g. more than one request to the same
@@ -86,8 +92,8 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          E.g. css::uno::Exception if the configuration could not be opened.
      */
     static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                  const OUString&                                    sPackage,
-                                                                        sal_Int32                                           eMode   );
+                                                                  const OUString&                                           sPackage,
+                                                                        EConfigurationModes                                 eMode   );
 
 
     /** reads the value of an existing(!) configuration key,
@@ -211,7 +217,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                        const OUString&                                       sPackage,
                                        const OUString&                                       sRelPath,
                                        const OUString&                                       sKey    ,
-                                             sal_Int32                                              eMode   );
+                                             EConfigurationModes                             eMode   );
 
 
     /** does the same then openConfig() / writeRelativeKey() & flush() together.
@@ -227,8 +233,8 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                const OUString&                                       sPackage,
                                const OUString&                                       sRelPath,
                                const OUString&                                       sKey    ,
-                               const css::uno::Any&                                         aValue  ,
-                                     sal_Int32                                              eMode   );
+                               const css::uno::Any&                                  aValue  ,
+                                     EConfigurationModes                             eMode   );
 };
 
 } // namespace comphelper

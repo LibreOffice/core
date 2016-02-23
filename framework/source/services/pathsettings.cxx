@@ -1464,7 +1464,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
         xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
                         CFG_NODE_OLD,
-                        ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Sometimes we need write access there !!!
+                        ::comphelper::EConfigurationModes::Standard), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
 
         { // SAFE ->
@@ -1491,7 +1491,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
         xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
                         CFG_NODE_NEW,
-                        ::comphelper::ConfigurationHelper::E_STANDARD),
+                        ::comphelper::EConfigurationModes::Standard),
                    css::uno::UNO_QUERY_THROW);
 
         { // SAFE ->

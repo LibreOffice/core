@@ -157,7 +157,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
         m_xRoot.set( ::comphelper::ConfigurationHelper::openConfig(
                             ::comphelper::getProcessComponentContext(),
                             PACKAGE_VIEWS,
-                            ::comphelper::ConfigurationHelper::E_STANDARD),
+                            ::comphelper::EConfigurationModes::Standard),
                      css::uno::UNO_QUERY);
         if (m_xRoot.is())
             m_xRoot->getByName(sList) >>= m_xSet;

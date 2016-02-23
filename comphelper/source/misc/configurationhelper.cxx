@@ -31,8 +31,8 @@ namespace comphelper{
 
 
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                            const OUString&                                    sPackage,
-                                                                                  sal_Int32                                           eMode   )
+                                                                            const OUString&                                           sPackage,
+                                                                                  EConfigurationModes                                 eMode   )
 {
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
         css::configuration::theDefaultProvider::get( rxContext ) );
@@ -46,7 +46,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     lParams.push_back(css::uno::makeAny(aParam));
 
     // enable all locales mode
-    if ((eMode & ConfigurationHelper::E_ALL_LOCALES)==ConfigurationHelper::E_ALL_LOCALES)
+    if (eMode & EConfigurationModes::AllLocales)
     {
         aParam.Name    = "locale";
         aParam.Value <<= OUString("*");
@@ -54,7 +54,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     }
 
     // enable lazy writing
-    bool bLazy = ((eMode & ConfigurationHelper::E_LAZY_WRITE)==ConfigurationHelper::E_LAZY_WRITE);
+    bool bLazy(eMode & EConfigurationModes::LazyWrite);
     aParam.Name    = "lazywrite";
     aParam.Value   = css::uno::makeAny(bLazy);
     lParams.push_back(css::uno::makeAny(aParam));
@@ -62,7 +62,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     // open it
     css::uno::Reference< css::uno::XInterface > xCFG;
 
-    bool bReadOnly = ((eMode & ConfigurationHelper::E_READONLY)==ConfigurationHelper::E_READONLY);
+    bool bReadOnly(eMode & EConfigurationModes::ReadOnly);
     if (bReadOnly)
         xCFG = xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationAccess",
@@ -158,7 +158,7 @@ css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css:
                                                  const OUString&                                       sPackage,
                                                  const OUString&                                       sRelPath,
                                                  const OUString&                                       sKey    ,
-                                                       sal_Int32                                              eMode   )
+                                                       EConfigurationModes                             eMode   )
 {
     css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
     return ConfigurationHelper::readRelativeKey(xCFG, sRelPath, sKey);
@@ -169,8 +169,8 @@ void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XC
                                          const OUString&                                       sPackage,
                                          const OUString&                                       sRelPath,
                                          const OUString&                                       sKey    ,
-                                         const css::uno::Any&                                         aValue  ,
-                                               sal_Int32                                              eMode   )
+                                         const css::uno::Any&                                  aValue  ,
+                                               EConfigurationModes                             eMode   )
 {
     css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
     ConfigurationHelper::writeRelativeKey(xCFG, sRelPath, sKey, aValue);

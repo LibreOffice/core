@@ -124,7 +124,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
             ::comphelper::ConfigurationHelper::openConfig(
                 comphelper::getProcessComponentContext(),
                 ROOTNODE_PRINTOPTION,
-                ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::EConfigurationModes::Standard),
             css::uno::UNO_QUERY);
 
         if (m_xCfg.is())

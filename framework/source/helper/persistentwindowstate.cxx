@@ -175,7 +175,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
             "org.openoffice.Setup/",
             "Office/Factories/*[\"" + sModuleName + "\"]",
             "ooSetupFactoryWindowAttributes",
-            ::comphelper::ConfigurationHelper::E_READONLY) >>= sWindowState;
+            ::comphelper::EConfigurationModes::ReadOnly) >>= sWindowState;
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -196,7 +196,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
             "Office/Factories/*[\"" + sModuleName + "\"]",
             "ooSetupFactoryWindowAttributes",
             css::uno::makeAny(sWindowState),
-            ::comphelper::ConfigurationHelper::E_STANDARD);
+            ::comphelper::EConfigurationModes::Standard);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

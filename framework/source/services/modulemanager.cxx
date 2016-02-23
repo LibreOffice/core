@@ -147,7 +147,7 @@ ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentCont
 {
     m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
                 m_xContext, "/org.openoffice.Setup/Office/Factories",
-                comphelper::ConfigurationHelper::E_READONLY),
+                comphelper::EConfigurationModes::ReadOnly ),
             css::uno::UNO_QUERY_THROW );
 }
 
@@ -250,7 +250,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         m_xContext,
                                                                         "/org.openoffice.Setup/Office/Factories",
-                                                                        ::comphelper::ConfigurationHelper::E_STANDARD);
+                                                                        ::comphelper::EConfigurationModes::Standard);
     css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameReplace > xModule  ;
 

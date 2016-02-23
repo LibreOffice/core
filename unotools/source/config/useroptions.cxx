@@ -130,7 +130,7 @@ SvtUserOptions::Impl::Impl() :
             comphelper::ConfigurationHelper::openConfig(
                 comphelper::getProcessComponentContext(),
                 "org.openoffice.UserProfile/Data",
-                comphelper::ConfigurationHelper::E_STANDARD
+                comphelper::EConfigurationModes::Standard
             ),
             uno::UNO_QUERY
         );
