@@ -618,7 +618,7 @@ void CppuType::dumpLightGetCppuType(FileStream & out) {
 
 codemaker::cpp::IdentifierTranslationMode CppuType::isGlobal() const {
     return name_.indexOf('.') == -1
-        ? codemaker::cpp::ITM_GLOBAL : codemaker::cpp::ITM_NONGLOBAL;
+        ? codemaker::cpp::IdentifierTranslationMode::Global : codemaker::cpp::IdentifierTranslationMode::NonGlobal;
 }
 
 sal_uInt32 CppuType::getInheritedMemberCount()
@@ -3518,7 +3518,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "static ::css::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      "create", "method", codemaker::cpp::ITM_NONGLOBAL,
+                      "create", "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
                   << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
                       " the_context) {\n");
@@ -3576,7 +3576,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "static ::css::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      u2b(cons.name), "method", codemaker::cpp::ITM_NONGLOBAL,
+                      u2b(cons.name), "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
                   << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
                       " the_context");
@@ -3595,7 +3595,7 @@ void ServiceType::dumpHppFile(
                     dumpType(o, type, byRef, byRef);
                     o << " "
                       << codemaker::cpp::translateUnoToCppIdentifier(
-                          u2b(param.name), "param", codemaker::cpp::ITM_NONGLOBAL);
+                          u2b(param.name), "param", codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 }
                 o << ") {\n";
                 inc();
@@ -3614,7 +3614,7 @@ void ServiceType::dumpHppFile(
                         OString param(
                             codemaker::cpp::translateUnoToCppIdentifier(
                                 u2b(j.name), "param",
-                                codemaker::cpp::ITM_NONGLOBAL));
+                                codemaker::cpp::IdentifierTranslationMode::NonGlobal));
                         sal_Int32 rank;
                         if (m_typeMgr->getSort(
                                 b2u(codemaker::UnoType::decompose(
@@ -3664,7 +3664,7 @@ void ServiceType::dumpHppFile(
                 if (rest) {
                     o << codemaker::cpp::translateUnoToCppIdentifier(
                         u2b(cons.parameters.back().name), "param",
-                        codemaker::cpp::ITM_NONGLOBAL);
+                        codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
                     o << "::css::uno::Sequence< ::css::uno::Any >()";
                 } else {
@@ -3691,7 +3691,7 @@ void ServiceType::dumpHppFile(
                 if (rest) {
                     o << codemaker::cpp::translateUnoToCppIdentifier(
                         u2b(cons.parameters.back().name), "param",
-                        codemaker::cpp::ITM_NONGLOBAL);
+                        codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
                     o << ("::css::uno::Sequence< ::css::uno::Any >()");
                 } else {
@@ -3815,7 +3815,7 @@ void SingletonType::dumpHppFile(
     o << indent() << "static ::css::uno::Reference< "
       << scopedBaseName << " > "
       << codemaker::cpp::translateUnoToCppIdentifier(
-          "get", "method", codemaker::cpp::ITM_NONGLOBAL, &cppName)
+          "get", "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal, &cppName)
       << ("(::css::uno::Reference<"
           " ::css::uno::XComponentContext > const & the_context)"
           " {\n");
