@@ -2290,9 +2290,10 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame
         {
             if( bSelFrame )
             {
-                SelectObj( pFrame->Frame().Pos(), 0, pFrame->GetVirtDrawObj() );
-                if( !ActionPend() )
+                // first make visible, to get a11y events in proper order
+                if (!ActionPend())
                     MakeVisible( pFrame->Frame() );
+                SelectObj( pFrame->Frame().Pos(), 0, pFrame->GetVirtDrawObj() );
             }
             else
             {
