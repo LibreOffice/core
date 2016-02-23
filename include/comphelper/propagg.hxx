@@ -156,11 +156,11 @@ public:
     bool getPropertyByHandle( sal_Int32 _nHandle, css::beans::Property& _rProperty ) const;
 
 
-    enum PropertyOrigin
+    enum class PropertyOrigin
     {
-        AGGREGATE_PROPERTY,
-        DELEGATOR_PROPERTY,
-        UNKNOWN_PROPERTY
+        Aggregate,
+        Delegator,
+        Unknown
     };
     /** prefer this one over the XPropertySetInfo of the aggregate!
 

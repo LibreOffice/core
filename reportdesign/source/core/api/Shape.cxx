@@ -208,20 +208,20 @@ cppu::IPropertyArrayHelper& OShape::getInfoHelper()
 void SAL_CALL OShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate )
         m_aProps.aComponent.m_xProperty->setPropertyValue( aPropertyName,aValue);
     // can be in both
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Delegator )
         ShapePropertySet::setPropertyValue( aPropertyName, aValue );
 }
 
 uno::Any SAL_CALL OShape::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate )
         return m_aProps.aComponent.m_xProperty->getPropertyValue( PropertyName);
     // can be in both
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Delegator )
         return ShapePropertySet::getPropertyValue( PropertyName);
     return uno::Any();
 }
@@ -229,40 +229,40 @@ uno::Any SAL_CALL OShape::getPropertyValue( const OUString& PropertyName ) throw
 void SAL_CALL OShape::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || aPropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate || aPropertyName.isEmpty() )
         m_aProps.aComponent.m_xProperty->addPropertyChangeListener( aPropertyName, xListener);
     // can be in both
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || aPropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Delegator || aPropertyName.isEmpty() )
         ShapePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 
 void SAL_CALL OShape::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || aPropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate || aPropertyName.isEmpty() )
         m_aProps.aComponent.m_xProperty->removePropertyChangeListener( aPropertyName, aListener );
     // can be in both
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || aPropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Delegator || aPropertyName.isEmpty() )
         ShapePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 
 void SAL_CALL OShape::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || PropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate || PropertyName.isEmpty() )
         m_aProps.aComponent.m_xProperty->addVetoableChangeListener( PropertyName, aListener );
     // can be in both
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || PropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Delegator || PropertyName.isEmpty() )
         ShapePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 
 void SAL_CALL OShape::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || PropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate || PropertyName.isEmpty() )
         m_aProps.aComponent.m_xProperty->removeVetoableChangeListener( PropertyName, aListener );
     // can be in both
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || PropertyName.isEmpty() )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::PropertyOrigin::Delegator || PropertyName.isEmpty() )
         ShapePropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 

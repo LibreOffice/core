@@ -146,7 +146,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
 
 OPropertyArrayAggregationHelper::PropertyOrigin OPropertyArrayAggregationHelper::classifyProperty( const OUString& _rName )
 {
-    PropertyOrigin eOrigin = UNKNOWN_PROPERTY;
+    PropertyOrigin eOrigin = PropertyOrigin::Unknown;
     // look up the name
     const Property* pPropertyDescriptor = lcl_findPropertyByName( m_aProperties, _rName );
     if ( pPropertyDescriptor )
@@ -156,7 +156,7 @@ OPropertyArrayAggregationHelper::PropertyOrigin OPropertyArrayAggregationHelper:
         OSL_ENSURE( m_aPropertyAccessors.end() != aPos, "OPropertyArrayAggregationHelper::classifyProperty: should have this handle in my map!" );
         if ( m_aPropertyAccessors.end() != aPos )
         {
-            eOrigin = aPos->second.bAggregate ? AGGREGATE_PROPERTY : DELEGATOR_PROPERTY;
+            eOrigin = aPos->second.bAggregate ? PropertyOrigin::Aggregate : PropertyOrigin::Delegator;
         }
     }
     return eOrigin;
@@ -660,12 +660,12 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         for ( sal_Int32 i = 0; i < nLen; ++i, ++pNames )
         {
             OPropertyArrayAggregationHelper::PropertyOrigin ePropOrg = rPH.classifyProperty( *pNames );
-            if ( OPropertyArrayAggregationHelper::UNKNOWN_PROPERTY == ePropOrg )
+            if ( OPropertyArrayAggregationHelper::PropertyOrigin::Unknown == ePropOrg )
                 throw WrappedTargetException( OUString(), static_cast< XMultiPropertySet* >( this ), makeAny( UnknownPropertyException( ) ) );
                 // due to a flaw in the API design, this method is not allowed to throw an UnknownPropertyException
                 // so we wrap it into a WrappedTargetException
 
-            if ( OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY == ePropOrg )
+            if ( OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate == ePropOrg )
                 ++nAggCount;
         }
 
@@ -705,7 +705,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
 
                 for ( sal_Int32 i = 0; i < nLen; ++i, ++pNames, ++pValues )
                 {
-                    if ( OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY == rPH.classifyProperty( *pNames ) )
+                    if ( OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate == rPH.classifyProperty( *pNames ) )
                     {
                         *pAggNames++ = *pNames;
                         *pAggValues++ = *pValues;
