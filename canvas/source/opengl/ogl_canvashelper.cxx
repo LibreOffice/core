@@ -197,19 +197,19 @@ namespace oglcanvas
 
             switch( rValues.meType )
             {
-                case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
+                case ::canvas::ParametricPolyPolygon::GradientType::Linear:
                     rHelper.getDeviceHelper()->useLinearGradientShader(pColors,
                                                                        rValues.maStops,
                                                                        aTextureTransform);
                     break;
 
-                case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
+                case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:
                     rHelper.getDeviceHelper()->useRadialGradientShader(pColors,
                                                                        rValues.maStops,
                                                                        aTextureTransform);
                     break;
 
-                case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
+                case ::canvas::ParametricPolyPolygon::GradientType::Rectangular:
                     rHelper.getDeviceHelper()->useRectangularGradientShader(pColors,
                                                                             rValues.maStops,
                                                                             aTextureTransform);

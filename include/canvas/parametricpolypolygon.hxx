@@ -47,11 +47,11 @@ namespace canvas
                                   public ParametricPolyPolygon_Base
     {
     public:
-        enum GradientType
+        enum class GradientType
         {
-            GRADIENT_LINEAR,
-            GRADIENT_ELLIPTICAL,
-            GRADIENT_RECTANGULAR
+            Linear,
+            Elliptical,
+            Rectangular
         };
 
         /** Structure of defining values for the ParametricPolyPolygon

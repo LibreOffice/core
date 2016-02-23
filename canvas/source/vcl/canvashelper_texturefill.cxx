@@ -494,7 +494,7 @@ namespace vclcanvas
         {
             switch( rValues.meType )
             {
-                case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
+                case ::canvas::ParametricPolyPolygon::GradientType::Linear:
                     fillLinearGradient( rOutDev,
                                         rTextureTransform,
                                         rBounds,
@@ -503,9 +503,9 @@ namespace vclcanvas
                                         rColors );
                     break;
 
-                case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
+                case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:
                     // FALLTHROUGH intended
-                case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
+                case ::canvas::ParametricPolyPolygon::GradientType::Rectangular:
                     fillPolygonalGradient( rOutDev,
                                            rTextureTransform,
                                            rBounds,

@@ -709,7 +709,7 @@ namespace cairocanvas
 
         switch( aValues.meType )
         {
-            case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
+            case ::canvas::ParametricPolyPolygon::GradientType::Linear:
                 x0 = 0;
                 y0 = 0;
                 x1 = 1;
@@ -718,7 +718,7 @@ namespace cairocanvas
                 addColorStops( pPattern, aValues.maColors, aValues.maStops );
                 break;
 
-            case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
+            case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:
                 cx = 0;
                 cy = 0;
                 r0 = 0;
@@ -828,7 +828,7 @@ namespace cairocanvas
                             cairo_matrix_init( &aTextureMatrix,
                                                aTransform.m00, aTransform.m10, aTransform.m01,
                                                aTransform.m11, aTransform.m02, aTransform.m12);
-                            if( pPolyImpl->getValues().meType == canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR )
+                            if( pPolyImpl->getValues().meType == canvas::ParametricPolyPolygon::GradientType::Rectangular )
                             {
                                 // no general path gradient yet in cairo; emulate then
                                 cairo_save( pCairo );

@@ -430,7 +430,7 @@ namespace dxcanvas
         {
             switch( rValues.meType )
             {
-                case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
+                case ::canvas::ParametricPolyPolygon::GradientType::Linear:
                     fillLinearGradient( rGraphics,
                                         rValues,
                                         rColors,
@@ -439,9 +439,9 @@ namespace dxcanvas
                                         texture  );
                     break;
 
-                case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
+                case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:
                     // FALLTHROUGH intended
-                case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
+                case ::canvas::ParametricPolyPolygon::GradientType::Rectangular:
                     fillPolygonalGradient( rValues,
                                            rColors,
                                            rStops,
