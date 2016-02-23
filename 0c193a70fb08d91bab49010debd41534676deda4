@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_d4ce92b3",
+        "filename": "external/nss/ubsan.patch.0",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-23T21:32:10Z",
+      "side": 0,
+      "message": "This chunk was removed. New code is:\n\n  extern PRLogModuleInfo *pkixLog;\n\n  #define PKIX_MAGIC_HEADER           PR_UINT64(0xFEEDC0FFEEFACADE)\n  #define PKIX_MAGIC_HEADER_DESTROYED PR_UINT64(0xBAADF00DDEADBEEF)",
+      "revId": "0c193a70fb08d91bab49010debd41534676deda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
