@@ -16,8 +16,14 @@
 
 module com { module sun { module star { module util {
 
+/** This augments com::sun::star::util::SearchOptions to be able to
+    specify additional search algorithms for use with
+    com::sun::star::util::XTextSearch2
 
+    @since LibreOffice 5.2
+ */
 published struct SearchOptions2 : com::sun::star::util::SearchOptions {
+
     /** Search type, one of com::sun::star::util::SearchAlgorithms2
         constants. This is preferred over the content of the
         SearchAlgorithms SearchOptions::algorithmType enum field.
