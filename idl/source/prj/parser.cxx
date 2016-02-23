@@ -397,31 +397,25 @@ void SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
         throw SvParseException( rInStm, "no value for identifier <" + rAttr.aSlotId.getString() + "> " );
     rAttr.aSlotId.SetValue(n);
 
-    if( ReadIf( '(' ) )
+    Read( '(' );
+    // read method arguments
+    tools::SvRef<SvMetaType> xT(new SvMetaType() );
+    xT->SetRef(rAttr.GetType() );
+    rAttr.aType = xT;
+    sal_uInt32 nBeginPos = 0; // can not happen with Tell
+    while( nBeginPos != rInStm.Tell() )
     {
-        // read method arguments
-        tools::SvRef<SvMetaType> xT(new SvMetaType() );
-        xT->SetRef(rAttr.GetType() );
-        rAttr.aType = xT;
-        sal_uInt32 nBeginPos = 0; // can not happen with Tell
-        while( nBeginPos != rInStm.Tell() )
+        nBeginPos = rInStm.Tell();
+        tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
+        if( xAttr->ReadSvIdl( rBase, rInStm ) )
         {
-            nBeginPos = rInStm.Tell();
-            tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
-            if( xAttr->ReadSvIdl( rBase, rInStm ) )
-            {
-                if( xAttr->Test( rInStm ) )
-                    rAttr.aType->GetAttrList().push_back( xAttr );
-            }
-            ReadIfDelimiter();
+            if( xAttr->Test( rInStm ) )
+                rAttr.aType->GetAttrList().push_back( xAttr );
         }
-        Read( ')' );
-        rAttr.aType->SetType( MetaTypeType::Method );
+        ReadIfDelimiter();
     }
-    if( ReadIf( '[' ) )
-    {
-        Read( ']' );
-    }
+    Read( ')' );
+    rAttr.aType->SetType( MetaTypeType::Method );
 }
 
 SvMetaClass * SvIdlParser::ReadKnownClass()

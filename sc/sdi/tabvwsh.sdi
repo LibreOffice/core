@@ -212,7 +212,7 @@ interface DataPilotTables
 
 interface DataPilotTable
 {
-    SbxObject DataPilotFields SID_PIVOT_FIELDS
+    SbxObject DataPilotFields SID_PIVOT_FIELDS ()
 }
 
 interface DataPilotFields
@@ -221,9 +221,9 @@ interface DataPilotFields
 
 interface DataPilotField
 {
-    String FieldName SID_PFIELD_NAME
-    UINT16 Orientation SID_PFIELD_ORIENTATION
-    UINT16 Function SID_PFIELD_FUNCTION
+    String FieldName SID_PFIELD_NAME ()
+    UINT16 Orientation SID_PFIELD_ORIENTATION ()
+    UINT16 Function SID_PFIELD_FUNCTION ()
 }
 
 

@@ -29,11 +29,7 @@ interface TableSelection
         INT16   Column      SID_SC_CELLS,
         INT32   Row         FN_PARAM_1
     )
-    [
-    ]
-    UINT16 Index FID_TAB_INDEX
-    [
-    ]
+    UINT16 Index FID_TAB_INDEX ()
     FID_PROTECT_TABLE       [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_PROTECT_DOC         [ ExecMethod = Execute; StateMethod = GetState; ]
 
