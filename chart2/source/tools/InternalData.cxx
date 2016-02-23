@@ -22,7 +22,7 @@
 #include "Strings.hrc"
 
 #include <rtl/math.hxx>
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_CHART2_TOOLS
 #define DEBUG_INTERNAL_DATA 1
 #endif
 
