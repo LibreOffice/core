@@ -52,7 +52,9 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
         if ( !pMenu )
             return nullptr;
 
-        OUString aMenuCommand = pMenu->GetItemCommand( nId );
+        OUString aMenuCommand = pMenu->GetItemCommand(nId);
+        if (aMenuCommand.isEmpty())
+            aMenuCommand = "slot:" + OUString::number(nId);
         gchar* aCommandStr = g_strdup( OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
         aCommand = g_strdup( aCommandStr );
 
