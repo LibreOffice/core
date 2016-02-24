@@ -45,7 +45,7 @@ std::ostream& operator<<(std::ostream& rStrm, const TokenType& tt)
 void SyntaxHighlightTest::testBasicString() {
     OUString s("\"foo\"");
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -56,7 +56,7 @@ void SyntaxHighlightTest::testBasicString() {
 void SyntaxHighlightTest::testBasicComment() {
     OUString s("' foo");
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -67,7 +67,7 @@ void SyntaxHighlightTest::testBasicComment() {
 void SyntaxHighlightTest::testBasicCommentNewline() {
     OUString s("' foo\n");
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -81,7 +81,7 @@ void SyntaxHighlightTest::testBasicCommentNewline() {
 void SyntaxHighlightTest::testBasicEmptyComment() {
     OUString s("'");
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -92,7 +92,7 @@ void SyntaxHighlightTest::testBasicEmptyComment() {
 void SyntaxHighlightTest::testBasicEmptyCommentNewline() {
     OUString s("'\n");
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -108,7 +108,7 @@ void SyntaxHighlightTest::testBasic()
     OUString aBasicString("        if Mid(sText,iRun,1 )<> \" \" then Mid( sText ,iRun, 1, Chr( 1 + Asc( Mid(sText,iRun,1 )) ) '");
 
     std::vector<HighlightPortion> aPortions;
-    SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(
         aBasicString, aPortions );
 
     sal_Int32 prevEnd = 0;

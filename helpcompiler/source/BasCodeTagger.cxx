@@ -50,7 +50,7 @@ bool LibXmlTreeWalker::end()
 
 
 BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
-    m_Highlighter(HIGHLIGHT_BASIC)
+    m_Highlighter(HighlighterLanguage::Basic)
 {
       if ( rootDoc == nullptr )
           throw NULL_DOCUMENT;

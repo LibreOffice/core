@@ -59,10 +59,10 @@ struct HighlightPortion {
 
 // Language mode of the Highlighter (possibly to be refined later with keyword
 // lists, C comment flags)
-enum HighlighterLanguage
+enum class HighlighterLanguage
 {
-    HIGHLIGHT_BASIC,
-    HIGHLIGHT_SQL
+    Basic,
+    SQL
 };
 
 class COMPHELPER_DLLPUBLIC SyntaxHighlighter

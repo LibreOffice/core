@@ -387,7 +387,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
 
     // Operator?
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
-    else if ( testCharFlags( c, CHAR_OPERATOR ) || ( (c == '\'') && (aLanguage==HIGHLIGHT_BASIC)) )
+    else if ( testCharFlags( c, CHAR_OPERATOR ) || ( (c == '\'') && (aLanguage==HighlighterLanguage::Basic)) )
     {
         // parameters for SQL view
         if ( (c==':') || (c=='?'))
@@ -691,11 +691,11 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
 {
     switch (eLanguage)
     {
-        case HIGHLIGHT_BASIC:
+        case HighlighterLanguage::Basic:
             m_tokenizer->setKeyWords( strListBasicKeyWords,
                                             sizeof( strListBasicKeyWords ) / sizeof( char* ));
             break;
-        case HIGHLIGHT_SQL:
+        case HighlighterLanguage::SQL:
             m_tokenizer->setKeyWords( strListSqlKeyWords,
                                             sizeof( strListSqlKeyWords ) / sizeof( char* ));
             break;

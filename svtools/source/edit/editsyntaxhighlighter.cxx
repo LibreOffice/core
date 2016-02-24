@@ -120,7 +120,7 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenType aToken)
     Color aColor;
     switch (aHighlighter.GetLanguage())
     {
-        case HIGHLIGHT_SQL:
+        case HighlighterLanguage::SQL:
         {
             switch (aToken)
             {
@@ -135,7 +135,7 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenType aToken)
             }
             break;
         }
-        case HIGHLIGHT_BASIC:
+        case HighlighterLanguage::Basic:
         {
             switch (aToken)
             {
