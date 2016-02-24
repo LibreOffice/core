@@ -1070,6 +1070,8 @@ static bool lcl_GetBackgroundColor( Color & rColor,
 sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
                                 throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     Color aBackgroundCol;
 
     if ( lcl_GetBackgroundColor( aBackgroundCol, GetFrame(), GetCursorShell() ) )
@@ -1090,6 +1092,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
 sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
                                 throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     Color aBackgroundCol;
 
     if ( lcl_GetBackgroundColor( aBackgroundCol, GetFrame(), GetCursorShell() ) )
@@ -3248,6 +3252,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
                                         throw (lang::IllegalArgumentException,
                                                uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     std::unique_ptr<SwTextMarkupHelper> pTextMarkupHelper;
     switch ( nTextMarkupType )
     {
@@ -3473,6 +3479,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
                                                lang::IllegalArgumentException,
                                                uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     std::unique_ptr<SwTextMarkupHelper> pTextMarkupHelper;
     switch ( nTextMarkupType )
     {
@@ -3501,6 +3509,8 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
                                                lang::IllegalArgumentException,
                                                uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     // parameter checking
     const sal_Int32 nLength = GetString().getLength();
     if ( ! IsValidPosition( nCharIndex, nLength ) )
@@ -3534,6 +3544,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
                                         throw (lang::IndexOutOfBoundsException,
                                                uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     // parameter checking
     const sal_Int32 nLength = GetString().getLength();
     if ( ! IsValidPosition( nIndex, nLength ) )
@@ -3550,6 +3562,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
                                         throw (lang::IndexOutOfBoundsException,
                                                uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     // parameter checking
     if ( nLineNo < 0 ||
          nLineNo >= GetPortionData().GetLineCount() )
@@ -3573,6 +3587,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
 /*accessibility::*/TextSegment SAL_CALL SwAccessibleParagraph::getTextAtLineWithCaret()
                                         throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     const sal_Int32 nLineNoOfCaret = getNumberOfLineWithCaret();
 
     if ( nLineNoOfCaret >= 0 &&
@@ -3587,6 +3603,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
 sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
                                         throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     const sal_Int32 nCaretPos = getCaretPosition();
     const sal_Int32 nLength = GetString().getLength();
     if ( !IsValidPosition( nCaretPos, nLength ) )
