@@ -4333,31 +4333,31 @@ OString OParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 	OString aKeyword;
 	switch (_eKey)
 	{
-		case KEY_LIKE:		aKeyword = "LIKE"; break;
-		case KEY_NOT:		aKeyword = "NOT"; break;
-		case KEY_NULL:		aKeyword = "NULL"; break;
-		case KEY_TRUE:		aKeyword = "True"; break;
-		case KEY_FALSE:		aKeyword = "False"; break;
-		case KEY_IS:		aKeyword = "IS"; break;
-		case KEY_BETWEEN:	aKeyword = "BETWEEN"; break;
-		case KEY_OR:		aKeyword = "OR"; break;
-		case KEY_AND:		aKeyword = "AND"; break;
-		case KEY_AVG:		aKeyword = "AVG"; break;
-		case KEY_COUNT:		aKeyword = "COUNT"; break;
-		case KEY_MAX:		aKeyword = "MAX"; break;
-		case KEY_MIN:		aKeyword = "MIN"; break;
-		case KEY_SUM:		aKeyword = "SUM"; break;
-        case KEY_EVERY:     aKeyword = "EVERY"; break;
-        case KEY_ANY:       aKeyword = "ANY"; break;
-        case KEY_SOME:      aKeyword = "SOME"; break;
-        case KEY_STDDEV_POP: aKeyword = "STDDEV_POP"; break;
-        case KEY_STDDEV_SAMP: aKeyword = "STDDEV_SAMP"; break;
-        case KEY_VAR_SAMP:  aKeyword = "VAR_SAMP"; break;
-        case KEY_VAR_POP:   aKeyword = "VAR_POP"; break;
-        case KEY_COLLECT:   aKeyword = "COLLECT"; break;
-        case KEY_FUSION:    aKeyword = "FUSION"; break;
-        case KEY_INTERSECTION:aKeyword = "INTERSECTION"; break;
-        case KEY_NONE:      break;
+		case InternationalKeyCode::Like:		aKeyword = "LIKE"; break;
+		case InternationalKeyCode::Not:		aKeyword = "NOT"; break;
+		case InternationalKeyCode::Null:		aKeyword = "NULL"; break;
+		case InternationalKeyCode::True:		aKeyword = "True"; break;
+		case InternationalKeyCode::False:		aKeyword = "False"; break;
+		case InternationalKeyCode::Is:		aKeyword = "IS"; break;
+		case InternationalKeyCode::Between:	aKeyword = "BETWEEN"; break;
+		case InternationalKeyCode::Or:		aKeyword = "OR"; break;
+		case InternationalKeyCode::And:		aKeyword = "AND"; break;
+		case InternationalKeyCode::Avg:		aKeyword = "AVG"; break;
+		case InternationalKeyCode::Count:		aKeyword = "COUNT"; break;
+		case InternationalKeyCode::Max:		aKeyword = "MAX"; break;
+		case InternationalKeyCode::Min:		aKeyword = "MIN"; break;
+		case InternationalKeyCode::Sum:		aKeyword = "SUM"; break;
+        case InternationalKeyCode::Every:     aKeyword = "EVERY"; break;
+        case InternationalKeyCode::Any:       aKeyword = "ANY"; break;
+        case InternationalKeyCode::Some:      aKeyword = "SOME"; break;
+        case InternationalKeyCode::StdDevPop: aKeyword = "STDDEV_POP"; break;
+        case InternationalKeyCode::StdDevSamp: aKeyword = "STDDEV_SAMP"; break;
+        case InternationalKeyCode::VarSamp:  aKeyword = "VAR_SAMP"; break;
+        case InternationalKeyCode::VarPop:   aKeyword = "VAR_POP"; break;
+        case InternationalKeyCode::Collect:   aKeyword = "COLLECT"; break;
+        case InternationalKeyCode::Fusion:    aKeyword = "FUSION"; break;
+        case InternationalKeyCode::Intersection:aKeyword = "INTERSECTION"; break;
+        case InternationalKeyCode::None:      break;
         default:
             OSL_FAIL( "OParseContext::getIntlKeywordAscii: unknown key!" );
             break;
@@ -4370,12 +4370,12 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString&
 {
 	static IParseContext::InternationalKeyCode Intl_TokenID[] =
 	{
-		KEY_LIKE, KEY_NOT, KEY_NULL, KEY_TRUE,
-		KEY_FALSE, KEY_IS, KEY_BETWEEN, KEY_OR,
-		KEY_AND, KEY_AVG, KEY_COUNT, KEY_MAX,
-		KEY_MIN, KEY_SUM, KEY_EVERY,KEY_ANY,KEY_SOME,
-        KEY_STDDEV_POP,KEY_STDDEV_SAMP,KEY_VAR_SAMP,
-        KEY_VAR_POP,KEY_COLLECT,KEY_FUSION,KEY_INTERSECTION
+		InternationalKeyCode::Like, InternationalKeyCode::Not, InternationalKeyCode::Null, InternationalKeyCode::True,
+		InternationalKeyCode::False, InternationalKeyCode::Is, InternationalKeyCode::Between, InternationalKeyCode::Or,
+		InternationalKeyCode::And, InternationalKeyCode::Avg, InternationalKeyCode::Count, InternationalKeyCode::Max,
+		InternationalKeyCode::Min, InternationalKeyCode::Sum, InternationalKeyCode::Every,InternationalKeyCode::Any,InternationalKeyCode::Some,
+        InternationalKeyCode::StdDevPop,InternationalKeyCode::StdDevSamp,InternationalKeyCode::VarSamp,
+        InternationalKeyCode::VarPop,InternationalKeyCode::Collect,InternationalKeyCode::Fusion,InternationalKeyCode::Intersection
 	};
 
 	sal_uInt32 nCount = SAL_N_ELEMENTS( Intl_TokenID );
@@ -4386,7 +4386,7 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString&
 			return Intl_TokenID[i];
 	}
 
-	return KEY_NONE;
+	return InternationalKeyCode::None;
 }
 
 
@@ -4612,25 +4612,25 @@ OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pCont
 	OString aStr;
 	if (pContext)
 	{
-		IParseContext::InternationalKeyCode eKeyCode = IParseContext::KEY_NONE;
+		IParseContext::InternationalKeyCode eKeyCode = IParseContext::InternationalKeyCode::None;
 		switch( nTokenID )
 		{
-			case SQL_TOKEN_LIKE: eKeyCode = IParseContext::KEY_LIKE; break;
-			case SQL_TOKEN_NOT: eKeyCode = IParseContext::KEY_NOT; break;
-			case SQL_TOKEN_NULL: eKeyCode = IParseContext::KEY_NULL; break;
-			case SQL_TOKEN_TRUE: eKeyCode = IParseContext::KEY_TRUE; break;
-			case SQL_TOKEN_FALSE: eKeyCode = IParseContext::KEY_FALSE; break;
-			case SQL_TOKEN_IS: eKeyCode = IParseContext::KEY_IS; break;
-			case SQL_TOKEN_BETWEEN: eKeyCode = IParseContext::KEY_BETWEEN; break;
-			case SQL_TOKEN_OR: eKeyCode = IParseContext::KEY_OR; break;
-			case SQL_TOKEN_AND: eKeyCode = IParseContext::KEY_AND; break;
-			case SQL_TOKEN_AVG: eKeyCode = IParseContext::KEY_AVG; break;
-			case SQL_TOKEN_COUNT: eKeyCode = IParseContext::KEY_COUNT; break;
-			case SQL_TOKEN_MAX: eKeyCode = IParseContext::KEY_MAX; break;
-			case SQL_TOKEN_MIN: eKeyCode = IParseContext::KEY_MIN; break;
-			case SQL_TOKEN_SUM: eKeyCode = IParseContext::KEY_SUM; break;
+			case SQL_TOKEN_LIKE: eKeyCode = IParseContext::InternationalKeyCode::Like; break;
+			case SQL_TOKEN_NOT: eKeyCode = IParseContext::InternationalKeyCode::Not; break;
+			case SQL_TOKEN_NULL: eKeyCode = IParseContext::InternationalKeyCode::Null; break;
+			case SQL_TOKEN_TRUE: eKeyCode = IParseContext::InternationalKeyCode::True; break;
+			case SQL_TOKEN_FALSE: eKeyCode = IParseContext::InternationalKeyCode::False; break;
+			case SQL_TOKEN_IS: eKeyCode = IParseContext::InternationalKeyCode::Is; break;
+			case SQL_TOKEN_BETWEEN: eKeyCode = IParseContext::InternationalKeyCode::Between; break;
+			case SQL_TOKEN_OR: eKeyCode = IParseContext::InternationalKeyCode::Or; break;
+			case SQL_TOKEN_AND: eKeyCode = IParseContext::InternationalKeyCode::And; break;
+			case SQL_TOKEN_AVG: eKeyCode = IParseContext::InternationalKeyCode::Avg; break;
+			case SQL_TOKEN_COUNT: eKeyCode = IParseContext::InternationalKeyCode::Count; break;
+			case SQL_TOKEN_MAX: eKeyCode = IParseContext::InternationalKeyCode::Max; break;
+			case SQL_TOKEN_MIN: eKeyCode = IParseContext::InternationalKeyCode::Min; break;
+			case SQL_TOKEN_SUM: eKeyCode = IParseContext::InternationalKeyCode::Sum; break;
 		}
-		if ( eKeyCode != IParseContext::KEY_NONE )
+		if ( eKeyCode != IParseContext::InternationalKeyCode::None )
 		    aStr = pContext->getIntlKeywordAscii(eKeyCode);
 	}
 

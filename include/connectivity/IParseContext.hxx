@@ -51,33 +51,33 @@ namespace connectivity
             InvalidQueryExist        // "The database already contains a query with name \"#\".";
         };
 
-        enum    InternationalKeyCode
+        enum class InternationalKeyCode
         {
-            KEY_NONE = 0,
-            KEY_LIKE,
-            KEY_NOT,
-            KEY_NULL,
-            KEY_TRUE,
-            KEY_FALSE,
-            KEY_IS,
-            KEY_BETWEEN,
-            KEY_OR,
-            KEY_AND,
-            KEY_AVG,
-            KEY_COUNT,
-            KEY_MAX,
-            KEY_MIN,
-            KEY_SUM,
-            KEY_EVERY,
-            KEY_ANY,
-            KEY_SOME,
-            KEY_STDDEV_POP,
-            KEY_STDDEV_SAMP,
-            KEY_VAR_SAMP,
-            KEY_VAR_POP,
-            KEY_COLLECT,
-            KEY_FUSION,
-            KEY_INTERSECTION
+            None = 0,
+            Like,
+            Not,
+            Null,
+            True,
+            False,
+            Is,
+            Between,
+            Or,
+            And,
+            Avg,
+            Count,
+            Max,
+            Min,
+            Sum,
+            Every,
+            Any,
+            Some,
+            StdDevPop,
+            StdDevSamp,
+            VarSamp,
+            VarPop,
+            Collect,
+            Fusion,
+            Intersection
         };
 
     public:
