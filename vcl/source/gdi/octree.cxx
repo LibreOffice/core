@@ -234,8 +234,8 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
 {
     const int     nColorMax = 1 << OCTREE_BITS;
-    const long     xsqr = 1L << ( nBits << 1 );
-    const long     xsqr2 = xsqr << 1;
+    const unsigned long xsqr = 1L << ( nBits << 1 );
+    const unsigned long xsqr2 = xsqr << 1;
     const int     nColors = rPal.GetEntryCount();
     const long      x = 1L << nBits;
     const long      x2 = x >> 1L;
@@ -256,9 +256,9 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
         long bdist = cBlue - x2;
         rdist = rdist*rdist + gdist*gdist + bdist*bdist;
 
-        const long crinc = static_cast<unsigned long>( xsqr - ( cRed << nBits ) ) << 1L;
-        const long cginc = static_cast<unsigned long>( xsqr - ( cGreen << nBits ) ) << 1L;
-        const long cbinc = static_cast<unsigned long>( xsqr - ( cBlue << nBits ) ) << 1L;
+        const long crinc = ( xsqr - ( cRed << nBits ) ) << 1L;
+        const long cginc = ( xsqr - ( cGreen << nBits ) ) << 1L;
+        const long cbinc = ( xsqr - ( cBlue << nBits ) ) << 1L;
 
         sal_uLong* cdp = reinterpret_cast<sal_uLong*>(pBuffer);
         sal_uInt8* crgbp = pMap;
