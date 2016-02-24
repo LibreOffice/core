@@ -31,16 +31,12 @@ namespace comphelper {
 class COMPHELPER_DLLPUBLIC ScopeGuard
 {
 public:
-    enum exc_handling { IGNORE_EXCEPTIONS, ALLOW_EXCEPTIONS };
-
     /** @param func function object to be executed in dtor
         @param excHandling switches whether thrown exceptions in dtor will be
                            silently ignored (but OSL_ asserted)
     */
     template <typename func_type>
-    explicit ScopeGuard( func_type const & func,
-                         exc_handling excHandling = IGNORE_EXCEPTIONS )
-        : m_func( func ), m_excHandling( excHandling ) {}
+    explicit ScopeGuard( func_type const & func ) : m_func( func ) {}
 
     ~ScopeGuard();
 
@@ -55,7 +51,6 @@ private:
     ScopeGuard& operator=(const ScopeGuard&) = delete;
 
     ::std::function<void ()> m_func;
-    exc_handling const m_excHandling;
 };
 
 } // namespace comphelper

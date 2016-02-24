@@ -31,8 +31,8 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC FlagRestorationGuard : public ScopeGuard
     {
     public:
-        FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
-            : ScopeGuard(RestoreFlag(i_flagRef), i_excHandling)
+        FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue )
+            : ScopeGuard(RestoreFlag(i_flagRef))
         {
             i_flagRef = i_temporaryValue;
         }
@@ -61,8 +61,8 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC FlagGuard : public ScopeGuard
     {
     public:
-        explicit FlagGuard( bool& i_flagRef, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
-            : ScopeGuard( [&i_flagRef] () { i_flagRef = false; }, i_excHandling)
+        explicit FlagGuard( bool& i_flagRef )
+            : ScopeGuard( [&i_flagRef] () { i_flagRef = false; } )
         {
             i_flagRef = true;
         }
