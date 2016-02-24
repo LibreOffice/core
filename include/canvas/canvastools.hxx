@@ -376,9 +376,7 @@ namespace canvas
                 ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
                 ( arg>TargetLimits::max() ) )                               // overflow will happen
             {
-# if OSL_DEBUG_LEVEL > 2
-                OSL_TRACE("numeric_cast detected data loss");
-#endif
+                SAL_INFO("include.canvas", "numeric_cast detected data loss");
                 throw css::uno::RuntimeException(
                     "numeric_cast detected data loss",
                     nullptr );

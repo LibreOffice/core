@@ -70,18 +70,12 @@ class MSFILTER_DLLPUBLIC TBBase
 friend class Indent;
     static int nIndent; // num spaces to indent before printing
 protected:
-#if OSL_DEBUG_LEVEL > 1
-    static void indent_printf(FILE* fp, const char* format, ... );
-#endif
     sal_uInt32 nOffSet; // usually for debug we can store the offset in the stream to this record
 public:
     TBBase() : nOffSet( 0 ) {}
     virtual ~TBBase(){}
 
     virtual bool Read(SvStream &rS) = 0;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output
-#endif
     sal_uInt32 GetOffset() { return nOffSet; }
 };
 
@@ -127,9 +121,6 @@ public:
     TBCExtraInfo();
     virtual ~TBCExtraInfo(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     OUString getOnAction();
 };
 
@@ -145,9 +136,6 @@ public:
     TBCGeneralInfo();
     virtual ~TBCGeneralInfo() {}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     void ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
     OUString CustomText() { return customText.getString(); }
 };
@@ -161,9 +149,6 @@ public:
     TBCBitMap();
     virtual ~TBCBitMap();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
    // #FIXME Const-ness
     Bitmap& getBitMap() { return mBitMap;}
 };
@@ -176,9 +161,6 @@ public:
     TBCMenuSpecific();
     virtual ~TBCMenuSpecific(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     OUString Name();
 };
 
@@ -196,9 +178,6 @@ public:
     TBCCDData();
     virtual ~TBCCDData();
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
 };
 
 class TBCComboDropdownSpecific : public TBBase
@@ -208,9 +187,6 @@ public:
     TBCComboDropdownSpecific( const TBCHeader& header );
     TBCComboDropdownSpecific(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
 };
 
 class TBCBSpecific :  public TBBase
@@ -225,9 +201,6 @@ public:
     TBCBSpecific();
     virtual ~TBCBSpecific(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     // #TODO just add a getGraphic member here
     TBCBitMap* getIcon();
     TBCBitMap* getIconMask();
@@ -275,9 +248,6 @@ public:
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
     bool isBeginGroup() { return ( bFlagsTCR & 0x2 ) != 0; }
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     sal_uInt32 getTbct() { return tbct; };
 };
 
@@ -292,9 +262,6 @@ public:
     TBCData( const TBCHeader& Header );
     virtual ~TBCData(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
     TBCGeneralInfo& getGeneralInfo() { return controlGeneralInfo; }
     TBCMenuSpecific* getMenuSpecific();
@@ -314,9 +281,6 @@ public:
     TB();
     virtual ~TB(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
     sal_Int16 getcCL(){ return cCL; }
     WString& getName(){ return name; }
     bool IsEnabled();
@@ -332,9 +296,6 @@ public:
     sal_Int16 right;
     sal_Int16 bottom;
     bool Read( SvStream &rS ) override { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* fo ) override;
-#endif
 };
 
 
@@ -352,9 +313,6 @@ public:
     TBVisualData();
     virtual ~TBVisualData(){}
     bool Read(SvStream &rS) override;
-#if OSL_DEBUG_LEVEL > 1
-    virtual void Print( FILE* ) override;
-#endif
 };
 
 #endif
