@@ -18,15 +18,49 @@ in vec3 v_normal;
 in vec4 shadowCoordinate;
 
 void main() {
+    const vec2 samplingPoints[9] = vec2[](
+        vec2(0, 0),
+        vec2(-1, -1),
+        vec2(-1, 0),
+        vec2(-1, 1),
+        vec2(0, 1),
+        vec2(1, 1),
+        vec2(1, 0),
+        vec2(1, -1),
+        vec2(0, -1)
+    );
+
+    // Compute the shadow...
+    float visibility = 1.0;
+    const float epsilon = 0.0001;
+
+    // for the leaving slide,
+    {
+    float depthShadow = texture(leavingShadowTexture, shadowCoordinate.xy).r;
+    float shadowRadius = (1.0 / (shadowCoordinate.z - depthShadow)) * 1000.0;
+    for (int i = 0; i < 9; ++i) {
+        vec2 coordinate = shadowCoordinate.xy + samplingPoints[i] / shadowRadius;
+        if (texture(leavingShadowTexture, coordinate).r < shadowCoordinate.z - epsilon) {
+            visibility -= 0.05;
+        }
+    }
+    }
+
+    // and for entering slide.
+    {
+    float depthShadow = texture(enteringShadowTexture, shadowCoordinate.xy).r;
+    float shadowRadius = (1.0 / (shadowCoordinate.z - depthShadow)) * 1000.0;
+    for (int i = 0; i < 9; ++i) {
+        vec2 coordinate = shadowCoordinate.xy + samplingPoints[i] / shadowRadius;
+        if (texture(enteringShadowTexture, coordinate).r < shadowCoordinate.z - epsilon) {
+            visibility -= 0.05;
+        }
+    }
+    }
+
     vec3 lightVector = vec3(0.0, 0.0, 1.0);
     float light = max(dot(lightVector, v_normal), 0.0);
     vec4 fragment = texture(slideTexture, v_texturePosition);
-    float visibility = 1.0;
-    const float epsilon = 0.0001;
-    if (texture(leavingShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
-        visibility *= 0.7;
-    if (texture(enteringShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
-        visibility *= 0.7;
     vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
     gl_FragColor = mix(black, fragment, visibility * light);
 }

@@ -67,13 +67,14 @@ void emitHexagonVertex(vec3 center, vec2 translation)
 
 void main()
 {
-    vec2 translateVectors[6];
-    translateVectors[0] = vec2(-3, -2);
-    translateVectors[1] = vec2(0, -4);
-    translateVectors[2] = vec2(3, -2);
-    translateVectors[3] = vec2(3, 2);
-    translateVectors[4] = vec2(0, 4);
-    translateVectors[5] = vec2(-3, 2);
+    const vec2 translateVectors[6] = vec2[](
+        vec2(-3, -2),
+        vec2(0, -4),
+        vec2(3, -2),
+        vec2(3, 2),
+        vec2(0, 4),
+        vec2(-3, 2)
+    );
 
     vec3 center = gl_in[0].gl_Position.xyz;
 
