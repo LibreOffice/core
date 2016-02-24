@@ -1631,60 +1631,78 @@ void lclGetBorderLine(
         sal_uInt8& rnXclLine, sal_uInt32& rnColorId,
         const ::editeng::SvxBorderLine* pLine, XclExpPalette& rPalette, XclBiff eBiff )
 {
+    // Document: sc/qa/unit/data/README.cellborders
+
+    enum CalcLineIndex{Idx_None, Idx_Solid, Idx_Dotted, Idx_Dashed, Idx_FineDashed, Idx_DashDot, Idx_DashDotDot, Idx_DoubleThin, Idx_Last};
+    enum ExcelWidthIndex{Width_Hair, Width_Thin, Width_Medium, Width_Thick, Width_Last};
+    static sal_uInt8 Map_LineLO_toMS[Idx_Last][Width_Last] =
+    {
+    //    0,05  -  0,74                  0,75  -  1,49                   1,50  -  2,49                 2,50  -  9,00          Width Range [pt]
+    //   EXC_BORDER_HAIR                EXC_BORDER_THIN                EXC_BORDER_MEDIUM              EXC_BORDER_THICK        MS Width
+        {EXC_LINE_NONE                , EXC_LINE_NONE                , EXC_LINE_NONE                , EXC_LINE_NONE                }, //  0    BorderLineStyle::NONE
+        {EXC_LINE_HAIR                , EXC_LINE_THIN                , EXC_LINE_MEDIUM              , EXC_LINE_THICK               }, //  1    BorderLineStyle::SOLID
+        {EXC_LINE_DOTTED              , EXC_LINE_DOTTED              , EXC_LINE_MEDIUM_SLANT_DASHDOT, EXC_LINE_MEDIUM_SLANT_DASHDOT}, //  2    BorderLineStyle::DOTTED
+        {EXC_LINE_DOTTED              , EXC_LINE_DASHED              , EXC_LINE_MEDIUM_DASHED       , EXC_LINE_MEDIUM_DASHED       }, //  3    BorderLineStyle::DASHED
+        {EXC_LINE_DASHED              , EXC_LINE_DASHED              , EXC_LINE_MEDIUM_SLANT_DASHDOT, EXC_LINE_MEDIUM_SLANT_DASHDOT}, //  4    BorderLineStyle::FINE_DASHED
+        {EXC_LINE_DASHED              , EXC_LINE_THIN_DASHDOT        , EXC_LINE_MEDIUM_DASHDOT      , EXC_LINE_MEDIUM_DASHDOT      }, //  5    BorderLineStyle::DASH_DOT
+        {EXC_LINE_DASHED              , EXC_LINE_THIN_DASHDOTDOT     , EXC_LINE_MEDIUM_DASHDOTDOT   , EXC_LINE_MEDIUM_DASHDOTDOT   }, //  6    BorderLineStyle::DASH_DOT_DOT
+        {EXC_LINE_DOUBLE              , EXC_LINE_DOUBLE              , EXC_LINE_DOUBLE              , EXC_LINE_DOUBLE              }  //  7    BorderLineStyle::DOUBLE_THIN
+    };                                                                                                                                // Line  Name
+
     rnXclLine = EXC_LINE_NONE;
     if( pLine )
     {
         sal_uInt16 nOuterWidth = pLine->GetOutWidth();
-        sal_uInt16 nDistance = pLine->GetDistance();
-        if( nDistance > 0 )
-            rnXclLine = EXC_LINE_DOUBLE;
-        else if( nOuterWidth >= EXC_BORDER_THICK )
-            rnXclLine = EXC_LINE_THICK;
-        else if( nOuterWidth >= EXC_BORDER_MEDIUM )
+        ExcelWidthIndex nOuterWidthIndx;
+        CalcLineIndex  nStyleIndex;
+
+        switch (pLine->GetBorderLineStyle())
         {
-            rnXclLine = EXC_LINE_MEDIUM;
-            switch (pLine->GetBorderLineStyle())
-            {
-                case table::BorderLineStyle::DASHED:
-                    rnXclLine = EXC_LINE_MEDIUM_DASHED;
+            case table::BorderLineStyle::NONE:
+                nStyleIndex = Idx_None;
                 break;
-                case table::BorderLineStyle::DASH_DOT:
-                    rnXclLine = EXC_LINE_MEDIUM_DASHDOT;
-                    break;
-                case table::BorderLineStyle::DASH_DOT_DOT:
-                    rnXclLine = EXC_LINE_MEDIUM_DASHDOTDOT;
-                    break;
-                default:
-                    ;
-            }
+            case table::BorderLineStyle::SOLID:
+                nStyleIndex = Idx_Solid;
+                break;
+            case table::BorderLineStyle::DOTTED:
+                nStyleIndex = Idx_Dotted;
+                break;
+            case table::BorderLineStyle::DASHED:
+                nStyleIndex = Idx_Dashed;
+                break;
+            case table::BorderLineStyle::FINE_DASHED:
+                nStyleIndex = Idx_FineDashed;
+                break;
+            case table::BorderLineStyle::DASH_DOT:
+                nStyleIndex = Idx_DashDot;
+                break;
+            case table::BorderLineStyle::DASH_DOT_DOT:
+                nStyleIndex = Idx_DashDotDot;
+                break;
+            case table::BorderLineStyle::DOUBLE_THIN:
+                // the "nOuterWidth" is not right for this line type
+                // but at the moment width it not important for that
+                // the right function is nOuterWidth = (sal_uInt16) pLine->GetWidth();
+                nStyleIndex = Idx_DoubleThin;
+                break;
+            default:
+                nStyleIndex = Idx_Solid;
         }
+
+        if( nOuterWidth >= EXC_BORDER_THICK )
+            nOuterWidthIndx = Width_Thick;
+        else if( nOuterWidth >= EXC_BORDER_MEDIUM )
+            nOuterWidthIndx = Width_Medium;
         else if( nOuterWidth >= EXC_BORDER_THIN )
-        {
-            rnXclLine = EXC_LINE_THIN;
-            switch (pLine->GetBorderLineStyle())
-            {
-                case table::BorderLineStyle::DASHED:
-                case table::BorderLineStyle::FINE_DASHED:
-                    rnXclLine = EXC_LINE_DASHED;
-                    break;
-                case table::BorderLineStyle::DASH_DOT:
-                    rnXclLine = EXC_LINE_THIN_DASHDOT;
-                    break;
-                case table::BorderLineStyle::DASH_DOT_DOT:
-                    rnXclLine = EXC_LINE_THIN_DASHDOTDOT;
-                    break;
-                case table::BorderLineStyle::DOTTED:
-                    rnXclLine = EXC_LINE_DOTTED;
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if (nOuterWidth >= EXC_BORDER_HAIR)
-            rnXclLine = EXC_LINE_HAIR;
+            nOuterWidthIndx = Width_Thin;
+        else if ( nOuterWidth >= EXC_BORDER_HAIR )
+            nOuterWidthIndx = Width_Hair;
         else
-            rnXclLine = EXC_LINE_NONE;
+            nOuterWidthIndx = Width_Thin;
+
+        rnXclLine = Map_LineLO_toMS[nStyleIndex][nOuterWidthIndx];
     }
+
     if( (eBiff == EXC_BIFF2) && (rnXclLine != EXC_LINE_NONE) )
         rnXclLine = EXC_LINE_THIN;
 
@@ -1828,6 +1846,7 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
         case EXC_LINE_THIN_DASHDOTDOT:   return "dashDotDot";
         case EXC_LINE_MEDIUM_DASHDOT:    return "mediumDashDot";
         case EXC_LINE_MEDIUM_DASHDOTDOT: return "mediumDashDotDot";
+        case EXC_LINE_MEDIUM_SLANT_DASHDOT: return "slantDashDot";
     }
     return "*unknown*";
 }

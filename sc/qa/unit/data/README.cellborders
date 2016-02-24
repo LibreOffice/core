@@ -1,0 +1,93 @@
+
+Differences in borders between Excel and LibreOffice Calc.
+
+The sources for this Document is:
+ - sc/qa/unit/data/ods/test_borders_export.ods  (new Test-Document)
+ - sc/qa/unit/subsequent_export-test.cxx        (ScExportTest::testBordersExchangeXLSX)
+
+ - sc/source/filter/excel/xestyle.cxx           (void lclGetBorderLine)
+ - sc/source/filter/oox/stylesbuffer.cxx        (Border::convertBorderLine)
+
+ Bug-Ticket: tdf#79787
+
+
+In LibreOffice the lines are defined by two information: the style and the width of the line. There are seven different line styles available. And the following line width can be selected: 0.05 pt, 0.25 pt, 0.50 pt, 0.75 pt, 1.0 pt, 1.25 pt, 1.50 pt, … until 9pt.
+In Excel you can only define the style of the line. There are 13 different styles available. The width cannot be entered explicitly, instead you have different styles for a solid line with different width (s. Screenshots below).
+The question is now: how to map the borderlines of LibreOffice to Excel and vice versa.
+In the overview below you can see the mapping as it is and some suggestions how to improve it. As the borders are defined different, it will not be possible to define a 1:1 mapping."
+
+The current mapping is mainly defined of the width, but i think better is the line-style, i think user see that first
+
+Base for the evaluation is LibreOffice master (commit  [bbfeab3b13b48c99cfa2f94c8c34bc3efef7faa9] ) and Excel 2013
+
+                           EXCEL                                      ||                         LIBREOFFICE
+Excel-Line Name                                      Value            ||        LO-Line  Name                                      Value
+  Keine    EXC_LINE_NONE                               0              ||          none   table::BorderLineStyle::NONE              32767 (-1)
+    1      EXC_LINE_HAIR                               7              ||           1     table::BorderLineStyle::SOLID                 0
+    2      EXC_LINE_DOTTED                             4              ||           2     table::BorderLineStyle::DOTTED                1
+    3      EXC_LINE_THIN_DASHDOTDOT                    11             ||           3     table::BorderLineStyle::DASHED                2
+    4      EXC_LINE_THIN_DASHDOT                       9              ||           4     table::BorderLineStyle::FINE_DASHED           14
+    5      EXC_LINE_DASHED                             3              ||           5     table::BorderLineStyle::DASH_DOT              16
+    6      EXC_LINE_THIN                               1              ||           6     table::BorderLineStyle::DASH_DOT_DOT          17
+    7      EXC_LINE_MEDIUM_DASHDOTDOT                  12             ||           7     table::BorderLineStyle::DOUBLE_THIN           15
+    8      EXC_LINE_MEDIUM_SLANT_DASHDOT               13             ||
+    9      EXC_LINE_MEDIUM_DASHDOT                     10             ||
+    10     EXC_LINE_MEDIUM_DASHED                      8              ||
+    11     EXC_LINE_MEDIUM                             2              ||
+    12     EXC_LINE_THICK                              5              ||
+    13     EXC_LINE_DOUBLE                             6              ||
+
+In the following cases a 1:1 mapping is not possible.
+
+    Excel -> LibreOffice: Create in Excel and open it in LibreOffice. ||    LibreOffice -> Excel: Create Sheet in LibreOffice and save as XLSX.
+Create in|      In Excel save as XLSX,         | In Excel save as ODS,||  Created in     |        Load saved xlsx-file         | Load saved xlsx-file
+Excel2013|       Load in LibreOffice           |  Load in LibreOffice ||LibreOffice with |          in LibreOffice             |      in Excel
+_______________________________________________________________________________________________________________________________________________________
+   Line  |current transformation|new suggestion|current transformation||Line      Width  |current transformation|new suggestion|current|new suggestion
+         |   Line      Width    | Line   Width |   Line      Width    ||                 |   Line      Width    | Line   Width |  Line |    Line
+    13   |    7         2,50    |  7      1,75 |    1         0,05    || 2     0,05 - 0,5|    1         0,05    |  2      0,75 |   6   |     2
+                                                                      || 2     1,75 - 2,2|    1         1,75    |  4      1,75 |   6   |     8
+                                                                      || 2     2,50 - 9,0|    1         2,50    |  4      1,75 |   6   |     8
+                                                                      || 3     0,05 - 0,5|    1         0,05    |  2      0,75 |   6   |     2
+                                                                      || 3     0,75 - 1,5|    4         0,75    |  4      0,75 |   5   |     5
+                                                                      || 3     2,50 - 9,0|    1         2,50    |  3      1,75 |   6   |     10
+                                                                      || 4     0,05 - 0,5|    1         0,05    |  4      0,75 |   6   |     5
+                                                                      || 4     2,50 - 9,0|    1         2,50    |  4      1,75 |   6   |     8
+                                                                      || 5     0,05 - 0,5|    1         0,05    |  4      0,75 |   6   |     5
+                                                                      || 5     2,50 - 9,0|    1         2,50    |  5      1,75 |   6   |     9
+                                                                      || 6     0,05 - 0,5|    1         0,05    |  4      0,75 |   6   |     5
+                                                                      || 6     2,50 - 9,0|    1         2,50    |  6      1,75 |   6   |     7
+                                                                      || 7     0,05 - 9,0|    7         2,50    |  7      1,75 |   13  |     13
+
+
+No similar border available => choose one that is not used similar one and make the roundtrip via xlsx-file possible (create in LO, save as xlsx, open in LO and
+border is not changed)
+
+    Excel -> LibreOffice: Create in Excel and open it in LibreOffice. ||    LibreOffice -> Excel: Create Sheet in LibreOffice and save as XLSX.
+Create in|      In Excel save as XLSX,         | In Excel save as ODS,||  Created in     |        Load saved xlsx-file         | Load saved xlsx-file
+Excel2013|       Load in LibreOffice           |  Load in LibreOffice ||LibreOffice with |          in LibreOffice             |      in Excel
+_______________________________________________________________________________________________________________________________________________________
+   Line  |current transformation|new suggestion|current transformation||Line      Width  |current transformation|new suggestion|current|new suggestion
+         |   Line      Width    | Line   Width |   Line      Width    ||                 |   Line      Width    | Line   Width |  Line |    Line
+    8    |    5        1,75     |  4      1,75 |    1         0,05    || 4     1,75 - 2,2|    1         1,75    |  4      1,75 |   6   |     8
+
+
+In the following cases the mapping is o.k. and should not be changed.
+
+    Excel -> LibreOffice: Create in Excel and open it in LibreOffice. ||    LibreOffice -> Excel: Create Sheet in LibreOffice and save as XLSX.
+Create in|      In Excel save as XLSX,         | In Excel save as ODS,||  Created in     |        Load saved xlsx-file         | Load saved xlsx-file
+Excel2013|       Load in LibreOffice           |  Load in LibreOffice ||LibreOffice with |          in LibreOffice             |      in Excel
+_______________________________________________________________________________________________________________________________________________________
+   Line  |current transformation|new suggestion|current transformation||Line      Width  |current transformation               |current
+         |   Line      Width    | Line   Width |   Line      Width    ||                 |   Line      Width                   |  Line
+    1    |    1        0,05     |  1      0,05 |    1         0,05    || 1     0,05 - 0,5|    1        0,05                    |   1
+    2    |    2        0,75     |  2      0,75 |    1         0,05    || 1     0,75 - 1,5|    1        0,75                    |   6
+    3    |    6        0,75     |  6      0,75 |    1         0,05    || 1     1,75 - 2,2|    1        1,75                    |   11
+    4    |    5        0,75     |  5      0,75 |    1         0,05    || 1     2,50 - 9,0|    1        2,50                    |   12
+    5    |    4        0,75     |  4      0,75 |    1         0,05    || 2     0,75 - 1,5|    2        0,75                    |   2
+    6    |    1        0,75     |  1      0,75 |    1         0,05    || 3     1,75 - 2,2|    3        1,75                    |   10
+    7    |    6        1,75     |  6      1,75 |    1         0,05    || 4     0,75 - 1,5|    4        0,75                    |   5
+    9    |    5        1,75     |  5      1,75 |    1         0,05    || 5     0,75 - 1,5|    5        0,75                    |   4
+    10   |    3        1,75     |  3      1,75 |    3         2,00    || 5     1,75 - 2,2|    5        1,75                    |   9
+    11   |    1        1,75     |  1      1,75 |    1         2,00    || 6     0,75 - 1,5|    6        0,75                    |   3
+    12   |    1        2,50     |  1      2,50 |    1         2,50    || 6     1,75 - 2,2|    6        1,75                    |   7
