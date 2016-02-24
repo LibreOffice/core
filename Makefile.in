@@ -187,7 +187,7 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/ios/lo.xcconfig \
         $(BUILDDIR)/lo.xcent \
         $(BUILDDIR)/sysui/desktop/macosx/Info.plist
-	$(FIND) $(SRCDIR)/solenv/gdb -name "*.pyc" -exec rm {} \;
+	$(FIND) $(SRCDIR)/solenv/gdb -name \*.pyc -exec rm {} \;
 
 #
 # custom command
