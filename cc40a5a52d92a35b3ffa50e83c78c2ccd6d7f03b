@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_df0d0b39",
+        "filename": "sc/source/core/inc/parclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "Rather choose some specific name, not just the inc directory name, for example DEBUG_SC_PARCLASSDOC",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9f2a637d",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "Do not change all these fprintf to SAL_WARN, which does not the wanted floating point formatting and outputs a newline for each call, which is not wanted here.",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_1f3793e4",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "Do not change all these fprintf to SAL_WARN, which does not the wanted floating point formatting and outputs a newline for each call, which is not wanted here.",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_3f136f5e",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "This does not make sense, in this case the name should correspond to the one in the header file, e.g. DEBUG_SC_PARCLASSDOC",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_1f10334e",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "Change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7f1df765",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "This does not make sense, in this case the name should correspond to the one in the header file, e.g. DEBUG_SC_PARCLASSDOC",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_5f1abb6f",
+        "filename": "sc/source/core/tool/parclass.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "This does not make sense, in this case the name should correspond to the one in the header file, e.g. DEBUG_SC_PARCLASSDOC",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_df5b4b2d",
+        "filename": "sc/source/filter/qpro/biff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "Do not change all these fprintf to SAL_INFO, which outputs a newline for each call that is not wanted here.",
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_3f41af3a",
+        "filename": "sc/source/filter/xml/xmlbodyi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 1,
+      "message": "Nitpick: the cast to int is unnecessary now with SAL_INFO.",
+      "range": {
+        "startLine": 79,
+        "startChar": 68,
+        "endLine": 79,
+        "endChar": 73
+      },
+      "revId": "cc40a5a52d92a35b3ffa50e83c78c2ccd6d7f03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

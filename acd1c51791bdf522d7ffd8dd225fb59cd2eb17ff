@@ -1,0 +1,242 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_542c62ab",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Please do not remove such #if/#endif, the nLen\u003d... now would be executed also in production code, which is unnecessary. Change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_f4110e5f",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.\nSimilar the below places where it is used.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_340c3642",
+        "filename": "sal/osl/w32/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_14093a32",
+        "filename": "sal/qa/osl/process/osl_process.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Removing all these #if OSL_DEBUG_LEVEL \u003e 1 again results in debug code unnecessarily executed in production code, specifically all loop iterations.\n\nDo not remove, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7406be21",
+        "filename": "sal/rtl/bootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "All places in this file: do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_5403c20f",
+        "filename": "sal/test/testbootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "All places in this file: do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_bffe3f03",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2808,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "All places in this file: do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9f03830d",
+        "filename": "sc/source/core/data/dptabres.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2986,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "All places in this file: do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_bf259faf",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, in this case change to\n\n #ifdef DEBUG_SC_LUP_DECOMPOSITION\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ff1f2759",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, in this case change to\n\n #ifdef DEBUG_SC_LUP_DECOMPOSITION\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7f34d7dd",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_5f311bec",
+        "filename": "sc/source/filter/excel/excimp8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove this call. Change to\n\n #ifdef DEBUG_SC_EXCEL\n\ninstead, so the corresponding  code in sc/source/filter/excel/xltoolbar.cxx is actually called.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_ff560705",
+        "filename": "sc/source/filter/qpro/biff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, in this case the code inside #if 1. Change to\n\n #ifdef DEBUG_SC_QPRO\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_1f3e73b8",
+        "filename": "sc/source/ui/Accessibility/DrawModelBroadcaster.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-24T18:23:02Z",
+      "side": 0,
+      "message": "Do not remove #if OSL_DEBUG_LEVEL \u003e 1 if it leads to additional code being executed, change to\n\n #if OSL_DEBUG_LEVEL \u003e 0\n\ninstead.",
+      "revId": "acd1c51791bdf522d7ffd8dd225fb59cd2eb17ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
