@@ -1557,7 +1557,6 @@ public:
     }
 
 private:
-    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
     virtual void finishTransition() override;
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
@@ -1574,19 +1573,6 @@ private:
 
     std::vector<GLfloat> mvTileInfo;
 };
-
-void VortexTransition::prepare( double, double, double, double, double )
-{
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileInfoBuffer);
-    CHECK_GL_ERROR();
-    glEnableVertexAttribArray(mnTileInfoLocation);
-    CHECK_GL_ERROR();
-    glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    CHECK_GL_ERROR();
-}
 
 void VortexTransition::finishTransition()
 {
@@ -1668,6 +1654,10 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, mnTileInfoBuffer);
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(mnTileInfoLocation);
+    CHECK_GL_ERROR();
+    glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
     CHECK_GL_ERROR();
     glBufferData(GL_ARRAY_BUFFER, mvTileInfo.size()*sizeof(GLfloat), mvTileInfo.data(), GL_STATIC_DRAW);
     CHECK_GL_ERROR();
