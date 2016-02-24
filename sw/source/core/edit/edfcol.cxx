@@ -20,6 +20,7 @@
 #include <editsh.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -112,6 +113,47 @@ bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rSer
     return false;
 }
 
+/// Search for a frame named rShapeName of type rServiceName in xText.
+uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rShapeName)
+{
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    while (xParagraphs->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+        while (xTextPortions->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+            OUString aTextPortionType;
+            xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+            if (aTextPortionType != "Frame")
+                continue;
+
+            uno::Reference<container::XContentEnumerationAccess> xContentEnumerationAccess(xTextPortion, uno::UNO_QUERY);
+            if (!xContentEnumerationAccess.is())
+                continue;
+
+            uno::Reference<container::XEnumeration> xEnumeration = xContentEnumerationAccess->createContentEnumeration("com.sun.star.text.TextContent");
+            if (!xEnumeration->hasMoreElements())
+                continue;
+
+            uno::Reference<lang::XServiceInfo> xWatermark(xEnumeration->nextElement(), uno::UNO_QUERY);
+            if (!xWatermark->supportsService(rServiceName))
+                continue;
+
+            uno::Reference<container::XNamed> xNamed(xWatermark, uno::UNO_QUERY);
+            if (xNamed->getName() != rShapeName)
+                continue;
+
+            uno::Reference<drawing::XShape> xShape(xWatermark, uno::UNO_QUERY);
+            return xShape;
+        }
+    }
+
+    return uno::Reference<drawing::XShape>();
+}
+
 } // anonymous namespace
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
@@ -184,103 +226,122 @@ void SwEditShell::SetClassification(const OUString& rName)
 
             if (!aWatermark.isEmpty())
             {
-                // Calc the ratio.
-                double fRatio = 0;
-                OutputDevice* pOut = Application::GetDefaultDevice();
-                vcl::Font aFont(pOut->GetFont());
-                fRatio = aFont.GetFontSize().Height();
-                fRatio /= pOut->GetTextWidth(aWatermark);
+                OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
+                uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, SfxClassificationHelper::PROP_DOCWATERMARK());
 
-                // Calc the size.
-                sal_Int32 nWidth = 0;
-                awt::Size aSize;
-                xPageStyle->getPropertyValue(UNO_NAME_SIZE) >>= aSize;
-                if (aSize.Width < aSize.Height)
+                if (xWatermark.is())
                 {
-                    // Portrait.
-                    sal_Int32 nLeftMargin = 0;
-                    xPageStyle->getPropertyValue(UNO_NAME_LEFT_MARGIN) >>= nLeftMargin;
-                    sal_Int32 nRightMargin = 0;
-                    xPageStyle->getPropertyValue(UNO_NAME_RIGHT_MARGIN) >>= nRightMargin;
-                    nWidth = aSize.Width - nLeftMargin - nRightMargin;
+                    // If the header already contains a watermark, see if it its text is up to date.
+                    uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
+                    if (xTextRange->getString() != aWatermark)
+                    {
+                        // No: delete it and we'll insert a replacement.
+                        uno::Reference<lang::XComponent> xComponent(xWatermark, uno::UNO_QUERY);
+                        xComponent->dispose();
+                        xWatermark.clear();
+                    }
                 }
-                else
+
+                if (!xWatermark.is())
                 {
-                    // Landscape.
-                    sal_Int32 nTopMargin = 0;
-                    xPageStyle->getPropertyValue(UNO_NAME_TOP_MARGIN) >>= nTopMargin;
-                    sal_Int32 nBottomMargin = 0;
-                    xPageStyle->getPropertyValue(UNO_NAME_BOTTOM_MARGIN) >>= nBottomMargin;
-                    nWidth = aSize.Height - nTopMargin - nBottomMargin;
+                    // Calc the ratio.
+                    double fRatio = 0;
+                    OutputDevice* pOut = Application::GetDefaultDevice();
+                    vcl::Font aFont(pOut->GetFont());
+                    fRatio = aFont.GetFontSize().Height();
+                    fRatio /= pOut->GetTextWidth(aWatermark);
+
+                    // Calc the size.
+                    sal_Int32 nWidth = 0;
+                    awt::Size aSize;
+                    xPageStyle->getPropertyValue(UNO_NAME_SIZE) >>= aSize;
+                    if (aSize.Width < aSize.Height)
+                    {
+                        // Portrait.
+                        sal_Int32 nLeftMargin = 0;
+                        xPageStyle->getPropertyValue(UNO_NAME_LEFT_MARGIN) >>= nLeftMargin;
+                        sal_Int32 nRightMargin = 0;
+                        xPageStyle->getPropertyValue(UNO_NAME_RIGHT_MARGIN) >>= nRightMargin;
+                        nWidth = aSize.Width - nLeftMargin - nRightMargin;
+                    }
+                    else
+                    {
+                        // Landscape.
+                        sal_Int32 nTopMargin = 0;
+                        xPageStyle->getPropertyValue(UNO_NAME_TOP_MARGIN) >>= nTopMargin;
+                        sal_Int32 nBottomMargin = 0;
+                        xPageStyle->getPropertyValue(UNO_NAME_BOTTOM_MARGIN) >>= nBottomMargin;
+                        nWidth = aSize.Height - nTopMargin - nBottomMargin;
+                    }
+                    sal_Int32 nHeight = nWidth * fRatio;
+
+                    // Create and insert the shape.
+                    uno::Reference<drawing::XShape> xShape(xMultiServiceFactory->createInstance(aShapeServiceName), uno::UNO_QUERY);
+                    basegfx::B2DHomMatrix aTransformation;
+                    aTransformation.identity();
+                    aTransformation.scale(nWidth, nHeight);
+                    aTransformation.rotate(F_PI180 * -45);
+                    drawing::HomogenMatrix3 aMatrix;
+                    aMatrix.Line1.Column1 = aTransformation.get(0, 0);
+                    aMatrix.Line1.Column2 = aTransformation.get(0, 1);
+                    aMatrix.Line1.Column3 = aTransformation.get(0, 2);
+                    aMatrix.Line2.Column1 = aTransformation.get(1, 0);
+                    aMatrix.Line2.Column2 = aTransformation.get(1, 1);
+                    aMatrix.Line2.Column3 = aTransformation.get(1, 2);
+                    aMatrix.Line3.Column1 = aTransformation.get(2, 0);
+                    aMatrix.Line3.Column2 = aTransformation.get(2, 1);
+                    aMatrix.Line3.Column3 = aTransformation.get(2, 2);
+                    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                    uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
+                    xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, false);
+
+                    // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
+                    uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
+                    xLockable->addActionLock();
+                    xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(0xc0c0c0)));
+                    xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::makeAny(drawing::FillStyle_SOLID));
+                    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(static_cast<sal_Int16>(50)));
+                    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
+                    xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::makeAny(drawing::LineStyle_NONE));
+                    xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::makeAny(false));
+                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny(false));
+                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny(false));
+                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nHeight));
+                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
+                    xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGHT));
+                    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
+                    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(OUString("Liberation Sans")));
+                    xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
+                    xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
+                    xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
+
+                    uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
+                    xTextRange->setString(aWatermark);
+
+                    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
+                    xDefaulter->createCustomShapeDefaults("fontwork-plain-text");
+
+                    auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
+                    auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
+                    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+                    {
+                        {"TextPath", uno::makeAny(true)},
+                    }));
+                    auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
+                    {
+                        return rValue.Name == "TextPath";
+                    });
+                    if (it == aGeomPropVec.end())
+                        aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
+                    else
+                        it->Value <<= aPropertyValues;
+                    xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+
+                    uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
+                    xNamed->setName(SfxClassificationHelper::PROP_DOCWATERMARK());
+                    xLockable->removeActionLock();
                 }
-                sal_Int32 nHeight = nWidth * fRatio;
-
-                // Create and insert the shape.
-                uno::Reference<drawing::XShape> xShape(xMultiServiceFactory->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
-                basegfx::B2DHomMatrix aTransformation;
-                aTransformation.identity();
-                aTransformation.scale(nWidth, nHeight);
-                aTransformation.rotate(F_PI180 * -45);
-                drawing::HomogenMatrix3 aMatrix;
-                aMatrix.Line1.Column1 = aTransformation.get(0, 0);
-                aMatrix.Line1.Column2 = aTransformation.get(0, 1);
-                aMatrix.Line1.Column3 = aTransformation.get(0, 2);
-                aMatrix.Line2.Column1 = aTransformation.get(1, 0);
-                aMatrix.Line2.Column2 = aTransformation.get(1, 1);
-                aMatrix.Line2.Column3 = aTransformation.get(1, 2);
-                aMatrix.Line3.Column1 = aTransformation.get(2, 0);
-                aMatrix.Line3.Column2 = aTransformation.get(2, 1);
-                aMatrix.Line3.Column3 = aTransformation.get(2, 2);
-                uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-                uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
-                xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, false);
-
-                // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
-                uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
-                xLockable->addActionLock();
-                xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(0xc0c0c0)));
-                xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::makeAny(drawing::FillStyle_SOLID));
-                xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(static_cast<sal_Int16>(50)));
-                xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
-                xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::makeAny(drawing::LineStyle_NONE));
-                xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::makeAny(false));
-                xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny(false));
-                xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny(false));
-                xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nHeight));
-                xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
-                xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGHT));
-                xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
-                xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(OUString("Liberation Sans")));
-                xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
-                xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
-                xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
-
-                uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
-                xTextRange->setString(aWatermark);
-
-                uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-                xDefaulter->createCustomShapeDefaults("fontwork-plain-text");
-
-                auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
-                auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
-                uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-                {
-                    {"TextPath", uno::makeAny(true)},
-                }));
-                auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
-                {
-                    return rValue.Name == "TextPath";
-                });
-                if (it == aGeomPropVec.end())
-                    aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
-                else
-                    it->Value <<= aPropertyValues;
-                xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
-
-                uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
-                xNamed->setName(SfxClassificationHelper::PROP_DOCWATERMARK());
-                xLockable->removeActionLock();
             }
         }
 
