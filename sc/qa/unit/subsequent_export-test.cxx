@@ -115,6 +115,7 @@ public:
 
     void testCellBordersXLS();
     void testCellBordersXLSX();
+    void testBordersExchangeXLSX();
     void testTrackChangesSimpleXLSX();
     void testSheetTabColorsXLSX();
 
@@ -188,6 +189,7 @@ public:
     CPPUNIT_TEST(testSheetProtectionXLSX);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
+    CPPUNIT_TEST(testBordersExchangeXLSX);
     CPPUNIT_TEST(testTrackChangesSimpleXLSX);
     CPPUNIT_TEST(testSheetTabColorsXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
@@ -1492,6 +1494,94 @@ void ScExportTest::testCellBordersXLS()
 void ScExportTest::testCellBordersXLSX()
 {
     testExcelCellBorders(FORMAT_XLSX);
+}
+
+void ScExportTest::testBordersExchangeXLSX()
+{
+    // Document: sc/qa/unit/data/README.cellborders
+
+    // short name for the table
+    const ::editeng::SvxBorderStyle None     = table::BorderLineStyle::NONE;
+    const ::editeng::SvxBorderStyle Solid    = table::BorderLineStyle::SOLID;
+    const ::editeng::SvxBorderStyle Dotted   = table::BorderLineStyle::DOTTED;
+    const ::editeng::SvxBorderStyle Dashed   = table::BorderLineStyle::DASHED;
+    const ::editeng::SvxBorderStyle FineDash = table::BorderLineStyle::FINE_DASHED;
+    const ::editeng::SvxBorderStyle DashDot  = table::BorderLineStyle::DASH_DOT;
+    const ::editeng::SvxBorderStyle DashDoDo = table::BorderLineStyle::DASH_DOT_DOT;
+    const ::editeng::SvxBorderStyle DoubThin = table::BorderLineStyle::DOUBLE_THIN;
+
+    const size_t nMaxCol = 18;
+    const size_t nMaxRow = 7;
+
+    static struct
+    {
+        ::editeng::SvxBorderStyle BorderStyleTop, BorderStyleBottom;
+        long                      WidthTop, WidthBottom;
+    } aCheckBorderWidth[nMaxCol][nMaxRow] =
+    {
+/*  Line               1                                2                              3                            4                             5                                6                              7
+                     SOLID                           DOTTED                          DASHED                     FINE_DASHED                    DASH_DOT                      DASH_DOT_DOT                  DOUBLE_THIN          */
+/*Width */
+/* 0,05 */   {{Solid   , Solid   ,  1,  1}, {Dotted  , Dotted  , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {None    , None    ,  0,  0}},
+/* 0,25 */   {{Solid   , Solid   ,  1,  1}, {Dotted  , Dotted  , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {None    , None    ,  0,  0}},
+/* 0,50 */   {{Solid   , Solid   ,  1,  1}, {Dotted  , Dotted  , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {None    , None    ,  0,  0}},
+/* 0,75 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {None    , None    ,  0,  0}},
+/* 1,00 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {None    , None    ,  0,  0}},
+/* 1,25 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {DoubThin, DoubThin, 35, 35}},
+/* 1,50 */   {{Solid   , Solid   , 15, 15}, {Dotted  , Dotted  , 15, 15}, {FineDash, FineDash, 15, 15}, {FineDash, FineDash, 15, 15}, {DashDot , DashDot , 15, 15}, {DashDoDo, DashDoDo, 15, 15}, {DoubThin, DoubThin, 35, 35}},
+
+/* 1,75 */   {{Solid   , Solid   , 35, 35}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 2,00 */   {{Solid   , Solid   , 35, 35}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 2,25 */   {{Solid   , Solid   , 35, 35}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+
+/* 2,50 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 2,75 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 3,00 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 3,50 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 4,00 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 5,00 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 7,00 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}},
+/* 9,00 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}}
+    };
+
+    ScDocShellRef xShell    = loadDoc("test_borders_export.", FORMAT_ODS);  // load the ods with our Borders
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);          // save the ods to xlsx and load xlsx
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc    = xDocSh->GetDocument();
+
+    for (size_t mnCol = 0; mnCol < nMaxCol; ++mnCol)
+    {
+        for (size_t mnRow = 0; mnRow < nMaxRow; ++mnRow)
+        {
+            const editeng::SvxBorderLine* pLineTop    = nullptr;
+            const editeng::SvxBorderLine* pLineBottom = nullptr;
+            rDoc.GetBorderLines(mnCol + 2, (mnRow * 2) + 8, 0, nullptr, &pLineTop, nullptr, &pLineBottom);
+            if((mnCol < 5) && (mnRow == 6))
+            {   // in this range no lines
+                CPPUNIT_ASSERT(pLineTop == nullptr);
+                CPPUNIT_ASSERT(pLineBottom == nullptr);
+                continue;
+            }
+            else
+            {
+                CPPUNIT_ASSERT(pLineTop);
+                CPPUNIT_ASSERT(pLineBottom);
+            }
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border-Line-Style wrong", aCheckBorderWidth[mnCol][mnRow].BorderStyleTop,
+                                          pLineTop->GetBorderLineStyle());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border-Line-Style wrong", aCheckBorderWidth[mnCol][mnRow].BorderStyleBottom,
+                                          pLineBottom->GetBorderLineStyle());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Width-Line wrong", aCheckBorderWidth[mnCol][mnRow].WidthTop,
+                                          pLineTop->GetWidth());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Width-Line wrong", aCheckBorderWidth[mnCol][mnRow].WidthBottom,
+                                          pLineBottom->GetWidth());
+        }
+    }
+
+    xDocSh->DoClose();
 }
 
 OUString toString( const ScBigRange& rRange )
