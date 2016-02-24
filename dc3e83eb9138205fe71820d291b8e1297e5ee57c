@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_b4edc690",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-02-24T14:59:37Z",
+      "side": 1,
+      "message": "This is intended to mirror in Y. It will go wrong when aBmpRect.Top() is *not* zero. The later usages of nMapY can/will be out-of-bound in that case. There are two possibilities to ensure validity:\n\n(1) Prove that aBmpRect.Top() is *always* zero (and in that case ask the question why a Rect is used instead of a Size).\n\n(2) Take aBmpRect.Top() into account by mirroring *inside* the rectangle as it seems to be inteded (also may use aBmpRect.Height()).\n\nIn all cases, add an assert (and pass-by maybe, is discussable) which checks the resulting nMapY against the BitmapWriteAccess\u0027es size before accessing pP and pA.\n\nSame is true of course for mirroring in X. It may be worth a thought to add mirroring already to creatin gthe indices in pMapY/pMapX, thus the mirroring decisions would not have to be taken inside the loops at all.",
+      "range": {
+        "startLine": 1584,
+        "startChar": 16,
+        "endLine": 1587,
+        "endChar": 17
+      },
+      "revId": "dc3e83eb9138205fe71820d291b8e1297e5ee57c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
