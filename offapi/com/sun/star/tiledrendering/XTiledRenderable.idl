@@ -61,6 +61,8 @@ interface XTiledRenderable : com::sun::star::uno::XInterface
 
         @param nTileHeight
         logical height of the rendered rectangle, in TWIPs.
+
+        @since LibreOffice 5.0
      */
     void paintTile( [in] any Parent,
                             [in] long nOutputWidth,

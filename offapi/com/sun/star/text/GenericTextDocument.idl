@@ -77,6 +77,7 @@ published service GenericTextDocument
 
     interface com::sun::star::util::XRefreshable;
 
+    /** @since LibreOffice 5.0 */
     [optional] interface com::sun::star::tiledrendering::XTiledRenderable;
 
     [optional] interface com::sun::star::text::XFootnotesSupplier;
