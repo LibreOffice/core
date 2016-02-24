@@ -47,13 +47,7 @@ enum class StringId {
     LastValue  = 44
 };
 
-class SbxRes : public OUString
-{
-public:
-    explicit SbxRes( StringId );
-};
-
-const char* GetSbxRes( StringId );
+OUString GetSbxRes( StringId );
 
 
 #endif

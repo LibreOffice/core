@@ -35,10 +35,10 @@ SbxCollection::SbxCollection( const OUString& rClass )
 {
     if( !nCountHash )
     {
-        pCount  = OUString::createFromAscii(GetSbxRes( StringId::CountProp ));
-        pAdd    = OUString::createFromAscii(GetSbxRes( StringId::AddMeth ));
-        pItem   = OUString::createFromAscii(GetSbxRes( StringId::ItemMeth ));
-        pRemove = OUString::createFromAscii(GetSbxRes( StringId::RemoveMeth ));
+        pCount  = GetSbxRes( StringId::CountProp );
+        pAdd    = GetSbxRes( StringId::AddMeth );
+        pItem   = GetSbxRes( StringId::ItemMeth );
+        pRemove = GetSbxRes( StringId::RemoveMeth );
         nCountHash  = MakeHashCode( pCount );
         nAddHash    = MakeHashCode( pAdd );
         nItemHash   = MakeHashCode( pItem );

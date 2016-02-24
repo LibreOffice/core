@@ -70,9 +70,9 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
             nRes = SbxFALSE;
             if ( p->pOUString )
             {
-                if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( StringId::True ) ) )
+                if( p->pOUString->equalsIgnoreAsciiCase( GetSbxRes( StringId::True ) ) )
                     nRes = SbxTRUE;
-                else if( !p->pOUString->equalsIgnoreAsciiCase( SbxRes( StringId::False ) ) )
+                else if( !p->pOUString->equalsIgnoreAsciiCase( GetSbxRes( StringId::False ) ) )
                 {
                     // it can be convertible to a number
                     bool bError = true;
@@ -174,9 +174,9 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         case SbxSTRING:
         case SbxLPSTR:
             if ( !p->pOUString )
-                p->pOUString = new OUString( SbxRes( n ? StringId::True : StringId::False ) );
+                p->pOUString = new OUString( GetSbxRes( n ? StringId::True : StringId::False ) );
             else
-                *p->pOUString = SbxRes( n ? StringId::True : StringId::False );
+                *p->pOUString = GetSbxRes( n ? StringId::True : StringId::False );
             break;
 
         case SbxOBJECT:

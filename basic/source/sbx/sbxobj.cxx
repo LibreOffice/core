@@ -40,8 +40,8 @@ SbxObject::SbxObject( const OUString& rClass )
     aData.pObj = this;
     if( !nNameHash )
     {
-        pNameProp = OUString::createFromAscii(GetSbxRes( StringId::NameProp ));
-        pParentProp = OUString::createFromAscii(GetSbxRes( StringId::ParentProp ));
+        pNameProp = GetSbxRes( StringId::NameProp );
+        pParentProp = GetSbxRes( StringId::ParentProp );
         nNameHash = MakeHashCode( pNameProp );
         nParentHash = MakeHashCode( pParentProp );
     }
