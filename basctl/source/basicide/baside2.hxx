@@ -38,6 +38,7 @@ class SvxSearchItem;
 #include <vcl/idle.hxx>
 
 #include <sfx2/progress.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <set>
 
@@ -428,7 +429,7 @@ public:
 public:
     void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
-    Color GetSyntaxColor (TokenTypes eType) const { return aSyntaxColors.GetColor(eType); }
+    Color GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
 
 protected:
     // Window:
@@ -456,15 +457,15 @@ private:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
         void SettingsChanged ();
     public:
-        Color GetColor (TokenTypes eType) const { return aColors[eType]; }
+        Color GetColor (TokenType eType) const { return aColors[eType]; }
 
     private:
         virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32) override;
         void NewConfig (bool bFirst);
 
     private:
-        // the color values (the indexes are TokenTypes, see comphelper/syntaxhighlight.hxx)
-        Color aColors[TT_KEYWORDS + 1];
+        // the color values (the indexes are TokenType, see comphelper/syntaxhighlight.hxx)
+        o3tl::enumarray<TokenType, Color> aColors;
         // the configuration
         svtools::ColorConfig aConfig;
         // the active editor

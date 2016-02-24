@@ -46,7 +46,7 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override
                     { SetText( rStr ); SetSelection( rNewSelection ); }
 
-        Color GetColorValue(TokenTypes aToken);
+        Color GetColorValue(TokenType aToken);
 };
 
 #endif

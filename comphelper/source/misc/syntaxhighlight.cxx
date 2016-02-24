@@ -265,7 +265,7 @@ class SyntaxHighlighter::Tokenizer
     bool testCharFlags(sal_Unicode c, sal_uInt16 nTestFlags) const;
 
     // Get new token, EmptyString == nothing more over there
-    bool getNextToken(const sal_Unicode*& pos, /*out*/TokenTypes& reType,
+    bool getNextToken(const sal_Unicode*& pos, /*out*/TokenType& reType,
         /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos) const;
 
     const char** ppListKeyWords;
@@ -304,10 +304,10 @@ void SyntaxHighlighter::Tokenizer::setKeyWords( const char** ppKeyWords, sal_uIn
     nKeyWordCount = nCount;
 }
 
-bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/TokenTypes& reType,
+bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/TokenType& reType,
     /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos) const
 {
-    reType = TT_UNKNOWN;
+    reType = TokenType::Unknown;
 
     rpStartPos = pos;
 
@@ -324,7 +324,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         while( testCharFlags( *pos, CHAR_SPACE ) )
             ++pos;
 
-        reType = TT_WHITESPACE;
+        reType = TokenType::Whitespace;
     }
 
     // Identifier?
@@ -341,7 +341,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         }
         while( bIdentifierChar );
 
-        reType = TT_IDENTIFIER;
+        reType = TokenType::Identifier;
 
         // Keyword table
         if (ppListKeyWords != nullptr)
@@ -367,7 +367,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 if ( bsearch( aByteStr.getStr(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
                                                                         compare_strings ) )
                 {
-                    reType = TT_KEYWORDS;
+                    reType = TokenType::Keywords;
 
                     if( aByteStr == "rem" )
                     {
@@ -378,7 +378,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                             cPeek = *++pos;
                         }
 
-                        reType = TT_COMMENT;
+                        reType = TokenType::Comment;
                     }
                 }
             }
@@ -405,7 +405,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 }
                 while( bIdentifierChar );
             }
-            reType = TT_PARAMETER;
+            reType = TokenType::Parameter;
         }
         else if (c=='-')
         {
@@ -418,7 +418,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                     ++pos;
                     cPeekNext = *pos;
                 }
-                reType = TT_COMMENT;
+                reType = TokenType::Comment;
             }
         }
        else if (c=='/')
@@ -432,7 +432,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                    ++pos;
                    cPeekNext = *pos;
                }
-               reType = TT_COMMENT;
+               reType = TokenType::Comment;
            }
        }
         else
@@ -449,14 +449,14 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                     ++pos;
                 }
 
-                reType = TT_COMMENT;
+                reType = TokenType::Comment;
             }
 
             // The real operator; can be easily used since not the actual
             // operator (e.g. +=) is concerned, but the fact that it is one
-            if( reType != TT_COMMENT )
+            if( reType != TokenType::Comment )
             {
-                reType = TT_OPERATOR;
+                reType = TokenType::Operator;
             }
 
         }
@@ -465,13 +465,13 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     // Object separator? Must be handled before Number
     else if( c == '.' && ( *pos < '0' || *pos > '9' ) )
     {
-        reType = TT_OPERATOR;
+        reType = TokenType::Operator;
     }
 
     // Number?
     else if( testCharFlags( c, CHAR_START_NUMBER ) )
     {
-        reType = TT_NUMBER;
+        reType = TokenType::Number;
 
         // Number system, 10 = normal, it is changed for Oct/Hex
         int nRadix = 10;
@@ -503,12 +503,12 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             }
             else
             {
-                reType = TT_OPERATOR;
+                reType = TokenType::Operator;
             }
         }
 
         // When it is not Oct or Hex, then it is double
-        if( reType == TT_NUMBER && nRadix == 10 )
+        if( reType == TokenType::Number && nRadix == 10 )
         {
             // Flag if the last character is an exponent
             bool bAfterExpChar = false;
@@ -540,25 +540,25 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             if( *pos == 0 )
             {
                 // ERROR: unterminated string literal
-                reType = TT_ERROR;
+                reType = TokenType::Error;
                 break;
             }
             c = *pos++;
             if( testCharFlags( c, CHAR_EOL ) )
             {
                 // ERROR: unterminated string literal
-                reType = TT_ERROR;
+                reType = TokenType::Error;
                 break;
             }
         }
 
-        if( reType != TT_ERROR )
+        if( reType != TokenType::Error )
         {
             ++pos;
             if( cEndString == ']' )
-                reType = TT_IDENTIFIER;
+                reType = TokenType::Identifier;
             else
-                reType = TT_STRING;
+                reType = TokenType::String;
         }
     }
 
@@ -570,10 +570,10 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         if( cNext != c && testCharFlags( cNext, CHAR_EOL ) )
             ++pos;
 
-        reType = TT_EOL;
+        reType = TokenType::EOL;
     }
 
-    // All other will remain TT_UNKNOWN
+    // All other will remain TokenType::Unknown
 
     // Save end position
     rpEndPos = pos;
@@ -672,7 +672,7 @@ void SyntaxHighlighter::Tokenizer::getHighlightPortions(const OUString& rLine,
     const sal_Unicode* pos = rLine.getStr();
 
     // Variables for the out parameter
-    TokenTypes eType;
+    TokenType eType;
     const sal_Unicode* pStartPos;
     const sal_Unicode* pEndPos;
 

@@ -1512,9 +1512,9 @@ ModulWindowLayout::SyntaxColors::SyntaxColors () :
 {
     aConfig.AddListener(this);
 
-    aColors[TT_UNKNOWN] =
-    aColors[TT_WHITESPACE] =
-    aColors[TT_EOL] =
+    aColors[TokenType::Unknown] =
+    aColors[TokenType::Whitespace] =
+    aColors[TokenType::EOL] =
         Application::GetSettings().GetStyleSettings().GetFieldTextColor();
 
     NewConfig(true);
@@ -1528,11 +1528,11 @@ ModulWindowLayout::SyntaxColors::~SyntaxColors ()
 void ModulWindowLayout::SyntaxColors::SettingsChanged ()
 {
     Color const aColor = Application::GetSettings().GetStyleSettings().GetFieldTextColor();
-    if (aColor != aColors[TT_UNKNOWN])
+    if (aColor != aColors[TokenType::Unknown])
     {
-        aColors[TT_UNKNOWN] =
-        aColors[TT_WHITESPACE] =
-        aColors[TT_EOL] =
+        aColors[TokenType::Unknown] =
+        aColors[TokenType::Whitespace] =
+        aColors[TokenType::EOL] =
             aColor;
         if (pEditor)
             pEditor->UpdateSyntaxHighlighting();
@@ -1550,18 +1550,18 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
 {
     static struct
     {
-        TokenTypes eTokenType;
+        TokenType eTokenType;
         svtools::ColorConfigEntry eEntry;
     }
     const vIds[] =
     {
-        { TT_IDENTIFIER,  svtools::BASICIDENTIFIER },
-        { TT_NUMBER,      svtools::BASICNUMBER },
-        { TT_STRING,      svtools::BASICSTRING },
-        { TT_COMMENT,     svtools::BASICCOMMENT },
-        { TT_ERROR,       svtools::BASICERROR },
-        { TT_OPERATOR,    svtools::BASICOPERATOR },
-        { TT_KEYWORDS,    svtools::BASICKEYWORD },
+        { TokenType::Identifier,  svtools::BASICIDENTIFIER },
+        { TokenType::Number,      svtools::BASICNUMBER },
+        { TokenType::String,      svtools::BASICSTRING },
+        { TokenType::Comment,     svtools::BASICCOMMENT },
+        { TokenType::Error,       svtools::BASICERROR },
+        { TokenType::Operator,    svtools::BASICOPERATOR },
+        { TokenType::Keywords,    svtools::BASICKEYWORD },
     };
 
     bool bChanged = false;

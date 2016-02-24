@@ -622,7 +622,7 @@ void EditorWindow::HandleAutoCorrect()
 
     OUString sStr = aLine.copy( r.nBegin, r.nEnd - r.nBegin );
     //if WS or empty string: stop, nothing to do
-    if( ( r.tokenType == TT_WHITESPACE ) || sStr.isEmpty() )
+    if( ( r.tokenType == TokenType::Whitespace ) || sStr.isEmpty() )
         return;
     //create the appropriate TextSelection, and update the cache
     TextPaM aStart( nLine, r.nBegin );
@@ -631,7 +631,7 @@ void EditorWindow::HandleAutoCorrect()
     rModulWindow.UpdateModule();
     rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
     // correct the last entered keyword
-    if( r.tokenType == TT_KEYWORDS )
+    if( r.tokenType == TokenType::Keywords )
     {
         sStr = sStr.toAsciiLowerCase();
         if( !SbModule::GetKeywordCase(sStr).isEmpty() )
@@ -644,7 +644,7 @@ void EditorWindow::HandleAutoCorrect()
         pEditEngine->ReplaceText( sTextSelection, sStr );
         pEditView->SetSelection( aSel );
     }
-    if( r.tokenType == TT_IDENTIFIER )
+    if( r.tokenType == TokenType::Identifier )
     {// correct variables
         if( !aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName ).isEmpty() )
         {
@@ -729,7 +729,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     if( aPortions.empty() )
         return;
 
-    if( aLine.getLength() > 0 && !aLine.endsWith("\"") && (aPortions.back().tokenType != TT_STRING) )
+    if( aLine.getLength() > 0 && !aLine.endsWith("\"") && (aPortions.back().tokenType != TokenType::String) )
     {
         GetEditView()->InsertText("\"");
         //leave the cursor on its place: inside the two double quotes
@@ -776,7 +776,7 @@ void EditorWindow::HandleProcedureCompletion()
                 HighlightPortion& r = aCurrPortions.front();
                 OUString sStr = aCurrLine.copy(r.nBegin, r.nEnd - r.nBegin);
 
-                if( r.tokenType == 9 )
+                if( r.tokenType == TokenType::Keywords )
                 {
                     if( sStr.equalsIgnoreAsciiCase("sub") || sStr.equalsIgnoreAsciiCase("function") )
                     {
@@ -808,13 +808,13 @@ bool EditorWindow::GetProcedureName(OUString& rLine, OUString& rProcType, OUStri
     {
         OUString sTokStr = rLine.copy(i->nBegin, i->nEnd - i->nBegin);
 
-        if( i->tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
+        if( i->tokenType == TokenType::Keywords && ( sTokStr.equalsIgnoreAsciiCase("sub")
             || sTokStr.equalsIgnoreAsciiCase("function")) )
         {
             rProcType = sTokStr;
             bFoundType = true;
         }
-        if( i->tokenType == 1 && bFoundType )
+        if( i->tokenType == TokenType::Identifier && bFoundType )
         {
             rProcName = sTokStr;
             bFoundName = true;
@@ -847,9 +847,9 @@ void EditorWindow::HandleCodeCompletion()
                  aPortions.rbegin());
              i != aPortions.rend(); ++i)
         {
-            if( i->tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
+            if( i->tokenType == TokenType::Whitespace ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
                 break;
-            if( i->tokenType == TT_IDENTIFIER || i->tokenType == TT_KEYWORDS ) // extract the identifiers(methods, base variable)
+            if( i->tokenType == TokenType::Identifier || i->tokenType == TokenType::Keywords ) // extract the identifiers(methods, base variable)
             /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
              * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
              * */

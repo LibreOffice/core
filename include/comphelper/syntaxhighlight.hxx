@@ -30,29 +30,29 @@
 #include <vector>
 #include <memory>
 
-// Token-Typen TT_...
-enum TokenTypes
+enum class TokenType
 {
-    TT_UNKNOWN,
-    TT_IDENTIFIER,
-    TT_WHITESPACE,
-    TT_NUMBER,
-    TT_STRING,
-    TT_EOL,
-    TT_COMMENT,
-    TT_ERROR,
-    TT_OPERATOR,
-    TT_KEYWORDS,
-    TT_PARAMETER
+    Unknown,
+    Identifier,
+    Whitespace,
+    Number,
+    String,
+    EOL,
+    Comment,
+    Error,
+    Operator,
+    Keywords,
+    Parameter,
+    LAST = Parameter
 };
 
 struct HighlightPortion {
     sal_Int32 nBegin;
     sal_Int32 nEnd;
-    TokenTypes tokenType;
+    TokenType tokenType;
 
     HighlightPortion(
-        sal_Int32 theBegin, sal_Int32 theEnd, TokenTypes theTokenType):
+        sal_Int32 theBegin, sal_Int32 theEnd, TokenType theTokenType):
         nBegin(theBegin), nEnd(theEnd), tokenType(theTokenType)
     {}
 };

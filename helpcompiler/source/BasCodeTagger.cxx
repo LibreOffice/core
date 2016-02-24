@@ -150,7 +150,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     {
         OString sToken(OUStringToOString(strLine.copy(i->nBegin, i->nEnd-i->nBegin), RTL_TEXTENCODING_UTF8));
         xmlNodePtr text = xmlNewText(reinterpret_cast<const xmlChar*>(sToken.getStr()));
-        if ( i->tokenType != TT_WHITESPACE )
+        if ( i->tokenType != TokenType::Whitespace )
         {
             xmlChar* typeStr = getTypeString( i->tokenType );
             curNode = xmlNewTextChild( paragraph, nullptr, reinterpret_cast<xmlChar const *>("item"), nullptr );
@@ -188,42 +188,42 @@ void BasicCodeTagger::tagBasicCodes()
 }
 
 //! Converts SyntaxHighlighter's TokenTypes enum to a type string for <item type=... >
-xmlChar* BasicCodeTagger::getTypeString( TokenTypes tokenType )
+xmlChar* BasicCodeTagger::getTypeString( TokenType tokenType )
 {
     const char* str;
     switch ( tokenType )
     {
-        case TT_UNKNOWN :
+        case TokenType::Unknown :
             str = "unknown";
             break;
-        case TT_IDENTIFIER :
+        case TokenType::Identifier :
             str = "identifier";
             break;
-        case TT_WHITESPACE :
+        case TokenType::Whitespace :
             str = "whitespace";
             break;
-        case TT_NUMBER :
+        case TokenType::Number :
             str = "number";
             break;
-        case TT_STRING :
+        case TokenType::String :
             str = "string";
             break;
-        case TT_EOL :
+        case TokenType::EOL :
             str = "eol";
             break;
-        case TT_COMMENT :
+        case TokenType::Comment :
             str = "comment";
             break;
-        case TT_ERROR :
+        case TokenType::Error :
             str = "error";
             break;
-        case TT_OPERATOR :
+        case TokenType::Operator :
             str = "operator";
             break;
-        case TT_KEYWORDS :
+        case TokenType::Keywords :
             str = "keyword";
             break;
-        case TT_PARAMETER :
+        case TokenType::Parameter :
             str = "parameter";
             break;
         default :

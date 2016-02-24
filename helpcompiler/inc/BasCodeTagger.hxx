@@ -33,7 +33,7 @@ class L10N_DLLPUBLIC BasicCodeTagger
     SyntaxHighlighter     m_Highlighter;
     bool m_bTaggingCompleted;
     void tagParagraph( xmlNodePtr paragraph );
-    static xmlChar* getTypeString( TokenTypes tokenType );
+    static xmlChar* getTypeString( TokenType tokenType );
     void getBasicCodeContainerNodes();
     void tagBasCodeParagraphs();
 
