@@ -277,6 +277,9 @@ void SwEditShell::SetClassification(const OUString& rName)
                 else
                     it->Value <<= aPropertyValues;
                 xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+
+                uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
+                xNamed->setName(SfxClassificationHelper::PROP_DOCWATERMARK());
                 xLockable->removeActionLock();
             }
         }
