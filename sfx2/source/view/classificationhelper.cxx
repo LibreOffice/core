@@ -165,7 +165,7 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:4"].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCHEADER()].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCFOOTER()].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:document-watermark"].clear();
+            rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCWATERMARK()].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-first-line-of-text"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-last-line-of-text"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-subject-prefix"].clear();
@@ -239,7 +239,7 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (
             else if (m_aIdentifier == "Document: Footer")
                 m_pCategory->m_aLabels[SfxClassificationHelper::PROP_DOCFOOTER()] = m_aValue;
             else if (m_aIdentifier == "Document: Watermark")
-                m_pCategory->m_aLabels["urn:bails:IntellectualProperty:Marking:document-watermark"] = m_aValue;
+                m_pCategory->m_aLabels[SfxClassificationHelper::PROP_DOCWATERMARK()] = m_aValue;
         }
     }
 }
@@ -486,7 +486,7 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 
 OUString SfxClassificationHelper::GetDocumentWatermark()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Marking:document-watermark");
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find(SfxClassificationHelper::PROP_DOCWATERMARK());
     if (it != m_pImpl->m_aLabels.end())
         return it->second;
 
@@ -539,6 +539,12 @@ const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 const OUString& SfxClassificationHelper::PROP_DOCFOOTER()
 {
     static OUString sProp("urn:bails:IntellectualProperty:Marking:document-footer");
+    return sProp;
+}
+
+const OUString& SfxClassificationHelper::PROP_DOCWATERMARK()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:Marking:document-watermark");
     return sProp;
 }
 

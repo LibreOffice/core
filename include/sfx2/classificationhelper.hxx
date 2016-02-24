@@ -51,6 +51,8 @@ public:
     static const OUString& PROP_DOCHEADER();
     /// Brief text located at the bottom of each document's pages.
     static const OUString& PROP_DOCFOOTER();
+    /// Brief text formatted as a watermark on each document's page.
+    static const OUString& PROP_DOCWATERMARK();
 };
 
 #endif
