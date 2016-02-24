@@ -208,19 +208,9 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
     // Asian vertical mode
     m_pCbAsianMode->Show( SvtCJKOptions().IsVerticalTextEnabled() );
 
-
-    if( !SvtLanguageOptions().IsCTLFontEnabled() )
-    {
-        m_pBoxDirection->Hide();
-    }
-    else
-    {
-       // CTL frame direction
-       m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-       m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-       m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
-       m_pBoxDirection->Show();
-    }
+    m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+    m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+    m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
 
     // This page needs ExchangeSupport.
     SetExchangeSupport();
