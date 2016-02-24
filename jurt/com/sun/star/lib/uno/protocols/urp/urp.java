@@ -398,14 +398,16 @@ public final class urp implements IProtocol {
         return readRequest(funId, sync);
     }
 
-    private UrpMessage readShortRequest(int header) {
+    private UrpMessage readShortRequest(int header) throws IOException {
         int funId = (header & HEADER_FUNCTIONID14) != 0
             ? ((header & HEADER_FUNCTIONID) << 8) | unmarshal.read8Bit()
             : header & HEADER_FUNCTIONID;
         return readRequest(funId, false);
     }
 
-    private UrpMessage readRequest(int functionId, boolean forcedSynchronous) {
+    private UrpMessage readRequest(int functionId, boolean forcedSynchronous)
+        throws IOException
+    {
         boolean internal = PROPERTIES_OID.equals(inL1Oid);
             // inL1Oid may be null in XInstanceProvider.getInstance("")
         XCurrentContext cc =
@@ -415,6 +417,10 @@ public final class urp implements IProtocol {
                 new Type(XCurrentContext.class))
             : null;
         IMethodDescription desc = inL1Type.getMethodDescription(functionId);
+        if (desc == null) {
+            throw new IOException(
+                "read URP request with unsupported function ID " + functionId);
+        }
         ITypeDescription[] inSig = desc.getInSignature();
         ITypeDescription[] outSig = desc.getOutSignature();
         Object[] args = new Object[inSig.length];
