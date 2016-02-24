@@ -124,8 +124,18 @@ final class Unmarshal {
             return TypeDescription.getTypeDescription(typeClass);
         } else {
             int index = read16Bit();
-            TypeDescription type = null;
-            if ((b & 0x80) != 0) {
+            TypeDescription type;
+            if ((b & 0x80) == 0) {
+                if (index >= typeCache.length) {
+                    throw new RuntimeException(
+                        "Reading TYPE with bad cache index " + index);
+                }
+                type = typeCache[index];
+                if (type == null) {
+                    throw new RuntimeException(
+                        "Reading TYPE with empty cache index " + index);
+                }
+            } else {
                 try {
                     type = TypeDescription.getTypeDescription(
                         readStringValue());
@@ -134,11 +144,11 @@ final class Unmarshal {
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            if (index != 0xFFFF) {
-                if ((b & 0x80) == 0) {
-                    type = typeCache[index];
-                } else {
+                if (index != 0xFFFF) {
+                    if (index >= typeCache.length) {
+                        throw new RuntimeException(
+                            "Reading TYPE with bad cache index " + index);
+                    }
                     typeCache[index] = type;
                 }
             }
