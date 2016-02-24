@@ -20,6 +20,8 @@
 #include <editsh.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <hintids.hxx>
 #include <editeng/formatbreakitem.hxx>
@@ -57,6 +59,41 @@ std::set<OUString> lcl_getUsedPageStyles(SwViewShell* pShell)
     }
 
     return aRet;
+}
+
+/// Search for a field named rFieldName of type rServiceName in xText.
+bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rFieldName)
+{
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    while (xParagraphs->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+        while (xTextPortions->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+            OUString aTextPortionType;
+            xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+            if (aTextPortionType != UNO_NAME_TEXT_FIELD)
+                continue;
+
+            uno::Reference<lang::XServiceInfo> xTextField;
+            xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xTextField;
+            if (!xTextField->supportsService(rServiceName))
+                continue;
+
+            OUString aName;
+            uno::Reference<beans::XPropertySet> xPropertySet(xTextField, uno::UNO_QUERY);
+            xPropertySet->getPropertyValue(UNO_NAME_NAME) >>= aName;
+            if (aName != rFieldName)
+                continue;
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 } // anonymous namespace
@@ -104,14 +141,19 @@ void SwEditShell::SetClassification(const OUString& rName)
             if (!bHeaderIsOn)
                 xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
 
-            // Append a field to the end of the header text.
-            uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance("com.sun.star.text.TextField.DocInfo.Custom"), uno::UNO_QUERY);
-            xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
+            // If the header already contains a document header field, no need to do anything.
             uno::Reference<text::XText> xHeaderText;
             xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
-            uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
-            xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+            OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
+            if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_DOCHEADER()))
+            {
+                // Append a field to the end of the header text.
+                uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+                xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
+                uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+                xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+            }
         }
     }
 }
