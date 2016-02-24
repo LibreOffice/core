@@ -32,6 +32,8 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  * This class can be used as a loader for application classes which use UNO.
@@ -167,11 +169,16 @@ public final class Loader {
             }
 
             // copy urls to array
-            URL[] urls = new URL[vec.size()];
+            final URL[] urls = new URL[vec.size()];
             vec.toArray( urls );
 
             // instantiate class loader
-            m_Loader = new CustomURLClassLoader( urls );
+            m_Loader = AccessController.doPrivileged(
+                new PrivilegedAction<ClassLoader>() {
+                    public ClassLoader run() {
+                        return new CustomURLClassLoader(urls);
+                    }
+                });
         }
 
         return m_Loader;
