@@ -26,6 +26,9 @@ uniform ivec2 numTiles;
 uniform sampler2D permTexture;
 uniform float slide;
 
+// Workaround for Intel's Windows driver, to prevent optimisation breakage.
+uniform float zero;
+
 out vec2 g_texturePosition;
 out vec3 g_normal;
 out mat4 modelViewMatrix;
@@ -130,10 +133,14 @@ void main( void )
         vec3 translationVector = vec3(rotationFuzz, 0.0, 0.0);
 
         // Compute the actual rotation matrix.
-        transform = translationMatrix(translationVector)
-                  * rotationMatrix(vec3(0.0, 1.0, 0.0), clamp(rotation, -1.0, 1.0) * M_PI)
-                  * translationMatrix(-translationVector)
-                  * transform;
+
+        // Intel's Windows driver gives a wrong matrix when all operations are done at once.
+        if (zero < 1.0)
+            transform = translationMatrix(translationVector) * transform;
+        if (zero < 2.0)
+            transform = rotationMatrix(vec3(0.0, 1.0, 0.0), clamp(rotation, -1.0, 1.0) * M_PI) * transform;
+        if (zero < 3.0)
+            transform = translationMatrix(-translationVector) * transform;
     }
 
     modelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
