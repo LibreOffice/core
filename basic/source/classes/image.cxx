@@ -121,7 +121,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     sal_uInt32 nReserved2;
     sal_uInt32 nReserved3;
     bool bBadVer = false;
-    if( nSign == B_MODULE )
+    if( nSign == static_cast<sal_uInt16>( FileOffset::Module ) )
     {
         sal_uInt16 nTmpFlags;
         r.ReadUInt32( nVersion ).ReadUInt32( nCharSet ).ReadUInt32( lDimBase )
@@ -143,20 +143,20 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         nNext += nLen + 8;
         if( r.GetError() == SVSTREAM_OK )
         {
-            switch( nSign )
+            switch( static_cast<FileOffset>( nSign ) )
             {
-            case B_NAME:
+            case FileOffset::Name:
                 aName = r.ReadUniOrByteString(eCharSet);
                 break;
-            case B_COMMENT:
+            case FileOffset::Comment:
                 aComment = r.ReadUniOrByteString(eCharSet );
                 break;
-            case B_SOURCE:
+            case FileOffset::Source:
             {
                 aOUSource = r.ReadUniOrByteString(eCharSet);
                 break;
             }
-            case B_EXTSOURCE:
+            case FileOffset::ExtSource:
             {
                 //assuming an empty string with just the lead 32bit/16bit len indicator
                 const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
@@ -173,7 +173,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 }
                 break;
             }
-            case B_PCODE:
+            case FileOffset::PCode:
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
                 nCodeSize = nLen;
@@ -198,12 +198,12 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     // release of the buffer.
                 }
                 break;
-            case B_PUBLICS:
-            case B_POOLDIR:
-            case B_SYMPOOL:
-            case B_LINERANGES:
+            case FileOffset::Publics:
+            case FileOffset::PoolDir:
+            case FileOffset::SymPool:
+            case FileOffset::LineRanges:
                 break;
-            case B_STRINGPOOL:
+            case FileOffset::StringPool:
             {
                 if( bBadVer ) break;
                 //assuming an empty string with just the lead 32bit len indicator
@@ -240,7 +240,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 }
                 break;
             }
-            case B_USERTYPES:
+            case FileOffset::UserTypes:
             {
                 //assuming an empty string with just the lead 32bit/16bit len indicator
                 const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
@@ -340,7 +340,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 }
                 break;
             }
-            case B_MODEND:
+            case FileOffset::ModEnd:
                 goto done;
             default:
                 break;
@@ -375,7 +375,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         return true;
     }
     // First of all the header
-    sal_uInt64 nStart = SbiOpenRecord( r, B_MODULE, 1 );
+    sal_uInt64 nStart = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::Module ), 1 );
     sal_uInt64 nPos;
 
     eCharSet = GetSOStoreTextEncoding( eCharSet );
@@ -397,28 +397,28 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     // Name?
     if( !aName.isEmpty() && SbiGood( r ) )
     {
-        nPos = SbiOpenRecord( r, B_NAME, 1 );
+        nPos = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::Name ), 1 );
         r.WriteUniOrByteString( aName, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Comment?
     if( !aComment.isEmpty() && SbiGood( r ) )
     {
-        nPos = SbiOpenRecord( r, B_COMMENT, 1 );
+        nPos = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::Comment ), 1 );
         r.WriteUniOrByteString( aComment, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Source?
     if( !aOUSource.isEmpty() && SbiGood( r ) )
     {
-        nPos = SbiOpenRecord( r, B_SOURCE, 1 );
+        nPos = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::Source ), 1 );
         r.WriteUniOrByteString( aOUSource, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Binary data?
     if( pCode && SbiGood( r ) )
     {
-        nPos = SbiOpenRecord( r, B_PCODE, 1 );
+        nPos = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::PCode ), 1 );
         if ( bLegacy )
         {
             ReleaseLegacyBuffer(); // release any previously held buffer
@@ -437,7 +437,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     // String-Pool?
     if( nStrings )
     {
-        nPos = SbiOpenRecord( r, B_STRINGPOOL, nStrings );
+        nPos = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::StringPool ), nStrings );
         // For every String:
         //  sal_uInt32 Offset of the Strings in the Stringblock
         short i;
@@ -466,7 +466,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         sal_uInt16 nTypes = rTypes->Count();
         if (nTypes > 0 )
         {
-            nPos = SbiOpenRecord( r, B_USERTYPES, nTypes );
+            nPos = SbiOpenRecord( r, static_cast<sal_uInt16>( FileOffset::UserTypes ), nTypes );
 
             for (sal_uInt16 i = 0; i < nTypes; i++)
             {
