@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/string.hxx>
@@ -314,12 +315,14 @@ void SwEditShell::ApplyAutoMark()
 
         sal_Int32 nSrchFlags = SearchFlags::LEV_RELAXED;
 
-        SearchOptions aSearchOpt(
+        SearchOptions2 aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
                             "", "",
                             SvtSysLocale().GetLanguageTag().getLocale(),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                            nTransliterationFlags );
+                            nTransliterationFlags,
+                            SearchAlgorithms2::ABSOLUTE,
+                            '\\' );
 
         while( !rStrm.GetError() && !rStrm.IsEof() )
         {

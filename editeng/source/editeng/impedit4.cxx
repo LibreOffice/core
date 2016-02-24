@@ -2606,7 +2606,7 @@ bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
 bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel )
 {
-    util::SearchOptions aSearchOptions( rSearchItem.GetSearchOptions() );
+    util::SearchOptions2 aSearchOptions( rSearchItem.GetSearchOptions() );
     aSearchOptions.Locale = GetLocale( rStartPos );
 
     bool bBack = rSearchItem.GetBackward();
@@ -2622,7 +2622,7 @@ bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         nEndNode = bBack ? 0 : aEditDoc.Count()-1;
     }
 
-    utl::TextSearch aSearcher( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions) );
+    utl::TextSearch aSearcher( aSearchOptions );
 
     // iterate over the paragraphs ...
     for ( sal_Int32 nNode = nStartNode;

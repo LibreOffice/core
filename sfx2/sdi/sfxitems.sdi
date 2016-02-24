@@ -90,6 +90,7 @@
         INT32       SearchStartPointX MID_SEARCH_STARTPOINTX;
         INT32       SearchStartPointY MID_SEARCH_STARTPOINTY;
         BOOL        SearchFormatted MID_SEARCH_SEARCHFORMATTED;
+        INT16       AlgorithmType2  MID_SEARCH_ALGORITHMTYPE2;
     };
     item SvxSearch SvxSearchItem;
 

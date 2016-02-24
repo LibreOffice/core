@@ -27,7 +27,8 @@
 #include <com/sun/star/frame/Bibliography.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <svl/stritem.hxx>
 #include <vcl/layout.hxx>
@@ -427,7 +428,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
 {
     rSh.Push();
 
-    SearchOptions aSearchOpt(
+    SearchOptions2 aSearchOpt(
                         SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelText(), OUString(),
@@ -435,7 +436,9 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
                         0, 0, 0,
                         (bCaseSensitive
                             ? 0
-                            : static_cast<int>(TransliterationModules_IGNORE_CASE)) );
+                            : static_cast<int>(TransliterationModules_IGNORE_CASE)),
+                        SearchAlgorithms2::ABSOLUTE,
+                        '\\' );
 
     rSh.ClearMark();
     bool bCancel;

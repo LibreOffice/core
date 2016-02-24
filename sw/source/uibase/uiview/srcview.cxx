@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -96,7 +96,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-using ::com::sun::star::util::SearchOptions;
+using ::com::sun::star::util::SearchOptions2;
 
 #define SWSRCVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::NO_NEWWINDOW )
 
@@ -587,7 +587,7 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         pTextView->SetSelection( TextSelection( aPaM, aPaM ));
     }
 
-    util::SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
+    util::SearchOptions2 aSearchOpt( rSearchItem.GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
 
     sal_uInt16 nFound;

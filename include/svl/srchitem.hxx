@@ -22,7 +22,8 @@
 #include <sal/config.h>
 #include <svl/svldllapi.h>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/configitem.hxx>
@@ -63,7 +64,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
         public SfxPoolItem,
         public utl::ConfigItem
 {
-    css::util::SearchOptions m_aSearchOpt;
+    css::util::SearchOptions2 m_aSearchOpt;
 
     SfxStyleFamily  m_eFamily;            // style family
 
@@ -177,9 +178,9 @@ public:
     inline  sal_uInt16      GetLEVLonger() const;
     inline  void            SetLEVLonger(sal_uInt16 nSet);
 
-    inline const css::util::SearchOptions &
+    inline const css::util::SearchOptions2 &
                             GetSearchOptions() const;
-    inline void             SetSearchOptions( const css::util::SearchOptions &rOpt );
+    inline void             SetSearchOptions( const css::util::SearchOptions2 &rOpt );
 
     inline  sal_Int32       GetTransliterationFlags() const;
             void            SetTransliterationFlags( sal_Int32 nFlags );
@@ -234,6 +235,10 @@ bool SvxSearchItem::GetSelection() const
 
 bool SvxSearchItem::GetRegExp() const
 {
+    // Ensure old and new algorithm types are in sync until all places are
+    // adapted to use only new types.
+    assert( (m_aSearchOpt.algorithmType == css::util::SearchAlgorithms_REGEXP) ==
+            (m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::REGEXP));
     return m_aSearchOpt.algorithmType == css::util::SearchAlgorithms_REGEXP ;
 }
 
@@ -274,15 +279,19 @@ void SvxSearchItem::SetLEVLonger( sal_uInt16 nVal )
 
 bool SvxSearchItem::IsLevenshtein() const
 {
+    // Ensure old and new algorithm types are in sync until all places are
+    // adapted to use only new types.
+    assert( (m_aSearchOpt.algorithmType == css::util::SearchAlgorithms_APPROXIMATE) ==
+            (m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::APPROXIMATE));
     return m_aSearchOpt.algorithmType == css::util::SearchAlgorithms_APPROXIMATE;
 }
 
-const css::util::SearchOptions & SvxSearchItem::GetSearchOptions() const
+const css::util::SearchOptions2 & SvxSearchItem::GetSearchOptions() const
 {
     return m_aSearchOpt;
 }
 
-void SvxSearchItem::SetSearchOptions( const css::util::SearchOptions &rOpt )
+void SvxSearchItem::SetSearchOptions( const css::util::SearchOptions2 &rOpt )
 {
     m_aSearchOpt = rOpt;
 }

@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <hintids.hxx>
@@ -1056,12 +1056,12 @@ struct SwFindParaAttr : public SwFindParas
 {
     bool bValue;
     const SfxItemSet *pSet, *pReplSet;
-    const SearchOptions *pSearchOpt;
+    const SearchOptions2 *pSearchOpt;
     SwCursor& m_rCursor;
     utl::TextSearch* pSText;
 
     SwFindParaAttr( const SfxItemSet& rSet, bool bNoCollection,
-                    const SearchOptions* pOpt, const SfxItemSet* pRSet,
+                    const SearchOptions2* pOpt, const SfxItemSet* pRSet,
                     SwCursor& rCursor )
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
           pSearchOpt( pOpt ), m_rCursor( rCursor ),pSText( nullptr ) {}
@@ -1109,7 +1109,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
             // then search in text of it
             if( !pSText )
             {
-                SearchOptions aTmp( *pSearchOpt );
+                SearchOptions2 aTmp( *pSearchOpt );
 
                 // search in selection
                 aTmp.searchFlag |= (SearchFlags::REG_NOT_BEGINOFLINE |
@@ -1117,7 +1117,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
 
                 aTmp.Locale = SvtSysLocale().GetLanguageTag().getLocale();
 
-                pSText = new utl::TextSearch( utl::TextSearch::UpgradeToSearchOptions2( aTmp) );
+                pSText = new utl::TextSearch( aTmp );
             }
 
             // TODO: searching for attributes in Outliner text?!
@@ -1221,7 +1221,7 @@ bool SwFindParaAttr::IsReplaceMode() const
 sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs,
-                          const SearchOptions* pSearchOpt,
+                          const SearchOptions2* pSearchOpt,
                           const SfxItemSet* pReplSet )
 {
     // switch off OLE-notifications

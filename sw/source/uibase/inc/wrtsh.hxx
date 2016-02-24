@@ -48,7 +48,7 @@ struct SwCallMouseEvent;
 class SfxStringListItem;
 
 namespace com { namespace sun { namespace star { namespace util {
-    struct SearchOptions;
+    struct SearchOptions2;
 } } } }
 
 typedef sal_Int32 SelectionType;
@@ -362,7 +362,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
     // search and replace
-    sal_uLong SearchPattern(const css::util::SearchOptions& rSearchOpt,
+    sal_uLong SearchPattern(const css::util::SearchOptions2& rSearchOpt,
                          bool bSearchInNotes,
                          SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
@@ -377,7 +377,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                          bool bNoColls,
                          SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
-                         const css::util::SearchOptions* pSearchOpt = nullptr,
+                         const css::util::SearchOptions2* pSearchOpt = nullptr,
                          const SfxItemSet* pReplaceSet = nullptr);
 
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar );

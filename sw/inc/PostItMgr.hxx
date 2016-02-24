@@ -29,7 +29,7 @@
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <SidebarWindowsTypes.hxx>
 #include <svl/lstner.hxx>
@@ -272,8 +272,8 @@ class SwPostItMgr: public SfxListener
         void CheckMetaText();
 
         sal_uInt16 Replace(SvxSearchItem* pItem);
-        sal_uInt16 SearchReplace(const SwFormatField &pField, const css::util::SearchOptions& rSearchOptions,bool bSrchForward);
-        sal_uInt16 FinishSearchReplace(const css::util::SearchOptions& rSearchOptions,bool bSrchForward);
+        sal_uInt16 SearchReplace(const SwFormatField &pField, const css::util::SearchOptions2& rSearchOptions,bool bSrchForward);
+        sal_uInt16 FinishSearchReplace(const css::util::SearchOptions2& rSearchOptions,bool bSrchForward);
 
         void AssureStdModeAtShell();
 

@@ -18,7 +18,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -451,7 +452,7 @@ void SwMacrosTest::testFindReplace()
     pPaM->Move(fnMoveBackward, fnGoDoc);
 
     bool bCancel(false);
-    util::SearchOptions opts(
+    util::SearchOptions2 opts(
             util::SearchAlgorithms_REGEXP,
             65536,
             "$",
@@ -460,7 +461,9 @@ void SwMacrosTest::testFindReplace()
             2,
             2,
             2,
-            1073745152);
+            1073745152,
+            util::SearchAlgorithms2::REGEXP,
+            '\\');
 
     // find newline on 1st paragraph
     bool bFound = pPaM->Find(

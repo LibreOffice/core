@@ -40,7 +40,7 @@ class SwPaM;
 class Point;
 
 namespace com { namespace sun { namespace star { namespace util {
-    struct SearchOptions;
+    struct SearchOptions2;
 } } } }
 
 namespace utl {
@@ -194,7 +194,7 @@ public:
                 SwGoInDoc fnGo = fnGoContent );
 
     /// Search.
-    bool Find(  const css::util::SearchOptions& rSearchOpt,
+    bool Find(  const css::util::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 utl::TextSearch& rSText,
                 SwMoveFn fnMove = fnMoveForward,
@@ -209,7 +209,7 @@ public:
                 SwMoveFn fnMove,
                 const SwPaM *pPam, bool bInReadOnly, bool bMoveFirst );
 
-    bool DoSearch( const css::util::SearchOptions& rSearchOpt, utl::TextSearch& rSText,
+    bool DoSearch( const css::util::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                    SwMoveFn fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
                    sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen, SwNode* pNode, SwPaM* pPam);
 

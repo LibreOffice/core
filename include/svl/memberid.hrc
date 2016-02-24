@@ -35,9 +35,9 @@
 
 // SvxSearchItem
 // XXX When changing the MID count here, also increment the corresponding
-// SvxSearchItem SFX_DECL_TYPE(n) value to match, and add a member to
-// struct SvxSearch in sfx2/sdi/sfxitems.sdi so that dependent slot items get
-// generated.
+// SvxSearchItem SFX_DECL_TYPE(n) value in include/sfx2/msg.hxx to match, and
+// add a member to struct SvxSearch in sfx2/sdi/sfxitems.sdi so that dependent
+// slot items get generated.
 #define MID_SEARCH_STYLEFAMILY          1
 #define MID_SEARCH_CELLTYPE             2
 #define MID_SEARCH_ROWDIRECTION         3
@@ -60,6 +60,7 @@
 #define MID_SEARCH_STARTPOINTX          20
 #define MID_SEARCH_STARTPOINTY          21
 #define MID_SEARCH_SEARCHFORMATTED      22
+#define MID_SEARCH_ALGORITHMTYPE2       23
 
 #endif
 

@@ -19,7 +19,7 @@
 
 #include <memory>
 
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
@@ -220,7 +220,7 @@ size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
     return aIndex;
 }
 
-bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
+bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
                   SwMoveFn fnMove, const SwPaM * pRegion,
                   bool bInReadOnly )
 {
@@ -465,7 +465,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     return bFound;
 }
 
-bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
+bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                       SwMoveFn fnMove, bool bSrchForward, bool bRegSearch,
                       bool bChkEmptyPara, bool bChkParaEnd,
                       sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen,
@@ -628,13 +628,13 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
 /// parameters for search and replace in text
 struct SwFindParaText : public SwFindParas
 {
-    const SearchOptions& m_rSearchOpt;
+    const SearchOptions2& m_rSearchOpt;
     SwCursor& m_rCursor;
     utl::TextSearch m_aSText;
     bool m_bReplace;
     bool m_bSearchInNotes;
 
-    SwFindParaText( const SearchOptions& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
+    SwFindParaText( const SearchOptions2& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
         : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( utl::TextSearch::UpgradeToSearchOptions2( rOpt) ),
         m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
@@ -708,7 +708,7 @@ bool SwFindParaText::IsReplaceMode() const
     return m_bReplace;
 }
 
-sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
+sal_uLong SwCursor::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs, bool bReplace )
 {
@@ -741,7 +741,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes,
     return nRet;
 }
 
-OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
+OUString *ReplaceBackReferences( const SearchOptions2& rSearchOpt, SwPaM* pPam )
 {
     OUString *pRet = nullptr;
     if( pPam && pPam->HasMark() &&

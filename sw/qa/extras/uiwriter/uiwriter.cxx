@@ -69,7 +69,8 @@
 #include "com/sun/star/util/XNumberFormatTypes.hpp"
 #include "com/sun/star/util/NumberFormat.hpp"
 #include "com/sun/star/util/XNumberFormatsSupplier.hpp"
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
@@ -1819,7 +1820,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     aPaM = SwPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
-    css::util::SearchOptions SearchOpt;
+    css::util::SearchOptions2 SearchOpt;
     SearchOpt.algorithmType = css::util::SearchAlgorithms_ABSOLUTE;
     SearchOpt.searchFlag = 0x00000001;
     SearchOpt.searchString = "other";
@@ -1828,6 +1829,8 @@ void SwUiWriterTest::testSearchWithTransliterate()
     SearchOpt.deletedChars = 0;
     SearchOpt.insertedChars = 0;
     SearchOpt.transliterateFlags = css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+    SearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    SearchOpt.WildcardEscapeCharacter = 0;
     //transliteration option set so that at least one of the search strings is not found
     sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);

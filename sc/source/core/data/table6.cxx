@@ -35,8 +35,6 @@
 #include "postit.hxx"
 #include "stringutil.hxx"
 
-using ::com::sun::star::util::SearchOptions;
-
 namespace {
 
 bool lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUString& rVal )
@@ -727,7 +725,7 @@ bool ScTable::SearchAndReplace(
         else
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
-            css::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
+            css::util::SearchOptions2 aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
 
             if (aSearchOptions.searchString.isEmpty())
@@ -744,7 +742,7 @@ bool ScTable::SearchAndReplace(
                     ( css::i18n::TransliterationModules_IGNORE_CASE |
                       css::i18n::TransliterationModules_IGNORE_WIDTH );
 
-            pSearchText = new utl::TextSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions) );
+            pSearchText = new utl::TextSearch( aSearchOptions );
 
             if (nCommand == SvxSearchCmd::FIND)
                 bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);

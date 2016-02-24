@@ -111,7 +111,8 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                         OUString(),
                         lang::Locale(),
                           2, 2, 2,
-                          TransliterationModules_IGNORE_CASE ),
+                          TransliterationModules_IGNORE_CASE,
+                          SearchAlgorithms2::ABSOLUTE, '\\' ),
     m_eFamily         ( SFX_STYLE_FAMILY_PARA ),
     m_nCommand        ( SvxSearchCmd::FIND ),
     m_nCellType       ( SvxSearchCellType::FORMULA ),
@@ -137,9 +138,15 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     m_bNotes = aOpt.IsNotes();
 
     if (aOpt.IsUseRegularExpression())
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
         m_aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
+    }
     if (aOpt.IsSimilaritySearch())
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
+    }
     if (aOpt.IsWholeWordsOnly())
         m_aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
 
@@ -232,7 +239,7 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 
 
 //! used below
-static bool equalsWithoutLocale( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+static bool equalsWithoutLocale( const SearchOptions2& rItem1, const SearchOptions2& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
@@ -242,7 +249,9 @@ static bool equalsWithoutLocale( const SearchOptions& rItem1, const SearchOption
            rItem1.changedChars          == rItem2.changedChars  &&
            rItem1.deletedChars          == rItem2.deletedChars  &&
            rItem1.insertedChars         == rItem2.insertedChars &&
-           rItem1.transliterateFlags    == rItem2.transliterateFlags;
+           rItem1.transliterateFlags    == rItem2.transliterateFlags &&
+           rItem1.AlgorithmType2        == rItem2.AlgorithmType2 &&
+           rItem1.WildcardEscapeCharacter == rItem2.WildcardEscapeCharacter;
 }
 
 
@@ -335,9 +344,15 @@ void SvxSearchItem::SetSelection( bool bVal )
 void SvxSearchItem::SetRegExp( bool bVal )
 {
     if ( bVal )
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
         m_aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
+    }
     else if ( SearchAlgorithms_REGEXP == m_aSearchOpt.algorithmType )
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
+    }
 }
 
 
@@ -353,9 +368,15 @@ void SvxSearchItem::SetLEVRelaxed( bool bVal )
 void SvxSearchItem::SetLevenshtein( bool bVal )
 {
     if ( bVal )
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
+    }
     else if ( SearchAlgorithms_APPROXIMATE == m_aSearchOpt.algorithmType )
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
+    }
 }
 
 
@@ -425,6 +446,8 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= m_bAsianOptions; break;
         case MID_SEARCH_ALGORITHMTYPE:
             rVal <<= (sal_Int16) m_aSearchOpt.algorithmType; break;
+        case MID_SEARCH_ALGORITHMTYPE2:
+            rVal <<= m_aSearchOpt.AlgorithmType2; break;
         case MID_SEARCH_FLAGS:
             rVal <<= m_aSearchOpt.searchFlag; break;
         case MID_SEARCH_SEARCHSTRING:
@@ -585,6 +608,8 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             bRet = (rVal >>= m_bAsianOptions); break;
         case MID_SEARCH_ALGORITHMTYPE:
             bRet = (rVal >>= nInt); m_aSearchOpt.algorithmType = (SearchAlgorithms)(sal_Int16)nInt; break;
+        case MID_SEARCH_ALGORITHMTYPE2:
+            bRet = (rVal >>= nInt); m_aSearchOpt.AlgorithmType2 = (sal_Int16)nInt; break;
         case MID_SEARCH_FLAGS:
             bRet = (rVal >>= m_aSearchOpt.searchFlag); break;
         case MID_SEARCH_SEARCHSTRING:
