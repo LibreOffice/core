@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_746cfe9c",
+        "filename": "cppu/source/typelib/typelib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2016-02-24T06:13:12Z",
+      "side": 1,
+      "message": "SAL_INFO use iostream and support OUString directly.. no need to convert it to a OString and then take a char* of it...\nsame remark apply to other similar case above",
+      "revId": "35733cf8f84baec814c9fa8d1e30a7270c7690bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
