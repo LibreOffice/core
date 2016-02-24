@@ -43,10 +43,14 @@ public:
     OUString GetDocumentWatermark();
     /// The selected category has some content for the document header.
     bool HasDocumentHeader();
+    /// The selected category has some content for the document footer.
+    bool HasDocumentFooter();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
 
     /// Brief text located at the top of each document's pages.
     static const OUString& PROP_DOCHEADER();
+    /// Brief text located at the bottom of each document's pages.
+    static const OUString& PROP_DOCFOOTER();
 };
 
 #endif
