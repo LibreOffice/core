@@ -60,18 +60,28 @@ final class WinRegKey {
             if ( is != null ) {
                 // generate a temporary name for lib file and write to temp
                 // location
-                BufferedInputStream istream = new BufferedInputStream( is );
-                File libfile = File.createTempFile( "unowinreg", ".dll" );
-                libfile.deleteOnExit(); // ensure deletion
-                BufferedOutputStream ostream = new BufferedOutputStream(
-                    new FileOutputStream( libfile ) );
-                int bsize = 2048; int n = 0;
-                byte[] buffer = new byte[bsize];
-                while ( ( n = istream.read( buffer, 0, bsize ) ) != -1 ) {
-                    ostream.write( buffer, 0, n );
+                File libfile;
+                BufferedInputStream istream = null;
+                BufferedOutputStream ostream = null;
+                try {
+                    istream = new BufferedInputStream( is );
+                    libfile = File.createTempFile( "unowinreg", ".dll" );
+                    libfile.deleteOnExit(); // ensure deletion
+                    ostream = new BufferedOutputStream(
+                        new FileOutputStream( libfile ) );
+                    int bsize = 2048; int n = 0;
+                    byte[] buffer = new byte[bsize];
+                    while ( ( n = istream.read( buffer, 0, bsize ) ) != -1 ) {
+                        ostream.write( buffer, 0, n );
+                    }
+                } finally {
+                    if (istream != null) {
+                        istream.close();
+                    }
+                    if (ostream != null) {
+                        ostream.close();
+                    }
                 }
-                istream.close();
-                ostream.close();
                 // load library
                 System.load( libfile.getPath() );
             } else {
