@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <editsh.hxx>
+
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+
 #include <hintids.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <edimp.hxx>
@@ -33,6 +36,7 @@
 #include <swundo.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>
+#include <unoprnms.hxx>
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
 {
@@ -56,7 +60,32 @@ void SwEditShell::SetClassification(const OUString& rName)
         return;
 
     SfxClassificationHelper aHelper(*pDocShell);
+    // This updates the infobar as well.
     aHelper.SetBACName(rName);
+
+    if (aHelper.HasDocumentHeader())
+    {
+        uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
+
+        // If the header is off, turn it on.
+        bool bHeaderIsOn = false;
+        xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
+        if (!bHeaderIsOn)
+            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+
+        // Append a field to the end of the header text.
+        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance("com.sun.star.text.TextField.DocInfo.Custom"), uno::UNO_QUERY);
+        xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
+        uno::Reference<text::XText> xHeaderText;
+        xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+        uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+        xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+    }
 }
 
 // #i62675#
