@@ -11863,6 +11863,8 @@ module com {
      [property, optional] long RefreshPeriod;
      [property, optional] boolean FromSelection;
      [property, optional, readonly] long TokenIndex;
+     [property, optional] boolean TotalsRow;
+     [property, optional] boolean ContainsHeader;
     };
     published interface XDatabaseRanges {
      interface ::com::sun::star::container::XNameAccess;
@@ -11970,6 +11972,8 @@ module com {
      [property, optional] boolean IsAdjustHeightEnabled;
      [property, optional] boolean IsExecuteLinkEnabled;
      [property, optional, readonly] ::com::sun::star::awt::XDevice ReferenceDevice;
+     [property, optional] boolean RecordChanges;
+     [property, optional, readonly] boolean IsRecordChangesProtected;
     };
     published interface XFunctionAccess {
      interface ::com::sun::star::uno::XInterface;
@@ -14408,12 +14412,21 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::container::XNameAccess getTextTables();
     };
+   };
+   module tiledrendering {
+    interface XTiledRenderable {
+     interface ::com::sun::star::uno::XInterface;
+     void paintTile([in] any Parent, [in] long nOutputWidth, [in] long nOutputHeight, [in] long nTilePosX, [in] long nTilePosY, [in] long nTileWidth, [in] long nTileHeight);
+    };
+   };
+   module text {
     published service GenericTextDocument {
      service ::com::sun::star::document::OfficeDocument;
      interface ::com::sun::star::lang::XMultiServiceFactory;
      interface ::com::sun::star::text::XTextDocument;
      interface ::com::sun::star::util::XSearchable;
      interface ::com::sun::star::util::XRefreshable;
+     [optional] interface ::com::sun::star::tiledrendering::XTiledRenderable;
      [optional] interface ::com::sun::star::text::XFootnotesSupplier;
      [optional] interface ::com::sun::star::text::XEndnotesSupplier;
      [optional] interface ::com::sun::star::util::XReplaceable;
