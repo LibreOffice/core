@@ -522,7 +522,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
-    SdDrawDocument *pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // the document has 1 slide
@@ -531,11 +531,11 @@ void SdTiledRenderingTest::testInsertDeletePage()
     uno::Sequence<beans::PropertyValue> aArgs;
 
     // Insert slides
-    for(unsigned it = 1; it <= 10; it++)
+    for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:InsertPage", aArgs);
 
     // Verify inserted slides
-    for(auto i: m_aPageList)
+    for (auto i: m_aPageList)
     {
         SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage);
@@ -544,11 +544,11 @@ void SdTiledRenderingTest::testInsertDeletePage()
     m_aPageList.clear();
 
     // Delete slides
-    for(unsigned it = 1; it <= 10; it++)
+    for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:DeletePage", aArgs);
 
     // Verify deleted slides
-    for(auto i: m_aPageList)
+    for (auto i: m_aPageList)
     {
         SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage == nullptr);
@@ -557,11 +557,11 @@ void SdTiledRenderingTest::testInsertDeletePage()
     m_aPageList.clear();
 
     // Undo deleted slides
-    for(unsigned it = 1; it <= 10; it++)
+    for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Undo", aArgs);
 
     // Verify inserted slides
-    for(auto i: m_aPageList)
+    for (auto i: m_aPageList)
     {
         SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage);
@@ -570,11 +570,11 @@ void SdTiledRenderingTest::testInsertDeletePage()
     m_aPageList.clear();
 
     // Redo deleted slides
-    for(unsigned it = 1; it <= 10; it++)
+    for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Redo", aArgs);
 
     // Verify deleted slides
-    for(auto i: m_aPageList)
+    for (auto i: m_aPageList)
     {
         SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
         CPPUNIT_ASSERT(pPage == nullptr);

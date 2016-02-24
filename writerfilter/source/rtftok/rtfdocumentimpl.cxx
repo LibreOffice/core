@@ -5184,7 +5184,7 @@ RTFError RTFDocumentImpl::popState()
             {
                 aPictureURL = rtl::Uri::convertRelToAbs(aFileURL, m_aPicturePath);
             }
-            catch(const rtl::MalformedUriException& rException)
+            catch (const rtl::MalformedUriException& rException)
             {
                 SAL_WARN("writerfilter", "rtl::Uri::convertRelToAbs() failed: " << rException.getMessage());
             }

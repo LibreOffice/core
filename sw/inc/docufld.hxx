@@ -562,8 +562,8 @@ public:
     virtual SwFieldType*    Copy() const override;
 
 protected:
-   /// Overlay, because there is nothing to update!
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
+    /// Overlay, because there is nothing to update!
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
 };
 
 // Relative page numbering.
@@ -599,7 +599,7 @@ class SwRefPageGetFieldType : public SwFieldType
     void UpdateField( SwTextField* pTextField, _SetGetExpFields& rSetList );
 protected:
     /// overwritten to update all RefPageGet fields
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const override;
