@@ -148,7 +148,7 @@ protected:
 
 inline bool SwAccessibleFrame::IsShowing( const SwRect& rFrame ) const
 {
-    return rFrame.IsOver( maVisArea );
+    return !rFrame.IsEmpty() && rFrame.IsOver( maVisArea );
 }
 
 inline bool SwAccessibleFrame::IsShowing( const SwAccessibleMap& rAccMap ) const

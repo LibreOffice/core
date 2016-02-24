@@ -1149,9 +1149,11 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
 {
     SolarMutexGuard aGuard;
 
-    OSL_ENSURE( !rChildFrameOrObj.GetSwFrame() ||
-            !rChildFrameOrObj.GetSwFrame()->Frame().IsEmpty(),
-            "child context should have a size" );
+    // this happens during layout, e.g. when a page is deleted and next page's
+    // header/footer moves backward such an event is generated
+    SAL_INFO_IF(rChildFrameOrObj.GetSwFrame() &&
+            rChildFrameOrObj.GetSwFrame()->Frame().IsEmpty(),
+            "sw.a11y", "child context should have a size");
 
     if ( rChildFrameOrObj.AlwaysIncludeAsChild() )
     {
