@@ -115,6 +115,7 @@ public:
 
     void testCellBordersXLS();
     void testCellBordersXLSX();
+    void testBordersExchangeXLSX();
     void testTrackChangesSimpleXLSX();
     void testSheetTabColorsXLSX();
 
@@ -163,11 +164,14 @@ public:
     void testRefStringUnspecified();
     void testHeaderImage();
 
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
     CPPUNIT_TEST(testPasswordExport);
 #endif
+
+
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testColorScaleExportODS);
@@ -186,8 +190,11 @@ public:
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST(testSheetProtectionXLSX);
+
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
+    CPPUNIT_TEST(testBordersExchangeXLSX);
+
     CPPUNIT_TEST(testTrackChangesSimpleXLSX);
     CPPUNIT_TEST(testSheetTabColorsXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
@@ -353,6 +360,8 @@ void ScExportTest::testPasswordExport()
     xDocSh->DoClose();
 }
 #endif
+
+
 
 void ScExportTest::testConditionalFormatExportODS()
 {
@@ -1493,6 +1502,60 @@ void ScExportTest::testCellBordersXLSX()
 {
     testExcelCellBorders(FORMAT_XLSX);
 }
+
+
+void ScExportTest::testBordersExchangeXLSX()
+{
+    ScDocShellRef xShell    = loadDoc("test_borders_export.", FORMAT_ODS);  // load the ods with our Borders
+    ScDocShellRef xDocShRef = loadDoc("test_borders_ref.", FORMAT_XLSX);    // load the compare file
+    CPPUNIT_ASSERT(xShell.Is());
+    CPPUNIT_ASSERT(xDocShRef.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);          // save the ods to xlsx and load xlsx
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc    = xDocSh->GetDocument();
+    ScDocument& rDocRef = xDocShRef->GetDocument();
+
+    for (size_t mnCol = 2; mnCol < 20 ; ++mnCol)
+    {
+        for (size_t mnRow = 8; mnRow < 22; mnRow+=2)
+        {
+            const editeng::SvxBorderLine* pLineTop    = nullptr;
+            const editeng::SvxBorderLine* pLineBot    = nullptr;
+            const editeng::SvxBorderLine* pLineTopRef = nullptr;
+            const editeng::SvxBorderLine* pLineBotRef = nullptr;
+            rDoc.GetBorderLines(mnCol, mnRow, 0, nullptr, &pLineTop, nullptr, &pLineBot);
+            rDocRef.GetBorderLines(mnCol, mnRow, 0, nullptr, &pLineTopRef, nullptr, &pLineBotRef);
+            if(nullptr == pLineTop)
+            {   // in this case the lines not exist, but should be in both
+                if((pLineTop == pLineTopRef) && (pLineBot == pLineBotRef))
+                    continue;    // both have no line it is okay
+                else
+                    CPPUNIT_ASSERT_MESSAGE("Border-Style not equal", false);   // that is wrong, output with line and file
+            }
+            else
+            {
+                CPPUNIT_ASSERT(pLineBot);
+                CPPUNIT_ASSERT(pLineTopRef);
+                CPPUNIT_ASSERT(pLineBotRef);
+            }
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border-Line-Style wrong", pLineTopRef->GetBorderLineStyle(),
+                                          pLineTop->GetBorderLineStyle());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border-Line-Style wrong", pLineBotRef->GetBorderLineStyle(),
+                                          pLineBot->GetBorderLineStyle());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Width-Line wrong", pLineTopRef->GetWidth(), pLineTop->GetWidth());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Width-Line wrong", pLineBotRef->GetWidth(), pLineBot->GetWidth());
+        }
+    }
+
+
+    xDocSh->DoClose();
+    xDocShRef->DoClose();
+}
+
+
+
 
 OUString toString( const ScBigRange& rRange )
 {

@@ -1681,7 +1681,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
             rBorderLine.LineStyle = table::BorderLineStyle::DOTTED;
         break;
         case XML_double:
-            lclSetBorderLineWidth( rBorderLine, 10, 30, 10 );
+            lclSetBorderLineWidth( rBorderLine, 10, 15, 10 );
             rBorderLine.LineStyle = table::BorderLineStyle::DOUBLE_THIN;
         break;
         case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
@@ -1701,7 +1701,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
         case XML_none:              lclSetBorderLineWidth( rBorderLine, API_LINE_NONE );    break;
         case XML_slantDashDot:
             lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
-            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+            rBorderLine.LineStyle = table::BorderLineStyle::FINE_DASHED;
             break;
         case XML_thick:             lclSetBorderLineWidth( rBorderLine, API_LINE_THICK );   break;
         case XML_thin:              lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
