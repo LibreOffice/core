@@ -12,11 +12,14 @@
 layout(triangles) in;
 layout(triangle_strip, max_vertices=11) out;
 
+uniform float shadow;
+uniform mat4 u_projectionMatrix;
+uniform mat4 orthoProjectionMatrix;
+uniform mat4 orthoViewMatrix;
+
 in vec2 g_texturePosition[];
 in vec3 g_normal[];
-in mat4 projectionMatrix[];
 in mat4 modelViewMatrix[];
-in mat4 shadowMatrix[];
 in mat4 transform[];
 in float nTime[];
 in float startTime[];
@@ -52,6 +55,17 @@ mat4 translationMatrix(vec3 axis)
 
 void emitHexagonVertex(int index, vec3 translation, float fdsq)
 {
+    mat4 projectionMatrix;
+    mat4 shadowMatrix;
+
+    if (shadow < 0.5) {
+        projectionMatrix = u_projectionMatrix;
+        shadowMatrix = orthoProjectionMatrix * orthoViewMatrix;
+    } else {
+        projectionMatrix = orthoProjectionMatrix * orthoViewMatrix;
+        shadowMatrix = mat4(0.0);
+    }
+
     mat4 normalMatrix = transpose(inverse(modelViewMatrix[index]));
 
     vec4 pos = gl_in[index].gl_Position + vec4(translation, 0.0);
@@ -62,8 +76,8 @@ void emitHexagonVertex(int index, vec3 translation, float fdsq)
     v_normal = normalize(vec3(normalMatrix * transform[index] * vec4(g_normal[index], 0.0)));
     v_normal.z *= fdsq;
 
-    gl_Position = projectionMatrix[index] * modelViewMatrix[index] * pos;
-    shadowCoordinate = translationMatrix(vec3(0.5, 0.5, 0.5)) * scaleMatrix(vec3(0.5, 0.5, 0.5)) * shadowMatrix[index] * modelViewMatrix[index] * pos;
+    gl_Position = projectionMatrix * modelViewMatrix[index] * pos;
+    shadowCoordinate = translationMatrix(vec3(0.5, 0.5, 0.5)) * scaleMatrix(vec3(0.5, 0.5, 0.5)) * shadowMatrix * modelViewMatrix[index] * pos;
     v_texturePosition = g_texturePosition[index];
     EmitVertex();
 }
