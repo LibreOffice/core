@@ -57,23 +57,26 @@ class SvStream;
 
 // all the file-offsets in records are relative to the module's start!
 
-#define B_LIBRARY       0x4C42      // BL Library Record
-#define B_MODULE        0x4D42      // BM Module Record
-#define B_NAME          0x4E4D      // MN module name
-#define B_COMMENT       0x434D      // MC comment
-#define B_SOURCE        0x4353      // SC source code
-#define B_PCODE         0x4350      // PC p-code
-#define B_OLDPUBLICS    0x7550      // Pu publics
-#define B_PUBLICS       0x5550      // PU publics
-#define B_POOLDIR       0x4450      // PD symbol pool directory
-#define B_SYMPOOL       0x5953      // SY symbol pool
-#define B_STRINGPOOL    0x5453      // ST symbol pool
-#define B_LINERANGES    0x524C      // LR line ranges for publics
-#define B_MODEND        0x454D      // ME module end
-#define B_SBXOBJECTS    0x5853      // SX SBX objects
-#define B_EXTSOURCE     0x5345      // ES extended source
+enum class FileOffset {
+    Library     =  0x4C42,      // BL Library Record
+    Module      =  0x4D42,      // BM Module Record
+    Name        =  0x4E4D,      // MN module name
+    Comment     =  0x434D,      // MC comment
+    Source      =  0x4353,      // SC source code
+    PCode       =  0x4350,      // PC p-code
+    OldPublics  =  0x7550,      // Pu publics
+    Publics     =  0x5550,      // PU publics
+    PoolDir     =  0x4450,      // PD symbol pool directory
+    SymPool     =  0x5953,      // SY symbol pool
+    StringPool  =  0x5453,      // ST symbol pool
+    LineRanges  =  0x524C,      // LR line ranges for publics
+    ModEnd      =  0x454D,      // ME module end
+    SbxObjects  =  0x5853,      // SX SBX objects
+    ExtSource   =  0x5345,      // ES extended source
+    UserTypes   =  0x4369,      // UT user defined types
 
-#define B_USERTYPES     0x4369      // UT user defined types
+    LastValue   = UserTypes
+};
 
 
 // A library record contains only module records
