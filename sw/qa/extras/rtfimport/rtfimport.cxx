@@ -153,11 +153,11 @@ DECLARE_RTFIMPORT_TEST(testN192129, "n192129.rtf")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     awt::Size aActualSize(xShape->getSize());
-    if (((((sal_Int32)aExpectedSize.Width()) - aActualSize.Width) / 2) != 0)
+    if ((aExpectedSize.Width() - aActualSize.Width) / 2 != 0)
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Width()), aActualSize.Width);
     }
-    if (((((sal_Int32)aExpectedSize.Height()) - aActualSize.Height) / 2) != 0)
+    if ((aExpectedSize.Height() - aActualSize.Height) / 2 != 0)
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
     }
