@@ -14,7 +14,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL),,libxml
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 	external/libxmlsec/xmlsec1-configure.patch \
 	external/libxmlsec/xmlsec1-configure-libxml-libxslt.patch \
-	external/libxmlsec/xmlsec1-olderlibxml2.patch \
 	external/libxmlsec/xmlsec1-oldlibtool.patch \
 	external/libxmlsec/xmlsec1-nssdisablecallbacks.patch \
 	external/libxmlsec/xmlsec1-nssmangleciphers.patch \
