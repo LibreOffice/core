@@ -39,7 +39,7 @@ out float endTime;
 
 float snoise(vec2 p)
 {
-    return texture2D(permTexture, p).r;
+    return texture(permTexture, p).r;
 }
 
 mat4 identityMatrix(void)

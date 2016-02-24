@@ -29,7 +29,7 @@ bool isBorder(vec2 point)
 
 void main()
 {
-    vec4 fragment = vec4(texture2D(slideTexture, texturePosition).rgb, 1.0);
+    vec4 fragment = vec4(texture(slideTexture, texturePosition).rgb, 1.0);
     vec3 lightVector = vec3(0.0, 0.0, 1.0);
     float light = max(dot(lightVector, normal), 0.0);
     if (hexagonSize > 1.0) {
@@ -75,8 +75,8 @@ void main()
     }
     float visibility = 1.0;
     const float epsilon = 0.0001;
-    if (texture2D(depthShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
-        visibility *= 0.7 + 0.3 * (1.0 - texture2D(colorShadowTexture, shadowCoordinate.xy).a);
+    if (texture(depthShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
+        visibility *= 0.7 + 0.3 * (1.0 - texture(colorShadowTexture, shadowCoordinate.xy).a);
     vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
     if (fragment.a < 0.001)
         discard;
