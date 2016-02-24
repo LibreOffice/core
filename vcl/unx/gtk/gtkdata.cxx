@@ -110,6 +110,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 #endif
 #endif
 
+    gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 }
 
 GtkSalDisplay::~GtkSalDisplay()
