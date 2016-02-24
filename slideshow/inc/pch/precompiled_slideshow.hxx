@@ -52,13 +52,8 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/intrusive_ptr.hpp>
-#include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>

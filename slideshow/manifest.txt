@@ -43,7 +43,7 @@ Coding style:
  - header guards follow this scheme: INCLUDED_SLIDESHOW_<CLASSNAME>_HXX
 
  - module-external headers, and system headers are included like this:
-   #include <module/header.hxx> or #include <boost/shared_ptr.hpp>. 
+   #include <module/header.hxx>.
    module-internal headers are included like this:
    #include "header.hxx"
    No external header guards are used in cxx files
