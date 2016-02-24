@@ -40,6 +40,14 @@ namespace __cxxabiv1
     {
         explicit __class_type_info( const char *__n ) : type_info( __n ) { }
         virtual ~__class_type_info();
+
+        enum __offset_flags_masks
+        {
+            __virtual_mask = 0x1,
+            __public_mask = 0x2,
+            __hwm_bit = 2,
+            __offset_shift = 8
+        };
     };
 
     struct __si_class_type_info : public __class_type_info
@@ -48,6 +56,36 @@ namespace __cxxabiv1
             __class_type_info( __n ), __base_type( __b ) { }
         virtual ~__si_class_type_info();
         const __class_type_info *__base_type;
+    };
+
+    struct __base_class_type_info {
+        const __class_type_info *__base_type;
+        uintptr_t __offset_flags;
+
+        enum __offset_flags_masks
+        {
+            __virtual_mask = 0x1,
+            __public_mask = 0x2,
+            __hwm_bit = 2,
+            __offset_shift = 8
+        };
+    };
+
+    struct __vmi_class_type_info : public __class_type_info
+    {
+        unsigned int __flags;
+        unsigned int __base_count;
+        __base_class_type_info __base_info[1];
+
+        explicit __vmi_class_type_info(const char *__n, int ___flags) :
+         __class_type_info(__n), __flags(___flags), __base_count(0) {}
+
+        enum __flags_masks
+        {
+            __non_diamond_repeat_mask = 0x1,
+            __diamond_shaped_mask = 0x2,
+            __flags_unknown_mask = 0x10
+        };
     };
 
 extern "C" void *__cxa_allocate_exception( std::size_t thrown_size ) _NOEXCEPT;
