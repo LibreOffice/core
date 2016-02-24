@@ -121,7 +121,6 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
             if (nHyphenationPos > 0)
             {
 
-#if OSL_DEBUG_LEVEL > 1
                 {
                     if (aTmp.toString() != rOrigWord)
                     {
@@ -142,12 +141,10 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                         sal_Int32 nL = aLonger.getLength();
                         if (nS > 0 && nL > 0)
                         {
-                            DBG_ASSERT( (nS + 1 == nL) && aLonger[nL-1] == '.',
-                                "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
+                            assert( ((nS + 1 == nL) && aLonger[nL-1] == '.') && "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
                         }
                     }
                 }
-#endif
                 if (aText[ nOrigHyphPos ] == '[')  // alternative hyphenation
                 {
                     sal_Int16 split = 0;

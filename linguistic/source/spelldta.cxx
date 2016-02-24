@@ -83,11 +83,9 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
         {
-#if OSL_DEBUG_LEVEL > 1
             DictionaryType  eType = xDic->getDictionaryType();
             (void) eType;
-            DBG_ASSERT( eType != DictionaryType_MIXED, "unexpected dictionary type" );
-#endif
+            assert( eType != DictionaryType_MIXED && "unexpected dictionary type" );
             const Sequence< Reference< XDictionaryEntry > > aEntries = xDic->getEntries();
             const Reference< XDictionaryEntry > *pEntries = aEntries.getConstArray();
             sal_Int32 nLen = aEntries.getLength();

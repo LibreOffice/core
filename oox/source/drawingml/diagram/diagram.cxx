@@ -91,7 +91,7 @@ void Diagram::setLayout( const DiagramLayoutPtr & pLayout)
     mpLayout = pLayout;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_OOX_DIAGRAM
 OString normalizeDotName( const OUString& rStr )
 {
     OUStringBuffer aBuf;
@@ -139,19 +139,17 @@ static sal_Int32 calcDepth( const OUString& rNodeName,
 void Diagram::build(  )
 {
     // build name-object maps
-
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_OOX_DIAGRAM
     std::ofstream output("/tmp/tree.dot");
 
     output << "digraph datatree {" << std::endl;
 #endif
-
     dgm::Points& rPoints = getData()->getPoints();
     dgm::Points::iterator aCurrPoint(rPoints.begin());
     dgm::Points::iterator aEndPoint(rPoints.end());
     while( aCurrPoint != aEndPoint )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_OOX_DIAGRAM
         output << "\t"
                << normalizeDotName(aCurrPoint->msModelId).getStr()
                << "[";
@@ -179,6 +177,7 @@ void Diagram::build(  )
         }
 
         output << "];" << std::endl;
+#endif
 
         // does currpoint have any text set?
         if( aCurrPoint->mpShape &&
@@ -186,8 +185,8 @@ void Diagram::build(  )
             !aCurrPoint->mpShape->getTextBody()->getParagraphs().empty() &&
             !aCurrPoint->mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
         {
+#ifdef DEBUG_OOX_DIAGRAM
             static sal_Int32 nCount=0;
-
             output << "\t"
                    << "textNode" << nCount
                    << " ["
@@ -201,8 +200,8 @@ void Diagram::build(  )
                    << " -> "
                    << "textNode" << nCount++
                    << ";" << std::endl;
-        }
 #endif
+        }
 
         const bool bInserted1=getData()->getPointNameMap().insert(
             std::make_pair(aCurrPoint->msModelId,&(*aCurrPoint))).second;
@@ -224,7 +223,7 @@ void Diagram::build(  )
     const dgm::Connections::const_iterator aEndCxn(rConnections.end());
     while( aCurrCxn != aEndCxn )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_OOX_DIAGRAM
         if( !aCurrCxn->msParTransId.isEmpty() ||
             !aCurrCxn->msSibTransId.isEmpty() )
         {
@@ -308,8 +307,7 @@ void Diagram::build(  )
 
         ++aPresOfIter;
     }
-
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_OOX_DIAGRAM
     output << "}" << std::endl;
 #endif
 }
