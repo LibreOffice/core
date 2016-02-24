@@ -4305,26 +4305,26 @@ OParseContext::~OParseContext()
 
 OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
 {
-	OUString aMsg;
-	switch (_eCode)
-	{
-		case ERROR_GENERAL:					aMsg = "Syntax error in SQL expression"; break;
-		case ERROR_VALUE_NO_LIKE:			aMsg = "The value #1 can not be used with LIKE."; break;
-		case ERROR_FIELD_NO_LIKE:			aMsg = "LIKE can not be used with this field."; break;
-		case ERROR_INVALID_COMPARE:			aMsg = "The entered criterion can not be compared with this field."; break;
-		case ERROR_INVALID_INT_COMPARE:		aMsg = "The field can not be compared with a number."; break;
-		case ERROR_INVALID_DATE_COMPARE:	aMsg = "The field can not be compared with a date."; break;
-		case ERROR_INVALID_REAL_COMPARE:	aMsg = "The field can not be compared with a floating point number."; break;
-		case ERROR_INVALID_TABLE_NOSUCH:			aMsg = "The database does not contain a table named \"#\"."; break;
-		case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = "The database does contain neither a table nor a query named \"#\"."; break;
-		case ERROR_INVALID_COLUMN:			aMsg = "The column \"#1\" is unknown in the table \"#2\"."; break;
-		case ERROR_INVALID_TABLE_EXIST:		aMsg = "The database already contains a table or view with name \"#\"."; break;
-		case ERROR_INVALID_QUERY_EXIST:		aMsg = "The database already contains a query with name \"#\"."; break;
+    OUString aMsg;
+    switch (_eCode)
+    {
+        case ErrorCode::General:              aMsg = "Syntax error in SQL expression"; break;
+        case ErrorCode::ValueNoLike:          aMsg = "The value #1 can not be used with LIKE."; break;
+        case ErrorCode::FieldNoLike:          aMsg = "LIKE can not be used with this field."; break;
+        case ErrorCode::InvalidCompare:       aMsg = "The entered criterion can not be compared with this field."; break;
+        case ErrorCode::InvalidIntCompare:    aMsg = "The field can not be compared with a number."; break;
+        case ErrorCode::InvalidDateCompare:   aMsg = "The field can not be compared with a date."; break;
+        case ErrorCode::InvalidRealCompare:   aMsg = "The field can not be compared with a floating point number."; break;
+        case ErrorCode::InvalidTableNosuch:   aMsg = "The database does not contain a table named \"#\"."; break;
+        case ErrorCode::InvalidTableOrQuery:  aMsg = "The database does contain neither a table nor a query named \"#\"."; break;
+        case ErrorCode::InvalidColumn:        aMsg = "The column \"#1\" is unknown in the table \"#2\"."; break;
+        case ErrorCode::InvalidTableExist:    aMsg = "The database already contains a table or view with name \"#\"."; break;
+        case ErrorCode::InvalidQueryExist:    aMsg = "The database already contains a query with name \"#\"."; break;
         default:
             OSL_FAIL( "OParseContext::getErrorMessage: unknown error code!" );
             break;
-	}
-	return aMsg;
+    }
+    return aMsg;
 }
 
 
@@ -4585,7 +4585,7 @@ OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
 		if (m_sErrorMessage.isEmpty())
 			m_sErrorMessage = s_pScanner->getErrorMessage();
 		if (m_sErrorMessage.isEmpty())
-			m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_GENERAL);
+			m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::General);
 
 		rErrorMessage = m_sErrorMessage;
 
@@ -4747,7 +4747,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 	}
 	if(SQL_ISRULE(pLiteral,term) || SQL_ISRULE(pLiteral,value_exp_primary))
 	{
-		m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
+		m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidCompare);
 		return 0;
 	}
 	return 1;

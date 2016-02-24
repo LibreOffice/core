@@ -849,7 +849,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)
                         pReturn = buildDate( nType, pReturn);
                     break;
                 default:
-                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidCompare);
                     break;
             }
             break;
@@ -862,10 +862,10 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)
                 if ( m_xFormatter.is() )
                     pReturn = buildDate( nType, pReturn);
                     else
-                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
+                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidDateCompare);
                     break;
                 default:
-                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidCompare);
                     break;
             }
             break;
@@ -893,7 +893,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)
                     pReturn = buildNode_STR_NUM(pReturn);
                     break;
                 default:
-                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_INT_COMPARE);
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidIntCompare);
                     break;
             }
             break;
@@ -916,7 +916,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)
                     break;
                 case DataType::INTEGER:
                 default:
-                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_REAL_COMPARE);
+                    m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidRealCompare);
                     break;
             }
             break;
@@ -1018,14 +1018,14 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLit
                         nErg = 1;
                         break;
                     default:
-                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_VALUE_NO_LIKE);
+                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::ValueNoLike);
                         m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf("#1"),2,pLiteral->getTokenValue());
                         break;
                 }
             }
             break;
         default:
-            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_FIELD_NO_LIKE);
+            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::FieldNoLike);
             break;
     }
     return nErg;
@@ -1271,7 +1271,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         if (m_sErrorMessage.isEmpty())
             m_sErrorMessage = s_pScanner->getErrorMessage();
         if (m_sErrorMessage.isEmpty())
-            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_GENERAL);
+            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::General);
 
         rErrorMessage = m_sErrorMessage;
 
@@ -1569,7 +1569,7 @@ OSQLParseNode* OSQLParser::buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral)
     pLiteral = nullptr;
 
     if ( !pFCTNode )
-        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
+        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidDateCompare);
 
     return pFCTNode;
 }

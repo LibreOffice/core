@@ -381,9 +381,9 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
         if ( SQL_STATEMENT_CREATE_TABLE == m_eStatementType )
         {
             if ( bQueryDoesExist )
-                impl_appendError( IParseContext::ERROR_INVALID_QUERY_EXIST, &sName );
+                impl_appendError( IParseContext::ErrorCode::InvalidQueryExist, &sName );
             else if ( bTableDoesExist )
-                impl_appendError( IParseContext::ERROR_INVALID_TABLE_EXIST, &sName );
+                impl_appendError( IParseContext::ErrorCode::InvalidTableExist, &sName );
             else
                 aReturn = impl_createTableObject( sName, sCatalog, sSchema );
         }
@@ -412,15 +412,15 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
                 if ( m_pImpl->m_xQueryContainer.is() )
                     // the connection on which we're working supports sub queries in from (else
                     // m_xQueryContainer would not have been set), so emit a better error message
-                    impl_appendError( IParseContext::ERROR_INVALID_TABLE_OR_QUERY, &sName );
+                    impl_appendError( IParseContext::ErrorCode::InvalidTableOrQuery, &sName );
                 else
-                    impl_appendError( IParseContext::ERROR_INVALID_TABLE_NOSUCH, &sName );
+                    impl_appendError( IParseContext::ErrorCode::InvalidTableNosuch, &sName );
             }
         }
     }
     catch(Exception&)
     {
-        impl_appendError( IParseContext::ERROR_INVALID_TABLE_NOSUCH, &sComposedName );
+        impl_appendError( IParseContext::ErrorCode::InvalidTableNosuch, &sComposedName );
     }
 
     return aReturn;
@@ -860,7 +860,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
 
     if (!pSelectNode || m_eStatementType != SQL_STATEMENT_CREATE_TABLE || m_pImpl->m_pTables->empty())
     {
-        impl_appendError( IParseContext::ERROR_GENERAL );
+        impl_appendError( IParseContext::ErrorCode::General );
         return;
     }
     if (!SQL_ISRULE(pSelectNode,base_table_element_commalist))
@@ -921,7 +921,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 
     if (!pSelectNode || m_eStatementType != SQL_STATEMENT_SELECT || m_pImpl->m_pTables->empty())
     {
-        impl_appendError( IParseContext::ERROR_GENERAL );
+        impl_appendError( IParseContext::ErrorCode::General );
         return false;
     }
 
@@ -1653,7 +1653,7 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColum
             _rColumns->get().push_back(xCol);
         }
         else
-            impl_appendError( IParseContext::ERROR_INVALID_COLUMN, pBegin, &_rTableAlias );
+            impl_appendError( IParseContext::ErrorCode::InvalidColumn, pBegin, &_rTableAlias );
     }
 }
 
