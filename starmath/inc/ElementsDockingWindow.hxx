@@ -41,12 +41,12 @@ public:
     virtual ~SmElement();
 
     SmNodePointer getNode();
-    OUString      getText()
+    const OUString& getText() const
     {
         return maText;
     }
 
-    OUString getHelpText()
+    const OUString& getHelpText() const
     {
         return maHelpText;
     }

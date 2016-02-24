@@ -180,7 +180,7 @@ public:
 
     void        UpdateText();
     void        SetText(const OUString& rBuffer);
-    OUString    GetText() { return aText; }
+    const OUString& GetText() const { return aText; }
     void        SetFormat(SmFormat& rFormat);
     const SmFormat&  GetFormat() { return aFormat; }
 
