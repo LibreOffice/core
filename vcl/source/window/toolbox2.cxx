@@ -1790,6 +1790,20 @@ bool ToolBox::ImplHasClippedItems()
     return false;
 }
 
+namespace
+{
+    MenuItemBits ConvertBitsFromToolBoxToMenu(ToolBoxItemBits nToolItemBits)
+    {
+        MenuItemBits nMenuItemBits = MenuItemBits::NONE;
+        if ((nToolItemBits & ToolBoxItemBits::CHECKABLE) ||
+            (nToolItemBits & ToolBoxItemBits::DROPDOWN))
+        {
+            nMenuItemBits |= MenuItemBits::CHECKABLE;
+        }
+        return nMenuItemBits;
+    }
+}
+
 void ToolBox::UpdateCustomMenu()
 {
     // fill clipped items into menu
@@ -1825,7 +1839,8 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsClipped() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImageOriginal, MenuItemBits::NONE, OString());
+                MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(it->mnBits);
+                pMenu->InsertItem( id, it->maText, it->maImageOriginal, nMenuItemBits, OString());
                 pMenu->SetItemCommand( id, it->maCommandStr );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
@@ -1842,7 +1857,8 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsItemHidden() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImageOriginal, MenuItemBits::NONE, OString() );
+                MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(it->mnBits);
+                pMenu->InsertItem( id, it->maText, it->maImageOriginal, nMenuItemBits, OString() );
                 pMenu->SetItemCommand( id, it->maCommandStr );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
