@@ -868,7 +868,6 @@
   <block-list:block block-list:abbreviated-name=":cultivo:" block-list:name="🌾"/>
   <block-list:block block-list:abbreviated-name=":cumpleaños:" block-list:name="🎂"/>
   <block-list:block block-list:abbreviated-name=":curri:" block-list:name="🍛"/>
-  <block-list:block block-list:abbreviated-name=":cuteness:" block-list:name="💠"/>
   <block-list:block block-list:abbreviated-name=":dado1:" block-list:name="⚀"/>
   <block-list:block block-list:abbreviated-name=":dado2:" block-list:name="⚁"/>
   <block-list:block block-list:abbreviated-name=":dado3:" block-list:name="⚂"/>
@@ -919,7 +918,6 @@
   <block-list:block block-list:abbreviated-name=":dseda:" block-list:name="ζ"/>
   <block-list:block block-list:abbreviated-name=":Dseda:" block-list:name="Ζ"/>
   <block-list:block block-list:abbreviated-name=":duende:" block-list:name="👺"/>
-  <block-list:block block-list:abbreviated-name=":dulce sonrisa:" block-list:name="😅"/>
   <block-list:block block-list:abbreviated-name=":durmiendo:" block-list:name="😴"/>
   <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
   <block-list:block block-list:abbreviated-name=":E2:" block-list:name="⇒"/>
@@ -1144,6 +1142,7 @@
   <block-list:block block-list:abbreviated-name=":libro contable:" block-list:name="📒"/>
   <block-list:block block-list:abbreviated-name=":libros:" block-list:name="📚"/>
   <block-list:block block-list:abbreviated-name=":limón:" block-list:name="🍋"/>
+  <block-list:block block-list:abbreviated-name=":lindura:" block-list:name="💠"/>
   <block-list:block block-list:abbreviated-name=":linterna:" block-list:name="🔦"/>
   <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
   <block-list:block block-list:abbreviated-name=":lira turca:" block-list:name="₺"/>
@@ -1292,7 +1291,6 @@
   <block-list:block block-list:abbreviated-name=":Ómicron:" block-list:name="Ο"/>
   <block-list:block block-list:abbreviated-name=":onda:" block-list:name="👋"/>
   <block-list:block block-list:abbreviated-name=":oníguiri:" block-list:name="🍙"/>
-  <block-list:block block-list:abbreviated-name=":ordenador:" block-list:name="💻"/>
   <block-list:block block-list:abbreviated-name=":oreja:" block-list:name="👂"/>
   <block-list:block block-list:abbreviated-name=":orejas de conejo:" block-list:name="👯"/>
   <block-list:block block-list:abbreviated-name=":oso:" block-list:name="🐻"/>
@@ -1333,6 +1331,7 @@
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
   <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
+  <block-list:block block-list:abbreviated-name=":PC:" block-list:name="💻"/>
   <block-list:block block-list:abbreviated-name=":peatón:" block-list:name="🚶"/>
   <block-list:block block-list:abbreviated-name=":pensativo:" block-list:name="😔"/>
   <block-list:block block-list:abbreviated-name=":pentágono2:" block-list:name="⬟"/>
@@ -1508,8 +1507,10 @@
   <block-list:block block-list:abbreviated-name=":somnolencia:" block-list:name="😪"/>
   <block-list:block block-list:abbreviated-name=":sonido alto:" block-list:name="🔊"/>
   <block-list:block block-list:abbreviated-name=":sonido:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":sonriente:" block-list:name="😀"/>
   <block-list:block block-list:abbreviated-name=":sonrisa2:" block-list:name="☻"/>
   <block-list:block block-list:abbreviated-name=":sonrisa:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":sonrisa de alivio:" block-list:name="😅"/>
   <block-list:block block-list:abbreviated-name=":sonrisita:" block-list:name="😏"/>
   <block-list:block block-list:abbreviated-name=":sonrojado:" block-list:name="😳"/>
   <block-list:block block-list:abbreviated-name=":sostenido:" block-list:name="♯"/>
