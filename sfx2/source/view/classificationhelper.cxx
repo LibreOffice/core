@@ -416,6 +416,15 @@ bool SfxClassificationHelper::HasImpactLevel()
     return true;
 }
 
+bool SfxClassificationHelper::HasDocumentHeader()
+{
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Marking:document-header");
+    if (it == m_pImpl->m_aLabels.end() || it->second.isEmpty())
+        return false;
+
+    return true;
+}
+
 basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 {
     basegfx::BColor aRet;
@@ -510,6 +519,12 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
         rViewFrame.RemoveInfoBar("classification");
         rViewFrame.AppendInfoBar("classification", aMessage, &aBackgroundColor, &aForegroundColor, &aForegroundColor, WB_CENTER);
     }
+}
+
+const OUString& SfxClassificationHelper::PROP_DOCHEADER()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:Marking:document-header");
+    return sProp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
