@@ -530,30 +530,31 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
     GVariant *pTarget = nullptr;
 
-    if ( g_action_group_has_action( mpActionGroup, aCommand ) == FALSE ) {
-        if ( ( nBits & MenuItemBits::CHECKABLE ) || bIsSubmenu )
-        {
-            // Item is a checkmark button.
-            GVariantType* pStateType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_BOOLEAN) );
-            GVariant* pState = g_variant_new_boolean( bChecked );
+    if (g_action_group_has_action(mpActionGroup, aCommand))
+        g_lo_action_group_remove(pActionGroup, aCommand);
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, bIsSubmenu, nullptr, pStateType, nullptr, pState );
-        }
-        else if ( nBits & MenuItemBits::RADIOCHECK )
-        {
-            // Item is a radio button.
-            GVariantType* pParameterType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_STRING) );
-            GVariantType* pStateType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_STRING) );
-            GVariant* pState = g_variant_new_string( "" );
-            pTarget = g_variant_new_string( aCommand );
+    if ( ( nBits & MenuItemBits::CHECKABLE ) || bIsSubmenu )
+    {
+        // Item is a checkmark button.
+        GVariantType* pStateType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_BOOLEAN) );
+        GVariant* pState = g_variant_new_boolean( bChecked );
 
-            g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, FALSE, pParameterType, pStateType, nullptr, pState );
-        }
-        else
-        {
-            // Item is not special, so insert a stateless action.
-            g_lo_action_group_insert( pActionGroup, aCommand, nId, FALSE );
-        }
+        g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, bIsSubmenu, nullptr, pStateType, nullptr, pState );
+    }
+    else if ( nBits & MenuItemBits::RADIOCHECK )
+    {
+        // Item is a radio button.
+        GVariantType* pParameterType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_STRING) );
+        GVariantType* pStateType = g_variant_type_new( reinterpret_cast<gchar const *>(G_VARIANT_TYPE_STRING) );
+        GVariant* pState = g_variant_new_string( "" );
+        pTarget = g_variant_new_string( aCommand );
+
+        g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, FALSE, pParameterType, pStateType, nullptr, pState );
+    }
+    else
+    {
+        // Item is not special, so insert a stateless action.
+        g_lo_action_group_insert( pActionGroup, aCommand, nId, FALSE );
     }
 
     GLOMenu* pMenu = G_LO_MENU( mpMenuModel );
