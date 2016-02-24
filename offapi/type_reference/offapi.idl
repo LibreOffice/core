@@ -3142,6 +3142,7 @@ module com {
      [property, optional] long SymbolType;
      [property, optional] string SymbolBitmapURL;
      [property, optional] long SegmentOffset;
+     [property, optional] boolean TextWordWrap;
     };
     /** @deprecated */ published struct ChartDataRow {
      string Name;
@@ -15243,6 +15244,7 @@ module com {
      [property, optional] long VerticalRulerMetric;
      [property, optional] boolean ShowContentTips;
      [property, optional] boolean ShowScrollBarTips;
+     [property, optional] boolean HideWhitespace;
     };
     published constants WritingMode2 {
      const short CONTEXT = 4;
@@ -16862,7 +16864,11 @@ module com {
       void setDefaultName([in] string aName);
       void setDisplayDirectory([in] string aDirectory) raises (::com::sun::star::lang::IllegalArgumentException);
       string getDisplayDirectory();
-      sequence< string > getFiles();
+      /** @deprecated */ sequence< string > getFiles();
+     };
+     published interface XFilePicker2 {
+      interface ::com::sun::star::ui::dialogs::XFilePicker;
+      sequence< string > getSelectedFiles();
      };
      published interface XFilePickerListener;
      published interface XFilePickerNotifier {
@@ -16889,10 +16895,6 @@ module com {
       void appendFilter([in] string aTitle, [in] string aFilter) raises (::com::sun::star::lang::IllegalArgumentException);
       void setCurrentFilter([in] string aTitle) raises (::com::sun::star::lang::IllegalArgumentException);
       string getCurrentFilter();
-     };
-     published interface XFilePicker2 {
-      interface ::com::sun::star::ui::dialogs::XFilePicker;
-      sequence< string > getSelectedFiles();
      };
      published interface XFilePicker3 {
       interface ::com::sun::star::ui::dialogs::XFilePicker2;
@@ -17056,6 +17058,7 @@ module com {
      const short DATE = 2;
      const short DATETIME = 6;
      const short DEFINED = 1;
+     const short EMPTY = 4096;
      const short FRACTION = 64;
      const short LOGICAL = 1024;
      const short NUMBER = 16;
