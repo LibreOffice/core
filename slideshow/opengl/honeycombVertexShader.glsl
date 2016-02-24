@@ -25,9 +25,20 @@ uniform float shadow;
 uniform mat4 orthoProjectionMatrix;
 uniform mat4 orthoViewMatrix;
 
+// Workaround for Intel's Windows driver, to prevent optimisation breakage.
+uniform float zero;
+
 out mat4 projectionMatrix;
 out mat4 modelViewMatrix;
 out mat4 shadowMatrix;
+
+mat4 identityMatrix(void)
+{
+    return mat4(1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0);
+}
 
 mat4 translationMatrix(vec3 axis)
 {
@@ -61,25 +72,35 @@ mat4 rotationMatrix(vec3 axis, float angle)
 void main( void )
 {
     mat4 nmodelViewMatrix = u_modelViewMatrix * u_operationsTransformMatrix * u_sceneTransformMatrix * u_primitiveTransformMatrix;
-    mat4 transformMatrix;
+    mat4 transformMatrix = identityMatrix();
 
     // TODO: use the aspect ratio of the slide instead.
     mat4 slideScaleMatrix = scaleMatrix(vec3(0.75, 1, 1));
     mat4 invertSlideScaleMatrix = scaleMatrix(1.0 / vec3(0.75, 1, 1));
 
+    // These ugly zero comparisons are a workaround for Intel's Windows driver optimisation bug.
     if (selectedTexture > 0.5) {
         // Leaving texture
-        transformMatrix = translationMatrix(vec3(0, 0, 6 * time))
-            * scaleMatrix(vec3(1 + pow(2 * time, 2.1), 1 + pow(2 * time, 2.1), 0))
-            * slideScaleMatrix
-            * rotationMatrix(vec3(0.0, 0.0, 1.0), -pow(time, 3) * M_PI)
-            * invertSlideScaleMatrix;
+        if (zero < 1.0)
+            transformMatrix = invertSlideScaleMatrix * transformMatrix;
+        if (zero < 2.0)
+            transformMatrix = rotationMatrix(vec3(0.0, 0.0, 1.0), -pow(time, 3) * M_PI) * transformMatrix;
+        if (zero < 3.0)
+            transformMatrix = slideScaleMatrix * transformMatrix;
+        if (zero < 4.0)
+            transformMatrix = scaleMatrix(vec3(1 + pow(2 * time, 2.1), 1 + pow(2 * time, 2.1), 0)) * transformMatrix;
+        if (zero < 5.0)
+            transformMatrix = translationMatrix(vec3(0, 0, 6 * time)) * transformMatrix;
     } else {
         // Entering texture
-        transformMatrix = translationMatrix(vec3(0, 0, 28 * (sqrt(time) - 1)))
-            * slideScaleMatrix
-            * rotationMatrix(vec3(0.0, 0.0, 1.0), pow(0.8 * (time - 1.0), 2.0) * M_PI)
-            * invertSlideScaleMatrix;
+        if (zero < 1.0)
+            transformMatrix = invertSlideScaleMatrix * transformMatrix;
+        if (zero < 2.0)
+            transformMatrix = rotationMatrix(vec3(0.0, 0.0, 1.0), pow(0.8 * (time - 1.0), 2.0) * M_PI) * transformMatrix;
+        if (zero < 3.0)
+            transformMatrix = slideScaleMatrix * transformMatrix;
+        if (zero < 4.0)
+            transformMatrix = translationMatrix(vec3(0, 0, 28 * (sqrt(time) - 1))) * transformMatrix;
     }
 
     if (shadow < 0.5) {
