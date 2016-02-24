@@ -41,7 +41,12 @@ public:
     bool HasImpactLevel();
     basegfx::BColor GetImpactLevelColor();
     OUString GetDocumentWatermark();
+    /// The selected category has some content for the document header.
+    bool HasDocumentHeader();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
+
+    /// Brief text located at the top of each document's pages.
+    static const OUString& PROP_DOCHEADER();
 };
 
 #endif
