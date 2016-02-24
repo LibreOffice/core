@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1aa78d24_9409aae0",
+        "filename": "external/nss/UnpackedTarball_nss.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-24T07:01:38Z",
+      "side": 0,
+      "message": "Why not to drop this patch file from the tree?",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 31
+      },
+      "revId": "0c193a70fb08d91bab49010debd41534676deda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_d4ce92b3",
         "filename": "external/nss/ubsan.patch.0",
         "patchSetId": 1
