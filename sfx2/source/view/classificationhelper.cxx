@@ -163,8 +163,8 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:2"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:3"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:4"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:document-footer"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:document-header"].clear();
+            rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCHEADER()].clear();
+            rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCFOOTER()].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:document-watermark"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-first-line-of-text"].clear();
             rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-last-line-of-text"].clear();
@@ -235,9 +235,9 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (
         if (m_pCategory)
         {
             if (m_aIdentifier == "Document: Header")
-                m_pCategory->m_aLabels["urn:bails:IntellectualProperty:Marking:document-header"] = m_aValue;
+                m_pCategory->m_aLabels[SfxClassificationHelper::PROP_DOCHEADER()] = m_aValue;
             else if (m_aIdentifier == "Document: Footer")
-                m_pCategory->m_aLabels["urn:bails:IntellectualProperty:Marking:document-footer"] = m_aValue;
+                m_pCategory->m_aLabels[SfxClassificationHelper::PROP_DOCFOOTER()] = m_aValue;
             else if (m_aIdentifier == "Document: Watermark")
                 m_pCategory->m_aLabels["urn:bails:IntellectualProperty:Marking:document-watermark"] = m_aValue;
         }
@@ -418,7 +418,16 @@ bool SfxClassificationHelper::HasImpactLevel()
 
 bool SfxClassificationHelper::HasDocumentHeader()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find("urn:bails:IntellectualProperty:Marking:document-header");
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find(SfxClassificationHelper::PROP_DOCHEADER());
+    if (it == m_pImpl->m_aLabels.end() || it->second.isEmpty())
+        return false;
+
+    return true;
+}
+
+bool SfxClassificationHelper::HasDocumentFooter()
+{
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aLabels.find(SfxClassificationHelper::PROP_DOCFOOTER());
     if (it == m_pImpl->m_aLabels.end() || it->second.isEmpty())
         return false;
 
@@ -524,6 +533,12 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 {
     static OUString sProp("urn:bails:IntellectualProperty:Marking:document-header");
+    return sProp;
+}
+
+const OUString& SfxClassificationHelper::PROP_DOCFOOTER()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:Marking:document-footer");
     return sProp;
 }
 

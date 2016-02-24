@@ -123,7 +123,10 @@ void SwEditShell::SetClassification(const OUString& rName)
     // This updates the infobar as well.
     aHelper.SetBACName(rName);
 
-    if (aHelper.HasDocumentHeader())
+    bool bHeaderIsNeeded = aHelper.HasDocumentHeader();
+    bool bFooterIsNeeded = aHelper.HasDocumentFooter();
+
+    if (bHeaderIsNeeded || bFooterIsNeeded)
     {
         uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
@@ -134,25 +137,50 @@ void SwEditShell::SetClassification(const OUString& rName)
         for (const OUString& rPageStyleName : aUsedPageStyles)
         {
             uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
-
-            // If the header is off, turn it on.
-            bool bHeaderIsOn = false;
-            xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
-            if (!bHeaderIsOn)
-                xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
-
-            // If the header already contains a document header field, no need to do anything.
-            uno::Reference<text::XText> xHeaderText;
-            xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
             OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
-            if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_DOCHEADER()))
+
+            if (bHeaderIsNeeded)
             {
-                // Append a field to the end of the header text.
-                uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
-                xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
-                uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
-                xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+                // If the header is off, turn it on.
+                bool bHeaderIsOn = false;
+                xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
+                if (!bHeaderIsOn)
+                    xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+
+                // If the header already contains a document header field, no need to do anything.
+                uno::Reference<text::XText> xHeaderText;
+                xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+                if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_DOCHEADER()))
+                {
+                    // Append a field to the end of the header text.
+                    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+                    xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
+                    uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+                    xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+                }
+            }
+
+            if (bFooterIsNeeded)
+            {
+                // If the footer is off, turn it on.
+                bool bFooterIsOn = false;
+                xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
+                if (!bFooterIsOn)
+                    xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, uno::makeAny(true));
+
+                // If the footer already contains a document header field, no need to do anything.
+                uno::Reference<text::XText> xFooterText;
+                xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
+                if (!lcl_hasField(xFooterText, aServiceName, SfxClassificationHelper::PROP_DOCFOOTER()))
+                {
+                    // Append a field to the end of the footer text.
+                    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+                    xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCFOOTER()));
+                    uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+                    xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
+                }
             }
         }
     }
