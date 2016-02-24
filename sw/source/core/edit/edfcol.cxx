@@ -37,6 +37,29 @@
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <unoprnms.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+
+namespace
+{
+
+/// Find all page styles which are currently used in the document.
+std::set<OUString> lcl_getUsedPageStyles(SwViewShell* pShell)
+{
+    std::set<OUString> aRet;
+
+    SwRootFrame* pLayout = pShell->GetLayout();
+    for (SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
+    {
+        SwPageFrame* pPage = static_cast<SwPageFrame*>(pFrame);
+        if (const SwPageDesc *pDesc = pPage->FindPageDesc())
+            aRet.insert(pDesc->GetName());
+    }
+
+    return aRet;
+}
+
+} // anonymous namespace
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
 {
@@ -69,22 +92,27 @@ void SwEditShell::SetClassification(const OUString& rName)
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
 
-        // If the header is off, turn it on.
-        bool bHeaderIsOn = false;
-        xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
-        if (!bHeaderIsOn)
-            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+        std::set<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
+        for (const OUString& rPageStyleName : aUsedPageStyles)
+        {
+            uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
 
-        // Append a field to the end of the header text.
-        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance("com.sun.star.text.TextField.DocInfo.Custom"), uno::UNO_QUERY);
-        xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
-        uno::Reference<text::XText> xHeaderText;
-        xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
-        uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
-        xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+            // If the header is off, turn it on.
+            bool bHeaderIsOn = false;
+            xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
+            if (!bHeaderIsOn)
+                xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+
+            // Append a field to the end of the header text.
+            uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance("com.sun.star.text.TextField.DocInfo.Custom"), uno::UNO_QUERY);
+            xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
+            uno::Reference<text::XText> xHeaderText;
+            xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+            uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+            xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
+        }
     }
 }
 
