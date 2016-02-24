@@ -29,6 +29,18 @@ bool isBorder(vec2 point)
 
 void main()
 {
+    const vec2 samplingPoints[9] = vec2[](
+        vec2(0, 0),
+        vec2(-1, -1),
+        vec2(-1, 0),
+        vec2(-1, 1),
+        vec2(0, 1),
+        vec2(1, 1),
+        vec2(1, 0),
+        vec2(1, -1),
+        vec2(0, -1)
+    );
+
     vec4 fragment = vec4(texture(slideTexture, texturePosition).rgb, 1.0);
     vec3 lightVector = vec3(0.0, 0.0, 1.0);
     float light = max(dot(lightVector, normal), 0.0);
@@ -73,13 +85,23 @@ void main()
             fragment.rgb *= actualTime;
         }
     }
+
+    // Compute the shadow.
     float visibility = 1.0;
     const float epsilon = 0.0001;
-    if (texture(depthShadowTexture, shadowCoordinate.xy).r < shadowCoordinate.z - epsilon)
-        visibility *= 0.7 + 0.3 * (1.0 - texture(colorShadowTexture, shadowCoordinate.xy).a);
+    if (selectedTexture < 0.5) {
+        float depthShadow = texture(depthShadowTexture, shadowCoordinate.xy).z;
+        float shadowRadius = (1.0 / (shadowCoordinate.z - depthShadow)) * 1000.0;
+        // Only the entering slide.
+        for (int i = 0; i < 9; ++i) {
+            vec2 coordinate = shadowCoordinate.xy + samplingPoints[i] / shadowRadius;
+            if (depthShadow < shadowCoordinate.z - epsilon) {
+                visibility -= 0.05 * texture(colorShadowTexture, coordinate).a;
+            }
+        }
+    }
+
     vec4 black = vec4(0.0, 0.0, 0.0, fragment.a);
-    if (fragment.a < 0.001)
-        discard;
     gl_FragColor = mix(black, fragment, visibility * light);
 }
 
