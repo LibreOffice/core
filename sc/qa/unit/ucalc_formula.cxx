@@ -542,9 +542,10 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetString(ScAddress(3,5,0), "=12");
     m_pDoc->SetString(ScAddress(3,6,0), "=13");
     m_pDoc->SetString(ScAddress(3,7,0), "=CONCATENATE(\"A\";\"B\";\"C\")");
+    m_pDoc->SetString(ScAddress(3,8,0), "=CONCATENATE(C4:D8)");
     m_pDoc->CalcAll();
 
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(3,0,0), 8);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(3,0,0), 9);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 10));
@@ -555,6 +556,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 5, 12));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 6, 13));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 7, "ABC"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 8, "1336111213ABC"));
 
     // Column E consists of formula cells whose results are all numeric.
     for (SCROW i = 0; i <= 6; ++i)

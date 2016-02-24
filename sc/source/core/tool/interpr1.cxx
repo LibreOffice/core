@@ -8333,14 +8333,85 @@ void ScInterpreter::ScRept()
 
 void ScInterpreter::ScConcat()
 {
-    sal_uInt8 nParamCount = GetByte();
     OUString aRes;
-    while( nParamCount-- > 0)
+    ScAddress aAdr;
+    ScRange aRange;
+    size_t nRefInList = 0;
+    short nParamCount = GetByte();
+    while ( nParamCount-- > 0 )
     {
-        OUString aStr = GetString().getString();
-        aRes = aStr + aRes;
+        switch ( GetStackType() )
+        {
+            case svString:
+            case svDouble:
+                aRes = PopString().getString() + aRes;
+                break;
+            case svExternalSingleRef:
+            {
+                ScExternalRefCache::TokenRef pToken;
+                ScExternalRefCache::CellFormat aFmt;
+                PopExternalSingleRef(pToken, &aFmt);
+                if ( !nGlobalError && pToken )
+                    aRes = pToken->GetString().getString() + aRes;
+                break;
+            }
+            case svSingleRef :
+            {
+                PopSingleRef( aAdr );
+                if ( nGlobalError )
+                    break;
+                ScRefCellValue aCell( *pDok, aAdr );
+                if ( !aCell.isEmpty() )
+                {
+                    if ( aCell.hasString() )
+                        aRes = aCell.getString( pDok ) + aRes;
+                    else
+                    {
+                        if ( !aCell.hasEmptyValue() )
+                            aRes = OUString::number( aCell.getValue() ) + aRes;
+                    }
+                }
+                break;
+            }
+            case svDoubleRef :
+            case svRefList :
+            {
+                PopDoubleRef( aRange, nParamCount, nRefInList);
+                if ( nGlobalError )
+                    break;
+                OUString aStr;
+                ScCellIterator aIter( pDok, aRange, mnSubTotalFlags );
+                for ( bool bHas = aIter.first(); bHas; bHas = aIter.next() )
+                {
+                    if ( aIter.getType() != CELLTYPE_FORMULA )
+                        aStr += aIter.getString();
+                    else
+                    {
+                        aAdr = aIter.GetPos();
+                        ScRefCellValue aCell( *pDok, aAdr );
+                        if ( !aCell.isEmpty() )
+                        {
+                            if ( aCell.hasString() )
+                                aStr += aCell.getString( pDok );
+                            else
+                            {
+                                if ( !aCell.hasEmptyValue() )
+                                    aStr += OUString::number( aCell.getValue() );
+                            }
+                        }
+                    }
+                }
+                aRes = aStr + aRes;
+                break;
+            }
+            default:
+              break;
+        }
     }
-    PushString( aRes );
+    if ( !nGlobalError )
+        PushString( aRes );
+    else
+        PushError( nGlobalError );
 }
 
 sal_uInt16 ScInterpreter::GetErrorType()
