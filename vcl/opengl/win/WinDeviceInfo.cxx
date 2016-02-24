@@ -27,49 +27,6 @@ std::vector<wgl::DriverInfo> WinOpenGLDeviceInfo::maDriverInfo;
 
 namespace {
 
-
-void GetDLLVersion(const sal_Unicode* aDLLPath, OUString& aVersion)
-{
-    DWORD versInfoSize, vers[4] = {0};
-    // version info not available case
-    aVersion = OUString("0.0.0.0");
-    versInfoSize = GetFileVersionInfoSizeW(aDLLPath, nullptr);
-    std::vector<char> versionInfo(512, 0);
-
-    if (versInfoSize == 0)
-    {
-        return;
-    }
-    versionInfo.resize(uint32_t(versInfoSize));
-
-    if (!GetFileVersionInfoW(aDLLPath, 0, versInfoSize,
-                LPBYTE(&versionInfo[0])))
-    {
-        return;
-    }
-
-    UINT len = 0;
-    VS_FIXEDFILEINFO *fileInfo = nullptr;
-    if (!VerQueryValue(LPBYTE(&versionInfo[0]), TEXT("\\"),
-                (LPVOID *)&fileInfo, &len) ||
-            len == 0 ||
-            fileInfo == nullptr)
-    {
-        return;
-    }
-
-    DWORD fileVersMS = fileInfo->dwFileVersionMS;
-    DWORD fileVersLS = fileInfo->dwFileVersionLS;
-
-    vers[0] = HIWORD(fileVersMS);
-    vers[1] = LOWORD(fileVersMS);
-    vers[2] = HIWORD(fileVersLS);
-    vers[3] = LOWORD(fileVersLS);
-
-    aVersion = OUString::number(vers[0]) + "." + OUString::number(vers[1])
-        + "." + OUString::number(vers[2]) + "." + OUString::number(vers[3]);
-}
-
 /*
  * Compute the length of an array with constant length.  (Use of this method
  * with a non-array pointer will not compile.)
