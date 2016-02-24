@@ -52,6 +52,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf97543();
     void testRGBColor();
     void testRGBAColor();
+    void testTdf97936();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testTdf97543);
     CPPUNIT_TEST(testRGBColor);
     CPPUNIT_TEST(testRGBAColor);
+    CPPUNIT_TEST(testTdf97936);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -350,6 +352,20 @@ void Test::testRGBAColor()
     assertXPath(pDocument, "/primitive2D/transform/unifiedtransparence", "transparence", "0");
 }
 
+void Test::testTdf97936()
+{
+    // check that both rectangles are rendered in the viewBox
+    Primitive2DSequence aSequenceTdf97936 = parseSvg("/svgio/qa/cppunit/data/tdf97936.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf97936.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf97936));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[1]");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]");
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
