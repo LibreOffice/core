@@ -19,13 +19,29 @@
 
 #include <editsh.hxx>
 
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/unoprnms.hxx>
+#include <sfx2/classificationhelper.hxx>
+#include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <sfx2/classificationhelper.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <edimp.hxx>
@@ -125,35 +141,40 @@ void SwEditShell::SetClassification(const OUString& rName)
 
     bool bHeaderIsNeeded = aHelper.HasDocumentHeader();
     bool bFooterIsNeeded = aHelper.HasDocumentFooter();
+    OUString aWatermark = aHelper.GetDocumentWatermark();
 
-    if (bHeaderIsNeeded || bFooterIsNeeded)
+    if (!bHeaderIsNeeded && !bFooterIsNeeded && aWatermark.isEmpty())
+        return;
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+
+    std::set<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
+    for (const OUString& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
+        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
-        std::set<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
-        for (const OUString& rPageStyleName : aUsedPageStyles)
+        if (bHeaderIsNeeded || !aWatermark.isEmpty())
         {
-            uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
-            OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
+            // If the header is off, turn it on.
+            bool bHeaderIsOn = false;
+            xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
+            if (!bHeaderIsOn)
+                xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+
+            // If the header already contains a document header field, no need to do anything.
+            uno::Reference<text::XText> xHeaderText;
+            xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
 
             if (bHeaderIsNeeded)
             {
-                // If the header is off, turn it on.
-                bool bHeaderIsOn = false;
-                xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
-                if (!bHeaderIsOn)
-                    xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
-
-                // If the header already contains a document header field, no need to do anything.
-                uno::Reference<text::XText> xHeaderText;
-                xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
                 if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_DOCHEADER()))
                 {
                     // Append a field to the end of the header text.
-                    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
                     uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
                     xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
                     uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
@@ -161,26 +182,123 @@ void SwEditShell::SetClassification(const OUString& rName)
                 }
             }
 
-            if (bFooterIsNeeded)
+            if (!aWatermark.isEmpty())
             {
-                // If the footer is off, turn it on.
-                bool bFooterIsOn = false;
-                xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
-                if (!bFooterIsOn)
-                    xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, uno::makeAny(true));
+                // Calc the ratio.
+                double fRatio = 0;
+                OutputDevice* pOut = Application::GetDefaultDevice();
+                vcl::Font aFont(pOut->GetFont());
+                fRatio = aFont.GetFontSize().Height();
+                fRatio /= pOut->GetTextWidth(aWatermark);
 
-                // If the footer already contains a document header field, no need to do anything.
-                uno::Reference<text::XText> xFooterText;
-                xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
-                if (!lcl_hasField(xFooterText, aServiceName, SfxClassificationHelper::PROP_DOCFOOTER()))
+                // Calc the size.
+                sal_Int32 nWidth = 0;
+                awt::Size aSize;
+                xPageStyle->getPropertyValue(UNO_NAME_SIZE) >>= aSize;
+                if (aSize.Width < aSize.Height)
                 {
-                    // Append a field to the end of the footer text.
-                    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
-                    xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCFOOTER()));
-                    uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
-                    xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
+                    // Portrait.
+                    sal_Int32 nLeftMargin = 0;
+                    xPageStyle->getPropertyValue(UNO_NAME_LEFT_MARGIN) >>= nLeftMargin;
+                    sal_Int32 nRightMargin = 0;
+                    xPageStyle->getPropertyValue(UNO_NAME_RIGHT_MARGIN) >>= nRightMargin;
+                    nWidth = aSize.Width - nLeftMargin - nRightMargin;
                 }
+                else
+                {
+                    // Landscape.
+                    sal_Int32 nTopMargin = 0;
+                    xPageStyle->getPropertyValue(UNO_NAME_TOP_MARGIN) >>= nTopMargin;
+                    sal_Int32 nBottomMargin = 0;
+                    xPageStyle->getPropertyValue(UNO_NAME_BOTTOM_MARGIN) >>= nBottomMargin;
+                    nWidth = aSize.Height - nTopMargin - nBottomMargin;
+                }
+                sal_Int32 nHeight = nWidth * fRatio;
+
+                // Create and insert the shape.
+                uno::Reference<drawing::XShape> xShape(xMultiServiceFactory->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
+                basegfx::B2DHomMatrix aTransformation;
+                aTransformation.identity();
+                aTransformation.scale(nWidth, nHeight);
+                aTransformation.rotate(F_PI180 * -45);
+                drawing::HomogenMatrix3 aMatrix;
+                aMatrix.Line1.Column1 = aTransformation.get(0, 0);
+                aMatrix.Line1.Column2 = aTransformation.get(0, 1);
+                aMatrix.Line1.Column3 = aTransformation.get(0, 2);
+                aMatrix.Line2.Column1 = aTransformation.get(1, 0);
+                aMatrix.Line2.Column2 = aTransformation.get(1, 1);
+                aMatrix.Line2.Column3 = aTransformation.get(1, 2);
+                aMatrix.Line3.Column1 = aTransformation.get(2, 0);
+                aMatrix.Line3.Column2 = aTransformation.get(2, 1);
+                aMatrix.Line3.Column3 = aTransformation.get(2, 2);
+                uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
+                xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, false);
+
+                // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
+                uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
+                xLockable->addActionLock();
+                xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(0xc0c0c0)));
+                xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::makeAny(drawing::FillStyle_SOLID));
+                xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(static_cast<sal_Int16>(50)));
+                xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
+                xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::makeAny(drawing::LineStyle_NONE));
+                xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::makeAny(false));
+                xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny(false));
+                xPropertySet->setPropertyValue(UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny(false));
+                xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEHEIGHT, uno::makeAny(nHeight));
+                xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
+                xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGHT));
+                xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
+                xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(OUString("Liberation Sans")));
+                xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
+                xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
+                xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
+
+                uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
+                xTextRange->setString(aWatermark);
+
+                uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
+                xDefaulter->createCustomShapeDefaults("fontwork-plain-text");
+
+                auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
+                auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
+                uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+                {
+                    {"TextPath", uno::makeAny(true)},
+                }));
+                auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
+                {
+                    return rValue.Name == "TextPath";
+                });
+                if (it == aGeomPropVec.end())
+                    aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
+                else
+                    it->Value <<= aPropertyValues;
+                xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+                xLockable->removeActionLock();
+            }
+        }
+
+        if (bFooterIsNeeded)
+        {
+            // If the footer is off, turn it on.
+            bool bFooterIsOn = false;
+            xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
+            if (!bFooterIsOn)
+                xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, uno::makeAny(true));
+
+            // If the footer already contains a document header field, no need to do anything.
+            uno::Reference<text::XText> xFooterText;
+            xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
+            if (!lcl_hasField(xFooterText, aServiceName, SfxClassificationHelper::PROP_DOCFOOTER()))
+            {
+                // Append a field to the end of the footer text.
+                uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+                xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCFOOTER()));
+                uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+                xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
             }
         }
     }
