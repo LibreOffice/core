@@ -359,7 +359,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         const View* pSourceView = pOwnData->GetView();
 
-        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && dynamic_cast< View *>( this) !=  nullptr )
+        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() )
         {
             mpClipboard->HandlePageDrop (*pOwnData);
             bReturn = true;
