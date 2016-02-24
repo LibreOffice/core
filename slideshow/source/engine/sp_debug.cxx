@@ -32,6 +32,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
+#include <boost/shared_ptr.hpp>
 #include <canvas/debug.hxx>
 #include <cstdlib>
 #include <map>
