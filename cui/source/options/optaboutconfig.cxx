@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 
 #include <vector>
@@ -172,7 +173,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     aTabs[3] = aTabs[2] + fWidth * 20;
     aTabs[4] = aTabs[3] + fWidth * 8;
 
-    m_options.algorithmType = util::SearchAlgorithms_ABSOLUTE;
+    m_options.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
     m_options.transliterateFlags |= i18n::TransliterationModules_IGNORE_CASE;
     m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
                                         util::SearchFlags::REG_NOT_ENDOFLINE);
@@ -833,7 +834,7 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, SearchHdl_Impl, Button*, void)
     else
     {
         m_options.searchString = m_pSearchEdit->GetText();
-        utl::TextSearch textSearch( utl::TextSearch::UpgradeToSearchOptions2( m_options) );
+        utl::TextSearch textSearch( m_options );
         for (auto const& it : m_prefBoxEntries)
         {
             sal_Int32 endPos, startPos = 0;
