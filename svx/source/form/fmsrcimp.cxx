@@ -29,8 +29,8 @@
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -549,8 +549,8 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     FieldCollection::iterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
-    SearchOptions aParam;
-    aParam.algorithmType = m_bRegular ? SearchAlgorithms_REGEXP : SearchAlgorithms_APPROXIMATE;
+    SearchOptions2 aParam;
+    aParam.AlgorithmType2 = m_bRegular ? SearchAlgorithms2::REGEXP : SearchAlgorithms2::APPROXIMATE;
     aParam.searchFlag = 0;
     aParam.transliterateFlags = GetTransliterationFlags();
     if ( !GetTransliteration() )
@@ -567,7 +567,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     }
     aParam.searchString = strExpression;
     aParam.Locale = SvtSysLocale().GetLanguageTag().getLocale();
-    ::utl::TextSearch aLocalEngine( utl::TextSearch::UpgradeToSearchOptions2( aParam));
+    ::utl::TextSearch aLocalEngine( aParam);
 
 
     bool bFound = false;
