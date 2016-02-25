@@ -66,7 +66,7 @@ SdXML3DLightContext::SdXML3DLightContext(
             {
                 ::basegfx::B3DVector aVal;
                 SvXMLUnitConverter::convertB3DVector(aVal, sValue);
-                if (!isnan(aVal.getX()) && !isnan(aVal.getY()) && !isnan(aVal.getZ()))
+                if (!std::isnan(aVal.getX()) && !std::isnan(aVal.getY()) && !std::isnan(aVal.getZ()))
                 {
                     maDirection = aVal;
                 }
