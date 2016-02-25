@@ -154,6 +154,7 @@ struct LOKDocViewPrivateImpl
         m_nDocumentHeightTwips(0),
         m_bEdit(FALSE),
         m_nLOKFeatures(0),
+        m_nParts(0),
         m_aVisibleCursor({0, 0, 0, 0}),
         m_bCursorOverlayVisible(false),
         m_bCursorVisible(true),
