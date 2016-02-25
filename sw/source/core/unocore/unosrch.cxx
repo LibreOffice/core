@@ -27,7 +27,8 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -715,11 +716,12 @@ uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames() throw( uno::
     return aRet;
 }
 
-void SwXTextSearch::FillSearchOptions( util::SearchOptions& rSearchOpt ) const
+void SwXTextSearch::FillSearchOptions( util::SearchOptions2& rSearchOpt ) const
 {
     if( bSimilarity )
     {
         rSearchOpt.algorithmType = util::SearchAlgorithms_APPROXIMATE;
+        rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::APPROXIMATE;
         rSearchOpt.changedChars = nLevExchange;
         rSearchOpt.deletedChars = nLevRemove;
         rSearchOpt.insertedChars = nLevAdd;
@@ -727,9 +729,15 @@ void SwXTextSearch::FillSearchOptions( util::SearchOptions& rSearchOpt ) const
             rSearchOpt.searchFlag |= util::SearchFlags::LEV_RELAXED;
     }
     else if( bExpr )
+    {
         rSearchOpt.algorithmType = util::SearchAlgorithms_REGEXP;
+        rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
+    }
     else
+    {
         rSearchOpt.algorithmType = util::SearchAlgorithms_ABSOLUTE;
+        rSearchOpt.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+    }
 
     rSearchOpt.Locale = GetAppLanguageTag().getLocale();
     rSearchOpt.searchString = sSearchText;

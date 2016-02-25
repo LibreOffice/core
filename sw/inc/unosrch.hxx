@@ -31,7 +31,7 @@ class SwSearchProperties_Impl;
 class SfxItemSet;
 
 namespace com{namespace sun{namespace star{namespace util{
-    struct SearchOptions;
+    struct SearchOptions2;
 }}}}
 
 class SwXTextSearch : public cppu::WeakImplHelper
@@ -109,7 +109,7 @@ public:
     bool    HasSearchAttributes() const;
     bool    HasReplaceAttributes() const;
 
-    void    FillSearchOptions( css::util::SearchOptions&
+    void    FillSearchOptions( css::util::SearchOptions2&
                                         rSearchOpt ) const;
 };
 
