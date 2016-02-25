@@ -596,8 +596,8 @@ public:
     Point GetRelativePagePosition(const Point& rDocPos);
 
     /// Hide or show layout-selection and pass call to CursorSh.
-    void ShLooseFcs();
-    void ShGetFcs( bool bUpdate = true );
+    void ShellLoseFocus();
+    void ShellGetFocus( bool bUpdate = true );
 
     /// PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );

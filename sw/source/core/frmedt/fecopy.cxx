@@ -567,7 +567,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 }
             }
 
-            if( this != pDestShell && !pDestShell->HasShFcs() )
+            if (this != pDestShell && !pDestShell->HasShellFocus())
                 pDestShell->Imp()->GetDrawView()->hideMarkHandles();
         }
     }

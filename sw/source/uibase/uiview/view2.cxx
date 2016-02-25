@@ -1924,9 +1924,9 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         SetCursorAtTop( true );
 
         // For scrolling the FrameSet, the corresponding shell needs to have the focus.
-        bool bHasShFocus = m_pWrtShell->HasShFcs();
+        bool bHasShFocus = m_pWrtShell->HasShellFocus();
         if( !bHasShFocus )
-            m_pWrtShell->ShGetFcs( false );
+            m_pWrtShell->ShellGetFocus( false );
 
         const SwFormatINetFormat* pINet;
         OUString sCmp;
@@ -2044,7 +2044,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         SetCursorAtTop( bSaveCT, bSaveCC );
 
         if( !bHasShFocus )
-            m_pWrtShell->ShLooseFcs();
+            m_pWrtShell->ShellLoseFocus();
     }
     return bRet;
 }

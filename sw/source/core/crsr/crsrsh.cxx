@@ -2176,14 +2176,14 @@ void SwCursorShell::HideCursor()
     }
 }
 
-void SwCursorShell::ShLooseFcs()
+void SwCursorShell::ShellLoseFocus()
 {
     if( !m_bBasicHideCursor )
         HideCursors();
     m_bHasFocus = false;
 }
 
-void SwCursorShell::ShGetFcs( bool bUpdate )
+void SwCursorShell::ShellGetFocus( bool bUpdate )
 {
     m_bHasFocus = true;
     if( !m_bBasicHideCursor && VisArea().Width() )

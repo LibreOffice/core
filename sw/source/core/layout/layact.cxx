@@ -2236,9 +2236,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                         // to fill the virtual device. This fill don't have
                         // paint the selection! -> Set the focus flag at
                         // CursorShell and it doesn't paint the selection.
-                        pCursorShell->ShLooseFcs();
+                        pCursorShell->ShellLoseFocus();
                         pCursorShell->UnlockPaint( true );
-                        pCursorShell->ShGetFcs( false );
+                        pCursorShell->ShellGetFocus( false );
                     }
                     else
                         rSh.UnlockPaint( true );
