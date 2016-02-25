@@ -106,7 +106,17 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
 
 void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
 {
-    return;
+    if (!m_pCategories || m_pCategories->GetEntryCount() > 0)
+        return;
+
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    if (!pObjectShell)
+        return;
+
+    SfxClassificationHelper aHelper(*pObjectShell);
+    std::vector<OUString> aNames = aHelper.GetBACNames();
+    for (const OUString& rName : aNames)
+        m_pCategories->InsertEntry(rName);
 }
 
 } // namespace sfx2
