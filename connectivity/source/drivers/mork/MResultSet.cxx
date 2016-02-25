@@ -1144,7 +1144,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
     switch( m_pSQLIterator->getStatementType() )
     {
-        case SQL_STATEMENT_SELECT:
+        case OSQLStatementType::Select:
         {
             if(m_bIsAlwaysFalseQuery) {
                 break;
@@ -1285,9 +1285,9 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             }
         }   break;
 
-        case SQL_STATEMENT_UPDATE:
-        case SQL_STATEMENT_DELETE:
-        case SQL_STATEMENT_INSERT:
+        case OSQLStatementType::Update:
+        case OSQLStatementType::Delete:
+        case OSQLStatementType::Insert:
             break;
         default:
             m_pStatement->getOwnConnection()->throwSQLException( STR_STMT_TYPE_NOT_SUPPORTED, *this );

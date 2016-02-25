@@ -84,7 +84,7 @@ void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, Run
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
-    if ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
+    if ( m_aSQLIterator.getStatementType() == OSQLStatementType::Select )
         m_xParamColumns = m_aSQLIterator.getParameters();
     else
     {
@@ -158,7 +158,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     if(xRS.is())
         xRS->dispose();
 
-    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
+    return m_aSQLIterator.getStatementType() == OSQLStatementType::Select;
 }
 
 

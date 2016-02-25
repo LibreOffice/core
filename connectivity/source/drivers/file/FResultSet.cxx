@@ -847,7 +847,7 @@ again:
 
     // Evaluate may only be set,
     // if the Keyset will be constructed further
-    if  (   ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
+    if  (   ( m_aSQLIterator.getStatementType() == OSQLStatementType::Select )
         &&  !isCount()
         &&  bEvaluate
         )
@@ -863,7 +863,7 @@ again:
             m_pFileSet->get().push_back(nBookmarkValue);
         }
     }
-    else if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_UPDATE)
+    else if (m_aSQLIterator.getStatementType() == OSQLStatementType::Update)
     {
         bool bOK = true;
         if (bEvaluate)
@@ -879,7 +879,7 @@ again:
                 return false;
         }
     }
-    else if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_DELETE)
+    else if (m_aSQLIterator.getStatementType() == OSQLStatementType::Delete)
     {
         bool bOK = true;
         if (bEvaluate)
@@ -900,7 +900,7 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
 {
     sal_Int32 nTempPos = m_nRowPos;
 
-    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
+    if (m_aSQLIterator.getStatementType() == OSQLStatementType::Select &&
         !isCount())
     {
         if (!m_pFileSet.is()) //no Index available
@@ -1004,7 +1004,7 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
             }
         }
     }
-    else if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && isCount())
+    else if (m_aSQLIterator.getStatementType() == OSQLStatementType::Select && isCount())
     {
         // Fetch the COUNT(*)
         switch (eCursorPosition)
@@ -1224,7 +1224,7 @@ bool OResultSet::OpenImpl()
 
     switch(m_aSQLIterator.getStatementType())
     {
-        case SQL_STATEMENT_SELECT:
+        case OSQLStatementType::Select:
         {
             if(isCount())
             {
@@ -1363,8 +1363,8 @@ bool OResultSet::OpenImpl()
             }
         }   break;
 
-        case SQL_STATEMENT_UPDATE:
-        case SQL_STATEMENT_DELETE:
+        case OSQLStatementType::Update:
+        case OSQLStatementType::Delete:
             // during processing count the number of processed Rows
             m_nRowCountResult = 0;
             // for now simply iterate over all rows and
@@ -1386,7 +1386,7 @@ bool OResultSet::OpenImpl()
                 // nRowCount (number of rows in the result-set) = 1 for this request!
             }
             break;
-        case SQL_STATEMENT_INSERT:
+        case OSQLStatementType::Insert:
             m_nRowCountResult = 0;
 
             OSL_ENSURE(m_aAssignValues.is(),"No assign values set!");

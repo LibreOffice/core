@@ -256,7 +256,7 @@ sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException,
 
     executeQuery(sql);
 
-    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
+    return m_aSQLIterator.getStatementType() == OSQLStatementType::Select;
 }
 
 
@@ -405,15 +405,15 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
             // more than one table -> can't operate on them -> error
             m_pConnection->throwGenericSQLException(STR_QUERY_MORE_TABLES,*this);
 
-        if ( (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT) && m_aSQLIterator.getSelectColumns()->get().empty() )
+        if ( (m_aSQLIterator.getStatementType() == OSQLStatementType::Select) && m_aSQLIterator.getSelectColumns()->get().empty() )
             // SELECT statement without columns -> error
             m_pConnection->throwGenericSQLException(STR_QUERY_NO_COLUMN,*this);
 
         switch(m_aSQLIterator.getStatementType())
         {
-            case SQL_STATEMENT_CREATE_TABLE:
-            case SQL_STATEMENT_ODBC_CALL:
-            case SQL_STATEMENT_UNKNOWN:
+            case OSQLStatementType::CreateTable:
+            case OSQLStatementType::OdbcCall:
+            case OSQLStatementType::Unknown:
                 m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
                 break;
             default:

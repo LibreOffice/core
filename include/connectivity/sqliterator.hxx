@@ -42,14 +42,14 @@ namespace connectivity
 
     typedef ::std::pair<const OSQLParseNode*,const OSQLParseNode* > TNodePair;
 
-    enum OSQLStatementType {
-        SQL_STATEMENT_UNKNOWN,
-        SQL_STATEMENT_SELECT,
-        SQL_STATEMENT_INSERT,
-        SQL_STATEMENT_UPDATE,
-        SQL_STATEMENT_DELETE,
-        SQL_STATEMENT_ODBC_CALL,
-        SQL_STATEMENT_CREATE_TABLE
+    enum class OSQLStatementType {
+        Unknown,
+        Select,
+        Insert,
+        Update,
+        Delete,
+        OdbcCall,
+        CreateTable
     };
 
     struct OSQLParseTreeIteratorImpl;

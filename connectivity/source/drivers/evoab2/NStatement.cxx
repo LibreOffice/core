@@ -412,7 +412,7 @@ OUString OCommonStatement::getTableName()
 {
     OUString aTableName;
 
-    if( m_pParseTree && m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
+    if( m_pParseTree && m_aSQLIterator.getStatementType() == OSQLStatementType::Select )
     {
         Any aCatalog;
         OUString aSchema;

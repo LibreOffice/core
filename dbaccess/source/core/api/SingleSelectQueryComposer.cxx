@@ -126,7 +126,7 @@ namespace
         // determine the statement type
         _rIterator.setParseTree( pStatementNode );
         _rIterator.traverseAll();
-        bool bIsSingleSelect = ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT );
+        bool bIsSingleSelect = ( _rIterator.getStatementType() == OSQLStatementType::Select );
 
         // throw the error, if necessary
         if ( !bIsSingleSelect || SQL_ISRULE( pStatementNode, union_statement ) ) // #i4229# OJ

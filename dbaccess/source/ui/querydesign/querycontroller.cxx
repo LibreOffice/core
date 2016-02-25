@@ -628,7 +628,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                         else
                         {
                             const OSQLTables& xTabs = m_pSqlIterator->getTables();
-                            if ( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT || xTabs.begin() == xTabs.end() )
+                            if ( m_pSqlIterator->getStatementType() != OSQLStatementType::Select || xTabs.begin() == xTabs.end() )
                             {
                                 aError = SQLException(
                                     OUString( ModuleRes( STR_QRY_NOSELECT ) ),

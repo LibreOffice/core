@@ -157,7 +157,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
         Reference<XIndexAccess> xNames;
         switch(m_pSQLIterator->getStatementType())
         {
-        case SQL_STATEMENT_SELECT:
+        case OSQLStatementType::Select:
 
             // at this moment we support only one table per select statement
 
@@ -176,7 +176,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
             analyseSQL();
             return eSelect;
 
-        case SQL_STATEMENT_CREATE_TABLE:
+        case OSQLStatementType::CreateTable:
             return eCreateTable;
 
         default:

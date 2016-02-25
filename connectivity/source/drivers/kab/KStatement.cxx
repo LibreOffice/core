@@ -417,7 +417,7 @@ OSL_TRACE("KDE Address book - SQL Request: %s", OUtoCStr(sql));
     m_aSQLIterator.traverseAll();
     switch (m_aSQLIterator.getStatementType())
     {
-        case SQL_STATEMENT_SELECT:
+        case OSQLStatementType::Select:
             if (isTableKnown(pResult))      // FROM which table ?
             {
                 setKabFields(pResult);      // SELECT which columns ?

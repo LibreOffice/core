@@ -424,7 +424,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
     m_aSQLIterator.traverseAll();
     switch (m_aSQLIterator.getStatementType())
     {
-        case SQL_STATEMENT_SELECT:
+        case OSQLStatementType::Select:
             {
             OUString sTableName = getTableName(); // FROM which table ?
             if (sTableName.getLength() != 0) // a match
