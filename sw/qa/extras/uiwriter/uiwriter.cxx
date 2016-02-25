@@ -1868,19 +1868,19 @@ void SwUiWriterTest::testTdf73660()
     searchOpt.algorithmType = css::util::SearchAlgorithms_REGEXP;
     searchOpt.searchFlag = css::util::SearchFlags::NORM_WORD_ONLY;
     //case 1
-    searchOpt.searchString = OUString("First");
+    searchOpt.searchString = "First";
     CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
     //case 2
-    searchOpt.searchString = OUString("Second");
+    searchOpt.searchString = "Second";
     CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
     //case 3
-    searchOpt.searchString = OUString("Third");
+    searchOpt.searchString = "Third";
     CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
     //case 4
-    searchOpt.searchString = OUString("Fourth");
+    searchOpt.searchString = "Fourth";
     CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
     //case 5
-    searchOpt.searchString = OUString("Fifth");
+    searchOpt.searchString = "Fifth";
     CPPUNIT_ASSERT_EQUAL(sal_uLong(1), pWrtShell->SearchPattern(searchOpt,true,DOCPOS_START,DOCPOS_END));
 }
 
