@@ -121,7 +121,7 @@ void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldCommandList,
         {
             gchar* pCommand = g_lo_menu_get_command_from_item_in_section(pMenu, nSection, nSectionItems);
             // remove disabled entries
-            bool bRemove = g_action_group_get_action_enabled(pActionGroup, pCommand) == FALSE;
+            bool bRemove = !g_action_group_get_action_enabled(pActionGroup, pCommand);
             if (!bRemove)
             {
                 //also remove any empty submenus
