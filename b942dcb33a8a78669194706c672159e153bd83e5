@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_5fc59b59",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-02-25T08:28:02Z",
+      "side": 1,
+      "message": "this copy of the __base_class_type_info::__offset_flags_masks enum isn\u0027t actually needed, right?",
+      "revId": "b942dcb33a8a78669194706c672159e153bd83e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
