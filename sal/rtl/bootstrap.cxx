@@ -349,10 +349,10 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OString sFile = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE("Bootstrap_Impl(): sFile=%s", sFile.getStr());
-#endif /* OSL_DEBUG_LEVEL > 1 */
+    SAL_INFO("sal.rtl", "Bootstrap_Impl(): sFile=" << sFile.getStr());
+#endif /* OSL_DEBUG_LEVEL > 0 */
 
     oslFileHandle handle;
     if (!_iniName.isEmpty() &&
@@ -372,26 +372,21 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 nameValue.sValue = OStringToOUString(
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
-#if OSL_DEBUG_LEVEL > 1
-                OString name_tmp = OUStringToOString(nameValue.sName, RTL_TEXTENCODING_ASCII_US);
-                OString value_tmp = OUStringToOString(nameValue.sValue, RTL_TEXTENCODING_UTF8);
-                OSL_TRACE(
-                    "pushing: name=%s value=%s",
-                    name_tmp.getStr(), value_tmp.getStr() );
-#endif /* OSL_DEBUG_LEVEL > 1 */
+#if OSL_DEBUG_LEVEL > 0
+                SAL_INFO("sal.rtl", "pushing: name=" << nameValue.sName << "value = " << nameValue.sValue);
+#endif /* OSL_DEBUG_LEVEL > 0 */
 
                 _nameValueList.push_back(nameValue);
             }
         }
         osl_closeFile(handle);
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     else
     {
-        OString file_tmp = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( "couldn't open file: %s", file_tmp.getStr() );
+        SAL_WARN( "sal.rtl", "couldn't open file: " <<  _iniName );
     }
-#endif /* OSL_DEBUG_LEVEL > 1 */
+#endif /* OSL_DEBUG_LEVEL > 0 */
 }
 
 Bootstrap_Impl::~Bootstrap_Impl()
@@ -695,7 +690,7 @@ void SAL_CALL rtl_bootstrap_args_close (
 
 #if OSL_DEBUG_LEVEL == 1 // nonpro
         nLeaking = 0;
-#elif OSL_DEBUG_LEVEL > 1 // debug
+#elif OSL_DEBUG_LEVEL > 0 // debug
         nLeaking = 1;
 #endif /* OSL_DEBUG_LEVEL */
 
@@ -792,13 +787,9 @@ void SAL_CALL rtl_bootstrap_set (
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    OString cstr_name( OUStringToOString( name, RTL_TEXTENCODING_ASCII_US ) );
-    OString cstr_value( OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE(
-        "bootstrap.cxx: explicitly setting: name=%s value=%s\n",
-        cstr_name.getStr(), cstr_value.getStr() );
-#endif /* OSL_DEBUG_LEVEL > 1 */
+#if OSL_DEBUG_LEVEL > 0
+    SAL_INFO("sal.rtl", "explicitly getting: name=" << name << " value= " <<value);
+#endif /* OSL_DEBUG_LEVEL > 0 */
 
     r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
