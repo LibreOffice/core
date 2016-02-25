@@ -274,7 +274,7 @@ namespace vcl
         virtual ~PrintProgressDialog();
         virtual void dispose() override;
         bool isCanceled() const { return mbCanceled; }
-        void setProgress( int i_nCurrent, int i_nMax = -1 );
+        void setProgress( int i_nCurrent );
         void tick();
         void reset();
     };

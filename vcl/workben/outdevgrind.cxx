@@ -765,8 +765,9 @@ void grindFunc( OutputDevice&                       rTarget,
 /** Call OutputDevice render methods repeatedly, and output elapsed
     time to stdout
  */
-void outDevGrind(vcl::RenderContext& rTarget, sal_Int32 nTurns = 100)
+void outDevGrind(vcl::RenderContext& rTarget)
 {
+    sal_Int32 nTurns = 100;
     // TODO(F1): also profile pure complex clip setup times!
 
     // State: fill/line color, draw mode, w/o clip, rect clip, complex clip

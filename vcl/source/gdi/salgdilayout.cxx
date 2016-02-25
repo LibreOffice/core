@@ -71,7 +71,7 @@ bool SalGraphics::drawTransformedBitmap(
     return false;
 }
 
-void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
+void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
 {
     long w;
     if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -88,18 +88,12 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
             if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
             {
                 long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-                if( bBack )
-                    x = x - devX + pOutDevRef->GetOutOffXPixel();
-                else
-                    x = devX + (x - pOutDevRef->GetOutOffXPixel());
+                x = devX + (x - pOutDevRef->GetOutOffXPixel());
             }
             else
             {
                 long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-                if( bBack )
-                    x = devX + (pOutDevRef->GetOutputWidthPixel() + devX) - (x + 1);
-                else
-                    x = pOutDevRef->GetOutputWidthPixel() - (x - devX) + pOutDevRef->GetOutOffXPixel() - 1;
+                x = pOutDevRef->GetOutputWidthPixel() - (x - devX) + pOutDevRef->GetOutOffXPixel() - 1;
             }
         }
         else if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
@@ -144,7 +138,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
     }
 }
 
-bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack ) const
+bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const
 {
     long w;
     if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -163,49 +157,19 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
             if( (m_nLayout & SalLayoutFlags::BiDiRtl) )
             {
                 long devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-                if( bBack )
+                for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                 {
-                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
-                    {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
-                        pPtAry2[j].mnX = pOutDevRef->GetOutOffXPixel() + (pPtAry[i].mnX - devX);
-                        pPtAry2[j].mnY = pPtAry[i].mnY;
-                    }
-                }
-                else
-                {
-                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
-                    {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
-                        pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
-                        pPtAry2[j].mnY = pPtAry[i].mnY;
-                    }
+                    pPtAry2[j].mnX = devX + (pPtAry[i].mnX - pOutDevRef->GetOutOffXPixel());
+                    pPtAry2[j].mnY = pPtAry[i].mnY;
                 }
             }
             else
             {
                 long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
-                if( bBack )
+                for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                 {
-                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
-                    {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
-                        pPtAry2[j].mnX = pPtAry[i].mnX - pOutDevRef->GetOutputWidthPixel() + devX - pOutDevRef->GetOutOffXPixel() + 1;
-                        pPtAry2[j].mnY = pPtAry[i].mnY;
-                    }
-                }
-                else
-                {
-                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
-                    {
-                        //long x = w-1-pPtAry[i].mnX;
-                        //pPtAry2[j].mnX = devX + ( pOutDevRef->mnOutWidth - 1 - (x - devX) );
-                        pPtAry2[j].mnX = pOutDevRef->GetOutputWidthPixel() - (pPtAry[i].mnX - devX) + pOutDevRef->GetOutOffXPixel() - 1;
-                        pPtAry2[j].mnY = pPtAry[i].mnY;
-                    }
+                    pPtAry2[j].mnX = pOutDevRef->GetOutputWidthPixel() - (pPtAry[i].mnX - devX) + pOutDevRef->GetOutOffXPixel() - 1;
+                    pPtAry2[j].mnY = pPtAry[i].mnY;
                 }
             }
         }
@@ -223,11 +187,11 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
         return false;
 }
 
-void SalGraphics::mirror( vcl::Region& rRgn, const OutputDevice *pOutDev, bool bBack ) const
+void SalGraphics::mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const
 {
     if( rRgn.HasPolyPolygonOrB2DPolyPolygon() )
     {
-        const basegfx::B2DPolyPolygon aPolyPoly(mirror(rRgn.GetAsB2DPolyPolygon(), pOutDev, bBack));
+        const basegfx::B2DPolyPolygon aPolyPoly(mirror(rRgn.GetAsB2DPolyPolygon(), pOutDev));
 
         rRgn = vcl::Region(aPolyPoly);
     }
@@ -239,7 +203,7 @@ void SalGraphics::mirror( vcl::Region& rRgn, const OutputDevice *pOutDev, bool b
 
         for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
-            mirror(*aRectIter, pOutDev, bBack);
+            mirror(*aRectIter, pOutDev);
             rRgn.Union(*aRectIter);
         }
 
@@ -660,36 +624,36 @@ bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, co
         return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rIsInside );
 }
 
-void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
+void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) const
 {
     switch( rVal.getType() )
     {
         case CTRL_SLIDER:
         {
             SliderValue* pSlVal = static_cast<SliderValue*>(&rVal);
-            mirror(pSlVal->maThumbRect,pOutDev,bBack);
+            mirror(pSlVal->maThumbRect,pOutDev);
         }
         break;
         case CTRL_SCROLLBAR:
         {
             ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(&rVal);
-            mirror(pScVal->maThumbRect,pOutDev,bBack);
-            mirror(pScVal->maButton1Rect,pOutDev,bBack);
-            mirror(pScVal->maButton2Rect,pOutDev,bBack);
+            mirror(pScVal->maThumbRect,pOutDev);
+            mirror(pScVal->maButton1Rect,pOutDev);
+            mirror(pScVal->maButton2Rect,pOutDev);
         }
         break;
         case CTRL_SPINBOX:
         case CTRL_SPINBUTTONS:
         {
             SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(&rVal);
-            mirror(pSpVal->maUpperRect,pOutDev,bBack);
-            mirror(pSpVal->maLowerRect,pOutDev,bBack);
+            mirror(pSpVal->maUpperRect,pOutDev);
+            mirror(pSpVal->maLowerRect,pOutDev);
         }
         break;
         case CTRL_TOOLBAR:
         {
             ToolbarValue* pTVal = static_cast<ToolbarValue*>(&rVal);
-            mirror(pTVal->maGripRect,pOutDev,bBack);
+            mirror(pTVal->maGripRect,pOutDev);
         }
         break;
     }

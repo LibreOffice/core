@@ -251,7 +251,7 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
     virtual void    InitFont() const override;
 
-    void SetIncomplete(bool bIncomplete = true);
+    void SetIncomplete(bool bIncomplete);
 
 protected:
     virtual         ~MultiSalLayout();

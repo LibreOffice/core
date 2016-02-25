@@ -1950,11 +1950,9 @@ IMPL_LINK_TYPED( PrintProgressDialog, ClickHdl, Button*, pButton, void )
         mbCanceled = true;
 }
 
-void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
+void PrintProgressDialog::setProgress( int i_nCurrent )
 {
     mnCur = i_nCurrent;
-    if( i_nMax != -1 )
-        mnMax = i_nMax;
 
     if( mnMax < 1 )
         mnMax = 1;

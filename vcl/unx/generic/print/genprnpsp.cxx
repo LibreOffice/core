@@ -251,7 +251,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
 // Needs a cleaner abstraction ...
 #if defined( UNX )
-static bool passFileToCommandLine( const OUString& rFilename, const OUString& rCommandLine, bool bRemoveFile = true )
+static bool passFileToCommandLine( const OUString& rFilename, const OUString& rCommandLine )
 {
     bool bSuccess = false;
 
@@ -330,8 +330,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
         fprintf( stderr, "failed to fork\n" );
 
     // clean up the mess
-    if( bRemoveFile )
-        unlink( aFilename.getStr() );
+    unlink( aFilename.getStr() );
 
     return bSuccess;
 }

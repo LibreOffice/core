@@ -2199,9 +2199,9 @@ int WMAdaptor::getWindowWorkArea( ::Window aWindow ) const
  *  WMAdaptor::getCurrentWorkArea
  */
 // fixme: multi screen case
-void WMAdaptor::switchToWorkArea( int nWorkArea, bool bConsiderWM ) const
+void WMAdaptor::switchToWorkArea( int nWorkArea ) const
 {
-    if( bConsiderWM && ! getWMshouldSwitchWorkspace() )
+    if( ! getWMshouldSwitchWorkspace() )
         return;
 
     if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
