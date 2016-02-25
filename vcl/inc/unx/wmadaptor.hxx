@@ -200,9 +200,8 @@ public:
 
     /*
      * attempt to switch the desktop to a certain workarea (ie. virtual desktops)
-     * if bConsiderWM is true, then on some WMs the call will not result in any action
      */
-    void switchToWorkArea( int nWorkArea, bool bConsiderWM = true ) const;
+    void switchToWorkArea( int nWorkArea ) const;
 
     /*
      *  sets window title

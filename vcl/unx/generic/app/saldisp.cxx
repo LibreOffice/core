@@ -2338,8 +2338,9 @@ Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
 }
 
 bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateData,
-                                      X_if_predicate i_pPredicate, long i_nTimeout ) const
+                                      X_if_predicate i_pPredicate ) const
 {
+    long nTimeout = 1000;
     /* #i99360# ugly workaround an X11 library bug
        this replaces the following call:
        XIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData );
@@ -2353,10 +2354,10 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
         aFD.fd = ConnectionNumber(GetDisplay());
         aFD.events = POLLIN;
         aFD.revents = 0;
-        (void)poll(&aFD, 1, i_nTimeout);
+        (void)poll(&aFD, 1, nTimeout);
         if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
         {
-            (void)poll(&aFD, 1, i_nTimeout); // try once more for a packet of events from the Xserver
+            (void)poll(&aFD, 1, nTimeout); // try once more for a packet of events from the Xserver
             if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
             {
                 bRet = false;

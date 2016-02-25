@@ -127,7 +127,7 @@ public:
     ToolBox*        FindToolBox( const Rectangle& rRect );
 
     void            StartDragging( ToolBox* pDragBox, const Point& rPos, const Rectangle& rRect, sal_uInt16 nLineMode,
-                                   bool bResizeItem, void* pData = nullptr );
+                                   bool bResizeItem );
     void            Dragging( const Point& rPos );
     void            EndDragging( bool bOK = true );
     void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
@@ -1177,8 +1177,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 
 void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
                                    const Point& rPos, const Rectangle& rRect,
-                                   sal_uInt16 nDragLineMode, bool bResizeItem,
-                                   void* pData )
+                                   sal_uInt16 nDragLineMode, bool bResizeItem )
 {
     mpDragBox = pToolBox;
     pToolBox->CaptureMouse();
@@ -1192,7 +1191,7 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
     }
     else
     {
-        mpCustomizeData = pData;
+        mpCustomizeData = nullptr;
         mbResizeMode = bResizeItem;
         pToolBox->Activate();
         pToolBox->mnCurItemId = pToolBox->mnConfigItem;

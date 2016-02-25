@@ -137,7 +137,7 @@ public:
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 
     // get the current font's metrics
-    virtual void                GetFontMetric( ImplFontMetricDataPtr&, int nFallbackLevel = 0 ) = 0;
+    virtual void                GetFontMetric( ImplFontMetricDataPtr& ) = 0;
 
     // get the repertoire of the current font
     virtual const FontCharMapPtr GetFontCharMap() const = 0;
@@ -230,12 +230,12 @@ public:
     SalLayoutFlags              GetLayout() { return m_nLayout; }
     void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
-    void                        mirror( long& nX, const OutputDevice *pOutDev, bool bBack = false ) const;
+    void                        mirror( long& nX, const OutputDevice *pOutDev ) const;
     void                        mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
-    bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
+    bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
     void                        mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
-    void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
-    void                        mirror( ImplControlValue&, const OutputDevice*, bool bBack = false ) const;
+    void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
+    void                        mirror( ImplControlValue&, const OutputDevice* ) const;
     basegfx::B2DPoint           mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *pOutDev, bool bBack = false ) const;
     basegfx::B2DPolygon         mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
     basegfx::B2DPolyPolygon     mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;

@@ -412,7 +412,7 @@ public:
     bool getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical = false ) const;
     // get metrics for an array of sal_Unicode characters
     // the user is responsible to allocate pArray large enough
-    bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray, bool bVertical = false ) const;
+    bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const;
 
     // get encoding vector of font, currently only for Type1 fonts
     // returns NULL if encoding vector is empty or font is not type1;
@@ -454,8 +454,7 @@ public:
                            const sal_GlyphId* pGlyphIDs,
                            const sal_uInt8* pNewEncoding,
                            sal_Int32* pWidths,
-                           int nGlyphs,
-                           bool bVertical = false
+                           int nGlyphs
                            );
     void getGlyphWidths( fontID nFont,
                          bool bVertical,
