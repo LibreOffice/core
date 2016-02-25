@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_dfa34b4e",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 14417,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-02-25T13:05:19Z",
+      "side": 1,
+      "message": "apparently this was published by accident and there is commit cd581f7e5d1eb7724463949a15bbec1ca950d461 that unpublishes it",
+      "revId": "48b862f4ec2e5d19dd90e9f07f395406a8ce5b1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
