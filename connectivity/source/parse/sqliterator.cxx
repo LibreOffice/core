@@ -68,13 +68,13 @@ namespace connectivity
         std::shared_ptr< OSQLTables >   m_pSubTables;   // all tables from sub queries not the tables from the select tables
         std::shared_ptr< QueryNameSet > m_pForbiddenQueryNames;
 
-        sal_uInt32                      m_nIncludeMask;
+        TraversalParts                  m_nIncludeMask;
 
         bool                            m_bIsCaseSensitive;
 
         OSQLParseTreeIteratorImpl( const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxTables )
             :m_xConnection( _rxConnection )
-            ,m_nIncludeMask( OSQLParseTreeIterator::All )
+            ,m_nIncludeMask( TraversalParts::All )
             ,m_bIsCaseSensitive( true )
         {
             OSL_PRECOND( m_xConnection.is(), "OSQLParseTreeIteratorImpl::OSQLParseTreeIteratorImpl: invalid connection!" );
@@ -304,7 +304,7 @@ namespace
 
 void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQuery  )
 {
-    if ( ( m_pImpl->m_nIncludeMask & Parameters ) != Parameters )
+    if ( !( m_pImpl->m_nIncludeMask & TraversalParts::Parameters ) )
         // parameters not to be included in the traversal
         return;
 
@@ -336,7 +336,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         break;
 
     OSQLParseTreeIterator aSubQueryIterator( *this, m_rParser, pSubQueryNode.get() );
-    aSubQueryIterator.traverseSome( Parameters | SelectColumns );
+    aSubQueryIterator.traverseSome( TraversalParts::Parameters | TraversalParts::SelectColumns );
         // SelectColumns might also contain parameters
         // #i77635# - 2007-07-23 / frank.schoenheit@sun.com
     pSubQueryParameterColumns = aSubQueryIterator.getParameters();
@@ -429,7 +429,7 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
 
 void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const OUString & rTableRange )
 {
-    if ( ( m_pImpl->m_nIncludeMask & TableNames ) != TableNames )
+    if ( !( m_pImpl->m_nIncludeMask & TraversalParts::TableNames ) )
         // tables should not be included in the traversal
         return;
 
@@ -916,7 +916,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
 
 bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSelectNode)
 {
-    if ( ( m_pImpl->m_nIncludeMask & SelectColumns ) != SelectColumns )
+    if ( !( m_pImpl->m_nIncludeMask & TraversalParts::SelectColumns ) )
         return true;
 
     if (!pSelectNode || m_eStatementType != OSQLStatementType::Select || m_pImpl->m_pTables->empty())
@@ -1383,7 +1383,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     if ( !SQL_ISRULE( _pParseNode, parameter ) )
         return;
 
-    if ( ( m_pImpl->m_nIncludeMask & Parameters ) != Parameters )
+    if ( !( m_pImpl->m_nIncludeMask & TraversalParts::Parameters ) )
         // parameters not to be included in the traversal
         return;
 
@@ -1540,7 +1540,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
 }
 
 
-void OSQLParseTreeIterator::traverseSome( sal_uInt32 _nIncludeMask )
+void OSQLParseTreeIterator::traverseSome( TraversalParts _nIncludeMask )
 {
     impl_traverse( _nIncludeMask );
 }
@@ -1548,11 +1548,11 @@ void OSQLParseTreeIterator::traverseSome( sal_uInt32 _nIncludeMask )
 
 void OSQLParseTreeIterator::traverseAll()
 {
-    impl_traverse( All );
+    impl_traverse( TraversalParts::All );
 }
 
 
-void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
+void OSQLParseTreeIterator::impl_traverse( TraversalParts _nIncludeMask )
 {
     impl_resetErrors();
     m_pImpl->m_nIncludeMask = _nIncludeMask;

@@ -33,6 +33,29 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <o3tl/typed_flags_set.hxx>
+
+namespace connectivity
+{
+    enum class TraversalParts
+    {
+        Parameters      = 0x0001,
+        TableNames      = 0x0002,
+        SelectColumns   = 0x0006,   // note that this includes TableNames. No SelectColumns without TableNames
+
+        // Those are not implemented currently
+        // GroupColumns    = 0x0008,
+        // OrderColumns    = 0x0010,
+        // SelectColumns   = 0x0020,
+        // CreateColumns   = 0x0040,
+
+        All             = 0xFFFF
+    };
+}
+namespace o3tl
+{
+    template<> struct typed_flags<connectivity::TraversalParts> : is_typed_flags<connectivity::TraversalParts, 0xffff> {};
+}
 
 namespace connectivity
 {
@@ -185,20 +208,6 @@ namespace connectivity
         */
         void traverseAll();
 
-        enum TraversalParts
-        {
-            Parameters      = 0x0001,
-            TableNames      = 0x0002,
-            SelectColumns   = 0x0006,   // note that this includes TableNames. No SelectColumns without TableNames
-
-            // Those are not implemented currently
-            // GroupColumns    = 0x0008,
-            // OrderColumns    = 0x0010,
-            // SelectColumns   = 0x0020,
-            // CreateColumns   = 0x0040,
-
-            All             = 0xFFFF
-        };
         /** traverses selected parts of the statement tree, and fills our data with
             the information obtained during traversal
 
@@ -206,7 +215,7 @@ namespace connectivity
                 set of TraversalParts bits, specifying which information is to be collected.
                 Note TraversalParts is currently not
         */
-        void traverseSome( sal_uInt32 _nIncludeMask );
+        void traverseSome( TraversalParts _nIncludeMask );
 
         // The TableRangeMap contains all tables associated with the range name found first.
         const OSQLTables& getTables() const;
@@ -322,7 +331,7 @@ namespace connectivity
 
         /** implementation for both traverseAll and traverseSome
         */
-        void    impl_traverse( sal_uInt32 _nIncludeMask );
+        void    impl_traverse( TraversalParts _nIncludeMask );
 
         /** retrieves the parameter columns of the given query
         */
