@@ -178,14 +178,18 @@ void SwEditShell::SetClassification(const OUString& rName)
         return;
 
     SfxClassificationHelper aHelper(*pDocShell);
+
+    bool bHadWatermark = !aHelper.GetDocumentWatermark().isEmpty();
+
     // This updates the infobar as well.
     aHelper.SetBACName(rName);
 
     bool bHeaderIsNeeded = aHelper.HasDocumentHeader();
     bool bFooterIsNeeded = aHelper.HasDocumentFooter();
     OUString aWatermark = aHelper.GetDocumentWatermark();
+    bool bWatermarkIsNeeded = !aWatermark.isEmpty();
 
-    if (!bHeaderIsNeeded && !bFooterIsNeeded && aWatermark.isEmpty())
+    if (!bHeaderIsNeeded && !bFooterIsNeeded && !bWatermarkIsNeeded && !bHadWatermark)
         return;
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
@@ -200,7 +204,7 @@ void SwEditShell::SetClassification(const OUString& rName)
         OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
-        if (bHeaderIsNeeded || !aWatermark.isEmpty())
+        if (bHeaderIsNeeded || bWatermarkIsNeeded || bHadWatermark)
         {
             // If the header is off, turn it on.
             bool bHeaderIsOn = false;
@@ -224,16 +228,17 @@ void SwEditShell::SetClassification(const OUString& rName)
                 }
             }
 
-            if (!aWatermark.isEmpty())
+            if (bWatermarkIsNeeded || bHadWatermark)
             {
                 OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
                 uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, SfxClassificationHelper::PROP_DOCWATERMARK());
 
+                bool bDeleteWatermark = bHadWatermark && !bWatermarkIsNeeded;
                 if (xWatermark.is())
                 {
                     // If the header already contains a watermark, see if it its text is up to date.
                     uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
-                    if (xTextRange->getString() != aWatermark)
+                    if (xTextRange->getString() != aWatermark || bDeleteWatermark)
                     {
                         // No: delete it and we'll insert a replacement.
                         uno::Reference<lang::XComponent> xComponent(xWatermark, uno::UNO_QUERY);
@@ -242,7 +247,7 @@ void SwEditShell::SetClassification(const OUString& rName)
                     }
                 }
 
-                if (!xWatermark.is())
+                if (!xWatermark.is() && bWatermarkIsNeeded)
                 {
                     // Calc the ratio.
                     double fRatio = 0;
