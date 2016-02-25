@@ -114,12 +114,12 @@ namespace
 
             switch ( _eType )
             {
-            case SQLExceptionInfo::SQL_WARNING:
+            case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsImage;
                 nNormalImageID = BMP_EXCEPTION_WARNING;
                 break;
 
-            case SQLExceptionInfo::SQL_CONTEXT:
+            case SQLExceptionInfo::TYPE::SQLContext:
                 ppProvider = &m_pInfoImage;
                 nNormalImageID = BMP_EXCEPTION_INFO;
                 break;
@@ -140,12 +140,12 @@ namespace
 
             switch ( _eType )
             {
-            case SQLExceptionInfo::SQL_WARNING:
+            case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsLabel;
                 nLabelID = STR_EXCEPTION_WARNING;
                 break;
 
-            case SQLExceptionInfo::SQL_CONTEXT:
+            case SQLExceptionInfo::TYPE::SQLContext:
                 ppProvider = &m_pInfoLabel;
                 nLabelID = _bSubLabel ? STR_EXCEPTION_DETAILS : STR_EXCEPTION_INFO;
                 break;
@@ -174,7 +174,7 @@ namespace
         OUString                                sSQLState;
         OUString                                sErrorCode;
 
-        ExceptionDisplayInfo() : eType( SQLExceptionInfo::UNDEFINED ), bSubEntry( false ) { }
+        ExceptionDisplayInfo() : eType( SQLExceptionInfo::TYPE::Undefined ), bSubEntry( false ) { }
         explicit ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
     };
 
@@ -247,7 +247,7 @@ namespace
 
             _out_rChain.push_back( aDisplayInfo );
 
-            if ( aCurrentElement.getType() == SQLExceptionInfo::SQL_CONTEXT )
+            if ( aCurrentElement.getType() == SQLExceptionInfo::TYPE::SQLContext )
             {
                 const SQLContext* pContext = static_cast<const SQLContext*>(aCurrentElement);
                 if ( !pContext->Details.isEmpty() )
@@ -342,8 +342,8 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
 
         ExceptionDisplayInfo aInfo22018;
         aInfo22018.sMessage = ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR );
-        aInfo22018.pLabelProvider = aProviderFactory.getLabelProvider( SQLExceptionInfo::SQL_CONTEXT, false );
-        aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
+        aInfo22018.pLabelProvider = aProviderFactory.getLabelProvider( SQLExceptionInfo::TYPE::SQLContext, false );
+        aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::TYPE::SQLContext );
         m_aExceptions.push_back( aInfo22018 );
 
         lcl_insertExceptionEntry( *m_pExceptionList, m_aExceptions.size() - 1, aInfo22018 );
@@ -449,8 +449,8 @@ void OSQLMessageBox::impl_positionControls()
         //   element denotes its sub entry
         // - the first and the second element are both independent (i.e. the second
         //   is no sub entry), and none of them is a context.
-        bool bFirstElementIsContext = ( rFirstInfo.eType == SQLExceptionInfo::SQL_CONTEXT );
-        bool bSecondElementIsContext = ( pSecondInfo->eType == SQLExceptionInfo::SQL_CONTEXT );
+        bool bFirstElementIsContext = ( rFirstInfo.eType == SQLExceptionInfo::TYPE::SQLContext );
+        bool bSecondElementIsContext = ( pSecondInfo->eType == SQLExceptionInfo::TYPE::SQLContext );
 
         if ( bFirstElementIsContext && pSecondInfo->bSubEntry )
             sSecondary = pSecondInfo->sMessage;
@@ -638,9 +638,9 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
     {
         switch ( m_pImpl->aDisplayInfo[0].eType )
         {
-        case SQLExceptionInfo::SQL_EXCEPTION: eType = Error;    break;
-        case SQLExceptionInfo::SQL_WARNING:   eType = Warning;  break;
-        case SQLExceptionInfo::SQL_CONTEXT:   eType = Info;     break;
+        case SQLExceptionInfo::TYPE::SQLException: eType = Error;    break;
+        case SQLExceptionInfo::TYPE::SQLWarning:   eType = Warning;  break;
+        case SQLExceptionInfo::TYPE::SQLContext:   eType = Info;     break;
         default: OSL_FAIL( "OSQLMessageBox::Construct: invalid type!" );
         }
     }

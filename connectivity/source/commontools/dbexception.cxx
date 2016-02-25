@@ -40,7 +40,7 @@ namespace dbtools
     using namespace ::connectivity;
 
 SQLExceptionInfo::SQLExceptionInfo()
-    :m_eType(UNDEFINED)
+    :m_eType(TYPE::Undefined)
 {
 }
 
@@ -141,14 +141,14 @@ void SQLExceptionInfo::implDetermineType()
     const Type& aSQLContextType  = ::cppu::UnoType<SQLContext>::get();
 
     if ( isAssignableFrom( aSQLContextType, m_aContent.getValueType() ) )
-        m_eType = SQL_CONTEXT;
+        m_eType = TYPE::SQLContext;
     else if ( isAssignableFrom( aSQLWarningType, m_aContent.getValueType() ) )
-        m_eType = SQL_WARNING;
+        m_eType = TYPE::SQLWarning;
     else if ( isAssignableFrom( aSQLExceptionType, m_aContent.getValueType() ) )
-        m_eType = SQL_EXCEPTION;
+        m_eType = TYPE::SQLException;
     else
     {
-        m_eType = UNDEFINED;
+        m_eType = TYPE::Undefined;
         m_aContent.clear();
     }
 }
@@ -158,14 +158,14 @@ bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 {
     switch (_eType)
     {
-        case SQL_CONTEXT:
-            return (m_eType == SQL_CONTEXT);
-        case SQL_WARNING:
-            return (m_eType == SQL_CONTEXT) || (m_eType == SQL_WARNING);
-        case SQL_EXCEPTION:
-            return (m_eType == SQL_CONTEXT) || (m_eType == SQL_WARNING) || (m_eType == SQL_EXCEPTION);
-        case UNDEFINED:
-            return (m_eType == UNDEFINED);
+        case TYPE::SQLContext:
+            return (m_eType == TYPE::SQLContext);
+        case TYPE::SQLWarning:
+            return (m_eType == TYPE::SQLContext) || (m_eType == TYPE::SQLWarning);
+        case TYPE::SQLException:
+            return (m_eType == TYPE::SQLContext) || (m_eType == TYPE::SQLWarning) || (m_eType == TYPE::SQLException);
+        case TYPE::Undefined:
+            return (m_eType == TYPE::Undefined);
     }
     return false;
 }
@@ -173,14 +173,14 @@ bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 
 SQLExceptionInfo::operator const ::com::sun::star::sdbc::SQLException*() const
 {
-    OSL_ENSURE(isKindOf(SQL_EXCEPTION), "SQLExceptionInfo::operator SQLException* : invalid call !");
+    OSL_ENSURE(isKindOf(TYPE::SQLException), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return static_cast<const ::com::sun::star::sdbc::SQLException*>(m_aContent.getValue());
 }
 
 
 SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 {
-    OSL_ENSURE(isKindOf(SQL_CONTEXT), "SQLExceptionInfo::operator SQLException* : invalid call !");
+    OSL_ENSURE(isKindOf(TYPE::SQLContext), "SQLExceptionInfo::operator SQLException* : invalid call !");
     return static_cast<const ::com::sun::star::sdb::SQLContext*>(m_aContent.getValue());
 }
 
@@ -194,7 +194,7 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& 
     aException.NextException = m_aContent;
     m_aContent <<= aException;
 
-    m_eType = SQL_EXCEPTION;
+    m_eType = TYPE::SQLException;
 }
 
 
@@ -204,9 +204,9 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
     Any aAppend;
     switch ( _eType )
     {
-    case SQL_EXCEPTION: aAppend <<= SQLException(); break;
-    case SQL_WARNING:   aAppend <<= SQLWarning();   break;
-    case SQL_CONTEXT:   aAppend <<= SQLContext();   break;
+    case TYPE::SQLException: aAppend <<= SQLException(); break;
+    case TYPE::SQLWarning:   aAppend <<= SQLWarning();   break;
+    case TYPE::SQLContext:   aAppend <<= SQLContext();   break;
     default:
         OSL_FAIL( "SQLExceptionInfo::append: invalid exception type: this will crash!" );
         break;
@@ -253,7 +253,7 @@ void SQLExceptionInfo::doThrow()
 
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )
     :m_pCurrent( nullptr )
-    ,m_eCurrentType( SQLExceptionInfo::UNDEFINED )
+    ,m_eCurrentType( SQLExceptionInfo::TYPE::Undefined )
 {
     if ( _rChainStart.isValid() )
     {
@@ -265,7 +265,7 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& 
 
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLException& _rChainStart )
     :m_pCurrent( &_rChainStart )
-    ,m_eCurrentType( SQLExceptionInfo::SQL_EXCEPTION )
+    ,m_eCurrentType( SQLExceptionInfo::TYPE::SQLException )
 {
 }
 
@@ -274,15 +274,15 @@ void SQLExceptionIteratorHelper::current( SQLExceptionInfo& _out_rInfo ) const
 {
     switch ( m_eCurrentType )
     {
-    case SQLExceptionInfo::SQL_EXCEPTION:
+    case SQLExceptionInfo::TYPE::SQLException:
         _out_rInfo = *m_pCurrent;
         break;
 
-    case SQLExceptionInfo::SQL_WARNING:
+    case SQLExceptionInfo::TYPE::SQLWarning:
         _out_rInfo = *static_cast< const SQLWarning* >( m_pCurrent );
         break;
 
-    case SQLExceptionInfo::SQL_CONTEXT:
+    case SQLExceptionInfo::TYPE::SQLContext:
         _out_rInfo = *static_cast< const SQLContext* >( m_pCurrent );
         break;
 
@@ -309,7 +309,7 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
     {
         // no SQLException at all in the next chain element
         m_pCurrent = nullptr;
-        m_eCurrentType = SQLExceptionInfo::UNDEFINED;
+        m_eCurrentType = SQLExceptionInfo::TYPE::Undefined;
         return pReturn;
     }
 
@@ -319,19 +319,19 @@ const ::com::sun::star::sdbc::SQLException* SQLExceptionIteratorHelper::next()
     const Type aTypeContext( ::cppu::UnoType< SQLContext >::get() );
     if ( isAssignableFrom( aTypeContext, aNextElementType ) )
     {
-        m_eCurrentType = SQLExceptionInfo::SQL_CONTEXT;
+        m_eCurrentType = SQLExceptionInfo::TYPE::SQLContext;
         return pReturn;
     }
 
     const Type aTypeWarning( ::cppu::UnoType< SQLWarning >::get() );
     if ( isAssignableFrom( aTypeWarning, aNextElementType ) )
     {
-        m_eCurrentType = SQLExceptionInfo::SQL_WARNING;
+        m_eCurrentType = SQLExceptionInfo::TYPE::SQLWarning;
         return pReturn;
     }
 
     // a simple SQLException
-    m_eCurrentType = SQLExceptionInfo::SQL_EXCEPTION;
+    m_eCurrentType = SQLExceptionInfo::TYPE::SQLException;
     return pReturn;
 }
 

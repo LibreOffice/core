@@ -1658,7 +1658,7 @@ void ORowSet::impl_ensureStatement_throw()
         try
         {
             OUString sInfo(DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sCommandToExecute )  );
-            aError.append( SQLExceptionInfo::SQL_CONTEXT, sInfo );
+            aError.append( SQLExceptionInfo::TYPE::SQLContext, sInfo );
         }
         catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 

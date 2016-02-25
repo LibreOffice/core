@@ -262,7 +262,7 @@ void ODatabaseImportExport::initialize()
         SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, m_xContext, xEvt, xConnection );
         m_xConnection.reset( xConnection );
 
-        if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)
+        if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::TYPE::SQLException)
             throw *static_cast<const SQLException*>(aInfo);
     }
 

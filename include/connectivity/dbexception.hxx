@@ -61,7 +61,7 @@ enum OOoBaseErrorCode
 class OOO_DLLPUBLIC_DBTOOLS SQLExceptionInfo
 {
 public:
-    enum TYPE { SQL_EXCEPTION, SQL_WARNING, SQL_CONTEXT, UNDEFINED };
+    enum class TYPE { SQLException, SQLWarning, SQLContext, Undefined };
 
 private:
     css::uno::Any  m_aContent;
@@ -128,7 +128,7 @@ public:
 
     bool        isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
-    bool        isValid() const { return m_eType != UNDEFINED; }
+    bool        isValid() const { return m_eType != TYPE::Undefined; }
     TYPE        getType() const { return m_eType; }
 
     operator const css::sdbc::SQLException*    () const;
@@ -139,7 +139,7 @@ public:
     void    clear()
     {
         m_aContent.clear();
-        m_eType = UNDEFINED;
+        m_eType = TYPE::Undefined;
     }
 
 protected:

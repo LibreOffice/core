@@ -176,7 +176,7 @@ bool OCopyTable::LeavePage()
         SQLExceptionInfo aErrorInfo;
         if ( !aNameCheck.isNameValid( m_pEdTableName->GetText(), aErrorInfo ) )
         {
-            aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) );
+            aErrorInfo.append( SQLExceptionInfo::TYPE::SQLContext, ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) );
             m_pParent->showError(aErrorInfo.get());
 
             return false;
