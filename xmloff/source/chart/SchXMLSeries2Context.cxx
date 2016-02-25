@@ -179,15 +179,10 @@ void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XProp
 
 void lcl_insertErrorBarLSequencesToMap(
     tSchXMLLSequencesPerIndex & rInOutMap,
-    const uno::Reference< beans::XPropertySet > & xSeriesProp,
-    bool bYError = true )
+    const uno::Reference< beans::XPropertySet > & xSeriesProp )
 {
     Reference< chart2::data::XDataSource > xErrorBarSource;
-    const OUString aPropName(
-        bYError
-        ? OUString(  "ErrorBarY" )
-        : OUString(  "ErrorBarX" ));
-    if( ( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBarSource ) &&
+    if( ( xSeriesProp->getPropertyValue( "ErrorBarY" ) >>= xErrorBarSource ) &&
         xErrorBarSource.is() )
     {
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSequences(

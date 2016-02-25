@@ -183,8 +183,7 @@ namespace xmloff
         */
         bool            convertStringAddress(
                             const OUString& _rAddressDescription,
-                            css::table::CellAddress& /* [out] */ _rAddress,
-                            sal_Int16 _nAssumeSheet = -1
+                            css::table::CellAddress& /* [out] */ _rAddress
                         ) const;
 
         /** creates an address range object from a string representation of a cell range address

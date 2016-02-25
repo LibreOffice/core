@@ -52,17 +52,11 @@ struct MyFuncInfo
     std::string nameAndParams;
     std::string sourceLocation;
 
-    bool operator < (const MyFuncInfo &other) const
-    {
-        if (returnType < other.returnType)
-            return true;
-        else if (returnType == other.returnType)
-            return nameAndParams < other.nameAndParams;
-        else
-            return false;
-    }
 };
-
+bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
+{
+    return lhs.sourceLocation < rhs.sourceLocation;
+}
 
 // try to limit the voluminous output a little
 

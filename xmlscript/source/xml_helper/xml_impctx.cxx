@@ -789,14 +789,13 @@ OUString ExtendedAttributes::getValueByUidName(
 }
 
 Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
-    Reference< xml::input::XRoot > const & xRoot,
-    bool bSingleThreadedUse )
+    Reference< xml::input::XRoot > const & xRoot )
 {
     SAL_WARN_IF( !xRoot.is(), "xmlscript.xmlhelper", "xRoot is NULL" );
     if (xRoot.is())
     {
         return static_cast< xml::sax::XDocumentHandler * >(
-            new DocumentHandlerImpl( xRoot, bSingleThreadedUse ) );
+            new DocumentHandlerImpl( xRoot, true /* mt use */ ) );
     }
     return Reference< xml::sax::XDocumentHandler >();
 }

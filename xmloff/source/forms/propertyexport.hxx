@@ -298,15 +298,12 @@ namespace xmloff
                 the name of the property to ask the object for
             @param _aQuoteCharacter
                 the character to use to quote the sequence elements with. May be 0, in this case no quoting happens
-            @param _aListSeparator
-                the character to use to separate the list entries
         */
         void exportStringSequenceAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
             const sal_Char* _pAttributeName,
             const OUString& _rPropertyName,
-            const sal_Unicode _aQuoteCharacter = '"',
-            const sal_Unicode _aListSeparator = ',');
+            const sal_Unicode _aQuoteCharacter = '"');
 
         /** determines whether the given property is to be exported
 

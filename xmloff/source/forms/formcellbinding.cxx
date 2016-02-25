@@ -113,7 +113,7 @@ bool FormCellBindingHelper::livesInSpreadsheetDocument( const Reference< XProper
     return xDocument.is();
 }
 
-bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress, sal_Int16 /*_nAssumeSheet*/ ) const
+bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress ) const
 {
     Any aAddress;
     return doConvertAddressRepresentations(

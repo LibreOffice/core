@@ -473,10 +473,10 @@ namespace xmloff
 
     void OPropertyExport::exportStringSequenceAttribute(const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName,
         const OUString& _rPropertyName,
-        const sal_Unicode _aQuoteCharacter, const sal_Unicode _aListSeparator)
+        const sal_Unicode _aQuoteCharacter)
     {
+        const sal_Unicode _aListSeparator = ',';
         DBG_CHECK_PROPERTY( _rPropertyName, Sequence< OUString > );
-        OSL_ENSURE(_aListSeparator != 0, "OPropertyExport::exportStringSequenceAttribute: invalid separator character!");
 
         Sequence< OUString > aItems;
         m_xProps->getPropertyValue( _rPropertyName ) >>= aItems;

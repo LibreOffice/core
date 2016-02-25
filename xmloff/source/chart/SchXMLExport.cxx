@@ -237,9 +237,9 @@ public:
     void addPosition( css::uno::Reference< css::drawing::XShape > xShape );
     /// add svg size as attribute for current element
     void addSize( const css::awt::Size & rSize, bool bIsOOoNamespace = false );
-    void addSize( css::uno::Reference< css::drawing::XShape > xShape, bool bIsOOoNamespace = false  );
+    void addSize( css::uno::Reference< css::drawing::XShape > xShape );
     /// exports a string as a paragraph element
-    void exportText( const OUString& rText, bool bConvertTabsLFs = false );
+    void exportText( const OUString& rText );
 
 public:
     SvXMLExport& mrExport;
@@ -3476,10 +3476,10 @@ void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize, bool bIsOOoNames
     mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
 
-void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape, bool bIsOOoNamespace )
+void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape )
 {
     if( xShape.is())
-        addSize( xShape->getSize(), bIsOOoNamespace );
+        addSize( xShape->getSize() );
 }
 
 awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc )
@@ -3510,9 +3510,9 @@ void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPrope
     }
 }
 
-void SchXMLExportHelper_Impl::exportText( const OUString& rText, bool bConvertTabsLFs )
+void SchXMLExportHelper_Impl::exportText( const OUString& rText )
 {
-    SchXMLTools::exportText( mrExport, rText, bConvertTabsLFs );
+    SchXMLTools::exportText( mrExport, rText, false/*bConvertTabsLFs*/ );
 }
 
 // class SchXMLExport

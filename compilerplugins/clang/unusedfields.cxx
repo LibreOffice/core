@@ -47,17 +47,16 @@ struct MyFieldInfo
     std::string fieldName;
     std::string fieldType;
     std::string sourceLocation;
-
-    bool operator < (const MyFieldInfo &other) const
-    {
-        if (parentClass < other.parentClass)
-            return true;
-        else if (parentClass == other.parentClass)
-            return fieldName < other.fieldName;
-        else
-            return false;
-    }
 };
+bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
+{
+    if (lhs.parentClass < rhs.parentClass)
+        return true;
+    else if (lhs.parentClass == rhs.parentClass)
+         return lhs.fieldName < rhs.fieldName;
+    else
+        return false;
+}
 
 
 // try to limit the voluminous output a little

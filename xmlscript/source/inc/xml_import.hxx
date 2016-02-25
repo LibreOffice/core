@@ -43,16 +43,13 @@ namespace xmlscript
 
     @param xRoot
            initial object being called for root context
-    @param bSingleThreadedUse
-           flag whether context management is synchronized.
     @return
             document handler for parser
 */
 css::uno::Reference< css::xml::sax::XDocumentHandler >
 SAL_CALL createDocumentHandler(
     css::uno::Reference<
-    css::xml::input::XRoot > const & xRoot,
-    bool bSingleThreadedUse = true );
+    css::xml::input::XRoot > const & xRoot );
 
 }
 
