@@ -4741,13 +4741,15 @@ Any StructRefInfo::getValue()
 
 void StructRefInfo::setValue( const Any& rValue )
 {
-    uno_type_assignData( getInst(),
+    bool bSuccess = uno_type_assignData( getInst(),
        maType.getTypeLibType(),
        const_cast<void*>(rValue.getValue()),
        rValue.getValueTypeRef(),
        reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
        reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
        reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
+    OSL_ENSURE(bSuccess,
+        "StructRefInfo::setValue: ooops .... the value could not be assigned!");
 }
 
 OUString StructRefInfo::getTypeName() const
