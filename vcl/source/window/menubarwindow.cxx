@@ -213,6 +213,8 @@ void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
     aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, bClose);
     aCloseBtn->Show(bClose || !m_aAddButtons.empty());
+    if (pMenu->mpSalMenu)
+        pMenu->mpSalMenu->ShowCloseButton(bClose);
     aFloatBtn->Show( bFloat );
     aHideBtn->Show( bHide );
     Resize();

@@ -46,6 +46,7 @@ private:
     bool                            mbMenuBar;
     bool                            mbUnityMode;
     GtkWidget*                      mpMenuBarWidget;
+    GtkWidget*                      mpCloseButton;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     GtkSalFrame*                    mpFrame;
@@ -106,10 +107,11 @@ public:
     virtual void                Update() override;  // Update this menu only.
     void                        UpdateFull();       // Update full menu hierarchy from this menu.
 
-    void CreateMenuWidget();
-    void DestroyMenuWidget();
+    void CreateMenuBarWidget();
+    void DestroyMenuBarWidget();
 
-    virtual bool                ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
+    virtual void ShowCloseButton(bool bShow) override;
 };
 
 class GtkSalMenuItem : public SalMenuItem

@@ -26,6 +26,7 @@
 
 #include <sal/log.hxx>
 #include <window.h>
+#include <svids.hrc>
 
 // FIXME Copied from framework/inc/framework/menuconfiguration.hxx to
 // avoid circular dependency between modules. It should be in a common
@@ -429,6 +430,7 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mbUnityMode ( false ),
     mpMenuBarWidget( nullptr ),
+    mpCloseButton( nullptr ),
     mpVCLMenu( nullptr ),
     mpParentSalMenu( nullptr ),
     mpFrame( nullptr ),
@@ -450,7 +452,7 @@ GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
 
-    DestroyMenuWidget();
+    DestroyMenuBarWidget();
 
     if (mpMenuModel)
         g_object_unref(mpMenuModel);
@@ -495,7 +497,69 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     pItem->mpSubMenu = pGtkSubMenu;
 }
 
-void GtkSalMenu::CreateMenuWidget()
+#if GTK_CHECK_VERSION(3,0,0)
+static void CloseMenuBar(GtkWidget *, gpointer pMenu)
+{
+    Application::PostUserEvent(static_cast<MenuBar*>(pMenu)->GetCloseButtonClickHdl());
+}
+#endif
+
+void GtkSalMenu::ShowCloseButton(bool bShow)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    assert(mbMenuBar);
+    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu);
+    if (!bShow)
+    {
+        if (mpCloseButton)
+            gtk_widget_destroy(mpCloseButton);
+        return;
+    }
+
+    mpCloseButton = gtk_button_new();
+    g_signal_connect(mpCloseButton, "clicked", G_CALLBACK(CloseMenuBar), pVclMenuBar);
+
+    gtk_button_set_relief(GTK_BUTTON(mpCloseButton), GTK_RELIEF_NONE);
+    gtk_button_set_focus_on_click(GTK_BUTTON(mpCloseButton), false);
+
+    GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(mpCloseButton));
+
+    GtkCssProvider *pProvider = gtk_css_provider_new();
+    const gchar data[] = "* { "
+      "padding: 0;"
+      "margin-left: 8px;"
+      "margin-right: 8px;"
+      "min-width: 18px;"
+      "min-height: 18px;"
+      "}";
+    gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
+    gtk_style_context_add_provider(pButtonContext,
+                                   GTK_STYLE_PROVIDER(pProvider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+    gtk_style_context_add_class(pButtonContext, "flat");
+    gtk_style_context_add_class(pButtonContext, "small-button");
+
+    GIcon* icon = g_themed_icon_new_with_default_fallbacks("window-close-symbolic");
+    GtkWidget* image = gtk_image_new_from_gicon(icon, GTK_ICON_SIZE_MENU);
+    gtk_widget_show(image);
+    g_object_unref(icon);
+
+    OUString sToolTip(VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
+    gtk_widget_set_tooltip_text(mpCloseButton,
+        OUStringToOString(sToolTip, RTL_TEXTENCODING_UTF8).getStr());
+
+    gtk_widget_set_valign(mpCloseButton, GTK_ALIGN_CENTER);
+
+    gtk_container_add(GTK_CONTAINER(mpCloseButton), image);
+    gtk_grid_attach(GTK_GRID(mpMenuBarWidget), GTK_WIDGET(mpCloseButton), 1, 0, 1, 1);
+    gtk_widget_show_all(mpCloseButton);
+#else
+    (void)bShow;
+#endif
+}
+
+void GtkSalMenu::CreateMenuBarWidget()
 {
 #if GTK_CHECK_VERSION(3,0,0)
     GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
@@ -507,13 +571,14 @@ void GtkSalMenu::CreateMenuWidget()
 
     GtkWidget *pMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
     gtk_widget_insert_action_group(pMenuBarWidget, "win", mpActionGroup);
+    gtk_widget_set_hexpand(GTK_WIDGET(pMenuBarWidget), true);
     gtk_grid_attach(GTK_GRID(mpMenuBarWidget), pMenuBarWidget, 0, 0, 1, 1);
 
     gtk_widget_show_all(mpMenuBarWidget);
 #endif
 }
 
-void GtkSalMenu::DestroyMenuWidget()
+void GtkSalMenu::DestroyMenuBarWidget()
 {
 #if GTK_CHECK_VERSION(3,0,0)
     if (mpMenuBarWidget)
@@ -567,7 +632,10 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
 
 #if GTK_CHECK_VERSION(3,0,0)
     if (!mbUnityMode)
-        CreateMenuWidget();
+    {
+        DestroyMenuBarWidget();
+        CreateMenuBarWidget();
+    }
 #endif
 }
 
@@ -821,9 +889,9 @@ void GtkSalMenu::EnableUnity(bool bEnable)
     if (bUnityMode != bEnable)
     {
         if (!bEnable)
-            CreateMenuWidget();
+            CreateMenuBarWidget();
         else
-            DestroyMenuWidget();
+            DestroyMenuBarWidget();
         bUnityMode = bEnable;
     }
 }
