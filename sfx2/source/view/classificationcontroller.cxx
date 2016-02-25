@@ -117,6 +117,8 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     std::vector<OUString> aNames = aHelper.GetBACNames();
     for (const OUString& rName : aNames)
         m_pCategories->InsertEntry(rName);
+    // Normally VclBuilder::makeObject() does this.
+    m_pCategories->EnableAutoSize(true);
 }
 
 } // namespace sfx2
