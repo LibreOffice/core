@@ -403,7 +403,7 @@ public:
         const css::uno::Reference< css::frame::XModel>& rModel, SvXMLImport& rImport );
 
     /** defines if the import should increment the progress bar or not */
-    void enableHandleProgressBar( bool bEnable = true );
+    void enableHandleProgressBar();
     bool IsHandleProgressBarEnabled() const;
 
     /** queries the capability of the current model to create presentation shapes */

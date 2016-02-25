@@ -97,8 +97,7 @@ public:
 
     /// export the events, but write <officeooo:events> element
     /// (for new file format additions)
-    void ExportExt( css::uno::Reference<css::container::XNameAccess> & xAccess,
-                bool bUseWhitespace = true);
+    void ExportExt( css::uno::Reference<css::container::XNameAccess> & xAccess);
 
     /// export a single event (writes <office:events> element)
     void ExportSingleEvent(

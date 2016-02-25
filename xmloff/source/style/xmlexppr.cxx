@@ -576,9 +576,9 @@ std::vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter(
 }
 
 std::vector<XMLPropertyState> SvXMLExportPropertyMapper::FilterDefaults(
-    const uno::Reference<beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily ) const
+    const uno::Reference<beans::XPropertySet>& rPropSet ) const
 {
-    return _Filter(rPropSet, true, bEnableFoFontFamily);
+    return _Filter(rPropSet, true, false/*bEnableFoFontFamily*/);
 }
 
 vector<XMLPropertyState> SvXMLExportPropertyMapper::_Filter(

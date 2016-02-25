@@ -124,7 +124,7 @@ public:
       * - instead of the property's value, its default value is exported.
       */
     std::vector<XMLPropertyState> FilterDefaults(
-        const css::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
+        const css::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
 
     /** Compare to arrays of XMLPropertyState */
     bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,

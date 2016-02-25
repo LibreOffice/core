@@ -75,10 +75,9 @@ public:
 
     /** register a new family with its appropriate instance of a derivation of XMLPropertySetMapper
         for family numbers see families.hxx
-        if bAsFamily is sal_False, the family name is used as element name
      */
     // TODO: Remove this ugly method as soon as possible
-    void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, const OUString& aStrPrefix, bool bAsFamily = true );
+    void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, const OUString& aStrPrefix );
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
                     const rtl::Reference< SvXMLExportPropertyMapper >& rMapper,
                     const OUString& rStrPrefix, bool bAsFamily = true );

@@ -328,12 +328,10 @@ public:
         be added, as well.</p>
 
         @param i_rNamespace         the namespace to be declared
-        @param i_rPreferredPrefix   (opt.) preferred prefix for the namespace
 
         @returns the actual prefix that the namespace is associated with
       */
-    OUString EnsureNamespace(OUString const & i_rNamespace,
-                             OUString const & i_rPreferredPrefix = OUString("gen") );
+    OUString EnsureNamespace(OUString const & i_rNamespace );
 
     // Check if common attribute list is empty.
 #ifndef DBG_UTIL
@@ -374,17 +372,9 @@ public:
         @param  bWriteEmpty
                 Whether to write empty *:language and *:country attribute
                 values in case of an empty locale (denoting system).
-
-        @param  eClass
-                default, XML_LANGUAGE: XML_SCRIPT, XML_COUNTRY, XML_RFC_LANGUAGE_TAG
-                XML_LANGUAGE_ASIAN: XML_SCRIPT_ASIAN, XML_COUNTRY_ASIAN, XML_RFC_LANGUAGE_TAG_ASIAN
-                    also switches nPrefix XML_NAMESPACE_FO to XML_NAMESPACE_STYLE
-                XML_LANGUAGE_COMPLEX: XML_SCRIPT_COMPLEX, XML_COUNTRY_COMPLEX, XML_RFC_LANGUAGE_TAG_COMPLEX
-                    also switches nPrefix XML_NAMESPACE_FO to XML_NAMESPACE_STYLE
      */
     void AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
-            const css::lang::Locale& rLocale, bool bWriteEmpty,
-            enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_LANGUAGE );
+            const css::lang::Locale& rLocale, bool bWriteEmpty);
 
     /** Same as AddLanguageTagAttributes() but with LanguageTag parameter
         instead of Locale.

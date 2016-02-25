@@ -235,7 +235,7 @@ private:
     SAL_DLLPRIVATE void ImpExportOLE2Shape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr, SvXMLAttributeList* pAttrList = nullptr );
     SAL_DLLPRIVATE void ImpExportPageShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
     SAL_DLLPRIVATE void ImpExportCaptionShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
-    SAL_DLLPRIVATE void ImpExport3DShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
+    SAL_DLLPRIVATE void ImpExport3DShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT );
     SAL_DLLPRIVATE void ImpExportFrameShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
     SAL_DLLPRIVATE void ImpExportPluginShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
     SAL_DLLPRIVATE void ImpExportAppletShape( const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT, css::awt::Point* pRefPoint = nullptr );
@@ -296,11 +296,11 @@ public:
     /// returns the export property mapper for external chaining
     static SvXMLExportPropertyMapper* CreateShapePropMapper( SvXMLExport& rExport );
 
-    void enableLayerExport( bool bEnable = true ) { mbExportLayer = bEnable; }
+    void enableLayerExport() { mbExportLayer = true; }
     bool IsLayerExportEnabled() const { return mbExportLayer; }
 
     /** defines if the export should increment the progress bar or not */
-    void enableHandleProgressBar( bool bEnable = true ) { mbHandleProgressBar = bEnable; }
+    void enableHandleProgressBar() { mbHandleProgressBar = true; }
     bool IsHandleProgressBarEnabled() const { return mbHandleProgressBar; }
 
     void setPresentationStylePrefix( const OUString& rPrefix ) { msPresentationStylePrefix = rPrefix; }

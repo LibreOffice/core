@@ -586,8 +586,7 @@ static bool lcl_validPropState( const XMLPropertyState& rState )
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   MultiPropertySetHelper& rPropSetHelper,
-                                  const Reference < XPropertySet > & rPropSet,
-                                  const XMLPropertyState** ppAddStates)
+                                  const Reference < XPropertySet > & rPropSet)
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
@@ -599,14 +598,6 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
 
     vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            xPropStates.push_back( **ppAddStates );
-            ++ppAddStates;
-        }
-    }
 
     if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
     {
@@ -3394,7 +3385,7 @@ void XMLTextParagraphExport::exportTextRange(
 }
 
 void XMLTextParagraphExport::exportText( const OUString& rText,
-                                           bool& rPrevCharIsSpace, TextPNS /*eExtensionNS*/ )
+                                           bool& rPrevCharIsSpace )
 {
     sal_Int32 nExpStartPos = 0;
     sal_Int32 nEndPos = rText.getLength();

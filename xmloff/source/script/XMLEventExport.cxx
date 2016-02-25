@@ -159,13 +159,12 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
     }
 }
 
-void XMLEventExport::ExportExt( Reference<XNameAccess> & rAccess,
-                                bool bWhitespace )
+void XMLEventExport::ExportExt( Reference<XNameAccess> & rAccess )
 {
     // set bExtNamespace flag to use XML_NAMESPACE_OFFICE_EXT namespace
     // for events element (not for child elements)
     bExtNamespace = true;
-    Export(rAccess, bWhitespace);
+    Export(rAccess);
     bExtNamespace = false;          // reset for future Export calls
 }
 

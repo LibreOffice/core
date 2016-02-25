@@ -900,22 +900,22 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 }
 
 OUString
-SvXMLExport::EnsureNamespace(OUString const & i_rNamespace,
-    OUString const & i_rPreferredPrefix)
+SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
 {
+    OUString const aPreferredPrefix("gen");
     OUString sPrefix;
     sal_uInt16 nKey( _GetNamespaceMap().GetKeyByName( i_rNamespace ) );
     if( XML_NAMESPACE_UNKNOWN == nKey )
     {
         // There is no prefix for the namespace, so
         // we have to generate one and have to add it.
-        sPrefix = i_rPreferredPrefix;
+        sPrefix = aPreferredPrefix;
         nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
         sal_Int32 n( 0 );
         OUStringBuffer buf;
         while( nKey != USHRT_MAX )
         {
-            buf.append( i_rPreferredPrefix );
+            buf.append( aPreferredPrefix );
             buf.append( ++n );
             sPrefix = buf.makeStringAndClear();
             nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
@@ -1007,8 +1007,7 @@ void SvXMLExport::AddAttribute( const OUString& rQName,
 }
 
 void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
-        const css::lang::Locale& rLocale, bool bWriteEmpty,
-        enum ::xmloff::token::XMLTokenEnum eClass )
+        const css::lang::Locale& rLocale, bool bWriteEmpty )
 {
     if (rLocale.Variant.isEmpty())
     {
@@ -1017,26 +1016,8 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         // to convert to LanguageTag first. Also catches the case of empty
         // locale denoting system locale.
         xmloff::token::XMLTokenEnum eLanguage, eCountry;
-        switch (eClass)
-        {
-            default:
-            case XML_LANGUAGE:
-                eLanguage = XML_LANGUAGE;
-                eCountry  = XML_COUNTRY;
-                break;
-            case XML_LANGUAGE_ASIAN:
-                eLanguage = XML_LANGUAGE_ASIAN;
-                eCountry  = XML_COUNTRY_ASIAN;
-                if (nPrefix == XML_NAMESPACE_FO)
-                    nPrefix = XML_NAMESPACE_STYLE;
-                break;
-            case XML_LANGUAGE_COMPLEX:
-                eLanguage = XML_LANGUAGE_COMPLEX;
-                eCountry  = XML_COUNTRY_COMPLEX;
-                if (nPrefix == XML_NAMESPACE_FO)
-                    nPrefix = XML_NAMESPACE_STYLE;
-                break;
-        }
+        eLanguage = XML_LANGUAGE;
+        eCountry  = XML_COUNTRY;
         if (bWriteEmpty || !rLocale.Language.isEmpty())
             AddAttribute( nPrefix, eLanguage, rLocale.Language);
         if (bWriteEmpty || !rLocale.Country.isEmpty())
@@ -1045,7 +1026,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
     else
     {
         LanguageTag aLanguageTag( rLocale);
-        AddLanguageTagAttributes( nPrefix, nPrefixRfc, aLanguageTag, bWriteEmpty, eClass);
+        AddLanguageTagAttributes( nPrefix, nPrefixRfc, aLanguageTag, bWriteEmpty);
     }
 }
 

@@ -391,14 +391,14 @@ ScXMLExport::ScXMLExport(
     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
     xTableStylesExportPropertySetMapper = new ScXMLTableExportPropertyMapper(xTableStylesPropertySetMapper);
 
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME),
-        xCellStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME),
-        xColumnStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME),
-        xRowStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME),
-        xTableStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
+        xCellStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
+        xColumnStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
+        xRowStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
+        xTableStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {

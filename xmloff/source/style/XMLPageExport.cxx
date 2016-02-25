@@ -162,8 +162,8 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     xPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(
                                     xPageMasterPropSetMapper, rExp);
 
-    rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( XML_STYLE_FAMILY_PAGE_MASTER_NAME ),
-        xPageMasterExportPropMapper, OUString( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ), false );
+    rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, XML_STYLE_FAMILY_PAGE_MASTER_NAME,
+        xPageMasterExportPropMapper, XML_STYLE_FAMILY_PAGE_MASTER_PREFIX, false );
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
                                                        UNO_QUERY );

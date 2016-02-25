@@ -189,14 +189,14 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 
     mrExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
+        XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
         GetPropertySetMapper(),
-        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX));
+        XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX);
     mrExport.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_PRESENTATION_ID,
-        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
+        XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
         GetPropertySetMapper(),
-        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX));
+        XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX);
 
     maCurrentInfo = maShapeInfos.end();
 
@@ -3449,7 +3449,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
 void XMLShapeExport::ImpExport3DShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, XMLShapeExportFlags /* nFeatures = SEF_DEFAULT */, awt::Point* /*pRefPoint = NULL */)
+    XmlShapeType eShapeType, XMLShapeExportFlags /* nFeatures = SEF_DEFAULT */)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())

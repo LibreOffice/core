@@ -280,11 +280,10 @@ void SvXMLAutoStylePoolP::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
         SvXMLExportPropertyMapper* pMapper,
-        const OUString& aStrPrefix,
-        bool bAsFamily )
+        const OUString& aStrPrefix )
 {
     rtl::Reference <SvXMLExportPropertyMapper> xTmp = pMapper;
-    AddFamily( nFamily, rStrName, xTmp, aStrPrefix, bAsFamily );
+    AddFamily( nFamily, rStrName, xTmp, aStrPrefix );
 }
 
 void SvXMLAutoStylePoolP::AddFamily(

@@ -296,14 +296,11 @@ namespace xmloff
                 the name of the attribute to add. Must not contain any namespace (it's added automatically)
             @param _pPropertyName
                 the name of the property to ask the object for
-            @param _aQuoteCharacter
-                the character to use to quote the sequence elements with. May be 0, in this case no quoting happens
         */
         void exportStringSequenceAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
             const sal_Char* _pAttributeName,
-            const OUString& _rPropertyName,
-            const sal_Unicode _aQuoteCharacter = '"');
+            const OUString& _rPropertyName);
 
         /** determines whether the given property is to be exported
 

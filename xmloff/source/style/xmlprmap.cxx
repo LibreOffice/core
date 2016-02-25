@@ -184,12 +184,10 @@ sal_uInt32 XMLPropertySetMapper::GetEntryFlags( sal_Int32 nIndex ) const
     return mpImpl->maMapEntries[nIndex].nType & ~MID_FLAG_MASK;
 }
 
-sal_uInt32 XMLPropertySetMapper::GetEntryType( sal_Int32 nIndex, bool bWithFlags ) const
+sal_uInt32 XMLPropertySetMapper::GetEntryType( sal_Int32 nIndex ) const
 {
     assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
     sal_uInt32 nType = mpImpl->maMapEntries[nIndex].nType;
-    if( !bWithFlags )
-        nType = nType & MID_FLAG_MASK;
     return nType;
 }
 

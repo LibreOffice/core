@@ -1096,9 +1096,9 @@ void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes >
 }
 
 /** defines if the import should increment the progress bar or not */
-void XMLShapeImportHelper::enableHandleProgressBar( bool bEnable )
+void XMLShapeImportHelper::enableHandleProgressBar()
 {
-    mpImpl->mbHandleProgressBar = bEnable;
+    mpImpl->mbHandleProgressBar = true;
 }
 
 bool XMLShapeImportHelper::IsHandleProgressBarEnabled() const

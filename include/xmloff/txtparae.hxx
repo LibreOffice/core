@@ -435,8 +435,7 @@ public:
     void Add(
         sal_uInt16 nFamily,
         MultiPropertySetHelper& rPropSetHelper,
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const XMLPropertyState** pAddState = nullptr );
+        const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
     void Add(
         sal_uInt16 nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
@@ -501,8 +500,7 @@ public:
     // This method exports the given OUString
     void exportText(
         const OUString& rText,
-        bool& rPrevCharWasSpace,
-        TextPNS eExtensionNS = TextPNS::ODF);
+        bool& rPrevCharWasSpace);
 
     // This method collects all automatic styles for the given XText
     void collectTextAutoStyles(

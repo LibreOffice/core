@@ -66,7 +66,7 @@ public:
     sal_uInt32 GetEntryFlags( sal_Int32 nIndex ) const;
 
     /** Returns the type of an entry */
-    sal_uInt32 GetEntryType( sal_Int32 nIndex, bool bWithFlags = true ) const;
+    sal_uInt32 GetEntryType( sal_Int32 nIndex ) const;
 
     /** Returns the namespace-key of an entry */
     sal_uInt16 GetEntryNameSpace( sal_Int32 nIndex ) const;

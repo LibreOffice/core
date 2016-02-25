@@ -2434,9 +2434,9 @@ XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
 }
 
 
-void XMLTextImportHelper::PushListContext(XMLTextListBlockContext *i_pListBlock)
+void XMLTextImportHelper::PushListContext()
 {
-    GetTextListHelper().PushListContext(i_pListBlock);
+    GetTextListHelper().PushListContext(static_cast<XMLTextListBlockContext*>(nullptr));
 }
 
 void XMLTextImportHelper::PopListContext()
