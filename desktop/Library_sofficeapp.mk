@@ -59,7 +59,6 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     ucbhelper \
     utl \
     vcl \
-    xmlreader \
 	$(gb_UWINAPI) \
 ))
 

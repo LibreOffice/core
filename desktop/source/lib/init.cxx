@@ -28,7 +28,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/detail/preinit.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -48,8 +47,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -1920,8 +1917,27 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             if (eStage == PRE_INIT)
             {
                 InitVCL();
+
                 // pre-load all component libraries.
-                cppu::preInitBootstrap(xContext);
+                if (!xContext.is())
+                    throw css::uno::DeploymentException("preInit: XComponentContext is not created");
+
+                css::uno::Reference< css::uno::XInterface > xService;
+                xContext->getValueByName("/singletons/com.sun.star.lang.theServiceManager") >>= xService;
+                if (!xService.is())
+                    throw css::uno::DeploymentException("preInit: XMultiComponentFactory is not created");
+
+                css::uno::Reference<css::lang::XInitialization> aService(
+                    xService, css::uno::UNO_QUERY_THROW);
+
+                // pre-requisites:
+                // In order to load implementations and invoke
+                // component factory it is required:
+                // 1) defaultBootstrap_InitialComponentContext()
+                // 2) comphelper::setProcessServiceFactory(xSFactory);
+                // 3) InitVCL()
+                aService->initialize({css::uno::makeAny<OUString>("preload")});
+
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
             }
