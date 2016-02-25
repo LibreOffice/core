@@ -1824,7 +1824,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
     css::util::SearchOptions2 SearchOpt;
     SearchOpt.algorithmType = css::util::SearchAlgorithms_ABSOLUTE;
-    SearchOpt.searchFlag = 0x00000001;
+    SearchOpt.searchFlag = css::util::SearchFlags::ALL_IGNORE_CASE;
     SearchOpt.searchString = "other";
     SearchOpt.replaceString.clear();
     SearchOpt.changedChars = 0;
