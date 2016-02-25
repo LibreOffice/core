@@ -5946,8 +5946,10 @@ if test "$GCC" = "yes"; then
             AC_LANG_PUSH([C++])
             AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <list>
-#if !defined __GLIBCXX__ ||(__GLIBCXX__ < 20080606 && __GLIBCXX__ != 20080306)
+#if defined __GLIBCXX__
+#if __GLIBCXX__ < 20080606 && __GLIBCXX__ != 20080306
 #error
+#endif
 #endif
                 ]])],[HAVE_THREADSAFE_STATICS=TRUE],[])
             AC_LANG_POP([C++])
