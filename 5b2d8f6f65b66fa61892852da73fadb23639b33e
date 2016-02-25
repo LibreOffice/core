@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_7f069721",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "Both solutions that you propose are not a good idea. Let me explain why:\n\nThe current solution has the disadvantage that you are not actually testing that whatever you are doing is correct but that ODS and XLSX produce the same results. Therefore if something breaks in shared code you are not failing this test.\n\nUsing some implementation detail for the test is actually even worse as you are now just using something that you are trying to test.\n\nThe ideal and correct solution is to test against known good values which you are not doing. Additionally it is hard to decide in your case if the test would fail because something broke in the XLSX import/export (what you want to test) or in the ODS import. So someone looking at a test failure from this test would be totally mislead when the test fails because of an ODS import bug.",
+      "parentUuid": "1aa78d24_9f3543f9",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_bf5f5f74",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 1
@@ -124,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_9a03910d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "What bubli is trying to tell you that this test in this form is wrong. Either because you express the condition (pLineTop \u003d\u003d NULL \u0026\u0026 pLineTopRef \u003d\u003d NULL \u0026\u0026 pLineBot \u003d\u003d NULL \u0026\u0026 pLineBotRef \u003d\u003d NULL) in a horrible way or because it does not do what you want to express. You are comparing pointers so this condition can only be true if all 4 pointers are NULL. Also if we look at the whole if .. else construct you can replace it with a CPPUNIT_ASSERT.",
+      "parentUuid": "1aa78d24_ff3a87e6",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_bfc63f14",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 1
@@ -153,6 +189,75 @@
       "side": 1,
       "message": "But the CPPUNIT_FAIL give only the message, but the CPPUNIT_ASSERT_MESSAGE give the line with file\n\nI think that should be at all error massages, why different outputs, it is very helpful this information with line and file?",
       "parentUuid": "1aa78d24_bfc63f14",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_bafe4d03",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "That is not correct. CPPUNIT_FAIL also prints the file and the line. It basically boils down to the same code as CPPUNIT_ASSERT.",
+      "parentUuid": "1aa78d24_3f252fc2",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_da0d1939",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1629,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "That comment is completely useless. This whole file is about XLS/XLSX export.",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_3a137d5e",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "The documentation does not belong into a bug report.",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_1a10414e",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "These enumeration names are not meaningful at all.",
       "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -229,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_fa08d52a",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "This information does not belong in bugzilla. It belongs into the code.",
+      "parentUuid": "1aa78d24_7f2fb7a1",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_1f6af31a",
         "filename": "sc/source/filter/excel/xestyle.cxx",
         "patchSetId": 1
@@ -293,6 +416,24 @@
       "side": 1,
       "message": "Is decript in Bugticket https://bugs.documentfoundation.org/show_bug.cgi?id\u003d79787#c14",
       "parentUuid": "1aa78d24_ff8287c7",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9a2a717d",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T15:20:19Z",
+      "side": 1,
+      "message": "Well. This whole patch feels a bit like this argumentation. You think you have a slightly different mapping that is more appealing to you but feels at least in some parts just like personal taste.\n\nPlease read Kohei\u0027s blog posts about the border export and try to split real bug fixes from cosmetic changes. I might want to give some of the cosmetic changes a -2 while not blocking bug fixes.",
+      "parentUuid": "1aa78d24_bf175f53",
       "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
