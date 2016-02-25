@@ -76,7 +76,7 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
 {
     // send the minidump to the server (not yet implemented)
     SAL_WARN("destkop.crashreport", "minidump generated: " << descriptor.path());
-    OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"" + LIBO_VERSION_DOTTED + "\" ";
+    OString aCommand = getLibDir().copy(7) + "/minidump_upload -p LibreOffice -v \"" LIBO_VERSION_DOTTED "\" ";
     aCommand = aCommand + descriptor.path() + " http://libreofficecrash.org/submit";
     int retVal = std::system(aCommand.getStr());
     SAL_WARN_IF(retVal != 0, "destkop.crashreport", "Failed to upload minidump. Error Code: " << retVal);
