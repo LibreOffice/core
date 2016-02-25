@@ -18,7 +18,7 @@ osl::Mutex CrashReporter::maMutex;
 
 namespace {
 
-const char* CrashReporter::getIniFileName()
+const char* getIniFileName()
 {
     return "/tmp/dump.ini";
 }
