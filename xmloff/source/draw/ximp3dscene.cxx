@@ -18,6 +18,7 @@
  */
 
 #include <sax/tools/converter.hxx>
+#include <rtl/math.hxx>
 
 #include "ximp3dscene.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -66,7 +67,7 @@ SdXML3DLightContext::SdXML3DLightContext(
             {
                 ::basegfx::B3DVector aVal;
                 SvXMLUnitConverter::convertB3DVector(aVal, sValue);
-                if (!isnan(aVal.getX()) && !isnan(aVal.getY()) && !isnan(aVal.getZ()))
+                if (!rtl::math::isNan(aVal.getX()) && !rtl::math::isNan(aVal.getY()) && !rtl::math::isNan(aVal.getZ()))
                 {
                     maDirection = aVal;
                 }
