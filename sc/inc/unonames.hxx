@@ -368,6 +368,7 @@
 #define SC_UNO_SRCHBYROW            "SearchByRow"
 #define SC_UNO_SRCHCASE             "SearchCaseSensitive"
 #define SC_UNO_SRCHREGEXP           "SearchRegularExpression"
+#define SC_UNO_SRCHWILDCARD         "SearchWildcard"
 #define SC_UNO_SRCHSIM              "SearchSimilarity"
 #define SC_UNO_SRCHSIMADD           "SearchSimilarityAdd"
 #define SC_UNO_SRCHSIMEX            "SearchSimilarityExchange"
