@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_faf29505",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6934,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T19:53:44Z",
+      "side": 1,
+      "message": "I\u0027m not sure if that is really a good idea. While on the first look it seems easy to read it is quite confusing when you realize that it is only used in these two functions. In the end while debugging it might actually be more confusing than helpful.",
+      "revId": "1f40821e685325f30d591c6ad5cbf2fabb93fce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_bae80d18",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6938,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T19:53:44Z",
+      "side": 1,
+      "message": "We are now rejecting operator, when it is not necessary. There is a clang plugin that would fail with this. Please use independent expressions.",
+      "revId": "1f40821e685325f30d591c6ad5cbf2fabb93fce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7a906596",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6955,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T19:53:44Z",
+      "side": 1,
+      "message": "Please make this a normal function. It is surely way too big for a lambda expression.",
+      "revId": "1f40821e685325f30d591c6ad5cbf2fabb93fce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_5a8da97a",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6988,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T19:53:44Z",
+      "side": 1,
+      "message": "That should be CPPUNIT_ASSERT_DOUBLES_EQUAL or the ASSERT_DOUBLES_EQUAL from one of the sc unit test headers.",
+      "revId": "1f40821e685325f30d591c6ad5cbf2fabb93fce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9aed5128",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7075,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-25T19:53:44Z",
+      "side": 1,
+      "message": "Should also be the CPPUNIT_ASSERT_DOUBLES_EQUAL.",
+      "revId": "1f40821e685325f30d591c6ad5cbf2fabb93fce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
