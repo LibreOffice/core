@@ -28,7 +28,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1550,9 +1551,9 @@ void SbiRuntime::StepLIKE()
     OUString pattern = VBALikeToRegexp(refVar1->GetOUString());
     OUString value = refVar2->GetOUString();
 
-    css::util::SearchOptions aSearchOpt;
+    css::util::SearchOptions2 aSearchOpt;
 
-    aSearchOpt.algorithmType = css::util::SearchAlgorithms_REGEXP;
+    aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
 
     aSearchOpt.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     aSearchOpt.searchString = pattern;
@@ -1568,7 +1569,7 @@ void SbiRuntime::StepLIKE()
         aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
     }
     SbxVariable* pRes = new SbxVariable;
-    utl::TextSearch aSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOpt));
+    utl::TextSearch aSearch( aSearchOpt);
     sal_Int32 nStart=0, nEnd=value.getLength();
     bool bRes = aSearch.SearchForward(value, &nStart, &nEnd);
     pRes->PutBool( bRes );
