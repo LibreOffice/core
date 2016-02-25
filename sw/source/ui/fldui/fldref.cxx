@@ -383,7 +383,8 @@ IMPL_LINK_NOARG_TYPED(SwFieldRefPage, TypeHdl, ListBox&, void)
         sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
         // fill selection-ListBox
-        UpdateSubType();
+        OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
+        UpdateSubType(sFilter);
 
         bool bName = false;
         nFieldDlgFormatSel = 0;
