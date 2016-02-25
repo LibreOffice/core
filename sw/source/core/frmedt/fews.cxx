@@ -275,10 +275,10 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
     return nReturn;
 }
 
-void SwFEShell::ShGetFcs( bool bUpdate )
+void SwFEShell::ShellGetFocus( bool bUpdate )
 {
     ::SetShell( this );
-    SwCursorShell::ShGetFcs( bUpdate );
+    SwCursorShell::ShellGetFocus( bUpdate );
 
     if ( HasDrawView() )
     {
@@ -288,9 +288,9 @@ void SwFEShell::ShGetFcs( bool bUpdate )
     }
 }
 
-void SwFEShell::ShLooseFcs()
+void SwFEShell::ShellLoseFocus()
 {
-    SwCursorShell::ShLooseFcs();
+    SwCursorShell::ShellLoseFocus();
 
     if ( HasDrawView() && Imp()->GetDrawView()->AreObjectsMarked() )
     {

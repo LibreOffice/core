@@ -448,9 +448,9 @@ public:
      * On the other hand, on receiving the focus all selected ranges are displayed again
      * (ranges must be recalculated!).
      */
-    bool HasShFcs() const { return m_bHasFocus; }
-    void ShLooseFcs();
-    void ShGetFcs( bool bUpdate = true );
+    bool HasShellFocus() const { return m_bHasFocus; }
+    void ShellLoseFocus();
+    void ShellGetFocus( bool bUpdate = true );
 
     // Methods for displaying or hiding the visible text cursor.
     void ShowCursor();
