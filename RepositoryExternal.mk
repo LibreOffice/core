@@ -2961,12 +2961,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(KDE4_LIBS) \
 )
 
-ifeq ($(COM),GCC)
-$(call gb_LinkTarget_add_cxxflags,$(1),\
-	-Wno-shadow \
-)
-endif
-
 endef
 
 else # !ENABLE_KDE4
