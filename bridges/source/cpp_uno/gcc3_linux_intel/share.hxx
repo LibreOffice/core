@@ -27,6 +27,7 @@
 #ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
 #define _GLIBCXX_CDTOR_CALLABI
 #endif
+#include <unwind.h>
 
 #include "config_gcc.h"
 #include <uno/any2.h>
@@ -37,15 +38,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 void dummy_can_throw_anything( char const * );
 
-// ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
-
-struct _Unwind_Exception
-{
-    unsigned exception_class __attribute__((__mode__(__DI__)));
-    void * exception_cleanup;
-    unsigned private_1 __attribute__((__mode__(__word__)));
-    unsigned private_2 __attribute__((__mode__(__word__)));
-} __attribute__((__aligned__));
+// ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h
 
 struct __cxa_exception
 {
