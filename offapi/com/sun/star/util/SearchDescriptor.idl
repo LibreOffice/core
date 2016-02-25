@@ -49,6 +49,9 @@ published service SearchDescriptor
     [property] boolean SearchWords;
 
     /** If `TRUE`, the search string is evaluated as a regular expression.
+
+        <p> SearchRegularExpression, SearchWildcard and SearchSimilarity
+        are mutually exclusive, only one can be `TRUE` at the same time. </p>
      */
     [property] boolean SearchRegularExpression;
 
@@ -72,6 +75,9 @@ published service SearchDescriptor
         <li>SearchSimilarityExchange
         </li>
         </ul>
+
+        <p> SearchRegularExpression, SearchWildcard and SearchSimilarity
+        are mutually exclusive, only one can be `TRUE` at the same time. </p>
      */
     [property] boolean SearchSimilarity;
 
@@ -106,6 +112,22 @@ published service SearchDescriptor
         be replaced to match the search pattern.
      */
     [property] short SearchSimilarityExchange;
+
+    /** If `TRUE`, the search string is evaluated as a wildcard pattern.
+
+        <p> Wildcards are '*' (asterisk) for any sequence of characters,
+        including an empty sequence, and '?' (question mark) for exactly
+        one character. Escape character is '\' (U+005C REVERSE SOLIDUS)
+        aka backslash, it escapes the special meaning of a question
+        mark, asterisk or escape character that follows immediately
+        after the escape character. </p>
+
+        <p> SearchRegularExpression, SearchWildcard and SearchSimilarity
+        are mutually exclusive, only one can be `TRUE` at the same time. </p>
+
+        @since LibreOffice 5.2
+     */
+    [optional, property] boolean SearchWildcard;
 
 };
 
