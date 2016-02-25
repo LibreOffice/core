@@ -2671,6 +2671,17 @@ SfxCmisPropertiesPage::SfxCmisPropertiesPage( vcl::Window* pParent, const SfxIte
 {
 }
 
+SfxCmisPropertiesPage::~SfxCmisPropertiesPage()
+{
+    disposeOnce();
+}
+
+void SfxCmisPropertiesPage::dispose()
+{
+    m_pPropertiesCtrl.ClearAllLines();
+    SfxTabPage::dispose();
+}
+
 bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem = nullptr;

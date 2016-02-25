@@ -635,6 +635,9 @@ protected:
 
 public:
     SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
+    virtual ~SfxCmisPropertiesPage();
+    virtual void dispose() override;
+
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 };
 
