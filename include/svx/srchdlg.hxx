@@ -180,6 +180,7 @@ private:
     VclPtr<CheckBox>       m_pSelectionBtn;
     VclPtr<CheckBox>       m_pBackwardsBtn;
     VclPtr<CheckBox>       m_pRegExpBtn;
+    VclPtr<CheckBox>       m_pWildcardBtn;
     VclPtr<CheckBox>       m_pSimilarityBox;
     VclPtr<PushButton>     m_pSimilarityBtn;
     VclPtr<CheckBox>       m_pLayoutBtn;

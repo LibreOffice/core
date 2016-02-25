@@ -39,11 +39,12 @@ enum class SearchOptionFlags
     MORE          = 0x0800,
     SIMILARITY    = 0x1000,
     CONTENT       = 0x2000,
-    ALL           = 0x3fff
+    WILDCARD      = 0x4000,
+    ALL           = 0x7fff
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SearchOptionFlags> : is_typed_flags<SearchOptionFlags, 0x3fff> {};
+    template<> struct typed_flags<SearchOptionFlags> : is_typed_flags<SearchOptionFlags, 0x7fff> {};
 }
 
 #endif
