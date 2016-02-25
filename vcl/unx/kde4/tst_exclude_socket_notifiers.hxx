@@ -43,9 +43,9 @@ class TestExcludeSocketNotifiers
         const int* pipes;
 };
 
-TestExcludeSocketNotifiers::TestExcludeSocketNotifiers( const int* pipes )
+TestExcludeSocketNotifiers::TestExcludeSocketNotifiers( const int* thePipes )
     : received( false )
-    , pipes( pipes )
+    , pipes( thePipes )
 {
 }
 
