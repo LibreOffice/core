@@ -58,20 +58,18 @@ namespace dbtools
     class OOO_DLLPUBLIC_DBTOOLS FilterManager
     {
     public:
-        enum FilterComponent
+        enum class FilterComponent
         {
-            fcPublicFilter = 0,     // the filter which is to be published as "Filter" property of the database component
-            fcLinkFilter,           // the filter part which is implicitly created for a database component when connecting
-                                    // master and detail database components via column names
-
-            FC_COMPONENT_COUNT      // boundary delimiter, not to be used from outside
+            PublicFilter,     // The filter which is to be published as "Filter" property of the database component.
+            LinkFilter        // The filter part which is implicitly created for a database component when connecting
+                              // master and detail database components via column names.
         };
 
     private:
-        css::uno::Reference< css::beans::XPropertySet >
-                                            m_xComponentAggregate;
-        ::std::vector< OUString >           m_aFilterComponents;
-        bool                                m_bApplyPublicFilter;
+        css::uno::Reference< css::beans::XPropertySet >   m_xComponentAggregate;
+        OUString                                          m_aPublicFilterComponent;
+        OUString                                          m_aLinkFilterComponent;
+        bool                                              m_bApplyPublicFilter;
 
     public:
         /// ctor
@@ -84,7 +82,7 @@ namespace dbtools
         void    dispose( );
 
         const OUString&  getFilterComponent( FilterComponent _eWhich ) const;
-        void                    setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent );
+        void             setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent );
 
         inline bool     isApplyPublicFilter( ) const { return m_bApplyPublicFilter; }
                void     setApplyPublicFilter( bool _bApply );
@@ -100,12 +98,6 @@ namespace dbtools
 
         /// checks whether there is only one (or even no) non-empty filter component
         bool    isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const;
-
-        /// returns the index of the first filter component which should be considered when building the composed filter
-        inline  sal_Int32   getFirstApplicableFilterIndex() const
-        {
-            return m_bApplyPublicFilter ? fcPublicFilter : fcPublicFilter + 1;
-        }
     };
 
 

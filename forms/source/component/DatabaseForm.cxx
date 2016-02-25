@@ -1500,7 +1500,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_FILTER:
-            rValue <<= m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter );
+            rValue <<= m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicFilter );
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -1583,7 +1583,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             break;
 
         case PROPERTY_ID_FILTER:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter ) );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicFilter ) );
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -1672,7 +1672,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         {
             OUString sNewFilter;
             rValue >>= sNewFilter;
-            m_aFilterManager.setFilterComponent( FilterManager::fcPublicFilter, sNewFilter );
+            m_aFilterManager.setFilterComponent( FilterManager::FilterComponent::PublicFilter, sNewFilter );
         }
         break;
 
@@ -1815,7 +1815,7 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
             break;
 
         case PROPERTY_ID_FILTER:
-            if ( m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter ).isEmpty() )
+            if ( m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicFilter ).isEmpty() )
                 eState = PropertyState_DEFAULT_VALUE;
             else
                 eState = PropertyState_DIRECT_VALUE;

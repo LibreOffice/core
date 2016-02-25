@@ -398,7 +398,7 @@ namespace dbtools
                 }
 
                 // now set this filter at the 's filter manager
-                _rFilterManager.setFilterComponent( FilterManager::fcLinkFilter, sAdditionalFilter.makeStringAndClear() );
+                _rFilterManager.setFilterComponent( FilterManager::FilterComponent::LinkFilter, sAdditionalFilter.makeStringAndClear() );
 
                 _rColumnsInLinkDetails = true;
             }

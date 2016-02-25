@@ -496,14 +496,14 @@ void SAL_CALL DatabaseDataProvider::setCommandType(::sal_Int32 the_value) throw 
 OUString SAL_CALL DatabaseDataProvider::getFilter() throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
-    return m_aFilterManager.getFilterComponent( dbtools::FilterManager::fcPublicFilter );
+    return m_aFilterManager.getFilterComponent( dbtools::FilterManager::FilterComponent::PublicFilter );
 }
 
 void SAL_CALL DatabaseDataProvider::setFilter(const OUString & the_value) throw (uno::RuntimeException, std::exception)
 {
     {
         osl::MutexGuard g(m_aMutex);
-        m_aFilterManager.setFilterComponent( dbtools::FilterManager::fcPublicFilter, the_value );
+        m_aFilterManager.setFilterComponent( dbtools::FilterManager::FilterComponent::PublicFilter, the_value );
     }
     set(PROPERTY_FILTER,the_value,m_Filter);
 }

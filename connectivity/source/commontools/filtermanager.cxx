@@ -39,8 +39,7 @@ namespace dbtools
     using namespace connectivity;
 
     FilterManager::FilterManager( )
-        :m_aFilterComponents( FC_COMPONENT_COUNT )
-        ,m_bApplyPublicFilter( true )
+        :m_bApplyPublicFilter( true )
     {
     }
 
@@ -63,16 +62,19 @@ namespace dbtools
 
     const OUString& FilterManager::getFilterComponent( FilterComponent _eWhich ) const
     {
-        return m_aFilterComponents[ _eWhich ];
+        return _eWhich == FilterComponent::PublicFilter ? m_aPublicFilterComponent : m_aLinkFilterComponent;
     }
 
 
     void FilterManager::setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent )
     {
-        m_aFilterComponents[ _eWhich ]  = _rComponent;
+        if (_eWhich == FilterComponent::PublicFilter)
+            m_aPublicFilterComponent = _rComponent;
+        else
+            m_aLinkFilterComponent = _rComponent;
         try
         {
-            if ( m_xComponentAggregate.is() && (( _eWhich != fcPublicFilter ) || m_bApplyPublicFilter ) )
+            if ( m_xComponentAggregate.is() && (( _eWhich != FilterComponent::PublicFilter ) || m_bApplyPublicFilter ) )
                 m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), makeAny( getComposedFilter() ) );
         }
         catch( const Exception& )
@@ -91,7 +93,7 @@ namespace dbtools
 
         try
         {
-            if ( m_xComponentAggregate.is() && !getFilterComponent( fcPublicFilter ).isEmpty() )
+            if ( m_xComponentAggregate.is() && !getFilterComponent( FilterComponent::PublicFilter ).isEmpty() )
             {   // only if there changed something
                 m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), makeAny( getComposedFilter() ) );
             }
@@ -120,32 +122,25 @@ namespace dbtools
 
     bool FilterManager::isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const
     {
-        sal_Int32 nOnlyNonEmpty = -1;
-        sal_Int32 i;
-        for ( i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
-        {
-            if ( !m_aFilterComponents[ i ].isEmpty() )
-            {
-                if ( nOnlyNonEmpty != -1 )
-                    // it's the second non-empty component
-                    break;
-                else
-                    nOnlyNonEmpty = i;
-            }
-        }
-        if ( nOnlyNonEmpty == -1 )
-        {
-            o_singleComponent.makeStringAndClear();
+        if (m_bApplyPublicFilter) {
+            if (!m_aPublicFilterComponent.isEmpty() && !m_aLinkFilterComponent.isEmpty())
+                return false;
+            if (!m_aPublicFilterComponent.isEmpty())
+                o_singleComponent = m_aPublicFilterComponent;
+            else if (!m_aLinkFilterComponent.isEmpty())
+                o_singleComponent = m_aLinkFilterComponent;
+            else
+                o_singleComponent.makeStringAndClear();
             return true;
         }
-
-        if ( i == FC_COMPONENT_COUNT )
+        else
         {
-            // we found only one non-empty filter component
-            o_singleComponent = m_aFilterComponents[ nOnlyNonEmpty ];
+            if (m_aLinkFilterComponent.isEmpty())
+                o_singleComponent.makeStringAndClear();
+            else
+                o_singleComponent = m_aLinkFilterComponent;
             return true;
         }
-        return false;
     }
 
 
@@ -157,8 +152,9 @@ namespace dbtools
         if ( !isThereAtMostOneComponent( aComposedFilter ) )
         {
             // append the single components
-            for ( sal_Int32 i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
-                appendFilterComponent( aComposedFilter, m_aFilterComponents[ i ] );
+            if (m_bApplyPublicFilter)
+                appendFilterComponent( aComposedFilter, m_aPublicFilterComponent );
+            appendFilterComponent( aComposedFilter, m_aLinkFilterComponent );
         }
 
         return aComposedFilter.makeStringAndClear();
