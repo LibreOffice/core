@@ -32,7 +32,7 @@ class DESKTOP_DLLPUBLIC CrashReporter
 public:
     static void AddKeyValue(const OUString& rKey, const OUString& rValue);
 
-    const char* getIniFileName();
+    static const char* getIniFileName();
 
 private:
 
