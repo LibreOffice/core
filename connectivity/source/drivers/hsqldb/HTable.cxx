@@ -315,7 +315,7 @@ OUString OHSQLTable::getAlterTableColumnPart()
 {
     OUString sSql(  "ALTER TABLE " );
 
-    OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::eInTableDefinitions ) );
+    OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::EComposeRule::InTableDefinitions ) );
     sSql += sComposedName;
 
     return sSql;
@@ -382,19 +382,19 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
             sSql += " TABLE ";
 
         OUString sCatalog,sSchema,sTable;
-        ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+        ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
 
         sSql +=
-            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::eInDataManipulation )
+            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::EComposeRule::InDataManipulation )
             + " RENAME TO "
-            + ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, true, ::dbtools::eInDataManipulation );
+            + ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InDataManipulation );
 
         executeStatement(sSql);
 
         ::connectivity::OTable_TYPEDEF::rename(newName);
     }
     else
-        ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
+        ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::EComposeRule::InTableDefinitions);
 }
 
 

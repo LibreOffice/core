@@ -266,7 +266,7 @@ void SAL_CALL OTable::rename( const OUString& newName ) throw(SQLException, Elem
     const OUString sOldComposedName = getName();
     const Reference< XDatabaseMetaData> xMetaData = getMetaData();
     if ( xMetaData.is() )
-        ::dbtools::qualifiedNameComponents(xMetaData,newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInDataManipulation);
+        ::dbtools::qualifiedNameComponents(xMetaData,newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::EComposeRule::InDataManipulation);
     else
         m_Name = newName;
 

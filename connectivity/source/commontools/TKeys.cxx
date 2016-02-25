@@ -159,7 +159,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
         aSql.append("ALTER TABLE ");
         OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
 
-        aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true ));
+        aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::EComposeRule::InTableDefinitions, false, false, true ));
         aSql.append(" ADD ");
 
         if ( nKeyType == KeyType::PRIMARY )
@@ -189,7 +189,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
         if ( nKeyType == KeyType::FOREIGN )
         {
             aSql.append(" REFERENCES ");
-            aSql.append(::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::eInTableDefinitions));
+            aSql.append(::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::EComposeRule::InTableDefinitions));
             aSql.append(" (");
 
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -274,7 +274,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
             OUStringBuffer aSql;
             aSql.append("ALTER TABLE ");
 
-            aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::eInTableDefinitions, false, false, true ));
+            aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::EComposeRule::InTableDefinitions, false, false, true ));
 
             sal_Int32 nKeyType = KeyType::PRIMARY;
             if ( xKey.is() )

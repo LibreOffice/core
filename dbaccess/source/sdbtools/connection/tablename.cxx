@@ -186,12 +186,12 @@ namespace sdbtools
                 EComposeRule    eComposeRule;
             }   TypeTable[] =
             {
-                { CompositionType::ForTableDefinitions,      eInTableDefinitions },
-                { CompositionType::ForIndexDefinitions,      eInIndexDefinitions },
-                { CompositionType::ForDataManipulation,      eInDataManipulation },
-                { CompositionType::ForProcedureCalls,        eInProcedureCalls },
-                { CompositionType::ForPrivilegeDefinitions,  eInPrivilegeDefinitions },
-                { CompositionType::ForPrivilegeDefinitions,  eComplete }
+                { CompositionType::ForTableDefinitions,      EComposeRule::InTableDefinitions },
+                { CompositionType::ForIndexDefinitions,      EComposeRule::InIndexDefinitions },
+                { CompositionType::ForDataManipulation,      EComposeRule::InDataManipulation },
+                { CompositionType::ForProcedureCalls,        EComposeRule::InProcedureCalls },
+                { CompositionType::ForPrivilegeDefinitions,  EComposeRule::InPrivilegeDefinitions },
+                { CompositionType::ForPrivilegeDefinitions,  EComposeRule::Complete }
             };
 
             bool found = false;

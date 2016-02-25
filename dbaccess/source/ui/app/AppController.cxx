@@ -1595,7 +1595,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 {
                     ensureConnection();
                     if ( xProp.is() && m_xMetaData.is() )
-                        sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
+                        sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
                 }
                 break;
                 case E_FORM:
@@ -2111,7 +2111,7 @@ void OApplicationController::renameEntry()
                                 OUString sCatalog = aDialog->getCatalog();
                                 OUString sSchema  = aDialog->getSchema();
 
-                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, false, ::dbtools::eInDataManipulation );
+                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, false, ::dbtools::EComposeRule::InDataManipulation );
                             }
                             else
                                 sNewName = aDialog->getName();
@@ -2131,7 +2131,7 @@ void OApplicationController::renameEntry()
                             if ( eType == E_TABLE )
                             {
                                 Reference<XPropertySet> xProp(xRename,UNO_QUERY);
-                                sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
+                                sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
                             }
                             getContainer()->elementReplaced( eType , sOldName, sNewName );
 

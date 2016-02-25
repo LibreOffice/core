@@ -488,8 +488,8 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
                 if(sTableName.indexOf('.') != -1)
                 {
                     OUString aCatlog,aSchema,aTable;
-                    ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
+                    ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
+                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
                 }
                 else if (!sTableName.isEmpty())
                     sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -1305,7 +1305,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         }
         else
         {
-            aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, false, ::dbtools::eInDataManipulation );
+            aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, false, ::dbtools::EComposeRule::InDataManipulation );
 
             // Is this the right case for the table name?
             // Else, look for it with different case, if applicable.
@@ -1338,7 +1338,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         }
         if(pBegin != pEnd)
         {
-            sReturn = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, true, ::dbtools::eInDataManipulation ) + ".";
+            sReturn = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation ) + ".";
         }
     }
     return sReturn;
@@ -1591,8 +1591,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             if(sTableName.indexOf('.') != -1)
             {
                 OUString aCatlog,aSchema,aTable;
-                ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-                sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
+                sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
             }
             else
                 sTableName = ::dbtools::quoteName(aQuote,sTableName);

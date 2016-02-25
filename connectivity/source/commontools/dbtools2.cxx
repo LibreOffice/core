@@ -215,7 +215,7 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= sSchema;
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= sTable;
 
-    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
+    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
     if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
@@ -329,8 +329,8 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                                                         sCatalog,
                                                         sSchema,
                                                         sTable,
-                                                        ::dbtools::eInDataManipulation);
-                    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
+                                                        ::dbtools::EComposeRule::InDataManipulation);
+                    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
 
 
                     if ( sComposedName.isEmpty() )

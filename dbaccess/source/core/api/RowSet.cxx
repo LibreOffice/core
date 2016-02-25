@@ -1686,7 +1686,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
 
     OUString aComposedUpdateTableName;
     if ( !m_aUpdateTableName.isEmpty() )
-        aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, false, ::dbtools::eInDataManipulation );
+        aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, false, ::dbtools::EComposeRule::InDataManipulation );
 
     SAL_INFO("dbaccess", "ORowSet::impl_prepareAndExecute_throw: creating cache" );
     if(m_pCache)
@@ -2354,7 +2354,7 @@ bool ORowSet::impl_buildActiveCommand_throw()
             {
                 sCommand = "SELECT * FROM ";
                 OUString sCatalog, sSchema, sTable;
-                ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
                 sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
             }
         }
@@ -2386,7 +2386,7 @@ bool ORowSet::impl_buildActiveCommand_throw()
                         xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
                         if(!aTable.isEmpty())
-                            m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, false, ::dbtools::eInDataManipulation );
+                            m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, false, ::dbtools::EComposeRule::InDataManipulation );
                     }
                 }
                 else

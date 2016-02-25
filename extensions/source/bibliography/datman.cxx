@@ -833,7 +833,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 OUString aString("SELECT * FROM ");
 
                 OUString sCatalog, sSchema, sName;
-                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
                 aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
 
                 m_xParser->setElementaryQuery(aString);
@@ -1012,7 +1012,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
             aQuoteChar = xMetaData->getIdentifierQuoteString();
 
             OUString sCatalog, sSchema, sName;
-            ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+            ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
             aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
 
             m_xParser->setElementaryQuery(aString);
@@ -1082,7 +1082,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
                 OUString aString("SELECT * FROM ");
 
                 OUString sCatalog, sSchema, sName;
-                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
                 aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
 
                 m_xParser->setElementaryQuery(aString);

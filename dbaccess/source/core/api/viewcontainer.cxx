@@ -91,7 +91,7 @@ ObjectType OViewContainer::createObject(const OUString& _rName)
                                             sCatalog,
                                             sSchema,
                                             sTable,
-                                            ::dbtools::eInDataManipulation);
+                                            ::dbtools::EComposeRule::InDataManipulation);
         return new View(m_xConnection,
                         isCaseSensitive(),
                         sCatalog,
@@ -136,7 +136,7 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
     }
     else
     {
-        OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
+        OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, false, false, true );
         if(sComposedName.isEmpty())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
@@ -181,7 +181,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
                 xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
+                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
             }
 
             if(sComposedName.isEmpty())

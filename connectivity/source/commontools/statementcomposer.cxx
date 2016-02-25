@@ -126,7 +126,7 @@ namespace dbtools
                         sStatement = "SELECT * FROM ";
 
                         OUString sCatalog, sSchema, sTable;
-                        qualifiedNameComponents( _rData.xConnection->getMetaData(), _rData.sCommand, sCatalog, sSchema, sTable, eInDataManipulation );
+                        qualifiedNameComponents( _rData.xConnection->getMetaData(), _rData.sCommand, sCatalog, sSchema, sTable, EComposeRule::InDataManipulation );
 
                         sStatement += composeTableNameForSelect( _rData.xConnection, sCatalog, sSchema, sTable );
                     }

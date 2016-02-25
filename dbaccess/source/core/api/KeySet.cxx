@@ -190,7 +190,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
         xTableProp->getPropertyValue( PROPERTY_CATALOGNAME )>>= sCatalog;
         xTableProp->getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema;
         xTableProp->getPropertyValue( PROPERTY_NAME )       >>= sTable;
-        sUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, false, ::dbtools::eInDataManipulation );
+        sUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, false, ::dbtools::EComposeRule::InDataManipulation );
     }
 
     ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sUpdateTableName,(*o_pKeyColumnNames),true);
@@ -265,7 +265,7 @@ OUStringBuffer OKeySet::createKeyFilter()
     {
         if ( ! aFilter.isEmpty() )
             aFilter.append(aAnd);
-        appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::eInDataManipulation),
+        appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::EComposeRule::InDataManipulation),
                                  ::dbtools::quoteName(aQuote, aPosIter->second.sRealName),
                                  *aIter++,
                                  aFilter);
@@ -275,7 +275,7 @@ OUStringBuffer OKeySet::createKeyFilter()
     {
         if ( ! aFilter.isEmpty() )
             aFilter.append(aAnd);
-        appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::eInDataManipulation),
+        appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::EComposeRule::InDataManipulation),
                                  ::dbtools::quoteName(aQuote, aPosIter->second.sRealName),
                                  *aIter++,
                                  aFilter);
@@ -311,7 +311,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
             {
                 connectivity::OSQLTable xSelColSup(xSelectTables->getByName(*pIter),uno::UNO_QUERY);
                 Reference<XPropertySet> xProp(xSelColSup,uno::UNO_QUERY);
-                OUString sSelectTableName = ::dbtools::composeTableName( xMeta, xProp, ::dbtools::eInDataManipulation, false, false, false );
+                OUString sSelectTableName = ::dbtools::composeTableName( xMeta, xProp, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
 
                 ::dbaccess::getColumnPositions(xQueryColumns, xSelColSup->getColumns()->getElementNames(), sSelectTableName, (*m_pForeignColumnNames), true);
 
@@ -768,7 +768,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
             sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1," ");
             OUString sStmt = "SELECT " + sMaxStmt + "FROM ";
             OUString sCatalog,sSchema,sTable;
-            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
             try
             {

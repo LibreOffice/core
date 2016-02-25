@@ -336,7 +336,7 @@ OUString OMySQLTable::getAlterTableColumnPart()
     OUString sSql(  "ALTER TABLE " );
 
     OUString sComposedName(
-        ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::eInTableDefinitions ) );
+        ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::EComposeRule::InTableDefinitions ) );
     sSql += sComposedName;
 
     return sSql;

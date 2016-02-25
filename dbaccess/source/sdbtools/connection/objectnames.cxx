@@ -134,7 +134,7 @@ namespace sdbtools
 
             OUString sCatalog, sSchema, sName;
             ::dbtools::qualifiedNameComponents(
-                m_xConnection->getMetaData(), _rName, sCatalog, sSchema, sName, ::dbtools::eInTableDefinitions );
+                m_xConnection->getMetaData(), _rName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InTableDefinitions );
 
             OUString sExtraNameCharacters( m_xConnection->getMetaData()->getExtraNameCharacters() );
             if  (   ( !sCatalog.isEmpty() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )

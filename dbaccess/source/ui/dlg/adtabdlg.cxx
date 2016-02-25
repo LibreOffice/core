@@ -122,7 +122,7 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
         }
 
         aComposedName = ::dbtools::composeTableName(
-            xMeta, aCatalog, aSchema, aTableName, false, ::dbtools::eInDataManipulation );
+            xMeta, aCatalog, aSchema, aTableName, false, ::dbtools::EComposeRule::InDataManipulation );
     }
     catch ( const Exception& )
     {

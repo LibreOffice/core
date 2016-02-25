@@ -228,7 +228,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
             OUString sCatalog,sSchema,sTable;
-            ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             OUStringBuffer sSql(s_sUPDATE + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
                                        s_sSET + aSqlIter->second.toString());
             OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
@@ -293,7 +293,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
             OUString sCatalog,sSchema,sTable;
-            ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
             OUString sSql(s_sINSERT + sComposedTableName + " ( " + aSqlIter->second.toString() +
                                  s_sVALUES + aParameter[aSqlIter->first].toString() + " )");
@@ -363,7 +363,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
         if ( !rCondition.isEmpty() )
         {
             OUString sCatalog,sSchema,sTable;
-            ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             OUString sSql("DELETE FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
                                  " WHERE " + rCondition.toString() );
             executeDelete(_rDeleteRow, sSql, aSqlIter->first);
@@ -585,7 +585,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
             if ( !rCondition.isEmpty() )
             {
                 OUString sCatalog,sSchema,sTable;
-                ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+                ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
                 OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
                 OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName + " WHERE " +
                                        rCondition.makeStringAndClear());

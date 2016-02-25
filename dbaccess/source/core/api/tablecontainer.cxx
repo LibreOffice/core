@@ -188,7 +188,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
                                                 sCatalog,
                                                 sSchema,
                                                 sTable,
-                                                ::dbtools::eInDataManipulation);
+                                                ::dbtools::EComposeRule::InDataManipulation);
             Any aCatalog;
             if(!sCatalog.isEmpty())
                 aCatalog <<= sCatalog;
@@ -367,7 +367,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
                     xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
+                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
 
                 OUString sType;
                 xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;

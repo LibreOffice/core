@@ -535,7 +535,7 @@ void OComboBoxModel::loadData( bool _bForce )
                     OUString aQuote = xMeta->getIdentifierQuoteString();
 
                     OUString sCatalog, sSchema, sTable;
-                    qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, eInDataManipulation );
+                    qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, EComposeRule::InDataManipulation );
 
                     OUStringBuffer aStatement;
                     aStatement.append( "SELECT DISTINCT " );

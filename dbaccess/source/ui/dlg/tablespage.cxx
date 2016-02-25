@@ -164,7 +164,7 @@ namespace dbaui
         for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
         {
             if (xMeta.is())
-                qualifiedNameComponents(xMeta, pIncludeTable->getStr(), sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
+                qualifiedNameComponents(xMeta, pIncludeTable->getStr(), sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
             else
                 sName = pIncludeTable->getStr();
 

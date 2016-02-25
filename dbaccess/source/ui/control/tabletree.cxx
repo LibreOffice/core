@@ -424,7 +424,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
 
     // split the complete name into its components
     OUString sCatalog, sSchema, sName;
-    qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+    qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
 
     SvTreeListEntry* pParentEntry = getAllObjectsEntry();
 
@@ -577,7 +577,7 @@ OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) co
         }
         sTable = GetEntryText( _pEntry );
 
-        return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, false, ::dbtools::eInDataManipulation );
+        return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, false, ::dbtools::EComposeRule::InDataManipulation );
     }
     catch( const Exception& )
     {
@@ -596,7 +596,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
 
         // split the complete name into its components
         OUString sCatalog, sSchema, sName;
-        qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
+        qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
 
         SvTreeListEntry* pParent = getAllObjectsEntry();
         SvTreeListEntry* pCat = nullptr;

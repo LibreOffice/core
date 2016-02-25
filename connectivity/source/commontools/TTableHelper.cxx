@@ -393,7 +393,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
                     if ( pKeyProps.get() )
                         m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
 
-                    const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::eInDataManipulation);
+                    const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::EComposeRule::InDataManipulation);
                     pKeyProps.reset(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule));
                     pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
                     _rNames.push_back(sFkName);
@@ -513,13 +513,13 @@ void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException
             OUString sSql = getRenameStart();
 
             OUString sCatalog,sSchema,sTable;
-            ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+            ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
 
             OUString sComposedName;
-            sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,true,::dbtools::eInDataManipulation);
+            sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,true,::dbtools::EComposeRule::InDataManipulation);
             sSql += sComposedName
                  + " TO ";
-            sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,true,::dbtools::eInDataManipulation);
+            sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,true,::dbtools::EComposeRule::InDataManipulation);
             sSql += sComposedName;
 
             Reference< XStatement > xStmt = m_pImpl->m_xConnection->createStatement(  );
@@ -533,7 +533,7 @@ void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException
         OTable_TYPEDEF::rename(newName);
     }
     else
-        ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
+        ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::EComposeRule::InTableDefinitions);
 }
 
 Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
@@ -562,7 +562,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 OUString SAL_CALL OTableHelper::getName() throw(RuntimeException, std::exception)
 {
     OUString sComposedName;
-    sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,false,::dbtools::eInDataManipulation);
+    sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,false,::dbtools::EComposeRule::InDataManipulation);
     return sComposedName;
 }
 

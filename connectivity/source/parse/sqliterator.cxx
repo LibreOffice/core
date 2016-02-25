@@ -293,7 +293,7 @@ namespace
                     sSchema,
                     sName,
                     false,
-                    ::dbtools::eInDataManipulation
+                    ::dbtools::EComposeRule::InDataManipulation
                 );
             }
         }
@@ -364,7 +364,7 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
     try
     {
         OUString sCatalog, sSchema, sName;
-        qualifiedNameComponents( m_pImpl->m_xDatabaseMetaData, sComposedName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+        qualifiedNameComponents( m_pImpl->m_xDatabaseMetaData, sComposedName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
 
         // check whether there is a query with the given name
         bool bQueryDoesExist = m_pImpl->m_xQueryContainer.is() && m_pImpl->m_xQueryContainer->hasByName( sComposedName );
@@ -448,7 +448,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
                                 aSchema,
                                 aTableName,
                                 false,
-                                ::dbtools::eInDataManipulation);
+                                ::dbtools::EComposeRule::InDataManipulation);
 
     // if there is no alias for the table name assign the orignal name to it
     if ( aTableRange.isEmpty() )

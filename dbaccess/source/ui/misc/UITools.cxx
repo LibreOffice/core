@@ -696,7 +696,7 @@ OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const
         {
             sSchema = _xMetaData->getUserName();
         }
-        sCompsedName = ::dbtools::composeTableName( _xMetaData, sCatalog, sSchema, _sName, false, ::dbtools::eInDataManipulation );
+        sCompsedName = ::dbtools::composeTableName( _xMetaData, sCatalog, sSchema, _sName, false, ::dbtools::EComposeRule::InDataManipulation );
         sDefaultName = ::dbtools::createUniqueName(_xTables,sCompsedName);
     }
     catch(const SQLException&)
@@ -1338,7 +1338,7 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
                                         sCatalog,
                                         sSchema,
                                         sTable,
-                                        ::dbtools::eInDataManipulation);
+                                        ::dbtools::EComposeRule::InDataManipulation);
 
     xView->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
     xView->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));

@@ -330,8 +330,8 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
                         // properly quote all parts of the table name, so
                         // e.g. <schema>.<table> becomes "<schema>"."<table>"
                         OUString aCatlog,aSchema,aTable;
-                        ::dbtools::qualifiedNameComponents( m_xMetaData, sTableName, aCatlog, aSchema, aTable, ::dbtools::eInDataManipulation );
-                        sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
+                        ::dbtools::qualifiedNameComponents( m_xMetaData, sTableName, aCatlog, aSchema, aTable, ::dbtools::EComposeRule::InDataManipulation );
+                        sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
                     }
                 }
                 xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;

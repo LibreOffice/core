@@ -794,7 +794,7 @@ namespace frm
                     aStatement += " FROM ";
 
                     OUString sCatalog, sSchema, sTable;
-                    qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
+                    qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, EComposeRule::InDataManipulation );
                     aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
                     m_aListRowSet.setEscapeProcessing( false );

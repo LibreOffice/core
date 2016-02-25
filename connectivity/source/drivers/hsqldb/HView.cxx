@@ -87,7 +87,7 @@ namespace connectivity { namespace hsqldb
         // backend support.
 
         OUString sQualifiedName( ::dbtools::composeTableName(
-            m_xMetaData, m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::eInDataManipulation ) );
+            m_xMetaData, m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::EComposeRule::InDataManipulation ) );
 
         ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
 

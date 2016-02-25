@@ -358,7 +358,7 @@ namespace
                 Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
 
                 OUString sCatalog, sSchema, sTable;
-                ::dbtools::qualifiedNameComponents( xMetaData, aDBName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents( xMetaData, aDBName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
                 OUString aTableListStr = ::dbtools::composeTableNameForSelect( _xConnection, sCatalog, sSchema, sTable );
 
                 OUString aQuote = xMetaData->getIdentifierQuoteString();
@@ -1998,13 +1998,13 @@ namespace
                         OSL_VERIFY( xTableProps->getPropertyValue( PROPERTY_NAME ) >>= sComposedName );
                     else
                     {
-                        sComposedName = ::dbtools::composeTableName( xMetaData, xTableProps, ::dbtools::eInDataManipulation, false, false, false );
+                        sComposedName = ::dbtools::composeTableName( xMetaData, xTableProps, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
 
                         // if the alias is the complete (composed) table, then shorten it
                         if ( aKeyComp( sComposedName, aIter->first ) )
                         {
                             OUString sCatalog, sSchema, sTable;
-                            ::dbtools::qualifiedNameComponents( xMetaData, sComposedName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                            ::dbtools::qualifiedNameComponents( xMetaData, sComposedName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
                             sAlias = sTable;
                         }
                     }

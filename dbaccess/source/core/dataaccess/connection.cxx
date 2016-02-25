@@ -610,7 +610,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUS
                 aStatement = "SELECT * FROM ";
 
                 OUString sCatalog, sSchema, sTable;
-                ::dbtools::qualifiedNameComponents( getMetaData(), command, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents( getMetaData(), command, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
                 aStatement += ::dbtools::composeTableNameForSelect( this, sCatalog, sSchema, sTable );
             }
             break;

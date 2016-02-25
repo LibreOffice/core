@@ -219,7 +219,7 @@ namespace dbtools
             OUString tblName;
             xDetailField->getPropertyValue("TableName") >>= tblName;
             if (!tblName.isEmpty())
-                sFilter = ::dbtools::quoteTableName( m_xConnectionMetadata, tblName, ::dbtools::eInDataManipulation ) + ".";
+                sFilter = ::dbtools::quoteTableName( m_xConnectionMetadata, tblName, ::dbtools::EComposeRule::InDataManipulation ) + ".";
         }
         {
             OUString colName;

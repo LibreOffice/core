@@ -215,7 +215,7 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
                                                    sCatalog,
                                                    sSchema,
                                                    sTable,
-                                                   ::dbtools::eInDataManipulation);
+                                                   ::dbtools::EComposeRule::InDataManipulation);
 
                 sal_Int32 nPos = m_pImpl->m_pCatalog->GetEntryPos(OUString(sCatalog));
                 if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
@@ -291,7 +291,7 @@ IMPL_LINK_TYPED(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
                                getSchema(),
                                sNameToCheck,
                                false,  // no quoting
-                               ::dbtools::eInDataManipulation
+                               ::dbtools::EComposeRule::InDataManipulation
                            );
         }
 

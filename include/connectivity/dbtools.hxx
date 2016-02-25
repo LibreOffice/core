@@ -79,14 +79,14 @@ namespace dbtools
     class ISQLStatementHelper;
     typedef ::utl::SharedUNOComponent< css::sdbc::XConnection > SharedConnection;
 
-    enum EComposeRule
+    enum class EComposeRule
     {
-        eInTableDefinitions,
-        eInIndexDefinitions,
-        eInDataManipulation,
-        eInProcedureCalls,
-        eInPrivilegeDefinitions,
-        eComplete
+        InTableDefinitions,
+        InIndexDefinitions,
+        InDataManipulation,
+        InProcedureCalls,
+        InPrivilegeDefinitions,
+        Complete
     };
 
     // date conversion

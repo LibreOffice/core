@@ -437,7 +437,7 @@ namespace frm
             aStatement.append( " FROM " );
 
             OUString sCatalog, sSchema, sTable;
-            ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+            ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
             aStatement.append( ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
 
             // execute the statement

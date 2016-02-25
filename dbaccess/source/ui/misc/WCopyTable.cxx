@@ -113,7 +113,7 @@ OUString ObjectCopySource::getQualifiedObjectName() const
     OUString sName;
 
     if ( !m_xObjectPSI->hasPropertyByName( PROPERTY_COMMAND ) )
-        sName = ::dbtools::composeTableName( m_xMetaData, m_xObject, ::dbtools::eInDataManipulation, false, false, false );
+        sName = ::dbtools::composeTableName( m_xMetaData, m_xObject, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
     else
         m_xObject->getPropertyValue( PROPERTY_NAME ) >>= sName;
     return sName;
@@ -266,7 +266,7 @@ NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxC
     ,m_sTableName( _rTableName )
     ,m_aColumnInfo()
 {
-    ::dbtools::qualifiedNameComponents( m_xMetaData, m_sTableName, m_sTableCatalog, m_sTableSchema, m_sTableBareName, ::dbtools::eComplete );
+    ::dbtools::qualifiedNameComponents( m_xMetaData, m_sTableName, m_sTableCatalog, m_sTableSchema, m_sTableBareName, ::dbtools::EComposeRule::Complete );
     impl_ensureColumnInfo_throw();
 }
 
@@ -572,9 +572,9 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDef
                                             sCatalog,
                                             sSchema,
                                             sTable,
-                                            ::dbtools::eInDataManipulation);
+                                            ::dbtools::EComposeRule::InDataManipulation);
 
-        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,false,::dbtools::eInTableDefinitions);
+        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,false,::dbtools::EComposeRule::InTableDefinitions);
     }
 
     VclPtrInstance<OCopyTable> pPage1( this );
@@ -1217,7 +1217,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                                             sCatalog,
                                             sSchema,
                                             sTable,
-                                            ::dbtools::eInDataManipulation);
+                                            ::dbtools::EComposeRule::InDataManipulation);
 
         if ( sCatalog.isEmpty() && xMetaData->supportsCatalogsInTableDefinitions() )
         {
@@ -1252,7 +1252,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         else
         {
             OUString sComposedName(
-                ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::eInDataManipulation, false, false, false ) );
+                ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::EComposeRule::InDataManipulation, false, false, false ) );
             if(xTables->hasByName(sComposedName))
             {
                 xTables->getByName(sComposedName) >>= xTable;

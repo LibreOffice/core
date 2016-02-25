@@ -165,7 +165,7 @@ namespace dbp
                     getSettings().sLinkedListField = quoteName(sQuoteString, getSettings().sLinkedListField);
 
                 OUString sCatalog, sSchema, sName;
-                ::dbtools::qualifiedNameComponents( xMetaData, getSettings().sListContentTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
+                ::dbtools::qualifiedNameComponents( xMetaData, getSettings().sListContentTable, sCatalog, sSchema, sName, ::dbtools::EComposeRule::InDataManipulation );
                 getSettings().sListContentTable = ::dbtools::composeTableNameForSelect( xConn, sCatalog, sSchema, sName );
 
                 getSettings().sListContentField = quoteName(sQuoteString, getSettings().sListContentField);

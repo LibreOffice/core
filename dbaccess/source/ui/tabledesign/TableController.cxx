@@ -368,7 +368,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
             if(!m_xTable.is()) // correct name and try again
             {
                 // it can be that someone inserted new data for us
-                m_sName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTable, ::dbtools::eInDataManipulation, false, false, false );
+                m_sName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTable, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
@@ -1481,7 +1481,7 @@ OUString OTableController::getPrivateTitle() const
         if ( !m_sName.isEmpty() && getConnection().is() )
         {
             if ( m_xTable.is() )
-                sTitle = ::dbtools::composeTableName( getConnection()->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
+                sTitle = ::dbtools::composeTableName( getConnection()->getMetaData(), m_xTable, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
             else
                 sTitle = m_sName;
         }

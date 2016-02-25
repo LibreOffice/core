@@ -281,7 +281,7 @@ namespace dbaui
         OUString sSchema;
         OUString sTable;
         if ( m_bTable )
-            ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+            ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
 
         i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
         i_rDispatchArgs.put( OUString(PROPERTY_COMMAND), _rQualifiedName );

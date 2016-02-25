@@ -289,7 +289,7 @@ namespace connectivity { namespace hsqldb
             // split the fully qualified name
             Reference< XDatabaseMetaData > xMetaData( xMe->getMetaData(), UNO_QUERY_THROW );
             OUString sCatalog, sSchema, sName;
-            ::dbtools::qualifiedNameComponents( xMetaData, _rTableName, sCatalog, sSchema, sName, ::dbtools::eComplete );
+            ::dbtools::qualifiedNameComponents( xMetaData, _rTableName, sCatalog, sSchema, sName, ::dbtools::EComposeRule::Complete );
 
             // get the table information
             OUStringBuffer sSQL;

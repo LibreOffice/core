@@ -49,7 +49,7 @@ using namespace dbtools;
 sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {
     OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+    ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
 
     static const char s_sTableTypeView[] = "VIEW";
     static const char s_sTableTypeTable[] = "TABLE";
@@ -131,7 +131,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
 
 
         OUString sCatalog,sSchema,sTable;
-        ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+        ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
 
         OUString aSql(  "DROP " );
 
@@ -143,7 +143,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
             aSql += "TABLE ";
 
         OUString sComposedName(
-            ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInDataManipulation ) );
+            ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InDataManipulation ) );
         aSql += sComposedName;
         Reference< XStatement > xStmt = xConnection->createStatement(  );
         if ( xStmt.is() )
@@ -204,7 +204,7 @@ void OTables::appendNew(const OUString& _rsNewTable)
 OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
-    return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
+    return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
 }
 
 void OTables::addComment(const Reference< XPropertySet >& descriptor,OUStringBuffer& _rOut)

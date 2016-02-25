@@ -765,26 +765,26 @@ namespace
 
         switch ( _eComposeRule )
         {
-            case eInTableDefinitions:
+            case EComposeRule::InTableDefinitions:
                 pCatalogCall = &XDatabaseMetaData::supportsCatalogsInTableDefinitions;
                 pSchemaCall = &XDatabaseMetaData::supportsSchemasInTableDefinitions;
                 break;
-            case eInIndexDefinitions:
+            case EComposeRule::InIndexDefinitions:
                 pCatalogCall = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
                 pSchemaCall = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
                 break;
-            case eInProcedureCalls:
+            case EComposeRule::InProcedureCalls:
                 pCatalogCall = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
                 pSchemaCall = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
                 break;
-            case eInPrivilegeDefinitions:
+            case EComposeRule::InPrivilegeDefinitions:
                 pCatalogCall = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
                 pSchemaCall = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
                 break;
-            case eComplete:
+            case EComposeRule::Complete:
                 bIgnoreMetaData = true;
                 break;
-            case eInDataManipulation:
+            case EComposeRule::InDataManipulation:
                 // already properly set above
                 break;
         }
@@ -1303,7 +1303,7 @@ OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnectio
         bUseSchemaInSelect ? _rSchema : OUString(),
         _rName,
         true,
-        eInDataManipulation
+        EComposeRule::InDataManipulation
     );
 }
 

@@ -192,7 +192,7 @@ bool OCopyTable::LeavePage()
                                             sCatalog,
                                             sSchema,
                                             sTable,
-                                            ::dbtools::eInDataManipulation);
+                                            ::dbtools::EComposeRule::InDataManipulation);
         sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
         if ( nMaxLength && sTable.getLength() > nMaxLength )
         {

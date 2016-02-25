@@ -56,7 +56,7 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
                                         sCatalog,
                                         sSchema,
                                         sTable,
-                                        ::dbtools::eInDataManipulation);
+                                        ::dbtools::EComposeRule::InDataManipulation);
     return new ::connectivity::sdbcx::OView(isCaseSensitive(),
                             sTable,
                             m_xMetaData,
@@ -105,7 +105,7 @@ void OViews::dropObject(sal_Int32 _nPos,const OUString& /*_sElementName*/)
         OUString aSql(  "DROP VIEW" );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
+        aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InTableDefinitions, false, false, true );
 
         Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = xConnection->createStatement(  );
@@ -128,7 +128,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     OUString aSql(  "CREATE VIEW " );
     OUString sCommand;
 
-    aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
+    aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, false, false, true );
 
     aSql += " AS ";
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
@@ -145,7 +145,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     OTables* pTables = static_cast<OTables*>(static_cast<OMySQLCatalog&>(m_rParent).getPrivateTables());
     if ( pTables )
     {
-        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInDataManipulation, false, false, false );
+        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
         pTables->appendNew(sName);
     }
 }

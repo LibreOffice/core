@@ -93,7 +93,7 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
     // first we need to create the sql stmt to select the privs
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
+    ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
     Reference<XResultSet> xRes;
     switch(objType)
     {
@@ -227,7 +227,7 @@ void SAL_CALL OMySQLUser::grantPrivileges( const OUString& objName, sal_Int32 ob
     {
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         OUString sGrant = "GRANT " + sPrivs +
-            " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation) +
+            " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::EComposeRule::InDataManipulation) +
             " TO " + m_Name;
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
@@ -253,7 +253,7 @@ void SAL_CALL OMySQLUser::revokePrivileges( const OUString& objName, sal_Int32 o
     {
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         OUString sGrant = "REVOKE " + sPrivs +
-            " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation) +
+            " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::EComposeRule::InDataManipulation) +
             " FROM " + m_Name;
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
