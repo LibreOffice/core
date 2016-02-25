@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <hintids.hxx>
@@ -1141,7 +1142,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFn fnMove, const SwPaM* pRegion,
     if( bReplaceText )
     {
         const bool bRegExp(
-                SearchAlgorithms_REGEXP == pSearchOpt->algorithmType);
+                SearchAlgorithms2::REGEXP == pSearchOpt->AlgorithmType2);
         SwIndex& rSttCntIdx = pCursor->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 

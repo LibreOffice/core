@@ -238,7 +238,7 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
     bool bFirst = true;
     SwContentNode * pNode;
 
-    const bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+    const bool bRegSearch = SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2;
     const bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
                         ( rSearchOpt.searchString == "^$" ||
                           rSearchOpt.searchString == "$^" );
@@ -510,7 +510,7 @@ bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
     sal_uInt16 nSearchScript = 0;
     sal_uInt16 nCurrScript = 0;
 
-    if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
+    if ( SearchAlgorithms2::APPROXIMATE == rSearchOpt.AlgorithmType2 &&
          g_pBreakIt->GetBreakIter().is() )
     {
         pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
@@ -658,7 +658,7 @@ int SwFindParaText::Find( SwPaM* pCursor, SwMoveFn fnMove,
     if( bFnd && m_bReplace ) // replace string
     {
         // use replace method in SwDoc
-        const bool bRegExp(SearchAlgorithms_REGEXP == m_rSearchOpt.algorithmType);
+        const bool bRegExp(SearchAlgorithms2::REGEXP == m_rSearchOpt.AlgorithmType2);
         SwIndex& rSttCntIdx = pCursor->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
@@ -745,7 +745,7 @@ OUString *ReplaceBackReferences( const SearchOptions2& rSearchOpt, SwPaM* pPam )
 {
     OUString *pRet = nullptr;
     if( pPam && pPam->HasMark() &&
-        SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
+        SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
         const SwContentNode* pTextNode = pPam->GetContentNode();
         if( pTextNode && pTextNode->IsTextNode() && pTextNode == pPam->GetContentNode( false ) )
