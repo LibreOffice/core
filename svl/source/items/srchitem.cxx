@@ -137,6 +137,11 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     m_bAsianOptions   = aOpt.IsUseAsianOptions();
     m_bNotes = aOpt.IsNotes();
 
+    if (aOpt.IsUseWildcard())
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
+        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE; // something valid
+    }
     if (aOpt.IsUseRegularExpression())
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
@@ -348,7 +353,22 @@ void SvxSearchItem::SetRegExp( bool bVal )
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
         m_aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
     }
-    else if ( SearchAlgorithms_REGEXP == m_aSearchOpt.algorithmType )
+    else if ( SearchAlgorithms2::REGEXP == m_aSearchOpt.AlgorithmType2 )
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
+        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
+    }
+}
+
+
+void SvxSearchItem::SetWildcard( bool bVal )
+{
+    if ( bVal )
+    {
+        m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
+        m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE; // something valid
+    }
+    else if ( SearchAlgorithms2::REGEXP == m_aSearchOpt.AlgorithmType2 )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
@@ -372,7 +392,7 @@ void SvxSearchItem::SetLevenshtein( bool bVal )
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
     }
-    else if ( SearchAlgorithms_APPROXIMATE == m_aSearchOpt.algorithmType )
+    else if ( SearchAlgorithms2::APPROXIMATE == m_aSearchOpt.AlgorithmType2 )
     {
         m_aSearchOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         m_aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
