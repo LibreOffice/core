@@ -55,7 +55,7 @@ public class PlainSourceView extends JScrollPane implements
     private static final String undoKey = "Undo";
     private static final String redoKey = "Redo";
     private CompoundEdit compoundEdit = null;
-    private final int noLimit = -1;
+    private static final int noLimit = -1;
     UndoManager undoManager;
 
     public PlainSourceView(ScriptSourceModel model) {
