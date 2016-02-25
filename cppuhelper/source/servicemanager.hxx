@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,7 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <registry/registry.hxx>
 #include <rtl/ustring.hxx>
@@ -50,11 +51,12 @@ typedef css::uno::XInterface * SAL_CALL ImplementationConstructorFn(
 
 }
 
-typedef cppu::WeakComponentImplHelper8<
+typedef cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
     css::lang::XMultiComponentFactory, css::container::XSet,
     css::container::XContentEnumerationAccess, css::beans::XPropertySet,
-    css::beans::XPropertySetInfo, css::lang::XEventListener >
+    css::beans::XPropertySetInfo, css::lang::XEventListener,
+    css::lang::XInitialization>
 ServiceManagerBase;
 
 class ServiceManager:
@@ -203,8 +205,6 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         std::shared_ptr< Data::Implementation > & implementation);
 
-    void loadAllImplementations();
-
 private:
     virtual ~ServiceManager();
 
@@ -333,6 +333,11 @@ private:
     virtual void SAL_CALL disposing(css::lang::EventObject const & Source)
         throw (css::uno::RuntimeException, std::exception) override;
 
+    virtual void SAL_CALL initialize(
+        css::uno::Sequence<css::uno::Any> const & aArguments)
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+        override;
+
     // needs to be called with rBHelper.rMutex locked:
     bool isDisposed() { return rBHelper.bDisposed || rBHelper.bInDispose; }
 
@@ -376,6 +381,8 @@ private:
     std::shared_ptr< Data::Implementation > findServiceImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & specifier);
+
+    void preloadImplementations();
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     Data data_;
