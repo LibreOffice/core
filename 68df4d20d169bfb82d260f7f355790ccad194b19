@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_7f76973f",
+        "filename": "sw/Module_sw.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-25T09:00:05Z",
+      "side": 0,
+      "message": "why remove a unit test ? Especially doing it, without mentioning it in the commit message is no good.",
+      "revId": "68df4d20d169bfb82d260f7f355790ccad194b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

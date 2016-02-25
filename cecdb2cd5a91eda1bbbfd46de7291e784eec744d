@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_bf8e3f25",
+        "filename": "sw/source/core/bastyp/bparr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-02-25T09:00:05Z",
+      "side": 1,
+      "message": "change to #if 0",
+      "revId": "cecdb2cd5a91eda1bbbfd46de7291e784eec744d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
