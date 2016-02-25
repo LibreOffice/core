@@ -54,8 +54,6 @@ enum class FontSizeType {
 #define FLG_HORALIGN    0x0040
 
 
-extern SmFormat *pActiveFormat;
-
 class SmVisitor;
 class SmDocShell;
 class SmNode;
