@@ -33,7 +33,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define MAX_FLAGS_OFFSET    28
+#define MAX_FLAGS_OFFSET    29
 
 class SvtSearchOptions_Impl : public ConfigItem
 {
@@ -63,6 +63,7 @@ public:
 
     bool            GetFlag( sal_uInt16 nOffset ) const;
     void            SetFlag( sal_uInt16 nOffset, bool bVal );
+    void            SetSearchAlgorithm( sal_uInt16 nOffset, bool bVal );
 };
 
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
@@ -144,12 +145,13 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
         "Japanese/IsMatch_KiKu",                // 20
         "Japanese/IsIgnorePunctuation",         // 21
         "Japanese/IsIgnoreWhitespace",          // 22
-        "Japanese/IsIgnoreProlongedSoundMark",      // 23
+        "Japanese/IsIgnoreProlongedSoundMark",  // 23
         "Japanese/IsIgnoreMiddleDot",           // 24
         "IsNotes",                              // 25
         "IsIgnoreDiacritics_CTL",               // 26
         "IsIgnoreKashida_CTL",                  // 27
         "IsSearchFormatted"                     // 28
+        "IsUseWildcard"                         // 29
     };
 
     const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -159,6 +161,21 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
         pNames[i] = OUString::createFromAscii( aPropNames[i] );
 
     return aNames;
+}
+
+void SvtSearchOptions_Impl::SetSearchAlgorithm( sal_uInt16 nOffset, bool bVal )
+{
+    if (bVal)
+    {
+        // Search algorithms are mutually exclusive.
+        if (nOffset != 2 && GetFlag(2))
+            SetFlag( 2, false );
+        if (nOffset != 4 && GetFlag(4))
+            SetFlag( 4, false );
+        if (nOffset != 29 && GetFlag(29))
+            SetFlag( 29, false );
+    }
+    SetFlag( nOffset, bVal );
 }
 
 void SvtSearchOptions_Impl::Load()
@@ -327,7 +344,7 @@ bool SvtSearchOptions::IsUseRegularExpression() const
 
 void SvtSearchOptions::SetUseRegularExpression( bool bVal )
 {
-    pImpl->SetFlag( 2, bVal );
+    pImpl->SetSearchAlgorithm( 2, bVal );
 }
 
 void SvtSearchOptions::SetSearchForStyles( bool bVal )
@@ -342,7 +359,7 @@ bool SvtSearchOptions::IsSimilaritySearch() const
 
 void SvtSearchOptions::SetSimilaritySearch( bool bVal )
 {
-    pImpl->SetFlag( 4, bVal );
+    pImpl->SetSearchAlgorithm( 4, bVal );
 }
 
 bool SvtSearchOptions::IsUseAsianOptions() const
@@ -583,6 +600,16 @@ bool SvtSearchOptions::IsSearchFormatted() const
 void SvtSearchOptions::SetSearchFormatted( bool bVal )
 {
     pImpl->SetFlag( 28, bVal );
+}
+
+bool SvtSearchOptions::IsUseWildcard() const
+{
+    return pImpl->GetFlag( 29 );
+}
+
+void SvtSearchOptions::SetUseWildcard( bool bVal )
+{
+    pImpl->SetSearchAlgorithm( 29, bVal );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

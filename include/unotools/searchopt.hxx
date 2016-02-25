@@ -45,6 +45,7 @@ public:
     bool    IsWholeWordsOnly() const;
     bool    IsBackwards() const;
     bool    IsUseRegularExpression() const;
+    bool    IsUseWildcard() const;
     bool    IsSimilaritySearch() const;
     bool    IsUseAsianOptions() const;
     bool    IsMatchCase() const;            // also Japanese search option
@@ -54,6 +55,7 @@ public:
     void    SetWholeWordsOnly( bool bVal );
     void    SetBackwards( bool bVal );
     void    SetUseRegularExpression( bool bVal );
+    void    SetUseWildcard( bool bVal );
     void    SetSearchForStyles( bool bVal );
     void    SetSimilaritySearch( bool bVal );
     void    SetUseAsianOptions( bool bVal );

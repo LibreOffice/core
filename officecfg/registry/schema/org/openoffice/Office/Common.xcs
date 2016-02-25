@@ -5936,6 +5936,15 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="IsUseWildcard" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- UIHints: Edit/Find & Replace -->
+        <info>
+          <desc>Specifies search with the use of wildcards.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
