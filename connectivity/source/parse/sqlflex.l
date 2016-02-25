@@ -72,11 +72,11 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
         SQLyylval.pParseNode = new OSQLInternalNode(text, token);
 
 #define SQL_NEW_KEYWORD(token)                      \
-        SQLyylval.pParseNode = new OSQLInternalNode("", SQL_NODE_KEYWORD, (token));       return token;
+        SQLyylval.pParseNode = new OSQLInternalNode("", SQLNodeType::Keyword, (token));       return token;
 
-#define SQL_NEW_INTNUM      SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_INTNUM); return SQL_TOKEN_INTNUM;
-#define SQL_NEW_APPROXNUM   SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_APPROXNUM); return SQL_TOKEN_APPROXNUM;
-#define SQL_NEW_DATE        SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE); return SQL_TOKEN_ACCESS_DATE;
+#define SQL_NEW_INTNUM      SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::IntNum); return SQL_TOKEN_INTNUM;
+#define SQL_NEW_APPROXNUM   SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::ApproxNum); return SQL_TOKEN_APPROXNUM;
+#define SQL_NEW_DATE        SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::AccessDate); return SQL_TOKEN_ACCESS_DATE;
 
 #define YY_INPUT(buf,result,max_size)               \
 {                                                   \
@@ -403,14 +403,14 @@ YEAR                {SQL_NEW_KEYWORD(SQL_TOKEN_YEAR);  }
 
 ZONE                {SQL_NEW_KEYWORD(SQL_TOKEN_ZONE);  }
 
-"<"                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESS);return SQL_LESS;}
-">"                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREAT);return SQL_GREAT;}
-"="                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_EQUAL);return SQL_EQUAL;}
-"<="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESSEQ);return SQL_LESSEQ;}
-">="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return SQL_GREATEQ;}
-"<>"                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
-"!="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
-"||"                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_CONCAT);return SQL_CONCAT;}
+"<"                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Less);return SQL_LESS;}
+">"                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Great);return SQL_GREAT;}
+"="                 { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Equal);return SQL_EQUAL;}
+"<="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::LessEq);return SQL_LESSEQ;}
+">="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::GreatEq);return SQL_GREATEQ;}
+"<>"                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::NotEqual);return SQL_NOTEQUAL;}
+"!="                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::NotEqual);return SQL_NOTEQUAL;}
+"||"                { SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQLNodeType::Concat);return SQL_CONCAT;}
 
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
@@ -497,9 +497,9 @@ inline bool checkeof(int c) { return c == 0 || c == EOF; }
  * Valid strings:
  *  ''  'a string'  'quote '' within string'
  *  ""  "a string"  "quote "" within string"
- * nTyp == 0 -> SQL_NODE_NAME
- * nTyp == 1 -> SQL_NODE_STRING
- * nTyp == 2 -> SQL_NODE_ACCESS_DATE
+ * nTyp == 0 -> SQLNodeType::Name
+ * nTyp == 1 -> SQLNodeType::String
+ * nTyp == 2 -> SQLNodeType::AccessDate
  */
 sal_Int32 gatherString(int delim, sal_Int32 nTyp)
 {
@@ -518,13 +518,13 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
                 switch(nTyp)
                 {
                 case 0:
-                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
                     return SQL_TOKEN_NAME;
                 case 1:
-                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::String);
                     return SQL_TOKEN_STRING;
                 case 2:
-                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
+                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQLNodeType::AccessDate);
                     return SQL_TOKEN_ACCESS_DATE;
                 }
             }
@@ -619,7 +619,7 @@ sal_Int32 gatherName(const sal_Char* text)
             SQL_NEW_KEYWORD(nToken);
             break;
         default:
-            SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+            SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
             return SQL_TOKEN_NAME;
     }
 }
@@ -670,12 +670,12 @@ sal_Int32 gatherNamePre(const sal_Char* text)
             sal_Int32 nPos = xxx_pGLOBAL_SQLSCAN->GetCurrentPos() - nLength - 2;
             if (sStmt.getStr()[nPos] == ':')
             {
-                SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+                SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQLNodeType::Name);
                 nToken = SQL_TOKEN_NAME;
             }
             else
             {
-                SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+                SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQLNodeType::String);
                 nToken = SQL_TOKEN_STRING;
             }
         }

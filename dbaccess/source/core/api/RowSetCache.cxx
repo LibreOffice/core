@@ -1541,7 +1541,7 @@ bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,con
         OSL_ENSURE(pNode->count() == 3,"checkInnerJoin: Fehler im Parse Tree");
         if (!(SQL_ISRULE(pNode->getChild(0),column_ref) &&
                 SQL_ISRULE(pNode->getChild(2),column_ref) &&
-                pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
+                pNode->getChild(1)->getNodeType() == SQLNodeType::Equal))
         {
             bOk = false;
         }

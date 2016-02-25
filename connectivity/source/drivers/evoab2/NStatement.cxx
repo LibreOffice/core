@@ -289,33 +289,33 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         OSQLParseNode* pRHS = parseTree->getChild( 2 );
 
         if  (   (   !( SQL_ISRULE( pLHS, column_ref ) )         // on the LHS, we accept a column or a constant int value
-                &&  ( pLHS->getNodeType() != SQL_NODE_INTNUM )
+                &&  ( pLHS->getNodeType() != SQLNodeType::IntNum )
                 )
-            ||  (   ( pRHS->getNodeType() != SQL_NODE_STRING )  // on the RHS, certain literals are acceptable
-                &&  ( pRHS->getNodeType() != SQL_NODE_INTNUM )
-                &&  ( pRHS->getNodeType() != SQL_NODE_APPROXNUM )
+            ||  (   ( pRHS->getNodeType() != SQLNodeType::String )  // on the RHS, certain literals are acceptable
+                &&  ( pRHS->getNodeType() != SQLNodeType::IntNum )
+                &&  ( pRHS->getNodeType() != SQLNodeType::ApproxNum )
                 &&  !( SQL_ISTOKEN( pRHS, TRUE ) )
                 &&  !( SQL_ISTOKEN( pRHS, FALSE ) )
                 )
-            ||  (   ( pLHS->getNodeType() == SQL_NODE_INTNUM )  // an int on LHS requires an int on RHS
-                &&  ( pRHS->getNodeType() != SQL_NODE_INTNUM )
+            ||  (   ( pLHS->getNodeType() == SQLNodeType::IntNum )  // an int on LHS requires an int on RHS
+                &&  ( pRHS->getNodeType() != SQLNodeType::IntNum )
                 )
             )
         {
             m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
         }
 
-        if  (   ( pPrec->getNodeType() != SQL_NODE_EQUAL )
-            &&  ( pPrec->getNodeType() != SQL_NODE_NOTEQUAL )
+        if  (   ( pPrec->getNodeType() != SQLNodeType::Equal )
+            &&  ( pPrec->getNodeType() != SQLNodeType::NotEqual )
             )
         {
             m_pConnection->throwGenericSQLException( STR_OPERATOR_TOO_COMPLEX, *this );
         }
 
         // recognize the special "0 = 1" condition
-        if  (   ( pLHS->getNodeType() == SQL_NODE_INTNUM )
-            &&  ( pRHS->getNodeType() == SQL_NODE_INTNUM )
-            &&  ( pPrec->getNodeType() == SQL_NODE_EQUAL )
+        if  (   ( pLHS->getNodeType() == SQLNodeType::IntNum )
+            &&  ( pRHS->getNodeType() == SQLNodeType::IntNum )
+            &&  ( pPrec->getNodeType() == SQLNodeType::Equal )
             )
         {
             const sal_Int32 nLHS = pLHS->getTokenValue().toInt64();
@@ -333,7 +333,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
 
         pResult = createTest( aColumnName, E_BOOK_QUERY_IS, aMatchString );
 
-        if ( pResult && ( pPrec->getNodeType() == SQL_NODE_NOTEQUAL ) )
+        if ( pResult && ( pPrec->getNodeType() == SQLNodeType::NotEqual ) )
             pResult = e_book_query_not( pResult, TRUE );
     }
     // SQL like
@@ -350,11 +350,11 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         OSQLParseNode *pAtom      = pPart2->getChild( pPart2->count() - 2 );     // Match String
         bool bNotLike             = pPart2->getChild(0)->isToken();
 
-        if( !( pAtom->getNodeType() == SQL_NODE_STRING ||
-               pAtom->getNodeType() == SQL_NODE_NAME ||
+        if( !( pAtom->getNodeType() == SQLNodeType::String ||
+               pAtom->getNodeType() == SQLNodeType::Name ||
                SQL_ISRULE( pAtom,parameter ) ||
-               ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQL_NODE_NAME ) ||
-               ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQL_NODE_STRING ) ) )
+               ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQLNodeType::Name ) ||
+               ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQLNodeType::String ) ) )
         {
             SAL_INFO(
                 "connectivity.evoab2",

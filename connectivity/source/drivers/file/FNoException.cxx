@@ -75,7 +75,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     if (SQL_ISRULE(pParseNode,parameter))
     {
         DBG_ASSERT(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
-        DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
+        DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQLNodeType::Punctuation,"OResultSet: Parse Tree fehlerhaft");
 
         _rParaNodes.push_back(pParseNode);
         // Further descend not necessary

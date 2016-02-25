@@ -226,9 +226,9 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
 
     if ( !(SQL_ISRULE(pPredicateNode->getChild(0),column_ref)               ||
-          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_STRING     ||
-          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_INTNUM     ||
-          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_APPROXNUM  ||
+          pPredicateNode->getChild(2)->getNodeType() == SQLNodeType::String     ||
+          pPredicateNode->getChild(2)->getNodeType() == SQLNodeType::IntNum     ||
+          pPredicateNode->getChild(2)->getNodeType() == SQLNodeType::ApproxNum  ||
           SQL_ISTOKEN(pPredicateNode->getChild(2),TRUE)                     ||
           SQL_ISTOKEN(pPredicateNode->getChild(2),FALSE)                    ||
           SQL_ISRULE(pPredicateNode->getChild(2),parameter)                 ||
@@ -246,17 +246,17 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     sal_Int32 ePredicateType( SQLFilterOperator::EQUAL );
     OSQLParseNode *pPrec = pPredicateNode->getChild(1);
 
-    if (pPrec->getNodeType() == SQL_NODE_EQUAL)
+    if (pPrec->getNodeType() == SQLNodeType::Equal)
         ePredicateType = SQLFilterOperator::EQUAL;
-    else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
+    else if (pPrec->getNodeType() == SQLNodeType::NotEqual)
         ePredicateType = SQLFilterOperator::NOT_EQUAL;
-    else if (pPrec->getNodeType() == SQL_NODE_LESS)
+    else if (pPrec->getNodeType() == SQLNodeType::Less)
         ePredicateType = SQLFilterOperator::LESS;
-    else if (pPrec->getNodeType() == SQL_NODE_LESSEQ)
+    else if (pPrec->getNodeType() == SQLNodeType::LessEq)
         ePredicateType = SQLFilterOperator::LESS_EQUAL;
-    else if (pPrec->getNodeType() == SQL_NODE_GREATEQ)
+    else if (pPrec->getNodeType() == SQLNodeType::GreatEq)
         ePredicateType = SQLFilterOperator::GREATER_EQUAL;
-    else if (pPrec->getNodeType() == SQL_NODE_GREAT)
+    else if (pPrec->getNodeType() == SQLNodeType::Great)
         ePredicateType = SQLFilterOperator::GREATER;
     else
         OSL_FAIL( "OPredicateCompiler::execute_COMPARE: unexpected node type!" );
@@ -280,7 +280,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
     OSQLParseNode* pAtom        = pPart2->getChild(pPart2->count()-2);
     OSQLParseNode* pOptEscape   = pPart2->getChild(pPart2->count()-1);
 
-    if (!(pAtom->getNodeType() == SQL_NODE_STRING   ||
+    if (!(pAtom->getNodeType() == SQLNodeType::String   ||
           SQL_ISRULE(pAtom,parameter)               ||
           // odbc date
           SQL_ISRULE(pAtom,set_fct_spec)            ||
@@ -300,7 +300,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
             m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,nullptr);
         }
         OSQLParseNode *pEscNode = pOptEscape->getChild(1);
-        if (pEscNode->getNodeType() != SQL_NODE_STRING)
+        if (pEscNode->getNodeType() != SQLNodeType::String)
         {
             m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,nullptr);
         }
@@ -329,8 +329,8 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
     OSQLParseNode* p2ndtValue = pPart2->getChild(4);
 
     if (
-            !(p1stValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p1stValue,parameter))
-        &&  !(p2ndtValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p2ndtValue,parameter))
+            !(p1stValue->getNodeType() == SQLNodeType::String || SQL_ISRULE(p1stValue,parameter))
+        &&  !(p2ndtValue->getNodeType() == SQLNodeType::String || SQL_ISRULE(p2ndtValue,parameter))
         )
     {
         m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_BETWEEN,nullptr);
@@ -470,10 +470,10 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     {
         pOperand = new OOperandParam(pPredicateNode, ++m_nParamCounter);
     }
-    else if (pPredicateNode->getNodeType() == SQL_NODE_STRING ||
-             pPredicateNode->getNodeType() == SQL_NODE_INTNUM ||
-             pPredicateNode->getNodeType() == SQL_NODE_APPROXNUM ||
-             pPredicateNode->getNodeType() == SQL_NODE_NAME ||
+    else if (pPredicateNode->getNodeType() == SQLNodeType::String ||
+             pPredicateNode->getNodeType() == SQLNodeType::IntNum ||
+             pPredicateNode->getNodeType() == SQLNodeType::ApproxNum ||
+             pPredicateNode->getNodeType() == SQLNodeType::Name ||
              SQL_ISTOKEN(pPredicateNode,TRUE) ||
              SQL_ISTOKEN(pPredicateNode,FALSE) ||
              SQL_ISRULE(pPredicateNode,parameter))
@@ -482,7 +482,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     }
     else if((pPredicateNode->count() == 2) &&
             (SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"+") || SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"-")) &&
-            pPredicateNode->getChild(1)->getNodeType() == SQL_NODE_INTNUM)
+            pPredicateNode->getChild(1)->getNodeType() == SQLNodeType::IntNum)
     { // if -1 or +1 is there
         OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
         aValue += pPredicateNode->getChild(1)->getTokenValue();
@@ -494,7 +494,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         const OSQLParseNode* pODBCNodeChild = pODBCNode->getChild(0);
 
         // Odbc Date or time
-        if (pODBCNodeChild->getNodeType() == SQL_NODE_KEYWORD && (
+        if (pODBCNodeChild->getNodeType() == SQLNodeType::Keyword && (
             SQL_ISTOKEN(pODBCNodeChild,D) ||
             SQL_ISTOKEN(pODBCNodeChild,T) ||
             SQL_ISTOKEN(pODBCNodeChild,TS) ))

@@ -112,13 +112,13 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
 {
     switch (rColumnRef.getNodeType())
     {
-    case SQL_NODE_STRING:
+    case SQLNodeType::String:
         m_aValue = aStrValue;
         m_eDBType = DataType::VARCHAR;
         m_aValue.setBound(true);
         return;
-    case SQL_NODE_INTNUM:
-    case SQL_NODE_APPROXNUM:
+    case SQLNodeType::IntNum:
+    case SQLNodeType::ApproxNum:
         m_aValue = aStrValue.toDouble();
         m_eDBType = DataType::DOUBLE;
         m_aValue.setBound(true);

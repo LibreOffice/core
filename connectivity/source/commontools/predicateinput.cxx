@@ -399,7 +399,7 @@ namespace dbtools
                 else
                 {
                     OSQLParseNode* pValueNode = pOdbcSpec->getChild(1);
-                    if ( SQL_NODE_STRING == pValueNode->getNodeType() )
+                    if ( SQLNodeType::String == pValueNode->getNodeType() )
                         sReturn = pValueNode->getTokenValue();
                     else
                         pValueNode->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext());
@@ -419,7 +419,7 @@ namespace dbtools
                     assert(pValueNode && "OPredicateInputController::getPredicateValue: invalid node child!");
                     if ( !_bForStatementUse )
                     {
-                        if ( SQL_NODE_STRING == pValueNode->getNodeType() )
+                        if ( SQLNodeType::String == pValueNode->getNodeType() )
                             sReturn = pValueNode->getTokenValue();
                         else
                             pValueNode->parseNodeToStr(

@@ -625,7 +625,7 @@ void OStatement_Base::GetAssignValues()
 
             OSQLParseNode * pComp = pAssignment->getChild(1);
             OSL_ENSURE(pComp != nullptr,"OResultSet: pComp == NULL");
-            OSL_ENSURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
+            OSL_ENSURE(pComp->getNodeType() == SQLNodeType::Equal,"OResultSet: pComp->getNodeType() != SQLNodeType::Comparison");
             if (pComp->getTokenValue().toChar() != '=')
             {
                 throwFunctionSequenceException(*this);
@@ -647,9 +647,9 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnN
     OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name nicht gefunden");
     OSL_ENSURE(pRow_Value_Constructor_Elem != nullptr,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
 
-    if (pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_STRING ||
-        pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_INTNUM ||
-        pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_APPROXNUM)
+    if (pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::String ||
+        pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::IntNum ||
+        pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::ApproxNum)
     {
         // set value:
         SetAssignValue(aColumnName, pRow_Value_Constructor_Elem->getTokenValue());

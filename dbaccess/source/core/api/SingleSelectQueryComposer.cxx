@@ -1089,22 +1089,22 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
     sal_Int32 nPredicate = SQLFilterOperator::EQUAL;
     switch (_pPredicate->getNodeType())
     {
-        case SQL_NODE_EQUAL:
+        case SQLNodeType::Equal:
             nPredicate = SQLFilterOperator::EQUAL;
             break;
-        case SQL_NODE_NOTEQUAL:
+        case SQLNodeType::NotEqual:
             nPredicate = SQLFilterOperator::NOT_EQUAL;
             break;
-        case SQL_NODE_LESS:
+        case SQLNodeType::Less:
             nPredicate = SQLFilterOperator::LESS;
             break;
-        case SQL_NODE_LESSEQ:
+        case SQLNodeType::LessEq:
             nPredicate = SQLFilterOperator::LESS_EQUAL;
             break;
-        case SQL_NODE_GREAT:
+        case SQLNodeType::Great:
             nPredicate = SQLFilterOperator::GREATER;
             break;
-        case SQL_NODE_GREATEQ:
+        case SQLNodeType::GreatEq:
             nPredicate = SQLFilterOperator::GREATER_EQUAL;
             break;
         default:
@@ -1130,7 +1130,7 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
 
             aItem.Handle = getPredicateType(pCondition->getChild(i));
             // don't display the equal
-            if (pCondition->getChild(i)->getNodeType() == SQL_NODE_EQUAL)
+            if (pCondition->getChild(i)->getNodeType() == SQLNodeType::Equal)
                 i++;
 
             // go forward
@@ -1145,34 +1145,34 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
             sal_Int32 i = pCondition->count() - 2;
             switch (pCondition->getChild(i)->getNodeType())
             {
-                case SQL_NODE_EQUAL:
+                case SQLNodeType::Equal:
                     // don't display the equal
                     i--;
                     aItem.Handle = SQLFilterOperator::EQUAL;
                     break;
-                case SQL_NODE_NOTEQUAL:
+                case SQLNodeType::NotEqual:
                     i--;
                     aItem.Handle = SQLFilterOperator::NOT_EQUAL;
                     break;
-                case SQL_NODE_LESS:
+                case SQLNodeType::Less:
                     // take the opposite as we change the order
                     i--;
                     aValue = ">=";
                     aItem.Handle = SQLFilterOperator::GREATER_EQUAL;
                     break;
-                case SQL_NODE_LESSEQ:
+                case SQLNodeType::LessEq:
                     // take the opposite as we change the order
                     i--;
                     aValue = ">";
                     aItem.Handle = SQLFilterOperator::GREATER;
                     break;
-                case SQL_NODE_GREAT:
+                case SQLNodeType::Great:
                     // take the opposite as we change the order
                     i--;
                     aValue = "<=";
                     aItem.Handle = SQLFilterOperator::LESS_EQUAL;
                     break;
-                case SQL_NODE_GREATEQ:
+                case SQLNodeType::GreatEq:
                     // take the opposite as we change the order
                     i--;
                     aValue = "<";

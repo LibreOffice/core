@@ -64,11 +64,11 @@ namespace connectivity
 
     typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
 
-    enum SQLNodeType    {SQL_NODE_RULE, SQL_NODE_LISTRULE, SQL_NODE_COMMALISTRULE,
-                         SQL_NODE_KEYWORD, SQL_NODE_COMPARISON, SQL_NODE_NAME,
-                         SQL_NODE_STRING,   SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
-                         SQL_NODE_EQUAL,SQL_NODE_LESS,SQL_NODE_GREAT,SQL_NODE_LESSEQ,SQL_NODE_GREATEQ,SQL_NODE_NOTEQUAL,
-                         SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE,SQL_NODE_CONCAT};
+    enum class SQLNodeType { Rule, ListRule, CommaListRule,
+                         Keyword, Comparison, Name,
+                         String, IntNum, ApproxNum,
+                         Equal, Less, Great, LessEq, GreatEq, NotEqual,
+                         Punctuation, AMMSC, AccessDate, Date, Concat};
 
     typedef ::std::set< OUString >   QueryNameSet;
 
@@ -360,8 +360,8 @@ namespace connectivity
             // IsRule tests whether a node is a rule (NonTerminal)
             // ATTENTION: rules can be leaves, for example empty lists
         bool isRule() const
-            { return (m_eNodeType == SQL_NODE_RULE) || (m_eNodeType == SQL_NODE_LISTRULE)
-                || (m_eNodeType == SQL_NODE_COMMALISTRULE);}
+            { return (m_eNodeType == SQLNodeType::Rule) || (m_eNodeType == SQLNodeType::ListRule)
+                || (m_eNodeType == SQLNodeType::CommaListRule);}
 
             // IsToken tests whether a Node is a Token (Terminal but not a rule)
         bool isToken() const {return !isRule();}
@@ -458,7 +458,7 @@ namespace connectivity
     #define SQL_ISTOKEN(pParseNode, token) ((pParseNode)->isToken() && (pParseNode)->getTokenID() == SQL_TOKEN_##token)
     #define SQL_ISTOKENOR2(pParseNode, tok0, tok1) ((pParseNode)->isToken() &&  ( (pParseNode)->getTokenID() == SQL_TOKEN_##tok0 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok1 ))
     #define SQL_ISTOKENOR3(pParseNode, tok0, tok1, tok2) ((pParseNode)->isToken() && ( (pParseNode)->getTokenID() == SQL_TOKEN_##tok0 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok1 || (pParseNode)->getTokenID() == SQL_TOKEN_##tok2 ))
-    #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQL_NODE_PUNCTUATION && (pParseNode)->getTokenValue() == (aString))
+    #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQLNodeType::Punctuation && (pParseNode)->getTokenValue() == (aString))
 }
 
 #endif // INCLUDED_CONNECTIVITY_SQLNODE_HXX

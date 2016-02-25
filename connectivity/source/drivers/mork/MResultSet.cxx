@@ -805,9 +805,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     {
         OSL_ENSURE(parseTree->count() == 3, "Error parsing COMPARE predicate");
         if (!(SQL_ISRULE(parseTree->getChild(0),column_ref) ||
-          parseTree->getChild(2)->getNodeType() == SQL_NODE_STRING ||
-          parseTree->getChild(2)->getNodeType() == SQL_NODE_INTNUM ||
-          parseTree->getChild(2)->getNodeType() == SQL_NODE_APPROXNUM ||
+          parseTree->getChild(2)->getNodeType() == SQLNodeType::String ||
+          parseTree->getChild(2)->getNodeType() == SQLNodeType::IntNum ||
+          parseTree->getChild(2)->getNodeType() == SQLNodeType::ApproxNum ||
           SQL_ISTOKEN(parseTree->getChild(2),TRUE) ||
           SQL_ISTOKEN(parseTree->getChild(2),FALSE) ||
           SQL_ISRULE(parseTree->getChild(2),parameter) ||
@@ -818,9 +818,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         }
 
         OSQLParseNode *pPrec = parseTree->getChild(1);
-        if (pPrec->getNodeType() == SQL_NODE_EQUAL)
+        if (pPrec->getNodeType() == SQLNodeType::Equal)
             op = MQueryOp::Is;
-        else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
+        else if (pPrec->getNodeType() == SQLNodeType::NotEqual)
             op = MQueryOp::IsNot;
 
         OUString sTableRange;
@@ -864,11 +864,11 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         (void)pOptEscape;
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
-        if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
-              pAtom->getNodeType() == SQL_NODE_NAME ||
+        if (!(pAtom->getNodeType() == SQLNodeType::String ||
+              pAtom->getNodeType() == SQLNodeType::Name ||
               SQL_ISRULE(pAtom,parameter) ||
-              ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQL_NODE_NAME ) ||
-              ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQL_NODE_STRING )
+              ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQLNodeType::Name ) ||
+              ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQLNodeType::String )
               ) )
         {
             OSL_TRACE("analyseSQL : pAtom->count() = %zu", pAtom->count() );

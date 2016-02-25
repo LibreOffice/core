@@ -166,45 +166,45 @@ namespace dbaui
                 switch (_pNode->getNodeType())
                 {
 
-                case SQL_NODE_KEYWORD:
+                case SQLNodeType::Keyword:
                     {
                         rString += "SQL_KEYWORD:";
                         OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
                         rString += OStringToOUString(sT, RTL_TEXTENCODING_UTF8);
                      break;}
 
-                case SQL_NODE_COMPARISON:
+                case SQLNodeType::Comparison:
                     {
                         rString += "SQL_COMPARISON:" + _pNode->getTokenValue(); // append Nodevalue
                             // and start new line
                         break;}
 
-                case SQL_NODE_NAME:
+                case SQLNodeType::Name:
                     {
                         rString += "SQL_NAME:\"" + _pNode->getTokenValue() + "\"";
                         break;}
 
-                case SQL_NODE_STRING:
+                case SQLNodeType::String:
                     {
                         rString += "SQL_STRING:'" + _pNode->getTokenValue();
                         break;}
 
-                case SQL_NODE_INTNUM:
+                case SQLNodeType::IntNum:
                     {
                         rString += "SQL_INTNUM:" + _pNode->getTokenValue();
                         break;}
 
-                case SQL_NODE_APPROXNUM:
+                case SQLNodeType::ApproxNum:
                     {
                         rString += "SQL_APPROXNUM:" + _pNode->getTokenValue();
                         break;}
 
-                case SQL_NODE_PUNCTUATION:
+                case SQLNodeType::Punctuation:
                     {
                         rString += "SQL_PUNCTUATION:" + _pNode->getTokenValue(); // append Nodevalue
                         break;}
 
-                case SQL_NODE_AMMSC:
+                case SQLNodeType::AMMSC:
                     {
                         rString += "SQL_AMMSC:" + _pNode->getTokenValue(); // append Nodevalue
                         break;}

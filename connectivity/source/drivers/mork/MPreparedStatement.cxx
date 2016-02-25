@@ -466,7 +466,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     if (SQL_ISRULE(pParseNode,parameter))
     {
         OSL_ENSURE(pParseNode->count() >= 1,"OResultSet: Faulty Parse Tree");
-        OSL_ENSURE(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Faulty Parse Tree");
+        OSL_ENSURE(pParseNode->getChild(0)->getNodeType() == SQLNodeType::Punctuation,"OResultSet: Faulty Parse Tree");
 
         _rParaNodes.push_back(pParseNode);
         // further search isn't necessary

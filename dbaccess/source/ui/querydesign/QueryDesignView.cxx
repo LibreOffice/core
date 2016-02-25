@@ -570,7 +570,7 @@ namespace
             OSL_ENSURE(pNode->count() == 3,"OQueryDesignView::InsertJoinConnection: Error in Parse Tree");
             if (!(SQL_ISRULE(pNode->getChild(0),column_ref) &&
                   SQL_ISRULE(pNode->getChild(2),column_ref) &&
-                   pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
+                   pNode->getChild(1)->getNodeType() == SQLNodeType::Equal))
             {
                 OUString sError(ModuleRes(STR_QRY_JOIN_COLUMN_COMPARE));
                 _pView->getController().appendError( sError );
@@ -1630,7 +1630,7 @@ namespace
                 sal_uInt32 i=1;
 
                 // don't display the equal
-                if (pCondition->getChild(i)->getNodeType() == SQL_NODE_EQUAL)
+                if (pCondition->getChild(i)->getNodeType() == SQLNodeType::Equal)
                     i++;
 
                 // Bedingung parsen
@@ -1647,26 +1647,26 @@ namespace
                 sal_Int32 i = static_cast<sal_Int32>(pCondition->count() - 2);
                 switch (pCondition->getChild(i)->getNodeType())
                 {
-                    case SQL_NODE_EQUAL:
+                    case SQLNodeType::Equal:
                         // don't display the equal
                         i--;
                         break;
-                    case SQL_NODE_LESS:
+                    case SQLNodeType::Less:
                         // take the opposite as we change the order
                         i--;
                         aCondition += ">";
                         break;
-                    case SQL_NODE_LESSEQ:
+                    case SQLNodeType::LessEq:
                         // take the opposite as we change the order
                         i--;
                         aCondition += ">=";
                         break;
-                    case SQL_NODE_GREAT:
+                    case SQLNodeType::Great:
                         // take the opposite as we change the order
                         i--;
                         aCondition += "<";
                         break;
-                    case SQL_NODE_GREATEQ:
+                    case SQLNodeType::GreatEq:
                         // take the opposite as we change the order
                         i--;
                         aCondition += "<=";
@@ -3256,38 +3256,38 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
     sal_Int32 nDataType = DataType::DOUBLE;
     switch(pNode->getNodeType())
     {
-    case SQL_NODE_CONCAT:
-    case SQL_NODE_STRING:
+    case SQLNodeType::Concat:
+    case SQLNodeType::String:
         nDataType = DataType::VARCHAR;
         break;
-    case SQL_NODE_INTNUM:
+    case SQLNodeType::IntNum:
         nDataType = DataType::INTEGER;
         break;
-    case SQL_NODE_APPROXNUM:
+    case SQLNodeType::ApproxNum:
         nDataType = DataType::DOUBLE;
         break;
-    case SQL_NODE_DATE:
-    case SQL_NODE_ACCESS_DATE:
+    case SQLNodeType::Date:
+    case SQLNodeType::AccessDate:
         nDataType = DataType::TIMESTAMP;
         break;
-    case SQL_NODE_COMPARISON:
-    case SQL_NODE_EQUAL:
-    case SQL_NODE_LESS:
-    case SQL_NODE_GREAT:
-    case SQL_NODE_LESSEQ:
-    case SQL_NODE_GREATEQ:
-    case SQL_NODE_NOTEQUAL:
+    case SQLNodeType::Comparison:
+    case SQLNodeType::Equal:
+    case SQLNodeType::Less:
+    case SQLNodeType::Great:
+    case SQLNodeType::LessEq:
+    case SQLNodeType::GreatEq:
+    case SQLNodeType::NotEqual:
         nDataType = DataType::BOOLEAN;
         break;
-    case SQL_NODE_NAME:
-    case SQL_NODE_LISTRULE:
-    case SQL_NODE_COMMALISTRULE:
-    case SQL_NODE_KEYWORD:
-    case SQL_NODE_AMMSC: //??
-    case SQL_NODE_PUNCTUATION:
+    case SQLNodeType::Name:
+    case SQLNodeType::ListRule:
+    case SQLNodeType::CommaListRule:
+    case SQLNodeType::Keyword:
+    case SQLNodeType::AMMSC: //??
+    case SQLNodeType::Punctuation:
         OSL_FAIL("Unexpected SQL Node Type");
         break;
-    case SQL_NODE_RULE:
+    case SQLNodeType::Rule:
         switch(pNode->getKnownRuleID())
         {
         case OSQLParseNode::select_statement:

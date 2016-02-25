@@ -484,7 +484,7 @@ void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoin
         OSL_ENSURE(i_pJoinCondition->count() == 3,"OQueryDesignView::InsertJoinConnection: error in the parse tree");
         if (SQL_ISRULE(i_pJoinCondition->getChild(0),column_ref) &&
               SQL_ISRULE(i_pJoinCondition->getChild(2),column_ref) &&
-               i_pJoinCondition->getChild(1)->getNodeType() == SQL_NODE_EQUAL)
+               i_pJoinCondition->getChild(1)->getNodeType() == SQLNodeType::Equal)
         {
             m_pImpl->m_aJoinConditions.push_back( TNodePair(i_pJoinCondition->getChild(0),i_pJoinCondition->getChild(2)) );
         }
@@ -755,7 +755,7 @@ namespace
         { // Function
             _pColumnRef->parseNodeToStr( _out_rColumnName, _rxConnection );
         }
-        else  if(_pColumnRef->getNodeType() == SQL_NODE_NAME)
+        else  if(_pColumnRef->getNodeType() == SQLNodeType::Name)
             _out_rColumnName = _pColumnRef->getTokenValue();
     }
 }
@@ -892,7 +892,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                     (void)nLen;
                 }
             }
-            else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
+            else if(pDatatype && pDatatype->getNodeType() == SQLNodeType::Keyword)
             {
                 aTypeName = "VARCHAR";
             }
@@ -1172,7 +1172,7 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
                 lcl_generateParameterName( *pParent, *_pNode );
             }
         }
-        else if ( pParent->getNodeType() == SQL_NODE_COMMALISTRULE )
+        else if ( pParent->getNodeType() == SQLNodeType::CommaListRule )
         {
             lcl_generateParameterName( *pParent, *_pNode );
         }
