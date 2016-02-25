@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_dfb86be8",
+        "filename": "connectivity/source/commontools/CommonTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2016-02-25T08:11:09Z",
+      "side": 1,
+      "message": "(uintptr_t)nValue does the trick",
+      "revId": "df5e01cca55ab74ada5c08834efeabfd416aaf00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
