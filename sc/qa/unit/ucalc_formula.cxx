@@ -10,6 +10,7 @@
 #include "ucalc.hxx"
 #include "markdata.hxx"
 #include "calcconfig.hxx"
+#include "clipparam.hxx"
 #include "interpre.hxx"
 #include "compiler.hxx"
 #include "tokenarray.hxx"
@@ -33,6 +34,9 @@
 #include <svl/broadcast.hxx>
 
 #include <memory>
+#include <functional>
+#include <set>
+#include <algorithm>
 
 using namespace formula;
 
@@ -6925,6 +6929,178 @@ void Test::testFormulaErrorPropagation()
     m_pDoc->InsertMatrixFormula(aPos.Col(), aPos.Row(), aPos2.Col(), aPos2.Row(), aMark, "=ISERROR(({\"x\";2}+{3;4})-{5;6})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos.Format(SCA_VALID).toUtf8().getStr(), aTRUE, m_pDoc->GetString(aPos));
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aPos2.Format(SCA_VALID).toUtf8().getStr(), aFALSE, m_pDoc->GetString(aPos2));
+
+    m_pDoc->DeleteTab(0);
+}
+
+namespace {
+
+class ColumnTest
+{
+    ScDocument * m_pDoc;
+
+    const SCROW m_nTotalRows;
+    const SCROW m_nStart1;
+    const SCROW m_nEnd1;
+    const SCROW m_nStart2;
+    const SCROW m_nEnd2;
+
+public:
+    ColumnTest( ScDocument * pDoc, SCROW nTotalRows,
+                SCROW nStart1, SCROW nEnd1, SCROW nStart2, SCROW nEnd2 )
+        : m_pDoc(pDoc), m_nTotalRows(nTotalRows)
+        , m_nStart1(nStart1), m_nEnd1(nEnd1)
+        , m_nStart2(nStart2), m_nEnd2(nEnd2)
+    {}
+
+    void operator() ( SCCOL nColumn, const OUString& rFormula,
+                      std::function<double(SCROW )> lExpected ) const
+    {
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        ScMarkData aMark;
+
+        ScAddress aPos(nColumn, m_nStart1, 0);
+        m_pDoc->SetString(aPos, rFormula);
+        ASSERT_DOUBLES_EQUAL( lExpected(m_nStart1), m_pDoc->GetValue(aPos) );
+
+        // Copy formula cell to clipboard.
+        ScClipParam aClipParam(aPos, false);
+        aMark.SetMarkArea(aPos);
+        m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+
+        // Paste it to first range.
+        InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
+        ScRange aDestRange(nColumn, m_nStart1, 0, nColumn, m_nEnd1, 0);
+        aMark.SetMarkArea(aDestRange);
+        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+
+        // Paste it second range.
+        aDestRange = ScRange(nColumn, m_nStart2, 0, nColumn, m_nEnd2, 0);
+        aMark.SetMarkArea(aDestRange);
+        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+
+        // Check the formula results for passed column.
+        for( SCROW i = 0; i < m_nTotalRows; ++i )
+        {
+            if( !((m_nStart1 <= i && i <= m_nEnd1) || (m_nStart2 <= i && i <= m_nEnd2)) )
+                continue;
+            double fExpected = lExpected(i);
+            ASSERT_DOUBLES_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(nColumn,i,0)));
+        }
+    }
+};
+
+}
+
+void Test::testTdf97369()
+{
+    const SCROW TOTAL_ROWS = 330;
+    const SCROW ROW_RANGE = 10;
+    const SCROW START1 = 9;
+    const SCROW END1 = 159;
+    const SCROW START2 = 169;
+    const SCROW END2 = 319;
+
+    const double SHIFT1 = 200;
+    const double SHIFT2 = 400;
+
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, "tdf97369"));
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    // set up columns A, B, C
+    for( SCROW i = 0; i < TOTAL_ROWS; ++i )
+    {
+        m_pDoc->SetValue(ScAddress(0, i, 0), i);          // A
+        m_pDoc->SetValue(ScAddress(1, i, 0), i + SHIFT1); // B
+        m_pDoc->SetValue(ScAddress(2, i, 0), i + SHIFT2); // C
+    }
+
+    const ColumnTest columnTest( m_pDoc, TOTAL_ROWS, START1, END1, START2, END2 );
+
+    auto lExpectedinD = [=] (SCROW n) {
+        return 3.0 * (n-START1) + SHIFT1 + SHIFT2;
+    };
+    columnTest(3, "=SUM(A1:C1)", lExpectedinD);
+
+    auto lExpectedinE = [=] (SCROW ) {
+        return SHIFT1 + SHIFT2;
+    };
+    columnTest(4, "=SUM(A$1:C$1)", lExpectedinE);
+
+    auto lExpectedinF = [=] (SCROW n) {
+        return ((2*n + 1 - ROW_RANGE) * ROW_RANGE) / 2.0;
+    };
+    columnTest(5, "=SUM(A1:A10)", lExpectedinF);
+
+    auto lExpectedinG = [=] (SCROW n) {
+        return ((n + 1) * n) / 2.0;
+    };
+    columnTest(6, "=SUM(A$1:A10)", lExpectedinG);
+
+    auto lExpectedinH = [=] (SCROW n) {
+        return 3.0 * (((2*n + 1 - ROW_RANGE) * ROW_RANGE) / 2) + ROW_RANGE * (SHIFT1 + SHIFT2);
+    };
+    columnTest(7, "=SUM(A1:C10)", lExpectedinH);
+
+    auto lExpectedinI = [=] (SCROW ) {
+        return 3.0 * (((2*START1 + 1 - ROW_RANGE) * ROW_RANGE) / 2) + ROW_RANGE * (SHIFT1 + SHIFT2);
+    };
+    columnTest(8, "=SUM(A$1:C$10)", lExpectedinI);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf97587()
+{
+    const SCROW TOTAL_ROWS = 150;
+    const SCROW ROW_RANGE = 10;
+
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, "tdf97587"));
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    std::set<SCROW> emptyCells = {0, 50, 100};
+    for( SCROW i = 0; i < ROW_RANGE; ++i )
+    {
+        emptyCells.insert(i + TOTAL_ROWS);
+    }
+
+    // set up columns A
+    for( SCROW i = 0; i < TOTAL_ROWS; ++i )
+    {
+        if( emptyCells.find(i) != emptyCells.end() )
+            continue;
+        m_pDoc->SetValue(ScAddress(0, i, 0), 1);
+    }
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScMarkData aMark;
+
+    ScAddress aPos(1, 0, 0);
+    m_pDoc->SetString(aPos, "=SUM(A1:A10)");
+
+    // Copy formula cell to clipboard.
+    ScClipParam aClipParam(aPos, false);
+    aMark.SetMarkArea(aPos);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+
+    // Paste it to first range.
+    InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
+    ScRange aDestRange(1, 1, 0, 1, TOTAL_ROWS + ROW_RANGE, 0);
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+
+    // Check the formula results in column B.
+    for( SCROW i = 0; i < TOTAL_ROWS + 1; ++i )
+    {
+        int k = std::count_if( emptyCells.begin(), emptyCells.end(),
+                [=](SCROW n) { return (i <= n && n < i + ROW_RANGE); } );
+        double fExpected = ROW_RANGE - k;
+        ASSERT_DOUBLES_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(1,i,0)));
+    }
 
     m_pDoc->DeleteTab(0);
 }

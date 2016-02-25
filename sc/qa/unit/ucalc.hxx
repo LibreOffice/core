@@ -458,6 +458,9 @@ public:
     void testUndoDataAnchor();
     void testFormulaErrorPropagation();
 
+    void testTdf97369();
+    void testTdf97587();
+
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
     CPPUNIT_TEST(testPerf);
@@ -688,6 +691,8 @@ public:
     CPPUNIT_TEST(testCopyPasteMatrixFormula);
     CPPUNIT_TEST(testUndoDataAnchor);
     CPPUNIT_TEST(testFormulaErrorPropagation);
+    CPPUNIT_TEST(testTdf97369);
+    CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST_SUITE_END();
 
 private:
