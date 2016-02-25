@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_3f5ecf45",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "oh sorry, that was not purpose.",
+      "parentUuid": "1aa78d24_1fd833ef",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_dfd50bba",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-25T12:40:58Z",
       "side": 1,
       "message": "I can\u0027t say I like this idea of testing by comparing to reference document. It introduces too much uncertainty, too many points that can possibly break that are independent of the code you actually want to test ... but maybe you have a very good reason to do it this way instead of just testing the content of the document ...",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9f3543f9",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "The bestter solution is i get the buffer \"matrixmap\" from xestyle.cpp and compare, but a second define here is ugly, this reference document is, i think the better solution as double definition.\n\nHave you a better idea?",
+      "parentUuid": "1aa78d24_dfd50bba",
       "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_ff3a87e6",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "When you look to the test_borders_export.ods you can see the double-lines appear at with 1,25pt before it has no lines.\nAnd that i testing here, not lines when in both then okay",
+      "parentUuid": "1aa78d24_5f4bdbb0",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_bfc63f14",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 1
@@ -81,6 +135,24 @@
       "writtenOn": "2016-02-25T12:40:58Z",
       "side": 1,
       "message": "You can also use CPPUNIT_FAIL",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_3f252fc2",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "But the CPPUNIT_FAIL give only the message, but the CPPUNIT_ASSERT_MESSAGE give the line with file\n\nI think that should be at all error massages, why different outputs, it is very helpful this information with line and file?",
+      "parentUuid": "1aa78d24_bfc63f14",
       "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_5f559b1b",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "That is typo mistake",
+      "parentUuid": "1aa78d24_1f231307",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_3fdb6fef",
         "filename": "sc/source/filter/excel/xestyle.cxx",
         "patchSetId": 1
@@ -115,6 +205,24 @@
       "writtenOn": "2016-02-25T12:40:58Z",
       "side": 1,
       "message": "I have neither time nor energy to comment on this map, but I trust you that you know what you\u0027re doing :)",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7f2fb7a1",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "This mapping ist descript in the Bugticket https://bugs.documentfoundation.org/show_bug.cgi?id\u003d79787#c14",
+      "parentUuid": "1aa78d24_3fdb6fef",
       "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -138,6 +246,24 @@
     },
     {
       "key": {
+        "uuid": "1aa78d24_bf30ff08",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1655,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "but with copy and paste the compiler was happy, will change",
+      "parentUuid": "1aa78d24_1f6af31a",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa78d24_ff8287c7",
         "filename": "sc/source/filter/oox/stylesbuffer.cxx",
         "patchSetId": 1
@@ -149,6 +275,24 @@
       "writtenOn": "2016-02-25T12:40:58Z",
       "side": 1,
       "message": "So for this slanted dash-dot line, I find the original mapping okay and I\u0027d not be inclined to change it. But it\u0027s a matter of taste and it can be discussed, nothing to hold this patch back for ...",
+      "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_bf175f53",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-02-25T14:43:08Z",
+      "side": 1,
+      "message": "Is decript in Bugticket https://bugs.documentfoundation.org/show_bug.cgi?id\u003d79787#c14",
+      "parentUuid": "1aa78d24_ff8287c7",
       "revId": "5b2d8f6f65b66fa61892852da73fadb23639b33e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
