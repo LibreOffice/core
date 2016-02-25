@@ -10,6 +10,7 @@
 #include <sfx2/classificationhelper.hxx>
 
 #include <map>
+#include <algorithm>
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -491,6 +492,19 @@ OUString SfxClassificationHelper::GetDocumentWatermark()
         return it->second;
 
     return OUString();
+}
+
+std::vector<OUString> SfxClassificationHelper::GetBACNames()
+{
+    if (m_pImpl->m_aCategories.empty())
+        m_pImpl->parsePolicy();
+
+    std::vector<OUString> aRet;
+    std::transform(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), std::back_inserter(aRet), [](const std::pair<OUString, SfxClassificationCategory>& rPair)
+    {
+        return rPair.first;
+    });
+    return aRet;
 }
 
 void SfxClassificationHelper::SetBACName(const OUString& rName)
