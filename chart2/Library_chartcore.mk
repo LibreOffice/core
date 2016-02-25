@@ -113,10 +113,10 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/VLineProperties \
     chart2/source/view/main/VPolarTransformation \
     chart2/source/view/main/VTitle \
+    chart2/source/view/main/Linear3DTransformation \
 ))
 ifeq ($(ENABLE_OPENGL),TRUE)
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
-    chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/3DChartObjects \
     chart2/source/model/template/GL3DBarChartType \
     chart2/source/model/template/GL3DBarChartTypeTemplate \
