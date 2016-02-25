@@ -53,19 +53,19 @@ namespace dbtools
     {
     public:
         /// classifies the origin of the data to fill a parameter
-        enum ParameterClassification
+        enum class ParameterClassification
         {
             /** parameters which are filled from the master-detail relationship, where the detail
                 name is an explicit parameter name
             */
-            eLinkedByParamName,
+            LinkedByParamName,
             /** parameters which are filled from the master-detail relationship, where the detail
                 name is a column name, so an implicit parameter had to be generated for it
             */
-            eLinkedByColumnName,
+            LinkedByColumnName,
             /** parameters which are filled externally (i.e. by XParameters::setXXX, or by the parameter listeners)
             */
-            eFilledExternally
+            FilledExternally
         };
         /** meta data about an inner parameter
         */
@@ -82,13 +82,13 @@ namespace dbtools
 
             /// default ctor
             ParameterMetaData()
-                :eType( eFilledExternally )
+                :eType( ParameterClassification::FilledExternally )
             {
             }
 
             /// ctor with composer column
             ParameterMetaData( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
-                :eType           ( eFilledExternally )
+                :eType           ( ParameterClassification::FilledExternally )
                 ,xComposerColumn ( _rxColumn         )
             {
             }
