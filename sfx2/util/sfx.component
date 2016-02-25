@@ -82,4 +82,8 @@
       constructor="com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
+  <implementation name="com.sun.star.comp.sfx2.ClassificationCategoriesController"
+      constructor="com_sun_star_sfx2_ClassificationCategoriesController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>

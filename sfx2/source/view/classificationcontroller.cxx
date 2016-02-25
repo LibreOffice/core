@@ -1,0 +1,119 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <cppuhelper/implbase.hxx>
+#include <svtools/toolboxcontroller.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <cppuhelper/supportsservice.hxx>
+
+#include <vcl/vclptr.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/svapp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/toolbox.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/classificationhelper.hxx>
+
+using namespace com::sun::star;
+
+namespace sfx2
+{
+
+using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::ToolboxController, lang::XServiceInfo>;
+
+/// Controller for .uno:ClassificationApply.
+class ClassificationCategoriesController : public ClassificationCategoriesControllerBase
+{
+    VclPtr<ListBox> m_pCategories;
+
+public:
+    ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
+    virtual ~ClassificationCategoriesController();
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
+
+    // XToolbarController
+    virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
+};
+
+ClassificationCategoriesController::ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext)
+    : ClassificationCategoriesControllerBase(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:ClassificationApply"))
+    , m_pCategories(nullptr)
+{
+}
+
+ClassificationCategoriesController::~ClassificationCategoriesController()
+{
+}
+
+OUString ClassificationCategoriesController::getImplementationName() throw (uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.comp.sfx2.ClassificationCategoriesController");
+}
+
+sal_Bool ClassificationCategoriesController::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+{
+    uno::Sequence<OUString> aServices
+    {
+        "com.sun.star.frame.ToolbarController"
+    };
+    return aServices;
+}
+
+void ClassificationCategoriesController::dispose() throw (uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    svt::ToolboxController::dispose();
+    m_pCategories.disposeAndClear();
+}
+
+uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
+{
+    vcl::Window* pParent = VCLUnoHelper::GetWindow(rParent);
+    ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent);
+    if (pToolbar)
+    {
+        m_pCategories = VclPtr<ListBox>::Create(pToolbar, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
+        m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
+    }
+
+    return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCategories));
+}
+
+void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
+{
+    return;
+}
+
+} // namespace sfx2
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(uno::XComponentContext* pContext, const uno::Sequence<uno::Any>&)
+{
+    return cppu::acquire(new sfx2::ClassificationCategoriesController(pContext));
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
