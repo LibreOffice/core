@@ -129,23 +129,12 @@ namespace connectivity
             processID[16] = 0;
 
             Any uaJVM = xVM->getJavaVM( processID );
-
-            if (!uaJVM.hasValue())
+            sal_Int64 nTemp;
+            if (!(uaJVM >>= nTemp)) {
                 throw Exception(); // -5
-            else
-            {
-                sal_Int32 nValue = 0;
-                jvmaccess::VirtualMachine* pJVM = nullptr;
-                if ( uaJVM >>= nValue )
-                    pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nValue);
-                else
-                {
-                    sal_Int64 nTemp = 0;
-                    uaJVM >>= nTemp;
-                    pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nTemp);
-                }
-                aRet = pJVM;
             }
+            aRet = reinterpret_cast<jvmaccess::VirtualMachine *>(
+                static_cast<sal_IntPtr>(nTemp));
         }
         catch (Exception&)
         {
