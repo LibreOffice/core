@@ -25,7 +25,7 @@
 
 namespace framework{
 
-bool InterceptionHelper::m_bPreferrFirstInterceptor = true;
+bool InterceptionHelper::m_bPreferrFirstInterceptor = false;
 
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                                        const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
