@@ -130,10 +130,6 @@ bool UnusedDefaultParams::VisitCallExpr(CallExpr * callExpr) {
         return true;
     }
     const FunctionDecl* functionDecl = callExpr->getDirectCallee()->getCanonicalDecl();
-    auto n = functionDecl->getNumParams();
-    if (n == 0 || !functionDecl->getParamDecl(n - 1)->hasDefaultArg()) {
-        return true;
-    }
     // method overrides don't always specify the same default params (althogh they probably should)
     // so we need to work our way up to the root method
     while (isa<CXXMethodDecl>(functionDecl)) {
@@ -141,6 +137,10 @@ bool UnusedDefaultParams::VisitCallExpr(CallExpr * callExpr) {
         if (methodDecl->size_overridden_methods()==0)
             break;
         functionDecl = *methodDecl->begin_overridden_methods();
+    }
+    auto n = functionDecl->getNumParams();
+    if (n == 0 || !functionDecl->getParamDecl(n - 1)->hasDefaultArg()) {
+        return true;
     }
     assert(callExpr->getNumArgs() <= n); // can be < in template code
     for (unsigned i = callExpr->getNumArgs(); i != 0;) {
@@ -208,7 +208,7 @@ bool UnusedDefaultParams::VisitFunctionDecl( const FunctionDecl* functionDecl )
     return true;
 }
 
-loplugin::Plugin::Registration< UnusedDefaultParams > X("unuseddefaultparams", true);
+loplugin::Plugin::Registration< UnusedDefaultParams > X("unuseddefaultparams", false);
 
 }
 
