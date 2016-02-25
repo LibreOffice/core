@@ -143,8 +143,7 @@ public:
     //     + from the parent styles
 
     // @param mask      mask describing which properties to return
-    // @param pStack    already processed StyleSheetEntries
-    PropertyMapPtr GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack = StyleSheetEntryDequePtr());
+    PropertyMapPtr GetProperties( sal_Int32 nMask);
 
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
     virtual ~TableStyleSheetEntry( );

@@ -81,9 +81,9 @@ static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValu
     rAttributes.set(nId, pValue, eOverwrite);
 }
 
-static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = RTFOverwrite::NO_APPEND)
+static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue)
 {
-    lcl_putNestedAttribute(rSprms, nParent, nId, pValue, eOverwrite, false);
+    lcl_putNestedAttribute(rSprms, nParent, nId, pValue, RTFOverwrite::NO_APPEND, false);
 }
 
 static RTFValue::Pointer_t lcl_getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
@@ -379,7 +379,7 @@ void RTFDocumentImpl::checkFirstRun()
         // start initial paragraph
         m_bFirstRun = false;
         assert(!m_bNeedSect);
-        setNeedSect(); // first call that succeeds
+        setNeedSect(true); // first call that succeeds
 
         // set the requested default font, if there are none
         RTFValue::Pointer_t pFont = lcl_getNestedAttribute(m_aDefaultState.aCharacterSprms, NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii);
@@ -1505,7 +1505,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
 
 RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
-    setNeedSect();
+    setNeedSect(true);
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     // special case \upr: ignore everything except nested \ud
@@ -2079,7 +2079,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 
 RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
-    setNeedSect();
+    setNeedSect(true);
     if (nKeyword != RTF_HEXCHAR)
         checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     else
@@ -2563,7 +2563,7 @@ void RTFDocumentImpl::resetTableRowProperties()
 
 RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
-    setNeedSect();
+    setNeedSect(true);
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
@@ -3585,7 +3585,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
 RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
-    setNeedSect();
+    setNeedSect(true);
     checkUnicode(/*bUnicode =*/ nKeyword != RTF_U, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
@@ -4811,7 +4811,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
 RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
-    setNeedSect();
+    setNeedSect(true);
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;

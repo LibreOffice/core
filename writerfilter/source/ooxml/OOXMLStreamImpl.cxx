@@ -413,11 +413,10 @@ OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (uno::Reference<uno::XComponentContext> xContext,
  uno::Reference<io::XInputStream> rStream,
- bool bRepairStorage,
- OOXMLStream::StreamType_t nStreamType)
+ bool bRepairStorage)
 {
     OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream,
-                                                    nStreamType, bRepairStorage);
+                                                    OOXMLStream::DOCUMENT, bRepairStorage);
     return OOXMLStream::Pointer_t(pStream);
 }
 

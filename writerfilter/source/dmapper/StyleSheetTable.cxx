@@ -139,30 +139,9 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
     m_aStyles[nType] = pProps;
 }
 
-PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack )
+PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
 {
     PropertyMapPtr pProps( new PropertyMap );
-
-    // First get the parent properties
-    StyleSheetEntryPtr pEntry = m_pStyleSheet->FindParentStyleSheet( sBaseStyleIdentifier );
-
-    if ( pEntry.get( ) )
-    {
-        if (pStack.get() == nullptr)
-            pStack.reset(new StyleSheetEntryDeque());
-
-        StyleSheetEntryDeque::const_iterator aIt = find(pStack->begin(), pStack->end(), pEntry);
-
-        if (aIt != pStack->end())
-        {
-            pStack->push_back(pEntry);
-
-            TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
-            pProps->InsertProps(pParent->GetProperties(nMask));
-
-            pStack->pop_back();
-        }
-    }
 
     // And finally get the mask ones
     pProps->InsertProps(GetLocalPropertiesFromMask(nMask));

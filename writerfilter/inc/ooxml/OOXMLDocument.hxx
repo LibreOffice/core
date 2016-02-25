@@ -241,8 +241,7 @@ public:
     static OOXMLStream::Pointer_t
     createStream(css::uno::Reference<css::uno::XComponentContext> rContext,
                  css::uno::Reference<css::io::XInputStream> rStream,
-                 bool bRepairStorage,
-                 OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
+                 bool bRepairStorage);
 
     static OOXMLStream::Pointer_t
     createStream(OOXMLStream::Pointer_t pStream,

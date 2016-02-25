@@ -439,7 +439,7 @@ private:
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.
-    void setNeedSect(bool bNeedSect = true);
+    void setNeedSect(bool bNeedSect);
     void resetTableRowProperties();
     void backupTableRowProperties();
     void restoreTableRowProperties();
