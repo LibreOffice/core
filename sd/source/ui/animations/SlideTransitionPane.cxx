@@ -805,7 +805,9 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             }
         }
         aResult.mbEffectAmbiguous = false;
-    }
+
+    } else if (mpVS_TRANSITION_ICONS->IsNoSelection())
+        aResult.mbEffectAmbiguous = false;
 
     // speed
     if( mpLB_SPEED->IsEnabled() &&
