@@ -150,7 +150,7 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
         "IsNotes",                              // 25
         "IsIgnoreDiacritics_CTL",               // 26
         "IsIgnoreKashida_CTL",                  // 27
-        "IsSearchFormatted"                     // 28
+        "IsSearchFormatted",                    // 28
         "IsUseWildcard"                         // 29
     };
 
