@@ -292,6 +292,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/styles/StyleManager \
     sfx2/source/toolbox/imgmgr \
     sfx2/source/toolbox/tbxitem \
+    sfx2/source/view/classificationcontroller \
     sfx2/source/view/classificationhelper \
     sfx2/source/view/frame \
     sfx2/source/view/frame2 \
