@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_CLASSIFICATIONHELPER_HXX
 
 #include <memory>
+#include <vector>
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
@@ -35,6 +36,8 @@ public:
     SfxClassificationHelper(SfxObjectShell& rObjectShell);
     ~SfxClassificationHelper();
     OUString GetBACName();
+    /// Return all possible valid category names, based on the policy.
+    std::vector<OUString> GetBACNames();
     /// Setting this sets all the other properties, based on the policy.
     void SetBACName(const OUString& rName);
     /// If GetImpactLevelColor() will return something meaningful.
