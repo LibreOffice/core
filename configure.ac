@@ -6047,7 +6047,7 @@ if test "$GCC" = "yes"; then
             #include <cxxabi.h>
             void * f() { return __cxxabiv1::__cxa_allocate_exception(0); }
         ])], [
-            AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION],[1])
+            AC_DEFINE([HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION],[1])
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
@@ -6058,7 +6058,7 @@ if test "$GCC" = "yes"; then
             #include <cxxabi.h>
             void * f() { return __cxxabiv1::__cxa_get_globals(); }
         ])], [
-            AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS],[1])
+            AC_DEFINE([HAVE_CXXABI_H_CXA_GET_GLOBALS],[1])
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
@@ -6069,7 +6069,7 @@ if test "$GCC" = "yes"; then
             #include <cxxabi.h>
             void f() { __cxxabiv1::__cxa_throw(0, 0, 0); }
         ])], [
-            AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_THROW],[1])
+            AC_DEFINE([HAVE_CXXABI_H_CXA_THROW],[1])
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
@@ -12855,10 +12855,10 @@ AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extension_update.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cups.h])
+AC_CONFIG_HEADERS([config_host/config_cxxabi.h])
 AC_CONFIG_HEADERS([config_host/config_dbus.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])
-AC_CONFIG_HEADERS([config_host/config_gcc.h])
 AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])

@@ -29,7 +29,7 @@
 #endif
 #include <unwind.h>
 
-#include "config_gcc.h"
+#include "config_cxxabi.h"
 #include "uno/any2.h"
 #include "uno/mapping.h"
 
@@ -104,17 +104,17 @@ struct __cxa_eh_globals
 // __cxa_allocate_exception and __cxa_throw, though they do not have the
 // additional problem of an incompletely declared return type:
 
-#if !HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS
+#if !HAVE_CXXABI_H_CXA_GET_GLOBALS
 namespace __cxxabiv1 { extern "C" void * __cxa_get_globals() throw(); }
 #endif
 
-#if !HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION
+#if !HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION
 namespace __cxxabiv1 {
 extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) throw();
 }
 #endif
 
-#if !HAVE_GCC_CXXABI_H_CXA_THROW
+#if !HAVE_CXXABI_H_CXA_THROW
 namespace __cxxabiv1 {
 extern "C" void __cxa_throw(
     void * thrown_exception, void * tinfo, void (* dest)(void *))

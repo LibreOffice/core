@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CONFIG_GCC_H
-#define CONFIG_GCC_H
+#ifndef CONFIG_CXXABI_H
+#define CONFIG_CXXABI_H
 
-#define HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION 0
-#define HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS 0
-#define HAVE_GCC_CXXABI_H_CXA_THROW 0
+#define HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION 0
+#define HAVE_CXXABI_H_CXA_GET_GLOBALS 0
+#define HAVE_CXXABI_H_CXA_THROW 0
 
 #endif
 
