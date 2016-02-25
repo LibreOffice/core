@@ -50,14 +50,9 @@ namespace __cxxabiv1
         virtual ~__si_class_type_info();
         const __class_type_info *__base_type;
     };
-
-extern "C" void *__cxa_allocate_exception( std::size_t thrown_size ) _NOEXCEPT;
-
-extern "C" _LIBCPP_NORETURN void __cxa_throw(
-    void *thrown_exception, std::type_info *tinfo, void (*dest) (void *) );
 }
 
-#else
+#endif
 
 #if !HAVE_CXXABI_H_CXA_EH_GLOBALS
 // <https://mentorembedded.github.io/cxx-abi/abi-eh.html>:
@@ -107,8 +102,6 @@ extern "C" void __cxa_throw(
     void * thrown_exception, void * tinfo, void (* dest)(void *))
     __attribute__((noreturn));
 }
-#endif
-
 #endif
 
 extern "C" void privateSnippetExecutor( ... );
