@@ -143,7 +143,6 @@ void AtkListener::updateChildList(
                  m_aChildList.resize(std::min(nChildren2, n));
                  break;
              }
-             OSL_ASSERT(m_aChildList[n].is());
          }
      }
 }

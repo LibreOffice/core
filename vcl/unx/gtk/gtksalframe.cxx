@@ -721,7 +721,7 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     if ( pSalMenu != nullptr )
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
-        pGtkSalMenu->Display( true );
+        pGtkSalMenu->EnableUnity(true);
         pGtkSalMenu->UpdateFull();
     }
 }
@@ -742,7 +742,7 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
     if ( pSalMenu ) {
         GtkSalMenu* pGtkSalMenu = static_cast< GtkSalMenu* >( pSalMenu );
-        pGtkSalMenu->Display( false );
+        pGtkSalMenu->EnableUnity(false);
     }
 }
 #endif

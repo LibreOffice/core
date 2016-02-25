@@ -376,6 +376,9 @@ public:
     GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
     GtkWidget*  getMouseEventWidget() const;
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
+#endif
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }
     GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }

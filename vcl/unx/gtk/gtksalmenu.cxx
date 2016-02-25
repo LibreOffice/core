@@ -33,6 +33,8 @@
 const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
 const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
 
+static bool bUnityMode = false;
+
 /*
  * This function generates the proper command name for all actions, including
  * duplicated or special ones.
@@ -77,17 +79,7 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
 
 bool GtkSalMenu::PrepUpdate()
 {
-    bool bMenuVisibility;
-
-    //get top level visibility
-    const GtkSalMenu* pMenu = this;
-    do
-    {
-        bMenuVisibility = pMenu->mbMenuVisibility;
-        pMenu = pMenu->mpParentSalMenu;
-    } while (pMenu);
-
-    return bMenuVisibility && mpMenuModel && mpActionGroup;
+    return mpMenuModel && mpActionGroup;
 }
 
 /*
@@ -386,8 +378,6 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rR
         nTime = gtk_get_current_event_time();
     }
 
-    Display(true);
-
     mpFrame = static_cast<GtkSalFrame*>(pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame());
 
     GLOActionGroup* pActionGroup = g_lo_action_group_new(static_cast<gpointer>(mpFrame));
@@ -437,7 +427,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& /*rR
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
-    mbMenuVisibility( false ),
+    mbUnityMode ( false ),
+    mpMenuBarWidget( nullptr ),
     mpVCLMenu( nullptr ),
     mpParentSalMenu( nullptr ),
     mpFrame( nullptr ),
@@ -459,6 +450,8 @@ GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
 
+    DestroyMenuWidget();
+
     if (mpMenuModel)
         g_object_unref(mpMenuModel);
 
@@ -467,7 +460,7 @@ GtkSalMenu::~GtkSalMenu()
 
 bool GtkSalMenu::VisibleMenuBar()
 {
-    return mbMenuBar && mbMenuVisibility;
+    return mbMenuBar;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -500,6 +493,35 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
     pGtkSubMenu->mpParentSalMenu = this;
     pItem->mpSubMenu = pGtkSubMenu;
+}
+
+void GtkSalMenu::CreateMenuWidget()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
+    mpMenuBarWidget = gtk_grid_new();
+
+    gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarWidget), true);
+    gtk_grid_insert_row(pGrid, 0);
+    gtk_grid_attach(pGrid, mpMenuBarWidget, 0, 0, 1, 1);
+
+    GtkWidget *pMenuBarWidget = gtk_menu_bar_new_from_model(mpMenuModel);
+    gtk_widget_insert_action_group(pMenuBarWidget, "win", mpActionGroup);
+    gtk_grid_attach(GTK_GRID(mpMenuBarWidget), pMenuBarWidget, 0, 0, 1, 1);
+
+    gtk_widget_show_all(mpMenuBarWidget);
+#endif
+}
+
+void GtkSalMenu::DestroyMenuWidget()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    if (mpMenuBarWidget)
+    {
+        gtk_widget_destroy(mpMenuBarWidget);
+        mpMenuBarWidget = nullptr;
+    }
+#endif
 }
 
 void GtkSalMenu::SetFrame(const SalFrame* pFrame)
@@ -539,10 +561,14 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     }
 
     // Generate the main menu structure.
-    if (mbMenuVisibility)
-        UpdateFull();
+    UpdateFull();
 
     g_lo_menu_insert_section( pMenuModel, 0, nullptr, mpMenuModel );
+
+#if GTK_CHECK_VERSION(3,0,0)
+    if (!mbUnityMode)
+        CreateMenuWidget();
+#endif
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
@@ -790,15 +816,15 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
     }
 }
 
-void GtkSalMenu::Display( bool bVisible )
+void GtkSalMenu::EnableUnity(bool bEnable)
 {
-    mbMenuVisibility = bVisible;
-
-    if (mbMenuBar)
+    if (bUnityMode != bEnable)
     {
-        bool bVCLMenuVisible = !bVisible;
-        MenuBar* pMenuBar = static_cast<MenuBar*>(mpVCLMenu);
-        pMenuBar->SetDisplayable(bVCLMenuVisible);
+        if (!bEnable)
+            CreateMenuWidget();
+        else
+            DestroyMenuWidget();
+        bUnityMode = bEnable;
     }
 }
 

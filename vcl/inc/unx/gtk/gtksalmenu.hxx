@@ -44,7 +44,8 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
 
     bool                            mbMenuBar;
-    bool                            mbMenuVisibility;
+    bool                            mbUnityMode;
+    GtkWidget*                      mpMenuBarWidget;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     GtkSalFrame*                    mpFrame;
@@ -100,10 +101,13 @@ public:
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate( const gchar* aMenuCommand = nullptr );
     void                        Deactivate( const gchar* aMenuCommand );
-    void                        Display( bool bVisible );
+    void                        EnableUnity(bool bEnable);
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     void                        UpdateFull();       // Update full menu hierarchy from this menu.
+
+    void CreateMenuWidget();
+    void DestroyMenuWidget();
 
     virtual bool                ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) override;
 };
