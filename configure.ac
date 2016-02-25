@@ -3688,7 +3688,12 @@ if test "$_os" = "WINNT"; then
                 fi
             fi
             if test "$BUILD_X64" = TRUE; then
-                AC_MSG_RESULT([found])
+                if test "$VCVER" = 140; then
+                    BUILD_X64=
+                    AC_MSG_RESULT([64-bit Explorer extensions are not supported on this compiler yet])
+                else
+                    AC_MSG_RESULT([found])
+                endif
             else
                 AC_MSG_RESULT([not found])
                 AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
