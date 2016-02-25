@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/stream.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
@@ -96,8 +96,6 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 SmFormat::SmFormat()
 :   aBaseSize(0, SmPtsTo100th_mm(12))
 {
-    nVersion    = SM_FMT_VERSION_NOW;
-
     eHorAlign       = AlignCenter;
     nGreekCharStyle = 0;
     bIsTextmode     = bScaleNormalBrackets = false;
@@ -175,7 +173,6 @@ void SmFormat::SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault )
 SmFormat & SmFormat::operator = (const SmFormat &rFormat)
 {
     SetBaseSize(rFormat.GetBaseSize());
-    SetVersion (rFormat.GetVersion());
     SetHorAlign(rFormat.GetHorAlign());
     SetTextmode(rFormat.IsTextmode());
     SetGreekCharStyle(rFormat.GetGreekCharStyle());

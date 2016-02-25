@@ -26,9 +26,6 @@
 #include <types.hxx>
 
 
-#define SM_FMT_VERSION_51   (sal_uInt8(0x01))
-#define SM_FMT_VERSION_NOW  SM_FMT_VERSION_51
-
 #define FNTNAME_TIMES   "Times New Roman"
 #define FNTNAME_HELV    "Helvetica"
 #define FNTNAME_COUR    "Courier"
@@ -97,7 +94,6 @@ class SmFormat : public SfxBroadcaster
     SmFace      vFont[FNT_END + 1];
     bool        bDefaultFont[FNT_END + 1];
     Size        aBaseSize;
-    long        nVersion;
     sal_uInt16      vSize[SIZ_END + 1];
     sal_uInt16      vDist[DIS_END + 1];
     SmHorAlign  eHorAlign;
@@ -136,11 +132,6 @@ public:
 
     bool            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
     void            SetScaleNormalBrackets(bool bVal) { bScaleNormalBrackets = bVal; }
-
-    long            GetVersion() const { return nVersion; }
-
-    //! at time (5.1) use only the lower byte!!!
-    void            SetVersion(long nVer) { nVersion = nVer; }
 
     SmFormat &      operator = (const SmFormat &rFormat);
 
