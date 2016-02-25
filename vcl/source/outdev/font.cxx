@@ -1419,7 +1419,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
             pMultiSalLayout->AddFallback( *pFallback,
                 rLayoutArgs.maRuns, aFontSelData.mpFontData );
             if (nFallbackLevel == MAX_FALLBACK-1)
-                pMultiSalLayout->SetIncomplete();
+                pMultiSalLayout->SetIncomplete(true);
         }
 
         mpFontCache->Release( pFallbackFont );

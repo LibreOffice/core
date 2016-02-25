@@ -151,9 +151,9 @@ public:
         // appends a polygon optionally closing it
         void appendPolygon( const basegfx::B2DPolygon& rPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
         // appends a polypolygon optionally closing the subpaths
-        void appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
+        void appendPolyPolygon( const tools::PolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
         // appends a polypolygon optionally closing the subpaths
-        void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose = true ) const;
+        void appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const;
         // converts a length (either vertical or horizontal; this
         // can be important if the source MapMode is not
         // symmetrical) to page length and appends it to the buffer
@@ -818,7 +818,7 @@ i12626
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
-    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, bool bDrawMask = false );
+    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx );
 
     /* writes the Do operation inside the content stream */
     void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
@@ -1153,11 +1153,10 @@ public:
 
     /* actual drawing functions */
     void drawText( const Point& rPos, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
-    void drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
+    void drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen );
     void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
-                          sal_Int32 nIndex, sal_Int32 nLen,
-                          bool bTextLines = true  );
-    void drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle, bool bTextLines = true  );
+                          sal_Int32 nIndex, sal_Int32 nLen  );
+    void drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove );
     void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );

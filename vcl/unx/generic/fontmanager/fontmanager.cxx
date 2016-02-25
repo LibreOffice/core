@@ -1827,7 +1827,7 @@ bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
     return bRet;
 }
 
-bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray, bool bVertical ) const
+bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray ) const
 {
     PrintFont* pFont = getFont( nFontID );
     if( ! pFont )
@@ -1853,13 +1853,9 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
         if( pFont->m_pMetrics )
         {
             int effectiveCode = pString[i];
-            effectiveCode |= bVertical ? 1 << 16 : 0;
             std::unordered_map< int, CharacterMetric >::const_iterator it =
                   pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
-        // if no vertical metrics are available assume rotated horizontal metrics
-        if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
-                  it = pFont->m_pMetrics->m_aMetrics.find( pString[i] );
-        // the character metrics are in it->second
+            // the character metrics are in it->second
             if( it != pFont->m_pMetrics->m_aMetrics.end() )
                 pArray[ i ] = it->second;
         }
@@ -1923,8 +1919,7 @@ bool PrintFontManager::createFontSubset(
                                         const sal_GlyphId* pGlyphIds,
                                         const sal_uInt8* pNewEncoding,
                                         sal_Int32* pWidths,
-                                        int nGlyphs,
-                                        bool bVertical
+                                        int nGlyphs
                                         )
 {
     PrintFont* pFont = getFont( nFont );
@@ -2043,7 +2038,7 @@ bool PrintFontManager::createFontSubset(
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
                                                               pGID,
                                                               nGlyphs,
-                                                              bVertical );
+                                                              false/*bVertical*/ );
     if( pMetrics )
     {
         for( int i = 0; i < nGlyphs; i++ )

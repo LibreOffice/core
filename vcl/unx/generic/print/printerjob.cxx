@@ -52,17 +52,15 @@ namespace psp
 {
 
 bool
-AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
-          sal_uInt32 nBlockSize = nBLOCKSIZE)
+AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer)
 {
+    sal_uInt32 nBlockSize = nBLOCKSIZE;
     if ((pDst == nullptr) || (pSrc == nullptr))
         return false;
 
     if (pSrc->setPos(osl_Pos_Absolut, 0) != osl::FileBase::E_None)
         return false;
 
-    if (nBlockSize == 0)
-        nBlockSize = nBLOCKSIZE;
     if (pBuffer == nullptr)
         pBuffer = static_cast<unsigned char*>(alloca (nBlockSize));
 

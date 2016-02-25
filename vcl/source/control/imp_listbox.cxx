@@ -1874,12 +1874,12 @@ void ImplListBoxWindow::FillLayoutData() const
     const_cast<ImplListBoxWindow*>(this)->Invalidate(Rectangle(Point(0, 0), GetOutputSize()));
 }
 
-void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout)
+void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     sal_Int32 nCount = mpEntryList->GetEntryCount();
 
     bool bShowFocusRect = mbHasFocusRect;
-    if (mbHasFocusRect && !bLayout)
+    if (mbHasFocusRect)
         ImplHideFocusRect();
 
     long nY = 0; // + mnBorder;
@@ -1891,7 +1891,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Re
         if (nY + pEntry->mnHeight >= rRect.Top() &&
             nY <= rRect.Bottom() + mnMaxHeight)
         {
-            ImplPaint(rRenderContext, i, false, bLayout);
+            ImplPaint(rRenderContext, i);
         }
         nY += pEntry->mnHeight;
     }
@@ -1900,7 +1900,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Re
     maFocusRect.SetPos(Point(0, nHeightDiff));
     Size aSz(maFocusRect.GetWidth(), mpEntryList->GetEntryHeight(mnCurrentPos));
     maFocusRect.SetSize(aSz);
-    if (HasFocus() && bShowFocusRect && !bLayout)
+    if (HasFocus() && bShowFocusRect)
         ImplShowFocusRect();
 }
 
