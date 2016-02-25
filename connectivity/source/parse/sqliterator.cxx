@@ -2088,7 +2088,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
     }
 
     impl_appendError( SQLException(
-        sErrorMessage, nullptr, getStandardSQLState( SQL_GENERAL_ERROR ), 1000, Any() ) );
+        sErrorMessage, nullptr, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, Any() ) );
 }
 
 

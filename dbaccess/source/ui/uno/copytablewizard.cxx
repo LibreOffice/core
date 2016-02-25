@@ -1201,7 +1201,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                 if ( ( nSourceColumn < 1 ) || ( nSourceColumn >= (sal_Int32)aSourceColTypes.size() ) )
                 {   // ( we have to check here against 1 because the parameters are 1 based)
                     ::dbtools::throwSQLException("Internal error: invalid column type index.",
-                                                 ::dbtools::SQL_INVALID_DESCRIPTOR_INDEX, *this);
+                                                 ::dbtools::StandardSQLState::INVALID_DESCRIPTOR_INDEX, *this);
                 }
 
                 switch ( aSourceColTypes[ nSourceColumn ] )
@@ -1285,7 +1285,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
                         ::dbtools::throwSQLException(
                             aMessage,
-                            ::dbtools::SQL_INVALID_SQL_DATA_TYPE,
+                            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
                             *this
                         );
                     }

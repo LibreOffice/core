@@ -306,7 +306,7 @@ namespace dbtools
         const css::sdbc::SQLException& _rChainedException,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const OUString& _rAdditionalError,
-        const StandardSQLState _eSQLState = SQL_ERROR_UNSPECIFIED,
+        const StandardSQLState _eSQLState = StandardSQLState::ERROR_UNSPECIFIED,
         const sal_Int32 _nErrorCode = 0);
 
     /** search the parent hierarchy for a data source.

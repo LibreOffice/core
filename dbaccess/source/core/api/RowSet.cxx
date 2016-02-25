@@ -973,7 +973,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException, std::
         }
         else if ( !m_bAfterLast ) // the update went wrong
         {
-            ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_UPDATE_FAILED ), SQL_INVALID_CURSOR_POSITION, *this );
+            ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_UPDATE_FAILED ), StandardSQLState::INVALID_CURSOR_POSITION, *this );
         }
     }
 }
@@ -986,15 +986,15 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException, std::
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_BEFORE_AFTER ), SQL_INVALID_CURSOR_POSITION, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_BEFORE_AFTER ), StandardSQLState::INVALID_CURSOR_POSITION, *this );
     if ( m_bNew )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_INSERT_ROW ), SQL_INVALID_CURSOR_POSITION, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_INSERT_ROW ), StandardSQLState::INVALID_CURSOR_POSITION, *this );
     if  ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), StandardSQLState::FUNCTION_SEQUENCE_ERROR, *this );
     if ( ( m_pCache->m_nPrivileges & Privilege::DELETE ) != Privilege::DELETE )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_PRIVILEGE ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_DELETE_PRIVILEGE ), StandardSQLState::FUNCTION_SEQUENCE_ERROR, *this );
     if ( rowDeleted() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), StandardSQLState::FUNCTION_SEQUENCE_ERROR, *this );
 
     // this call position the cache indirect
     Any aBookmarkToDelete( m_aBookmark );
@@ -1160,7 +1160,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException,
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
     if ( ( m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_INSERT_PRIVILEGE ), SQL_GENERAL_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_INSERT_PRIVILEGE ), StandardSQLState::GENERAL_ERROR, *this );
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
@@ -1258,7 +1258,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
         // m_bModified should be true. Also, as soon as somebody calls moveToInsertRow,
         // our current row should not be deleted anymore. So, we should not have survived the above
         // check "if ( !m_pCache->m_bNew && !m_bModified )"
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), StandardSQLState::FUNCTION_SEQUENCE_ERROR, *this );
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
@@ -1631,7 +1631,7 @@ void ORowSet::impl_ensureStatement_throw()
         m_xStatement = m_xActiveConnection->prepareStatement( sCommandToExecute );
         if ( !m_xStatement.is() )
         {
-            ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INTERNAL_ERROR ), SQL_GENERAL_ERROR, *this );
+            ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INTERNAL_ERROR ), StandardSQLState::GENERAL_ERROR, *this );
         }
 
         Reference< XPropertySet > xStatementProps( m_xStatement, UNO_QUERY_THROW );
@@ -2408,7 +2408,7 @@ bool ORowSet::impl_buildActiveCommand_throw()
     m_aActiveCommand = sCommand;
 
     if ( m_aActiveCommand.isEmpty() && !bDoEscapeProcessing )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_SQL_COMMAND ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_SQL_COMMAND ), StandardSQLState::FUNCTION_SEQUENCE_ERROR, *this );
 
     return bDoEscapeProcessing;
 }
@@ -2704,16 +2704,16 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
     checkCache();
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), SQL_GENERAL_ERROR, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_RESULT_IS_READONLY ), StandardSQLState::GENERAL_ERROR, *this );
 
     if ( rowDeleted() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), SQL_INVALID_CURSOR_POSITION, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_ROW_ALREADY_DELETED ), StandardSQLState::INVALID_CURSOR_POSITION, *this );
 
     if ( m_aCurrentRow.isNull() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_CURSOR_STATE ), SQL_INVALID_CURSOR_STATE, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_CURSOR_STATE ), StandardSQLState::INVALID_CURSOR_STATE, *this );
 
     if ( columnIndex <= 0 || sal_Int32((*m_aCurrentRow)->get().size()) <= columnIndex )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_INDEX ), SQL_INVALID_DESCRIPTOR_INDEX, *this );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_INVALID_INDEX ), StandardSQLState::INVALID_DESCRIPTOR_INDEX, *this );
 }
 
 void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)

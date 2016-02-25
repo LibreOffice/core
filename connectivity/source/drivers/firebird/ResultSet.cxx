@@ -288,7 +288,7 @@ void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 nIndex)
     {
         ::dbtools::throwSQLException(
             "No column " + OUString::number(nIndex),
-            ::dbtools::SQL_COLUMN_NOT_FOUND,
+            ::dbtools::StandardSQLState::COLUMN_NOT_FOUND,
             *this);
     }
 }
@@ -303,7 +303,7 @@ void SAL_CALL OResultSet::checkRowIndex()
     {
         ::dbtools::throwSQLException(
             "Invalid Row",
-            ::dbtools::SQL_INVALID_CURSOR_POSITION,
+            ::dbtools::StandardSQLState::INVALID_CURSOR_POSITION,
             *this);
     }
 }

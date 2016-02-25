@@ -159,7 +159,7 @@ void OQuery::rebuildColumns()
             if ( !xResultSetMeta.is() )
             {
                 OUString sError( DBA_RES( RID_STR_STATEMENT_WITHOUT_RESULT_SET ) );
-                ::dbtools::throwSQLException( sError, SQL_GENERAL_ERROR, *this );
+                ::dbtools::throwSQLException( sError, StandardSQLState::GENERAL_ERROR, *this );
             }
 
             Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );

@@ -992,13 +992,13 @@ void OResultSet::checkReadOnly() const
     if  (   ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         ||  !m_xDelegatorResultSetUpdate.is()
         )
-        throwSQLException( "The result set is read-only.", SQL_GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
+        throwSQLException( "The result set is read-only.", StandardSQLState::GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
 
 void OResultSet::checkBookmarkable() const
 {
     if ( !m_bIsBookmarkable )
-        throwSQLException( "The result set does not have bookmark support.", SQL_GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
+        throwSQLException( "The result set does not have bookmark support.", StandardSQLState::GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

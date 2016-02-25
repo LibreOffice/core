@@ -226,7 +226,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     default:
         ::dbtools::throwSQLException(
             "Incorrect type for setString",
-            ::dbtools::SQL_INVALID_SQL_DATA_TYPE,
+            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
 }
@@ -342,7 +342,7 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     {
        ::dbtools::throwSQLException(
             "Incorrect type for setString",
-            ::dbtools::SQL_INVALID_SQL_DATA_TYPE,
+            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
             *this);
     }
 
@@ -693,7 +693,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
     {
         ::dbtools::throwSQLException(
             "No column " + OUString::number(nParameterIndex),
-            ::dbtools::SQL_COLUMN_NOT_FOUND,
+            ::dbtools::StandardSQLState::COLUMN_NOT_FOUND,
             *this);
     }
 }

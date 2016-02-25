@@ -737,7 +737,7 @@ SQLException prependErrorInfo( const SQLException& _rChainedException, const Ref
     const OUString& _rAdditionalError, const StandardSQLState _eSQLState, const sal_Int32 _nErrorCode )
 {
     return SQLException( _rAdditionalError, _rxContext,
-        _eSQLState == SQL_ERROR_UNSPECIFIED ? OUString() : getStandardSQLState( _eSQLState ),
+        _eSQLState == StandardSQLState::ERROR_UNSPECIFIED ? OUString() : getStandardSQLState( _eSQLState ),
         _nErrorCode, makeAny( _rChainedException ) );
 }
 

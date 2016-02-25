@@ -107,7 +107,7 @@ namespace
         const OSQLParseNode* pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
         if ( !pNewSqlParseNode )
         {
-            OUString sSQLStateGeneralError( getStandardSQLState( SQL_GENERAL_ERROR ) );
+            OUString sSQLStateGeneralError( getStandardSQLState( StandardSQLState::GENERAL_ERROR ) );
             SQLException aError2( aErrorMsg, _rxContext, sSQLStateGeneralError, 1000, Any() );
             SQLException aError1( _rStatement, _rxContext, sSQLStateGeneralError, 1000, makeAny( aError2 ) );
             throw SQLException(_rParser.getContext().getErrorMessage(OParseContext::ErrorCode::General),_rxContext,sSQLStateGeneralError,1000,makeAny(aError1));
@@ -134,9 +134,9 @@ namespace
             // restore the old node before throwing the exception
             _rIterator.setParseTree( pOldNode );
             // and now really ...
-            SQLException aError1( _rOriginatingCommand, _rxContext, getStandardSQLState( SQL_GENERAL_ERROR ), 1000, Any() );
+            SQLException aError1( _rOriginatingCommand, _rxContext, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, Any() );
             throw SQLException( DBACORE_RESSTRING( RID_STR_ONLY_QUERY ), _rxContext,
-                getStandardSQLState( SQL_GENERAL_ERROR ), 1000, makeAny( aError1 ) );
+                getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, makeAny( aError1 ) );
         }
 
         delete pOldNode;

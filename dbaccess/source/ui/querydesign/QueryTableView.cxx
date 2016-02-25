@@ -949,7 +949,7 @@ bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 void OQueryTableView::onNoColumns_throw()
 {
     OUString sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
-    ::dbtools::throwSQLException( sError, ::dbtools::SQL_GENERAL_ERROR, nullptr );
+    ::dbtools::throwSQLException( sError, ::dbtools::StandardSQLState::GENERAL_ERROR, nullptr );
 }
 
 bool OQueryTableView::supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const

@@ -210,10 +210,10 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     }
 
     if( aSql.empty() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), SQL_GENERAL_ERROR, m_xConnection );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), StandardSQLState::GENERAL_ERROR, m_xConnection );
 
     if( aKeyConditions.empty() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), SQL_GENERAL_ERROR, m_xConnection );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), StandardSQLState::GENERAL_ERROR, m_xConnection );
 
     static const char s_sUPDATE[] = "UPDATE ";
     static const char s_sSET[] = " SET ";
@@ -280,7 +280,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         }
     }
     if ( aParameter.empty() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), SQL_GENERAL_ERROR, m_xConnection );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), StandardSQLState::GENERAL_ERROR, m_xConnection );
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     static const char s_sINSERT[] = "INSERT INTO ";

@@ -349,7 +349,7 @@ void throwFunctionSequenceException(const Reference< XInterface >& _Context, con
     throw SQLException(
         aResources.getResourceString(STR_ERRORMSG_SEQUENCE),
         _Context,
-        getStandardSQLState( SQL_FUNCTION_SEQUENCE_ERROR ),
+        getStandardSQLState( StandardSQLState::FUNCTION_SEQUENCE_ERROR ),
         0,
         _Next
     );
@@ -362,7 +362,7 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
     throw SQLException(
         aResources.getResourceString(STR_INVALID_INDEX),
         _Context,
-        getStandardSQLState( SQL_INVALID_DESCRIPTOR_INDEX ),
+        getStandardSQLState( StandardSQLState::INVALID_DESCRIPTOR_INDEX ),
         0,
         _Next
     );
@@ -380,7 +380,7 @@ void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
     throw SQLException(
         sError,
         _rxContext,
-        getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
+        getStandardSQLState( StandardSQLState::FUNCTION_NOT_SUPPORTED ),
         0,
         _rNextException
     );
@@ -410,7 +410,7 @@ void throwGenericSQLException(const OUString& _rMsg, const ::com::sun::star::uno
 void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
     throw (SQLException)
 {
-    throw SQLException( _rMsg, _rxSource, getStandardSQLState( SQL_GENERAL_ERROR ), 0, _rNextException);
+    throw SQLException( _rMsg, _rxSource, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 0, _rNextException);
 }
 
 void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
@@ -425,7 +425,7 @@ void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, cons
     throw SQLException(
         sError,
         _rxContext,
-        getStandardSQLState( SQL_FEATURE_NOT_IMPLEMENTED ),
+        getStandardSQLState( StandardSQLState::FEATURE_NOT_IMPLEMENTED ),
         0,
         _pNextException ? *_pNextException : Any()
     );
@@ -450,7 +450,7 @@ void throwInvalidColumnException( const OUString& _rColumnName, const Reference<
     OUString sErrorMessage( aResources.getResourceStringWithSubstitution(
                                 STR_INVALID_COLUMNNAME,
                                 "$columnname$",_rColumnName) );
-    throwSQLException( sErrorMessage, SQL_COLUMN_NOT_FOUND, _rxContext );
+    throwSQLException( sErrorMessage, StandardSQLState::COLUMN_NOT_FOUND, _rxContext );
 }
 
 void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
@@ -478,27 +478,27 @@ OUString getStandardSQLState( StandardSQLState _eState )
 {
     switch ( _eState )
     {
-    case SQL_WRONG_PARAMETER_NUMBER:    return OUString("07001");
-    case SQL_INVALID_DESCRIPTOR_INDEX:  return OUString("07009");
-    case SQL_UNABLE_TO_CONNECT:         return OUString("08001");
-    case SQL_NUMERIC_OUT_OF_RANGE:      return OUString("22003");
-    case SQL_INVALID_DATE_TIME:         return OUString("22007");
-    case SQL_INVALID_CURSOR_STATE:      return OUString("24000");
-    case SQL_TABLE_OR_VIEW_EXISTS:      return OUString("42S01");
-    case SQL_TABLE_OR_VIEW_NOT_FOUND:   return OUString("42S02");
-    case SQL_INDEX_ESISTS:              return OUString("42S11");
-    case SQL_INDEX_NOT_FOUND:           return OUString("42S12");
-    case SQL_COLUMN_EXISTS:             return OUString("42S21");
-    case SQL_COLUMN_NOT_FOUND:          return OUString("42S22");
-    case SQL_GENERAL_ERROR:             return OUString("HY000");
-    case SQL_INVALID_SQL_DATA_TYPE:     return OUString("HY004");
-    case SQL_OPERATION_CANCELED:        return OUString("HY008");
-    case SQL_FUNCTION_SEQUENCE_ERROR:   return OUString("HY010");
-    case SQL_INVALID_CURSOR_POSITION:   return OUString("HY109");
-    case SQL_INVALID_BOOKMARK_VALUE:    return OUString("HY111");
-    case SQL_FEATURE_NOT_IMPLEMENTED:   return OUString("HYC00");
-    case SQL_FUNCTION_NOT_SUPPORTED:    return OUString("IM001");
-    case SQL_CONNECTION_DOES_NOT_EXIST: return OUString("08003");
+    case StandardSQLState::WRONG_PARAMETER_NUMBER:    return OUString("07001");
+    case StandardSQLState::INVALID_DESCRIPTOR_INDEX:  return OUString("07009");
+    case StandardSQLState::UNABLE_TO_CONNECT:         return OUString("08001");
+    case StandardSQLState::NUMERIC_OUT_OF_RANGE:      return OUString("22003");
+    case StandardSQLState::INVALID_DATE_TIME:         return OUString("22007");
+    case StandardSQLState::INVALID_CURSOR_STATE:      return OUString("24000");
+    case StandardSQLState::TABLE_OR_VIEW_EXISTS:      return OUString("42S01");
+    case StandardSQLState::TABLE_OR_VIEW_NOT_FOUND:   return OUString("42S02");
+    case StandardSQLState::INDEX_ESISTS:              return OUString("42S11");
+    case StandardSQLState::INDEX_NOT_FOUND:           return OUString("42S12");
+    case StandardSQLState::COLUMN_EXISTS:             return OUString("42S21");
+    case StandardSQLState::COLUMN_NOT_FOUND:          return OUString("42S22");
+    case StandardSQLState::GENERAL_ERROR:             return OUString("HY000");
+    case StandardSQLState::INVALID_SQL_DATA_TYPE:     return OUString("HY004");
+    case StandardSQLState::OPERATION_CANCELED:        return OUString("HY008");
+    case StandardSQLState::FUNCTION_SEQUENCE_ERROR:   return OUString("HY010");
+    case StandardSQLState::INVALID_CURSOR_POSITION:   return OUString("HY109");
+    case StandardSQLState::INVALID_BOOKMARK_VALUE:    return OUString("HY111");
+    case StandardSQLState::FEATURE_NOT_IMPLEMENTED:   return OUString("HYC00");
+    case StandardSQLState::FUNCTION_NOT_SUPPORTED:    return OUString("IM001");
+    case StandardSQLState::CONNECTION_DOES_NOT_EXIST: return OUString("08003");
     default:                            return OUString("HY001"); // General Error
     }
 }

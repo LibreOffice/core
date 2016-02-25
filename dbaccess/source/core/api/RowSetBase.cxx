@@ -207,7 +207,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     if ( m_bBeforeFirst || m_bAfterLast )
     {
         SAL_WARN("dbaccess", "ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), StandardSQLState::INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
     if ( impl_rowDeleted() )
@@ -333,7 +333,7 @@ Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_In
     if ( m_bBeforeFirst || m_bAfterLast )
     {
         SAL_WARN("dbaccess", "ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), StandardSQLState::INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
     if ( impl_rowDeleted() )
@@ -403,10 +403,10 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException, 
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER ), StandardSQLState::INVALID_CURSOR_POSITION, *m_pMySelf );
 
     if ( impl_rowDeleted() )
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_BOOKMARK_DELETED ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_BOOKMARK_DELETED ), StandardSQLState::INVALID_CURSOR_POSITION, *m_pMySelf );
 
     OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::getBookmark: bookmark has no value!" );
     return m_aBookmark;
@@ -1094,7 +1094,7 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException, 
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     if ( impl_rowDeleted() )
-        throwSQLException( "The current row is deleted", SQL_INVALID_CURSOR_STATE, Reference< XRowSet >( this ) );
+        throwSQLException( "The current row is deleted", StandardSQLState::INVALID_CURSOR_STATE, Reference< XRowSet >( this ) );
 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {
