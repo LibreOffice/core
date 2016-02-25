@@ -6052,6 +6052,30 @@ if test "$GCC" = "yes"; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
+    AC_MSG_CHECKING([whether $CXX defines __cxa_eh_globals in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cstddef>
+            #include <cxxabi.h>
+            std::size_t f() { return sizeof(__cxxabiv1::__cxa_eh_globals); }
+        ])], [
+            AC_DEFINE([HAVE_CXXABI_H_CXA_EH_GLOBALS],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether $CXX defines __cxa_exceptions in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cstddef>
+            #include <cxxabi.h>
+            std::size_t f() { return sizeof(__cxxabiv1::__cxa_exceptions); }
+        ])], [
+            AC_DEFINE([HAVE_CXXABI_H_CXA_EXCEPTIONS],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
     AC_MSG_CHECKING([whether $CXX declares __cxa_get_globals in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([

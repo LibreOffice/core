@@ -59,53 +59,40 @@ extern "C" _LIBCPP_NORETURN void __cxa_throw(
 
 #else
 
-namespace CPPU_CURRENT_NAMESPACE
-{
-
-// ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h
-
-struct __cxa_exception
-{
-    ::std::type_info *exceptionType;
-    void (*exceptionDestructor)(void *);
-
-    ::std::unexpected_handler unexpectedHandler;
-    ::std::terminate_handler terminateHandler;
-
-    __cxa_exception *nextException;
-
+#if !HAVE_CXXABI_H_CXA_EH_GLOBALS
+// <https://mentorembedded.github.io/cxx-abi/abi-eh.html>:
+namespace __cxxabiv1 {
+struct __cxa_exception {
+    std::type_info * exceptionType;
+    void (* exceptionDestructor)(void *);
+    std::unexpected_handler unexpectedHandler;
+    std::terminate_handler terminateHandler;
+    __cxa_exception * nextException;
     int handlerCount;
-
     int handlerSwitchValue;
-    const unsigned char *actionRecord;
-    const unsigned char *languageSpecificData;
-    void *catchTemp;
-    void *adjustedPtr;
-
+    char const * actionRecord;
+    char const * languageSpecificData;
+    void * catchTemp;
+    void * adjustedPtr;
     _Unwind_Exception unwindHeader;
 };
+}
+#endif
 
-struct __cxa_eh_globals
-{
-    __cxa_exception *caughtExceptions;
+#if !HAVE_CXXABI_H_CXA_EH_GLOBALS
+// <https://mentorembedded.github.io/cxx-abi/abi-eh.html>:
+namespace __cxxabiv1 {
+struct __cxa_eh_globals {
+    __cxa_exception * caughtExceptions;
     unsigned int uncaughtExceptions;
 };
-
 }
-
-// __cxa_get_globals is exported from libstdc++ since GCC 3.4.0 (CXXABI_1.3),
-// but it is only declared in cxxabi.h (in namespace __cxxabiv1) since
-// GCC 4.7.0.  It returns a pointer to a struct __cxa_eh_globals, but that
-// struct is only incompletely declared even in the GCC 4.7.0 cxxabi.h.
-// Therefore, provide a declaration here for old GCC (libstdc++, really) version
-// that returns a void pointer, and in the code calling it always cast to the
-// above fake definition of CPPU_CURRENT_NAMESPACE::__cxa_eh_globals (which
-// hopefully keeps matching the real definition in libstdc++); similarly for
-// __cxa_allocate_exception and __cxa_throw, though they do not have the
-// additional problem of an incompletely declared return type:
+#endif
 
 #if !HAVE_CXXABI_H_CXA_GET_GLOBALS
-namespace __cxxabiv1 { extern "C" void * __cxa_get_globals() throw(); }
+namespace __cxxabiv1 {
+extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+}
 #endif
 
 #if !HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION
@@ -133,11 +120,7 @@ void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
 void fillUnoException(
-#ifdef _LIBCPP_VERSION
     __cxxabiv1::__cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
-#else
-    __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
