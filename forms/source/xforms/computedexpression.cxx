@@ -33,7 +33,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
 
 #include <osl/diagnose.h>
 
@@ -52,8 +52,7 @@ using com::sun::star::xml::xpath::XPathExtension;
 using com::sun::star::xml::xpath::XXPathExtension;
 using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
-using com::sun::star::util::SearchOptions;
-using com::sun::star::util::SearchAlgorithms_REGEXP;
+using com::sun::star::util::SearchOptions2;
 
 
 namespace xforms
@@ -87,10 +86,10 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     assert(pExpression && "no expression?");
 
     // call RegExp engine
-    SearchOptions aSearchOptions;
-    aSearchOptions.algorithmType = SearchAlgorithms_REGEXP;
+    SearchOptions2 aSearchOptions;
+    aSearchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
     aSearchOptions.searchString = OUString( pExpression, strlen(pExpression), RTL_TEXTENCODING_ASCII_US );
-    utl::TextSearch aTextSearch( utl::TextSearch::UpgradeToSearchOptions2( aSearchOptions) );
+    utl::TextSearch aTextSearch( aSearchOptions );
 
     sal_Int32 nLength =  msExpression.getLength();
     sal_Int32 nStart = 0;
