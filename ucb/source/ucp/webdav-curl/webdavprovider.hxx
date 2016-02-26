@@ -92,8 +92,7 @@ public:
     // Non-interface methods.
 
     bool getProperty( const OUString & rPropName,
-                      css::beans::Property & rProp,
-                      bool bStrict = false );
+                      css::beans::Property & rProp );
 };
 
 }

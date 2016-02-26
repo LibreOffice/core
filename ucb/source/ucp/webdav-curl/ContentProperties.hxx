@@ -81,25 +81,23 @@ public:
 
     // Maps the UCB property names contained in rProps with their DAV property
     // counterparts, if possible. All unmappable properties will be included
-    // unchanged in resulting vector unless bIncludeUnmatched is set to false.
+    // unchanged in resulting vector.
     // The vector filled by this method can directly be handed over to
     // DAVResourceAccess::PROPFIND. The result from PROPFIND
     // (vector< DAVResource >) can be used to create a ContentProperties
     // instance which can map DAV properties back to UCB properties.
     static void UCBNamesToDAVNames( const css::uno::Sequence< css::beans::Property > & rProps,
-                                    std::vector< OUString > & resources,
-                                    bool bIncludeUnmatched = true );
+                                    std::vector< OUString > & resources );
 
     // Maps the UCB property names contained in rProps with their HTTP header
     // counterparts, if possible. All unmappable properties will be included
-    // unchanged in resulting vector unless bIncludeUnmatched is set to false.
+    // unchanged in resulting vector.
     // The vector filled by this method can directly be handed over to
     // DAVResourceAccess::HEAD. The result from HEAD (vector< DAVResource >)
     // can be used to create a ContentProperties instance which can map header
     // names back to UCB properties.
     static void UCBNamesToHTTPNames( const css::uno::Sequence< css::beans::Property > & rProps,
-                                    std::vector< OUString > & resources,
-                                    bool bIncludeUnmatched = true );
+                                    std::vector< OUString > & resources );
 
     // return true, if all properties contained in rProps are contained in
     // this ContentProperties instance. Otherwise, false will be returned.
