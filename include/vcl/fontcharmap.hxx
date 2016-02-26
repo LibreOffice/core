@@ -47,7 +47,7 @@ public:
 
         @returns the default font character map.
      */
-    static FontCharMapPtr GetDefaultMap( bool bSymbols=false );
+    static FontCharMapPtr GetDefaultMap();
 
     /** Determines if the font character map is the "default". The default map
         includes all codepoints in the Unicode BMP range, including surrogates.

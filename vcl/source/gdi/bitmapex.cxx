@@ -616,14 +616,14 @@ bool BitmapEx::Erase( const Color& rFillColor )
     return bRet;
 }
 
-bool BitmapEx::Dither( BmpDitherFlags nDitherFlags )
+bool BitmapEx::Dither()
 {
-    return !!aBitmap && aBitmap.Dither( nDitherFlags );
+    return !!aBitmap && aBitmap.Dither();
 }
 
-bool BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
+bool BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor )
 {
-    return !!aBitmap && aBitmap.Replace( rSearchColor, rReplaceColor, nTol );
+    return !!aBitmap && aBitmap.Replace( rSearchColor, rReplaceColor );
 }
 
 bool BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, const sal_uLong* pTols )

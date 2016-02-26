@@ -158,8 +158,7 @@ OUString CommandInfoProvider::GetPopupLabelForCommand (
 
 OUString CommandInfoProvider::GetTooltipForCommand (
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame,
-    bool bIncludeShortcut)
+    const Reference<frame::XFrame>& rxFrame)
 {
     SetFrame(rxFrame);
 
@@ -167,11 +166,9 @@ OUString CommandInfoProvider::GetTooltipForCommand (
     if (sLabel.isEmpty())
         sLabel = GetCommandProperty("Name", rsCommandName);
 
-    if (bIncludeShortcut) {
-        const OUString sShortCut(GetCommandShortcut(rsCommandName, rxFrame));
-        if (!sShortCut.isEmpty())
-            return sLabel + " (" + sShortCut + ")";
-    }
+    const OUString sShortCut(GetCommandShortcut(rsCommandName, rxFrame));
+    if (!sShortCut.isEmpty())
+        return sLabel + " (" + sShortCut + ")";
     return sLabel;
 }
 

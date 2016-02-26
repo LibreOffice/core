@@ -408,9 +408,9 @@ FontCharMap::~FontCharMap()
     mpImplFontCharMap = nullptr;
 }
 
-FontCharMapPtr FontCharMap::GetDefaultMap( bool bSymbol )
+FontCharMapPtr FontCharMap::GetDefaultMap()
 {
-    FontCharMapPtr pFontCharMap( new FontCharMap( ImplFontCharMap::getDefaultMap( bSymbol ) ) );
+    FontCharMapPtr pFontCharMap( new FontCharMap( ImplFontCharMap::getDefaultMap() ) );
     return pFontCharMap;
 }
 

@@ -571,9 +571,9 @@ void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
     }
 }
 
-void Button::SetSmallSymbol(bool bSmall)
+void Button::SetSmallSymbol()
 {
-    mpButtonData->mbSmallSymbol = bSmall;
+    mpButtonData->mbSmallSymbol = true;
 }
 
 void Button::EnableImageDisplay( bool bEnable )
@@ -938,10 +938,9 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     pDev->Pop();  // restore clipregion
 }
 
-void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout)
+void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 {
-    if (!bLayout)
-        HideFocus();
+    HideFocus();
 
     DrawButtonFlags nButtonStyle = ImplGetButtonState();
     Point aPoint;
@@ -1088,7 +1087,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
 
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent(&rRenderContext, (nState&ControlState::ROLLOVER) ? DrawFlags::NoRollover : DrawFlags::NONE,
-                                  aInRect, bLayout, bDrawMenuSep);
+                                  aInRect, false/*bLayout*/, bDrawMenuSep);
 
         if (HasFocus())
             ShowFocus(ImplGetFocusRect());
@@ -1100,7 +1099,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
         if (GetStyle() & WB_FLATBUTTON)
         {
             Rectangle aTempRect(aInRect);
-            if (!bLayout && bRollOver)
+            if (bRollOver)
                 ImplDrawPushButtonFrame(rRenderContext, aTempRect, nButtonStyle);
             aInRect.Left()   += 2;
             aInRect.Top()    += 2;
@@ -1109,14 +1108,13 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
         }
         else
         {
-            if (!bLayout)
-                ImplDrawPushButtonFrame(rRenderContext, aInRect, nButtonStyle);
+            ImplDrawPushButtonFrame(rRenderContext, aInRect, nButtonStyle);
         }
 
         // draw content
-        ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, bLayout, bDrawMenuSep);
+        ImplDrawPushButtonContent(&rRenderContext, DrawFlags::NONE, aInRect, false/*bLayout*/, bDrawMenuSep);
 
-        if (!bLayout && HasFocus())
+        if (HasFocus())
         {
             ShowFocus(ImplGetFocusRect());
         }
@@ -1634,7 +1632,7 @@ void PushButton::EndSelection()
     }
 }
 
-Size PushButton::CalcMinimumSize( long nMaxWidth ) const
+Size PushButton::CalcMinimumSize() const
 {
     Size aSize;
 
@@ -1654,7 +1652,7 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     }
     if ( !PushButton::GetText().isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
     {
-        Size textSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
+        Size textSize = GetTextRect( Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
         aSize.Width() += textSize.Width();
         aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
@@ -2152,10 +2150,9 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     pDev->Pop();
 }
 
-void RadioButton::ImplDrawRadioButton(vcl::RenderContext& rRenderContext, bool bLayout)
+void RadioButton::ImplDrawRadioButton(vcl::RenderContext& rRenderContext)
 {
-    if (!bLayout)
-        HideFocus();
+    HideFocus();
 
     Size aImageSize;
     if (!maImage)
@@ -2168,15 +2165,12 @@ void RadioButton::ImplDrawRadioButton(vcl::RenderContext& rRenderContext, bool b
 
     // Draw control text
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel(),
-             aImageSize, maStateRect, maMouseRect, bLayout);
+             aImageSize, maStateRect, maMouseRect);
 
-    if (!bLayout || rRenderContext.IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL))
-    {
-        if (!maImage && HasFocus())
-            ShowFocus(ImplGetFocusRect());
+    if (!maImage && HasFocus())
+        ShowFocus(ImplGetFocusRect());
 
-        ImplDrawRadioButtonState(rRenderContext);
-    }
+    ImplDrawRadioButtonState(rRenderContext);
 }
 
 void RadioButton::group(RadioButton &rOther)
@@ -2887,7 +2881,7 @@ void RadioButton::ImplSetMinimumNWFSize()
     Pop();
 }
 
-Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
+Size RadioButton::CalcMinimumSize() const
 {
     Size aSize;
     if ( !maImage )
@@ -2904,16 +2898,7 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     {
         bool bTopImage = (GetStyle() & WB_TOP) != 0;
 
-        if (!bTopImage)
-        {
-            nMaxWidth -= aSize.Width();
-            nMaxWidth -= ImplGetImageToTextDistance();
-        }
-
-        // subtract what will be added later
-        nMaxWidth-=2;
-
-        Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
+        Size aTextSize = GetTextRect( Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
 
         aSize.Width()+=2;   // for focus rect
@@ -3191,24 +3176,20 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     pDev->Pop();
 }
 
-void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext, bool bLayout)
+void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext)
 {
     Size aImageSize = ImplGetCheckImageSize();
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
-    if (!bLayout)
-        HideFocus();
+    HideFocus();
 
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel(),
-             aImageSize, maStateRect, maMouseRect, bLayout);
+             aImageSize, maStateRect, maMouseRect, false/*bLayout*/);
 
-    if (!bLayout)
-    {
-        ImplDrawCheckBoxState(rRenderContext);
-        if (HasFocus())
-            ShowFocus(ImplGetFocusRect());
-    }
+    ImplDrawCheckBoxState(rRenderContext);
+    if (HasFocus())
+        ShowFocus(ImplGetFocusRect());
 }
 
 void CheckBox::ImplCheck()

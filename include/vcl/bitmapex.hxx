@@ -123,11 +123,8 @@ public:
         This method dithers the bitmap inplace, i.e. a true color
         bitmap is converted to a paletted bitmap, reducing the color
         deviation by error diffusion.
-
-        @param nDitherFlags
-        The algorithm to be used for dithering
      */
-    bool                Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
+    bool                Dither();
 
     /** Crop the bitmap
 
@@ -277,17 +274,11 @@ public:
         @param rReplaceColor
         Color to be placed in all changed pixel
 
-        @param nTol
-        Tolerance value. Specifies the maximal difference between
-        rSearchColor and the individual pixel values, such that the
-        corresponding pixel is still regarded a match.
-
         @return true, if the operation was completed successfully.
      */
     bool                Replace(
                             const Color& rSearchColor,
-                            const Color& rReplaceColor,
-                            sal_uLong nTol = 0 );
+                            const Color& rReplaceColor );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 

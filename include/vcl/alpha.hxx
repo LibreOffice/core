@@ -55,7 +55,7 @@ public:
 
     bool        Erase( sal_uInt8 cTransparency );
     bool        Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
-    bool        Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong nTol = 0UL );
+    bool        Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency );
 
     BitmapReadAccess*  AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }
     BitmapWriteAccess* AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }

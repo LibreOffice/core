@@ -106,12 +106,10 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
     return bRet;
 }
 
-bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong nTol )
+bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
     bool                bRet = false;
-
-    DBG_ASSERT( !nTol, "AlphaMask::Replace: nTol not used yet" );
 
     if( pAcc && pAcc->GetBitCount() == 8 )
     {

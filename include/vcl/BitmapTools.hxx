@@ -20,7 +20,7 @@ class VCL_DLLPUBLIC BitmapTools
 {
 public:
     static void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx,
-                            double fScaleFactor = 1.0, const Size& aSize = Size());
+                            double fScaleFactor = 1.0);
 };
 
 }

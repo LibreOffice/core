@@ -56,7 +56,7 @@ private:
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     DECL_DLLPRIVATE_LINK_TYPED( ImplTimerHdl, Timer*, void );
-    SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
+    SAL_DLLPRIVATE void         ImplShow();
     SAL_DLLPRIVATE void         ImplHide( bool bStopTimer );
     SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );
     SAL_DLLPRIVATE bool         ImplSuspend();

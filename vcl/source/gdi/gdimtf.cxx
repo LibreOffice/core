@@ -306,7 +306,7 @@ void GDIMetaFile::Record( OutputDevice* pOut )
     Linker( pOut, true );
 }
 
-void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
+void GDIMetaFile::Play( GDIMetaFile& rMtf )
 {
     if ( !bRecord && !rMtf.bRecord )
     {
@@ -315,10 +315,7 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
 
         rMtf.UseCanvas( rMtf.GetUseCanvas() || bUseCanvas );
 
-        if( nPos > nObjCount )
-            nPos = nObjCount;
-
-        for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
+        for( size_t nCurPos = nCurrentActionElement; nCurPos < nObjCount; nCurPos++ )
         {
             if( pAction )
             {
@@ -525,7 +522,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
 }
 
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
-                        const Size& rSize, size_t nPos )
+                        const Size& rSize )
 {
     vcl::Region  aDrawClipRegion;
     MapMode aDrawMap( GetPrefMapMode() );
@@ -582,7 +579,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         pOut->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
         pOut->SetDigitLanguage( 0 );
 
-        Play( pOut, nPos );
+        Play( pOut );
 
         pOut->Pop();
     }
@@ -2284,7 +2281,7 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
     }
 }
 
-void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, sal_uLong* pTols )
+void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount )
 {
     ImplColReplaceParam aColParam;
     ImplBmpReplaceParam aBmpParam;
@@ -2298,20 +2295,19 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
 
     for( sal_uLong i = 0; i < nColorCount; i++ )
     {
-        const long  nTol = pTols ? ( pTols[ i ] * 255 ) / 100 : 0;
         long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal - nTol, 0L );
-        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal + nTol, 255L );
+        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal, 0L );
+        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal, 255L );
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal - nTol, 0L );
-        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal + nTol, 255L );
+        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal, 0L );
+        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal, 255L );
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal - nTol, 0L );
-        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal + nTol, 255L );
+        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal, 0L );
+        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal, 255L );
     }
 
     aColParam.pDstCols = pReplaceColors;
@@ -2320,7 +2316,7 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     aBmpParam.pSrcCols = pSearchColors;
     aBmpParam.pDstCols = pReplaceColors;
     aBmpParam.nCount = nColorCount;
-    aBmpParam.pTols = pTols;
+    aBmpParam.pTols = nullptr;
 
     ImplExchangeColors( ImplColReplaceFnc, &aColParam, ImplBmpReplaceFnc, &aBmpParam );
 
