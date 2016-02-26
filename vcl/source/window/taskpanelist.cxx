@@ -227,12 +227,9 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 }
 
 // returns next splitter
-vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow, bool bForward )
+vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow )
 {
-    if( bForward )
-        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
-    else
-        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
+    ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
 
     auto p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )

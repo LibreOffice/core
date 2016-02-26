@@ -1093,8 +1093,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 
 bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen,
-                                      long* pDXAry, long nLayoutWidth,
-                                      bool bCellBreaking ) const
+                                      long* pDXAry, long nLayoutWidth ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1145,12 +1144,6 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
     {
         for( i = 0; i < 2*nLen; ++i )
             pCaretXArray[i] /= nWidthFactor;
-    }
-
-    // if requested move caret position to cell limits
-    if( bCellBreaking )
-    {
-        ; // FIXME
     }
 
     return true;
@@ -2290,8 +2283,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 }
 
 long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
-                                     sal_Int32 nIndex, sal_Int32 nLen,
-                                     DrawTextFlags nStyle ) const
+                                     sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2304,21 +2296,16 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
     }
 
-    if ( nStyle & DrawTextFlags::Mnemonic )
+    sal_Int32  nMnemonicPos;
+    OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
+    if ( nMnemonicPos != -1 )
     {
-        sal_Int32  nMnemonicPos;
-        OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
-        if ( nMnemonicPos != -1 )
-        {
-            if ( nMnemonicPos < nIndex )
-                nIndex--;
-            else if ( (nMnemonicPos >= nIndex) && ((sal_uLong)nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
-                nLen--;
-        }
-        return GetTextWidth( aStr, nIndex, nLen );
+        if ( nMnemonicPos < nIndex )
+            nIndex--;
+        else if ( (nMnemonicPos >= nIndex) && ((sal_uLong)nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
+            nLen--;
     }
-    else
-        return GetTextWidth( rStr, nIndex, nLen );
+    return GetTextWidth( aStr, nIndex, nLen );
 }
 
 OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )

@@ -984,7 +984,7 @@ void Window::ImplValidate( const vcl::Region* pRegion, ValidateFlags nFlags )
     }
 }
 
-void Window::ImplUpdateAll( bool bOverlapWindows )
+void Window::ImplUpdateAll()
 {
     if ( !mpWindowImpl->mbReallyVisible )
         return;
@@ -1002,13 +1002,7 @@ void Window::ImplUpdateAll( bool bOverlapWindows )
     // an update changes the OverlapWindow, such that for later paints
     // not too much has to be drawn, if ALLCHILDREN etc. is set
     vcl::Window* pWindow = ImplGetFirstOverlapWindow();
-    if ( bOverlapWindows )
-        pWindow->ImplCallOverlapPaint();
-    else
-    {
-        if (pWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN))
-            pWindow->ImplCallPaint(nullptr, pWindow->mpWindowImpl->mnPaintFlags);
-    }
+    pWindow->ImplCallOverlapPaint();
 
     if ( bFlush )
         Flush();
@@ -1226,12 +1220,12 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
     }
 }
 
-void Window::Validate( ValidateFlags nFlags )
+void Window::Validate()
 {
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
-    ImplValidate( nullptr, nFlags );
+    ImplValidate( nullptr, ValidateFlags::NONE );
 }
 
 bool Window::HasPaintEvent() const

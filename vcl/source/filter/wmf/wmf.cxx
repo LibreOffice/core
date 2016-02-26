@@ -53,7 +53,7 @@ bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
     return !rStreamWMF.GetError();
 }
 
-bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
+bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 {
     sal_uInt32 nMetaType(0);
     sal_uInt32 nOrgPos = rStream.Tell();
@@ -77,7 +77,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
     }
     else
     {
-        WMFReader( rStream, rMTF, pFilterConfigItem ).ReadWMF();
+        WMFReader( rStream, rMTF, nullptr ).ReadWMF();
     }
 
     return rStream.good();

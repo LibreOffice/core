@@ -1143,11 +1143,9 @@ public:
     /** Turns on "auto-help" (hover mouse above UI element and a tooltip with an
      explanation pops up.
 
-     @param     bEnabled        Enables/disables auto-help.
-
      @see EnableAutoHelpId
     */
-    static void                 EnableAutoHelpId( bool bEnabled = true );
+    static void                 EnableAutoHelpId();
 
     /** Determines if auto-help is enabled or disabled.
 

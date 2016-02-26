@@ -199,11 +199,10 @@ void SystemChildWindow::SetForwardKey( bool bEnable )
         mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
 
-sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
+sal_IntPtr SystemChildWindow::GetParentWindowHandle()
 {
     sal_IntPtr nRet = 0;
 
-    (void)bUseJava;
 #if defined(_WIN32)
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
 #elif defined MACOSX
@@ -214,91 +213,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
 #elif defined IOS
     // Nothing
 #elif defined UNX
-    if( !bUseJava )
-    {
-        nRet = (sal_IntPtr) GetSystemData()->aWindow;
-    }
-#if HAVE_FEATURE_JAVA
-    else
-    {
-        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
-        if( GetSystemData()->aWindow > 0 )
-        {
-            try
-            {
-                    ::rtl::Reference< ::jvmaccess::VirtualMachine > xVM;
-                    uno::Reference< java::XJavaVM >                 xJavaVM = java::JavaVirtualMachine::create(xContext);
-                    uno::Sequence< sal_Int8 >                       aProcessID( 17 );
-
-                    rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(aProcessID.getArray()) );
-                    aProcessID[ 16 ] = 0;
-                    OSL_ENSURE(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *), "Pointer cannot be represented as sal_Int64");
-                    sal_Int64 nPointer = reinterpret_cast< sal_Int64 >( static_cast< jvmaccess::VirtualMachine * >(nullptr));
-                    xJavaVM->getJavaVM(aProcessID) >>= nPointer;
-                    xVM = reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer);
-
-                    if( xVM.is() )
-                    {
-                        try
-                        {
-                                ::jvmaccess::VirtualMachine::AttachGuard    aVMAttachGuard( xVM );
-                                JNIEnv*                                     pEnv = aVMAttachGuard.getEnvironment();
-
-                                jclass jcToolkit = pEnv->FindClass("java/awt/Toolkit");
-                                ImplTestJavaException(pEnv);
-
-                                jmethodID jmToolkit_getDefaultToolkit = pEnv->GetStaticMethodID( jcToolkit, "getDefaultToolkit", "()Ljava/awt/Toolkit;" );
-                                ImplTestJavaException(pEnv);
-
-                                pEnv->CallStaticObjectMethod(jcToolkit, jmToolkit_getDefaultToolkit);
-                                ImplTestJavaException(pEnv);
-
-                                jclass jcMotifAppletViewer = pEnv->FindClass("sun/plugin/navig/motif/MotifAppletViewer");
-                                if( pEnv->ExceptionOccurred() )
-                                {
-                                    pEnv->ExceptionClear();
-
-                                    jcMotifAppletViewer = pEnv->FindClass( "sun/plugin/viewer/MNetscapePluginContext");
-                                    ImplTestJavaException(pEnv);
-                                }
-
-                                jclass jcClassLoader = pEnv->FindClass("java/lang/ClassLoader");
-                                ImplTestJavaException(pEnv);
-
-                                jmethodID jmClassLoader_loadLibrary = pEnv->GetStaticMethodID( jcClassLoader, "loadLibrary", "(Ljava/lang/Class;Ljava/lang/String;Z)V");
-                                ImplTestJavaException(pEnv);
-
-                                jstring jsplugin = pEnv->NewStringUTF("javaplugin_jni");
-                                ImplTestJavaException(pEnv);
-
-                                pEnv->CallStaticVoidMethod(jcClassLoader, jmClassLoader_loadLibrary, jcMotifAppletViewer, jsplugin, JNI_FALSE);
-                                ImplTestJavaException(pEnv);
-
-                                jmethodID jmMotifAppletViewer_getWidget = pEnv->GetStaticMethodID( jcMotifAppletViewer, "getWidget", "(IIIII)I" );
-                                ImplTestJavaException(pEnv);
-
-                                const Size aSize( GetOutputSizePixel() );
-                                jint ji_widget = pEnv->CallStaticIntMethod( jcMotifAppletViewer, jmMotifAppletViewer_getWidget,
-                                        GetSystemData()->aWindow, 0, 0, aSize.Width(), aSize.Height() );
-                                ImplTestJavaException(pEnv);
-
-                                nRet = static_cast< sal_IntPtr >( ji_widget );
-                        }
-                        catch( uno::RuntimeException& )
-                        {
-                        }
-
-                        if( !nRet )
-                            nRet = static_cast< sal_IntPtr >( GetSystemData()->aWindow );
-                    }
-            }
-            catch( ... )
-            {
-            }
-        }
-    }
-#endif // HAVE_FEATURE_JAVA
+    nRet = (sal_IntPtr) GetSystemData()->aWindow;
 #endif
 
     return nRet;

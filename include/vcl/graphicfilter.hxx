@@ -269,7 +269,7 @@ public:
     OUString        GetExportFormatName( sal_uInt16 nFormat );
     OUString        GetExportFormatMediaType( sal_uInt16 nFormat );
     OUString        GetExportFormatShortName( sal_uInt16 nFormat );
-    OUString        GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    OUString        GetExportWildcard( sal_uInt16 nFormat );
     bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,

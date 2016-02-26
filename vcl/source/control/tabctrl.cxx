@@ -1059,10 +1059,9 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRe
         ImplPaint(rRenderContext, rRect);
 }
 
-void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bLayout)
+void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    if (!bLayout)
-        HideFocus();
+    HideFocus();
 
     // reformat if needed
     Rectangle aRect = ImplGetTabRect(TAB_PAGERECT);
@@ -1100,7 +1099,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         aRect.Right() += 10;
     }
 
-    if (!bLayout && rRenderContext.IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL))
     {
         const ImplControlValue aControlValue;
 
@@ -1147,12 +1146,10 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         if (pCurItem && !pCurItem->maRect.IsEmpty())
         {
             aCurRect = pCurItem->maRect;
-            if (!bLayout)
-                rRenderContext.DrawLine(aRect.TopLeft(), Point(aCurRect.Left() - 2, aRect.Top()));
+            rRenderContext.DrawLine(aRect.TopLeft(), Point(aCurRect.Left() - 2, aRect.Top()));
             if (aCurRect.Right() + 1 < aRect.Right())
             {
-                if (!bLayout)
-                    rRenderContext.DrawLine(Point(aCurRect.Right(), aRect.Top()), aRect.TopRight());
+                rRenderContext.DrawLine(Point(aCurRect.Right(), aRect.Top()), aRect.TopRight());
             }
             else
             {
@@ -1160,35 +1157,31 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
             }
         }
         else
-            if (!bLayout)
-                rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
 
-        if (!bLayout)
+        rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
+
+        if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
         {
-            rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
-
-            if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
-            {
-                // if we have not tab page the bottom line of the tab page
-                // directly touches the tab items, so choose a color that fits seamlessly
-                if (bNoTabPage)
-                    rRenderContext.SetLineColor(rStyleSettings.GetDialogColor());
-                else
-                    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-                rRenderContext.DrawLine(Point(1, aRect.Bottom() - 1), Point(aRect.Right() - 1, aRect.Bottom() - 1));
-                rRenderContext.DrawLine(Point(aRect.Right() - 1, aRect.Top() + nTopOff), Point(aRect.Right() - 1, aRect.Bottom() - 1));
-                if (bNoTabPage)
-                    rRenderContext.SetLineColor(rStyleSettings.GetDialogColor());
-                else
-                    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
-                rRenderContext.DrawLine(Point(0, aRect.Bottom()), Point(aRect.Right(), aRect.Bottom()));
-                rRenderContext.DrawLine(Point(aRect.Right(), aRect.Top() + nTopOff), Point(aRect.Right(), aRect.Bottom()));
-            }
+            // if we have not tab page the bottom line of the tab page
+            // directly touches the tab items, so choose a color that fits seamlessly
+            if (bNoTabPage)
+                rRenderContext.SetLineColor(rStyleSettings.GetDialogColor());
             else
-            {
-                rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
-                rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
-            }
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.DrawLine(Point(1, aRect.Bottom() - 1), Point(aRect.Right() - 1, aRect.Bottom() - 1));
+            rRenderContext.DrawLine(Point(aRect.Right() - 1, aRect.Top() + nTopOff), Point(aRect.Right() - 1, aRect.Bottom() - 1));
+            if (bNoTabPage)
+                rRenderContext.SetLineColor(rStyleSettings.GetDialogColor());
+            else
+                rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+            rRenderContext.DrawLine(Point(0, aRect.Bottom()), Point(aRect.Right(), aRect.Bottom()));
+            rRenderContext.DrawLine(Point(aRect.Right(), aRect.Top() + nTopOff), Point(aRect.Right(), aRect.Bottom()));
+        }
+        else
+        {
+            rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
+            rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
         }
     }
 
@@ -1225,9 +1218,9 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
                 aClipRgn.Intersect(pItem->maRect);
                 if (!rRect.IsEmpty())
                     aClipRgn.Intersect(rRect);
-                if (bLayout || !aClipRgn.IsEmpty())
+                if (!aClipRgn.IsEmpty())
                 {
-                    ImplDrawItem(rRenderContext, pItem, aCurRect, bLayout,
+                    ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
                                  pItem == pFirstTab, pItem == pLastTab);
                 }
             }
@@ -1244,19 +1237,18 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
             aClipRgn.Intersect(pCurItem->maRect);
             if (!rRect.IsEmpty())
                 aClipRgn.Intersect(rRect);
-            if (bLayout || !aClipRgn.IsEmpty())
+            if (!aClipRgn.IsEmpty())
             {
-                ImplDrawItem(rRenderContext, pCurItem, aCurRect, bLayout,
+                ImplDrawItem(rRenderContext, pCurItem, aCurRect, false/*bLayout*/,
                              pCurItem == pFirstTab, pCurItem == pLastTab, true);
             }
         }
     }
 
-    if (!bLayout && HasFocus())
+    if (HasFocus())
         ImplShowFocus();
 
-    if (!bLayout)
-        mbSmallInvalidate = true;
+    mbSmallInvalidate = true;
 }
 
 void TabControl::setAllocation(const Size &rAllocation)

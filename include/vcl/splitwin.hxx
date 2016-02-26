@@ -151,7 +151,7 @@ public:
     void                InsertItem( sal_uInt16 nId, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
                                     SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
-    void                RemoveItem( sal_uInt16 nId, bool bHide = true );
+    void                RemoveItem( sal_uInt16 nId );
     void                Clear();
 
     void                SplitItem( sal_uInt16 nId, long nNewSize,
@@ -175,7 +175,7 @@ public:
     sal_uInt16          GetItemId( vcl::Window* pWindow ) const;
     sal_uInt16          GetItemId( const Point& rPos ) const;
     sal_uInt16          GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId = 0 ) const;
-    sal_uInt16          GetItemId( sal_uInt16 nPos, sal_uInt16 nSetId = 0 ) const;
+    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
     sal_uInt16          GetItemCount( sal_uInt16 nSetId = 0 ) const;
     bool                IsItemValid( sal_uInt16 nId ) const;
 
@@ -189,8 +189,8 @@ public:
 
     void                ShowAutoHideButton( bool bShow = true );
     bool                IsAutoHideButtonVisible() const { return mbAutoHide; }
-    void                ShowFadeInHideButton( bool bShow = true );
-    void                ShowFadeOutButton( bool bShow = true );
+    void                ShowFadeInHideButton();
+    void                ShowFadeOutButton();
     long                GetFadeInSize() const;
     bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
 

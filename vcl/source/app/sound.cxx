@@ -24,14 +24,13 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 
-void Sound::Beep( vcl::Window* pWindow )
+void Sound::Beep()
 {
     // #i91990#
     if ( Application::IsHeadlessModeEnabled() )
         return;
 
-    if ( !pWindow )
-        pWindow = ImplGetDefaultWindow();
+    vcl::Window* pWindow = ImplGetDefaultWindow();
 
     pWindow->ImplGetFrame()->Beep();
 }

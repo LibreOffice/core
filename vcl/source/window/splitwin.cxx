@@ -2722,7 +2722,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, long nSize,
     InsertItem( nId, nullptr, nSize, nPos, nIntoSetId, nBits );
 }
 
-void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
+void SplitWindow::RemoveItem( sal_uInt16 nId )
 {
 #ifdef DBG_UTIL
     sal_uInt16 nDbgDummy;
@@ -2756,11 +2756,8 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
     if ( pWindow )
     {
         // restore window
-        if ( bHide || (pOrgParent != this) )
-        {
-            pWindow->Hide();
-            pWindow->SetParent( pOrgParent );
-        }
+        pWindow->Hide();
+        pWindow->SetParent( pOrgParent );
     }
 
     // Clear and delete
@@ -3159,9 +3156,9 @@ sal_uInt16 SplitWindow::GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId ) const
     return nPos;
 }
 
-sal_uInt16 SplitWindow::GetItemId( sal_uInt16 nPos, sal_uInt16 nSetId ) const
+sal_uInt16 SplitWindow::GetItemId( sal_uInt16 nPos ) const
 {
-    ImplSplitSet* pSet = ImplFindSet( mpBaseSet, nSetId );
+    ImplSplitSet* pSet = ImplFindSet( mpBaseSet, 0/*nSetId*/ );
     if ( pSet && (nPos < pSet->mpItems.size()) )
         return pSet->mpItems[nPos]->mnId;
     else
@@ -3233,15 +3230,15 @@ void SplitWindow::ShowAutoHideButton( bool bShow )
     ImplUpdate();
 }
 
-void SplitWindow::ShowFadeInHideButton( bool bShow )
+void SplitWindow::ShowFadeInHideButton()
 {
-    mbFadeIn = bShow;
+    mbFadeIn = true;
     ImplUpdate();
 }
 
-void SplitWindow::ShowFadeOutButton( bool bShow )
+void SplitWindow::ShowFadeOutButton()
 {
-    mbFadeOut = bShow;
+    mbFadeOut = true;
     ImplUpdate();
 }
 

@@ -43,17 +43,13 @@ namespace vcl
                 will take the image upon successful return.
             @param  bSearchLanguageDependent
                 determines whether a language-dependent image is to be searched.
-            @param  loadMissing
-                if set to true, then load a default image if no image can be found,
-                otherwise don't load anything
             @return
                 whether or not the image could be loaded successfully.
         */
         static bool loadImage(
             const OUString& _rName,
             BitmapEx& _out_rImage,
-            bool bSearchLanguageDependent,
-            bool loadMissing = false
+            bool bSearchLanguageDependent
         );
 
         static bool loadDefaultImage(

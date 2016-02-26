@@ -1329,22 +1329,11 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     return mpImpl->maSelection;
 }
 
-void TextView::InsertText( const OUString& rStr, bool bSelect )
+void TextView::InsertText( const OUString& rStr )
 {
     mpImpl->mpTextEngine->UndoActionStart();
 
-    TextSelection aNewSel( mpImpl->maSelection );
-    TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, rStr );
-
-    if ( bSelect )
-    {
-        aNewSel.Justify();
-        aNewSel.GetEnd() = aPaM;
-    }
-    else
-    {
-        aNewSel = aPaM;
-    }
+    TextSelection aNewSel = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, rStr );
 
     ImpSetSelection( aNewSel );
 

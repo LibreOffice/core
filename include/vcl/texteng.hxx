@@ -148,9 +148,9 @@ protected:
     TextPaM             ImpDeleteText( const TextSelection& rSel );
     TextPaM             ImpInsertText( const TextSelection& rSel, sal_Unicode c, bool bOverwrite = false );
     TextPaM             ImpInsertText( const TextSelection& rSel, const OUString& rText );
-    TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, bool bKeepEndingAttribs = true );
+    TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection );
     TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs = true );
-    void                ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars, SfxUndoAction* pCurUndo = nullptr );
+    void                ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars );
     TextPaM             ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight );
     void                ImpRemoveParagraph( sal_uInt32 nPara );
     void                ImpInitWritingDirections( sal_uInt32 nPara );
@@ -201,14 +201,14 @@ protected:
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uInt16 nTextPortion );
     long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
-    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart = nullptr, sal_Int32* pEnd = nullptr );
-    static void         ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
+    sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart = nullptr );
+    static void         ImpInitLayoutMode( OutputDevice* pOutDev );
     TxtAlign            ImpGetAlign() const;
 
     long                CalcTextHeight();
     long                CalcParaHeight( sal_uInt32 nParagraph ) const;
     long                CalcTextWidth( sal_uInt32 nPara );
-    long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen, const vcl::Font* pFont = nullptr );
+    long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen);
     Range               GetInvalidYOffsets( sal_uInt32 nPortion );
 
     // for Undo/Redo
@@ -230,8 +230,8 @@ public:
     OUString            GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
     void                ReplaceText(const TextSelection& rSel, const OUString& rText);
 
-    sal_Int32           GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
-    sal_Int32           GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    sal_Int32           GetTextLen() const;
+    sal_Int32           GetTextLen( const TextSelection& rSel ) const;
 
     void                SetFont( const vcl::Font& rFont );
     const vcl::Font&    GetFont() const { return maFont; }
@@ -299,7 +299,7 @@ public:
 
     void                RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich, bool bIdleFormatAndUpdate );
     void                RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib );
-    void                RemoveAttribs( sal_uInt32 nPara, bool bIdleFormatAndUpdate = true );
+    void                RemoveAttribs( sal_uInt32 nPara );
     void                SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate = true );
 
     TxtAlign            GetTextAlign() const { return meAlign; }

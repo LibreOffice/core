@@ -284,17 +284,17 @@ OUString TextEngine::GetText( sal_uInt32 nPara ) const
     return mpDoc->GetText( nPara );
 }
 
-sal_Int32 TextEngine::GetTextLen( LineEnd aSeparator ) const
+sal_Int32 TextEngine::GetTextLen() const
 {
-    return mpDoc->GetTextLen( static_getLineEndText( aSeparator ) );
+    return mpDoc->GetTextLen( static_getLineEndText( LINEEND_LF ) );
 }
 
-sal_Int32 TextEngine::GetTextLen( const TextSelection& rSel, LineEnd aSeparator ) const
+sal_Int32 TextEngine::GetTextLen( const TextSelection& rSel ) const
 {
     TextSelection aSel( rSel );
     aSel.Justify();
     ValidateSelection( aSel );
-    return mpDoc->GetTextLen( static_getLineEndText( aSeparator ), &aSel );
+    return mpDoc->GetTextLen( static_getLineEndText( LINEEND_LF ), &aSel );
 }
 
 sal_Int32 TextEngine::GetTextLen( const sal_uInt32 nPara ) const
@@ -479,7 +479,7 @@ void TextEngine::CursorMoved( sal_uInt32 nNode )
         pNode->GetCharAttribs().DeleteEmptyAttribs();
 }
 
-void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars, SfxUndoAction* )
+void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
 {
     DBG_ASSERT( nChars, "ImpRemoveChars: 0 Chars?!" );
     if ( IsUndoEnabled() && !IsInUndo() )
@@ -809,7 +809,7 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString&
     return aPaM;
 }
 
-TextPaM TextEngine::ImpInsertParaBreak( const TextSelection& rCurSel, bool bKeepEndingAttribs )
+TextPaM TextEngine::ImpInsertParaBreak( const TextSelection& rCurSel )
 {
     TextPaM aPaM;
     if ( rCurSel.HasRange() )
@@ -817,7 +817,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextSelection& rCurSel, bool bKeep
     else
         aPaM = rCurSel.GetEnd();
 
-    return ImpInsertParaBreak( aPaM, bKeepEndingAttribs );
+    return ImpInsertParaBreak( aPaM );
 }
 
 TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs )
@@ -1205,7 +1205,7 @@ long TextEngine::CalcTextHeight()
     return nY;
 }
 
-long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nLen, const vcl::Font* pFont )
+long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nLen )
 {
 #ifdef DBG_UTIL
     // within the text there must not be a Portion change (attribute/tab)!
@@ -1220,17 +1220,9 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_I
     }
     else
     {
-        if ( pFont )
-        {
-            if ( !mpRefDev->GetFont().IsSameInstance( *pFont ) )
-                mpRefDev->SetFont( *pFont );
-        }
-        else
-        {
-            vcl::Font aFont;
-            SeekCursor( nPara, nPortionStart+1, aFont, nullptr );
-            mpRefDev->SetFont( aFont );
-        }
+        vcl::Font aFont;
+        SeekCursor( nPara, nPortionStart+1, aFont, nullptr );
+        mpRefDev->SetFont( aFont );
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         nWidth = mpRefDev->GetTextWidth( pNode->GetText(), nPortionStart, nLen );
 
@@ -2572,7 +2564,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
     return rOutput.GetError() == 0;
 }
 
-void TextEngine::RemoveAttribs( sal_uInt32 nPara, bool bIdleFormatAndUpdate )
+void TextEngine::RemoveAttribs( sal_uInt32 nPara )
 {
     if ( nPara < mpDoc->GetNodes().size() )
     {
@@ -2586,10 +2578,7 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, bool bIdleFormatAndUpdate )
 
             mbFormatted = false;
 
-            if ( bIdleFormatAndUpdate )
-                IdleFormatAndUpdate( nullptr, 0xFFFF );
-            else
-                FormatAndUpdate();
+            IdleFormatAndUpdate( nullptr, 0xFFFF );
         }
     }
 }
@@ -2916,7 +2905,7 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
 
 }
 
-sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart, sal_Int32* pEnd )
+sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32* pStart )
 {
     sal_uInt8 nRightToLeft = 0;
 
@@ -2935,8 +2924,6 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos, sal_I
                 nRightToLeft = rWritingDirectionInfo.nType;
                 if ( pStart )
                     *pStart = rWritingDirectionInfo.nStartPos;
-                if ( pEnd )
-                    *pEnd = rWritingDirectionInfo.nEndPos;
                 break;
             }
         }
@@ -3014,13 +3001,11 @@ long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uI
     return nX;
 }
 
-void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion )
+void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev )
 {
     ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
 
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
-    if ( bDrawingR2LPortion )
-        nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
 
     pOutDev->SetLayoutMode( nLayoutMode );
 }

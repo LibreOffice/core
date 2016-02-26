@@ -765,8 +765,7 @@ The following structure describes the permissions used in PDF security
     void                DrawTextLine( const Point& rPos, long nWidth,
                                       FontStrikeout eStrikeout,
                                       FontLineStyle eUnderline,
-                                      FontLineStyle eOverline,
-                                      bool bUnderlineAbove = false );
+                                      FontLineStyle eOverline );
     void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        const long* pDXAry,
                                        sal_Int32 nIndex,
@@ -1236,13 +1235,10 @@ The following structure describes the permissions used in PDF security
     @param rControlType
     a descendant of AnyWidget determining the control's properties
 
-    @param nPageNr
-    the page number to apply the effect to; -1 denotes the current page
-
     @returns
     the new control's id for reference purposes
      */
-    sal_Int32 CreateControl( const AnyWidget& rControlType, sal_Int32 nPageNr = -1 );
+    sal_Int32 CreateControl( const AnyWidget& rControlType );
 
     /** Inserts an additional stream to the PDF file
 

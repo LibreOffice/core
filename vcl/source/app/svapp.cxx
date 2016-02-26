@@ -1382,9 +1382,9 @@ Help* Application::GetHelp()
     return ImplGetSVData()->maAppData.mpHelp;
 }
 
-void Application::EnableAutoHelpId( bool bEnabled )
+void Application::EnableAutoHelpId()
 {
-    ImplGetSVData()->maHelpData.mbAutoHelpId = bEnabled;
+    ImplGetSVData()->maHelpData.mbAutoHelpId = true;
 }
 
 bool Application::IsAutoHelpIdEnabled()

@@ -122,7 +122,7 @@ public:
     OUString            GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
-    void                InsertText( const OUString& rNew, bool bSelect = false );
+    void                InsertText( const OUString& rNew );
 
     bool                KeyInput( const KeyEvent& rKeyEvent );
     void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);

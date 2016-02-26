@@ -692,12 +692,12 @@ void PDFExtOutDevData::CreateNote( const Rectangle& rRect, const PDFNote& rNote,
     mpGlobalSyncData->mParaPDFNotes.push_back( rNote );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
 }
-void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr )
+void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetPageTransition );
     mpGlobalSyncData->mParaPageTransitions.push_back( eType );
     mpGlobalSyncData->mParauInts.push_back( nMilliSec );
-    mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
+    mpGlobalSyncData->mParaInts.push_back( mnPage );
 }
 
 /* local (page), actions have to be played synchronously to the actions of
@@ -764,7 +764,7 @@ void PDFExtOutDevData::SetAlternateText( const OUString& rText )
     mpPageSyncData->mParaOUStrings.push_back( rText );
 }
 
-void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType, sal_Int32 /*nPageNr*/ )
+void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::CreateControl );
 
