@@ -111,7 +111,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
 
     // Disable 100-continue header.
     char buf[] = "Expect:";
-    curl_slist* headerlist = NULL;
+    curl_slist* headerlist = nullptr;
     headerlist = curl_slist_append(headerlist, buf);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
 
@@ -132,15 +132,15 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
 #endif
     /*
      * TODO
-    if (error_description != NULL)
+    if (error_description != nullptr)
         *error_description = curl_easy_strerror(cc);
     */
 
-    if (formpost != NULL)
+    if (formpost != nullptr)
     {
         curl_formfree(formpost);
     }
-    if (headerlist != NULL)
+    if (headerlist != nullptr)
     {
         curl_slist_free_all(headerlist);
     }
