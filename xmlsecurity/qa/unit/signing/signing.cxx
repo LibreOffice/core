@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <type_traits>
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
@@ -196,8 +200,14 @@ void SigningTest::testOOXMLPartial()
     CPPUNIT_ASSERT(pObjectShell);
     // This was SignatureState::BROKEN due to missing RelationshipTransform and SHA-256 support.
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
-    int nActual = static_cast<int>(pObjectShell->GetDocumentSignatureState());
-    CPPUNIT_ASSERT(nActual == static_cast<int>(SignatureState::NOTVALIDATED) || nActual == static_cast<int>(SignatureState::PARTIAL_OK));
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(
+            static_cast<typename std::underlying_type<SignatureState>::type>(
+                nActual))
+         .getStr()),
+        (nActual == SignatureState::NOTVALIDATED
+         || nActual == SignatureState::PARTIAL_OK));
 }
 
 void SigningTest::testOOXMLBroken()
