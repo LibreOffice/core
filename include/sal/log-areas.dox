@@ -126,6 +126,11 @@ certain functionality.
 @li @c sc.qa
 @li @c sc.ui - Calc UI
 @li @c sc.viewdata
+@li @c sc.Accessibility
+@li @c sc.xml
+@li @c sc.qpro
+@li @c sc.tool
+@li @c sc.data
 
 @section desktop
 

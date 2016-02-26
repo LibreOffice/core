@@ -73,10 +73,8 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         catch( const uno::RuntimeException& r )
         {
             (void) r;
-#if OSL_DEBUG_LEVEL > 1
-            OStringBuffer aError("Runtime exception caught while notifying shape.:\n");
-            aError.append(OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_FAIL( aError.getStr() );
+#if OSL_DEBUG_LEVEL > 0
+            SAL_INFO("sc.Accessibility", "Runtime exception caught while notifying shape. : " << r.Message);
 #endif
         }
     }
