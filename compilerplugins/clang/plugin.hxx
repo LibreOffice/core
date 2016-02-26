@@ -22,11 +22,7 @@
 #include <clang/Lex/Preprocessor.h>
 #include <unordered_map>
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
-#include <clang/Rewrite/Rewriter.h>
-#else
 #include <clang/Rewrite/Core/Rewriter.h>
-#endif
 
 using namespace clang;
 using namespace llvm;
