@@ -53,6 +53,7 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/uri.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/layout.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
@@ -263,6 +264,13 @@ OUString getDefaultModule_Impl()
     return sDefaultModule;
 }
 
+Reference< XFrame > getCurrentFrame()
+{
+    Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference < XDesktop2 > xDesktop = Desktop::create(xContext);
+    return xDesktop->getCurrentFrame();
+}
+
 OUString getCurrentModuleIdentifier_Impl()
 {
     OUString sIdentifier;
@@ -443,7 +451,8 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* pWindow )
 {
     OUString sModuleName = GetHelpModuleName_Impl();
-    OUString sHelpText = SfxHelp_Impl::GetHelpText( aCommandURL, sModuleName );
+    OUString sRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aCommandURL, getCurrentFrame() );
+    OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
     OString aNewHelpId;
 
@@ -556,8 +565,14 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         default:
         {
             OUString aHelpModuleName( GetHelpModuleName_Impl() );
+            OUString aRealCommand;
+
+            if ( nProtocol == INetProtocol::Uno )
+                // Command can be just an alias to another command.
+                aRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( rURL, getCurrentFrame() );
+
             // no URL, just a HelpID (maybe empty in case of keyword search)
-            aHelpURL = CreateHelpURL_Impl( rURL, aHelpModuleName );
+            aHelpURL = CreateHelpURL_Impl( aRealCommand.isEmpty() ? rURL : aRealCommand, aHelpModuleName );
 
             if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {

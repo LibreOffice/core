@@ -84,6 +84,9 @@ public:
     OUString GetCommandShortcut (const OUString& rCommandName,
                                  const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
+    OUString GetRealCommandForCommand( const OUString& rCommandName,
+                                       const css::uno::Reference<css::frame::XFrame>& rxFrame );
+
     Image GetImageForCommand(
         const OUString& rsCommandName,
         bool bLarge,

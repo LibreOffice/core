@@ -46,6 +46,11 @@
           <desc>Used for Tooltips (Toolbar and Glade Widgets that have their 'action_name' specified.)</desc>
         </info>
       </prop>
+      <prop oor:name="TargetURL" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>The actual command to use for everything except label/icon, typically when the main command doesn't map to a valid application slot.</desc>
+        </info>
+      </prop>
       <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>

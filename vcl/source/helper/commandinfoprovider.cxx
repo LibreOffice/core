@@ -194,6 +194,14 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
     return OUString();
 }
 
+OUString CommandInfoProvider::GetRealCommandForCommand(const OUString& rCommandName,
+                                                       const css::uno::Reference<frame::XFrame>& rxFrame)
+{
+    SetFrame(rxFrame);
+
+    return GetCommandProperty("TargetURL", rCommandName);
+}
+
 Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName, bool bLarge,
                                               const Reference<frame::XFrame>& rxFrame)
 {

@@ -650,12 +650,17 @@ void ToolBarManager::CreateControllers()
             continue;
 
         OUString                 aLoadURL( ".uno:OpenUrl" );
-        OUString                 aCommandURL( m_pToolBar->GetItemCommand( nId ));
         bool                     bInit( true );
         bool                     bCreate( true );
         Reference< XStatusListener > xController;
 
         svt::ToolboxController* pController( nullptr );
+
+        OUString aCommandURL( m_pToolBar->GetItemCommand( nId ) );
+        // Command can be just an alias to another command.
+        OUString aRealCommandURL( vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aCommandURL, m_xFrame ) );
+        if ( !aRealCommandURL.isEmpty() )
+            aCommandURL = aRealCommandURL;
 
         if ( bHasDisabledEntries )
         {

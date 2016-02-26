@@ -844,14 +844,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                         {
                             Reference< XDispatch > xMenuItemDispatch;
 
-                            OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
-                            if ( aItemCommand.isEmpty() )
-                            {
-                                aItemCommand = "slot:" + OUString::number( pMenuItemHandler->nItemId );
-                                pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
-                            }
-
-                            aTargetURL.Complete = aItemCommand;
+                            aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
 
                             m_xURLTransformer->parseStrict( aTargetURL );
 
@@ -870,7 +863,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                             if(xMenuItemDispatch != nullptr)
                             {
                                 if ( !pMenuItemHandler->xPopupMenuController.is() &&
-                                     m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ) )
+                                     m_xPopupMenuControllerFactory->hasController( pMenuItemHandler->aMenuItemURL, m_aModuleIdentifier ) )
                                 {
                                     bPopupMenu = CreatePopupMenuController( pMenuItemHandler );
                                 }
@@ -1182,6 +1175,11 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
         sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
+
+        // Command can be just an alias to another command.
+        OUString aRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aItemCommand, m_xFrame );
+        if ( !aRealCommand.isEmpty() )
+            aItemCommand = aRealCommand;
 
         // Set module identifier when provided from outside
         if ( !rModuleIdentifier.isEmpty() )
