@@ -72,7 +72,7 @@ public:
     void persistChanges() throw (css::uno::RuntimeException);
     css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
     void removeSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
-    void ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, bool bTemporary = true ) throw (css::uno::RuntimeException);
+    void ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings) throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() throw (css::uno::RuntimeException);
 

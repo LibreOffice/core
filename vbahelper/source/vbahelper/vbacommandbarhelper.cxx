@@ -144,7 +144,7 @@ void VbaCommandBarHelper::removeSettings( const OUString& sResourceUrl ) throw (
     // persistChanges();
 }
 
-void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, bool bTemporary ) throw (css::uno::RuntimeException)
+void VbaCommandBarHelper::ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
@@ -153,10 +153,6 @@ void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::
     else
     {
         m_xDocCfgMgr->insertSettings( sResourceUrl, xSettings );
-    }
-    if( !bTemporary )
-    {
-        persistChanges();
     }
 }
 

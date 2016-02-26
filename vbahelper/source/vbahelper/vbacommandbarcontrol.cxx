@@ -32,7 +32,7 @@ void ScVbaCommandBarControl::ApplyChange() throw ( uno::RuntimeException )
 {
     uno::Reference< container::XIndexContainer > xIndexContainer( m_xCurrentSettings, uno::UNO_QUERY_THROW );
     xIndexContainer->replaceByIndex( m_nPosition, uno::makeAny( m_aPropertyValues ) );
-    pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
+    pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
 
 OUString SAL_CALL
@@ -154,7 +154,7 @@ ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::Runt
         uno::Reference< container::XIndexContainer > xIndexContainer( m_xCurrentSettings, uno::UNO_QUERY_THROW );
         xIndexContainer->removeByIndex( m_nPosition );
 
-        pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
+        pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
     }
 }
 

@@ -76,7 +76,7 @@ ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException, 
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
     xPropertySet->setPropertyValue( "UIName" , uno::makeAny( _name ) );
 
-    pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
+    pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
 sal_Bool SAL_CALL
 ScVbaCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
