@@ -10,10 +10,14 @@
 
 CLANG_COMMA :=,
 
-# You may occasionally want to override some of these
+ifeq ($(COMPILER_PLUGINS_CXX),)
 CLANGCXX=$(filter-out -m32 -m64 -fsanitize=%,$(CXX))
+else
+CLANGCXX=$(COMPILER_PLUGINS_CXX)
+endif
 
-# Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
+# Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin); you
+# may occasionally want to override these:
 CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
 
 # The uninteresting rest.

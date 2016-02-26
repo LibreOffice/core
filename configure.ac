@@ -6735,6 +6735,7 @@ else
     fi
 fi
 AC_SUBST(COMPILER_PLUGINS)
+AC_SUBST(COMPILER_PLUGINS_CXX)
 AC_SUBST(CLANGDIR)
 
 # Plugin to help linker.
