@@ -57,6 +57,24 @@
       "revId": "0c193a70fb08d91bab49010debd41534676deda4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_7aad0588",
+        "filename": "external/nss/ubsan.patch.0",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2016-02-26T09:19:45Z",
+      "side": 0,
+      "message": "Thanks for the confirmation.",
+      "parentUuid": "1aa78d24_da9d195b",
+      "revId": "0c193a70fb08d91bab49010debd41534676deda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
