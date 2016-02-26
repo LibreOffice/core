@@ -105,7 +105,7 @@ public:
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                                     ScPasteFunc nFunction = ScPasteFunc::NONE, bool bSkipEmpty = false,
-                                    bool bTranspose = false, bool bAsLink = false,
+                                    bool bTranspose = false, bool bAsLink = false, bool bAsDDE = false,
                                     InsCellCmd eMoveMode = INS_NONE,
                                     InsertDeleteFlags nUndoExtraFlags = InsertDeleteFlags::NONE,
                                     bool bAllowDialogs = false );
@@ -139,7 +139,8 @@ public:
     bool            PasteBookmark( SotClipboardFormatId nFormatId,
                                 const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );
-    bool            PasteLink( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
+    bool            PasteLink( SotClipboardFormatId nFormatId,
+                               const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget = nullptr,

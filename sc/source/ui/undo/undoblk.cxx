@@ -1086,7 +1086,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
             css::uno::Reference<css::datatransfer::XTransferable> aOwnClipRef( pOwnClip );
             pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
-                                    aPasteOptions.bAsLink, aPasteOptions.eMoveMode, InsertDeleteFlags::NONE,
+                                    aPasteOptions.bAsLink, aPasteOptions.bAsDDE, aPasteOptions.eMoveMode, InsertDeleteFlags::NONE,
                                     true );     // allow warning dialog
         }
     }

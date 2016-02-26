@@ -212,6 +212,7 @@ class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg
     virtual ScPasteFunc   GetFormulaCmdBits() const override;
     virtual bool        IsSkipEmptyCells() const override;
     virtual bool        IsLink() const override;
+    virtual bool        IsDDE() const override;
     virtual void        SetFillMode( bool bSet ) override;
     virtual void        SetOtherDoc( bool bSet ) override;
     virtual bool        IsTranspose() const override;

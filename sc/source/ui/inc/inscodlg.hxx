@@ -41,6 +41,7 @@ public:
     bool            IsSkipEmptyCells() const;
     bool            IsTranspose() const;
     bool            IsLink() const;
+    bool            IsDDE() const;
     InsCellCmd      GetMoveMode();
 
     void    SetOtherDoc( bool bSet );
@@ -61,6 +62,7 @@ private:
     VclPtr<CheckBox>        mpBtnSkipEmptyCells;
     VclPtr<CheckBox>        mpBtnTranspose;
     VclPtr<CheckBox>        mpBtnLink;
+    VclPtr<CheckBox>        mpBtnDDE;
 
     VclPtr<RadioButton>     mpRbNoOp;
     VclPtr<RadioButton>     mpRbAdd;
@@ -88,6 +90,7 @@ private:
     bool              bShortCutSkipEmptyCells;
     bool              bShortCutTranspose;
     bool              bShortCutIsLink;
+    bool              bShortCutIsDDE;
     InsCellCmd        nShortCutMoveMode;
 
     static bool         bPreviousAllCheck;
@@ -97,11 +100,12 @@ private:
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
     void DisableChecks( bool bInsAllChecked = true );
-    void TestModes();
+    void TestModes(bool bLinkFRF, bool bLinkDDE);
 
     // Handler
     DECL_LINK_TYPED( InsAllHdl, Button*, void );
     DECL_LINK_TYPED( LinkBtnHdl, Button*, void );
+    DECL_LINK_TYPED( DDEBtnHdl, Button*, void );
     DECL_LINK_TYPED( ShortCutHdl, Button*, void );
 };
 

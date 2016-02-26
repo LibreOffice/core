@@ -316,6 +316,11 @@ bool    AbstractScInsertContentsDlg_Impl::IsLink() const
     return pDlg->IsLink();
 }
 
+bool    AbstractScInsertContentsDlg_Impl::IsDDE() const
+{
+    return pDlg->IsDDE();
+}
+
 void    AbstractScInsertContentsDlg_Impl::SetFillMode( bool bSet )
 {
     pDlg->SetFillMode( bSet );

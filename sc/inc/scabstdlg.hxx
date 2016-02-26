@@ -162,6 +162,7 @@ public:
     virtual ScPasteFunc   GetFormulaCmdBits() const = 0 ;
     virtual bool        IsSkipEmptyCells() const = 0;
     virtual bool        IsLink() const = 0;
+    virtual bool        IsDDE() const = 0;
     virtual void        SetFillMode( bool bSet ) = 0;
     virtual void        SetOtherDoc( bool bSet ) = 0;
     virtual bool        IsTranspose() const = 0;

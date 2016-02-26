@@ -163,6 +163,7 @@ struct ScUndoPasteOptions
     bool       bSkipEmpty;
     bool       bTranspose;
     bool       bAsLink;
+    bool       bAsDDE;
     InsCellCmd eMoveMode;
 
     ScUndoPasteOptions() :
@@ -170,6 +171,7 @@ struct ScUndoPasteOptions
         bSkipEmpty( false ),
         bTranspose( false ),
         bAsLink( false ),
+        bAsDDE( false ),
         eMoveMode( INS_NONE )
     {}
 };
