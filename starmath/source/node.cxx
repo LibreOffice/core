@@ -2060,7 +2060,8 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
         default:
             break;
     }
-    GetSubNode(1)->CreateTextFromNode(rText);
+    if(GetNumSubNodes() > 1)
+        GetSubNode(1)->CreateTextFromNode(rText);
 }
 
 void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
