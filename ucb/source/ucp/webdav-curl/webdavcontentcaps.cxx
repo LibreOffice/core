@@ -46,7 +46,7 @@ using namespace http_dav_ucp;
 
 
 bool ContentProvider::getProperty(
-        const OUString & rPropName, beans::Property & rProp, bool bStrict )
+        const OUString & rPropName, beans::Property & rProp )
 {
     if ( !m_pProps )
     {
@@ -244,9 +244,6 @@ bool ContentProvider::getProperty(
     }
     else
     {
-        if ( bStrict )
-            return false;
-
         // All unknown props are treated as:
         rProp = beans::Property(
                     rPropName,
