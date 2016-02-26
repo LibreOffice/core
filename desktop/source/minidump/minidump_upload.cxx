@@ -45,9 +45,9 @@ static size_t WriteCallback(void *ptr, size_t size,
   if (!userp)
     return 0;
 
-  std::string* response = reinterpret_cast<std::string *>(userp);
+  std::string* response = static_cast<std::string *>(userp);
   size_t real_size = size * nmemb;
-  response->append(reinterpret_cast<char *>(ptr), real_size);
+  response->append(static_cast<char *>(ptr), real_size);
   return real_size;
 }
 
@@ -117,7 +117,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA,
-            reinterpret_cast<void *>(&response_body));
+            static_cast<void *>(&response_body));
 
     // Fail if 400+ is returned from the web server.
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
