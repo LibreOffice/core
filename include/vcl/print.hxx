@@ -605,10 +605,8 @@ public:
     /** Process a new set of properties
 
         merges changed properties and returns "true" if any occurred
-        if the optional output set is not NULL then the names of the changed properties are returned
     */
-    bool                 processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp,
-                             std::set< OUString >* o_pChangeProp = nullptr );
+    bool                 processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
 
     /** Append to a sequence of property values the ui property sequence passed at creation
 

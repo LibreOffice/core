@@ -248,15 +248,14 @@ public:
                     MenuItemBits nItemBits = MenuItemBits::NONE,
                     const OString &rIdent = OString(),
                     sal_uInt16 nPos = MENU_APPEND);
-    void InsertItem(const ResId& rResId, sal_uInt16 nPos = MENU_APPEND );
+    void InsertItem(const ResId& rResId);
     void InsertItem(const OUString& rCommand,
                     const css::uno::Reference<css::frame::XFrame>& rFrame,
                     MenuItemBits nBits = MenuItemBits::NONE,
-                    const OString &rIdent = OString(),
-                    sal_uInt16 nPos = MENU_APPEND);
+                    const OString &rIdent = OString());
     void InsertSeparator(const OString &rIdent = OString(), sal_uInt16 nPos = MENU_APPEND);
     void RemoveItem( sal_uInt16 nPos );
-    void CopyItem(const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos = MENU_APPEND );
+    void CopyItem(const Menu& rMenu, sal_uInt16 nPos );
     void Clear();
 
     void CreateAutoMnemonics();
@@ -308,7 +307,7 @@ public:
     virtual bool IsMenuBar() const = 0;
 
     void RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
-    bool HasValidEntries( bool bCheckPopups = true );
+    bool HasValidEntries();
 
     void UpdateNativeMenu();
 
@@ -533,7 +532,7 @@ public:
     sal_uInt16 Execute( vcl::Window* pWindow, const Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );
 
     // Fuer das TestTool
-    void EndExecute( sal_uInt16 nSelect = 0 );
+    void EndExecute();
     virtual void SelectItem(sal_uInt16 nId) override;
     void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 

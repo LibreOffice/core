@@ -576,7 +576,7 @@ public:
     SAL_DLLPRIVATE void                 ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt );
     SAL_DLLPRIVATE void                 ImplNotifyIconifiedState( bool bIconified );
 
-    SAL_DLLPRIVATE void                 ImplUpdateAll( bool bOverlapWindows = true );
+    SAL_DLLPRIVATE void                 ImplUpdateAll();
 
     SAL_DLLPRIVATE void                 ImplControlFocus( GetFocusFlags nFlags = GetFocusFlags::NONE );
 
@@ -871,7 +871,7 @@ public:
     /// Enable/disable double-buffering of the frame window and all its children.
     void                                RequestDoubleBuffering(bool bRequest);
 
-    void                                EnableAllResize( bool bEnable = true );
+    void                                EnableAllResize();
 
     void                                SetBorderStyle( WindowBorderStyle nBorderStyle );
     WindowBorderStyle                   GetBorderStyle() const;
@@ -1084,7 +1084,7 @@ public:
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
-    void                                Validate( ValidateFlags nFlags = ValidateFlags::NONE );
+    void                                Validate();
     bool                                HasPaintEvent() const;
     void                                Update();
     void                                Flush();

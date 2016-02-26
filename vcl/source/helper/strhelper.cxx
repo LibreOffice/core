@@ -303,7 +303,7 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
     return OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
-OString WhitespaceToSpace(const OString& rLine, bool bProtect)
+OString WhitespaceToSpace(const OString& rLine)
 {
     sal_Int32 nLen = rLine.getLength();
     if (!nLen)
@@ -334,11 +334,11 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
                 if( *pRun )
                     pRun++;
             }
-            else if( bProtect && *pRun == '`' )
+            else if( *pRun == '`' )
                 CopyUntil( pLeap, pRun, '`', true );
-            else if( bProtect && *pRun == '\'' )
+            else if( *pRun == '\'' )
                 CopyUntil( pLeap, pRun, '\'', true );
-            else if( bProtect && *pRun == '"' )
+            else if( *pRun == '"' )
                 CopyUntil( pLeap, pRun, '"', true );
             else
             {

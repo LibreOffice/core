@@ -1788,14 +1788,9 @@ OUString PrinterOptionsHelper::getStringValue( const OUString& i_rPropertyName, 
     return (aVal >>= aRet) ? aRet : i_rDefault;
 }
 
-bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp,
-                                              std::set< OUString >* o_pChangeProp )
+bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp )
 {
     bool bChanged = false;
-
-    // clear the changed set
-    if( o_pChangeProp )
-        o_pChangeProp->clear();
 
     sal_Int32 nElements = i_rNewProp.getLength();
     const css::beans::PropertyValue* pVals = i_rNewProp.getConstArray();
@@ -1814,8 +1809,6 @@ bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::bea
 
         if( bElementChanged )
         {
-            if( o_pChangeProp )
-                o_pChangeProp->insert( pVals[ i ].Name );
             m_aPropertyMap[ pVals[i].Name ] = pVals[i].Value;
             bChanged = true;
         }

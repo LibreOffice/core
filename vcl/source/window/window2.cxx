@@ -1090,9 +1090,9 @@ bool Window::IsToolbarFloatingWindow() const
     return mpWindowImpl && mpWindowImpl->mbToolbarFloatingWindow;
 }
 
-void Window::EnableAllResize( bool bEnable )
+void Window::EnableAllResize()
 {
-    mpWindowImpl->mbAllResize = bEnable;
+    mpWindowImpl->mbAllResize = true;
 }
 
 void Window::EnableChildTransparentMode( bool bEnable )

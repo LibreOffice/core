@@ -446,7 +446,7 @@ void ToolBox::Select()
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
-void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
+void ToolBox::InsertItem( const ResId& rResId )
 {
     sal_uLong nObjMask;
     bool      bImage = false;     // has image
@@ -524,14 +524,14 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     }
 
     // create item and add to list
-    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
+    mpData->m_aItems.push_back( aItem );
     mpData->ImplClearLayoutData();
 
     // recalculate ToolBox and redraw
     ImplInvalidate( bNewCalc );
 
     // Notify
-    sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
+    sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(mpData->m_aItems.size() - 1);
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -637,19 +637,19 @@ void ToolBox::InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertSpace( sal_uInt16 nPos )
+void ToolBox::InsertSpace()
 {
     // create item and add to list
     ImplToolItem aItem;
     aItem.meType     = ToolBoxItemType::SPACE;
     aItem.mbEnabled  = false;
-    mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
+    mpData->m_aItems.push_back( aItem );
     mpData->ImplClearLayoutData();
 
     ImplInvalidate();
 
     // Notify
-    sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
+    sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(mpData->m_aItems.size() - 1);
     CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
@@ -719,8 +719,7 @@ void ToolBox::RemoveItem( sal_uInt16 nPos )
     }
 }
 
-void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
-                        sal_uInt16 nNewPos )
+void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId )
 {
     DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
                 "ToolBox::CopyItem(): ItemId already exists" );
@@ -736,13 +735,13 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
         aNewItem.mpWindow      = nullptr;
         aNewItem.mbShowWindow = false;
 
-        mpData->m_aItems.insert( (nNewPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nNewPos : mpData->m_aItems.end(), aNewItem );
+        mpData->m_aItems.push_back( aNewItem );
         mpData->ImplClearLayoutData();
         // redraw ToolBox
         ImplInvalidate();
 
         // Notify
-        sal_uInt16 nNewPos2 = sal::static_int_cast<sal_uInt16>(( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos);
+        sal_uInt16 nNewPos2 = sal::static_int_cast<sal_uInt16>(mpData->m_aItems.size() - 1);
         CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
     }
 }
@@ -1355,7 +1354,7 @@ void ToolBox::EndSelection()
     mnMouseModifier = 0;
 }
 
-void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
+void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1380,23 +1379,20 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
             }
         }
 
-        if ( bRelease )
+        if ( mbDrag || mbSelection )
         {
-            if ( mbDrag || mbSelection )
-            {
-                mbDrag = false;
-                mbSelection = false;
-                EndTracking();
-                if (IsMouseCaptured())
-                    ReleaseMouse();
-                Deactivate();
-            }
-
-            mnCurItemId     = 0;
-            mnDownItemId    = 0;
-            mnMouseClicks   = 0;
-            mnMouseModifier = 0;
+            mbDrag = false;
+            mbSelection = false;
+            EndTracking();
+            if (IsMouseCaptured())
+                ReleaseMouse();
+            Deactivate();
         }
+
+        mnCurItemId     = 0;
+        mnDownItemId    = 0;
+        mnMouseClicks   = 0;
+        mnMouseModifier = 0;
     }
 }
 

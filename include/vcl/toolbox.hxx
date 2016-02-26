@@ -284,8 +284,7 @@ public:
     virtual void        Resizing( Size& rSize ) override;
     virtual Size        GetOptimalSize() const override;
 
-    void                InsertItem( const ResId& rResId,
-                                    sal_uInt16 nPos = TOOLBOX_APPEND );
+    void                InsertItem( const ResId& rResId );
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
@@ -305,11 +304,11 @@ public:
     void                InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
                                       ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                       sal_uInt16 nPos = TOOLBOX_APPEND );
-    void                InsertSpace( sal_uInt16 nPos = TOOLBOX_APPEND );
+    void                InsertSpace();
     void                InsertSeparator( sal_uInt16 nPos = TOOLBOX_APPEND, sal_uInt16 nPixSize = 0 );
     void                InsertBreak( sal_uInt16 nPos = TOOLBOX_APPEND );
     void                RemoveItem( sal_uInt16 nPos );
-    void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId, sal_uInt16 nNewPos = TOOLBOX_APPEND );
+    void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId );
     void                Clear();
 
     const ImageList&    GetImageList() const { return maImageList; }
@@ -376,7 +375,7 @@ public:
     void                StartSelection();
     void                EndSelection();
 
-    void                SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease = true );
+    void                SetItemDown( sal_uInt16 nItemId, bool bDown );
 
     void                SetItemState( sal_uInt16 nItemId, TriState eState );
     TriState            GetItemState( sal_uInt16 nItemId ) const;
@@ -387,7 +386,7 @@ public:
     void                EnableItem( sal_uInt16 nItemId, bool bEnable = true );
     bool                IsItemEnabled( sal_uInt16 nItemId ) const;
 
-    void                TriggerItem( sal_uInt16 nItemId, bool bShift = false, bool bCtrl = false );
+    void                TriggerItem( sal_uInt16 nItemId, bool bShift = false );
 
     /// Shows or hides items.
     void                ShowItem(sal_uInt16 nItemId, bool bVisible = true);

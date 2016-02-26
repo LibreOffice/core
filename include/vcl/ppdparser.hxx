@@ -231,11 +231,9 @@ public:
     static void     getResolutionFromString( const OUString&, int&, int& );
     // helper function
 
-    OUString   translateKey( const OUString& i_rKey,
-                                  const css::lang::Locale& i_rLocale = css::lang::Locale() ) const;
+    OUString   translateKey( const OUString& i_rKey ) const;
     OUString   translateOption( const OUString& i_rKey,
-                                     const OUString& i_rOption,
-                                     const css::lang::Locale& i_rLocale = css::lang::Locale() ) const;
+                                const OUString& i_rOption ) const;
 };
 
 

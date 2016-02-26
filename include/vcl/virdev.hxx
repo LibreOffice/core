@@ -128,8 +128,8 @@ public:
                                                                 const Point& rNewOffset,
                                                                 sal_uInt8* pBuffer);
 
-    bool                SetOutputSize( const Size& rNewSize, bool bErase = true )
-                            { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
+    bool                SetOutputSize( const Size& rNewSize )
+                            { return SetOutputSizePixel( LogicToPixel( rNewSize ) ); }
 
     // reference device modes for different compatibility levels
     enum RefDevMode {   REFDEV_NONE = 0,

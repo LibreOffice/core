@@ -1254,9 +1254,9 @@ OUString GraphicFilter::GetExportFormatShortName( sal_uInt16 nFormat )
     return pConfig->GetExportFormatShortName( nFormat );
 }
 
-OUString GraphicFilter::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
+OUString GraphicFilter::GetExportWildcard( sal_uInt16 nFormat )
 {
-    return pConfig->GetExportWildcard( nFormat, nEntry );
+    return pConfig->GetExportWildcard( nFormat, 0 );
 }
 
 bool GraphicFilter::IsExportPixelFormat( sal_uInt16 nFormat )

@@ -479,11 +479,8 @@ public:
     @param nMilliSec
     the duration of the transitional effect in milliseconds;
     set 0 to disable transitional effects
-
-    @param nPageNr
-    the page number to apply the effect to; -1 denotes the current page
     */
-    void SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr = -1 );
+    void SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec );
 
     /** create a new form control
 
@@ -493,11 +490,8 @@ public:
 
     @param rControlType
     a descendant of AnyWidget determining the control's properties
-
-    @param nPageNr
-    the page number to apply the effect to; -1 denotes the current page
      */
-    void    CreateControl( const PDFWriter::AnyWidget& rControlType, sal_Int32 nPageNr = -1 );
+    void    CreateControl( const PDFWriter::AnyWidget& rControlType );
 };
 
 }

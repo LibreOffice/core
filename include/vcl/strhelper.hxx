@@ -36,7 +36,7 @@ namespace psp
     // returns number of tokens (zero if empty or whitespace only)
 
     VCL_DLLPUBLIC OUString WhitespaceToSpace( const OUString&, bool bProtect = true );
-    VCL_DLLPUBLIC OString WhitespaceToSpace(const OString&, bool bProtect = true);
+    VCL_DLLPUBLIC OString WhitespaceToSpace(const OString&);
     // returns a string with multiple adjacent occurrences of whitespace
     // converted to a single space. if bProtect is sal_True (nonzero), then
     // doublequote, singlequote and singleleftquote protect their respective

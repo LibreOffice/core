@@ -51,9 +51,7 @@ public:
     void                    EnableEraseBackground( bool bEnable = true );
     void                    SetForwardKey( bool bEnable );
     // return the platform specific handle/id of this window;
-    // in case the flag bUseJava is set, a java compatible overlay window
-    // is created on which other java windows can be created (plugin interface)
-    sal_IntPtr              GetParentWindowHandle( bool bUseJava = false );
+    sal_IntPtr              GetParentWindowHandle();
 };
 
 #endif // INCLUDED_VCL_SYSCHILD_HXX

@@ -107,8 +107,7 @@ public:
     long            DoScroll( long nNewPos );
     long            DoScrollAction( ScrollType eScrollType );
 
-    void            EnableDrag( bool bEnable = true )
-                        { mbFullDrag = bEnable; }
+    void            EnableDrag() { mbFullDrag = true; }
 
     void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }

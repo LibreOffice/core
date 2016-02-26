@@ -25,11 +25,11 @@
 
 namespace vcl
 {
-    bool ImageRepository::loadImage( const OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
+    bool ImageRepository::loadImage( const OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent )
     {
         OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-        return ImplImageTree::get().loadImage( _rName, sIconTheme, _out_rImage, _bSearchLanguageDependent, loadMissing );
+        return ImplImageTree::get().loadImage( _rName, sIconTheme, _out_rImage, _bSearchLanguageDependent );
     }
 
     bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
