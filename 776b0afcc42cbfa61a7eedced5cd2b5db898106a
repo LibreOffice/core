@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_5a7e49af",
+        "filename": "sc/source/filter/oox/sheetdatabuffer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-02-26T15:56:01Z",
+      "side": 1,
+      "message": "For what do you need the aBaseAddr here?",
+      "revId": "776b0afcc42cbfa61a7eedced5cd2b5db898106a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
