@@ -18,7 +18,7 @@ module com { module sun { module star { module util {
 
 /** enables an object to search in its content.
  */
-published interface XTextSearch2 : com::sun::star::util::XTextSearch
+interface XTextSearch2 : com::sun::star::util::XTextSearch
 {
     /** set the options for the forward or backward search.
      */

@@ -17,7 +17,7 @@ module com { module sun { module star { module util {
 
     @since LibreOffice 5.2
  */
-published constants SearchAlgorithms2
+constants SearchAlgorithms2
 {
     /// Literal
     const short ABSOLUTE = 1;

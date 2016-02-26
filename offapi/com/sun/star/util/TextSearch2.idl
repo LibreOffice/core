@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module util {
 
     <p>It is possible to search forward or backward in the string.
 */
-published service TextSearch2 : XTextSearch2;
+service TextSearch2 : XTextSearch2;
 
 
 }; }; }; };

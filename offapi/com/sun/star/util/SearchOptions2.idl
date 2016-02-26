@@ -22,7 +22,7 @@ module com { module sun { module star { module util {
 
     @since LibreOffice 5.2
  */
-published struct SearchOptions2 : com::sun::star::util::SearchOptions {
+struct SearchOptions2 : com::sun::star::util::SearchOptions {
 
     /** Search type, one of com::sun::star::util::SearchAlgorithms2
         constants. This is preferred over the content of the
