@@ -394,11 +394,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="rotate">
+              <object class="GtkLabel" id="scale">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Rotation</property>
+                <property name="label" translatable="yes">Scaling</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

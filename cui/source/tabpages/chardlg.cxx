@@ -2629,7 +2629,7 @@ SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet
     get(m_pFontSizeFT, "relativefontsize");
     get(m_pFontSizeMF, "fontsizesb");
     get(m_pRotationContainer, "rotationcontainer");
-    get(m_pScalingFT, "rotate");
+    get(m_pScalingFT, "scale");
     get(m_pScalingAndRotationFT, "rotateandscale");
     get(m_p0degRB, "0deg");
     get(m_p90degRB, "90deg");
