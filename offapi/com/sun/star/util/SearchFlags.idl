@@ -133,6 +133,8 @@ published constants SearchFlags
 
         <p> If set, the entire selection must match. If not set, a
         substring match is allowed. </p>
+
+        @since LibreOffice 5.2
      */
     const long  WILD_MATCH_SELECTION = 0x00100000;
 };
