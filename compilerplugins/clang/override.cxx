@@ -97,14 +97,14 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
             //TODO: Looks like a Clang bug that in some cases like
             // (filter/source/svg/svgexport.cxx)
             //
-            // #define TEXT_FIELD_GET_CLASS_NAME_METHOD( class_name ) \
-            // virtual OUString getClassName() const                  \
-            // {                                                      \
-            //     static const char className[] = #class_name;       \
-            //     return OUString( className );                      \
-            // }
-            //
-            // TEXT_FIELD_GET_CLASS_NAME_METHOD( TextField )
+            // | #define TEXT_FIELD_GET_CLASS_NAME_METHOD( class_name ) \ |
+            // | virtual OUString getClassName() const                  \ |
+            // | {                                                      \ |
+            // |     static const char className[] = #class_name;       \ |
+            // |     return OUString( className );                      \ |
+            // | }                                                        |
+            // |                                                          |
+            // | TEXT_FIELD_GET_CLASS_NAME_METHOD( TextField )            |
             //
             // where "\<NL>" is followed directly by a real token without
             // intervening whitespace, tokens "\<NL>virtual" and "\<NL>{" are
