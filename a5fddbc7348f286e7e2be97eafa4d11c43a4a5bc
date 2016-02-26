@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa78d24_1a2201ba",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-26T18:08:29Z",
+      "side": 1,
+      "message": "Really \u0026\u0026 and, not || or?",
+      "range": {
+        "startLine": 415,
+        "startChar": 25,
+        "endLine": 415,
+        "endChar": 27
+      },
+      "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_fa3a95e6",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-26T18:08:29Z",
+      "side": 1,
+      "message": "This is odd. First, RAND_MAX has no relation at all with the random number generator used. Second, why 1+random/2 ? uniform_real_distribution() without arguments produces numbers between 0.0 inclusive and 1.0 exclusive. If the goal is to produce random numbers between [0.5,1.0) (which 1.0+uniform_real_distribution()/2.0 does) then call comphelper::rng::uniform_real_distribution(0.5,1.0) instead. \n\nBut why divide that by RAND_MAX again, which effectively results in values [0.5/2147483647,1.0/2147483647) \u003d\u003d [2.3283064376228985e-10,4.6566128752457969e-10) if RAND_MAX is defined to signed long 2147483647?\n\nMy assumption is that should simply be\n\n gaussinv( comphelper::rng::uniform_real_distribution( 0.5, 1.0))",
+      "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa78d24_9a1c3179",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-02-26T18:08:29Z",
+      "side": 1,
+      "message": "It might be better to assign these pointers to std::unique_ptr instances, so they don\u0027t have to be cleaned up manually at the end. Like this\n\n std::unique_ptr\u003cdouble[]\u003e xScenRange( pScenRange \u003d new double[nSize]);\n\nThen you don\u0027t have to care about deleting the allocated memory if the variable goes out of scope for any reason, i.e. some premature return. Which isn\u0027t the case here, but just as a general advice.",
+      "revId": "a5fddbc7348f286e7e2be97eafa4d11c43a4a5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
