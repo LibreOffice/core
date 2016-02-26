@@ -55,9 +55,15 @@ namespace __cxxabiv1
 #endif
 
 #if !HAVE_CXXABI_H_CXA_EH_GLOBALS
-// <https://mentorembedded.github.io/cxx-abi/abi-eh.html>:
+// <https://mentorembedded.github.io/cxx-abi/abi-eh.html>,
+// libcxxabi/src/cxa_exception.hpp:
 namespace __cxxabiv1 {
 struct __cxa_exception {
+#if defined _LIBCPPABI_VERSION // detect libc++abi
+#if defined __LP64__ || LIBCXXABI_ARM_EHABI
+    std::size_t referenceCount;
+#endif
+#endif
     std::type_info * exceptionType;
     void (* exceptionDestructor)(void *);
     std::unexpected_handler unexpectedHandler;
