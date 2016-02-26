@@ -52,14 +52,11 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC UcbStreamHelper : public SvStream
     {
     public:
+        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode );
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                          UcbLockBytesHandler* pHandler=nullptr );
+                                          css::uno::Reference < css::task::XInteractionHandler > );
         static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                          css::uno::Reference < css::task::XInteractionHandler >,
-                                          UcbLockBytesHandler* pHandler=nullptr );
-        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                          bool bFileExists,
-                                UcbLockBytesHandler* pHandler=nullptr );
+                                          bool bFileExists );
         static SvStream*    CreateStream( css::uno::Reference < css::io::XInputStream > xStream );
         static SvStream*    CreateStream( css::uno::Reference < css::io::XStream > xStream );
         static SvStream*    CreateStream( css::uno::Reference < css::io::XInputStream > xStream, bool bCloseStream );

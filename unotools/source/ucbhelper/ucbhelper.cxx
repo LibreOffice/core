@@ -225,7 +225,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
 
 bool utl::UCBContentHelper::MakeFolder(
     ucbhelper::Content & parent, OUString const & title,
-    ucbhelper::Content & result, bool exclusive)
+    ucbhelper::Content & result)
 {
     bool exists = false;
     try {
@@ -276,7 +276,7 @@ bool utl::UCBContentHelper::MakeFolder(
                 << e.getValueType().getTypeName() << " \""
                 << e.get<css::uno::Exception>().Message << '"');
     }
-    if (exists && !exclusive) {
+    if (exists) {
         INetURLObject o(parent.getURL());
         o.Append(title);
         result = content(o);

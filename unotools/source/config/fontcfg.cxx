@@ -1099,8 +1099,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
     }
 }
 
-const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontName,
-        const LanguageTag& rLanguageTag ) const
+const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontName ) const
 {
     if( rFontName.isEmpty() )
         return nullptr;
@@ -1111,7 +1110,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-    LanguageTag aLanguageTag( rLanguageTag);
+    LanguageTag aLanguageTag("en");
 
     if( aLanguageTag.isSystemLocale() )
         aLanguageTag = SvtSysLocale().GetUILanguageTag();

@@ -138,24 +138,21 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
     return pStream;
 }
 
-SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                         UcbLockBytesHandler* pHandler )
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, true /* bEnsureFileExists */ );
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), nullptr, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                         Reference < XInteractionHandler > xInteractionHandler,
-                                         UcbLockBytesHandler* pHandler )
+                                         Reference < XInteractionHandler > xInteractionHandler )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, pHandler, true /* bEnsureFileExists */ );
+    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, nullptr, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
-                                         bool bFileExists,
-                                         UcbLockBytesHandler* pHandler )
+                                         bool bFileExists )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, !bFileExists );
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), nullptr, !bFileExists );
 }
 
 SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream )

@@ -1238,9 +1238,9 @@ OUString StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
     return sRet;
 }
 
-StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly)
+StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont()
 {
-    return new StarSymbolToMSMultiFontImpl(bPerfectOnly);
+    return new StarSymbolToMSMultiFontImpl(false/*bPerfectOnly*/);
 }
 
 sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const

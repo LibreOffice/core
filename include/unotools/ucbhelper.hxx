@@ -57,7 +57,7 @@ UNOTOOLS_DLLPUBLIC css::uno::Any GetProperty(
 
 UNOTOOLS_DLLPUBLIC bool MakeFolder(
     ucbhelper::Content & parent, OUString const & title,
-    ucbhelper::Content & result, bool exclusive = false);
+    ucbhelper::Content & result);
 
 /// like mkdir -p
 UNOTOOLS_DLLPUBLIC bool ensureFolder(

@@ -279,7 +279,7 @@ namespace utl
             given node path does not exist) are still asserted.</p>
         */
         static OConfigurationTreeRoot tryCreateWithComponentContext( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, bool _bLazyWrite = true );
+            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE );
 
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any OConfigurationNode object retrieved (maybe indirect) from this root

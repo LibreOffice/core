@@ -375,8 +375,7 @@ public:
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Reference< rdf::XURI > & i_xPredicate,
             const uno::Reference< rdf::XNode > & i_xObject,
-            const uno::Reference< rdf::XURI > & i_xName,
-            bool i_Internal = false );
+            const uno::Reference< rdf::XURI > & i_xName );
 //        throw (uno::RuntimeException, lang::IllegalArgumentException,
 //            container::NoSuchElementException, rdf::RepositoryException);
     void addStatementGraph_Lock(
@@ -1805,8 +1804,7 @@ void librdf_Repository::addStatementGraph_NoLock(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject,
-    const uno::Reference< rdf::XURI > & i_xGraphName,
-    bool i_Internal)
+    const uno::Reference< rdf::XURI > & i_xGraphName)
 //throw (uno::RuntimeException, lang::IllegalArgumentException,
 //    container::NoSuchElementException, rdf::RepositoryException)
 {
@@ -1832,7 +1830,7 @@ void librdf_Repository::addStatementGraph_NoLock(
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
-    addStatementGraph_Lock(stmt, contextU, i_Internal);
+    addStatementGraph_Lock(stmt, contextU, false/*i_Internal*/);
 }
 
 void librdf_Repository::addStatementGraph_Lock(

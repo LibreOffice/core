@@ -173,10 +173,7 @@ public:
 
     static FontSubstConfiguration& get();
 
-    const FontNameAttr* getSubstInfo(
-                                     const OUString& rFontName,
-                                     const LanguageTag& rLanguageTag = LanguageTag( OUString( "en"))
-                                     ) const;
+    const FontNameAttr* getSubstInfo( const OUString& rFontName ) const;
     static void getMapName( const OUString& rOrgName, OUString& rShortName, OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ImplFontAttrs& rType );
 };
 

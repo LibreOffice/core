@@ -551,13 +551,13 @@ namespace utl
     }
 
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
-        const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , bool _bLazyWrite )
+        const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode )
     {
         OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithComponentContext: invalid XComponentContext!" );
         try
         {
             Reference< XMultiServiceFactory > xConfigFactory = theDefaultProvider::get( rxContext );
-            return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode, _bLazyWrite );
+            return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode );
         }
         catch(const Exception&)
         {
