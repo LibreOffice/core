@@ -559,6 +559,22 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 #endif
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
+//hack-around https://bugzilla.gnome.org/show_bug.cgi?id=762756
+static void ReturnFocus(GtkMenuShell *, gpointer pWidget)
+{
+    GtkWidget* pTopLevel = static_cast<GtkWidget*>(pWidget);
+    GdkWindow *window = gtk_widget_get_window(pTopLevel);
+    GdkEvent *fevent = gdk_event_new(GDK_FOCUS_CHANGE);
+
+    fevent->focus_change.type = GDK_FOCUS_CHANGE;
+    fevent->focus_change.window = GDK_WINDOW(g_object_ref(window));
+    fevent->focus_change.in = TRUE;
+    gtk_widget_send_focus_change(pTopLevel, fevent);
+    gdk_event_free(fevent);
+}
+#endif
+
 void GtkSalMenu::CreateMenuBarWidget()
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -573,6 +589,7 @@ void GtkSalMenu::CreateMenuBarWidget()
     gtk_widget_insert_action_group(pMenuBarWidget, "win", mpActionGroup);
     gtk_widget_set_hexpand(GTK_WIDGET(pMenuBarWidget), true);
     gtk_grid_attach(GTK_GRID(mpMenuBarWidget), pMenuBarWidget, 0, 0, 1, 1);
+    g_signal_connect(G_OBJECT(pMenuBarWidget), "deactivate", G_CALLBACK(ReturnFocus), mpFrame->getWindow());
 
     gtk_widget_show_all(mpMenuBarWidget);
 #endif
