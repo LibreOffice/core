@@ -214,8 +214,7 @@ const PropertyValue * ContentProperties::get(
 // static
 void ContentProperties::UCBNamesToDAVNames(
                             const uno::Sequence< beans::Property > & rProps,
-                            std::vector< OUString > & propertyNames,
-                            bool bIncludeUnmatched /* = true */ )
+                            std::vector< OUString > & propertyNames )
 {
 
     // Assemble list of DAV properties to obtain from server.
@@ -291,8 +290,7 @@ void ContentProperties::UCBNamesToDAVNames(
         }
         else
         {
-            if ( bIncludeUnmatched )
-                propertyNames.push_back( rProp.Name );
+            propertyNames.push_back( rProp.Name );
         }
     }
 }
@@ -301,8 +299,7 @@ void ContentProperties::UCBNamesToDAVNames(
 // static
 void ContentProperties::UCBNamesToHTTPNames(
                             const uno::Sequence< beans::Property > & rProps,
-                            std::vector< OUString > & propertyNames,
-                            bool bIncludeUnmatched /* = true */ )
+                            std::vector< OUString > & propertyNames )
 {
 
     // Assemble list of HTTP header names to obtain from server.
@@ -336,8 +333,7 @@ void ContentProperties::UCBNamesToHTTPNames(
         }
         else
         {
-            if ( bIncludeUnmatched )
-                propertyNames.push_back( rProp.Name );
+            propertyNames.push_back( rProp.Name );
         }
     }
 }
