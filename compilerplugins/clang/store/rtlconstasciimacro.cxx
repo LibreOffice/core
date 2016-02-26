@@ -34,7 +34,7 @@ class RtlConstAsciiMacro
         bool VisitCXXConstructExpr( CXXConstructExpr* expr );
         bool VisitCXXTemporaryObjectExpr( CXXTemporaryObjectExpr* expr );
         bool VisitStringLiteral( const StringLiteral* literal );
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
+#if CLANG_VERSION < 30300
         virtual void MacroExpands( const Token& macro, const MacroInfo* info, SourceRange range ) override;
 #else
         virtual void MacroExpands( const Token& macro, const MacroDirective* directive,
@@ -59,7 +59,7 @@ void RtlConstAsciiMacro::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
+#if CLANG_VERSION < 30300
 void RtlConstAsciiMacro::MacroExpands( const Token& macro, const MacroInfo*, SourceRange range )
 #else
 void RtlConstAsciiMacro::MacroExpands( const Token& macro, const MacroDirective*,
