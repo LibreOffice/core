@@ -87,7 +87,7 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         // depend on the following token at the spelling location where
         // "SAL_OVERRIDE" is inserted, not on the following token in the fully-
         // macro-expanded view:
-        bool addSpace;
+        bool addSpace = bool();
         SourceLocation loc;
         for (SourceLocation l(decl->getSourceRange().getBegin());;) {
             SourceLocation sl(compiler.getSourceManager().getSpellingLoc(l));
