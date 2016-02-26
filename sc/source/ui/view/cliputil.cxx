@@ -65,7 +65,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                 nFlags &= ~InsertDeleteFlags::FORMULA;
 
             pTabViewShell->PasteFromClip( nFlags, pClipDoc,
-                    ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                    ScPasteFunc::NONE, false, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                     bShowDialog );      // allow warning dialog
         }
     }

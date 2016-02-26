@@ -30,6 +30,7 @@
 #define INS_CONT_NOEMPTY    0x0100 //from inscodlg.hxx
 #define INS_CONT_TRANS      0x0200 //from inscodlg.hxx
 #define INS_CONT_LINK       0x0400 //from inscodlg.hxx
+#define INS_CONT_DDE        0x0800 //from inscodlg.hxx
 
 #define SC_CELL_SHIFT_DISABLE_DOWN  0x01 //from inscodlg.hxx
 #define SC_CELL_SHIFT_DISABLE_RIGHT 0x02 //from inscodlg.hxx

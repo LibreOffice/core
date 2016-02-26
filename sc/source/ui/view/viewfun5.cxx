@@ -158,7 +158,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     SetCursor( nPosX, nPosY );
                     Unmark();
                     PasteFromClip( InsertDeleteFlags::ALL, pClipDoc.get(),
-                                    ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                                    ScPasteFunc::NONE, false, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                                     bAllowDialogs );
                     bRet = true;
                 }
@@ -278,9 +278,10 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             //TODO/LATER: if format is not available, create picture
         }
     }
-    else if ( nFormatId == SotClipboardFormatId::LINK )      // LINK is also in ScImportExport
+    else if ( nFormatId == SotClipboardFormatId::LINK ||  // LINK and DDE are also in ScImportExport
+              nFormatId == SotClipboardFormatId::LINK_DDE )
     {
-        bRet = PasteLink( rxTransferable );
+        bRet = PasteLink( nFormatId, rxTransferable );
     }
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SotClipboardFormatId::RTF )
     {
@@ -579,7 +580,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                 pInsDoc->SetClipArea( aSource );
                 PasteFromClip( InsertDeleteFlags::ALL, pInsDoc,
-                                ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                                ScPasteFunc::NONE, false, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                                 bAllowDialogs );
                 delete pInsDoc;
 
@@ -624,14 +625,15 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     return bRet;
 }
 
-bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
+bool ScViewFunc::PasteLink( SotClipboardFormatId nFormatId,
+                            const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
     //  get link data from transferable before string data,
     //  so the source knows it will be used for a link
 
-    uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(SotClipboardFormatId::LINK, OUString());
+    uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(nFormatId, OUString());
     if (!aSequence.getLength())
     {
         OSL_FAIL("DDE Data not found.");

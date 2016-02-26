@@ -390,6 +390,7 @@
 #define SID_CUT                             (SID_SFX_START + 710)
 #define SID_COPY                            (SID_SFX_START + 711)
 #define SID_PASTE                           (SID_SFX_START + 712)
+#define SID_MENU_PASTE_SPECIAL              (SID_SFX_START + 713)
 
 #define SID_BACKSPACE                       (SID_SFX_START + 714)
 #define SID_FORMATPAINTBRUSH                (SID_SFX_START + 715)
@@ -648,6 +649,7 @@
 #define FN_PARAM_4                          (FN_PARAM+63)
 #define FN_PARAM_5                          (FN_PARAM+64)
 #define FN_PARAM_6                          (FN_PARAM+65)
+#define FN_PARAM_7                          (FN_PARAM+66)
 #define FN_FAX                              (SID_SW_START + 28)   /* Fax */
 
 #define SID_KEYFUNC_START                   (SID_SC_START + 521)

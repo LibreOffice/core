@@ -52,6 +52,7 @@ private:
     sal_uInt16                      nDragSourceFlags;
     bool                            bDragWasInternal;
     bool                            bUsedForLink;
+    bool                            bUsedForDDE;
     bool                            bHasFiltered;       // if has filtered rows
     bool                            bUseInApi;          // to recognize clipboard content copied from API
 

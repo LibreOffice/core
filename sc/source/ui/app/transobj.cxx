@@ -119,6 +119,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     nDragSourceFlags( 0 ),
     bDragWasInternal( false ),
     bUsedForLink( false ),
+    bUsedForDDE( false ),
     bUseInApi( false )
 {
     OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
@@ -230,6 +231,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SotClipboardFormatId::HTML );
     AddFormat( SotClipboardFormatId::SYLK );
     AddFormat( SotClipboardFormatId::LINK );
+    AddFormat( SotClipboardFormatId::LINK_DDE );
     AddFormat( SotClipboardFormatId::DIF );
     AddFormat( SotClipboardFormatId::STRING );
 
@@ -283,9 +285,15 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
             if ( nFormat == SotClipboardFormatId::LINK )
+            {
                 bUsedForLink = true;
+            }
+            if ( nFormat == SotClipboardFormatId::LINK_DDE )
+            {
+                bUsedForDDE = true;
+            }
 
-            bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
+            bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink || bUsedForDDE;
 
             bool bReduceBlockFormat = nFormat == SotClipboardFormatId::HTML || nFormat == SotClipboardFormatId::RTF;
             ScRange aReducedBlock = aBlock;
@@ -303,7 +311,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             ScImportExport aObj( pDoc, aReducedBlock );
             ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
-            if ( bUsedForLink )
+            if ( bUsedForLink || bUsedForDDE )
             {
                 // For a DDE link, convert line breaks and separators to space.
                 aTextOptions.meNewlineConversion = ScExportTextOptions::ToSpace;

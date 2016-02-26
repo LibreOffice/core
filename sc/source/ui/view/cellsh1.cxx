@@ -1337,6 +1337,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bSkipEmpty = false;
                     bool bTranspose = false;
                     bool bAsLink    = false;
+                    bool bAsDDE     = false;
 
                     // keep a reference in case the clipboard is changed during dialog or PasteFromClip
                     uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
@@ -1373,6 +1374,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         const SfxBoolItem* pTransposeItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
                         const SfxBoolItem* pLinkItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_4);
                         const SfxInt16Item* pMoveItem = rReq.GetArg<SfxInt16Item>(FN_PARAM_5);
+                        const SfxBoolItem* pDDEItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_6);
                         if ( pFuncItem )
                             nFunction = static_cast<ScPasteFunc>(pFuncItem->GetValue());
                         if ( pSkipItem )
@@ -1381,6 +1383,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             bTranspose = pTransposeItem->GetValue();
                         if ( pLinkItem )
                             bAsLink = pLinkItem->GetValue();
+                        if ( pDDEItem )
+                            bAsDDE = pDDEItem->GetValue();
                         if ( pMoveItem )
                             eMoveMode = (InsCellCmd) pMoveItem->GetValue();
                     }
@@ -1464,6 +1468,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 bSkipEmpty = pDlg->IsSkipEmptyCells();
                                 bTranspose = pDlg->IsTranspose();
                                 bAsLink    = pDlg->IsLink();
+                                bAsDDE     = pDlg->IsDDE();
                                 eMoveMode  = pDlg->GetMoveMode();
                             }
                         }
@@ -1476,11 +1481,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             WaitObject aWait( GetViewData()->GetDialogParent() );
                             if ( bAsLink && bOtherDoc )
-                                pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // DDE insert
+                                pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // File insert
+                            else if ( bAsDDE && bOtherDoc )
+                                pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK_DDE); // DDE insert
                             else
                             {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
-                                    nFunction, bSkipEmpty, bTranspose, bAsLink,
+                                    nFunction, bSkipEmpty, bTranspose, bAsLink, bAsDDE,
                                     eMoveMode, InsertDeleteFlags::NONE, true );    // allow warning dialog
                             }
                         }
@@ -1507,6 +1514,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bSkipEmpty ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_3, bTranspose ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_4, bAsLink ) );
+                            rReq.AppendItem( SfxBoolItem( FN_PARAM_6, bAsDDE ) );
                             rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nFunction) ) );
                             rReq.AppendItem( SfxInt16Item( FN_PARAM_5, (sal_Int16) eMoveMode ) );
                             rReq.Done();

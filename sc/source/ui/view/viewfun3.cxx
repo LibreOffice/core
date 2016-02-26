@@ -461,7 +461,7 @@ void ScViewFunc::PasteFromSystem()
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
-                        ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                        ScPasteFunc::NONE, false, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         true );     // allow warning dialog
     }
     else if (pDrawClip)
@@ -603,7 +603,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     if (pOwnClip)
     {
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
-                        ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                        ScPasteFunc::NONE, false, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         true );     // allow warning dialog
     }
     else if (pDrawClip)
@@ -697,7 +697,7 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
-                        ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
+                        ScPasteFunc::NONE, false, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         !bApi );        // allow warning dialog
     }
     else
@@ -841,7 +841,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 
 bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                                 ScPasteFunc nFunction, bool bSkipEmpty,
-                                bool bTranspose, bool bAsLink,
+                                bool bTranspose, bool bAsLink, bool bAsDDE,
                                 InsCellCmd eMoveMode, InsertDeleteFlags nUndoExtraFlags,
                                 bool bAllowDialogs )
 {
@@ -1373,6 +1373,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         aOptions.bSkipEmpty = bSkipEmpty;
         aOptions.bTranspose = bTranspose;
         aOptions.bAsLink    = bAsLink;
+        aOptions.bAsDDE     = bAsDDE;
         aOptions.eMoveMode  = eMoveMode;
 
         SfxUndoAction* pUndo = new ScUndoPaste(

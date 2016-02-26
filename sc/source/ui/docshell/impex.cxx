@@ -197,6 +197,7 @@ bool ScImportExport::IsFormatSupported( SotClipboardFormatId nFormat )
     return nFormat == SotClipboardFormatId::STRING
               || nFormat == SotClipboardFormatId::SYLK
               || nFormat == SotClipboardFormatId::LINK
+              || nFormat == SotClipboardFormatId::LINK_DDE
               || nFormat == SotClipboardFormatId::HTML
               || nFormat == SotClipboardFormatId::HTML_SIMPLE
               || nFormat == SotClipboardFormatId::DIF;
@@ -383,6 +384,8 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, So
     }
     if( nFmt == SotClipboardFormatId::LINK )
         return true;            // Link-Import?
+    if( nFmt == SotClipboardFormatId::LINK_DDE )
+        return true;            // Link-Import?
     if ( nFmt == SotClipboardFormatId::HTML )
     {
         if( HTML2Doc( rStrm, rBaseURL ) )
@@ -416,7 +419,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
         if( Doc2Dif( rStrm ) )
             return true;
     }
-    if( nFmt == SotClipboardFormatId::LINK && !bAll )
+    if( !bAll && (nFmt == SotClipboardFormatId::LINK || nFmt == SotClipboardFormatId::LINK_DDE) )
     {
         OUString aDocName;
         if ( pDoc->IsClipboard() )
@@ -444,14 +447,16 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             }
             OUString aAppName = Application::GetAppName();
 
-            // extra bits are used to tell the client to prefer external
-            // reference link.
-            OUString aExtraBits("calc:extref");
-
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );
             WriteUnicodeOrByteString( rStrm, aRefName, true );
-            WriteUnicodeOrByteString( rStrm, aExtraBits, true );
+            if (nFmt == SotClipboardFormatId::LINK)
+            {
+                // extra bits are used to tell the client to prefer external
+                // reference link.
+                OUString aExtraBits("calc:extref");
+                WriteUnicodeOrByteString( rStrm, aExtraBits, true );
+            }
             if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
                 rStrm.WriteUInt16( 0 );
             else
