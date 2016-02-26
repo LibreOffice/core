@@ -8,6 +8,7 @@
  */
 
 #include <cassert>
+#include <cstdlib>
 #include <set>
 
 #include "compat.hxx"
@@ -17,9 +18,6 @@ namespace {
 
 char const * kindName(Expr::NullPointerConstantKind kind) {
     switch (kind) {
-    case Expr::NPCK_NotNull:
-        assert(false); // cannot happen
-        // fall through
     case Expr::NPCK_ZeroExpression:
         return "ZeroExpression";
     case Expr::NPCK_ZeroLiteral:
@@ -28,6 +26,11 @@ char const * kindName(Expr::NullPointerConstantKind kind) {
         return "CXX11_nullptr";
     case Expr::NPCK_GNUNull:
         return "GNUNull";
+    case Expr::NPCK_NotNull:
+        assert(false); // cannot happen
+        // fall through
+    default:
+        std::abort();
     }
 }
 
