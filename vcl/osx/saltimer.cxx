@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <rtl/math.hxx>
+
 #include "osx/saltimer.h"
 #include "osx/salnstimer.h"
 #include "osx/saldata.hxx"
@@ -37,7 +39,8 @@ void ImplSalStartTimer( sal_uLong nMS )
         NSTimeInterval aTI = double(nMS)/1000.0;
         if( AquaSalTimer::pRunningTimer != nil )
         {
-            if( [AquaSalTimer::pRunningTimer timeInterval] == aTI )
+            if (rtl::math::approxEqual(
+                    [AquaSalTimer::pRunningTimer timeInterval], aTI))
             {
                 // set new fire date
                 [AquaSalTimer::pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
