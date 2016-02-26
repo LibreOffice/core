@@ -111,11 +111,15 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     DBG_ASSERT( xLayer, "QuartzSalBitmap::Create() from non-layered context" );
 
     // sanitize input parameters
-    if( nX < 0 )
-        nWidth += nX, nX = 0;
+    if( nX < 0 ) {
+        nWidth += nX;
+        nX = 0;
+    }
 
-    if( nY < 0 )
-        nHeight += nY, nY = 0;
+    if( nY < 0 ) {
+        nHeight += nY;
+        nY = 0;
+    }
 
     const CGSize aLayerSize = CGLayerGetSize( xLayer );
     SAL_INFO("vcl.cg", "CGLayerGetSize(" << xLayer << ") = " << aLayerSize );
