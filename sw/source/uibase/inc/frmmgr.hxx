@@ -108,8 +108,7 @@ public:
     void                InsertFlyFrame();
     void                InsertFlyFrame(RndStdIds      eAnchorType,
                                    const Point    &rPos,
-                                   const Size     &rSize,
-                                   bool           bAbsPos = false);
+                                   const Size     &rSize);
 
     // check and change metrics
     void                ValidateMetrics(SvxSwFrameValidation& rVal,

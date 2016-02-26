@@ -1117,7 +1117,7 @@ void  SwPagePreview::StateUndo(SfxItemSet& rSet)
     }
 }
 
-void SwPagePreview::Init(const SwViewOption * pPrefs)
+void SwPagePreview::Init()
 {
     if ( GetViewShell()->HasDrawView() )
         GetViewShell()->GetDrawView()->SetAnimationEnabled( false );
@@ -1128,8 +1128,7 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
     // the handler, because the shell is unknown to the SFX management
     // within the CTOR phase.
 
-    if( !pPrefs )
-        pPrefs = SW_MOD()->GetUsrPref(false);
+    const SwViewOption * pPrefs = SW_MOD()->GetUsrPref(false);
 
     mbHScrollbarEnabled = pPrefs->IsViewHScrollBar();
     mbVScrollbarEnabled = pPrefs->IsViewVScrollBar();
@@ -1371,7 +1370,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
                     *pVScrollbar, *pHScrollbar, *pScrollFill );
 }
 
-void SwPagePreview::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
+void SwPagePreview::SetVisArea( const Rectangle &rRect )
 {
     const Point aTopLeft(AlignToPixel(rRect.TopLeft()));
     const Point aBottomRight(AlignToPixel(rRect.BottomRight()));
@@ -1414,7 +1413,7 @@ void SwPagePreview::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
     // Set at View-Win the current size
     aVisArea = aLR;
     pViewWin->SetWinSize( aLR.GetSize() );
-    ChgPage( SwPagePreviewWin::MV_NEWWINSIZE, bUpdateScrollbar );
+    ChgPage( SwPagePreviewWin::MV_NEWWINSIZE );
 
     pViewWin->Invalidate();
 }

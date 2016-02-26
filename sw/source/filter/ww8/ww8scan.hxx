@@ -683,9 +683,9 @@ public:
     virtual WW8_FC Where() override;
 
     // returns reference descriptors
-    const void* GetData( long nIdx = -1 ) const
+    const void* GetData() const
     {
-        return pRef ? pRef->GetData( -1L == nIdx ? pRef->GetIdx() : nIdx ) : nullptr;
+        return pRef ? pRef->GetData( pRef->GetIdx() ) : nullptr;
     }
 
     virtual void GetSprms(WW8PLCFxDesc* p) override;

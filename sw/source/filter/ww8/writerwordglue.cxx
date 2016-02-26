@@ -516,8 +516,7 @@ namespace sw
             return nA < nB;
         }
 
-        CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd,
-            sal_Int32 nTextStart)
+        CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd)
         {
             const OUString &rText = rTextNd.GetText();
 
@@ -657,7 +656,7 @@ namespace sw
             }
 
             aRunChanges.erase(std::remove_if(aRunChanges.begin(),
-                aRunChanges.end(), myImplHelpers::IfBeforeStart(nTextStart)), aRunChanges.end());
+                aRunChanges.end(), myImplHelpers::IfBeforeStart(0/*nTextStart*/)), aRunChanges.end());
 
             return aRunChanges;
         }

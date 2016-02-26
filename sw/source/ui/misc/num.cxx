@@ -926,14 +926,11 @@ IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, StandardHdl, Button*, void)
 }
 
 #ifdef DBG_UTIL
-void SwNumPositionTabPage::SetModified(bool bRepaint)
+void SwNumPositionTabPage::SetModified()
 {
     bModified = true;
-    if(bRepaint)
-    {
-        m_pPreviewWIN->SetLevel(nActNumLvl);
-        m_pPreviewWIN->Invalidate();
-    }
+    m_pPreviewWIN->SetLevel(nActNumLvl);
+    m_pPreviewWIN->Invalidate();
 }
 #endif
 

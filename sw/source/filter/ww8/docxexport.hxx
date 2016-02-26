@@ -131,7 +131,7 @@ public:
 
     virtual void AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
-    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) override;
+    virtual void AppendBookmark( const OUString& rName ) override;
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 

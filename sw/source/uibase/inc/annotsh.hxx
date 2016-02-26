@@ -66,7 +66,7 @@ public:
 
     void        InsertSymbol(SfxRequest& rReq);
 
-    void        ExecSearch(SfxRequest&, bool bNoMessage = false);
+    void        ExecSearch(SfxRequest&);
     void        StateSearch(SfxItemSet &);
 
     virtual ::svl::IUndoManager*

@@ -278,10 +278,9 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
     }
 }
 
-void SwFieldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
-                         const ListBox* pLst3 )
+void SwFieldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2 )
 {
-    const ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
+    const ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, nullptr };
 
     const ListBox** ppLB = aLBArr;
     for( int i = 0; i < coLBCount; ++i, ++ppLB )
@@ -291,12 +290,12 @@ void SwFieldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
             m_aLstStrArr[ i ].clear();
 }
 
-void SwFieldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
+void SwFieldPage::RestorePos(ListBox* pLst1, ListBox* pLst2)
 {
     sal_Int32 nPos = 0;
-    ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
+    ListBox* aLBArr [ 2 ] = { pLst1, pLst2 };
     ListBox** ppLB = aLBArr;
-    for( int i = 0; i < coLBCount; ++i, ++ppLB )
+    for( int i = 0; i < 2; ++i, ++ppLB )
         if( (*ppLB) && (*ppLB)->GetEntryCount() && !m_aLstStrArr[ i ].isEmpty() &&
             LISTBOX_ENTRY_NOTFOUND !=
                         ( nPos = (*ppLB)->GetEntryPos(m_aLstStrArr[ i ] ) ) )

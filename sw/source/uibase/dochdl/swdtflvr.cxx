@@ -1554,38 +1554,21 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     return bRet;
 }
 
-SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh,
-                                            const Point* pPt )
+SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh )
 {
     SotExchangeDest nRet = SotExchangeDest::NONE;
 
-    ObjCntType eOType;
-    if( pPt )
-    {
-        SdrObject *pObj = nullptr;
-        eOType = rSh.GetObjCntType( *pPt, pObj );
-    }
-    else
-        eOType = rSh.GetObjCntTypeOfSelection();
+    ObjCntType eOType = rSh.GetObjCntTypeOfSelection();
 
     switch( eOType )
     {
     case OBJCNT_GRF:
         {
             bool bIMap, bLink;
-            if( pPt )
-            {
-                bIMap = nullptr != rSh.GetFormatFromObj( *pPt )->GetURL().GetMap();
-                OUString aDummy;
-                rSh.GetGrfAtPos( *pPt, aDummy, bLink );
-            }
-            else
-            {
-                bIMap = nullptr != rSh.GetFlyFrameFormat()->GetURL().GetMap();
-                OUString aDummy;
-                rSh.GetGrfNms( &aDummy, nullptr );
-                bLink = !aDummy.isEmpty();
-            }
+            bIMap = nullptr != rSh.GetFlyFrameFormat()->GetURL().GetMap();
+            OUString aDummy;
+            rSh.GetGrfNms( &aDummy, nullptr );
+            bLink = !aDummy.isEmpty();
 
             if( bLink && bIMap )
                 nRet = SotExchangeDest::DOC_LNKD_GRAPH_W_IMAP;

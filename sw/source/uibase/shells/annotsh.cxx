@@ -878,9 +878,9 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
     }
 }
 
-void SwAnnotationShell::ExecSearch(SfxRequest& rReq, bool bNoMessage)
+void SwAnnotationShell::ExecSearch(SfxRequest& rReq)
 {
-    rView.ExecSearch(rReq,bNoMessage);
+    rView.ExecSearch(rReq);
 }
 
 void SwAnnotationShell::StateSearch(SfxItemSet &rSet)

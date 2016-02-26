@@ -1503,9 +1503,9 @@ void WW8Export::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
     m_pBkmks->MoveFieldMarks(nFrom, nTo);
 }
 
-void WW8Export::AppendBookmark( const OUString& rName, bool bSkip )
+void WW8Export::AppendBookmark( const OUString& rName )
 {
-    sal_uLong nSttCP = Fc2Cp( Strm().Tell() ) + ( bSkip? 1: 0 );
+    sal_uLong nSttCP = Fc2Cp( Strm().Tell() );
     m_pBkmks->Append( nSttCP, rName );
 }
 
@@ -1680,7 +1680,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
 }
 
 void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
-    sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen)
+    sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf)
 {
     sal_uInt16 n, nCount = static_cast< sal_uInt16 >(rStrings.size());
     if( nCount )
@@ -1696,8 +1696,6 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
             const OUString& rNm = rStrings[n];
             SwWW8Writer::WriteShort( rStrm, rNm.getLength() );
             SwWW8Writer::WriteString16(rStrm, rNm, false);
-            if( nExtraLen )
-                SwWW8Writer::FillCount(rStrm, nExtraLen);
         }
         rlcbSttbf = rStrm.Tell() - rfcSttbf;
     }
@@ -1793,14 +1791,14 @@ void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
         rStrm.Write(&aBytes[0], aBytes.size());
 }
 
-void WW8Export::WriteStringAsPara( const OUString& rText, sal_uInt16 nStyleId )
+void WW8Export::WriteStringAsPara( const OUString& rText )
 {
     if( !rText.isEmpty() )
         OutSwString(rText, 0, rText.getLength());
     WriteCR();              // CR thereafter
 
     ww::bytes aArr;
-    SwWW8Writer::InsUInt16( aArr, nStyleId );
+    SwWW8Writer::InsUInt16( aArr, 0/*nStyleId*/ );
     if( m_bOutTable )
     {                                               // Tab-Attr
         // sprmPFInTable

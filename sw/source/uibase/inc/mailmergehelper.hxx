@@ -103,7 +103,7 @@ public:
 
     // set the number of rows and columns of addresses
     void SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns);
-    void EnableScrollBar(bool bEnable = true);
+    void EnableScrollBar();
 
     // fill the actual data into a string (address block or greeting)
     static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem& rConfigItem,

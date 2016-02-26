@@ -54,7 +54,7 @@ public:
     void SetLoseFocusHdl(const Link<Control&,void>& rLink) { m_pField->SetLoseFocusHdl(rLink); }
     void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_pField, eUnit); }
     void Enable(bool bEnable = true, bool bChild = true) { m_pField->Enable(bEnable, bChild); }
-    void Disable(bool bChild = true) { m_pField->Disable(bChild); }
+    void Disable() { m_pField->Disable(); }
     bool HasFocus() const { return m_pField->HasFocus(); }
     void SetAccessibleName(const OUString& rName) { m_pField->SetAccessibleName(rName); }
     void SetText(const OUString& rStr) { m_pField->SetText(rStr); }
@@ -65,7 +65,7 @@ public:
     void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
     void SetMetricFieldMax(sal_Int64 nNewMax) { m_pField->SetMax(nNewMax); }
 
-    void SetValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE) { m_pField->SetValue(nNewValue, eInUnit); }
+    void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FUNIT_NONE); }
 
     void SetLast(sal_Int64 nNewLast) { m_pField->SetLast(nNewLast); }
 

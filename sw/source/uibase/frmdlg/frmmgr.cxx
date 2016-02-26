@@ -180,8 +180,7 @@ void SwFlyFrameAttrMgr::InsertFlyFrame()
 // Not-allowed values of the enumeration type get corrected.
 void SwFlyFrameAttrMgr::InsertFlyFrame(RndStdIds    eAnchorType,
                                    const Point  &rPos,
-                                   const Size   &rSize,
-                                   bool bAbs )
+                                   const Size   &rSize )
 {
     OSL_ENSURE( eAnchorType == FLY_AT_PAGE ||
             eAnchorType == FLY_AT_PARA ||
@@ -189,10 +188,7 @@ void SwFlyFrameAttrMgr::InsertFlyFrame(RndStdIds    eAnchorType,
             eAnchorType == FLY_AT_FLY  ||
             eAnchorType == FLY_AS_CHAR,     "invalid frame type" );
 
-    if ( bAbs )
-        SetAbsPos( rPos );
-    else
-        SetPos( rPos );
+    SetPos( rPos );
 
     SetSize( rSize );
     SetAnchor( eAnchorType );

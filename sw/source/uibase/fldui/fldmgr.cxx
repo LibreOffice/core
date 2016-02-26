@@ -257,11 +257,11 @@ void SwFieldMgr::RemoveFieldType(sal_uInt16 nResId, const OUString& rName )
         pSh->RemoveFieldType(nResId, rName);
 }
 
-size_t SwFieldMgr::GetFieldTypeCount(sal_uInt16 nResId) const
+size_t SwFieldMgr::GetFieldTypeCount() const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
-    return pSh ? pSh->GetFieldTypeCount(nResId) : 0;
+    return pSh ? pSh->GetFieldTypeCount() : 0;
 }
 
 SwFieldType* SwFieldMgr::GetFieldType(sal_uInt16 nResId, size_t nField) const
@@ -1651,7 +1651,7 @@ void SwFieldMgr::SetMacroPath(const OUString& rPath)
     }
 }
 
-sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal)
+sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter)
 {
     double fValue;
     short  nDefFormat;
@@ -1690,9 +1690,6 @@ sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumbe
             }
             break;
     }
-
-    if (pVal)
-        *pVal = fValue;
 
     return pFormatter->GetStandardFormat(nDefFormat, GetCurrLanguage());
 }

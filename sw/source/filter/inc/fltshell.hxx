@@ -174,7 +174,7 @@ public:
 
     virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, bool bTstEnde=true, long nHand = LONG_MAX, bool consumedByField=false);
 
-    void StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId = 0);
+    void StealAttr(const SwNodeIndex& rNode);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
     SfxPoolItem* GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = nullptr);

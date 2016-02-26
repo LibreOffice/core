@@ -290,9 +290,9 @@ void SwAddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
     UpdateScrollBar();
 }
 
-void SwAddressPreview::EnableScrollBar(bool bEnable)
+void SwAddressPreview::EnableScrollBar()
 {
-    pImpl->bEnableScrollBar = bEnable;
+    pImpl->bEnableScrollBar = true;
 }
 
 void SwAddressPreview::UpdateScrollBar()

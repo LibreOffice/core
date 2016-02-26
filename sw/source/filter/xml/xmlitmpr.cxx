@@ -49,12 +49,9 @@ SvXMLItemMapEntries::~SvXMLItemMapEntries()
 }
 
 SvXMLItemMapEntry* SvXMLItemMapEntries::getByName(  sal_uInt16 nNameSpace,
-                                                    const OUString& rString,
-                                                    SvXMLItemMapEntry* pStartAt /* = NULL */  ) const
+                                                    const OUString& rString  ) const
 {
-    SvXMLItemMapEntry* pMap =
-        (pStartAt && (pStartAt->eLocalName!=XML_TOKEN_INVALID)) ?
-                                           &(pStartAt[1]) : mpImpl->mpEntries;
+    SvXMLItemMapEntry* pMap = mpImpl->mpEntries;
     while( pMap && (pMap->eLocalName != XML_TOKEN_INVALID) )
     {
         if( pMap->nNameSpace == nNameSpace &&

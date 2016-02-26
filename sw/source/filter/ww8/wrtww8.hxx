@@ -677,7 +677,7 @@ public:
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
 
-    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) = 0;
+    virtual void AppendBookmark( const OUString& rName ) = 0;
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
 
@@ -1037,7 +1037,7 @@ public:
         tools::SvRef<SotStorage> xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
-    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) override;
+    virtual void AppendBookmark( const OUString& rName ) override;
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
@@ -1049,7 +1049,7 @@ public:
     void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
 
     void WriteAsStringTable(const ::std::vector<OUString>&, sal_Int32& rfcSttbf,
-        sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen = 0);
+        sal_Int32& rlcbSttbf);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;
 
@@ -1107,7 +1107,7 @@ public:
 
     void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
-    void WriteStringAsPara( const OUString& rText, sal_uInt16 nStyleId = 0 );
+    void WriteStringAsPara( const OUString& rText );
 
     /// Setup the exporter.
     WW8Export( SwWW8Writer *pWriter,

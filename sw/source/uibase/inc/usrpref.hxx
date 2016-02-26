@@ -189,11 +189,10 @@ public:
     bool IsUpdateFields()const {return eFieldUpdateFlags != AUTOUPD_OFF; }
 
     SwFieldUpdateFlags   GetFieldUpdateFlags()const {return eFieldUpdateFlags;}
-    void        SetFieldUpdateFlags(SwFieldUpdateFlags eSet, bool bNoModify = false)
+    void        SetFieldUpdateFlags(SwFieldUpdateFlags eSet)
         {
             eFieldUpdateFlags = eSet;
-            if(!bNoModify)
-                aContentConfig.SetModified();
+            aContentConfig.SetModified();
         }
 
     void SetUpdateCharts(bool bSet, bool bNoModify = false)
@@ -221,33 +220,30 @@ public:
                         aLayoutConfig.SetModified();
                 }
 
-    bool    IsHScrollMetric()const {return bIsHScrollMetricSet;}
+    bool        IsHScrollMetric()const {return bIsHScrollMetricSet;}
     FieldUnit   GetHScrollMetric() const { return bIsHScrollMetricSet ? eHScrollMetric : eUserMetric;}
-    void        SetHScrollMetric(FieldUnit eSet, bool bNoModify = false)
+    void        SetHScrollMetric(FieldUnit eSet)
                 {
                     eHScrollMetric = eSet; bIsHScrollMetricSet = true;
-                    if(!bNoModify)
-                        aLayoutConfig.SetModified();
+                    aLayoutConfig.SetModified();
                 }
 
-    bool    IsVScrollMetric()const {return bIsVScrollMetricSet;}
+    bool        IsVScrollMetric()const {return bIsVScrollMetricSet;}
     FieldUnit   GetVScrollMetric() const { return bIsVScrollMetricSet ? eVScrollMetric : eUserMetric;}
-    void        SetVScrollMetric(FieldUnit eSet, bool bNoModify = false)
+    void        SetVScrollMetric(FieldUnit eSet)
                 {
                     eVScrollMetric = eSet; bIsVScrollMetricSet = true;
-                    if(!bNoModify)
-                        aLayoutConfig.SetModified();
+                    aLayoutConfig.SetModified();
                 }
 
     bool    IsApplyCharUnit() const
     {
         return bApplyCharUnit;
     }
-    void   SetApplyCharUnit(bool bSet, bool bNoModify = false)
+    void   SetApplyCharUnit(bool bSet)
     {
         bApplyCharUnit = bSet;
-        if(!bNoModify)
-            aLayoutConfig.SetModified();
+        aLayoutConfig.SetModified();
     }
 
     sal_Int32   GetDefTab() const { return nDefTab;}
@@ -259,7 +255,7 @@ public:
                 }
 
     //default page mode for text grid
-    bool    IsSquaredPageMode() const {return bIsSquaredPageMode;}
+    bool        IsSquaredPageMode() const {return bIsSquaredPageMode;}
     void        SetDefaultPageMode( bool bVal, bool bNoModify = false )
                 {
                     bIsSquaredPageMode = bVal;
@@ -267,12 +263,11 @@ public:
                         aLayoutConfig.SetModified();
                 }
 
-    bool    IsAlignMathObjectsToBaseline() const { return bIsAlignMathObjectsToBaseline; }
-    void        SetAlignMathObjectsToBaseline( bool bVal, bool bNoModify = false )
+    bool        IsAlignMathObjectsToBaseline() const { return bIsAlignMathObjectsToBaseline; }
+    void        SetAlignMathObjectsToBaseline( bool bVal )
                 {
                     bIsAlignMathObjectsToBaseline = bVal;
-                    if(!bNoModify)
-                        aLayoutConfig.SetModified();
+                    aLayoutConfig.SetModified();
                 }
 };
 

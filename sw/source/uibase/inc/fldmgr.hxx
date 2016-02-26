@@ -148,8 +148,8 @@ public:
 
     // previous and next of the same type
     bool GoNextPrev( bool bNext = true, SwFieldType* pTyp = nullptr );
-    bool GoNext( SwFieldType* pTyp = nullptr )    { return GoNextPrev( true, pTyp ); }
-    bool GoPrev( SwFieldType* pTyp = nullptr )    { return GoNextPrev( false, pTyp ); }
+    bool GoNext()    { return GoNextPrev(); }
+    bool GoPrev()    { return GoNextPrev( false ); }
 
     bool            IsDBNumeric(const OUString& rDBName, const OUString& rTableQryName,
                                     bool bIsTable, const OUString& rFieldName);
@@ -158,7 +158,7 @@ public:
     bool            CanInsertRefMark( const OUString& rStr );
 
     // access to field types via ResId
-    size_t          GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
+    size_t          GetFieldTypeCount() const;
     SwFieldType*    GetFieldType(sal_uInt16 nResId, size_t nField = 0) const;
     SwFieldType*    GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
 
@@ -187,7 +187,7 @@ public:
     sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtmlMode = false) const;
     OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
-    sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter, double* pVal = nullptr);
+    sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter);
 
     // turn off evaluation of expression fields for insertation
     // of many expression fields (see labels)

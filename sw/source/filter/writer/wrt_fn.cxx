@@ -40,8 +40,7 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 }
 
 Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
-                        const SfxItemSet& rSet, bool bDeep,
-                        bool bTstForDefault )
+                        const SfxItemSet& rSet, bool bDeep )
 {
     // at first give the own attributes out
     const SfxItemPool& rPool = *rSet.GetPool();
@@ -89,11 +88,10 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         while( nWhich )
         {
             if( SfxItemState::SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
-                ( !bTstForDefault || (
-                    *pItem != rPool.GetDefaultItem( nWhich )
+                (   *pItem != rPool.GetDefaultItem( nWhich )
                     || ( pSet->GetParent() &&
                         *pItem != pSet->GetParent()->Get( nWhich ))
-                )))
+                ))
             {
                 if( nullptr != ( pOut = pTab[ nWhich - RES_CHRATR_BEGIN] ))
                 {

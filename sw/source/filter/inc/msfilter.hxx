@@ -440,9 +440,6 @@ namespace sw
             @param rTextNd
                 The TextNode we want to ranges from
 
-            @param nStart
-                The position in the TextNode to start processing from
-
             @return STL container of CharRuns which describe the shared
             direction, script and optionally script of the contiguous sequences
             of characters
@@ -452,8 +449,7 @@ namespace sw
 
             @see #i22537# for example
         */
-        CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd,
-            sal_Int32 nStart = 0);
+        CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd);
     }
 }
 

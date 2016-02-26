@@ -128,7 +128,7 @@ void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
-void RtfExport::AppendBookmark(const OUString& rName, bool /*bSkip*/)
+void RtfExport::AppendBookmark(const OUString& rName)
 {
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;

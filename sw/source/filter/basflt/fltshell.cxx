@@ -295,7 +295,7 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
 // type.  This makes them disappear from the doc structure. Only
 // attributes from the same paragraph as rPos are removed. Used for
 // graphic apos -> images.
-void SwFltControlStack::StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId)
+void SwFltControlStack::StealAttr(const SwNodeIndex& rNode)
 {
     size_t nCnt = m_Entries.size();
 
@@ -303,8 +303,7 @@ void SwFltControlStack::StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId)
     {
         nCnt --;
         SwFltStackEntry& rEntry = *m_Entries[nCnt];
-        if (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == rNode.GetIndex() &&
-            (!nAttrId || nAttrId == rEntry.pAttr->Which()))
+        if (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == rNode.GetIndex())
         {
             DeleteAndDestroy(nCnt);     // loesche aus dem Stack
         }

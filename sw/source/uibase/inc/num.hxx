@@ -120,15 +120,12 @@ public:
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);
 #ifdef DBG_UTIL
-    void                SetModified(bool bRepaint = true);
+    void                SetModified();
 #else
-    void                SetModified(bool bRepaint = true)
+    void                SetModified()
                             {   bModified = true;
-                                if(bRepaint)
-                                {
-                                    m_pPreviewWIN->SetLevel(nActNumLvl);
-                                    m_pPreviewWIN->Invalidate();
-                                }
+                                m_pPreviewWIN->SetLevel(nActNumLvl);
+                                m_pPreviewWIN->Invalidate();
                             }
 #endif
 };

@@ -160,7 +160,7 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sa
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
-void DocxExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
+void DocxExport::AppendBookmark( const OUString& rName )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;

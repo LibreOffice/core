@@ -190,7 +190,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     bool mbResetFormDesignMode:1;
     bool mbFormDesignModeToReset:1;
 
-    SAL_DLLPRIVATE void Init(const SwViewOption* = nullptr);
+    SAL_DLLPRIVATE void Init();
     SAL_DLLPRIVATE Point AlignToPixel(const Point& rPt) const;
 
     SAL_DLLPRIVATE void _CreateScrollbar( bool bHori);
@@ -239,7 +239,7 @@ public:
 
     void DocSzChgd(const Size& rNewSize);
 
-    void SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
+    void SetVisArea( const Rectangle& );
 
     void ScrollViewSzChg();
     void ScrollDocSzChg();

@@ -149,7 +149,7 @@ public:
     SwTransferable( SwWrtShell& );
     virtual ~SwTransferable();
 
-    static SotExchangeDest GetSotDestination( const SwWrtShell& rSh, const Point* = nullptr );
+    static SotExchangeDest GetSotDestination( const SwWrtShell& rSh );
 
     // set properties on the document, like PageMargin, VisArea.
     // And set real Size
