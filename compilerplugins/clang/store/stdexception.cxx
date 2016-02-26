@@ -185,7 +185,7 @@ found:
 }
 
 bool StdException::isInMainFile(SourceLocation spellingLocation) const {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#if CLANG_VERSION >= 30400
     return compiler.getSourceManager().isInMainFile(spellingLocation);
 #else
     return compiler.getSourceManager().isFromMainFile(spellingLocation);

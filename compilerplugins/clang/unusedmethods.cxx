@@ -119,7 +119,7 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
 // workaround clang-3.5 issue
-#if __clang_major__ > 3 || ( __clang_major__ == 3 && __clang_minor__ >= 6 )
+#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 #endif

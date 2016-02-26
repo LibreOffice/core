@@ -3784,6 +3784,7 @@ if test "$COM_IS_CLANG" = TRUE; then
     CLANG_FULL_VERSION=`echo __clang_version__ | ${CC%-cl.exe*} -E -P -`
     CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
     AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
+    AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
     AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
 fi
 AC_SUBST(COM_IS_CLANG)

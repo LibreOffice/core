@@ -83,7 +83,7 @@ bool isDerivedFrom(const CXXRecordDecl *decl, const char *pString) {
         !decl->hasAnyDependentBases() &&
         !compat::forallBases(
             *decl,
-#if __clang_major__ == 3 && __clang_minor__ <= 7
+#if CLANG_VERSION < 30800
             BaseCheckNotSubclass,
 #else
             [pString](const CXXRecordDecl *BaseDefinition) -> bool

@@ -14,7 +14,7 @@ CLANG_COMMA :=,
 CLANGCXX=$(filter-out -m32 -m64 -fsanitize=%,$(CXX))
 
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
-CLANGCXXFLAGS=-O2 -Wall -Wextra -g
+CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
 
 # The uninteresting rest.
 

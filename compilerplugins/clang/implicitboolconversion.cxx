@@ -18,7 +18,7 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-#if __clang_major__ == 3 && __clang_minor__ < 7
+#if CLANG_VERSION < 30700
 
 template<> struct std::iterator_traits<ExprIterator> {
     typedef std::ptrdiff_t difference_type;
@@ -230,7 +230,7 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     if (decl->isExternC()) {
         return true;
     }
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     if (decl->isInExternCContext()) {
         return true;
     }

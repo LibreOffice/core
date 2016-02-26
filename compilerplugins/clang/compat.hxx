@@ -30,7 +30,9 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
 
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#include "config_clang.h"
+
+#if CLANG_VERSION >= 30400
 #define LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion \
     true
 #else
@@ -42,7 +44,7 @@
 namespace compat {
 
 inline bool isLookupContext(clang::DeclContext const & ctxt) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+#if CLANG_VERSION >= 30700
     return ctxt.isLookupContext();
 #else
     return !ctxt.isFunctionOrMethod()
@@ -51,7 +53,7 @@ inline bool isLookupContext(clang::DeclContext const & ctxt) {
 }
 
 inline bool isExternCContext(clang::DeclContext const & ctxt) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#if CLANG_VERSION >= 30400
     return ctxt.isExternCContext();
 #else
     for (clang::DeclContext const * c = &ctxt;
@@ -67,7 +69,7 @@ inline bool isExternCContext(clang::DeclContext const & ctxt) {
 }
 
 inline bool isInExternCContext(clang::FunctionDecl const & decl) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#if CLANG_VERSION >= 30400
     return decl.isInExternCContext();
 #else
     return isExternCContext(*decl.getCanonicalDecl()->getDeclContext());
@@ -80,7 +82,7 @@ inline bool forallBases(
     void* callbackParam,
     bool AllowShortCircuit)
 {
-#if (__clang_major__ == 3 && __clang_minor__ > 7) || __clang_major__ > 3
+#if CLANG_VERSION >= 30700
     (void) callbackParam;
     return decl.forallBases(BaseMatches, AllowShortCircuit);
 #else
@@ -88,14 +90,14 @@ inline bool forallBases(
 #endif
 }
 
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
 typedef clang::LinkageInfo LinkageInfo;
 #else
 typedef clang::NamedDecl::LinkageInfo LinkageInfo;
 #endif
 
 inline clang::Linkage getLinkage(LinkageInfo const & info) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return info.getLinkage();
 #else
     return info.linkage();
@@ -103,7 +105,7 @@ inline clang::Linkage getLinkage(LinkageInfo const & info) {
 }
 
 inline clang::Visibility getVisibility(LinkageInfo const & info) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return info.getVisibility();
 #else
     return info.visibility();
@@ -111,7 +113,7 @@ inline clang::Visibility getVisibility(LinkageInfo const & info) {
 }
 
 inline bool isFirstDecl(clang::FunctionDecl const & decl) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#if CLANG_VERSION >= 30400
     return decl.isFirstDecl();
 #else
     return decl.isFirstDeclaration();
@@ -119,7 +121,7 @@ inline bool isFirstDecl(clang::FunctionDecl const & decl) {
 }
 
 inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     return decl.getReturnType();
 #else
     return decl.getResultType();
@@ -127,7 +129,7 @@ inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
 }
 
 inline clang::QualType getReturnType(clang::FunctionProtoType const & type) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     return type.getReturnType();
 #else
     return type.getResultType();
@@ -135,7 +137,7 @@ inline clang::QualType getReturnType(clang::FunctionProtoType const & type) {
 }
 
 inline unsigned getNumParams(clang::FunctionProtoType const & type) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     return type.getNumParams();
 #else
     return type.getNumArgs();
@@ -145,7 +147,7 @@ inline unsigned getNumParams(clang::FunctionProtoType const & type) {
 inline clang::QualType getParamType(
     clang::FunctionProtoType const & type, unsigned i)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     return type.getParamType(i);
 #else
     return type.getArgType(i);
@@ -155,7 +157,7 @@ inline clang::QualType getParamType(
 inline clang::Stmt::const_child_iterator begin(
     clang::Stmt::const_child_range const & range)
 {
-#if (__clang_major__ == 3 && __clang_minor__ > 7) || __clang_major__ > 3
+#if CLANG_VERSION >= 30700
     return range.begin();
 #else
     return range.first;
@@ -165,7 +167,7 @@ inline clang::Stmt::const_child_iterator begin(
 inline clang::Stmt::const_child_iterator end(
     clang::Stmt::const_child_range const & range)
 {
-#if (__clang_major__ == 3 && __clang_minor__ > 7) || __clang_major__ > 3
+#if CLANG_VERSION >= 30700
     return range.end();
 #else
     return range.second;
@@ -173,7 +175,7 @@ inline clang::Stmt::const_child_iterator end(
 }
 
 inline unsigned getBuiltinCallee(clang::CallExpr const & expr) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     return expr.getBuiltinCallee();
 #else
     return expr.isBuiltinCall();
@@ -183,7 +185,7 @@ inline unsigned getBuiltinCallee(clang::CallExpr const & expr) {
 inline bool isInMainFile(
     clang::SourceManager const & manager, clang::SourceLocation Loc)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#if CLANG_VERSION >= 30400
     return manager.isInMainFile(Loc);
 #else
     return manager.isFromMainFile(Loc);
@@ -194,7 +196,7 @@ inline unsigned getCustomDiagID(
     clang::DiagnosticsEngine & engine, clang::DiagnosticsEngine::Level L,
     llvm::StringRef FormatString)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     return engine.getDiagnosticIDs()->getCustomDiagID(
         static_cast<clang::DiagnosticIDs::Level>(L), FormatString);
 #else
@@ -205,13 +207,13 @@ inline unsigned getCustomDiagID(
 inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
     char const * Filename, std::string & ErrorInfo)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ > 3
+#if CLANG_VERSION >= 30600
     std::error_code ec;
     std::unique_ptr<llvm::raw_fd_ostream> s(
         new llvm::raw_fd_ostream(Filename, ec, llvm::sys::fs::F_None));
     ErrorInfo = ec ? "error: " + ec.message() : std::string();
     return s;
-#elif __clang_major__ == 3 && __clang_minor__ == 5
+#elif CLANG_VERSION >= 30500
     return std::unique_ptr<llvm::raw_fd_ostream>(
         new llvm::raw_fd_ostream(Filename, ErrorInfo, llvm::sys::fs::F_None));
 #else
@@ -220,7 +222,7 @@ inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
 #endif
 }
 
-#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+#if CLANG_VERSION >= 30700
 typedef clang::DeclContext::lookup_result DeclContextLookupResult;
 typedef clang::DeclContext::lookup_iterator DeclContextLookupIterator;
 #else
@@ -229,7 +231,7 @@ typedef clang::DeclContext::lookup_const_iterator DeclContextLookupIterator;
 #endif
 
 inline DeclContextLookupIterator begin(DeclContextLookupResult const & result) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return result.begin();
 #else
     return result.first;
@@ -237,7 +239,7 @@ inline DeclContextLookupIterator begin(DeclContextLookupResult const & result) {
 }
 
 inline DeclContextLookupIterator end(DeclContextLookupResult const & result) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return result.end();
 #else
     return result.second;
@@ -247,7 +249,7 @@ inline DeclContextLookupIterator end(DeclContextLookupResult const & result) {
 inline void addPPCallbacks(
     clang::Preprocessor & preprocessor, clang::PPCallbacks * C)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ > 3
+#if CLANG_VERSION >= 30600
     preprocessor.addPPCallbacks(std::unique_ptr<clang::PPCallbacks>(C));
 #else
     preprocessor.addPPCallbacks(C);
@@ -256,7 +258,7 @@ inline void addPPCallbacks(
 
 inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::SourceLocation location)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return compiler.getSourceManager().isMacroBodyExpansion(location);
 #else
     return location.isMacroID()
@@ -266,7 +268,7 @@ inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::Sourc
 
 inline auto getAsTagDecl(clang::Type const& t) -> clang::TagDecl *
 {
-#if (__clang_major__ == 3 && __clang_minor__ > 5) || __clang_major__ > 3
+#if CLANG_VERSION >= 30500
     // TODO not sure if it works with clang 3.6, trunk is known to work
     return t.getAsTagDecl();
 #else

@@ -34,7 +34,7 @@ public:
 
 bool BaseCheckNotSfxPoolItemSubclass(
     const CXXRecordDecl *BaseDefinition
-#if __clang_major__ == 3 && __clang_minor__ <= 7
+#if CLANG_VERSION < 30800
     , void *
 #endif
     )
@@ -65,7 +65,7 @@ bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
 
 bool BaseCheckNotSwMsgPoolItemSubclass(
     const CXXRecordDecl *BaseDefinition
-#if __clang_major__ == 3 && __clang_minor__ <= 7
+#if CLANG_VERSION < 30800
     , void *
 #endif
     )

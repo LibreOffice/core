@@ -12,7 +12,8 @@
 #if defined(__unix__)
 // only compile this on clang 3.7 or higher, which is known to work
 // there were problems on clang 3.5 at least
-#if (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7))
+#include "config_clang.h"
+#if CLANG_VERSION >= 30700
 #include <cassert>
 #include <stdlib.h>
 #include <string>

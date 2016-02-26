@@ -193,7 +193,7 @@ bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {
 }
 
 bool Nullptr::isMacroBodyExpansion(SourceLocation location) const {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return compiler.getSourceManager().isMacroBodyExpansion(location);
 #else
     return location.isMacroID()

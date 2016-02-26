@@ -30,7 +30,7 @@ bool isSalBool(QualType type) {
 // class body.") but mis-classifies salhelper::Timer's isTicking, isExpired, and
 // expiresBefore members as defined in salhelper/source/timer.cxx as inlined:
 bool isInlined(FunctionDecl const & decl) {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     return decl.isInlined();
 #else
     (void)decl;
@@ -53,7 +53,7 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     if (decl->isExternC()) {
         return true;
     }
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+#if CLANG_VERSION >= 30300
     if (decl->isInExternCContext()) {
         return true;
     }

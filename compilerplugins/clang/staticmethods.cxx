@@ -38,7 +38,7 @@ private:
 
 bool BaseCheckNotTestFixtureSubclass(
     const CXXRecordDecl *BaseDefinition
-#if __clang_major__ == 3 && __clang_minor__ <= 7
+#if CLANG_VERSION < 30800
     , void *
 #endif
     )
